@@ -1,376 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF75013AD0F;
-	Tue, 24 Sep 2024 20:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC79147C79
+	for <llvm@lists.linux.dev>; Tue, 24 Sep 2024 22:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727209546; cv=none; b=UUhysatM8AxwqvH1rjweumZ9oslqvWwJG5QQWcCio8NhTwrLx4yv1/eqDoLBnqRVE/gutk8hK9WhIv/i093UiHbfxOY26fkQmhwfUzOehzP521INaLxO63X2LPwCDU9hEJdqzUtqMXdM3yltC0zxf5y55lDqDJuU71ffh1Td3ik=
+	t=1727217668; cv=none; b=MmnfjV1Ln9jMLaiVIsiGz7wCdiyl7EteVYmYDlSdKOXtyqRrqrqf3Ok7Srk7oqAvzRYN8WnTu5DA8Afa0lYXxKTT+bNKQAHBzSLDEpvmySqTbJxiYxunkP2ZZQENNBgiXfaJEd5UmgkK8x9rN2MBo2peIhDEFjmK4pxVC1Fvf9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727209546; c=relaxed/simple;
-	bh=93gxUKIopDOuDyl7RueuP8to9UNOVhpzwFUiRm2mDGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=diWN3QDHoLMak0YbhGN750mC1FUH7pdbsYw1Yp7btdFqzKqg8/JQLvdVV6qSWgXrw3BLbF/kg2CLPdGeb16jf+0ucGHmBCrFdzEOLd3IsmvHygKslVlASF3k6GEY4amRPMvn8lhHRPPaozKU9k4yN1eFzUibYPa6OIA1VUcpGAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VNTZqoT2; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727217668; c=relaxed/simple;
+	bh=NhMixv5kl+9QH6xYXoXAIcF/J3IXlleAgXvIX0252z8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oS2bx264Mq+xiffIYjtKNoRbsKLmqsxv+2hQL/Esy2Nht2O90XXiT6mBUzS1Jz0eV9WS/yrsxmrCkNtUIBzA+GZKmpDJKpLcIQw1C74hWRUZS77wA5HhpwKqsu66Km/FzLrjTyNR1PBWknpwmNNR/lWHOGlvUy8CDQXG4b8wkk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SLqyPgRt; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VNTZqoT2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727209544; x=1758745544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=93gxUKIopDOuDyl7RueuP8to9UNOVhpzwFUiRm2mDGU=;
-  b=VNTZqoT2eU+JO19h5Im+7ct4LpI77HWbt4fAAVBmajhAyesI66VNqs92
-   44NjNdupHgW47Pyx9N2SQo0KvLxEe3N+TcOROk2MF+6EozOC88j0m4IPf
-   hyJ/HxL3AmM7fwjuRW9STkmTf3bjlC/gCrGiZfdoh9CCCJhmejRvAYe5l
-   SPKx2BW1GL0ENtDHqr+HE5B9lY4/s54YgEBtMx/DeZ8sayiSukoYwBvw1
-   8vIkhf71Hql4bUN/NyeQRZfacRwwDDDPzcCmKVDvVnIAHOcxZPMDo2BB8
-   Wob+WAQkYdPc/AwvDnS8DZAl4wSAux3gkaXjxQf2entZJGeMwtChIXz4c
-   w==;
-X-CSE-ConnectionGUID: KRrF04fbRUKQv+SKfk1gww==
-X-CSE-MsgGUID: Ap/0G56kTbmLrCIJaL+0Ng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="29938374"
-X-IronPort-AV: E=Sophos;i="6.10,255,1719903600"; 
-   d="scan'208";a="29938374"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 13:25:43 -0700
-X-CSE-ConnectionGUID: iGvYRx9hQPu42ih2tE1DAQ==
-X-CSE-MsgGUID: HS6cwghiQVS5NxpipcoCcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,255,1719903600"; 
-   d="scan'208";a="75642370"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 24 Sep 2024 13:25:39 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stC6K-000IoH-2X;
-	Tue, 24 Sep 2024 20:25:36 +0000
-Date: Wed, 25 Sep 2024 04:25:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Julian Vetter <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	Yann Sionneau <ysionneau@kalrayinc.com>,
-	Julian Vetter <jvetter@kalrayinc.com>
-Subject: Re: [PATCH v4 2/5] Replace generic memcpy and memset by IO memcpy
- functions
-Message-ID: <202409250346.N624LLrr-lkp@intel.com>
-References: <20240924092223.534040-3-jvetter@kalrayinc.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SLqyPgRt"
+Message-ID: <c7c16253-eff3-4d34-80c3-884790ecfdb4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1727217663;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D/3ql7hSu6hfJ6OUqVAGGrToVQdofg7CuYaFZlYBk80=;
+	b=SLqyPgRtLkk/M3T3thMFA4Fk9htRI6ziWWflbkjrvNW+jLBX6iVw63Kg2ZVUh+c6tbkWgP
+	GVAB6wHaVDQijoBgFZclOYkd22LPH2GX6TUK7HEr9HQm3yldyj9S/BbIczOBrPWqRi4188
+	1IgMXcJqtnKIYjKEqhuEFpd70PjRN3k=
+Date: Tue, 24 Sep 2024 15:40:53 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240924092223.534040-3-jvetter@kalrayinc.com>
+Subject: Re: [PATCH bpf-next v1] selftests/bpf:Enhance bpf ability to detect
+ ksym read error by libcap
+To: Lin Yikai <yikai.lin@vivo.com>
+Cc: bpf@vger.kernel.org, opensource.kernel@vivo.com,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240914092426.431066-1-yikai.lin@vivo.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20240914092426.431066-1-yikai.lin@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Julian,
+On 9/14/24 11:24 AM, Lin Yikai wrote:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 04716a5e43f1..369c5ad8fc4a 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -183,7 +183,7 @@ NON_CHECK_FEAT_TARGETS := clean docs-clean
+>   CHECK_FEAT := $(filter-out $(NON_CHECK_FEAT_TARGETS),$(or $(MAKECMDGOALS), "none"))
+>   ifneq ($(CHECK_FEAT),)
+>   FEATURE_USER := .selftests
+> -FEATURE_TESTS := llvm
+> +FEATURE_TESTS := llvm libcap
+>   FEATURE_DISPLAY := $(FEATURE_TESTS)
+>   
+>   # Makefile.feature expects OUTPUT to end with a slash
+> @@ -208,6 +208,11 @@ ifeq ($(feature-llvm),1)
+>     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+>   endif
+>   
+> +ifeq ($(feature-libcap), 1)
+> +  CFLAGS += -DHAVE_LIBCAP_SUPPORT
+> +  LDLIBS += -lcap
+> +endif
+> +
 
-kernel test robot noticed the following build errors:
+[ ... ]
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on arm64/for-next/core soc/for-next linus/master v6.11 next-20240924]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> @@ -31,6 +35,55 @@ struct ksyms {
+>   static struct ksyms *ksyms;
+>   static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
+>   
+> +#ifdef HAVE_LIBCAP_SUPPORT
+> +#include <sys/capability.h>
+> +static bool bpf_cap__capable(cap_value_t cap)
+> +{
+> +	cap_flag_value_t val;
+> +	cap_t caps = cap_get_proc();
+> +
+> +	if (!caps)
+> +		return false;
+> +
+> +	if (cap_get_flag(caps, cap, CAP_EFFECTIVE, &val) != 0)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Vetter/Consolidate-__memcpy_-to-from-io-and-__memset_io-into-a-single-lib/20240924-172751
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20240924092223.534040-3-jvetter%40kalrayinc.com
-patch subject: [PATCH v4 2/5] Replace generic memcpy and memset by IO memcpy functions
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240925/202409250346.N624LLrr-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409250346.N624LLrr-lkp@intel.com/reproduce)
+Instead of adding new dependency on libcap, please check if capget() can 
+directly be used. Take a look at tools/testing/selftests/bpf/cap_helpers.c.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409250346.N624LLrr-lkp@intel.com/
+pw-bot: cr
 
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/time/time.c:31:
-   In file included from include/linux/timekeeper_internal.h:10:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/time/time.c:31:
-   In file included from include/linux/timekeeper_internal.h:10:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/time/time.c:31:
-   In file included from include/linux/timekeeper_internal.h:10:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> include/asm-generic/io.h:1166:2: error: call to undeclared function '__memset_io'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           __memset_io(__io_virt(addr), value, size);
-           ^
-   include/asm-generic/io.h:1166:2: note: did you mean 'memset_io'?
-   include/asm-generic/io.h:1163:20: note: 'memset_io' declared here
-   static inline void memset_io(volatile void __iomem *addr, int value,
-                      ^
-   include/asm-generic/io.h:1154:19: note: expanded from macro 'memset_io'
-   #define memset_io memset_io
-                     ^
->> include/asm-generic/io.h:1184:2: error: call to undeclared function '__memcpy_fromio'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           __memcpy_fromio(buffer, __io_virt(addr), size);
-           ^
-   include/asm-generic/io.h:1184:2: note: did you mean 'memcpy_fromio'?
-   include/asm-generic/io.h:1180:20: note: 'memcpy_fromio' declared here
-   static inline void memcpy_fromio(void *buffer,
-                      ^
-   include/asm-generic/io.h:1171:23: note: expanded from macro 'memcpy_fromio'
-   #define memcpy_fromio memcpy_fromio
-                         ^
->> include/asm-generic/io.h:1201:2: error: call to undeclared function '__memcpy_toio'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           __memcpy_toio(__io_virt(addr), buffer, size);
-           ^
-   include/asm-generic/io.h:1201:2: note: did you mean 'memcpy_toio'?
-   include/asm-generic/io.h:1198:20: note: 'memcpy_toio' declared here
-   static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
-                      ^
-   include/asm-generic/io.h:1189:21: note: expanded from macro 'memcpy_toio'
-   #define memcpy_toio memcpy_toio
-                       ^
-   12 warnings and 3 errors generated.
---
-   In file included from kernel/time/hrtimer.c:30:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/time/hrtimer.c:30:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/time/hrtimer.c:30:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> include/asm-generic/io.h:1166:2: error: call to undeclared function '__memset_io'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           __memset_io(__io_virt(addr), value, size);
-           ^
-   include/asm-generic/io.h:1166:2: note: did you mean 'memset_io'?
-   include/asm-generic/io.h:1163:20: note: 'memset_io' declared here
-   static inline void memset_io(volatile void __iomem *addr, int value,
-                      ^
-   include/asm-generic/io.h:1154:19: note: expanded from macro 'memset_io'
-   #define memset_io memset_io
-                     ^
->> include/asm-generic/io.h:1184:2: error: call to undeclared function '__memcpy_fromio'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           __memcpy_fromio(buffer, __io_virt(addr), size);
-           ^
-   include/asm-generic/io.h:1184:2: note: did you mean 'memcpy_fromio'?
-   include/asm-generic/io.h:1180:20: note: 'memcpy_fromio' declared here
-   static inline void memcpy_fromio(void *buffer,
-                      ^
-   include/asm-generic/io.h:1171:23: note: expanded from macro 'memcpy_fromio'
-   #define memcpy_fromio memcpy_fromio
-                         ^
->> include/asm-generic/io.h:1201:2: error: call to undeclared function '__memcpy_toio'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           __memcpy_toio(__io_virt(addr), buffer, size);
-           ^
-   include/asm-generic/io.h:1201:2: note: did you mean 'memcpy_toio'?
-   include/asm-generic/io.h:1198:20: note: 'memcpy_toio' declared here
-   static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
-                      ^
-   include/asm-generic/io.h:1189:21: note: expanded from macro 'memcpy_toio'
-   #define memcpy_toio memcpy_toio
-                       ^
-   kernel/time/hrtimer.c:121:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:124:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
-                                     ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   16 warnings and 3 errors generated.
-
-
-vim +/__memset_io +1166 include/asm-generic/io.h
-
-  1152	
-  1153	#ifndef memset_io
-  1154	#define memset_io memset_io
-  1155	/**
-  1156	 * memset_io	Set a range of I/O memory to a constant value
-  1157	 * @addr:	The beginning of the I/O-memory range to set
-  1158	 * @val:	The value to set the memory to
-  1159	 * @count:	The number of bytes to set
-  1160	 *
-  1161	 * Set a range of I/O memory to a given value.
-  1162	 */
-  1163	static inline void memset_io(volatile void __iomem *addr, int value,
-  1164				     size_t size)
-  1165	{
-> 1166		__memset_io(__io_virt(addr), value, size);
-  1167	}
-  1168	#endif
-  1169	
-  1170	#ifndef memcpy_fromio
-  1171	#define memcpy_fromio memcpy_fromio
-  1172	/**
-  1173	 * memcpy_fromio	Copy a block of data from I/O memory
-  1174	 * @dst:		The (RAM) destination for the copy
-  1175	 * @src:		The (I/O memory) source for the data
-  1176	 * @count:		The number of bytes to copy
-  1177	 *
-  1178	 * Copy a block of data from I/O memory.
-  1179	 */
-  1180	static inline void memcpy_fromio(void *buffer,
-  1181					 const volatile void __iomem *addr,
-  1182					 size_t size)
-  1183	{
-> 1184		__memcpy_fromio(buffer, __io_virt(addr), size);
-  1185	}
-  1186	#endif
-  1187	
-  1188	#ifndef memcpy_toio
-  1189	#define memcpy_toio memcpy_toio
-  1190	/**
-  1191	 * memcpy_toio		Copy a block of data into I/O memory
-  1192	 * @dst:		The (I/O memory) destination for the copy
-  1193	 * @src:		The (RAM) source for the data
-  1194	 * @count:		The number of bytes to copy
-  1195	 *
-  1196	 * Copy a block of data to I/O memory.
-  1197	 */
-  1198	static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
-  1199				       size_t size)
-  1200	{
-> 1201		__memcpy_toio(__io_virt(addr), buffer, size);
-  1202	}
-  1203	#endif
-  1204	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +		val = CAP_CLEAR;
+> +
+> +	if (cap_free(caps) != 0)
+> +		return false;
+> +
+> +	return val == CAP_SET;
+> +}
