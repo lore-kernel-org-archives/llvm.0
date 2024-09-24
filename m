@@ -1,115 +1,199 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC79147C79
-	for <llvm@lists.linux.dev>; Tue, 24 Sep 2024 22:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF8C176FA5;
+	Tue, 24 Sep 2024 22:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727217668; cv=none; b=MmnfjV1Ln9jMLaiVIsiGz7wCdiyl7EteVYmYDlSdKOXtyqRrqrqf3Ok7Srk7oqAvzRYN8WnTu5DA8Afa0lYXxKTT+bNKQAHBzSLDEpvmySqTbJxiYxunkP2ZZQENNBgiXfaJEd5UmgkK8x9rN2MBo2peIhDEFjmK4pxVC1Fvf9k=
+	t=1727218132; cv=none; b=HpyBr8UgC0hPp29JWhVKYf/rvom3jbOvWGTABZ8FEsHeDHpGOoGnlPuEClTtWchiU5sd/+k9Qnw4tnUoXkGPVu7LLzLN1UQZCpY1j56/FIu7mKGM/uX0sIC88BuE84ZAnKqP+UbUOmggfifG7YkWJAM2HAc+bfdoPcy4xLmi6qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727217668; c=relaxed/simple;
-	bh=NhMixv5kl+9QH6xYXoXAIcF/J3IXlleAgXvIX0252z8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oS2bx264Mq+xiffIYjtKNoRbsKLmqsxv+2hQL/Esy2Nht2O90XXiT6mBUzS1Jz0eV9WS/yrsxmrCkNtUIBzA+GZKmpDJKpLcIQw1C74hWRUZS77wA5HhpwKqsu66Km/FzLrjTyNR1PBWknpwmNNR/lWHOGlvUy8CDQXG4b8wkk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SLqyPgRt; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1727218132; c=relaxed/simple;
+	bh=YFLT7lvUmLlcX+KeUeORCwsDU3A3sva3+huIQHw5Sp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=evOsS+TicthxczJATlzEQC1cyTUHCXBIUp79OlUO6Tszr48sLiWb2XgdpQ3y6ho0BCX6D8I4fEN66GgzkP+TLL7V668xOw1Dgo0iPQe1J2WAlsHaij74lT4z7y9YDpqSb0BrTC2gzoZqZvUbnAyVrGMmc2mbwLpNQ33mji8czSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YasrFEI8; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SLqyPgRt"
-Message-ID: <c7c16253-eff3-4d34-80c3-884790ecfdb4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1727217663;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D/3ql7hSu6hfJ6OUqVAGGrToVQdofg7CuYaFZlYBk80=;
-	b=SLqyPgRtLkk/M3T3thMFA4Fk9htRI6ziWWflbkjrvNW+jLBX6iVw63Kg2ZVUh+c6tbkWgP
-	GVAB6wHaVDQijoBgFZclOYkd22LPH2GX6TUK7HEr9HQm3yldyj9S/BbIczOBrPWqRi4188
-	1IgMXcJqtnKIYjKEqhuEFpd70PjRN3k=
-Date: Tue, 24 Sep 2024 15:40:53 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YasrFEI8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727218130; x=1758754130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YFLT7lvUmLlcX+KeUeORCwsDU3A3sva3+huIQHw5Sp0=;
+  b=YasrFEI8pm4K3Ge7VTfKJ0T/Tv6i0R3azLGESU7kLoDgGY2dsMwD15nD
+   gfW7yCfnEcXA1uw8D5L8X20DGw1znC1F+i9gOsk+JWBifL3MI+fWWdjrO
+   oHVkF/EzZnR9G8phgSncgmdGnlUPvB0W442gGdNGE3PWS8sWhblbZdI3F
+   a3qVNnsVBQFGU2wWCBvneHg1rruTotG3rGXfkTBoESdXNgfk1VJGBMSdV
+   Hc349tKxqmTItpMUdudADg7ealfSWALCnu1sdW9nj/+OzmNclKAxCObls
+   DByJwXV77um/M8HFNmL7Zduuex84kfV7lfbVP3MSCMq2t8tK6DtV0/sdq
+   g==;
+X-CSE-ConnectionGUID: Q1RygeYhTnW+esZyodmlgg==
+X-CSE-MsgGUID: Gnnfez7ASmO+iRM8p8Wm0Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="36909571"
+X-IronPort-AV: E=Sophos;i="6.10,255,1719903600"; 
+   d="scan'208";a="36909571"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 15:48:49 -0700
+X-CSE-ConnectionGUID: VewxNWtFTjy2y+neNWv/nQ==
+X-CSE-MsgGUID: w14Jr1cfTmGEMvrzgefZ/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,255,1719903600"; 
+   d="scan'208";a="102389047"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 24 Sep 2024 15:48:46 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1stEKp-000Iun-1x;
+	Tue, 24 Sep 2024 22:48:43 +0000
+Date: Wed, 25 Sep 2024 06:48:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Julian Vetter <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+	Yann Sionneau <ysionneau@kalrayinc.com>,
+	Julian Vetter <jvetter@kalrayinc.com>
+Subject: Re: [PATCH v5 1/5] Consolidate __memcpy_{to,from}io and __memset_io
+ into iomap_copy.c
+Message-ID: <202409250603.okc57309-lkp@intel.com>
+References: <20240924121432.798655-2-jvetter@kalrayinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf:Enhance bpf ability to detect
- ksym read error by libcap
-To: Lin Yikai <yikai.lin@vivo.com>
-Cc: bpf@vger.kernel.org, opensource.kernel@vivo.com,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240914092426.431066-1-yikai.lin@vivo.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20240914092426.431066-1-yikai.lin@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240924121432.798655-2-jvetter@kalrayinc.com>
 
-On 9/14/24 11:24 AM, Lin Yikai wrote:
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 04716a5e43f1..369c5ad8fc4a 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -183,7 +183,7 @@ NON_CHECK_FEAT_TARGETS := clean docs-clean
->   CHECK_FEAT := $(filter-out $(NON_CHECK_FEAT_TARGETS),$(or $(MAKECMDGOALS), "none"))
->   ifneq ($(CHECK_FEAT),)
->   FEATURE_USER := .selftests
-> -FEATURE_TESTS := llvm
-> +FEATURE_TESTS := llvm libcap
->   FEATURE_DISPLAY := $(FEATURE_TESTS)
->   
->   # Makefile.feature expects OUTPUT to end with a slash
-> @@ -208,6 +208,11 @@ ifeq ($(feature-llvm),1)
->     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
->   endif
->   
-> +ifeq ($(feature-libcap), 1)
-> +  CFLAGS += -DHAVE_LIBCAP_SUPPORT
-> +  LDLIBS += -lcap
-> +endif
-> +
+Hi Julian,
 
-[ ... ]
+kernel test robot noticed the following build warnings:
 
-> @@ -31,6 +35,55 @@ struct ksyms {
->   static struct ksyms *ksyms;
->   static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
->   
-> +#ifdef HAVE_LIBCAP_SUPPORT
-> +#include <sys/capability.h>
-> +static bool bpf_cap__capable(cap_value_t cap)
-> +{
-> +	cap_flag_value_t val;
-> +	cap_t caps = cap_get_proc();
-> +
-> +	if (!caps)
-> +		return false;
-> +
-> +	if (cap_get_flag(caps, cap, CAP_EFFECTIVE, &val) != 0)
+[auto build test WARNING on arnd-asm-generic/master]
+[also build test WARNING on soc/for-next akpm-mm/mm-nonmm-unstable arm64/for-next/core linus/master v6.11 next-20240924]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Instead of adding new dependency on libcap, please check if capget() can 
-directly be used. Take a look at tools/testing/selftests/bpf/cap_helpers.c.
+url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Vetter/Consolidate-__memcpy_-to-from-io-and-__memset_io-into-iomap_copy-c/20240924-202154
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20240924121432.798655-2-jvetter%40kalrayinc.com
+patch subject: [PATCH v5 1/5] Consolidate __memcpy_{to,from}io and __memset_io into iomap_copy.c
+config: arm-mxs_defconfig (https://download.01.org/0day-ci/archive/20240925/202409250603.okc57309-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409250603.okc57309-lkp@intel.com/reproduce)
 
-pw-bot: cr
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409250603.okc57309-lkp@intel.com/
 
-> +		val = CAP_CLEAR;
-> +
-> +	if (cap_free(caps) != 0)
-> +		return false;
-> +
-> +	return val == CAP_SET;
-> +}
+All warnings (new ones prefixed by >>):
+
+   lib/iomap_copy.c:89:19: error: call to undeclared function 'IS_ALIGNED'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      89 |         while (count && !IS_ALIGNED((unsigned long)from, NATIVE_STORE_SIZE)) {
+         |                          ^
+   lib/iomap_copy.c:121:19: error: call to undeclared function 'IS_ALIGNED'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     121 |         while (count && !IS_ALIGNED((unsigned long)to, NATIVE_STORE_SIZE)) {
+         |                          ^
+   lib/iomap_copy.c:161:19: error: call to undeclared function 'IS_ALIGNED'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     161 |         while (count && !IS_ALIGNED((unsigned long)dst, NATIVE_STORE_SIZE)) {
+         |                          ^
+>> lib/iomap_copy.c:159:12: warning: shift count >= width of type [-Wshift-count-overflow]
+     159 |                 qc |= qc << 32;
+         |                          ^  ~~
+   1 warning and 3 errors generated.
+
+
+vim +159 lib/iomap_copy.c
+
+    84	
+    85	
+    86	#ifndef __memcpy_fromio
+    87	void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
+    88	{
+  > 89		while (count && !IS_ALIGNED((unsigned long)from, NATIVE_STORE_SIZE)) {
+    90			*(u8 *)to = __raw_readb(from);
+    91			from++;
+    92			to++;
+    93			count--;
+    94		}
+    95	
+    96		while (count >= NATIVE_STORE_SIZE) {
+    97	#ifdef CONFIG_64BIT
+    98				put_unaligned(__raw_readq(from), (uintptr_t *)to);
+    99	#else
+   100				put_unaligned(__raw_readl(from), (uintptr_t *)to);
+   101	#endif
+   102	
+   103			from += NATIVE_STORE_SIZE;
+   104			to += NATIVE_STORE_SIZE;
+   105			count -= NATIVE_STORE_SIZE;
+   106		}
+   107	
+   108		while (count) {
+   109			*(u8 *)to = __raw_readb(from);
+   110			from++;
+   111			to++;
+   112			count--;
+   113		}
+   114	}
+   115	EXPORT_SYMBOL(__memcpy_fromio);
+   116	#endif
+   117	
+   118	#ifndef __memcpy_toio
+   119	void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
+   120	{
+   121		while (count && !IS_ALIGNED((unsigned long)to, NATIVE_STORE_SIZE)) {
+   122			__raw_writeb(*(u8 *)from, to);
+   123			from++;
+   124			to++;
+   125			count--;
+   126		}
+   127	
+   128		while (count >= NATIVE_STORE_SIZE) {
+   129	#ifdef CONFIG_64BIT
+   130				__raw_writeq(get_unaligned((uintptr_t *)from), to);
+   131	#else
+   132				__raw_writel(get_unaligned((uintptr_t *)from), to);
+   133	#endif
+   134	
+   135			from += NATIVE_STORE_SIZE;
+   136			to += NATIVE_STORE_SIZE;
+   137			count -= NATIVE_STORE_SIZE;
+   138		}
+   139	
+   140		while (count) {
+   141			__raw_writeb(*(u8 *)from, to);
+   142			from++;
+   143			to++;
+   144			count--;
+   145		}
+   146	}
+   147	EXPORT_SYMBOL(__memcpy_toio);
+   148	#endif
+   149	
+   150	#ifndef __memset_io
+   151	void __memset_io(volatile void __iomem *dst, int c, size_t count)
+   152	{
+   153		uintptr_t qc = (u8)c;
+   154	
+   155		qc |= qc << 8;
+   156		qc |= qc << 16;
+   157	
+   158		if (IS_ENABLED(CONFIG_64BIT))
+ > 159			qc |= qc << 32;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
