@@ -1,54 +1,54 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1563B18E03A
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07F21922CE
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276554; cv=none; b=LHfJeSkmITekPQcpU5JYNLFi9fRIzYnD8BjgpI2QIw5g/saavczHy0Okiyuurb5wb7JCykZkVJvVOj1wzIOyY4v00KjFN9FNxm2W8/MS+ZTsDCEWZCj645quRkZOT4+5oxWeSI4pXhPlG+KaQChXl3RX77XFdVCs86xdnjEkXMU=
+	t=1727276557; cv=none; b=NBUxyZhmYJkESoeX3zHK8rgQZraYSSiLuoa1/Lt4aujiSjFNoSFVnIqrwJRC4mDVA7CYS85z01lAXi7uoisvyXMm9ldEAgKXPwrjG/umKYW38Ph+nzgxMklsZKUm0BNbdjYi2WlpvASQPy6IOpLIF8AwxY+1RByJq1FoL3M55iY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276554; c=relaxed/simple;
-	bh=w/P+2/7/i0/j2dzTpIfGv0L554wt2D6+DkL221lAYlA=;
+	s=arc-20240116; t=1727276557; c=relaxed/simple;
+	bh=CMurddgdDXZCJtwTh7sicisjqXrlKeRuIZ1TFq/8oX8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hlde/89UvJ2hiV3qalgr7ILnWEzejlIFVrT0wgjx0vfpG3mjM43YGJS/lVE0PqOMfbpOFw6gszuPNGD1wmEj5gRfJheWCci0xIEEJX5jl17JNvLMseIHx4saDYBjUlo27FlxzPQnrm2qOqjuOKQbuuRMqdobkUu7ys/rzc4ALCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=faCu1BDh; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=Nf/DjyxgkouOy2beuJA6g3MbzDfUp5mRw1XhsevSnc48eaxqlxoMo2EEWpiCaL5bep/8bRxYafpG2O/NIjWrwkaZlAtqc+YAIe2TsZmIJZcsliA0eSNnIdc0RpqmZH4BKqzhntR/fgHvdgbJxo0Dca6OUaw+vmZ3nrMs2hIb9k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WNSz4Hpd; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="faCu1BDh"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-42cb050acc3so5385715e9.1
-        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:02:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WNSz4Hpd"
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-374b69e65e8so2626722f8f.0
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276550; x=1727881350; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1727276553; x=1727881353; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vAC8l3Y8WvFUyajZb+pirsZCUpFvZ3r8+BwrpQuj/SE=;
-        b=faCu1BDhkuF6xIMO74YCKegYQowPFVKpu1BP9VLiHrzt1SiFOACPdBQOkgT/BF0IOV
-         e/C/efiR7MoxwHft/mXBN1cbsdg7JGhb7gRlDuCYbNDuWK5VATIsjwi971RBPDIkTPYN
-         leJ30IYZHpK7fMOqbYX7nY3pRwUoO+SpSjs2v317LfegYUo1VqyqylUlFyhhi4Nyccn/
-         59VVGRtC+9DQ0MUra1zneiNs5yWCGjvmyS4INbhIceeh+84c7sqeW/iPgBJpIJuSc2qt
-         KphniU2JeIX5hukaQUBgfv6wIY4BW6LppcH/tOzqv1C+7JbPzkRM3ANmbJUwFN2xdEEY
-         oTIw==
+        bh=GQ1cTLWN/qm1UuyAwDsDiC37ecAWh5CqzUoGN/3jT3Q=;
+        b=WNSz4Hpdu4i9uIUL4dRZmO9DIKFLV1QQ3zFCuOOSqjhP5koa5p3PEcA6oqjR323Zyx
+         T5IRSxrKBz5wGa3x4ULEl1J2EyDJWY2s1eIi7GgV5KT6LUawEQVsx1bFv5YVmhetLmbT
+         OFoPB3an/7H/c7Mbz4G/b7mTZsGzJTT02SXe/ce92C/Zy0dC5sC0UY2I/zo/DZ5Slpo6
+         v0UUfL214nNH1siqLc3iJlID23/knwVfgqui7hoM1DsFkKekH8txrDK786AJOPdURVlU
+         drgpi34CzQIXBrwXY4mRi2uU4TZ9qVMMZRa0ADUV92Gjeg2roDEEEVdvyzTkT0QlDH6N
+         3igA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276550; x=1727881350;
+        d=1e100.net; s=20230601; t=1727276553; x=1727881353;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vAC8l3Y8WvFUyajZb+pirsZCUpFvZ3r8+BwrpQuj/SE=;
-        b=U92hJ/QcYgFS3GcuDao/CPHrc9QsCEF8EjcuJ/wdXQLXBf3vqIMD7UCJ9ZXgOoOhPo
-         JbCsxJRVyc+5Z+ZgV30Ito0qc4Nfg/4XG64XHVBytYA8HlkexNshXW/7l0dj1BA3N/G5
-         RqUXvxlUEEPnF9wlfeXBlcZyBqpZBjNpXuRgQmqUazqspAfd07nzXvi2tPX7SzUg3cFm
-         lVaYZ5hL4ixUwbDepzZOZdeeEkpGF5igl/nNtsFIfhy44xHP7yJv5b/lCJsWDHQR6k6m
-         QE0Qay7QhysYxy2QK4WTych0K/FEKdmEUAO2HzQc5+xTxJfHbIbQZ9R65r1nAHt/xMRB
-         9DIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVB3jGRxwo2ywQj1jU+FTMK2ehUriQRQGc2nL9dgqzuLp7xy1A6lJq7G1dK8HGvMBCFHtfC@lists.linux.dev
-X-Gm-Message-State: AOJu0YwSSNEBmeW8M4qOqQAHiqlj1UcqNnEVSCWbCCDO8EZ59iqGbi4R
-	UXEQMiBVfIZTEedI1DbIHVP6xHIgTXeybv4VVlcBRv4ht9qDsRNpIlFO/vtcRVk2Vn5Ceg==
-X-Google-Smtp-Source: AGHT+IGsHQZbBz7v7rjB2VogUNbzT3V2zpNGtAWZsXzYUPDihu4mWF0GF+yn2VIMs1ZNTkRqyJuf4PXN
+        bh=GQ1cTLWN/qm1UuyAwDsDiC37ecAWh5CqzUoGN/3jT3Q=;
+        b=Vyp0fgE+Yg620jwJub0L7p8uv78WW9fPg8yCrJkE/+xZBoEQPVKyvE5e04821hU210
+         kru2NNVRZ/eO4wpA8mFoZ2T948c7ppvtsVY1qMLTqdTwwoRbGOZdhBRdiCNzmgMVY+tW
+         he4qOo65SFcpQUw3GrxVNDI0xzcSFScOX4Kb8lvP6iQAYslBvGZLTCUcxP3pt1IiHPCt
+         zsxpPtLtZz9C1AOcq9NWbIjMiCyevif6FM5mnIvaPfEBkhkgcs+NI3gLuPCLyQAl92Dk
+         jDw94XK6PEzqJlhpv0XKkUu1iUacfQ8Dze7YHA+/zKjNM0n/plhgcxTbBhlHYRZLkfpn
+         jAsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWuymHnpj5hPCvbU8+ZPfodsZ2Wmmy2P3miIzVcvlvrHG6KE0f6bJpmBMLSPU+eLRmbMy/@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy2VCsjNUJaK0OCvkqBkGlM6tPJJJRmfeSKe0a7H/B+edHGDOfH
+	umV2hxdsOEe9CWLMLezPwpdcjdnNqppLGUn0m5b3zHJquvtUmKtKlyy368pcv+N5Gn9KHg==
+X-Google-Smtp-Source: AGHT+IEbuxsanqyADq8Deat2AYN/hrx0yHWhBh+K99NJ5NNzbtyXWGf28ibYOumK1/7kTAhssaq/BKmU
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:600c:4ca2:b0:42c:acd5:c641 with SMTP id
- 5b1f17b1804b1-42e96037975mr279665e9.2.1727276550412; Wed, 25 Sep 2024
- 08:02:30 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:16 +0200
+ (user=ardb job=sendgmr) by 2002:a05:6000:1948:b0:371:8d08:6302 with SMTP id
+ ffacd0b85a97d-37cc2466282mr1755f8f.2.1727276552813; Wed, 25 Sep 2024 08:02:32
+ -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:17 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2723; i=ardb@kernel.org;
- h=from:subject; bh=tMElkct6gfSM6gp7MMWL/mRF1vGpc7RrYvn7ljZWXyE=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6iGZPaJMr8LDnd//b/RW8SszXOfdmXXq3NuftZV75
- oQv+lfaUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACZy4w/DHw7GS21Or9/PeKL6
- 7ZX8zCMs6WX7p7QFXu6zKz6oZDhn3S9GhnkFPcEfOSfJKv9IYrKOXfBu+/X/Xl4zqlnSnqz7v02 4kwsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1089; i=ardb@kernel.org;
+ h=from:subject; bh=Gk3vl5lcNVlUG5WaXx6+kW7e4vi5Wc78FqbNjCEkOO8=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6pHFHOXq05/1nFnPcudQmJ7wpr7dLDufJIa/O8C5x
+ Txd0oW5o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAExENobhf+k7pXk1KeYh8xfa
+ vazOipusdTSTNTQtS+jqxsxgKQvlywz/y0srlXSWbHHluXU+4voFET+GHMONjSy3U2vjQqX5RWI YAQ==
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-46-ardb+git@google.com>
-Subject: [RFC PATCH 16/28] x86/entry_64: Use RIP-relative addressing
+Message-ID: <20240925150059.3955569-47-ardb+git@google.com>
+Subject: [RFC PATCH 17/28] x86/hibernate: Prefer RIP-relative accesses
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -90,97 +90,36 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Fix up a couple of occurrences in the x86_64 entry code where we take
-the absolute address of a symbol while we could use RIP-relative
-addressing just the same. This avoids relocation fixups at boot for
-these quantities.
+Replace some absolute symbol references with RIP-relative ones, so we
+don't need to fix them up at boot.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/entry/calling.h  |  9 +++++----
- arch/x86/entry/entry_64.S | 12 +++++++-----
- 2 files changed, 12 insertions(+), 9 deletions(-)
+ arch/x86/power/hibernate_asm_64.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
-index ea81770629ee..099da5aaf929 100644
---- a/arch/x86/entry/calling.h
-+++ b/arch/x86/entry/calling.h
-@@ -375,8 +375,8 @@ For 32-bit we have the following conventions - kernel is built with
- .endm
+diff --git a/arch/x86/power/hibernate_asm_64.S b/arch/x86/power/hibernate_asm_64.S
+index 0a0539e1cc81..1d96a119d29d 100644
+--- a/arch/x86/power/hibernate_asm_64.S
++++ b/arch/x86/power/hibernate_asm_64.S
+@@ -39,7 +39,7 @@ SYM_FUNC_START(restore_registers)
+ 	movq	%rax, %cr4;  # turn PGE back on
  
- .macro SAVE_AND_SET_GSBASE scratch_reg:req save_reg:req
-+	GET_PERCPU_BASE \scratch_reg \save_reg
- 	rdgsbase \save_reg
--	GET_PERCPU_BASE \scratch_reg
- 	wrgsbase \scratch_reg
- .endm
+ 	/* We don't restore %rax, it must be 0 anyway */
+-	movq	$saved_context, %rax
++	leaq	saved_context(%rip), %rax
+ 	movq	pt_regs_sp(%rax), %rsp
+ 	movq	pt_regs_bp(%rax), %rbp
+ 	movq	pt_regs_si(%rax), %rsi
+@@ -70,7 +70,7 @@ SYM_FUNC_START(restore_registers)
+ SYM_FUNC_END(restore_registers)
  
-@@ -412,15 +412,16 @@ For 32-bit we have the following conventions - kernel is built with
-  * Thus the kernel would consume a guest's TSC_AUX if an NMI arrives
-  * while running KVM's run loop.
-  */
--.macro GET_PERCPU_BASE reg:req
-+.macro GET_PERCPU_BASE reg:req scratch:req
- 	LOAD_CPU_AND_NODE_SEG_LIMIT \reg
- 	andq	$VDSO_CPUNODE_MASK, \reg
--	movq	__per_cpu_offset(, \reg, 8), \reg
-+	leaq	__per_cpu_offset(%rip), \scratch
-+	movq	(\scratch, \reg, 8), \reg
- .endm
- 
- #else
- 
--.macro GET_PERCPU_BASE reg:req
-+.macro GET_PERCPU_BASE reg:req scratch:req
- 	movq	pcpu_unit_offsets(%rip), \reg
- .endm
- 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 1b5be07f8669..6509e12b6329 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -1038,7 +1038,8 @@ SYM_CODE_START(error_entry)
- 	movl	%ecx, %eax			/* zero extend */
- 	cmpq	%rax, RIP+8(%rsp)
- 	je	.Lbstep_iret
--	cmpq	$.Lgs_change, RIP+8(%rsp)
-+	leaq	.Lgs_change(%rip), %rcx
-+	cmpq	%rcx, RIP+8(%rsp)
- 	jne	.Lerror_entry_done_lfence
- 
- 	/*
-@@ -1250,10 +1251,10 @@ SYM_CODE_START(asm_exc_nmi)
- 	 * the outer NMI.
- 	 */
- 
--	movq	$repeat_nmi, %rdx
-+	leaq	repeat_nmi(%rip), %rdx
- 	cmpq	8(%rsp), %rdx
- 	ja	1f
--	movq	$end_repeat_nmi, %rdx
-+	leaq	end_repeat_nmi(%rip), %rdx
- 	cmpq	8(%rsp), %rdx
- 	ja	nested_nmi_out
- 1:
-@@ -1307,7 +1308,8 @@ nested_nmi:
- 	pushq	%rdx
- 	pushfq
- 	pushq	$__KERNEL_CS
--	pushq	$repeat_nmi
-+	leaq	repeat_nmi(%rip), %rdx
-+	pushq	%rdx
- 
- 	/* Put stack back */
- 	addq	$(6*8), %rsp
-@@ -1346,7 +1348,7 @@ first_nmi:
- 	addq	$8, (%rsp)	/* Fix up RSP */
- 	pushfq			/* RFLAGS */
- 	pushq	$__KERNEL_CS	/* CS */
--	pushq	$1f		/* RIP */
-+	pushq	1f@GOTPCREL(%rip) /* RIP */
- 	iretq			/* continues at repeat_nmi below */
- 	UNWIND_HINT_IRET_REGS
- 1:
+ SYM_FUNC_START(swsusp_arch_suspend)
+-	movq	$saved_context, %rax
++	leaq	saved_context(%rip), %rax
+ 	movq	%rsp, pt_regs_sp(%rax)
+ 	movq	%rbp, pt_regs_bp(%rax)
+ 	movq	%rsi, pt_regs_si(%rax)
 -- 
 2.46.0.792.g87dc391469-goog
 
