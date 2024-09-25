@@ -1,239 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9A5157490;
-	Wed, 25 Sep 2024 07:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45745159568
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727250914; cv=none; b=WhMQ0Pa5MS9ZobqBy/gWfNXYHz33ONYZZcBD7kvjQnxVk8R2fCrTeJayARd2BErwh+AVIwSBETu3IQVmI2RiYLHYHL4dgGWPsgUewYyO6HRO8X7vJ5Tb7OgCCzsL9RQxPmBekxF0CazRsWlFv+BrSlBzAliIn/7ZsG03IqgI9cI=
+	t=1727251830; cv=none; b=FYUlDpS16KQQvpyuGmOFB7xwlm+Mylx115AHMHAbWldNwI8Bnmq1KSVNUHxhZ8IyOn88lkGiBjgYgYggf29eyk7TahUM+BaisUitNadi7DkT97fz0wMhSmhnnGxj1R3PyHIzPoZFAZUxdsVUaow7dmtEujJe7r75oFlVl2KoocI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727250914; c=relaxed/simple;
-	bh=onnuYLvkaKKSJNLqIp8eCNb0T4hkLx7Ysm2WxJr7wEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O9jZjnwrKiMYwfVQRSk3KI+yL3BtAlh58nI71D4z/9JHOcN5/uixv9qyloWt3IzmWn5oXUj5s4lsYy0MShKFifT0k5UlFu+TO82pvT5kPA3j0PMXQTo35J1PnUe0qfvz/2pbZZtWnnZsHXa4Ta1LFoEjw0GLJybqlJb4SMrnq4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ul29YE1i; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727251830; c=relaxed/simple;
+	bh=B/1993ysDmQNNhtX5Rg233PtOJBfcm30ryXVXcMGEhQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=iPw+GupKLpWiyud8dFGQkTcSvV3hfnp9S1bnnzHdkLVBPGtXCq5VB2zIQCzP1w0vQtO4J+JwqIpJ0q6KkPdNNFiyV+bSeWgS4JaC0Q0f9ktapP0335TwKUye5SMw1gWKUWlOL8HjJF2gB9AwgshzrmMTSZu7GfsUTgL2OTiEBO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pafyIand; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ul29YE1i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727250912; x=1758786912;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=onnuYLvkaKKSJNLqIp8eCNb0T4hkLx7Ysm2WxJr7wEg=;
-  b=Ul29YE1iHKm89eHBTXIhVZ6lWl4zotVVgUF+dmnD/qkNjkh8sh4lVZzz
-   MdmzWlPCYZoQScMvHINHyqlEYaQo+xn4sw8/BC5g5+9dSUMk2G3NR3MZP
-   tDfo+WL0maQq1Qz1SGTPJYsbZLxsySQq3PYtjBkPcEiQkP5NYiUM7sW1p
-   thOYUeuvIiGIySvV4kEoIjGBtegtXFtGHcTu4XZF1u06xlYJIp3ACAxaJ
-   WVLf2tCOmkLG5JoZ4AC/9RW/mxARkZFIqSrpZU8TFrqM4tUQvRwnDFEi2
-   TNNdKN6vn912nAGu/2sYGP81ClzznqHeAfFyyDTZRsnrgYzrZbmLpnPrr
-   w==;
-X-CSE-ConnectionGUID: OpSCoiLCTNywRRwXflQb5A==
-X-CSE-MsgGUID: TfQeFteQSyGQIOMzvd6o/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="26231808"
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="26231808"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 00:55:09 -0700
-X-CSE-ConnectionGUID: qWQlesjeQNm+CQ8oGSH/1g==
-X-CSE-MsgGUID: PFEEdDF3Q1eojZB8t1AvIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="71837108"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Sep 2024 00:55:08 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stMrZ-000JKd-1I;
-	Wed, 25 Sep 2024 07:55:05 +0000
-Date: Wed, 25 Sep 2024 15:54:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 3/4] block: add support for partition table defined
- in OF
-Message-ID: <202409251530.PSGUVk2k-lkp@intel.com>
-References: <20240923105937.4374-4-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pafyIand"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e1159159528so1001708276.1
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 01:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727251827; x=1727856627; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=53by2NxAwupjORg26RSnLD5EFIBSE3pYXAK2QJq5NTI=;
+        b=pafyIandLrbWj9SDZ6Unf9OkH8v/PA61Ql01MThVcKEToXCCxGGnmF3qGmE3DWa96F
+         2Kt8376b9poQ+NjDmlwPEWGZBYl/UaPVMMQ+pTn78SlSbLRTTnM7N91pqUjETtO1VdrT
+         4kI9igexip4zytS9vklWVV3yVWqspGzODu511AjI++02eIGfaobbWyxMiZ4zH/Z7YDSG
+         HBtqb4wWAnECoBzmZJ8WnRdCTrzuclKB95MaT6HILfM76ursVAHtddJZdK5li/6khrMK
+         nz/6UzifsCdb9AD3WB36cMU50LXqQDrteQoeKszIFNAlNhOTEKj8Ol9Q/EVAe5t1FjYI
+         aGVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727251827; x=1727856627;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=53by2NxAwupjORg26RSnLD5EFIBSE3pYXAK2QJq5NTI=;
+        b=DM+uf9G4Htk4D5COp0QSCq9KF1Z8tQttvPCuRbX3GIyBQYhJD46YuiYRHwyHyMJOQ+
+         tLXmSn0dLOGG8ZdgqDn/0mge2j6JFb7uJXrX1i7rMisacEDDS7LVgQy2c6EkAjwDdSgz
+         /iVyeZQAMcbXOJlDyMbsdc6ArcCeny3IrUMfxfv8sVZg1X95Ij1gYTzBxzIa0oY0sMHt
+         kZzfp8FsnC42WqA/iK5QArRuHIzVYTT5+iHlCMQP8myTmgcwFKh/cBBWm6EU58xiisyP
+         6U0hPLg//GOcJN9Jcz3N3nli3pIbBMMcvOJVPqg1Yk4gt8640KWzySDUiOUtbqahoCU1
+         5+eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfQjDXVyNKe4CWo/a4cAJKnzrp+OLISJyT0u69ko5H1t3qh0DLrmMvMvlF3WHy0RM0qABm@lists.linux.dev
+X-Gm-Message-State: AOJu0YwGr2bVkTy1FCaWM65G2NhsJGJ6YuWOVP2nNJNxzjITQoekfGeR
+	2fuqZ+PqRv4TBYMH9KsaaORY2nH+YOooPmkXX4qucjW+rrpeAwdwzk9O2i8x0ysBkH49e0whXBr
+	+PsTh37lPfGGF/w==
+X-Google-Smtp-Source: AGHT+IErno4QjSVCiQY/x0ZBglpUga9kOX+6kScCRNzmqDrrXSIcdnKg0oap5Mj+eQuF2zzkR4EoutcYWEdcYs0=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:35bd])
+ (user=aliceryhl job=sendgmr) by 2002:a05:6902:289:b0:e0b:f6aa:8088 with SMTP
+ id 3f1490d57ef6-e24d38351f5mr25592276.1.1727251827170; Wed, 25 Sep 2024
+ 01:10:27 -0700 (PDT)
+Date: Wed, 25 Sep 2024 08:10:18 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240923105937.4374-4-ansuelsmth@gmail.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAGrF82YC/x2MSQqAMAwAvyI5G9DWBf2KeCgxahCjtCBC6d8tH
+ mdgJkJgLxxgLCJ4fiTIpRnqsgDanW6MsmQGU5mmGkyDtArq5U88XHCKq7zY19aarmuJWoIc3p6 z/qfTnNIHIwhoo2QAAAA=
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5295; i=aliceryhl@google.com;
+ h=from:subject:message-id; bh=B/1993ysDmQNNhtX5Rg233PtOJBfcm30ryXVXcMGEhQ=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBm88VwwmmqXYAgGo6vgR40GfyvFkQv9Bs303oAW
+ dAD4xxOeiWJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCZvPFcAAKCRAEWL7uWMY5
+ RpT+EACvRQ4HKQFC6qHo4YsLWe4b5aa/UKfaTZ0hGTRTO3sS3r6oeo+lZRLSlwgs8RO855+KnEx
+ xcFsy0ymQsNPqeBgAjFlqtkyYesXotcvPCD5XmEO50Yz3h/7Tz8boEIbCgJ9M9L4Azqpkh11blM
+ eirE1mgv9mJNQKnLzeOpyvHflwLdJJn/ZBjyL/X/uFmDGPpjGC1PjXSLq4fPztMqs5A739msSmS
+ 18hUwHhOarZS6DSLs56dNPg2TJzB5plj9jN5jEz4g3SeAhqDEOblikPD6HC/tvKEBQDwnwG2wQY
+ fNry9DlrVMjGwrkgAyOYm/c/bOK78gBgje/2UvIsO184WwRvrczlJLE901hkE14NGquuimcpkKy
+ 7GgYINbJT8339LsY8QYSmcZTu2rKTJ4Av47Jkfp2q0ZbkK7Ya+eUN10p6zZegUp1xWGSlYa8hEu
+ hpfCGjCsr8oGPksxKCdVatrC9Hzwa8Xyc1dCT8k9E63zCSu7DeSnUEd3LuI1zHBxaX4Z7O8npTL
+ A3Ib4qc5rRp9/Gs602H8GUObybb3ZRn6716AO736fgb1rIb0K3OLncE+/8hT4E9pdLdWJ0rDJkx
+ CXzwQwi0BcMfUQNuiaqKaIgBioeH3Q4rvMlLBON7OnmlhnatFzYkv8w1NHr+ueAsSDQcSUiCN61 be3BViL6By+rXxg==
+X-Mailer: b4 0.13.0
+Message-ID: <20240925-cfi-norm-kasan-fix-v1-1-0328985cdf33@google.com>
+Subject: [PATCH] cfi: encode cfi normalized integers + kasan/gcov bug in Kconfig
+From: Alice Ryhl <aliceryhl@google.com>
+To: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Gatlin Newhouse <gatlin.newhouse@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, kernel test robot <oliver.sang@intel.com>, 
+	Alice Ryhl <aliceryhl@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Christian,
+There is a bug in the LLVM implementation of KASAN and GCOV that makes
+these options incompatible with the CFI_ICALL_NORMALIZE_INTEGERS option.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+The bug has already been fixed in llvm/clang [1] and rustc [2]. However,
+Kconfig currently has no way to gate features on the LLVM version inside
+rustc, so we cannot write down a precise `depends on` clause in this
+case. Instead, a `def_bool` option is defined for whether
+CFI_ICALL_NORMALIZE_INTEGERS is available, and its default value is set
+to false when GCOV or KASAN are turned on. End users using a patched
+clang/rustc can turn on the HAVE_CFI_ICALL_NORMALIZE_INTEGERS option
+directly to override this.
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on robh/for-next lwn/docs-next linus/master v6.11 next-20240925]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+An alternative solution is to inspect a binary created by clang or rustc
+to see whether the faulty CFI tags are in the binary. This would be a
+precise check, but it would involve hard-coding the *hashed* version of
+the CFI tag. This is because there's no way to get clang or rustc to
+output the unhased version of the CFI tag. Relying on the precise
+hashing algorithm using by CFI seems too fragile, so I have not pursued
+this option. Besides, this kind of hack is exactly what lead to the LLVM
+bug in the first place.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/block-add-support-for-defining-read-only-partitions/20240923-190251
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20240923105937.4374-4-ansuelsmth%40gmail.com
-patch subject: [RFC PATCH 3/4] block: add support for partition table defined in OF
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240925/202409251530.PSGUVk2k-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409251530.PSGUVk2k-lkp@intel.com/reproduce)
+If the CFI_ICALL_NORMALIZE_INTEGERS option is used without CONFIG_RUST,
+then we actually can perform a precise check today: just compare the
+clang version number. This works since clang and llvm are always updated
+in lockstep. However, encoding this in Kconfig would give the
+HAVE_CFI_ICALL_NORMALIZE_INTEGERS option a dependency on CONFIG_RUST,
+which is not possible as the reverse dependency already exists.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409251530.PSGUVk2k-lkp@intel.com/
+HAVE_CFI_ICALL_NORMALIZE_INTEGERS is defined to be a `def_bool` instead
+of `bool` to avoid asking end users whether they want to turn on the
+option. Turning it on explicitly is something only experts should do, so
+making it hard to do so is not an issue.
 
-All error/warnings (new ones prefixed by >>):
+I added a `depends on CFI_CLANG` clause to the new Kconfig option. I'm
+not sure whether that makes sense or not, but it doesn't seem to make a
+big difference.
 
-   In file included from block/partitions/of.c:3:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2237:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from block/partitions/of.c:5:
-   In file included from block/partitions/check.h:4:
-   In file included from block/partitions/../blk.h:7:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from block/partitions/of.c:5:
-   In file included from block/partitions/check.h:4:
-   In file included from block/partitions/../blk.h:7:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from block/partitions/of.c:5:
-   In file included from block/partitions/check.h:4:
-   In file included from block/partitions/../blk.h:7:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> block/partitions/of.c:47:28: error: use of undeclared identifier 'pp'
-      47 |         if (of_property_read_bool(pp, "read-only"))
-         |                                   ^
->> block/partitions/of.c:58:5: warning: no previous prototype for function 'of_partition' [-Wmissing-prototypes]
-      58 | int of_partition(struct parsed_partitions *state)
-         |     ^
-   block/partitions/of.c:58:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      58 | int of_partition(struct parsed_partitions *state)
-         | ^
-         | static 
-   17 warnings and 1 error generated.
+In a future kernel release, I would like to add a Kconfig option similar
+to CLANG_VERSION/RUSTC_VERSION for inspecting the version of the LLVM
+inside rustc. Once that feature lands, this logic will be replaced with
+a precise version check. This check is not being introduced here to
+avoid introducing a new _VERSION constant in a fix.
 
+Link: https://github.com/llvm/llvm-project/pull/104826 [1]
+Link: https://github.com/rust-lang/rust/pull/129373 [2]
+Fixes: ce4a2620985c ("cfi: add CONFIG_CFI_ICALL_NORMALIZE_INTEGERS")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202409231044.4f064459-oliver.sang@intel.com
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ arch/Kconfig | 18 +++++++++++++++++-
+ init/Kconfig |  2 +-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-vim +/pp +47 block/partitions/of.c
+diff --git a/arch/Kconfig b/arch/Kconfig
+index ee58df8b1080..b8066bf43153 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -829,7 +829,7 @@ config CFI_CLANG
+ config CFI_ICALL_NORMALIZE_INTEGERS
+ 	bool "Normalize CFI tags for integers"
+ 	depends on CFI_CLANG
+-	depends on $(cc-option,-fsanitize=kcfi -fsanitize-cfi-icall-experimental-normalize-integers)
++	depends on HAVE_CFI_ICALL_NORMALIZE_INTEGERS
+ 	help
+ 	  This option normalizes the CFI tags for integer types so that all
+ 	  integer types of the same size and signedness receive the same CFI
+@@ -842,6 +842,22 @@ config CFI_ICALL_NORMALIZE_INTEGERS
+ 
+ 	  This option is necessary for using CFI with Rust. If unsure, say N.
+ 
++config HAVE_CFI_ICALL_NORMALIZE_INTEGERS
++	def_bool !GCOV_KERNEL && !KASAN
++	depends on CFI_CLANG
++	depends on $(cc-option,-fsanitize=kcfi -fsanitize-cfi-icall-experimental-normalize-integers)
++	help
++	  Is CFI_ICALL_NORMALIZE_INTEGERS supported with the set of compilers
++	  currently in use?
++
++	  This option defaults to false if GCOV or KASAN is enabled, as there is
++	  an LLVM bug that makes normalized integers tags incompatible with
++	  KASAN and GCOV. Kconfig currently does not have the infrastructure to
++	  detect whether your rustc compiler contains the fix for this bug, so
++	  it is assumed that it doesn't. If your compiler has the fix, you can
++	  explicitly enable this option in your config file. The Kconfig logic
++	  needed to detect this will be added in a future kernel release.
++
+ config CFI_PERMISSIVE
+ 	bool "Use CFI in permissive mode"
+ 	depends on CFI_CLANG
+diff --git a/init/Kconfig b/init/Kconfig
+index 4ea2a161d362..6f3f36d631f6 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1909,7 +1909,7 @@ config RUST
+ 	depends on !GCC_PLUGIN_RANDSTRUCT
+ 	depends on !RANDSTRUCT
+ 	depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+-	depends on !CFI_CLANG || RUSTC_VERSION >= 107900 && $(cc-option,-fsanitize=kcfi -fsanitize-cfi-icall-experimental-normalize-integers)
++	depends on !CFI_CLANG || RUSTC_VERSION >= 107900 && HAVE_CFI_ICALL_NORMALIZE_INTEGERS
+ 	select CFI_ICALL_NORMALIZE_INTEGERS if CFI_CLANG
+ 	depends on !CALL_PADDING || RUSTC_VERSION >= 108000
+ 	depends on !KASAN_SW_TAGS
 
-    25	
-    26	static void add_of_partition(struct parsed_partitions *state, int slot,
-    27				     struct device_node *np)
-    28	{
-    29		struct partition_meta_info *info;
-    30		char tmp[sizeof(info->volname) + 4];
-    31		int a_cells, s_cells;
-    32		const char *partname;
-    33		const __be32 *reg;
-    34		u64 offset, size;
-    35		int len;
-    36	
-    37		reg = of_get_property(np, "reg", &len);
-    38	
-    39		a_cells = of_n_addr_cells(np);
-    40		s_cells = of_n_size_cells(np);
-    41	
-    42		offset = of_read_number(reg, a_cells);
-    43		size = of_read_number(reg + a_cells, s_cells);
-    44	
-    45		put_partition(state, slot, offset, size);
-    46	
-  > 47		if (of_property_read_bool(pp, "read-only"))
-    48			state->parts[slot].flags |= ADDPART_FLAG_READONLY;
-    49	
-    50		info = &state->parts[slot].info;
-    51		partname = of_get_property(np, "label", &len);
-    52		strscpy(info->volname, partname, sizeof(info->volname));
-    53	
-    54		snprintf(tmp, sizeof(tmp), "(%s)", info->volname);
-    55		strlcat(state->pp_buf, tmp, PAGE_SIZE);
-    56	}
-    57	
-  > 58	int of_partition(struct parsed_partitions *state)
+---
+base-commit: a2f11547052001bd448ccec81dd1e68409078fbb
+change-id: 20240924-cfi-norm-kasan-fix-71332665cc5c
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice Ryhl <aliceryhl@google.com>
+
