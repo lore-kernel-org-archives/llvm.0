@@ -1,138 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F45E1714C4;
-	Wed, 25 Sep 2024 12:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EFC18DF61;
+	Wed, 25 Sep 2024 12:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727266285; cv=none; b=KO8s/CG2RGNLdXQ50uBVUOpgFPSgdMbJaESnm2JbEwo4OMRWALWUZSeuyFZ+JYu5zo0ld1cpZpVHaovVm+hfFwp9WLrAx8EkMW5ZdyPBZZ6wXtHeoKCqT0daKPHRblKIcdSx7KdZdLQJRBt4XlDHhkpMe0dy5n4DT/uDJYiyH4A=
+	t=1727266305; cv=none; b=tevWP84PGMBToNHouYCzw0VkrxQZxkPQEseYm3W+qviSQtO4vXAF+t49Vc+C0XoQUuwi69RZEcJIAcEmowaB9c/g7Mj9sDCaLOFeOq9IHsy4dATgAFVJEjKTpkjxTfxiG2j+LH8WSB4TKFCvBgBP/OpcanvD7F60a1iMLVuIp0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727266285; c=relaxed/simple;
-	bh=FAHKjBRAC5Qo7JGJBZ0ZwrHXhZXpLlt629eFHIHC2mQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UCLeUdJLcYFH2UHgzstUMd5y/y5G4PMmk+paYWivplBg2H5PFBoSRXbMZxsra1TyFSlpAU/DPgBSJPHs9qODKqshk33t457o6igGr53UuX5Ir371DMr0rzvFCiLrS9vNGo5ivY8CbN/CdU9bvOMJPOxBsyFHr/W59BpKoWWGIjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kpPmrpTC; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727266305; c=relaxed/simple;
+	bh=BCRPbZGT2cytSH/WPYdWdJfSm5/GQ9nDnLyBHUbxs8Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oLq6rrZw326izMe59HAM4ffN0lat9k6jXeB/rvwCWXn0iFwgJsuvNQhKWXdLFKTRC9vRbKXIi/x++Y8At5P4cMmVCy9lcybzsPzRXFJ2ibb9GTPSsqIKgZNWJZLonuIPHdnGbZSQj/x6qsc0FZXSF2slgLW8Gg75hP1sUnqbX18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TyIOY75q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kpPmrpTC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727266282; x=1758802282;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FAHKjBRAC5Qo7JGJBZ0ZwrHXhZXpLlt629eFHIHC2mQ=;
-  b=kpPmrpTCMv0LcRqDfFPHyEnAAa9r2MjMxc+ixQQW033pZYZsK9hNkm4Q
-   KoaSgosC92Vv6qbGIKvP3Z6k5l8W6uzB5MNA0Sng9jspGcU/2tnJo5OV6
-   XCOFoW/MrPNxTDrZAWkVvgYQ8tzgGfEK925B25is5xg6uNtc9guqj/yXh
-   elbL65hyOjnylgndrrdmdoUNv09p7Ivae+wyTbEDeEFvR4OccjERvUJG5
-   tGLXnKS5W/gGAEd7pvShp5FE/zD5SWVUn4dONCfnDdMjF/M3KdNQM/sp0
-   mzlGJ0bVkywrhHlOHZ2pbzf5h3lGaLBjAd9PhqpnTY4HhaDxGen023lF2
-   Q==;
-X-CSE-ConnectionGUID: nucYZX2eTEadamAjUL4lCQ==
-X-CSE-MsgGUID: nmrtTOMeQ7SxIvGaHHcuIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="37685681"
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="37685681"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 05:11:22 -0700
-X-CSE-ConnectionGUID: 4r2PhwDLS8+19mq24EPbKQ==
-X-CSE-MsgGUID: kHeJJX76TBGVdZwSVBpbjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,257,1719903600"; 
-   d="scan'208";a="71349556"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 25 Sep 2024 05:11:18 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stQrT-000JXF-17;
-	Wed, 25 Sep 2024 12:11:15 +0000
-Date: Wed, 25 Sep 2024 20:10:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fangzheng Zhang <fangzheng.zhang@unisoc.com>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>, Greg KH <greg@kroah.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, tkjos@google.com,
-	Fangzheng Zhang <fangzheng.zhang@unisoc.com>,
-	Yuming Han <yuming.han@unisoc.com>
-Subject: Re: [PATCH 1/2] mm/slub: Add panic function when slub leaks
-Message-ID: <202409251929.fHee67vM-lkp@intel.com>
-References: <20240925032256.1782-2-fangzheng.zhang@unisoc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TyIOY75q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F44C4CECD;
+	Wed, 25 Sep 2024 12:11:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727266305;
+	bh=BCRPbZGT2cytSH/WPYdWdJfSm5/GQ9nDnLyBHUbxs8Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TyIOY75qbjnlxrv/prCz2vMWvh757/gp+/BN60zyqfEYt3ViKtfm4NK0pigFYUjqp
+	 Ti2WQce2jg1iWqlEPM/7m/J4v0pVHY8016OAMTxwfy8pWdGvTCQ3QADTexxDLllJzb
+	 9McSNgDIbqs+kPvdZFEoNjICbipkBu5md13KeYUMMJw1jdcdTDNMXlk43E/GdJEsW+
+	 AxIYylmj1U8tB9FjqVIbMFKkUfdM0BoWay3VT1KxclORLaOXF/cfcy0fip+xObOzsu
+	 pqTJB6itmaQ3LRef2QoJBDfpoNZqE/jwE3wpUx9Zfjwz5G3Cvf6dSn5MH/8nEGUN18
+	 S9n0qGSukIdUA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Fangrui Song <maskray@google.com>,
+	Jan Beulich <jbeulich@suse.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Sasha Levin <sashal@kernel.org>,
+	davem@davemloft.net,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	nathan@kernel.org,
+	linux-crypto@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.6 004/139] crypto: x86/sha256 - Add parentheses around macros' single arguments
+Date: Wed, 25 Sep 2024 08:07:04 -0400
+Message-ID: <20240925121137.1307574-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240925121137.1307574-1-sashal@kernel.org>
+References: <20240925121137.1307574-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925032256.1782-2-fangzheng.zhang@unisoc.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.52
+Content-Transfer-Encoding: 8bit
 
-Hi Fangzheng,
+From: Fangrui Song <maskray@google.com>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit 3363c460ef726ba693704dbcd73b7e7214ccc788 ]
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.11 next-20240925]
-[cannot apply to vbabka-slab/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The macros FOUR_ROUNDS_AND_SCHED and DO_4ROUNDS rely on an
+unexpected/undocumented behavior of the GNU assembler, which might
+change in the future
+(https://sourceware.org/bugzilla/show_bug.cgi?id=32073).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fangzheng-Zhang/mm-slub-Add-panic-function-when-slub-leaks/20240925-112601
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240925032256.1782-2-fangzheng.zhang%40unisoc.com
-patch subject: [PATCH 1/2] mm/slub: Add panic function when slub leaks
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240925/202409251929.fHee67vM-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409251929.fHee67vM-lkp@intel.com/reproduce)
+    M (1) (2) // 1 arg !? Future: 2 args
+    M 1 + 2   // 1 arg !? Future: 3 args
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409251929.fHee67vM-lkp@intel.com/
+    M 1 2     // 2 args
 
-All errors (new ones prefixed by >>):
+Add parentheses around the single arguments to support future GNU
+assembler and LLVM integrated assembler (when the IsOperator hack from
+the following link is dropped).
 
->> mm/slub.c:7354:2: error: unterminated conditional directive
-    7354 | #ifdef CONFIG_SLUB_LEAK_PANIC
-         |  ^
-   1 error generated.
+Link: https://github.com/llvm/llvm-project/commit/055006475e22014b28a070db1bff41ca15f322f0
+Signed-off-by: Fangrui Song <maskray@google.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/crypto/sha256-avx2-asm.S | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-
-vim +7354 mm/slub.c
-
-  7350	
-  7351	/*
-  7352	 * The /sys/module/slub ABI
-  7353	 */
-> 7354	#ifdef CONFIG_SLUB_LEAK_PANIC
-  7355	/*
-  7356	 * What:          /sys/module/slub/parameters/leak_panic
-  7357	 *                /sys/module/slub/parameters/leak_panic_threshold
-  7358	 * Date:          Sep 2024
-  7359	 * KernelVersion: v6.6+
-  7360	 * Description:   Used for slub memory leak check. When the user
-  7361	 *                successfully allocates the slub page, it also performs
-  7362	 *                statistics on the total slub usage in the system.
-  7363	 *                When the usage exceeds the set value
-  7364	 *                (threshold * memtotal / 100), it is considered that
-  7365	 *                there is a risk of slub leakage in the system at this time.
-  7366	 *                A panic operation will be triggered.
-  7367	 * Users:         userspace
-  7368	 */
-  7369	MODULE_PARM_DESC(leak_panic, "Disable/Enable slub_leak_panic");
-  7370	module_param_named(leak_panic, slub_leak_panic_enabled, bool, 0644);
-  7371	
-
+diff --git a/arch/x86/crypto/sha256-avx2-asm.S b/arch/x86/crypto/sha256-avx2-asm.S
+index 0ffb072be9561..0bbec1c75cd0b 100644
+--- a/arch/x86/crypto/sha256-avx2-asm.S
++++ b/arch/x86/crypto/sha256-avx2-asm.S
+@@ -592,22 +592,22 @@ SYM_TYPED_FUNC_START(sha256_transform_rorx)
+ 	leaq	K256+0*32(%rip), INP		## reuse INP as scratch reg
+ 	vpaddd	(INP, SRND), X0, XFER
+ 	vmovdqa XFER, 0*32+_XFER(%rsp, SRND)
+-	FOUR_ROUNDS_AND_SCHED	_XFER + 0*32
++	FOUR_ROUNDS_AND_SCHED	(_XFER + 0*32)
+ 
+ 	leaq	K256+1*32(%rip), INP
+ 	vpaddd	(INP, SRND), X0, XFER
+ 	vmovdqa XFER, 1*32+_XFER(%rsp, SRND)
+-	FOUR_ROUNDS_AND_SCHED	_XFER + 1*32
++	FOUR_ROUNDS_AND_SCHED	(_XFER + 1*32)
+ 
+ 	leaq	K256+2*32(%rip), INP
+ 	vpaddd	(INP, SRND), X0, XFER
+ 	vmovdqa XFER, 2*32+_XFER(%rsp, SRND)
+-	FOUR_ROUNDS_AND_SCHED	_XFER + 2*32
++	FOUR_ROUNDS_AND_SCHED	(_XFER + 2*32)
+ 
+ 	leaq	K256+3*32(%rip), INP
+ 	vpaddd	(INP, SRND), X0, XFER
+ 	vmovdqa XFER, 3*32+_XFER(%rsp, SRND)
+-	FOUR_ROUNDS_AND_SCHED	_XFER + 3*32
++	FOUR_ROUNDS_AND_SCHED	(_XFER + 3*32)
+ 
+ 	add	$4*32, SRND
+ 	cmp	$3*4*32, SRND
+@@ -618,12 +618,12 @@ SYM_TYPED_FUNC_START(sha256_transform_rorx)
+ 	leaq	K256+0*32(%rip), INP
+ 	vpaddd	(INP, SRND), X0, XFER
+ 	vmovdqa XFER, 0*32+_XFER(%rsp, SRND)
+-	DO_4ROUNDS	_XFER + 0*32
++	DO_4ROUNDS	(_XFER + 0*32)
+ 
+ 	leaq	K256+1*32(%rip), INP
+ 	vpaddd	(INP, SRND), X1, XFER
+ 	vmovdqa XFER, 1*32+_XFER(%rsp, SRND)
+-	DO_4ROUNDS	_XFER + 1*32
++	DO_4ROUNDS	(_XFER + 1*32)
+ 	add	$2*32, SRND
+ 
+ 	vmovdqa	X2, X0
+@@ -651,8 +651,8 @@ SYM_TYPED_FUNC_START(sha256_transform_rorx)
+ 	xor	SRND, SRND
+ .align 16
+ .Lloop3:
+-	DO_4ROUNDS	 _XFER + 0*32 + 16
+-	DO_4ROUNDS	 _XFER + 1*32 + 16
++	DO_4ROUNDS	(_XFER + 0*32 + 16)
++	DO_4ROUNDS	(_XFER + 1*32 + 16)
+ 	add	$2*32, SRND
+ 	cmp	$4*4*32, SRND
+ 	jb	.Lloop3
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
