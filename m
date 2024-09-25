@@ -1,54 +1,54 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5426D7581F
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC47D13B7BE
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276518; cv=none; b=siL8vzDDFRDMmccty5ibyMaXTUJTZ2DWCbPsFYpqNSso7RFd0W08eoQWLYfEW+I5OGXVj6XQmuOB/VPt8IzLPl6k/4TiCBF1/D2p4uIM5YfadcQcrd+PiYQHhKpp3OxYdSpA+I9a3B4OXaz8Rwl7Xr34ak5Yv/ZqjNh4sGxXBoo=
+	t=1727276521; cv=none; b=Q4flyDKtTYEpM/ZS3HC6W6XDUUfi5aqx7IkdjM5YbcmRMXgVVyVUaiuT0BmtEePBqTA+gTJxVIHfC2Mf3KJa8mkckkoAQOsY0x94zYE+RYs4eiErKE55rDtp/ioWtsgmhnvfhgYSNmtovl4oZV3jmh9fgsnGBZnEFBzKznME4KA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276518; c=relaxed/simple;
-	bh=rk1TLausu3D2x4uz05lRhrdTMxiTSLA2fDl1meeIK+I=;
+	s=arc-20240116; t=1727276521; c=relaxed/simple;
+	bh=IaHPxWGMSEwaCkkyiwAlKMa55WaS/Witb8KJx2+NTs0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DDcoyVdkDrzQ/p5oNaRlqiFugSnysijWN1fJHM3a5GY/7wYRwU+2GqhZRw88uUkH5NCLhy6NMOFstDmC49VqnQgBYTGSry5qY7yL51sqv/xt9MDza85M7wWai0SqMQKwAR3YnE8iG4+mvWdYGjiNL98rEBfwkXsOIYr81h3zP1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZO2J1ru1; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=JmtfmKlLbU3q2wltd1g5Jm53b907bb+k2eCmOjGbR8PIhkb2hk84pqPAJzFml59fHjLAa3kFolfbZp3dbP8/WVR3IuRB7t+Z228BLX7MOgE5l8Fbtm95cUMfE/6eMevbSq+61hvIWkJRunm8IUbA6FxWqeMtSANGYKwYdMawJtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qPCZU3Xe; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZO2J1ru1"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-42cb6ed7f9dso63180105e9.3
-        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:01:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qPCZU3Xe"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-42cb0b0514bso56885795e9.1
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276515; x=1727881315; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1727276517; x=1727881317; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yjSReXj8XxN+J1aHSpg+bgY7XO8zJXJrh2uX1BeFRGQ=;
-        b=ZO2J1ru1yeTCJKTpJTThYW0T1H25aKJ4kdtnHtde6jh6AjThxbdajlOO5eth9K45h/
-         jQu6MxtKxfNhbqVbQpsAQmZIa51W7Qubxl3VxiKNVctwbbpkFE5EUXP5pT2RKajC6kmp
-         kIcCZv9ldT+V2HTPTwKkZ1u0ce8hF0TNRQBZvkSsH8XUXm69qPp9O0wQYCEIp3YpEggf
-         i3RnMrdkXYu+ihvvUnBvMAHRMqxT7efYCt17erwCk0ZAks+dE9ReK30vUCdOMNGkJ4Da
-         hiPufZy1mgnMvTcjUMWLol0MaxP2PINMK6vjdTwCkHJK0b8XCQqQxMudjvCp+fbIcp1f
-         25fQ==
+        bh=pz/XW8QSYpyjnMJx025a43dGrFFSpzR/yo2KpiqoalU=;
+        b=qPCZU3Xe6jaoQuRindJKYpwgFZKa6E3TjEcGpJ9jd/j3ZHI14TC36ifG28tW3UA+qe
+         Vnix8LhkzjNRwrbwWeFBlikt2jyU4Ntja+2xH1rmzH7BFik6V98R8IeEsdSSMYj4W0pK
+         DTICqLED1Ui433FytgJuG6oNId3+9/Ow/ou60trj4aKauzR02vQXxllrxsxu747eTD4A
+         nyXPLU1/wolY6OJE9768NMoHtEJ2yi1cK6hW54Szlw17NCQzatzUvzW8n0dVV+MqMyo4
+         hiQI1aLa/XydMGvmOWN+IYPhdFUm6m7KwSaHSm7iwJAicudum1rghl8sXLnAdxbd8bbo
+         ARCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276515; x=1727881315;
+        d=1e100.net; s=20230601; t=1727276517; x=1727881317;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yjSReXj8XxN+J1aHSpg+bgY7XO8zJXJrh2uX1BeFRGQ=;
-        b=mQOjbE3xv3SYgb/fwDEOn2pini9QqNko9ojiAoNPaJGOt3PJYv02txk4H5R8RKFAaX
-         1TdglSvv5Xi0NXPMJkyQnz5uw+44WxlcfnoRmvVd6eUmzuoLfWOSY9BEdFChaUFZcaUz
-         GARUq16u93fnvj4Ke61taSVTHypY4t/R/syR1KVoRZ42edjbgR7//5ewGF2n7UNpxdMw
-         GbMqPIySl3RBznd/M2PHbgVhiLETVVH8HqEUpebK5HgX0QGsjHHakosa73hBUo6e/sZ5
-         IHYx6d4KDWaaHs+IH3IKWx5kpNJ5tKX+ho5BEtl1avRueuV3ziN56Inn9i4Tgpk7cJDd
-         Tv0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVtKpqoD6qYrSofhjWD6uZu2IQY6wJJ/KaWw0duhjRH8iYh9PXop79TQoVDMwWyLmEUhLoF@lists.linux.dev
-X-Gm-Message-State: AOJu0YxHF3I/3HEl4JXSYmuZwcoALNm37PeHudG8VrvGR6aEluTXkOQp
-	v09+1tbSTbdlHia0nkwc2AscfjYteVEUd5OW1nBiOiH4ZO+psZSiC3BXKIMIcm3cx6iOLw==
-X-Google-Smtp-Source: AGHT+IGzIZ2o2YM9LwRx7GUBkPXP1nnHd93bOM06M/lDtcRNJJFbQb+/UGpm4f4GZO5kVPvAO8R9y3yP
+        bh=pz/XW8QSYpyjnMJx025a43dGrFFSpzR/yo2KpiqoalU=;
+        b=P1Mi3HXSLVsm5zwpo/jESXuxgxcGbg/8nNR6mw2yKaeSVHN5HYKXT8Iovs6A2XsSZ6
+         8kH4FvPNbTGppu5Ai8+3BvdXDiYS/HXhTe76dKSkAMvyJlCHPJFunBp+hbZW9WcF3FuH
+         5CPTd401UMzA2BDj0inXwAQc1TFTXRAYw1RDAYET2uE3I62qtrWQUNQZaAnbNHxuiYeb
+         S/Whl2ML7Wyy/cvusbiGUDmuN16Nz8hVGavoQgVKINNzUrT5S1WaCOtv+slVUTVnGydx
+         S786+8PBzlmKHdzqSTJDj2EOqpEHYFI/OtGoK+DEBcnrYPPSJGlNXdvcfbVgQaWRAx6v
+         Alxg==
+X-Forwarded-Encrypted: i=1; AJvYcCUNHWVwGg+JBPwkCS/tvS1YA+9rEHt81U5PYc+2zl5gx9eVI15SlQ6g/bBK3K/gvCrPs+nI@lists.linux.dev
+X-Gm-Message-State: AOJu0YxaXLjUtVyuUDoUUakrZ0mVWOHP/qa5yz5xo07IiHXO/tzItWzE
+	S5D9k6o3dLDZ9nW0xMmdknA2APKjb9g4BnB93aDfMhTyZxaGF1WY5lmydGPeh7VIm3ZCWw==
+X-Google-Smtp-Source: AGHT+IEbq9+/MTLELU3OXPlyueW+j2FWZvgN6ZakUbbc2SrTEQmlnuellku1ZjQlO+1N3OhIaNIzAxHq
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:600c:214f:b0:42c:b32e:6ba7 with SMTP id
- 5b1f17b1804b1-42e9624246bmr34035e9.6.1727276514236; Wed, 25 Sep 2024 08:01:54
- -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:02 +0200
+ (user=ardb job=sendgmr) by 2002:a05:600c:5119:b0:42c:b4ca:768c with SMTP id
+ 5b1f17b1804b1-42e961360edmr149855e9.3.1727276516881; Wed, 25 Sep 2024
+ 08:01:56 -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:03 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1869; i=ardb@kernel.org;
- h=from:subject; bh=Etb53DEUMtJxbS45M94XzvcBugumXuKFZ3M2B/KYBNo=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6jquDX165ub5J178W1mVH21S/GxP0fqUgljlqYpRR
- x60nEvpKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABPRa2RkeBV2XNd/yacJf4IS
- mc47ex9ud90aJbN1Uf8PDSuxLfrPTjD8rwhuEVogxe0Xov++IjA4keVg55+fz6JEZeM/B04o0/B nBgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10814; i=ardb@kernel.org;
+ h=from:subject; bh=yS/zV/W3xopSyE4a8OCITK3fowdcfQuYvJXmy9tih3c=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6obs5pM9GZf2VnAvYlrokLT1Ituly6LWzTERkUrrD
+ f6oTr3QUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACYSz8/wm0VimXuGXXdnV+M6
+ 5qSfrfdnXGBIb3j5Z7LmafMTK97PMWD4K1PcmbbV2I3veafe8+rETfcetx2VnGN1t1r8BK+RQaQ qCwA=
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-32-ardb+git@google.com>
-Subject: [RFC PATCH 02/28] Documentation: Bump minimum GCC version to 8.1
+Message-ID: <20240925150059.3955569-33-ardb+git@google.com>
+Subject: [RFC PATCH 03/28] x86/tools: Use mmap() to simplify relocs host tool
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -90,43 +90,330 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Bump the minimum GCC version to 8.1 to gain unconditional support for
-referring to the per-task stack cookie using a symbol rather than
-relying on the fixed offset of 40 bytes from %GS, which requires
-elaborate hacks to support.
+Instead of relying on fseek() and fread() to traverse the vmlinux file
+when processing the ELF relocations, mmap() the whole thing and use
+memcpy() or direct references where appropriate:
+- the executable and section headers are byte swabbed before use if the
+  host is big endian, so there, the copy is retained;
+- the strtab and extended symtab are not byte swabbed so there, the
+  copies are replaced with direct references into the mmap()'ed region.
+
+This substantially simplifies the code, and makes it much easier to
+refer to other file contents directly. This will be used by a subsequent
+patch to handle GOTPCREL relocations.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- Documentation/admin-guide/README.rst | 2 +-
- Documentation/process/changes.rst    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/tools/relocs.c | 145 ++++++++------------
+ arch/x86/tools/relocs.h |   2 +
+ 2 files changed, 62 insertions(+), 85 deletions(-)
 
-diff --git a/Documentation/admin-guide/README.rst b/Documentation/admin-guide/README.rst
-index f2bebff6a733..3dda41923ed6 100644
---- a/Documentation/admin-guide/README.rst
-+++ b/Documentation/admin-guide/README.rst
-@@ -259,7 +259,7 @@ Configuring the kernel
- Compiling the kernel
- --------------------
+diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
+index c101bed61940..35a73e4aa74d 100644
+--- a/arch/x86/tools/relocs.c
++++ b/arch/x86/tools/relocs.c
+@@ -37,15 +37,17 @@ static struct relocs		relocs64;
+ #endif
  
-- - Make sure you have at least gcc 5.1 available.
-+ - Make sure you have at least gcc 8.1 available.
-    For more information, refer to :ref:`Documentation/process/changes.rst <changes>`.
+ struct section {
+-				Elf_Shdr       shdr;
+-				struct section *link;
+-				Elf_Sym        *symtab;
+-				Elf32_Word     *xsymtab;
+-				Elf_Rel        *reltab;
+-				char           *strtab;
++				Elf_Shdr         shdr;
++				struct section   *link;
++				Elf_Sym          *symtab;
++				const Elf32_Word *xsymtab;
++				Elf_Rel          *reltab;
++				const char       *strtab;
+ };
+ static struct section		*secs;
  
-  - Do a ``make`` to create a compressed kernel image. It is also possible to do
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 00f1ed7c59c3..59b7d3d8a577 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -29,7 +29,7 @@ you probably needn't concern yourself with pcmciautils.
- ====================== ===============  ========================================
-         Program        Minimal version       Command to check the version
- ====================== ===============  ========================================
--GNU C                  5.1              gcc --version
-+GNU C                  8.1              gcc --version
- Clang/LLVM (optional)  13.0.1           clang --version
- Rust (optional)        1.78.0           rustc --version
- bindgen (optional)     0.65.1           bindgen --version
++static const void		*elf_image;
++
+ static const char * const	sym_regex_kernel[S_NSYMTYPES] = {
+ /*
+  * Following symbols have been audited. There values are constant and do
+@@ -291,7 +293,7 @@ static Elf_Sym *sym_lookup(const char *symname)
+ 	for (i = 0; i < shnum; i++) {
+ 		struct section *sec = &secs[i];
+ 		long nsyms;
+-		char *strtab;
++		const char *strtab;
+ 		Elf_Sym *symtab;
+ 		Elf_Sym *sym;
+ 
+@@ -354,7 +356,7 @@ static uint64_t elf64_to_cpu(uint64_t val)
+ static int sym_index(Elf_Sym *sym)
+ {
+ 	Elf_Sym *symtab = secs[shsymtabndx].symtab;
+-	Elf32_Word *xsymtab = secs[shxsymtabndx].xsymtab;
++	const Elf32_Word *xsymtab = secs[shxsymtabndx].xsymtab;
+ 	unsigned long offset;
+ 	int index;
+ 
+@@ -368,10 +370,9 @@ static int sym_index(Elf_Sym *sym)
+ 	return elf32_to_cpu(xsymtab[index]);
+ }
+ 
+-static void read_ehdr(FILE *fp)
++static void read_ehdr(void)
+ {
+-	if (fread(&ehdr, sizeof(ehdr), 1, fp) != 1)
+-		die("Cannot read ELF header: %s\n", strerror(errno));
++	memcpy(&ehdr, elf_image, sizeof(ehdr));
+ 	if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0)
+ 		die("No ELF magic\n");
+ 	if (ehdr.e_ident[EI_CLASS] != ELF_CLASS)
+@@ -414,60 +415,48 @@ static void read_ehdr(FILE *fp)
+ 
+ 
+ 	if (shnum == SHN_UNDEF || shstrndx == SHN_XINDEX) {
+-		Elf_Shdr shdr;
+-
+-		if (fseek(fp, ehdr.e_shoff, SEEK_SET) < 0)
+-			die("Seek to %" FMT " failed: %s\n", ehdr.e_shoff, strerror(errno));
+-
+-		if (fread(&shdr, sizeof(shdr), 1, fp) != 1)
+-			die("Cannot read initial ELF section header: %s\n", strerror(errno));
++		const Elf_Shdr *shdr = elf_image + ehdr.e_shoff;
+ 
+ 		if (shnum == SHN_UNDEF)
+-			shnum = elf_xword_to_cpu(shdr.sh_size);
++			shnum = elf_xword_to_cpu(shdr->sh_size);
+ 
+ 		if (shstrndx == SHN_XINDEX)
+-			shstrndx = elf_word_to_cpu(shdr.sh_link);
++			shstrndx = elf_word_to_cpu(shdr->sh_link);
+ 	}
+ 
+ 	if (shstrndx >= shnum)
+ 		die("String table index out of bounds\n");
+ }
+ 
+-static void read_shdrs(FILE *fp)
++static void read_shdrs(void)
+ {
++	const Elf_Shdr *shdr = elf_image + ehdr.e_shoff;
+ 	int i;
+-	Elf_Shdr shdr;
+ 
+ 	secs = calloc(shnum, sizeof(struct section));
+ 	if (!secs)
+ 		die("Unable to allocate %ld section headers\n", shnum);
+ 
+-	if (fseek(fp, ehdr.e_shoff, SEEK_SET) < 0)
+-		die("Seek to %" FMT " failed: %s\n", ehdr.e_shoff, strerror(errno));
+-
+-	for (i = 0; i < shnum; i++) {
++	for (i = 0; i < shnum; i++, shdr++) {
+ 		struct section *sec = &secs[i];
+ 
+-		if (fread(&shdr, sizeof(shdr), 1, fp) != 1)
+-			die("Cannot read ELF section headers %d/%ld: %s\n", i, shnum, strerror(errno));
+-
+-		sec->shdr.sh_name      = elf_word_to_cpu(shdr.sh_name);
+-		sec->shdr.sh_type      = elf_word_to_cpu(shdr.sh_type);
+-		sec->shdr.sh_flags     = elf_xword_to_cpu(shdr.sh_flags);
+-		sec->shdr.sh_addr      = elf_addr_to_cpu(shdr.sh_addr);
+-		sec->shdr.sh_offset    = elf_off_to_cpu(shdr.sh_offset);
+-		sec->shdr.sh_size      = elf_xword_to_cpu(shdr.sh_size);
+-		sec->shdr.sh_link      = elf_word_to_cpu(shdr.sh_link);
+-		sec->shdr.sh_info      = elf_word_to_cpu(shdr.sh_info);
+-		sec->shdr.sh_addralign = elf_xword_to_cpu(shdr.sh_addralign);
+-		sec->shdr.sh_entsize   = elf_xword_to_cpu(shdr.sh_entsize);
++		sec->shdr.sh_name      = elf_word_to_cpu(shdr->sh_name);
++		sec->shdr.sh_type      = elf_word_to_cpu(shdr->sh_type);
++		sec->shdr.sh_flags     = elf_xword_to_cpu(shdr->sh_flags);
++		sec->shdr.sh_addr      = elf_addr_to_cpu(shdr->sh_addr);
++		sec->shdr.sh_offset    = elf_off_to_cpu(shdr->sh_offset);
++		sec->shdr.sh_size      = elf_xword_to_cpu(shdr->sh_size);
++		sec->shdr.sh_link      = elf_word_to_cpu(shdr->sh_link);
++		sec->shdr.sh_info      = elf_word_to_cpu(shdr->sh_info);
++		sec->shdr.sh_addralign = elf_xword_to_cpu(shdr->sh_addralign);
++		sec->shdr.sh_entsize   = elf_xword_to_cpu(shdr->sh_entsize);
+ 		if (sec->shdr.sh_link < shnum)
+ 			sec->link = &secs[sec->shdr.sh_link];
+ 	}
+ 
+ }
+ 
+-static void read_strtabs(FILE *fp)
++static void read_strtabs(void)
+ {
+ 	int i;
+ 
+@@ -476,20 +465,11 @@ static void read_strtabs(FILE *fp)
+ 
+ 		if (sec->shdr.sh_type != SHT_STRTAB)
+ 			continue;
+-
+-		sec->strtab = malloc(sec->shdr.sh_size);
+-		if (!sec->strtab)
+-			die("malloc of %" FMT " bytes for strtab failed\n", sec->shdr.sh_size);
+-
+-		if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
+-			die("Seek to %" FMT " failed: %s\n", sec->shdr.sh_offset, strerror(errno));
+-
+-		if (fread(sec->strtab, 1, sec->shdr.sh_size, fp) != sec->shdr.sh_size)
+-			die("Cannot read symbol table: %s\n", strerror(errno));
++		sec->strtab = elf_image + sec->shdr.sh_offset;
+ 	}
+ }
+ 
+-static void read_symtabs(FILE *fp)
++static void read_symtabs(void)
+ {
+ 	int i, j;
+ 
+@@ -499,16 +479,7 @@ static void read_symtabs(FILE *fp)
+ 
+ 		switch (sec->shdr.sh_type) {
+ 		case SHT_SYMTAB_SHNDX:
+-			sec->xsymtab = malloc(sec->shdr.sh_size);
+-			if (!sec->xsymtab)
+-				die("malloc of %" FMT " bytes for xsymtab failed\n", sec->shdr.sh_size);
+-
+-			if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
+-				die("Seek to %" FMT " failed: %s\n", sec->shdr.sh_offset, strerror(errno));
+-
+-			if (fread(sec->xsymtab, 1, sec->shdr.sh_size, fp) != sec->shdr.sh_size)
+-				die("Cannot read extended symbol table: %s\n", strerror(errno));
+-
++			sec->xsymtab = elf_image + sec->shdr.sh_offset;
+ 			shxsymtabndx = i;
+ 			continue;
+ 
+@@ -519,11 +490,7 @@ static void read_symtabs(FILE *fp)
+ 			if (!sec->symtab)
+ 				die("malloc of %" FMT " bytes for symtab failed\n", sec->shdr.sh_size);
+ 
+-			if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
+-				die("Seek to %" FMT " failed: %s\n", sec->shdr.sh_offset, strerror(errno));
+-
+-			if (fread(sec->symtab, 1, sec->shdr.sh_size, fp) != sec->shdr.sh_size)
+-				die("Cannot read symbol table: %s\n", strerror(errno));
++			memcpy(sec->symtab, elf_image + sec->shdr.sh_offset, sec->shdr.sh_size);
+ 
+ 			for (j = 0; j < num_syms; j++) {
+ 				Elf_Sym *sym = &sec->symtab[j];
+@@ -543,12 +510,13 @@ static void read_symtabs(FILE *fp)
+ }
+ 
+ 
+-static void read_relocs(FILE *fp)
++static void read_relocs(void)
+ {
+ 	int i, j;
+ 
+ 	for (i = 0; i < shnum; i++) {
+ 		struct section *sec = &secs[i];
++		const Elf_Rel *reltab = elf_image + sec->shdr.sh_offset;
+ 
+ 		if (sec->shdr.sh_type != SHT_REL_TYPE)
+ 			continue;
+@@ -557,19 +525,12 @@ static void read_relocs(FILE *fp)
+ 		if (!sec->reltab)
+ 			die("malloc of %" FMT " bytes for relocs failed\n", sec->shdr.sh_size);
+ 
+-		if (fseek(fp, sec->shdr.sh_offset, SEEK_SET) < 0)
+-			die("Seek to %" FMT " failed: %s\n", sec->shdr.sh_offset, strerror(errno));
+-
+-		if (fread(sec->reltab, 1, sec->shdr.sh_size, fp) != sec->shdr.sh_size)
+-			die("Cannot read symbol table: %s\n", strerror(errno));
+-
+ 		for (j = 0; j < sec->shdr.sh_size/sizeof(Elf_Rel); j++) {
+ 			Elf_Rel *rel = &sec->reltab[j];
+-
+-			rel->r_offset = elf_addr_to_cpu(rel->r_offset);
+-			rel->r_info   = elf_xword_to_cpu(rel->r_info);
++			rel->r_offset = elf_addr_to_cpu(reltab[j].r_offset);
++			rel->r_info   = elf_xword_to_cpu(reltab[j].r_info);
+ #if (SHT_REL_TYPE == SHT_RELA)
+-			rel->r_addend = elf_xword_to_cpu(rel->r_addend);
++			rel->r_addend = elf_xword_to_cpu(reltab[j].r_addend);
+ #endif
+ 		}
+ 	}
+@@ -591,7 +552,7 @@ static void print_absolute_symbols(void)
+ 
+ 	for (i = 0; i < shnum; i++) {
+ 		struct section *sec = &secs[i];
+-		char *sym_strtab;
++		const char *sym_strtab;
+ 		int j;
+ 
+ 		if (sec->shdr.sh_type != SHT_SYMTAB)
+@@ -633,7 +594,7 @@ static void print_absolute_relocs(void)
+ 	for (i = 0; i < shnum; i++) {
+ 		struct section *sec = &secs[i];
+ 		struct section *sec_applies, *sec_symtab;
+-		char *sym_strtab;
++		const char *sym_strtab;
+ 		Elf_Sym *sh_symtab;
+ 		int j;
+ 
+@@ -725,7 +686,7 @@ static void walk_relocs(int (*process)(struct section *sec, Elf_Rel *rel,
+ 
+ 	/* Walk through the relocations */
+ 	for (i = 0; i < shnum; i++) {
+-		char *sym_strtab;
++		const char *sym_strtab;
+ 		Elf_Sym *sh_symtab;
+ 		struct section *sec_applies, *sec_symtab;
+ 		int j;
+@@ -1177,12 +1138,24 @@ void process(FILE *fp, int use_real_mode, int as_text,
+ 	     int show_absolute_syms, int show_absolute_relocs,
+ 	     int show_reloc_info)
+ {
++	int fd = fileno(fp);
++	struct stat sb;
++	void *p;
++
++	if (fstat(fd, &sb))
++		die("fstat() failed\n");
++
++	elf_image = p = mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
++	if (p == MAP_FAILED)
++		die("mmap() failed\n");
++
+ 	regex_init(use_real_mode);
+-	read_ehdr(fp);
+-	read_shdrs(fp);
+-	read_strtabs(fp);
+-	read_symtabs(fp);
+-	read_relocs(fp);
++
++	read_ehdr();
++	read_shdrs();
++	read_strtabs();
++	read_symtabs();
++	read_relocs();
+ 
+ 	if (ELF_BITS == 64)
+ 		percpu_init();
+@@ -1203,4 +1176,6 @@ void process(FILE *fp, int use_real_mode, int as_text,
+ 	}
+ 
+ 	emit_relocs(as_text, use_real_mode);
++
++	munmap(p, sb.st_size);
+ }
+diff --git a/arch/x86/tools/relocs.h b/arch/x86/tools/relocs.h
+index 4c49c82446eb..7a509604ff92 100644
+--- a/arch/x86/tools/relocs.h
++++ b/arch/x86/tools/relocs.h
+@@ -16,6 +16,8 @@
+ #include <endian.h>
+ #include <regex.h>
+ #include <tools/le_byteshift.h>
++#include <sys/stat.h>
++#include <sys/mman.h>
+ 
+ __attribute__((__format__(printf, 1, 2)))
+ void die(char *fmt, ...) __attribute__((noreturn));
 -- 
 2.46.0.792.g87dc391469-goog
 
