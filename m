@@ -1,54 +1,54 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F4B718C920
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D745918D620
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276538; cv=none; b=jr7J+zWAfMIqLSlA4/P5xIlU1ZZL7doW2ZEjerZYnJsmjIsHCqJ/tgfQs7Mg+obROkDvi9jVr/iJEmo6dv2wKFYu5W85l0yi+ZU6vyQoIlKhcu2ZiixAtxtiirnRgTa/gFN2D9UPUzB4R4XsffePqJhjNI1bZEMkJRfnhIxbMFA=
+	t=1727276541; cv=none; b=FuqC5l0Rpc5+tWynbCPDAHnqK9vWU5i6U7EMAp0CxXx2F9EYNDgL7WA/NOydDFGm4TB586j4yO81/auzJbb0HGvgi1MrJ+CvIik3lkg9CQMpr1XbXEExVjTEDKr81v9RIQ0f5slBVOexsKUgqEAhWBzknIc/0sa9W3AiS00SCg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276538; c=relaxed/simple;
-	bh=UKT9SQcfQYmFYYWRpiFhP5glZL5JX0TJEX6TTbNQ3aU=;
+	s=arc-20240116; t=1727276541; c=relaxed/simple;
+	bh=JTcZMRf52oQJjvsrQbaaa26wNEschMPTichZxc3ZyTY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SyOoVc4w8HSnvOI5FU664Oe2L2DxlVB5kM6l4of/nBx3U4d0kzleylrjVxwWzg7Oa08kbH/5xMvrH+aXzBVCkaAf/y0qvTNt2q8xBKO2ly/ZPHvbZ23GVW1P+KjakHtIboR0/x8D4t9NbcKhErmN5jue9NTr71YyT4e46AY2Owk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TK4Q2Pkc; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=RveKIH22mLgZJUXx71FosIo9pmXrEgbR1F+sZ/IPwxYMP3ZnJY0H+ng+FiyEWLUMF/r9SMJTXekQJUhuxBrK8gckANCgCAp1Jgt+1CI6dxQH5fG/1HQF+tOzy35wE5+HJrGQ2krB8bzlAfnwtKmKxNJpjeEE0B3OszbCJVqTlwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sO4zJX3A; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TK4Q2Pkc"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6d3e062dbeeso14659187b3.0
-        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:02:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sO4zJX3A"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6ddbcc96a5fso96281337b3.0
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276535; x=1727881335; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1727276538; x=1727881338; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwy8kTVjZ/08dn4MFhxsJ/CPkFSWb32MIOuFSl+DFsU=;
-        b=TK4Q2PkcGp/Y2/H5a9abnunSJw1m+Hr7IvhfrrRlZadO/Jnkrt3xDSMyz88far7u/N
-         6xc2GW11XT+lzrbHTVZEie/QKs9I5ZyxRrzAQLV+Gb1FuHlgX9+g7T0tz3pbB+Auop94
-         452xikjEb8D8U8f5xQB56wYrEpIGTmcZ2B1S/nOrus4OkBCQLTaYFlJhJdRAPgpqti7F
-         fp/8SO5G7kSjDilZoLVS/h7i89P++wyX69tTBCkTSZlPBB83qGdsBgX6xvtCC5OAoh4Q
-         2hvYVISumq1F/lIT4YmSF2N+C+iqlANpIkhGkunfwqb38n0k26MuLfxBG2MXs5Ad5Xvo
-         e+bw==
+        bh=WebA59vxPkU4u7rhQajyH4BvEeqGZRhskbQXw1lowfs=;
+        b=sO4zJX3Ay3sRE2yHMk5MYA9978PiFbrJOWgNR6WDWqc27bk5bEY/AYCtaFOvtRqTSx
+         9RWF+IATxWI6pwS+CiyWFxmZSS2O5zqiW08Dt8raJXTatfNMKvsChSUWIsSnMNRgclOW
+         GSSydLdsQ+W+9cdbdIh2NqFOXzRCqYl9abQ2O/UuNaOYChc8bs/o0BE/J3ro/yhn/+zf
+         qxhpHq8MCDxrrwxV3rKsdXTanvtVBRq27zh6ToQUnHLGrbrqMZ0ah6CHBIHNSZueO3c8
+         AiyYJBeYq9zVbh/EWwYABVcgXu2Qdv1IBzPkozOAB0rexrmfqAnN/31ji9XWAAcqJMoz
+         xlPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276535; x=1727881335;
+        d=1e100.net; s=20230601; t=1727276538; x=1727881338;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwy8kTVjZ/08dn4MFhxsJ/CPkFSWb32MIOuFSl+DFsU=;
-        b=peBLbkrzBy1Ep8w7+71MhZ4AzWk/boCe9DoujD1vkdnu1R0NipJoO9Xxml7ibiBHx4
-         +mDC5NIzz8jPXKzOQeloJ9dZpa2lTvV3MDq3aqWWvjBR0NoTlkCxFpDCQCuPJcW+T8xd
-         VwsRCQ4PcEJek934PD6+5nxMh5YmwOtSWoJpZT4Ov5hc5VeqPO/utMA9g33D6K5v9nVw
-         3MK1xQnpgStAR2J+1JL8lIe/ND7HKKP4lU3J+JOdFgIZwEWpx1O12f6qziTSFasfEqt7
-         MHw/PQ7yw/JD5H2Kg3nf2n+oTLE7AzISdPWF8A1z2lCleGXU1LyUE5JttRjY4CK8i8G9
-         kc2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX4LBE53KK2EqGK/JRGDAELIbehYHpX9JUyRZqHXxKW1EXn5c5xfKz9eHcyypoHVyKX6/RB@lists.linux.dev
-X-Gm-Message-State: AOJu0YyTCW770Ji4kwaipn1O2D9lFZCInBHmT61IVe8+0tCoRemYKuUY
-	mcF7SmSvsUqiBbBJtoUiICpDJxjQrHvGoJjS8Df4B+o3fKpWu7qnLPdOcbYEBA5IiZAFhg==
-X-Google-Smtp-Source: AGHT+IEEpXdESu+AVZ5xAH4ocoULrkWfhbmfoqTWPQarKhwafrufRJLTuhlZhXvWoZ56ZcFdzDjPCpOs
+        bh=WebA59vxPkU4u7rhQajyH4BvEeqGZRhskbQXw1lowfs=;
+        b=cnhaQZ6jX5xWbRDRODykRHp/dbnzug3nC6no02i994Vt1L3zCNJ+EqwGmuPJB7sOMA
+         RyMkBU7xDaS05k0cCqiuiVJu2TmBQGKL2vei4cQKi4sI5xroAXLdZY0Upmk9gUayVQpZ
+         G6ZqZLTOdl46V7gC9P/YwNMN5CfyUx2XEeKX6NW14Eg738hw86AieMkkFykdKmHLnwVB
+         Zcu4pDK+8bjCzX37ffWCBF/ttba/pbbp8KEcdryoNhXKt88SCCNYI7gJZK/h0xUHqOgL
+         WykKbLkpo5/lYmdoJpO2w9TsEdNdUctAKT1+RHbNRJ90VMr2qYRTB50c99RGl+h8i97I
+         SpRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXY+CElppMG9EnziIES3UXilvza7Ee5sjt8iWuBvjqxeYLGAp/C1nlciAcO8GKSPye6uyxC@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxj9HfzmNdtiRFkGe+FE+fPW+Bxuc0fZbwBO0+jqgaPEW1VRQXS
+	WhrN9YrJqbPzQplzW8HALsDlWSQ5nrN1HrMT4uGpZvJgYHB2omAnkRpuvwENwF+pIQpklw==
+X-Google-Smtp-Source: AGHT+IG1eaRHJ+k+oWi0MEewfWnHRvzWiyuPrZa2XUixnuMGDlz9gyzzCn4pjg7USYksDYWFG76nQbXB
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:690c:6a0d:b0:6da:3596:21b8 with SMTP id
- 00721157ae682-6e2089c8234mr1848507b3.4.1727276535155; Wed, 25 Sep 2024
- 08:02:15 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:10 +0200
+ (user=ardb job=sendgmr) by 2002:a81:7c46:0:b0:673:b39a:92ce with SMTP id
+ 00721157ae682-6e21da5ea7bmr151347b3.3.1727276537527; Wed, 25 Sep 2024
+ 08:02:17 -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:11 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4217; i=ardb@kernel.org;
- h=from:subject; bh=umOxUEgpm+XSdzq7sqW2wzWT3DKWlT715fLzy00ZrIc=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6q4zMe0fH8zn/6yon+W25vvljx/znOb8fBedfXMvk
- 4PJy+hrHaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiC5MZGX675CxMX+/71dxB
- RTLX6OaHWScZikUU3t9k3TfnWIl7YijDP8vjN+r/hng3npecsefHgZqi2WFz5zPUNTIeVXy24tT y6awA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3674; i=ardb@kernel.org;
+ h=from:subject; bh=R6ohiPGa3ul2ikQd2A7YE6wpEPvXq0bd6W2LGMrzZ/k=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6m4L/Wkc7n0aPQzsYULiEQZPMlgefsmsLHv4K8KPe
+ c6T1d0dpSwMYhwMsmKKLAKz/77beXqiVK3zLFmYOaxMIEMYuDgFYCLF8YwMhwNCO7WWnu4+bHJ/
+ R+KN+e/7+Z5GTZy4J83mRy0Xx+UbAowMLwuTAsXUc+SfqAVdK+gtnHdHT+jRjZtrv3D/ms77oD2 BCwA=
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-40-ardb+git@google.com>
-Subject: [RFC PATCH 10/28] x86/xen: Avoid relocatable quantities in Xen ELF notes
+Message-ID: <20240925150059.3955569-41-ardb+git@google.com>
+Subject: [RFC PATCH 11/28] x86/pvh: Avoid absolute symbol references in .head.text
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -90,107 +90,119 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Xen puts virtual and physical addresses into ELF notes that are treated
-by the linker as relocatable by default. Doing so is not only pointless,
-given that the ELF notes are only intended for consumption by Xen before
-the kernel boots. It is also a KASLR leak, given that the kernel's ELF
-notes are exposed via the world readable /sys/kernel/notes.
+The .head.text section contains code that may execute from a different
+address than it was linked at. This is fragile, given that the x86 ABI
+can refer to global symbols via absolute or relative references, and the
+toolchain assumes that these are interchangeable, which they are not in
+this particular case.
 
-So emit these constants in a way that prevents the linker from marking
-them as relocatable. This involves place-relative relocations (which
-subtract their own virtual address from the symbol value) and linker
-provided absolute symbols that add the address of the place to the
-desired value.
+In the case of the PVH code, there are some additional complications:
+- the absolute references are in 32-bit code, which get emitted with
+  R_X86_64_32 relocations, and these are not permitted in PIE code;
+- the code in question is not actually relocatable: it can only run
+  correctly from the physical load address specified in the ELF note.
+
+So rewrite the code to only rely on relative symbol references: these
+are always 32-bits wide, even in 64-bit code, and are resolved by the
+linker at build time.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/kernel/vmlinux.lds.S | 13 +++++++++++++
- arch/x86/platform/pvh/head.S  |  6 +++---
- arch/x86/tools/relocs.c       |  1 +
- arch/x86/xen/xen-head.S       |  6 ++++--
- 4 files changed, 21 insertions(+), 5 deletions(-)
+ arch/x86/platform/pvh/head.S | 39 ++++++++++++++------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 00f82db7b3e1..52b8db931d0f 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -111,6 +111,19 @@ PHDRS {
- SECTIONS
- {
- 	. = __START_KERNEL;
-+
-+#ifdef CONFIG_XEN_PV
-+xen_elfnote_entry_offset =
-+	ABSOLUTE(xen_elfnote_entry) + ABSOLUTE(startup_xen);
-+xen_elfnote_hypercall_page_offset =
-+	ABSOLUTE(xen_elfnote_hypercall_page) + ABSOLUTE(hypercall_page);
-+#endif
-+
-+#ifdef CONFIG_PVH
-+xen_elfnote_phys32_entry_offset =
-+	ABSOLUTE(xen_elfnote_phys32_entry) + ABSOLUTE(pvh_start_xen - LOAD_OFFSET);
-+#endif
-+
- #ifdef CONFIG_X86_32
- 	phys_startup_32 = ABSOLUTE(startup_32 - LOAD_OFFSET);
- #else
 diff --git a/arch/x86/platform/pvh/head.S b/arch/x86/platform/pvh/head.S
-index 11245ecdc08d..adbf57e83e4e 100644
+index adbf57e83e4e..e6cb7da40e09 100644
 --- a/arch/x86/platform/pvh/head.S
 +++ b/arch/x86/platform/pvh/head.S
-@@ -50,7 +50,7 @@
- #define PVH_CS_SEL		(PVH_GDT_ENTRY_CS * 8)
- #define PVH_DS_SEL		(PVH_GDT_ENTRY_DS * 8)
- 
--SYM_CODE_START_LOCAL(pvh_start_xen)
-+SYM_CODE_START(pvh_start_xen)
+@@ -54,7 +54,20 @@ SYM_CODE_START(pvh_start_xen)
  	UNWIND_HINT_END_OF_STACK
  	cld
  
-@@ -165,5 +165,5 @@ SYM_DATA_START_LOCAL(early_stack)
- 	.fill BOOT_STACK_SIZE, 1, 0
- SYM_DATA_END_LABEL(early_stack, SYM_L_LOCAL, early_stack_end)
+-	lgdt (_pa(gdt))
++	/*
++	 * This is position dependent code that can only execute correctly from
++	 * the physical address that the kernel was linked to run at. Use the
++	 * symbols emitted for the ELF note to construct the build time physical
++	 * address of pvh_start_xen(), without relying on absolute 32-bit ELF
++	 * relocations, as these are not supported by the linker when running in
++	 * -pie mode, and should be avoided in .head.text in general.
++	 */
++0:	mov $xen_elfnote_phys32_entry_offset - 0b, %ebp
++	sub $xen_elfnote_phys32_entry - 0b, %ebp
++
++	lea (gdt - pvh_start_xen)(%ebp), %eax
++	add %eax, 2(%eax)
++	lgdt (%eax)
  
--	ELFNOTE(Xen, XEN_ELFNOTE_PHYS32_ENTRY,
--	             _ASM_PTR (pvh_start_xen - __START_KERNEL_map))
-+	ELFNOTE(Xen, XEN_ELFNOTE_PHYS32_ENTRY, .global xen_elfnote_phys32_entry;
-+		xen_elfnote_phys32_entry: _ASM_PTR xen_elfnote_phys32_entry_offset - .)
-diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index 942c029a5067..22c2d3f07a57 100644
---- a/arch/x86/tools/relocs.c
-+++ b/arch/x86/tools/relocs.c
-@@ -57,6 +57,7 @@ static const char * const	sym_regex_kernel[S_NSYMTYPES] = {
- 	[S_ABS] =
- 	"^(xen_irq_disable_direct_reloc$|"
- 	"xen_save_fl_direct_reloc$|"
-+	"xen_elfnote_.+_offset$|"
- 	"VDSO|"
- 	"__kcfi_typeid_|"
- 	"__crc_)",
-diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-index faadac7c29e6..4d246a48a85f 100644
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -88,7 +88,8 @@ SYM_CODE_END(xen_cpu_bringup_again)
- 	ELFNOTE(Xen, XEN_ELFNOTE_VIRT_BASE,      _ASM_PTR __START_KERNEL_map)
- 	/* Map the p2m table to a 512GB-aligned user address. */
- 	ELFNOTE(Xen, XEN_ELFNOTE_INIT_P2M,       .quad (PUD_SIZE * PTRS_PER_PUD))
--	ELFNOTE(Xen, XEN_ELFNOTE_ENTRY,          _ASM_PTR startup_xen)
-+	ELFNOTE(Xen, XEN_ELFNOTE_ENTRY,          .globl xen_elfnote_entry;
-+		xen_elfnote_entry: _ASM_PTR xen_elfnote_entry_offset - .)
- 	ELFNOTE(Xen, XEN_ELFNOTE_FEATURES,       .ascii "!writable_page_tables")
- 	ELFNOTE(Xen, XEN_ELFNOTE_PAE_MODE,       .asciz "yes")
- 	ELFNOTE(Xen, XEN_ELFNOTE_L1_MFN_VALID,
-@@ -109,7 +110,8 @@ SYM_CODE_END(xen_cpu_bringup_again)
- #else
- # define FEATURES_DOM0 0
- #endif
--	ELFNOTE(Xen, XEN_ELFNOTE_HYPERCALL_PAGE, _ASM_PTR hypercall_page)
-+	ELFNOTE(Xen, XEN_ELFNOTE_HYPERCALL_PAGE, .globl xen_elfnote_hypercall_page;
-+		xen_elfnote_hypercall_page: _ASM_PTR xen_elfnote_hypercall_page_offset - .)
- 	ELFNOTE(Xen, XEN_ELFNOTE_SUPPORTED_FEATURES,
- 		.long FEATURES_PV | FEATURES_PVH | FEATURES_DOM0)
- 	ELFNOTE(Xen, XEN_ELFNOTE_LOADER,         .asciz "generic")
+ 	mov $PVH_DS_SEL,%eax
+ 	mov %eax,%ds
+@@ -62,14 +75,14 @@ SYM_CODE_START(pvh_start_xen)
+ 	mov %eax,%ss
+ 
+ 	/* Stash hvm_start_info. */
+-	mov $_pa(pvh_start_info), %edi
++	lea (pvh_start_info - pvh_start_xen)(%ebp), %edi
+ 	mov %ebx, %esi
+-	mov _pa(pvh_start_info_sz), %ecx
++	mov (pvh_start_info_sz - pvh_start_xen)(%ebp), %ecx
+ 	shr $2,%ecx
+ 	rep
+ 	movsl
+ 
+-	mov $_pa(early_stack_end), %esp
++	lea (early_stack_end - pvh_start_xen)(%ebp), %esp
+ 
+ 	/* Enable PAE mode. */
+ 	mov %cr4, %eax
+@@ -84,17 +97,21 @@ SYM_CODE_START(pvh_start_xen)
+ 	wrmsr
+ 
+ 	/* Enable pre-constructed page tables. */
+-	mov $_pa(init_top_pgt), %eax
++	lea (init_top_pgt - pvh_start_xen)(%ebp), %eax
+ 	mov %eax, %cr3
+ 	mov $(X86_CR0_PG | X86_CR0_PE), %eax
+ 	mov %eax, %cr0
+ 
+ 	/* Jump to 64-bit mode. */
+-	ljmp $PVH_CS_SEL, $_pa(1f)
++	lea  (1f - pvh_start_xen)(%ebp), %eax
++	push $PVH_CS_SEL
++	push %eax
++	lret
+ 
+ 	/* 64-bit entry point. */
+ 	.code64
+ 1:
++	UNWIND_HINT_END_OF_STACK
+ 	/* Clear %gs so early per-CPU references target the per-CPU load area */
+ 	mov $MSR_GS_BASE,%ecx
+ 	xor %eax, %eax
+@@ -108,10 +125,8 @@ SYM_CODE_START(pvh_start_xen)
+ 	call *%rax
+ 
+ 	/* startup_64 expects boot_params in %rsi. */
+-	mov $_pa(pvh_bootparams), %rsi
+-	mov $_pa(startup_64), %rax
+-	ANNOTATE_RETPOLINE_SAFE
+-	jmp *%rax
++	lea pvh_bootparams(%rip), %rsi
++	jmp startup_64
+ 
+ #else /* CONFIG_X86_64 */
+ 
+@@ -146,8 +161,8 @@ SYM_CODE_END(pvh_start_xen)
+ 	.section ".init.data","aw"
+ 	.balign 8
+ SYM_DATA_START_LOCAL(gdt)
+-	.word gdt_end - gdt_start
+-	.long _pa(gdt_start)
++	.word gdt_end - gdt_start - 1
++	.long gdt_start - gdt
+ 	.word 0
+ SYM_DATA_END(gdt)
+ SYM_DATA_START_LOCAL(gdt_start)
 -- 
 2.46.0.792.g87dc391469-goog
 
