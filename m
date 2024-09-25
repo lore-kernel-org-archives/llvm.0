@@ -1,114 +1,275 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24584219E0
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 19:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF34313D2BE;
+	Wed, 25 Sep 2024 19:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727291682; cv=none; b=ZljYXOoaiTIHQeLRak/2Xi/DPE4fmpdBwMhsR9ZOaOq4BiHiFHbUo91bUS7ebgCB1+0967874/Dxn12L/BCpi+Q+tmeG1eAV3wEWmxFGNCYw9/7WZdJeC8ChcDBGpWNPBeR/m9rMQBhXVQHx7Jt1FuDxjFn370tG1w36PXU1Zbc=
+	t=1727292160; cv=none; b=hF751vmqpSm7NN2obcOPGggiD9/gEAmIq+CmDWJVmKnfZaPbBYmrACEi/tsGjB8k2QMoGcS5LpADJCbhN3oJ6IXw/9/2PS0cIv+9N7LtmvbBYh7nuDxgufJzvNZyrUlBjMKTlW89FJ4WKyFYx95VhJCwlhngIRH+vzGesRos4S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727291682; c=relaxed/simple;
-	bh=v6vimdadH9tmhJ3NLSECJJW2W8zTrYSh4bxODwkPlVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rQ3MKgNRanmxBRzCKICgOnjdUxLPZsCMCiFvXWVuJTeFGMi+KM1lJB1SVxUpGgg7WmDZJ2+yQufQr7dtMBz02Bh5VzVJubPoFh4JepRHCJMpR1khuY+XX/ErlYkqZNWBUiL85j2vf8Sq/MpBL5UV7IBnbvRgKMvSqzltqfplPHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YGBPGmYg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727292160; c=relaxed/simple;
+	bh=ZC3Nh8jXNyaMx+N0HxCVN/V6DJjNe47xe6VcstUqKyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iRbpRxAmineov9/ODyGjLxg/ePnoc5GwBdsecgmEYq+wOQM2HXue3w4JCTwxDK5ImSJdUF47rUH0PgAiL/bxURHE3xQVUgWXnIkZ+TbqWDrmQ2LvccKNyD1m/wECS2ox5UEeLjvfMESuFEykR3nvoS5/vtvk8ALlc5ColBmzNWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TcafY0d0; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YGBPGmYg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B647CC4CED5
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 19:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727291681;
-	bh=v6vimdadH9tmhJ3NLSECJJW2W8zTrYSh4bxODwkPlVY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YGBPGmYgAPdAFKNTwwajPecfktex9cSL6WggNqGsmkyZ+kpGzsxngdf8S8+81jNKy
-	 eRHOxSC4Er/nJLoAMfLrBkTHIcD1IdZYm1TNFrPbeS5EE4HG+uTT9AVyVqhIl/8HJL
-	 psBuU8DB8inowiaBUE9F9LJuDlTjOY0eHfoSjx7oH91PPbsHYt2Ihsnvpoy1LM1AK1
-	 tYHEHOvaPLcu5CS66hGTlA73hlGTptk2NtlRfVRmbHTdaNwk1haPSHF9lDYgrCR7dL
-	 s9OTTLilWDbSivuiX3XMZtzsg/Rv746l/RHhNETo2Bt5HCeuV+cwNeebX7eUhXXI68
-	 feesglxmQ0ChQ==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f75d044201so2549561fa.0
-        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 12:14:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWwyA0pnRQHc3V6jGQLu5cMUgyuJrexIkr5FOwjMEZ9h5bDcT5vZR101p03AIVWnQKyx6nZ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzkfBGzRnEu2hzOfOf+ac3tzwxvsJUZNowM2cyMqZLgmIMun5L2
-	3A94d6Md3VFszGicw4kRvI/63ZdiHi0/P5MCEpN+2ExVEg6YHg1H6xBH7yTFd6oEQN2N6S8fa8J
-	Fa/fP2H5VKBb+RE+no0CWxHnK0+0=
-X-Google-Smtp-Source: AGHT+IHhx37wVyIVLg+xrue+pSSLZp5Q9LgYurWqXbgYba/vJ5Rw09i+I8llv3k1oq/x6sYNFgZcR26HfbSEX6O6VBA=
-X-Received: by 2002:a05:651c:2126:b0:2f7:631a:6df8 with SMTP id
- 38308e7fff4ca-2f9c6cecd0fmr2173111fa.23.1727291679841; Wed, 25 Sep 2024
- 12:14:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TcafY0d0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727292158; x=1758828158;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZC3Nh8jXNyaMx+N0HxCVN/V6DJjNe47xe6VcstUqKyU=;
+  b=TcafY0d0A0DFDTnO2Jhv5LYqM7zvwrp+e9U4C1F6SLB5m1QqB8o3n/Xi
+   FGljRzlw5xVVqqIdU4KfL6YfTEW23V17V9nXrJs5JWMvuhxfQJLmA7hmk
+   +y3xT2qC2WCC5Gvq9pzt/ItCN68OhlmC5fFeTFi/C3E/xC7A8yBWbvxHQ
+   keK0ukB1yD1l5dRdYj3CbMgmY9iAQ16Nhvbz5FHqbjEw03OpsMeMT+93b
+   deAqh4Pyk877t0y7Y/lCR+3k6X5w05NutTQmHLPF9CLtmw6t1jVD3VJ3V
+   MQ4UtJEawxSb48VXsWY3RKk4vPgdS2iFjFlzv19lioV2Vq5rKtM7sbesC
+   w==;
+X-CSE-ConnectionGUID: md4yrn2hR82EVQ/xjMPDFw==
+X-CSE-MsgGUID: e/xc51ctTTy12+PGDdXHPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="37038045"
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
+   d="scan'208";a="37038045"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 12:22:36 -0700
+X-CSE-ConnectionGUID: PFGxo2AhRqqCNckHkhVVMg==
+X-CSE-MsgGUID: 1K6uvwN1Sz6MRdtEFKYIpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; 
+   d="scan'208";a="76395530"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 25 Sep 2024 12:22:35 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1stXaq-000Ju5-2G;
+	Wed, 25 Sep 2024 19:22:32 +0000
+Date: Thu, 26 Sep 2024 03:22:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nemesa Garg <nemesa.garg@intel.com>, intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nemesa Garg <nemesa.garg@intel.com>
+Subject: Re: [PATCH v4 3/3] drm/i915/display: Call panel_fitting from
+ pipe_config
+Message-ID: <202409260417.AhxuRXmO-lkp@intel.com>
+References: <20240925063032.2311796-4-nemesa.garg@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-57-ardb+git@google.com> <CAFULd4YnvhnUvq8epLqFs3hXLMCCrEi=HTRtRkLm4fg9YbP10g@mail.gmail.com>
-In-Reply-To: <CAFULd4YnvhnUvq8epLqFs3hXLMCCrEi=HTRtRkLm4fg9YbP10g@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 25 Sep 2024 21:14:28 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEL+BBTpaYzw_vkPdo18gF0-gjxBMbZyuaNhmWZC8=6tw@mail.gmail.com>
-Message-ID: <CAMj1kXEL+BBTpaYzw_vkPdo18gF0-gjxBMbZyuaNhmWZC8=6tw@mail.gmail.com>
-Subject: Re: [RFC PATCH 27/28] x86/kernel: Switch to PIE linking for the core kernel
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, Hou Wenlong <houwenlong.hwl@antgroup.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240925063032.2311796-4-nemesa.garg@intel.com>
 
-On Wed, 25 Sept 2024 at 20:54, Uros Bizjak <ubizjak@gmail.com> wrote:
->
-> On Wed, Sep 25, 2024 at 5:02=E2=80=AFPM Ard Biesheuvel <ardb+git@google.c=
-om> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Build the kernel as a Position Independent Executable (PIE). This
-> > results in more efficient relocation processing for the virtual
-> > displacement of the kernel (for KASLR). More importantly, it instructs
-> > the linker to generate what is actually needed (a program that can be
-> > moved around in memory before execution), which is better than having t=
-o
-> > rely on the linker to create a position dependent binary that happens t=
-o
-> > tolerate being moved around after poking it in exactly the right manner=
-.
-> >
-> > Note that this means that all codegen should be compatible with PIE,
-> > including Rust objects, so this needs to switch to the small code model
-> > with the PIE relocation model as well.
->
-> I think that related to this work is the patch series [1] that
-> introduces the changes necessary to build the kernel as Position
-> Independent Executable (PIE) on x86_64 [1]. There are some more places
-> that need to be adapted for PIE. The patch series also introduces
-> objtool functionality to add validation for x86 PIE.
->
-> [1] "[PATCH RFC 00/43] x86/pie: Make kernel image's virtual address flexi=
-ble"
-> https://lore.kernel.org/lkml/cover.1682673542.git.houwenlong.hwl@antgroup=
-.com/
->
+Hi Nemesa,
 
-Hi Uros,
+kernel test robot noticed the following build errors:
 
-I am aware of that discussion, as I took part in it as well.
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.11 next-20240925]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't think any of those changes are actually needed now - did you
-notice anything in particular that is missing?
+url:    https://github.com/intel-lab-lkp/linux/commits/Nemesa-Garg/drm-i915-display-Modify-panel_fitting-code-for-joiner/20240925-143239
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20240925063032.2311796-4-nemesa.garg%40intel.com
+patch subject: [PATCH v4 3/3] drm/i915/display: Call panel_fitting from pipe_config
+config: i386-randconfig-015-20240925 (https://download.01.org/0day-ci/archive/20240926/202409260417.AhxuRXmO-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409260417.AhxuRXmO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409260417.AhxuRXmO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_display.c:4792:37: error: variable 'fixed_mode' is uninitialized when used here [-Werror,-Wuninitialized]
+    4792 |                 if ((intel_dp_is_edp(intel_dp) && fixed_mode) ||
+         |                                                   ^~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_display.c:4656:43: note: initialize the variable 'fixed_mode' to silence this warning
+    4656 |         const struct drm_display_mode *fixed_mode;
+         |                                                  ^
+         |                                                   = NULL
+   1 error generated.
+
+
+vim +/fixed_mode +4792 drivers/gpu/drm/i915/display/intel_display.c
+
+  4645	
+  4646	static int
+  4647	intel_modeset_pipe_config(struct intel_atomic_state *state,
+  4648				  struct intel_crtc *crtc,
+  4649				  const struct intel_link_bw_limits *limits)
+  4650	{
+  4651		struct drm_i915_private *i915 = to_i915(crtc->base.dev);
+  4652		struct intel_crtc_state *crtc_state =
+  4653			intel_atomic_get_new_crtc_state(state, crtc);
+  4654		struct drm_connector *connector;
+  4655		struct drm_connector_state *connector_state;
+  4656		const struct drm_display_mode *fixed_mode;
+  4657		struct intel_dp *intel_dp;
+  4658		int pipe_src_w, pipe_src_h;
+  4659		int base_bpp, ret, i;
+  4660	
+  4661		crtc_state->cpu_transcoder = (enum transcoder) crtc->pipe;
+  4662	
+  4663		crtc_state->framestart_delay = 1;
+  4664	
+  4665		/*
+  4666		 * Sanitize sync polarity flags based on requested ones. If neither
+  4667		 * positive or negative polarity is requested, treat this as meaning
+  4668		 * negative polarity.
+  4669		 */
+  4670		if (!(crtc_state->hw.adjusted_mode.flags &
+  4671		      (DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_NHSYNC)))
+  4672			crtc_state->hw.adjusted_mode.flags |= DRM_MODE_FLAG_NHSYNC;
+  4673	
+  4674		if (!(crtc_state->hw.adjusted_mode.flags &
+  4675		      (DRM_MODE_FLAG_PVSYNC | DRM_MODE_FLAG_NVSYNC)))
+  4676			crtc_state->hw.adjusted_mode.flags |= DRM_MODE_FLAG_NVSYNC;
+  4677	
+  4678		ret = compute_baseline_pipe_bpp(state, crtc);
+  4679		if (ret)
+  4680			return ret;
+  4681	
+  4682		crtc_state->fec_enable = limits->force_fec_pipes & BIT(crtc->pipe);
+  4683		crtc_state->max_link_bpp_x16 = limits->max_bpp_x16[crtc->pipe];
+  4684	
+  4685		if (crtc_state->pipe_bpp > fxp_q4_to_int(crtc_state->max_link_bpp_x16)) {
+  4686			drm_dbg_kms(&i915->drm,
+  4687				    "[CRTC:%d:%s] Link bpp limited to " FXP_Q4_FMT "\n",
+  4688				    crtc->base.base.id, crtc->base.name,
+  4689				    FXP_Q4_ARGS(crtc_state->max_link_bpp_x16));
+  4690			crtc_state->bw_constrained = true;
+  4691		}
+  4692	
+  4693		base_bpp = crtc_state->pipe_bpp;
+  4694	
+  4695		/*
+  4696		 * Determine the real pipe dimensions. Note that stereo modes can
+  4697		 * increase the actual pipe size due to the frame doubling and
+  4698		 * insertion of additional space for blanks between the frame. This
+  4699		 * is stored in the crtc timings. We use the requested mode to do this
+  4700		 * computation to clearly distinguish it from the adjusted mode, which
+  4701		 * can be changed by the connectors in the below retry loop.
+  4702		 */
+  4703		drm_mode_get_hv_timing(&crtc_state->hw.mode,
+  4704				       &pipe_src_w, &pipe_src_h);
+  4705		drm_rect_init(&crtc_state->pipe_src, 0, 0,
+  4706			      pipe_src_w, pipe_src_h);
+  4707	
+  4708		for_each_new_connector_in_state(&state->base, connector, connector_state, i) {
+  4709			struct intel_encoder *encoder =
+  4710				to_intel_encoder(connector_state->best_encoder);
+  4711	
+  4712			if (connector_state->crtc != &crtc->base)
+  4713				continue;
+  4714	
+  4715			if (!check_single_encoder_cloning(state, crtc, encoder)) {
+  4716				drm_dbg_kms(&i915->drm,
+  4717					    "[ENCODER:%d:%s] rejecting invalid cloning configuration\n",
+  4718					    encoder->base.base.id, encoder->base.name);
+  4719				return -EINVAL;
+  4720			}
+  4721	
+  4722			/*
+  4723			 * Determine output_types before calling the .compute_config()
+  4724			 * hooks so that the hooks can use this information safely.
+  4725			 */
+  4726			if (encoder->compute_output_type)
+  4727				crtc_state->output_types |=
+  4728					BIT(encoder->compute_output_type(encoder, crtc_state,
+  4729									 connector_state));
+  4730			else
+  4731				crtc_state->output_types |= BIT(encoder->type);
+  4732		}
+  4733	
+  4734		/* Ensure the port clock defaults are reset when retrying. */
+  4735		crtc_state->port_clock = 0;
+  4736		crtc_state->pixel_multiplier = 1;
+  4737	
+  4738		/* Fill in default crtc timings, allow encoders to overwrite them. */
+  4739		drm_mode_set_crtcinfo(&crtc_state->hw.adjusted_mode,
+  4740				      CRTC_STEREO_DOUBLE);
+  4741	
+  4742		/* Pass our mode to the connectors and the CRTC to give them a chance to
+  4743		 * adjust it according to limitations or connector properties, and also
+  4744		 * a chance to reject the mode entirely.
+  4745		 */
+  4746		for_each_new_connector_in_state(&state->base, connector, connector_state, i) {
+  4747			struct intel_encoder *encoder =
+  4748				to_intel_encoder(connector_state->best_encoder);
+  4749	
+  4750			if (connector_state->crtc != &crtc->base)
+  4751				continue;
+  4752	
+  4753			ret = encoder->compute_config(encoder, crtc_state,
+  4754						      connector_state);
+  4755			if (ret == -EDEADLK)
+  4756				return ret;
+  4757			if (ret < 0) {
+  4758				drm_dbg_kms(&i915->drm, "[ENCODER:%d:%s] config failure: %d\n",
+  4759					    encoder->base.base.id, encoder->base.name, ret);
+  4760				return ret;
+  4761			}
+  4762		}
+  4763	
+  4764		/* Set default port clock if not overwritten by the encoder. Needs to be
+  4765		 * done afterwards in case the encoder adjusts the mode. */
+  4766		if (!crtc_state->port_clock)
+  4767			crtc_state->port_clock = crtc_state->hw.adjusted_mode.crtc_clock
+  4768				* crtc_state->pixel_multiplier;
+  4769	
+  4770		ret = intel_crtc_compute_config(state, crtc);
+  4771		if (ret == -EDEADLK)
+  4772			return ret;
+  4773		if (ret < 0) {
+  4774			drm_dbg_kms(&i915->drm, "[CRTC:%d:%s] config failure: %d\n",
+  4775				    crtc->base.base.id, crtc->base.name, ret);
+  4776			return ret;
+  4777		}
+  4778	
+  4779		for_each_new_connector_in_state(&state->base, connector,
+  4780						connector_state, i) {
+  4781			struct intel_encoder *encoder =
+  4782				to_intel_encoder(connector_state->best_encoder);
+  4783	
+  4784			if (connector_state->crtc != &crtc->base)
+  4785				continue;
+  4786	
+  4787			intel_dp = enc_to_intel_dp(encoder);
+  4788	
+  4789			if (!intel_dp)
+  4790				continue;
+  4791	
+> 4792			if ((intel_dp_is_edp(intel_dp) && fixed_mode) ||
+  4793			    crtc_state->output_format == INTEL_OUTPUT_FORMAT_YCBCR420)
+  4794				return intel_pch_panel_fitting(crtc_state, connector_state);
+  4795		}
+  4796	
+  4797		/* Dithering seems to not pass-through bits correctly when it should, so
+  4798		 * only enable it on 6bpc panels and when its not a compliance
+  4799		 * test requesting 6bpc video pattern.
+  4800		 */
+  4801		crtc_state->dither = (crtc_state->pipe_bpp == 6*3) &&
+  4802			!crtc_state->dither_force_disable;
+  4803		drm_dbg_kms(&i915->drm,
+  4804			    "[CRTC:%d:%s] hw max bpp: %i, pipe bpp: %i, dithering: %i\n",
+  4805			    crtc->base.base.id, crtc->base.name,
+  4806			    base_bpp, crtc_state->pipe_bpp, crtc_state->dither);
+  4807	
+  4808		return 0;
+  4809	}
+  4810	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
