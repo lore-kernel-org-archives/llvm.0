@@ -1,50 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EFC18DF61;
-	Wed, 25 Sep 2024 12:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB18D21F430;
+	Wed, 25 Sep 2024 12:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727266305; cv=none; b=tevWP84PGMBToNHouYCzw0VkrxQZxkPQEseYm3W+qviSQtO4vXAF+t49Vc+C0XoQUuwi69RZEcJIAcEmowaB9c/g7Mj9sDCaLOFeOq9IHsy4dATgAFVJEjKTpkjxTfxiG2j+LH8WSB4TKFCvBgBP/OpcanvD7F60a1iMLVuIp0o=
+	t=1727266491; cv=none; b=DLyikP0jTdJhW68KTQzaurqJNmTfYtL9ZzSYkaz8kSf1jx4Ta/c4WIoiVLHVwYI3gOLFGrItR1CWCa8ObDXZn+hzH0Dska9r8MCwrtRBBFDFoNxF95Bjq2dfxfo14Lfrj5KufhqqZ7UVsWDbj8mJf1wmRzmYkRn3RHSQ3FZ6WNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727266305; c=relaxed/simple;
-	bh=BCRPbZGT2cytSH/WPYdWdJfSm5/GQ9nDnLyBHUbxs8Q=;
+	s=arc-20240116; t=1727266491; c=relaxed/simple;
+	bh=pqDl/oLKye0IY1Vk4RElG6W96LZcmJEPguI00iQo6Zc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oLq6rrZw326izMe59HAM4ffN0lat9k6jXeB/rvwCWXn0iFwgJsuvNQhKWXdLFKTRC9vRbKXIi/x++Y8At5P4cMmVCy9lcybzsPzRXFJ2ibb9GTPSsqIKgZNWJZLonuIPHdnGbZSQj/x6qsc0FZXSF2slgLW8Gg75hP1sUnqbX18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TyIOY75q; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=AJIKqAZ/g1GY7Q029sxA3W0uH0ZQhQ3xwWFvVtQe0tJFDcJWZWTU8X2y+uAG//yIPvhcsadPGEwY78gBqLiOAiqxptOv8c7lCe0J32wdJce++76V0EaDUnpLJATyb3LrVeIoqGlmrxPvoGIoBFVBab0UYY86gFOw/AetnIaxv24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rcXwrzXD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TyIOY75q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F44C4CECD;
-	Wed, 25 Sep 2024 12:11:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rcXwrzXD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F7AC4CEC7;
+	Wed, 25 Sep 2024 12:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727266305;
-	bh=BCRPbZGT2cytSH/WPYdWdJfSm5/GQ9nDnLyBHUbxs8Q=;
+	s=k20201202; t=1727266490;
+	bh=pqDl/oLKye0IY1Vk4RElG6W96LZcmJEPguI00iQo6Zc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TyIOY75qbjnlxrv/prCz2vMWvh757/gp+/BN60zyqfEYt3ViKtfm4NK0pigFYUjqp
-	 Ti2WQce2jg1iWqlEPM/7m/J4v0pVHY8016OAMTxwfy8pWdGvTCQ3QADTexxDLllJzb
-	 9McSNgDIbqs+kPvdZFEoNjICbipkBu5md13KeYUMMJw1jdcdTDNMXlk43E/GdJEsW+
-	 AxIYylmj1U8tB9FjqVIbMFKkUfdM0BoWay3VT1KxclORLaOXF/cfcy0fip+xObOzsu
-	 pqTJB6itmaQ3LRef2QoJBDfpoNZqE/jwE3wpUx9Zfjwz5G3Cvf6dSn5MH/8nEGUN18
-	 S9n0qGSukIdUA==
+	b=rcXwrzXD0b9xMlDmXf7HFDTCEwM3L9awLcq+4JnfJEM9mifA3XNtJ0mJWdxGv5N3J
+	 qWarl9tGRmReK/F1VsTtpy8W0o5SkqqCpgFbbr250jXbmz2m5kEgvlasS2TJGGvwWc
+	 oHe40Y37TdYmWOYVJI6OrxIA+uSWSqcJFB2lz6gkkGXdHKdetZN8g+eg5jacKqj/s5
+	 mDAfHMRpSdDo1SbW6BTkFho5F6gvp5C51AhFQ8lyy2wu+VZIG/cy5WpXM6621tUpTP
+	 igxGh1hh1o5yewEg1Y4ZHOEFwV/NTk2Sk1NVd5TVfjj8DrD1viI2tNLNgULydeDG1w
+	 ijmeyqll0BMnQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Fangrui Song <maskray@google.com>,
-	Jan Beulich <jbeulich@suse.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Willy Tarreau <w@1wt.eu>,
 	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
 	nathan@kernel.org,
-	linux-crypto@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 004/139] crypto: x86/sha256 - Add parentheses around macros' single arguments
-Date: Wed, 25 Sep 2024 08:07:04 -0400
-Message-ID: <20240925121137.1307574-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 070/139] tools/nolibc: powerpc: limit stack-protector workaround to GCC
+Date: Wed, 25 Sep 2024 08:08:10 -0400
+Message-ID: <20240925121137.1307574-70-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240925121137.1307574-1-sashal@kernel.org>
 References: <20240925121137.1307574-1-sashal@kernel.org>
@@ -54,95 +46,42 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.52
 Content-Transfer-Encoding: 8bit
 
-From: Fangrui Song <maskray@google.com>
+From: Thomas Weißschuh <linux@weissschuh.net>
 
-[ Upstream commit 3363c460ef726ba693704dbcd73b7e7214ccc788 ]
+[ Upstream commit 1daea158d0aae0770371f3079305a29fdb66829e ]
 
-The macros FOUR_ROUNDS_AND_SCHED and DO_4ROUNDS rely on an
-unexpected/undocumented behavior of the GNU assembler, which might
-change in the future
-(https://sourceware.org/bugzilla/show_bug.cgi?id=32073).
+As mentioned in the comment, the workaround for
+__attribute__((no_stack_protector)) is only necessary on GCC.
+Avoid applying the workaround on clang, as clang does not recognize
+__attribute__((__optimize__)) and would fail.
 
-    M (1) (2) // 1 arg !? Future: 2 args
-    M 1 + 2   // 1 arg !? Future: 3 args
-
-    M 1 2     // 2 args
-
-Add parentheses around the single arguments to support future GNU
-assembler and LLVM integrated assembler (when the IsOperator hack from
-the following link is dropped).
-
-Link: https://github.com/llvm/llvm-project/commit/055006475e22014b28a070db1bff41ca15f322f0
-Signed-off-by: Fangrui Song <maskray@google.com>
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Acked-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/r/20240807-nolibc-llvm-v2-3-c20f2f5fc7c2@weissschuh.net
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/crypto/sha256-avx2-asm.S | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/include/nolibc/arch-powerpc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/crypto/sha256-avx2-asm.S b/arch/x86/crypto/sha256-avx2-asm.S
-index 0ffb072be9561..0bbec1c75cd0b 100644
---- a/arch/x86/crypto/sha256-avx2-asm.S
-+++ b/arch/x86/crypto/sha256-avx2-asm.S
-@@ -592,22 +592,22 @@ SYM_TYPED_FUNC_START(sha256_transform_rorx)
- 	leaq	K256+0*32(%rip), INP		## reuse INP as scratch reg
- 	vpaddd	(INP, SRND), X0, XFER
- 	vmovdqa XFER, 0*32+_XFER(%rsp, SRND)
--	FOUR_ROUNDS_AND_SCHED	_XFER + 0*32
-+	FOUR_ROUNDS_AND_SCHED	(_XFER + 0*32)
+diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
+index ac212e6185b26..41ebd394b90c7 100644
+--- a/tools/include/nolibc/arch-powerpc.h
++++ b/tools/include/nolibc/arch-powerpc.h
+@@ -172,7 +172,7 @@
+ 	_ret;                                                                \
+ })
  
- 	leaq	K256+1*32(%rip), INP
- 	vpaddd	(INP, SRND), X0, XFER
- 	vmovdqa XFER, 1*32+_XFER(%rsp, SRND)
--	FOUR_ROUNDS_AND_SCHED	_XFER + 1*32
-+	FOUR_ROUNDS_AND_SCHED	(_XFER + 1*32)
- 
- 	leaq	K256+2*32(%rip), INP
- 	vpaddd	(INP, SRND), X0, XFER
- 	vmovdqa XFER, 2*32+_XFER(%rsp, SRND)
--	FOUR_ROUNDS_AND_SCHED	_XFER + 2*32
-+	FOUR_ROUNDS_AND_SCHED	(_XFER + 2*32)
- 
- 	leaq	K256+3*32(%rip), INP
- 	vpaddd	(INP, SRND), X0, XFER
- 	vmovdqa XFER, 3*32+_XFER(%rsp, SRND)
--	FOUR_ROUNDS_AND_SCHED	_XFER + 3*32
-+	FOUR_ROUNDS_AND_SCHED	(_XFER + 3*32)
- 
- 	add	$4*32, SRND
- 	cmp	$3*4*32, SRND
-@@ -618,12 +618,12 @@ SYM_TYPED_FUNC_START(sha256_transform_rorx)
- 	leaq	K256+0*32(%rip), INP
- 	vpaddd	(INP, SRND), X0, XFER
- 	vmovdqa XFER, 0*32+_XFER(%rsp, SRND)
--	DO_4ROUNDS	_XFER + 0*32
-+	DO_4ROUNDS	(_XFER + 0*32)
- 
- 	leaq	K256+1*32(%rip), INP
- 	vpaddd	(INP, SRND), X1, XFER
- 	vmovdqa XFER, 1*32+_XFER(%rsp, SRND)
--	DO_4ROUNDS	_XFER + 1*32
-+	DO_4ROUNDS	(_XFER + 1*32)
- 	add	$2*32, SRND
- 
- 	vmovdqa	X2, X0
-@@ -651,8 +651,8 @@ SYM_TYPED_FUNC_START(sha256_transform_rorx)
- 	xor	SRND, SRND
- .align 16
- .Lloop3:
--	DO_4ROUNDS	 _XFER + 0*32 + 16
--	DO_4ROUNDS	 _XFER + 1*32 + 16
-+	DO_4ROUNDS	(_XFER + 0*32 + 16)
-+	DO_4ROUNDS	(_XFER + 1*32 + 16)
- 	add	$2*32, SRND
- 	cmp	$4*4*32, SRND
- 	jb	.Lloop3
+-#ifndef __powerpc64__
++#if !defined(__powerpc64__) && !defined(__clang__)
+ /* FIXME: For 32-bit PowerPC, with newer gcc compilers (e.g. gcc 13.1.0),
+  * "omit-frame-pointer" fails with __attribute__((no_stack_protector)) but
+  * works with __attribute__((__optimize__("-fno-stack-protector")))
 -- 
 2.43.0
 
