@@ -1,55 +1,55 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6575214037F
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 10:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6CF44C68
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 10:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727258436; cv=none; b=SsogtfO7Aqjj0EvNp9XZFHxSQlCzEEVnsF/7l6c/IXzO7y4drOFeMn4KS6JpLGhKWeS2lx7qK7sfq0uqe84/Rankxf4K4bq1tqtf8Ru53oheXXVQfDcBkDZ/uQTFM5wLjdPIERpG7Dv1S2x5PeontTLrh2u0T2jcFPyeiVxXAig=
+	t=1727259666; cv=none; b=aFf1oml7xz/BWeGwDG2T2X9E69ApyPXeUfRt8rUyt2T3R/GqpLj7/I2tjdNpbsPwhuzJF+UdUNhpqj5gPIZfxbloex5LiIlFmMp6F0ZpfzhPv+zgeb61j5qGqGr+mt7R9aL55vtsXmRyONofzX5jvY7eApLNUh0Ar6OqvkexCEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727258436; c=relaxed/simple;
-	bh=pJ2juEFqj+48bXu5zvFqiWfX3lEeexWtmQCXqHMpLug=;
+	s=arc-20240116; t=1727259666; c=relaxed/simple;
+	bh=TCDnE5O1Qj4Sx4FFyUqVkcdfYPO8wvEkGDEg/b8x6RM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m8GRwB/AolRQPvMtc4RBJymZeFAdOdtNNuFnR6I0gcx8wPBHIXmPJTf3Y2Y/Fe343i56B+W7YDv69qj2wpC7IUQfQPKKi4ELb/Bq1mpQjtLkZxJc07g2Es4aW2OFlLMSPCBnTbeH1M12nKxo3ppz69tfs8DhNC0MSOM+pvMixZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CazRLJSw; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=qItglTk8DPatppgsreKsTEW1OKOrPyNDyndSpgH/2ckhyel4VdZxvHLOxIzyTaVmFBfMnumoUxTseChnbI3mDHgTMkALnc5KfTR0dv4+Vlvaf1WC2sWsI8CJi1czYpKGezaPsJdEaQNBX8UyKQXF5FYHiPnreg38vhpMWGEcebs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q1/JqvMr; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CazRLJSw"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-374c3400367so5792515f8f.2
-        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 03:00:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q1/JqvMr"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7c3d8105646so535732a12.2
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 03:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727258432; x=1727863232; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1727259664; x=1727864464; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pzoOml1YCYEgfJn8QSXq3DVawdpDp//KSF0cYbIea6E=;
-        b=CazRLJSw0fRqj6oKFVOYX8ZaZcK8D7+eE3dCTRpOGeimHuAAP9WOBS2ArvYt7u3uUt
-         yW1dr9LnZY43kiW2D74aLu0YxKEJMofFkMjP1OJoVqpynzseIdjbyrrdni26yKVmTM3R
-         f/S7goD8gSunem4jmqzxiRq4frO2MntwbgH6P6KZPW91xEqezZu7hugo0djJyGddLQcM
-         2j/wPJjmMKQ9BYZ8G1lx+epqhQZalbGpug1+MercmUoqlNEIbG49pDq4lA3s7qUEXbxG
-         NSow9aMucooDHvXVoVZVvJ0Jp0xPRQnv5wTpZBa7bmpZSz2dLf8uDH9HpAjMTxVxw84B
-         Wcsw==
+        bh=TCDnE5O1Qj4Sx4FFyUqVkcdfYPO8wvEkGDEg/b8x6RM=;
+        b=Q1/JqvMrqTqQojqEQvcJdUqKdwuBb2UmL/F1h1dS8ntXP7vmAkPm3Qyzr1z1PzdBHp
+         broKQaqxza2apPr3ClpR6KyV1e303cy3mYjMgRVjvbrG23/yexAErSJ8N3oFLCeajQEq
+         xq7N3Ze+OpGdk9fe2Z/C0mZgSQWG4nYkvue81rX6nPaSyxFkN2TWY3ocT9r49+jV8fgl
+         ux+dpwk6HxeTsexTfMYotZzvZ7y3SbnpHRc+GumDPh4a2r5tCHelYf4WJnugRj9tITkL
+         THr408dCWa6kQSWQMd9k4Cf5sO60HxPcld3HbhjU+d7FH88rdznLoF0pLTk72zfjaA0e
+         aDYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727258432; x=1727863232;
+        d=1e100.net; s=20230601; t=1727259664; x=1727864464;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pzoOml1YCYEgfJn8QSXq3DVawdpDp//KSF0cYbIea6E=;
-        b=c+xCgtinjPsUPNIXWb3wMzbYTOhN1QnnkCUf/g+cz+hYRRu6i0yCiIPQFc95oPOI29
-         EzxKkdlEsJ+jnYAgbCVp5rmuH9Pgo5jg53QmilIZH326j2+dgLaCeEhIlF6z1ooNSaGT
-         w1bKYXVOMLyIJr15j8opsYwjXLXwEYi5VjnKpcegqNVTkx+JaanvZokf8qwwpCF44jtz
-         sqHmQxpBchLdLrRG9c3oEWiePxjSqM0cf35sgjRrO4z+BvWMaYGkX0Z9iiILUnQgs+dE
-         MhKRTDaf0vZkbtVHbxgMF7TfuLhIbcZt+SYqiSOl5fEDpHMsHR0DizBioezSSgkXvS+3
-         2Rrw==
-X-Forwarded-Encrypted: i=1; AJvYcCVriVqPpVxJZS3FN7MW5LZXlo12yVrNcix/RrU1uiHInSVBS3uG+JefjO21gyj/7+RgQudx@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBIStG/53okHfjwewfxwI5i+fHSocSczhGyE7iib4+LaT/Wyg2
-	hwHp1eJk4jIy+MVWPsZ8VnvoTp87B5HVnFN3homaL04VaWCJASId7nS2Oh+E+ZpNAdHY2W4In6G
-	wMJyivVng7FyRCahY0IWilv5WZl7LeA4icqDp
-X-Google-Smtp-Source: AGHT+IGKx3uL22uVQI6NHByefGqy6iXJLA73m1W8DO6NEIobANtIbLRvc5jJ2Ew/h8x1OdttDYdjCDqwhHlO027Qz2g=
-X-Received: by 2002:a5d:5547:0:b0:371:8dd3:27c8 with SMTP id
- ffacd0b85a97d-37cc246a5cemr1937135f8f.23.1727258432326; Wed, 25 Sep 2024
- 03:00:32 -0700 (PDT)
+        bh=TCDnE5O1Qj4Sx4FFyUqVkcdfYPO8wvEkGDEg/b8x6RM=;
+        b=vJ4dH1SJhTRAAHjsBy8zETnbXHcV6hGhpUlnm5X6tqtOYZjTG6UjbPKvY3PC8C/6ck
+         APps5kZaOySvtf2pLWdAlucTxyiCSNwqX2hiLSTBnLNjGpGuK3uUvhwG34ApR9sN9jym
+         V+bGoL5/FJ2++8AtnBnjNvyZII0PVSIwUOrLO8NY8+Wfs3Lu5MouJeKElTerRbO/OIlK
+         zDhbSrdbTud9u2es57G9tvdO11ihsYtTksZsvyLC9CbDnf8U1YaVyyA9//vUBwyXWktO
+         d74UOMNQxpgR3oiuXmKQPcS0V3kjoHru5vLkYFoA61WmBXkXvkkmPp3qAifS1gFJ3Od1
+         3l9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUrZLi0YkjMZqthntbEAg6O8dr2gUyUB/J/pKH6wb/ViNg5YwaMj1y0hu0FFKA/x/xyAUNq@lists.linux.dev
+X-Gm-Message-State: AOJu0YwMXLbHsUSbxx4JQVqR1qjMQTQd3BK++5qdIckjrv+VhlyiS+Dh
+	u2FlfmPrBHcAnPg6xqWK3orQrvbhZHu3H6XV9DKnwzGDA7BLz1MZ/br9ZcDsFdEV4I3CO1Zn4bY
+	1ReKkxj8nDRPoiKFR/vUrky9XMGw=
+X-Google-Smtp-Source: AGHT+IHrc4qeLncDvmI5by0PktN7ToaZFg+oGS0r8KUPyktOQT8smdBpXd4RQ/kBZQLt1sN+Zznoq/2KTkDYdaikT8c=
+X-Received: by 2002:a05:6a00:1149:b0:70d:140c:7369 with SMTP id
+ d2e1a72fcca58-71b0ac5a8c4mr1439818b3a.3.1727259664158; Wed, 25 Sep 2024
+ 03:21:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,13 +57,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20240820194910.187826-1-mmaurer@google.com> <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
- <CANiq72myZL4_poCMuNFevtpYYc0V0embjSuKb7y=C+m3vVA_8g@mail.gmail.com> <CAH5fLgheG47LdgJGX6grHXL6h08tsSM1DACRkkzQk_1U8VAOxQ@mail.gmail.com>
-In-Reply-To: <CAH5fLgheG47LdgJGX6grHXL6h08tsSM1DACRkkzQk_1U8VAOxQ@mail.gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 25 Sep 2024 12:00:19 +0200
-Message-ID: <CAH5fLgj7E03DKBcptgmZ8SLgco=Qs4puO=O6=v9=-3SSuqJyUQ@mail.gmail.com>
+ <CANiq72myZL4_poCMuNFevtpYYc0V0embjSuKb7y=C+m3vVA_8g@mail.gmail.com>
+ <CAH5fLgheG47LdgJGX6grHXL6h08tsSM1DACRkkzQk_1U8VAOxQ@mail.gmail.com> <CAH5fLgj7E03DKBcptgmZ8SLgco=Qs4puO=O6=v9=-3SSuqJyUQ@mail.gmail.com>
+In-Reply-To: <CAH5fLgj7E03DKBcptgmZ8SLgco=Qs4puO=O6=v9=-3SSuqJyUQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 25 Sep 2024 12:20:50 +0200
+Message-ID: <CANiq72mFKE4tLp1bgr+c0-Hi+dmReFT4m5RcV6MigjyiAiuwmg@mail.gmail.com>
 Subject: Re: [PATCH v4 0/4] Rust KASAN Support
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+To: Alice Ryhl <aliceryhl@google.com>
 Cc: Matthew Maurer <mmaurer@google.com>, andreyknvl@gmail.com, ojeda@kernel.org, 
 	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
 	Nathan Chancellor <nathan@kernel.org>, dvyukov@google.com, samitolvanen@google.com, 
@@ -77,40 +78,27 @@ Cc: Matthew Maurer <mmaurer@google.com>, andreyknvl@gmail.com, ojeda@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 25, 2024 at 10:26=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
+On Wed, Sep 25, 2024 at 12:00=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> =
 wrote:
 >
-> On Mon, Sep 16, 2024 at 6:47=E2=80=AFPM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > On Mon, Sep 16, 2024 at 6:15=E2=80=AFPM Miguel Ojeda
-> > <miguel.ojeda.sandonis@gmail.com> wrote:
-> > >
-> > > Applied to `rust-next` -- thanks everyone!
-> >
-> > Also, for KASAN + RETHUNK builds, I noticed objtool detects this:
-> >
-> >     samples/rust/rust_print.o: warning: objtool:
-> > asan.module_ctor+0x17: 'naked' return found in MITIGATION_RETHUNK
-> > build
-> >     samples/rust/rust_print.o: warning: objtool:
-> > asan.module_dtor+0x17: 'naked' return found in MITIGATION_RETHUNK
-> > build
-> >
-> > And indeed from a quick look the `ret` is there.
-> >
-> > Since KASAN support is important, I decided to take it nevertheless,
-> > but please let's make sure this is fixed during the cycle (or add a
-> > "depends on").
->
-> I figured out what the problem is. I will follow up with a fix soon.
+> I posted a fix:
+> https://github.com/rust-lang/rust/pull/130824
 
-I posted a fix:
-https://github.com/rust-lang/rust/pull/130824
+Reviewed, tagged and added to the lists -- thanks!
 
-We'll need a check on RUSTC_VERSION in Kconfig for this. If the PR
-gets merged within the next 22 days, this will land in 1.83.0. Would
-you like me to send a fix with that version number now or wait for it
-to get merged before I send that fix?
+> We'll need a check on RUSTC_VERSION in Kconfig for this. If the PR
+> gets merged within the next 22 days, this will land in 1.83.0. Would
+> you like me to send a fix with that version number now or wait for it
+> to get merged before I send that fix?
 
-Alice
+Perhaps it could also go into 1.82.0 since it is a fix? (there are
+still a couple weeks for that)
+
+In any case, I think we can put 1.83 in the fix already and modify
+later if needed. Even then, I am not sure if the requirement is a big
+deal, i.e. I guess we could keep the warning and avoid adding the
+restriction. But since this is for KASAN-enabled, I guess it is fine
+adding the restriction and being safe & proper.
+
+Cheers,
+Miguel
