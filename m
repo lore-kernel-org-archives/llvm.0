@@ -1,54 +1,54 @@
 Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF5D47A76
-	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5426D7581F
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 15:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276515; cv=none; b=rwAxJxat4KqeE6pBVthnPlBtckFCyJe10ZI6NH+OKQDibSUrv8f6Ai37kUluetNfvgph4wJu7WPWJWcwiAi7lBqQntTzCchvDGLcsJEWTKVslUnmD2MZoEXxj2HGJQC3Idmu7WtPUMi7n4zPI5jb3B6OghPpLBXBJUZ1y6uWnWc=
+	t=1727276518; cv=none; b=siL8vzDDFRDMmccty5ibyMaXTUJTZ2DWCbPsFYpqNSso7RFd0W08eoQWLYfEW+I5OGXVj6XQmuOB/VPt8IzLPl6k/4TiCBF1/D2p4uIM5YfadcQcrd+PiYQHhKpp3OxYdSpA+I9a3B4OXaz8Rwl7Xr34ak5Yv/ZqjNh4sGxXBoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276515; c=relaxed/simple;
-	bh=7J0jWEjwrexzo9oPbBgZ33ZQC1xyFpo8+XmzUWJ/VHg=;
+	s=arc-20240116; t=1727276518; c=relaxed/simple;
+	bh=rk1TLausu3D2x4uz05lRhrdTMxiTSLA2fDl1meeIK+I=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uuNeQIWb6yKo9TfjmCviIvrhm50FZhkUv/IwXOX85RxVB/oValhTBY3Wqk7u+191ap5QhNskZcfTOvO+RgJvmN+VJloWZM0WVhda15r2gN6q30p6fOHCG1n/pdwCkhO1WUOuaHUvxsWv1GShM+ZNcr+4LgvD1iVhG+6J5AmfznE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V8DiPesj; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=DDcoyVdkDrzQ/p5oNaRlqiFugSnysijWN1fJHM3a5GY/7wYRwU+2GqhZRw88uUkH5NCLhy6NMOFstDmC49VqnQgBYTGSry5qY7yL51sqv/xt9MDza85M7wWai0SqMQKwAR3YnE8iG4+mvWdYGjiNL98rEBfwkXsOIYr81h3zP1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZO2J1ru1; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V8DiPesj"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-42cb33e6299so45729765e9.2
-        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:01:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZO2J1ru1"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-42cb6ed7f9dso63180105e9.3
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 08:01:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276512; x=1727881312; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1727276515; x=1727881315; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvHrMBM7osvq1YNoyXkrrTpmrTIb8bNW96uzrIXNQu8=;
-        b=V8DiPesjrAP5h8H6zLEJf2ZqF9Ir/VAbIHjh3s9HlRs/a+9BV7iY0OoTYRcH1edqsm
-         Qz0skuAjemqBcP2qu4Csfq5CK4BasGLFa17eKAy2TxgSYhJ27g5J4zI+KgmM/GRRW2BC
-         YUX7ki2cGZtEFGxrSGZhJrWCmq1B67BkCGIRfsP69Lum6+ReitHqhhIpEdCuy5L+aYU7
-         G0+a1YjbqVG+90LSHsTzoy/wgvnNttyzi7dWSZfamnszD2CRcKz9Wq+PZKrHX6eC5IOS
-         5yhYYSZ2xLodCejoEO9+lJUD7znUa6MKxEjlfb83rLH1lG/21phLx+vqWNY7TKteNXSQ
-         dDiQ==
+        bh=yjSReXj8XxN+J1aHSpg+bgY7XO8zJXJrh2uX1BeFRGQ=;
+        b=ZO2J1ru1yeTCJKTpJTThYW0T1H25aKJ4kdtnHtde6jh6AjThxbdajlOO5eth9K45h/
+         jQu6MxtKxfNhbqVbQpsAQmZIa51W7Qubxl3VxiKNVctwbbpkFE5EUXP5pT2RKajC6kmp
+         kIcCZv9ldT+V2HTPTwKkZ1u0ce8hF0TNRQBZvkSsH8XUXm69qPp9O0wQYCEIp3YpEggf
+         i3RnMrdkXYu+ihvvUnBvMAHRMqxT7efYCt17erwCk0ZAks+dE9ReK30vUCdOMNGkJ4Da
+         hiPufZy1mgnMvTcjUMWLol0MaxP2PINMK6vjdTwCkHJK0b8XCQqQxMudjvCp+fbIcp1f
+         25fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276512; x=1727881312;
+        d=1e100.net; s=20230601; t=1727276515; x=1727881315;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvHrMBM7osvq1YNoyXkrrTpmrTIb8bNW96uzrIXNQu8=;
-        b=gJVLLjrN9tHwSt0xKg650mABqpSneTEDEOCzvQZHqzqKQOX21dYt554VKEodfgeqrP
-         UFjhjJtilIf490YgDnkO96pDMQTGBEfmplG2W27vNi/B0TTQx6EsA0+ITj0LPJmaYNCH
-         riO6jeRsfzT9l3QUICm7rrtw/yxRK9N/G4pCuHmWlCF+Qy5RGhVGxSTd78Zkh0MUHw35
-         y55kQaRv4W0GOeGCSTeP6V3U7q80UwGSD+gsvAWJM2H2ybrGQzEDaksmBGeXuWK5CtpV
-         wr29ilAx+m3UjxTqnkia0hAC0rrdmGiQpQIJW/sxU/yuKHOGgYJz9pc8Uvq3mVvjzkAB
-         jvnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWXmATlZLyVOoLfWPudmWDehMp5PJBhxy2McH74dNcL3/P5yc20RKjeAx7+yKe9Qhd3pNt+@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz7WFVFHAjwm7U+0RME+S5aCJ7m4P3+zFwy6QLGCqYbnB0J2OgF
-	jbc1Bcf35yOvOiI6EUonsSITWwn5jfCY8Hu2A/F1P1WY3TPzGyFf7YNfYK7G2z7NGTWpNA==
-X-Google-Smtp-Source: AGHT+IGNEZwim//wtoUQ0IgEwXQAmuWMXuvjVNrkXztiUbXuSVle0sf2azOpfGly/wGUuNh4kSi9g764
+        bh=yjSReXj8XxN+J1aHSpg+bgY7XO8zJXJrh2uX1BeFRGQ=;
+        b=mQOjbE3xv3SYgb/fwDEOn2pini9QqNko9ojiAoNPaJGOt3PJYv02txk4H5R8RKFAaX
+         1TdglSvv5Xi0NXPMJkyQnz5uw+44WxlcfnoRmvVd6eUmzuoLfWOSY9BEdFChaUFZcaUz
+         GARUq16u93fnvj4Ke61taSVTHypY4t/R/syR1KVoRZ42edjbgR7//5ewGF2n7UNpxdMw
+         GbMqPIySl3RBznd/M2PHbgVhiLETVVH8HqEUpebK5HgX0QGsjHHakosa73hBUo6e/sZ5
+         IHYx6d4KDWaaHs+IH3IKWx5kpNJ5tKX+ho5BEtl1avRueuV3ziN56Inn9i4Tgpk7cJDd
+         Tv0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVtKpqoD6qYrSofhjWD6uZu2IQY6wJJ/KaWw0duhjRH8iYh9PXop79TQoVDMwWyLmEUhLoF@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHF3I/3HEl4JXSYmuZwcoALNm37PeHudG8VrvGR6aEluTXkOQp
+	v09+1tbSTbdlHia0nkwc2AscfjYteVEUd5OW1nBiOiH4ZO+psZSiC3BXKIMIcm3cx6iOLw==
+X-Google-Smtp-Source: AGHT+IGzIZ2o2YM9LwRx7GUBkPXP1nnHd93bOM06M/lDtcRNJJFbQb+/UGpm4f4GZO5kVPvAO8R9y3yP
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:600c:4b23:b0:42c:b635:9ba7 with SMTP id
- 5b1f17b1804b1-42e961449f9mr294105e9.3.1727276511763; Wed, 25 Sep 2024
- 08:01:51 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:01 +0200
+ (user=ardb job=sendgmr) by 2002:a05:600c:214f:b0:42c:b32e:6ba7 with SMTP id
+ 5b1f17b1804b1-42e9624246bmr34035e9.6.1727276514236; Wed, 25 Sep 2024 08:01:54
+ -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:02 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,14 +58,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1383; i=ardb@kernel.org;
- h=from:subject; bh=kkus52hb+9U3rGqLGvcTtWiqi7ULiH1wdI2hpFI7/9I=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6loPG1eTz6/TRZ+ExF55v9yoPVaMz0DJP05TXvNix
- 3yvWS87SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwER0vzAyLNdk+Hf0DcN93e0c
- kou2iV0ReKfEPrsn3ORh04fsoM3R+gz/0yZt5ne4cnJFldTMQpGfLor75ZYczDujFLCs+4iee6Q pMwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1869; i=ardb@kernel.org;
+ h=from:subject; bh=Etb53DEUMtJxbS45M94XzvcBugumXuKFZ3M2B/KYBNo=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6jquDX165ub5J178W1mVH21S/GxP0fqUgljlqYpRR
+ x60nEvpKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABPRa2RkeBV2XNd/yacJf4IS
+ mc47ex9ud90aJbN1Uf8PDSuxLfrPTjD8rwhuEVogxe0Xov++IjA4keVg55+fz6JEZeM/B04o0/B nBgA=
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-31-ardb+git@google.com>
-Subject: [RFC PATCH 01/28] x86/pvh: Call C code via the kernel virtual mapping
+Message-ID: <20240925150059.3955569-32-ardb+git@google.com>
+Subject: [RFC PATCH 02/28] Documentation: Bump minimum GCC version to 8.1
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -90,40 +90,43 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Calling C code via a different mapping than it was linked at is
-problematic, because the compiler assumes that RIP-relative and absolute
-symbol references are interchangeable. GCC in particular may use
-RIP-relative per-CPU variable references even when not using -fpic.
+Bump the minimum GCC version to 8.1 to gain unconditional support for
+referring to the per-task stack cookie using a symbol rather than
+relying on the fixed offset of 40 bytes from %GS, which requires
+elaborate hacks to support.
 
-So call xen_prepare_pvh() via its kernel virtual mapping on x86_64, so
-that those RIP-relative references produce the correct values. This
-matches the pre-existing behavior for i386, which also invokes
-xen_prepare_pvh() via the kernel virtual mapping before invoking
-startup_32 with paging disabled again.
-
-Fixes: 7243b93345f7 ("xen/pvh: Bootstrap PVH guest")
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/platform/pvh/head.S | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/README.rst | 2 +-
+ Documentation/process/changes.rst    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/platform/pvh/head.S b/arch/x86/platform/pvh/head.S
-index f7235ef87bc3..a308b79a887c 100644
---- a/arch/x86/platform/pvh/head.S
-+++ b/arch/x86/platform/pvh/head.S
-@@ -101,7 +101,11 @@ SYM_CODE_START_LOCAL(pvh_start_xen)
- 	xor %edx, %edx
- 	wrmsr
+diff --git a/Documentation/admin-guide/README.rst b/Documentation/admin-guide/README.rst
+index f2bebff6a733..3dda41923ed6 100644
+--- a/Documentation/admin-guide/README.rst
++++ b/Documentation/admin-guide/README.rst
+@@ -259,7 +259,7 @@ Configuring the kernel
+ Compiling the kernel
+ --------------------
  
--	call xen_prepare_pvh
-+	/* Call xen_prepare_pvh() via the kernel virtual mapping */
-+	leaq xen_prepare_pvh(%rip), %rax
-+	addq $__START_KERNEL_map, %rax
-+	ANNOTATE_RETPOLINE_SAFE
-+	call *%rax
+- - Make sure you have at least gcc 5.1 available.
++ - Make sure you have at least gcc 8.1 available.
+    For more information, refer to :ref:`Documentation/process/changes.rst <changes>`.
  
- 	/* startup_64 expects boot_params in %rsi. */
- 	mov $_pa(pvh_bootparams), %rsi
+  - Do a ``make`` to create a compressed kernel image. It is also possible to do
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index 00f1ed7c59c3..59b7d3d8a577 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -29,7 +29,7 @@ you probably needn't concern yourself with pcmciautils.
+ ====================== ===============  ========================================
+         Program        Minimal version       Command to check the version
+ ====================== ===============  ========================================
+-GNU C                  5.1              gcc --version
++GNU C                  8.1              gcc --version
+ Clang/LLVM (optional)  13.0.1           clang --version
+ Rust (optional)        1.78.0           rustc --version
+ bindgen (optional)     0.65.1           bindgen --version
 -- 
 2.46.0.792.g87dc391469-goog
 
