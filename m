@@ -1,233 +1,213 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED7A946F;
-	Wed, 25 Sep 2024 02:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727231028; cv=none; b=NPLkHQ11TLRPzMR32iTZWYRrpbgHxDB8Y5zX6OHHb8Pg+WjLt1c03FTJec0Eq+VLAQNAi2CYJv6Hk2jHayoktJbMhu3SVjvk116UiAtpKAX+2qJkTEvZ/yjahCzQcZXTQJgbwYh6wbM42+QDLysOHKZ5oTl+6WUBtOFqrKCAEAA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727231028; c=relaxed/simple;
-	bh=/YlGWyulUM98izQIes2mLPmt8hy/HU85Sy5hLTCEIU8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tx8gFD4mnM7iRXeRofIVJs3d0giAVWhqHJuHzY8rTrc1Ws2MPFw38s5nmPpwiOcAnFPwg35/dfpc1IDziZ7mjHnI20r7zvyn9UAGjLl/VxTX8bEZfmkDKAvuJF9X36zIy+17n/Q4VDxp/slzPwSDNgqQgBZIsgz18EYN2fXcXRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gDwuVqYh; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33029A55
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 02:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727231948; cv=pass; b=GLuA4jG5udqarE9tgYMmOKOHar3sCX0QahcsAoA1t9VZC8s6uS1SfZop4TZ3bjvuDeDrfXg2Vw0chKS5dcSkM6Zz43I/2BC/Gb3PS8szmhhKZ3O+WqecvckBxSGGT8L53ls2YLhgVv9D0OC5tbzxAZe7RV95g9Ktk3vJyO6pVdI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727231948; c=relaxed/simple;
+	bh=KBq3L/tgBOQo38ht7Jo8RF5vs4fSLBlXE86WnspFstY=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=RBaCsa6me/clNp4DmMwIhqalqqp+Z9R/GaY+98SlLJ3VakEwxoneX1oz6IH8vlydDmcjtp7+PhnIBuVM1jA4LSsploO6OFITHWjimfiSfqnhxdWrhY0XspfwPdOlAvSKR8SeJVrAcMit9MlWVvmApo9qVjOEuOs/k/0eKXB+mxs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=midstall.com; spf=pass smtp.mailfrom=midstall.com; dkim=pass (1024-bit key) header.d=midstall.com header.i=tristan.ross@midstall.com header.b=DZHVQJN3; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=midstall.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=midstall.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gDwuVqYh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727231026; x=1758767026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/YlGWyulUM98izQIes2mLPmt8hy/HU85Sy5hLTCEIU8=;
-  b=gDwuVqYhxUSBAs+et0Ne5PYscOkeDzAB/Xo3GCbqEXQHBh6xfRo4ZDXR
-   lB2+nhadMqxkuODiciEM4sd1GT+fN8Mq7I+HxhrUttitWYbmkFeyLdP0B
-   ZTyt7qeznxzt/lcaid5fiLxgvkghpivNM9FKsfQ7P6hkxTJV9kt2a92i3
-   UabIBiaQjmyQzw245m5BZyTKWo7NYRXSj43ussDr/rLecMkopva0+5/mN
-   I6l8IhSQcBAtMk5Fxl2+q6load7xlxnSq8dIvCgKMDfvqwtPHmSOqodSs
-   8xXcK1gOFwuMwB0ntugz0at6zTrpqiN4fwoYETCDKvCPztutflqvfU8+E
-   A==;
-X-CSE-ConnectionGUID: /vUWdHFORd+IozFUyHPmYA==
-X-CSE-MsgGUID: 8DMlf35BTuS5RycteQ0VoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="37634844"
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="37634844"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 19:23:45 -0700
-X-CSE-ConnectionGUID: NBfBahSVQAyje0HDo6yTXA==
-X-CSE-MsgGUID: ia0rOS/CQFmuWswycvmQsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="71914301"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 24 Sep 2024 18:55:50 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stHFs-000J21-0r;
-	Wed, 25 Sep 2024 01:55:48 +0000
-Date: Wed, 25 Sep 2024 09:55:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steve Sistare <steven.sistare@oracle.com>, iommu@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jason Gunthorpe <jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Steve Sistare <steven.sistare@oracle.com>
-Subject: Re: [PATCH V2 3/9] iommufd: pfn reader for file mappings
-Message-ID: <202409250951.qvaDPgeE-lkp@intel.com>
-References: <1727190338-385692-4-git-send-email-steven.sistare@oracle.com>
+	dkim=pass (1024-bit key) header.d=midstall.com header.i=tristan.ross@midstall.com header.b="DZHVQJN3"
+ARC-Seal: i=1; a=rsa-sha256; t=1727231943; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=EnJgzRANJfEpR8HlUzJciEC5ENNQKdocB90lU56ZTElvpuBaM2HxvqsABJgC412A80ga/1X1Lv5qWmCMSlUSTVJ7yr//i/f8UHFzziercTEBZiR4kj1CF7cPiKiQjhuef3QWGDa26K+sRqohCJBORK1wLIpS36mUVDTlTUyu0AY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1727231943; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=zfP6tk72gDTaS0kfkEVIpmWor1jmd723y6OtaVebG7I=; 
+	b=BmRfhOkA84LWvevM5HD8t89vgeXoevX7HcI9wo7MxT0yMFAVkUPRSE+I9DkKBT5qvKBNltFRHkLlIbkYAaQ0+PxegqfQMMUYKtGVMpg936nGKBUBri4AK/1CqkG/GwLc+TkZpSL4pCPKG3SxU+PHnwQ8qasBq/s40vzO3QRGegQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=midstall.com;
+	spf=pass  smtp.mailfrom=tristan.ross@midstall.com;
+	dmarc=pass header.from=<tristan.ross@midstall.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727231943;
+	s=zmail; d=midstall.com; i=tristan.ross@midstall.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=zfP6tk72gDTaS0kfkEVIpmWor1jmd723y6OtaVebG7I=;
+	b=DZHVQJN3+gEh6YrB1ik+MPrVyPNEBJKUdBVt+3S/6StvCo0Z5QIPhEzwuqsla/iu
+	VkAf0+e5De0xaSgIDDokavtQ6ODBDz25TtC9E9ZZtnZRmeSEPBbkekVPXsz6+lD/PLl
+	YNIbMKZ0nwsRRBcNqUcEN57VCl0rNLiYWJT+sU60=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1727231940772585.4316937211197; Tue, 24 Sep 2024 19:39:00 -0700 (PDT)
+Date: Tue, 24 Sep 2024 19:39:00 -0700
+From: Tristan ross <tristan.ross@midstall.com>
+To: "Fangrui Song" <maskray@google.com>
+Cc: "Yuxuan Shui" <yshuiv7@gmail.com>,
+	"Masahiro Yamada" <masahiroy@kernel.org>,
+	"llvm" <llvm@lists.linux.dev>, "nathan" <nathan@kernel.org>,
+	"nicolas" <nicolas@fjasle.eu>,
+	"linux-kbuild" <linux-kbuild@vger.kernel.org>,
+	"tglx" <tglx@linutronix.de>, "mingo" <mingo@redhat.com>,
+	"bp" <bp@alien8.de>, "dave.hansen" <dave.hansen@linux.intel.com>,
+	"x86" <x86@kernel.org>, "hpa" <hpa@zytor.com>,
+	"linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <192270bd88d.f4dae43a112354.5469673441409436657@midstall.com>
+In-Reply-To: <CAFP8O3Kqx-gdTBFn_hesWzd-6NCpGEz1=fMoJXuX+n4c7sp0Bw@mail.gmail.com>
+References: <20240208012057.2754421-2-yshuiv7@gmail.com> <CAK7LNAT0KT7sbZJZNXtq5waM-UjUm4zHyf9xHZc3uHLvZ_eAfA@mail.gmail.com> <CAFP8O3Kqx-gdTBFn_hesWzd-6NCpGEz1=fMoJXuX+n4c7sp0Bw@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Fix building with LLVM on NixOS
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1727190338-385692-4-git-send-email-steven.sistare@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 
-Hi Steve,
+LLVM maintainer for Nix here, I do agree that our wrapper is causing issues=
+ here. However, we're looking to fix this by mimicking GNU ld's behavior fo=
+r checking --dynamic-linker. We're also going to look into getting LLVM lld=
+ to support the same behavior in case others have this issue. We might not =
+be the only ones who could be affected so adding this behavior into LLVM de=
+finitely will be useful. I tested aarch64 building of the kernel and it wor=
+ks after we fixed our handling of hardening options. However, aside from aa=
+rch64 and x86_64, I am not sure what other things could be failing. I hope =
+this clarifies things.
 
-kernel test robot noticed the following build errors:
+Thank you,
+Tristan Ross
 
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes linus/master v6.11 next-20240924]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steve-Sistare/iommufd-rename-uptr-in-iopt_alloc_iova/20240924-231223
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/1727190338-385692-4-git-send-email-steven.sistare%40oracle.com
-patch subject: [PATCH V2 3/9] iommufd: pfn reader for file mappings
-config: i386-buildonly-randconfig-001-20240925 (https://download.01.org/0day-ci/archive/20240925/202409250951.qvaDPgeE-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409250951.qvaDPgeE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409250951.qvaDPgeE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/iommu/iommufd/pages.c:772:4: error: call to undeclared function 'folio_split_user_page_pin'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     772 |                         folio_split_user_page_pin(folio, npin);
-         |                         ^
->> drivers/iommu/iommufd/pages.c:809:32: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'size_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-     809 |                 user->ufolios = temp_kmalloc(&user->ufolios_len, NULL, 0);
-         |                                              ^~~~~~~~~~~~~~~~~~
-   drivers/iommu/iommufd/pages.c:74:35: note: passing argument to parameter 'size' here
-      74 | static void *temp_kmalloc(size_t *size, void *backup, size_t backup_len)
-         |                                   ^
-   2 errors generated.
+(Sorry if I sent two emails, I forgot to reply all last time. First time us=
+ing the LKML)
 
 
-vim +809 drivers/iommu/iommufd/pages.c
+ ---- On Mon, 12 Feb 2024 13:59:13 -0800  Fangrui Song  wrote ---=20
+ > On Mon, Feb 12, 2024 at 1:30=E2=80=AFPM Masahiro Yamada masahiroy@kernel=
+.org> wrote:
+ > >
+ > > +Cc: Fangrui Song maskray@google.com>
+ > >
+ > >
+ > >
+ > > On Thu, Feb 8, 2024 at 10:22=E2=80=AFAM Yuxuan Shui yshuiv7@gmail.com>=
+ wrote:
+ > > >
+ > > > NixOS is designed to have immutable packages, and explicit dependenc=
+ies.
+ > > > It allows multiple different versions of the same shared library to
+ > > > co-exist in its file system.
+ > > >
+ > > > Each application built with Nix, the NixOS package manager, will hav=
+e
+ > > > paths to its dependency shared libraries hardcoded into its executab=
+le,
+ > > > this includes the dynamic linker. To achieve this, Nix adds a
+ > > > --dynamic-linker linker flag when building any application.
+ > > >
+ > > > This isn't a problem if the kernel is built with ld.bfd, because ld.=
+bfd
+ > > > ignores the --dynamic-linker flag when the resulting binary doesn't =
+have
+ > > > a DT_NEEDED entry. However, ld.lld respects --dynamic-linker
+ > > > unconditionally, which breaks linking in several cases.
+ > > >
+ > > > This commit adds an explicit --no-dynamic-linker flag which override=
+s
+ > > > the flag added by Nix.
+ > >
+ > >
+ > >
+ > > I expect some Acks from LLVM folks (especially, from Frangrui)
+ > > if this is the right thing to do.
+ >=20
+ > GNU ld seems to ignore --dynamic-linker for a position-dependent
+ > executable (ET_EXEC) when there is no DT_NEEDED entry.
+ > ld.lld respects --dynamic-linker in this case. Before this kernel
+ > report, I do not know any user inconvenienced by this difference.
+ > (mold respects --dynamic-linker as well.)
+ > This could be helpful to test an executable with PT_INTERP but no DT_NEE=
+DED.
+ >=20
+ > I think this patch does not fix non-x86 builds.
+ > It feels to me that NixOS should provide a linker wrapper that does
+ > not force --dynamic-linker=3D.
+ > While it's extremely uncommon (and generally not recommended), certain
+ > programs invoke the linker directly (instead of using a compiler
+ > driver).
+ > Such programs would run into a problem when they make a
+ > position-dependent executable with no dependency as well.
+ > I don't feel that NixOS forcing --dynamic-linker=3D is enough
+ > justification to change linkers.
+ >=20
+ > > > Signed-off-by: Yuxuan Shui yshuiv7@gmail.com>
+ > > > ---
+ > > >  Makefile                      | 3 +++
+ > > >  arch/x86/boot/Makefile        | 2 +-
+ > > >  arch/x86/realmode/rm/Makefile | 2 +-
+ > > >  3 files changed, 5 insertions(+), 2 deletions(-)
+ > > >
+ > > > diff --git a/Makefile b/Makefile
+ > > > index a171eafce2a3b..10ed19caecb1b 100644
+ > > > --- a/Makefile
+ > > > +++ b/Makefile
+ > > > @@ -531,6 +531,9 @@ RUSTFLAGS_KERNEL =3D
+ > > >  AFLAGS_KERNEL  =3D
+ > > >  LDFLAGS_vmlinux =3D
+ > > >
+ > > > +LDFLAGS_MODULE +=3D --no-dynamic-linker
+ > > > +LDFLAGS_vmlinux +=3D --no-dynamic-linker
+ > > > +
+ > > >  # Use USERINCLUDE when you must reference the UAPI directories only=
+.
+ > > >  USERINCLUDE    :=3D \
+ > > >                 -I$(srctree)/arch/$(SRCARCH)/include/uapi \
+ > > > diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+ > > > index 3cece19b74732..390a4604166eb 100644
+ > > > --- a/arch/x86/boot/Makefile
+ > > > +++ b/arch/x86/boot/Makefile
+ > > > @@ -102,7 +102,7 @@ $(obj)/zoffset.h: $(obj)/compressed/vmlinux FORC=
+E
+ > > >  AFLAGS_header.o +=3D -I$(objtree)/$(obj)
+ > > >  $(obj)/header.o: $(obj)/zoffset.h
+ > > >
+ > > > -LDFLAGS_setup.elf      :=3D -m elf_i386 -z noexecstack -T
+ > > > +LDFLAGS_setup.elf      :=3D --no-dynamic-linker -m elf_i386 -z noex=
+ecstack -T
+ > > >  $(obj)/setup.elf: $(src)/setup.ld $(SETUP_OBJS) FORCE
+ > > >         $(call if_changed,ld)
+ > > >
+ > > > diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Ma=
+kefile
+ > > > index f614009d3e4e2..4b42006d9ce02 100644
+ > > > --- a/arch/x86/realmode/rm/Makefile
+ > > > +++ b/arch/x86/realmode/rm/Makefile
+ > > > @@ -50,7 +50,7 @@ $(obj)/pasyms.h: $(REALMODE_OBJS) FORCE
+ > > >  targets +=3D realmode.lds
+ > > >  $(obj)/realmode.lds: $(obj)/pasyms.h
+ > > >
+ > > > -LDFLAGS_realmode.elf :=3D -m elf_i386 --emit-relocs -T
+ > > > +LDFLAGS_realmode.elf :=3D --no-dynamic-linker -m elf_i386 --emit-re=
+locs -T
+ > > >  CPPFLAGS_realmode.lds +=3D -P -C -I$(objtree)/$(obj)
+ > > >
+ > > >  targets +=3D realmode.elf
+ > > > --
+ > > > 2.43.0
+ > > >
+ > >
+ > >
+ > > --
+ > > Best Regards
+ > > Masahiro Yamada
+ > >
+ >=20
+ >=20
+ > --=20
+ > =E5=AE=8B=E6=96=B9=E7=9D=BF
+ >=20
+ >=20
+ >=20
+Tristan ross
+CEO & Founder of Midstall Software
 
-   746	
-   747	static long pin_memfd_pages(struct pfn_reader_user *user,
-   748				    unsigned long start,
-   749				    unsigned long npages)
-   750	{
-   751		unsigned long end, nr, i, j, npin, offset, npages_out;
-   752		long nfolios;
-   753		struct folio *folio;
-   754		struct page **upages = user->upages;
-   755	
-   756		nfolios = user->ufolios_len / sizeof(*user->ufolios);
-   757		end = start + (npages << PAGE_SHIFT) - 1;
-   758	
-   759		nfolios = memfd_pin_folios(user->file, start, end,
-   760					   user->ufolios, nfolios, &offset);
-   761		if (nfolios <= 0)
-   762			return nfolios;
-   763	
-   764		offset >>= PAGE_SHIFT;
-   765		npages_out = 0;
-   766	
-   767		for (i = 0; i < nfolios; i++) {
-   768			folio = user->ufolios[i];
-   769			nr = folio_nr_pages(folio);
-   770			npin = min(nr - offset, npages);
-   771			if (nr > 1) {
- > 772				folio_split_user_page_pin(folio, npin);
-   773			}
-   774			for (j = offset; j < offset + npin; j++)
-   775				*upages++ = folio_page(folio, j);
-   776			npages -= npin;
-   777			npages_out += npin;
-   778			offset = 0;
-   779		}
-   780	
-   781		return npages_out;
-   782	}
-   783	
-   784	static int pfn_reader_user_pin(struct pfn_reader_user *user,
-   785				       struct iopt_pages *pages,
-   786				       unsigned long start_index,
-   787				       unsigned long last_index)
-   788	{
-   789		bool remote_mm = pages->source_mm != current->mm;
-   790		unsigned long npages = last_index - start_index + 1;
-   791		unsigned long start, unum;
-   792		uintptr_t uptr;
-   793		long rc;
-   794	
-   795		if (IS_ENABLED(CONFIG_IOMMUFD_TEST) &&
-   796		    WARN_ON(last_index < start_index))
-   797			return -EINVAL;
-   798	
-   799		if (!user->upages) {
-   800			/* All undone in pfn_reader_destroy() */
-   801			user->upages_len = npages * sizeof(*user->upages);
-   802			user->upages = temp_kmalloc(&user->upages_len, NULL, 0);
-   803			if (!user->upages)
-   804				return -ENOMEM;
-   805		}
-   806	
-   807		if (user->file && !user->ufolios) {
-   808			user->ufolios_len = npages * sizeof(*user->ufolios);
- > 809			user->ufolios = temp_kmalloc(&user->ufolios_len, NULL, 0);
-   810			if (!user->ufolios)
-   811				return -ENOMEM;
-   812	
-   813			/* Bail for now.  Be more robust when we optimize for folios. */
-   814			if (user->ufolios_len / sizeof(*user->ufolios) <
-   815			    user->upages_len / sizeof(*user->upages))
-   816				return -ENOMEM;
-   817		}
-   818	
-   819		if (!user->file && user->locked == -1) {
-   820			/*
-   821			 * The majority of usages will run the map task within the mm
-   822			 * providing the pages, so we can optimize into
-   823			 * get_user_pages_fast()
-   824			 */
-   825			if (remote_mm) {
-   826				if (!mmget_not_zero(pages->source_mm))
-   827					return -EFAULT;
-   828			}
-   829			user->locked = 0;
-   830		}
-   831	
-   832		unum = user->file ? user->ufolios_len / sizeof(*user->ufolios) :
-   833				    user->upages_len / sizeof(*user->upages);
-   834		npages = min_t(unsigned long, npages, unum);
-   835	
-   836		if (iommufd_should_fail())
-   837			return -EFAULT;
-   838	
-   839		if (user->file) {
-   840			start = pages->start + (start_index * PAGE_SIZE);
-   841			rc = pin_memfd_pages(user, start, npages);
-   842		} else if (!remote_mm) {
-   843			uptr = (uintptr_t)(pages->uptr + start_index * PAGE_SIZE);
-   844			rc = pin_user_pages_fast(uptr, npages, user->gup_flags,
-   845						 user->upages);
-   846		} else {
-   847			uptr = (uintptr_t)(pages->uptr + start_index * PAGE_SIZE);
-   848			if (!user->locked) {
-   849				mmap_read_lock(pages->source_mm);
-   850				user->locked = 1;
-   851			}
-   852			rc = pin_user_pages_remote(pages->source_mm, uptr, npages,
-   853						   user->gup_flags, user->upages,
-   854						   &user->locked);
-   855		}
-   856		if (rc <= 0) {
-   857			if (WARN_ON(!rc))
-   858				return -EFAULT;
-   859			return rc;
-   860		}
-   861		iopt_pages_add_npinned(pages, rc);
-   862		user->upages_start = start_index;
-   863		user->upages_end = start_index + rc;
-   864		return 0;
-   865	}
-   866	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
