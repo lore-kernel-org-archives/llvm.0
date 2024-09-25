@@ -1,87 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954D6155336;
-	Wed, 25 Sep 2024 08:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6575214037F
+	for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 10:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727254035; cv=none; b=ko4P3XlEH3IDbSLLfqFomGZMC25wJqP6dHg2kirX8rwucAJC4t8GVodl1oivvJjBRG5L1Jr2x6RXIq+MhIoJ8ycZPVeALRA6z6ZCXFAyzjhwyBUbL6/9T2Tzb8YQZhVty3Fx5lPfSFXsPWKhsCl7+jR3meCcopZ6+J8miwe2LKI=
+	t=1727258436; cv=none; b=SsogtfO7Aqjj0EvNp9XZFHxSQlCzEEVnsF/7l6c/IXzO7y4drOFeMn4KS6JpLGhKWeS2lx7qK7sfq0uqe84/Rankxf4K4bq1tqtf8Ru53oheXXVQfDcBkDZ/uQTFM5wLjdPIERpG7Dv1S2x5PeontTLrh2u0T2jcFPyeiVxXAig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727254035; c=relaxed/simple;
-	bh=xH4QVy5AJPkB+FVCrwJ8QbZVsuCF8oiWdp6wBn7OtbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=a9qK0hBKKLZ46LxZNQKIc7+7BewBK3bDScc32qQOZCzQpgu+8Ti+M458mGpfKhP6pHpisIW3AAnsvXeVPmRA6/Nh9TztjJ644qvMo3sNyj14K+tbTqM+H1j/A59q6vluzGPbuiGpwHd02Fo0QTgwTUPSqis59paIeNOAW6BwX7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WR4o+FvX; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727258436; c=relaxed/simple;
+	bh=pJ2juEFqj+48bXu5zvFqiWfX3lEeexWtmQCXqHMpLug=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m8GRwB/AolRQPvMtc4RBJymZeFAdOdtNNuFnR6I0gcx8wPBHIXmPJTf3Y2Y/Fe343i56B+W7YDv69qj2wpC7IUQfQPKKi4ELb/Bq1mpQjtLkZxJc07g2Es4aW2OFlLMSPCBnTbeH1M12nKxo3ppz69tfs8DhNC0MSOM+pvMixZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CazRLJSw; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WR4o+FvX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727254033; x=1758790033;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xH4QVy5AJPkB+FVCrwJ8QbZVsuCF8oiWdp6wBn7OtbU=;
-  b=WR4o+FvXgz7are7gKxXL4gFTAFUYbdN/oNp8G9C6hOi4YPqTD7rP24zI
-   oBLg1ndbqf/mmagxwNgW68cwRDXgMGheeZB9xQEo1puY/My8BW5JxGp+G
-   Qq+XhF9pVIqwTtjI1ao6Ev/ZbhbvVoOfTTScYz5LWOJl4JJ+oFR7V0zVC
-   6gDeCKx7FeouZWc2xc/Lyl6LNEBdvI19yk68ag7EmSr0/0Rpq55iOFnVT
-   19vmnrKtZSD1Bku0wS/FE1ddSjLGvAGokY1okv2k23+v7tdEFBSsTz3IY
-   SPON4kbkNLlHEk4pFELbiXZZbGr9j17whG+Gqqa6Ffo7HqPRYAWNxQAfy
-   g==;
-X-CSE-ConnectionGUID: 9BJe0bGmSdq7Zgy346SLAA==
-X-CSE-MsgGUID: eW/Nw9hKQhq31bJdRwYe1g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="13914064"
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="13914064"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2024 01:47:13 -0700
-X-CSE-ConnectionGUID: dlFn7rn5T1SEetn87SkgGw==
-X-CSE-MsgGUID: oAoTrJlGSaKYyF9pq9FUdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="76093998"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 25 Sep 2024 01:47:10 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stNfw-000JNj-1r;
-	Wed, 25 Sep 2024 08:47:08 +0000
-Date: Wed, 25 Sep 2024 16:46:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: ld.lld: error: call to __compiletime_assert_135 marked
- "dontcall-error": BUILD_BUG_ON failed: !__builtin_constant_p(res)
-Message-ID: <202409251656.lmhUs1ya-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CazRLJSw"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-374c3400367so5792515f8f.2
+        for <llvm@lists.linux.dev>; Wed, 25 Sep 2024 03:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727258432; x=1727863232; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pzoOml1YCYEgfJn8QSXq3DVawdpDp//KSF0cYbIea6E=;
+        b=CazRLJSw0fRqj6oKFVOYX8ZaZcK8D7+eE3dCTRpOGeimHuAAP9WOBS2ArvYt7u3uUt
+         yW1dr9LnZY43kiW2D74aLu0YxKEJMofFkMjP1OJoVqpynzseIdjbyrrdni26yKVmTM3R
+         f/S7goD8gSunem4jmqzxiRq4frO2MntwbgH6P6KZPW91xEqezZu7hugo0djJyGddLQcM
+         2j/wPJjmMKQ9BYZ8G1lx+epqhQZalbGpug1+MercmUoqlNEIbG49pDq4lA3s7qUEXbxG
+         NSow9aMucooDHvXVoVZVvJ0Jp0xPRQnv5wTpZBa7bmpZSz2dLf8uDH9HpAjMTxVxw84B
+         Wcsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727258432; x=1727863232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pzoOml1YCYEgfJn8QSXq3DVawdpDp//KSF0cYbIea6E=;
+        b=c+xCgtinjPsUPNIXWb3wMzbYTOhN1QnnkCUf/g+cz+hYRRu6i0yCiIPQFc95oPOI29
+         EzxKkdlEsJ+jnYAgbCVp5rmuH9Pgo5jg53QmilIZH326j2+dgLaCeEhIlF6z1ooNSaGT
+         w1bKYXVOMLyIJr15j8opsYwjXLXwEYi5VjnKpcegqNVTkx+JaanvZokf8qwwpCF44jtz
+         sqHmQxpBchLdLrRG9c3oEWiePxjSqM0cf35sgjRrO4z+BvWMaYGkX0Z9iiILUnQgs+dE
+         MhKRTDaf0vZkbtVHbxgMF7TfuLhIbcZt+SYqiSOl5fEDpHMsHR0DizBioezSSgkXvS+3
+         2Rrw==
+X-Forwarded-Encrypted: i=1; AJvYcCVriVqPpVxJZS3FN7MW5LZXlo12yVrNcix/RrU1uiHInSVBS3uG+JefjO21gyj/7+RgQudx@lists.linux.dev
+X-Gm-Message-State: AOJu0YwBIStG/53okHfjwewfxwI5i+fHSocSczhGyE7iib4+LaT/Wyg2
+	hwHp1eJk4jIy+MVWPsZ8VnvoTp87B5HVnFN3homaL04VaWCJASId7nS2Oh+E+ZpNAdHY2W4In6G
+	wMJyivVng7FyRCahY0IWilv5WZl7LeA4icqDp
+X-Google-Smtp-Source: AGHT+IGKx3uL22uVQI6NHByefGqy6iXJLA73m1W8DO6NEIobANtIbLRvc5jJ2Ew/h8x1OdttDYdjCDqwhHlO027Qz2g=
+X-Received: by 2002:a5d:5547:0:b0:371:8dd3:27c8 with SMTP id
+ ffacd0b85a97d-37cc246a5cemr1937135f8f.23.1727258432326; Wed, 25 Sep 2024
+ 03:00:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240820194910.187826-1-mmaurer@google.com> <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
+ <CANiq72myZL4_poCMuNFevtpYYc0V0embjSuKb7y=C+m3vVA_8g@mail.gmail.com> <CAH5fLgheG47LdgJGX6grHXL6h08tsSM1DACRkkzQk_1U8VAOxQ@mail.gmail.com>
+In-Reply-To: <CAH5fLgheG47LdgJGX6grHXL6h08tsSM1DACRkkzQk_1U8VAOxQ@mail.gmail.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 25 Sep 2024 12:00:19 +0200
+Message-ID: <CAH5fLgj7E03DKBcptgmZ8SLgco=Qs4puO=O6=v9=-3SSuqJyUQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Rust KASAN Support
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Matthew Maurer <mmaurer@google.com>, andreyknvl@gmail.com, ojeda@kernel.org, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, dvyukov@google.com, samitolvanen@google.com, 
+	kasan-dev@googlegroups.com, linux-mm@kvack.org, glider@google.com, 
+	ryabinin.a.a@gmail.com, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   684a64bf32b6e488004e0ad7f0d7e922798f65b6
-commit: 7adaf37f7f104a7ee5f150af491674ccbbfc4114 lib/bitmap: add compile-time test for __assign_bit() optimization
-date:   6 months ago
-config: um-randconfig-001-20240925 (https://download.01.org/0day-ci/archive/20240925/202409251656.lmhUs1ya-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409251656.lmhUs1ya-lkp@intel.com/reproduce)
+On Wed, Sep 25, 2024 at 10:26=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
+wrote:
+>
+> On Mon, Sep 16, 2024 at 6:47=E2=80=AFPM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+> >
+> > On Mon, Sep 16, 2024 at 6:15=E2=80=AFPM Miguel Ojeda
+> > <miguel.ojeda.sandonis@gmail.com> wrote:
+> > >
+> > > Applied to `rust-next` -- thanks everyone!
+> >
+> > Also, for KASAN + RETHUNK builds, I noticed objtool detects this:
+> >
+> >     samples/rust/rust_print.o: warning: objtool:
+> > asan.module_ctor+0x17: 'naked' return found in MITIGATION_RETHUNK
+> > build
+> >     samples/rust/rust_print.o: warning: objtool:
+> > asan.module_dtor+0x17: 'naked' return found in MITIGATION_RETHUNK
+> > build
+> >
+> > And indeed from a quick look the `ret` is there.
+> >
+> > Since KASAN support is important, I decided to take it nevertheless,
+> > but please let's make sure this is fixed during the cycle (or add a
+> > "depends on").
+>
+> I figured out what the problem is. I will follow up with a fix soon.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409251656.lmhUs1ya-lkp@intel.com/
+I posted a fix:
+https://github.com/rust-lang/rust/pull/130824
 
-All errors (new ones prefixed by >>):
+We'll need a check on RUSTC_VERSION in Kconfig for this. If the PR
+gets merged within the next 22 days, this will land in 1.83.0. Would
+you like me to send a fix with that version number now or wait for it
+to get merged before I send that fix?
 
->> ld.lld: error: call to __compiletime_assert_135 marked "dontcall-error": BUILD_BUG_ON failed: !__builtin_constant_p(res)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice
