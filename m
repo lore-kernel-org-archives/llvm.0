@@ -1,153 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBE93A8F7
-	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 13:38:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD1E13213E;
+	Thu, 26 Sep 2024 14:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727357922; cv=none; b=WCQQi4vbwCkxQDml/CRvbeQDevm6pzMmgT8GZOr8FtNxmS4QoTRACLUN8ABTytP+SI/n91zc4zDvMyOCHunldtQdzoegVou12BwJv9jFH9HHg03FtbeEGrc6rMr9wO3QA3Px6cOLB0P2qSy2beFv8GAckQ/uvjjiI8sYPkzAL2A=
+	t=1727359941; cv=none; b=opwSr3Xb0HEhHdJMiIWM7a4OhvlKmRBFI4j0mtaP/y+V/1Cet8ulV/Uceu6WUQdhgaDNHVZUIg6jBr9CUJByM2+/JxJ+QDMR48pjuvxNCTNJvkCrildg8vAYQ4LVyi0RipSSQ33UrvP2r/LwElLQzZsfO44lRoMn4ge6ZrTavJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727357922; c=relaxed/simple;
-	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SWI4Ov3/hPpmp4ekefjXgITt1acMdx2JHaai2YW3K++Jlnhk++5i0P+tQeLR5cckoEm+Y8I8qPrbkPzhS/p3c9jXKyw8/v7oh6LfGDbNLRoKKEc5idpk11WTZtEEigmpwQj72fMED3moCd6l+C2DMO5b5F5TLYKA1fRV81s9rYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tFpkbNET; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727359941; c=relaxed/simple;
+	bh=pMKxWpF1vDUnw6Eym12+Sx+fRvfPFS0/SnM1YmOSzWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OIb41umhbbTScAPtrsKNNHgK+hqiWByTyGs64+H2+6QII4vmxX4kCaqjfbIowyy6i073Cw4YhMQh28QpK9TwbjnFDELMP2zmWuVaI+uPY4nPtWD+InRhbuGQkClwJz46mphSNMJaP4USa7ZZIn47sGtNqsSqVkWfMtIcZjxNg4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L0puKO3M; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tFpkbNET"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85C6C4CED4
-	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 13:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727357921;
-	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tFpkbNET0czPRtMPovfI/tw3gSCaREnEFLqAxcDb3uZoTaN1MUsL6oFQbeAJWaXFI
-	 CeZWZV2EQC3jkUVUyeFkJ+3vTNfdldDlcwSemGpaMMeK9dMpCn+eo3NwP7qHalae2l
-	 VkYErS8T+eLlgBYIpVtrHU2I5PcdP6mhLc1DUl1KUsQKtRR5hqOVwbYWqQHd51bOSc
-	 0RXX9eQm9K7Euav9Ek8BEAPCErl0m7IiVuV8uXmMnTrDNFw9GHP2lFmVOsqkL2L43u
-	 cjWMgiSR1KtLVxjFC81BklSOZDD2JwvftlNBn0/eOD6Pyn0J+4KRnR0e//rfp7F508
-	 d7FbSWxfvv7MQ==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f753375394so9654791fa.0
-        for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 06:38:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVqxWuQxJG0A6Xceq2j4wta5nyLzE3GDk5h6R/fBOUVr/zPqbCc6uIuD3KkscUaZwPzw12D@lists.linux.dev
-X-Gm-Message-State: AOJu0YxPwO5ED4y2RFfdnkFP15h3ppI8g2Z93v6csarrwQSWn4pMKEfX
-	alcdHumcTMkZ9Gy9Nq3JVSLhA4QtwoMx4gii6VZuVsThPLaCpPNPOs/2U8a0qVZHq/OquzTPw1m
-	5ceAYJ4XIgT2TzpAoxmN49D84CjY=
-X-Google-Smtp-Source: AGHT+IGDysp0zVaI/G56jPcUmenrli6iDQ7ZCklZUQ9W3MAWEI6d8p2NALI8I7dIlWV2Pg4Oztsl5Tqp++gl5gafuuo=
-X-Received: by 2002:a2e:4a0a:0:b0:2ef:1784:a20 with SMTP id
- 38308e7fff4ca-2f91ca68786mr32564001fa.38.1727357920170; Thu, 26 Sep 2024
- 06:38:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L0puKO3M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727359940; x=1758895940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pMKxWpF1vDUnw6Eym12+Sx+fRvfPFS0/SnM1YmOSzWY=;
+  b=L0puKO3MelBVO4nbp1sRkTua+ronpW9kSwQA3bgcFjAkXmBmnYMSTHVJ
+   sXcfCPdgo4gINefpBY7zc4kmS5IJOOPPHdDbdCqK2uA9E8ajIIhkRIvWm
+   QFlou5UqqYKdt+/o0mf9g87J7CzED0ptCPlPtduSLpGJeZT4q0X1seNtz
+   9cECI1URuhlyNx022pQbNWW5RDHIdIADQOez/lyL6Cac+SXLAYre9/bYb
+   v1AVP7tgP9VTxxmbmsG4rj/h59SWGSIXYs2RpR9e1l3K2DmZvcZrs34W7
+   yEzazK39jg3hwOCOlFxOGsb+q+LMTLMGDvceGaN8j9hPdkqTa6tjsGibZ
+   g==;
+X-CSE-ConnectionGUID: k4n1hmXJTEijiICvNV6WPQ==
+X-CSE-MsgGUID: cQe4eiCVS0WbNXBOQ/XZ0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="26610394"
+X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
+   d="scan'208";a="26610394"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 07:12:19 -0700
+X-CSE-ConnectionGUID: F6vX/U6HSgWqzzcokI2EMg==
+X-CSE-MsgGUID: 3VhJCZ0uTuSFbieHVg7hNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
+   d="scan'208";a="72607121"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 26 Sep 2024 07:12:17 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1stpE6-000Kn5-29;
+	Thu, 26 Sep 2024 14:12:14 +0000
+Date: Thu, 26 Sep 2024 22:12:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yihang Li <liyihang9@huawei.com>, James.Bottomley@hansenpartnership.com,
+	martin.petersen@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, linuxarm@huawei.com,
+	liyihang9@huawei.com
+Subject: Re: [PATCH 03/13] scsi: hisi_sas: Add firmware information check
+Message-ID: <202409262135.mC6xdK2H-lkp@intel.com>
+References: <20240926014332.3905399-4-liyihang9@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-57-ardb+git@google.com> <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
-In-Reply-To: <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 26 Sep 2024 15:38:27 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
-Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
-Subject: Re: [RFC PATCH 27/28] x86/kernel: Switch to PIE linking for the core kernel
-To: Vegard Nossum <vegard.nossum@oracle.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240926014332.3905399-4-liyihang9@huawei.com>
 
-On Wed, 25 Sept 2024 at 22:25, Vegard Nossum <vegard.nossum@oracle.com> wrote:
->
->
-> On 25/09/2024 17:01, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Build the kernel as a Position Independent Executable (PIE). This
-> > results in more efficient relocation processing for the virtual
-> > displacement of the kernel (for KASLR). More importantly, it instructs
-> > the linker to generate what is actually needed (a program that can be
-> > moved around in memory before execution), which is better than having to
-> > rely on the linker to create a position dependent binary that happens to
-> > tolerate being moved around after poking it in exactly the right manner.
-> >
-> > Note that this means that all codegen should be compatible with PIE,
-> > including Rust objects, so this needs to switch to the small code model
-> > with the PIE relocation model as well.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >   arch/x86/Kconfig                        |  2 +-
-> >   arch/x86/Makefile                       | 11 +++++++----
-> >   arch/x86/boot/compressed/misc.c         |  2 ++
-> >   arch/x86/kernel/vmlinux.lds.S           |  5 +++++
-> >   drivers/firmware/efi/libstub/x86-stub.c |  2 ++
-> >   5 files changed, 17 insertions(+), 5 deletions(-)
-> >
-...
->
-> This patch causes a build failure here (on 64-bit):
->
->    LD      .tmp_vmlinux2
->    NM      .tmp_vmlinux2.syms
->    KSYMS   .tmp_vmlinux2.kallsyms.S
->    AS      .tmp_vmlinux2.kallsyms.o
->    LD      vmlinux
->    BTFIDS  vmlinux
-> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
-> FAILED elf_update(WRITE): invalid section entry size
-> make[5]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
-> make[5]: *** Deleting file 'vmlinux'
-> make[4]: *** [Makefile:1153: vmlinux] Error 2
-> make[3]: *** [debian/rules:74: build-arch] Error 2
-> dpkg-buildpackage: error: make -f debian/rules binary subprocess
-> returned exit status 2
-> make[2]: *** [scripts/Makefile.package:121: bindeb-pkg] Error 2
-> make[1]: *** [/home/opc/linux-mainline-worktree2/Makefile:1544:
-> bindeb-pkg] Error 2
-> make: *** [Makefile:224: __sub-make] Error 2
->
-> The parent commit builds fine. With V=1:
->
-> + ldflags='-m elf_x86_64 -z noexecstack --pie -z text -z
-> call-nop=suffix-nop -z max-page-size=0x200000 --build-id=sha1
-> --orphan-handling=warn --script=./arch/x86/kernel/vmlinux.lds
-> -Map=vmlinux.map'
-> + ld -m elf_x86_64 -z noexecstack --pie -z text -z call-nop=suffix-nop
-> -z max-page-size=0x200000 --build-id=sha1 --orphan-handling=warn
-> --script=./arch/x86/kernel/vmlinux.lds -Map=vmlinux.map -o vmlinux
-> --whole-archive vmlinux.a .vmlinux.export.o init/version-timestamp.o
-> --no-whole-archive --start-group --end-group .tmp_vmlinux2.kallsyms.o
-> .tmp_vmlinux1.btf.o
-> + is_enabled CONFIG_DEBUG_INFO_BTF
-> + grep -q '^CONFIG_DEBUG_INFO_BTF=y' include/config/auto.conf
-> + info BTFIDS vmlinux
-> + printf '  %-7s %s\n' BTFIDS vmlinux
->    BTFIDS  vmlinux
-> + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
-> FAILED elf_update(WRITE): invalid section entry size
->
-> I can send the full config off-list if necessary, but looks like it
-> might be enough to set CONFIG_DEBUG_INFO_BTF=y.
->
+Hi Yihang,
 
-Thanks for the report. Turns out that adding the GOT to .rodata bumps
-the section's sh_entsize to 8, and libelf complains if the section
-size is not a multiple of the entry size.
+kernel test robot noticed the following build errors:
 
-I'll include a fix in the next revision.
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next linus/master v6.11 next-20240926]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yihang-Li/scsi-hisi_sas-Adjust-priority-of-registering-and-exiting-debugfs-for-security/20240926-094506
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20240926014332.3905399-4-liyihang9%40huawei.com
+patch subject: [PATCH 03/13] scsi: hisi_sas: Add firmware information check
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240926/202409262135.mC6xdK2H-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409262135.mC6xdK2H-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409262135.mC6xdK2H-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/scsi/hisi_sas/hisi_sas_main.c:2457:11: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct Scsi_Host *' [-Wint-conversion]
+    2457 |                         return error;
+         |                                ^~~~~
+   drivers/scsi/hisi_sas/hisi_sas_main.c:2460:41: warning: shift count >= width of type [-Wshift-count-overflow]
+    2460 |         error = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+         |                                                ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 1 error generated.
+
+
+vim +2457 drivers/scsi/hisi_sas/hisi_sas_main.c
+
+  2424	
+  2425	static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
+  2426						      const struct hisi_sas_hw *hw)
+  2427	{
+  2428		struct resource *res;
+  2429		struct Scsi_Host *shost;
+  2430		struct hisi_hba *hisi_hba;
+  2431		struct device *dev = &pdev->dev;
+  2432		int error;
+  2433	
+  2434		shost = scsi_host_alloc(hw->sht, sizeof(*hisi_hba));
+  2435		if (!shost) {
+  2436			dev_err(dev, "scsi host alloc failed\n");
+  2437			return NULL;
+  2438		}
+  2439		hisi_hba = shost_priv(shost);
+  2440	
+  2441		INIT_WORK(&hisi_hba->rst_work, hisi_sas_rst_work_handler);
+  2442		hisi_hba->hw = hw;
+  2443		hisi_hba->dev = dev;
+  2444		hisi_hba->platform_dev = pdev;
+  2445		hisi_hba->shost = shost;
+  2446		SHOST_TO_SAS_HA(shost) = &hisi_hba->sha;
+  2447	
+  2448		timer_setup(&hisi_hba->timer, NULL, 0);
+  2449	
+  2450		if (hisi_sas_get_fw_info(hisi_hba) < 0)
+  2451			goto err_out;
+  2452	
+  2453		if (hisi_hba->hw->fw_info_check) {
+  2454			error = hisi_hba->hw->fw_info_check(hisi_hba);
+  2455	
+  2456			if (error)
+> 2457				return error;
+  2458		}
+  2459	
+  2460		error = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+  2461		if (error) {
+  2462			dev_err(dev, "No usable DMA addressing method\n");
+  2463			goto err_out;
+  2464		}
+  2465	
+  2466		hisi_hba->regs = devm_platform_ioremap_resource(pdev, 0);
+  2467		if (IS_ERR(hisi_hba->regs))
+  2468			goto err_out;
+  2469	
+  2470		res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+  2471		if (res) {
+  2472			hisi_hba->sgpio_regs = devm_ioremap_resource(dev, res);
+  2473			if (IS_ERR(hisi_hba->sgpio_regs))
+  2474				goto err_out;
+  2475		}
+  2476	
+  2477		if (hisi_sas_alloc(hisi_hba)) {
+  2478			hisi_sas_free(hisi_hba);
+  2479			goto err_out;
+  2480		}
+  2481	
+  2482		return shost;
+  2483	err_out:
+  2484		scsi_host_put(shost);
+  2485		dev_err(dev, "shost alloc failed\n");
+  2486		return NULL;
+  2487	}
+  2488	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
