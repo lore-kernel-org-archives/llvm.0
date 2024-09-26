@@ -1,141 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5507C158851;
-	Thu, 26 Sep 2024 12:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBE93A8F7
+	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 13:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727353218; cv=none; b=o1WT2vA/dugTua85qwkeYE2Mz+EkIiNlRj+GPXYAe+O+ZOgKXDJfxrzlVybsCXwGAtX4ekoN6Eyb+rVuDK92DzARxS/We4yfH6fU8V7cxJ+QcqPylmXXUh+QNU8D/iqE9FaKrKPbXxBHibTcC9bJcIO6IS1iX82GW2WRRdvSjUA=
+	t=1727357922; cv=none; b=WCQQi4vbwCkxQDml/CRvbeQDevm6pzMmgT8GZOr8FtNxmS4QoTRACLUN8ABTytP+SI/n91zc4zDvMyOCHunldtQdzoegVou12BwJv9jFH9HHg03FtbeEGrc6rMr9wO3QA3Px6cOLB0P2qSy2beFv8GAckQ/uvjjiI8sYPkzAL2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727353218; c=relaxed/simple;
-	bh=jMFSl4vA3LhEG7jX0SfZfCpZINnnt3t1a3rMS2YEflA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=vFALodxBGpp6ULuPa8dJcJhTqcgtTRVxziRReVuA71NLeoOB/sGYgUtsDqkTtuCl1S7Ain1oSi68+7+EkgMItDGJuiKphUzkP+N9nfqIiQQPYQJDkAHgefgNxM7B1QPs8MYwrIJCV2Ag182QMeZ+mxFZPipoRyAi2yGaz0TBqnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gvw0aNyY; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727357922; c=relaxed/simple;
+	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SWI4Ov3/hPpmp4ekefjXgITt1acMdx2JHaai2YW3K++Jlnhk++5i0P+tQeLR5cckoEm+Y8I8qPrbkPzhS/p3c9jXKyw8/v7oh6LfGDbNLRoKKEc5idpk11WTZtEEigmpwQj72fMED3moCd6l+C2DMO5b5F5TLYKA1fRV81s9rYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tFpkbNET; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gvw0aNyY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727353216; x=1758889216;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jMFSl4vA3LhEG7jX0SfZfCpZINnnt3t1a3rMS2YEflA=;
-  b=Gvw0aNyYClVG0aPPqLB4mgKYBpvqr4oFsUW7yn8uZw5JlqpTin9DiIJS
-   hHwNtoa7On6/ZvG1g3GPuVpnlJG3lk0+44CvvyXfR7KY79RskVSVXgORw
-   Y8yezShwlwDO51jeo9cA5k7bUiPLiHccOQtwwtp6Zk/0X9/JenIsha/t8
-   jBSo7SaLT2Sjds07Lzxf0qbmjj8aA20cSOLkPib+w5bxMp6ToxGbmBW8G
-   i9+7ED++sDJq+r2VX3ECgP8yQBf3NmRNCaGOvu5QqLcss00LvfOTEdZM7
-   nl5/vNl52p+XKxH5YhzbBRImmHdsHcHPTJ6GE/Z/mv9yD7X6UA1C0m7WU
-   A==;
-X-CSE-ConnectionGUID: FHaOLMqiRo+C9NRyNt6Kwg==
-X-CSE-MsgGUID: /5MNBUMyQSWBKYflCxp8sw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="26391285"
-X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
-   d="scan'208";a="26391285"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 05:20:15 -0700
-X-CSE-ConnectionGUID: fOxlk4o9TmWH3NTSRV1hAQ==
-X-CSE-MsgGUID: 4eUUw5e1RMqaNneS88Za/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,155,1725346800"; 
-   d="scan'208";a="95476030"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 26 Sep 2024 05:20:13 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stnTe-000Khr-2j;
-	Thu, 26 Sep 2024 12:20:10 +0000
-Date: Thu, 26 Sep 2024 20:20:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Samuel Holland <samuel@sholland.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Subject: [esmil:d1-6.11.y 31/47] sound/soc/sunxi/sun20i-codec.c:427:14:
- warning: duplicate 'const' declaration specifier
-Message-ID: <202409262017.8tZPxDjm-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tFpkbNET"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85C6C4CED4
+	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 13:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727357921;
+	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tFpkbNET0czPRtMPovfI/tw3gSCaREnEFLqAxcDb3uZoTaN1MUsL6oFQbeAJWaXFI
+	 CeZWZV2EQC3jkUVUyeFkJ+3vTNfdldDlcwSemGpaMMeK9dMpCn+eo3NwP7qHalae2l
+	 VkYErS8T+eLlgBYIpVtrHU2I5PcdP6mhLc1DUl1KUsQKtRR5hqOVwbYWqQHd51bOSc
+	 0RXX9eQm9K7Euav9Ek8BEAPCErl0m7IiVuV8uXmMnTrDNFw9GHP2lFmVOsqkL2L43u
+	 cjWMgiSR1KtLVxjFC81BklSOZDD2JwvftlNBn0/eOD6Pyn0J+4KRnR0e//rfp7F508
+	 d7FbSWxfvv7MQ==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f753375394so9654791fa.0
+        for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 06:38:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVqxWuQxJG0A6Xceq2j4wta5nyLzE3GDk5h6R/fBOUVr/zPqbCc6uIuD3KkscUaZwPzw12D@lists.linux.dev
+X-Gm-Message-State: AOJu0YxPwO5ED4y2RFfdnkFP15h3ppI8g2Z93v6csarrwQSWn4pMKEfX
+	alcdHumcTMkZ9Gy9Nq3JVSLhA4QtwoMx4gii6VZuVsThPLaCpPNPOs/2U8a0qVZHq/OquzTPw1m
+	5ceAYJ4XIgT2TzpAoxmN49D84CjY=
+X-Google-Smtp-Source: AGHT+IGDysp0zVaI/G56jPcUmenrli6iDQ7ZCklZUQ9W3MAWEI6d8p2NALI8I7dIlWV2Pg4Oztsl5Tqp++gl5gafuuo=
+X-Received: by 2002:a2e:4a0a:0:b0:2ef:1784:a20 with SMTP id
+ 38308e7fff4ca-2f91ca68786mr32564001fa.38.1727357920170; Thu, 26 Sep 2024
+ 06:38:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-57-ardb+git@google.com> <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
+In-Reply-To: <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 26 Sep 2024 15:38:27 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
+Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
+Subject: Re: [RFC PATCH 27/28] x86/kernel: Switch to PIE linking for the core kernel
+To: Vegard Nossum <vegard.nossum@oracle.com>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/esmil/linux d1-6.11.y
-head:   d99b769766ff1b1ced32d8d279d28e581e02fa9d
-commit: a66c0350f140f50f26d79d84ff42c898f36e8bc9 [31/47] ASoC: sun20i-codec: New driver for D1 internal codec
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240926/202409262017.8tZPxDjm-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240926/202409262017.8tZPxDjm-lkp@intel.com/reproduce)
+On Wed, 25 Sept 2024 at 22:25, Vegard Nossum <vegard.nossum@oracle.com> wrote:
+>
+>
+> On 25/09/2024 17:01, Ard Biesheuvel wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > Build the kernel as a Position Independent Executable (PIE). This
+> > results in more efficient relocation processing for the virtual
+> > displacement of the kernel (for KASLR). More importantly, it instructs
+> > the linker to generate what is actually needed (a program that can be
+> > moved around in memory before execution), which is better than having to
+> > rely on the linker to create a position dependent binary that happens to
+> > tolerate being moved around after poking it in exactly the right manner.
+> >
+> > Note that this means that all codegen should be compatible with PIE,
+> > including Rust objects, so this needs to switch to the small code model
+> > with the PIE relocation model as well.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >   arch/x86/Kconfig                        |  2 +-
+> >   arch/x86/Makefile                       | 11 +++++++----
+> >   arch/x86/boot/compressed/misc.c         |  2 ++
+> >   arch/x86/kernel/vmlinux.lds.S           |  5 +++++
+> >   drivers/firmware/efi/libstub/x86-stub.c |  2 ++
+> >   5 files changed, 17 insertions(+), 5 deletions(-)
+> >
+...
+>
+> This patch causes a build failure here (on 64-bit):
+>
+>    LD      .tmp_vmlinux2
+>    NM      .tmp_vmlinux2.syms
+>    KSYMS   .tmp_vmlinux2.kallsyms.S
+>    AS      .tmp_vmlinux2.kallsyms.o
+>    LD      vmlinux
+>    BTFIDS  vmlinux
+> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
+> FAILED elf_update(WRITE): invalid section entry size
+> make[5]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
+> make[5]: *** Deleting file 'vmlinux'
+> make[4]: *** [Makefile:1153: vmlinux] Error 2
+> make[3]: *** [debian/rules:74: build-arch] Error 2
+> dpkg-buildpackage: error: make -f debian/rules binary subprocess
+> returned exit status 2
+> make[2]: *** [scripts/Makefile.package:121: bindeb-pkg] Error 2
+> make[1]: *** [/home/opc/linux-mainline-worktree2/Makefile:1544:
+> bindeb-pkg] Error 2
+> make: *** [Makefile:224: __sub-make] Error 2
+>
+> The parent commit builds fine. With V=1:
+>
+> + ldflags='-m elf_x86_64 -z noexecstack --pie -z text -z
+> call-nop=suffix-nop -z max-page-size=0x200000 --build-id=sha1
+> --orphan-handling=warn --script=./arch/x86/kernel/vmlinux.lds
+> -Map=vmlinux.map'
+> + ld -m elf_x86_64 -z noexecstack --pie -z text -z call-nop=suffix-nop
+> -z max-page-size=0x200000 --build-id=sha1 --orphan-handling=warn
+> --script=./arch/x86/kernel/vmlinux.lds -Map=vmlinux.map -o vmlinux
+> --whole-archive vmlinux.a .vmlinux.export.o init/version-timestamp.o
+> --no-whole-archive --start-group --end-group .tmp_vmlinux2.kallsyms.o
+> .tmp_vmlinux1.btf.o
+> + is_enabled CONFIG_DEBUG_INFO_BTF
+> + grep -q '^CONFIG_DEBUG_INFO_BTF=y' include/config/auto.conf
+> + info BTFIDS vmlinux
+> + printf '  %-7s %s\n' BTFIDS vmlinux
+>    BTFIDS  vmlinux
+> + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
+> FAILED elf_update(WRITE): invalid section entry size
+>
+> I can send the full config off-list if necessary, but looks like it
+> might be enough to set CONFIG_DEBUG_INFO_BTF=y.
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409262017.8tZPxDjm-lkp@intel.com/
+Thanks for the report. Turns out that adding the GOT to .rodata bumps
+the section's sh_entsize to 8, and libelf complains if the section
+size is not a multiple of the entry size.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from sound/soc/sunxi/sun20i-codec.c:4:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/sunxi/sun20i-codec.c:4:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/sunxi/sun20i-codec.c:4:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from sound/soc/sunxi/sun20i-codec.c:11:
-   In file included from include/sound/dmaengine_pcm.h:10:
-   In file included from include/sound/pcm.h:15:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> sound/soc/sunxi/sun20i-codec.c:427:14: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
-     427 | static const SOC_ENUM_DOUBLE_DECL(sun20i_codec_line_out_mode_enum,
-         |              ^
-   include/sound/soc.h:406:2: note: expanded from macro 'SOC_ENUM_DOUBLE_DECL'
-     406 |         const struct soc_enum name = SOC_ENUM_DOUBLE(xreg, xshift_l, xshift_r, \
-         |         ^
-   8 warnings generated.
-
-
-vim +/const +427 sound/soc/sunxi/sun20i-codec.c
-
-   426	
- > 427	static const SOC_ENUM_DOUBLE_DECL(sun20i_codec_line_out_mode_enum,
-   428					  SUN20I_CODEC_DAC,
-   429					  SUN20I_CODEC_DAC_LINEOUTL_DIFFEN,
-   430					  SUN20I_CODEC_DAC_LINEOUTR_DIFFEN,
-   431					  sun20i_codec_line_out_mode_enum_text);
-   432	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'll include a fix in the next revision.
