@@ -1,106 +1,100 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28F9187850;
-	Thu, 26 Sep 2024 21:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8989188715
+	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 21:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727385547; cv=none; b=MIgvxBQfIatvTCer5bj9xmgzxtskbNtxtXcyBKOf0TSiAY94Dp7VVDMoKUXANddmru1qEL4+dVirugrX6y7WOiereU3XSq94zgq3COyiNJh46c5HWPVeWWTDDdbii5dKajnnHFtFuPvQCrnTHWC8CYUN0UbSsZzuDKXKoY1E1q0=
+	t=1727386525; cv=none; b=GNma3/F+3qVn8RzBilP7crvQYDneNFEOWOE76anhgB0nbgNJZnsNHS1B7U+RhAdJEoNinS43HEvjKBelJwjPX62w8tHb0FPpWnam/uGajZqxhMfFk9LBeg/v8t46NV8VFCG6N6Pe6llbS9UbtmkZbzhVATfyihgmvkpL3tU7Do8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727385547; c=relaxed/simple;
-	bh=AvcDnkUmv2DqPh64tRKzMWvmnXubSlYFjN4hVlRNLk0=;
+	s=arc-20240116; t=1727386525; c=relaxed/simple;
+	bh=1/AF0ye1aEDqbRIMOiqu2UP5rEYyIqLBgduhnkT/Gq8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VHP+pNWd3bJmuBCHdf2wF46p2Te+n5xXyGmRxP9TqmMcbUruXdn+bX4gojl94YlIaDkTm3cAjxlkK3gGKHyqpt4AMsm7+3GpVG4ZWs5yPr5lEZXes9/pwBaGsPcO1mEDcwwpyoqDsD5PNcTglG18MKE2XbbREHjhsu4+BIspjxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ODCt56/b; arc=none smtp.client-ip=209.85.215.175
+	 To:Cc:Content-Type; b=HBJfh/5Z7VEQxAgZ34fM/Fcum9KV9uRA4YIPjdwVhv1SKHj5FlBKtaFrY9UklpOXb6tj9a24Ppj0UNskaOvLs1phEpW4M0T3GA05X3E3GzoES+ZHys+EPON/W5TX4FRw1SnZ4EYkHV1ZwW9wX5nfulw3klh0rZgUbhtG3nAQFJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9uDyNHf; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ODCt56/b"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7dafb321dbcso41704a12.1;
-        Thu, 26 Sep 2024 14:19:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9uDyNHf"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2db6e80555dso259811a91.0
+        for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 14:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727385545; x=1727990345; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1727386523; x=1727991323; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jiL/43w7xPDMaXqaTLOfu6ipmJ7ueyEd94vFcLFVt94=;
-        b=ODCt56/b1xYK9NNfWyw+7AXzGZRHpIV3swkJ2OiEpIA+3HyZWbp7Aa6PM7GhiDZZ/T
-         EtqMDdczdJAa45+qpDikEASmOm5wgjSeAwSuBhTuGt15e0r9R5G0dg5w+LjkCMO2Ijfh
-         aehtQW99oOYwO5jHjaz7FAoZH/s+d8Ie4qI7AgovL/4FnNXYlYf2JauvxjJC7qgCvjsK
-         C45ibbMDl6CW/UGCs0/wLp5HlNDXcGGSIypVKE8LDhxxUobvQk7SX8h8VE1HceXD6Oou
-         r/WHhOlqrhqai8i67WvhuoArAWdULO63kmzKMalIeACiV2QhJ0f11pePvk5FpaNYil6L
-         L6hw==
+        bh=YN3ZIl0AHdW2Pc3ccHhFRbQ1ihSm5IEdT9WChsNSY6k=;
+        b=W9uDyNHf/xAqM40DVlOEeW9iNR0kof99nGLRtmT8BOXU6nREQs4wKs7NRUD3fNjXjW
+         mgChn0f2QXM+HG67wv+nuREhIHcpUNFFtIHB47pU2kob5JKvMbjbOugfhBCnpzpYHoY5
+         XAkWuuy/LiBEWxTouVFoAGhhE+5xI5BY3mkE22EWFomNCFyhTgsB7Fl/Av60pQX+iesB
+         UieQSd61s0R1o9/F+EjUhTCjXirh3Q6tNtSAY201gBCX6nUxjEq1SU5Rmjl33LJDwy+Q
+         J+88cHiKPxa9Yq8zKKi8jdXAEg/N3SuMkNvS7wq7wdl+7viwg+ZFp2R0dlUSDArVYGdL
+         b9XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727385545; x=1727990345;
+        d=1e100.net; s=20230601; t=1727386523; x=1727991323;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jiL/43w7xPDMaXqaTLOfu6ipmJ7ueyEd94vFcLFVt94=;
-        b=qVFb575X/wN0SDYdQ81yqAFKDydKO38sHFHeO4YFXhoZIePOV8SexSIlvX+CfHDQsS
-         qrrc1f2QTqdllvNI3xUSoqVZ/1hdrdMUQxP57FxPzowETYPQZT5htewTxExGNlXcPrQw
-         JB4iRkiExQL+N1Zz+GnitvIgONav373EdKRk5Eriudh9jg2kQMMN0Bpwtr6rDLSP+aEZ
-         1OGAbn7mw9gy9fYmn25DAZh+DwayTs5kFWOA24YXJ4fZZgtELfg6xw7lfYvyFeo+jUNU
-         l3XaSTDDZPT4QAPtZEd/NieYuY768DvTbrgXX87fxcry7f8b34GErjALd+3WMk2osYvz
-         xKMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVeobniT7tuQzu4G62xkoyKQDm30Qdd6XQsshzLlSqmhDt/OwltqAcoicNpGseXSHNYmVfk@lists.linux.dev, AJvYcCWWsNttd58XZ1gpyHGCl5TNXkMkQcGxrkiF7mDKT8r7kBViHlYFX9/3IHqwi7tCuuqTOXYh7ewa/1AUTOHayQ==@lists.linux.dev
-X-Gm-Message-State: AOJu0YxVEvwCz3sppUFqZjnCnt67sB658qn61YwXF6TXNk4TJQK4my6Z
-	F+lGhDI24T2jAfCNvZgdBLKVqAPOOhnrJt7JmIkIq5QdGfTAHp6NUWgi3G02Qy5yibju92KqacJ
-	AdRX5fdxci1ktXoIYKP9KCOdLQkY=
-X-Google-Smtp-Source: AGHT+IE6Z5Ugs5d9ud90HsPwabxzrmKDL6pJfCR6F+I4Hb2fAl23W6NAluXCqFPTFKmt/02r4eYWF2KDbgYnvtdh4g4=
-X-Received: by 2002:a05:6a20:8415:b0:1cf:46ff:973d with SMTP id
- adf61e73a8af0-1d4fa78e94fmr838750637.9.1727385545304; Thu, 26 Sep 2024
- 14:19:05 -0700 (PDT)
+        bh=YN3ZIl0AHdW2Pc3ccHhFRbQ1ihSm5IEdT9WChsNSY6k=;
+        b=CZqWC/wNudJjSlnS8FOV0MmlRjl/6vcm/c/GKDdmAUC2RmOyDCD4I01Wk2kDUjH00N
+         TTrz4qw7QmZICM8U4Zn+WXnFb7OgTy1L6sWrb4jMK2HGw8uNcEcN7LDX6ka+hvsgsfTl
+         M6O3Ykie7LPMClzfUDfj2rHk10R1IIrsqlsJNz9w3Tic06E2mYS/iIuZ+a/Yd2E33H4w
+         6rUYz4+MLNCHc4t8TlJ+CD8syo9K+k7p59yC16EbF6p5/fCus7Sbx7PpQufKZsc9usLv
+         dAxpYQGGEqiZ4G4VEPHY91Y8aC70yMMSZORfZu/zWdSwIRBTg5VRxjiFGWDJdKfhqMK9
+         3PGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWz8s373KR8cTLAgSf6++K7jS5jUiApnqBwxXgpcXu/PBcsuzzTfPOvaQx7eB7gw7/EeDfT@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHYlvubb53+Hgsxa0GdH/sJWizWZ1K7W2344MiJPhFMo00ttgm
+	iiSHbkEohf8oBNvMFrlnylNmHQCTCOXyYCapXGtkVwWbbt7yGkNBPEldVMkxXrIosQeKs/ZuUkk
+	lU2nN/kK893mKFGvVbk6sVDrgbnU=
+X-Google-Smtp-Source: AGHT+IFP+qclc+DwNk0VcbiLZGtyseD1sfEmeyqBVla3e/ZDfuly9waYm3g7wRqfrKuy03nGqriwsOXLp8FvWSa4ibk=
+X-Received: by 2002:a17:90b:3698:b0:2db:60b:eee with SMTP id
+ 98e67ed59e1d1-2e0b8ed348emr498104a91.9.1727386523117; Thu, 26 Sep 2024
+ 14:35:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202409160804.eSg9zh1e-lkp@intel.com> <20240916003347.1744345-1-gary@garyguo.net>
-In-Reply-To: <20240916003347.1744345-1-gary@garyguo.net>
+References: <20240925150059.3955569-30-ardb+git@google.com> <20240925150059.3955569-32-ardb+git@google.com>
+In-Reply-To: <20240925150059.3955569-32-ardb+git@google.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 26 Sep 2024 23:18:50 +0200
-Message-ID: <CANiq72=qRGkXJoTin69KDgz0YHDaY8uB0vfX=GDZeR7TbhaTdA@mail.gmail.com>
-Subject: Re: [PATCH] rust: fix `ARCH_SLAB_MINALIGN` multiple definition error
-To: Gary Guo <gary@garyguo.net>
-Cc: lkp@intel.com, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, conor.dooley@microchip.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, palmer@rivosinc.com, 
-	rust-for-linux@vger.kernel.org
+Date: Thu, 26 Sep 2024 23:35:10 +0200
+Message-ID: <CANiq72=z6A=50QO3V0S3Kgx6XQT93GxbB_LN6PFAQCmNgy370A@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/28] Documentation: Bump minimum GCC version to 8.1
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 16, 2024 at 1:09=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+On Wed, Sep 25, 2024 at 5:10=E2=80=AFPM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
 >
-> We use const helpers in form of
->
->     const size_t RUST_CONST_HELPER_ARCH_SLAB_MINALIGN =3D ARCH_SLAB_MINAL=
-IGN;
->
-> to aid generation of constants by bindgen because it is otherwise a
-> macro definition of an expression and bindgen doesn't expand the
-> constant. The helpers are then have `RUST_CONST_HELPER` prefix stripped
-> and exposed to Rust code as if `ARCH_SLAB_MISALIGN` is generated
-> natively by bindgen.
->
-> This works well for most constants, but on RISC-V, `ARCH_SLAB_MINALIGN`
-> is defined directly as literal constant if `!CONFIG_MMU`, and bindgen
-> would generate `ARCH_SLAB_MINALIGN` directly, thus conflict with the
-> one generated through the helper.
->
-> To fix this, we simply need to block bindgen from generating directly
-> without going through helper.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202409160804.eSg9zh1e-lkp@i=
-ntel.com/
-> Signed-off-by: Gary Guo <gary@garyguo.net>
+>  Documentation/admin-guide/README.rst | 2 +-
+>  Documentation/process/changes.rst    | 2 +-
 
-Applied to `rust-fixes` -- thanks!
+This should update scripts/min-tool-version.sh too. With that:
+
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+
+As Arnd says, the cleanups can be done afterwards.
 
 Cheers,
 Miguel
