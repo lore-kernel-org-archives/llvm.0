@@ -1,118 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D81133C9;
-	Thu, 26 Sep 2024 20:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28F9187850;
+	Thu, 26 Sep 2024 21:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727382707; cv=none; b=sbmnSyqjwltl5kKQ64cPsqYiWFuX4/cPI5jEMY/I8sNblSwZEGeSxyaYwg8hAZtC8iZg7i0WODpdEg2ZRaAkXvSR0xFL/z7quP3R+fICdpvKjq/gV7Es1Z4lrZfZvQwk4Q/IxYzcfuvfSSXsiaO7gUmXCoOayR5h9wHDHHB9C54=
+	t=1727385547; cv=none; b=MIgvxBQfIatvTCer5bj9xmgzxtskbNtxtXcyBKOf0TSiAY94Dp7VVDMoKUXANddmru1qEL4+dVirugrX6y7WOiereU3XSq94zgq3COyiNJh46c5HWPVeWWTDDdbii5dKajnnHFtFuPvQCrnTHWC8CYUN0UbSsZzuDKXKoY1E1q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727382707; c=relaxed/simple;
-	bh=iZH+ElxSkR/k3giY3/bChPya9hqtm05vBd05Dre3eCo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hC12E4gGlSBYcPxtSIcJvT2g/thvf5MAzYo45dASu1egnJGcADvANBvBwPIevca5ZHkSDtvuwQMzOgnyb4C4yIR19AcG8TkFsQ+ViAs8o93D2j9HMc4F0xP0hz0mT4fmOCaMqND1K+WNL2QXBgaXFkBGWLEBmVr2J//sQR3QUWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TyAl67OE; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727385547; c=relaxed/simple;
+	bh=AvcDnkUmv2DqPh64tRKzMWvmnXubSlYFjN4hVlRNLk0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VHP+pNWd3bJmuBCHdf2wF46p2Te+n5xXyGmRxP9TqmMcbUruXdn+bX4gojl94YlIaDkTm3cAjxlkK3gGKHyqpt4AMsm7+3GpVG4ZWs5yPr5lEZXes9/pwBaGsPcO1mEDcwwpyoqDsD5PNcTglG18MKE2XbbREHjhsu4+BIspjxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ODCt56/b; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TyAl67OE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727382705; x=1758918705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iZH+ElxSkR/k3giY3/bChPya9hqtm05vBd05Dre3eCo=;
-  b=TyAl67OEANA3PQv3xNuIFhp/dVKrO8KMUlsjh13fbnQUBRdKSU8V0+ZC
-   2/nDT4nrOJ1G6KmdOXOkba3Xrf1TWr8GcPzT5AzByePH1sEBEeN8wAZFF
-   AE95K72rAPZLjnb+3apbrwUO+iC9T0ZETuQqGijJd/N90rMUnlGaaREvA
-   v7rcHNyIHhzI/Wu7R0+Xv+tirco3nK42wIWYeggALW2U8Ut39Eyd/E05/
-   aqvk2auxQYd8oGjBeO/oyo9vkApkH1Fgqn5XAldK4pb/yC605CbHnJvzi
-   9Kcaj2etxI03ZFQw+ScGy5qr62klXLJX4UcrrpqWbz1WBGQULP+9MTJJm
-   w==;
-X-CSE-ConnectionGUID: S0ye7PxeTReeoY8sR6+Ojg==
-X-CSE-MsgGUID: EiywWC0bQRCAjbSo9zozCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="26690287"
-X-IronPort-AV: E=Sophos;i="6.11,156,1725346800"; 
-   d="scan'208";a="26690287"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2024 13:31:45 -0700
-X-CSE-ConnectionGUID: gldxkRZZR7+N+/ya0A+Skg==
-X-CSE-MsgGUID: Zerset9BTJazvYoEY6zslw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,156,1725346800"; 
-   d="scan'208";a="76657648"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Sep 2024 13:31:42 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stv9H-000LAt-1X;
-	Thu, 26 Sep 2024 20:31:39 +0000
-Date: Fri, 27 Sep 2024 04:31:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benno Lossin <benno.lossin@proton.me>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg KH <greg@kroah.com>, Simona Vetter <simona.vetter@ffwll.ch>,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] rust: add untrusted data abstraction
-Message-ID: <202409270303.kUIAmOmY-lkp@intel.com>
-References: <20240925205244.873020-2-benno.lossin@proton.me>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ODCt56/b"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7dafb321dbcso41704a12.1;
+        Thu, 26 Sep 2024 14:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727385545; x=1727990345; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jiL/43w7xPDMaXqaTLOfu6ipmJ7ueyEd94vFcLFVt94=;
+        b=ODCt56/b1xYK9NNfWyw+7AXzGZRHpIV3swkJ2OiEpIA+3HyZWbp7Aa6PM7GhiDZZ/T
+         EtqMDdczdJAa45+qpDikEASmOm5wgjSeAwSuBhTuGt15e0r9R5G0dg5w+LjkCMO2Ijfh
+         aehtQW99oOYwO5jHjaz7FAoZH/s+d8Ie4qI7AgovL/4FnNXYlYf2JauvxjJC7qgCvjsK
+         C45ibbMDl6CW/UGCs0/wLp5HlNDXcGGSIypVKE8LDhxxUobvQk7SX8h8VE1HceXD6Oou
+         r/WHhOlqrhqai8i67WvhuoArAWdULO63kmzKMalIeACiV2QhJ0f11pePvk5FpaNYil6L
+         L6hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727385545; x=1727990345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jiL/43w7xPDMaXqaTLOfu6ipmJ7ueyEd94vFcLFVt94=;
+        b=qVFb575X/wN0SDYdQ81yqAFKDydKO38sHFHeO4YFXhoZIePOV8SexSIlvX+CfHDQsS
+         qrrc1f2QTqdllvNI3xUSoqVZ/1hdrdMUQxP57FxPzowETYPQZT5htewTxExGNlXcPrQw
+         JB4iRkiExQL+N1Zz+GnitvIgONav373EdKRk5Eriudh9jg2kQMMN0Bpwtr6rDLSP+aEZ
+         1OGAbn7mw9gy9fYmn25DAZh+DwayTs5kFWOA24YXJ4fZZgtELfg6xw7lfYvyFeo+jUNU
+         l3XaSTDDZPT4QAPtZEd/NieYuY768DvTbrgXX87fxcry7f8b34GErjALd+3WMk2osYvz
+         xKMg==
+X-Forwarded-Encrypted: i=1; AJvYcCVeobniT7tuQzu4G62xkoyKQDm30Qdd6XQsshzLlSqmhDt/OwltqAcoicNpGseXSHNYmVfk@lists.linux.dev, AJvYcCWWsNttd58XZ1gpyHGCl5TNXkMkQcGxrkiF7mDKT8r7kBViHlYFX9/3IHqwi7tCuuqTOXYh7ewa/1AUTOHayQ==@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVEvwCz3sppUFqZjnCnt67sB658qn61YwXF6TXNk4TJQK4my6Z
+	F+lGhDI24T2jAfCNvZgdBLKVqAPOOhnrJt7JmIkIq5QdGfTAHp6NUWgi3G02Qy5yibju92KqacJ
+	AdRX5fdxci1ktXoIYKP9KCOdLQkY=
+X-Google-Smtp-Source: AGHT+IE6Z5Ugs5d9ud90HsPwabxzrmKDL6pJfCR6F+I4Hb2fAl23W6NAluXCqFPTFKmt/02r4eYWF2KDbgYnvtdh4g4=
+X-Received: by 2002:a05:6a20:8415:b0:1cf:46ff:973d with SMTP id
+ adf61e73a8af0-1d4fa78e94fmr838750637.9.1727385545304; Thu, 26 Sep 2024
+ 14:19:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925205244.873020-2-benno.lossin@proton.me>
+References: <202409160804.eSg9zh1e-lkp@intel.com> <20240916003347.1744345-1-gary@garyguo.net>
+In-Reply-To: <20240916003347.1744345-1-gary@garyguo.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 26 Sep 2024 23:18:50 +0200
+Message-ID: <CANiq72=qRGkXJoTin69KDgz0YHDaY8uB0vfX=GDZeR7TbhaTdA@mail.gmail.com>
+Subject: Re: [PATCH] rust: fix `ARCH_SLAB_MINALIGN` multiple definition error
+To: Gary Guo <gary@garyguo.net>
+Cc: lkp@intel.com, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, conor.dooley@microchip.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, palmer@rivosinc.com, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Benno,
+On Mon, Sep 16, 2024 at 1:09=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+>
+> We use const helpers in form of
+>
+>     const size_t RUST_CONST_HELPER_ARCH_SLAB_MINALIGN =3D ARCH_SLAB_MINAL=
+IGN;
+>
+> to aid generation of constants by bindgen because it is otherwise a
+> macro definition of an expression and bindgen doesn't expand the
+> constant. The helpers are then have `RUST_CONST_HELPER` prefix stripped
+> and exposed to Rust code as if `ARCH_SLAB_MISALIGN` is generated
+> natively by bindgen.
+>
+> This works well for most constants, but on RISC-V, `ARCH_SLAB_MINALIGN`
+> is defined directly as literal constant if `!CONFIG_MMU`, and bindgen
+> would generate `ARCH_SLAB_MINALIGN` directly, thus conflict with the
+> one generated through the helper.
+>
+> To fix this, we simply need to block bindgen from generating directly
+> without going through helper.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202409160804.eSg9zh1e-lkp@i=
+ntel.com/
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
-kernel test robot noticed the following build errors:
+Applied to `rust-fixes` -- thanks!
 
-[auto build test ERROR on a2f11547052001bd448ccec81dd1e68409078fbb]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Benno-Lossin/rust-add-untrusted-data-abstraction/20240926-045445
-base:   a2f11547052001bd448ccec81dd1e68409078fbb
-patch link:    https://lore.kernel.org/r/20240925205244.873020-2-benno.lossin%40proton.me
-patch subject: [PATCH v2 1/2] rust: add untrusted data abstraction
-config: x86_64-buildonly-randconfig-002-20240927 (https://download.01.org/0day-ci/archive/20240927/202409270303.kUIAmOmY-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240927/202409270303.kUIAmOmY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409270303.kUIAmOmY-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> error[E0004]: non-exhaustive patterns: `Err(_)` not covered
-   --> rust/kernel/validate.rs:188:15
-   |
-   188 |         match unsafe { value.__init(ptr) } {
-   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ pattern `Err(_)` not covered
-   |
-   note: `core::result::Result<(), Infallible>` defined here
-   --> /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:502:1
-   |
-   502 | pub enum Result<T, E> {
-   | ^^^^^^^^^^^^^^^^^^^^^
-   ...
-   511 |     Err(#[stable(feature = "rust1", since = "1.0.0")] E),
-   |     --- not covered
-   = note: the matched value is of type `core::result::Result<(), Infallible>`
-   help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern or an explicit pattern as shown
-   |
-   189 ~             Ok(()) => {},
-   190 +             Err(_) => todo!()
-   |
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
