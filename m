@@ -1,48 +1,48 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCFE13632B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10FA2136337
 	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 14:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727359989; cv=none; b=g//cmvpSfPBz788z51qkGP7JKf0u3/eHeqRHg6takR+CXqKU2uZ8jaem75r21uZuFKqwLbLitUoRVz6m9hWCKg+rirjCEgoHM4jM9F5LNA1/AyPpIMsD6/Fyln/U65adCnj3f/kJjGYo0Gl0sUZov3/TAunhUvdbX0hrY/ojzSE=
+	t=1727359990; cv=none; b=JuZAPUhqW7ge/VrfumefI+75TLbQGBO2yPzxSF9NT0obEkdcVhxtuXljg8hWdEfAjsU1giSS6e4Jetq9JgF47ZQkS3MhdDqkP++1j8tywMILCTHPiISisJMf4xwJz03Wo25BlJB3zS77nbigpNOWly8VreIoHFbR9Ox9PFlYrqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727359989; c=relaxed/simple;
-	bh=WMAuC6AO/xm8qgqKwQyJLK95jTanWnqY3Xukj1XpGGo=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VFyd06kRcC8ZQSAEeVoaUmdCeTcsEadO1lakgJYPCexyaeeA8CQcv1FSEU+2oWOP0TntpUZKfxJHXf7ODavOSJ4k6sjo/7YzAdG3CjgXjS4Bc0HEJ0b7sOQtHlcwu0K/dyCDsqkcXV5Hu0bnR/f9yGOyTBQ+hDRRsQVst0rrDqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SEXJxapR; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1727359990; c=relaxed/simple;
+	bh=XdBYxIVztvEXxh4pblb4iedhL3dff4G4QDdFAHyUA7g=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TwTgprP2bgr8s55VuobtDL4fYzjxEQcyWKk9Z+nEpP2SC/b6Jd+uVSeevYg+/ZJHqPmZSVzwWrdXoGOg1If2HoeOGPX1bwhHffT5HjHbf5f6WNvs0nsu+oeQIDUIyvX7QWWvsjiWoyL3cOwf55rOuBUHvaJNmJtoFdztVteqRck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eIPb4eAs; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SEXJxapR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eIPb4eAs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1727359987;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=8xG4Mot34nxgjheMW4pgq2uc1gCzXkVEI4TR1lzyD94=;
-	b=SEXJxapRsSPxGnyJeNrSxCHiu2gPz2Jwh3pS8wPpqtnKbUDDOrozRugz0evV2hp8KTe3k3
-	lLnTNu1DS9e9xboVXNPDvMaW238yzbKHcqkvMgT7W0DcRl4OTLCk7Jw5xWDK55t+dzYcg/
-	UrlW72U/zF4iDDr0xikGs24TBTjsZxs=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=8khe17IUJyznvqhY+I0k+mgvCHwr4oCCfcOoerk1D9M=;
+	b=eIPb4eAsjyWW+2rWXF7teYMyK3eP1fXkiTpU00O926YVVDR/aUvDYDnXpeI9lG4siOWA+j
+	imKfLE1UL39h6YkvCMvaDJC/ZWn4LZVuS/TIb/boKGv4bZ6SkE1Vg4monGLVghDLQDodaT
+	b6nvYsbcQfjaBRZ0qZj1uYvCQwW6IEE=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-195-WRQh0VE7Pxy5LysaYDvOgA-1; Thu,
- 26 Sep 2024 10:13:05 -0400
-X-MC-Unique: WRQh0VE7Pxy5LysaYDvOgA-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (unknown [10.30.177.15])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-435-9CoUOhaKN2G85UFXRKz27w-1; Thu,
+ 26 Sep 2024 10:13:06 -0400
+X-MC-Unique: 9CoUOhaKN2G85UFXRKz27w-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (unknown [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 12EB0196E0AB
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EC66C1933184
 	for <llvm@lists.linux.dev>; Thu, 26 Sep 2024 14:13:05 +0000 (UTC)
 Received: from [172.64.15.17] (unknown [10.30.34.46])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 978491979060;
-	Thu, 26 Sep 2024 14:13:04 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B6A351955DC7;
+	Thu, 26 Sep 2024 14:13:05 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0,
- mainline.kernel.org-clang, aa486552)
-Date: Thu, 26 Sep 2024 14:13:04 -0000
+ mainline.kernel.org-clang, eb5b0f98)
+Date: Thu, 26 Sep 2024 14:13:05 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -50,8 +50,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <10215.124092610130502609@us-mta-195.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <63945.124092610130603262@us-mta-435.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -65,22 +65,22 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'memblock-v6.12-rc1' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/rppt/memblock
+    Commit message: Merge tag 'sparc-for-6.12-tag1' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/alarsson/linux-sparc
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1469490062
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1469395841
 
 One or more kernel builds failed:
     Unrecognized or new issues:
          ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1469490062-ppc64le-kernel
+t:1469395841-ppc64le-kernel
            s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1469490062-s390x-kernel
+t:1469395841-s390x-kernel
           x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1469490062-x86_64-kernel
+t:1469395841-x86_64-kernel
           x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1469490062-x86_64-kernel-debug
+ds/redhat:1469395841-x86_64-kernel-debug
 
 
 If you find a failure unrelated to your changes, please ask the test mainta=
