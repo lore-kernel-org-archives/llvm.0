@@ -1,60 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD24C189502;
-	Fri, 27 Sep 2024 13:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D02819ABD4;
+	Fri, 27 Sep 2024 13:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727442688; cv=none; b=H6jrSKIXO0t3auuk1jNz+Lc1EL0NMMRuv+si5sfHZnHzQ2p38TQ6/KPxL0T9KcMAxjx1Rm3jAWUeDVnUcjhtnIKz2ZvnLcUCRjeGTnFk9Y9u03kULNsg4t/3Q3dp4al+fzPsEus5y/5IojYTQdKjSxT6llc5/VLBxmSwW5Ksx/8=
+	t=1727444478; cv=none; b=W1LFO0KzMEf6T5d/xhsj3eSXpsQ6qV5gOq88nRSlDqaKtayYJEXftkoElB5qPs97hy/D8O+0oc65wCIDOCFGXK6CT7DbcEHbyBO4KzVj8BsH/jHLa8St7o0UiMuEciA6hgZC6zzdrMtPzJu8/8UWVub168AbviB4FOlwuyesvZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727442688; c=relaxed/simple;
-	bh=c44bjS+p3rYDPqMG+zvAyh8nMa10/3qryBdZxj0A0cc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Rx6+TtNqh1N871qjaxAhBtOTWSya3kUnnDs7jofk0DdAxuWE8WkTw9Cv7D8n+YhTpZZk8KwLJ8RELQbyBGCCQA6TMZ4amGJoM8IAaw5DlV/YoNiR7kFmu0Bssz6mqUCvB2jfglqx4l50Nbz066GyhqFZOwD28MIokjuZL5BRCa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=axlSue3F; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727444478; c=relaxed/simple;
+	bh=gI6HCMfYo206j1dF/5CqQAMvd9oA/DGlIIqu3b41Yos=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ec0WsHbbRPdQpkXlMbw0Wvqpu6tfJo3V59cD1wge2LVA2BJ3Q+KEQ40/qYXXYwbqBynrS/y3JTy2HhldaiAEWXGjU/MV5i3+BSZvMSgXj0AtIbcDWzQriwJekA5S52anEHQmlWAd/d6FUboT4PDwcBtgPy2xu0QigPBwvXgGHyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oizr7bw8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="axlSue3F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727442687; x=1758978687;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=c44bjS+p3rYDPqMG+zvAyh8nMa10/3qryBdZxj0A0cc=;
-  b=axlSue3F0RgHjlu5xEZSQ4eQlGjM7SVvsTABCbQ0mKmr6JMNqAkQuwmi
-   oS1ck9iS7GwaeAxnah1Upf/E14zt90mr7Yccx/70LzRxHxc0DJRWrxJCc
-   7bFNOs4b6OcdNeymLyVtQ/xU+74ZDi/UnhKtjQ/kMD4RMo/crP06wNiiD
-   szjmZ+LNOX+7PxfUvvOvrV1dsmcuH10u9acdbt2aW0RCtwYkyGtwea5JN
-   1mw9ZzgHyHOrdS8Zp7XBdjD1VVpPcNKvAK9M91MAW+1DOqUWSzk4FVpOl
-   ALHGko81Z4Rt4TfgIMXtKK18Bb7AERBuI63W6ENQ1NW1r+30JV4mSDztP
-   A==;
-X-CSE-ConnectionGUID: mqX8v0o2S9ySHwwInBe6MA==
-X-CSE-MsgGUID: kjX+plnaSpW085dr7d2J/A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="14204605"
-X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
-   d="scan'208";a="14204605"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 06:11:25 -0700
-X-CSE-ConnectionGUID: XTVnf3WCQVeArxrh+RJNsA==
-X-CSE-MsgGUID: PKnhSLveQ7CMRlF01UJ5Wg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
-   d="scan'208";a="72837928"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 27 Sep 2024 06:11:24 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1suAkj-000MAF-0B;
-	Fri, 27 Sep 2024 13:11:21 +0000
-Date: Fri, 27 Sep 2024 21:10:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michal Simek <monstr@monstr.eu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Jianqiang Chen <jianqiang.chen@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.6_LTS_2024.1_update 383/1001]
- drivers/gpu/drm/xlnx/zynqmp_dp.c:361:2: error: call to undeclared function
- 'writel'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202409272111.QHpMu8rt-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oizr7bw8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEC8C4CEC4;
+	Fri, 27 Sep 2024 13:41:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727444478;
+	bh=gI6HCMfYo206j1dF/5CqQAMvd9oA/DGlIIqu3b41Yos=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oizr7bw8C023CNIijNEfxbcwsbjUfgO4j6eKmgW1/LZRUqQDepkin/cxM8byxF5yg
+	 aJkp/GxicAgWn7KP7JxzxJ4fMhxeq9Pc74RqTHs1MY+DiEqF4bHIRvxqTAsheXhaR4
+	 6WSiLPWiyaFBIBJx5Fgg/wzqxwBzpfmkOLwvXvVUU9ar5Ql8FsY5loy+cPkxg0Uk7g
+	 Uvu33nyIjbfkSF9s8efqeOEgu1VoWefuSbNgOW5tQ+7tkwnnAEVCyb2usrE++X/BJr
+	 BKJCwhPNUjCfBX1fzhnGHfwW3vzfGQHg1d3NjNo/IxolggjeHC/Mtb3hCGJg+J42+u
+	 0h3IUT+2EBS/Q==
+Date: Fri, 27 Sep 2024 06:41:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [djiang:cxl/fwctl 13/25] drivers/cxl/cxlmem.h:798:44: error:
+ 'counted_by' argument must be a simple declaration reference
+Message-ID: <20240927134116.GA3695247@thelio-3990X>
+References: <202409270908.NJPL38kw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,90 +45,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202409270908.NJPL38kw-lkp@intel.com>
 
-Hi Michal,
+On Fri, Sep 27, 2024 at 09:39:54AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
+> head:   b4f2900f53c72de8fc639b62e44763c6a9695d3b
+> commit: 5a0496c19151d83cd0d926f8a1488eeaab27509b [13/25] cxl: Add Get Supported Features command for kernel usage
+> config: arm-randconfig-004-20240927 (https://download.01.org/0day-ci/archive/20240927/202409270908.NJPL38kw-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240927/202409270908.NJPL38kw-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202409270908.NJPL38kw-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/cxl/port.c:7:
+>    In file included from drivers/cxl/cxlmem.h:6:
+>    In file included from include/linux/pci.h:1646:
+>    In file included from include/linux/dmapool.h:14:
+>    In file included from include/linux/scatterlist.h:8:
+>    In file included from include/linux/mm.h:2232:
+>    include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    In file included from drivers/cxl/port.c:7:
+> >> drivers/cxl/cxlmem.h:798:44: error: 'counted_by' argument must be a simple declaration reference
+>      798 |         struct cxl_feat_entry ents[] __counted_by(le32_to_cpu(supported_feats));
+>          |                                      ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-FYI, the error/warning still remains.
+It seems like this should likely use the __counted_by_le() macro so that
+it is only used for tracking on little endian targets?
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6_LTS_2024.1_update
-head:   5365c13a86998da06d845c918f849b30b8735538
-commit: bdf045814d4629c0ab369b168755b12635532dc3 [383/1001] drm: xlnx: Update DP subsystem with downstream version
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240927/202409272111.QHpMu8rt-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240927/202409272111.QHpMu8rt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409272111.QHpMu8rt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/xlnx/zynqmp_dp.c:12:
-   In file included from include/drm/drm_atomic_helper.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:30:
-   In file included from include/linux/hdmi.h:28:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2168:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/xlnx/zynqmp_dp.c:361:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     361 |         writel(val, base + offset);
-         |         ^
->> drivers/gpu/drm/xlnx/zynqmp_dp.c:366:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     366 |         return readl(base + offset);
-         |                ^
-   5 warnings and 2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_PANEL_SIMPLE
-   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && DRM_PANEL [=y] && OF [=y] && BACKLIGHT_CLASS_DEVICE [=m] && PM
-   Selected by [m]:
-   - DRM_XLNX_DSI [=m] && HAS_IOMEM [=y] && DRM_XLNX [=m]
-
-
-vim +/writel +361 drivers/gpu/drm/xlnx/zynqmp_dp.c
-
-   358	
-   359	static void zynqmp_dp_write(void __iomem *base, int offset, u32 val)
-   360	{
- > 361		writel(val, base + offset);
-   362	}
-   363	
-   364	static u32 zynqmp_dp_read(void __iomem *base, int offset)
-   365	{
- > 366		return readl(base + offset);
-   367	}
-   368	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>    include/linux/byteorder/generic.h:89:21: note: expanded from macro 'le32_to_cpu'
+>       89 | #define le32_to_cpu __le32_to_cpu
+>          |                     ^
+>    include/uapi/linux/byteorder/little_endian.h:35:26: note: expanded from macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>          |                          ^
+>    include/linux/compiler_attributes.h:105:62: note: expanded from macro '__counted_by'
+>      105 | # define __counted_by(member)           __attribute__((__counted_by__(member)))
+>          |                                                                       ^~~~~~
+>    1 warning and 1 error generated.
+> 
+> 
+> vim +/counted_by +798 drivers/cxl/cxlmem.h
+> 
+>    793	
+>    794	struct cxl_mbox_get_sup_feats_out {
+>    795		__le16 num_entries;
+>    796		__le16 supported_feats;
+>    797		u8 reserved[4];
+>  > 798		struct cxl_feat_entry ents[] __counted_by(le32_to_cpu(supported_feats));
+>    799	} __packed;
+>    800	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
