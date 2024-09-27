@@ -1,98 +1,152 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A0C18A939
-	for <llvm@lists.linux.dev>; Fri, 27 Sep 2024 09:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA11017ADF0;
+	Fri, 27 Sep 2024 11:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727428016; cv=none; b=nPJwIuzs+KuxArBrY2LC1cWab/OSMi+Tie9I5AWbrm66dJ12v7syNPrKGVhLNbNEuNCZD2dB64UNEFIvsX67Obor28d6tC4016ooG1XBQmmmkLx3IFd3xdNDfGj9pPNav+v3lWgOfN3NMlTTW4BZdg2R1rLfhpunodeeZ1RsuFE=
+	t=1727437577; cv=none; b=N+olpdsOoxZByg5v8BomGvRsmuOwvvm4nVD8jB2lfMsY1phHq+a7+xOi4DUayWwiz9irgUNrtitj0/XmMJ1SXX/vHJRmFesY83NVolVLcML2JUQ9t6ZBN8rbPyS+YuuUqFR8STwO+6Q5wW+k8NGqmWqP4YW58UDRleD+KTIkvVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727428016; c=relaxed/simple;
-	bh=XJi4lkPN6suJ6SAQVTKbY8dUP1e7mUKYZhisWbQCV2o=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jM7arWvyHZOOZeTfuwaynO8dFFAsjoi9ZGbhn6IkaerDZBCjjP/WPcw3jGaoQKHt2A89fWSbJbEmn2LRCK7WJIz46duqcKTgkv3YRGxR4j54eF/bdYe5rI5zHqAWql6Plnd5Xzo1pBZ6kfihjTEypJ2qvMZ6c9q1OGjeDBfCjVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=bKVPAOaQ; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1727437577; c=relaxed/simple;
+	bh=Ya+LQ5q5MK6pIM01FgrfAcpRmyHo07YjIdpTdnh+4gI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XJE8VkafSd5VhGH6yWCLLNx2fCQrp2Y1DeaBN2sw2a3VuS8O3LSPsYZL0FbB2SQJ41SzK7t4AOBoKJKgeDtd1KNriz3RdfJii4dikRndwObsoX+RkG9gV0Ay8SLjsNcde1Cd80lYfb32a1YevfhPrzu1vcZvzHjDRZvRwKhWvg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J5XhgMib; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="bKVPAOaQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=yj54tm3ptfco7bqyilauajek4y.protonmail; t=1727428012; x=1727687212;
-	bh=Y/ZMKfKxXxmed7Y4nQfgv37JqGP7l9vxlakQNi8YpsM=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=bKVPAOaQ20srGUp6b38HUwM2Nlzq2jdqUDf+eRI+1rOBGIVUpHr3X7BwbhrXMaNvQ
-	 nXr96s0CpRM11Q+SkRpdwVtp788NMwzKSeVudfLIUbY14oraKkzy0HwaVBGMSpUmjI
-	 yIWYgwF8YDLcGj/Lx1v3wWumunsiKXeJw/Z6A4bF5hYpXjXhFkswn8mSC0XkaaJVbb
-	 eQJ9+gq8b6d0dxooo++z/VhIZ6t4w0HM4d5NPwtM5aRUhJ2IMqsZ6fl+lUMCE7hC+a
-	 J042WZeIO6lyUI3ME9z6uYcN7CiN9HBtq0XLAF/BhUwdiqP/ARWsOeVLlOebfQwEUp
-	 EVNul4+43d7Gg==
-Date: Fri, 27 Sep 2024 09:06:45 +0000
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: kernel test robot <lkp@intel.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Greg KH <greg@kroah.com>, Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] rust: add untrusted data abstraction
-Message-ID: <00ca48e4-1b4a-496d-a06b-3c12a9ef2d14@proton.me>
-In-Reply-To: <CANiq72=-bV_=TUoH6gLnPwTcxROBqyrCpOpbumki_S+po1TPhQ@mail.gmail.com>
-References: <20240925205244.873020-2-benno.lossin@proton.me> <202409270303.kUIAmOmY-lkp@intel.com> <42d17306-1ac6-4fc7-ab1b-69ef045039ac@proton.me> <CANiq72kXGNyLg0Ooo3Ne=KmZWBnSO9HE2tcfP=gf+WGFqnjDEg@mail.gmail.com> <1aa088b1-ca4d-4a97-b25c-96a18f62a79c@proton.me> <CANiq72=-bV_=TUoH6gLnPwTcxROBqyrCpOpbumki_S+po1TPhQ@mail.gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: d03cb3c88484f51dc99e6d9272da316b79dd1db5
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5XhgMib"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727437576; x=1758973576;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ya+LQ5q5MK6pIM01FgrfAcpRmyHo07YjIdpTdnh+4gI=;
+  b=J5XhgMiba+SCjNq5C1X2LD3EZwUT9KpknLMic54z/u/CmXA88L/9YHn5
+   zQI2pVydojEA8dssFj0ZDVXiecgop6Nr0CyOy3Hik2NyFQYIvISM1E8zl
+   zOYNY9HhkytPYF4988HlmSGEf48urvJr9BJ4COJhonhLUJ1B950P59rcv
+   jiCZGfa7FTezk7XpcMcxM9l1s1fG2V5ZomdXFkikBxAMCtBiw3f7Fo19v
+   UV1xhBuR3ZNUrD0zxbFP/5JVw9BPGTGZ6oY++vB+W3hSTZ+4yvRFtBqu7
+   pu5SRJX9elwOcxrUjQ9UH8YvrR3NH9bzK6ZHY/f2SOVSbCNZF9/tnpCzr
+   A==;
+X-CSE-ConnectionGUID: 1/7l1N3oS0OXA9q7RiDoyA==
+X-CSE-MsgGUID: nKGTFFfzQrOafifczCHRNg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11207"; a="26525044"
+X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
+   d="scan'208";a="26525044"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 04:46:15 -0700
+X-CSE-ConnectionGUID: /ERdoAa+QHyqnkilVLyZCw==
+X-CSE-MsgGUID: szyOh+DSTqCzOoCxCO66DA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,158,1725346800"; 
+   d="scan'208";a="95846291"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 27 Sep 2024 04:46:13 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1su9QJ-000Lrf-1G;
+	Fri, 27 Sep 2024 11:46:11 +0000
+Date: Fri, 27 Sep 2024 19:45:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Saurabh Sengar <saurabh.singh@xilinx.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+	Michal Simek <monstr@monstr.eu>, Hyun Kwon <hyun.kwon@xilinx.com>
+Subject: [xilinx-xlnx:xlnx_rebase_v6.6_LTS_2024.1_update 243/1001]
+ drivers/gpu/drm/xlnx/xlnx_sdi.c:252:2: error: call to undeclared function
+ 'writel'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202409271949.tKXOv6M6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 27.09.24 10:39, Miguel Ojeda wrote:
-> On Fri, Sep 27, 2024 at 12:15=E2=80=AFAM Benno Lossin <benno.lossin@proto=
-n.me> wrote:
->>
->> Personally, I would prefer adding a symbol. Since if we allow it, then
->> it might take a long time until the code is removed once we increase the
->> minimum version.
->>
->> It would be best, if it produces an error when we raise the minimum
->> version beyond the one represented by the symbol. Is that already the
->> case?
->=20
-> No -- that is a nice idea that I guess could be implemented in Kconfig
-> somewhere (i.e. when checking conditions). However, one of the common
-> things to do when upgrading the minimum is to review/clean the
-> `*_VERSION` uses anyway (and they may occur outside Kconfig files
-> too), and also sometimes one wants to upgrade a minimum without doing
-> the cleanups immediately (e.g. the recently proposed GCC 8.1 upgrade).
->=20
->> Gave it a try and I also can't reproduce the error there...
->=20
-> Hmm... I think CE uses the Rust-provided binaries (and I guess the
-> playground too). Do you have a link ("Share" in CE)?
+Hi Saurabh,
 
-Here you go: https://godbolt.org/z/qE8E9M56c
+FYI, the error/warning still remains.
 
-The error that I get locally:
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6_LTS_2024.1_update
+head:   5365c13a86998da06d845c918f849b30b8735538
+commit: 6126d5c7f967fcef16227b5d83850832d0984135 [243/1001] drm: xlnx: sdi: Adding sdi-tx driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240927/202409271949.tKXOv6M6-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240927/202409271949.tKXOv6M6-lkp@intel.com/reproduce)
 
-    error: unreachable pattern
-     --> src/main.rs:8:9
-      |
-    8 |         Err(e) =3D> match e {},
-      |         ^^^^^^ matches no values because `Infallible` is uninhabite=
-d
-      |
-      =3D note: to learn more about uninhabited types, see https://doc.rust=
--lang.org/nomicon/exotic-sizes.html#empty-types
-    note: the lint level is defined here
-     --> src/main.rs:1:9
-      |
-    1 | #![deny(unreachable_patterns)]
-      |         ^^^^^^^^^^^^^^^^^^^^
-   =20
-    error: could not compile `rust` (bin "rust") due to 1 previous error
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409271949.tKXOv6M6-lkp@intel.com/
 
----
-Cheers,
-Benno
+All errors (new ones prefixed by >>):
 
+   In file included from drivers/gpu/drm/xlnx/xlnx_sdi.c:10:
+   In file included from include/drm/drm_atomic_helper.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:30:
+   In file included from include/linux/hdmi.h:28:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/xlnx/xlnx_sdi.c:252:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     252 |         writel(val, base + offset);
+         |         ^
+>> drivers/gpu/drm/xlnx/xlnx_sdi.c:257:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     257 |         return readl(base + offset);
+         |                ^
+   5 warnings and 2 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_PANEL_SIMPLE
+   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && DRM_PANEL [=y] && OF [=y] && BACKLIGHT_CLASS_DEVICE [=m] && PM
+   Selected by [m]:
+   - DRM_XLNX_DSI [=m] && HAS_IOMEM [=y] && DRM_XLNX [=m]
+
+
+vim +/writel +252 drivers/gpu/drm/xlnx/xlnx_sdi.c
+
+   249	
+   250	static inline void xlnx_sdi_writel(void __iomem *base, int offset, u32 val)
+   251	{
+ > 252		writel(val, base + offset);
+   253	}
+   254	
+   255	static inline u32 xlnx_sdi_readl(void __iomem *base, int offset)
+   256	{
+ > 257		return readl(base + offset);
+   258	}
+   259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
