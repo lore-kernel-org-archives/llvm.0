@@ -1,115 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E9B1B375A;
-	Fri, 27 Sep 2024 22:39:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789821B5EDF
+	for <llvm@lists.linux.dev>; Fri, 27 Sep 2024 22:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727476795; cv=none; b=MNXcJveAkPsmJr4w1IWItbkFn4xx0hRXa9mPN3b1fFlaoEBcOjwN4FawxglcpI9w68nU2IKmpReIoldvyTQqvNkb63xNGjJyy9UPHbjhjWcBt0tEH9mKc4rzFUd2Jmz9cIFfuTN39dr4gVRY4I1jROMC8g2ycRC0i2TU2luI740=
+	t=1727477155; cv=none; b=Awwiz2vOVgt6NGIaOS5KeiLzFiySEzEmVfBA0mqk48B+Mdgdi0PFpHtiLCf9/jEmEAbeuCRl+f0yiSvK8r0bb7/TWJ+Z17TAcufK7eo8NEpCVRK/H4sx1SwnAKh8Kc8FBGNQah8Gsw551TOFUMcm+p3JGIgb5/0XASbnr0d6uhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727476795; c=relaxed/simple;
-	bh=J77Ymn+fLS6ZIblJzGi9l65BaDtISc6bLGcj6BCJdaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=INAYEYtjVjAKsjaKLx8Zn7Dtk1yMkBOgZ4VDpWnvC1B6xexRytGgPD4nE8vxsGwmo/we9JelW54KilOWFKywxiFc6mF7iJnVwjHLI56xj/Wf4SqV62SeoCBhGp9+YpuM7J/QQJyAwzuqcC+NTZWfkhVamTPojSRq3DJRtapZ4xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OC4NqNCV; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727477155; c=relaxed/simple;
+	bh=UEbVixBgVaf8M3e9cHPVpzQgl77JbdhxFB49Rb4Lexg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SyAFx0050DeYY7EGhjccfMIsMrk/5gJeZY7aptc1E5CAq7xRW0EgoKXcOAiiMf4TwPG+TM9dI1XNR6st2naopf8VoC02TmQAMNZGZ72IsEnCK9lndKAUXU/oFxynuy51AU8HXURLq7uUhSt7H+eS1lBffEw7/PLU9TKKzQCInCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=po2WskZd; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OC4NqNCV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727476793; x=1759012793;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J77Ymn+fLS6ZIblJzGi9l65BaDtISc6bLGcj6BCJdaM=;
-  b=OC4NqNCVb4XCkA+0eZqkdfRCSL2hufM3QlyE/9zIibOFUTJ5fAMlZp2s
-   LLrrfVP/hAHZLevhAp+u02rpTfpN8behmhA/Keqp4RIGKdtaWcSMxGzD+
-   dMs/DuJhbWDLN8qqQqs2K3527lxMmy4jOCCWUFLNTPauPy09N9ovSOoQA
-   4xbVxe1AI0fZU08zv9zy0tvAX0BSIivxHZRrXx+KdPic5El38kBAiv5BX
-   TkVao76pyW+9Jazubi4CyK7UGMFxSh54Lh+s+vnghKflrS53e0HDvvu/o
-   Oq05c9evWpQReb5waAk7emoY2T/vznMRQ2J+etBonkgxvOa+p7/Fmu6Ez
-   g==;
-X-CSE-ConnectionGUID: HHFFr6HLQ7mDgN/CmmHuCg==
-X-CSE-MsgGUID: lyMjL8k4Tg+sKTg1SmVH3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="30341093"
-X-IronPort-AV: E=Sophos;i="6.11,159,1725346800"; 
-   d="scan'208";a="30341093"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 15:39:53 -0700
-X-CSE-ConnectionGUID: C+vfVv9IQCus3Wk6lGnj6w==
-X-CSE-MsgGUID: BMndFm0gT/2r8bPOxIzt9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,159,1725346800"; 
-   d="scan'208";a="77049756"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 27 Sep 2024 15:39:51 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1suJcp-000MhT-2v;
-	Fri, 27 Sep 2024 22:39:47 +0000
-Date: Sat, 28 Sep 2024 06:39:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Levinsky <ben.levinsky@xilinx.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>,
-	Wendy Liang <wendy.liang@xilinx.com>,
-	Ed Mooring <ed.mooring@xilinx.com>, Jason Wu <j.wu@xilinx.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.6_LTS_2024.1_update 21/1001]
- drivers/remoteproc/zynqmp_r5_remoteproc.c:69: warning: Function parameter or
- member 'max_banks' not described in 'xlnx_rpu_soc_data'
-Message-ID: <202409280641.xwhdvzKw-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="po2WskZd"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-37cc846fbc4so1858582f8f.2
+        for <llvm@lists.linux.dev>; Fri, 27 Sep 2024 15:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727477152; x=1728081952; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aDQvVwsDtp+mFdbUxO9Cffd9UazHpnItRnVC+YjwEF8=;
+        b=po2WskZdLFunKJWAg2GlYluDddTGr3Apq0TJF7rQHaXQW66QT/O7tQEaTfZNcxdwsB
+         I4bBpA+54jEfOqgwsOtyLjcFsRh3KtpYzMbZpYBEK9uwIS4BS0Q4Xy+KYZ8bprqXK8jQ
+         06SK6DbJ6KkXM/W71e2e+dzaz2GTd6zLgXf2wteRkhSmyX48H1aKQbZ7eFHADNechL2v
+         uaOQHKGReW5VIAhf0XSUiWkV9umso2KVlEXufHLwcjM+wvrpkSvGgLHtER2HBSuMnwF5
+         hoRVgEJE06123z1DLPXUY5DvaOZm5KKDnyjRtimW8loDn1f2tan1+Geshl1sotEYzVLJ
+         Hkag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727477152; x=1728081952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aDQvVwsDtp+mFdbUxO9Cffd9UazHpnItRnVC+YjwEF8=;
+        b=c/3awtzXJN3VopBNU5aB1OxklUD1GX4bnuAT2TNSRe+VJWNatlrJlhGbm3GgabglPM
+         wEs1d3nlxCMEiMuH/kayLYa8VUYvyo9gvbgAaOng/U8N56aDlZPhxAokZJIWIr+srErg
+         SqUJGe4v+SBuIS/uSM87pmjgeALzAlqGg7gie5MgdAK1YCfsu7dolnazZ/qLFdpXm6NX
+         LEyZlssIAo7MfemaREsH4MPr6ylfaMZNLApD0WeizghJ/R7vlwxI5xKNwuqVF3tguS/l
+         mkSTQYaKAeegikMCfoCEbfHsQZmmsdvM7Q23kt8XI+IPxiql09eUbcCgNSuAIRQNJd+y
+         JR9A==
+X-Forwarded-Encrypted: i=1; AJvYcCWKeorE3GFW2FAQnGvAHh6NipjQE9lhAz/0UgIV7UGfpzJXpRsknrKb28BE6267oifSpRLj@lists.linux.dev
+X-Gm-Message-State: AOJu0YzYjWeWZvyuW4+Uvc546SOwU0am9Q3D3yOGCbfK6uyvGWMZJ1zK
+	Z2+4B18237yBpOadXFKMXVSnrwQmdDQJMEiLFL28PxMZdhH8tweiH7nrcW0Eciw2xyuvrkvL/2u
+	s8xlYg/Nkd8e94+QYXBWhJ/NZLnGQlN+etyEj
+X-Google-Smtp-Source: AGHT+IG6Xki+LFKJg9jjTGxml51UwiNYvnAhUGo6WA4A/ge/2ShkqDPsrBP4lv5UL9HpPy51RD3yj/pjoU1+Gx+aQq8=
+X-Received: by 2002:a05:6000:d82:b0:375:570e:7ee with SMTP id
+ ffacd0b85a97d-37cd5a9eb80mr3127268f8f.15.1727477151378; Fri, 27 Sep 2024
+ 15:45:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-7-xur@google.com>
+ <c65a07ef-6436-4e04-a263-7cad9758e9be@gmail.com>
+In-Reply-To: <c65a07ef-6436-4e04-a263-7cad9758e9be@gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 27 Sep 2024 15:45:39 -0700
+Message-ID: <CAKwvOdm0iZspjpuueBV1=eFt+Bf4edWBZsDsj10kEvTGZRye2w@mail.gmail.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+To: Maksim Panchenko <max4bolt@gmail.com>, Rong Xu <xur@google.com>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Vegard Nossum <vegard.nossum@oracle.com>, John Moon <john@jmoon.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, 
+	Mike Rapoport <rppt@kernel.org>, "Paul E . McKenney" <paulmck@kernel.org>, Rafael Aquini <aquini@redhat.com>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Eric DeVolder <eric.devolder@oracle.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Benjamin Segall <bsegall@google.com>, Breno Leitao <leitao@debian.org>, 
+	Wei Yang <richard.weiyang@gmail.com>, Brian Gerst <brgerst@gmail.com>, 
+	Juergen Gross <jgross@suse.com>, Palmer Dabbelt <palmer@rivosinc.com>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Kees Cook <kees@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Xiao Wang <xiao.w.wang@intel.com>, 
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>, 
+	Maksim Panchenko <maks@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ben,
+On Thu, Sep 19, 2024 at 4:52=E2=80=AFAM Maksim Panchenko <max4bolt@gmail.co=
+m> wrote:
+>
+> On Sun, Jul 28, 2024 at 01:29:56PM -0700, Rong Xu wrote:
+> > Add the build support for using Clang's Propeller optimizer. Like
+> > AutoFDO, Propeller uses hardware sampling to gather information
+> > about the frequency of execution of different code paths within a
+> > binary. This information is then used to guide the compiler's
+> > optimization decisions, resulting in a more efficient binary.
+>
+> Thank you for submitting the patches with the latest compiler features.
+>
+> Regarding Propeller, I want to quickly mention that I plan to send a
+> patch to include BOLT as a profile-based post-link optimizer for the
+> kernel. I'd like it to be considered an alternative that is selectable
+> at build time.
+>
+> BOLT also uses sampling, and the profile can be collected on virtually
+> any kernel (with some caveats).  There are no constraints on the
+> compiler (i.e., any version of GCC or Clang is acceptable), while Linux
+> perf is the only external dependency used for profile collection and
+> conversion. BOLT works on top of AutoFDO and LTO but can be used without
+> them if the user desires. The build overhead is a few seconds.
+>
+> As you've heard from the LLVM discussion
+> (https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autofdo-in=
+cluding-thinlto-and-propeller)
+> and LPC talk (https://lpc.events/event/18/contributions/1921/), at Meta,
+> we've also successfully optimized the kernel and got similar results.
+>
+> Again, this is a heads-up before the patch, and I would like to hear
+> what people think about having a binary optimizer as a user-selectable
+> alternative to Propeller.
 
-FYI, the error/warning still remains.
+I'd imagine that folks would be interested in running Propeller, or
+BOLT, but perhaps not both.
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6_LTS_2024.1_update
-head:   5365c13a86998da06d845c918f849b30b8735538
-commit: a5fe1c1d116f2534a25d0fb511bbdeb5d1971a3e [21/1001] remoteproc: Add initial zynqmp R5 remoteproc driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240928/202409280641.xwhdvzKw-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409280641.xwhdvzKw-lkp@intel.com/reproduce)
+In that sense, Kconfig has the means to express mutual exclusion.
+It's perhaps worth working together to get the kconfig selection
+working such that folks can play with enabling these newer toolchain
+related technologies.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409280641.xwhdvzKw-lkp@intel.com/
+The next instance of the bi-weekly public Clang Built Linux meeting is
+next Wednesday. (Links from https://clangbuiltlinux.github.io/)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/remoteproc/zynqmp_r5_remoteproc.c:69: warning: Function parameter or member 'max_banks' not described in 'xlnx_rpu_soc_data'
-
-
-vim +69 drivers/remoteproc/zynqmp_r5_remoteproc.c
-
-    51	
-    52	/**
-    53	 * struct xlnx_rpu_soc_data - match data to handle SoC variations
-    54	 * @soc_type:	enum to denote which SOC this is running. on. Some EEMI calls
-    55	 *		behave differently on various SoC's so denote here.
-    56	 * @tcm_bases:	collection of device addresses that SoC has for TCM banks
-    57	 * @num_tcms:	number of entries in the tcm base collection.
-    58	 *		for each core.
-    59	 * @max_rprocs: Maximum number of remoteproc instances allowed per RPU core.
-    60	 * max_banks:	Maximnum number of banks allowed for All Remoteproc instances
-    61	 *		for a given SOC.
-    62	 */
-    63	struct xlnx_rpu_soc_data {
-    64		enum soc_type_t soc_type;
-    65		unsigned int tcm_bases[MAX_BANKS_PER_CORE];
-    66		unsigned int num_tcms;
-    67		unsigned int max_rprocs;
-    68		unsigned int max_banks;
-  > 69	};
-    70	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Perhaps it's worth Rong (and Sriraman and Han) and Maksim to stop by and ch=
+at?
+--=20
+Thanks,
+~Nick Desaulniers
