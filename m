@@ -1,121 +1,134 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC94913A276
-	for <llvm@lists.linux.dev>; Fri, 27 Sep 2024 16:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A8B171092;
+	Fri, 27 Sep 2024 16:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727454143; cv=none; b=SX0LwW2bOBBb5Z7Qz6r8cFEnlV9j+BrlfVBSEvPkiQgr4KsOFZg5vkqir7PvvQfTwiL6yonpFf/MaF6Mw/i0PazfUEj5+krLi4fMrePucJOW1nk59zG8kTE1y4xdU2Kv70tQ6vldf9suHiLRCjYsO6HXDSeGtD15lJpEdlWww68=
+	t=1727454191; cv=none; b=jCThO9gzkiWWZDwYs02ptiC80dzlcccNL4laq8ffAv+J2rNCcr6LkVM298grDWzSNwZ4BzHBnTm1vfY2yOuiLtBrdBDZo6pyaind1AcHhzNtmuauzwvnSabYrouRGSUGKkNNcnFm6FeuvG6OMkUGtQXODYB/lVT/IoXwfBrmJlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727454143; c=relaxed/simple;
-	bh=MwxSYUQfpQZ8Dt7MR3StqGkeSe7twZkuP4tcbwLCnKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QKGKEBdsmLfCT14G6Uki3hIDcsX3jlZtx459D1k4HFQ/GjjFN5UiSrbtMw9LT5TVji+iBTSYwTBru1HegV+b2EwlNmWx3Y+tjnBA/TdV3a68Ni03VwWfKOBhX8hBb+ThX0inMN1edpEkNS4DqVNYwTvM7+7YqTU0czP4tGL1+60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EDBA14BF;
-	Fri, 27 Sep 2024 09:22:44 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B650E3F6A8;
-	Fri, 27 Sep 2024 09:22:08 -0700 (PDT)
-Date: Fri, 27 Sep 2024 17:22:03 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Keith Packard <keithp@keithp.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org,
-	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 02/28] Documentation: Bump minimum GCC version to 8.1
-Message-ID: <ZvbbqzrfkgjM1VZ3@J2N7QTR9R3>
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-32-ardb+git@google.com>
+	s=arc-20240116; t=1727454191; c=relaxed/simple;
+	bh=6marIh19WZrGCdY2BxGmhnNoJn18ZK94qKIiudktIY4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mawP+gQp/thEUfs61PqDiz3X/8I/dudFgUaB/D+JWt4yW/7yGL/fE0kNEmUQpt1bOtANUYj4uyha/gF0ECWe/PafGEVgInHY5Ziuz6Oe6cAIb+sTMRSkfucvG270PuhluhPiVJR0YIc30by4O1Hk5Lhx22BsAJSykHt1uIFv8GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=daG2UQ+e; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="daG2UQ+e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727454190; x=1758990190;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6marIh19WZrGCdY2BxGmhnNoJn18ZK94qKIiudktIY4=;
+  b=daG2UQ+eUMlbQfcCHGw4oGqvtWr5BXihYM5ulq+QV4OqARImLtLLNeVi
+   uqt9X04oeIEvxaiV0GfWiabfR8j6NSEABFu2kh51z3sumC1mhialwJhNP
+   Wga06TU2byxVQlxii46xhzulpqP8X4p1a24Y74PRQUd4a46G0En7CWEBy
+   +yrDbKvaotlY3IOlaiBhtWxNylL+CmLXnjxloME4sBWm4qKSxDXbLKsX1
+   BIp+DSv4jswqvCB+lHFv8LghF+jnYcNH7UI7DtdV7pyaH8LTvcEN6TEON
+   6mQs9UOWa9L6GYrcf3BStUzMB+q+OOB3sxSIwFMkTIgqHrxvoxPAfdbuU
+   Q==;
+X-CSE-ConnectionGUID: YNjdQ/QgTG+UASjyeUAluQ==
+X-CSE-MsgGUID: VAESinXXSyaP4HRXCuTnqw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="26736840"
+X-IronPort-AV: E=Sophos;i="6.11,159,1725346800"; 
+   d="scan'208";a="26736840"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 09:23:09 -0700
+X-CSE-ConnectionGUID: Y+kw/ZaJSjGo3nvgQRBnuA==
+X-CSE-MsgGUID: HgsZ1cA2TqOWddKonwDzFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,159,1725346800"; 
+   d="scan'208";a="110069715"
+Received: from inaky-mobl1.amr.corp.intel.com (HELO [10.125.108.33]) ([10.125.108.33])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 09:23:09 -0700
+Message-ID: <527f8aca-7703-419c-bfa8-1cfdf65e0fd3@intel.com>
+Date: Fri, 27 Sep 2024 09:23:08 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925150059.3955569-32-ardb+git@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [djiang:cxl/fwctl 13/25] drivers/cxl/cxlmem.h:798:44: error:
+ 'counted_by' argument must be a simple declaration reference
+To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ linux-hardening@vger.kernel.org
+References: <202409270908.NJPL38kw-lkp@intel.com>
+ <20240927134116.GA3695247@thelio-3990X>
+Content-Language: en-US
+From: Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20240927134116.GA3695247@thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 25, 2024 at 05:01:02PM +0200, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
+
+
+On 9/27/24 6:41 AM, Nathan Chancellor wrote:
+> On Fri, Sep 27, 2024 at 09:39:54AM +0800, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
+>> head:   b4f2900f53c72de8fc639b62e44763c6a9695d3b
+>> commit: 5a0496c19151d83cd0d926f8a1488eeaab27509b [13/25] cxl: Add Get Supported Features command for kernel usage
+>> config: arm-randconfig-004-20240927 (https://download.01.org/0day-ci/archive/20240927/202409270908.NJPL38kw-lkp@intel.com/config)
+>> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240927/202409270908.NJPL38kw-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202409270908.NJPL38kw-lkp@intel.com/
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>    In file included from drivers/cxl/port.c:7:
+>>    In file included from drivers/cxl/cxlmem.h:6:
+>>    In file included from include/linux/pci.h:1646:
+>>    In file included from include/linux/dmapool.h:14:
+>>    In file included from include/linux/scatterlist.h:8:
+>>    In file included from include/linux/mm.h:2232:
+>>    include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>>      517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>>          |                               ~~~~~~~~~~~ ^ ~~~
+>>    In file included from drivers/cxl/port.c:7:
+>>>> drivers/cxl/cxlmem.h:798:44: error: 'counted_by' argument must be a simple declaration reference
+>>      798 |         struct cxl_feat_entry ents[] __counted_by(le32_to_cpu(supported_feats));
+>>          |                                      ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Bump the minimum GCC version to 8.1 to gain unconditional support for
-> referring to the per-task stack cookie using a symbol rather than
-> relying on the fixed offset of 40 bytes from %GS, which requires
-> elaborate hacks to support.
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  Documentation/admin-guide/README.rst | 2 +-
->  Documentation/process/changes.rst    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> It seems like this should likely use the __counted_by_le() macro so that
+> it is only used for tracking on little endian targets?
 
-I'd like this for arm64 and others too (for unconditional support for
--fpatchable-function-entry), so FWIW:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-I think you'll want to update scripts/min-tool-version.sh too; judging
-by the diff in the cover letter that's not handled elsehere in the
-series.
-
-Mark.
+Thank you! That helped address the issue.
 
 > 
-> diff --git a/Documentation/admin-guide/README.rst b/Documentation/admin-guide/README.rst
-> index f2bebff6a733..3dda41923ed6 100644
-> --- a/Documentation/admin-guide/README.rst
-> +++ b/Documentation/admin-guide/README.rst
-> @@ -259,7 +259,7 @@ Configuring the kernel
->  Compiling the kernel
->  --------------------
->  
-> - - Make sure you have at least gcc 5.1 available.
-> + - Make sure you have at least gcc 8.1 available.
->     For more information, refer to :ref:`Documentation/process/changes.rst <changes>`.
->  
->   - Do a ``make`` to create a compressed kernel image. It is also possible to do
-> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-> index 00f1ed7c59c3..59b7d3d8a577 100644
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@ -29,7 +29,7 @@ you probably needn't concern yourself with pcmciautils.
->  ====================== ===============  ========================================
->          Program        Minimal version       Command to check the version
->  ====================== ===============  ========================================
-> -GNU C                  5.1              gcc --version
-> +GNU C                  8.1              gcc --version
->  Clang/LLVM (optional)  13.0.1           clang --version
->  Rust (optional)        1.78.0           rustc --version
->  bindgen (optional)     0.65.1           bindgen --version
-> -- 
-> 2.46.0.792.g87dc391469-goog
-> 
-> 
+>>    include/linux/byteorder/generic.h:89:21: note: expanded from macro 'le32_to_cpu'
+>>       89 | #define le32_to_cpu __le32_to_cpu
+>>          |                     ^
+>>    include/uapi/linux/byteorder/little_endian.h:35:26: note: expanded from macro '__le32_to_cpu'
+>>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>>          |                          ^
+>>    include/linux/compiler_attributes.h:105:62: note: expanded from macro '__counted_by'
+>>      105 | # define __counted_by(member)           __attribute__((__counted_by__(member)))
+>>          |                                                                       ^~~~~~
+>>    1 warning and 1 error generated.
+>>
+>>
+>> vim +/counted_by +798 drivers/cxl/cxlmem.h
+>>
+>>    793	
+>>    794	struct cxl_mbox_get_sup_feats_out {
+>>    795		__le16 num_entries;
+>>    796		__le16 supported_feats;
+>>    797		u8 reserved[4];
+>>  > 798		struct cxl_feat_entry ents[] __counted_by(le32_to_cpu(supported_feats));
+>>    799	} __packed;
+>>    800	
+>>
+>> -- 
+>> 0-DAY CI Kernel Test Service
+>> https://github.com/intel/lkp-tests/wiki
+>>
+
