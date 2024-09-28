@@ -1,75 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D89D1400A;
-	Sat, 28 Sep 2024 03:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A575F15665D;
+	Sat, 28 Sep 2024 04:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727493905; cv=none; b=nNZMsjD27LEf5HSnF8e+CWn3I2a/7mtAOnUFmDLgdwQNlRv0IhoneBbpQ5gLpWPZPW9lbBh0bzgvEiKxEWvCRbKs1Zj4icyyy3HAwzzKLKBwVqhid19QFAXMKfCmQXvB5YjOYVk14hwC7CiNa/KcKPZaRSoWVb3P8B2WsOhV5yE=
+	t=1727497685; cv=none; b=a5rknsnnpJxO+cEr9Oa3GZ4b8om+YcHhF6+wypn1gZvzd2JUjxeT66PYu4BWwGuwHqmqd6VKUkODxgD36flz+utvm3Gbvx16MiDQqJOPKlxll+NwgI0BNdJa9pEJDWPZkfEAk2LW8GBk6tjg51ML8Hpfgs+4vPSNjAFzbByV/jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727493905; c=relaxed/simple;
-	bh=oSv/hrz5syVfs0mQq+pOXzwhXAzulQxdP2NB6+XqghA=;
+	s=arc-20240116; t=1727497685; c=relaxed/simple;
+	bh=3Va6m4aP32feiSS3Bwmiq96mkkCGpqjkUnk4TUYjfyE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bu9QjJIxp8xETylpyMJwu4eDF2wqiPUx/sRHf2JLn7Zmb7LgEbVjUO5Q+k4MWq34AUE10VP+g4xUTHf2pe+gTvnEHtuTPJe3DEqidLdXqY7RDL8Bs2Sb/LlYdeSXoURgPBfAkyRfCRT1WrLzodtrvn8SDy1mzlHt7MAiLgO08qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EgzUpb2j; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=EY5To0cmb/C/nITBmEIMimAQautsPhRFK3hoFpUr4Cxj3EsjXlujFR5bAxqHsJYeJP+9fHDc1JRz7Fv6ymt9kh5P2XdgYlVAiteStoj3lEHzLMIMEX7n9Vd34ec4pMB9WQ5VioO6EjXiVncy3S2AY1Llgjo4Uj01H5nrOtFZ91g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bdNgMa3J; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EgzUpb2j"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bdNgMa3J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727493904; x=1759029904;
+  t=1727497684; x=1759033684;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oSv/hrz5syVfs0mQq+pOXzwhXAzulQxdP2NB6+XqghA=;
-  b=EgzUpb2jpAGgX+EKZ1M7TjCXDZ4Kz/Bii7lieZ16Up8qhYZ8KS/AeamL
-   nipIv5FHQt2Nh5gQxENyts+GTpunf6Grbicm+5H0gIstKzxEWzaBg4ERs
-   WTCgGjWl4J47lbuny2dujwI2hsKzCX2+jZvz1td4Ck1V4/0RSJui0cy41
-   32klwVQfjYp6rW8i0YkDycE2uLPo7JnL0fRIYV6zfoK8pMPykx/ZImwhx
-   QSvILCW27cnYzkUnYzy4OmlpZiZEKPxC8+hd8gMJg2aM92tNnKU4JA8sv
-   wPpif5lUxRHvtFLwgBGE2eZ/3d5bFnpXlywWTJarqvep/K7hL4GTFxRvO
+  bh=3Va6m4aP32feiSS3Bwmiq96mkkCGpqjkUnk4TUYjfyE=;
+  b=bdNgMa3JRKRIKySHC/O1mPfRHykpoymaWIi7FxjZzwlAqRFmTYB5BArL
+   v/x2wOc0eQm2px/mSbtJN8ZO1jzDYgv8AHlC0YZGhulQwROoFrtPUAjPX
+   Bvx/oHvmqVh6BhO8GJr1hc5WKkCxI14fQlSgsac9uHziMVYYiam+v/eZh
+   YUYB0l0agUyDSVpGnT5dPP9qdXITBl0n2/TP9VDVX32XMbbjloBHwgtYV
+   CceVIq+PVsUZtH1fXg2g2KmXGn8ga0HZDLTLneRnwheHjk4Np5EJCyjDQ
+   hDjEmCFe4efGUU8MtuVlg7CRpXeANwJN4K2ohYse9J+ZmFippeq32vRyH
    Q==;
-X-CSE-ConnectionGUID: 6cmQTzXvTr2JhOZUvN+DwA==
-X-CSE-MsgGUID: lO/fHYSTS5ub8hrSIBHi4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="26519928"
+X-CSE-ConnectionGUID: ZAvZdvnCSJW5ZIlGkH23/Q==
+X-CSE-MsgGUID: yEtfLW29Ql+aF8afHS0DoQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="29530981"
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="26519928"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 20:25:03 -0700
-X-CSE-ConnectionGUID: 9JmC+vnRTlKbrrThEK3U5g==
-X-CSE-MsgGUID: rPHb/3AKSrC+aAovPzJwiQ==
+   d="scan'208";a="29530981"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 21:28:02 -0700
+X-CSE-ConnectionGUID: mHUk22eXRO+YX+RW8moBRw==
+X-CSE-MsgGUID: unMTifetTLe6509csDHvpg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="72785976"
+   d="scan'208";a="73050718"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Sep 2024 20:24:59 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 27 Sep 2024 21:27:59 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1suO4m-000Mt3-1O;
-	Sat, 28 Sep 2024 03:24:56 +0000
-Date: Sat, 28 Sep 2024 11:24:39 +0800
+	id 1suP3l-000Mut-0o;
+	Sat, 28 Sep 2024 04:27:57 +0000
+Date: Sat, 28 Sep 2024 12:27:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrei Stefanescu <andrei.stefanescu@oss.nxp.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chester Lin <chester62515@gmail.com>,
-	Matthias Brugger <mbrugger@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Christophe Lizzi <clizzi@redhat.com>,
-	Alberto Ruiz <aruizrui@redhat.com>,
-	Enric Balletbo <eballetb@redhat.com>,
-	Andrei Stefanescu <andrei.stefanescu@oss.nxp.com>
-Subject: Re: [PATCH v4 3/4] gpio: siul2-s32g2: add NXP S32G2/S32G3 SoCs
- support
-Message-ID: <202409281117.IOrJBXgL-lkp@intel.com>
-References: <20240926143122.1385658-4-andrei.stefanescu@oss.nxp.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	heikki.krogerus@linux.intel.com, tzungbi@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jthies@google.com,
+	pmalani@chromium.org, akuchynski@google.com,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] platform/chrome: cros_ec_typec: Displayport support
+Message-ID: <202409281250.dtPQ2TrT-lkp@intel.com>
+References: <20240925092505.6.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,123 +68,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240926143122.1385658-4-andrei.stefanescu@oss.nxp.com>
+In-Reply-To: <20240925092505.6.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
 
-Hi Andrei,
+Hi Abhishek,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus robh/for-next linus/master v6.11 next-20240927]
+[auto build test WARNING on chrome-platform/for-next]
+[also build test WARNING on chrome-platform/for-firmware-next usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.11 next-20240927]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Stefanescu/drivers-provide-devm_platform_get_and_ioremap_resource_byname/20240926-223448
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20240926143122.1385658-4-andrei.stefanescu%40oss.nxp.com
-patch subject: [PATCH v4 3/4] gpio: siul2-s32g2: add NXP S32G2/S32G3 SoCs support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240928/202409281117.IOrJBXgL-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281117.IOrJBXgL-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Abhishek-Pandit-Subedi/usb-typec-Add-driver-for-Thunderbolt-3-Alternate-Mode/20240926-002931
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240925092505.6.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800%40changeid
+patch subject: [PATCH 6/8] platform/chrome: cros_ec_typec: Displayport support
+config: i386-randconfig-001-20240928 (https://download.01.org/0day-ci/archive/20240928/202409281250.dtPQ2TrT-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281250.dtPQ2TrT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409281117.IOrJBXgL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409281250.dtPQ2TrT-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpio-siul2-s32g2.c:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-siul2-s32g2.c:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-siul2-s32g2.c:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/gpio/gpio-siul2-s32g2.c:296:32: warning: comparison of distinct pointer types ('typeof ((size)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-     296 |                 conf->num_reg_defaults_raw = do_div(size, conf->reg_stride);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> drivers/gpio/gpio-siul2-s32g2.c:296:32: error: incompatible pointer types passing 'resource_size_t *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-     296 |                 conf->num_reg_defaults_raw = do_div(size, conf->reg_stride);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-   include/asm-generic/div64.h:213:38: note: passing argument to parameter 'dividend' here
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                                      ^
->> drivers/gpio/gpio-siul2-s32g2.c:296:32: warning: shift count >= width of type [-Wshift-count-overflow]
-     296 |                 conf->num_reg_defaults_raw = do_div(size, conf->reg_stride);
-         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^  ~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   8 warnings and 1 error generated.
+   In file included from drivers/platform/chrome/cros_ec_typec.c:21:
+>> drivers/platform/chrome/cros_typec_altmode.h:21:1: warning: no previous prototype for function 'cros_typec_register_displayport' [-Wmissing-prototypes]
+      21 | cros_typec_register_displayport(struct cros_typec_port *port,
+         | ^
+   drivers/platform/chrome/cros_typec_altmode.h:20:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      20 | struct typec_altmode *
+         | ^
+         | static 
+>> drivers/platform/chrome/cros_typec_altmode.h:28:5: warning: no previous prototype for function 'cros_typec_displayport_status_update' [-Wmissing-prototypes]
+      28 | int cros_typec_displayport_status_update(struct typec_altmode *altmode,
+         |     ^
+   drivers/platform/chrome/cros_typec_altmode.h:28:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      28 | int cros_typec_displayport_status_update(struct typec_altmode *altmode,
+         | ^
+         | static 
+   2 warnings generated.
 
 
-vim +296 drivers/gpio/gpio-siul2-s32g2.c
+vim +/cros_typec_register_displayport +21 drivers/platform/chrome/cros_typec_altmode.h
 
-   273	
-   274	static struct regmap *common_regmap_init(struct platform_device *pdev,
-   275						 struct regmap_config *conf,
-   276						 const char *name)
-   277	{
-   278		struct device *dev = &pdev->dev;
-   279		struct resource *res;
-   280		resource_size_t size;
-   281		void __iomem *base;
-   282	
-   283		base = devm_platform_get_and_ioremap_resource_byname(pdev, name, &res);
-   284		if (IS_ERR(base)) {
-   285			dev_err(&pdev->dev, "Failed to get MEM resource: %s\n", name);
-   286			return ERR_PTR(-EINVAL);
-   287		}
-   288	
-   289		size = resource_size(res);
-   290		conf->val_bits = conf->reg_stride * 8;
-   291		conf->max_register = size - conf->reg_stride;
-   292		conf->name = name;
-   293		conf->use_raw_spinlock = true;
-   294	
-   295		if (conf->cache_type != REGCACHE_NONE)
- > 296			conf->num_reg_defaults_raw = do_div(size, conf->reg_stride);
-   297	
-   298		return devm_regmap_init_mmio(dev, base, conf);
-   299	}
-   300	
+    10	
+    11	#if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
+    12	struct typec_altmode *
+    13	cros_typec_register_displayport(struct cros_typec_port *port,
+    14					struct typec_altmode_desc *desc,
+    15					bool ap_mode_entry);
+    16	
+    17	int cros_typec_displayport_status_update(struct typec_altmode *altmode,
+    18						 struct typec_displayport_data *data);
+    19	#else
+    20	struct typec_altmode *
+  > 21	cros_typec_register_displayport(struct cros_typec_port *port,
+    22					struct typec_altmode_desc *desc,
+    23					bool ap_mode_entry)
+    24	{
+    25		return typec_port_register_altmode(port->port, desc);
+    26	}
+    27	
+  > 28	int cros_typec_displayport_status_update(struct typec_altmode *altmode,
 
 -- 
 0-DAY CI Kernel Test Service
