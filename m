@@ -1,126 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A9D1885B7;
-	Sat, 28 Sep 2024 14:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B391F4A1B;
+	Sat, 28 Sep 2024 17:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727533413; cv=none; b=V8eVSlLEa/H1c2PRPOkyEM5sO6eQ7/IVWaARyxibUoYg2XdIrSZQQRawR8MYn/klu34+iOjxSn3S3YSjdXu2wmOMWohBPsWPy+iefH4qBMyFm7kQ2vTVUbpRVSvW9FYU8T4GyRZ2txHnW2rB8378GxcwiISiCGfSJkkzzYuMKhU=
+	t=1727544935; cv=none; b=hVpk/FsRBtvLbqsLpEWeIRgMpjmihpuMB7JrMXfvl5xCw55eYmVF6vMY8hKwSNxn2ETWPkQMPXOaJJEP+RiNyoYDWz9yvfOsGpfY1Wu3uuG+gIZQieSf4MNjeo0nWspru32TwrUDEjye920wc51lZ+p7rL0Yg7cIieCI4PCi+sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727533413; c=relaxed/simple;
-	bh=vETVdzpFTgtzgearedU8ZcNNOdx77yL2ot4guI4zHgo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=a1cSG/MDfKY+eIsALlSzjHMmYiFoK2z7h/sN513fozxmycTyb77LFgjZRMtB1+kVk286Qd5d/kpwuuc8mD1pQ0WOk2SqHzRyPbPu2USPRcUm14msIjXjKJ9ADXHHh940b/lDtdJ6ANZ9iCQh6Gxvd09HaGnlju+6kWqhRQV4eq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcwM8TAd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727544935; c=relaxed/simple;
+	bh=bB2TppACa73qNvdpxzZBOI5mAq3cV8/IE4AHhZY4SiY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dDsElIhp0Vg6VnXhmMoQ9VHGPbfXJD2mzVpnU3+P92ETBkB70R6mJHOZIj0XhEOVzOY2sV87+aNeuKzolJWeLa/50nnVBISEsjZhcorEo3gAlucppiv6FWmmPH7l2swt9YynTtniXeEXy3Bow4TbglNE+nrC1+Kws2Y8/mxExlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tJ4Msfby; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcwM8TAd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77067C4CEC3;
-	Sat, 28 Sep 2024 14:23:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tJ4Msfby"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CA8C4CEC3;
+	Sat, 28 Sep 2024 17:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727533412;
-	bh=vETVdzpFTgtzgearedU8ZcNNOdx77yL2ot4guI4zHgo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=kcwM8TAd7gxkWE0rbC4u45mh93b1kQHSDfAR9PehOdW9rK43xsB6mv9T2Xs084TKW
-	 iUThp/4Vxsu3A1QQ5FtcFp+59Wj/ZyQSM7Pi/snGvcx5sgfGvSEkv3iejSytTN+HnK
-	 Ubn5iDOz2ClBxkbZMy+ZK5mtksyrbqaHWajHvMnU5UFYGUT3ygU5/zkWHH1rRRjutE
-	 pdsNU+XtTkb/760DGR6xb14UxtzazwZMmcBxNQ5Nusd5mk9WMFwlEIAHcqsl1/Lu6l
-	 XTx6FBlIvy+YG9PPdV8Zsj+35qCx/dhipRRmPv8f9eAwTs5N/qFKi6HS8Hsv8WBl+y
-	 G+QRNimE396ZQ==
-Date: Sat, 28 Sep 2024 15:23:24 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jagath Jog J <jagathjog1996@gmail.com>, Lars-Peter Clausen
- <lars@metafoo.de>, Denis Benato <benato.denis96@gmail.com>,
- linux-iio@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] iio: bmi323: Drop CONFIG_PM guards around runtime
- functions
-Message-ID: <20240928152324.5c03fb3e@jic23-huawei>
-In-Reply-To: <20240910-iio-bmi323-remove-config_pm-guards-v1-1-0552249207af@kernel.org>
-References: <20240910-iio-bmi323-remove-config_pm-guards-v1-1-0552249207af@kernel.org>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=k20201202; t=1727544935;
+	bh=bB2TppACa73qNvdpxzZBOI5mAq3cV8/IE4AHhZY4SiY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tJ4MsfbyKpA8Esh+QS3uAmaX1WGDmewgqfgYwVwy7C+UjMvu2+vUCvfK3vH3KMSR/
+	 ZNsVAKu9T1nJjVhLY7IsxlBe87yjC3ieL7BYmwiokaxCzLA6o5co5P32q4hEwvqE+N
+	 9aZr8yG+i38uIB6k0sU8RCPd80yhRw5X37G6jkQu+taG6EQP/oTL1QNlSzMl/XH/Mr
+	 awJ2kDI/4d8uMekYOWPzfOIlRmhqfv5LeMrrE1KxmL87cb614xDwcFMENyJFZ0ngXA
+	 aGR/AoQ2TP8GuFgSj1VSlATiM6nqScq/svAuS2jKKS+9h/AeE34k5FLpGq6rAwpq8f
+	 uIgIZQvGTAliw==
+Date: Sat, 28 Sep 2024 10:35:30 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Maksim Panchenko <max4bolt@gmail.com>, Rong Xu <xur@google.com>,
+	Han Shen <shenhan@google.com>,
+	Sriraman Tallam <tmsriram@google.com>,
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	John Moon <john@jmoon.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Eric DeVolder <eric.devolder@oracle.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Benjamin Segall <bsegall@google.com>,
+	Breno Leitao <leitao@debian.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Xiao Wang <xiao.w.wang@intel.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>,
+	Stephane Eranian <eranian@google.com>,
+	Maksim Panchenko <maks@meta.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+Message-ID: <20240928173530.GC430964@thelio-3990X>
+References: <20240728203001.2551083-1-xur@google.com>
+ <20240728203001.2551083-7-xur@google.com>
+ <c65a07ef-6436-4e04-a263-7cad9758e9be@gmail.com>
+ <CAKwvOdm0iZspjpuueBV1=eFt+Bf4edWBZsDsj10kEvTGZRye2w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdm0iZspjpuueBV1=eFt+Bf4edWBZsDsj10kEvTGZRye2w@mail.gmail.com>
 
-On Tue, 10 Sep 2024 10:22:54 -0700
-Nathan Chancellor <nathan@kernel.org> wrote:
+On Fri, Sep 27, 2024 at 03:45:39PM -0700, Nick Desaulniers wrote:
+> On Thu, Sep 19, 2024 at 4:52 AM Maksim Panchenko <max4bolt@gmail.com> wrote:
+> >
+> > On Sun, Jul 28, 2024 at 01:29:56PM -0700, Rong Xu wrote:
+> > > Add the build support for using Clang's Propeller optimizer. Like
+> > > AutoFDO, Propeller uses hardware sampling to gather information
+> > > about the frequency of execution of different code paths within a
+> > > binary. This information is then used to guide the compiler's
+> > > optimization decisions, resulting in a more efficient binary.
+> >
+> > Thank you for submitting the patches with the latest compiler features.
+> >
+> > Regarding Propeller, I want to quickly mention that I plan to send a
+> > patch to include BOLT as a profile-based post-link optimizer for the
+> > kernel. I'd like it to be considered an alternative that is selectable
+> > at build time.
+> >
+> > BOLT also uses sampling, and the profile can be collected on virtually
+> > any kernel (with some caveats).  There are no constraints on the
+> > compiler (i.e., any version of GCC or Clang is acceptable), while Linux
+> > perf is the only external dependency used for profile collection and
+> > conversion. BOLT works on top of AutoFDO and LTO but can be used without
+> > them if the user desires. The build overhead is a few seconds.
+> >
+> > As you've heard from the LLVM discussion
+> > (https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autofdo-including-thinlto-and-propeller)
+> > and LPC talk (https://lpc.events/event/18/contributions/1921/), at Meta,
+> > we've also successfully optimized the kernel and got similar results.
+> >
+> > Again, this is a heads-up before the patch, and I would like to hear
+> > what people think about having a binary optimizer as a user-selectable
+> > alternative to Propeller.
+> 
+> I'd imagine that folks would be interested in running Propeller, or
+> BOLT, but perhaps not both.
+> 
+> In that sense, Kconfig has the means to express mutual exclusion.
+> It's perhaps worth working together to get the kconfig selection
+> working such that folks can play with enabling these newer toolchain
+> related technologies.
 
-> When building with clang and CONFIG_PM disabled (such as with s390), it
-> warns:
-> 
->   drivers/iio/imu/bmi323/bmi323_core.c:121:27: warning: variable 'bmi323_reg_savestate' is not needed and will not be emitted [-Wunneeded-internal-declaration]
->     121 | static const unsigned int bmi323_reg_savestate[] = {
->         |                           ^~~~~~~~~~~~~~~~~~~~
->   drivers/iio/imu/bmi323/bmi323_core.c:133:27: warning: variable 'bmi323_ext_reg_savestate' is not needed and will not be emitted [-Wunneeded-internal-declaration]
->     133 | static const unsigned int bmi323_ext_reg_savestate[] = {
->         |                           ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> These arrays have no references outside of sizeof(), which will be
-> evaluated at compile time. To avoid these warnings, remove the CONFIG_PM
-> ifdef guard and use the RUNTIME_PM_OPS macro to ensure these functions
-> always appear used to the compiler, which allows the references to the
-> arrays to be visible as well. This results in no difference in runtime
-> behavior because bmi323_core_pm_ops is only used when CONFIG_PM is set
-> with the pm_ptr() macro.
-> 
-> Fixes: b09999ee1e86 ("iio: bmi323: suspend and resume triggering on relevant pm operations")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Applied to the fixes togreg branch of iio.git.
-I'll rebase that tree on rc1 once available then send a pull request with this
-in.
+Right, I would expect this to just be a Kconfig choice with a
+description like "Post link optimization" or something of the sort, like
+the RANDSTRUCT or DEBUG_INFO ones. If it does make sense to do them at
+the same time, they can obviously be separate.
 
-Thanks,
+> The next instance of the bi-weekly public Clang Built Linux meeting is
+> next Wednesday. (Links from https://clangbuiltlinux.github.io/)
+> 
+> Perhaps it's worth Rong (and Sriraman and Han) and Maksim to stop by and chat?
 
-Jonathan
+I would certainly be open to discussing the plans for upstreaming these
+in the meeting. I think the sessions went well in the Toolchains Track.
+There were no major objections from what I could tell.
 
-> ---
-> NOTE: The second warning will still be visible without this change as
-> well:
-> 
-> https://lore.kernel.org/20240909-iio-bmi323-fix-array-ref-v1-1-51c220f22229@kernel.org/
-> 
-> Technically, the blamed change for that fix is somewhat responsible for
-> this issue as well but I believe the one I assigned was the real culprit
-> because this diff should have been in that change.
-> ---
->  drivers/iio/imu/bmi323/bmi323_core.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/iio/imu/bmi323/bmi323_core.c b/drivers/iio/imu/bmi323/bmi323_core.c
-> index 671401ce80dcf947b7b64ea3af112d2a42ca5501..1d1405d37c5adb2717fc27d6b22540da50dea6d4 100644
-> --- a/drivers/iio/imu/bmi323/bmi323_core.c
-> +++ b/drivers/iio/imu/bmi323/bmi323_core.c
-> @@ -2172,7 +2172,6 @@ int bmi323_core_probe(struct device *dev)
->  }
->  EXPORT_SYMBOL_NS_GPL(bmi323_core_probe, IIO_BMI323);
->  
-> -#if defined(CONFIG_PM)
->  static int bmi323_core_runtime_suspend(struct device *dev)
->  {
->  	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-> @@ -2293,11 +2292,9 @@ static int bmi323_core_runtime_resume(struct device *dev)
->  	return iio_device_resume_triggering(indio_dev);
->  }
->  
-> -#endif
-> -
->  const struct dev_pm_ops bmi323_core_pm_ops = {
-> -	SET_RUNTIME_PM_OPS(bmi323_core_runtime_suspend,
-> -			   bmi323_core_runtime_resume, NULL)
-> +	RUNTIME_PM_OPS(bmi323_core_runtime_suspend,
-> +		       bmi323_core_runtime_resume, NULL)
->  };
->  EXPORT_SYMBOL_NS_GPL(bmi323_core_pm_ops, IIO_BMI323);
->  
-> 
-> ---
-> base-commit: 5ba0cb92584ba5e107c97001e09013c1da0772a8
-> change-id: 20240910-iio-bmi323-remove-config_pm-guards-5707958e0ac1
-> 
-> Best regards,
-
+Cheers,
+Nathan
