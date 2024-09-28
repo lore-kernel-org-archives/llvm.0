@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FA019DF94;
-	Sat, 28 Sep 2024 06:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404A312E75;
+	Sat, 28 Sep 2024 10:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727505726; cv=none; b=BJfnn7mFsO/KlJD91PDMFtaE5Hi/26KA6FMJH2ylRiqZKPpOIIGN6kAr0UThjSkeVP97ievdea2Gvq2O6kWFSxI4C65UQcxMZt6QMtCiNSHD2kFDViRwkvlSBTS7DByaRTBD+g26mPwytxUKpz7hVDCFJACXBiNI60OXmkmApeI=
+	t=1727520736; cv=none; b=oh4H6o5L84JaYfLwrB/JThAkoiDRmZvfCYtkW0oMOh32qlt1+fP9AkH2j0GZ7pzb9WsE5a7pQE02NXxljfvMTXxVHEzxbLUg9jw8RWaIdIrGi2635FQjPznrZuqLXQE9bUNbh2I687qN3iuE2uCk6J085xRtuw6AagJDKVkXAX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727505726; c=relaxed/simple;
-	bh=Bylns5n1fT35ZTeSGxrZH4yYoCqvVI13kz3gcZYN3p0=;
+	s=arc-20240116; t=1727520736; c=relaxed/simple;
+	bh=aUL2MNKny/FrCKLUkjdju1BoQqqG98YFjitX+H1pLf8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RRR6T2mAvQqvANuonjLpe7Hys4EWqagHTQBUHQscpb24aiO9L+CM7vNjID0/eZxOFikePIE6IpnY9pmMAgM5MK7hgfENUDuaPQfNJm43OxJpI9DQP2hE2frxjsbXxQiDP1aCmZmwteUJAzbpS3TUOhCI4h8PUWkofDtWtn6ewY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lUVz5GX3; arc=none smtp.client-ip=192.198.163.9
+	 Content-Disposition; b=ZpKQGzYZhMMpHxlKsryuIDFoWuJC2YUP0jmxe7geBhF4MdA7xZsK77IzvC3+kBKrcimVg8XDcac0jtG9g5mRALD3VtJA+tm7SB3733zvvwQBf+zbecAVO29izXj2pDyMv6Zsn3gpOhw66mJd7c6yPSargnWFZ5R4DgrufkXREZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftKSF92C; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lUVz5GX3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftKSF92C"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727505725; x=1759041725;
+  t=1727520734; x=1759056734;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Bylns5n1fT35ZTeSGxrZH4yYoCqvVI13kz3gcZYN3p0=;
-  b=lUVz5GX3grj78xKUHRhP/KZwHeiaxNRFHCRkrp0KapAo0nu4epZxpe7L
-   L47oGMsn7OMsWzMnhUUxOLpxbGLHqlWeyFS+qH57XqapFqLU0Pb8qxR2a
-   meakGqmpIwHjGMS1wt75DaE6BuEcmav8ueRB67DmS5q+Ol3EPFw8rx5DP
-   aHeBU7wYkngkHCr3+Fkz3uCXO4Yl+BQcP7fy8oYVS0ILloMtZzgRJOk1D
-   KvWaciYWW/BkcWfjAmZNznqouR+Sqn1OATc4Slw+2bzHsqLWOHpCWJxPI
-   pAAHlRGJyqKOEQHaobwbmr0kq0RQ1tq4kPHHu2+vgoEpQYzzdfIeuvMH0
-   Q==;
-X-CSE-ConnectionGUID: KgpJiMk8TzKBikzhggfnew==
-X-CSE-MsgGUID: BWMjzyCtR0SFelzTjhzCow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="37329242"
+  bh=aUL2MNKny/FrCKLUkjdju1BoQqqG98YFjitX+H1pLf8=;
+  b=ftKSF92C/VNF3mBD0+Yat5BvoUQcdAaIPYlYQ7ig1LwXYN3qt1Xdq3R4
+   9JsGiq6yC9FJ1aB19TWuqZ3sD8GElPGy4Tbhl4SnsHA72k2oWF+x7NGaP
+   cII3vjoRxeKa4hmE2vBCJqsYMqHwpaPIwvF0Z9VfwVwlU+wM+hJRNIscl
+   /waCCBN7JmZC1MUCclpaexih8igdefxm8zhPj1ZVh171aU9mThGwdPq+w
+   krlFfDfORb5ecMKIM8SmkETcpYlbDxpCyCuDdWZOF4IQS+QtL8IiAApMr
+   t139bJXoqYZtJ08HYKgfLL7Fp27YYX46Cpon36VlMBKU5tywA5q5f7pQw
+   w==;
+X-CSE-ConnectionGUID: 1QwAS9VOTluAvWJ3nKoS0Q==
+X-CSE-MsgGUID: RGE1Zyr+T4+zHRo0KjLkqA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="44128037"
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="37329242"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 23:42:03 -0700
-X-CSE-ConnectionGUID: 40xkr53TQdKVpHtd7xOhOg==
-X-CSE-MsgGUID: uysA6x4eRIy6MsVbzAeYPw==
+   d="scan'208";a="44128037"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 03:52:14 -0700
+X-CSE-ConnectionGUID: yMvNpt40Rwib1e4ymzgERA==
+X-CSE-MsgGUID: bKvmQ2t/QM61kNdOaX734A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="72818521"
+   d="scan'208";a="72363724"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Sep 2024 23:42:02 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 28 Sep 2024 03:52:12 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1suR9T-000Myh-1W;
-	Sat, 28 Sep 2024 06:41:59 +0000
-Date: Sat, 28 Sep 2024 14:41:20 +0800
+	id 1suV3a-000NBo-0W;
+	Sat, 28 Sep 2024 10:52:10 +0000
+Date: Sat, 28 Sep 2024 18:51:15 +0800
 From: kernel test robot <lkp@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/ibt 6/10] arch/x86/kernel/traps.c:328:7: error:
- call to undeclared function '__do_kernel_cp_fault'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202409281458.omMmG4EU-lkp@intel.com>
+Subject: [peterz-queue:x86/ibt 9/10] arch/x86/um/../kernel/module.c:undefined
+ reference to `apply_direct_call_offset'
+Message-ID: <202409281834.27t5v0fl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,89 +64,22 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
 head:   4e155f6fbba48ed677042026d7732c6256ffa166
-commit: 5bb9d6530a561f5bec514a4be368cb7c2e36a507 [6/10] x86/traps: Prepare for ENDBR poison UD1 usage
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240928/202409281458.omMmG4EU-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281458.omMmG4EU-lkp@intel.com/reproduce)
+commit: 76743359658d730ecba565019069d870d30fe3b8 [9/10] x86/ibt: Implement IBT+
+config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240928/202409281834.27t5v0fl-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281834.27t5v0fl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409281458.omMmG4EU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409281834.27t5v0fl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/traps.c:328:7: error: call to undeclared function '__do_kernel_cp_fault'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     328 |                 if (__do_kernel_cp_fault(regs)) {
-         |                     ^
-   1 error generated.
-
-
-vim +/__do_kernel_cp_fault +328 arch/x86/kernel/traps.c
-
-   282	
-   283	static noinstr bool handle_bug(struct pt_regs *regs)
-   284	{
-   285		bool handled = false;
-   286		int ud_type, ud_len;
-   287		s32 ud_imm;
-   288	
-   289		/*
-   290		 * Normally @regs are unpoisoned by irqentry_enter(), but handle_bug()
-   291		 * is a rare case that uses @regs without passing them to
-   292		 * irqentry_enter().
-   293		 */
-   294		kmsan_unpoison_entry_regs(regs);
-   295		ud_type = decode_bug(regs->ip, &ud_imm, &ud_len);
-   296		if (ud_type == BUG_NONE)
-   297			return handled;
-   298	
-   299		/*
-   300		 * All lies, just get the WARN/BUG out.
-   301		 */
-   302		instrumentation_begin();
-   303		/*
-   304		 * Since we're emulating a CALL with exceptions, restore the interrupt
-   305		 * state to what it was at the exception site.
-   306		 */
-   307		if (regs->flags & X86_EFLAGS_IF)
-   308			raw_local_irq_enable();
-   309	
-   310		switch (ud_type) {
-   311		case BUG_UD2:
-   312			if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-   313			    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
-   314				regs->ip += ud_len;
-   315				handled = true;
-   316			}
-   317			break;
-   318	
-   319		case BUG_UD1_UBSAN:
-   320			if (IS_ENABLED(CONFIG_UBSAN_TRAP)) {
-   321				pr_crit("%s at %pS\n",
-   322					report_ubsan_failure(regs, ud_imm),
-   323					(void *)regs->ip);
-   324			}
-   325			break;
-   326	
-   327		case BUG_UD1_ENDBR:
- > 328			if (__do_kernel_cp_fault(regs)) {
-   329				regs->ip += ud_len;
-   330				handled = true;
-   331			}
-   332			break;
-   333	
-   334		default:
-   335			break;
-   336		}
-   337	
-   338		if (regs->flags & X86_EFLAGS_IF)
-   339			raw_local_irq_disable();
-   340		instrumentation_end();
-   341	
-   342		return handled;
-   343	}
-   344	
+   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: arch/x86/kernel/module.o: in function `module_finalize':
+>> arch/x86/um/../kernel/module.c:(.text+0x4bd): undefined reference to `apply_direct_call_offset'
+   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
 
 -- 
 0-DAY CI Kernel Test Service
