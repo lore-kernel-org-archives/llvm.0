@@ -1,67 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9848D168BD;
-	Sat, 28 Sep 2024 02:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F191537D7;
+	Sat, 28 Sep 2024 03:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727492043; cv=none; b=cPCxI3dyVED/R11Y6ZtEO+itgX8yI1zGIV8Cs8U9yjIoXT4q8a2UhSxa7PjDtdfXlcENPRs41TBbveNL/yzkLiUsdYujjBk8dqta9z+vEVhnqu/1owbMQjhlZ/ip51Xj03HZ98hPLBaeoy1wIGqpsj+uIoU64DZhkUDS/ujwwJI=
+	t=1727493305; cv=none; b=C5xtDoyETjmPNJA2m/2t8PQOUsbU2C/E/ZV8pVrQZOLInMj0+2ouu2aK3CeiQ1jhpVqp9G+Zbs7R0kC3zhYvpRcoLu9KX0yqXIZur8o7irIXoJfwiXtE+W6KJ3b1itcNQZmiKmygF3AICqwaRNYAGqDBxW9jZJYiMYP20G5+4bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727492043; c=relaxed/simple;
-	bh=L/4ztKUmR2hY9BORg5sinYR4OqxxO8+qKgs09g1Q7iA=;
+	s=arc-20240116; t=1727493305; c=relaxed/simple;
+	bh=/VGW6gLOvWEix6yTtYLUBYd1mi71ScOcWznvaDztTHE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rZXr1u92NrK/IzqCXg8rOXjuWr8lC0/MBLB7S5jabJApi6KjFjJf35u32Ekgkm5AMZRR3q42Wg014Ig0/hd5C8iKJbkWGxM0bb0gzc4YqFyyFnIMxJ0lIdZJSrLEd3P9+aShIiFxv4shXInEk7CQlddRieE9Fu//yqPSGKrGKnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PRhx80tP; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=fVg8rQC0GJPaLQdZdaWbWrBHbJr5F/gFpIIhKSQPf7jypO+nxdemjK5dH7zoQ626y4pU7hgjS5x+UC9T1c0ivQwCJrR+3LtbGEXisHhVRWhyug+aXWsB6T53owPJNP0VwSTvKQ/Wic9ywpiqQk8H8DnHnIaN/dkC7MpUuFpHwtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E3ZdStL5; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRhx80tP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E3ZdStL5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727492041; x=1759028041;
+  t=1727493303; x=1759029303;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=L/4ztKUmR2hY9BORg5sinYR4OqxxO8+qKgs09g1Q7iA=;
-  b=PRhx80tPUMxtu/JQSHqMQky7mTB009nEJf2MLbrW34G3mEhwDA5KK/T0
-   HgceKIaZfj0VTbj2ZOhglXbOruDJRNS3tiLFe0tx4OsC8CsZO9CJJOC7H
-   oGqijRpgSf8uzdJz+fJcQTyyVm+CPcjdI+fQZcIaib6GuyK1A7k9GLh0U
-   y7dAlUJdkguTdEjXl54jpJMOEIvFqsqQB/AwgP5y811uryG5RGMvDV58J
-   AVy6uu+jEDeWF7gCRY3uNcrZh0FKCtkj0YRPlAL+Y60izVMgzC/TwoYlK
-   IoOvSS9gqOVIL5aZSZU4fn2EU3XlJ36XdBdddUYkIKG/zJSKIA0pHEbey
-   A==;
-X-CSE-ConnectionGUID: N0ue4VBCREiaedmXJErrVA==
-X-CSE-MsgGUID: Aj5YIo0aTxmUrOGQ4acsKA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="26779794"
+  bh=/VGW6gLOvWEix6yTtYLUBYd1mi71ScOcWznvaDztTHE=;
+  b=E3ZdStL5sNAVbY6jGRks9C9a2Jg1cu0Yf+L901rwKreimiDw1gcZaeuz
+   UrYUA16L2wM6glgVD8TAP92vy9LLwjkMV0KFn39ttjOf7seniuZuayji4
+   fFIXacRudS1ZxTU44SafUAzmZFpONLJCFSXgqwqWLhIFwePBJlT3ydgSv
+   Xw1oIh7O1xbXm8QkyABsyInoeec9amiUq/DOvvowJjaeLnUpF8R00hRRe
+   WDjVg3KE7JhfoPJMRUrqLWS1V2irhmS+ei/hj4L5QH7tUYxaUXupvUZMP
+   hJn4hKwdhIllzV1X3/CEayb87OJMp7kqCbCCO+5rs//+X49kxT39K5UHe
+   w==;
+X-CSE-ConnectionGUID: b6G6Xn6RSFOW2gwUfFI9zA==
+X-CSE-MsgGUID: Y3zTqdj1SxmHWpJZYnK0HA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="37211754"
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="26779794"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 19:54:00 -0700
-X-CSE-ConnectionGUID: KFmS8c7gQuSlY+Pxl/vwwA==
-X-CSE-MsgGUID: dvlsoNVgQO6q7/UFTPhPlw==
+   d="scan'208";a="37211754"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 20:15:02 -0700
+X-CSE-ConnectionGUID: EnSXIkpuRJC1xt5BLRuVNA==
+X-CSE-MsgGUID: 0GDsKC/WQ4ugdUKMVLw+GQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="73513459"
+   d="scan'208";a="77663551"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 27 Sep 2024 19:53:57 -0700
+  by orviesa004.jf.intel.com with ESMTP; 27 Sep 2024 20:14:59 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1suNal-000MrY-0m;
-	Sat, 28 Sep 2024 02:53:55 +0000
-Date: Sat, 28 Sep 2024 10:53:20 +0800
+	id 1suNv5-000Msb-2i;
+	Sat, 28 Sep 2024 03:14:55 +0000
+Date: Sat, 28 Sep 2024 11:14:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
+To: Ricardo Ribalda <ribalda@chromium.org>, Benoit Parrot <bparrot@ti.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Bingbu Cao <bingbu.cao@intel.com>,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Avichal Rakesh <arakesh@google.com>,
-	Jayant Chowdhary <jchowdhary@google.com>
+	Hans de Goede <hdegoede@redhat.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>
-Subject: Re: [PATCH v5 8/9] usb: gadget: uvc: add trace of enqueued and
- completed requests
-Message-ID: <202409281004.YHy0SVaY-lkp@intel.com>
-References: <20240403-uvc_request_length_by_interval-v5-8-2de78794365c@pengutronix.de>
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	Ricardo Ribalda <ribalda@chromium.org>
+Subject: Re: [PATCH v2 1/3] media: ti: cal: Use str_up_down()
+Message-ID: <202409281015.ZcDlYBGw-lkp@intel.com>
+References: <20240927-cocci-6-12-v2-1-1c6ad931959b@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,33 +73,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240403-uvc_request_length_by_interval-v5-8-2de78794365c@pengutronix.de>
+In-Reply-To: <20240927-cocci-6-12-v2-1-1c6ad931959b@chromium.org>
 
-Hi Michael,
+Hi Ricardo,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 68d4209158f43a558c5553ea95ab0c8975eab18c]
+[auto build test ERROR on 075dbe9f6e3c21596c5245826a4ee1f1c1676eb8]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Grzeschik/usb-gadget-uvc-wake-pump-everytime-we-update-the-free-list/20240927-074027
-base:   68d4209158f43a558c5553ea95ab0c8975eab18c
-patch link:    https://lore.kernel.org/r/20240403-uvc_request_length_by_interval-v5-8-2de78794365c%40pengutronix.de
-patch subject: [PATCH v5 8/9] usb: gadget: uvc: add trace of enqueued and completed requests
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240928/202409281004.YHy0SVaY-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281004.YHy0SVaY-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-Ribalda/media-ti-cal-Use-str_up_down/20240927-180438
+base:   075dbe9f6e3c21596c5245826a4ee1f1c1676eb8
+patch link:    https://lore.kernel.org/r/20240927-cocci-6-12-v2-1-1c6ad931959b%40chromium.org
+patch subject: [PATCH v2 1/3] media: ti: cal: Use str_up_down()
+config: i386-buildonly-randconfig-003-20240928 (https://download.01.org/0day-ci/archive/20240928/202409281015.ZcDlYBGw-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281015.ZcDlYBGw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409281004.YHy0SVaY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409281015.ZcDlYBGw-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All error/warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "__tracepoint_uvcg_video_complete" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
->> ERROR: modpost: "__traceiter_uvcg_video_complete" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
->> ERROR: modpost: "__tracepoint_uvcg_video_queue" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
->> ERROR: modpost: "__traceiter_uvcg_video_queue" [drivers/usb/gadget/function/usb_f_uvc.ko] undefined!
+>> drivers/media/platform/ti/cal/cal-camerarx.c:193:3: error: unterminated function-like macro invocation
+     193 |                 phy_err(phy, "Failed to power %s complexio\n",
+         |                 ^
+   drivers/media/platform/ti/cal/cal.h:278:9: note: macro 'phy_err' defined here
+     278 | #define phy_err(phy, fmt, arg...)                                       \
+         |         ^
+>> drivers/media/platform/ti/cal/cal-camerarx.c:897:2: error: expected expression
+     897 | }
+         |  ^
+>> drivers/media/platform/ti/cal/cal-camerarx.c:897:2: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+   drivers/media/platform/ti/cal/cal-camerarx.c:192:2: note: previous statement is here
+     192 |         if (i == 10)
+         |         ^
+>> drivers/media/platform/ti/cal/cal-camerarx.c:897:2: error: expected '}'
+     897 | }
+         |  ^
+   drivers/media/platform/ti/cal/cal-camerarx.c:169:1: note: to match this '{'
+     169 | {
+         | ^
+   1 warning and 3 errors generated.
+
+
+vim +193 drivers/media/platform/ti/cal/cal-camerarx.c
+
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  167  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  168  static void cal_camerarx_power(struct cal_camerarx *phy, bool enable)
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  169  {
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  170  	u32 target_state;
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  171  	unsigned int i;
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  172  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  173  	target_state = enable ? CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_STATE_ON :
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  174  		       CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_STATE_OFF;
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  175  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  176  	cal_write_field(phy->cal, CAL_CSI2_COMPLEXIO_CFG(phy->instance),
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  177  			target_state, CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_MASK);
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  178  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  179  	for (i = 0; i < 10; i++) {
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  180  		u32 current_state;
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  181  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  182  		current_state = cal_read_field(phy->cal,
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  183  					       CAL_CSI2_COMPLEXIO_CFG(phy->instance),
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  184  					       CAL_CSI2_COMPLEXIO_CFG_PWR_STATUS_MASK);
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  185  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  186  		if (current_state == target_state)
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  187  			break;
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  188  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  189  		usleep_range(1000, 1100);
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  190  	}
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  191  
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  192  	if (i == 10)
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06 @193  		phy_err(phy, "Failed to power %s complexio\n",
+368e80f16a6aff drivers/media/platform/ti/cal/cal-camerarx.c Ricardo Ribalda  2024-09-27  194  			str_up_down(enable);
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  195  }
+af30d4f36ef35d drivers/media/platform/ti-vpe/cal-camerarx.c Laurent Pinchart 2020-07-06  196  
 
 -- 
 0-DAY CI Kernel Test Service
