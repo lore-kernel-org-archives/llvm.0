@@ -1,58 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 404A312E75;
-	Sat, 28 Sep 2024 10:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D145A17736;
+	Sat, 28 Sep 2024 12:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727520736; cv=none; b=oh4H6o5L84JaYfLwrB/JThAkoiDRmZvfCYtkW0oMOh32qlt1+fP9AkH2j0GZ7pzb9WsE5a7pQE02NXxljfvMTXxVHEzxbLUg9jw8RWaIdIrGi2635FQjPznrZuqLXQE9bUNbh2I687qN3iuE2uCk6J085xRtuw6AagJDKVkXAX4=
+	t=1727526383; cv=none; b=P4jtBjVzYW/jLypUWlkpJD6fbtYSOsLj4FHs6TZt0Hw4xyLXlFspGAoqyyDoQ+49k3uVYofN5ssvCn9EwF1zEmXqvqPoBI7ZfMjJWV2oWxA7yg6Dkh8A1XoU8EzTLvu9lO0rg5chnmHqxgV6sxV3RVGzG71DGZdeKTEVyDn3eU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727520736; c=relaxed/simple;
-	bh=aUL2MNKny/FrCKLUkjdju1BoQqqG98YFjitX+H1pLf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZpKQGzYZhMMpHxlKsryuIDFoWuJC2YUP0jmxe7geBhF4MdA7xZsK77IzvC3+kBKrcimVg8XDcac0jtG9g5mRALD3VtJA+tm7SB3733zvvwQBf+zbecAVO29izXj2pDyMv6Zsn3gpOhw66mJd7c6yPSargnWFZ5R4DgrufkXREZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftKSF92C; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1727526383; c=relaxed/simple;
+	bh=0O0bP0IrBhKutucM950AErodJ/ElrwHuacHsGrdmOL0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fodQ4P0jZCrQHomJamEINbb+xH+vZTU1CmLNAJblr94l4nxh0a51vC9tRoSOI49xy1GapU6WSMtWXhVYM4Vz1KzLICPcOdSiy4v41q4vf2vNFJzVgDKyFy54DgWkKwINSEe/KRev5NgZtzUFuZiBw5WeZeo3W005OwGOA4avg2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SX7uwgI/; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftKSF92C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SX7uwgI/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727520734; x=1759056734;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aUL2MNKny/FrCKLUkjdju1BoQqqG98YFjitX+H1pLf8=;
-  b=ftKSF92C/VNF3mBD0+Yat5BvoUQcdAaIPYlYQ7ig1LwXYN3qt1Xdq3R4
-   9JsGiq6yC9FJ1aB19TWuqZ3sD8GElPGy4Tbhl4SnsHA72k2oWF+x7NGaP
-   cII3vjoRxeKa4hmE2vBCJqsYMqHwpaPIwvF0Z9VfwVwlU+wM+hJRNIscl
-   /waCCBN7JmZC1MUCclpaexih8igdefxm8zhPj1ZVh171aU9mThGwdPq+w
-   krlFfDfORb5ecMKIM8SmkETcpYlbDxpCyCuDdWZOF4IQS+QtL8IiAApMr
-   t139bJXoqYZtJ08HYKgfLL7Fp27YYX46Cpon36VlMBKU5tywA5q5f7pQw
-   w==;
-X-CSE-ConnectionGUID: 1QwAS9VOTluAvWJ3nKoS0Q==
-X-CSE-MsgGUID: RGE1Zyr+T4+zHRo0KjLkqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11208"; a="44128037"
+  t=1727526382; x=1759062382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0O0bP0IrBhKutucM950AErodJ/ElrwHuacHsGrdmOL0=;
+  b=SX7uwgI/bzo2IPYwplUAb/6TV1nzHERKIIfVJfcr997WWzNLVxBvI/Ul
+   JQwGFItuWYIScipfgSS/5Np6lu0psZF0yQPfoK/4TjLqwoyZ9VV9dYMaQ
+   9ZqsJyqILxB1Hqw78L5l5ttcQ0S44KAeRzucgtkw4hCD/P+FHkRTnUrdS
+   gtbdWA4sr1stItIyWQSf4zlUqVMXM4IKOm7i6ExnIIWYi+CmcQ8ZqaxSW
+   B+Cr/vSKKbJSMKZr3w0IDSWuvmmCJNKehfqD3zalKmNk3lEGchUdvPDXs
+   /gjqO6OcNcbcZFtG5hIupOlZJR5K+TUDLzQFLJSm2KhIH4XUugWf2OA1O
+   Q==;
+X-CSE-ConnectionGUID: abtI1Bo4Q+uJGXjU4gFU/A==
+X-CSE-MsgGUID: 8z7FN9dSQh+L4nkur1Aa7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="26174332"
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="44128037"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 03:52:14 -0700
-X-CSE-ConnectionGUID: yMvNpt40Rwib1e4ymzgERA==
-X-CSE-MsgGUID: bKvmQ2t/QM61kNdOaX734A==
+   d="scan'208";a="26174332"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 05:26:21 -0700
+X-CSE-ConnectionGUID: tqVLSgj5RGiBg6fDPtfYcA==
+X-CSE-MsgGUID: iXlxDZxGRlO5tpgIe7GV2g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,160,1725346800"; 
-   d="scan'208";a="72363724"
+   d="scan'208";a="72677358"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 28 Sep 2024 03:52:12 -0700
+  by orviesa010.jf.intel.com with ESMTP; 28 Sep 2024 05:26:15 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1suV3a-000NBo-0W;
-	Sat, 28 Sep 2024 10:52:10 +0000
-Date: Sat, 28 Sep 2024 18:51:15 +0800
+	id 1suWWa-000NFb-0k;
+	Sat, 28 Sep 2024 12:26:12 +0000
+Date: Sat, 28 Sep 2024 20:25:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/ibt 9/10] arch/x86/um/../kernel/module.c:undefined
- reference to `apply_direct_call_offset'
-Message-ID: <202409281834.27t5v0fl-lkp@intel.com>
+To: Wei Huang <wei.huang2@amd.com>, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan.Cameron@huawei.com, helgaas@kernel.org, corbet@lwn.net,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, alex.williamson@redhat.com, gospo@broadcom.com,
+	michael.chan@broadcom.com, ajit.khaparde@broadcom.com,
+	somnath.kotur@broadcom.com, andrew.gospodarek@broadcom.com,
+	manoj.panicker2@amd.com, Eric.VanTassell@amd.com,
+	wei.huang2@amd.com, vadim.fedorenko@linux.dev, horms@kernel.org,
+	bagasdotme@gmail.com, bhelgaas@google.com, lukas@wunner.de,
+	paul.e.luse@intel.com, jing2.liu@intel.com
+Subject: Re: [PATCH V6 2/5] PCI/TPH: Add Steering Tag support
+Message-ID: <202409282017.PWd5zICd-lkp@intel.com>
+References: <20240927215653.1552411-3-wei.huang2@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,25 +73,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240927215653.1552411-3-wei.huang2@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
-head:   4e155f6fbba48ed677042026d7732c6256ffa166
-commit: 76743359658d730ecba565019069d870d30fe3b8 [9/10] x86/ibt: Implement IBT+
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20240928/202409281834.27t5v0fl-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409281834.27t5v0fl-lkp@intel.com/reproduce)
+Hi Wei,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus linus/master next-20240927]
+[cannot apply to v6.11]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Huang/PCI-Add-TLP-Processing-Hints-TPH-support/20240928-055915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20240927215653.1552411-3-wei.huang2%40amd.com
+patch subject: [PATCH V6 2/5] PCI/TPH: Add Steering Tag support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240928/202409282017.PWd5zICd-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240928/202409282017.PWd5zICd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409281834.27t5v0fl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409282017.PWd5zICd-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-   /usr/bin/ld: arch/x86/kernel/module.o: in function `module_finalize':
->> arch/x86/um/../kernel/module.c:(.text+0x4bd): undefined reference to `apply_direct_call_offset'
-   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+>> drivers/pci/tph.c:236:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     236 |         val |= FIELD_PREP(mask, st_val);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   1 warning generated.
+
+
+vim +236 drivers/pci/tph.c
+
+   205	
+   206	/* Write ST to MSI-X vector control reg - Return 0 if OK, otherwise -errno */
+   207	static int write_tag_to_msix(struct pci_dev *pdev, int msix_idx, u16 tag)
+   208	{
+   209		struct msi_desc *msi_desc = NULL;
+   210		void __iomem *vec_ctrl;
+   211		u32 val, mask, st_val;
+   212		int err = 0;
+   213	
+   214		msi_lock_descs(&pdev->dev);
+   215	
+   216		/* Find the msi_desc entry with matching msix_idx */
+   217		msi_for_each_desc(msi_desc, &pdev->dev, MSI_DESC_ASSOCIATED) {
+   218			if (msi_desc->msi_index == msix_idx)
+   219				break;
+   220		}
+   221	
+   222		if (!msi_desc) {
+   223			err = -ENXIO;
+   224			goto err_out;
+   225		}
+   226	
+   227		st_val = (u32)tag;
+   228	
+   229		/* Get the vector control register (offset 0xc) pointed by msix_idx */
+   230		vec_ctrl = pdev->msix_base + msix_idx * PCI_MSIX_ENTRY_SIZE;
+   231		vec_ctrl += PCI_MSIX_ENTRY_VECTOR_CTRL;
+   232	
+   233		val = readl(vec_ctrl);
+   234		mask = PCI_MSIX_ENTRY_CTRL_ST_LOWER | PCI_MSIX_ENTRY_CTRL_ST_UPPER;
+   235		val &= ~mask;
+ > 236		val |= FIELD_PREP(mask, st_val);
+   237		writel(val, vec_ctrl);
+   238	
+   239		/* Read back to flush the update */
+   240		val = readl(vec_ctrl);
+   241	
+   242	err_out:
+   243		msi_unlock_descs(&pdev->dev);
+   244		return err;
+   245	}
+   246	
 
 -- 
 0-DAY CI Kernel Test Service
