@@ -1,65 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099981CA80;
-	Sat, 28 Sep 2024 19:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9370E17C7C2;
+	Sat, 28 Sep 2024 20:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727553216; cv=none; b=j0x/m35lCSqwX2/IiQ8K+oJFfkmfeEiweayHZ102ye4+wbA5OgV5beacl8DWWJqvOE6bqjMcUHT/aFkh2Ker1EoAUSFMyXD4g3sbzak6Y1tcNRD4N/27NlREyaFRis6Mxq0B9TAwd5apb5SPz6XSAMx8qLNKVDl2rYcTczFC4Oc=
+	t=1727557027; cv=none; b=iS1gt7xKV+fVxgdUYuEa4/SMSq/a0S5tW9u5SWc947H1j00eKmFOB4xix9iuEmWNn0Su2f/EILKznj2hCe4aNYk+Naj9VBvfcAFo5t60eaW7dtUAMUDvj83EnSAvwmF7V6rf2QGxfYQup7CgwIVWUTrysyVZkh85WKQ8j5t+Fu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727553216; c=relaxed/simple;
-	bh=TsG2b3fBW6P71XH5avJ2+zbBrCJTD+5CCr5SVzCDjw4=;
+	s=arc-20240116; t=1727557027; c=relaxed/simple;
+	bh=OK5RveDLSz5tFyXUinR9c5kALUI2j3KDOCHCIRzL/ug=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=deVwFAMUZwHf6MS21gI/k6NnBSEfAIwPbKT58qaatUSAHQfx57sMiPqdSHgOMRSW8xBzcoQjETTHUZDKCU9Oe3MsTpjP8KbtFeywwCukeT9O3V8vJI8ba7l5u7PKE2+ajUTO1RUg7PatuqRybmH3AhjZmTvAJ9CEXPR6BMfhkiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SUmzg8Yu; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=V+8xzIOEV0nfYtyaSfUyh7CpIuoRW2058wMX1WOkvI/6I3LYcd3iCML7HIun/NCzUHjidu15/b0SwZACNxNeukXpIOqCUnt6DS6Geprw6poCY4ekHWzEEMJbtT1KagIjWcW0WEqQHuPiz0XPTIe3rYywulMGdAOz+pPRmhkGo9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K5ammNvw; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SUmzg8Yu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K5ammNvw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727553215; x=1759089215;
+  t=1727557025; x=1759093025;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TsG2b3fBW6P71XH5avJ2+zbBrCJTD+5CCr5SVzCDjw4=;
-  b=SUmzg8YuG/fbsk/Eaf9zge6k9Py11ezpERzle7qjdGod59jJftnjjLJt
-   Jbrxkzo1RtuRijB00eGiMACUO5/OH69vzxnCu4bWq3ozxEA5iEHnq0IVl
-   jD4utAshBj36yky3mtzIlFxcbnyrDpon71HqJ3/q66G0U4WNJJjzFNuaP
-   x0WvGh2Al1qKY5qqL+WtVcDUUZJgcxmSDtWjw96kX3O6yXEHVddvsSz7/
-   Qw+5+nDYa7KWfgDLU/7I3iGnZPMcKyHx/CdNwlX0Lbgr56J9bpneR5xZl
-   RzAxGqmGHJhg1n/2NFt4/I0lTn+XOtQ0/oEwadOg1s/ec0vbfF6Dalllu
+  bh=OK5RveDLSz5tFyXUinR9c5kALUI2j3KDOCHCIRzL/ug=;
+  b=K5ammNvwqmIX83nFP6U1LVHv8plnNyZYRNKaE8uW8Af6D36VgF1kabOD
+   //XF9rA+yXJuKqPf7VVChGOaflVRr6r7q9gNcyf3T3TuyI7KIX/H5NW/d
+   yt37ebvCyAmquu0bm3r8xJjlqH2mHumz0SAKr1xgjdJ+fdzyAobS1nc2m
+   +hjv3XD4KMIxJDBbMqU9mSFTlnX6dFEEnpH10FXf0QtSvE9iyH3qUv3hV
+   yUxFxovV1qgCMgQio1FqNNy4RfemQOBAc1m5tmS9lUM7yhr835+ChUaWd
+   Vzqd36QX9EO2pOdC8qrQWIKADpf9k/Jb17R2XXPTIuHUmENeJB4k+RUvA
    Q==;
-X-CSE-ConnectionGUID: lGxwHdHIQT6xjXGhzvAqpA==
-X-CSE-MsgGUID: cenp4tV8S8usA25w9ruuLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="38036576"
+X-CSE-ConnectionGUID: AlQDfNU+QVuxtPrUyr7EeQ==
+X-CSE-MsgGUID: CfRhgy3oS8uIHxswtqJCrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="30381436"
 X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="38036576"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 12:53:35 -0700
-X-CSE-ConnectionGUID: bEZ9ms7uQpCQW5HKT/DOYQ==
-X-CSE-MsgGUID: 3IHAGF6YTy+64Yig4ZHwfQ==
+   d="scan'208";a="30381436"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 13:57:05 -0700
+X-CSE-ConnectionGUID: 6qhZtbjVRJmEAVdY4rD6Yw==
+X-CSE-MsgGUID: RZ0r+Ll4ReGVrTFCGCBMVQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="77394217"
+   d="scan'208";a="96208155"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 28 Sep 2024 12:53:31 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 28 Sep 2024 13:56:59 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sudVR-000NZP-0n;
-	Sat, 28 Sep 2024 19:53:29 +0000
-Date: Sun, 29 Sep 2024 03:53:06 +0800
+	id 1sueUq-000NeZ-27;
+	Sat, 28 Sep 2024 20:56:56 +0000
+Date: Sun, 29 Sep 2024 04:56:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Seshu Madhavi Puppala <quic_spuppala@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Wei Huang <wei.huang2@amd.com>, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_rampraka@quicinc.com, quic_nitirawa@quicinc.com,
-	quic_bhaskarv@quicinc.com, quic_neersoni@quicinc.com,
-	quic_gaurkash@quicinc.com
-Subject: Re: [PATCH] qcom: ice: Remove ice probe
-Message-ID: <202409290321.quE8sBb5-lkp@intel.com>
-References: <20240928050456.27577-1-quic_spuppala@quicinc.com>
+	Jonathan.Cameron@huawei.com, helgaas@kernel.org, corbet@lwn.net,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, alex.williamson@redhat.com, gospo@broadcom.com,
+	michael.chan@broadcom.com, ajit.khaparde@broadcom.com,
+	somnath.kotur@broadcom.com, andrew.gospodarek@broadcom.com,
+	manoj.panicker2@amd.com, Eric.VanTassell@amd.com,
+	wei.huang2@amd.com, vadim.fedorenko@linux.dev, horms@kernel.org,
+	bagasdotme@gmail.com, bhelgaas@google.com, lukas@wunner.de,
+	paul.e.luse@intel.com, jing2.liu@intel.com
+Subject: Re: [PATCH V6 2/5] PCI/TPH: Add Steering Tag support
+Message-ID: <202409290413.EtVuNEgl-lkp@intel.com>
+References: <20240927215653.1552411-3-wei.huang2@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,129 +73,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240928050456.27577-1-quic_spuppala@quicinc.com>
+In-Reply-To: <20240927215653.1552411-3-wei.huang2@amd.com>
 
-Hi Seshu,
+Hi Wei,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v6.11]
-[also build test ERROR on next-20240927]
-[cannot apply to linus/master]
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master next-20240927]
+[cannot apply to v6.11]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Seshu-Madhavi-Puppala/qcom-ice-Remove-ice-probe/20240928-130818
-base:   v6.11
-patch link:    https://lore.kernel.org/r/20240928050456.27577-1-quic_spuppala%40quicinc.com
-patch subject: [PATCH] qcom: ice: Remove ice probe
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240929/202409290321.quE8sBb5-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Huang/PCI-Add-TLP-Processing-Hints-TPH-support/20240928-055915
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20240927215653.1552411-3-wei.huang2%40amd.com
+patch subject: [PATCH V6 2/5] PCI/TPH: Add Steering Tag support
+config: x86_64-buildonly-randconfig-001-20240929 (https://download.01.org/0day-ci/archive/20240929/202409290413.EtVuNEgl-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290321.quE8sBb5-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290413.EtVuNEgl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409290321.quE8sBb5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409290413.EtVuNEgl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/qcom/ice.c:309:10: error: incompatible integer to pointer conversion returning 'long' from a function with result type 'struct qcom_ice *' [-Wint-conversion]
-     309 |                 return PTR_ERR(base);
-         |                        ^~~~~~~~~~~~~
-   1 error generated.
+>> drivers/pci/tph.c:230:19: error: no member named 'msix_base' in 'struct pci_dev'; did you mean 'msix_cap'?
+     230 |         vec_ctrl = pdev->msix_base + msix_idx * PCI_MSIX_ENTRY_SIZE;
+         |                          ^~~~~~~~~
+         |                          msix_cap
+   include/linux/pci.h:350:6: note: 'msix_cap' declared here
+     350 |         u8              msix_cap;       /* MSI-X capability offset */
+         |                         ^
+   drivers/pci/tph.c:236:9: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     236 |         val |= FIELD_PREP(mask, st_val);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   1 warning and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CRYPTO_CRC32C_INTEL
+   Depends on [n]: CRYPTO [=y] && !KMSAN [=y] && X86 [=y]
+   Selected by [y]:
+   - ISCSI_TARGET [=y] && TARGET_CORE [=y] && INET [=y] && X86 [=y]
 
 
-vim +309 drivers/soc/qcom/ice.c
+vim +230 drivers/pci/tph.c
 
-   250	
-   251	/**
-   252	 * of_qcom_ice_get() - get an ICE instance from a DT node
-   253	 * @dev: device pointer for the consumer device
-   254	 *
-   255	 * This function will provide an ICE instance either by creating one for the
-   256	 * consumer device if its DT node provides the 'ice' reg range and the 'ice'
-   257	 * clock (for legacy DT style). On the other hand, if consumer provides a
-   258	 * phandle via 'qcom,ice' property to an ICE DT, the ICE instance will already
-   259	 * be created and so this function will return that instead.
-   260	 *
-   261	 * Return: ICE pointer on success, NULL if there is no ICE data provided by the
-   262	 * consumer or ERR_PTR() on error.
-   263	 */
-   264	struct qcom_ice *of_qcom_ice_get(struct device *dev)
-   265	{
-   266		struct platform_device *pdev = to_platform_device(dev);
-   267		struct qcom_ice *ice;
-   268		struct device_node *node;
-   269		struct resource *res;
-   270		void __iomem *base;
-   271	
-   272		if (!dev || !dev->of_node)
-   273			return ERR_PTR(-ENODEV);
-   274	
-   275		/*
-   276		 * In order to support legacy style devicetree bindings, we need
-   277		 * to create the ICE instance using the consumer device and the reg
-   278		 * range called 'ice' it provides.
-   279		 */
-   280		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ice");
-   281		if (res) {
-   282			base = devm_ioremap_resource(&pdev->dev, res);
-   283			if (IS_ERR(base))
-   284				return ERR_CAST(base);
-   285	
-   286			/* create ICE instance using consumer dev */
-   287			return qcom_ice_create(&pdev->dev, base);
-   288		}
-   289	
-   290		/*
-   291		 * If the consumer node does not provider an 'ice' reg range
-   292		 * (legacy DT binding), then it must at least provide a phandle
-   293		 * to the ICE devicetree node, otherwise ICE is not supported.
-   294		 */
-   295		node = of_parse_phandle(dev->of_node, "qcom,ice", 0);
-   296		if (!node)
-   297			return NULL;
-   298	
-   299		pdev = of_find_device_by_node(node);
-   300		if (!pdev) {
-   301			dev_err(dev, "Cannot find device node %s\n", node->name);
-   302			ice = ERR_PTR(-EPROBE_DEFER);
-   303			goto out;
-   304		}
-   305	
-   306		base = devm_platform_ioremap_resource(pdev, 0);
-   307		if (IS_ERR(base)) {
-   308			dev_warn(&pdev->dev, "ICE registers not found\n");
- > 309			return PTR_ERR(base);
-   310		}
-   311	
-   312		ice = qcom_ice_create(&pdev->dev, base);
-   313		if (!ice) {
-   314			dev_err(dev, "Cannot get ice instance from %s\n",
-   315				dev_name(&pdev->dev));
-   316			platform_device_put(pdev);
-   317			ice = ERR_PTR(-EPROBE_DEFER);
-   318			goto out;
-   319		}
-   320	
-   321		ice->link = device_link_add(dev, &pdev->dev, DL_FLAG_AUTOREMOVE_SUPPLIER);
-   322		if (!ice->link) {
-   323			dev_err(&pdev->dev,
-   324				"Failed to create device link to consumer %s\n",
-   325				dev_name(dev));
-   326			platform_device_put(pdev);
-   327			ice = ERR_PTR(-EINVAL);
-   328		}
-   329	
-   330	out:
-   331		of_node_put(node);
-   332	
-   333		return ice;
-   334	}
-   335	EXPORT_SYMBOL_GPL(of_qcom_ice_get);
-   336	
+   205	
+   206	/* Write ST to MSI-X vector control reg - Return 0 if OK, otherwise -errno */
+   207	static int write_tag_to_msix(struct pci_dev *pdev, int msix_idx, u16 tag)
+   208	{
+   209		struct msi_desc *msi_desc = NULL;
+   210		void __iomem *vec_ctrl;
+   211		u32 val, mask, st_val;
+   212		int err = 0;
+   213	
+   214		msi_lock_descs(&pdev->dev);
+   215	
+   216		/* Find the msi_desc entry with matching msix_idx */
+   217		msi_for_each_desc(msi_desc, &pdev->dev, MSI_DESC_ASSOCIATED) {
+   218			if (msi_desc->msi_index == msix_idx)
+   219				break;
+   220		}
+   221	
+   222		if (!msi_desc) {
+   223			err = -ENXIO;
+   224			goto err_out;
+   225		}
+   226	
+   227		st_val = (u32)tag;
+   228	
+   229		/* Get the vector control register (offset 0xc) pointed by msix_idx */
+ > 230		vec_ctrl = pdev->msix_base + msix_idx * PCI_MSIX_ENTRY_SIZE;
+   231		vec_ctrl += PCI_MSIX_ENTRY_VECTOR_CTRL;
+   232	
+   233		val = readl(vec_ctrl);
+   234		mask = PCI_MSIX_ENTRY_CTRL_ST_LOWER | PCI_MSIX_ENTRY_CTRL_ST_UPPER;
+   235		val &= ~mask;
+   236		val |= FIELD_PREP(mask, st_val);
+   237		writel(val, vec_ctrl);
+   238	
+   239		/* Read back to flush the update */
+   240		val = readl(vec_ctrl);
+   241	
+   242	err_out:
+   243		msi_unlock_descs(&pdev->dev);
+   244		return err;
+   245	}
+   246	
 
 -- 
 0-DAY CI Kernel Test Service
