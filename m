@@ -1,64 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62558125A9;
-	Sun, 29 Sep 2024 02:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3528113959D;
+	Sun, 29 Sep 2024 07:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727575874; cv=none; b=PBSxIMY5/qoJv47RvOBNgTw8arzm+o/fGEw68Vq4HKmO4j7M7eETQ0Sv+HGOYfjpwu6ZnBD6QvdUF9TbRQwydrtq4ROBORc4uvNTCwVoNzVZkCJB5ervoD27MxqGg+ifhu+flYeJBppz7sH4bATuECHyOHMd9E1AfyDl0S9NeGc=
+	t=1727595623; cv=none; b=tWe3MMpfbt6MaiRjCGG5mFDlgR7cmfZTwVynZZSvnF0K3WjplwvVOjU9ErBFKAJ794Fa4I9AC/gRD/EsCqG73W1EtEqW53aasiffs2+OlSuxCSLODHxOTCSOFHFTgxkPC5Kz/JQCES7ZZ5ZsJvE4HCY/+kqBpCtrPXFX95Gcw7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727575874; c=relaxed/simple;
-	bh=Hv4r9dZwC4uBhsY6TX+1JT3nKDoN7iVVRNZ4tSBjDOQ=;
+	s=arc-20240116; t=1727595623; c=relaxed/simple;
+	bh=PXPm3ZEdxyC1/4kK1id7Oxz+32shoP17TZE59UaH2qs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rq/1X/sfgYy70QNd6VAEmUQdpgRvMerbW+v2Zr2DTIGHAqq3dAtg3+OSNjhmAZ6JjzRg/o527+crxYktVClMuCvyRihhDdzBDHvkFWclwxCw88xiVYehrvz9OW3ciyRFZgAyOM/xmZsuiS8yOVk54IrO20x0Y3EeQ7icbA671tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bqlYS9To; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=aZLERMMuyXmLEZJnk01M/EPvc0luv3jdvapSZvwiNadF9Wn6PPSJFzDrz1tzw6A9bdhWcCHl6nAc2AAB+YTArC5sS4+rltZzqKKmVeO0RrAHhtD9IaWVdhCzAfGvkcd0MDQZbiP6yW5IIGZf8/CXr2Wn46LWCCIN0xVXvqxwFFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SrZrEHp2; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bqlYS9To"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SrZrEHp2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727575873; x=1759111873;
+  t=1727595621; x=1759131621;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Hv4r9dZwC4uBhsY6TX+1JT3nKDoN7iVVRNZ4tSBjDOQ=;
-  b=bqlYS9TodWNmo+12S0p9sQmzCrSYFAHsycK6Onbh+E5ga+v/OEANLtbo
-   0DLUp0WwHxN02N5CYMfwxIacfIQ/06r4u2gZs7t2sCchfkpGJOhtvgBf6
-   NNd4RkDMr90VRiEiXM2OGOVS6Oo4KIkw6fs5iG8rXLnRLxlB0lQthR+pi
-   4iqqEbRYEwY9lyYh5WzP76om5S5UvJFcbRafV/b7BIVxM5svS0SL3idZ9
-   4xHnP3YfeIQHv9lFePrPVjm2hw2jkmVA0kCt0JTDKBrkr009uzqVpzI46
-   4n9tweOv4m8qT6MVOwlLlhUHmuHRPXX6+pV+sGE1eKgzoPaDScgHH/wWw
-   w==;
-X-CSE-ConnectionGUID: +snIuc8UTfKxOho9bKRR1Q==
-X-CSE-MsgGUID: s9heN9ZXS4ilTkW8E4wDNg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="44150314"
+  bh=PXPm3ZEdxyC1/4kK1id7Oxz+32shoP17TZE59UaH2qs=;
+  b=SrZrEHp2Bz4o2PFXv1kmW/WTDYFwxnwjE2xzuAR+OV7y0qj7bIuCsmzQ
+   4XUCI/mwJsbGCizG+o6Ot29PFv8kUyl0LCKJq3ojAUE6opq2bRSNMwwGi
+   iFrc5AeZLjgATO68YU/M/N4hK81r+4miJiliTS0bxsCypbihSH8iS6kGc
+   EMvSes6UIdbv0Gt4vWdZ9ZhjGe2iicj670+3/osIhVbcpUvwlbSSPm+pC
+   x8BU3l+vu0x0C2gxRh4EpmP1ibFVOAzTPcYp0Khu9azi6JGQr6nyKpUjw
+   hwFxFfbPArKwf40rOGv2x+7WT7Ax8hgKGg8vsAZl4Ki0NntCjlfhpNZpm
+   g==;
+X-CSE-ConnectionGUID: GZEAsjwpRnKheFeDUhX4ng==
+X-CSE-MsgGUID: YYATv8rxQJKd72M8tTI8pA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="14316082"
 X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="44150314"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 19:11:12 -0700
-X-CSE-ConnectionGUID: bCBpWIOOT0mhj+06HAz3og==
-X-CSE-MsgGUID: Jwfg4XmyT7qx1/3T6bCFjw==
+   d="scan'208";a="14316082"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 00:40:17 -0700
+X-CSE-ConnectionGUID: T/AOcw+tRvutzdqtolQaeQ==
+X-CSE-MsgGUID: K3XLFbCFROuePKEdHSVqEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="103729791"
+   d="scan'208";a="96297875"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Sep 2024 19:11:09 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 29 Sep 2024 00:40:16 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sujOs-000NpP-1c;
-	Sun, 29 Sep 2024 02:11:06 +0000
-Date: Sun, 29 Sep 2024 10:10:13 +0800
+	id 1suoXN-000O0F-27;
+	Sun, 29 Sep 2024 07:40:13 +0000
+Date: Sun, 29 Sep 2024 15:39:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dragan Simic <dsimic@manjaro.org>, linux-spi@vger.kernel.org,
-	linux-rockchip@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, broonie@kernel.org,
-	heiko@sntech.de, gregkh@linuxfoundation.org, rafael@kernel.org,
-	oss@helene.moe, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] driver core: Add device probe log helper
- dev_warn_probe()
-Message-ID: <202409290914.ODQyF8lR-lkp@intel.com>
-References: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
+To: Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kernel@pengutronix.de, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH] reset: Further simplify locking with guard()
+Message-ID: <202409291457.lc5Xgv3u-lkp@intel.com>
+References: <20240927-reset-guard-v1-1-293bf1302210@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,206 +65,133 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
+In-Reply-To: <20240927-reset-guard-v1-1-293bf1302210@pengutronix.de>
 
-Hi Dragan,
+Hi Philipp,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on rockchip/for-next]
-[also build test ERROR on broonie-spi/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11 next-20240927]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 487b1b32e317b85c2948eb4013f3e089a0433d49]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dragan-Simic/spi-rockchip-Perform-trivial-code-cleanups/20240928-121548
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-patch link:    https://lore.kernel.org/r/2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic%40manjaro.org
-patch subject: [PATCH v2 4/5] driver core: Add device probe log helper dev_warn_probe()
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240929/202409290914.ODQyF8lR-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290914.ODQyF8lR-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Zabel/reset-Further-simplify-locking-with-guard/20240927-220355
+base:   487b1b32e317b85c2948eb4013f3e089a0433d49
+patch link:    https://lore.kernel.org/r/20240927-reset-guard-v1-1-293bf1302210%40pengutronix.de
+patch subject: [PATCH] reset: Further simplify locking with guard()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240929/202409291457.lc5Xgv3u-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409291457.lc5Xgv3u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409290914.ODQyF8lR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409291457.lc5Xgv3u-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/base/core.c:11:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/base/core.c:27:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/base/core.c:27:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/base/core.c:27:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/base/core.c:4988:9: error: incompatible pointer types assigning to 'va_list *' (aka '__builtin_va_list *') from 'struct __va_list_tag **' [-Werror,-Wincompatible-pointer-types]
-    4988 |         vaf.va = &args;
-         |                ^ ~~~~~
->> drivers/base/core.c:5055:1: warning: non-void function does not return a value [-Wreturn-type]
-    5055 | }
+>> drivers/reset/core.c:1035:4: error: cannot jump from this goto statement to its label
+    1035 |                         goto out_put;
+         |                         ^
+   drivers/reset/core.c:1039:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1039 |         guard(mutex)(&reset_list_mutex);
+         |         ^
+   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
+     167 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:110:1: note: expanded from here
+     110 | __UNIQUE_ID_guard501
          | ^
-   drivers/base/core.c:5101:1: warning: non-void function does not return a value [-Wreturn-type]
-    5101 | }
-         | ^
-   15 warnings and 1 error generated.
+   1 error generated.
 
 
-vim +4988 drivers/base/core.c
+vim +1035 drivers/reset/core.c
 
-  4981	
-  4982	static int dev_probe_failed(const struct device *dev, int err, bool fatal,
-  4983				    const char *fmt, va_list args)
-  4984	{
-  4985		struct va_format vaf;
-  4986	
-  4987		vaf.fmt = fmt;
-> 4988		vaf.va = &args;
-  4989	
-  4990		switch (err) {
-  4991		case -EPROBE_DEFER:
-  4992			device_set_deferred_probe_reason(dev, &vaf);
-  4993			dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-  4994			break;
-  4995	
-  4996		case -ENOMEM:
-  4997			/* Don't print anything on -ENOMEM, there's already enough output */
-  4998			break;
-  4999	
-  5000		default:
-  5001			/* Log fatal final failures as errors, otherwise produce warnings */
-  5002			if (fatal)
-  5003				dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-  5004			else
-  5005				dev_warn(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-  5006			break;
-  5007		}
-  5008	
-  5009		return err;
-  5010	}
-  5011	
-  5012	/**
-  5013	 * dev_err_probe - probe error check and log helper
-  5014	 * @dev: the pointer to the struct device
-  5015	 * @err: error value to test
-  5016	 * @fmt: printf-style format string
-  5017	 * @...: arguments as specified in the format string
-  5018	 *
-  5019	 * This helper implements common pattern present in probe functions for error
-  5020	 * checking: print debug or error message depending if the error value is
-  5021	 * -EPROBE_DEFER and propagate error upwards.
-  5022	 * In case of -EPROBE_DEFER it sets also defer probe reason, which can be
-  5023	 * checked later by reading devices_deferred debugfs attribute.
-  5024	 * It replaces the following code sequence::
-  5025	 *
-  5026	 * 	if (err != -EPROBE_DEFER)
-  5027	 * 		dev_err(dev, ...);
-  5028	 * 	else
-  5029	 * 		dev_dbg(dev, ...);
-  5030	 * 	return err;
-  5031	 *
-  5032	 * with::
-  5033	 *
-  5034	 * 	return dev_err_probe(dev, err, ...);
-  5035	 *
-  5036	 * Using this helper in your probe function is totally fine even if @err
-  5037	 * is known to never be -EPROBE_DEFER.
-  5038	 * The benefit compared to a normal dev_err() is the standardized format
-  5039	 * of the error code, which is emitted symbolically (i.e. you get "EAGAIN"
-  5040	 * instead of "-35"), and having the error code returned allows more
-  5041	 * compact error paths.
-  5042	 *
-  5043	 * Returns @err.
-  5044	 */
-  5045	int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
-  5046	{
-  5047		va_list args;
-  5048	
-  5049		va_start(args, fmt);
-  5050	
-  5051		/* Use dev_err() for logging when err doesn't equal -EPROBE_DEFER */
-  5052		dev_probe_failed(dev, err, true, fmt, args);
-  5053	
-  5054		va_end(args);
-> 5055	}
-  5056	EXPORT_SYMBOL_GPL(dev_err_probe);
-  5057	
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29   989  
+1c5e05c23f4a64 Philipp Zabel       2021-03-04   990  struct reset_control *
+1c5e05c23f4a64 Philipp Zabel       2021-03-04   991  __of_reset_control_get(struct device_node *node, const char *id, int index,
+1c5e05c23f4a64 Philipp Zabel       2021-03-04   992  		       bool shared, bool optional, bool acquired)
+61fc41317666be Philipp Zabel       2012-11-19   993  {
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29   994  	bool gpio_fallback = false;
+d056c9b8191867 Philipp Zabel       2015-12-08   995  	struct reset_control *rstc;
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29   996  	struct reset_controller_dev *rcdev;
+61fc41317666be Philipp Zabel       2012-11-19   997  	struct of_phandle_args args;
+61fc41317666be Philipp Zabel       2012-11-19   998  	int rstc_id;
+61fc41317666be Philipp Zabel       2012-11-19   999  	int ret;
+61fc41317666be Philipp Zabel       2012-11-19  1000  
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1001  	if (!node)
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1002  		return ERR_PTR(-EINVAL);
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1003  
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1004  	if (id) {
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1005  		index = of_property_match_string(node,
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1006  						 "reset-names", id);
+bb475230b8e59a Ramiro Oliveira     2017-01-13  1007  		if (index == -EILSEQ)
+bb475230b8e59a Ramiro Oliveira     2017-01-13  1008  			return ERR_PTR(index);
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1009  		if (index < 0)
+bb475230b8e59a Ramiro Oliveira     2017-01-13  1010  			return optional ? NULL : ERR_PTR(-ENOENT);
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1011  	}
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1012  
+fc0a5921561c71 Maxime Ripard       2013-12-20  1013  	ret = of_parse_phandle_with_args(node, "resets", "#reset-cells",
+61fc41317666be Philipp Zabel       2012-11-19  1014  					 index, &args);
+bb475230b8e59a Ramiro Oliveira     2017-01-13  1015  	if (ret == -EINVAL)
+61fc41317666be Philipp Zabel       2012-11-19  1016  		return ERR_PTR(ret);
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1017  	if (ret) {
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1018  		if (!IS_ENABLED(CONFIG_RESET_GPIO))
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1019  			return optional ? NULL : ERR_PTR(ret);
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1020  
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1021  		/*
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1022  		 * There can be only one reset-gpio for regular devices, so
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1023  		 * don't bother with the "reset-gpios" phandle index.
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1024  		 */
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1025  		ret = of_parse_phandle_with_args(node, "reset-gpios", "#gpio-cells",
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1026  						 0, &args);
+bb475230b8e59a Ramiro Oliveira     2017-01-13  1027  		if (ret)
+bb475230b8e59a Ramiro Oliveira     2017-01-13  1028  			return optional ? NULL : ERR_PTR(ret);
+61fc41317666be Philipp Zabel       2012-11-19  1029  
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1030  		gpio_fallback = true;
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1031  
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1032  		ret = __reset_add_reset_gpio_device(&args);
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1033  		if (ret) {
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1034  			rstc = ERR_PTR(ret);
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29 @1035  			goto out_put;
+61fc41317666be Philipp Zabel       2012-11-19  1036  		}
+61fc41317666be Philipp Zabel       2012-11-19  1037  	}
+61fc41317666be Philipp Zabel       2012-11-19  1038  
+784c4fbce820c0 Philipp Zabel       2024-09-27  1039  	guard(mutex)(&reset_list_mutex);
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1040  	rcdev = __reset_find_rcdev(&args, gpio_fallback);
+61fc41317666be Philipp Zabel       2012-11-19  1041  	if (!rcdev) {
+b790c8ea5593d6 Geert Uytterhoeven  2018-10-08  1042  		rstc = ERR_PTR(-EPROBE_DEFER);
+784c4fbce820c0 Philipp Zabel       2024-09-27  1043  		goto out_put;
+61fc41317666be Philipp Zabel       2012-11-19  1044  	}
+61fc41317666be Philipp Zabel       2012-11-19  1045  
+e677774f502635 Maxime Ripard       2016-01-14  1046  	if (WARN_ON(args.args_count != rcdev->of_reset_n_cells)) {
+b790c8ea5593d6 Geert Uytterhoeven  2018-10-08  1047  		rstc = ERR_PTR(-EINVAL);
+784c4fbce820c0 Philipp Zabel       2024-09-27  1048  		goto out_put;
+e677774f502635 Maxime Ripard       2016-01-14  1049  	}
+e677774f502635 Maxime Ripard       2016-01-14  1050  
+61fc41317666be Philipp Zabel       2012-11-19  1051  	rstc_id = rcdev->of_xlate(rcdev, &args);
+61fc41317666be Philipp Zabel       2012-11-19  1052  	if (rstc_id < 0) {
+b790c8ea5593d6 Geert Uytterhoeven  2018-10-08  1053  		rstc = ERR_PTR(rstc_id);
+784c4fbce820c0 Philipp Zabel       2024-09-27  1054  		goto out_put;
+61fc41317666be Philipp Zabel       2012-11-19  1055  	}
+61fc41317666be Philipp Zabel       2012-11-19  1056  
+c15ddec2ca0607 Hans de Goede       2016-02-23  1057  	/* reset_list_mutex also protects the rcdev's reset_control list */
+c84b0326d5e4fe Philipp Zabel       2019-02-21  1058  	rstc = __reset_control_get_internal(rcdev, rstc_id, shared, acquired);
+61fc41317666be Philipp Zabel       2012-11-19  1059  
+c721f189e89c0d Krzysztof Kozlowski 2024-01-29  1060  out_put:
+b790c8ea5593d6 Geert Uytterhoeven  2018-10-08  1061  	of_node_put(args.np);
+61fc41317666be Philipp Zabel       2012-11-19  1062  
+61fc41317666be Philipp Zabel       2012-11-19  1063  	return rstc;
+61fc41317666be Philipp Zabel       2012-11-19  1064  }
+6c96f05c8bb8bc Hans de Goede       2016-02-23  1065  EXPORT_SYMBOL_GPL(__of_reset_control_get);
+61fc41317666be Philipp Zabel       2012-11-19  1066  
 
 -- 
 0-DAY CI Kernel Test Service
