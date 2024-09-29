@@ -1,314 +1,232 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE40613B5A1;
-	Sun, 29 Sep 2024 10:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467681E4B2
+	for <llvm@lists.linux.dev>; Sun, 29 Sep 2024 11:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727606304; cv=none; b=HRI3OfRKMUn/zLRG8IHp3FV6pGllq82M/ZEyr4Q0Pjf+sDjrYLMFSSr2xZZcCKAKo/dx3mrjLChxC27dPS2mD59QjrUQB/b3+GMUpRwFXG0oTVSxrM4XO9ncyC7EHP+wKBc4+gUtPxCRaicRU10Echl96rN5ymW3v0sHs2fm2Kw=
+	t=1727608162; cv=none; b=bByAicACjWy7R5ZnrEX/h5XRC30fWl5/US0aQuhkijqSkqTkpo9S3pgooxAbc58DiI+iEEHyh6L/p0TbVEGp9kyu7rkezG75GaXu45D9t2XtH8lKX4XUDKrBBdOmD0ZU8gazAN4zY8T6XN1Q4gX2apeJM/YF72JKfaQ+13Qmjw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727606304; c=relaxed/simple;
-	bh=SgF4pgZTLOl0dKajqPfd5secSNAVBGqHN0Padipl/bE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cblU06cm9Bl+RC4T4jJ0b1dHrtg72A0ZOFoQWWwIynAf7IONk6zpjj9iQPWXabo6Z25GVqt/2+MEpbS+VGcl2AxjtL7zXjq8MEJ3wX653PzSJrr+IJ4o4sJAZqq3fuKnYYXkKtLNow3iOF8tOpTPbJfFwWvoxcnpn884OAJ+bOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=X5bJR1wU; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1727608162; c=relaxed/simple;
+	bh=srwdaNmK8u2bJg6ywpOtDUlEv34NsoQ/aP2RQHtowvo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jzZAdph/qZsZNxQFdcrOUdTSb9O77m/qIjG6JlPW72ZLI+fwkfU4jmyvYm74f7/9d6g3iJTu5FF1yHvvvMeN0FH+/b2vsWOMCXtF9bwzjROQ4Es67ydMIypT1zHrBuXxMxF37NlyrFa5YKflofnuxSMqYSEsWKBhoXzNPROiq5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCJhI2SX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="X5bJR1wU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1727606299;
-	bh=SgF4pgZTLOl0dKajqPfd5secSNAVBGqHN0Padipl/bE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=X5bJR1wU6nTuItl/6Bx8LS4ISjasrXYFGCAnO+trklYufxKHm7oTuKBrSCiTPYEAG
-	 gjSz09XT8eaXAyT2kK6N7N/BZG2q8QqxnGw4XAXjWGQnJprTBiVSKQWKjenDdAGbxW
-	 Np5WPSNuPzQbfBzq3ltpWRxceuCCSr21XfRQC1jMEUpEp1SivzVOPLuPnK7r4asxds
-	 JNuvoIPtwIGTp/pXiyfIawItlMWUU6twY/ZFjs+IYUZ/sV+5MloofWsGzrEOhMAyDj
-	 cNc0SxdFqoI/7s7cZo5zm/VIH8DReE+8tgn41bHSaISGhp9Hc8BD3Yx0hEjqjP0c0j
-	 fIin0/arVPmMw==
-Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XGgf31s3Dz65S;
-	Sun, 29 Sep 2024 06:38:19 -0400 (EDT)
-Message-ID: <229ac2ba-dd5b-4735-af93-8ef8efb6fa02@efficios.com>
-Date: Sun, 29 Sep 2024 06:36:16 -0400
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCJhI2SX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2F8C4CECE
+	for <llvm@lists.linux.dev>; Sun, 29 Sep 2024 11:09:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727608161;
+	bh=srwdaNmK8u2bJg6ywpOtDUlEv34NsoQ/aP2RQHtowvo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OCJhI2SXHAo4yClX0YdilwOAmz/1fVng750eHrvuQTkxScfeuorRBDF0HaYItD/hF
+	 C43fwzD0UpXKDeb+aFWhXVkZhY+U70fqmu/W1sef7M4EuM0KwbFKRy2Zxp3D5bgiei
+	 aa7xvBws8HD9/rmsywlcGb98pB/sFdosQnd9gObpik66zZswJUQuYwJSZ6e/Df1cCk
+	 CoQfzmXiBSHdj2v7xJpkqB5ZAHALlygLuB8pWYYL1AR/nvNlAVICpIxR9mU73lkdHw
+	 C4BJrEmNRH8KmWTzRrz6OCJccsqCrXvtH24HlMyMBLLkQB52NbixurczG9i1WLS8kJ
+	 MDUvIpcaHEApg==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5398fb1a871so636643e87.3
+        for <llvm@lists.linux.dev>; Sun, 29 Sep 2024 04:09:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUSGu1jKFiV9qUfASqX069b9n1eVDcixZm0J1L4CqZSkeXEHFaBFlY84GhRwKVrzbOIrLo6@lists.linux.dev
+X-Gm-Message-State: AOJu0YyAfDMqWhuJaTVzerR88/Y6AkxyD4OZ6yc9/zIk+CkughWV157O
+	4vnhzf90uxOTg8YDANCtVnxuoICEOoWP+PZTITWLGlEl/jCl/43FkZIc5gVvKpDy7jl8tUr+Pfe
+	ChOOrZsttYCu5Fza+zTxU7OeOfeg=
+X-Google-Smtp-Source: AGHT+IEsBxQobNp7YOwhlu12U4LHK6MZ7qbVwvDOh9lalkDk33YZH+hUz+o835ZL3w50z+1yplsg5PQvJbebLBR4ngE=
+X-Received: by 2002:ac2:4e12:0:b0:52e:9f6b:64 with SMTP id 2adb3069b0e04-5389fc49f41mr3634136e87.34.1727608160167;
+ Sun, 29 Sep 2024 04:09:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] compiler.h: Introduce ptr_eq() to preserve address
- dependency
-To: Gary Guo <gary@garyguo.net>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kernel@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- "Paul E. McKenney" <paulmck@kernel.org>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
- Alan Stern <stern@rowland.harvard.edu>, John Stultz <jstultz@google.com>,
- Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
- Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com,
- Mateusz Guzik <mjguzik@gmail.com>,
- Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, rcu@vger.kernel.org,
- linux-mm@kvack.org, lkmm@lists.linux.dev, github@npopov.com,
- llvm@lists.linux.dev
-References: <20240928135128.991110-1-mathieu.desnoyers@efficios.com>
- <20240928135128.991110-2-mathieu.desnoyers@efficios.com>
- <20240929002428.38f37f54.gary@garyguo.net>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20240929002428.38f37f54.gary@garyguo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-7-xur@google.com>
+In-Reply-To: <20240728203001.2551083-7-xur@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 29 Sep 2024 20:08:43 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ0Z38a1Nt=_XKT3i-UpauiO9RaZAye6LXGCFzvg2R8Bg@mail.gmail.com>
+Message-ID: <CAK7LNAQ0Z38a1Nt=_XKT3i-UpauiO9RaZAye6LXGCFzvg2R8Bg@mail.gmail.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+To: Rong Xu <xur@google.com>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Vegard Nossum <vegard.nossum@oracle.com>, 
+	John Moon <john@jmoon.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Samuel Holland <samuel.holland@sifive.com>, Mike Rapoport <rppt@kernel.org>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Eric DeVolder <eric.devolder@oracle.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Benjamin Segall <bsegall@google.com>, 
+	Breno Leitao <leitao@debian.org>, Wei Yang <richard.weiyang@gmail.com>, 
+	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Kees Cook <kees@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Xiao Wang <xiao.w.wang@intel.com>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-09-29 01:24, Gary Guo wrote:
-> Cc: Nikita Popov <github@npopov.com>
-> Cc: llvm@lists.linux.dev
-> 
-> On Sat, 28 Sep 2024 09:51:27 -0400
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> 
->> Compiler CSE and SSA GVN optimizations can cause the address dependency
->> of addresses returned by rcu_dereference to be lost when comparing those
->> pointers with either constants or previously loaded pointers.
->>
->> Introduce ptr_eq() to compare two addresses while preserving the address
->> dependencies for later use of the address. It should be used when
->> comparing an address returned by rcu_dereference().
->>
->> This is needed to prevent the compiler CSE and SSA GVN optimizations
->> from replacing the registers holding @a or @b based on their
->> equality, which does not preserve address dependencies and allows the
->> following misordering speculations:
->>
->> - If @b is a constant, the compiler can issue the loads which depend
->>    on @a before loading @a.
->> - If @b is a register populated by a prior load, weakly-ordered
->>    CPUs can speculate loads which depend on @a before loading @a.
->>
->> The same logic applies with @a and @b swapped.
->>
->> The compiler barrier() is ineffective at fixing this issue.
->> It does not prevent the compiler CSE from losing the address dependency:
->>
->> int fct_2_volatile_barriers(void)
->> {
->>      int *a, *b;
->>
->>      do {
->>          a = READ_ONCE(p);
->>          asm volatile ("" : : : "memory");
->>          b = READ_ONCE(p);
->>      } while (a != b);
->>      asm volatile ("" : : : "memory");  <----- barrier()
->>      return *b;
->> }
->>
->> With gcc 14.2 (arm64):
->>
->> fct_2_volatile_barriers:
->>          adrp    x0, .LANCHOR0
->>          add     x0, x0, :lo12:.LANCHOR0
->> .L2:
->>          ldr     x1, [x0]    <------ x1 populated by first load.
->>          ldr     x2, [x0]
->>          cmp     x1, x2
->>          bne     .L2
->>          ldr     w0, [x1]    <------ x1 is used for access which should depend on b.
->>          ret
->>
->> On weakly-ordered architectures, this lets CPU speculation use the
->> result from the first load to speculate "ldr w0, [x1]" before
->> "ldr x2, [x0]".
->> Based on the RCU documentation, the control dependency does not prevent
->> the CPU from speculating loads.
-> 
-> I recall seeing Nikita Popov (nikic) doing work related to this to LLVM
-> so it respects pointer provenances much better and doesn't randomly
-> replace pointers with others if they compare equal. So I tried to
-> reproduce this example on clang, which seems to generate the correct
-> code, loading from *b instead of *a.
-> 
-> The generated code with "ptr_eq" however produces one extra move
-> instruction which is not necessary.
-> 
-> I digged into the LLVM source code to see if this behaviour is that we
-> can rely on, and found that the GVN in use is very careful with
-> replacing pointers [1].
-> 
-> Essentially:
-> * null can be replaced
-> * constant addresses can be replaced <-- bad for this use case
-> * pointers originate from the same value (getUnderlyingObject).
-> 
-> So it appears to me that if we can ensure that neither a or b come
-> from a constant address then the OPTIMIZER_HIDE_VAR might be
-> unnecessary for clang? This should be testable with __builtin_constant_p.
-> 
-> Not necessary worth additional complexity handling clang specially, but
-> I think this is GCC/clang difference is worth pointing out.
+On Mon, Jul 29, 2024 at 5:31=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> Add the build support for using Clang's Propeller optimizer. Like
+> AutoFDO, Propeller uses hardware sampling to gather information
+> about the frequency of execution of different code paths within a
+> binary. This information is then used to guide the compiler's
+> optimization decisions, resulting in a more efficient binary.
+>
+> The support requires a Clang compiler LLVM 19 or later, and the
+> create_llvm_prof tool
+> (https://github.com/google/autofdo/releases/tag/v0.30.1). This
+> submission is limited to x86 platforms that support PMU features
+> like LBR on Intel machines and AMD Zen3 BRS.
+>
+> For Arm, we plan to send patches for SPE-based Propeller when
+> AutoFDO for Arm is ready.
+>
+> Here is an example workflow for building an AutoFDO+Propeller
+> optimized kernel:
+>
+> 1) Build the kernel on the HOST machine, with AutoFDO and Propeller
+>    build config
+>       CONFIG_AUTOFDO_CLANG=3Dy
+>       CONFIG_PROPELLER_CLANG=3Dy
+>    then
+>       $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<autofdo_profile>
+>
+> =E2=80=9C<autofdo_profile>=E2=80=9D is the profile collected when doing a=
+ non-Propeller
+> AutoFDO build. This step builds a kernel that has the same optimization
+> level as AutoFDO, plus a metadata section that records basic block
+> information. This kernel image runs as fast as an AutoFDO optimized
+> kernel.
+>
+> 2) Install the kernel on test/production machines.
+>
+> 3) Run the load tests. The '-c' option in perf specifies the sample
+>    event period. We suggest using a suitable prime number,
+>    like 500009, for this purpose.
+>    For Intel platforms:
+>       $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c <count> \
+>         -o <perf_file> -- <loadtest>
+>    For AMD platforms:
+>       The supported system are: Zen3 with BRS, or Zen4 with amd_lbr_v2
+>       # To see if Zen3 support LBR:
+>       $ cat proc/cpuinfo | grep " brs"
+>       # To see if Zen4 support LBR:
+>       $ cat proc/cpuinfo | grep amd_lbr_v2
+>       # If the result is yes, then collect the profile using:
+>       $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k -a \
+>         -N -b -c <count> -o <perf_file> -- <loadtest>
+>
+> 4) (Optional) Download the raw perf file to the HOST machine.
+>
+> 5) Generate Propeller profile:
+>    $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_file> \
+>      --format=3Dpropeller --propeller_output_module_name \
+>      --out=3D<propeller_profile_prefix>_cc_profile.txt \
+>      --propeller_symorder=3D<propeller_profile_prefix>_ld_profile.txt
+>
+>    =E2=80=9Ccreate_llvm_prof=E2=80=9D is the profile conversion tool, and=
+ a prebuilt
+>    binary for linux can be found on
+>    https://github.com/google/autofdo/releases/tag/v0.30.1 (can also build
+>    from source).
+>
+>    "<propeller_profile_prefix>" can be something like
+>    "/home/user/dir/any_string".
+>
+>    This command generates a pair of Propeller profiles:
+>    "<propeller_profile_prefix>_cc_profile.txt" and
+>    "<propeller_profile_prefix>_ld_profile.txt".
+>
+> 6) Rebuild the kernel using the AutoFDO and Propeller profile files.
+>       CONFIG_AUTOFDO_CLANG=3Dy
+>       CONFIG_PROPELLER_CLANG=3Dy
+>    and
+>       $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<autofdo_profile> \
+>         CLANG_PROPELLER_PROFILE_PREFIX=3D<propeller_profile_prefix>
+>
+> Co-developed-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Rong Xu <xur@google.com>
+> Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Suggested-by: Stephane Eranian <eranian@google.com>
+> ---
 
-Thanks for the thorough analysis of the clang GVN behavior. It confirms
-my observations.
 
-AFAIU, your proposal is to add a clang-specific #ifdef to eliminate one
-mov from register to register (and thus free one register) when ptr_eq()
-is used.
 
-I'm not sure the gain (removing this extra mov) is worth it if what we
-lose is robustness.
 
-This would make the code dependent on current clang GVN optimization
-design choices which are really specific to the compiler implementation
-rather than guaranteed by the C standard. How can we be sure it won't
-subtly break with a future clang version ?
 
-If we think about it purely from a compiler optimization perspective,
-using the content of the earliest loaded register allows weakly-ordered
-CPUs to speculate following loads sooner. It's only when address
-dependencies are needed (e.g. RCU) that this is unwanted. Am I missing
-other cases where it is preferable to preserve address dependencies ?
+> diff --git a/Makefile b/Makefile
+> index 5ae30cc94a26..85a96d973f20 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1025,6 +1025,7 @@ include-$(CONFIG_KCOV)            +=3D scripts/Make=
+file.kcov
+>  include-$(CONFIG_RANDSTRUCT)   +=3D scripts/Makefile.randstruct
+>  include-$(CONFIG_GCC_PLUGINS)  +=3D scripts/Makefile.gcc-plugins
+>  include-$(CONFIG_AUTOFDO_CLANG)        +=3D scripts/Makefile.autofdo
+> +include-$(CONFIG_PROPELLER_CLANG)      +=3D scripts/Makefile.propeller
 
-Thanks,
 
-Mathieu
 
-> 
-> I cc'ed nikic and clang-built-linux mailing list, please correct me if
-> I'm wrong.
-> 
-> [1]: https://github.com/llvm/llvm-project/blob/6558e5615ae9e6af6168b0a363808854fd66663f/llvm/lib/Analysis/Loads.cpp#L777-L788
-> 
-> Best,
-> Gary
-> 
->>
->> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
->> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
->> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
->> Acked-by: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Boqun Feng <boqun.feng@gmail.com>
->> Cc: Alan Stern <stern@rowland.harvard.edu>
->> Cc: John Stultz <jstultz@google.com>
->> Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
->> Cc: Linus Torvalds <torvalds@linux-foundation.org>
->> Cc: Boqun Feng <boqun.feng@gmail.com>
->> Cc: Frederic Weisbecker <frederic@kernel.org>
->> Cc: Joel Fernandes <joel@joelfernandes.org>
->> Cc: Josh Triplett <josh@joshtriplett.org>
->> Cc: Uladzislau Rezki <urezki@gmail.com>
->> Cc: Steven Rostedt <rostedt@goodmis.org>
->> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
->> Cc: Zqiang <qiang.zhang1211@gmail.com>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Waiman Long <longman@redhat.com>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Vlastimil Babka <vbabka@suse.cz>
->> Cc: maged.michael@gmail.com
->> Cc: Mateusz Guzik <mjguzik@gmail.com>
->> Cc: Gary Guo <gary@garyguo.net>
->> Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
->> Cc: rcu@vger.kernel.org
->> Cc: linux-mm@kvack.org
->> Cc: lkmm@lists.linux.dev
->> ---
->>   include/linux/compiler.h | 62 ++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 62 insertions(+)
->>
->> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
->> index 2df665fa2964..f26705c267e8 100644
->> --- a/include/linux/compiler.h
->> +++ b/include/linux/compiler.h
->> @@ -186,6 +186,68 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
->>   	__asm__ ("" : "=r" (var) : "0" (var))
->>   #endif
->>   
->> +/*
->> + * Compare two addresses while preserving the address dependencies for
->> + * later use of the address. It should be used when comparing an address
->> + * returned by rcu_dereference().
->> + *
->> + * This is needed to prevent the compiler CSE and SSA GVN optimizations
->> + * from replacing the registers holding @a or @b based on their
->> + * equality, which does not preserve address dependencies and allows the
->> + * following misordering speculations:
->> + *
->> + * - If @b is a constant, the compiler can issue the loads which depend
->> + *   on @a before loading @a.
->> + * - If @b is a register populated by a prior load, weakly-ordered
->> + *   CPUs can speculate loads which depend on @a before loading @a.
->> + *
->> + * The same logic applies with @a and @b swapped.
->> + *
->> + * Return value: true if pointers are equal, false otherwise.
->> + *
->> + * The compiler barrier() is ineffective at fixing this issue. It does
->> + * not prevent the compiler CSE from losing the address dependency:
->> + *
->> + * int fct_2_volatile_barriers(void)
->> + * {
->> + *     int *a, *b;
->> + *
->> + *     do {
->> + *         a = READ_ONCE(p);
->> + *         asm volatile ("" : : : "memory");
->> + *         b = READ_ONCE(p);
->> + *     } while (a != b);
->> + *     asm volatile ("" : : : "memory");  <-- barrier()
->> + *     return *b;
->> + * }
->> + *
->> + * With gcc 14.2 (arm64):
->> + *
->> + * fct_2_volatile_barriers:
->> + *         adrp    x0, .LANCHOR0
->> + *         add     x0, x0, :lo12:.LANCHOR0
->> + * .L2:
->> + *         ldr     x1, [x0]  <-- x1 populated by first load.
->> + *         ldr     x2, [x0]
->> + *         cmp     x1, x2
->> + *         bne     .L2
->> + *         ldr     w0, [x1]  <-- x1 is used for access which should depend on b.
->> + *         ret
->> + *
-> 
->> + * On weakly-ordered architectures, this lets CPU speculation use the
->> + * result from the first load to speculate "ldr w0, [x1]" before
->> + * "ldr x2, [x0]".
->> + * Based on the RCU documentation, the control dependency does not
->> + * prevent the CPU from speculating loads.
->> + */
->> +static __always_inline
->> +int ptr_eq(const volatile void *a, const volatile void *b)
->> +{
->> +	OPTIMIZER_HIDE_VAR(a);
->> +	OPTIMIZER_HIDE_VAR(b);
->> +	return a == b;
->> +}
->> +
->>   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
->>   
->>   /**
-> 
+Please do not ignore this comment:
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+https://github.com/torvalds/linux/blob/v6.11/Makefile#L1016
 
+
+
+
+
+
+
+> +ifdef CONFIG_LTO_CLANG
+> +ifdef CONFIG_LTO_CLANG_THIN
+> +ifdef CLANG_PROPELLER_PROFILE_PREFIX
+> +KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3D$(CLANG_PROPELLER_PROFI=
+LE_PREFIX)_cc_profile.txt
+> +else
+> +KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3Dlabels
+> +endif
+> +endif
+> +else
+> +endif
+
+
+Unreadable and redundant.
+
+
+ifdef CONFIG_LTO_CLANG_THIN
+  ifdef CLANG_PROPELLER_PROFILE_PREFIX
+    KBUILD_LDFLAGS +=3D
+--lto-basic-block-sections=3D$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.t=
+xt
+  else
+    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3Dlabels
+  endif
+endif
+
+
+
+
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
