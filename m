@@ -1,93 +1,80 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C2F16B391
-	for <llvm@lists.linux.dev>; Sun, 29 Sep 2024 21:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681788F6D;
+	Sun, 29 Sep 2024 21:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727643644; cv=none; b=p3ASPYiDK5kiwBLHBctBYwuz08ozu16XTYL/4Za+tcUsqaHcxSUfTjewxRFpNo1ujAzhZgRq3dnhJGNExfm/BjRbtMgT8wvRMqJLnq4Zq3TxbesOW31EaqGnEpboYpQ0HF2xjhxTnS/BUitmfnDO4yALxjpYZzEYQFfqJmbepUM=
+	t=1727644248; cv=none; b=SJSSpyUKlUy3QYvF6mzNmYyXyk/eWWJJE/06gQVuKEyLNKF34RNoOdKbspbmyX468ze4TyNtwI2tRE5lwLSxLfejRMW/1M9BqlJEVxgp7f372HtnbcH32U8bG8nLafuyvMQ1EIGVbyHDdwYoh6DZ+gxLywqaJZF3D+d7iIf/veg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727643644; c=relaxed/simple;
-	bh=6goDgIvXlrnFCc9KRrG8W8k4uU9ZlRJdc5Z2jkIGVPM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hTwOqv9JdrFJWMhP7VBzP4PzyDdXv11PoGE6ciLZXP6a5QEyD7fjpiYpJKazPVpt05KQiHHTQGEgiAvCou9OOVVUhmMkdBXDJzQD4LuzO9T7t4I3YEL0GCPC3HMJukEF/RLWt1njUbG3RiCTEQp5zFSmlF9GEx9WWS+R6gTqjUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=c66pcTFu; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
+	s=arc-20240116; t=1727644248; c=relaxed/simple;
+	bh=wMsGjuR25mp/aKLm5jdecrsXtweYnx1xsGjy980bAAc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pGaYsodOr8oYGRcVrEQeKDakLvk2oVVIJtLBu1WDevQZiMTzLTY/NPqL1h5NzoO5hzol6Lxf5V9XgsNstGUG+VcbgQ4i3E3kPIUIbUDPkPpXIpSDY/wDfIxZBqYj9RHDD0tS8npUGaojfGktitE2I5eA0mYXn3Dcuu6d6fUdVaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ailfhA+n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="c66pcTFu"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e129c01b3bso35290147b3.0
-        for <llvm@lists.linux.dev>; Sun, 29 Sep 2024 14:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1727643640; x=1728248440; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6goDgIvXlrnFCc9KRrG8W8k4uU9ZlRJdc5Z2jkIGVPM=;
-        b=c66pcTFuZKC5t8fWY0t6mVwprZJz7Zn1v31biNAmLx5Up5bNztz7OZUay9pAroWbni
-         pyvtTeg2m5obtr13HAk8DdZFq2uh4yopHHF2A2kK2UHaUVT1CNt1Nw/XrNMK3s7PBGOf
-         5U7m5igHjzJNLm+1TdFGTf5rJMgkL09TnlKwoYTwjM3FN817AByWMGCQa9Zdj2rWrvFC
-         IYcPo/piNqdiP1m4oycx+KaBOV5gDn6pBM96Upio+vYhWufjFwU16UFtWQAcxmQGjCVF
-         JO4+MUb0PN9yO3drxQ9mfiAiwUcKgvT89jiJhbxg3/ceR3hvGmUdHnLanxQm3Zovb+27
-         PF4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727643640; x=1728248440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6goDgIvXlrnFCc9KRrG8W8k4uU9ZlRJdc5Z2jkIGVPM=;
-        b=uFQnx+hCzSAWHEklVgucW6cWZhNRxnG2JErJeM35xfQhXPuLk312/bU91nZ4ah0A2p
-         hf8iqGkj9+32FDOL4w7JiI3civDlvV4NOMCJBbVFzvdFKqiZwlOiIxxNQ6N7bZdMd5PZ
-         I7/eG/+O3jummtRxHaOtxw2f1158RYmzF8B2xXVScug31bx42lMGAzLwQaUYma/1hlfc
-         Jk/s8Du0gXEmqas2QSCfOwMtFlAY5RRWvpKCNyxBUc3ffqNcrjCmvLz985tJvVjBN/6t
-         aUJooENtRtiKA8Ya7d4AI3EMUPIkkzQf8/b1F5Vv4fsqPu5uZMn2S9LjNsCwBr86kQhY
-         ETDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV4TzHJaSXjv/GyZcDlDvO47FlcLQn7cvL+pONmOv+DgVaWwnk1KGbyK5d1hwVJ3UwiNnP7@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxpf8yuaSb5PMdY7o1fuMbbg7BgOr2lU+3HxO4yq6s4dm3akdlc
-	IU+llQKEIrXcWtVDCxjVEDijfxWOebNMhMWwI5U3OzVBPncqMS2b85wvnVfFDGG73DeSKa785TV
-	HdUVMm1LUnyE48h31UVe3JmikZJMENZ2S8BG+jQ==
-X-Google-Smtp-Source: AGHT+IGyowJOWGUWAKF2NVl2DVZ7EqWnGUFKSfa0zIPMF+JmPrRPt6l+JRpnKHOqXHz5x05oV7aAmMN8LnpJhXdpZvI=
-X-Received: by 2002:a05:690c:6bc6:b0:6db:dede:ec63 with SMTP id
- 00721157ae682-6e2475e8caamr69779507b3.28.1727643640240; Sun, 29 Sep 2024
- 14:00:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ailfhA+n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7716AC4CEC5;
+	Sun, 29 Sep 2024 21:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727644247;
+	bh=wMsGjuR25mp/aKLm5jdecrsXtweYnx1xsGjy980bAAc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ailfhA+nrSea6SElDG0U/Cc1y+oPS+KYgI+z5SL2gEArxGC5LYugpzbRJJatos/9Z
+	 S/i0zrIfP+kphjMaWAPypt+P2VwT11EqYV0l4iANf1gioqO55SKUBfSD3hCvjhjE9o
+	 tDQkJqa28yMR47oW74Sk+gnh6mDUKkBJwwD60DbpWCbnZMQT8522dL15l/tev4KYnc
+	 wcI6/of5M1WrUVWEA1oMrpd96WHHlaHKbGRPJ6rlaBVZl3RvXwEEPYfG9a2eq2A3c2
+	 7vRPYtY883MHedfVVovhDSvwxWm6LJxXtEApVM9hvE1mjjHcol+WslyETsRNIuj51n
+	 O9laykBPzogXQ==
+Date: Sun, 29 Sep 2024 14:10:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] hardening: Adjust dependencies in selection of
+ MODVERSIONS
+Message-ID: <20240929211045.GA2111654@thelio-3990X>
+References: <20240928-fix-randstruct-modversions-kconfig-warning-v1-1-27d3edc8571e@kernel.org>
+ <CAHk-=wgdQ5TjbXX0D568GZebYnt5ZuhTW5-ffeim-aoyT9LnbA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240913213041.395655-1-gary@garyguo.net> <20240913213041.395655-2-gary@garyguo.net>
-In-Reply-To: <20240913213041.395655-2-gary@garyguo.net>
-From: Trevor Gross <tmgross@umich.edu>
-Date: Sun, 29 Sep 2024 17:00:29 -0400
-Message-ID: <CALNs47sgdi4PU8YXxozMm4=7aQ9RspJsKkKrYuT++9KiC8E-KQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] rust: fix size_t in bindgen prototypes of C builtins
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgdQ5TjbXX0D568GZebYnt5ZuhTW5-ffeim-aoyT9LnbA@mail.gmail.com>
 
-On Fri, Sep 13, 2024 at 5:32=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+On Sun, Sep 29, 2024 at 08:35:44AM -0700, Linus Torvalds wrote:
+> On Sat, 28 Sept 2024 at 11:13, Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > MODVERSIONS recently grew a dependency on !COMPILE_TEST so that Rust
+> > could be more easily tested. However, this introduces a Kconfig warning
+> > when building allmodconfig with a clang version that supports RANDSTRUCT
+> > natively because RANDSTRUCT_FULL and RANDSTRUCT_PERFORMANCE select
+> > MODVERSIONS when MODULES is enabled, bypassing the !COMPILE_TEST
+> > dependency:
+> 
+> Argh. I should have checked, but I didn't think anybody would 'select'
+> MODVERSIONS.
+> 
+> That's such an odd thing to do in general, but I guess for RANDSTRUCT
+> it actually makes sense (since a plain version check is nonsensical).
+> 
+> Now that 'select' statement is truly crazy and another level of odd
+> duck, but I guess it still makes perfect sense ("give me the build
+> coverage, but this is never going to be run, so don't bother with
+> MODVERSIONS").
 
-> -bindgen_c_flags_final =3D $(bindgen_c_flags_lto) -D__BINDGEN__
-> +# `-fno-builtin` is passed to avoid bindgen from using clang builtin pro=
-totypes
-> +# for functions like `memcpy` -- if this flag is not passed, bindgen-gen=
-erated
-> +# prototypes use `c_ulong` or `c_uint` depending on architecture instead=
- of
-> +# generating `usize`.
-> +bindgen_c_flags_final =3D $(bindgen_c_flags_lto) -fno-builtin -D__BINDGE=
-N__
+Yeah, I came to the same conclusion on both fronts (perhaps I should
+have actually put that in the patch description).
 
-I wonder how reliable this behavior is. Maybe bindgen could do a
-better job controlling this, is there an open issue?
+> So Ack on the patch. And now I did check that there doesn't seem to be
+> anything else with odd MODVERSIONS Kconfig rules.
 
-- Trevor
+Thanks, it looks like you'll get this via Kees soon.
+
+Cheers,
+Nathan
