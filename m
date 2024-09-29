@@ -1,65 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA0214A4F1;
-	Sun, 29 Sep 2024 13:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10C816631C;
+	Sun, 29 Sep 2024 13:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727615616; cv=none; b=UlLxi7wXwnFs8r+rIejG0A2bqJhrDHPOBgvInmqiawAXTCOXv+opbQc0vIB2As9Gmp2N1CKohayoaDCnVupJabkHVmObX+wDqdh/TH1gtSAV+RDImBWn4vFZTIsaOo3tbcULRsyb/b73ncd6+Bjx9odcD3sVcTEKAcgThINpADQ=
+	t=1727616873; cv=none; b=juvVV82ifAFw7UYRyEZM06cc+Gsq9GLtTi/lc8UHRE1YAuylIKCORGJPI7tFYHUA9hAD34hPmkKSTS/oILwHejWEyEtcT6QblQmz8rxEkyF/yaS7KzWySqiAw2SGOWDZPF07unbxAz1biM3L/C4GqOkxMLmsB3FSj25HN/saFHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727615616; c=relaxed/simple;
-	bh=3F7xFSUGK/sZ4Xmlcg3e1EhoVv0SD/q3Pk0km8pPHFg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SY3dRClk9CliGgW5aOF8CSczpCNNKg9NH25AhiCmMiflj2ab6EF1WVRylJYKcM2I52h6J704ANeI1xtdv2TqPgu3+HFEt3ZC9ZcKMr3y2pGlHhaobm/IPMWHFj5P+sfD7CKXXIXKnsRRzFSAvHn7ctrS10OIzakMa1KKiCioYO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mA6OjPds; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1727616873; c=relaxed/simple;
+	bh=l9QW8lJj1kUiGFBw9aOQOTDUQoXKNPtn7vNrLDLmze8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WqFl5EJ5T0+iwqtbSjeGR383s6kOWpFralE+QnipB6whZZH6E2YAUe0nM/PdXLXCj4HvuXIXVib6oxHF6dngvKCWP2PX59kgj48HG3z9d0xe8TRGr2WGHTh23DbE2b2fanY3FOciCvt5VzqYEjiFj4qqnf2gEl7MP6JQTRh3gXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IgoCq+89; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mA6OjPds"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgoCq+89"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727615614; x=1759151614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3F7xFSUGK/sZ4Xmlcg3e1EhoVv0SD/q3Pk0km8pPHFg=;
-  b=mA6OjPdsBjs8Qpo8Ve7Ec6REkMrnmZHEestwkAbQ2Jvszu6rM2LMyK9C
-   rOrTnXpID/X7Au2KTt9bit4JJFWRIPZ+RctfYSpGTMyFY7F6X7vpSydiJ
-   rxuYt44Z1KFSOPyC5nDX8g8OUERA5H2MkEMFvyN2/2cbcziy6b8GECIqb
-   849eaD2DPlFIDfeWCJglUliqI5cvStrWNX7xMCLTM/wvYZZN4VI2J97TB
-   V226IA5NQZVCq6kkOOEJJjlYJt48nj8fr51hEV1roVjsylda5S1uSpwY8
-   C8P26O17iR6f3dFC0XLQ4iD3/aPs+vNaLmxSP2zRaZTMQYT7cvR2Ji3Qm
-   A==;
-X-CSE-ConnectionGUID: FyxTuuo7QuuIzTUW2k9gXA==
-X-CSE-MsgGUID: bNzB8eVoQOCD+ufS7hmjEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="29588743"
+  t=1727616872; x=1759152872;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l9QW8lJj1kUiGFBw9aOQOTDUQoXKNPtn7vNrLDLmze8=;
+  b=IgoCq+89i+wkfnDk4ggWcFBHuBR0Q04v+SugVCTX9Rt3bjHcgKyIMYaq
+   XMyyzE73Wzu9ZXm7goZOgawNYM5E5wHdxwGtsfgomij/R0tz3T6lWPRJc
+   oaZvYLdI5FiDKx8JtbTw4kr+yt9nJdOYLse55kBM3ZdV7EH8+YIW0Vhtr
+   rF/Li3DZdK2JmMHoetJQEUYjiksRRfE+Z4hbPZWKYAaJ2LYor2iZx/+Uo
+   pP0NWk57H+hTuKqsToS7ZgUQnA0Vj2Y2jUwy4fDxYKog0TBuCiNt8uGRB
+   kiz7HTCcAHzF9wG9o1GxLwYXI3BalH+F+y+stthSCMfcnLNpD+OaeZXW8
+   g==;
+X-CSE-ConnectionGUID: +DLzpej+SyW2tlCeKjWerQ==
+X-CSE-MsgGUID: +FZl3gCJQFmK71Yas//UqA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="26885623"
 X-IronPort-AV: E=Sophos;i="6.11,163,1725346800"; 
-   d="scan'208";a="29588743"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 06:13:33 -0700
-X-CSE-ConnectionGUID: uiNVnPNkRKW0RuUvboYcfQ==
-X-CSE-MsgGUID: ObDZashbSnqzIpS9YNS0xA==
+   d="scan'208";a="26885623"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 06:34:31 -0700
+X-CSE-ConnectionGUID: I+VaVAU2TpC6isEbJ2tRzQ==
+X-CSE-MsgGUID: t65heNWGS3KpR2jivkFGCA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,163,1725346800"; 
-   d="scan'208";a="72892994"
+   d="scan'208";a="73178803"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 29 Sep 2024 06:13:30 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 29 Sep 2024 06:34:30 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sutjr-000OIv-2Q;
-	Sun, 29 Sep 2024 13:13:27 +0000
-Date: Sun, 29 Sep 2024 21:13:19 +0800
+	id 1suu4B-000OJT-3C;
+	Sun, 29 Sep 2024 13:34:27 +0000
+Date: Sun, 29 Sep 2024 21:34:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Karan Tilak Kumar <kartilak@cisco.com>, sebaddel@cisco.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arulponn@cisco.com,
-	djhawar@cisco.com, gcboffa@cisco.com, mkai2@cisco.com,
-	satishkh@cisco.com, aeasi@cisco.com, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Karan Tilak Kumar <kartilak@cisco.com>
-Subject: Re: [PATCH v3 08/14] scsi: fnic: Add functionality in fnic to
- support FDLS
-Message-ID: <202409292037.ZYWZwIK6-lkp@intel.com>
-References: <20240927184613.52172-9-kartilak@cisco.com>
+To: Nuno Sa <nuno.sa@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nuno Sa <noname.nuno@gmail.com>
+Subject: [nsa:b4/dev-adp5589-fw-conversion 5/14]
+ drivers/input/keyboard/adp5589-keys.c:639:9: warning: implicit conversion
+ from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1
+Message-ID: <202409292156.0rcdXulr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,125 +63,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240927184613.52172-9-kartilak@cisco.com>
 
-Hi Karan,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next linus/master v6.11 next-20240927]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Karan-Tilak-Kumar/scsi-fnic-Replace-shost_printk-with-dev_info-dev_err/20240928-025906
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20240927184613.52172-9-kartilak%40cisco.com
-patch subject: [PATCH v3 08/14] scsi: fnic: Add functionality in fnic to support FDLS
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240929/202409292037.ZYWZwIK6-lkp@intel.com/config)
+tree:   https://github.com/nunojsa/linux b4/dev-adp5589-fw-conversion
+head:   d8f775093f32be0f662a6093041d941d372d4830
+commit: 6a5d4ac02d5c62d620ab4bc46c1cebf0cfe64436 [5/14] Input: adp5589-keys: support gpi key events as 'gpio keys'
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240929/202409292156.0rcdXulr-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409292037.ZYWZwIK6-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409292156.0rcdXulr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409292037.ZYWZwIK6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409292156.0rcdXulr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/scsi/fnic/fnic_scsi.c:2618:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2618 |         if (fnic->link_status) {
-         |             ^~~~~~~~~~~~~~~~~
-   drivers/scsi/fnic/fnic_scsi.c:2637:9: note: uninitialized use occurs here
-    2637 |         return ret;
-         |                ^~~
-   drivers/scsi/fnic/fnic_scsi.c:2618:2: note: remove the 'if' if its condition is always true
-    2618 |         if (fnic->link_status) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/fnic/fnic_scsi.c:2580:9: note: initialize the variable 'ret' to silence this warning
-    2580 |         int ret;
-         |                ^
-         |                 = 0
+>> drivers/input/keyboard/adp5589-keys.c:639:9: warning: implicit conversion from 'unsigned long' to 'int' changes value from 18446744073709551615 to -1 [-Wconstant-conversion]
+     639 |         return INVALID_HWIRQ;
+         |         ~~~~~~ ^~~~~~~~~~~~~
+   include/linux/irq.h:1300:24: note: expanded from macro 'INVALID_HWIRQ'
+    1300 | #define INVALID_HWIRQ   (~0UL)
+         |                          ^~~~
    1 warning generated.
---
->> drivers/scsi/fnic/fnic_fcs.c:1031: warning: expecting prototype for fnic_tport_work(). Prototype was for fnic_tport_event_handler() instead
 
 
-vim +2618 drivers/scsi/fnic/fnic_scsi.c
+vim +639 drivers/input/keyboard/adp5589-keys.c
 
-  2568	
-  2569	/*
-  2570	 * SCSI Error handling calls driver's eh_host_reset if all prior
-  2571	 * error handling levels return FAILED. If host reset completes
-  2572	 * successfully, and if link is up, then Fabric login begins.
-  2573	 *
-  2574	 * Host Reset is the highest level of error recovery. If this fails, then
-  2575	 * host is offlined by SCSI.
-  2576	 *
-  2577	 */
-  2578	int fnic_host_reset(struct Scsi_Host *shost)
-  2579	{
-  2580		int ret;
-  2581		unsigned long wait_host_tmo;
-  2582		struct fnic *fnic = *((struct fnic **) shost_priv(shost));
-  2583		unsigned long flags;
-  2584		struct fnic_iport_s *iport = &fnic->iport;
-  2585	
-  2586		spin_lock_irqsave(&fnic->fnic_lock, flags);
-  2587		if (fnic->reset_in_progress == NOT_IN_PROGRESS) {
-  2588			fnic->reset_in_progress = IN_PROGRESS;
-  2589		} else {
-  2590			spin_unlock_irqrestore(&fnic->fnic_lock, flags);
-  2591			wait_for_completion_timeout(&fnic->reset_completion_wait,
-  2592										msecs_to_jiffies(10000));
-  2593	
-  2594			spin_lock_irqsave(&fnic->fnic_lock, flags);
-  2595			if (fnic->reset_in_progress == IN_PROGRESS) {
-  2596				spin_unlock_irqrestore(&fnic->fnic_lock, flags);
-  2597				FNIC_SCSI_DBG(KERN_WARNING, fnic->lport->host, fnic->fnic_num,
-  2598				  "Firmware reset in progress. Skipping another host reset\n");
-  2599				return SUCCESS;
-  2600			}
-  2601			fnic->reset_in_progress = IN_PROGRESS;
-  2602		}
-  2603		spin_unlock_irqrestore(&fnic->fnic_lock, flags);
-  2604	
-  2605		/*
-  2606		 * If fnic_reset is successful, wait for fabric login to complete
-  2607		 * scsi-ml tries to send a TUR to every device if host reset is
-  2608		 * successful, so before returning to scsi, fabric should be up
-  2609		 */
-  2610		fnic_reset(shost);
-  2611	
-  2612		spin_lock_irqsave(&fnic->fnic_lock, flags);
-  2613		fnic->reset_in_progress = NOT_IN_PROGRESS;
-  2614		complete(&fnic->reset_completion_wait);
-  2615		fnic->soft_reset_count++;
-  2616	
-  2617		/* wait till the link is up */
-> 2618		if (fnic->link_status) {
-  2619			wait_host_tmo = jiffies + FNIC_HOST_RESET_SETTLE_TIME * HZ;
-  2620			ret = FAILED;
-  2621			while (time_before(jiffies, wait_host_tmo)) {
-  2622				if (iport->state != FNIC_IPORT_STATE_READY
-  2623					&& fnic->link_status) {
-  2624					spin_unlock_irqrestore(&fnic->fnic_lock, flags);
-  2625					ssleep(1);
-  2626					spin_lock_irqsave(&fnic->fnic_lock, flags);
-  2627				} else {
-  2628					ret = SUCCESS;
-  2629					break;
-  2630				}
-  2631			}
-  2632		}
-  2633		spin_unlock_irqrestore(&fnic->fnic_lock, flags);
-  2634	
-  2635		FNIC_SCSI_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
-  2636					  "host reset return status: %d\n", ret);
-  2637		return ret;
-  2638	}
-  2639	
+   626	
+   627	static int adp5589_gpiomap_get_hwirq(struct device *dev, const u8 *map,
+   628					     unsigned int gpio, unsigned int ngpios)
+   629	{
+   630		unsigned int hwirq;
+   631	
+   632		for (hwirq = 0; hwirq < ngpios; hwirq++)
+   633			if (map[hwirq] == gpio)
+   634				return hwirq;
+   635	
+   636		/* should never happen */
+   637		dev_warn_ratelimited(dev, "could not find the hwirq for gpio(%u)\n", gpio);
+   638	
+ > 639		return INVALID_HWIRQ;
+   640	}
+   641	
 
 -- 
 0-DAY CI Kernel Test Service
