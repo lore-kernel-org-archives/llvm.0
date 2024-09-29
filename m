@@ -1,57 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC712263A;
-	Sun, 29 Sep 2024 18:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43088F6D;
+	Sun, 29 Sep 2024 19:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727633878; cv=none; b=sn9Su2OBxBx5yxnxlOhXyAcbRkOgvRKa1+o5fkBuaqwH6JWKhqvv3wVCH6NSPF0eu64Qzxq5iVtt6uldXHfoBWPGBzUTQzpB5nYkv6zUdh5qTAoIckAgz4LOfMZsS2X2vst60wmvjyw+VrZtIuvVQOU+pW93Srz4k2qKaCLkj8Y=
+	t=1727637652; cv=none; b=MMeuo6EUyEy35sXFoeVMV38KWVujzgUci5bODdlFh03C/8tXcLhfcBLOo7n2Oc4oPsHCdkkp7TGXwBZS12102lJQ2L5Gp9ZIc3jbyeXtaTIEgU04PEedtgzH/BG7a5ecKwNXfmj3SabFwRn3sTqyBzchVFpmLjpc+Tx2MWlX78M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727633878; c=relaxed/simple;
-	bh=YrUtqYMAsV5VmM/8LxC4dPNex1L7QZp3ecGUAsVJAaI=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZffMBQERjHSKY0LsCXoinplv8JCZQLEPuwFdpQ0dhLbTLd+i5vVN3Hy0Xa1oyo6irCgbFnu4nuU+0tJxFzNyUMPpAz0KZ/DZ+EZy1P/ttuu7dGCbOakrD4ifxTKTyqz/S5YEWmgK/GWPhLMXy4zyI8n7vF0k/oZDSSB81/VUBiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OHJDAwo4; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1727637652; c=relaxed/simple;
+	bh=gVcMQQV+Gpr+OQqBULQBrCz/DC30AA672n7VOQXMN6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=W1cTn0EonggmSRYs6NxDH6m9WQuIprNJkoQGPIhmS7MDRDlMwK7C/Hr4A8C35UpkoYB8NMGPANxPh3xaHlpKzCXGzzGfB9d8J2ncKTU9FMRSQhw2jKrYDsT8VvEyKjzafFCEposrx7ZtcQ2h8v9O2Y4k8WYfFnXvwNad0IQiJcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=El991XnA; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OHJDAwo4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="El991XnA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727633876; x=1759169876;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=YrUtqYMAsV5VmM/8LxC4dPNex1L7QZp3ecGUAsVJAaI=;
-  b=OHJDAwo4c2t44K/foTHTOQnJnP+5Fs8OJ6L1PiaMtRPuo5a8QQtwzKFK
-   77cKrSSJdmVyqXsiMLJpSMsRwGmHBxMaFFZJJFgynXOjhJ/HGWS+LavfB
-   iGbHyPFDN8n5Qy7XNgFnBHll65TXLXROsD4A8//NEDCev/14pT0P05/4+
-   2Qm/+3LL2jAmlYKfJxYQJl5GRw7BJPdfMEeXhTDXsNXoOWK8n5K80D2LD
-   kXB03NrgPS2znUbgelkmLOTr5cvW6UoGdqEdw+9doj9G15kjZLs4FWV0y
-   QRVYHKVXUFKF1zVdCv+kBbCnvXYomPXcGxozEj5d7GTeyjBbOw5gsCLwA
+  t=1727637651; x=1759173651;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gVcMQQV+Gpr+OQqBULQBrCz/DC30AA672n7VOQXMN6c=;
+  b=El991XnAc5l4I1Zx2oWPQ/fElg5IwwjIy3AgOoBRNpIKDY4ESXm4XyUF
+   ZRqPCUO7j06svcFH8TiDYzboLG8R1lq7+aqXy+TGBpbAVgIBEvKS+ACoE
+   4C7+M4ZeE32eHhhdv43p4gaSSip7aITvWpo1NsjuhJJn0mhmcfKGey8no
+   +FDfHkgq7zFIbF1JGg4rD8xF0zw8K6lMaymkp198kLjJFXPUOjkX1NffZ
+   +KAKfIx/oSj2y25HN+bFqdd2RLWsVEKDokmy+folBm5xaKHWh/UdSc60/
+   gblSILbZKvbUm8jbjqTgX5ntqRn6FIob7lA9pTr2+eeHuJqEkAuNghEvr
    A==;
-X-CSE-ConnectionGUID: D+OrCkQSQYi5eXIsmHzRYw==
-X-CSE-MsgGUID: GaHpHRhzR+CtahQs4P6Jog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="38077293"
+X-CSE-ConnectionGUID: Sk15k/VLSxuvANOxpMHjsQ==
+X-CSE-MsgGUID: Cfe88d59St6GtUTilFzaCg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="37858462"
 X-IronPort-AV: E=Sophos;i="6.11,163,1725346800"; 
-   d="scan'208";a="38077293"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 11:17:47 -0700
-X-CSE-ConnectionGUID: x1ff++d/QeObYDzGL1x2YA==
-X-CSE-MsgGUID: 7p4e/cTRRs6CeW1M7n+xiQ==
+   d="scan'208";a="37858462"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 12:20:50 -0700
+X-CSE-ConnectionGUID: MvJdhaR9REiQcjQrWVsKOg==
+X-CSE-MsgGUID: sg4VFEm3T6OTbnHOVMGiyQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,163,1725346800"; 
-   d="scan'208";a="103867365"
+   d="scan'208";a="77476414"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 29 Sep 2024 11:17:45 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 29 Sep 2024 12:20:48 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1suyUJ-000OZ9-09;
-	Sun, 29 Sep 2024 18:17:43 +0000
-Date: Mon, 30 Sep 2024 02:17:36 +0800
+	id 1suzTK-000Od7-2b;
+	Sun, 29 Sep 2024 19:20:46 +0000
+Date: Mon, 30 Sep 2024 03:20:03 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [ardb:x86-pie-v2 23/26] block/blk-core.o: warning: objtool:
- errno_to_blk_status+0x16: can't find switch jump table
-Message-ID: <202409300226.u5kOSLIm-lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 215/218] fs/ext4/mballoc-test.c:90:17:
+ error: incompatible pointer types passing 'struct fast_list *' to parameter
+ of type 'struct list_head *'
+Message-ID: <202409300345.fLnh9qN3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,94 +64,93 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Ard Biesheuvel <ardb@kernel.org>
+Hi Kent,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v2
-head:   2b9142b6c6241b0debfe0d21c911c3aaf0c05670
-commit: 73ab629624e08a8d1fad61e724e408d71c5c107f [23/26] x86: Use PIE codegen for the core kernel
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240930/202409300226.u5kOSLIm-lkp@intel.com/config)
+First bad commit (maybe != root cause):
+
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   31dd5392c7007b3d01a4eff5179e1c27faaac8be
+commit: 03b37c7d400d2b5fbe80dcb15c24a342560fb9e3 [215/218] vfs: use fast_list for superblock's inode list
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240930/202409300345.fLnh9qN3-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240930/202409300226.u5kOSLIm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240930/202409300345.fLnh9qN3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409300226.u5kOSLIm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409300345.fLnh9qN3-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> block/blk-core.o: warning: objtool: errno_to_blk_status+0x16: can't find switch jump table
---
->> block/blk-merge.o: warning: objtool: bio_split_to_limits+0x2f: can't find switch jump table
---
->> block/blk-mq.o: warning: objtool: blk_mq_submit_bio+0xf1: can't find switch jump table
---
->> block/ioctl.o: warning: objtool: blkdev_ioctl+0x80: can't find switch jump table
---
->> arch/x86/entry/syscall_64.o: warning: objtool: x64_sys_call+0x1c: can't find switch jump table
---
->> arch/x86/events/core.o: warning: objtool: init_hw_perf_events+0x35: can't find switch jump table
---
->> arch/x86/events/msr.o: warning: objtool: test_intel+0x34: can't find switch jump table
---
->> fs/open.o: warning: objtool: vfs_fallocate+0x4a: can't find switch jump table
---
->> fs/read_write.o: warning: objtool: generic_file_llseek+0x28: can't find switch jump table
---
->> fs/namei.o: warning: objtool: may_open+0x35: can't find switch jump table
---
->> fs/fcntl.o: warning: objtool: __x64_sys_fcntl+0x83: can't find switch jump table
-..
+   In file included from fs/ext4/mballoc.c:7047:
+>> fs/ext4/mballoc-test.c:90:17: error: incompatible pointer types passing 'struct fast_list *' to parameter of type 'struct list_head *' [-Werror,-Wincompatible-pointer-types]
+      90 |         INIT_LIST_HEAD(&sb->s_inodes);
+         |                        ^~~~~~~~~~~~~
+   include/linux/list.h:35:53: note: passing argument to parameter 'list' here
+      35 | static inline void INIT_LIST_HEAD(struct list_head *list)
+         |                                                     ^
+   1 error generated.
 
 
-objdump-func vmlinux.o errno_to_blk_status:
-0000 000000000016d460 <errno_to_blk_status>:
-0000   16d460:	83 c7 79             	add    $0x79,%edi
-0003   16d463:	83 ff 79             	cmp    $0x79,%edi
-0006   16d466:	77 10                	ja     16d478 <errno_to_blk_status+0x18>
-0008   16d468:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 16d46f <errno_to_blk_status+0xf>	16d46b: R_X86_64_PC32	.rodata+0x7d28
-000f   16d46f:	48 63 0c b8          	movslq (%rax,%rdi,4),%rcx
-0013   16d473:	48 01 c1             	add    %rax,%rcx
-0016   16d476:	ff e1                	jmp    *%rcx
-0018   16d478:	b0 0a                	mov    $0xa,%al
-001a   16d47a:	c3                   	ret
-001b   16d47b:	31 c0                	xor    %eax,%eax
-001d   16d47d:	c3                   	ret
-001e   16d47e:	b0 10                	mov    $0x10,%al
-0020   16d480:	c3                   	ret
-0021   16d481:	b0 06                	mov    $0x6,%al
-0023   16d483:	c3                   	ret
-0024   16d484:	b0 08                	mov    $0x8,%al
-0026   16d486:	c3                   	ret
-0027   16d487:	b0 13                	mov    $0x13,%al
-0029   16d489:	c3                   	ret
-002a   16d48a:	b0 02                	mov    $0x2,%al
-002c   16d48c:	c3                   	ret
-002d   16d48d:	b0 0b                	mov    $0xb,%al
-002f   16d48f:	c3                   	ret
-0030   16d490:	b0 03                	mov    $0x3,%al
-0032   16d492:	c3                   	ret
-0033   16d493:	b0 05                	mov    $0x5,%al
-0035   16d495:	c3                   	ret
-0036   16d496:	b0 01                	mov    $0x1,%al
-0038   16d498:	c3                   	ret
-0039   16d499:	b0 0e                	mov    $0xe,%al
-003b   16d49b:	c3                   	ret
-003c   16d49c:	b0 0f                	mov    $0xf,%al
-003e   16d49e:	c3                   	ret
-003f   16d49f:	b0 04                	mov    $0x4,%al
-0041   16d4a1:	c3                   	ret
-0042   16d4a2:	b0 0d                	mov    $0xd,%al
-0044   16d4a4:	c3                   	ret
-0045   16d4a5:	b0 09                	mov    $0x9,%al
-0047   16d4a7:	c3                   	ret
-0048   16d4a8:	b0 07                	mov    $0x7,%al
-004a   16d4aa:	c3                   	ret
-004b   16d4ab:	b0 11                	mov    $0x11,%al
-004d   16d4ad:	c3                   	ret
-004e   16d4ae:	b0 0c                	mov    $0xc,%al
-0050   16d4b0:	c3                   	ret
-0051   16d4b1:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+vim +90 fs/ext4/mballoc-test.c
+
+8ffc0cd24c2a3e Kemeng Shi 2024-03-05   69  
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   70  static int mbt_mb_init(struct super_block *sb)
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   71  {
+0ecae5410ab526 Kemeng Shi 2024-03-05   72  	ext4_fsblk_t block;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   73  	int ret;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   74  
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   75  	/* needed by ext4_mb_init->bdev_nonrot(sb->s_bdev) */
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   76  	sb->s_bdev = kzalloc(sizeof(*sb->s_bdev), GFP_KERNEL);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   77  	if (sb->s_bdev == NULL)
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   78  		return -ENOMEM;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   79  
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   80  	sb->s_bdev->bd_queue = kzalloc(sizeof(struct request_queue), GFP_KERNEL);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   81  	if (sb->s_bdev->bd_queue == NULL) {
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   82  		kfree(sb->s_bdev);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   83  		return -ENOMEM;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   84  	}
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   85  
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   86  	/*
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   87  	 * needed by ext4_mb_init->ext4_mb_init_backend-> sbi->s_buddy_cache =
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   88  	 * new_inode(sb);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   89  	 */
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  @90  	INIT_LIST_HEAD(&sb->s_inodes);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   91  	sb->s_op = &mbt_sops;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   92  
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   93  	ret = ext4_mb_init(sb);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   94  	if (ret != 0)
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   95  		goto err_out;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03   96  
+0ecae5410ab526 Kemeng Shi 2024-03-05   97  	block = ext4_count_free_clusters(sb);
+0ecae5410ab526 Kemeng Shi 2024-03-05   98  	ret = percpu_counter_init(&EXT4_SB(sb)->s_freeclusters_counter, block,
+0ecae5410ab526 Kemeng Shi 2024-03-05   99  				  GFP_KERNEL);
+0ecae5410ab526 Kemeng Shi 2024-03-05  100  	if (ret != 0)
+0ecae5410ab526 Kemeng Shi 2024-03-05  101  		goto err_mb_release;
+0ecae5410ab526 Kemeng Shi 2024-03-05  102  
+0ecae5410ab526 Kemeng Shi 2024-03-05  103  	ret = percpu_counter_init(&EXT4_SB(sb)->s_dirtyclusters_counter, 0,
+0ecae5410ab526 Kemeng Shi 2024-03-05  104  				  GFP_KERNEL);
+0ecae5410ab526 Kemeng Shi 2024-03-05  105  	if (ret != 0)
+0ecae5410ab526 Kemeng Shi 2024-03-05  106  		goto err_freeclusters;
+0ecae5410ab526 Kemeng Shi 2024-03-05  107  
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  108  	return 0;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  109  
+0ecae5410ab526 Kemeng Shi 2024-03-05  110  err_freeclusters:
+0ecae5410ab526 Kemeng Shi 2024-03-05  111  	percpu_counter_destroy(&EXT4_SB(sb)->s_freeclusters_counter);
+0ecae5410ab526 Kemeng Shi 2024-03-05  112  err_mb_release:
+0ecae5410ab526 Kemeng Shi 2024-03-05  113  	ext4_mb_release(sb);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  114  err_out:
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  115  	kfree(sb->s_bdev->bd_queue);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  116  	kfree(sb->s_bdev);
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  117  	return ret;
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  118  }
+67d2a11b22b4d5 Kemeng Shi 2024-01-03  119  
+
+:::::: The code at line 90 was first introduced by commit
+:::::: 67d2a11b22b4d520072db62620851615df13183e ext4: Add unit test of ext4_mb_generate_buddy
+
+:::::: TO: Kemeng Shi <shikemeng@huaweicloud.com>
+:::::: CC: Theodore Ts'o <tytso@mit.edu>
 
 -- 
 0-DAY CI Kernel Test Service
