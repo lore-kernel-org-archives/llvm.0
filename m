@@ -1,65 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F7E188002;
-	Sat, 28 Sep 2024 23:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62558125A9;
+	Sun, 29 Sep 2024 02:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727567107; cv=none; b=NFxfumb7+iBvOBwX9KsDAZgDInpLzBKV1gY/7d5jhgpb/TUGDXB3nlRoe1MVTJweyN8DRhT714J1lk7ulWUPrYDAnShS9qscL+DW0ALylMlGLWVlD29VsUWjw/tCRgYt3geo5sh7VsZXVOwEmAXjFzfP5uWz3stiysiUyHQRnYs=
+	t=1727575874; cv=none; b=PBSxIMY5/qoJv47RvOBNgTw8arzm+o/fGEw68Vq4HKmO4j7M7eETQ0Sv+HGOYfjpwu6ZnBD6QvdUF9TbRQwydrtq4ROBORc4uvNTCwVoNzVZkCJB5ervoD27MxqGg+ifhu+flYeJBppz7sH4bATuECHyOHMd9E1AfyDl0S9NeGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727567107; c=relaxed/simple;
-	bh=sRtstZyamgTFvaWC2HT26A4k0j5wMsLi6ZRHUYxbr60=;
+	s=arc-20240116; t=1727575874; c=relaxed/simple;
+	bh=Hv4r9dZwC4uBhsY6TX+1JT3nKDoN7iVVRNZ4tSBjDOQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JpFP4yR4/vV2pOrgIr9rYFgTZ24jhw366oOFyUQOgw03/8WNv8OE5Xs3YiZo8wIt3OG3xM5ngU4N1zSiBjJ2R2GQ/ChsfSiXFVyUicbDYOIOK497AC4GNv4+FamZ6+iZCPC0K4hRl8m6DLuAbDZyVbCx/4Kuik5dfu/W7BUCx4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WUz9WOzS; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=rq/1X/sfgYy70QNd6VAEmUQdpgRvMerbW+v2Zr2DTIGHAqq3dAtg3+OSNjhmAZ6JjzRg/o527+crxYktVClMuCvyRihhDdzBDHvkFWclwxCw88xiVYehrvz9OW3ciyRFZgAyOM/xmZsuiS8yOVk54IrO20x0Y3EeQ7icbA671tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bqlYS9To; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WUz9WOzS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bqlYS9To"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727567105; x=1759103105;
+  t=1727575873; x=1759111873;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sRtstZyamgTFvaWC2HT26A4k0j5wMsLi6ZRHUYxbr60=;
-  b=WUz9WOzS9BIiTZaBhzFoKkMMG/TsnKudIYjOh2mR4/md1N5M8LaXKb5t
-   ANUq+yHIz6gFLnDr0coIjKyz1KJXtk5K9N31SQRgh630IBhYg9gEl31i8
-   PIi0u1QiqZycWyO0s/3bFuN4UL0YQZ5HbJsE47omIAj3+yx62NFHOoytK
-   LwDiRS7hXuwIx5DJBB2UzWDDR/Ga8xs9U4++yTPtCh1krdUV5/6dNUmA2
-   jv3v4ztuNte0hCyLfZmfuEmCql++KfVSYNlInGxGZsuWwfYez1pfb8qDU
-   UQ8++1y1i1EkcYDCuOTA+Azn7xorB12gZ7Q4lz3hLh6Ua5lTb9T0Hw+Kn
-   A==;
-X-CSE-ConnectionGUID: jLRgbaSCQ2+6Fb9P+Ov0Tg==
-X-CSE-MsgGUID: D2AM61jTQBao0NWa7sY14g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="26192342"
+  bh=Hv4r9dZwC4uBhsY6TX+1JT3nKDoN7iVVRNZ4tSBjDOQ=;
+  b=bqlYS9TodWNmo+12S0p9sQmzCrSYFAHsycK6Onbh+E5ga+v/OEANLtbo
+   0DLUp0WwHxN02N5CYMfwxIacfIQ/06r4u2gZs7t2sCchfkpGJOhtvgBf6
+   NNd4RkDMr90VRiEiXM2OGOVS6Oo4KIkw6fs5iG8rXLnRLxlB0lQthR+pi
+   4iqqEbRYEwY9lyYh5WzP76om5S5UvJFcbRafV/b7BIVxM5svS0SL3idZ9
+   4xHnP3YfeIQHv9lFePrPVjm2hw2jkmVA0kCt0JTDKBrkr009uzqVpzI46
+   4n9tweOv4m8qT6MVOwlLlhUHmuHRPXX6+pV+sGE1eKgzoPaDScgHH/wWw
+   w==;
+X-CSE-ConnectionGUID: +snIuc8UTfKxOho9bKRR1Q==
+X-CSE-MsgGUID: s9heN9ZXS4ilTkW8E4wDNg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="44150314"
 X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="26192342"
+   d="scan'208";a="44150314"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 16:45:05 -0700
-X-CSE-ConnectionGUID: KI4+d7XNS7iUtlrv57V2gg==
-X-CSE-MsgGUID: LwqmGFfYR5CYkeryjZ8msQ==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 19:11:12 -0700
+X-CSE-ConnectionGUID: bCBpWIOOT0mhj+06HAz3og==
+X-CSE-MsgGUID: Jwfg4XmyT7qx1/3T6bCFjw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="103705533"
+   d="scan'208";a="103729791"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Sep 2024 16:45:02 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 28 Sep 2024 19:11:09 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1suh7U-000Nkv-22;
-	Sat, 28 Sep 2024 23:45:00 +0000
-Date: Sun, 29 Sep 2024 07:44:33 +0800
+	id 1sujOs-000NpP-1c;
+	Sun, 29 Sep 2024 02:11:06 +0000
+Date: Sun, 29 Sep 2024 10:10:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: Re: [PATCH v5 2/2] gcc-sdm845: Add general purpose clock ops
-Message-ID: <202409290702.jlF0XWJZ-lkp@intel.com>
-References: <20240617-starqltechn_integration_upstream-v5-2-761795ea5084@gmail.com>
+To: Dragan Simic <dsimic@manjaro.org>, linux-spi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, broonie@kernel.org,
+	heiko@sntech.de, gregkh@linuxfoundation.org, rafael@kernel.org,
+	oss@helene.moe, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] driver core: Add device probe log helper
+ dev_warn_probe()
+Message-ID: <202409290914.ODQyF8lR-lkp@intel.com>
+References: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,84 +67,206 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240617-starqltechn_integration_upstream-v5-2-761795ea5084@gmail.com>
+In-Reply-To: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
 
-Hi Dzmitry,
+Hi Dragan,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 92fc9636d1471b7f68bfee70c776f7f77e747b97]
+[auto build test ERROR on rockchip/for-next]
+[also build test ERROR on broonie-spi/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11 next-20240927]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/clk-qcom-clk-rcg2-document-calc_rate-function/20240926-184051
-base:   92fc9636d1471b7f68bfee70c776f7f77e747b97
-patch link:    https://lore.kernel.org/r/20240617-starqltechn_integration_upstream-v5-2-761795ea5084%40gmail.com
-patch subject: [PATCH v5 2/2] gcc-sdm845: Add general purpose clock ops
-config: i386-buildonly-randconfig-006-20240929 (https://download.01.org/0day-ci/archive/20240929/202409290702.jlF0XWJZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290702.jlF0XWJZ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dragan-Simic/spi-rockchip-Perform-trivial-code-cleanups/20240928-121548
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic%40manjaro.org
+patch subject: [PATCH v2 4/5] driver core: Add device probe log helper dev_warn_probe()
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240929/202409290914.ODQyF8lR-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290914.ODQyF8lR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409290702.jlF0XWJZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409290914.ODQyF8lR-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/clk/qcom/clk-rcg2.c:431:13: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     431 |         int i = 2, count = 0;
-         |                    ^
-   1 warning generated.
+   In file included from drivers/base/core.c:11:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/base/core.c:27:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/base/core.c:27:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/base/core.c:27:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/base/core.c:4988:9: error: incompatible pointer types assigning to 'va_list *' (aka '__builtin_va_list *') from 'struct __va_list_tag **' [-Werror,-Wincompatible-pointer-types]
+    4988 |         vaf.va = &args;
+         |                ^ ~~~~~
+>> drivers/base/core.c:5055:1: warning: non-void function does not return a value [-Wreturn-type]
+    5055 | }
+         | ^
+   drivers/base/core.c:5101:1: warning: non-void function does not return a value [-Wreturn-type]
+    5101 | }
+         | ^
+   15 warnings and 1 error generated.
 
 
-vim +/count +431 drivers/clk/qcom/clk-rcg2.c
+vim +4988 drivers/base/core.c
 
-   427	
-   428	static void clk_rcg2_calc_mnd(u64 parent_rate, u64 rate, struct freq_tbl *f,
-   429				unsigned int mnd_max, unsigned int pre_div_max)
-   430	{
- > 431		int i = 2, count = 0;
-   432		unsigned int pre_div = 1;
-   433		unsigned long rates_gcd, scaled_parent_rate;
-   434		u16 m, n = 1, n_candidate = 1, n_max;
-   435	
-   436		rates_gcd = gcd(parent_rate, rate);
-   437		m = div64_u64(rate, rates_gcd);
-   438		scaled_parent_rate = div64_u64(parent_rate, rates_gcd);
-   439		while (scaled_parent_rate > (mnd_max + m) * pre_div_max) {
-   440			// we're exceeding divisor's range, trying lower scale.
-   441			if (m > 1) {
-   442				m--;
-   443				scaled_parent_rate = mult_frac(scaled_parent_rate, m, (m + 1));
-   444			} else {
-   445				f->n = mnd_max + m;
-   446				f->pre_div = pre_div_max;
-   447				f->m = m;
-   448			}
-   449		}
-   450	
-   451		n_max = m + mnd_max;
-   452	
-   453		while (scaled_parent_rate > 1) {
-   454			while (scaled_parent_rate % i == 0) {
-   455				n_candidate *= i;
-   456				if (n_candidate < n_max)
-   457					n = n_candidate;
-   458				else if (pre_div * i < pre_div_max)
-   459					pre_div *= i;
-   460				else
-   461					clk_rcg2_split_div(i, &pre_div, &n, pre_div_max);
-   462	
-   463				scaled_parent_rate /= i;
-   464			}
-   465			i++;
-   466			count++;
-   467		}
-   468	
-   469		f->m = m;
-   470		f->n = n;
-   471		f->pre_div = pre_div > 1 ? pre_div : 0;
-   472	}
-   473	
+  4981	
+  4982	static int dev_probe_failed(const struct device *dev, int err, bool fatal,
+  4983				    const char *fmt, va_list args)
+  4984	{
+  4985		struct va_format vaf;
+  4986	
+  4987		vaf.fmt = fmt;
+> 4988		vaf.va = &args;
+  4989	
+  4990		switch (err) {
+  4991		case -EPROBE_DEFER:
+  4992			device_set_deferred_probe_reason(dev, &vaf);
+  4993			dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+  4994			break;
+  4995	
+  4996		case -ENOMEM:
+  4997			/* Don't print anything on -ENOMEM, there's already enough output */
+  4998			break;
+  4999	
+  5000		default:
+  5001			/* Log fatal final failures as errors, otherwise produce warnings */
+  5002			if (fatal)
+  5003				dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+  5004			else
+  5005				dev_warn(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+  5006			break;
+  5007		}
+  5008	
+  5009		return err;
+  5010	}
+  5011	
+  5012	/**
+  5013	 * dev_err_probe - probe error check and log helper
+  5014	 * @dev: the pointer to the struct device
+  5015	 * @err: error value to test
+  5016	 * @fmt: printf-style format string
+  5017	 * @...: arguments as specified in the format string
+  5018	 *
+  5019	 * This helper implements common pattern present in probe functions for error
+  5020	 * checking: print debug or error message depending if the error value is
+  5021	 * -EPROBE_DEFER and propagate error upwards.
+  5022	 * In case of -EPROBE_DEFER it sets also defer probe reason, which can be
+  5023	 * checked later by reading devices_deferred debugfs attribute.
+  5024	 * It replaces the following code sequence::
+  5025	 *
+  5026	 * 	if (err != -EPROBE_DEFER)
+  5027	 * 		dev_err(dev, ...);
+  5028	 * 	else
+  5029	 * 		dev_dbg(dev, ...);
+  5030	 * 	return err;
+  5031	 *
+  5032	 * with::
+  5033	 *
+  5034	 * 	return dev_err_probe(dev, err, ...);
+  5035	 *
+  5036	 * Using this helper in your probe function is totally fine even if @err
+  5037	 * is known to never be -EPROBE_DEFER.
+  5038	 * The benefit compared to a normal dev_err() is the standardized format
+  5039	 * of the error code, which is emitted symbolically (i.e. you get "EAGAIN"
+  5040	 * instead of "-35"), and having the error code returned allows more
+  5041	 * compact error paths.
+  5042	 *
+  5043	 * Returns @err.
+  5044	 */
+  5045	int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
+  5046	{
+  5047		va_list args;
+  5048	
+  5049		va_start(args, fmt);
+  5050	
+  5051		/* Use dev_err() for logging when err doesn't equal -EPROBE_DEFER */
+  5052		dev_probe_failed(dev, err, true, fmt, args);
+  5053	
+  5054		va_end(args);
+> 5055	}
+  5056	EXPORT_SYMBOL_GPL(dev_err_probe);
+  5057	
 
 -- 
 0-DAY CI Kernel Test Service
