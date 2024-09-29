@@ -1,68 +1,57 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B1CAD2F;
-	Sun, 29 Sep 2024 17:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC712263A;
+	Sun, 29 Sep 2024 18:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727629656; cv=none; b=SJvT0L8H2dvkGlYpLFfS7giKHcqWpsuRkxMS72K7E58iEC9LWuAXoisIuwUkk1+tleR/1QltVBGl95v3kWdll45CRNaVdotQiHgDVcv6VazklEoSXGEwuA2cVK4GD+bZzD9hgbuVeW2zgfUZkk3egDEdTd4L9DmpohnwG1GIVvk=
+	t=1727633878; cv=none; b=sn9Su2OBxBx5yxnxlOhXyAcbRkOgvRKa1+o5fkBuaqwH6JWKhqvv3wVCH6NSPF0eu64Qzxq5iVtt6uldXHfoBWPGBzUTQzpB5nYkv6zUdh5qTAoIckAgz4LOfMZsS2X2vst60wmvjyw+VrZtIuvVQOU+pW93Srz4k2qKaCLkj8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727629656; c=relaxed/simple;
-	bh=O7w8DeVwq7CwRT5PMbyZVQpfUrTlDNjY5NwQLo7OfxA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sSyab/T9By/OkF3HaKxHchwl1d+pAJ3R+HaVgOMxKHVpz/06uFGgeEGiycXcEortQ4f67rQ5TpAfo8y+KkRPGOBR0z3nKgu8qy8vHmYHYD9yTrZBZ7xFKS9QDjQqycq2rQUbuIx7dMAM8gbbsXW5HP9ZPPMFVm9NsTVU3Ylk3QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t2LXR/Do; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727633878; c=relaxed/simple;
+	bh=YrUtqYMAsV5VmM/8LxC4dPNex1L7QZp3ecGUAsVJAaI=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZffMBQERjHSKY0LsCXoinplv8JCZQLEPuwFdpQ0dhLbTLd+i5vVN3Hy0Xa1oyo6irCgbFnu4nuU+0tJxFzNyUMPpAz0KZ/DZ+EZy1P/ttuu7dGCbOakrD4ifxTKTyqz/S5YEWmgK/GWPhLMXy4zyI8n7vF0k/oZDSSB81/VUBiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OHJDAwo4; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t2LXR/Do"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DBBC4CEC5;
-	Sun, 29 Sep 2024 17:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727629655;
-	bh=O7w8DeVwq7CwRT5PMbyZVQpfUrTlDNjY5NwQLo7OfxA=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=t2LXR/DoOMh4sF/JbbWKkcGIj78RzUgUI8rsWOJITBhe6S9skX8osKV86lRHspwJ1
-	 tpYMKTXppM93TfsEcEru0yQz8rxkPjYPl4118Xa1M5HI2aNeEk8rT+kcdN7sVerTyr
-	 kswROxQkl3RFeliMR9ybHJXeo0nBBiUCG8izn5VsM/7D1zw8pNkpZIopW7RMUcDoSh
-	 brhwrd6Y+uWwi2vxh8/4YGF/vfJBmQ9NqpQ1uZyHOLc1UAxX7FJeaq0hutwHTzJK6a
-	 eCuUCucuyXbHZ6AF6OH/7t0czyr5NEN5GyAHjun6Ksb3yzjwHYT+zXBhgOIEVyvsuO
-	 bNImMGb9NCvtw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 6E859CE04D4; Sun, 29 Sep 2024 10:07:35 -0700 (PDT)
-Date: Sun, 29 Sep 2024 10:07:35 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	John Stultz <jstultz@google.com>,
-	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com,
-	Mateusz Guzik <mjguzik@gmail.com>, Gary Guo <gary@garyguo.net>,
-	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-	rcu@vger.kernel.org, linux-mm@kvack.org, lkmm@lists.linux.dev,
-	Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 2/2] Documentation: RCU: Refer to ptr_eq()
-Message-ID: <cf2139e2-41cd-4213-89e9-c10873498edf@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240929111608.1016757-1-mathieu.desnoyers@efficios.com>
- <20240929111608.1016757-3-mathieu.desnoyers@efficios.com>
- <8153f0f1-fd18-4ae1-9dc5-f9b725429cad@paulmck-laptop>
- <3a298b64-dd7c-4a0d-950e-8e5b98b39fee@efficios.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OHJDAwo4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727633876; x=1759169876;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=YrUtqYMAsV5VmM/8LxC4dPNex1L7QZp3ecGUAsVJAaI=;
+  b=OHJDAwo4c2t44K/foTHTOQnJnP+5Fs8OJ6L1PiaMtRPuo5a8QQtwzKFK
+   77cKrSSJdmVyqXsiMLJpSMsRwGmHBxMaFFZJJFgynXOjhJ/HGWS+LavfB
+   iGbHyPFDN8n5Qy7XNgFnBHll65TXLXROsD4A8//NEDCev/14pT0P05/4+
+   2Qm/+3LL2jAmlYKfJxYQJl5GRw7BJPdfMEeXhTDXsNXoOWK8n5K80D2LD
+   kXB03NrgPS2znUbgelkmLOTr5cvW6UoGdqEdw+9doj9G15kjZLs4FWV0y
+   QRVYHKVXUFKF1zVdCv+kBbCnvXYomPXcGxozEj5d7GTeyjBbOw5gsCLwA
+   A==;
+X-CSE-ConnectionGUID: D+OrCkQSQYi5eXIsmHzRYw==
+X-CSE-MsgGUID: GaHpHRhzR+CtahQs4P6Jog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="38077293"
+X-IronPort-AV: E=Sophos;i="6.11,163,1725346800"; 
+   d="scan'208";a="38077293"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 11:17:47 -0700
+X-CSE-ConnectionGUID: x1ff++d/QeObYDzGL1x2YA==
+X-CSE-MsgGUID: 7p4e/cTRRs6CeW1M7n+xiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,163,1725346800"; 
+   d="scan'208";a="103867365"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 29 Sep 2024 11:17:45 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1suyUJ-000OZ9-09;
+	Sun, 29 Sep 2024 18:17:43 +0000
+Date: Mon, 30 Sep 2024 02:17:36 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [ardb:x86-pie-v2 23/26] block/blk-core.o: warning: objtool:
+ errno_to_blk_status+0x16: can't find switch jump table
+Message-ID: <202409300226.u5kOSLIm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,153 +60,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3a298b64-dd7c-4a0d-950e-8e5b98b39fee@efficios.com>
 
-On Sun, Sep 29, 2024 at 12:09:54PM -0400, Mathieu Desnoyers wrote:
-> On 2024-09-29 17:51, Paul E. McKenney wrote:
-> > On Sun, Sep 29, 2024 at 07:16:08AM -0400, Mathieu Desnoyers wrote:
-> > > Refer to ptr_eq() in the rcu_dereference() documentation.
-> > > 
-> > > ptr_eq() is a mechanism that preserves address dependencies when
-> > > comparing pointers, and should be favored when comparing a pointer
-> > > obtained from rcu_dereference() against another pointer.
-> > > 
-> > > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > > Cc: Will Deacon <will@kernel.org>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > > Cc: Alan Stern <stern@rowland.harvard.edu>
-> > > Cc: John Stultz <jstultz@google.com>
-> > > Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
-> > > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > > Cc: Frederic Weisbecker <frederic@kernel.org>
-> > > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > > Cc: Josh Triplett <josh@joshtriplett.org>
-> > > Cc: Uladzislau Rezki <urezki@gmail.com>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> > > Cc: Zqiang <qiang.zhang1211@gmail.com>
-> > > Cc: Ingo Molnar <mingo@redhat.com>
-> > > Cc: Waiman Long <longman@redhat.com>
-> > > Cc: Mark Rutland <mark.rutland@arm.com>
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > > Cc: maged.michael@gmail.com
-> > > Cc: Mateusz Guzik <mjguzik@gmail.com>
-> > > Cc: Gary Guo <gary@garyguo.net>
-> > > Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> > > Cc: rcu@vger.kernel.org
-> > > Cc: linux-mm@kvack.org
-> > > Cc: lkmm@lists.linux.dev
-> > > Cc: Nikita Popov <github@npopov.com>
-> > > Cc: llvm@lists.linux.dev
-> > > ---
-> > > Changes since v0:
-> > > - Include feedback from Alan Stern.
-> > > ---
-> > >   Documentation/RCU/rcu_dereference.rst | 32 ++++++++++++++++++++++-----
-> > >   1 file changed, 27 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/Documentation/RCU/rcu_dereference.rst b/Documentation/RCU/rcu_dereference.rst
-> > > index 2524dcdadde2..9ef97b7ca74d 100644
-> > > --- a/Documentation/RCU/rcu_dereference.rst
-> > > +++ b/Documentation/RCU/rcu_dereference.rst
-> > > @@ -104,11 +104,12 @@ readers working properly:
-> > >   	after such branches, but can speculate loads, which can again
-> > >   	result in misordering bugs.
-> > > --	Be very careful about comparing pointers obtained from
-> > > -	rcu_dereference() against non-NULL values.  As Linus Torvalds
-> > > -	explained, if the two pointers are equal, the compiler could
-> > > -	substitute the pointer you are comparing against for the pointer
-> > > -	obtained from rcu_dereference().  For example::
-> > > +-	Use operations that preserve address dependencies (such as
-> > > +	"ptr_eq()") to compare pointers obtained from rcu_dereference()
-> > > +	against non-NULL pointers. As Linus Torvalds explained, if the
-> > > +	two pointers are equal, the compiler could substitute the
-> > > +	pointer you are comparing against for the pointer obtained from
-> > > +	rcu_dereference().  For example::
-> > >   		p = rcu_dereference(gp);
-> > >   		if (p == &default_struct)
-> > > @@ -125,6 +126,23 @@ readers working properly:
-> > >   	On ARM and Power hardware, the load from "default_struct.a"
-> > >   	can now be speculated, such that it might happen before the
-> > >   	rcu_dereference().  This could result in bugs due to misordering.
-> > > +	Performing the comparison with "ptr_eq()" ensures the compiler
-> > > +	does not perform such transformation.
-> > > +
-> > > +	If the comparison is against another pointer, the compiler is
-> > > +	allowed to use either pointer for the following accesses, which
-> > > +	loses the address dependency and allows weakly-ordered
-> > > +	architectures such as ARM and PowerPC to speculate the
-> > > +	address-dependent load before rcu_dereference().  For example::
-> > > +
-> > > +		p1 = READ_ONCE(gp);
-> > > +		p2 = rcu_dereference(gp);
-> > > +		if (p1 == p2)
-> > > +			do_default(p2->a);
-> > > +
-> > > +	The compiler can use p1->a rather than p2->a, destroying the
-> > > +	address dependency.  Performing the comparison with "ptr_eq()"
-> > > +	ensures the compiler preserves the address dependencies.
-> > 
-> > Bitter experience leads me to suggest a "// BUGGY" comment on the "if"
-> > statement in the above example, and a corrected code snippet right here.  :-/
-> 
-> Changing for the following:
-> 
-> +               p1 = READ_ONCE(gp);
-> +               p2 = rcu_dereference(gp);
-> +               if (p1 == p2)  /* BUGGY!!! */
-> +                       do_default(p2->a);
-> +
-> +       The compiler can use p1->a rather than p2->a, destroying the
-> +       address dependency.  Performing the comparison with "ptr_eq()"
-> +       ensures the compiler preserves the address dependencies.
-> +       Corrected code::
-> +
-> +               p1 = READ_ONCE(gp);
-> +               p2 = rcu_dereference(gp);
-> +               if (ptr_eq(p1, p2))
-> +                       do_default(p2->a);
-> 
-> > 
-> > Other than that, loks good!
-> 
-> Let me know if I should add an acked-by from you on this
-> documentation patch as well.
+TO: Ard Biesheuvel <ardb@kernel.org>
 
-Much better!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v2
+head:   2b9142b6c6241b0debfe0d21c911c3aaf0c05670
+commit: 73ab629624e08a8d1fad61e724e408d71c5c107f [23/26] x86: Use PIE codegen for the core kernel
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240930/202409300226.u5kOSLIm-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240930/202409300226.u5kOSLIm-lkp@intel.com/reproduce)
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409300226.u5kOSLIm-lkp@intel.com/
 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > 							Thanx, Paul
-> > 
-> > >   	However, comparisons are OK in the following cases:
-> > > @@ -204,6 +222,10 @@ readers working properly:
-> > >   		comparison will provide exactly the information that the
-> > >   		compiler needs to deduce the value of the pointer.
-> > > +	When in doubt, use operations that preserve address dependencies
-> > > +	(such as "ptr_eq()") to compare pointers obtained from
-> > > +	rcu_dereference() against non-NULL pointers.
-> > > +
-> > >   -	Disable any value-speculation optimizations that your compiler
-> > >   	might provide, especially if you are making use of feedback-based
-> > >   	optimizations that take data collected from prior runs.  Such
-> > > -- 
-> > > 2.39.2
-> > > 
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
-> 
+All warnings (new ones prefixed by >>):
+
+>> block/blk-core.o: warning: objtool: errno_to_blk_status+0x16: can't find switch jump table
+--
+>> block/blk-merge.o: warning: objtool: bio_split_to_limits+0x2f: can't find switch jump table
+--
+>> block/blk-mq.o: warning: objtool: blk_mq_submit_bio+0xf1: can't find switch jump table
+--
+>> block/ioctl.o: warning: objtool: blkdev_ioctl+0x80: can't find switch jump table
+--
+>> arch/x86/entry/syscall_64.o: warning: objtool: x64_sys_call+0x1c: can't find switch jump table
+--
+>> arch/x86/events/core.o: warning: objtool: init_hw_perf_events+0x35: can't find switch jump table
+--
+>> arch/x86/events/msr.o: warning: objtool: test_intel+0x34: can't find switch jump table
+--
+>> fs/open.o: warning: objtool: vfs_fallocate+0x4a: can't find switch jump table
+--
+>> fs/read_write.o: warning: objtool: generic_file_llseek+0x28: can't find switch jump table
+--
+>> fs/namei.o: warning: objtool: may_open+0x35: can't find switch jump table
+--
+>> fs/fcntl.o: warning: objtool: __x64_sys_fcntl+0x83: can't find switch jump table
+..
+
+
+objdump-func vmlinux.o errno_to_blk_status:
+0000 000000000016d460 <errno_to_blk_status>:
+0000   16d460:	83 c7 79             	add    $0x79,%edi
+0003   16d463:	83 ff 79             	cmp    $0x79,%edi
+0006   16d466:	77 10                	ja     16d478 <errno_to_blk_status+0x18>
+0008   16d468:	48 8d 05 00 00 00 00 	lea    0x0(%rip),%rax        # 16d46f <errno_to_blk_status+0xf>	16d46b: R_X86_64_PC32	.rodata+0x7d28
+000f   16d46f:	48 63 0c b8          	movslq (%rax,%rdi,4),%rcx
+0013   16d473:	48 01 c1             	add    %rax,%rcx
+0016   16d476:	ff e1                	jmp    *%rcx
+0018   16d478:	b0 0a                	mov    $0xa,%al
+001a   16d47a:	c3                   	ret
+001b   16d47b:	31 c0                	xor    %eax,%eax
+001d   16d47d:	c3                   	ret
+001e   16d47e:	b0 10                	mov    $0x10,%al
+0020   16d480:	c3                   	ret
+0021   16d481:	b0 06                	mov    $0x6,%al
+0023   16d483:	c3                   	ret
+0024   16d484:	b0 08                	mov    $0x8,%al
+0026   16d486:	c3                   	ret
+0027   16d487:	b0 13                	mov    $0x13,%al
+0029   16d489:	c3                   	ret
+002a   16d48a:	b0 02                	mov    $0x2,%al
+002c   16d48c:	c3                   	ret
+002d   16d48d:	b0 0b                	mov    $0xb,%al
+002f   16d48f:	c3                   	ret
+0030   16d490:	b0 03                	mov    $0x3,%al
+0032   16d492:	c3                   	ret
+0033   16d493:	b0 05                	mov    $0x5,%al
+0035   16d495:	c3                   	ret
+0036   16d496:	b0 01                	mov    $0x1,%al
+0038   16d498:	c3                   	ret
+0039   16d499:	b0 0e                	mov    $0xe,%al
+003b   16d49b:	c3                   	ret
+003c   16d49c:	b0 0f                	mov    $0xf,%al
+003e   16d49e:	c3                   	ret
+003f   16d49f:	b0 04                	mov    $0x4,%al
+0041   16d4a1:	c3                   	ret
+0042   16d4a2:	b0 0d                	mov    $0xd,%al
+0044   16d4a4:	c3                   	ret
+0045   16d4a5:	b0 09                	mov    $0x9,%al
+0047   16d4a7:	c3                   	ret
+0048   16d4a8:	b0 07                	mov    $0x7,%al
+004a   16d4aa:	c3                   	ret
+004b   16d4ab:	b0 11                	mov    $0x11,%al
+004d   16d4ad:	c3                   	ret
+004e   16d4ae:	b0 0c                	mov    $0xc,%al
+0050   16d4b0:	c3                   	ret
+0051   16d4b1:	66 66 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 	data16 data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
