@@ -1,42 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681788F6D;
-	Sun, 29 Sep 2024 21:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAEB1DFF0;
+	Sun, 29 Sep 2024 21:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727644248; cv=none; b=SJSSpyUKlUy3QYvF6mzNmYyXyk/eWWJJE/06gQVuKEyLNKF34RNoOdKbspbmyX468ze4TyNtwI2tRE5lwLSxLfejRMW/1M9BqlJEVxgp7f372HtnbcH32U8bG8nLafuyvMQ1EIGVbyHDdwYoh6DZ+gxLywqaJZF3D+d7iIf/veg=
+	t=1727645781; cv=none; b=rF5iUKaK8qKmIDY1o6TUllL0tz4Ptmj4+st0y36wru5JUh5p9Jk2J+0GP5bS323CEQgFM+ergZRVqB1rCyShsEGL7Uef5eFDo5marJYWAqijVRZkd771jWpWXG2bWGzZYmmM92cyoaE+MscBBW9ApXL0nXtuzNxre72/5qDm35A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727644248; c=relaxed/simple;
-	bh=wMsGjuR25mp/aKLm5jdecrsXtweYnx1xsGjy980bAAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pGaYsodOr8oYGRcVrEQeKDakLvk2oVVIJtLBu1WDevQZiMTzLTY/NPqL1h5NzoO5hzol6Lxf5V9XgsNstGUG+VcbgQ4i3E3kPIUIbUDPkPpXIpSDY/wDfIxZBqYj9RHDD0tS8npUGaojfGktitE2I5eA0mYXn3Dcuu6d6fUdVaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ailfhA+n; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727645781; c=relaxed/simple;
+	bh=cJ35YExUBC6nadm+eaeXhh+ctE+7ijnS2LqrrIOwaug=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cBArM1P5ivHEgCn3kO1P7267QX4AASPp1KNo55WUjBTzCSM6/91kvcZWJUl3jRizskoDMU5vAo7hvcbHvcb/ANEC1yjXt064hLdLbapD0I/IAkgmOQFPSAj5f3mFkLd84gr1QtXmR2lFBL6JpW+672jrv3mkc/A5iEX7rW1AKW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LqFB93QV; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ailfhA+n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7716AC4CEC5;
-	Sun, 29 Sep 2024 21:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727644247;
-	bh=wMsGjuR25mp/aKLm5jdecrsXtweYnx1xsGjy980bAAc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ailfhA+nrSea6SElDG0U/Cc1y+oPS+KYgI+z5SL2gEArxGC5LYugpzbRJJatos/9Z
-	 S/i0zrIfP+kphjMaWAPypt+P2VwT11EqYV0l4iANf1gioqO55SKUBfSD3hCvjhjE9o
-	 tDQkJqa28yMR47oW74Sk+gnh6mDUKkBJwwD60DbpWCbnZMQT8522dL15l/tev4KYnc
-	 wcI6/of5M1WrUVWEA1oMrpd96WHHlaHKbGRPJ6rlaBVZl3RvXwEEPYfG9a2eq2A3c2
-	 7vRPYtY883MHedfVVovhDSvwxWm6LJxXtEApVM9hvE1mjjHcol+WslyETsRNIuj51n
-	 O9laykBPzogXQ==
-Date: Sun, 29 Sep 2024 14:10:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] hardening: Adjust dependencies in selection of
- MODVERSIONS
-Message-ID: <20240929211045.GA2111654@thelio-3990X>
-References: <20240928-fix-randstruct-modversions-kconfig-warning-v1-1-27d3edc8571e@kernel.org>
- <CAHk-=wgdQ5TjbXX0D568GZebYnt5ZuhTW5-ffeim-aoyT9LnbA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LqFB93QV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727645780; x=1759181780;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cJ35YExUBC6nadm+eaeXhh+ctE+7ijnS2LqrrIOwaug=;
+  b=LqFB93QVOObsXTPoHave/yUb3eKvp85hbA6bfNrGvqjn5xLwOxpBvxZQ
+   7awcmVRTa392earu8+hCzi3ZPCOMhutVEmeopaIe0Cb/WoOG9qxgRsjG+
+   bAHcn/IslNRPRr81jx+RDgNPr1iFuvJmrrEz2KBZFYI+r9q5meB2pWQmo
+   7UoycYEyrXCmC5XiAK9RRmXIx+d+uKq6v9peq7HjmMiLqusJvbbNORWZi
+   Ce1j7Q5g0MIvJGha8CTHSVFdf1HM/jnFW8CMo4ABZxy3FCkY3ql48x2XI
+   mY/A0yhdJQE+a+DXNVwElPNrkZUbJN5068RiGk5YfGcrf+1enUaF4exjo
+   w==;
+X-CSE-ConnectionGUID: v9SAT/rlR/ifPOXUaXh0Jg==
+X-CSE-MsgGUID: xs8RBcxWQPOhZMETF+xc7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11210"; a="30424166"
+X-IronPort-AV: E=Sophos;i="6.11,164,1725346800"; 
+   d="scan'208";a="30424166"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2024 14:36:16 -0700
+X-CSE-ConnectionGUID: u+1z27tkQTO3OuLNI3Dx0A==
+X-CSE-MsgGUID: zrpcN4rdRimAdMGQp+4rWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,164,1725346800"; 
+   d="scan'208";a="73888313"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 29 Sep 2024 14:36:15 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sv1aO-000Ojs-1o;
+	Sun, 29 Sep 2024 21:36:12 +0000
+Date: Mon, 30 Sep 2024 05:35:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-pie-v2 25/26] ld.lld: error: relocation R_X86_64_64 cannot
+ be used against local symbol; recompile with -fPIC
+Message-ID: <202409300536.ZjxlIetO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,36 +61,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgdQ5TjbXX0D568GZebYnt5ZuhTW5-ffeim-aoyT9LnbA@mail.gmail.com>
 
-On Sun, Sep 29, 2024 at 08:35:44AM -0700, Linus Torvalds wrote:
-> On Sat, 28 Sept 2024 at 11:13, Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > MODVERSIONS recently grew a dependency on !COMPILE_TEST so that Rust
-> > could be more easily tested. However, this introduces a Kconfig warning
-> > when building allmodconfig with a clang version that supports RANDSTRUCT
-> > natively because RANDSTRUCT_FULL and RANDSTRUCT_PERFORMANCE select
-> > MODVERSIONS when MODULES is enabled, bypassing the !COMPILE_TEST
-> > dependency:
-> 
-> Argh. I should have checked, but I didn't think anybody would 'select'
-> MODVERSIONS.
-> 
-> That's such an odd thing to do in general, but I guess for RANDSTRUCT
-> it actually makes sense (since a plain version check is nonsensical).
-> 
-> Now that 'select' statement is truly crazy and another level of odd
-> duck, but I guess it still makes perfect sense ("give me the build
-> coverage, but this is never going to be run, so don't bother with
-> MODVERSIONS").
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v2
+head:   2b9142b6c6241b0debfe0d21c911c3aaf0c05670
+commit: 8fbee41d40057c6a4cd0595475fd3c92bc7a0133 [25/26] x86/kernel: Switch to PIE linking for the core kernel
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240930/202409300536.ZjxlIetO-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240930/202409300536.ZjxlIetO-lkp@intel.com/reproduce)
 
-Yeah, I came to the same conclusion on both fronts (perhaps I should
-have actually put that in the patch description).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409300536.ZjxlIetO-lkp@intel.com/
 
-> So Ack on the patch. And now I did check that there doesn't seem to be
-> anything else with odd MODVERSIONS Kconfig rules.
+All errors (new ones prefixed by >>):
 
-Thanks, it looks like you'll get this via Kees soon.
+>> ld.lld: error: relocation R_X86_64_64 cannot be used against local symbol; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/x86/kernel/head_64.o)
+   >>> referenced by arch/x86/kernel/head_64.o:(.init.rodata+0x0) in archive vmlinux.a
 
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
