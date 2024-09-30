@@ -1,125 +1,412 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C4D15666D
-	for <llvm@lists.linux.dev>; Mon, 30 Sep 2024 20:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D1A19882F;
+	Mon, 30 Sep 2024 20:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727728536; cv=none; b=rzmGLqVoc74Thkh98w2XMTsVUIs7IOFJzuxzLc1BmzHODQ1wkpPajJoTaiTVX+crIR88uV/EylMyZBEqLWWIcMom+5B4gmS+4zIyG+hJrM8W9GhuqsCCMyKlQcM4QnTJSUciXns3149QOjlTJ/E4pBtwrV6XS4mgPt3uZ2RXIUQ=
+	t=1727728600; cv=none; b=u9jQ9JcCO+ix0+I47yzIfj1rMWN9184djrWnhob9TK12AazBqv/GS4co8OghJ1xiieLqocOvRC4s0kV2+kjNj7qDBxQh0j0ZEpv+EDnG4CzJ8toVi9IUfcKHyYC9q6sXEE4w9Wz3RfITrFv7ui6UXRPqvX0LRuecvCvVsxMJBns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727728536; c=relaxed/simple;
-	bh=EvGp6sAlZk0VPl14kVuQt5lwWnwxjx9HOSoTel6dY4M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b9WDpxeKlSD929UMeIABjPGtdZlLibuqiJJ7Zp6onk8Iy8I6iBgFLaaN+5W4+ysli4qDxBr9M4jnX86YCoAy6CCcWtD5xQnnffIe4fG1PfsP5/KULFprWPE7BPcGnamHwn4tBvQ+GECk9taOkMY9TIPLZUwHD6BA5zLtQxFtv1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JNHn0gkD; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1727728600; c=relaxed/simple;
+	bh=pPEL9qFMRBFDo9j/92QHXmD8ngtQ0WgKVBe+oCpLy60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PEkkKvf1o9oNp+pe8jRUe4roBhZNfp0DjdgQWMpqWqTzNQxkzvvm9FRJ96dCaVs/xQ18rBdPEPF2c5kY4/i1zXbSQl10ACItrKQUbhsaLywwSJMKRyHD9RROdDAx56ezkA+bZYGJtF3FkReDElnZY91pjaEPcwI37l8LzH2Ld/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mTVa6glt; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JNHn0gkD"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20b3d1a77bbso52025ad.0
-        for <llvm@lists.linux.dev>; Mon, 30 Sep 2024 13:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727728534; x=1728333334; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EvGp6sAlZk0VPl14kVuQt5lwWnwxjx9HOSoTel6dY4M=;
-        b=JNHn0gkD9Y0zrwz5s6RTGOn7fmP8bJPvLkNiDUulznuTEM+lswnXPTBRyA7A3mmvh4
-         zt4RThTC/QBCiri4sDZr/x2nCbzcqjAnWcCkKPx6AfHwAgpHXlHQGF5j7k0SHISMUaBJ
-         FVyEt+k5qLM4RsyUt4lAYal0aH88vigYg79iAcmmFuPlIL59cLz/93WtKl9H0mNsPWMS
-         KpO4TK01PE87tr1ut8ByRJhZA3CoJrn4M/Gf6Y4lfmf0eACjmuwwtx6hLuZ6BrCGvrBS
-         DrNVulCBMMIjedEI9Ntdm8luxXkJwTyw+EW5ToK3Y9CN3YL6jrI4kpiqqw6vQ9SC5uWR
-         8M4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727728534; x=1728333334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EvGp6sAlZk0VPl14kVuQt5lwWnwxjx9HOSoTel6dY4M=;
-        b=b+KMvW8CFKGfYYLunpqkKK19OutUsxzusdG3XE6cdsfTi27hXw6DdVViJlN0HzCcOV
-         4AriHyqGyDb3H57n+TTV/+tCT/rkrEb8mqtUe3zsdjxToA40QqwcUIqNZxtS1nLo7auU
-         1Rjd3rwpkw1uoCrClMlNSzm20RhquPohSNP/uoXz+d1iPCGb26VCGe5e06UVhyW8LKfb
-         4WjMTAZjD/eWvlOp2B9RBpK59ke1k0ugWjQVFfowMBr7KpkK3OU7K3WjPQHFp7lZsj5r
-         98hzr58oNklrWHmO3l0Q6d1p+8Vawmcr2+bBnEhuF/I7ICjoxBu0+XJppzVsFLqdw+1Q
-         iamQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWKu4nOt9C44wVNajmbIS8AiUz8iV3u9xPTyYZxZ+fLMLS9cj5t+gJUqizZFpvtPxvQSjJw@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyf/UOZW3dQcS8sK8pKgtQtj9h+3vOnQaAOFQIVre517JU3XihN
-	oV5/4i8XnwJUnTw8x7kldYXx6oIY12Q7ivVfgYIqJ3mOfKdsJlnu2D5PJrqmFarb5A7Z4dsGl5/
-	kXEShS9CuonoWkZf1Ud2l+T68xJ4ZS/Cmi9BA
-X-Google-Smtp-Source: AGHT+IFnbcGLNTwXNFovYgGJb47q4+smFCUzoLEdiETVHWauNimxOhjfQshZVGQxictt2tOdZ/N8cQaljX8vuQUmX1k=
-X-Received: by 2002:a17:903:283:b0:20b:13a8:9f86 with SMTP id
- d9443c01a7336-20bad44e1camr740385ad.28.1727728534224; Mon, 30 Sep 2024
- 13:35:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mTVa6glt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727728598; x=1759264598;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pPEL9qFMRBFDo9j/92QHXmD8ngtQ0WgKVBe+oCpLy60=;
+  b=mTVa6gltAQiMldwP1fpKph1lak5M3KJ6TI12MkhQeJsoBcm0N9z/Tidg
+   K1MJXud0bhKqRQMlxe0GpU8CtZ2P44FlKjCLBvED+Q72ox9UBYkiEK/1H
+   fxFrHDWKC4a/GwPummrwqw1fSjgWzuuIjhIzAC613GUC+R2SpNopqlB5B
+   RBcNsTXFRN7L/fhvDLamsGsnCopa1NPqYrsVQ1tOGnudC9WTBcgXtju6R
+   i9WSo2Rc+D0CW/BMuGoPhtuARxsOSLYkzzFR2zEtqPgQud7YoSNIUjrAN
+   jbcgs8yAo92EIxTNqDqr/+EK4wp3rJwZX+7GXzZJJRW5Zbtxq8R0mapcj
+   A==;
+X-CSE-ConnectionGUID: 4I9ObfFNRFikdHrcQC6K+A==
+X-CSE-MsgGUID: 1z+bwfZmTIG+WsjADpXLVA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="38195552"
+X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
+   d="scan'208";a="38195552"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 13:36:38 -0700
+X-CSE-ConnectionGUID: RaQI0/hzQ9mFoLU4o/W7oA==
+X-CSE-MsgGUID: 4V8/bBXiQIO8fjAVGw4jUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
+   d="scan'208";a="73689706"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 30 Sep 2024 13:36:33 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1svN8B-000Prn-07;
+	Mon, 30 Sep 2024 20:36:31 +0000
+Date: Tue, 1 Oct 2024 04:36:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anastasia Belova <abelova@astralinux.ru>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anastasia Belova <abelova@astralinux.ru>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] drm/meson: switch to a managed drm device
+Message-ID: <202410010450.fOkIu1ki-lkp@intel.com>
+References: <20240930082640.129543-1-abelova@astralinux.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-7-xur@google.com>
- <c65a07ef-6436-4e04-a263-7cad9758e9be@gmail.com> <CAKwvOdm0iZspjpuueBV1=eFt+Bf4edWBZsDsj10kEvTGZRye2w@mail.gmail.com>
- <20240928173530.GC430964@thelio-3990X> <CAF1bQ=QoNNLVKRpaXyJ8pm+NcnSyzmpgAN5ktu=Fqim9HkF4rA@mail.gmail.com>
- <20240930202911.GB1497385@thelio-3990X>
-In-Reply-To: <20240930202911.GB1497385@thelio-3990X>
-From: Rong Xu <xur@google.com>
-Date: Mon, 30 Sep 2024 13:35:22 -0700
-Message-ID: <CAF1bQ=TPuP+ZLtdoKhBc-10HyHmiqROXwwMOWuEex5JFEMHa6A@mail.gmail.com>
-Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Vegard Nossum <vegard.nossum@oracle.com>, John Moon <john@jmoon.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, 
-	Mike Rapoport <rppt@kernel.org>, "Paul E . McKenney" <paulmck@kernel.org>, Rafael Aquini <aquini@redhat.com>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Eric DeVolder <eric.devolder@oracle.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Benjamin Segall <bsegall@google.com>, Breno Leitao <leitao@debian.org>, 
-	Wei Yang <richard.weiyang@gmail.com>, Brian Gerst <brgerst@gmail.com>, 
-	Juergen Gross <jgross@suse.com>, Palmer Dabbelt <palmer@rivosinc.com>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Kees Cook <kees@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Xiao Wang <xiao.w.wang@intel.com>, 
-	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>, 
-	Maksim Panchenko <maks@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240930082640.129543-1-abelova@astralinux.ru>
 
-Thanks Nathan! We will be there for the discussion.We are also happy
-to discuss any additional comments or suggestions about the patch.
+Hi Anastasia,
 
--Rong
+kernel test robot noticed the following build errors:
 
-On Mon, Sep 30, 2024 at 1:29=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hi Rong,
->
-> On Mon, Sep 30, 2024 at 10:07:05AM -0700, Rong Xu wrote:
-> > I don't find the Clang Build Linux meeting in the link of
-> > https://clangbuiltlinux.github.io/. There is no Wednesday meeting in th=
-e
-> > upcoming event. Can you confirm there is such a meeting.
-> > We will be happy to join to chat about this.
->
-> It is in the "Useful links" section, under the "Bi-weekly video meeting"
-> line. I'll copy it here just to make sure you have it.
->
-> Calendar, which should show the October 2nd meeting at 12pm Pacific
-> time:
-> https://calendar.google.com/calendar/embed?src=3D47005f8f50f21da6133d7239=
-f3cb93d1624d2e1949963ea75dd86d5f2d5721e0%40group.calendar.google.com
->
-> Meeting link:
-> https://meet.google.com/wrr-mxkn-hdo
->
-> Cheers,
-> Nathan
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.12-rc1 next-20240930]
+[cannot apply to drm-misc/drm-misc-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anastasia-Belova/drm-meson-switch-to-a-managed-drm-device/20240930-162755
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240930082640.129543-1-abelova%40astralinux.ru
+patch subject: [PATCH v3] drm/meson: switch to a managed drm device
+config: arm-randconfig-001-20240930 (https://download.01.org/0day-ci/archive/20241001/202410010450.fOkIu1ki-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241001/202410010450.fOkIu1ki-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410010450.fOkIu1ki-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/meson/meson_osd_afbcd.c:12:
+>> drivers/gpu/drm/meson/meson_drv.h:56:20: error: field has incomplete type 'struct drm_device'
+           struct drm_device drm;
+                             ^
+   include/drm/drm_print.h:37:8: note: forward declaration of 'struct drm_device'
+   struct drm_device;
+          ^
+   1 error generated.
+--
+   In file included from drivers/gpu/drm/meson/meson_venc.c:14:
+>> drivers/gpu/drm/meson/meson_drv.h:56:20: error: field has incomplete type 'struct drm_device'
+           struct drm_device drm;
+                             ^
+   include/drm/drm_lease.h:12:8: note: forward declaration of 'struct drm_device'
+   struct drm_device;
+          ^
+   1 error generated.
+--
+   In file included from drivers/gpu/drm/meson/meson_vclk.c:12:
+>> drivers/gpu/drm/meson/meson_drv.h:56:20: error: field has incomplete type 'struct drm_device'
+           struct drm_device drm;
+                             ^
+   include/drm/drm_print.h:37:8: note: forward declaration of 'struct drm_device'
+   struct drm_device;
+          ^
+   In file included from drivers/gpu/drm/meson/meson_vclk.c:13:
+   In file included from drivers/gpu/drm/meson/meson_vclk.h:12:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/gpu/drm/meson/meson_vclk.c:13:
+   In file included from drivers/gpu/drm/meson/meson_vclk.h:12:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/gpu/drm/meson/meson_vclk.c:13:
+   In file included from drivers/gpu/drm/meson/meson_vclk.h:12:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/gpu/drm/meson/meson_vclk.c:13:
+   In file included from drivers/gpu/drm/meson/meson_vclk.h:12:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/gpu/drm/meson/meson_vclk.c:13:
+   In file included from drivers/gpu/drm/meson/meson_vclk.h:12:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+--
+   In file included from drivers/gpu/drm/meson/meson_vpp.c:11:
+>> drivers/gpu/drm/meson/meson_drv.h:56:20: error: field has incomplete type 'struct drm_device'
+           struct drm_device drm;
+                             ^
+   drivers/gpu/drm/meson/meson_drv.h:15:8: note: forward declaration of 'struct drm_device'
+   struct drm_device;
+          ^
+   1 error generated.
+--
+>> drivers/gpu/drm/meson/meson_encoder_dsi.c:135:32: error: passing 'struct drm_device' to parameter of incompatible type 'struct drm_device *'; take the address with &
+           ret = drm_simple_encoder_init(priv->drm, &meson_encoder_dsi->encoder,
+                                         ^~~~~~~~~
+                                         &
+   include/drm/drm_simple_kms_helper.h:261:48: note: passing argument to parameter 'dev' here
+   int drm_simple_encoder_init(struct drm_device *dev,
+                                                  ^
+   1 error generated.
+--
+   In file included from drivers/gpu/drm/meson/meson_viu.c:14:
+>> drivers/gpu/drm/meson/meson_drv.h:56:20: error: field has incomplete type 'struct drm_device'
+           struct drm_device drm;
+                             ^
+   include/drm/drm_fourcc.h:56:8: note: forward declaration of 'struct drm_device'
+   struct drm_device;
+          ^
+   1 error generated.
+--
+>> drivers/gpu/drm/meson/meson_encoder_hdmi.c:405:32: error: passing 'struct drm_device' to parameter of incompatible type 'struct drm_device *'; take the address with &
+           ret = drm_simple_encoder_init(priv->drm, &meson_encoder_hdmi->encoder,
+                                         ^~~~~~~~~
+                                         &
+   include/drm/drm_simple_kms_helper.h:261:48: note: passing argument to parameter 'dev' here
+   int drm_simple_encoder_init(struct drm_device *dev,
+                                                  ^
+   drivers/gpu/drm/meson/meson_encoder_hdmi.c:423:60: error: passing 'struct drm_device' to parameter of incompatible type 'struct drm_device *'; take the address with &
+           meson_encoder_hdmi->connector = drm_bridge_connector_init(priv->drm,
+                                                                     ^~~~~~~~~
+                                                                     &
+   include/drm/drm_bridge_connector.h:13:68: note: passing argument to parameter 'drm' here
+   struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+                                                                      ^
+   2 errors generated.
+
+
+vim +56 drivers/gpu/drm/meson/meson_drv.h
+
+    42	
+    43	struct meson_drm {
+    44		struct device *dev;
+    45		enum vpu_compatible compat;
+    46		void __iomem *io_base;
+    47		struct regmap *hhi;
+    48		int vsync_irq;
+    49	
+    50		struct meson_canvas *canvas;
+    51		u8 canvas_id_osd1;
+    52		u8 canvas_id_vd1_0;
+    53		u8 canvas_id_vd1_1;
+    54		u8 canvas_id_vd1_2;
+    55	
+  > 56		struct drm_device drm;
+    57		struct drm_crtc *crtc;
+    58		struct drm_plane *primary_plane;
+    59		struct drm_plane *overlay_plane;
+    60		void *encoders[MESON_ENC_LAST];
+    61	
+    62		const struct meson_drm_soc_limits *limits;
+    63	
+    64		/* Components Data */
+    65		struct {
+    66			bool osd1_enabled;
+    67			bool osd1_interlace;
+    68			bool osd1_commit;
+    69			bool osd1_afbcd;
+    70			uint32_t osd1_ctrl_stat;
+    71			uint32_t osd1_ctrl_stat2;
+    72			uint32_t osd1_blk0_cfg[5];
+    73			uint32_t osd1_blk1_cfg4;
+    74			uint32_t osd1_blk2_cfg4;
+    75			uint32_t osd1_addr;
+    76			uint32_t osd1_stride;
+    77			uint32_t osd1_height;
+    78			uint32_t osd1_width;
+    79			uint32_t osd_sc_ctrl0;
+    80			uint32_t osd_sc_i_wh_m1;
+    81			uint32_t osd_sc_o_h_start_end;
+    82			uint32_t osd_sc_o_v_start_end;
+    83			uint32_t osd_sc_v_ini_phase;
+    84			uint32_t osd_sc_v_phase_step;
+    85			uint32_t osd_sc_h_ini_phase;
+    86			uint32_t osd_sc_h_phase_step;
+    87			uint32_t osd_sc_h_ctrl0;
+    88			uint32_t osd_sc_v_ctrl0;
+    89			uint32_t osd_blend_din0_scope_h;
+    90			uint32_t osd_blend_din0_scope_v;
+    91			uint32_t osb_blend0_size;
+    92			uint32_t osb_blend1_size;
+    93	
+    94			bool vd1_enabled;
+    95			bool vd1_commit;
+    96			bool vd1_afbc;
+    97			unsigned int vd1_planes;
+    98			uint32_t vd1_if0_gen_reg;
+    99			uint32_t vd1_if0_luma_x0;
+   100			uint32_t vd1_if0_luma_y0;
+   101			uint32_t vd1_if0_chroma_x0;
+   102			uint32_t vd1_if0_chroma_y0;
+   103			uint32_t vd1_if0_repeat_loop;
+   104			uint32_t vd1_if0_luma0_rpt_pat;
+   105			uint32_t vd1_if0_chroma0_rpt_pat;
+   106			uint32_t vd1_range_map_y;
+   107			uint32_t vd1_range_map_cb;
+   108			uint32_t vd1_range_map_cr;
+   109			uint32_t viu_vd1_fmt_w;
+   110			uint32_t vd1_if0_canvas0;
+   111			uint32_t vd1_if0_gen_reg2;
+   112			uint32_t viu_vd1_fmt_ctrl;
+   113			uint32_t vd1_addr0;
+   114			uint32_t vd1_addr1;
+   115			uint32_t vd1_addr2;
+   116			uint32_t vd1_stride0;
+   117			uint32_t vd1_stride1;
+   118			uint32_t vd1_stride2;
+   119			uint32_t vd1_height0;
+   120			uint32_t vd1_height1;
+   121			uint32_t vd1_height2;
+   122			uint32_t vd1_afbc_mode;
+   123			uint32_t vd1_afbc_en;
+   124			uint32_t vd1_afbc_head_addr;
+   125			uint32_t vd1_afbc_body_addr;
+   126			uint32_t vd1_afbc_conv_ctrl;
+   127			uint32_t vd1_afbc_dec_def_color;
+   128			uint32_t vd1_afbc_vd_cfmt_ctrl;
+   129			uint32_t vd1_afbc_vd_cfmt_w;
+   130			uint32_t vd1_afbc_vd_cfmt_h;
+   131			uint32_t vd1_afbc_mif_hor_scope;
+   132			uint32_t vd1_afbc_mif_ver_scope;
+   133			uint32_t vd1_afbc_size_out;
+   134			uint32_t vd1_afbc_pixel_hor_scope;
+   135			uint32_t vd1_afbc_pixel_ver_scope;
+   136			uint32_t vd1_afbc_size_in;
+   137			uint32_t vpp_pic_in_height;
+   138			uint32_t vpp_postblend_vd1_h_start_end;
+   139			uint32_t vpp_postblend_vd1_v_start_end;
+   140			uint32_t vpp_hsc_region12_startp;
+   141			uint32_t vpp_hsc_region34_startp;
+   142			uint32_t vpp_hsc_region4_endp;
+   143			uint32_t vpp_hsc_start_phase_step;
+   144			uint32_t vpp_hsc_region1_phase_slope;
+   145			uint32_t vpp_hsc_region3_phase_slope;
+   146			uint32_t vpp_line_in_length;
+   147			uint32_t vpp_preblend_h_size;
+   148			uint32_t vpp_vsc_region12_startp;
+   149			uint32_t vpp_vsc_region34_startp;
+   150			uint32_t vpp_vsc_region4_endp;
+   151			uint32_t vpp_vsc_start_phase_step;
+   152			uint32_t vpp_vsc_ini_phase;
+   153			uint32_t vpp_vsc_phase_ctrl;
+   154			uint32_t vpp_hsc_phase_ctrl;
+   155			uint32_t vpp_blend_vd2_h_start_end;
+   156			uint32_t vpp_blend_vd2_v_start_end;
+   157		} viu;
+   158	
+   159		struct {
+   160			unsigned int current_mode;
+   161			bool hdmi_repeat;
+   162			bool venc_repeat;
+   163			bool hdmi_use_enci;
+   164		} venc;
+   165	
+   166		struct {
+   167			dma_addr_t addr_dma;
+   168			uint32_t *addr;
+   169			unsigned int offset;
+   170		} rdma;
+   171	
+   172		struct {
+   173			struct meson_afbcd_ops *ops;
+   174			u64 modifier;
+   175			u32 format;
+   176		} afbcd;
+   177	};
+   178	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
