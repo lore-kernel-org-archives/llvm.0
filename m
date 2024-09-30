@@ -1,144 +1,111 @@
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C03F1A0BC5
-	for <llvm@lists.linux.dev>; Mon, 30 Sep 2024 20:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915BE19882F;
+	Mon, 30 Sep 2024 20:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727727198; cv=none; b=N/pCyd5xMIwDWZc2u9p7Jj4b8QOOXi3nOIT/jxAkVirSD8yvcZpzMsgUMorBlKw/La+MpZov6+kwnWZ8tAd44Mz6qiS9tajlF2SBXPe0pDGpKfsgOEJG1yhb15jr+eis97NZBZJW5mD8OwnY1U9xnpSx51WCsqBH9oRHm0aysB4=
+	t=1727728156; cv=none; b=AkLL96vLbEMJm5jkazzaiioUfquMsl5BQ9VOXHSnUdZiFNEQrSkmESF81bwpBeUz1o7tRA/jNKfNgobSptfvLxPi8ihURjpVkdm9zWqkZTbC15b/AEbzwME5JV6ySGNHzlD4s1ihhrv3uparS1lQAoIv/httC8SS9cfF0Dbk57s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727727198; c=relaxed/simple;
-	bh=jpHFbPS4b46l4Uy5ur3XAr82nRkU4uFcljnesW3CQjA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=jjG/tZZBzuQ6nZmZl7ybiVPqAq86xIWHKzOpnk0Ih0p6IB3JcAmO+C76qWMoTtFbtAs7CPUKyTZ1XI3IRlWNW6m/UcTFPOGVYiN8iY9qeNZKWp2rnOdSIt7QoJ39notkQEXer6U/SmscKaaGTnG2ktPcEiijh5jSZc2vGYybQxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=e231wNzI; arc=none smtp.client-ip=217.70.178.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1727728156; c=relaxed/simple;
+	bh=YiaWmx4C+Wz5BdawBQdt6XQcHpZFtuPbrE1OBh+7RHs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YQqfTtAxbihpPsoVmDUuYd9TQXTir6n+oJuJNh505GHNT2n2S6SbLFGCoBLGzmtFV4z3wUMYSi+zuzNwl9jZOi4HZEheXXKXy6xHT1/YgHQ5ywYkeHm1+W6R0exphi6snYeFri771ucEWKP+XSU4ezIMrhlcQ7gBF2SW3IhSVtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y36Z5gFU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="e231wNzI"
-Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
-	by mslow1.mail.gandi.net (Postfix) with ESMTP id E74E1C0EE4
-	for <llvm@lists.linux.dev>; Mon, 30 Sep 2024 20:07:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7686B60005;
-	Mon, 30 Sep 2024 20:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1727726858;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uPjZZqN7jnSiL2NmefSUuNypX5UxgdYOfraEUVr0Otg=;
-	b=e231wNzIz4oR70aovEHisrl21oyE2m0L3T4+Z8hXGO7hhzHaByLdi/1MobIS+zPxM9O23o
-	CIKANaTkENTMIiqYTB2bwAtRFFx9K32FJ++KtEXXPp7q0cn2ru0ka999sZ/i0MiAxq6gGg
-	Js/7MdmM6enEH874PpBnaIYtYPFXjce2HHd4o7Fqy39g398TtkkTrTUN9bqnUOV2TuwmQS
-	GteyLvj78INFCPBj8k6pBCH8usXi8BI7r+bNW2QtiGs4i4aph8jjtOsFvnkOXnUL5e37mo
-	8AObZa8eHe9imlZ9BiIEYB13Prf1/EKWBTI1/MxRfJnQZUfRtj5gCGOwCwkKyw==
-Message-ID: <affb7aff-dc9b-4263-bbd4-a7965c19ac4e@gtucker.io>
-Date: Mon, 30 Sep 2024 22:07:36 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y36Z5gFU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C96EC4CEC7;
+	Mon, 30 Sep 2024 20:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727728156;
+	bh=YiaWmx4C+Wz5BdawBQdt6XQcHpZFtuPbrE1OBh+7RHs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y36Z5gFUJMhKC1P3Fgs33xQwUxd7cXW0xvyy75tpTfLf3iKm0NocvzMZFqkFiS5tu
+	 W0anNMdHAiPyWLdBvvNvfIrTYKIK1Stb01bo+V0xg5uqt6tHD+/I3RXe1URRD2AW/r
+	 kq/ghRbt2mV/xoMb7mJB4CTp5XincIJADHBVerxaZFKKUZAbAX59ksLP9cQjn5KufN
+	 g/aSKsbeEtPHRe0uBIrHO/PwJJY8ilgb+Ytl6O53uFhoh+yw9skrJK5Bosqrf0nRPt
+	 TR5ft9baBq6pWSjsF7T8WRURA/naor6G0QMc16aTAHFZ9l64fag/acedSUrLYyjE06
+	 9DlSRg5ucss4g==
+Date: Mon, 30 Sep 2024 13:29:11 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rong Xu <xur@google.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Maksim Panchenko <max4bolt@gmail.com>,
+	Han Shen <shenhan@google.com>,
+	Sriraman Tallam <tmsriram@google.com>,
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	John Moon <john@jmoon.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Eric DeVolder <eric.devolder@oracle.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Benjamin Segall <bsegall@google.com>,
+	Breno Leitao <leitao@debian.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Xiao Wang <xiao.w.wang@intel.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>,
+	Stephane Eranian <eranian@google.com>,
+	Maksim Panchenko <maks@meta.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+Message-ID: <20240930202911.GB1497385@thelio-3990X>
+References: <20240728203001.2551083-1-xur@google.com>
+ <20240728203001.2551083-7-xur@google.com>
+ <c65a07ef-6436-4e04-a263-7cad9758e9be@gmail.com>
+ <CAKwvOdm0iZspjpuueBV1=eFt+Bf4edWBZsDsj10kEvTGZRye2w@mail.gmail.com>
+ <20240928173530.GC430964@thelio-3990X>
+ <CAF1bQ=QoNNLVKRpaXyJ8pm+NcnSyzmpgAN5ktu=Fqim9HkF4rA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Automated-testing] Plumbers Testing MC potential topic:
- specialised toolchains
-From: Guillaume Tucker <gtucker@gtucker.io>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
- rust-for-linux@vger.kernel.org, yurinnick@meta.com, bpf@vger.kernel.org,
- Sasha Levin <sashal@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- automated-testing@lists.yoctoproject.org
-References: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
- <20240709053031.GB2120498@thelio-3990X>
- <e0b6e4b6-549a-43dc-bc76-3f8488cf5dd2@gtucker.io>
- <17F6464FBF21FF99.27464@lists.yoctoproject.org>
-Content-Language: en-GB
-Organization: gtucker.io
-In-Reply-To: <17F6464FBF21FF99.27464@lists.yoctoproject.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: gtucker@gtucker.io
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAF1bQ=QoNNLVKRpaXyJ8pm+NcnSyzmpgAN5ktu=Fqim9HkF4rA@mail.gmail.com>
 
-On 18/09/2024 09:33, Guillaume Tucker wrote:
-> Hello,
-> 
-> On 14/07/2024 1:03 am, Guillaume Tucker wrote:
->>>> very interested to hear whether people feel it would be
->>>> beneficial to work towards a more exhaustive solution supported
->>>> upstream: kernel.org Docker images or something close such as
->>>> Dockerfiles in Git or another type of images with all the
->>>> dependencies included.  How does that sound?
->>> A few thoughts around this:
->>>
->>> Having first party Dockerfiles could be useful but how would they be
->>> used? Perhaps building a kernel in such a container could be plumbed
->>> into Kbuild, such that the container manager could be invoked to build
->>> the image if it does not exist then build the kernel in that image? This
->>> might be a lofty idea but it would remove a lot of the friction of using
->>> containers to build the kernel so that more people would adopt it?
->> That's a great idea, and I think it's why having a live
->> discussion at Plumbers would make sense as it's going to be
->> harder to reach answers in a thread like this.
-> 
-> In fact I went ahead and made a small PoC for this as an experiment:
-> 
->     https://gitlab.com/gtucker/linux/-/commits/linux-6.7-make-container
-> 
->>> Another aspect of this is discoverability. I think a big problem with a
->>> project like TuxMake is that while it is developed for the kernel
->>> community, it is not a first party project, so without word of mouth,
->>> there is not a great way for other people to hear about it.
->>>
->>> I think it would be a good idea to try and solicit feedback from the
->>> greater kernel community at large to ensure that whatever solution is
->>> decided on will work for both testing systems and
->>> developers/maintainers. I think that a first party solution for having a
->>> consistent and easy to set up/work with build environment has been
->>> needed for some time but unfortunately, I am not sure how much
->>> discussion around this problem has happened directly with those folks.
->> Yes, that was my intention here with this thread to start
->> widening the audience with the upstream community.  My
->> understanding is that the issue hasn't been suitably framed to
->> enable constructive discussion yet.  I'll consider submitting a
->> proposal for the Toolchain track next.
->>
->>>> [1]https://lpc.events/event/18/contributions/1665/
->>>> [2]https://hub.docker.com/u/tuxmake
->>>> [3]https://www.linaro.org/blog/tuxmake-building-linux-with-kernel-org-toolchains/
->>> As an aside, consider using me as a point of contact for anything
->>> ClangBuiltLinux related instead of Nick going forward, he has stepped
->>> away to focus on LLVM libc for the immediate future.
->> Noted, thank you.
->>
->>> Thanks a lot for bring up this topic. I think it is important to work on
->>> and I look forward to talking through this at Plumbers.
->> That would be greatly appreciated.  Many thanks already for your
->> insightful feedback.
-> 
-> The talk is happening today, slides are available:
-> 
->     https://lpc.events/event/18/contributions/1928/
-> 
-> I'll reply later this week with a follow-up from the live
-> discussions at Plumbers and maybe this will lead to some RFCs or
-> a few patches.
+Hi Rong,
 
-Well, we're now more than a week after but I got some extras with
-actual container images and a blog post with all the details:
+On Mon, Sep 30, 2024 at 10:07:05AM -0700, Rong Xu wrote:
+> I don't find the Clang Build Linux meeting in the link of
+> https://clangbuiltlinux.github.io/. There is no Wednesday meeting in the
+> upcoming event. Can you confirm there is such a meeting.
+> We will be happy to join to chat about this.
 
-    https://gtucker.io/posts/2024-09-30-korg-containers/
+It is in the "Useful links" section, under the "Bi-weekly video meeting"
+line. I'll copy it here just to make sure you have it.
 
-In a nutshell, this went down rather well at Plumbers.  I think
-there are still a few critical points to address before bringing
-this up as actual RFC kernel patches but let's see how this goes.
+Calendar, which should show the October 2nd meeting at 12pm Pacific
+time:
+https://calendar.google.com/calendar/embed?src=47005f8f50f21da6133d7239f3cb93d1624d2e1949963ea75dd86d5f2d5721e0%40group.calendar.google.com
 
-Many thanks once again to the Toolchain Track organizers and
-Nathan for the feedback.
+Meeting link:
+https://meet.google.com/wrr-mxkn-hdo
 
-Best wishes,
-Guillaume
-
+Cheers,
+Nathan
