@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA4763C;
-	Tue,  1 Oct 2024 01:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB36BA37;
+	Tue,  1 Oct 2024 03:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727745770; cv=none; b=oPsXIUdqS+vjaMC1sQhNNgDY4C19+HXjrnEyT7o5ryXDXXOJPjo7R/zPdXp1Rs5r2A8ncE1YZ58i9aMLeAcktfkVWdkWn/K8ai+RnJm+SVNd0espsVF6UA5OA7uw8Qz7+FzSKMq49kzy8S0fP08jCjM8r6WbZJycwlFII9Ob17o=
+	t=1727751954; cv=none; b=GMSvp+sBWLPmvsu3vNkOf4TA/7L/iCC1t6ebdSKtNq4TyExvmbJFsBHpqweXtrlSTUW+qV2HDbD3wIzaT7pLaMB/84DHx7S7T6rmrCnjzDR8ZmOjupeTFb/Zf1uVhU31YDF9Ea2Jua87PBlTSkHXpGPCeCHdNmv9XrG49nbZHeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727745770; c=relaxed/simple;
-	bh=AKIg4VoRpA4jYK8/KnU3MlGxI+4XGWbmqThiign0pgM=;
+	s=arc-20240116; t=1727751954; c=relaxed/simple;
+	bh=irPUzE0q3LMoztClPUKr1FGEat0NuPzhHFsvqqzyfBA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ktaUiyZeqtZx5AN+F6Wu48SpWQKRtVXXcQXo0AZo90tAHeK4qZmw2VcThmvv7TlksnRtJFHj9gNA21TI3ItMcBnvd3n/nSkyxXoaissAmrMtz2MS/3pNqZdWjpKmiw2N/wsij+TF4ga0HQ020hhLYKtxZu8IQ2oqK6Bs5/1+wgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QRu+P6sx; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=FNoKmDrB82XNO4uM3hq2EnOo41c8Kstzfz6PPYafMoxwMa4S+swDHboTv5Kb7JQxaVDSq246bO8+j0IiqyXI7zo9dRDoh5Bycmc47Ntg+CynmXNUvx49Xqe/HLOA8sJIHBT+xTnJPN+pkOXEXbn35xiTCBVNc6HRfZZrZbVzmBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LamGV30P; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QRu+P6sx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LamGV30P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727745768; x=1759281768;
+  t=1727751953; x=1759287953;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AKIg4VoRpA4jYK8/KnU3MlGxI+4XGWbmqThiign0pgM=;
-  b=QRu+P6sxmOFS9dHU0I0AA/HIZ2RUFVYur3720IVD5o5O/D1COSyD0l+l
-   pOcbqJ1oG4N8IM0/2yquVdY57yt+7q9QlVpFxhRDGGMfuqqVM0ZjFKmXB
-   klMakVsxGOQzBWmrP3OpqByPnRaLhUMFUpMban02Lrt5NhffO0sbnsrE/
-   7Q/LSW+5h5KwcURwjPJOVLHKzy8YjcQvOvJY4wR2nrdnvzFRl5pVcdv6s
-   He39jHMXzZwm12wi4ipIYUB2srxALZL8br4cCWoWFdkIvbwuCVqqSKYOW
-   zCSSWb8EZZ9UU6jDIo/mYszxvgayrnCim34n+dSYO0TLzbbkxOmn5qv4+
-   w==;
-X-CSE-ConnectionGUID: PA/swhdUSg++z4n2Bv7Nzw==
-X-CSE-MsgGUID: xZBNBycCS5mPYn84SIv92g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="26984747"
+  bh=irPUzE0q3LMoztClPUKr1FGEat0NuPzhHFsvqqzyfBA=;
+  b=LamGV30PvhLe+GIz5drnCEJzdkzZV1/aN+ZBc9Pm7KvjRhWH0vQEYYKZ
+   nV+Ka5gDfNUTT38vyw9r4TNzyfBvLfnC3vI2hX8BwCZxYo6ABGCVS8e1q
+   0ONbXelzxcKAjn3wFo7QbN88Fsr+3TszYeOJBqJK/aRX1KEKeCr2e0Rz9
+   N3/nZHsb9dr8HrAjhFYajfOWMDxx0CK2Jp9HDDu34sI+Nv01rCqRf6KlM
+   kvZEEAnjcXquulf5rKGrB0EW2EPTpaKgJrB91Bc83Y+sMgWdVyMOxpnxc
+   Jh2E5tpDs2Qkp4xWBYpIG957GPZO89cwHZ8lrxjXieN4uvqiqPmt67t9d
+   g==;
+X-CSE-ConnectionGUID: /FR0NixATeaZaRL3K1hCKQ==
+X-CSE-MsgGUID: QSCVMLE0S1+xg9fhBricyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="26323574"
 X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="26984747"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 18:22:48 -0700
-X-CSE-ConnectionGUID: jjQTeaayTcSexKUPHK95YA==
-X-CSE-MsgGUID: gtnQmT6RSluQ3px9xdBz2w==
+   d="scan'208";a="26323574"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 20:05:51 -0700
+X-CSE-ConnectionGUID: m1HjSWqcQx233YTGxemSFw==
+X-CSE-MsgGUID: RlJkglm2TKe4eRVyXvZg3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="96829214"
+   d="scan'208";a="77579063"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 30 Sep 2024 18:22:46 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 30 Sep 2024 20:05:50 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1svRbA-000Q77-0M;
-	Tue, 01 Oct 2024 01:22:44 +0000
-Date: Tue, 1 Oct 2024 09:22:11 +0800
+	id 1svTCu-000QBZ-0b;
+	Tue, 01 Oct 2024 03:05:48 +0000
+Date: Tue, 1 Oct 2024 11:05:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Fomichev <a.fomichev@yadro.com>
+To: Shuming Fan <shumingf@realtek.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-ntb@googlegroups.com, Jon Mason <jdmason@kudzu.us>,
-	Dave Jiang <dave.jiang@intel.com>
-Subject: [jonmason-ntb:ntb-perf-latency 2/5]
- drivers/ntb/test/ntb_perf.c:1185:14: error: call to undeclared function
- 'get_random_int'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202410010927.2eG6VtDI-lkp@intel.com>
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:filekCZcLQ 7/13] sound/soc/codecs/rt1320-sdw.c:564:14:
+ warning: result of comparison of constant 4295491583 with expression of type
+ 'unsigned int' is always false
+Message-ID: <202410011159.InLKFd40-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,54 +64,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/jonmason/ntb ntb-perf-latency
-head:   259175ed1ca5c7b82c8948657de24b15b99162d0
-commit: 1361021161161af720f27081dc7cbda6e3c6f6d0 [2/5] ntb_perf: extend with poll latency measurement
-config: arm-randconfig-003-20241001 (https://download.01.org/0day-ci/archive/20241001/202410010927.2eG6VtDI-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241001/202410010927.2eG6VtDI-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git filekCZcLQ
+head:   4649cbd97fdae5069e9a71cd7669b62b90e03669
+commit: d72498fad93abf1817c4998d172a3d7f98f76bbe [7/13] ASoC: rt1320: reads patch code from firmware file
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241001/202410011159.InLKFd40-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241001/202410011159.InLKFd40-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410010927.2eG6VtDI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410011159.InLKFd40-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/ntb/test/ntb_perf.c:1185:14: error: call to undeclared function 'get_random_int'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1185 |                         *bp = (u8)get_random_int();
-         |                                   ^
-   1 error generated.
+>> sound/soc/codecs/rt1320-sdw.c:564:14: warning: result of comparison of constant 4295491583 with expression of type 'unsigned int' is always false [-Wtautological-constant-out-of-range-compare]
+     564 |                                 if (addr > 0x10007ffff || addr < 0x10007000) {
+         |                                     ~~~~ ^ ~~~~~~~~~~~
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +/get_random_int +1185 drivers/ntb/test/ntb_perf.c
+vim +564 sound/soc/codecs/rt1320-sdw.c
 
-  1166	
-  1167	static int perf_init_pl(struct perf_poll_lat_data *pldata)
-  1168	{
-  1169		struct perf_ctx *perf = pldata->perf;
-  1170		struct perf_peer *peer = perf->test_peer;
-  1171		u8 *bp;
-  1172	
-  1173		pldata->src = kmalloc_node(peer->outbuf_size, GFP_KERNEL,
-  1174					 dev_to_node(&perf->ntb->dev));
-  1175		if (!pldata->src)
-  1176			return -ENOMEM;
-  1177	
-  1178		/*
-  1179		 * Prepare random data to send, guaranteed exclusion of 0x00 (unreceived)
-  1180		 * and 0xFF (stop_word)
-  1181		 */
-  1182		get_random_bytes(pldata->src, peer->outbuf_size);
-  1183		for (bp = pldata->src; bp < (u8 *) pldata->src + peer->outbuf_size; bp++)
-  1184			while (*bp == 0 || *bp == stop_word)
-> 1185				*bp = (u8)get_random_int();
-  1186	
-  1187		memset(peer->inbuf, 0, peer->inbuf_size);
-  1188	
-  1189		return 0;
-  1190	}
-  1191	
+   527	
+   528	/*
+   529	 * The 'patch code' is written to the patch code area.
+   530	 * The patch code area is used for SDCA register expansion flexibility.
+   531	 */
+   532	static void rt1320_load_mcu_patch(struct rt1320_sdw_priv *rt1320)
+   533	{
+   534		struct sdw_slave *slave = rt1320->sdw_slave;
+   535		const struct firmware *patch;
+   536		const char *filename;
+   537		unsigned int addr, val;
+   538		const unsigned char *ptr;
+   539		int ret, i;
+   540	
+   541		if (rt1320->version_id <= RT1320_VB)
+   542			filename = RT1320_VAB_MCU_PATCH;
+   543		else
+   544			filename = RT1320_VC_MCU_PATCH;
+   545	
+   546		/* load the patch code here */
+   547		ret = request_firmware(&patch, filename, &slave->dev);
+   548		if (ret) {
+   549			dev_err(&slave->dev, "%s: Failed to load %s firmware", __func__, filename);
+   550			regmap_write(rt1320->regmap, 0xc598, 0x00);
+   551			regmap_write(rt1320->regmap, 0x10007000, 0x67);
+   552			regmap_write(rt1320->regmap, 0x10007001, 0x80);
+   553			regmap_write(rt1320->regmap, 0x10007002, 0x00);
+   554			regmap_write(rt1320->regmap, 0x10007003, 0x00);
+   555		} else {
+   556			ptr = (const unsigned char *)patch->data;
+   557			if ((patch->size % 8) == 0) {
+   558				for (i = 0; i < patch->size; i += 8) {
+   559					addr = (ptr[i] & 0xff) | (ptr[i + 1] & 0xff) << 8 |
+   560						(ptr[i + 2] & 0xff) << 16 | (ptr[i + 3] & 0xff) << 24;
+   561					val = (ptr[i + 4] & 0xff) | (ptr[i + 5] & 0xff) << 8 |
+   562						(ptr[i + 6] & 0xff) << 16 | (ptr[i + 7] & 0xff) << 24;
+   563	
+ > 564					if (addr > 0x10007ffff || addr < 0x10007000) {
+   565						dev_err(&slave->dev, "%s: the address 0x%x is wrong", __func__, addr);
+   566						goto _exit_;
+   567					}
+   568					if (val > 0xff) {
+   569						dev_err(&slave->dev, "%s: the value 0x%x is wrong", __func__, val);
+   570						goto _exit_;
+   571					}
+   572					regmap_write(rt1320->regmap, addr, val);
+   573				}
+   574			}
+   575	_exit_:
+   576			release_firmware(patch);
+   577		}
+   578	}
+   579	
 
 -- 
 0-DAY CI Kernel Test Service
