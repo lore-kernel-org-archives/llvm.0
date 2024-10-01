@@ -1,138 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BCE1BBBCA
-	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 07:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361DC19B587;
+	Tue,  1 Oct 2024 09:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727768399; cv=none; b=g/WLCMLnSHVpVZnl4T8gGrvb4zRbheBBkZBTX+pk/w50XBBzw3ICVnx41nEXL6FETUYkf7AAgJYmR+bw7tlEuUktFcgI2uMLUD8Sw3dn5JgBpPUqo7MoHqXc6d59uIoqLRMR6FDv7A5NGMi/4bMGnI+rWGrL3dlGpQcRoaLLZWs=
+	t=1727773628; cv=none; b=Q2QO01XQxG8N3p9z8y+bvhT9LcyFlmcDlT0LPlYmdNlGnZII9ANj4fkn5Mbvhh92WXyaH6qVkjO30ZbjQ+XE6szZtA5Ur6fJdTH39ob8hvlMUIodwD4H5ZwdJzhTm1aqHrQJ/SeNnbNYCxJEHw2zh/9lWkXOnYZa+KLRnlOnC+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727768399; c=relaxed/simple;
-	bh=za16NxIQDUGjjHP2c29sw6PI8ZU3lXszSx4jSWmr5Jk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gs1Vlb39N+XmFyhOeSWV4HH9lzSLiE41NhmnxX/eJOYaPkrQukle5QKp6eexE760VeACnvemTTg6q4R2woDbDQ4SYtmLCljnKwuIRo26inm4taTB+AwKKdD8HDrvig05ViTX9WH7/7r/ALZGLDecw2+p7SyXoYJu8vH9a16f76I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+ZdI5Pr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727773628; c=relaxed/simple;
+	bh=m97NaR/uwM/LoByNr7jk1ak8+1faMfudA3HDDJa1jBQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=akcaOcV28nO9iEQTb/RUIv16kcgq+TSe/Wc1sUoaUP2ue+c1kY8SUggqsJOwX2XTgKEgfr5wuEi8kzWmrJORnwGlAMnpJwiWexmoBxmeh5NHQIdIRQLn5wqaNQo4yCPIACCAwAPOIuZdnRuRwxDrTI3oLfFIAdEr/rLfw2K7Qpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i4xOF5sK; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+ZdI5Pr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6386C4CED5
-	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 07:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727768398;
-	bh=za16NxIQDUGjjHP2c29sw6PI8ZU3lXszSx4jSWmr5Jk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=A+ZdI5Pr5z95cPoyROInkoF/m1KgQ1L5oRn72JvSq+0YaKEdwCLUom9aGtJ3WPnt6
-	 oXZapjcw8OgiAkwdqtb+64MzbbBoHJQXQvGkIqquljGClamFglB5/PXtGbAeAY3If6
-	 IPlo6kC//uC39Zx/hW+2gRDa4n5/CBK3RzMF7t6DGLbGJj4ChLHKB+H3CWbWWTD03j
-	 baj8udo9fC+ZVvg7A5HIWpbzZQW1YwtupJL9Stvns+2O4l6puYXjcYLKahxMR2nxKz
-	 rTrMJDmhJURVb5Z0NfhyRfNtdi4MgvLrU7I4+tha5g9KyqMVcQhZWiJApoLGS8OCy5
-	 ejezbRdzfWUbA==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f7657f9f62so59370651fa.3
-        for <llvm@lists.linux.dev>; Tue, 01 Oct 2024 00:39:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW1v20R0DfVHK0QlFXbrfb8ISbzWMIiLIUzr7zmmENqKc00KgsBM22xipshSpJoS6xShVDW@lists.linux.dev
-X-Gm-Message-State: AOJu0YwlpFvNv8yJejLiHR5ECzL7JGPHf987f2tqSzUke8m129ZfdGPw
-	7ErWwlwVF4z+ZonpHWSNLaImJoyx2iT2DuYYo9NaI5Xa+3jJJahBnxLysTfgSr1035XLBKLGfBR
-	dJMM2jlacJDD1t4Z0at63BTwvhks=
-X-Google-Smtp-Source: AGHT+IGSGW+uzmUjxyeIFaLft3PnZ2kaCaMuKqb2T+GLgytq3+U5XTQLxKYTu05fD4+Ir4Uuwo1LuIK4EgJ7mk97UG4=
-X-Received: by 2002:a05:6512:b9e:b0:539:8e20:105 with SMTP id
- 2adb3069b0e04-5398e200266mr5005657e87.28.1727768396993; Tue, 01 Oct 2024
- 00:39:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i4xOF5sK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727773627; x=1759309627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m97NaR/uwM/LoByNr7jk1ak8+1faMfudA3HDDJa1jBQ=;
+  b=i4xOF5sKEcVbFekmdnCSMR+cnRPA4hmKBdS9JZCe6V1tp+wKRs9VI2eO
+   PxeBU/c2Pz9TWdoCc5VO0qocXtkR1Pm9sHTH3q6fF9cRJKLm+nTRdSgcP
+   SuXEkzRg6mU62sLxqk0SCTuoUfZJxyxL8J53iHPWMR3tMCsUojjba4sEt
+   Q6Gxy4d2nbgIPi69O5GAk2npEVgwmYITSuv8zig7ztYuuAD3qjwtuWo06
+   cRw5lmSz7GPA/HOKKp1XSz5ziwmOFvNAOB+E3jlUPYWF8GpbFuLM5gH94
+   rYUYdhe2SG3y5sN+xqWidsfQ+MsPz08Uaj2zvuSjx0vYBIvT9Yb0trWJj
+   A==;
+X-CSE-ConnectionGUID: 3NPcDP59TLOun4Lfd8YYyQ==
+X-CSE-MsgGUID: lZmc/Tk6Qn6C/CJVvpa9rQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="52306009"
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="52306009"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 02:07:07 -0700
+X-CSE-ConnectionGUID: ojDeIRRCQy6cXbvKsd4T0g==
+X-CSE-MsgGUID: N/BxBTXLSmyOMZi+tRyimQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
+   d="scan'208";a="73564062"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 01 Oct 2024 02:07:03 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1svYqT-000QU9-0V;
+	Tue, 01 Oct 2024 09:07:01 +0000
+Date: Tue, 1 Oct 2024 17:06:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rosen Penev <rosenp@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrew@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-kernel@vger.kernel.org,
+	jacob.e.keller@intel.com, horms@kernel.org, sd@queasysnail.net,
+	chunkeey@gmail.com
+Subject: Re: [PATCH net-next 09/13] net: ibm: emac: rgmii:
+ devm_platform_get_resource
+Message-ID: <202410011626.D4gEmLU8-lkp@intel.com>
+References: <20240930180036.87598-10-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-54-ardb+git@google.com> <20241001071841.yrc7cxdp2unnzju7@treble>
-In-Reply-To: <20241001071841.yrc7cxdp2unnzju7@treble>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 1 Oct 2024 09:39:45 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGA785Z2_AWuTTXPkvH9Mis=28rn_paOZe=gdaXjpu-=A@mail.gmail.com>
-Message-ID: <CAMj1kXGA785Z2_AWuTTXPkvH9Mis=28rn_paOZe=gdaXjpu-=A@mail.gmail.com>
-Subject: Re: [RFC PATCH 24/28] tools/objtool: Treat indirect ftrace calls as
- direct calls
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240930180036.87598-10-rosenp@gmail.com>
 
-On Tue, 1 Oct 2024 at 09:18, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Wed, Sep 25, 2024 at 05:01:24PM +0200, Ard Biesheuvel wrote:
-> > +             if (insn->type == INSN_CALL_DYNAMIC) {
-> > +                     if (!reloc)
-> > +                             continue;
-> > +
-> > +                     /*
-> > +                      * GCC 13 and older on x86 will always emit the call to
-> > +                      * __fentry__ using a relaxable GOT-based symbol
-> > +                      * reference when operating in PIC mode, i.e.,
-> > +                      *
-> > +                      *   call   *0x0(%rip)
-> > +                      *             R_X86_64_GOTPCRELX  __fentry__-0x4
-> > +                      *
-> > +                      * where it is left up to the linker to relax this into
-> > +                      *
-> > +                      *   call   __fentry__
-> > +                      *   nop
-> > +                      *
-> > +                      * if __fentry__ turns out to be DSO local, which is
-> > +                      * always the case for vmlinux. Given that this
-> > +                      * relaxation is mandatory per the x86_64 psABI, these
-> > +                      * calls can simply be treated as direct calls.
-> > +                      */
-> > +                     if (arch_ftrace_match(reloc->sym->name)) {
-> > +                             insn->type = INSN_CALL;
-> > +                             add_call_dest(file, insn, reloc->sym, false);
-> > +                     }
->
-> Can the compiler also do this for non-fentry direct calls?
+Hi Rosen,
 
-No, it is essentially an oversight in GCC that this happens at all,
-and I fixed it [0] for GCC 14, i.e., to honour -mdirect-extern-access
-when emitting these calls.
+kernel test robot noticed the following build errors:
 
-But even without that, it is peculiar at the very least that the
-compiler would emit GOT based indirect calls at all.
+[auto build test ERROR on net-next/main]
 
-Instead of
+url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/net-ibm-emac-remove-custom-init-exit-functions/20241001-020553
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240930180036.87598-10-rosenp%40gmail.com
+patch subject: [PATCH net-next 09/13] net: ibm: emac: rgmii: devm_platform_get_resource
+config: powerpc-canyonlands_defconfig (https://download.01.org/0day-ci/archive/20241001/202410011626.D4gEmLU8-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241001/202410011626.D4gEmLU8-lkp@intel.com/reproduce)
 
-  call *__fentry__@GOTPCREL(%rip)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410011626.D4gEmLU8-lkp@intel.com/
 
-it should simply emit
+All errors (new ones prefixed by >>):
 
-  call __fentry__@PLT
-
-and leave it up to the linker to resolve this directly or
-lazily/eagerly via a PLT jump (assuming -fno-plt is not being used)
-
-> If so would
-> it make sense to generalize this by converting all
-> INSN_CALL_DYNAMIC+reloc to INSN_CALL?
->
-> And maybe something similar for add_jump_destinations().
->
-
-I suppose that the pattern INSN_CALL_DYNAMIC+reloc is unambiguous, and
-can therefore always be treated as INSN_CALL. But I don't anticipate
-any other occurrences here, and if they do exist, they indicate some
-other weirdness in the compiler, so perhaps it is better not to add
-general support for these.
+   In file included from drivers/net/ethernet/ibm/emac/rgmii.c:21:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/powerpc/include/asm/cacheflush.h:7:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/net/ethernet/ibm/emac/rgmii.c:229:14: error: call to undeclared function 'devm_platform_get_resource'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     229 |         dev->base = devm_platform_get_resource(ofdev, 0);
+         |                     ^
+   drivers/net/ethernet/ibm/emac/rgmii.c:229:14: note: did you mean 'platform_get_resource'?
+   include/linux/platform_device.h:58:25: note: 'platform_get_resource' declared here
+      58 | extern struct resource *platform_get_resource(struct platform_device *,
+         |                         ^
+>> drivers/net/ethernet/ibm/emac/rgmii.c:229:12: error: incompatible integer to pointer conversion assigning to 'struct rgmii_regs *' from 'int' [-Wint-conversion]
+     229 |         dev->base = devm_platform_get_resource(ofdev, 0);
+         |                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-[0] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=bde21de1205c0456f6df68c950fb7ee631fcfa93
+vim +/devm_platform_get_resource +229 drivers/net/ethernet/ibm/emac/rgmii.c
+
+   215	
+   216	
+   217	static int rgmii_probe(struct platform_device *ofdev)
+   218	{
+   219		struct rgmii_instance *dev;
+   220	
+   221		dev = devm_kzalloc(&ofdev->dev, sizeof(struct rgmii_instance),
+   222				   GFP_KERNEL);
+   223		if (!dev)
+   224			return -ENOMEM;
+   225	
+   226		mutex_init(&dev->lock);
+   227		dev->ofdev = ofdev;
+   228	
+ > 229		dev->base = devm_platform_get_resource(ofdev, 0);
+   230		if (IS_ERR(dev->base)) {
+   231			dev_err(&ofdev->dev, "can't map device registers");
+   232			return PTR_ERR(dev->base);
+   233		}
+   234	
+   235		/* Check for RGMII flags */
+   236		if (of_property_read_bool(ofdev->dev.of_node, "has-mdio"))
+   237			dev->flags |= EMAC_RGMII_FLAG_HAS_MDIO;
+   238	
+   239		/* CAB lacks the right properties, fix this up */
+   240		if (of_device_is_compatible(ofdev->dev.of_node, "ibm,rgmii-axon"))
+   241			dev->flags |= EMAC_RGMII_FLAG_HAS_MDIO;
+   242	
+   243		DBG2(dev, " Boot FER = 0x%08x, SSR = 0x%08x\n",
+   244		     in_be32(&dev->base->fer), in_be32(&dev->base->ssr));
+   245	
+   246		/* Disable all inputs by default */
+   247		out_be32(&dev->base->fer, 0);
+   248	
+   249		printk(KERN_INFO
+   250		       "RGMII %pOF initialized with%s MDIO support\n",
+   251		       ofdev->dev.of_node,
+   252		       (dev->flags & EMAC_RGMII_FLAG_HAS_MDIO) ? "" : "out");
+   253	
+   254		wmb();
+   255		platform_set_drvdata(ofdev, dev);
+   256	
+   257		return 0;
+   258	}
+   259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
