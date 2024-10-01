@@ -1,257 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE473201;
-	Tue,  1 Oct 2024 06:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8902063D
+	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 06:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727762460; cv=none; b=E3JmhgdKRe9Lz/g1/jS3VcuZEIkqokoqjISTeJDPbyLVrej39I8E345c/4OULwQCVJ+B6Ut1FPSuY+0rjaf0f+fYwvKVElrBbAKYvO2R38ylLiS3xbUpsvzakc5RzEUo78cO7O6YqiYlEy6tuB9oUp2EDtIHxllOZca+DzUkkxw=
+	t=1727765786; cv=none; b=WwI9bai10R1XdL5LvCdb60Ruj9EB4kX1IGGN+h9nI5NZ9qPbYpIkMeyT5OTlNhgLB+lgqIZpgiIEI0WnXPUoCP9QKPi8W28/awQxt9RFTUXWQc3Uys3Q+YAeHh9ufhWGPMP/5ka6xxDme+P+dyWtvbW0YkkoKpNk9j85/RXHcq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727762460; c=relaxed/simple;
-	bh=e0ucNSqZyVSG9GxzOeQRnWshI/L8IYO+stZaHultQZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UCEcma51OpHpEr/TAbLwtwJoLlOVacCla+ji94VRPdhzKnB+VwnWbjOLJjWJ2GHA2808IU36RylZ35EBQafQL3blNPHH+XRsdcif2BxRaiobu7HRgjv/Xb7IefOiAYkVNwlEk08ckwdGtMCAW3ALtAcriRszUL5XCRuLCeStaN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ak4If4dd; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727765786; c=relaxed/simple;
+	bh=D6cq+9W5AquN6Xivssj0gJ1Jk4JQ0mfYEn2CA9+npXI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CxADuRegO1vz5uNQcUlg99joUnxiXrQXHSTRxJYot8Pq1tCJjYCwa80x7P2k0gSL8iyvT71njphVgQkQUFvITGEgs2P6ZWUjgyIwZPPyDMOwVBXwoCR7wRBBsr2qb39kovT9ncNHFtza4nqLDn4umvNMnEPrpBLKwFThMo5Yxtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwBYHQaz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ak4If4dd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727762458; x=1759298458;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e0ucNSqZyVSG9GxzOeQRnWshI/L8IYO+stZaHultQZA=;
-  b=ak4If4ddV9zwIutLj9Fdu4QmtcV49dOQgDxTg43xS1fVvpQE20+T4/i1
-   LhYtr2nz+GyYnz0Ukm6VHT8gxDo/ZNczhi33rDF0mQ3G6WNVjKMKD7X05
-   FhW7v2BahCQhVhboTvNBUxS6KwE2swsnCbvBI2HgcTOE5PBCsVHQ0qMBS
-   IGCnkeN+4Asob6rijAkHhMCMOmImzixgZVV+wdueUZpd35CSH+yllX4V/
-   aYZYHLNLenIBVgjBKe/UZ8En4ecMaHtssOY/kCm5eJ3kMkfNFWljWrM78
-   QLgb0PNZfvhd7oGbiQUSsEn19BXqfoAi5E2ibuLeqLge7J4WYk5ztCv1i
-   w==;
-X-CSE-ConnectionGUID: y4T0bt8vSvq3YcSf7yWYbg==
-X-CSE-MsgGUID: wwaHy7cnRLSIJ6+Dk27kIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="26333425"
-X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="26333425"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 23:00:58 -0700
-X-CSE-ConnectionGUID: sswBxU7ASl20MNY9RwGpvg==
-X-CSE-MsgGUID: K0DR1l5ZTBi6O1P5XPargA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="74316564"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 30 Sep 2024 23:00:56 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1svVwL-000QJB-1b;
-	Tue, 01 Oct 2024 06:00:53 +0000
-Date: Tue, 1 Oct 2024 14:00:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>
-Subject: [viro-vfs:work.xattr 9/9] fs/xattr.c:971:28: error: use of
- undeclared identifier 'pathname'; did you mean 'putname'?
-Message-ID: <202410011312.c884e7lp-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwBYHQaz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17999C4CEC7
+	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 06:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727765786;
+	bh=D6cq+9W5AquN6Xivssj0gJ1Jk4JQ0mfYEn2CA9+npXI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XwBYHQazazbTC4OwId3vnrFAgc6CpLItRV3CT+Z8Gu23wph58CKcedFo7OLdarXFj
+	 CfBr/fhizt+I319h5X05aQeNiGEwLpOlTkxFwdMvZp5tn26hL9grIrgluiUanZgVrj
+	 0ryllcIGgHjRky7zD5Cq7OsKZqK4RkRI4/CJstCL2fYk+KBEVoQob6cme8zRgaORsv
+	 8IC6faZd2aGl4jfIjpTmpGu86/o4/aahDo/ckVnRLhdwe1cSJTcyxtGmwBVe5kWta6
+	 zAbfWFj5Dzv5UH3KDkLJ7Igmws7XQ8kbnjqJSF3yJWaphRu3BKFYLpSFA19jzUWCHz
+	 4bi5hwVR6eikg==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53992157528so2283880e87.2
+        for <llvm@lists.linux.dev>; Mon, 30 Sep 2024 23:56:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUX0JCfhjEJWOhkc02wCw9i4ioapPElMfIKhDxKtRREopgaMzBafQ9JdwvtMXVcQ2BwQ9c8@lists.linux.dev
+X-Gm-Message-State: AOJu0YzBJjIJe3MntOzZFYoOW//vHy/iZ5ERPcK8jLCwVLpbx6nA82Bm
+	6VUYwyOQQ6p7eEDYPxP9DOgNXfI8f/2O3Dy4kb/33yiWT7euVo/d4a9NujNztSM1UgXuD7VXSYK
+	1sxfcO4DPzJIEnVod+9uWl3qUOIM=
+X-Google-Smtp-Source: AGHT+IGjtx2HGlRUUxfHLsgxZrMc5HOLfFzS5jvtirjyIPXJpZcKEYpq6gBAXQaDQEq6eyp0Tbbah6SY1D/EzYnBAjs=
+X-Received: by 2002:a05:6512:3b8d:b0:52b:bf8e:ffea with SMTP id
+ 2adb3069b0e04-5389fc6429dmr8367147e87.40.1727765784329; Mon, 30 Sep 2024
+ 23:56:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-34-ardb+git@google.com> <20241001053318.elfwwiyluw6rlynz@treble>
+In-Reply-To: <20241001053318.elfwwiyluw6rlynz@treble>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 1 Oct 2024 08:56:12 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFyd7zDqnFzHTZmcR+ktxRVdOnuF-VOW+E0PYPNaQGXzQ@mail.gmail.com>
+Message-ID: <CAMj1kXFyd7zDqnFzHTZmcR+ktxRVdOnuF-VOW+E0PYPNaQGXzQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/28] x86/boot: Permit GOTPCREL relocations for
+ x86_64 builds
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.xattr
-head:   242dce7f3a28f84e733f16d29368cedf91feccf3
-commit: 242dce7f3a28f84e733f16d29368cedf91feccf3 [9/9] fs/xattr: add *at family syscalls
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241001/202410011312.c884e7lp-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241001/202410011312.c884e7lp-lkp@intel.com/reproduce)
+On Tue, 1 Oct 2024 at 07:33, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> On Wed, Sep 25, 2024 at 05:01:04PM +0200, Ard Biesheuvel wrote:
+> > +             if (r_type == R_X86_64_GOTPCREL) {
+> > +                     Elf_Shdr *s = &secs[sec->shdr.sh_info].shdr;
+> > +                     unsigned file_off = offset - s->sh_addr + s->sh_offset;
+> > +
+> > +                     /*
+> > +                      * GOTPCREL relocations refer to instructions that load
+> > +                      * a 64-bit address via a 32-bit relative reference to
+> > +                      * the GOT.  In this case, it is the GOT entry that
+> > +                      * needs to be fixed up, not the immediate offset in
+> > +                      * the opcode. Note that the linker will have applied an
+> > +                      * addend of -4 to compensate for the delta between the
+> > +                      * relocation offset and the value of RIP when the
+> > +                      * instruction executes, and this needs to be backed out
+> > +                      * again. (Addends other than -4 are permitted in
+> > +                      * principle, but make no sense in practice so they are
+> > +                      * not supported.)
+> > +                         */
+> > +                     if (rel->r_addend != -4) {
+> > +                             die("invalid addend (%ld) for %s relocation: %s\n",
+> > +                                 rel->r_addend, rel_type(r_type), symname);
+> > +                             break;
+> > +                     }
+>
+> For x86 PC-relative addressing, the addend is <reloc offset> -
+> <subsequent insn offset>.  So a PC-relative addend can be something
+> other than -4 when the relocation applies to the middle of an
+> instruction, e.g.:
+>
+>    5b381:       66 81 3d 00 00 00 00 01 06      cmpw   $0x601,0x0(%rip)        # 5b38a <generic_validate_add_page+0x4a> 5b384: R_X86_64_PC32    boot_cpu_data-0x6
+>
+>    5f283:       81 3d 00 00 00 00 ff ff ff 00   cmpl   $0xffffff,0x0(%rip)        # 5f28d <x86_acpi_suspend_lowlevel+0x9d>      5f285: R_X86_64_PC32    smpboot_control-0x8
+>
+>    72f67:       c6 05 00 00 00 00 01    movb   $0x1,0x0(%rip)        # 72f6e <sched_itmt_update_handler+0x6e>   72f69: R_X86_64_PC32    x86_topology_update-0x5
+>
+> Presumably that could also happen with R_X86_64_GOTPCREL?
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410011312.c884e7lp-lkp@intel.com/
+In theory, yes.
 
-All errors (new ones prefixed by >>):
+But for the class of GOTPCREL relaxable instructions listed in the
+psABI, the addend is always -4, and these are the only ones we might
+expect from the compiler when using -fpic with 'hidden' visibility
+and/or -mdirect-extern-access. Note that the memory operand
+foo@GOTPCREL(%rip) produces the *address* of foo, and so it is always
+the source operand, appearing at the end of the encoding.
 
-   In file included from fs/xattr.c:15:
-   In file included from include/linux/xattr.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/xattr.c:971:28: error: use of undeclared identifier 'pathname'; did you mean 'putname'?
-     971 |         error = user_path_at(dfd, pathname, lookup_flags, &path);
-         |                                   ^~~~~~~~
-         |                                   putname
-   include/linux/fs.h:2769:13: note: 'putname' declared here
-    2769 | extern void putname(struct filename *name);
-         |             ^
-   fs/xattr.c:990:10: warning: unused variable 'error' [-Wunused-variable]
-     990 |         ssize_t error;
-         |                 ^~~~~
->> fs/xattr.c:1092:37: error: incompatible pointer types passing 'struct xattr_name *' to parameter of type 'const char *' [-Werror,-Wincompatible-pointer-types]
-    1092 |                                             fd_file(f)->f_path.dentry, &kname);
-         |                                                                        ^~~~~~
-   fs/xattr.c:1037:68: note: passing argument to parameter 'name' here
-    1037 | removexattr(struct mnt_idmap *idmap, struct dentry *d, const char *name)
-         |                                                                    ^
->> fs/xattr.c:1097:2: error: use of undeclared identifier 'lookup_flags'
-    1097 |         lookup_flags = (at_flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-         |         ^
-   fs/xattr.c:1098:45: error: use of undeclared identifier 'lookup_flags'
-    1098 |         return filename_removexattr(dfd, filename, lookup_flags, &kname);
-         |                                                    ^
-   2 warnings and 4 errors generated.
+Alternatively, we might simply subtract the addend from 'offset'
+before applying the displacement from the opcode.
 
-
-vim +971 fs/xattr.c
-
-   962	
-   963	static
-   964	ssize_t filename_listxattrat(int dfd, struct filename *filename,
-   965				     unsigned int lookup_flags,
-   966				     char __user *list, size_t size)
-   967	{
-   968		struct path path;
-   969		ssize_t error;
-   970	retry:
- > 971		error = user_path_at(dfd, pathname, lookup_flags, &path);
-   972		if (error)
-   973			goto out;
-   974		error = listxattr(path.dentry, list, size);
-   975		path_put(&path);
-   976		if (retry_estale(error, lookup_flags)) {
-   977			lookup_flags |= LOOKUP_REVAL;
-   978			goto retry;
-   979		}
-   980	out:
-   981		putname(filename);
-   982		return error;
-   983	}
-   984	
-   985	static ssize_t path_listxattrat(int dfd, const char __user *pathname,
-   986					unsigned int at_flags, char __user *list,
-   987					size_t size)
-   988	{
-   989		struct filename *filename;
-   990		ssize_t error;
-   991		int lookup_flags;
-   992	
-   993		if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-   994			return -EINVAL;
-   995	
-   996		filename = getname_xattr(pathname, at_flags);
-   997		if (!filename) {
-   998			CLASS(fd, f)(dfd);
-   999			if (fd_empty(f))
-  1000				return -EBADF;
-  1001			audit_file(fd_file(f));
-  1002			return listxattr(file_dentry(fd_file(f)), list, size);
-  1003		}
-  1004	
-  1005		lookup_flags = (at_flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-  1006		return filename_listxattrat(dfd, filename, lookup_flags, list, size);
-  1007	}
-  1008	
-  1009	SYSCALL_DEFINE5(listxattrat, int, dfd, const char __user *, pathname,
-  1010			unsigned int, at_flags,
-  1011			char __user *, list, size_t, size)
-  1012	{
-  1013		return path_listxattrat(dfd, pathname, at_flags, list, size);
-  1014	}
-  1015	
-  1016	SYSCALL_DEFINE3(listxattr, const char __user *, pathname, char __user *, list,
-  1017			size_t, size)
-  1018	{
-  1019		return path_listxattrat(AT_FDCWD, pathname, 0, list, size);
-  1020	}
-  1021	
-  1022	SYSCALL_DEFINE3(llistxattr, const char __user *, pathname, char __user *, list,
-  1023			size_t, size)
-  1024	{
-  1025		return path_listxattrat(AT_FDCWD, pathname, AT_SYMLINK_NOFOLLOW, list, size);
-  1026	}
-  1027	
-  1028	SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
-  1029	{
-  1030		return path_listxattrat(fd, NULL, AT_EMPTY_PATH, list, size);
-  1031	}
-  1032	
-  1033	/*
-  1034	 * Extended attribute REMOVE operations
-  1035	 */
-  1036	static long
-  1037	removexattr(struct mnt_idmap *idmap, struct dentry *d, const char *name)
-  1038	{
-  1039		if (is_posix_acl_xattr(name))
-  1040			return vfs_remove_acl(idmap, d, name);
-  1041		return vfs_removexattr(idmap, d, name);
-  1042	}
-  1043	
-  1044	static int filename_removexattr(int dfd, struct filename *filename,
-  1045					unsigned int lookup_flags, struct xattr_name *kname)
-  1046	{
-  1047		struct path path;
-  1048		int error;
-  1049	
-  1050	retry:
-  1051		error = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
-  1052		if (error)
-  1053			goto out;
-  1054		error = mnt_want_write(path.mnt);
-  1055		if (!error) {
-  1056			error = removexattr(mnt_idmap(path.mnt), path.dentry, kname->name);
-  1057			mnt_drop_write(path.mnt);
-  1058		}
-  1059		path_put(&path);
-  1060		if (retry_estale(error, lookup_flags)) {
-  1061			lookup_flags |= LOOKUP_REVAL;
-  1062			goto retry;
-  1063		}
-  1064	out:
-  1065		putname(filename);
-  1066		return error;
-  1067	}
-  1068	
-  1069	static int path_removexattrat(int dfd, const char __user *pathname,
-  1070				      unsigned int at_flags, const char __user *name)
-  1071	{
-  1072		struct xattr_name kname;
-  1073		struct filename *filename;
-  1074		int error;
-  1075	
-  1076		if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-  1077			return -EINVAL;
-  1078	
-  1079		error = import_xattr_name(&kname, name);
-  1080		if (error)
-  1081			return error;
-  1082	
-  1083		filename = getname_xattr(pathname, at_flags);
-  1084		if (!filename) {
-  1085			CLASS(fd, f)(dfd);
-  1086			if (fd_empty(f))
-  1087				return -EBADF;
-  1088			audit_file(fd_file(f));
-  1089			error = mnt_want_write_file(fd_file(f));
-  1090			if (!error) {
-  1091				error = removexattr(file_mnt_idmap(fd_file(f)),
-> 1092						    fd_file(f)->f_path.dentry, &kname);
-  1093				mnt_drop_write_file(fd_file(f));
-  1094			}
-  1095			return error;
-  1096		}
-> 1097		lookup_flags = (at_flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-  1098		return filename_removexattr(dfd, filename, lookup_flags, &kname);
-  1099	}
-  1100	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Note that this code gets removed again in the last patch, after
+switching to PIE linking.
