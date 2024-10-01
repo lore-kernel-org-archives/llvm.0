@@ -1,305 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A931CCB36
-	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 18:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650821C2DB7;
+	Tue,  1 Oct 2024 18:55:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727806608; cv=none; b=O3ZtqLh1RfbTnV0CwtNkKoev6FySYOwMRKulpmseQKThX4cvPwAJyXvX/b8OzNo6S93+pylhIRGKYXVJnFa2hbCGrxQR5cKw7LLUtBC7EB2Q3PGrJSjePLPgFWZ5g4BxfKMrzErx2V5CnAp/kbPcVYcWvtn1CCk4jaypTZttvWE=
+	t=1727808928; cv=none; b=Xf/f0ViKwn3MKWrqTMz8lSnzoh7CH6x0VLwhU65q0/OZp+jdsrKU2ucfAJG6VTZXyyZFkz7V7Ix9tBJDs9t7PioLup7zkfnTYkAUlkMXvXJLcCbmXTiYV2tIf7Y9iqFnKgaMob0q9xfdlZDfnMDIh9Ub8GnXiZTbUWw+TwJiHFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727806608; c=relaxed/simple;
-	bh=583aKZ9l0xQjgk1LBumhwVy9engtD/OQ9RYSzWJPy9g=;
+	s=arc-20240116; t=1727808928; c=relaxed/simple;
+	bh=QwD3xBfZA0gawSdQWqGNveBRPtYRJsC9peBijbGQt8I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ttAei62ofuDioEuOWDKKDK94E9mk9hgxE6dUmwT7C8972IhvNaCrj+oB9gU3kn7VuVCoSW7idoUCFp+cJcj4Wed2hwk/qTyUlFBiml21CJ7AkXE+j/FJykCNDppNIiprYNM5/lQLRtwPBbQyXO3v+OMzsKj5JK4MAfPE3vDispg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyK0qFoi; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+2CYR7q+5N28gSJZEFtwVqSrJlUQ+P0OJ6o5tmN5Zn8ZYFsTQiGfTtzHCFZ1gcspXiDY8/+vGAshOdubLI4H+XHWYDhgdOuSnksSRapPOXJ4v4qEGP/dUOw66C0zD1oT3nu5ixO7SpAxyezx2zIHfaG1sn5jQWKTA3nSMl1Q1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qU4+RDr+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyK0qFoi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D2CC4CEC6;
-	Tue,  1 Oct 2024 18:16:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qU4+RDr+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6391C4CEC6;
+	Tue,  1 Oct 2024 18:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727806608;
-	bh=583aKZ9l0xQjgk1LBumhwVy9engtD/OQ9RYSzWJPy9g=;
+	s=k20201202; t=1727808927;
+	bh=QwD3xBfZA0gawSdQWqGNveBRPtYRJsC9peBijbGQt8I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iyK0qFoif3xuIDhjbLiQaq2/stp0xjr4dDcw2q02MjoYYkvVzL5F0Try1G5+KKVE+
-	 w9pItcquVjOG+ZJAjGN6eBOGcnN7Mp9gMpKpFzakAE7eETvawZwdhHX2Vi33HhKRZF
-	 MSo822ZEYcE2GE44cspKghsi1FlU1AHw3vxiNNpZ3K6htGWB/S4xcBSNMVq6SJj9cP
-	 ZptcC1qxwLMwnGdvfIFAO7pYmAx2HViPVNi4KWz9rDCGRk98OwxMcF14dEylqErMrB
-	 M/3zUxtqVQN1n2RIJ8HecgTw5ZzVFVqWrDCdrM/al/U/FOft00ylVRSHcoLMILEpwi
-	 uQjxwNIE8WIcA==
-Date: Tue, 1 Oct 2024 11:16:46 -0700
+	b=qU4+RDr+Og6v9NRvLaOvlgYoWD2ZBgH9RUrb3CqldEtlqAODsT04Wh+g9ys/qWQdz
+	 7ZCCu6OoUQd/AgyS7lTBsR4Sa4ND0jKxNTJZ11RGU6IA2Qddh/b7jalokZPuXBUUdd
+	 WX1LWfXXJkKashS/RFLOGkfcCiH62cSDfxnYlaUTrulKHzwgGVe9rql32kJIfoBU56
+	 o2jZIZ1XdxXloa6U9llgnZsgKxSedik61NaTb/j47cy7bF0gQXEGI2xVYPvkDzwX85
+	 RFQOyyAbqCnuygtKA7KqBKHr/bs5GtEHmDszdbEpGFKyRDyPo8FgMQKB5G95exj6rn
+	 BWJU1Q/rhghEw==
+Date: Tue, 1 Oct 2024 11:55:25 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: intel-xe@lists.freedesktop.org, Matthew Brost <matthew.brost@intel.com>,
-	Matthew Auld <matthew.auld@intel.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] drm/xe: Add a xe_bo subtest for shrinking / swapping
-Message-ID: <20241001181646.GA25328@thelio-3990X>
-References: <20240909085654.5064-1-thomas.hellstrom@linux.intel.com>
- <20240913195649.GA61514@thelio-3990X>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-riscv@lists.infradead.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Jason Montleon <jmontleo@redhat.com>, ojeda@kernel.org,
+	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+	bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+	a.hindborg@kernel.org, aliceryhl@google.com,
+	paul.walmsley@sifive.com, palmer@dabbelt.com,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1] RISC-V: disallow gcc + rust builds
+Message-ID: <20241001185525.GA29379@thelio-3990X>
+References: <20241001-playlist-deceiving-16ece2f440f5@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240913195649.GA61514@thelio-3990X>
+In-Reply-To: <20241001-playlist-deceiving-16ece2f440f5@spud>
 
-Ping? In particular, the instance of -Wsometimes-uninitialized breaks
-our CI for several configurations that enable -Werror (we don't have any
-32-bit architectures with -Werror, so the other ones do not matter as
-much, but should still be fixed) and that one does not show up with GCC
-(even though I think it should). Should purgeable just be zero
-initialized? I am happy to send a patch but I need some input on what
-the correct solution is since I am unfamiliar with this code.
+On Tue, Oct 01, 2024 at 12:28:13PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> During the discussion before supporting rust on riscv, it was decided
+> not to support gcc yet, due to differences in extension handling
+> compared to llvm (only the version of libclang matching the c compiler
+> is supported). Recently Jason Montleon reported [1] that building with
+> gcc caused build issues, due to unsupported arguments being passed to
+> libclang. After some discussion between myself and Miguel, it is better
+> to disable gcc + rust builds to match the original intent, and
+> subsequently support it when an appropriate set of extensions can be
+> deduced from the version of libclang.
+> 
+> Closes: https://lore.kernel.org/all/20240917000848.720765-2-jmontleo@redhat.com/ [1]
+> Link: https://lore.kernel.org/all/20240926-battering-revolt-6c6a7827413e@spud/ [2]
+> Fixes: 70a57b247251a ("RISC-V: enable building 64-bit kernels with rust support")
+> Reported-by: Jason Montleon <jmontleo@redhat.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-This is one of only two issues preventing our CI from being green on
--next, which we would usually expect after -rc1.
+Seems like a reasonable restriction to me.
 
-Cheers,
-Nathan
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-On Fri, Sep 13, 2024 at 12:56:49PM -0700, Nathan Chancellor wrote:
-> On Mon, Sep 09, 2024 at 10:56:54AM +0200, Thomas Hellström wrote:
-> > Add a subtest that tries to allocate twice the amount of
-> > buffer object memory available, write data to it and then read
-> > all the data back verifying data integrity.
-> > In order to be able to do this on systems that
-> > have no or not enough swap-space available, allocate some memory
-> > as purgeable, and introduce a function to purge such memory from
-> > the TTM swap_notify path.
-> > 
-> > this test is intended to add test coverage to the current
-> > bo swap path and upcoming shrinking path.
-> > 
-> > The test has previously been part of the xe bo shrinker series.
-> > 
-> > v2:
-> > - Skip test if the execution time is expected to be too long.
-> > - Minor code cleanups.
-> > 
-> > v3:
-> > - Print random seed. (Matthew Auld)
-> > 
-> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > Cc: Matthew Brost <matthew.brost@intel.com>
-> > Cc: Matthew Auld <matthew.auld@intel.com>
-> > Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> > Reviewed-by: Matthew Auld <matthew.auld@intel.com>
-> ...
-> > diff --git a/drivers/gpu/drm/xe/tests/xe_bo.c b/drivers/gpu/drm/xe/tests/xe_bo.c
-> > index 8dac069483e8..7d3fd720478b 100644
-> > --- a/drivers/gpu/drm/xe/tests/xe_bo.c
-> > +++ b/drivers/gpu/drm/xe/tests/xe_bo.c
-> ...
-> > +/*
-> > + * Try to create system bos corresponding to twice the amount
-> > + * of available system memory to test shrinker functionality.
-> > + * If no swap space is available to accommodate the
-> > + * memory overcommit, mark bos purgeable.
-> > + */
-> > +static int shrink_test_run_device(struct xe_device *xe)
-> > +{
-> > +	struct kunit *test = kunit_get_current_test();
-> > +	LIST_HEAD(bos);
-> > +	struct xe_bo_link *link, *next;
-> > +	struct sysinfo si;
-> > +	size_t ram, ram_and_swap, purgeable, alloced, to_alloc, limit;
-> > +	unsigned int interrupted = 0, successful = 0, count = 0;
-> > +	struct rnd_state prng;
-> > +	u64 rand_seed;
-> > +	bool failed = false;
-> > +
-> > +	rand_seed = get_random_u64();
-> > +	prandom_seed_state(&prng, rand_seed);
-> > +	kunit_info(test, "Random seed is 0x%016llx.\n",
-> > +		   (unsigned long long)rand_seed);
-> > +
-> > +	/* Skip if execution time is expected to be too long. */
-> > +
-> > +	limit = SZ_32G;
-> > +	/* IGFX with flat CCS needs to copy when swapping / shrinking */
-> > +	if (!IS_DGFX(xe) && xe_device_has_flat_ccs(xe))
-> > +		limit = SZ_16G;
-> > +
-> > +	si_meminfo(&si);
-> > +	ram = (size_t)si.freeram * si.mem_unit;
-> > +	if (ram > limit) {
-> > +		kunit_skip(test, "Too long expected execution time.\n");
-> > +		return 0;
-> > +	}
-> > +	to_alloc = ram * 2;
-> > +
-> > +	ram_and_swap = ram + get_nr_swap_pages() * PAGE_SIZE;
-> > +	if (to_alloc > ram_and_swap)
-> > +		purgeable = to_alloc - ram_and_swap;
-> > +	purgeable += purgeable / 5;
-> > +
-> > +	kunit_info(test, "Free ram is %lu bytes. Will allocate twice of that.\n",
-> > +		   (unsigned long)ram);
-> > +	for (alloced = 0; alloced < to_alloc; alloced += XE_BO_SHRINK_SIZE) {
-> > +		struct xe_bo *bo;
-> > +		unsigned int mem_type;
-> > +		struct xe_ttm_tt *xe_tt;
-> > +
-> > +		link = kzalloc(sizeof(*link), GFP_KERNEL);
-> > +		if (!link) {
-> > +			KUNIT_FAIL(test, "Unexpected link allocation failure\n");
-> > +			failed = true;
-> > +			break;
-> > +		}
-> > +
-> > +		INIT_LIST_HEAD(&link->link);
-> > +
-> > +		/* We can create bos using WC caching here. But it is slower. */
-> > +		bo = xe_bo_create_user(xe, NULL, NULL, XE_BO_SHRINK_SIZE,
-> > +				       DRM_XE_GEM_CPU_CACHING_WB,
-> > +				       XE_BO_FLAG_SYSTEM);
-> > +		if (IS_ERR(bo)) {
-> > +			if (bo != ERR_PTR(-ENOMEM) && bo != ERR_PTR(-ENOSPC) &&
-> > +			    bo != ERR_PTR(-EINTR) && bo != ERR_PTR(-ERESTARTSYS))
-> > +				KUNIT_FAIL(test, "Error creating bo: %pe\n", bo);
-> > +			kfree(link);
-> > +			failed = true;
-> > +			break;
-> > +		}
-> > +		xe_bo_lock(bo, false);
-> > +		xe_tt = container_of(bo->ttm.ttm, typeof(*xe_tt), ttm);
-> > +
-> > +		/*
-> > +		 * Allocate purgeable bos first, because if we do it the
-> > +		 * other way around, they may not be subject to swapping...
-> > +		 */
-> > +		if (alloced < purgeable) {
-> > +			xe_tt->purgeable = true;
-> > +			bo->ttm.priority = 0;
-> > +		} else {
-> > +			int ret = shrink_test_fill_random(bo, &prng, link);
-> > +
-> > +			if (ret) {
-> > +				xe_bo_unlock(bo);
-> > +				xe_bo_put(bo);
-> > +				KUNIT_FAIL(test, "Error filling bo with random data: %pe\n",
-> > +					   ERR_PTR(ret));
-> > +				kfree(link);
-> > +				failed = true;
-> > +				break;
-> > +			}
-> > +		}
-> > +
-> > +		mem_type = bo->ttm.resource->mem_type;
-> > +		xe_bo_unlock(bo);
-> > +		link->bo = bo;
-> > +		list_add_tail(&link->link, &bos);
-> > +
-> > +		if (mem_type != XE_PL_TT) {
-> > +			KUNIT_FAIL(test, "Bo in incorrect memory type: %u\n",
-> > +				   bo->ttm.resource->mem_type);
-> > +			failed = true;
-> > +		}
-> > +		cond_resched();
-> > +		if (signal_pending(current))
-> > +			break;
-> > +	}
+I assume the difficulty is not in getting the libclang version itself
+but actually mapping extensions to the versions and then deciding how to
+make that available to the build system? Or is it more that a solution
+is somewhat known but someone has to actually implement it? Sorry if
+this has been talked about before.
+
+> ---
 > 
-> This function introduces three warnings with clang:
+> Palmer, this is yours to take.
 > 
->   $ make -skj"$(nproc)" ARCH=i386 LLVM=1 allmodconfig drivers/gpu/drm/xe/xe_bo.o
->   ...
->   In file included from drivers/gpu/drm/xe/xe_bo.c:2406:
->   drivers/gpu/drm/xe/tests/xe_bo.c:456:10: error: implicit conversion from 'unsigned long long' to 'size_t' (aka 'unsigned int') changes value from 34359738368 to 0 [-Werror,-Wconstant-conversion]
->     456 |         limit = SZ_32G;
->         |               ~ ^~~~~~
->   include/linux/sizes.h:49:19: note: expanded from macro 'SZ_32G'
->      49 | #define SZ_32G                          _AC(0x800000000, ULL)
->         |                                         ^~~~~~~~~~~~~~~~~~~~~
->   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
->      21 | #define _AC(X,Y)        __AC(X,Y)
->         |                         ^~~~~~~~~
->   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
->      20 | #define __AC(X,Y)       (X##Y)
->         |                          ^~~~
->   <scratch space>:31:1: note: expanded from here
->      31 | 0x800000000ULL
->         | ^~~~~~~~~~~~~~
->   In file included from drivers/gpu/drm/xe/xe_bo.c:2406:
->   drivers/gpu/drm/xe/tests/xe_bo.c:459:11: error: implicit conversion from 'unsigned long long' to 'size_t' (aka 'unsigned int') changes value from 17179869184 to 0 [-Werror,-Wconstant-conversion]
->     459 |                 limit = SZ_16G;
->         |                       ~ ^~~~~~
->   include/linux/sizes.h:48:19: note: expanded from macro 'SZ_16G'
->      48 | #define SZ_16G                          _AC(0x400000000, ULL)
->         |                                         ^~~~~~~~~~~~~~~~~~~~~
->   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
->      21 | #define _AC(X,Y)        __AC(X,Y)
->         |                         ^~~~~~~~~
->   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
->      20 | #define __AC(X,Y)       (X##Y)
->         |                          ^~~~
->   <scratch space>:32:1: note: expanded from here
->      32 | 0x400000000ULL
->         | ^~~~~~~~~~~~~~
->   In file included from drivers/gpu/drm/xe/xe_bo.c:2406:
->   drivers/gpu/drm/xe/tests/xe_bo.c:470:6: error: variable 'purgeable' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->     470 |         if (to_alloc > ram_and_swap)
->         |             ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/gpu/drm/xe/tests/xe_bo.c:472:2: note: uninitialized use occurs here
->     472 |         purgeable += purgeable / 5;
->         |         ^~~~~~~~~
->   drivers/gpu/drm/xe/tests/xe_bo.c:470:2: note: remove the 'if' if its condition is always true
->     470 |         if (to_alloc > ram_and_swap)
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     471 |                 purgeable = to_alloc - ram_and_swap;
->   drivers/gpu/drm/xe/tests/xe_bo.c:443:37: note: initialize the variable 'purgeable' to silence this warning
->     443 |         size_t ram, ram_and_swap, purgeable, alloced, to_alloc, limit;
->         |                                            ^
->         |                                             = 0
->   3 errors generated.
+> CC: jmontleo@redhat.com
+> CC: ojeda@kernel.org
+> CC: alex.gaynor@gmail.com
+> CC: boqun.feng@gmail.com
+> CC: gary@garyguo.net
+> CC: bjorn3_gh@protonmail.com
+> CC: benno.lossin@proton.me
+> CC: a.hindborg@kernel.org
+> CC: aliceryhl@google.com
+> CC: paul.walmsley@sifive.com
+> CC: palmer@dabbelt.com
+> CC: nathan@kernel.org
+> CC: ndesaulniers@google.com
+> CC: morbo@google.com
+> CC: justinstitt@google.com
+> CC: rust-for-linux@vger.kernel.org
+> CC: linux-riscv@lists.infradead.org
+> CC: llvm@lists.linux.dev
+> ---
+>  Documentation/rust/arch-support.rst | 2 +-
+>  arch/riscv/Kconfig                  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> I tried to make GCC show the same warnings with an explicit
-> -Wmaybe-uninitialized but only the overflow warnings show up (is
-> purgeable always set because of the if condition?):
+> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+> index 750ff371570a0..54be7ddf3e57a 100644
+> --- a/Documentation/rust/arch-support.rst
+> +++ b/Documentation/rust/arch-support.rst
+> @@ -17,7 +17,7 @@ Architecture   Level of support  Constraints
+>  =============  ================  ==============================================
+>  ``arm64``      Maintained        Little Endian only.
+>  ``loongarch``  Maintained        \-
+> -``riscv``      Maintained        ``riscv64`` only.
+> +``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
+>  ``um``         Maintained        \-
+>  ``x86``        Maintained        ``x86_64`` only.
+>  =============  ================  ==============================================
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 22dc5ea4196ce..76843584960c2 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -177,7 +177,7 @@ config RISCV
+>  	select HAVE_REGS_AND_STACK_ACCESS_API
+>  	select HAVE_RETHOOK if !XIP_KERNEL
+>  	select HAVE_RSEQ
+> -	select HAVE_RUST if RUSTC_SUPPORTS_RISCV
+> +	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
+>  	select HAVE_SAMPLE_FTRACE_DIRECT
+>  	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+>  	select HAVE_STACKPROTECTOR
+> -- 
+> 2.45.2
 > 
->   $ make -skj"$(nproc)" ARCH=i386 CROSS_COMPILE=i386-linux- KCFLAGS=-Wmaybe-uninitialized allmodconfig drivers/gpu/drm/xe/xe_bo.o
->   In file included from include/vdso/const.h:5,
->                    from include/linux/const.h:4,
->                    from include/linux/bits.h:5,
->                    from include/linux/ratelimit_types.h:5,
->                    from include/linux/printk.h:9,
->                    from include/asm-generic/bug.h:22,
->                    from arch/x86/include/asm/bug.h:99,
->                    from include/linux/bug.h:5,
->                    from include/linux/mmdebug.h:5,
->                    from include/linux/mm.h:6,
->                    from include/linux/pagemap.h:8,
->                    from include/drm/ttm/ttm_tt.h:30,
->                    from drivers/gpu/drm/xe/xe_bo.h:9,
->                    from drivers/gpu/drm/xe/xe_bo.c:6:
->   drivers/gpu/drm/xe/tests/xe_bo.c: In function 'shrink_test_run_device':
->   include/uapi/linux/const.h:20:25: error: conversion from 'long long unsigned int' to 'size_t' {aka 'unsigned int'} changes value from '34359738368' to '0' [-Werror=overflow]
->      20 | #define __AC(X,Y)       (X##Y)
->         |                         ^
->   include/uapi/linux/const.h:21:25: note: in expansion of macro '__AC'
->      21 | #define _AC(X,Y)        __AC(X,Y)
->         |                         ^~~~
->   include/linux/sizes.h:49:41: note: in expansion of macro '_AC'
->      49 | #define SZ_32G                          _AC(0x800000000, ULL)
->         |                                         ^~~
->   drivers/gpu/drm/xe/tests/xe_bo.c:456:17: note: in expansion of macro 'SZ_32G'
->     456 |         limit = SZ_32G;
->         |                 ^~~~~~
->   include/uapi/linux/const.h:20:25: error: conversion from 'long long unsigned int' to 'size_t' {aka 'unsigned int'} changes value from '17179869184' to '0' [-Werror=overflow]
->      20 | #define __AC(X,Y)       (X##Y)
->         |                         ^
->   include/uapi/linux/const.h:21:25: note: in expansion of macro '__AC'
->      21 | #define _AC(X,Y)        __AC(X,Y)
->         |                         ^~~~
->   include/linux/sizes.h:48:41: note: in expansion of macro '_AC'
->      48 | #define SZ_16G                          _AC(0x400000000, ULL)
->         |                                         ^~~
->   drivers/gpu/drm/xe/tests/xe_bo.c:459:25: note: in expansion of macro 'SZ_16G'
->     459 |                 limit = SZ_16G;
->         |                         ^~~~~~
->   cc1: all warnings being treated as errors
