@@ -1,112 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691306F31E;
-	Tue,  1 Oct 2024 05:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E802036AF8
+	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 05:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727760802; cv=none; b=BL0VLi9yFXEC5LMZEsmumzNjHu0V55RlXFdHr2IEgAJU7qnpMHA5s8xQVbBig/kn0GwrAmY+F6cHJeddpLjqLMb1Ip4RMz1zXPaoKRj5eOwslvNFRuZeFCWKcmD0/Mz0JJGKglRezcuKtp0uRwJiwfLq+OIat/NJXUHOjcZal0E=
+	t=1727761908; cv=none; b=lAnrvcXDcirZIBOa5SRfZKZrARTWrDt0ygl18hpifWJ+8sVOlEXIXmlakKrAu66L/cojW/Q+qBxCaGKdU8GsBXPYNAFYx8teLq8a+y5mCNA637JFnIq6K3C0Hrall/CmfB6rDtpPuAQZBTcb/6m9YrsEIISPkq1IdJhWJsbCVyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727760802; c=relaxed/simple;
-	bh=ALkA67D2rrKVC3yq6JegYHLnnbAgFq9HD2IAj9UHyx0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n7BxmBmhO7/ZglhuShcpiCvqTm/qmT5EU2gtNYLAG8zRfhJn+eRBEXrXg/MsualD1XPpv3tC4XhF2XvkvAl5QjOZb+mcSTQpZ8d6Xd2UxzL/g592Z+j5j3/1ml2tNMNn7WYIn3rD6tUWVKKvmJKMTS/WvuM3+wpFaHsz7jmMDqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kaVQMaga; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727761908; c=relaxed/simple;
+	bh=3/wRht5chjIqgH1ON7u8+YBRhM3p+Px11yM4Lw3cLa0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pHxcohCbi/ytSh2fWuVOZriG8iDjZwqlEKmUiSn55zMXo5vyZr6FkOK6+bE0VSPANprzNkkkjdL2sfLgfZ0fL+nKsX2hd9n9s7xXCmEVtKjHdx3XnS8i8bG7IkM3NBCYl+B3domTU9uOogqTQ5SUOBsg/Fp+Gxk2b/800MEaMKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDPbF6yf; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kaVQMaga"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746B3C4CEC6;
-	Tue,  1 Oct 2024 05:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727760801;
-	bh=ALkA67D2rrKVC3yq6JegYHLnnbAgFq9HD2IAj9UHyx0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kaVQMaga3ThzkwWDWuQk6rDB3RSXwRBcTwVGj8nhKaCxd8DGvY0nFCd3IYRsTljub
-	 AZKP4ayTicXJrMtWGj3619WfldHuCsfWcGmrgx6E5KyTalkkIaPvDa79j8IX7+KCf9
-	 tyL1xiG/I6r77qcfTBBo8IHr09HTVxQ5ElVlGqCP6PER85aneiWgpkfNVBK7/pOc2d
-	 0IB7OJr+GBkkTfq3dlA5pz5ppoFJHfbV+YEe6fDprG8RfaDEijzbt4+Mc2WLN9Cu7U
-	 G+M9qW3AxZz15VbiWMQ7LPrCzm4ijKVB3gpMkuSL/R/mT8sVLa15UwdAicPRjd0T7A
-	 AapjojwaZZpvA==
-Date: Mon, 30 Sep 2024 22:33:18 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Keith Packard <keithp@keithp.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org,
-	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 04/28] x86/boot: Permit GOTPCREL relocations for
- x86_64 builds
-Message-ID: <20241001053318.elfwwiyluw6rlynz@treble>
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-34-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDPbF6yf"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e0b46df34eso679824a91.3
+        for <llvm@lists.linux.dev>; Mon, 30 Sep 2024 22:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727761906; x=1728366706; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3/wRht5chjIqgH1ON7u8+YBRhM3p+Px11yM4Lw3cLa0=;
+        b=bDPbF6yfrDlORqHxs292kCa+kqpkuDUNOL9VuEQ7oojIWt2l5LxcHCrq0saTBQiOnP
+         UUKsziN+dHxbqvNaub6iD7X+TJ2OdluaBFRsuvJer4TesEQhNzHyB80qwXpdd7eHz1fz
+         FjF9he0iG8prTOm6SJxYoRPN4IBD9IOChHZJp3iNONf86lohD7k/GOQ9TW9UqeKuJoxy
+         VAtKPseAUW3f4d7EvRn037MOTkc/KG4K+BzRD+9T1ONfkgQd1qjd89nixOg2UZ2KOcwx
+         DSqGHwW7fNyMm2kXtIQEaGLYHqBMPhhQotNbtL4cGDoc5oNaqJ4Wa8liDF4roauucQMB
+         4BQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727761906; x=1728366706;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3/wRht5chjIqgH1ON7u8+YBRhM3p+Px11yM4Lw3cLa0=;
+        b=MboiIs6S+9XOhZxGj21lvDgf2Ks7As2KEDGzkiu+ul7qwZa7GiVDexymzDpzezA86R
+         cskANJ0JiMloEWL3vMrGONK8yFiHLgQj3lWFR/ME6a2X/pMQ+2yW1mejO+Twf1LJkaTJ
+         lvzRlLtBB/nhuGcUr9ocRv1CuKyMH6cJBCApo1OX4YQVZhqgs3/BBJSqu+t+aN8GOLXi
+         juLutzHuOxLth4V+ldPaMkaz5RD5NKBOlk/satKYnDdNTOWlJ4c/epsFlnva8v+fDyAP
+         R6M/uo0mMQL3Wf/mcPhDy8HoPKOLOvVH2v1C/lyi0Zm1hh/DYsC9dIAEYoGY/7BaMCcy
+         FFug==
+X-Forwarded-Encrypted: i=1; AJvYcCXtCMu+M95655Qm8V82MlWJLYJU2/3wIsYJEs9pG3+SnxwOx2+pF4TVAyDvdRCKHD5DfqEP@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0jBOuv1Hz+2S5WtP2PNyAAsgnfyZHAEy3lb1QPmX2waJFkZvL
+	MpMfTm8Zd8jLGhUM7LLhOI7TCN+TG+pDWMht+Bpf0tpyTx1GXVsribGNGGxnbCLWhO0UezVNJ3L
+	Xaf130O+e0AHuWovFgR/G2LX7UnY=
+X-Google-Smtp-Source: AGHT+IEIwfs2ae50IxJcrYEx+9x6jDhkTa4h8dXquDWIxEFs1VpueqZk22iLQZsgbP1/FJwllipH1R6cUki2Wf6ve+w=
+X-Received: by 2002:a05:6a00:b85:b0:718:e49f:4185 with SMTP id
+ d2e1a72fcca58-71c6371432cmr6551145b3a.7.1727761906110; Mon, 30 Sep 2024
+ 22:51:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240925150059.3955569-34-ardb+git@google.com>
+References: <20240925-cfi-norm-kasan-fix-v1-1-0328985cdf33@google.com>
+In-Reply-To: <20240925-cfi-norm-kasan-fix-v1-1-0328985cdf33@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 1 Oct 2024 07:51:34 +0200
+Message-ID: <CANiq72kMHp=F8Vyu5t2nPk86FB=PwcaxZQKRs9Sdj8FrvpQv=A@mail.gmail.com>
+Subject: Re: [PATCH] cfi: encode cfi normalized integers + kasan/gcov bug in Kconfig
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Gatlin Newhouse <gatlin.newhouse@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, kernel test robot <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 25, 2024 at 05:01:04PM +0200, Ard Biesheuvel wrote:
-> +		if (r_type == R_X86_64_GOTPCREL) {
-> +			Elf_Shdr *s = &secs[sec->shdr.sh_info].shdr;
-> +			unsigned file_off = offset - s->sh_addr + s->sh_offset;
-> +
-> +			/*
-> +			 * GOTPCREL relocations refer to instructions that load
-> +			 * a 64-bit address via a 32-bit relative reference to
-> +			 * the GOT.  In this case, it is the GOT entry that
-> +			 * needs to be fixed up, not the immediate offset in
-> +			 * the opcode. Note that the linker will have applied an
-> +			 * addend of -4 to compensate for the delta between the
-> +			 * relocation offset and the value of RIP when the
-> +			 * instruction executes, and this needs to be backed out
-> +			 * again. (Addends other than -4 are permitted in
-> +			 * principle, but make no sense in practice so they are
-> +			 * not supported.)
-> +                         */
-> +			if (rel->r_addend != -4) {
-> +				die("invalid addend (%ld) for %s relocation: %s\n",
-> +				    rel->r_addend, rel_type(r_type), symname);
-> +				break;
-> +			}
+On Wed, Sep 25, 2024 at 10:10=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
+wrote:
+>
+> There is a bug in the LLVM implementation of KASAN and GCOV that makes
+> these options incompatible with the CFI_ICALL_NORMALIZE_INTEGERS option.
 
-For x86 PC-relative addressing, the addend is <reloc offset> -
-<subsequent insn offset>.  So a PC-relative addend can be something
-other than -4 when the relocation applies to the middle of an
-instruction, e.g.:
+Applied to `rust-fixes` -- thanks everyone!
 
-   5b381:	66 81 3d 00 00 00 00 01 06 	cmpw   $0x601,0x0(%rip)        # 5b38a <generic_validate_add_page+0x4a>	5b384: R_X86_64_PC32	boot_cpu_data-0x6
-
-   5f283:	81 3d 00 00 00 00 ff ff ff 00 	cmpl   $0xffffff,0x0(%rip)        # 5f28d <x86_acpi_suspend_lowlevel+0x9d>	5f285: R_X86_64_PC32	smpboot_control-0x8
-
-   72f67:       c6 05 00 00 00 00 01    movb   $0x1,0x0(%rip)        # 72f6e <sched_itmt_update_handler+0x6e>   72f69: R_X86_64_PC32    x86_topology_update-0x5
-
-Presumably that could also happen with R_X86_64_GOTPCREL?
-
--- 
-Josh
+Cheers,
+Miguel
