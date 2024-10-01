@@ -1,255 +1,305 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37741CBE8A;
-	Tue,  1 Oct 2024 17:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A931CCB36
+	for <llvm@lists.linux.dev>; Tue,  1 Oct 2024 18:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727802515; cv=none; b=UIKocsHBp96hTddvUkFabZ5MAwMXqsqBQkmlXhrxpD2JLUWlN25dwmYdVTR3jEpQ8nLf8sbiW95vccoKA68vq+18AXt+faZPqWtAdB6/Xp7a5GdKT2tDVWSf1z+cw3Rj1zjipkL/YGVEQiDKLaiXedNA0tGLiZDZsSUQ+GFT0fg=
+	t=1727806608; cv=none; b=O3ZtqLh1RfbTnV0CwtNkKoev6FySYOwMRKulpmseQKThX4cvPwAJyXvX/b8OzNo6S93+pylhIRGKYXVJnFa2hbCGrxQR5cKw7LLUtBC7EB2Q3PGrJSjePLPgFWZ5g4BxfKMrzErx2V5CnAp/kbPcVYcWvtn1CCk4jaypTZttvWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727802515; c=relaxed/simple;
-	bh=LSIvE0bonvGOjFRYo2a2gp1X6FhuUVdwp67GJuC4WTI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jbo+jYV6ri8/kP7cz3vYQQSx7iggzFb6y7sVnNlWYEhFGHOdvTyYbxBFXFtvPbq1zqb94ka8TvCF+ZAEgsaLSsCqmXtEw+7WLqVmm6iIvOqtT5eiWfmja9jVInkrsKQabWnWLSaN9Ow5fzt/1Bm/h2uw6AaqiG3aAFqN0XG/xZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a9SvA3Co; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727806608; c=relaxed/simple;
+	bh=583aKZ9l0xQjgk1LBumhwVy9engtD/OQ9RYSzWJPy9g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ttAei62ofuDioEuOWDKKDK94E9mk9hgxE6dUmwT7C8972IhvNaCrj+oB9gU3kn7VuVCoSW7idoUCFp+cJcj4Wed2hwk/qTyUlFBiml21CJ7AkXE+j/FJykCNDppNIiprYNM5/lQLRtwPBbQyXO3v+OMzsKj5JK4MAfPE3vDispg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iyK0qFoi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a9SvA3Co"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727802513; x=1759338513;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LSIvE0bonvGOjFRYo2a2gp1X6FhuUVdwp67GJuC4WTI=;
-  b=a9SvA3CobJkWDih9cMGeOuR/srojxAEb5mFqYAmszvKHvBQZyORSdheS
-   r7NYsp5k3LkFi9yv9pL1xCLIXiuFZLZMYjGiwDrpORq6QifIbQWuXX1nU
-   mDsETP1Cr2snrZnhvHEMynr4imsKjb6KFaN0BJS5jzHezRtZkn58gegkO
-   gC5UHRpNleTrTI3QPzKWr43xTg5e1+0jMIipzl2Ke1hC37ictbHQrydZF
-   TEbOdOkkB0dbD8ijdYq12j38LqJJjaQmW/ntshlrBbQW4Mem77RFPAs2v
-   Jufi/lF1dqmG0kPHqza5Neq9ANQsHeL7pBPjlmyuiY35IEGXeNcsujU8s
-   g==;
-X-CSE-ConnectionGUID: eVnolRxiQAKYRntjTkqC7g==
-X-CSE-MsgGUID: DG28LZGESni3PcLYjQu4WQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11212"; a="27088634"
-X-IronPort-AV: E=Sophos;i="6.11,169,1725346800"; 
-   d="scan'208";a="27088634"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 10:08:33 -0700
-X-CSE-ConnectionGUID: 19STQk1aR3SN8r/7ioJp3A==
-X-CSE-MsgGUID: LHWrMZtuTquzzbtfK4+OvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,169,1725346800"; 
-   d="scan'208";a="73616875"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 01 Oct 2024 10:08:31 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1svgMO-000QzB-2D;
-	Tue, 01 Oct 2024 17:08:28 +0000
-Date: Wed, 2 Oct 2024 01:07:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:execmem/x86-rox/v4 5/8]
- drivers/net/ethernet/pensando/ionic/ionic_txrx.c:203:30: warning: implicit
- conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes
- value from 65536 to 0
-Message-ID: <202410020117.DiGJI30C-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iyK0qFoi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D2CC4CEC6;
+	Tue,  1 Oct 2024 18:16:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727806608;
+	bh=583aKZ9l0xQjgk1LBumhwVy9engtD/OQ9RYSzWJPy9g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iyK0qFoif3xuIDhjbLiQaq2/stp0xjr4dDcw2q02MjoYYkvVzL5F0Try1G5+KKVE+
+	 w9pItcquVjOG+ZJAjGN6eBOGcnN7Mp9gMpKpFzakAE7eETvawZwdhHX2Vi33HhKRZF
+	 MSo822ZEYcE2GE44cspKghsi1FlU1AHw3vxiNNpZ3K6htGWB/S4xcBSNMVq6SJj9cP
+	 ZptcC1qxwLMwnGdvfIFAO7pYmAx2HViPVNi4KWz9rDCGRk98OwxMcF14dEylqErMrB
+	 M/3zUxtqVQN1n2RIJ8HecgTw5ZzVFVqWrDCdrM/al/U/FOft00ylVRSHcoLMILEpwi
+	 uQjxwNIE8WIcA==
+Date: Tue, 1 Oct 2024 11:16:46 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: intel-xe@lists.freedesktop.org, Matthew Brost <matthew.brost@intel.com>,
+	Matthew Auld <matthew.auld@intel.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v3] drm/xe: Add a xe_bo subtest for shrinking / swapping
+Message-ID: <20241001181646.GA25328@thelio-3990X>
+References: <20240909085654.5064-1-thomas.hellstrom@linux.intel.com>
+ <20240913195649.GA61514@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240913195649.GA61514@thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git execmem/x86-rox/v4
-head:   c90f89d40fd21ce040b5cf1485ec6913d1b4ea5d
-commit: 394ca992d5179367add42d631858f72a3bf4870d [5/8] arch: introduce set_direct_map_valid_noflush()
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20241002/202410020117.DiGJI30C-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241002/202410020117.DiGJI30C-lkp@intel.com/reproduce)
+Ping? In particular, the instance of -Wsometimes-uninitialized breaks
+our CI for several configurations that enable -Werror (we don't have any
+32-bit architectures with -Werror, so the other ones do not matter as
+much, but should still be fixed) and that one does not show up with GCC
+(even though I think it should). Should purgeable just be zero
+initialized? I am happy to send a patch but I need some input on what
+the correct solution is since I am unfamiliar with this code.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410020117.DiGJI30C-lkp@intel.com/
+This is one of only two issues preventing our CI from being green on
+-next, which we would usually expect after -rc1.
 
-All warnings (new ones prefixed by >>):
+Cheers,
+Nathan
 
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:4:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:11:
-   In file included from drivers/net/ethernet/pensando/ionic/ionic.h:10:
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_dev.h:11:
-   In file included from include/linux/bpf_trace.h:5:
-   In file included from include/trace/events/xdp.h:9:
-   In file included from include/linux/filter.h:19:
-   include/linux/set_memory.h:38:1: error: expected identifier or '('
-      38 | {
-         | ^
->> drivers/net/ethernet/pensando/ionic/ionic_txrx.c:203:30: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     203 |                 frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-         |                            ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:32: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         MIN(PAGE_SIZE, IONIC_MAX_BUF_LEN)
-         |                                                     ^
-   arch/powerpc/include/asm/page.h:25:34: note: expanded from macro 'PAGE_SIZE'
-      25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
-         |                                               ^
-   include/linux/minmax.h:329:28: note: expanded from macro 'MIN'
-     329 | #define MIN(a,b) __cmp(min,a,b)
-         |                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   drivers/net/ethernet/pensando/ionic/ionic_txrx.c:803:36: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     803 |                 first_frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:32: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         MIN(PAGE_SIZE, IONIC_MAX_BUF_LEN)
-         |                                                     ^
-   arch/powerpc/include/asm/page.h:25:34: note: expanded from macro 'PAGE_SIZE'
-      25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
-         |                                               ^
-   include/linux/minmax.h:329:28: note: expanded from macro 'MIN'
-     329 | #define MIN(a,b) __cmp(min,a,b)
-         |                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   drivers/net/ethernet/pensando/ionic/ionic_txrx.c:838:38: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     838 |                         frag_len = min_t(u16, remain_len, IONIC_PAGE_SIZE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:32: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         MIN(PAGE_SIZE, IONIC_MAX_BUF_LEN)
-         |                                                     ^
-   arch/powerpc/include/asm/page.h:25:34: note: expanded from macro 'PAGE_SIZE'
-      25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
-         |                                               ^
-   include/linux/minmax.h:329:28: note: expanded from macro 'MIN'
-     329 | #define MIN(a,b) __cmp(min,a,b)
-         |                            ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   7 warnings and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-
-
-vim +203 drivers/net/ethernet/pensando/ionic/ionic_txrx.c
-
-36a47c906b2324 Shannon Nelson 2024-03-06  174  
-36a47c906b2324 Shannon Nelson 2024-03-06  175  static struct sk_buff *ionic_rx_build_skb(struct ionic_queue *q,
-4dcd4575bfb17d Shannon Nelson 2024-03-06  176  					  struct ionic_rx_desc_info *desc_info,
-f81da39bf4c0a5 Shannon Nelson 2024-02-14  177  					  unsigned int headroom,
-f81da39bf4c0a5 Shannon Nelson 2024-02-14  178  					  unsigned int len,
-f81da39bf4c0a5 Shannon Nelson 2024-02-14  179  					  unsigned int num_sg_elems,
-180e35cdf035d1 Shannon Nelson 2024-02-14  180  					  bool synced)
-0f3154e6bcb354 Shannon Nelson 2019-09-03  181  {
-4b0a7539a3728f Shannon Nelson 2021-03-10  182  	struct ionic_buf_info *buf_info;
-08f2e4b2b2008c Shannon Nelson 2019-10-23  183  	struct sk_buff *skb;
-08f2e4b2b2008c Shannon Nelson 2019-10-23  184  	unsigned int i;
-08f2e4b2b2008c Shannon Nelson 2019-10-23  185  	u16 frag_len;
-08f2e4b2b2008c Shannon Nelson 2019-10-23  186  
-4b0a7539a3728f Shannon Nelson 2021-03-10  187  	buf_info = &desc_info->bufs[0];
-e75ccac1d0644c Shannon Nelson 2021-07-27  188  	prefetchw(buf_info->page);
-08f2e4b2b2008c Shannon Nelson 2019-10-23  189  
-89e572e7369fd9 Shannon Nelson 2021-03-10  190  	skb = napi_get_frags(&q_to_qcq(q)->napi);
-89e572e7369fd9 Shannon Nelson 2021-03-10  191  	if (unlikely(!skb)) {
-89e572e7369fd9 Shannon Nelson 2021-03-10  192  		net_warn_ratelimited("%s: SKB alloc failed on %s!\n",
-36a47c906b2324 Shannon Nelson 2024-03-06  193  				     dev_name(q->dev), q->name);
-2854242d23a7b3 Shannon Nelson 2024-03-06  194  		q_to_rx_stats(q)->alloc_err++;
-08f2e4b2b2008c Shannon Nelson 2019-10-23  195  		return NULL;
-89e572e7369fd9 Shannon Nelson 2021-03-10  196  	}
-ac8813c0ab7d28 Shannon Nelson 2024-09-06  197  	skb_mark_for_recycle(skb);
-08f2e4b2b2008c Shannon Nelson 2019-10-23  198  
-f81da39bf4c0a5 Shannon Nelson 2024-02-14  199  	if (headroom)
-36a47c906b2324 Shannon Nelson 2024-03-06  200  		frag_len = min_t(u16, len,
-36a47c906b2324 Shannon Nelson 2024-03-06  201  				 IONIC_XDP_MAX_LINEAR_MTU + VLAN_ETH_HLEN);
-f81da39bf4c0a5 Shannon Nelson 2024-02-14  202  	else
-ac8813c0ab7d28 Shannon Nelson 2024-09-06 @203  		frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-f81da39bf4c0a5 Shannon Nelson 2024-02-14  204  
-36a47c906b2324 Shannon Nelson 2024-03-06  205  	if (unlikely(!buf_info->page))
-36a47c906b2324 Shannon Nelson 2024-03-06  206  		goto err_bad_buf_page;
-36a47c906b2324 Shannon Nelson 2024-03-06  207  	ionic_rx_add_skb_frag(q, skb, buf_info, headroom, frag_len, synced);
-36a47c906b2324 Shannon Nelson 2024-03-06  208  	len -= frag_len;
-4b0a7539a3728f Shannon Nelson 2021-03-10  209  	buf_info++;
-4b0a7539a3728f Shannon Nelson 2021-03-10  210  
-36a47c906b2324 Shannon Nelson 2024-03-06  211  	for (i = 0; i < num_sg_elems; i++, buf_info++) {
-36a47c906b2324 Shannon Nelson 2024-03-06  212  		if (unlikely(!buf_info->page))
-36a47c906b2324 Shannon Nelson 2024-03-06  213  			goto err_bad_buf_page;
-ac8813c0ab7d28 Shannon Nelson 2024-09-06  214  		frag_len = min_t(u16, len, buf_info->len);
-36a47c906b2324 Shannon Nelson 2024-03-06  215  		ionic_rx_add_skb_frag(q, skb, buf_info, 0, frag_len, synced);
-36a47c906b2324 Shannon Nelson 2024-03-06  216  		len -= frag_len;
-36a47c906b2324 Shannon Nelson 2024-03-06  217  	}
-08f2e4b2b2008c Shannon Nelson 2019-10-23  218  
-08f2e4b2b2008c Shannon Nelson 2019-10-23  219  	return skb;
-36a47c906b2324 Shannon Nelson 2024-03-06  220  
-36a47c906b2324 Shannon Nelson 2024-03-06  221  err_bad_buf_page:
-36a47c906b2324 Shannon Nelson 2024-03-06  222  	dev_kfree_skb(skb);
-36a47c906b2324 Shannon Nelson 2024-03-06  223  	return NULL;
-0f3154e6bcb354 Shannon Nelson 2019-09-03  224  }
-0f3154e6bcb354 Shannon Nelson 2019-09-03  225  
-
-:::::: The code at line 203 was first introduced by commit
-:::::: ac8813c0ab7d2816946379bff2677a5f725e37bf ionic: convert Rx queue buffers to use page_pool
-
-:::::: TO: Shannon Nelson <shannon.nelson@amd.com>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Fri, Sep 13, 2024 at 12:56:49PM -0700, Nathan Chancellor wrote:
+> On Mon, Sep 09, 2024 at 10:56:54AM +0200, Thomas Hellström wrote:
+> > Add a subtest that tries to allocate twice the amount of
+> > buffer object memory available, write data to it and then read
+> > all the data back verifying data integrity.
+> > In order to be able to do this on systems that
+> > have no or not enough swap-space available, allocate some memory
+> > as purgeable, and introduce a function to purge such memory from
+> > the TTM swap_notify path.
+> > 
+> > this test is intended to add test coverage to the current
+> > bo swap path and upcoming shrinking path.
+> > 
+> > The test has previously been part of the xe bo shrinker series.
+> > 
+> > v2:
+> > - Skip test if the execution time is expected to be too long.
+> > - Minor code cleanups.
+> > 
+> > v3:
+> > - Print random seed. (Matthew Auld)
+> > 
+> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> > Cc: Matthew Brost <matthew.brost@intel.com>
+> > Cc: Matthew Auld <matthew.auld@intel.com>
+> > Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> > Reviewed-by: Matthew Auld <matthew.auld@intel.com>
+> ...
+> > diff --git a/drivers/gpu/drm/xe/tests/xe_bo.c b/drivers/gpu/drm/xe/tests/xe_bo.c
+> > index 8dac069483e8..7d3fd720478b 100644
+> > --- a/drivers/gpu/drm/xe/tests/xe_bo.c
+> > +++ b/drivers/gpu/drm/xe/tests/xe_bo.c
+> ...
+> > +/*
+> > + * Try to create system bos corresponding to twice the amount
+> > + * of available system memory to test shrinker functionality.
+> > + * If no swap space is available to accommodate the
+> > + * memory overcommit, mark bos purgeable.
+> > + */
+> > +static int shrink_test_run_device(struct xe_device *xe)
+> > +{
+> > +	struct kunit *test = kunit_get_current_test();
+> > +	LIST_HEAD(bos);
+> > +	struct xe_bo_link *link, *next;
+> > +	struct sysinfo si;
+> > +	size_t ram, ram_and_swap, purgeable, alloced, to_alloc, limit;
+> > +	unsigned int interrupted = 0, successful = 0, count = 0;
+> > +	struct rnd_state prng;
+> > +	u64 rand_seed;
+> > +	bool failed = false;
+> > +
+> > +	rand_seed = get_random_u64();
+> > +	prandom_seed_state(&prng, rand_seed);
+> > +	kunit_info(test, "Random seed is 0x%016llx.\n",
+> > +		   (unsigned long long)rand_seed);
+> > +
+> > +	/* Skip if execution time is expected to be too long. */
+> > +
+> > +	limit = SZ_32G;
+> > +	/* IGFX with flat CCS needs to copy when swapping / shrinking */
+> > +	if (!IS_DGFX(xe) && xe_device_has_flat_ccs(xe))
+> > +		limit = SZ_16G;
+> > +
+> > +	si_meminfo(&si);
+> > +	ram = (size_t)si.freeram * si.mem_unit;
+> > +	if (ram > limit) {
+> > +		kunit_skip(test, "Too long expected execution time.\n");
+> > +		return 0;
+> > +	}
+> > +	to_alloc = ram * 2;
+> > +
+> > +	ram_and_swap = ram + get_nr_swap_pages() * PAGE_SIZE;
+> > +	if (to_alloc > ram_and_swap)
+> > +		purgeable = to_alloc - ram_and_swap;
+> > +	purgeable += purgeable / 5;
+> > +
+> > +	kunit_info(test, "Free ram is %lu bytes. Will allocate twice of that.\n",
+> > +		   (unsigned long)ram);
+> > +	for (alloced = 0; alloced < to_alloc; alloced += XE_BO_SHRINK_SIZE) {
+> > +		struct xe_bo *bo;
+> > +		unsigned int mem_type;
+> > +		struct xe_ttm_tt *xe_tt;
+> > +
+> > +		link = kzalloc(sizeof(*link), GFP_KERNEL);
+> > +		if (!link) {
+> > +			KUNIT_FAIL(test, "Unexpected link allocation failure\n");
+> > +			failed = true;
+> > +			break;
+> > +		}
+> > +
+> > +		INIT_LIST_HEAD(&link->link);
+> > +
+> > +		/* We can create bos using WC caching here. But it is slower. */
+> > +		bo = xe_bo_create_user(xe, NULL, NULL, XE_BO_SHRINK_SIZE,
+> > +				       DRM_XE_GEM_CPU_CACHING_WB,
+> > +				       XE_BO_FLAG_SYSTEM);
+> > +		if (IS_ERR(bo)) {
+> > +			if (bo != ERR_PTR(-ENOMEM) && bo != ERR_PTR(-ENOSPC) &&
+> > +			    bo != ERR_PTR(-EINTR) && bo != ERR_PTR(-ERESTARTSYS))
+> > +				KUNIT_FAIL(test, "Error creating bo: %pe\n", bo);
+> > +			kfree(link);
+> > +			failed = true;
+> > +			break;
+> > +		}
+> > +		xe_bo_lock(bo, false);
+> > +		xe_tt = container_of(bo->ttm.ttm, typeof(*xe_tt), ttm);
+> > +
+> > +		/*
+> > +		 * Allocate purgeable bos first, because if we do it the
+> > +		 * other way around, they may not be subject to swapping...
+> > +		 */
+> > +		if (alloced < purgeable) {
+> > +			xe_tt->purgeable = true;
+> > +			bo->ttm.priority = 0;
+> > +		} else {
+> > +			int ret = shrink_test_fill_random(bo, &prng, link);
+> > +
+> > +			if (ret) {
+> > +				xe_bo_unlock(bo);
+> > +				xe_bo_put(bo);
+> > +				KUNIT_FAIL(test, "Error filling bo with random data: %pe\n",
+> > +					   ERR_PTR(ret));
+> > +				kfree(link);
+> > +				failed = true;
+> > +				break;
+> > +			}
+> > +		}
+> > +
+> > +		mem_type = bo->ttm.resource->mem_type;
+> > +		xe_bo_unlock(bo);
+> > +		link->bo = bo;
+> > +		list_add_tail(&link->link, &bos);
+> > +
+> > +		if (mem_type != XE_PL_TT) {
+> > +			KUNIT_FAIL(test, "Bo in incorrect memory type: %u\n",
+> > +				   bo->ttm.resource->mem_type);
+> > +			failed = true;
+> > +		}
+> > +		cond_resched();
+> > +		if (signal_pending(current))
+> > +			break;
+> > +	}
+> 
+> This function introduces three warnings with clang:
+> 
+>   $ make -skj"$(nproc)" ARCH=i386 LLVM=1 allmodconfig drivers/gpu/drm/xe/xe_bo.o
+>   ...
+>   In file included from drivers/gpu/drm/xe/xe_bo.c:2406:
+>   drivers/gpu/drm/xe/tests/xe_bo.c:456:10: error: implicit conversion from 'unsigned long long' to 'size_t' (aka 'unsigned int') changes value from 34359738368 to 0 [-Werror,-Wconstant-conversion]
+>     456 |         limit = SZ_32G;
+>         |               ~ ^~~~~~
+>   include/linux/sizes.h:49:19: note: expanded from macro 'SZ_32G'
+>      49 | #define SZ_32G                          _AC(0x800000000, ULL)
+>         |                                         ^~~~~~~~~~~~~~~~~~~~~
+>   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
+>      21 | #define _AC(X,Y)        __AC(X,Y)
+>         |                         ^~~~~~~~~
+>   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
+>      20 | #define __AC(X,Y)       (X##Y)
+>         |                          ^~~~
+>   <scratch space>:31:1: note: expanded from here
+>      31 | 0x800000000ULL
+>         | ^~~~~~~~~~~~~~
+>   In file included from drivers/gpu/drm/xe/xe_bo.c:2406:
+>   drivers/gpu/drm/xe/tests/xe_bo.c:459:11: error: implicit conversion from 'unsigned long long' to 'size_t' (aka 'unsigned int') changes value from 17179869184 to 0 [-Werror,-Wconstant-conversion]
+>     459 |                 limit = SZ_16G;
+>         |                       ~ ^~~~~~
+>   include/linux/sizes.h:48:19: note: expanded from macro 'SZ_16G'
+>      48 | #define SZ_16G                          _AC(0x400000000, ULL)
+>         |                                         ^~~~~~~~~~~~~~~~~~~~~
+>   include/uapi/linux/const.h:21:18: note: expanded from macro '_AC'
+>      21 | #define _AC(X,Y)        __AC(X,Y)
+>         |                         ^~~~~~~~~
+>   include/uapi/linux/const.h:20:20: note: expanded from macro '__AC'
+>      20 | #define __AC(X,Y)       (X##Y)
+>         |                          ^~~~
+>   <scratch space>:32:1: note: expanded from here
+>      32 | 0x400000000ULL
+>         | ^~~~~~~~~~~~~~
+>   In file included from drivers/gpu/drm/xe/xe_bo.c:2406:
+>   drivers/gpu/drm/xe/tests/xe_bo.c:470:6: error: variable 'purgeable' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>     470 |         if (to_alloc > ram_and_swap)
+>         |             ^~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/gpu/drm/xe/tests/xe_bo.c:472:2: note: uninitialized use occurs here
+>     472 |         purgeable += purgeable / 5;
+>         |         ^~~~~~~~~
+>   drivers/gpu/drm/xe/tests/xe_bo.c:470:2: note: remove the 'if' if its condition is always true
+>     470 |         if (to_alloc > ram_and_swap)
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     471 |                 purgeable = to_alloc - ram_and_swap;
+>   drivers/gpu/drm/xe/tests/xe_bo.c:443:37: note: initialize the variable 'purgeable' to silence this warning
+>     443 |         size_t ram, ram_and_swap, purgeable, alloced, to_alloc, limit;
+>         |                                            ^
+>         |                                             = 0
+>   3 errors generated.
+> 
+> I tried to make GCC show the same warnings with an explicit
+> -Wmaybe-uninitialized but only the overflow warnings show up (is
+> purgeable always set because of the if condition?):
+> 
+>   $ make -skj"$(nproc)" ARCH=i386 CROSS_COMPILE=i386-linux- KCFLAGS=-Wmaybe-uninitialized allmodconfig drivers/gpu/drm/xe/xe_bo.o
+>   In file included from include/vdso/const.h:5,
+>                    from include/linux/const.h:4,
+>                    from include/linux/bits.h:5,
+>                    from include/linux/ratelimit_types.h:5,
+>                    from include/linux/printk.h:9,
+>                    from include/asm-generic/bug.h:22,
+>                    from arch/x86/include/asm/bug.h:99,
+>                    from include/linux/bug.h:5,
+>                    from include/linux/mmdebug.h:5,
+>                    from include/linux/mm.h:6,
+>                    from include/linux/pagemap.h:8,
+>                    from include/drm/ttm/ttm_tt.h:30,
+>                    from drivers/gpu/drm/xe/xe_bo.h:9,
+>                    from drivers/gpu/drm/xe/xe_bo.c:6:
+>   drivers/gpu/drm/xe/tests/xe_bo.c: In function 'shrink_test_run_device':
+>   include/uapi/linux/const.h:20:25: error: conversion from 'long long unsigned int' to 'size_t' {aka 'unsigned int'} changes value from '34359738368' to '0' [-Werror=overflow]
+>      20 | #define __AC(X,Y)       (X##Y)
+>         |                         ^
+>   include/uapi/linux/const.h:21:25: note: in expansion of macro '__AC'
+>      21 | #define _AC(X,Y)        __AC(X,Y)
+>         |                         ^~~~
+>   include/linux/sizes.h:49:41: note: in expansion of macro '_AC'
+>      49 | #define SZ_32G                          _AC(0x800000000, ULL)
+>         |                                         ^~~
+>   drivers/gpu/drm/xe/tests/xe_bo.c:456:17: note: in expansion of macro 'SZ_32G'
+>     456 |         limit = SZ_32G;
+>         |                 ^~~~~~
+>   include/uapi/linux/const.h:20:25: error: conversion from 'long long unsigned int' to 'size_t' {aka 'unsigned int'} changes value from '17179869184' to '0' [-Werror=overflow]
+>      20 | #define __AC(X,Y)       (X##Y)
+>         |                         ^
+>   include/uapi/linux/const.h:21:25: note: in expansion of macro '__AC'
+>      21 | #define _AC(X,Y)        __AC(X,Y)
+>         |                         ^~~~
+>   include/linux/sizes.h:48:41: note: in expansion of macro '_AC'
+>      48 | #define SZ_16G                          _AC(0x400000000, ULL)
+>         |                                         ^~~
+>   drivers/gpu/drm/xe/tests/xe_bo.c:459:25: note: in expansion of macro 'SZ_16G'
+>     459 |                 limit = SZ_16G;
+>         |                         ^~~~~~
+>   cc1: all warnings being treated as errors
