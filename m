@@ -1,168 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361DC19B587;
-	Tue,  1 Oct 2024 09:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C971BE844;
+	Tue,  1 Oct 2024 11:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727773628; cv=none; b=Q2QO01XQxG8N3p9z8y+bvhT9LcyFlmcDlT0LPlYmdNlGnZII9ANj4fkn5Mbvhh92WXyaH6qVkjO30ZbjQ+XE6szZtA5Ur6fJdTH39ob8hvlMUIodwD4H5ZwdJzhTm1aqHrQJ/SeNnbNYCxJEHw2zh/9lWkXOnYZa+KLRnlOnC+Q=
+	t=1727782119; cv=none; b=SAqBaaoEDNV0JAKV3WUDm5q9o0SLj0ajgXUcNs1obVZCnA/cTUJCQhaVqo7VQxXOTfhTo+KYkHHA9r/uigWluzN7HTvcH2QlaPkm3ubTrCMc+lcBbXWYDNSQrs3Wg68Cjf4RYEM2qSe0e7uq7UbGFXYKR4CAnvITT5b9kh4886s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727773628; c=relaxed/simple;
-	bh=m97NaR/uwM/LoByNr7jk1ak8+1faMfudA3HDDJa1jBQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=akcaOcV28nO9iEQTb/RUIv16kcgq+TSe/Wc1sUoaUP2ue+c1kY8SUggqsJOwX2XTgKEgfr5wuEi8kzWmrJORnwGlAMnpJwiWexmoBxmeh5NHQIdIRQLn5wqaNQo4yCPIACCAwAPOIuZdnRuRwxDrTI3oLfFIAdEr/rLfw2K7Qpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i4xOF5sK; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727782119; c=relaxed/simple;
+	bh=KmqvyWGAP2MUjMmA9fNXKIZ1pZgMR6vCNbIUx1juy7s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dpd8/22FCq0OEmjqcmGWlqPeFFSYhAv4KLYvzKyXUXaFBKw2ej2HgLea8nv72hzrDpby88VCWhFvvjU/7FdVB+cRXrEYJn/Ab0t9huKUFioQmCIGN9sBfLRMYmZX0bKKJ8sOmpzxGOtcbgxzpDb/SBLGb08klPaF1bhPWVynIjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KuiLKoyW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i4xOF5sK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727773627; x=1759309627;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m97NaR/uwM/LoByNr7jk1ak8+1faMfudA3HDDJa1jBQ=;
-  b=i4xOF5sKEcVbFekmdnCSMR+cnRPA4hmKBdS9JZCe6V1tp+wKRs9VI2eO
-   PxeBU/c2Pz9TWdoCc5VO0qocXtkR1Pm9sHTH3q6fF9cRJKLm+nTRdSgcP
-   SuXEkzRg6mU62sLxqk0SCTuoUfZJxyxL8J53iHPWMR3tMCsUojjba4sEt
-   Q6Gxy4d2nbgIPi69O5GAk2npEVgwmYITSuv8zig7ztYuuAD3qjwtuWo06
-   cRw5lmSz7GPA/HOKKp1XSz5ziwmOFvNAOB+E3jlUPYWF8GpbFuLM5gH94
-   rYUYdhe2SG3y5sN+xqWidsfQ+MsPz08Uaj2zvuSjx0vYBIvT9Yb0trWJj
-   A==;
-X-CSE-ConnectionGUID: 3NPcDP59TLOun4Lfd8YYyQ==
-X-CSE-MsgGUID: lZmc/Tk6Qn6C/CJVvpa9rQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="52306009"
-X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="52306009"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2024 02:07:07 -0700
-X-CSE-ConnectionGUID: ojDeIRRCQy6cXbvKsd4T0g==
-X-CSE-MsgGUID: N/BxBTXLSmyOMZi+tRyimQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,167,1725346800"; 
-   d="scan'208";a="73564062"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Oct 2024 02:07:03 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1svYqT-000QU9-0V;
-	Tue, 01 Oct 2024 09:07:01 +0000
-Date: Tue, 1 Oct 2024 17:06:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrew@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, linux-kernel@vger.kernel.org,
-	jacob.e.keller@intel.com, horms@kernel.org, sd@queasysnail.net,
-	chunkeey@gmail.com
-Subject: Re: [PATCH net-next 09/13] net: ibm: emac: rgmii:
- devm_platform_get_resource
-Message-ID: <202410011626.D4gEmLU8-lkp@intel.com>
-References: <20240930180036.87598-10-rosenp@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KuiLKoyW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F70C4CEC6;
+	Tue,  1 Oct 2024 11:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727782118;
+	bh=KmqvyWGAP2MUjMmA9fNXKIZ1pZgMR6vCNbIUx1juy7s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KuiLKoyWUokatFDV/DS7e+wT0IlNXFkx2mIt+uIFiJlUmIWuiiUXQTiYJyZ8jOW8u
+	 Y0WSBveMHbSBHoVEm4vURkR18zchCGaPgbkvf1dO2j1/BsvpY16fMY6unMpPcXfjWo
+	 n/QiROVPt2wJiLcONyWz0jspT5eWySVr2ytUvAgujdhLNqqwC7ImGvaLWP/yERBfk/
+	 rh8FMe76dqHM91vXrMAuA60dffuvvou+aq45Sd3rPI8VIbwSyehYUAXqQsyrzBcL/S
+	 sjT2iEtNoboVhtRYy4LKHYqIZASa1k9iLoP3S/zwL4jf5/sWz9Cn8O9ET0/S2gtOJh
+	 ilgZWKRZIOGgQ==
+From: Conor Dooley <conor@kernel.org>
+To: linux-riscv@lists.infradead.org
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Jason Montleon <jmontleo@redhat.com>,
+	ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	benno.lossin@proton.me,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v1] RISC-V: disallow gcc + rust builds
+Date: Tue,  1 Oct 2024 12:28:13 +0100
+Message-ID: <20241001-playlist-deceiving-16ece2f440f5@spud>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240930180036.87598-10-rosenp@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2894; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=C14oYIXOukeZfX/D92cINn4baWT04L73uEfZDoXdTw0=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDGm/75w7rpbkt043eH983KZld+rslI76i/J0Hj/h12n65 1fGyeyOjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzE2Jrhr1zlc+G/WWc6cxl7 M8MzWd85zd3cvvxAy6ltd85HtDUG9DL8lbi7+/ausgyR0JSKqFOxq8KtDGYmTk504zm26PO2xrT DnAA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-Hi Rosen,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-kernel test robot noticed the following build errors:
+During the discussion before supporting rust on riscv, it was decided
+not to support gcc yet, due to differences in extension handling
+compared to llvm (only the version of libclang matching the c compiler
+is supported). Recently Jason Montleon reported [1] that building with
+gcc caused build issues, due to unsupported arguments being passed to
+libclang. After some discussion between myself and Miguel, it is better
+to disable gcc + rust builds to match the original intent, and
+subsequently support it when an appropriate set of extensions can be
+deduced from the version of libclang.
 
-[auto build test ERROR on net-next/main]
+Closes: https://lore.kernel.org/all/20240917000848.720765-2-jmontleo@redhat.com/ [1]
+Link: https://lore.kernel.org/all/20240926-battering-revolt-6c6a7827413e@spud/ [2]
+Fixes: 70a57b247251a ("RISC-V: enable building 64-bit kernels with rust support")
+Reported-by: Jason Montleon <jmontleo@redhat.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/net-ibm-emac-remove-custom-init-exit-functions/20241001-020553
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240930180036.87598-10-rosenp%40gmail.com
-patch subject: [PATCH net-next 09/13] net: ibm: emac: rgmii: devm_platform_get_resource
-config: powerpc-canyonlands_defconfig (https://download.01.org/0day-ci/archive/20241001/202410011626.D4gEmLU8-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7773243d9916f98ba0ffce0c3a960e4aa9f03e81)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241001/202410011626.D4gEmLU8-lkp@intel.com/reproduce)
+Palmer, this is yours to take.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410011626.D4gEmLU8-lkp@intel.com/
+CC: jmontleo@redhat.com
+CC: ojeda@kernel.org
+CC: alex.gaynor@gmail.com
+CC: boqun.feng@gmail.com
+CC: gary@garyguo.net
+CC: bjorn3_gh@protonmail.com
+CC: benno.lossin@proton.me
+CC: a.hindborg@kernel.org
+CC: aliceryhl@google.com
+CC: paul.walmsley@sifive.com
+CC: palmer@dabbelt.com
+CC: nathan@kernel.org
+CC: ndesaulniers@google.com
+CC: morbo@google.com
+CC: justinstitt@google.com
+CC: rust-for-linux@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
+CC: llvm@lists.linux.dev
+---
+ Documentation/rust/arch-support.rst | 2 +-
+ arch/riscv/Kconfig                  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/ibm/emac/rgmii.c:21:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/net/ethernet/ibm/emac/rgmii.c:229:14: error: call to undeclared function 'devm_platform_get_resource'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     229 |         dev->base = devm_platform_get_resource(ofdev, 0);
-         |                     ^
-   drivers/net/ethernet/ibm/emac/rgmii.c:229:14: note: did you mean 'platform_get_resource'?
-   include/linux/platform_device.h:58:25: note: 'platform_get_resource' declared here
-      58 | extern struct resource *platform_get_resource(struct platform_device *,
-         |                         ^
->> drivers/net/ethernet/ibm/emac/rgmii.c:229:12: error: incompatible integer to pointer conversion assigning to 'struct rgmii_regs *' from 'int' [-Wint-conversion]
-     229 |         dev->base = devm_platform_get_resource(ofdev, 0);
-         |                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
-
-
-vim +/devm_platform_get_resource +229 drivers/net/ethernet/ibm/emac/rgmii.c
-
-   215	
-   216	
-   217	static int rgmii_probe(struct platform_device *ofdev)
-   218	{
-   219		struct rgmii_instance *dev;
-   220	
-   221		dev = devm_kzalloc(&ofdev->dev, sizeof(struct rgmii_instance),
-   222				   GFP_KERNEL);
-   223		if (!dev)
-   224			return -ENOMEM;
-   225	
-   226		mutex_init(&dev->lock);
-   227		dev->ofdev = ofdev;
-   228	
- > 229		dev->base = devm_platform_get_resource(ofdev, 0);
-   230		if (IS_ERR(dev->base)) {
-   231			dev_err(&ofdev->dev, "can't map device registers");
-   232			return PTR_ERR(dev->base);
-   233		}
-   234	
-   235		/* Check for RGMII flags */
-   236		if (of_property_read_bool(ofdev->dev.of_node, "has-mdio"))
-   237			dev->flags |= EMAC_RGMII_FLAG_HAS_MDIO;
-   238	
-   239		/* CAB lacks the right properties, fix this up */
-   240		if (of_device_is_compatible(ofdev->dev.of_node, "ibm,rgmii-axon"))
-   241			dev->flags |= EMAC_RGMII_FLAG_HAS_MDIO;
-   242	
-   243		DBG2(dev, " Boot FER = 0x%08x, SSR = 0x%08x\n",
-   244		     in_be32(&dev->base->fer), in_be32(&dev->base->ssr));
-   245	
-   246		/* Disable all inputs by default */
-   247		out_be32(&dev->base->fer, 0);
-   248	
-   249		printk(KERN_INFO
-   250		       "RGMII %pOF initialized with%s MDIO support\n",
-   251		       ofdev->dev.of_node,
-   252		       (dev->flags & EMAC_RGMII_FLAG_HAS_MDIO) ? "" : "out");
-   253	
-   254		wmb();
-   255		platform_set_drvdata(ofdev, dev);
-   256	
-   257		return 0;
-   258	}
-   259	
-
+diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+index 750ff371570a0..54be7ddf3e57a 100644
+--- a/Documentation/rust/arch-support.rst
++++ b/Documentation/rust/arch-support.rst
+@@ -17,7 +17,7 @@ Architecture   Level of support  Constraints
+ =============  ================  ==============================================
+ ``arm64``      Maintained        Little Endian only.
+ ``loongarch``  Maintained        \-
+-``riscv``      Maintained        ``riscv64`` only.
++``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
+ ``um``         Maintained        \-
+ ``x86``        Maintained        ``x86_64`` only.
+ =============  ================  ==============================================
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 22dc5ea4196ce..76843584960c2 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -177,7 +177,7 @@ config RISCV
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RETHOOK if !XIP_KERNEL
+ 	select HAVE_RSEQ
+-	select HAVE_RUST if RUSTC_SUPPORTS_RISCV
++	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
+ 	select HAVE_SAMPLE_FTRACE_DIRECT
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+ 	select HAVE_STACKPROTECTOR
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
