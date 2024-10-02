@@ -1,467 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A91981720;
-	Wed,  2 Oct 2024 19:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7535D2141C5
+	for <llvm@lists.linux.dev>; Wed,  2 Oct 2024 20:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727898760; cv=none; b=pqsjKlzne7XIGbNAAemT75SqEMah7M/JSEVJz1i19MLZWi/407dCtii26PW0Qriu6OO4EPD3UiOHSnoJ1M1kvXvMhhIuiTr5tssuPat8YkZdUsCbLNlQEiGLodQ/uz2DbhNEJzGYGs/AizMN9SMPDANJJNhpauyVRvQfQnFCLJ0=
+	t=1727899693; cv=none; b=VQuDDELlw8SoL3tj8EtV3ORr0iIZvqOND5rY3kB2nDDxjfCgOYY4RHgnuhd2JGvGHGPB4vC9/fkC6vzabZRmYd35LmiqrgsMsCBMDJvROtxm2DYkzxWVpFT5fhIApMCu16cRzwPXOu2Hq5UoHq/8T4Hls147pD3IbwcxcXAoZW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727898760; c=relaxed/simple;
-	bh=MKz7f+siPB0ZUqOyR2HQCUtQi59JXwPruCxbyegDYmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=E+dTNDoiWFezAlCxvdAS3+hZAh56N/Wy+29Ts32p4JEh28EoNXefHEKh7TpDl+hHrz2pWRz9pnNZjEsvafuVhUAaPa32f0bx96PTHQ11N92Tf1jpVlvY4Xf6bem506vH7XTwhsLk11xhIPRzLHo4ABJeHakydAJMvsMsDwmdoAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EnGb6vqe; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727899693; c=relaxed/simple;
+	bh=26ch3VLdZlgASzApmc+sdmN42sQrSbzi8ri/yXB2hcg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I7uyrlM2FqJsIvEmofLO/cuRlTqNTf7VKwo2mJEpIqP0ZJXI9m6fi8iuTMQeCdvgWLq5sRv8Yp/LfcDwpvw6KP/62DnSgp+e87BHA08fDeDQf6FH5qdUTMcLvBYQSrox6P7QKQiAefxlIVcCqXlrrUOhnzi+KARKi/MaDh7RWho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PdFYeW6s; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EnGb6vqe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727898758; x=1759434758;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MKz7f+siPB0ZUqOyR2HQCUtQi59JXwPruCxbyegDYmU=;
-  b=EnGb6vqeF71vLAlt6YTMSzTYmcM5C5E0E0q8zuv1fB7kLDvQMAIq1igz
-   SyKy6aqgmfRAMMDwP2EwrlMBusZrHo/0SjsliFgTBnCSU2R9mQ6LemG1L
-   vYPE2uXDkvTErSIdU58Sb9Tv6eSTjaovj5ygSnG4vPp6OXvxk3TYkm4H4
-   z91G2X5Bfv1g1YMjhRl9fUMb5Lwiljmwf6AvQS+FLZZ++EmEzqPG6iCqT
-   1fhf+ulNQNi+2nPnkdLeXhGzqKFJpwBKXNuSBKGCccQq8xdZrwYMn4/ye
-   ho8D42Vdwrtet8ynAQ5ecMFge1jtbnonQRQcO1sXUByWIZbsKVauqfStv
-   A==;
-X-CSE-ConnectionGUID: LWFLYw7jTxqEI4vg4q66XA==
-X-CSE-MsgGUID: awSQnEZ6QXSpTBu++2l9rA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="38438097"
-X-IronPort-AV: E=Sophos;i="6.11,172,1725346800"; 
-   d="scan'208";a="38438097"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 12:52:36 -0700
-X-CSE-ConnectionGUID: l8VUd8DQQNqMnxP8G4MTnw==
-X-CSE-MsgGUID: JtPO9iyVR+eZMDJ6FwG9vQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,172,1725346800"; 
-   d="scan'208";a="79078353"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 02 Oct 2024 12:52:34 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sw5Oi-000UVV-0K;
-	Wed, 02 Oct 2024 19:52:32 +0000
-Date: Thu, 3 Oct 2024 03:51:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:brauner.file.rcuref 3/4]
- include/linux/rcuref_long.h:49:14: error: use of undeclared identifier
- 'RCUREF_RELEASED'
-Message-ID: <202410030340.OcZ5iZeB-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PdFYeW6s"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-537a399e06dso177464e87.1
+        for <llvm@lists.linux.dev>; Wed, 02 Oct 2024 13:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1727899688; x=1728504488; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=felyUMZ1epn3qYN0qQZjWDzIrXK7nsXRUmOCiXehfgQ=;
+        b=PdFYeW6s8KpJ9w9KnGwXQVhKzEeqfbGykSBmJgOlx1ZU1Vc+oiVGNM6yhRW+AUn32U
+         dlKRF2/UDgJh1w1vUvTIuVST95/k0gyKRRNi78o10O3fl3Ajt9g0M0vBQZYvR7K5MXFa
+         ycSMzNeeeyteiUsxUD5ldyugq495R3igl9quw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727899688; x=1728504488;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=felyUMZ1epn3qYN0qQZjWDzIrXK7nsXRUmOCiXehfgQ=;
+        b=FYOCZLzH3mv+/JXcq7Krc9u5BTrkhUzhGrxXWdT46sTFOJkUl8bmkmSsOczhD0KRD1
+         U6i958DEN3sfaGy0fjWpEDN2VZXG4qQ6S0tkzr4H0tg9RBvCv7Ms6d/b2KFI1+Icdsj5
+         cr8R7cSPMDTcPBaT7FK1bjtE8TwQ0fLLEWAondPfhVAzpyv8IS7W/nWxYlUirE+ZPNiz
+         a9lcqXUUOlyYqKaqSoCB9uI0hXxAvJETUq48SMVOhMFgyL7PZDaHY5O2WC8X8FcLeyGY
+         c3cFDV9RvQ08nGOI8og/2jw6fYZAKnrRfsqoJTBXFZidEe9UpyMWaYADWwum8AtxbHhz
+         s6Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCWeXckWehZgrA0ISqiDD1fiI6wOINf8TGubrW5VIhPCHSQn3rjW3+TXFHlaKnkUgCZZN/04@lists.linux.dev
+X-Gm-Message-State: AOJu0YxSmu1JpuDGoNEFe/Bqrusf4TlttDWkwibWIyThM+QeCtkRIyjg
+	Uta4RmZDohemXl3JfjwHhw/CG8blq86Nckm803iUElXGBcbCZgDhrBJs7WAxSsgXOIwJF1LTpHu
+	VBvwA6A==
+X-Google-Smtp-Source: AGHT+IEQ0bw3rqigi9IlkW6kEGIq6n0/VrvR2kRhrKwcI8Sy3c1BZ8Zcgt+hZqPI3uu0AypsEGGN1Q==
+X-Received: by 2002:a05:6512:2349:b0:530:b76c:65df with SMTP id 2adb3069b0e04-539a0684352mr2857540e87.35.1727899688265;
+        Wed, 02 Oct 2024 13:08:08 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-538a04413edsm2009053e87.253.2024.10.02.13.08.06
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Oct 2024 13:08:07 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5398f3be400so194361e87.0
+        for <llvm@lists.linux.dev>; Wed, 02 Oct 2024 13:08:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXFjuAKuyYeZoriuMuhC2w0mAexH9OLSel4F0bwL/PjKB73gWfriWMN+ks1m3TjytzGI2oR@lists.linux.dev
+X-Received: by 2002:a05:6512:e9e:b0:535:6795:301a with SMTP id
+ 2adb3069b0e04-539a079eb59mr2506573e87.47.1727899328912; Wed, 02 Oct 2024
+ 13:02:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+ <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+In-Reply-To: <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 2 Oct 2024 13:01:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+Message-ID: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	x86@kernel.org, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git brauner.file.rcuref
-head:   27f246a26d936193149b818fa5e024cd985675c0
-commit: cb20f41ba36a8500ea0cca826b27ca58ede6123f [3/4] fs: port files to rcuref_long_t
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241003/202410030340.OcZ5iZeB-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241003/202410030340.OcZ5iZeB-lkp@intel.com/reproduce)
+On Wed, 2 Oct 2024 at 08:31, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> I guess you are referring to the use of a GOT? That is a valid
+> concern, but it does not apply here. With hidden visibility and
+> compiler command line options like -mdirect-access-extern, all emitted
+> symbol references are direct.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410030340.OcZ5iZeB-lkp@intel.com/
+I absolutely hate GOT entries. We definitely shouldn't ever do
+anything that causes them on x86-64.
 
-All errors (new ones prefixed by >>):
+I'd much rather just do boot-time relocation, and I don't think the
+"we run code at a different location than we told the linker" is an
+arghument against it.
 
-   In file included from kernel/fork.c:27:
-   In file included from include/linux/seq_file.h:11:
-   In file included from include/linux/fs.h:48:
->> include/linux/rcuref_long.h:49:14: error: use of undeclared identifier 'RCUREF_RELEASED'
-      49 |         return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
-         |                     ^
-   include/linux/rcuref_long.h:23:30: note: expanded from macro 'RCUREF_LONG_RELEASED'
-      23 | #define RCUREF_LONG_RELEASED    RCUREF_RELEASED
-         |                                 ^
-   In file included from kernel/fork.c:35:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/fork.c:35:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/fork.c:35:
-   In file included from include/linux/mempolicy.h:15:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/fork.c:43:
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     158 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     159 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   14 warnings and 1 error generated.
---
-   In file included from kernel/exec_domain.c:16:
-   In file included from include/linux/proc_fs.h:10:
-   In file included from include/linux/fs.h:48:
->> include/linux/rcuref_long.h:49:14: error: use of undeclared identifier 'RCUREF_RELEASED'
-      49 |         return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
-         |                     ^
-   include/linux/rcuref_long.h:23:30: note: expanded from macro 'RCUREF_LONG_RELEASED'
-      23 | #define RCUREF_LONG_RELEASED    RCUREF_RELEASED
-         |                                 ^
-   In file included from kernel/exec_domain.c:19:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/exec_domain.c:19:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/exec_domain.c:19:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   12 warnings and 1 error generated.
---
-   In file included from kernel/panic.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/panic.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/panic.c:14:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/panic.c:15:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:48:
->> include/linux/rcuref_long.h:49:14: error: use of undeclared identifier 'RCUREF_RELEASED'
-      49 |         return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
-         |                     ^
-   include/linux/rcuref_long.h:23:30: note: expanded from macro 'RCUREF_LONG_RELEASED'
-      23 | #define RCUREF_LONG_RELEASED    RCUREF_RELEASED
-         |                                 ^
-   12 warnings and 1 error generated.
---
-   In file included from kernel/signal.c:24:
-   In file included from include/linux/fs.h:48:
->> include/linux/rcuref_long.h:49:14: error: use of undeclared identifier 'RCUREF_RELEASED'
-      49 |         return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
-         |                     ^
-   include/linux/rcuref_long.h:23:30: note: expanded from macro 'RCUREF_LONG_RELEASED'
-      23 | #define RCUREF_LONG_RELEASED    RCUREF_RELEASED
-         |                                 ^
-   In file included from kernel/signal.c:27:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from kernel/signal.c:27:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from kernel/signal.c:27:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   kernel/signal.c:140:37: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     140 |         case 4: ready  = signal->sig[3] &~ blocked->sig[3];
-         |                                            ^            ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   kernel/signal.c:140:19: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     140 |         case 4: ready  = signal->sig[3] &~ blocked->sig[3];
-         |                          ^           ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   kernel/signal.c:141:30: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     141 |                 ready |= signal->sig[2] &~ blocked->sig[2];
-         |                                            ^            ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   kernel/signal.c:141:12: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     141 |                 ready |= signal->sig[2] &~ blocked->sig[2];
-         |                          ^           ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   16 warnings and 1 error generated.
-..
+Please, let's make sure we never have any of the global offset table horror.
 
+Yes, yes, you can't avoid them on other architectures.
 
-vim +/RCUREF_RELEASED +49 include/linux/rcuref_long.h
+That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
+feel are a complete no-brainer and should be done regardless of any
+other code generation issues.
 
-eea7922dd31c8d Christian Brauner 2024-09-18  37  
-eea7922dd31c8d Christian Brauner 2024-09-18  38  /**
-eea7922dd31c8d Christian Brauner 2024-09-18  39   * rcuref_long_read - Read the number of held reference counts of a rcuref
-eea7922dd31c8d Christian Brauner 2024-09-18  40   * @ref:	Pointer to the reference count
-eea7922dd31c8d Christian Brauner 2024-09-18  41   *
-eea7922dd31c8d Christian Brauner 2024-09-18  42   * Return: The number of held references (0 ... N)
-eea7922dd31c8d Christian Brauner 2024-09-18  43   */
-eea7922dd31c8d Christian Brauner 2024-09-18  44  static inline unsigned long rcuref_long_read(rcuref_long_t *ref)
-eea7922dd31c8d Christian Brauner 2024-09-18  45  {
-eea7922dd31c8d Christian Brauner 2024-09-18  46  	unsigned long c = atomic_long_read(&ref->refcnt);
-eea7922dd31c8d Christian Brauner 2024-09-18  47  
-eea7922dd31c8d Christian Brauner 2024-09-18  48  	/* Return 0 if within the DEAD zone. */
-eea7922dd31c8d Christian Brauner 2024-09-18 @49  	return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
-eea7922dd31c8d Christian Brauner 2024-09-18  50  }
-eea7922dd31c8d Christian Brauner 2024-09-18  51  
+Let's not do relocation for no good reason.
 
-:::::: The code at line 49 was first introduced by commit
-:::::: eea7922dd31c8d9d6dc9a25a19fef7bc272f9e50 rcurf: add rcuref_long_*() helpers
-
-:::::: TO: Christian Brauner <brauner@kernel.org>
-:::::: CC: Christian Brauner <brauner@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+             Linus
