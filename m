@@ -1,119 +1,101 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7535D2141C5
-	for <llvm@lists.linux.dev>; Wed,  2 Oct 2024 20:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD102745F4
+	for <llvm@lists.linux.dev>; Wed,  2 Oct 2024 21:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727899693; cv=none; b=VQuDDELlw8SoL3tj8EtV3ORr0iIZvqOND5rY3kB2nDDxjfCgOYY4RHgnuhd2JGvGHGPB4vC9/fkC6vzabZRmYd35LmiqrgsMsCBMDJvROtxm2DYkzxWVpFT5fhIApMCu16cRzwPXOu2Hq5UoHq/8T4Hls147pD3IbwcxcXAoZW8=
+	t=1727902932; cv=none; b=RelDLHaOxaLMnguMxCroHR8vGmmnc8p1Lol9TwVA49athaBtJZAx9f5JzVsFqRi9/Fc//MVECNPDtkcmebLBWif1SqQvUh8rR0O5rOt+DYX4o1o3FYw5vU7ZBbQx6KX3CKx03gOEB3vam5wJk4VWQQBboMOhfWAZA76k1ugo9lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727899693; c=relaxed/simple;
-	bh=26ch3VLdZlgASzApmc+sdmN42sQrSbzi8ri/yXB2hcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I7uyrlM2FqJsIvEmofLO/cuRlTqNTf7VKwo2mJEpIqP0ZJXI9m6fi8iuTMQeCdvgWLq5sRv8Yp/LfcDwpvw6KP/62DnSgp+e87BHA08fDeDQf6FH5qdUTMcLvBYQSrox6P7QKQiAefxlIVcCqXlrrUOhnzi+KARKi/MaDh7RWho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PdFYeW6s; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1727902932; c=relaxed/simple;
+	bh=5it3Fy1qGwz7e39eAwIBw+0faZ8oDz6qT1Yb6nMycZ0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I/iVtonHSvDW+o0P6RGEjQB5xzBTFnw/S0M2HD/MHfBuHFYFMTMAV5tSphg7M+eEYrqa05NbIs+s2LAXEiV/33HZ9Hb1P9EJ/Asn5M1C9+Gof6HUm4Ri49NApN+lPJ+AaL/kk5rOkUVi1d8PsKTb8u6HvdyJ6xopYVoUbMjioEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Omeu2CYv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PdFYeW6s"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-537a399e06dso177464e87.1
-        for <llvm@lists.linux.dev>; Wed, 02 Oct 2024 13:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1727899688; x=1728504488; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=felyUMZ1epn3qYN0qQZjWDzIrXK7nsXRUmOCiXehfgQ=;
-        b=PdFYeW6s8KpJ9w9KnGwXQVhKzEeqfbGykSBmJgOlx1ZU1Vc+oiVGNM6yhRW+AUn32U
-         dlKRF2/UDgJh1w1vUvTIuVST95/k0gyKRRNi78o10O3fl3Ajt9g0M0vBQZYvR7K5MXFa
-         ycSMzNeeeyteiUsxUD5ldyugq495R3igl9quw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727899688; x=1728504488;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=felyUMZ1epn3qYN0qQZjWDzIrXK7nsXRUmOCiXehfgQ=;
-        b=FYOCZLzH3mv+/JXcq7Krc9u5BTrkhUzhGrxXWdT46sTFOJkUl8bmkmSsOczhD0KRD1
-         U6i958DEN3sfaGy0fjWpEDN2VZXG4qQ6S0tkzr4H0tg9RBvCv7Ms6d/b2KFI1+Icdsj5
-         cr8R7cSPMDTcPBaT7FK1bjtE8TwQ0fLLEWAondPfhVAzpyv8IS7W/nWxYlUirE+ZPNiz
-         a9lcqXUUOlyYqKaqSoCB9uI0hXxAvJETUq48SMVOhMFgyL7PZDaHY5O2WC8X8FcLeyGY
-         c3cFDV9RvQ08nGOI8og/2jw6fYZAKnrRfsqoJTBXFZidEe9UpyMWaYADWwum8AtxbHhz
-         s6Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCWeXckWehZgrA0ISqiDD1fiI6wOINf8TGubrW5VIhPCHSQn3rjW3+TXFHlaKnkUgCZZN/04@lists.linux.dev
-X-Gm-Message-State: AOJu0YxSmu1JpuDGoNEFe/Bqrusf4TlttDWkwibWIyThM+QeCtkRIyjg
-	Uta4RmZDohemXl3JfjwHhw/CG8blq86Nckm803iUElXGBcbCZgDhrBJs7WAxSsgXOIwJF1LTpHu
-	VBvwA6A==
-X-Google-Smtp-Source: AGHT+IEQ0bw3rqigi9IlkW6kEGIq6n0/VrvR2kRhrKwcI8Sy3c1BZ8Zcgt+hZqPI3uu0AypsEGGN1Q==
-X-Received: by 2002:a05:6512:2349:b0:530:b76c:65df with SMTP id 2adb3069b0e04-539a0684352mr2857540e87.35.1727899688265;
-        Wed, 02 Oct 2024 13:08:08 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-538a04413edsm2009053e87.253.2024.10.02.13.08.06
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Oct 2024 13:08:07 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5398f3be400so194361e87.0
-        for <llvm@lists.linux.dev>; Wed, 02 Oct 2024 13:08:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXFjuAKuyYeZoriuMuhC2w0mAexH9OLSel4F0bwL/PjKB73gWfriWMN+ks1m3TjytzGI2oR@lists.linux.dev
-X-Received: by 2002:a05:6512:e9e:b0:535:6795:301a with SMTP id
- 2adb3069b0e04-539a079eb59mr2506573e87.47.1727899328912; Wed, 02 Oct 2024
- 13:02:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Omeu2CYv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1727902929;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YgZd54q03trl/3q4SYV6Ce6uZUNGBejnZCot9Sg4/1U=;
+	b=Omeu2CYvVaMAFwoF2rfqkp0uPorSvRn34bGGCcY8dPh0Jf8q9ie3VmANy68XqReNlHaoU/
+	Z4iMA2AK5FKBrCHXVCpZW9WAUa/XIns18u1iWqoAB2V3emVPoRhtnKjzRvXnji0RhQozd+
+	5mqAmMsNOOZCgpimBwXBe0jnDmjR89A=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-510-mqMIxtDZPhSGmrpknNcPrA-1; Wed,
+ 02 Oct 2024 17:02:06 -0400
+X-MC-Unique: mqMIxtDZPhSGmrpknNcPrA-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 52D511955F57
+	for <llvm@lists.linux.dev>; Wed,  2 Oct 2024 21:02:05 +0000 (UTC)
+Received: from [172.64.11.16] (unknown [10.30.34.149])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C01351956054;
+	Wed,  2 Oct 2024 21:02:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc1,
+ mainline.kernel.org-clang, f23aa4c0)
+Date: Wed, 02 Oct 2024 21:02:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
- <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
-In-Reply-To: <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 2 Oct 2024 13:01:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
-Message-ID: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
-Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <42919.124100217020600500@us-mta-510.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2 Oct 2024 at 08:31, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> I guess you are referring to the use of a GOT? That is a valid
-> concern, but it does not apply here. With hidden visibility and
-> compiler command line options like -mdirect-access-extern, all emitted
-> symbol references are direct.
+Hi, we tested your kernel and here are the results:
 
-I absolutely hate GOT entries. We definitely shouldn't ever do
-anything that causes them on x86-64.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-I'd much rather just do boot-time relocation, and I don't think the
-"we run code at a different location than we told the linker" is an
-arghument against it.
 
-Please, let's make sure we never have any of the global offset table horror.
+Kernel information:
+    Commit message: Merge tag 'hid-for-linus-2024090201' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/hid/hid
 
-Yes, yes, you can't avoid them on other architectures.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1479293372
 
-That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
-feel are a complete no-brainer and should be done regardless of any
-other code generation issues.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1479293372-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1479293372-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1479293372-x86_64-kernel-debug
 
-Let's not do relocation for no good reason.
 
-             Linus
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
