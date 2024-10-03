@@ -1,106 +1,132 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E91E6EB5C
-	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 18:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42EF17BA3;
+	Thu,  3 Oct 2024 20:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727979631; cv=none; b=rAjEeKYaPY4MRJWxeyvei4pNhgykIDwFxdbTCp9Kscb+E/3b2CHNNkLnRbMoi2+eQQ1YFtyLMTrWr/FD6TXsxPFDMu9eaZoILG//fCHKDrP3BXVKOWvKykbFzBPzMvhTIQltot/DJyCJxRDwSr8WsH4ZB1lW0kEBHGe2ND2j8Qc=
+	t=1727985713; cv=none; b=EaVoMfROYFJZGuSCl8sWp7LTGezr9hH8n4zL5mAWFjMzfWF5A9+shXJ75Asi+0w5xl55ORGBNQoKSFLG5a+gsbpx0sg0eoKypIQtyqM/UZeYXQi/gAW3fIQR7AACWdO7Mpc0Z0nq7Mf+ABVKkpp4v8JQTKyK7JnlSAky1+WLcKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727979631; c=relaxed/simple;
-	bh=OPHzpIyuAEVyuENdRsgtRgBjbI78VqztnMoMxs6v4zo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PNSMqbl8GiV9evPPUrWOUxyN3thVoO1vMcDAt2NHVJ4JtAexiKIRACjCBHVQoIjULdkPzxn3Dp/3ttISCd0uPDs8h7QGLC5aswmTCA+eR/NUzVNEF2Bn4eNrVTjau6G0m1er/5Vf3eLbnOBUC1EldayefpzXz9aqWlJdXGk9e5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4eC6fK/k; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1727985713; c=relaxed/simple;
+	bh=/oYqDlZ6Vlw0/om9THOLUYe3n5towioZU50JUlDE6w8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ksieW+9rusM42jT2g8JeK+ZSXiPCRKXd3/OWJOIsDGCMtRGMRvm1ojVEiK96dHWEVHZY3oStBPYiMd8TpmPcIgS0MeQ0x9aD7cXZzGwr9iFLUwxDPNwFjmYv+bBc5W1rzS5XstYD6X3+ATqLvdjqpavKfkOZkZGqU5N6j2Oy1uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kql9frFQ; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4eC6fK/k"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4582fa01090so34681cf.0
-        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 11:20:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727979629; x=1728584429; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OPHzpIyuAEVyuENdRsgtRgBjbI78VqztnMoMxs6v4zo=;
-        b=4eC6fK/ksRs+M/3WS0YMw2zScPGnm9iZ5vPtztojWFACZPxANo9qLQCTesnovWYzLp
-         GLbDbv6MMYBV7SrmtzYsy0xSYSQkFn0wg+bD7Ob+K4QCz1+4DVwS3x/oT87wsCnyXnp/
-         6+o9RJZOucS5ztD+oEJ5uU2e82+27uX8zO9ec+bfKlTuxoEmGCvC+rjYiELgnTXV+/V2
-         ogzBYy/AHcxwCtqHT8WU/v3ThLAbA95mVarPDPS+vOv35AjN7UDXOnhVWmTnxAkrWUuf
-         teJDFNBOQpTl9E95C+JssZPmYjCgvrYFTFVVoo1+AuL5i4QnMKQJuSNnRxGC5d59VCFn
-         Rxnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727979629; x=1728584429;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OPHzpIyuAEVyuENdRsgtRgBjbI78VqztnMoMxs6v4zo=;
-        b=tI2CprYJLe9bSrqq83amHHYgTQ89Dpnmzu87AQBZumnqDUZ83qWH3htNTcNjBwtGKj
-         C0I4A4fe7ME38yNvnjVCUKCrznjb6vxDS4QLYmbQ8TmKXSuvtotgfrxcQSSnCqtgR3Sf
-         NZY8VOupha+bI5eJGth438xt6jtv2kCh9heU/WRrn4lTYSv8ePZROWsJWL/z7P4Zdxxo
-         MWzkwC35oczXMJzBtevWfIVdpOXUqiR53mQQOmuATqeHL/uVxGvEvwPrzxeVGJjtNjOT
-         iUYiSJwIPTDCZC/v/NWVcsWDFq4Ky3l0P/uvZiDIY9pH/C2gPjhSoJVqul/DriLpTFX+
-         1gnA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5WjsTtu4lV1bKI5ICjHWLZmuc+0Ri+3Hv96pZhQzW8clsakOmTh1KKE3kvSrb/xrqprZk@lists.linux.dev
-X-Gm-Message-State: AOJu0YxDXuUGbsOQCmfVghsQV8zS7AS1KcmhLXNbZKAWspLfsSHvEmc9
-	61PpeLk8wEHMcnxIdTxQaeDZiSbGaFY+AC24ty9wPzbW9CzKhmBazmSHS5H8yMMdhZ0EtoNjKFm
-	WnSYmQXkapOVTdZHjHMFFgxAQxUZtLGMxXJ8x
-X-Google-Smtp-Source: AGHT+IHGZSKF56BASKK8GozB2yF2V8PIyDPsPS4fr3yQFHFDS0HG9quwxCeJ5MiYAd0srYGtlNnDajEe0HNMh2na5RM=
-X-Received: by 2002:a05:622a:5687:b0:44f:e12e:3015 with SMTP id
- d75a77b69052e-45d9b947144mr205851cf.25.1727979629144; Thu, 03 Oct 2024
- 11:20:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kql9frFQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727985712; x=1759521712;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/oYqDlZ6Vlw0/om9THOLUYe3n5towioZU50JUlDE6w8=;
+  b=Kql9frFQSRG1JfheG5XQ9nCf1sy7z3xlfQIuxCl41I1uXRbEoRd3u2A4
+   +YBxO6xVdKRTblI9XYy1lEXSnxu4tKtwuyOEIjiB/oqjdRzsAUssVE0Sc
+   O/I2olSLLTaWQX6JYc5VaPpYscyQ/CioM+TYTznruUmzFQ1qubzbDTlcL
+   +FSpQub0vidJ9DEwfARWOQxke6C7Ie7cPfhikRcF0fxjqTeoXusBgIs4S
+   hFUFBP5o18+NfXCULpCz06GevyZUfFem+GJbJQp6iWKJ9xNEX2exoliJo
+   eh+7wKYi8djQygi6moAEZ+hvdKP9i1UU58GKJUFNda7WkpsO5a1xLdb9/
+   w==;
+X-CSE-ConnectionGUID: z6dlBgGQT4+ySzn9Kul7Pg==
+X-CSE-MsgGUID: 9tPtRAZXR6y7S92HeZFfqg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="27371978"
+X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
+   d="scan'208";a="27371978"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 13:01:51 -0700
+X-CSE-ConnectionGUID: PzFDQxsySEuQBHQoEAAf3g==
+X-CSE-MsgGUID: nKpt6EqdS3SimN8DepW/TQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
+   d="scan'208";a="79309393"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 03 Oct 2024 13:01:50 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swS1D-0000qW-2x;
+	Thu, 03 Oct 2024 20:01:47 +0000
+Date: Fri, 4 Oct 2024 04:01:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:static-key-deprecated 1/18]
+ kernel/trace/trace_events_hist.c:825:36: error: no member named 'enabled' in
+ 'struct static_key_false'
+Message-ID: <202410040337.AVKyOkE0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241002233409.2857999-1-xur@google.com> <20241002233409.2857999-2-xur@google.com>
- <20241003154143.GW5594@noisy.programming.kicks-ass.net> <CAKwvOdnS-vyTXHaGm4XiLMtg4rsTuUTJ6ao7Ji-fUobZjdBVLw@mail.gmail.com>
- <20241003160309.GY5594@noisy.programming.kicks-ass.net> <CAKwvOd=CRiHitKeYtHH=tmT8yfDa2RSALbYn5uCC8nRq8ud79g@mail.gmail.com>
- <20241003161257.GZ5594@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241003161257.GZ5594@noisy.programming.kicks-ass.net>
-From: Rong Xu <xur@google.com>
-Date: Thu, 3 Oct 2024 11:20:17 -0700
-Message-ID: <CAF1bQ=RAizpP-T_sRGpE2-Kjsk_RZD3r_iz_dpn25W+uDzpWOw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
-	Jann Horn <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, linux-arch@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
-	workflows@vger.kernel.org, x86@kernel.org, "Xin Li (Intel)" <xin@zytor.com>, 
-	Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Writing the doc with all these code-blocks was not fun either.
-We are happy to change if there is a better way for this.
+Hi Josh,
 
--Rong
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-On Thu, Oct 3, 2024 at 9:13=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
-> wrote:
->
-> On Thu, Oct 03, 2024 at 09:11:34AM -0700, Nick Desaulniers wrote:
->
-> > > It makes it absolute crap for all of us who 'render' text documents
-> > > using less or vi.
-> >
-> > "It hurts when I punch myself in the face."
->
-> Weirdly enough I have a job that entails staring at text documents in
-> text editors all day every day :-) sorry for thinking that's a sane
-> thing to do.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git static-key-deprecated
+head:   02560a85ce2d5e66cd2b6f92bc5491f6fd199e02
+commit: dcb3457da83c22aae3efcd93357f35c70645c4bb [1/18] tracepoints: Use new static branch API
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241004/202410040337.AVKyOkE0-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040337.AVKyOkE0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410040337.AVKyOkE0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace_events_hist.c:825:36: error: no member named 'enabled' in 'struct static_key_false'
+     825 |         if (unlikely(atomic_read(&tp->key.enabled) > 0)) {
+         |                                   ~~~~~~~ ^
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   1 error generated.
+
+
+vim +825 kernel/trace/trace_events_hist.c
+
+7bbab38d07f318 Masami Hiramatsu        2018-11-05  816  
+726721a51838e3 Tom Zanussi             2020-05-28  817  typedef void (*synth_probe_func_t) (void *__data, u64 *var_ref_vals,
+726721a51838e3 Tom Zanussi             2020-05-28  818  				    unsigned int *var_ref_idx);
+4b147936fa5096 Tom Zanussi             2018-01-15  819  
+726721a51838e3 Tom Zanussi             2020-05-28  820  static inline void trace_synth(struct synth_event *event, u64 *var_ref_vals,
+726721a51838e3 Tom Zanussi             2020-05-28  821  			       unsigned int *var_ref_idx)
+4b147936fa5096 Tom Zanussi             2018-01-15  822  {
+726721a51838e3 Tom Zanussi             2020-05-28  823  	struct tracepoint *tp = event->tp;
+4b147936fa5096 Tom Zanussi             2018-01-15  824  
+726721a51838e3 Tom Zanussi             2020-05-28 @825  	if (unlikely(atomic_read(&tp->key.enabled) > 0)) {
+726721a51838e3 Tom Zanussi             2020-05-28  826  		struct tracepoint_func *probe_func_ptr;
+726721a51838e3 Tom Zanussi             2020-05-28  827  		synth_probe_func_t probe_func;
+726721a51838e3 Tom Zanussi             2020-05-28  828  		void *__data;
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  829) 
+726721a51838e3 Tom Zanussi             2020-05-28  830  		if (!(cpu_online(raw_smp_processor_id())))
+726721a51838e3 Tom Zanussi             2020-05-28  831  			return;
+4b147936fa5096 Tom Zanussi             2018-01-15  832  
+726721a51838e3 Tom Zanussi             2020-05-28  833  		probe_func_ptr = rcu_dereference_sched((tp)->funcs);
+726721a51838e3 Tom Zanussi             2020-05-28  834  		if (probe_func_ptr) {
+726721a51838e3 Tom Zanussi             2020-05-28  835  			do {
+726721a51838e3 Tom Zanussi             2020-05-28  836  				probe_func = probe_func_ptr->func;
+726721a51838e3 Tom Zanussi             2020-05-28  837  				__data = probe_func_ptr->data;
+726721a51838e3 Tom Zanussi             2020-05-28  838  				probe_func(__data, var_ref_vals, var_ref_idx);
+726721a51838e3 Tom Zanussi             2020-05-28  839  			} while ((++probe_func_ptr)->func);
+726721a51838e3 Tom Zanussi             2020-05-28  840  		}
+726721a51838e3 Tom Zanussi             2020-05-28  841  	}
+4b147936fa5096 Tom Zanussi             2018-01-15  842  }
+4b147936fa5096 Tom Zanussi             2018-01-15  843  
+
+:::::: The code at line 825 was first introduced by commit
+:::::: 726721a51838e3983023f906580722fc83f804ee tracing: Move synthetic events to a separate file
+
+:::::: TO: Tom Zanussi <zanussi@kernel.org>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
