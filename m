@@ -1,165 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DF81C0DCB;
-	Thu,  3 Oct 2024 21:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394301C2DB2
+	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 22:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727992500; cv=none; b=XCVTwd7w8W8gmHRxB34+IGPB6kvtR/l/Vpx9bM0suH+3s/+5/AbkE7N7cvXCS9dNHvImEsooRGz8bci/yCJHYa3abilkuMloMoIoNklfmFYiXkDFyNAex4GxZgNsR1HDb7/hQ1nuVIp7eCXIugKizN0DEdCQujH+3gb+6vsqIHg=
+	t=1727993403; cv=none; b=NSQW3fgXelL3CyloEiMrwN10UahOmdp+xTV1hR2MXZnTekcekEB32bP+mqItB9acMmSuJEq0MY6DkGDhkk1m6hCyAas4AqdMsva15/Zl+bbHp+SMWQomzELunGiKRupYxHvtte2eYYlLZOxPade3ZDu0c3Vebh5KNPxQVPuHZ64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727992500; c=relaxed/simple;
-	bh=1uPcI0h7/zBOkh1rnHMxjRL0nB6YyosX+r9Z3xNqlAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hD7K5sb5b6qS0g90P7qR/nJQYoEDtnUdDJRyT/IxhH/x86dLd1xJLcX6wV1Kanv+fPe+cX1hw4XFpp1LeKyu+DCSQsFM1K4l9HyF79TRhV4oShN2uIcWvyfzV+pvf93w/Jivb9lt0kkaOsosh5HuemIyPOndEA25LmE7F6KgaWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkpQB+5r; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727993403; c=relaxed/simple;
+	bh=RIEY/VvBXBpbOFws0YW9ZSyNHIhNNXGVpnHlXG+8ISU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WNVoCfkkGy8z55OuRkgYEFEvBbsGaXP6By+4DgfQioLAUU86ccX/ess5nFr4cjkGVEH1FkVhyYSshpD1atq7QEhHL/U6gl8kR+RbOlBkLRZJ28/MAXtGbCezY1Qd1dpBCE5HaM+CyxLwCGlAyItRbTwLLJ0dTEWB6jP6w+jqTjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=RJkxQMVH; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkpQB+5r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727992499; x=1759528499;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1uPcI0h7/zBOkh1rnHMxjRL0nB6YyosX+r9Z3xNqlAw=;
-  b=jkpQB+5rIptAUzMm8uPx5VcRG+VcDP8a6nYEMTW5kQSQ6NTJFAosK0qr
-   TovvXrpeiYv3dGdwWxSkcHPKUkjt86HYEYRcHO+Pnaxl38DiNgQiweXX2
-   9eGRT8f3hqngtG1r/yEFwYWsZJ+GQelme4Q9pKqE/Ftbn0PoaZ7hmoDDs
-   7c1fCh3VNMG2CzN+5qKzpeUXv7zj01AX+PGrxFli1NcMMrWRv0twcMR3d
-   5Y3Tg/HugVn69Q0AYN0kGvU8JzmS9A7Hc8d9i3vN2hkzWuUey+hlHN9d2
-   /WmnNhG6P8ijR7HGB9XwpyQ1xDb91yqfc51qdIWmudYimXfFIc6xBAdU0
-   Q==;
-X-CSE-ConnectionGUID: hSlzsBYaSFOPkmu9STuDnQ==
-X-CSE-MsgGUID: d4qSiVELREaVPsqrdCoJAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="37869293"
-X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="37869293"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 14:54:55 -0700
-X-CSE-ConnectionGUID: qK29dpFzSh69IQG7Gt4Rtg==
-X-CSE-MsgGUID: rPDS3m/CQ7yGA7E1BtW+cg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="74927109"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 03 Oct 2024 14:54:53 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swTmd-0000wU-0Q;
-	Thu, 03 Oct 2024 21:54:51 +0000
-Date: Fri, 4 Oct 2024 05:54:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: luca.boccassi@gmail.com, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	christian@brauner.io, paul@paul-moore.com
-Subject: Re: [PATCH] pidfd: add ioctl to retrieve pid info
-Message-ID: <202410040539.j2SZpABt-lkp@intel.com>
-References: <20241002142516.110567-1-luca.boccassi@gmail.com>
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="RJkxQMVH"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e25ccd64be9so1326722276.2
+        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 15:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1727993400; x=1728598200; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RIEY/VvBXBpbOFws0YW9ZSyNHIhNNXGVpnHlXG+8ISU=;
+        b=RJkxQMVHWfhDIcHEli6BGvnXWu0XcKlI6iSukWgDlFGy2B4gq52jNq2Wymd5Xd2Yok
+         UCQVhamJthQIx2pLEeUK769UFFD9Q8/OQq++Xmx8XE2L8QnEdCSHulxKb4ShgHBr42Ge
+         E9Z/+vNlb1j9uUHAP79nNv0GakBoY0wqoJ3zc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727993400; x=1728598200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RIEY/VvBXBpbOFws0YW9ZSyNHIhNNXGVpnHlXG+8ISU=;
+        b=eRO/wxRFxkTab/VywPuHDXl7Xn6Qiw4IQbireHMdpx03Rh8Mpr17igxlsQmGR+gZ7I
+         V+oxwbte0jUcQkQPVbiNuX9rUP88lAifI7gQZFfYle2baAdfeE0kwXERVwHlIysOsGJe
+         1zgTYoa2fO2Wcu15o+DaCRPSzbyN7GGWsuiQCgz13IoEboCt7JGynHo/SEnc9wxChmrE
+         i8zPTeFHJ8TLOsBRIQG8I1/SpeB+pKrNRXOTXCaZbBZBzNcUpp0qcYq4AvVRh2YRyJjL
+         E8SenVFAyeaLaZNPGXa/yRn05px5vRne4gjN4orBREvmHy0Anphv5w0qSSfo+COVhkSb
+         aH6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX22maEJQR0RUFRPRPItCX6s3Qia9DYWaOG2cVHTdfSlQkzSRkfs/6/HYPNY0p1aOKVgFc1@lists.linux.dev
+X-Gm-Message-State: AOJu0YxNa84ZU8enKlDZlx2gvpFeLzL/Y/KPo4qr6DQxxR46m8Rbmio9
+	Kac4P4a5FB7YIBbIr90S0Uk8gFeNlSSaeFPCyzT/iAq9Y+mPjYxB2vXO9drACMKxfIGdaLhay+h
+	pf6r33OX6dZ4axq1uLwoba47U5o+uknVC3i60mA==
+X-Google-Smtp-Source: AGHT+IGHUNzUYhVLVAPDGU9H/0WV5ShOsg0ptxWufYbLbDAiDNM07Pwk/MoJ8LvG3kzNc/NTlu+JDUt/1ryUfofqvJ8=
+X-Received: by 2002:a05:6902:2b8e:b0:e26:11ae:6de9 with SMTP id
+ 3f1490d57ef6-e28939561eemr459827276.52.1727993399239; Thu, 03 Oct 2024
+ 15:09:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241002142516.110567-1-luca.boccassi@gmail.com>
+References: <20241002010205.1341915-1-mathieu.desnoyers@efficios.com>
+ <20241002010205.1341915-2-mathieu.desnoyers@efficios.com> <20241003000843.GA192403@google.com>
+ <7cc83ffc-c9cc-4e87-a3ee-bb62588a594c@efficios.com>
+In-Reply-To: <7cc83ffc-c9cc-4e87-a3ee-bb62588a594c@efficios.com>
+From: Joel Fernandes <joel@joelfernandes.org>
+Date: Thu, 3 Oct 2024 18:09:48 -0400
+Message-ID: <CAEXW_YTO3AhHAqrA4E_goVbsNB26AdfdShynr-nNMR97AYy6ag@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] compiler.h: Introduce ptr_eq() to preserve
+ address dependency
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, John Stultz <jstultz@google.com>, 
+	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>, Frederic Weisbecker <frederic@kernel.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Zqiang <qiang.zhang1211@gmail.com>, Ingo Molnar <mingo@redhat.com>, 
+	Waiman Long <longman@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com, 
+	Mateusz Guzik <mjguzik@gmail.com>, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, 
+	rcu@vger.kernel.org, linux-mm@kvack.org, lkmm@lists.linux.dev, 
+	Gary Guo <gary@garyguo.net>, Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Oct 3, 2024 at 10:21=E2=80=AFAM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> >
+> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>
+> Please double-check with -O2, and let me know if you still agree with
+> the patch :)
+>
 
-kernel test robot noticed the following build errors:
+You are quite right, with -O2 I can indeed see that the optimize hide
+var fixes it.
 
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes linus/master v6.12-rc1 next-20241003]
-[cannot apply to brauner-vfs/vfs.all]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+FWIW:
+Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/luca-boccassi-gmail-com/pidfd-add-ioctl-to-retrieve-pid-info/20241002-223302
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20241002142516.110567-1-luca.boccassi%40gmail.com
-patch subject: [PATCH] pidfd: add ioctl to retrieve pid info
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241004/202410040539.j2SZpABt-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040539.j2SZpABt-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410040539.j2SZpABt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/pidfs.c:146:25: error: call to undeclared function 'task_css_check'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     146 |                 struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
-         |                                       ^
->> fs/pidfs.c:146:46: error: use of undeclared identifier 'pids_cgrp_id'
-     146 |                 struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
-         |                                                            ^
-   2 errors generated.
-
-
-vim +/task_css_check +146 fs/pidfs.c
-
-   116	
-   117	static long pidfd_info(struct task_struct *task, struct pid *pid, unsigned long arg)
-   118	{
-   119		struct pidfd_info uinfo = {}, info = {};
-   120	
-   121		if (copy_from_user(&uinfo, (struct pidfd_info *)arg, sizeof(struct pidfd_info)))
-   122			return -EFAULT;
-   123		if (uinfo.size > sizeof(struct pidfd_info))
-   124			return -E2BIG;
-   125		if (uinfo.size < sizeof(struct pidfd_info))
-   126			return -EINVAL; /* First version, no smaller struct possible */
-   127	
-   128		if (uinfo.request_mask & ~(PIDFD_INFO_PID | PIDFD_INFO_CREDS | PIDFD_INFO_CGROUPID | PIDFD_INFO_SECURITY_CONTEXT))
-   129			return -EINVAL;
-   130	
-   131		memcpy(&info, &uinfo, uinfo.size);
-   132	
-   133		if (uinfo.request_mask & PIDFD_INFO_PID)
-   134			info.pid = pid_nr_ns(pid, task_active_pid_ns(task));
-   135	
-   136		if (uinfo.request_mask & PIDFD_INFO_CREDS) {
-   137			const struct cred *c = get_task_cred(task);
-   138			if (!c)
-   139				return -ESRCH;
-   140	
-   141			info.uid = from_kuid_munged(current_user_ns(), c->uid);
-   142			info.gid = from_kgid_munged(current_user_ns(), c->gid);
-   143		}
-   144	
-   145		if (uinfo.request_mask & PIDFD_INFO_CGROUPID) {
- > 146			struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
-   147			if (!cgrp)
-   148				return -ENODEV;
-   149	
-   150			info.cgroupid = cgroup_id(cgrp);
-   151		}
-   152	
-   153		if (uinfo.request_mask & PIDFD_INFO_SECURITY_CONTEXT) {
-   154			char *secctx;
-   155			u32 secid, secctx_len;
-   156			const struct cred *c = get_task_cred(task);
-   157			if (!c)
-   158				return -ESRCH;
-   159	
-   160			security_cred_getsecid(c, &secid);
-   161			if (security_secid_to_secctx(secid, &secctx, &secctx_len))
-   162				return -EFAULT;
-   163	
-   164			memcpy(info.security_context, secctx, min_t(u32, secctx_len, NAME_MAX-1));
-   165		}
-   166	
-   167		if (copy_to_user((void __user *)arg, &info, uinfo.size))
-   168			return -EFAULT;
-   169	
-   170		return 0;
-   171	}
-   172	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ - Joel
