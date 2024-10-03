@@ -1,76 +1,65 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA0B1AAE10;
-	Thu,  3 Oct 2024 16:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38441A7AE4;
+	Thu,  3 Oct 2024 17:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727971990; cv=none; b=dQTmKFB06Deu/961F092KuiZbUaopEl0GaoyLJt8O4DthXyA78ChO5pPSwq00a4xln++Hv+h4AvgkXkWz4GyOHnNONnnZp75D3D5SwTAP6Rzvo/kEsvCIV4N/M06zsFUQKdBgLHiW4iTHFICbxzrw0R2SyHzCDvwrNeVUIfi9G0=
+	t=1727978209; cv=none; b=amaGURewKAIyVsF6A+ZhZjuViyLPaMkOfeapWZEeVQhCql6kKXCURWi7Hbq/jtYYMiI6hBiYsIkZAUf9inqGms+s8pQYa+MBdEO5hivuB/ZX2JYA8Ak2Q1aqZmO1ewB7JC+0p0gZaJRqJ7zXVdR9VmRhHDzGPJy/at97nqNOwpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727971990; c=relaxed/simple;
-	bh=T8Cgc/gHHRgrkKf5Qi9Z34zTzlpQLyLMmWWUdvR3Aic=;
+	s=arc-20240116; t=1727978209; c=relaxed/simple;
+	bh=Tdz26YASw+9dvuOBtCyGwKlhjo+jgUjMABkC2CrdMsU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iw2k8EtsFYXVbBLTcvVWp4IaCA19BOIJEeBezyPV7tnwhDUK/KV5qTJRp8YTCS3iflYWXRzfG7ltFlhqUgEnjckbg9sj7obawnnOHEbQ7TvyqSKKPPhLhukCvc+X5sU2Cpek23NqFPpzx42p721D/t7uVuBqndtwUPz4aWZzgSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DDl+6k7t; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=CMdWvoWd3vtstIMt7CBTWs+McvtQP18misAFCwtiHtb7nH7gYCsthJ1NGNk7LJYLPgLAvZyMbVFG5N2qS1JsFHEDk98pW0RQ4gQDprXU2//BCb89qIHOddiGOBw8uOEu/WiwOVDswisE0j1NIuezm0Q5TrgFIB09PlkOpwACttQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iI6omeBD; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DDl+6k7t"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=hEcfuIGAIskv8Oce0iUVPJ3XBsfzajuHJThTZpyVaVE=; b=DDl+6k7tCl2tJW8xADRccoAmdw
-	lt0d3vK689VZFTYTL7MhMRugM04JITw2epZ4/NxhjFmNYky4cDXWA7pcYA1QXmiIW6uVJgrtiKzVB
-	Uug410fDZ7hB4l23sdRB5+KNxVyZgZF3J6WYF/cTND+aAlkW5uhKmlyVyzgzjVuWPQjti5y+EdoZw
-	I/J+QDpb9sYzIOut0erfu5Ev8nDEJPmCkSOmnSdnGWoLK3CZmsyvUDAA6ESpgO2OR6BpOWBLkwPat
-	lz/raurbo7HziXOFgPQkpDlRqD+/f63OczgD0NYwBLWz6NVPCFhNTgHW0KzTK8Z0U1eB0RkkL1/F3
-	JvRnqVYQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1swORm-00000003iXS-06Mx;
-	Thu, 03 Oct 2024 16:12:58 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A255B30083E; Thu,  3 Oct 2024 18:12:57 +0200 (CEST)
-Date: Thu, 3 Oct 2024 18:12:57 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Rong Xu <xur@google.com>,
-	Han Shen <shenhan@google.com>,
-	Sriraman Tallam <tmsriram@google.com>,
-	David Li <davidxl@google.com>,
-	Krzysztof Pszeniczny <kpszeniczny@google.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
-	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jann Horn <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iI6omeBD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727978207; x=1759514207;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tdz26YASw+9dvuOBtCyGwKlhjo+jgUjMABkC2CrdMsU=;
+  b=iI6omeBDc2JFg4iVnzvJlwN0tG/INzff2Nh2TziMIjczvXUS6SObFQOX
+   SXIFMmyANFRtiRlo7HoSJvv2BYQ+UopkH7v0YTleX4ofdg8x/bGA9dTMG
+   jj1a4L0LzUUTzOEjU7QONFF0ttO5myJzNG+uw67V5FiUsOr58AWPf5lz3
+   2dmQ4kNXqaJCKOE/4SJK+uVA7MrJChaqwj7I27YfEFXLJeJIDrGYChMDb
+   q4JPYsfaDX+jMQAxZNmQV9BIwvwj0e5deNnUWIoABLj3OT3sYhCTeP0oZ
+   FFBMnnF9LOFoLfo21OZ3Dh4DY4iUQ177OJraLQVA0rr0XucF1hDj/VDow
+   w==;
+X-CSE-ConnectionGUID: eq79rgHNQt2SBOsBVit9aw==
+X-CSE-MsgGUID: +6BSFwyqRmOKS5Mf8YA5jQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="37749980"
+X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
+   d="scan'208";a="37749980"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 10:56:47 -0700
+X-CSE-ConnectionGUID: 11Robe9ISIGg+2J4PucE6A==
+X-CSE-MsgGUID: cra+AehDQ1ivTOPes+L8Iw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
+   d="scan'208";a="74012973"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 03 Oct 2024 10:56:45 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swQ4A-0000kR-1v;
+	Thu, 03 Oct 2024 17:56:42 +0000
+Date: Fri, 4 Oct 2024 01:55:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb+git@google.com>, x86@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	stable@vger.kernel.org, Fangrui Song <i@maskray.me>,
+	Brian Gerst <brgerst@gmail.com>, Uros Bizjak <ubizjak@gmail.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org,
-	x86@kernel.org, "Xin Li (Intel)" <xin@zytor.com>,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
-Message-ID: <20241003161257.GZ5594@noisy.programming.kicks-ass.net>
-References: <20241002233409.2857999-1-xur@google.com>
- <20241002233409.2857999-2-xur@google.com>
- <20241003154143.GW5594@noisy.programming.kicks-ass.net>
- <CAKwvOdnS-vyTXHaGm4XiLMtg4rsTuUTJ6ao7Ji-fUobZjdBVLw@mail.gmail.com>
- <20241003160309.GY5594@noisy.programming.kicks-ass.net>
- <CAKwvOd=CRiHitKeYtHH=tmT8yfDa2RSALbYn5uCC8nRq8ud79g@mail.gmail.com>
+	Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH] x86/stackprotector: Work around strict Clang TLS symbol
+ requirements
+Message-ID: <202410040122.shftyeMf-lkp@intel.com>
+References: <20241002092534.3163838-2-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,15 +68,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKwvOd=CRiHitKeYtHH=tmT8yfDa2RSALbYn5uCC8nRq8ud79g@mail.gmail.com>
+In-Reply-To: <20241002092534.3163838-2-ardb+git@google.com>
 
-On Thu, Oct 03, 2024 at 09:11:34AM -0700, Nick Desaulniers wrote:
+Hi Ard,
 
-> > It makes it absolute crap for all of us who 'render' text documents
-> > using less or vi.
-> 
-> "It hurts when I punch myself in the face."
+kernel test robot noticed the following build warnings:
 
-Weirdly enough I have a job that entails staring at text documents in
-text editors all day every day :-) sorry for thinking that's a sane
-thing to do.
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on tip/master linus/master tip/x86/asm v6.12-rc1 next-20241003]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/x86-stackprotector-Work-around-strict-Clang-TLS-symbol-requirements/20241002-172733
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20241002092534.3163838-2-ardb%2Bgit%40google.com
+patch subject: [PATCH] x86/stackprotector: Work around strict Clang TLS symbol requirements
+config: i386-randconfig-061-20241003 (https://download.01.org/0day-ci/archive/20241004/202410040122.shftyeMf-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040122.shftyeMf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410040122.shftyeMf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
+WARNING: modpost: EXPORT symbol "__ref_stack_chk_guard" [vmlinux] version generation failed, symbol will not be versioned.
+Is "__ref_stack_chk_guard" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: "__ref_stack_chk_guard" [kernel/rcu/refscale.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [kernel/torture.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [fs/nfs/nfsv4.ko] has no CRC!
+>> WARNING: modpost: "__ref_stack_chk_guard" [fs/unicode/utf8-selftest.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [fs/smb/client/cifs.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [crypto/gcm.ko] has no CRC!
+>> WARNING: modpost: "__ref_stack_chk_guard" [lib/kunit/kunit-test.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/string_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/string_helpers_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/test_hexdump.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/test_hash.ko] has no CRC!
+>> WARNING: modpost: "__ref_stack_chk_guard" [lib/test_printf.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/test_scanf.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/test_bitmap.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/test_uuid.ko] has no CRC!
+>> WARNING: modpost: "__ref_stack_chk_guard" [lib/cmdline_kunit.ko] has no CRC!
+>> WARNING: modpost: "__ref_stack_chk_guard" [lib/memcpy_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/overflow_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/stackinit_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/fortify_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [lib/siphash_kunit.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/tests/drm_cmdline_parser_test.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/tests/drm_connector_test.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/tests/drm_format_helper_test.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/display/drm_display_helper.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [drivers/base/test/property-entry-test.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [drivers/power/supply/test_power.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [net/mptcp/mptcp_crypto_test.ko] has no CRC!
+WARNING: modpost: "__ref_stack_chk_guard" [net/dns_resolver/dns_resolver.ko] has no CRC!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
