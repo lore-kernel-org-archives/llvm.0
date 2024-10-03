@@ -1,141 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A856B14EC51
-	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2661C13DDA7;
+	Thu,  3 Oct 2024 11:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727954034; cv=none; b=RnTvpHk6QXcQiB6o8HEEdYp8nOUGzI3YA7ilzFIfB6XHeHjGlH52mUXXYc0xr8HH5ohBBM32wXftJYcoLJTqkYSOwB29SnKVn7+mJYhWBsY2ufYWKwDtfu0f3b3R081vXJt7iviSeHGBGmYRzzXSmWqwRzhAhvqSDH6qZyOxJK0=
+	t=1727954670; cv=none; b=kNDsseNgYFRLOdBA+BWplP7QFpYGiX7xepbLzjIZjBk8pW8Y/twB1yota0gIm1V8VETcNZQdvnFoJJmBXYZN8/MIIjjMU0kxNiNiZKTftY6JKcogTN1M4ntvk3vps7Ud4gzF8vRjnk4vhvB2oxEvHGNXyzl2UsmCxeAUYQ7QwaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727954034; c=relaxed/simple;
-	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kPHSvaGKTWN8C0Nx37QsvMHDiJT6HLS64DtcWGxae2zf39VWSoA27me9CYpyUqVRwF4+8WeJMGg4N5tNvpBE+56XS0M66lBlX14WFwtEEYSRYswezlEZzDTamgqwcsSlUDI9I83gZnikxGS0BA6+RFEgARFxKs9gz5EtnPICyPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jo5b2EyM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727954670; c=relaxed/simple;
+	bh=PwXsnFC86QN4dkeTF+0QUd4AS8fr7EzNr7PQUgpbuh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VgFpA5FwuL2OeVj9kTo13/XskalzG2D5O9qPbWnBsOCkks/2sIFmu6OnGnIiL3ARnp0WRSqrw/HivdvouD7akSGv9FqDrcg1CuzYCg2RtqnAF+Dik62Xx588I52yK6u++KMY0RItAWakOpkfdns3KV9KwcycqRYSeOZxu+JohXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HfMOywnD; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jo5b2EyM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F787C4CEE2
-	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727954034;
-	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Jo5b2EyMOS3uk9JDlHSQeU5R1aJyjAs0+fTPWkZCep6Wfe3FtEcKX92qY2mtaY2EK
-	 Ci8TPn6Ee42qRsmfrcj1l+x8zMsi6bvfBaExW2NU/fSlbTuDXDF1+X8cFBydkm8Y27
-	 lb+XzyBozg7zRqcDdBoznF0nnozWrNcR9tzS6b9UomNb4g91qxhdupQuTqUK4zEuA4
-	 z7g+nzwCR3g6dyxU7168Y4P6qlP/X9DMrNre/R3uCNKxAg+BkBWF+gHp9jrQW3cTIh
-	 xrWMcRuCjU0dRKRqqjEvI0IIIfAguu/05IPATBt+DaAJfq3OXiy9Jf7zCzIbXi+uOl
-	 853BOc6UvNv1A==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5398e33155fso1005010e87.3
-        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 04:13:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWJH+ip6gHdo4QZPTkVmtJwq1VDoI6/JB6812g2WV7n8OBQQXBXQ+6wcgPXXSk2qxHBh6lA@lists.linux.dev
-X-Gm-Message-State: AOJu0YzsFPuoEjLXP1YO1YVd+Iwx4f9bvFcsV1wp8mx8d58dJyk7yzVL
-	TQ7N8m5afvhBiAPed8XVMCCE/urgw1tU2I4CGQqLItVu6M6WYR4BGV27hEwA8FZy2ePkZskb7Z/
-	f2/PKUXgCS/HHCoclB7O2dvgQoJ8=
-X-Google-Smtp-Source: AGHT+IH0sWh3HiA/Y/FG77TM2NrCKaNhbA4eJ/qwHE/WqxSdpNeBFdDDl6WpEY+OacY7yD9godh5OoCJmImz57qPZ+Q=
-X-Received: by 2002:a05:6512:1241:b0:536:9ef0:d829 with SMTP id
- 2adb3069b0e04-539a07a1db9mr3832198e87.44.1727954032228; Thu, 03 Oct 2024
- 04:13:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HfMOywnD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727954670; x=1759490670;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PwXsnFC86QN4dkeTF+0QUd4AS8fr7EzNr7PQUgpbuh0=;
+  b=HfMOywnDA4PmgSLAeg73xL+qcPcnIr7/g80LU/9B+cjf/gSnNoCDpq8H
+   Hc57jO1sA6jKY/8HWImdEN8jQKb75+0WLBg4FSi6Vkb7GhkE/5TR5rM/w
+   FTM9BwCYBiWNUkYJR0qvGUO8A5bfxklr5gInmfH3+coT8voRW6x/hya31
+   wf3U5HJ9NfyqUbkd3lHuvHm9BGibmTBgoOZIHhLWqQV4TxQ5B2/J2Nnzz
+   5wg9oHOcpg9kuow1D2nSzk+g9lg0rxTXcOKA0VIK1Wrzzo3Ft+K17oj/6
+   NDzDUe9jBHg8Qde0pQR1YWqtaKcOjsKlKdqRYaRNuGU5ZV4k7Ogh3gihL
+   w==;
+X-CSE-ConnectionGUID: 3s/pzlsdRtSuSY2qQfiaeQ==
+X-CSE-MsgGUID: /k1UMqjSSCKzWtceOCoxVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="49667112"
+X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
+   d="scan'208";a="49667112"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 04:24:29 -0700
+X-CSE-ConnectionGUID: 4V+6lN7WSs2LJypLBQQbwg==
+X-CSE-MsgGUID: GINP/FDRSY+xIwmyQjrt/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
+   d="scan'208";a="74001457"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 03 Oct 2024 04:24:26 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swJwW-0000L4-1E;
+	Thu, 03 Oct 2024 11:24:24 +0000
+Date: Thu, 3 Oct 2024 19:24:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kate Hsuan <hpa@redhat.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Kate Hsuan <hpa@redhat.com>
+Subject: Re: [PATCH] media: Add t4ka3 camera sensor driver
+Message-ID: <202410031909.fcXYISbG-lkp@intel.com>
+References: <20241002093037.50875-1-hpa@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
- <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com> <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
-In-Reply-To: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 3 Oct 2024 13:13:40 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
-Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
-Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241002093037.50875-1-hpa@redhat.com>
 
-On Wed, 2 Oct 2024 at 22:02, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, 2 Oct 2024 at 08:31, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > I guess you are referring to the use of a GOT? That is a valid
-> > concern, but it does not apply here. With hidden visibility and
-> > compiler command line options like -mdirect-access-extern, all emitted
-> > symbol references are direct.
->
-> I absolutely hate GOT entries. We definitely shouldn't ever do
-> anything that causes them on x86-64.
->
-> I'd much rather just do boot-time relocation, and I don't think the
-> "we run code at a different location than we told the linker" is an
-> arghument against it.
->
-> Please, let's make sure we never have any of the global offset table horror.
->
-> Yes, yes, you can't avoid them on other architectures.
->
+Hi Kate,
 
-GCC/binutils never needs them. GCC 13 and older will emit some
-horrible indirect fentry hook calls via the GOT, but those are NOPed
-out by objtool anyway, so that is easily fixable.
+kernel test robot noticed the following build warnings:
 
-Clang/LLD is slightly trickier, because Clang emits relaxable GOTPCREL
-relocations, but LLD doesn't update the relocations emitted via
---emit-relocs, so the relocs tool gets confused. This is one of the
-reasons I had for proposing to simply switch to PIE linking, and let
-the linker deal with all of that. Note that Clang may emit these even
-when not generating PIC/PIE code at all.
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linuxtv-media-stage/master sailus-media-tree/master linus/master v6.12-rc1 next-20241003]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So this is the reason I wanted to add support for GOTPCREL relocations
-in the relocs tool - it is really quite trivial to do, and makes our
-jobs slightly easier when dealing with these compiler quirks. The
-alternative would be to teach objtool how to relax 'movq
-foo@GOTPCREL(%rip)' into 'leaq foo(%rip)' - these are GOTPCREL
-relaxations described in the x86_64 psABI for ELF, which is why
-compilers are assuming more and more that emitting these is fine even
-without -fpic, given that the linker is supposed to elide them if
-possible.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kate-Hsuan/media-Add-t4ka3-camera-sensor-driver/20241002-173303
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20241002093037.50875-1-hpa%40redhat.com
+patch subject: [PATCH] media: Add t4ka3 camera sensor driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241003/202410031909.fcXYISbG-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241003/202410031909.fcXYISbG-lkp@intel.com/reproduce)
 
-Note that there are 1 or 2 cases in the asm code where it is actually
-quite useful to refer to the address of foo as 'foo@GOTPCREL(%rip)' in
-instructions that take memory operands, but those individual cases are
-easily converted to something else if even having a GOT with just 2
-entries is a dealbreaker for you.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410031909.fcXYISbG-lkp@intel.com/
 
-> That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
-> feel are a complete no-brainer and should be done regardless of any
-> other code generation issues.
->
+All warnings (new ones prefixed by >>):
 
-Yes, this is the primary reason I ended up looking into this in the
-first place. Earlier this year, we ended up having to introduce
-RIP_REL_REF() to emit those RIP-relative references explicitly, in
-order to prevent the C code that is called via the early 1:1 mapping
-from exploding. The amount of C code called in that manner has been
-growing steadily over time with the introduction of 5-level paging and
-SEV-SNP and TDX support, which need to play all kinds of tricks before
-the normal kernel mappings are created.
+>> drivers/media/i2c/t4ka3.c:628:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     628 |         if (sensor->streaming == enable) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/t4ka3.c:689:9: note: uninitialized use occurs here
+     689 |         return ret;
+         |                ^~~
+   drivers/media/i2c/t4ka3.c:628:2: note: remove the 'if' if its condition is always false
+     628 |         if (sensor->streaming == enable) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     629 |                 dev_warn(sensor->dev, "Stream already %s\n", enable ? "started" : "stopped");
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     630 |                 goto error_unlock;
+         |                 ~~~~~~~~~~~~~~~~~~
+     631 |         }
+         |         ~
+   drivers/media/i2c/t4ka3.c:624:9: note: initialize the variable 'ret' to silence this warning
+     624 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-Compiling with -fpie and linking with --pie -z text produces an
-executable that is guaranteed to have only RIP-relative references in
-the .text segment, removing the need for RIP_REL_REF entirely (it
-already does nothing when __pic__ is #define'd).
+
+vim +628 drivers/media/i2c/t4ka3.c
+
+   620	
+   621	static int t4ka3_s_stream(struct v4l2_subdev *sd, int enable)
+   622	{
+   623		struct t4ka3_data *sensor = to_t4ka3_sensor(sd);
+   624		int ret;
+   625	
+   626		mutex_lock(&sensor->lock);
+   627	
+ > 628		if (sensor->streaming == enable) {
+   629			dev_warn(sensor->dev, "Stream already %s\n", enable ? "started" : "stopped");
+   630			goto error_unlock;
+   631		}
+   632	
+   633		if (enable) {
+   634			ret = pm_runtime_get_sync(sensor->sd.dev);
+   635			if (ret) {
+   636				dev_err(sensor->dev, "power-up err.\n");
+   637				goto error_unlock;
+   638			}
+   639	
+   640			cci_multi_reg_write(sensor->regmap, t4ka3_init_config,
+   641					    ARRAY_SIZE(t4ka3_init_config), &ret);
+   642			/* enable group hold */
+   643			cci_write(sensor->regmap, T4KA3_REG_PARAM_HOLD, 1, &ret);
+   644			cci_multi_reg_write(sensor->regmap, t4ka3_pre_mode_set_regs,
+   645					    ARRAY_SIZE(t4ka3_pre_mode_set_regs), &ret);
+   646			if (ret)
+   647				goto error_powerdown;
+   648	
+   649			ret = t4ka3_set_mode(sensor);
+   650			if (ret)
+   651				goto error_powerdown;
+   652	
+   653			ret = cci_multi_reg_write(sensor->regmap, t4ka3_post_mode_set_regs,
+   654						  ARRAY_SIZE(t4ka3_post_mode_set_regs), NULL);
+   655			if (ret)
+   656				goto error_powerdown;
+   657	
+   658			/* Restore value of all ctrls */
+   659			ret = __v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+   660			if (ret)
+   661				goto error_powerdown;
+   662	
+   663			/* disable group hold */
+   664			cci_write(sensor->regmap, T4KA3_REG_PARAM_HOLD, 0, &ret);
+   665			cci_write(sensor->regmap, T4KA3_REG_STREAM, 1, &ret);
+   666			if (ret)
+   667				goto error_powerdown;
+   668	
+   669			sensor->streaming = 1;
+   670		} else {
+   671			ret = cci_write(sensor->regmap, T4KA3_REG_STREAM, 0, NULL);
+   672			if (ret)
+   673				goto error_powerdown;
+   674	
+   675			ret = pm_runtime_put(sensor->sd.dev);
+   676			if (ret)
+   677				goto error_unlock;
+   678	
+   679			sensor->streaming = 0;
+   680		}
+   681	
+   682		mutex_unlock(&sensor->lock);
+   683		return ret;
+   684	
+   685	error_powerdown:
+   686		ret = pm_runtime_put(sensor->sd.dev);
+   687	error_unlock:
+   688		mutex_unlock(&sensor->lock);
+   689		return ret;
+   690	}
+   691	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
