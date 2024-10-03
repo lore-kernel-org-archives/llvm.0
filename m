@@ -1,58 +1,36 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9DB19D8A9
-	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 14:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E8D15E5D3;
+	Thu,  3 Oct 2024 14:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727965217; cv=none; b=jwPbvlpAT37fp9+qg36TMWfE9IwZBvX8SKkv6xRtcBJg4BwVu+6KjttKLUeRcWRN87xCBtkfdCoFEYF1sSBP/kig3/2g0yc8JzgZb77BTBxcE8YvvRDWQRAGnKl9Td4yK38d5/OFhciOQkKAysfiqQe1P8fmiR6+3cdLHWGH428=
+	t=1727965269; cv=none; b=LWKRd7l9MhS1TEzIpig/BOanSelsc9iZhiSfKMDyYBYwvvFIC5Sr8OgX15IiJGihioVaLDGKeMsmpVLAV+b9gew8rMbVoJ64U+76UQj51RrZbRHXcPOrPeAfdDx+Izr4CP8+Oschtz05Plswfg+ufML1qPKd/zwPhVHIRefL/lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727965217; c=relaxed/simple;
-	bh=MTBMAJpXm1pHcmzbDM+XtEXr3jCyoJ1nEuQscnYO1H8=;
+	s=arc-20240116; t=1727965269; c=relaxed/simple;
+	bh=CGnfdcDnXLM248wKeLz3YsGWDhDT7TOOh166t7wY+uo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IB5WaN8n7XWfXK/iyGM72OHnL35IQY6SbN2q8t+bctqMtVGDRmGd+vP9fj2AB06DDZut5EoyuhdQaDXcvAqOZr+HOaezI3D/hHg0eNtHeHII741IGAUnQv5n09Ru6ocmS4/4peiECcazmi/xCwOG7SIsD1WzEtLfZFoMq7sna14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=dhXpVKtR; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	 In-Reply-To:Content-Type; b=odmfE7QGXKCgYufZDJiNlR15moMP08KMumDEprMYUJDJIX01Qrsqf8dhdsu4wVmLls/kHLWY/aCrq1Hj813DXeT28BfanV2Hu/AcnKA83cIhVUJRZnWPqZTpZW1FGEez6gTBFf+pywNOuQs4MMhkuprQQKO8NOPM2VWRxvsrJNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=xJ9KALNM; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="dhXpVKtR"
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-710da656c0bso445139a34.0
-        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 07:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1727965213; x=1728570013; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W0xXnRccwICf3nQQCN6F6qfdjv2N+ArvTxSpI1D+3TY=;
-        b=dhXpVKtRarmcb5xb2d0qEglPopJtjlac5v2bbqxjPpv4jD1AaFcUYpWZDU1EfWnbsJ
-         /b79ed2tPvflcWTaD1m8RmIL4G2NWPUUJD1Mtwf+PAY1mWCwC/oILEbNvUbJQ7q5ISJm
-         zvV+x8JLYDTDEY2M7vQjv1h0zyp3HB2N2930hjDsVd2KZ0+/tR96dWMmS6YZdKDGysgS
-         SZ4kcZpwBp9ecyPjFwC5k67/ybeXtRXi/KNGWlQaG3tm3t7vNsTjK4KTh7BJ36uJcsph
-         pIHQxIslBYe1QDeJ2w/GFmWDQOPatdl1eOK60yV/+7xm9cS9J5M1CTR1DmpMfemrVA/N
-         bPRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727965213; x=1728570013;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0xXnRccwICf3nQQCN6F6qfdjv2N+ArvTxSpI1D+3TY=;
-        b=U5YWz09F3Z8MgAekOABZ8XQIao/Il5fyh+YGI+eFgjU+JmQvsBBYHfeafiJf0qQca2
-         jhnyv7tLiDpH6icOnISZynSxzrdFm7ZnnHAxHV3MAaoDEzuMlyRv1XZAUC7Ds7jbImgU
-         jv6D6L7gctQ/6jLJhCaNZpJeFDM5P7kuHY8nPj0uer3kaUTlRxE8vjdzJKJ+QHZeYiDb
-         ftQaMFTNdKER2dhtoE/5dMhrd5dk5Y1lyrLRqIyYLiClii2b5fVaW0CX37fLTrhw0VHL
-         4FQGCZifFzs+9GnU8FL8GG4Vfw+4TNobnRE5UqTwjIJsz0+RXeMoSP2uNoxi/fciXDrq
-         /Y5A==
-X-Gm-Message-State: AOJu0Yys8R8ZcZBoOlyIfE8UGDMUOYoxHMhFp3fVSMkyFYt4je+l9rnz
-	obkNCFSxJKLDkodlY8yNGXNoobPZLpFhZ7vBv9+TS0X+nTbwm30b/kGlmTv+ZMM=
-X-Google-Smtp-Source: AGHT+IEWwNUWz4nQ2IndJUC/CzrU5KetlvJmNaXTu3CLm7H2k6yOjFPj8tQXSEF6utrDP8q+MGltcQ==
-X-Received: by 2002:a05:6830:438b:b0:713:76ea:6be9 with SMTP id 46e09a7af769-7153cd796b0mr6532950a34.11.1727965213475;
-        Thu, 03 Oct 2024 07:20:13 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71547f893a9sm337467a34.77.2024.10.03.07.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2024 07:20:11 -0700 (PDT)
-Message-ID: <193a517c-dd4e-4ed1-ba4e-a0aa6028beec@baylibre.com>
-Date: Thu, 3 Oct 2024 09:20:09 -0500
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="xJ9KALNM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1727965267;
+	bh=CGnfdcDnXLM248wKeLz3YsGWDhDT7TOOh166t7wY+uo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=xJ9KALNMcGMevAx9+lNF070s7mlbSEA8awVfo6Hp8UCXB5siihboA9Gs8PO2FWHHZ
+	 ZlTSfIhSFTF5LJQmt6rFYnxWRN0bFcQ0tzRaZDyTDJB/IPd6UtGTAeRVxTqABsTK0m
+	 z4NAE/29P3ULxX+aVZ2VszPnlmSw8/Rxdd9ffCiYYaNUOrsbwee3OHPJ6jQlFSzwVu
+	 64ohJZdZlaxw0ZjfAumQ+tHk6IEV1C3qp1WAKhCCM2esv81+yLDQ7fU8FU0lCIq9Ec
+	 W4FIQ2l2Qx99GsrfvJgBpRY+FmhJyt/PE2C5zjW+KQBfUP0wCD1UjFm+hMYjXLjdCB
+	 kVHlHVUz6q5Vg==
+Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKDPG3wvwz59p;
+	Thu,  3 Oct 2024 10:21:06 -0400 (EDT)
+Message-ID: <7cc83ffc-c9cc-4e87-a3ee-bb62588a594c@efficios.com>
+Date: Thu, 3 Oct 2024 10:19:05 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,281 +38,197 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] iio: adc: ad7380: use if_not_cond_guard for claim
- direct
-To: kernel test robot <lkp@intel.com>, Peter Zijlstra <peterz@infradead.org>,
- Dan Williams <dan.j.williams@intel.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Jonathan Cameron <jic23@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- LKML <linux-kernel@vger.kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Michael Hennerich <michael.hennerich@analog.com>,
- linux-iio@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20241001-cleanup-if_not_cond_guard-v1-2-7753810b0f7a@baylibre.com>
- <202410031253.vjAMDYuX-lkp@intel.com>
+Subject: Re: [RFC PATCH 1/4] compiler.h: Introduce ptr_eq() to preserve
+ address dependency
+To: Joel Fernandes <joel@joelfernandes.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+ Nicholas Piggin <npiggin@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Will Deacon <will@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Alan Stern <stern@rowland.harvard.edu>,
+ John Stultz <jstultz@google.com>, Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com,
+ Mateusz Guzik <mjguzik@gmail.com>,
+ Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, rcu@vger.kernel.org,
+ linux-mm@kvack.org, lkmm@lists.linux.dev, Gary Guo <gary@garyguo.net>,
+ Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
+References: <20241002010205.1341915-1-mathieu.desnoyers@efficios.com>
+ <20241002010205.1341915-2-mathieu.desnoyers@efficios.com>
+ <20241003000843.GA192403@google.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <202410031253.vjAMDYuX-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20241003000843.GA192403@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 10/3/24 12:35 AM, kernel test robot wrote:
-> Hi David,
+On 2024-10-03 02:08, Joel Fernandes wrote:
+> On Tue, Oct 01, 2024 at 09:02:02PM -0400, Mathieu Desnoyers wrote:
+>> Compiler CSE and SSA GVN optimizations can cause the address dependency
+>> of addresses returned by rcu_dereference to be lost when comparing those
+>> pointers with either constants or previously loaded pointers.
+>>
+>> Introduce ptr_eq() to compare two addresses while preserving the address
+>> dependencies for later use of the address. It should be used when
+>> comparing an address returned by rcu_dereference().
+>>
+>> This is needed to prevent the compiler CSE and SSA GVN optimizations
+>> from using @a (or @b) in places where the source refers to @b (or @a)
+>> based on the fact that after the comparison, the two are known to be
+>> equal, which does not preserve address dependencies and allows the
+>> following misordering speculations:
+>>
+>> - If @b is a constant, the compiler can issue the loads which depend
+>>    on @a before loading @a.
+>> - If @b is a register populated by a prior load, weakly-ordered
+>>    CPUs can speculate loads which depend on @a before loading @a.
+>>
+>> The same logic applies with @a and @b swapped.
+>>
+> [...]
+>> +/*
+>> + * Compare two addresses while preserving the address dependencies for
+>> + * later use of the address. It should be used when comparing an address
+>> + * returned by rcu_dereference().
+>> + *
+>> + * This is needed to prevent the compiler CSE and SSA GVN optimizations
+>> + * from using @a (or @b) in places where the source refers to @b (or @a)
+>> + * based on the fact that after the comparison, the two are known to be
+>> + * equal, which does not preserve address dependencies and allows the
+>> + * following misordering speculations:
+>> + *
+>> + * - If @b is a constant, the compiler can issue the loads which depend
+>> + *   on @a before loading @a.
+>> + * - If @b is a register populated by a prior load, weakly-ordered
+>> + *   CPUs can speculate loads which depend on @a before loading @a.
+>> + *
+>> + * The same logic applies with @a and @b swapped.
+>> + *
+>> + * Return value: true if pointers are equal, false otherwise.
+>> + *
+>> + * The compiler barrier() is ineffective at fixing this issue. It does
+>> + * not prevent the compiler CSE from losing the address dependency:
+>> + *
+>> + * int fct_2_volatile_barriers(void)
+>> + * {
+>> + *     int *a, *b;
+>> + *
+>> + *     do {
+>> + *         a = READ_ONCE(p);
+>> + *         asm volatile ("" : : : "memory");
+>> + *         b = READ_ONCE(p);
+>> + *     } while (a != b);
+>> + *     asm volatile ("" : : : "memory");  <-- barrier()
+>> + *     return *b;
+>> + * }
+>> + *
+>> + * With gcc 14.2 (arm64):
+>> + *
+>> + * fct_2_volatile_barriers:
+>> + *         adrp    x0, .LANCHOR0
+>> + *         add     x0, x0, :lo12:.LANCHOR0
+>> + * .L2:
+>> + *         ldr     x1, [x0]  <-- x1 populated by first load.
+>> + *         ldr     x2, [x0]
+>> + *         cmp     x1, x2
+>> + *         bne     .L2
+>> + *         ldr     w0, [x1]  <-- x1 is used for access which should depend on b.
+>> + *         ret
+>> + *
 > 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on 431c39f6d3edbab14f48dbf37a58ccdc0ac3be1e]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/cleanup-add-conditional-guard-helper/20241002-063209
-> base:   431c39f6d3edbab14f48dbf37a58ccdc0ac3be1e
-> patch link:    https://lore.kernel.org/r/20241001-cleanup-if_not_cond_guard-v1-2-7753810b0f7a%40baylibre.com
-> patch subject: [PATCH 2/3] iio: adc: ad7380: use if_not_cond_guard for claim direct
-> config: arm64-randconfig-001-20241003 (https://download.01.org/0day-ci/archive/20241003/202410031253.vjAMDYuX-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241003/202410031253.vjAMDYuX-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410031253.vjAMDYuX-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> drivers/iio/adc/ad7380.c:823:3: error: expected expression
->      823 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
->          |                 ^
->    include/linux/cleanup.h:316:2: note: expanded from macro 'if_not_cond_guard'
->      316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
->          |         ^
->    include/linux/cleanup.h:312:2: note: expanded from macro '__if_not_cond_guard'
->      312 |         CLASS(_name, _id)(args);                        \
->          |         ^
->    include/linux/cleanup.h:258:2: note: expanded from macro 'CLASS'
->      258 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
->          |         ^
->    <scratch space>:81:1: note: expanded from here
->       81 | class_iio_claim_direct_try_t
->          | ^
->    drivers/iio/adc/ad7380.c:823:3: error: use of undeclared identifier '__UNIQUE_ID_guard799'
->    include/linux/cleanup.h:316:29: note: expanded from macro 'if_not_cond_guard'
->      316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
->          |                                    ^
->    include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
->      189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
->          |                             ^
->    include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
->       84 | #define __PASTE(a,b) ___PASTE(a,b)
->          |                      ^
->    include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
->       83 | #define ___PASTE(a,b) a##b
->          |                       ^
->    <scratch space>:79:1: note: expanded from here
->       79 | __UNIQUE_ID_guard799
->          | ^
->>> drivers/iio/adc/ad7380.c:935:2: error: cannot jump from switch statement to this case label
->      935 |         default:
->          |         ^
->    drivers/iio/adc/ad7380.c:911:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
->      911 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
->          |                 ^
->    include/linux/cleanup.h:316:29: note: expanded from macro 'if_not_cond_guard'
->      316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
->          |                                    ^
->    include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
->      189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
->          |                             ^
->    include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
->       84 | #define __PASTE(a,b) ___PASTE(a,b)
->          |                      ^
->    include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
->       83 | #define ___PASTE(a,b) a##b
->          |                       ^
->    <scratch space>:90:1: note: expanded from here
->       90 | __UNIQUE_ID_guard800
->          | ^
->    3 errors generated.
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for MODVERSIONS
->    Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
->    Selected by [y]:
->    - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-> 
-> 
-> vim +823 drivers/iio/adc/ad7380.c
-> 
->    808	
->    809	static int ad7380_read_raw(struct iio_dev *indio_dev,
->    810				   struct iio_chan_spec const *chan,
->    811				   int *val, int *val2, long info)
->    812	{
->    813		struct ad7380_state *st = iio_priv(indio_dev);
->    814		const struct iio_scan_type *scan_type;
->    815	
->    816		scan_type = iio_get_current_scan_type(indio_dev, chan);
->    817	
->    818		if (IS_ERR(scan_type))
->    819			return PTR_ERR(scan_type);
->    820	
->    821		switch (info) {
->    822		case IIO_CHAN_INFO_RAW:
->  > 823			if_not_cond_guard(iio_claim_direct_try, indio_dev)
->    824				return -EBUSY;
->    825	
->    826			return ad7380_read_direct(st, chan->scan_index, scan_type, val);
->    827		case IIO_CHAN_INFO_SCALE:
->    828			/*
->    829			 * According to the datasheet, the LSB size is:
->    830			 *    * (2 × VREF) / 2^N, for differential chips
->    831			 *    * VREF / 2^N, for pseudo-differential chips
->    832			 * where N is the ADC resolution (i.e realbits)
->    833			 */
->    834			*val = st->vref_mv;
->    835			*val2 = scan_type->realbits - chan->differential;
->    836	
->    837			return IIO_VAL_FRACTIONAL_LOG2;
->    838		case IIO_CHAN_INFO_OFFSET:
->    839			/*
->    840			 * According to IIO ABI, offset is applied before scale,
->    841			 * so offset is: vcm_mv / scale
->    842			 */
->    843			*val = st->vcm_mv[chan->channel] * (1 << scan_type->realbits)
->    844				/ st->vref_mv;
->    845	
->    846			return IIO_VAL_INT;
->    847		case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->    848			*val = st->oversampling_ratio;
->    849	
->    850			return IIO_VAL_INT;
->    851		default:
->    852			return -EINVAL;
->    853		}
->    854	}
->    855	
->    856	static int ad7380_read_avail(struct iio_dev *indio_dev,
->    857				     struct iio_chan_spec const *chan,
->    858				     const int **vals, int *type, int *length,
->    859				     long mask)
->    860	{
->    861		switch (mask) {
->    862		case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->    863			*vals = ad7380_oversampling_ratios;
->    864			*length = ARRAY_SIZE(ad7380_oversampling_ratios);
->    865			*type = IIO_VAL_INT;
->    866	
->    867			return IIO_AVAIL_LIST;
->    868		default:
->    869			return -EINVAL;
->    870		}
->    871	}
->    872	
->    873	/**
->    874	 * ad7380_osr_to_regval - convert ratio to OSR register value
->    875	 * @ratio: ratio to check
->    876	 *
->    877	 * Check if ratio is present in the list of available ratios and return the
->    878	 * corresponding value that needs to be written to the register to select that
->    879	 * ratio.
->    880	 *
->    881	 * Returns: register value (0 to 7) or -EINVAL if there is not an exact match
->    882	 */
->    883	static int ad7380_osr_to_regval(int ratio)
->    884	{
->    885		int i;
->    886	
->    887		for (i = 0; i < ARRAY_SIZE(ad7380_oversampling_ratios); i++) {
->    888			if (ratio == ad7380_oversampling_ratios[i])
->    889				return i;
->    890		}
->    891	
->    892		return -EINVAL;
->    893	}
->    894	
->    895	static int ad7380_write_raw(struct iio_dev *indio_dev,
->    896				    struct iio_chan_spec const *chan, int val,
->    897				    int val2, long mask)
->    898	{
->    899		struct ad7380_state *st = iio_priv(indio_dev);
->    900		int ret, osr, boost;
->    901	
->    902		switch (mask) {
->    903		case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->    904			osr = ad7380_osr_to_regval(val);
->    905			if (osr < 0)
->    906				return osr;
->    907	
->    908			/* always enable resolution boost when oversampling is enabled */
->    909			boost = osr > 0 ? 1 : 0;
->    910	
->    911			if_not_cond_guard(iio_claim_direct_try, indio_dev)
->    912				return -EBUSY;
->    913	
->    914			ret = regmap_update_bits(st->regmap,
->    915						 AD7380_REG_ADDR_CONFIG1,
->    916						 AD7380_CONFIG1_OSR | AD7380_CONFIG1_RES,
->    917						 FIELD_PREP(AD7380_CONFIG1_OSR, osr) |
->    918						 FIELD_PREP(AD7380_CONFIG1_RES, boost));
->    919	
->    920			if (ret)
->    921				return ret;
->    922	
->    923			st->oversampling_ratio = val;
->    924			st->resolution_boost_enabled = boost;
->    925	
->    926			/*
->    927			 * Perform a soft reset. This will flush the oversampling block
->    928			 * and FIFO but will maintain the content of the configurable
->    929			 * registers.
->    930			 */
->    931			return regmap_update_bits(st->regmap, AD7380_REG_ADDR_CONFIG2,
->    932						  AD7380_CONFIG2_RESET,
->    933						  FIELD_PREP(AD7380_CONFIG2_RESET,
->    934							     AD7380_CONFIG2_RESET_SOFT));
->  > 935		default:
->    936			return -EINVAL;
->    937		}
->    938	}
->    939	
-> 
+> I could reproduce this in compiler explorer, but I'm curious what flags are
+> you using? For me it does a bunch of usage of the stack for temporary storage
+> (still incorrectly returns *a though as you pointed).
 
-This warning and the "warning: label followed by a declaration
-is a C23 extension" from the other bot message are both fixed
-with the following modification:
+You are probably missing "-O2".
 
 
-diff --git a/drivers/iio/adc/ad7380.c b/drivers/iio/adc/ad7380.c
-index 19a942035e93..34adc5aeb6f3 100644
---- a/drivers/iio/adc/ad7380.c
-+++ b/drivers/iio/adc/ad7380.c
-@@ -819,11 +819,12 @@ static int ad7380_read_raw(struct iio_dev *indio_dev,
- 		return PTR_ERR(scan_type);
- 
- 	switch (info) {
--	case IIO_CHAN_INFO_RAW:
-+	case IIO_CHAN_INFO_RAW: {
- 		if_not_cond_guard(iio_claim_direct_try, indio_dev)
- 			return -EBUSY;
- 
- 		return ad7380_read_direct(st, chan->scan_index, scan_type, val);
-+	}
- 	case IIO_CHAN_INFO_SCALE:
- 		/*
- 		 * According to the datasheet, the LSB size is:
-@@ -900,7 +901,7 @@ static int ad7380_write_raw(struct iio_dev *indio_dev,
- 	int ret, osr, boost;
- 
- 	switch (mask) {
--	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-+	case IIO_CHAN_INFO_OVERSAMPLING_RATIO: {
- 		osr = ad7380_osr_to_regval(val);
- 		if (osr < 0)
- 			return osr;
-@@ -932,6 +933,7 @@ static int ad7380_write_raw(struct iio_dev *indio_dev,
- 					  AD7380_CONFIG2_RESET,
- 					  FIELD_PREP(AD7380_CONFIG2_RESET,
- 						     AD7380_CONFIG2_RESET_SOFT));
-+	}
- 	default:
- 		return -EINVAL;
- 	}
+> 
+> Interestingly, if I just move the comparison into an an __always_inline__
+> function like below, but without the optimizer hide stuff, gcc 14.2 on arm64
+> does generate the correct code:
+
+Make sure you compile in -O2. Based on a quick check here the hide var
+is needed to make sure the compiler does the intended behavior in O2.
+
+> 
+> static inline __attribute__((__always_inline__)) int ptr_eq(const volatile void *a, const volatile void *b)
+> {
+>      /* No OPTIMIZER_HIDE_VAR */
+>      return a == b;
+> }
+> 
+> volatile int *p = 0;
+> 
+> int fct_2_volatile_barriers()
+> {
+>      int *a, *b;
+> 
+>      do {
+>          a = READ_ONCE(p);
+>          asm volatile ("" : : : "memory");
+>          b = READ_ONCE(p);
+>      } while (!ptr_eq(a, b));
+>      asm volatile ("" : : : "memory");  // barrier()
+>      return *b;
+> }
+> 
+> But not sure if it fixes the speculation issue you referred to.
+
+Not in -O2.
+
+> 
+> Putting back the OPTIMIZER_HIDE_VAR() then just seems to pass the a and b
+> stored on the stack through a washing machine:
+> 
+>          ldr     x0, [sp, 8]
+>          str     x0, [sp, 8]
+>          ldr     x0, [sp]
+>          str     x0, [sp]
+
+That washing machine looks like the result of -O0.
+
+> 
+> And here I thought the "" in OPTIMIZER_HIDE_VAR was not supposed to generate
+> any code but I guess it is still a NOOP.
+
+The hide var will only emit an extra register movement to copy the
+register to a temporary. That's one extra instruction but not as bad
+as what you observe in -O0.
+
+> 
+> Anyway, as such this LGTM since whether OPTIMIZER_HIDE_VAR() used or not, it
+> does fix the problem.
+
+hide var is needed in O2.
+
+> 
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+Please double-check with -O2, and let me know if you still agree with
+the patch :)
+
+Thanks,
+
+Mathieu
+
+
+> 
+> thanks,
+> 
+>   - Joel
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
