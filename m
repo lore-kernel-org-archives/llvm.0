@@ -1,324 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C519414601C;
-	Thu,  3 Oct 2024 10:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A856B14EC51
+	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727950347; cv=none; b=Hi6TUH030qPLAd7ID7uLrHXKWW4DkZ0o1BW/v99yujKBwrIb57I8MDf8+9+HuGoEjDFSFUAOF3TjQOWi2aLq71ZMpLWg8Hzzs1WZQxdSTaa5kaMtg8SRbj5K3emnHqhX3i+Tg7yAz1nJzAefU3xZw5jcwPOLrd30owxQVrXPj9s=
+	t=1727954034; cv=none; b=RnTvpHk6QXcQiB6o8HEEdYp8nOUGzI3YA7ilzFIfB6XHeHjGlH52mUXXYc0xr8HH5ohBBM32wXftJYcoLJTqkYSOwB29SnKVn7+mJYhWBsY2ufYWKwDtfu0f3b3R081vXJt7iviSeHGBGmYRzzXSmWqwRzhAhvqSDH6qZyOxJK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727950347; c=relaxed/simple;
-	bh=XjNanImzl+Dgidm1UATA7oR70Qm9s5ThDKwAaILR4fI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TNjPHWb0JEJH7bgLGOFT1C/BqonXX6WCRaIfnFscV4YSqWvDnFg/8W7NT0F2fw9mDisFnLpORks1h9+Q0xmYRdAExlxsJzW4MUY3dFXkvz0I8Oubz3h+WiMfwHoWd+L2+1HdWyk1boleCqNpuX1XKRBTfRf5Vlbimd6EGFNYizI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WBSvWphz; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727954034; c=relaxed/simple;
+	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kPHSvaGKTWN8C0Nx37QsvMHDiJT6HLS64DtcWGxae2zf39VWSoA27me9CYpyUqVRwF4+8WeJMGg4N5tNvpBE+56XS0M66lBlX14WFwtEEYSRYswezlEZzDTamgqwcsSlUDI9I83gZnikxGS0BA6+RFEgARFxKs9gz5EtnPICyPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jo5b2EyM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WBSvWphz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727950346; x=1759486346;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XjNanImzl+Dgidm1UATA7oR70Qm9s5ThDKwAaILR4fI=;
-  b=WBSvWphzZS61Y5wbnng4HZa6IUngqPPWU3m0whpKhRsdd8BsSnMPsNab
-   y2K61qTaNcJ/qlH3/1FqfMTzplMknbxAMdE/nWLRxSqbAwUHJME3kET1w
-   1pOUqjCq2TN8rLk9Voy+kwjhl4whub30RH899G29Ff9Xgn9FbyI9FBxJZ
-   /xIGEuz/D2HbonJXPGfhmiJch6+EZpwWl6zpRiRvOByWaaneBvMzMOFfb
-   OPNuYx+R67XyAmI5vsbhe9Uh5ZaNgLGf46di8O9O6NyHee+RLqRLqn1Ni
-   CTKHqhBvcpbgDVf1b8U08hqETwHmKpxNCnHNvR/VGsrUJ8YCjABfa8v0w
-   w==;
-X-CSE-ConnectionGUID: HLZjMjjTR8etxLbYC/lFeQ==
-X-CSE-MsgGUID: a72mErBeTCaVPAKLL2Y6Gg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="27316385"
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="27316385"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 03:12:25 -0700
-X-CSE-ConnectionGUID: CUmXx7l2SFqSVUCoWSUd9w==
-X-CSE-MsgGUID: rT10cGbkTb62krnBznvi2g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,174,1725346800"; 
-   d="scan'208";a="111764102"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 03 Oct 2024 03:12:23 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swIon-0000H3-1K;
-	Thu, 03 Oct 2024 10:12:21 +0000
-Date: Thu, 3 Oct 2024 18:11:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-fixes 11/11] fs/netfs/read_retry.c:235:20:
- warning: variable 'subreq' is uninitialized when used here
-Message-ID: <202410031854.Pi5OSJhP-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jo5b2EyM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F787C4CEE2
+	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 11:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727954034;
+	bh=ncshirJSuuxVYT6Rg4hMRMg6qTFNBzUzykD4N2BkVY8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Jo5b2EyMOS3uk9JDlHSQeU5R1aJyjAs0+fTPWkZCep6Wfe3FtEcKX92qY2mtaY2EK
+	 Ci8TPn6Ee42qRsmfrcj1l+x8zMsi6bvfBaExW2NU/fSlbTuDXDF1+X8cFBydkm8Y27
+	 lb+XzyBozg7zRqcDdBoznF0nnozWrNcR9tzS6b9UomNb4g91qxhdupQuTqUK4zEuA4
+	 z7g+nzwCR3g6dyxU7168Y4P6qlP/X9DMrNre/R3uCNKxAg+BkBWF+gHp9jrQW3cTIh
+	 xrWMcRuCjU0dRKRqqjEvI0IIIfAguu/05IPATBt+DaAJfq3OXiy9Jf7zCzIbXi+uOl
+	 853BOc6UvNv1A==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5398e33155fso1005010e87.3
+        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 04:13:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWJH+ip6gHdo4QZPTkVmtJwq1VDoI6/JB6812g2WV7n8OBQQXBXQ+6wcgPXXSk2qxHBh6lA@lists.linux.dev
+X-Gm-Message-State: AOJu0YzsFPuoEjLXP1YO1YVd+Iwx4f9bvFcsV1wp8mx8d58dJyk7yzVL
+	TQ7N8m5afvhBiAPed8XVMCCE/urgw1tU2I4CGQqLItVu6M6WYR4BGV27hEwA8FZy2ePkZskb7Z/
+	f2/PKUXgCS/HHCoclB7O2dvgQoJ8=
+X-Google-Smtp-Source: AGHT+IH0sWh3HiA/Y/FG77TM2NrCKaNhbA4eJ/qwHE/WqxSdpNeBFdDDl6WpEY+OacY7yD9godh5OoCJmImz57qPZ+Q=
+X-Received: by 2002:a05:6512:1241:b0:536:9ef0:d829 with SMTP id
+ 2adb3069b0e04-539a07a1db9mr3832198e87.44.1727954032228; Thu, 03 Oct 2024
+ 04:13:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+ <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com> <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+In-Reply-To: <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 3 Oct 2024 13:13:40 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+Message-ID: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	x86@kernel.org, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-fixes
-head:   138e9fb0a2ea3886803ba42efac5eb869d944f31
-commit: 138e9fb0a2ea3886803ba42efac5eb869d944f31 [11/11] netfs: Change the read result collector to only use one work item
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241003/202410031854.Pi5OSJhP-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241003/202410031854.Pi5OSJhP-lkp@intel.com/reproduce)
+On Wed, 2 Oct 2024 at 22:02, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, 2 Oct 2024 at 08:31, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > I guess you are referring to the use of a GOT? That is a valid
+> > concern, but it does not apply here. With hidden visibility and
+> > compiler command line options like -mdirect-access-extern, all emitted
+> > symbol references are direct.
+>
+> I absolutely hate GOT entries. We definitely shouldn't ever do
+> anything that causes them on x86-64.
+>
+> I'd much rather just do boot-time relocation, and I don't think the
+> "we run code at a different location than we told the linker" is an
+> arghument against it.
+>
+> Please, let's make sure we never have any of the global offset table horror.
+>
+> Yes, yes, you can't avoid them on other architectures.
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410031854.Pi5OSJhP-lkp@intel.com/
+GCC/binutils never needs them. GCC 13 and older will emit some
+horrible indirect fentry hook calls via the GOT, but those are NOPed
+out by objtool anyway, so that is easily fixable.
 
-All warnings (new ones prefixed by >>):
+Clang/LLD is slightly trickier, because Clang emits relaxable GOTPCREL
+relocations, but LLD doesn't update the relocations emitted via
+--emit-relocs, so the relocs tool gets confused. This is one of the
+reasons I had for proposing to simply switch to PIE linking, and let
+the linker deal with all of that. Note that Clang may emit these even
+when not generating PIC/PIE code at all.
 
->> fs/netfs/read_retry.c:235:20: warning: variable 'subreq' is uninitialized when used here [-Wuninitialized]
-     235 |         if (list_is_last(&subreq->rreq_link, &stream->subrequests))
-         |                           ^~~~~~
-   fs/netfs/read_retry.c:28:36: note: initialize the variable 'subreq' to silence this warning
-      28 |         struct netfs_io_subrequest *subreq;
-         |                                           ^
-         |                                            = NULL
-   1 warning generated.
+So this is the reason I wanted to add support for GOTPCREL relocations
+in the relocs tool - it is really quite trivial to do, and makes our
+jobs slightly easier when dealing with these compiler quirks. The
+alternative would be to teach objtool how to relax 'movq
+foo@GOTPCREL(%rip)' into 'leaq foo(%rip)' - these are GOTPCREL
+relaxations described in the x86_64 psABI for ELF, which is why
+compilers are assuming more and more that emitting these is fine even
+without -fpic, given that the linker is supposed to elide them if
+possible.
 
+Note that there are 1 or 2 cases in the asm code where it is actually
+quite useful to refer to the address of foo as 'foo@GOTPCREL(%rip)' in
+instructions that take memory operands, but those individual cases are
+easily converted to something else if even having a GOT with just 2
+entries is a dealbreaker for you.
 
-vim +/subreq +235 fs/netfs/read_retry.c
+> That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
+> feel are a complete no-brainer and should be done regardless of any
+> other code generation issues.
+>
 
-    21	
-    22	/*
-    23	 * Go through the list of failed/short reads, retrying all retryable ones.  We
-    24	 * need to switch failed cache reads to network downloads.
-    25	 */
-    26	static void netfs_retry_read_subrequests(struct netfs_io_request *rreq)
-    27	{
-    28		struct netfs_io_subrequest *subreq;
-    29		struct netfs_io_stream *stream = &rreq->io_streams[0];
-    30		struct list_head *next;
-    31	
-    32		_enter("R=%x", rreq->debug_id);
-    33	
-    34		if (list_empty(&stream->subrequests))
-    35			return;
-    36	
-    37		if (rreq->netfs_ops->retry_request)
-    38			rreq->netfs_ops->retry_request(rreq, NULL);
-    39	
-    40		/* If there's no renegotiation to do, just resend each retryable subreq
-    41		 * up to the first permanently failed one.
-    42		 */
-    43		if (!rreq->netfs_ops->prepare_read &&
-    44		    !test_bit(NETFS_RREQ_COPY_TO_CACHE, &rreq->flags)) {
-    45			struct netfs_io_subrequest *subreq;
-    46	
-    47			list_for_each_entry(subreq, &stream->subrequests, rreq_link) {
-    48				if (test_bit(NETFS_SREQ_FAILED, &subreq->flags))
-    49					break;
-    50				if (__test_and_clear_bit(NETFS_SREQ_NEED_RETRY, &subreq->flags)) {
-    51					netfs_reset_iter(subreq);
-    52					netfs_reissue_read(rreq, subreq);
-    53				}
-    54			}
-    55			return;
-    56		}
-    57	
-    58		/* Okay, we need to renegotiate all the download requests and flip any
-    59		 * failed cache reads over to being download requests and negotiate
-    60		 * those also.  All fully successful subreqs have been removed from the
-    61		 * list and any spare data from those has been donated.
-    62		 *
-    63		 * What we do is decant the list and rebuild it one subreq at a time so
-    64		 * that we don't end up with donations jumping over a gap we're busy
-    65		 * populating with smaller subrequests.  In the event that the subreq
-    66		 * we just launched finishes before we insert the next subreq, it'll
-    67		 * fill in rreq->prev_donated instead.
-    68		 *
-    69		 * Note: Alternatively, we could split the tail subrequest right before
-    70		 * we reissue it and fix up the donations under lock.
-    71		 */
-    72		next = stream->subrequests.next;
-    73	
-    74		do {
-    75			struct netfs_io_subrequest *subreq = NULL, *from, *to, *tmp;
-    76			struct iov_iter source;
-    77			unsigned long long start, len;
-    78			size_t part;
-    79			bool boundary = false;
-    80	
-    81			/* Go through the subreqs and find the next span of contiguous
-    82			 * buffer that we then rejig (cifs, for example, needs the
-    83			 * rsize renegotiating) and reissue.
-    84			 */
-    85			from = list_entry(next, struct netfs_io_subrequest, rreq_link);
-    86			to = from;
-    87			start = from->start + from->transferred;
-    88			len   = from->len   - from->transferred;
-    89	
-    90			_debug("from R=%08x[%x] s=%llx ctl=%zx/%zx",
-    91			       rreq->debug_id, from->debug_index,
-    92			       from->start, from->transferred, from->len);
-    93	
-    94			if (test_bit(NETFS_SREQ_FAILED, &from->flags) ||
-    95			    !test_bit(NETFS_SREQ_NEED_RETRY, &from->flags))
-    96				goto abandon;
-    97	
-    98			list_for_each_continue(next, &stream->subrequests) {
-    99				subreq = list_entry(next, struct netfs_io_subrequest, rreq_link);
-   100				if (subreq->start + subreq->transferred != start + len ||
-   101				    test_bit(NETFS_SREQ_BOUNDARY, &subreq->flags) ||
-   102				    !test_bit(NETFS_SREQ_NEED_RETRY, &subreq->flags))
-   103					break;
-   104				to = subreq;
-   105				len += to->len;
-   106			}
-   107	
-   108			_debug(" - range: %llx-%llx %llx", start, start + len - 1, len);
-   109	
-   110			/* Determine the set of buffers we're going to use.  Each
-   111			 * subreq gets a subset of a single overall contiguous buffer.
-   112			 */
-   113			netfs_reset_iter(from);
-   114			source = from->io_iter;
-   115			source.count = len;
-   116	
-   117			/* Work through the sublist. */
-   118			subreq = from;
-   119			list_for_each_entry_from(subreq, &stream->subrequests, rreq_link) {
-   120				if (!len)
-   121					break;
-   122				subreq->source	= NETFS_DOWNLOAD_FROM_SERVER;
-   123				subreq->start	= start - subreq->transferred;
-   124				subreq->len	= len   + subreq->transferred;
-   125				__clear_bit(NETFS_SREQ_NEED_RETRY, &subreq->flags);
-   126				__set_bit(NETFS_SREQ_RETRYING, &subreq->flags);
-   127				trace_netfs_sreq(subreq, netfs_sreq_trace_retry);
-   128	
-   129				/* Renegotiate max_len (rsize) */
-   130				stream->sreq_max_len = subreq->len;
-   131				if (rreq->netfs_ops->prepare_read(subreq) < 0) {
-   132					trace_netfs_sreq(subreq, netfs_sreq_trace_reprep_failed);
-   133					__set_bit(NETFS_SREQ_FAILED, &subreq->flags);
-   134					goto abandon;
-   135				}
-   136	
-   137				part = umin(len, stream->sreq_max_len);
-   138				if (unlikely(stream->sreq_max_segs))
-   139					part = netfs_limit_iter(&source, 0, part, stream->sreq_max_segs);
-   140				subreq->len = subreq->transferred + part;
-   141				subreq->io_iter = source;
-   142				iov_iter_truncate(&subreq->io_iter, part);
-   143				iov_iter_advance(&source, part);
-   144				len -= part;
-   145				start += part;
-   146				if (!len) {
-   147					if (boundary)
-   148						__set_bit(NETFS_SREQ_BOUNDARY, &subreq->flags);
-   149				} else {
-   150					__clear_bit(NETFS_SREQ_BOUNDARY, &subreq->flags);
-   151				}
-   152	
-   153				netfs_get_subrequest(subreq, netfs_sreq_trace_get_resubmit);
-   154				netfs_reissue_read(rreq, subreq);
-   155				if (subreq == to)
-   156					break;
-   157			}
-   158	
-   159			/* If we managed to use fewer subreqs, we can discard the
-   160			 * excess; if we used the same number, then we're done.
-   161			 */
-   162			if (!len) {
-   163				if (subreq == to)
-   164					continue;
-   165				list_for_each_entry_safe_from(subreq, tmp,
-   166							      &stream->subrequests, rreq_link) {
-   167					trace_netfs_sreq(subreq, netfs_sreq_trace_discard);
-   168					list_del(&subreq->rreq_link);
-   169					netfs_put_subrequest(subreq, false, netfs_sreq_trace_put_done);
-   170					if (subreq == to)
-   171						break;
-   172				}
-   173				continue;
-   174			}
-   175	
-   176			/* We ran out of subrequests, so we need to allocate some more
-   177			 * and insert them after.
-   178			 */
-   179			do {
-   180				subreq = netfs_alloc_subrequest(rreq);
-   181				if (!subreq) {
-   182					subreq = to;
-   183					goto abandon_after;
-   184				}
-   185				subreq->source		= NETFS_DOWNLOAD_FROM_SERVER;
-   186				subreq->start		= start;
-   187				subreq->len		= len;
-   188				subreq->debug_index	= atomic_inc_return(&rreq->subreq_counter);
-   189				subreq->stream_nr	= stream->stream_nr;
-   190				__set_bit(NETFS_SREQ_RETRYING, &subreq->flags);
-   191	
-   192				trace_netfs_sreq_ref(rreq->debug_id, subreq->debug_index,
-   193						     refcount_read(&subreq->ref),
-   194						     netfs_sreq_trace_new);
-   195				netfs_get_subrequest(subreq, netfs_sreq_trace_get_resubmit);
-   196	
-   197				list_add(&subreq->rreq_link, &to->rreq_link);
-   198				to = list_next_entry(to, rreq_link);
-   199				trace_netfs_sreq(subreq, netfs_sreq_trace_retry);
-   200	
-   201				stream->sreq_max_len	= umin(len, rreq->rsize);
-   202				stream->sreq_max_segs	= 0;
-   203				if (unlikely(stream->sreq_max_segs))
-   204					part = netfs_limit_iter(&source, 0, part, stream->sreq_max_segs);
-   205	
-   206				netfs_stat(&netfs_n_rh_download);
-   207				if (rreq->netfs_ops->prepare_read(subreq) < 0) {
-   208					trace_netfs_sreq(subreq, netfs_sreq_trace_reprep_failed);
-   209					__set_bit(NETFS_SREQ_FAILED, &subreq->flags);
-   210					goto abandon;
-   211				}
-   212	
-   213				part = umin(len, stream->sreq_max_len);
-   214				subreq->len = subreq->transferred + part;
-   215				subreq->io_iter = source;
-   216				iov_iter_truncate(&subreq->io_iter, part);
-   217				iov_iter_advance(&source, part);
-   218	
-   219				len -= part;
-   220				start += part;
-   221				if (!len && boundary) {
-   222					__set_bit(NETFS_SREQ_BOUNDARY, &to->flags);
-   223					boundary = false;
-   224				}
-   225	
-   226				netfs_reissue_read(rreq, subreq);
-   227			} while (len);
-   228	
-   229		} while (!list_is_head(next, &stream->subrequests));
-   230	
-   231		return;
-   232	
-   233		/* If we hit an error, fail all remaining incomplete subrequests */
-   234	abandon_after:
- > 235		if (list_is_last(&subreq->rreq_link, &stream->subrequests))
-   236			return;
-   237		subreq = list_next_entry(subreq, rreq_link);
-   238	abandon:
-   239		list_for_each_entry_from(subreq, &stream->subrequests, rreq_link) {
-   240			if (!subreq->error &&
-   241			    !test_bit(NETFS_SREQ_FAILED, &subreq->flags) &&
-   242			    !test_bit(NETFS_SREQ_NEED_RETRY, &subreq->flags))
-   243				continue;
-   244			subreq->error = -ENOMEM;
-   245			__set_bit(NETFS_SREQ_FAILED, &subreq->flags);
-   246			__clear_bit(NETFS_SREQ_NEED_RETRY, &subreq->flags);
-   247			__clear_bit(NETFS_SREQ_RETRYING, &subreq->flags);
-   248		}
-   249	}
-   250	
+Yes, this is the primary reason I ended up looking into this in the
+first place. Earlier this year, we ended up having to introduce
+RIP_REL_REF() to emit those RIP-relative references explicitly, in
+order to prevent the C code that is called via the early 1:1 mapping
+from exploding. The amount of C code called in that manner has been
+growing steadily over time with the introduction of 5-level paging and
+SEV-SNP and TDX support, which need to play all kinds of tricks before
+the normal kernel mappings are created.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Compiling with -fpie and linking with --pie -z text produces an
+executable that is guaranteed to have only RIP-relative references in
+the .text segment, removing the need for RIP_REL_REF entirely (it
+already does nothing when __pic__ is #define'd).
