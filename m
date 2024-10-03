@@ -1,134 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38441A7AE4;
-	Thu,  3 Oct 2024 17:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700471AAE36
+	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 18:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727978209; cv=none; b=amaGURewKAIyVsF6A+ZhZjuViyLPaMkOfeapWZEeVQhCql6kKXCURWi7Hbq/jtYYMiI6hBiYsIkZAUf9inqGms+s8pQYa+MBdEO5hivuB/ZX2JYA8Ak2Q1aqZmO1ewB7JC+0p0gZaJRqJ7zXVdR9VmRhHDzGPJy/at97nqNOwpY=
+	t=1727979146; cv=none; b=krVAogzhfSYEPoB9pWSeM/F1u5TkpmDcmN1iEswW1b6DdbrCUFHXOLMWvtukRRUKh5GmBlDbFO7a+iqWO+JKtO4x+w/Mes1XXHI7CvCBXwSifqSSk+fkQSqNrpTDUtODOheNrcLw4FxdAdxvTEvfBKtcaDqGKfILiFz9aSG1Yeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727978209; c=relaxed/simple;
-	bh=Tdz26YASw+9dvuOBtCyGwKlhjo+jgUjMABkC2CrdMsU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CMdWvoWd3vtstIMt7CBTWs+McvtQP18misAFCwtiHtb7nH7gYCsthJ1NGNk7LJYLPgLAvZyMbVFG5N2qS1JsFHEDk98pW0RQ4gQDprXU2//BCb89qIHOddiGOBw8uOEu/WiwOVDswisE0j1NIuezm0Q5TrgFIB09PlkOpwACttQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iI6omeBD; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1727979146; c=relaxed/simple;
+	bh=5a2tijohiLVme4B81WJKwbCbxlmvbAe8DVOHQqZRmVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iGitM2WoWS97ifHQygQKBiaFztM2mqWShlrW1E8k7xfktYvr58vzhSK79bnaS/QDVbcPjlSjGotNjQ3o0U3mMKSnHRSTGJlBKqR694gqGaMh1L/ZTnq9slhOOhPbhXACx8UuO73VsUGKrHeCIm5cUhcJRQ/4/Reg3ZGVXP/wcw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ldXJXHkm; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iI6omeBD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727978207; x=1759514207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tdz26YASw+9dvuOBtCyGwKlhjo+jgUjMABkC2CrdMsU=;
-  b=iI6omeBDc2JFg4iVnzvJlwN0tG/INzff2Nh2TziMIjczvXUS6SObFQOX
-   SXIFMmyANFRtiRlo7HoSJvv2BYQ+UopkH7v0YTleX4ofdg8x/bGA9dTMG
-   jj1a4L0LzUUTzOEjU7QONFF0ttO5myJzNG+uw67V5FiUsOr58AWPf5lz3
-   2dmQ4kNXqaJCKOE/4SJK+uVA7MrJChaqwj7I27YfEFXLJeJIDrGYChMDb
-   q4JPYsfaDX+jMQAxZNmQV9BIwvwj0e5deNnUWIoABLj3OT3sYhCTeP0oZ
-   FFBMnnF9LOFoLfo21OZ3Dh4DY4iUQ177OJraLQVA0rr0XucF1hDj/VDow
-   w==;
-X-CSE-ConnectionGUID: eq79rgHNQt2SBOsBVit9aw==
-X-CSE-MsgGUID: +6BSFwyqRmOKS5Mf8YA5jQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="37749980"
-X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="37749980"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 10:56:47 -0700
-X-CSE-ConnectionGUID: 11Robe9ISIGg+2J4PucE6A==
-X-CSE-MsgGUID: cra+AehDQ1ivTOPes+L8Iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="74012973"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 03 Oct 2024 10:56:45 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swQ4A-0000kR-1v;
-	Thu, 03 Oct 2024 17:56:42 +0000
-Date: Fri, 4 Oct 2024 01:55:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb+git@google.com>, x86@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	stable@vger.kernel.org, Fangrui Song <i@maskray.me>,
-	Brian Gerst <brgerst@gmail.com>, Uros Bizjak <ubizjak@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH] x86/stackprotector: Work around strict Clang TLS symbol
- requirements
-Message-ID: <202410040122.shftyeMf-lkp@intel.com>
-References: <20241002092534.3163838-2-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ldXJXHkm"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20b40c7fd8eso25095ad.0
+        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 11:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727979145; x=1728583945; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=syNQyjz3hsStKfZP5tLeqIERuCdmwlRMJEaOyM/R5+k=;
+        b=ldXJXHkm27fei16d0BRKF/OkusgWv1rVdZnepGCY03B0n7YNlwGggUFT8CkXmc3BCh
+         SBV92A1Au/N9yfcsnB5jGzTVDhdaSC+9PUbRcwbklIIWuDmW+PRLUrOWaEzTmop/TcFP
+         KlRCDynqNKyYLb1FaSyGEJRhrioIepQPHYkZhiCrHrPj9DC/dmmmYWa/NNZjwv0LCo2S
+         ie5zlrXnQBxMq1ZPXCMNufRrQkw1qCHQ/hJKH3WKbfjEAXzA8fWw1Oip0R7NL1FIuiit
+         t7LP06tTSng7RyLeVDnDGymJX2oyN3f7HoJnuBofUUo3Q6/mz26yBDy246bofw6GedXU
+         S/Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727979145; x=1728583945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=syNQyjz3hsStKfZP5tLeqIERuCdmwlRMJEaOyM/R5+k=;
+        b=Ck5lRqh/qwG7n7tfn06XBFuZJjfIZf9VYlIf509yTvoNpUXXXNFxhVw7esVjpMFGN4
+         ZBUbLjiDDMEuggWUWY6iOgycP7joGi9dEljM7MRhMfqT9WdvY/Xyodl8YSVECm3NO8Ei
+         y4GQOE0Edo9GHvfkMrr1wCLkfi4Xv0iJoSbal9uWi14oCS05IkgUS46sEuoli9jYFhJl
+         u0V1+gcpIUAsZsGvqcznOaZl6iNuBagtCVJvGyQHAZB9BGu0vOlCcG5f/VCF6DzKjxwY
+         RGoIrCUuD9oIDVOzzH1uA0buk1unofSqFNGwdGQEld2wv/LGo7gpH7PIyHA6IQU76gyF
+         gHHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX7blWzCTh69DImdSBEpDJsMgdvwWoOPttSr5j9bkC1yA2kwu1luDAJhjmOdrsm/Ozsdfac@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw6UXgFtsqymfhQEdQuKmz/0FnB08umpyxArPPRa+gN+9FDfD8q
+	rjmcJDgihjsOc2hR6mHnOcujNeCbSgArSPq7uzDvoEB/pi8uJdk+iIJKjQiz0wr9CGBVvcdeh3m
+	usoEo1FLn6QKP/LGf0FnbHWGrKvFbx2C4pUGy
+X-Google-Smtp-Source: AGHT+IH5yghVliv8i5uMVnyYn/6sNZ6wwE1O58ua+GMRxVeV0bDpveNuEgjNhVoacK3O8EaGvYqh0OWpeboBBbQa/co=
+X-Received: by 2002:a17:902:f681:b0:20b:a6f5:2770 with SMTP id
+ d9443c01a7336-20bff35cf7amr46035ad.6.1727979144391; Thu, 03 Oct 2024 11:12:24
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241002092534.3163838-2-ardb+git@google.com>
+References: <20241002233409.2857999-1-xur@google.com> <20241002233409.2857999-4-xur@google.com>
+ <20241003154320.GX5594@noisy.programming.kicks-ass.net>
+In-Reply-To: <20241003154320.GX5594@noisy.programming.kicks-ass.net>
+From: Rong Xu <xur@google.com>
+Date: Thu, 3 Oct 2024 11:12:10 -0700
+Message-ID: <CAF1bQ=TTfjh1UukJNZ2bbovagXFmS3i78=ALwDt+qfVe3wr7Vg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] Change the symbols order when --ffuntion-sections
+ is enabled
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	David Li <davidxl@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Samuel Holland <samuel.holland@sifive.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, x86@kernel.org, 
+	"Xin Li (Intel)" <xin@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ard,
+In principle, I don't see a problem using the new order unconditionally.
 
-kernel test robot noticed the following build warnings:
+This new ordering of sections (.text.unlikely, .text.hot, then .text)
+differs from the typical user-space ordering when no link-script is
+used. Usually, the order is .text, .text.hot, and then .text.unlikely
+(when -z keep-text-section-prefix is used).
 
-[auto build test WARNING on tip/x86/core]
-[also build test WARNING on tip/master linus/master tip/x86/asm v6.12-rc1 next-20241003]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, for normal kernel builds that don't use FDO (iFDO and
+AutoFDO), this change has minimal impact. This is because the
+.text.unlikely section is very small, containing only functions
+specifically annotated as cold by the user.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/x86-stackprotector-Work-around-strict-Clang-TLS-symbol-requirements/20241002-172733
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20241002092534.3163838-2-ardb%2Bgit%40google.com
-patch subject: [PATCH] x86/stackprotector: Work around strict Clang TLS symbol requirements
-config: i386-randconfig-061-20241003 (https://download.01.org/0day-ci/archive/20241004/202410040122.shftyeMf-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040122.shftyeMf-lkp@intel.com/reproduce)
+When using FDO, either with iFDO or AutoFDO, this new section ordering
+(.text.unlikely, .text.hot, then .text) should be used. These builds
+should enable -ffunction-sections and use the new order for
+function-level grouping.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410040122.shftyeMf-lkp@intel.com/
+This new ordering also affects the placement of ASan and TSan code.
+While I expect that this change won't cause issues for them, sanitizer
+developers should confirm this.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+We've tested this new ordering with iFDO (PGO), AutoFDO, and standard
+non-FDO builds. But I think more extensive testing is needed before
+using it unconditionally.
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
-WARNING: modpost: EXPORT symbol "__ref_stack_chk_guard" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__ref_stack_chk_guard" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "__ref_stack_chk_guard" [kernel/rcu/refscale.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [kernel/torture.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [fs/nfs/nfsv4.ko] has no CRC!
->> WARNING: modpost: "__ref_stack_chk_guard" [fs/unicode/utf8-selftest.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [fs/smb/client/cifs.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [crypto/gcm.ko] has no CRC!
->> WARNING: modpost: "__ref_stack_chk_guard" [lib/kunit/kunit-test.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/string_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/string_helpers_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/test_hexdump.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/test_hash.ko] has no CRC!
->> WARNING: modpost: "__ref_stack_chk_guard" [lib/test_printf.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/test_scanf.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/test_bitmap.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/test_uuid.ko] has no CRC!
->> WARNING: modpost: "__ref_stack_chk_guard" [lib/cmdline_kunit.ko] has no CRC!
->> WARNING: modpost: "__ref_stack_chk_guard" [lib/memcpy_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/overflow_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/stackinit_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/fortify_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [lib/siphash_kunit.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/tests/drm_cmdline_parser_test.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/tests/drm_connector_test.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/tests/drm_format_helper_test.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [drivers/gpu/drm/display/drm_display_helper.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [drivers/base/test/property-entry-test.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [drivers/power/supply/test_power.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [net/mptcp/mptcp_crypto_test.ko] has no CRC!
-WARNING: modpost: "__ref_stack_chk_guard" [net/dns_resolver/dns_resolver.ko] has no CRC!
+-Rong
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Thu, Oct 3, 2024 at 8:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Wed, Oct 02, 2024 at 04:34:02PM -0700, Rong Xu wrote:
+> > When the -ffunction-sections compiler option is enabled, each function
+> > is placed in a separate section named .text.function_name rather than
+> > putting all functions in a single .text section.
+> >
+> > However, using -function-sections can cause problems with the
+> > linker script. The comments included in include/asm-generic/vmlinux.lds=
+.h
+> > note these issues.:
+> >   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if =
+dead
+> >    code elimination is enabled, so these sections should be converted
+> >    to use ".." first.=E2=80=9D
+> >
+> > It is unclear whether there is a straightforward method for converting
+> > a suffix to "..". This patch modifies the order of subsections within t=
+he
+> > text output section when the -ffunction-sections flag is enabled.
+> > Specifically, it repositions sections with certain fixed patterns (for
+> > example .text.unlikely) before TEXT_MAIN, ensuring that they are groupe=
+d
+> > and matched together.
+> >
+> > Note that the limitation arises because the linker script employs glob
+> > patterns instead of regular expressions for string matching. While ther=
+e
+> > is a method to maintain the current order using complex patterns, this
+> > significantly complicates the pattern and increases the likelihood of
+> > errors.
+>
+> Is there a down-side to using the new order unconditionally?
