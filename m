@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42EF17BA3;
-	Thu,  3 Oct 2024 20:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DF81C0DCB;
+	Thu,  3 Oct 2024 21:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727985713; cv=none; b=EaVoMfROYFJZGuSCl8sWp7LTGezr9hH8n4zL5mAWFjMzfWF5A9+shXJ75Asi+0w5xl55ORGBNQoKSFLG5a+gsbpx0sg0eoKypIQtyqM/UZeYXQi/gAW3fIQR7AACWdO7Mpc0Z0nq7Mf+ABVKkpp4v8JQTKyK7JnlSAky1+WLcKM=
+	t=1727992500; cv=none; b=XCVTwd7w8W8gmHRxB34+IGPB6kvtR/l/Vpx9bM0suH+3s/+5/AbkE7N7cvXCS9dNHvImEsooRGz8bci/yCJHYa3abilkuMloMoIoNklfmFYiXkDFyNAex4GxZgNsR1HDb7/hQ1nuVIp7eCXIugKizN0DEdCQujH+3gb+6vsqIHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727985713; c=relaxed/simple;
-	bh=/oYqDlZ6Vlw0/om9THOLUYe3n5towioZU50JUlDE6w8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ksieW+9rusM42jT2g8JeK+ZSXiPCRKXd3/OWJOIsDGCMtRGMRvm1ojVEiK96dHWEVHZY3oStBPYiMd8TpmPcIgS0MeQ0x9aD7cXZzGwr9iFLUwxDPNwFjmYv+bBc5W1rzS5XstYD6X3+ATqLvdjqpavKfkOZkZGqU5N6j2Oy1uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kql9frFQ; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1727992500; c=relaxed/simple;
+	bh=1uPcI0h7/zBOkh1rnHMxjRL0nB6YyosX+r9Z3xNqlAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hD7K5sb5b6qS0g90P7qR/nJQYoEDtnUdDJRyT/IxhH/x86dLd1xJLcX6wV1Kanv+fPe+cX1hw4XFpp1LeKyu+DCSQsFM1K4l9HyF79TRhV4oShN2uIcWvyfzV+pvf93w/Jivb9lt0kkaOsosh5HuemIyPOndEA25LmE7F6KgaWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkpQB+5r; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kql9frFQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkpQB+5r"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727985712; x=1759521712;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/oYqDlZ6Vlw0/om9THOLUYe3n5towioZU50JUlDE6w8=;
-  b=Kql9frFQSRG1JfheG5XQ9nCf1sy7z3xlfQIuxCl41I1uXRbEoRd3u2A4
-   +YBxO6xVdKRTblI9XYy1lEXSnxu4tKtwuyOEIjiB/oqjdRzsAUssVE0Sc
-   O/I2olSLLTaWQX6JYc5VaPpYscyQ/CioM+TYTznruUmzFQ1qubzbDTlcL
-   +FSpQub0vidJ9DEwfARWOQxke6C7Ie7cPfhikRcF0fxjqTeoXusBgIs4S
-   hFUFBP5o18+NfXCULpCz06GevyZUfFem+GJbJQp6iWKJ9xNEX2exoliJo
-   eh+7wKYi8djQygi6moAEZ+hvdKP9i1UU58GKJUFNda7WkpsO5a1xLdb9/
-   w==;
-X-CSE-ConnectionGUID: z6dlBgGQT4+ySzn9Kul7Pg==
-X-CSE-MsgGUID: 9tPtRAZXR6y7S92HeZFfqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="27371978"
+  t=1727992499; x=1759528499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1uPcI0h7/zBOkh1rnHMxjRL0nB6YyosX+r9Z3xNqlAw=;
+  b=jkpQB+5rIptAUzMm8uPx5VcRG+VcDP8a6nYEMTW5kQSQ6NTJFAosK0qr
+   TovvXrpeiYv3dGdwWxSkcHPKUkjt86HYEYRcHO+Pnaxl38DiNgQiweXX2
+   9eGRT8f3hqngtG1r/yEFwYWsZJ+GQelme4Q9pKqE/Ftbn0PoaZ7hmoDDs
+   7c1fCh3VNMG2CzN+5qKzpeUXv7zj01AX+PGrxFli1NcMMrWRv0twcMR3d
+   5Y3Tg/HugVn69Q0AYN0kGvU8JzmS9A7Hc8d9i3vN2hkzWuUey+hlHN9d2
+   /WmnNhG6P8ijR7HGB9XwpyQ1xDb91yqfc51qdIWmudYimXfFIc6xBAdU0
+   Q==;
+X-CSE-ConnectionGUID: hSlzsBYaSFOPkmu9STuDnQ==
+X-CSE-MsgGUID: d4qSiVELREaVPsqrdCoJAQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="37869293"
 X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="27371978"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 13:01:51 -0700
-X-CSE-ConnectionGUID: PzFDQxsySEuQBHQoEAAf3g==
-X-CSE-MsgGUID: nKpt6EqdS3SimN8DepW/TQ==
+   d="scan'208";a="37869293"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 14:54:55 -0700
+X-CSE-ConnectionGUID: qK29dpFzSh69IQG7Gt4Rtg==
+X-CSE-MsgGUID: rPDS3m/CQ7yGA7E1BtW+cg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="79309393"
+   d="scan'208";a="74927109"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 03 Oct 2024 13:01:50 -0700
+  by orviesa007.jf.intel.com with ESMTP; 03 Oct 2024 14:54:53 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swS1D-0000qW-2x;
-	Thu, 03 Oct 2024 20:01:47 +0000
-Date: Fri, 4 Oct 2024 04:01:06 +0800
+	id 1swTmd-0000wU-0Q;
+	Thu, 03 Oct 2024 21:54:51 +0000
+Date: Fri, 4 Oct 2024 05:54:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:static-key-deprecated 1/18]
- kernel/trace/trace_events_hist.c:825:36: error: no member named 'enabled' in
- 'struct static_key_false'
-Message-ID: <202410040337.AVKyOkE0-lkp@intel.com>
+To: luca.boccassi@gmail.com, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	christian@brauner.io, paul@paul-moore.com
+Subject: Re: [PATCH] pidfd: add ioctl to retrieve pid info
+Message-ID: <202410040539.j2SZpABt-lkp@intel.com>
+References: <20241002142516.110567-1-luca.boccassi@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,70 +63,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241002142516.110567-1-luca.boccassi@gmail.com>
 
-Hi Josh,
+Hi,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git static-key-deprecated
-head:   02560a85ce2d5e66cd2b6f92bc5491f6fd199e02
-commit: dcb3457da83c22aae3efcd93357f35c70645c4bb [1/18] tracepoints: Use new static branch API
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241004/202410040337.AVKyOkE0-lkp@intel.com/config)
+[auto build test ERROR on shuah-kselftest/next]
+[also build test ERROR on shuah-kselftest/fixes linus/master v6.12-rc1 next-20241003]
+[cannot apply to brauner-vfs/vfs.all]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/luca-boccassi-gmail-com/pidfd-add-ioctl-to-retrieve-pid-info/20241002-223302
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20241002142516.110567-1-luca.boccassi%40gmail.com
+patch subject: [PATCH] pidfd: add ioctl to retrieve pid info
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241004/202410040539.j2SZpABt-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040337.AVKyOkE0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040539.j2SZpABt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410040337.AVKyOkE0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410040539.j2SZpABt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/trace_events_hist.c:825:36: error: no member named 'enabled' in 'struct static_key_false'
-     825 |         if (unlikely(atomic_read(&tp->key.enabled) > 0)) {
-         |                                   ~~~~~~~ ^
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   1 error generated.
+>> fs/pidfs.c:146:25: error: call to undeclared function 'task_css_check'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     146 |                 struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+         |                                       ^
+>> fs/pidfs.c:146:46: error: use of undeclared identifier 'pids_cgrp_id'
+     146 |                 struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+         |                                                            ^
+   2 errors generated.
 
 
-vim +825 kernel/trace/trace_events_hist.c
+vim +/task_css_check +146 fs/pidfs.c
 
-7bbab38d07f318 Masami Hiramatsu        2018-11-05  816  
-726721a51838e3 Tom Zanussi             2020-05-28  817  typedef void (*synth_probe_func_t) (void *__data, u64 *var_ref_vals,
-726721a51838e3 Tom Zanussi             2020-05-28  818  				    unsigned int *var_ref_idx);
-4b147936fa5096 Tom Zanussi             2018-01-15  819  
-726721a51838e3 Tom Zanussi             2020-05-28  820  static inline void trace_synth(struct synth_event *event, u64 *var_ref_vals,
-726721a51838e3 Tom Zanussi             2020-05-28  821  			       unsigned int *var_ref_idx)
-4b147936fa5096 Tom Zanussi             2018-01-15  822  {
-726721a51838e3 Tom Zanussi             2020-05-28  823  	struct tracepoint *tp = event->tp;
-4b147936fa5096 Tom Zanussi             2018-01-15  824  
-726721a51838e3 Tom Zanussi             2020-05-28 @825  	if (unlikely(atomic_read(&tp->key.enabled) > 0)) {
-726721a51838e3 Tom Zanussi             2020-05-28  826  		struct tracepoint_func *probe_func_ptr;
-726721a51838e3 Tom Zanussi             2020-05-28  827  		synth_probe_func_t probe_func;
-726721a51838e3 Tom Zanussi             2020-05-28  828  		void *__data;
-17911ff38aa58d Steven Rostedt (VMware  2019-10-11  829) 
-726721a51838e3 Tom Zanussi             2020-05-28  830  		if (!(cpu_online(raw_smp_processor_id())))
-726721a51838e3 Tom Zanussi             2020-05-28  831  			return;
-4b147936fa5096 Tom Zanussi             2018-01-15  832  
-726721a51838e3 Tom Zanussi             2020-05-28  833  		probe_func_ptr = rcu_dereference_sched((tp)->funcs);
-726721a51838e3 Tom Zanussi             2020-05-28  834  		if (probe_func_ptr) {
-726721a51838e3 Tom Zanussi             2020-05-28  835  			do {
-726721a51838e3 Tom Zanussi             2020-05-28  836  				probe_func = probe_func_ptr->func;
-726721a51838e3 Tom Zanussi             2020-05-28  837  				__data = probe_func_ptr->data;
-726721a51838e3 Tom Zanussi             2020-05-28  838  				probe_func(__data, var_ref_vals, var_ref_idx);
-726721a51838e3 Tom Zanussi             2020-05-28  839  			} while ((++probe_func_ptr)->func);
-726721a51838e3 Tom Zanussi             2020-05-28  840  		}
-726721a51838e3 Tom Zanussi             2020-05-28  841  	}
-4b147936fa5096 Tom Zanussi             2018-01-15  842  }
-4b147936fa5096 Tom Zanussi             2018-01-15  843  
-
-:::::: The code at line 825 was first introduced by commit
-:::::: 726721a51838e3983023f906580722fc83f804ee tracing: Move synthetic events to a separate file
-
-:::::: TO: Tom Zanussi <zanussi@kernel.org>
-:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
+   116	
+   117	static long pidfd_info(struct task_struct *task, struct pid *pid, unsigned long arg)
+   118	{
+   119		struct pidfd_info uinfo = {}, info = {};
+   120	
+   121		if (copy_from_user(&uinfo, (struct pidfd_info *)arg, sizeof(struct pidfd_info)))
+   122			return -EFAULT;
+   123		if (uinfo.size > sizeof(struct pidfd_info))
+   124			return -E2BIG;
+   125		if (uinfo.size < sizeof(struct pidfd_info))
+   126			return -EINVAL; /* First version, no smaller struct possible */
+   127	
+   128		if (uinfo.request_mask & ~(PIDFD_INFO_PID | PIDFD_INFO_CREDS | PIDFD_INFO_CGROUPID | PIDFD_INFO_SECURITY_CONTEXT))
+   129			return -EINVAL;
+   130	
+   131		memcpy(&info, &uinfo, uinfo.size);
+   132	
+   133		if (uinfo.request_mask & PIDFD_INFO_PID)
+   134			info.pid = pid_nr_ns(pid, task_active_pid_ns(task));
+   135	
+   136		if (uinfo.request_mask & PIDFD_INFO_CREDS) {
+   137			const struct cred *c = get_task_cred(task);
+   138			if (!c)
+   139				return -ESRCH;
+   140	
+   141			info.uid = from_kuid_munged(current_user_ns(), c->uid);
+   142			info.gid = from_kgid_munged(current_user_ns(), c->gid);
+   143		}
+   144	
+   145		if (uinfo.request_mask & PIDFD_INFO_CGROUPID) {
+ > 146			struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+   147			if (!cgrp)
+   148				return -ENODEV;
+   149	
+   150			info.cgroupid = cgroup_id(cgrp);
+   151		}
+   152	
+   153		if (uinfo.request_mask & PIDFD_INFO_SECURITY_CONTEXT) {
+   154			char *secctx;
+   155			u32 secid, secctx_len;
+   156			const struct cred *c = get_task_cred(task);
+   157			if (!c)
+   158				return -ESRCH;
+   159	
+   160			security_cred_getsecid(c, &secid);
+   161			if (security_secid_to_secctx(secid, &secctx, &secctx_len))
+   162				return -EFAULT;
+   163	
+   164			memcpy(info.security_context, secctx, min_t(u32, secctx_len, NAME_MAX-1));
+   165		}
+   166	
+   167		if (copy_to_user((void __user *)arg, &info, uinfo.size))
+   168			return -EFAULT;
+   169	
+   170		return 0;
+   171	}
+   172	
 
 -- 
 0-DAY CI Kernel Test Service
