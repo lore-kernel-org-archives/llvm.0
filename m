@@ -1,207 +1,255 @@
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com [209.85.222.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636881E481
-	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 03:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8BD1B969;
+	Thu,  3 Oct 2024 04:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727925276; cv=none; b=SUPdWoSvhZmIko4oj8apxQih1nqJvhxT9QYOCgOTsiZdhe7KHL5f2LsfYujOU+MThYKWbxqMxWHh5ZQO6Reol3w+jXyNf67f91real/yg3Sgch3zx/E5psYdqRWZLX0+LwT/Tp6jM/ERAaA6TBoH4PtPTxaJIGx/Eu2YzenQiKo=
+	t=1727929399; cv=none; b=Xr3rajHaJJYbQjFQdVK3br2GjeYenMwg0EPJzpWocTeb0E0yRSgeizqVTUoqeSVcNW3wQpICHyi9PFyDEEC0RTk6aEzKyMn19n6XR6p2nOoQ6bOJSPF3++RNAtts1SqxACyakctZym2/hSJcuBr7tXUhUa76wjvD7y7mq2FR++I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727925276; c=relaxed/simple;
-	bh=jKTsXBcNO/miLEA0jRPsm6kZWhLrFZu0gIUjdZSMDbU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UlNhib4g1KHc/EUbMESWyk5+INjzMuTrIR6osfhD0qkERiTDZ+rjXE5y/1QSLNyRPBrC2jrYrj9LQ9KEmF+zrwOYJDm6UyzziULjcHLVDEIN03Ub3ooFShSnJD9jbIV2fDh4SBIqp4qcOb6N2dwsiQ6hTpHdvXrjMGvSlnzUqKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=0whRuxl1; arc=none smtp.client-ip=209.85.222.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
+	s=arc-20240116; t=1727929399; c=relaxed/simple;
+	bh=zRd2CcWCC7ef6bV6W+QqZcAsCTaa6T/p5q2sLrbjNpk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ACARghQxwgQH+N9FagwwBjaDtVRvTTjuTDSS2dT4TklkyjB97j0mBj6HMkErFTzqT3yr3PesgBSfFw+BcqBOpRQ/M7ImUrKeyWjX6Z8dv3Ug/j4MOEW+2eHV6mqTPIzni3pndBEQz5chuwSnVX3oB0lfovL+FOFK6/xmbsaU7u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hH7l0EL4; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="0whRuxl1"
-Received: by mail-qk1-f196.google.com with SMTP id af79cd13be357-7ae3d9a93c0so50364785a.3
-        for <llvm@lists.linux.dev>; Wed, 02 Oct 2024 20:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1727925273; x=1728530073; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bVmdUELTDUmyOs2T634ZSBxOSroRBta42gzygmF21tA=;
-        b=0whRuxl1zYa0xZDRP55ugfQKx0Ps96dpZftjijpWzTP500dQvSUZubw7Pps9LlZxMm
-         dg5iET1oUAr+pILoXq1HeUbho6fhgdQnVu8gpyj5oj4CGXfdW7n0YkYJWZVfAMiEKaVi
-         uIbsj4aDqNpM1tDDew0PweTnfsdJ+xl1t07kdDXMB1UW3xRSa2UbHscwVvIMJUQfatSf
-         B7iqtrHFfURBvU2G5tv5MZVsb/c+FxJAO1lHS4VGuTVVnGKet5ZLbSEgqf+2JlR5ZtPU
-         CAqHh0X0QcWW39gZZxvbsAnhkeg1dUKFicjiAv9PPh9qZZ2sUEZzP0kz26SXL/9UZPfQ
-         aS4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727925273; x=1728530073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bVmdUELTDUmyOs2T634ZSBxOSroRBta42gzygmF21tA=;
-        b=Xypx3eU/hG9x/yigAcBaqXDo1ClsfLldyIIsmDkF6+Ak1X2KMMJWO1u/CDwguoS3Ry
-         JlTpXN4WTwnRbNhqPokvs+bYI0NuvR1HZMyJPB9n5aO7oBRMbn+J+CRj5sSjqFNVYczN
-         E6F4rePGDD7s95ozcelFgBvQbaKtZGYyczp10wAKlyXryYd4PjbUDK3WG2u6DGBectS2
-         y2Q3dqvJgBbLLCCdoIFlugMbe0ZikCpSERDLQdhNtP/RvdFvXN4XcEnSj+ueOKxxs87g
-         0GwSfJG5BakQpmwjmA3iTXgZ52EbNknSLIkofYkfHjUKdD6eBSLJSeA7hKc/8BCtCm7Q
-         Mxaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXBXl8UYwlcnQq2L1I2eKmxoQRcjccEdLg8EpoYd+NjOw4G0riJ2ePzLLJ9v4Aykn7wlgL@lists.linux.dev
-X-Gm-Message-State: AOJu0YwQ3gRyDP+BEFujTeBWgDPIWJsI+rVmKVttg5CoRxg1Aq0q3vPd
-	1trY+Qrx9iv0bmKuqDPQlqlkNC/XijzCKVBQhgmdJXcNZTRblwQi89TYT62gRw==
-X-Google-Smtp-Source: AGHT+IHyjSRkhjgcIpyEOBBu1F4Ot9eDMUivzJG0kRwm+KN8Ac30ciJk502QH5kn26uBubpxXFT/Wg==
-X-Received: by 2002:a05:620a:1923:b0:7a9:a63a:9f48 with SMTP id af79cd13be357-7ae626ac34dmr793486485a.11.1727925273322;
-        Wed, 02 Oct 2024 20:14:33 -0700 (PDT)
-Received: from shizuku.. ([2620:0:e00:550a:6782:866c:334a:d5e9])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ae6b29e2c9sm6901385a.15.2024.10.02.20.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 20:14:33 -0700 (PDT)
-From: Wentao Zhang <wentaoz5@illinois.edu>
-To: nathan@kernel.org
-Cc: Matt.Kelly2@boeing.com,
-	akpm@linux-foundation.org,
-	andrew.j.oppelt@boeing.com,
-	anton.ivanov@cambridgegreys.com,
-	ardb@kernel.org,
-	arnd@arndb.de,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	chuck.wolber@boeing.com,
-	dave.hansen@linux.intel.com,
-	dvyukov@google.com,
-	hpa@zytor.com,
-	jinghao7@illinois.edu,
-	johannes@sipsolutions.net,
-	jpoimboe@kernel.org,
-	justinstitt@google.com,
-	kees@kernel.org,
-	kent.overstreet@linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	llvm@lists.linux.dev,
-	luto@kernel.org,
-	marinov@illinois.edu,
-	masahiroy@kernel.org,
-	maskray@google.com,
-	mathieu.desnoyers@efficios.com,
-	matthew.l.weber3@boeing.com,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	morbo@google.com,
-	ndesaulniers@google.com,
-	oberpar@linux.ibm.com,
-	paulmck@kernel.org,
-	peterz@infradead.org,
-	richard@nod.at,
-	rostedt@goodmis.org,
-	samitolvanen@google.com,
-	samuel.sarkisian@boeing.com,
-	steven.h.vanderleest@boeing.com,
-	tglx@linutronix.de,
-	tingxur@illinois.edu,
-	tyxu@illinois.edu,
-	wentaoz5@illinois.edu,
-	x86@kernel.org
-Subject: Re: [PATCH v2 2/4] llvm-cov: add Clang's MC/DC support
-Date: Wed,  2 Oct 2024 22:14:29 -0500
-Message-Id: <20241003031429.46276-1-wentaoz5@illinois.edu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241002011030.GB555609@thelio-3990X>
-References: <20241002011030.GB555609@thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hH7l0EL4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727929397; x=1759465397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zRd2CcWCC7ef6bV6W+QqZcAsCTaa6T/p5q2sLrbjNpk=;
+  b=hH7l0EL4v1kLF3UQv7jHvbgGwgn2KTXM9vXYF+u1iOnPIodkikKHDmsv
+   kNiWYYOVTvXxcYt2ccI9lwuR1VkvHc3yg/Q7eQAoeqldm4s2Ya4MHLrjq
+   QDAUlWh4G++uI1W28xrz3WSQpzaS40a7gxEHAW7FOls7ul5V72G8lLJWq
+   SL4D/hlaLHOrzjsiABRRMs5CYHWj+ji4KyEP8FowLnKfG2rF6DkcsM2YV
+   96xaJjJhZ/L18c69jOuenh0xnDv32FfHV41rgz0/MQfKnEjEqWudJqgys
+   CjeXKIkyZ5tbzuXPt7ErSGmzn1JLiOz+0Pxzck5lcPKLP8t20Tl6CxmuC
+   g==;
+X-CSE-ConnectionGUID: l4P3eyxgTg2AI218T1o0HQ==
+X-CSE-MsgGUID: gxSWQeGdRN+mT821cNKY0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="27290986"
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="27290986"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 21:23:16 -0700
+X-CSE-ConnectionGUID: ncsuR5+GQZuqnFMbGU9wuA==
+X-CSE-MsgGUID: UtoooITFTIKUYIJuDiYblA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
+   d="scan'208";a="79072851"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 02 Oct 2024 21:23:13 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swDMt-000022-1Q;
+	Thu, 03 Oct 2024 04:23:11 +0000
+Date: Thu, 3 Oct 2024 12:23:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Lechner <dlechner@baylibre.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jonathan Cameron <jic23@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	linux-iio@vger.kernel.org, linux-cxl@vger.kernel.org,
+	David Lechner <dlechner@baylibre.com>
+Subject: Re: [PATCH 2/3] iio: adc: ad7380: use if_not_cond_guard for claim
+ direct
+Message-ID: <202410031215.IKHRIsat-lkp@intel.com>
+References: <20241001-cleanup-if_not_cond_guard-v1-2-7753810b0f7a@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241001-cleanup-if_not_cond_guard-v1-2-7753810b0f7a@baylibre.com>
 
-Hi Nathan,
+Hi David,
 
-Thanks for your review! See some of my responses below inline. Other
-comments, including those to [1/4] and [4/4], are acknowledged and will be
-updated in v3.
+kernel test robot noticed the following build warnings:
 
-On 2024-10-01 20:10, Nathan Chancellor wrote:
-> ...
-> > maximum value supported by Clang is 32767. According to local experiments,
-> > the working maximum for Linux kernel is 46, with the largest decisions in
-> > kernel codebase (with 47 conditions, as of v6.11) excluded, otherwise the
-> > kernel image size limit will be exceeded. The largest decisions in kernel
-> > are contributed for example by macros checking CPUID.
-> > 
-> > Code exceeding LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce compiler
-> > warnings.
-> > 
-> > As of LLVM 19, certain expressions are still not covered, and will produce
-> > build warnings when they are encountered:
-> > 
-> > "[...] if a boolean expression is embedded in the nest of another boolean
-> >  expression but separated by a non-logical operator, this is also not
-> >  supported. For example, in x = (a && b && c && func(d && f)), the d && f
-> >  case starts a new boolean expression that is separated from the other
-> >  conditions by the operator func(). When this is encountered, a warning
-> >  will be generated and the boolean expression will not be
-> >  instrumented." [4]
-> 
-> These two sets of warnings appear to be pretty noisy in my build
-> testing... Is there any way to shut them up? Perhaps it is good for
+[auto build test WARNING on 431c39f6d3edbab14f48dbf37a58ccdc0ac3be1e]
 
-These two warnings are currently implemented as custom diagnostic in
-clang/lib/CodeGen/CodeGenPGO.cpp:dataTraverseStmtPost. So I'm afraid there
-is no corresponding "-W[no-]xxx" flag at this moment. I agree such switches
-would be desirable but we might have to nudge this in LLVM community.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/cleanup-add-conditional-guard-helper/20241002-063209
+base:   431c39f6d3edbab14f48dbf37a58ccdc0ac3be1e
+patch link:    https://lore.kernel.org/r/20241001-cleanup-if_not_cond_guard-v1-2-7753810b0f7a%40baylibre.com
+patch subject: [PATCH 2/3] iio: adc: ad7380: use if_not_cond_guard for claim direct
+config: x86_64-randconfig-011-20241003 (https://download.01.org/0day-ci/archive/20241003/202410031215.IKHRIsat-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241003/202410031215.IKHRIsat-lkp@intel.com/reproduce)
 
-> users to see these limitations but it basically makes the build output
-> useless. If there were switches, then they could be disabled in the
-> default case with a Kconfig option to turn them on if the user is
-> concerned with seeing which parts of their code are not instrumented. I
-> could see developers wanting to run this for writing tests and they
-> might not care about this as much as someone else might.
-> 
-> I did leave LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS at its default value.
-> Perhaps there is a more reasonable default that would result in less
-> noisy build output but not run afoul of potential memory usage concerns?
-> I assume that mention means that memory usage may be a concern for the
-> type of deployments this technology would commonly be used with?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410031215.IKHRIsat-lkp@intel.com/
 
-To my own experiences, enlarging this threshold won't really help with the
-issue, because the other type of warning ("nested boolean") is even more
-prevalent in kernel codebase. I once built the kernel serially and counted
-the number of instances from the gigantic log:
+All warnings (new ones prefixed by >>):
 
-  unsupported number of conditions (>6): 837
-  unsupported nested boolean:            8029
+>> drivers/iio/adc/ad7380.c:823:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     823 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
+         |                 ^
+   include/linux/cleanup.h:316:2: note: expanded from macro 'if_not_cond_guard'
+     316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
+         |         ^
+   include/linux/cleanup.h:312:2: note: expanded from macro '__if_not_cond_guard'
+     312 |         CLASS(_name, _id)(args);                        \
+         |         ^
+   include/linux/cleanup.h:258:2: note: expanded from macro 'CLASS'
+     258 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+         |         ^
+   <scratch space>:67:1: note: expanded from here
+      67 | class_iio_claim_direct_try_t
+         | ^
+   drivers/iio/adc/ad7380.c:851:2: error: cannot jump from switch statement to this case label
+     851 |         default:
+         |         ^
+   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     823 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
+         |                 ^
+   include/linux/cleanup.h:316:29: note: expanded from macro 'if_not_cond_guard'
+     316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
+         |                                    ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:65:1: note: expanded from here
+      65 | __UNIQUE_ID_guard837
+         | ^
+   drivers/iio/adc/ad7380.c:847:2: error: cannot jump from switch statement to this case label
+     847 |         case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+         |         ^
+   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     823 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
+         |                 ^
+   include/linux/cleanup.h:316:29: note: expanded from macro 'if_not_cond_guard'
+     316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
+         |                                    ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:65:1: note: expanded from here
+      65 | __UNIQUE_ID_guard837
+         | ^
+   drivers/iio/adc/ad7380.c:838:2: error: cannot jump from switch statement to this case label
+     838 |         case IIO_CHAN_INFO_OFFSET:
+         |         ^
+   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     823 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
+         |                 ^
+   include/linux/cleanup.h:316:29: note: expanded from macro 'if_not_cond_guard'
+     316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
+         |                                    ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:65:1: note: expanded from here
+      65 | __UNIQUE_ID_guard837
+         | ^
+   drivers/iio/adc/ad7380.c:827:2: error: cannot jump from switch statement to this case label
+     827 |         case IIO_CHAN_INFO_SCALE:
+         |         ^
+   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     823 |                 if_not_cond_guard(iio_claim_direct_try, indio_dev)
+         |                 ^
+   include/linux/cleanup.h:316:29: note: expanded from macro 'if_not_cond_guard'
+     316 |         __if_not_cond_guard(_name, __UNIQUE_ID(guard), args)
+         |                                    ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:65:1: note: expanded from here
+      65 | __UNIQUE_ID_guard837
+         | ^
+   drivers/iio/adc/ad7380.c:935:2: error: cannot jump from switch statement to this case label
+     935 |         default:
 
-So again we should probably improve this on the tool side. I can talk to
-developers there separately.
 
-> ...
-> > diff --git a/Makefile b/Makefile
-> > index 51498134c..1185b38d6 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -740,6 +740,12 @@ all: vmlinux
-> >  CFLAGS_LLVM_COV := -fprofile-instr-generate -fcoverage-mapping
-> >  export CFLAGS_LLVM_COV
-> >  
-> > +CFLAGS_LLVM_COV_MCDC := -fcoverage-mcdc
-> > +ifdef CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
-> > +CFLAGS_LLVM_COV_MCDC += -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS)
-> 
-> Why is -Xclang needed here? Is this not a full frontend flag?
+vim +823 drivers/iio/adc/ad7380.c
 
-"-fmcdc-max-conditions" is a cc1 option only, while "-fcoverage-mcdc" is
-both a cc1 option and a clang option. See llvm/llvm-project#82448 and their
-changes to clang/include/clang/Driver/Options.td.
+   808	
+   809	static int ad7380_read_raw(struct iio_dev *indio_dev,
+   810				   struct iio_chan_spec const *chan,
+   811				   int *val, int *val2, long info)
+   812	{
+   813		struct ad7380_state *st = iio_priv(indio_dev);
+   814		const struct iio_scan_type *scan_type;
+   815	
+   816		scan_type = iio_get_current_scan_type(indio_dev, chan);
+   817	
+   818		if (IS_ERR(scan_type))
+   819			return PTR_ERR(scan_type);
+   820	
+   821		switch (info) {
+   822		case IIO_CHAN_INFO_RAW:
+ > 823			if_not_cond_guard(iio_claim_direct_try, indio_dev)
+   824				return -EBUSY;
+   825	
+   826			return ad7380_read_direct(st, chan->scan_index, scan_type, val);
+   827		case IIO_CHAN_INFO_SCALE:
+   828			/*
+   829			 * According to the datasheet, the LSB size is:
+   830			 *    * (2 × VREF) / 2^N, for differential chips
+   831			 *    * VREF / 2^N, for pseudo-differential chips
+   832			 * where N is the ADC resolution (i.e realbits)
+   833			 */
+   834			*val = st->vref_mv;
+   835			*val2 = scan_type->realbits - chan->differential;
+   836	
+   837			return IIO_VAL_FRACTIONAL_LOG2;
+   838		case IIO_CHAN_INFO_OFFSET:
+   839			/*
+   840			 * According to IIO ABI, offset is applied before scale,
+   841			 * so offset is: vcm_mv / scale
+   842			 */
+   843			*val = st->vcm_mv[chan->channel] * (1 << scan_type->realbits)
+   844				/ st->vref_mv;
+   845	
+   846			return IIO_VAL_INT;
+   847		case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+   848			*val = st->oversampling_ratio;
+   849	
+   850			return IIO_VAL_INT;
+   851		default:
+   852			return -EINVAL;
+   853		}
+   854	}
+   855	
 
-Thanks,
-Wentao
-
-> 
-> > +endif
-> > +export CFLAGS_LLVM_COV_MCDC
-> > +
-> >  CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage
-> >  ifdef CONFIG_CC_IS_GCC
-> >  CFLAGS_GCOV	+= -fno-tree-loop-im
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
