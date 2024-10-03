@@ -1,59 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E1B1B85EB;
-	Thu,  3 Oct 2024 22:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E8C1CC171;
+	Thu,  3 Oct 2024 23:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727995560; cv=none; b=gCvzNCe6PQjsV4YF4Wa7G31gOTqY9uj8a4Zw2qT5sO9mIbIxNSdA3mY/6l+h9L8wSF0IjqoDQTOZ4SCVWWaGnEPDQR234xx6HfQHF6cJkAB/ObshhrKRhdFNYRo8eNkNztg3kCngb8PspXxANG1R/AzXh0NgSy53WY+ICJpLo5Y=
+	t=1727998022; cv=none; b=OiuQkeKBNU5s2ExJTa7uCX7PizFWcRvHkZL/sj2emHUunpeyuogLfBeRwNmmxdMK3tT/teL8M3UTu+OQnovUb4K6mY/Y+MMW2iCunMOFf2BGrUwCbNhzO1kRIez3rT9SJZ828dyjA1nQhBSpuMLIz5m2ZUkOHf60ULs33Moy7Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727995560; c=relaxed/simple;
-	bh=iWp6hCe8ByCdxsvEcl1vAJjnu/xVbNh5vxSiYXtVRGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UL1GuNpT8wCvn6jSFbFQwJcalawCgIoxH2trWPP8O9IZWluW2C0jK3wi45ocTo5xNINdw/vaQG0ePirqVA6+mcJq7PQHgVkCGD9xeHSUYAzsk+r30/CtxTHprEuKGMEXqdSMMUqUZNZdQYsH7nKE2hIJ72k5f2Xco3QpvNFBGms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FxjGoGc8; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1727998022; c=relaxed/simple;
+	bh=aNlxrPz0Onakv+a4ZcnpY+rxavPhtRRm8WsJdwPsDgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g/vAAQU3T154raCZewyf/SsFooYAtB2JmoLiewmr/xGlKARBPnNwZhCqvLDfTXQCq6/r0rsjA7+4+XSLKdYEfgWy0+q1AwjKM0z+R9vDOBwBonxXxWsZTBn4Hu9FHYBIxBETerfL3wYoBnDDtiPC8VsBxtM5865HJ8VaZ9ystCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bSl0982C; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FxjGoGc8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bSl0982C"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727995559; x=1759531559;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iWp6hCe8ByCdxsvEcl1vAJjnu/xVbNh5vxSiYXtVRGQ=;
-  b=FxjGoGc8mSM2OsYKsAMLLQu0Qy2X4ZPA5vdwmYOAWzfMFIyvaDOLfn8k
-   c/O1bgN2XObRQa/nerNcx1VjTWsL+7CR+eNzsSdzt3bPkEAhomWCkO5UG
-   jHjxKjCkBC51kpAEd6q/U7U0jgUPmu7m8gt7NGXVb+vZT2Rk5MbnNdPP0
-   iEc32AViDY9X5csbzDyZuj5aKloUgAUK3bCeLUs+bwc0QWciR//ogFmHY
-   Qzkw6w1RuyQMqokwtJ3yNtj2i6CLe/ljqsrDUaZn1XNFIl5Q5tS8WWi9/
-   DM84JqbyEHppRmNfaQ4sx7vQWD9BMugge6NH0vdBaaWv/riPhmyu4vxrE
-   g==;
-X-CSE-ConnectionGUID: j0QQ6izeQBOQN+5jE9fGYQ==
-X-CSE-MsgGUID: MEav0aoVTamzTYewoCSIIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="27343065"
+  t=1727998019; x=1759534019;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aNlxrPz0Onakv+a4ZcnpY+rxavPhtRRm8WsJdwPsDgo=;
+  b=bSl0982CBvcnuzGN27Nc05SqfMkCCAkdrtj/5pV+EN1GiMxd6Eko3ckS
+   xdnk8Ip3uRQUgjb2tphxECvZavzLLTCTlOYe5BpeLMeh6KvN8VaXhfvMT
+   MktCw8WIaalyRLiUuICDfa34qnMtNxh1nsWD0iZR19XF2/RbppGs46uQN
+   9CGFeE33RWbO1XROBD2pJsGR9p3GcXhsPWP+rHVaf54QvEUWPZhWwjfLC
+   1292p3KRgG04r2c9uqaSs1pjHyaFupibucG+g4ChzzgvJfMSWe7c7uPnM
+   dhBnqbSjTGoxjNQcQ4et/2ihsqc3lv3whjULEGGu7pQTBMa7XbVmrjdM5
+   w==;
+X-CSE-ConnectionGUID: YhmIe9q3S6SMarf8FfGf8A==
+X-CSE-MsgGUID: v0ufnnB+SPeJ5/LI4S+BqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="30093304"
 X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="27343065"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 15:45:58 -0700
-X-CSE-ConnectionGUID: k2y25oaURNuZdKGfB6J3Ew==
-X-CSE-MsgGUID: 1P4XIPCOQRyeaUurDJT/yw==
+   d="scan'208";a="30093304"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2024 16:26:58 -0700
+X-CSE-ConnectionGUID: LElRzrFPRa6ZbF9H3ISchQ==
+X-CSE-MsgGUID: tOPdkfXHRvads+9kbySsMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,175,1725346800"; 
-   d="scan'208";a="74624155"
+   d="scan'208";a="79360364"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 03 Oct 2024 15:45:56 -0700
+  by orviesa003.jf.intel.com with ESMTP; 03 Oct 2024 16:26:55 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swUa0-0000zG-2f;
-	Thu, 03 Oct 2024 22:45:52 +0000
-Date: Fri, 4 Oct 2024 06:45:27 +0800
+	id 1swVDh-000116-25;
+	Thu, 03 Oct 2024 23:26:53 +0000
+Date: Fri, 4 Oct 2024 07:26:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [namhyung-perf:bpf/slab-iter-v4 2/3] mm/slab_common.c:1334:23:
- error: incompatible integer to pointer conversion passing 'u64' (aka
- 'unsigned long long') to parameter of type 'const void *'
-Message-ID: <202410040606.o9Sk5WgC-lkp@intel.com>
+To: David Lechner <dlechner@baylibre.com>,
+	Jonathan Cameron <jic23@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dan Williams <dan.j.williams@intel.com>,
+	David Lechner <dlechner@baylibre.com>
+Subject: Re: [PATCH] iio: core: make iio_device_claim_direct_mode()
+ __must_check
+Message-ID: <202410040721.upAHwZJm-lkp@intel.com>
+References: <20241002-iio-must-check-claim-direct-v1-1-ab94ce728731@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,60 +67,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241002-iio-must-check-claim-direct-v1-1-ab94ce728731@baylibre.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git bpf/slab-iter-v4
-head:   2941faf08c4c0c782881cfe9e8b7e1b6432a6212
-commit: 96ce888c02ed7cf7278c4d4d14bab67c1db4b673 [2/3] mm/bpf: Add bpf_get_kmem_cache() kfunc
-config: arm-randconfig-002-20241004 (https://download.01.org/0day-ci/archive/20241004/202410040606.o9Sk5WgC-lkp@intel.com/config)
+Hi David,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 431c39f6d3edbab14f48dbf37a58ccdc0ac3be1e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/iio-core-make-iio_device_claim_direct_mode-__must_check/20241002-233644
+base:   431c39f6d3edbab14f48dbf37a58ccdc0ac3be1e
+patch link:    https://lore.kernel.org/r/20241002-iio-must-check-claim-direct-v1-1-ab94ce728731%40baylibre.com
+patch subject: [PATCH] iio: core: make iio_device_claim_direct_mode() __must_check
+config: arm-randconfig-001-20241004 (https://download.01.org/0day-ci/archive/20241004/202410040721.upAHwZJm-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040606.o9Sk5WgC-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410040721.upAHwZJm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410040606.o9Sk5WgC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410040721.upAHwZJm-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/slab_common.c:9:
+   In file included from drivers/iio/pressure/bmp280-regmap.c:6:
+   In file included from drivers/iio/pressure/bmp280.h:5:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/slab_common.c:32:
-   In file included from mm/internal.h:13:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/slab_common.c:1334:23: error: incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long long') to parameter of type 'const void *' [-Wint-conversion]
-    1334 |         if (!virt_addr_valid(addr))
-         |                              ^~~~
-   arch/arm/include/asm/memory.h:392:31: note: expanded from macro 'virt_addr_valid'
-     392 |                                         && pfn_valid(virt_to_pfn(kaddr)))
-         |                                                                  ^~~~~
-   arch/arm/include/asm/memory.h:296:53: note: passing argument to parameter 'p' here
-     296 | static inline unsigned long virt_to_pfn(const void *p)
-         |                                                     ^
-   3 warnings and 1 error generated.
+   In file included from drivers/iio/pressure/bmp280-regmap.c:6:
+   In file included from drivers/iio/pressure/bmp280.h:7:
+>> include/linux/iio/iio.h:669:50: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     669 | DEFINE_GUARD(iio_claim_direct, struct iio_dev *, iio_device_claim_direct_mode(_T),
+         |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~
+   include/linux/cleanup.h:291:54: note: expanded from macro 'DEFINE_GUARD'
+     291 |         DEFINE_CLASS(_name, _type, if (_T) { _unlock; }, ({ _lock; _T; }), _type _T); \
+         |                                                             ^~~~~
+   include/linux/cleanup.h:248:13: note: expanded from macro 'DEFINE_CLASS'
+     248 | { _type t = _init; return t; }
+         |             ^~~~~
+   2 warnings generated.
+--
+   In file included from drivers/iio/pressure/ms5611_core.c:14:
+>> include/linux/iio/iio.h:669:50: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     669 | DEFINE_GUARD(iio_claim_direct, struct iio_dev *, iio_device_claim_direct_mode(_T),
+         |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~
+   include/linux/cleanup.h:291:54: note: expanded from macro 'DEFINE_GUARD'
+     291 |         DEFINE_CLASS(_name, _type, if (_T) { _unlock; }, ({ _lock; _T; }), _type _T); \
+         |                                                             ^~~~~
+   include/linux/cleanup.h:248:13: note: expanded from macro 'DEFINE_CLASS'
+     248 | { _type t = _init; return t; }
+         |             ^~~~~
+   In file included from drivers/iio/pressure/ms5611_core.c:16:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   2 warnings generated.
+--
+   In file included from drivers/iio/pressure/mpl115.c:11:
+>> include/linux/iio/iio.h:669:50: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+     669 | DEFINE_GUARD(iio_claim_direct, struct iio_dev *, iio_device_claim_direct_mode(_T),
+         |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~
+   include/linux/cleanup.h:291:54: note: expanded from macro 'DEFINE_GUARD'
+     291 |         DEFINE_CLASS(_name, _type, if (_T) { _unlock; }, ({ _lock; _T; }), _type _T); \
+         |                                                             ^~~~~
+   include/linux/cleanup.h:248:13: note: expanded from macro 'DEFINE_CLASS'
+     248 | { _type t = _init; return t; }
+         |             ^~~~~
+   1 warning generated.
 
 
-vim +1334 mm/slab_common.c
+vim +/warn_unused_result +669 include/linux/iio/iio.h
 
-  1329	
-  1330	__bpf_kfunc struct kmem_cache *bpf_get_kmem_cache(u64 addr)
-  1331	{
-  1332		struct slab *slab;
-  1333	
-> 1334		if (!virt_addr_valid(addr))
-  1335			return NULL;
-  1336	
-  1337		slab = virt_to_slab((void *)(long)addr);
-  1338		return slab ? slab->slab_cache : NULL;
-  1339	}
-  1340	
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  664  
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  665  /*
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  666   * This autocleanup logic is normally used via
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  667   * iio_device_claim_direct_scoped().
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  668   */
+1dae0cb79ceacb Jonathan Cameron 2024-01-28 @669  DEFINE_GUARD(iio_claim_direct, struct iio_dev *, iio_device_claim_direct_mode(_T),
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  670  	     iio_device_release_direct_mode(_T))
+1dae0cb79ceacb Jonathan Cameron 2024-01-28  671  
 
 -- 
 0-DAY CI Kernel Test Service
