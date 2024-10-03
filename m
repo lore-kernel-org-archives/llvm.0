@@ -1,102 +1,115 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394301C2DB2
-	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 22:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00281AC89A
+	for <llvm@lists.linux.dev>; Thu,  3 Oct 2024 22:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727993403; cv=none; b=NSQW3fgXelL3CyloEiMrwN10UahOmdp+xTV1hR2MXZnTekcekEB32bP+mqItB9acMmSuJEq0MY6DkGDhkk1m6hCyAas4AqdMsva15/Zl+bbHp+SMWQomzELunGiKRupYxHvtte2eYYlLZOxPade3ZDu0c3Vebh5KNPxQVPuHZ64=
+	t=1727994788; cv=none; b=HGUg42JjyiA1F2M39f5G00Ms3RXrqSCQoVjXsFdKbVHQPrxgYE3PfXooJGHlxM9+Plm2fwofsOfPrF2RP3quarXnQuIQy2nvqhCnTKSaFjOJDQqDiP6etwfC+S+qm2FQCjSkUr4xovf1IqYP5AK/f8LeKYZXUBkhZt8wTy54JPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727993403; c=relaxed/simple;
-	bh=RIEY/VvBXBpbOFws0YW9ZSyNHIhNNXGVpnHlXG+8ISU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WNVoCfkkGy8z55OuRkgYEFEvBbsGaXP6By+4DgfQioLAUU86ccX/ess5nFr4cjkGVEH1FkVhyYSshpD1atq7QEhHL/U6gl8kR+RbOlBkLRZJ28/MAXtGbCezY1Qd1dpBCE5HaM+CyxLwCGlAyItRbTwLLJ0dTEWB6jP6w+jqTjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=RJkxQMVH; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="RJkxQMVH"
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e25ccd64be9so1326722276.2
-        for <llvm@lists.linux.dev>; Thu, 03 Oct 2024 15:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1727993400; x=1728598200; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RIEY/VvBXBpbOFws0YW9ZSyNHIhNNXGVpnHlXG+8ISU=;
-        b=RJkxQMVHWfhDIcHEli6BGvnXWu0XcKlI6iSukWgDlFGy2B4gq52jNq2Wymd5Xd2Yok
-         UCQVhamJthQIx2pLEeUK769UFFD9Q8/OQq++Xmx8XE2L8QnEdCSHulxKb4ShgHBr42Ge
-         E9Z/+vNlb1j9uUHAP79nNv0GakBoY0wqoJ3zc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727993400; x=1728598200;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RIEY/VvBXBpbOFws0YW9ZSyNHIhNNXGVpnHlXG+8ISU=;
-        b=eRO/wxRFxkTab/VywPuHDXl7Xn6Qiw4IQbireHMdpx03Rh8Mpr17igxlsQmGR+gZ7I
-         V+oxwbte0jUcQkQPVbiNuX9rUP88lAifI7gQZFfYle2baAdfeE0kwXERVwHlIysOsGJe
-         1zgTYoa2fO2Wcu15o+DaCRPSzbyN7GGWsuiQCgz13IoEboCt7JGynHo/SEnc9wxChmrE
-         i8zPTeFHJ8TLOsBRIQG8I1/SpeB+pKrNRXOTXCaZbBZBzNcUpp0qcYq4AvVRh2YRyJjL
-         E8SenVFAyeaLaZNPGXa/yRn05px5vRne4gjN4orBREvmHy0Anphv5w0qSSfo+COVhkSb
-         aH6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX22maEJQR0RUFRPRPItCX6s3Qia9DYWaOG2cVHTdfSlQkzSRkfs/6/HYPNY0p1aOKVgFc1@lists.linux.dev
-X-Gm-Message-State: AOJu0YxNa84ZU8enKlDZlx2gvpFeLzL/Y/KPo4qr6DQxxR46m8Rbmio9
-	Kac4P4a5FB7YIBbIr90S0Uk8gFeNlSSaeFPCyzT/iAq9Y+mPjYxB2vXO9drACMKxfIGdaLhay+h
-	pf6r33OX6dZ4axq1uLwoba47U5o+uknVC3i60mA==
-X-Google-Smtp-Source: AGHT+IGHUNzUYhVLVAPDGU9H/0WV5ShOsg0ptxWufYbLbDAiDNM07Pwk/MoJ8LvG3kzNc/NTlu+JDUt/1ryUfofqvJ8=
-X-Received: by 2002:a05:6902:2b8e:b0:e26:11ae:6de9 with SMTP id
- 3f1490d57ef6-e28939561eemr459827276.52.1727993399239; Thu, 03 Oct 2024
- 15:09:59 -0700 (PDT)
+	s=arc-20240116; t=1727994788; c=relaxed/simple;
+	bh=9pOyjIY2Fu8sZWJ+h9Hhks0ngUMcydTiz+NvzoER/+Y=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZsBtO2shbE/hQ1fKSxQwcsIT1pZoW75uAZJs7nD4DqrGgd7QKhfcZVz4Kl8BxILK+ACEAbr9evC55azhsB9+k/e54ViJSFz70gH8td6kOJmeHFu6pFh8MUt4Q1TPyBjluGhZ+oIoBZcRTaFq4jy6WLQMuijn4rj/F7SkOPwDikg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-25-87.elisa-laajakaista.fi [88.113.25.87])
+	by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+	id 6ccef329-81d7-11ef-995b-005056bd6ce9;
+	Fri, 04 Oct 2024 01:32:55 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 4 Oct 2024 01:32:50 +0300
+To: Daniel Gomez <da.gomez@samsung.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	William Hubbs <w.d.hubbs@gmail.com>,
+	Chris Brannon <chris@the-brannons.com>,
+	Kirk Reiser <kirk@reisers.ca>,
+	Samuel Thibault <samuel.thibault@ens-lyon.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	speakup@linux-speakup.org, selinux@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-serial@vger.kernel.org, llvm@lists.linux.dev,
+	Finn Behrens <me@kloenk.dev>,
+	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>,
+	gost.dev@samsung.com
+Subject: Re: [PATCH v2 2/8] file2alias: fix uuid_t definitions for macos
+Message-ID: <Zv8bkoJA5oDIe6If@surfacebook.localdomain>
+References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
+ <20240906-macos-build-support-v2-2-06beff418848@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241002010205.1341915-1-mathieu.desnoyers@efficios.com>
- <20241002010205.1341915-2-mathieu.desnoyers@efficios.com> <20241003000843.GA192403@google.com>
- <7cc83ffc-c9cc-4e87-a3ee-bb62588a594c@efficios.com>
-In-Reply-To: <7cc83ffc-c9cc-4e87-a3ee-bb62588a594c@efficios.com>
-From: Joel Fernandes <joel@joelfernandes.org>
-Date: Thu, 3 Oct 2024 18:09:48 -0400
-Message-ID: <CAEXW_YTO3AhHAqrA4E_goVbsNB26AdfdShynr-nNMR97AYy6ag@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] compiler.h: Introduce ptr_eq() to preserve
- address dependency
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-kernel@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, John Stultz <jstultz@google.com>, 
-	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>, Frederic Weisbecker <frederic@kernel.org>, 
-	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Zqiang <qiang.zhang1211@gmail.com>, Ingo Molnar <mingo@redhat.com>, 
-	Waiman Long <longman@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com, 
-	Mateusz Guzik <mjguzik@gmail.com>, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, 
-	rcu@vger.kernel.org, linux-mm@kvack.org, lkmm@lists.linux.dev, 
-	Gary Guo <gary@garyguo.net>, Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240906-macos-build-support-v2-2-06beff418848@samsung.com>
 
-On Thu, Oct 3, 2024 at 10:21=E2=80=AFAM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> >
-> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->
-> Please double-check with -O2, and let me know if you still agree with
-> the patch :)
->
+Fri, Sep 06, 2024 at 01:01:29PM +0200, Daniel Gomez kirjoitti:
+> The uuid_t struct defined in sys/types.h on macOS hosts conflicts with
+> the one defined in file2alias, resulting in the typedef redefinition
+> error below. To resolve this conflict, define the _UUID_T and
+> __GETHOSTUUID_ in file2alias HOSTCFLAGS.
+> 
+> Error:
+>   HOSTCC  scripts/mod/file2alias.o scripts/mod/file2alias.c:45:3:
+> error: typedef redefinition with different types ('struct uuid_t' vs
+> '__darwin_uuid_t' (aka 'unsigned char[16]'))    45 | } uuid_t;       |
+> ^
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    sys/_types/_uuid_t.h:31:25: note: previous definition is here 31 |
+>    typedef __darwin_uuid_t uuid_t;    |                         ^
+> scripts/mod/file2alias.c:1354:7: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1354:19: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
 
-You are quite right, with -O2 I can indeed see that the optimize hide
-var fixes it.
+Please, shrink this to the valuable ~3-5 lines. No need to repeat the same for
+each case!
 
-FWIW:
-Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks!
 
- - Joel
