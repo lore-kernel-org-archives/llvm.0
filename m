@@ -1,132 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F13838DD2
-	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 13:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2688D2101B0;
+	Fri,  4 Oct 2024 13:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728047737; cv=none; b=d9DT47shIa10mgdOzP7sht/xD87J/ufz2CffKYROPQt2ndY1t8yyk65uoxHtIchvcC14WQfGctnnhLrtWZ1jhcJ+/CI0nmW1n5RxnLHmlm5ZyHdfJ7vHcqyvLagyxdkNG4DLXA1/WsMZ7XiiWzpdVxE9uJ3tDnbThUp8OvbFKtU=
+	t=1728048718; cv=none; b=kLrFTaTxw1kVJSR6v7vAfBWay5N5MNkYnx7OAhLxsvshj6wcXtV64kqH+zL4a3jf3tmr90ZTSBwd4YOPuEhk0moy5SLP2obi/WK7OHCbW0HqSMoboQ4anWaXMQoQu++m9vNWAI1A0NhsNViqOOeBXxrFE4I4Izqc/h4XmjZELx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728047737; c=relaxed/simple;
-	bh=1JZwYefyhSOCZB3CuZertgMGY1R4ZnxNXU0IyQGN6qM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FlgaPWhJ+EOxi1ZQc3ajSdI5kBpOAuwHU4/d0jOy2WK63DXND8085wBbMLqOEhRwllPAyrD60ssL8NqnMcMxSIRPtI390w+HDBYQdQvdhu99zZozOOPrNHB9bvHZvzBXnWMtkyVTASefFQ6kSJrzjqWiZWEr8c0DruvIhJ1f7mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kjjnc/L9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728048718; c=relaxed/simple;
+	bh=LipIKJHXywUFaT6Rr6fuW2hVVH4tKy/aeS0F5KcrTXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ogh2V3adfQu3C7CDNb/9BCXZqPadB+QW91Fwewyp9DEqXpqSkgDqv8sBZ62fLpSQPuA0wRCE6XJhmuJYpbog4CpFv/d5WzSBqidwHtZF8eNuEQGjEj1aX/rJZwLqvVVle9tzivwp4FctE2GZ33rKaPoOFqBrA6dK8LXzXY1sPcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cv+AueeE; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kjjnc/L9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA1F3C4CED8
-	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 13:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728047736;
-	bh=1JZwYefyhSOCZB3CuZertgMGY1R4ZnxNXU0IyQGN6qM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Kjjnc/L90TMtexTjGYxAYy1SQ1QLyKkvF/CbvX4DRZe3QZLNjgmA043In5Mn3i/rw
-	 6B5X+WF05mnRkF5MPsreCu1/RWhlYy0+kTzNNOgDa8rsLpPqegA7XxXK7Rhx0nUxa6
-	 IBkZJ2pdiTlc6pHGbh4RfTk0ZTnhtJZsbARiZlcRcR6BaSSw9ooGopO2oN7M88zaKP
-	 i9ZukewwH6dgft/J+7smkC7XLiCKWNYuCiKQdA/fHzzcPvpm6QIq/WKqZBvWKoD11P
-	 SHCZ55g+iyuo9/ex9afVt1+UpR3QIha2xI0NPLiyaKR+gtHkWFsHfMyaquC5SiCFd1
-	 mpOvPGs/3yVlw==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-539973829e7so2110198e87.0
-        for <llvm@lists.linux.dev>; Fri, 04 Oct 2024 06:15:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX3WVD14XB21G0ELjJPj2lfHwfl9rWlZQXqv0yzKuzjUZHKkLzgjGeWVK1WfVgZcjuy/DQx@lists.linux.dev
-X-Gm-Message-State: AOJu0YwgY/BkcOcrQ2Zs3o1z1TUnEtUrjY0Dlwkfhmux+oB6Ejh7NdJs
-	+Z3AQJaEr21xs4dGSrrBxfuhYQsXUF0CSrwHp+IyK7PTvrdolwBIx8I3C7tRgvC2FS7va8OD4LZ
-	M67AVsW1yZ7iYWRlyZPRKyDqkWXw=
-X-Google-Smtp-Source: AGHT+IEuHrt3V5yx40A/FQDIn91vq5WH5zeRnx8eS4s+O/De09fFFzzyl2W2oN2bUPJ3C1JSY+Ea24ADde6nXP4PqRA=
-X-Received: by 2002:a05:6512:3096:b0:539:a2e0:4e75 with SMTP id
- 2adb3069b0e04-539ab8662d1mr1636973e87.14.1728047734917; Fri, 04 Oct 2024
- 06:15:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cv+AueeE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728048716; x=1759584716;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LipIKJHXywUFaT6Rr6fuW2hVVH4tKy/aeS0F5KcrTXg=;
+  b=Cv+AueeEuKnFZh5G8sJybzceq+BljgOtbtPX66dQRIbwnxEo1ezZBDah
+   WXA/Iz+FUsZMh8FtwoC+MAq/+9nmGC+bCKvP+zo9DTmjVl9ta+dGYqcbz
+   G4KC9tGxYK1vdDCH4ExDM/fvoYureCs4Hq5hCbAxZcDF/+t/PSFg5cGor
+   TkY0c8RteZ8ntsWbdOea9e36m9GEHJZfX+j9QObQ59W1s/iPCrYwCIWcJ
+   EGafFnvrK4SR6wqQgiwTILA/nORejkDSmDZ9tzMQu+dkZsfSxAVn6+UhF
+   sjnfrUiRaRD/NIDKieP2hL5Xj+lOdd1o12X2kQcgRw87ofjvb/CTuNqGh
+   g==;
+X-CSE-ConnectionGUID: 9IUIXp0hS8q4vJTnKBKzkA==
+X-CSE-MsgGUID: dPqYiX90T+Wse3/KD+Q6GA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="27150469"
+X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
+   d="scan'208";a="27150469"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 06:30:21 -0700
+X-CSE-ConnectionGUID: IcluhS3fSAu9RiPnoDcCzg==
+X-CSE-MsgGUID: Ij+kEMolRPubbR9Jtmn+6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
+   d="scan'208";a="74697089"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 04 Oct 2024 06:30:20 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swiNt-0001fo-1R;
+	Fri, 04 Oct 2024 13:30:17 +0000
+Date: Fri, 4 Oct 2024 21:30:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	intel-xe@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-gfx@lists.freedesktop.org,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Subject: Re: [PATCH v3 10/12] drm/xe: Make xe_ggtt_pt_ops private
+Message-ID: <202410042102.EdHRO7JI-lkp@intel.com>
+References: <20241003154421.33805-11-maarten.lankhorst@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-35-ardb+git@google.com> <CAFULd4ZNwfPZO-yDjrtT2ANV509HeeYgR80b9AFachaVW5zqrg@mail.gmail.com>
- <CAMzpN2j4uj=mhdi7QHaA7y_NLtaHuRpnit38quK6RjvxdUYQew@mail.gmail.com>
-In-Reply-To: <CAMzpN2j4uj=mhdi7QHaA7y_NLtaHuRpnit38quK6RjvxdUYQew@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 4 Oct 2024 15:15:22 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF3_Hj9j2f_cBtwTFWvEmB0UoEs_cGkRiWc4AErDx0ftQ@mail.gmail.com>
-Message-ID: <CAMj1kXF3_Hj9j2f_cBtwTFWvEmB0UoEs_cGkRiWc4AErDx0ftQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 05/28] x86: Define the stack protector guard symbol explicitly
-To: Brian Gerst <brgerst@gmail.com>
-Cc: Uros Bizjak <ubizjak@gmail.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241003154421.33805-11-maarten.lankhorst@linux.intel.com>
 
-On Sat, 28 Sept 2024 at 15:41, Brian Gerst <brgerst@gmail.com> wrote:
->
-> On Wed, Sep 25, 2024 at 2:33=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> w=
-rote:
-> >
-> > On Wed, Sep 25, 2024 at 5:02=E2=80=AFPM Ard Biesheuvel <ardb+git@google=
-.com> wrote:
-> > >
-> > > From: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > Specify the guard symbol for the stack cookie explicitly, rather than
-> > > positioning it exactly 40 bytes into the per-CPU area. Doing so remov=
-es
-> > > the need for the per-CPU region to be absolute rather than relative t=
-o
-> > > the placement of the per-CPU template region in the kernel image, and
-> > > this allows the special handling for absolute per-CPU symbols to be
-> > > removed entirely.
-> > >
-> > > This is a worthwhile cleanup in itself, but it is also a prerequisite
-> > > for PIE codegen and PIE linking, which can replace our bespoke and
-> > > rather clunky runtime relocation handling.
-> >
-> > I would like to point out a series that converted the stack protector
-> > guard symbol to a normal percpu variable [1], so there was no need to
-> > assume anything about the location of the guard symbol.
-> >
-> > [1] "[PATCH v4 00/16] x86-64: Stack protector and percpu improvements"
-> > https://lore.kernel.org/lkml/20240322165233.71698-1-brgerst@gmail.com/
-> >
-> > Uros.
->
-> I plan on resubmitting that series sometime after the 6.12 merge
-> window closes.  As I recall from the last version, it was decided to
-> wait until after the next LTS release to raise the minimum GCC version
-> to 8.1 and avoid the need to be compatible with the old stack
-> protector layout.
->
+Hi Maarten,
 
-Hi Brian,
+kernel test robot noticed the following build warnings:
 
-I'd be more than happy to compare notes on that - I wasn't aware of
-your intentions here, or I would have reached out before sending this
-RFC.
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on linus/master v6.12-rc1]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip next-20241004]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-There are two things that you would need to address for Clang support
-to work correctly:
-- the workaround I cc'ed you on the other day [0],
-- a workaround for the module loader so it tolerates the GOTPCRELX
-relocations that Clang emits [1]
+url:    https://github.com/intel-lab-lkp/linux/commits/Maarten-Lankhorst/drm-xe-display-Handle-stolen-bar-readout-in-the-same-way-as-lmem/20241004-000534
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20241003154421.33805-11-maarten.lankhorst%40linux.intel.com
+patch subject: [PATCH v3 10/12] drm/xe: Make xe_ggtt_pt_ops private
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241004/202410042102.EdHRO7JI-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410042102.EdHRO7JI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410042102.EdHRO7JI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/xe/xe_ggtt.c:906: warning: expecting prototype for xe_ggtt_write_pte(). Prototype was for xe_ggtt_get_encode_pte_bo_fn() instead
 
 
+vim +906 drivers/gpu/drm/xe/xe_ggtt.c
 
-[0] https://lore.kernel.org/all/20241002092534.3163838-2-ardb+git@google.co=
-m/
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?=
-id=3Da18121aabbdd
+   897	
+   898	/**
+   899	 * xe_ggtt_write_pte - Write a PTE to the GGTT
+   900	 * @ggtt: &xe_ggtt
+   901	 * @offset: the offset for which the mapping should be written.
+   902	 *
+   903	 * Used by display for DPT and GGTT paths to enccode BO's.
+   904	 */
+   905	xe_ggtt_pte_encode_bo_fn xe_ggtt_get_encode_pte_bo_fn(struct xe_ggtt *ggtt)
+ > 906	{
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
