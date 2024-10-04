@@ -1,61 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D0C1D9673;
-	Fri,  4 Oct 2024 18:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF1B21CAD5;
+	Fri,  4 Oct 2024 18:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728065978; cv=none; b=ognQGqht0STaNn0KR7zr67o+Y5Y/7ywPxhJaS+NtLqQ4hFELrU5vHXm+adk2WYbHaWDen8SKHnZQYCT8NVS1nJDA1PZPnF2nSe2Plnzsg5YGxw+9QlTNOvch7jGkCfFzU7wmsXOmeLUp3UFBjNksdqodg4pYDKnTM2rxcuaJ9CM=
+	t=1728066555; cv=none; b=CYFT8xnSAm9fSN7QATCLrzOm04oKsxFjGcXLKX3+QkHA2iEdTrPvYrdEz67KR1vSl2Kz48nzzxwQhh4EdN+bC2Mxw9YZEPgqQaRBWQoj84cvEGA2AH/HQFc9iAQhmaUojMW6NYK1pWVIaZRUXFs/ZX5cCngREw5n3b8X5mGg9XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728065978; c=relaxed/simple;
-	bh=XrVZxWQZ+e3/LNrgbAFkiSgxRDsOKeEBt7/+ZHbn3bc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=O2Kt9G766DynmRBxxFuRytISOl2EfMBX67b7HdfmQBjDBDLn5MYNgp22MDCUzUH8t7xAc3zfSqzZqIqIK7xSxx1LIY2aa7Cv7rKJ9nTgnKpuFFAv8MDWlaBMbtZMgesnePGbEZMdJYZIxlQ0pYOp9x9dEv1tV9LJPV/2CwlM1d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kIUlbU6+; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728066555; c=relaxed/simple;
+	bh=6lBCjiRF4B46nhbZCs3k/e4Z0301LBosumkSAIOX6LI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EarPHt+fL0R3x/3UtggcW6zIqjMSUdXaClxx94kkrF1a1iwsjZdt9+4rbYX5D7eRMt/BxIjpHqe0/6uzhDKgOaBPjY8Hcll5eQSHDzFau3YXV9K6UfPzKH6VFRk9jYcuEJkX5PMhNmcJIBXOGvW9ASzW0ABfM+hUxttyyE617sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cnnSoO+x; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kIUlbU6+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728065976; x=1759601976;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XrVZxWQZ+e3/LNrgbAFkiSgxRDsOKeEBt7/+ZHbn3bc=;
-  b=kIUlbU6+RxwC7Dzs0F5J9Q1FpYTAR2XXJyncUh2RU36Kv8bf9sItjOg0
-   q+zX2+7xki97cqUUOWx+XTfbGW8Cs2vYIhlUfS4LxTdclolboyz23EZPu
-   AaHXMQ1CJ8dzXIdHSfdN3XmW1UpKIfjzVqVzlngGf3CvpqzvGgvFjSS3F
-   HlJPNJsalXJepH68whkrHFK1obNhpYQK393C1ybqaeyo25fN/YaLM8Qgq
-   DX5NVuybNWlDhgkY/joARukYEt6zRs4BXXQ6WGGxzU+m4kB4DZTYTddvS
-   +nNWAyYiNBscoBnrZJNOTB3xZ8hDsmCCQu6jAhDN29O1yZ+uZ+aEEleSN
-   Q==;
-X-CSE-ConnectionGUID: eUmeRT7dRaWbGiQ0eVbRag==
-X-CSE-MsgGUID: +7YCaCI3QVaZzLuc2mwBXg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="37903192"
-X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="37903192"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 11:19:35 -0700
-X-CSE-ConnectionGUID: VICI/CSIRIGHqXkSpxcozw==
-X-CSE-MsgGUID: w5ersl13SWKV1Tvi/qTcyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="74900806"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 04 Oct 2024 11:19:34 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swmtn-00023k-2W;
-	Fri, 04 Oct 2024 18:19:31 +0000
-Date: Sat, 5 Oct 2024 02:18:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20241003 14/14]
- kernel/bpf/core.c:2505:22: warning: comparison of distinct pointer types
- ('struct bpf_prog_array *' and 'struct bpf_prog_array_hdr *')
-Message-ID: <202410050215.8zVNACRw-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cnnSoO+x"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=fOb9M6ZRjRfvVCqDlasosWrUHjFjp7Hur2fhf3PBfgg=; b=cnnSoO+x6ifbk2XZl8GRTZm8Kf
+	Co4+zcisD6SR3lxix0PIP9Jh4m4Pv+xHhyh7i2N1aWvSENqf735ZdKFu3jV/Op1hKu+/Amc1ebVpQ
+	jzzYwasH3PDPVdgZCCQih6N9/3qgQOsoEPOyQUPkwg8MBeG3NG6FoWaZg7GOEnzU8ASije6iYVn0g
+	QKj1o/K7Cbv1VL5d4ApJkG4PMbtD+Br/8f2CgUZJMzqUnkSSngEuptT7K4ADE3JVoUFSkEUADU0bB
+	++C4Mvx4vGExNnCMtNMO2zc0LYl7AMLUxTHioVqT8B7lqCBpqBrLdFdRgsXe7z6FX7Sp7Wav/lN3c
+	mMDTiZbA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1swn2l-0000000B26f-1O0A;
+	Fri, 04 Oct 2024 18:28:48 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 94FA230083E; Fri,  4 Oct 2024 20:28:47 +0200 (CEST)
+Date: Fri, 4 Oct 2024 20:28:47 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>,
+	Sriraman Tallam <tmsriram@google.com>,
+	David Li <davidxl@google.com>,
+	Krzysztof Pszeniczny <kpszeniczny@google.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
+	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+	Jann Horn <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org,
+	x86@kernel.org, "Xin Li (Intel)" <xin@zytor.com>,
+	Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
+Message-ID: <20241004182847.GU18071@noisy.programming.kicks-ass.net>
+References: <20241002233409.2857999-1-xur@google.com>
+ <20241002233409.2857999-2-xur@google.com>
+ <20241003154143.GW5594@noisy.programming.kicks-ass.net>
+ <202410041106.6C1BC9BDA@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,44 +78,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202410041106.6C1BC9BDA@keescook>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20241003
-head:   ec64acf2dce7577a42c01241e78b24afebc26e96
-commit: ec64acf2dce7577a42c01241e78b24afebc26e96 [14/14] treewide_some: fix multiple -Wfamnae warnings that must be audited separately
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241005/202410050215.8zVNACRw-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050215.8zVNACRw-lkp@intel.com/reproduce)
+On Fri, Oct 04, 2024 at 11:10:04AM -0700, Kees Cook wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410050215.8zVNACRw-lkp@intel.com/
+> +Configure the kernel with::(make)
+> +
+> +     CONFIG_AUTOFDO_CLANG=y
+> 
+> Then we could avoid the extra 2 lines but still gain the rendered language
+> highlights?
 
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/core.c:2505:22: warning: comparison of distinct pointer types ('struct bpf_prog_array *' and 'struct bpf_prog_array_hdr *') [-Wcompare-distinct-pointer-types]
-    2505 |         if (!progs || progs == &bpf_empty_prog_array.hdr)
-         |                       ~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +2505 kernel/bpf/core.c
-
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2502  
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2503  void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2504  {
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14 @2505  	if (!progs || progs == &bpf_empty_prog_array.hdr)
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2506  		return;
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2507  	call_rcu_tasks_trace(&progs->rcu, __bpf_prog_array_free_sleepable_cb);
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2508  }
-8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2509  
-
-:::::: The code at line 2505 was first introduced by commit
-:::::: 8c7dcb84e3b744b2b70baa7a44a9b1881c33a9c9 bpf: implement sleepable uprobes by chaining gps
-
-:::::: TO: Delyan Kratunov <delyank@fb.com>
-:::::: CC: Alexei Starovoitov <ast@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The whole double-colon thing is already a pain to read; you're making it
+worse again.
