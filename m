@@ -1,146 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E7313C906;
-	Fri,  4 Oct 2024 08:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A88A146A7B
+	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 10:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728031335; cv=none; b=OW8MTeGwpeUPmhsvag7AgkI3M6y6Mkv6z6mSfG5/b268sxDruV7dDXhqnqkPh5a+SJ0jGaN2YV0TgRRr0MZO2/uMy1PruXK9RiDNvocvRJxeDTTPNKLADkkTOfYvlQ7GXyRYtiglg1u8NzD4CrV6K7C0Ilbw1Cx2zcW/FAFXatI=
+	t=1728036114; cv=none; b=ufXQQe1WUFm0TzsJyBL6nE5WOvuWfEmjmmyi7ZtRpGamWF4gS3cOEp/927CkMEq6HNq7z9EP6MrONfG5woc0EDa9d6tRUkyINVhB9cnu+MYmRHD/ubSDiEO83ejxr66j0iUKIBvk6/l6r6bsOrelbkFuolzEA5wbnBZSl8aQQGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728031335; c=relaxed/simple;
-	bh=pns61I65ZP7ckoYj8iUD/9/WF0Y59/fpgQSHHd2ExmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GhqlrhbYFICBHHYby+Xa5XXS6tcBJAWg/JyC9Ky46m1xBpJDDWpYwdojFScRnv9ocPkJpiCrVuZ3MeT3emjgxZSFOsmjxymMt99o9Hd0bxfnNX738hjDNE/S7rhde4ckN37VGbnKX669AepCWn0DYbutgy76Tssx+IA4ZKgsYfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HGIw76Nj; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728036114; c=relaxed/simple;
+	bh=nuE9Wx0dXnlPfKn5kpp9tKPB9VOjIJcG2joICPhGO2k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dxuDaNkUWZeLGBipsBdeCkhm6Mej4WktzAc6c+HhnzgApFvpstkfBdjGFYWORpjLDzEffawWbJCZRYBNRWCv74pTI1h5Rqt+euN4zAwby+phc3yR/CLWG7Qtx70Afr6RhBKhxBQJWvruta4wuVkbmdtE/aorvMxTZU3ee0e7v84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ikKOhlzv; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HGIw76Nj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728031333; x=1759567333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pns61I65ZP7ckoYj8iUD/9/WF0Y59/fpgQSHHd2ExmU=;
-  b=HGIw76Nj268LzpXSi0qVw3tpVbU4847XTccxoQGENSJFSd9nhr5jIyDA
-   KM2MhpUH/GHFeG5xBZC0Vkr1FbmLr6ETjp9PhaSrmDmQpCo4u+l3UKpMP
-   IIliNWhxTsfiNhiDps9pZ2hAOznEHpRVRT2KVMsa/qxF887wD5fQD4vIp
-   s8lHGLVmywKoc+2c3aLykCzseW0ALdaZv5cSDyXY80ZTs3tgnf5eckFST
-   1x7fkXxs739MAhYoDH65Flo5lPrZN/tqytmiy6BdaGjSze7DRa2nPx6z4
-   FU5Fbu2kljDaOtaZVY6aA6rkO8kZDTI1zpMJ8m2jsf+tar6Fmew3K6u6X
-   A==;
-X-CSE-ConnectionGUID: EnMZ52SHS72RXDxql5PcZg==
-X-CSE-MsgGUID: 9U9j6jSgQOyy4WX8dqlKXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="26715113"
-X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="26715113"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 01:42:12 -0700
-X-CSE-ConnectionGUID: +t/7UoSISImLoXtw8+CInA==
-X-CSE-MsgGUID: LH/HnQDYQ5SGzCOxZRhHcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="74958434"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 04 Oct 2024 01:42:10 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swdt1-0001OG-2O;
-	Fri, 04 Oct 2024 08:42:07 +0000
-Date: Fri, 4 Oct 2024 16:41:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrej Shadura <andrew.shadura@collabora.co.uk>,
-	linux-bluetooth@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	kernel@collabora.com, George Burgess <gbiv@chromium.org>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] Bluetooth: Fix type of len in
- rfcomm_sock_{bind,getsockopt_old}()
-Message-ID: <202410041637.iOIxEAQQ-lkp@intel.com>
-References: <20241002141217.663070-1-andrew.shadura@collabora.co.uk>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ikKOhlzv"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2faccada15bso20055381fa.3
+        for <llvm@lists.linux.dev>; Fri, 04 Oct 2024 03:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728036111; x=1728640911; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cieeCIQbn3uKGp6ANoCcdjT0voB4iLaxe9sLqJZ6O1w=;
+        b=ikKOhlzvJKuIaU0CeVYuAa18HgioHiunRrjfbIwl5TmPWhqU+mmM1/cEVkLzYF3Ycw
+         n4LGQ3veBqfZQTfyGrePpbfxXyXog+cF0HNlb1p+Vops3itaRBNQttnLJmrZgpL3wmIp
+         uiVPPUGK5M2LXm54GPe9KD5mFPy+T7+bLnIOXAONGK2tikYjKPD6uO/LPLFLNzvwXrIZ
+         6IbIcMxzx4BjHJTqQF1liH/ZEXkPYamcISIiw1tZmMXxqbX2q2ZgFzqyCcSU3WuBeZdN
+         R2hPVmvXTft5zfN/MLe9ovrPXZ6UbD7Dm4OIngXCjQ42t4it6klMmciEd/jIRQ9EQj98
+         BV4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728036111; x=1728640911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cieeCIQbn3uKGp6ANoCcdjT0voB4iLaxe9sLqJZ6O1w=;
+        b=TLTGRPe2Jk88XuupSi18ZdfddCFm8bAX+TcrlT0EPOkRFK1FJy0MuWJlOKpJ3V9dy3
+         Jt+i6qdmj48GBa6aBDID5j/2dMWUy1Xg+/z4bNeBM5jQq7eLjXYE1MoW/Btcz+gLqzgc
+         Gsi4EfureLZZf05HUZRot2cPlsFBQe/xUX0kX6DCfHgwB0D0bMDVHiu5ha1bhucLlpOR
+         vNL14ASlTMuCVyDEddUHQ72RCIhK7EGSsYPTsoT8HplsSmtI5P8kwtSvl5l+FrywdWmb
+         pBq7VaWn13dQbLzk5qv3PRiEEOduC+DLmkh64N9MJ+z/GFr23++KiZQk9qpJxekajJkY
+         0KfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxQz28sgM7YrEtT1yedMKoEFL8ER5LG8K9UkjRUjyiRAS9Qf+/IplFYBS29sga/JSgH+5n@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy6X/YHbWIFwBTEmid2qJi3xJ4vLA/rSQaIsp2xe/GFxlay2riK
+	qkEUMGHzjcMfQrPiVYG4KkiqiIjS5Mroq6hzC6KhrfOjAH2dLCewZZuU5Kn0h1Yqk6Ue7Pp1MlS
+	7yfn32dERauqy4IUbvG5kqZxlpHE=
+X-Google-Smtp-Source: AGHT+IFNljN6dwZlkogrdacVOY8k+lgMnJISEE8yVKjz9PNhP8aN8ZuhCudCHYoRMsLr1EPgwfyfZf3qjEWBYLSi1O4=
+X-Received: by 2002:a2e:b889:0:b0:2ef:20ae:d113 with SMTP id
+ 38308e7fff4ca-2faf3d8a95emr9412991fa.40.1728036110938; Fri, 04 Oct 2024
+ 03:01:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241002141217.663070-1-andrew.shadura@collabora.co.uk>
+References: <20240925150059.3955569-30-ardb+git@google.com> <20240925150059.3955569-35-ardb+git@google.com>
+In-Reply-To: <20240925150059.3955569-35-ardb+git@google.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Fri, 4 Oct 2024 12:01:39 +0200
+Message-ID: <CAFULd4an+aN4iJ7T0DdMQDOBWrTZPJ4Oyy9ULm6R29fLNQND9Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 05/28] x86: Define the stack protector guard symbol explicitly
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrej,
+On Wed, Sep 25, 2024 at 5:02=E2=80=AFPM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Specify the guard symbol for the stack cookie explicitly, rather than
+> positioning it exactly 40 bytes into the per-CPU area. Doing so removes
+> the need for the per-CPU region to be absolute rather than relative to
+> the placement of the per-CPU template region in the kernel image, and
+> this allows the special handling for absolute per-CPU symbols to be
+> removed entirely.
+>
+> This is a worthwhile cleanup in itself, but it is also a prerequisite
+> for PIE codegen and PIE linking, which can replace our bespoke and
+> rather clunky runtime relocation handling.
+>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/x86/Makefile                     |  4 ++++
+>  arch/x86/include/asm/init.h           |  2 +-
+>  arch/x86/include/asm/processor.h      | 11 +++--------
+>  arch/x86/include/asm/stackprotector.h |  4 ----
+>  tools/perf/util/annotate.c            |  4 ++--
+>  5 files changed, 10 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 6b3fe6e2aadd..b78b7623a4a9 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -193,6 +193,10 @@ else
+>          KBUILD_RUSTFLAGS +=3D -Cno-redzone=3Dy
+>          KBUILD_RUSTFLAGS +=3D -Ccode-model=3Dkernel
+>
+> +        ifeq ($(CONFIG_STACKPROTECTOR),y)
+> +                KBUILD_CFLAGS +=3D -mstack-protector-guard-symbol=3Dfixe=
+d_percpu_data
 
-kernel test robot noticed the following build errors:
+Looking at:
 
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on bluetooth/master linus/master v6.12-rc1 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +        * Since the irq_stack is the object at %gs:0, the bottom 8 bytes=
+ of
+> +        * the irq stack are reserved for the canary.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrej-Shadura/Bluetooth-Fix-type-of-len-in-rfcomm_sock_-bind-getsockopt_old/20241002-221656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20241002141217.663070-1-andrew.shadura%40collabora.co.uk
-patch subject: [PATCH] Bluetooth: Fix type of len in rfcomm_sock_{bind,getsockopt_old}()
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20241004/202410041637.iOIxEAQQ-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 13.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410041637.iOIxEAQQ-lkp@intel.com/reproduce)
+Please note that %gs:0 can also be achieved with
+-mstack-protector-guard-offset=3D0
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410041637.iOIxEAQQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:
-   net/bluetooth/rfcomm/sock.c: In function 'rfcomm_sock_bind':
->> include/linux/compiler_types.h:510:45: error: call to '__compiletime_assert_602' declared with attribute error: min(sizeof(sa), addr_len) signedness error
-     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:491:25: note: in definition of macro '__compiletime_assert'
-     491 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:510:9: note: in expansion of macro '_compiletime_assert'
-     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:100:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:105:9: note: in expansion of macro '__careful_cmp_once'
-     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:129:25: note: in expansion of macro '__careful_cmp'
-     129 | #define min(x, y)       __careful_cmp(min, x, y)
-         |                         ^~~~~~~~~~~~~
-   net/bluetooth/rfcomm/sock.c:339:15: note: in expansion of macro 'min'
-     339 |         len = min(sizeof(sa), addr_len);
-         |               ^~~
-
-
-vim +/__compiletime_assert_602 +510 include/linux/compiler_types.h
-
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  496  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  497  #define _compiletime_assert(condition, msg, prefix, suffix) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  498  	__compiletime_assert(condition, msg, prefix, suffix)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  499  
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  500  /**
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  501   * compiletime_assert - break build and emit msg if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  502   * @condition: a compile-time constant condition to check
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  503   * @msg:       a message to emit if condition is false
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  504   *
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  505   * In tradition of POSIX assert, this macro will break the build if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  506   * supplied condition is *false*, emitting the supplied error message if the
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  507   * compiler has support to do so.
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  508   */
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  509  #define compiletime_assert(condition, msg) \
-eb5c2d4b45e3d2 Will Deacon 2020-07-21 @510  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-eb5c2d4b45e3d2 Will Deacon 2020-07-21  511  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Uros.
