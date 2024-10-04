@@ -1,93 +1,227 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF1B21CAD5;
-	Fri,  4 Oct 2024 18:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC97F1E260A;
+	Fri,  4 Oct 2024 18:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066555; cv=none; b=CYFT8xnSAm9fSN7QATCLrzOm04oKsxFjGcXLKX3+QkHA2iEdTrPvYrdEz67KR1vSl2Kz48nzzxwQhh4EdN+bC2Mxw9YZEPgqQaRBWQoj84cvEGA2AH/HQFc9iAQhmaUojMW6NYK1pWVIaZRUXFs/ZX5cCngREw5n3b8X5mGg9XQ=
+	t=1728066586; cv=none; b=Unri1QGMcQKjZn68woX9k4kv9SefCgNLTz/L/+/hNpHXcJKDuj0adnj4bgZMaLkl/djieCf/TxSpvn8LaL8ddr7mrUFqHjSYGB+hTLlF4oJ/CEBxXoms0XHtSWgPYrPzcDZD9uHiLIbd3RPygpEHufIri2RGgUzA+Y7QjMEBp9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066555; c=relaxed/simple;
-	bh=6lBCjiRF4B46nhbZCs3k/e4Z0301LBosumkSAIOX6LI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EarPHt+fL0R3x/3UtggcW6zIqjMSUdXaClxx94kkrF1a1iwsjZdt9+4rbYX5D7eRMt/BxIjpHqe0/6uzhDKgOaBPjY8Hcll5eQSHDzFau3YXV9K6UfPzKH6VFRk9jYcuEJkX5PMhNmcJIBXOGvW9ASzW0ABfM+hUxttyyE617sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cnnSoO+x; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1728066586; c=relaxed/simple;
+	bh=ruHajFuAP+9RCH6285NJzkwm+MUgE21IicKMAn8zEWg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=gwFpB0IOu/SsY1aDHuYBHwpa/quyLjfZVbRGtFfC93IB258sJcwvbECQ/e5j9M+8cQ7aqEV6QOC7Ehi6sRe5jVNrRlURIFk4zHtUGcOnbyEBRpNeQoRNcxYcP9UUNQj53QBY67NafBp1YrRzILMHKGKvCu5yfqtyP50riBBoKzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=GY4zUt2T; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cnnSoO+x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=fOb9M6ZRjRfvVCqDlasosWrUHjFjp7Hur2fhf3PBfgg=; b=cnnSoO+x6ifbk2XZl8GRTZm8Kf
-	Co4+zcisD6SR3lxix0PIP9Jh4m4Pv+xHhyh7i2N1aWvSENqf735ZdKFu3jV/Op1hKu+/Amc1ebVpQ
-	jzzYwasH3PDPVdgZCCQih6N9/3qgQOsoEPOyQUPkwg8MBeG3NG6FoWaZg7GOEnzU8ASije6iYVn0g
-	QKj1o/K7Cbv1VL5d4ApJkG4PMbtD+Br/8f2CgUZJMzqUnkSSngEuptT7K4ADE3JVoUFSkEUADU0bB
-	++C4Mvx4vGExNnCMtNMO2zc0LYl7AMLUxTHioVqT8B7lqCBpqBrLdFdRgsXe7z6FX7Sp7Wav/lN3c
-	mMDTiZbA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1swn2l-0000000B26f-1O0A;
-	Fri, 04 Oct 2024 18:28:48 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 94FA230083E; Fri,  4 Oct 2024 20:28:47 +0200 (CEST)
-Date: Fri, 4 Oct 2024 20:28:47 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>,
-	Sriraman Tallam <tmsriram@google.com>,
-	David Li <davidxl@google.com>,
-	Krzysztof Pszeniczny <kpszeniczny@google.com>,
-	Alice Ryhl <aliceryhl@google.com>,
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="GY4zUt2T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1728066582;
+	bh=ruHajFuAP+9RCH6285NJzkwm+MUgE21IicKMAn8zEWg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GY4zUt2TAPM5YfusXMih3fV3IYkWKP/euMtVv+/PxLXdHpNsXgxya95dn+7c+pICP
+	 TpoTwpgWojwhrqN47JfH1uuLyYp0vMw/moy7QhNJmUmXEes6GkKZwj8YBIPPdOzGc4
+	 BvWFvWnu7uUKktoRhbiXX6SvCscRhca9DEuWp4GSkYprAWVw2nrADESHEJMN6SrU8i
+	 TofjfkvbUk0C+uiUrkxROZTRRmYYz4GrhJ8xBdy7djHqB1AYp8Sg8DOZz1eEQm+PvP
+	 FjTvIgbhj27mqs4K8KUeht0xuEIFzqFejkGpvNzMDsIJ13HCSkFoEr7TK7LMgFeW/I
+	 DaiWIjTVWM/Dw==
+Received: from thinkos.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKxsf36hmzN8Q;
+	Fri,  4 Oct 2024 14:29:42 -0400 (EDT)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
-	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jann Horn <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
+	Will Deacon <will@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	John Stultz <jstultz@google.com>,
+	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Waiman Long <longman@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org,
-	x86@kernel.org, "Xin Li (Intel)" <xin@zytor.com>,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
-Message-ID: <20241004182847.GU18071@noisy.programming.kicks-ass.net>
-References: <20241002233409.2857999-1-xur@google.com>
- <20241002233409.2857999-2-xur@google.com>
- <20241003154143.GW5594@noisy.programming.kicks-ass.net>
- <202410041106.6C1BC9BDA@keescook>
+	Vlastimil Babka <vbabka@suse.cz>,
+	maged.michael@gmail.com,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+	rcu@vger.kernel.org,
+	linux-mm@kvack.org,
+	lkmm@lists.linux.dev,
+	Gary Guo <gary@garyguo.net>,
+	Nikita Popov <github@npopov.com>,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH v2 1/4] compiler.h: Introduce ptr_eq() to preserve address dependency
+Date: Fri,  4 Oct 2024 14:27:31 -0400
+Message-Id: <20241004182734.1761555-2-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20241004182734.1761555-1-mathieu.desnoyers@efficios.com>
+References: <20241004182734.1761555-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202410041106.6C1BC9BDA@keescook>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 04, 2024 at 11:10:04AM -0700, Kees Cook wrote:
+Compiler CSE and SSA GVN optimizations can cause the address dependency
+of addresses returned by rcu_dereference to be lost when comparing those
+pointers with either constants or previously loaded pointers.
 
-> +Configure the kernel with::(make)
-> +
-> +     CONFIG_AUTOFDO_CLANG=y
-> 
-> Then we could avoid the extra 2 lines but still gain the rendered language
-> highlights?
+Introduce ptr_eq() to compare two addresses while preserving the address
+dependencies for later use of the address. It should be used when
+comparing an address returned by rcu_dereference().
 
-The whole double-colon thing is already a pain to read; you're making it
-worse again.
+This is needed to prevent the compiler CSE and SSA GVN optimizations
+from using @a (or @b) in places where the source refers to @b (or @a)
+based on the fact that after the comparison, the two are known to be
+equal, which does not preserve address dependencies and allows the
+following misordering speculations:
+
+- If @b is a constant, the compiler can issue the loads which depend
+  on @a before loading @a.
+- If @b is a register populated by a prior load, weakly-ordered
+  CPUs can speculate loads which depend on @a before loading @a.
+
+The same logic applies with @a and @b swapped.
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Tested-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Acked-by: "Paul E. McKenney" <paulmck@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: John Stultz <jstultz@google.com>
+Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Uladzislau Rezki <urezki@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Zqiang <qiang.zhang1211@gmail.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: maged.michael@gmail.com
+Cc: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Gary Guo <gary@garyguo.net>
+Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc: rcu@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: lkmm@lists.linux.dev
+Cc: Nikita Popov <github@npopov.com>
+Cc: llvm@lists.linux.dev
+---
+Changes since v0:
+- Include feedback from Alan Stern.
+---
+ include/linux/compiler.h | 63 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 2df665fa2964..75a378ae7af1 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -186,6 +186,69 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ 	__asm__ ("" : "=r" (var) : "0" (var))
+ #endif
+ 
++/*
++ * Compare two addresses while preserving the address dependencies for
++ * later use of the address. It should be used when comparing an address
++ * returned by rcu_dereference().
++ *
++ * This is needed to prevent the compiler CSE and SSA GVN optimizations
++ * from using @a (or @b) in places where the source refers to @b (or @a)
++ * based on the fact that after the comparison, the two are known to be
++ * equal, which does not preserve address dependencies and allows the
++ * following misordering speculations:
++ *
++ * - If @b is a constant, the compiler can issue the loads which depend
++ *   on @a before loading @a.
++ * - If @b is a register populated by a prior load, weakly-ordered
++ *   CPUs can speculate loads which depend on @a before loading @a.
++ *
++ * The same logic applies with @a and @b swapped.
++ *
++ * Return value: true if pointers are equal, false otherwise.
++ *
++ * The compiler barrier() is ineffective at fixing this issue. It does
++ * not prevent the compiler CSE from losing the address dependency:
++ *
++ * int fct_2_volatile_barriers(void)
++ * {
++ *     int *a, *b;
++ *
++ *     do {
++ *         a = READ_ONCE(p);
++ *         asm volatile ("" : : : "memory");
++ *         b = READ_ONCE(p);
++ *     } while (a != b);
++ *     asm volatile ("" : : : "memory");  <-- barrier()
++ *     return *b;
++ * }
++ *
++ * With gcc 14.2 (arm64):
++ *
++ * fct_2_volatile_barriers:
++ *         adrp    x0, .LANCHOR0
++ *         add     x0, x0, :lo12:.LANCHOR0
++ * .L2:
++ *         ldr     x1, [x0]  <-- x1 populated by first load.
++ *         ldr     x2, [x0]
++ *         cmp     x1, x2
++ *         bne     .L2
++ *         ldr     w0, [x1]  <-- x1 is used for access which should depend on b.
++ *         ret
++ *
++ * On weakly-ordered architectures, this lets CPU speculation use the
++ * result from the first load to speculate "ldr w0, [x1]" before
++ * "ldr x2, [x0]".
++ * Based on the RCU documentation, the control dependency does not
++ * prevent the CPU from speculating loads.
++ */
++static __always_inline
++int ptr_eq(const volatile void *a, const volatile void *b)
++{
++	OPTIMIZER_HIDE_VAR(a);
++	OPTIMIZER_HIDE_VAR(b);
++	return a == b;
++}
++
+ #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+ 
+ /**
+-- 
+2.39.2
+
