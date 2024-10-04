@@ -1,123 +1,112 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2274215A856
-	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 21:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23192E83F
+	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 21:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728076016; cv=none; b=sjU+1Sd7QxS6msNnsOXXOLi/SeIogfcRFLnWI5pzQKXBi4QxowVhLw+Tt3SOGcuTZeH56R3dRZLzch4lnomzisB+VtQjV3TUAOOFm8fsT/szR+iwrZUzhJJKLnCFToyjMjpZW1SLUW1azDVvgTfZThza3yA4inGV0N15Jbfd7/o=
+	t=1728076529; cv=none; b=SoI2qa6BaX3BwU+ouxiY4apl/k4tlVY3CSTbUax5FjBiNgdqtp/O+qYj5+BNoEQPIzw3uidZIOmsFT2kMFiG02V9XL6KRXcEprS5CuDOq1++rxV1zPjBFiD6a5SFNhGvox09MONeKpxUd8/+Hyi6uZDXpp1Y7RgGBdfhshzaw10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728076016; c=relaxed/simple;
-	bh=35IOoHe/X7gnxDSJ+PKxFRsGFeTWY6fFlRdddCjRNEQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KgMs1d7Ufj1iCUD87KuSt14ByGcLvgokwWHRk0sEXf3dmJeDd9OPLZSQScjIbEaa9FHXjpiLGP+EHASRVY5r2HxsQhn+TipgRn6uF9SO/U/Ui2w3jsr++KnnAkOTWSWCZ5MdTgx5sEuhBaUVAe7q9GjXWLSIN814gjRF6h4hX64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=RHbE3DVW; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1728076529; c=relaxed/simple;
+	bh=Mbx5r2TKIMn8mhKB+ZeVXt4Prsj555X1UtYtHQwuAzs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ywwnh18UlAUy4FGb38u/QVUE+G4MNk3x+Er8P0MqOe6E3QGW64cMXr3ErZqu9JU0iUIFIKkGi36NvIg9CLe7BQUeAQPq0d+15emp076/7psWivUaIs0Yxs9go/+2OdyJRBn8mqqruRv4WGh6Ux9K8ertLCdbwvk01RiZoG0KaRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=xPTA4Gvl; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="RHbE3DVW"
-Received: from [172.27.3.244] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 494L65GU1102942
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 4 Oct 2024 14:06:05 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 494L65GU1102942
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024091601; t=1728075968;
-	bh=XsIxGCLuwc7oDprSmGh/r3HcUoLTGC5y0f+hwyxMfwo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RHbE3DVWEQje/BMw0MYaccvz1CZHwlX6EAgZGBVxHM2N6A8Bs+1jWvQpqHAmpUzya
-	 B92rCcmXrNdl6GfJQOI48PxiDK98iUmhievUBaOuzvKW3PAg7k45+MO2DgOhre9Bqd
-	 MrXnCq+SHnBPZaEqYPEh1ZZWpqzvtfcpjsowsK7ZSQpJE3n6P52zeuoQxt6YTsZKnI
-	 eOmpzoP5V4jl/5Ek7xSXJuKz/8Ygm8jcSxEYWiVLw5Mr50hkZ5MwtV2JsKhIo4+1yl
-	 R0hI44pjMEjCP35l4UByBpjxQS3xPtcQR5w0P8PyQOSjLhz1QZW4Zg4KVQGx8RJEXl
-	 n08E+BHxsQUWw==
-Message-ID: <5c7490bb-aa74-427b-849e-c28c343b7409@zytor.com>
-Date: Fri, 4 Oct 2024 14:06:05 -0700
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="xPTA4Gvl"
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e260850140fso2579388276.2
+        for <llvm@lists.linux.dev>; Fri, 04 Oct 2024 14:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1728076527; x=1728681327; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mbx5r2TKIMn8mhKB+ZeVXt4Prsj555X1UtYtHQwuAzs=;
+        b=xPTA4GvlibYs7zKrbKmODz9wbSSbrv2vyxiM7e+AX3VvEBkXJDwFO5Qwzu/o5U/o+0
+         RiYwpJORSXuwKefqAWp8UHCma3vkB+HbsSUX2MYp2GUf0dbzLPIP/iriKjtYzycRmcYd
+         1e/ZYt/ukMeZXxkF8Ynxrl6jEZmE7QM4nh7o0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728076527; x=1728681327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mbx5r2TKIMn8mhKB+ZeVXt4Prsj555X1UtYtHQwuAzs=;
+        b=WhxZa04cL9Oklmi2mImn2qH2XEuNUqTwx2v4m+VqaDNQwo8AC4eaIy8ttxyvIjyJTp
+         Na3NMlfmDGadOb5a0aTjYw8kXaT8+3nWziXMRyc7CvfIA7nCCxlFoXw3/4xvzoshckoE
+         Cg0z36mxChhyVFF1JgCcuvtKcfY3EzzNPdfnsQTJECkt9NwESnGw6I8B5CZMMpavlU21
+         egF2wQtS+ZrSYBa/au2sXeWT0ozRT4Fekz/SGVlMY5eFr+mQIevv6BvXAbP0HsvLRvUK
+         DS4g7o14+WYLwkRseJni5BB2Kze4EN+B1eOdz+Szugq5C/4qJ5gLZNUB06DRNFnueiMh
+         JYKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUlX9PsogKZhg6tc7BuTnuOdYUJGvkwz13NKUUYFFMHZVduhoU3Mdw9KzM1cIbQ3WLT+kPL@lists.linux.dev
+X-Gm-Message-State: AOJu0YwOSq7XdZHuOt5HfKRwUTiAypE/eq7EZ/MU4MhUgAkHYp721Itz
+	NluIUA0htnJx+RsBtAEgNMD30HxYmWBU/+BtaTM4YFxkGTc4DsHWfWAhno9CpkwBP74nFegOkEA
+	hEOBoLAN62drqo5q1G9N5B/KRU2KZRRuIfBQPSg==
+X-Google-Smtp-Source: AGHT+IEPsLMnMKFXypAW2Ai1WtaX3NPqnW63QWoysrWAhTsUF8m+CHhPihaOdD4n+hkJeUszvqpfldEllQccT98CgOg=
+X-Received: by 2002:a05:6902:27c7:b0:e22:5b5b:58ad with SMTP id
+ 3f1490d57ef6-e2893944237mr3839551276.54.1728076526729; Fri, 04 Oct 2024
+ 14:15:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
-To: Ard Biesheuvel <ardb@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky
- <boris.ostrovsky@oracle.com>,
-        Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Keith Packard <keithp@keithp.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-sparse@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-55-ardb+git@google.com>
- <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
- <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
- <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
- <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
-Content-Language: en-US
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241004182734.1761555-1-mathieu.desnoyers@efficios.com> <20241004182734.1761555-3-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20241004182734.1761555-3-mathieu.desnoyers@efficios.com>
+From: Joel Fernandes <joel@joelfernandes.org>
+Date: Fri, 4 Oct 2024 17:15:15 -0400
+Message-ID: <CAEXW_YQL3wY+BSMw3SOxDWbczrVfe9ALz8wqRjb9iPOBJq0xHQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/4] Documentation: RCU: Refer to ptr_eq()
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Will Deacon <will@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	John Stultz <jstultz@google.com>, Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Josh Triplett <josh@joshtriplett.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
+	Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com, Mateusz Guzik <mjguzik@gmail.com>, 
+	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, rcu@vger.kernel.org, linux-mm@kvack.org, 
+	lkmm@lists.linux.dev, Gary Guo <gary@garyguo.net>, Nikita Popov <github@npopov.com>, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/3/24 04:13, Ard Biesheuvel wrote:
-> 
->> That said, doing changes like changing "mov $sym" to "lea sym(%rip)" I
->> feel are a complete no-brainer and should be done regardless of any
->> other code generation issues.
-> 
-> Yes, this is the primary reason I ended up looking into this in the
-> first place. Earlier this year, we ended up having to introduce
-> RIP_REL_REF() to emit those RIP-relative references explicitly, in
-> order to prevent the C code that is called via the early 1:1 mapping
-> from exploding. The amount of C code called in that manner has been
-> growing steadily over time with the introduction of 5-level paging and
-> SEV-SNP and TDX support, which need to play all kinds of tricks before
-> the normal kernel mappings are created.
-> 
+On Fri, Oct 4, 2024 at 2:29=E2=80=AFPM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> Refer to ptr_eq() in the rcu_dereference() documentation.
+>
+> ptr_eq() is a mechanism that preserves address dependencies when
+> comparing pointers, and should be favored when comparing a pointer
+> obtained from rcu_dereference() against another pointer.
+>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Acked-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
 
-movq $sym to leaq sym(%rip) which you said ought to be smaller (and in 
-reality appears to be the same size, 7 bytes) seems like a no-brainer 
-and can be treated as a code quality issue -- in other words, file bug 
-reports against gcc and clang.
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-> Compiling with -fpie and linking with --pie -z text produces an
-> executable that is guaranteed to have only RIP-relative references in
-> the .text segment, removing the need for RIP_REL_REF entirely (it
-> already does nothing when __pic__ is #define'd).
+thanks,
 
-But -fpie has a considerable cost; specifically when we have indexed 
-references, as in that case the base pointer needs to be manifest in a 
-register, *and* it takes up a register slot in the EA, which may end 
-converting one instruction into three.
-
-Now, the "kernel" memory model is defined in the ABI document, but there 
-is nothing that prevents us from making updates to it if we need to; 
-e.g. the statement that movq $sym can be used is undesirable, of course.
-
-	-hpa
-
+ - Joel
