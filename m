@@ -1,97 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74A91C3038;
-	Fri,  4 Oct 2024 15:45:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6861C8769
+	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 16:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728056728; cv=none; b=BlCDWHUE05XDrEFZh2bmvcqr1C5c5guSIbh3YSxkCmbaqjutLl7xNSbzOHcLlgfmqvkE5YMnZtOvdJsblbPOX4TLaMDdgglvEiulvTG2ApARAX/KyIgkPrHf4ukBRN4IcCamWxMrhyboPPxdxqS2DLX0cyiP5h78Z0iAXPdqoUY=
+	t=1728059333; cv=none; b=hDlBKcrD1/HQIHz3IEpkj4lNpyDeMsEx8AU051qrJOC/3Ejs247Cql0Y3RX9cyaC9oPLMAVL0D/3SyGLjTQz+G1ZEwMHmqf9iaLBF+CcOFcsxx3PpyoyeqHbDMd14RYC6l/9MPXPUQ1RSywOPoOFPTlXWVJYzyw1XRMZL+29KyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728056728; c=relaxed/simple;
-	bh=e7oCZOQEpb4KoIn9xoa0YLv2beWw5KGIE5hNlFZoaZE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ygt+zAIT0DKHaWBqT/mFV45Sh+DsqIpf9/SHOOB+ED7n6GpuJYWN3h1qlw/KzAwioKqzu9ds5cjyaPK5WKwHe+J3/bgTsaozuDr0TQDflCUFZhL7vWdUWLTgpiIk/STVbP09WvRUNqjLYrRA5ddqse8Ad52IA3LVCBi6kGZYCSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HHn9CjMy; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728059333; c=relaxed/simple;
+	bh=mcKXImcn/JYcaewMquzchQJQfQcUvJgG3O8bd9ZOhKE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ckOmLL0DF+1VUB8lx/0Q1ZfKWQFa/NeOBFHpw4O3dYW5l99wJkIhkRnyMT+TdrsKXVowcrKVsi06Q39nwMrH1BPRgu94wT0k1UFinHMwUoPD3keWo6IXAqsrECcPYWK4jzRtwlJMwzixaBJvD9GKzrMmATJEVlpj2DJ35z7VX1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rARzVm18; arc=none smtp.client-ip=209.85.166.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HHn9CjMy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728056727; x=1759592727;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e7oCZOQEpb4KoIn9xoa0YLv2beWw5KGIE5hNlFZoaZE=;
-  b=HHn9CjMyfGK/WH2yY6E4o+Ft1LdSYqDMvkpp19iLWf11laalFHjbm8XG
-   T0gLA0gLgzoGuCUyA33byKuLqO/zF8qJupdYV5q0JemXdvY7YqlgmJDpp
-   DrgykO1yIEquS6BXAgcQ9vZiDL6bWTCIP8r/iOSQx/X0zvD5Q465TXXkA
-   8vsKCLRgjkVnfQgsI+vjWRRz/EonBPcyel25hshWl1ToUdRaKRt0EC/ID
-   OkFak2Jzv7vWmBz3d/jjiCBRSsN2C5cvz5ROjBtqrnwyqijcCxFFJI188
-   FCvpR9U31Rnk3/i4mdH2DNIvcZ/329gkWqFCyObtDrd71CTfWz39MREh3
-   Q==;
-X-CSE-ConnectionGUID: bMExlRaTSuqnWKjlEYgQQw==
-X-CSE-MsgGUID: MkN3+O/YT1yhTlWyb08x4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27165125"
-X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="27165125"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 08:45:26 -0700
-X-CSE-ConnectionGUID: sw+nxSv+Rs+nBYQXdeVUMg==
-X-CSE-MsgGUID: s+/cDWx0RPaDEIeWke7AYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="79312415"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 04 Oct 2024 08:45:25 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swkUc-0001qq-33;
-	Fri, 04 Oct 2024 15:45:22 +0000
-Date: Fri, 4 Oct 2024 23:44:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-pie-v2 30/31] ld.lld: error: relocation R_X86_64_32S
- cannot be used against symbol 'ftrace_trace_function'; recompile with -fPIC
-Message-ID: <202410042304.WtASql7r-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rARzVm18"
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3a376e3acfbso231355ab.1
+        for <llvm@lists.linux.dev>; Fri, 04 Oct 2024 09:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728059331; x=1728664131; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OgGY2eqskxrBEZxo84cDOux6pQgpEj/UNQt8PWqDZ8w=;
+        b=rARzVm18NqnLDnY6JCL01YMOU+9TTyl6OWRLrvsPdboIXEVPQlL2dj3zQ4qOU18nSC
+         rbF+qrZcOw03OZt7I7R7oHQoyWgTpiSe+x/RzW7mvTlKJmkjKnemdGyfnv0SaeyqbETl
+         t2iLwbnhqVbHTcrV9ERLaVWq+N2+4lWtezQDtcCw4zZrD9hfdfUuTx6gPZuush7PTDRD
+         EWc+c69lbY9lUe0jxSKVo+NiQaPuvWqPpDmJxTki8WsZmRpxsidf/yV21RFqZf5PEK95
+         KNFWdJ1G2pzyMdFrH9ISm6XDrOyzaG8WsRwlePNEhRXDMspP8hTpsfl1JdABntNv2s/l
+         MY3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728059331; x=1728664131;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OgGY2eqskxrBEZxo84cDOux6pQgpEj/UNQt8PWqDZ8w=;
+        b=om2MmzuW05ZskBb5XPvgvh9ZOh90KFhuFIWRezm67jtmC4/V/HUu+HA7JgSKxUKXzJ
+         LAgV8QN7afQmBDFiP/1s6Rf5VHSy3UF7MtY+r58o8wGXRcgtlGosLTmKWRl+XMqtwfqx
+         kU/9zpMNHtpah5aD5cJIw1WFPs5OWCD7Jp2UF9AboI9drbX8CPhr0w3zRtXNnew9xpb+
+         6+Eriy5gKjBbM3OopobWGpz1JfhrzI2rY66S3BGw6mfFcfZ1xrgSHc8572QOtLOTxLWp
+         fhrliHfRf97OpxZl5xp2WsjfTsaeTfLrgbDydj73/JIZ/waUVlaL15ieBYcK+GmEd2vT
+         K/8w==
+X-Forwarded-Encrypted: i=1; AJvYcCVMLBAUwv3zDVBGAicHdtkzVoE+L0Hd2e9Pt3okp6IeVj/qZRAZolmD3s0/1afr4KkBhHv9@lists.linux.dev
+X-Gm-Message-State: AOJu0YzoeGUA6yXQxohVrTQWmd0WOWAebCJjY2BUBOfjpgM2FcaMitKe
+	DhiJJqGPeO8ryuOf1hoBL81rcPEqycUPKVtNZU0/soCcYseh6egrqSQvo7sLd0AfGxMz7+/nfTa
+	J9uS/pm1qYY/hk1orXExWfY++Mb9/QcFfIksG
+X-Google-Smtp-Source: AGHT+IGCEt+Cx8Bcl8DmVXb76uKeIue9614VP76/1RwzU7Pr6FX0/77BJWA/5ijrvw6aJnbkMfeSKf9ghJEJrtNmO1Y=
+X-Received: by 2002:a05:6e02:154f:b0:39f:3778:c896 with SMTP id
+ e9e14a558f8ab-3a3767e5548mr3313975ab.5.1728059330603; Fri, 04 Oct 2024
+ 09:28:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241002233409.2857999-1-xur@google.com> <20241002233409.2857999-2-xur@google.com>
+ <20241003154143.GW5594@noisy.programming.kicks-ass.net> <CAKwvOdnS-vyTXHaGm4XiLMtg4rsTuUTJ6ao7Ji-fUobZjdBVLw@mail.gmail.com>
+ <20241003160309.GY5594@noisy.programming.kicks-ass.net> <CAKwvOd=CRiHitKeYtHH=tmT8yfDa2RSALbYn5uCC8nRq8ud79g@mail.gmail.com>
+ <20241003161257.GZ5594@noisy.programming.kicks-ass.net> <CAF1bQ=RAizpP-T_sRGpE2-Kjsk_RZD3r_iz_dpn25W+uDzpWOw@mail.gmail.com>
+ <Zv-Fy4hnuscnLH1k@kernel.org>
+In-Reply-To: <Zv-Fy4hnuscnLH1k@kernel.org>
+From: Rong Xu <xur@google.com>
+Date: Fri, 4 Oct 2024 09:28:36 -0700
+Message-ID: <CAF1bQ=S8Hg0FUThaDU0snVqerVos6ztzVvN6sm1Ng3FnTpJt_A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Han Shen <shenhan@google.com>, 
+	Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
+	Jann Horn <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Samuel Holland <samuel.holland@sifive.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, x86@kernel.org, 
+	"Xin Li (Intel)" <xin@zytor.com>, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v2
-head:   1295be6d1a5cb6a30132ee8b01c79018794d0c3e
-commit: 61f3a3cf6f5940319514b36400d7c994b163d8c5 [30/31] x86/kernel: Switch to PIE linking for the core kernel
-config: x86_64-buildonly-randconfig-004-20241004 (https://download.01.org/0day-ci/archive/20241004/202410042304.WtASql7r-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410042304.WtASql7r-lkp@intel.com/reproduce)
+On Thu, Oct 3, 2024 at 11:09=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> On Thu, Oct 03, 2024 at 11:20:17AM -0700, Rong Xu wrote:
+> > Writing the doc with all these code-blocks was not fun either.
+> > We are happy to change if there is a better way for this.
+> >
+> > -Rong
+> >
+> > On Thu, Oct 3, 2024 at 9:13=E2=80=AFAM Peter Zijlstra <peterz@infradead=
+.org> wrote:
+> > >
+> > > On Thu, Oct 03, 2024 at 09:11:34AM -0700, Nick Desaulniers wrote:
+> > >
+> > > > > It makes it absolute crap for all of us who 'render' text documen=
+ts
+> > > > > using less or vi.
+> > > >
+> > > > "It hurts when I punch myself in the face."
+> > >
+> > > Weirdly enough I have a job that entails staring at text documents in
+> > > text editors all day every day :-) sorry for thinking that's a sane
+> > > thing to do.
+>
+> Something like this should do:
+>
+> > +- For enabling a single file (e.g. foo.o)::
+> > +
+> > +        AUTOFDO_PROFILE_foo.o :=3D y
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410042304.WtASql7r-lkp@intel.com/
+Do you mean we don't use ".. code-block:: " here and just use indented
+text separated with blank lines?
 
-All errors (new ones prefixed by >>):
+-Rong
 
->> ld.lld: error: relocation R_X86_64_32S cannot be used against symbol 'ftrace_trace_function'; recompile with -fPIC
-   >>> defined in vmlinux.o
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(__fentry__)
---
->> ld.lld: error: relocation R_X86_64_32S cannot be used against symbol 'ftrace_stub'; recompile with -fPIC
-   >>> defined in vmlinux.o
-   >>> referenced by usercopy_64.c
-   >>>               vmlinux.o:(__fentry__)
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>
+> --
+> Sincerely yours,
+> Mike.
