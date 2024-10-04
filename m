@@ -1,112 +1,122 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23192E83F
-	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 21:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760C71448E0
+	for <llvm@lists.linux.dev>; Fri,  4 Oct 2024 21:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728076529; cv=none; b=SoI2qa6BaX3BwU+ouxiY4apl/k4tlVY3CSTbUax5FjBiNgdqtp/O+qYj5+BNoEQPIzw3uidZIOmsFT2kMFiG02V9XL6KRXcEprS5CuDOq1++rxV1zPjBFiD6a5SFNhGvox09MONeKpxUd8/+Hyi6uZDXpp1Y7RgGBdfhshzaw10=
+	t=1728077040; cv=none; b=q3lbWWvQ1027cld+pmpiNKnEpNXetHYc2+uFXcC2xrFe5zl80t/+oqQdSWReP9yI2Qzy7LTXDZCRDyrHu6GHwtMer8O1q5MQE7QYIYSQnorFf/tvEskKFTETd79CNACUuwhVvU65BGsnrWwwfAS+KThbeW9q/GMmMq39PqAUMS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728076529; c=relaxed/simple;
-	bh=Mbx5r2TKIMn8mhKB+ZeVXt4Prsj555X1UtYtHQwuAzs=;
+	s=arc-20240116; t=1728077040; c=relaxed/simple;
+	bh=1OR4Ve0G8ozTpeMWZS3Lij1bBkuy08uUBWlqH40INcA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ywwnh18UlAUy4FGb38u/QVUE+G4MNk3x+Er8P0MqOe6E3QGW64cMXr3ErZqu9JU0iUIFIKkGi36NvIg9CLe7BQUeAQPq0d+15emp076/7psWivUaIs0Yxs9go/+2OdyJRBn8mqqruRv4WGh6Ux9K8ertLCdbwvk01RiZoG0KaRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=xPTA4Gvl; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
+	 To:Cc:Content-Type; b=pUGQApFKxtuVX11jtHA9yAfH3QhvTRLyFIl92OO+5cmHfmplhFd+K6QEH9yvuP+wwn6Dfl+GJF6oQM6C7l/r+uViCmd+TwReUo85i4YmGDIftAGQooreUfQayk/1q/NNeisGOWe6G0SJmfMkpdjGznBp2DQAsMk9wbndpPG38wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pJ1S9H68; arc=none smtp.client-ip=209.85.222.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="xPTA4Gvl"
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e260850140fso2579388276.2
-        for <llvm@lists.linux.dev>; Fri, 04 Oct 2024 14:15:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pJ1S9H68"
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-84ea658b647so856337241.1
+        for <llvm@lists.linux.dev>; Fri, 04 Oct 2024 14:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1728076527; x=1728681327; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1728077038; x=1728681838; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mbx5r2TKIMn8mhKB+ZeVXt4Prsj555X1UtYtHQwuAzs=;
-        b=xPTA4GvlibYs7zKrbKmODz9wbSSbrv2vyxiM7e+AX3VvEBkXJDwFO5Qwzu/o5U/o+0
-         RiYwpJORSXuwKefqAWp8UHCma3vkB+HbsSUX2MYp2GUf0dbzLPIP/iriKjtYzycRmcYd
-         1e/ZYt/ukMeZXxkF8Ynxrl6jEZmE7QM4nh7o0=
+        bh=AS2Tt07mNVpSQvOxW3B3xdNnuSdtzeSrYZ225ecdgxI=;
+        b=pJ1S9H68ueuHi1HMWp2GAyT6WsSp4Dn/ESqOrvd/2JPX7i1KCKVZCgMClpZLBWzDwC
+         d1CDsZACCTJ/HTY+JQ7Tf35Y32VwzjL98NYTy43/vynsNfILGoquyW807Wf/Nla6KIhR
+         T1xjmjDDMHNwanUqmrJdKpZwe8yorpaNJHJIJsR3JHmiLr50uW4CVWOKZcIZZD+RTEGX
+         QPGmaOa7nx5NbIRQjEo+gQzy1v6Xgw9SJbgmb5cSBn21m2y3Kt3bCdi6N37pd2DW8uNB
+         cLVkkTfe6h51l4TXi5GZFwzA9JiRXBAgWAE+b5k7FUzhvzvG7VHNVfaiEJodV5WbZhbZ
+         MJSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728076527; x=1728681327;
+        d=1e100.net; s=20230601; t=1728077038; x=1728681838;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mbx5r2TKIMn8mhKB+ZeVXt4Prsj555X1UtYtHQwuAzs=;
-        b=WhxZa04cL9Oklmi2mImn2qH2XEuNUqTwx2v4m+VqaDNQwo8AC4eaIy8ttxyvIjyJTp
-         Na3NMlfmDGadOb5a0aTjYw8kXaT8+3nWziXMRyc7CvfIA7nCCxlFoXw3/4xvzoshckoE
-         Cg0z36mxChhyVFF1JgCcuvtKcfY3EzzNPdfnsQTJECkt9NwESnGw6I8B5CZMMpavlU21
-         egF2wQtS+ZrSYBa/au2sXeWT0ozRT4Fekz/SGVlMY5eFr+mQIevv6BvXAbP0HsvLRvUK
-         DS4g7o14+WYLwkRseJni5BB2Kze4EN+B1eOdz+Szugq5C/4qJ5gLZNUB06DRNFnueiMh
-         JYKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUlX9PsogKZhg6tc7BuTnuOdYUJGvkwz13NKUUYFFMHZVduhoU3Mdw9KzM1cIbQ3WLT+kPL@lists.linux.dev
-X-Gm-Message-State: AOJu0YwOSq7XdZHuOt5HfKRwUTiAypE/eq7EZ/MU4MhUgAkHYp721Itz
-	NluIUA0htnJx+RsBtAEgNMD30HxYmWBU/+BtaTM4YFxkGTc4DsHWfWAhno9CpkwBP74nFegOkEA
-	hEOBoLAN62drqo5q1G9N5B/KRU2KZRRuIfBQPSg==
-X-Google-Smtp-Source: AGHT+IEPsLMnMKFXypAW2Ai1WtaX3NPqnW63QWoysrWAhTsUF8m+CHhPihaOdD4n+hkJeUszvqpfldEllQccT98CgOg=
-X-Received: by 2002:a05:6902:27c7:b0:e22:5b5b:58ad with SMTP id
- 3f1490d57ef6-e2893944237mr3839551276.54.1728076526729; Fri, 04 Oct 2024
- 14:15:26 -0700 (PDT)
+        bh=AS2Tt07mNVpSQvOxW3B3xdNnuSdtzeSrYZ225ecdgxI=;
+        b=GLtzfYlpP1SBlxkKENzN9qaYR+eamOlw6x0ZKKkWiRAkfkHViim84Xj8EmfC+wAorr
+         hW9K9MYzC9ScJVwq0RVNZZhnKTXAsGZwGECl3GfM5LhxC6UKr28bRjwEaluC31yOvb0k
+         TZ9gRshePjKqzs297h9U3A58nSOnSs3YEhnuqE9QAi2YKvAYCR9SbQAbzhzGOhcnozLK
+         mDyJusJ0eCblxmg2pwL7wBFLNjBAQfBd4BS/jRF8F9ryuUNJqCYaDTH9N9fYuHt7i7ZV
+         04XD9QbrfZ1oq7YZUYicYJUj/aOTrs0MKll4gc/pRvByGlZkO79ZGeZEZe0jU7QUhbWF
+         hGRw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/mKtBEsQAnVJ91+4RBx31E9fVw3YMMa+x1tVT7do+dQmWj9NHdfsrj7GiuB/uYn6UQgFE@lists.linux.dev
+X-Gm-Message-State: AOJu0YzfIwFPs9rJjZQDuc15MoO8VAPwmwGNfmBGAGx8KaOcOlQDmPoU
+	xa7Y9kwpavSsRXJ2eNiD1JsLQDMd4yD8QtgA10xm3FTSvc+PNvIVyg1rJgnOemoZoT9rAldEJKZ
+	a5HEpazMwiBuwh8zunMX6aoFLXSiWwTW7YZ+m
+X-Google-Smtp-Source: AGHT+IHirBWZiJ7avVL8zp5O8TKnny8LN6+S0bUCwVjwrwc/DYRkrAgQjSc8Xmqms5tSFJGQ8crQgjb9ejhVAZBSMZc=
+X-Received: by 2002:a67:fbcd:0:b0:4a3:ac2b:bffb with SMTP id
+ ada2fe7eead31-4a4058e1360mr4377858137.22.1728077038261; Fri, 04 Oct 2024
+ 14:23:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241004182734.1761555-1-mathieu.desnoyers@efficios.com> <20241004182734.1761555-3-mathieu.desnoyers@efficios.com>
-In-Reply-To: <20241004182734.1761555-3-mathieu.desnoyers@efficios.com>
-From: Joel Fernandes <joel@joelfernandes.org>
-Date: Fri, 4 Oct 2024 17:15:15 -0400
-Message-ID: <CAEXW_YQL3wY+BSMw3SOxDWbczrVfe9ALz8wqRjb9iPOBJq0xHQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/4] Documentation: RCU: Refer to ptr_eq()
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Will Deacon <will@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	John Stultz <jstultz@google.com>, Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Josh Triplett <josh@joshtriplett.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
-	Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com, Mateusz Guzik <mjguzik@gmail.com>, 
-	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, rcu@vger.kernel.org, linux-mm@kvack.org, 
-	lkmm@lists.linux.dev, Gary Guo <gary@garyguo.net>, Nikita Popov <github@npopov.com>, 
-	llvm@lists.linux.dev
+References: <20241002233409.2857999-1-xur@google.com> <20241002233409.2857999-2-xur@google.com>
+ <20241003154143.GW5594@noisy.programming.kicks-ass.net> <202410041106.6C1BC9BDA@keescook>
+ <20241004182847.GU18071@noisy.programming.kicks-ass.net>
+In-Reply-To: <20241004182847.GU18071@noisy.programming.kicks-ass.net>
+From: Justin Stitt <justinstitt@google.com>
+Date: Fri, 4 Oct 2024 14:23:45 -0700
+Message-ID: <CAFhGd8rPLoufNx4BMV993c+S_6psLGU6Ow49Frc9s88cStcuCQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
+	Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
+	Jann Horn <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
+	workflows@vger.kernel.org, x86@kernel.org, "Xin Li (Intel)" <xin@zytor.com>, 
+	Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 4, 2024 at 2:29=E2=80=AFPM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
+On Fri, Oct 4, 2024 at 11:29=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> Refer to ptr_eq() in the rcu_dereference() documentation.
+> On Fri, Oct 04, 2024 at 11:10:04AM -0700, Kees Cook wrote:
 >
-> ptr_eq() is a mechanism that preserves address dependencies when
-> comparing pointers, and should be favored when comparing a pointer
-> obtained from rcu_dereference() against another pointer.
+> > +Configure the kernel with::(make)
+> > +
+> > +     CONFIG_AUTOFDO_CLANG=3Dy
+> >
+> > Then we could avoid the extra 2 lines but still gain the rendered langu=
+age
+> > highlights?
 >
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> Acked-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: John Stultz <jstultz@google.com>
-> Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
+> The whole double-colon thing is already a pain to read; you're making it
+> worse again.
 
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Lots of people read docs on the web and having code blocks with
+monospaced fonts (+syntax highlighting) makes them easier to read
+there.
 
-thanks,
+Configure the kernel with:
 
- - Joel
+     CONFIG_AUTOFDO_CLANG=3Dy
+
+--versus--
+
+Configure the kernel with::
+
+     CONFIG_AUTOFDO_CLANG=3Dy
+
+This renders better for html through Sphinx and really can't be that
+bad to read in vim, can it?
+
+two cents and such,
+Justin
