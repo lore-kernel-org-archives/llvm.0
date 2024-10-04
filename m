@@ -1,62 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2688D2101B0;
-	Fri,  4 Oct 2024 13:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9179E1741DC;
+	Fri,  4 Oct 2024 15:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728048718; cv=none; b=kLrFTaTxw1kVJSR6v7vAfBWay5N5MNkYnx7OAhLxsvshj6wcXtV64kqH+zL4a3jf3tmr90ZTSBwd4YOPuEhk0moy5SLP2obi/WK7OHCbW0HqSMoboQ4anWaXMQoQu++m9vNWAI1A0NhsNViqOOeBXxrFE4I4Izqc/h4XmjZELx0=
+	t=1728054868; cv=none; b=uG99n7NqQ+Gxq79uT2lSHCfJcs9AbHDy9NFRpcc1xjRY2Bot36/ZmqbDKyJFNByBjy3rsO0af/dzQJH9bPDUiAZ9hPKZclebqIV4xZyJgaROk3EqxZ8+NYuAMvAtdzz7zCHKPLTrB6w90UzHQpB0XM6K/gQMCj2eeerkRs4pBvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728048718; c=relaxed/simple;
-	bh=LipIKJHXywUFaT6Rr6fuW2hVVH4tKy/aeS0F5KcrTXg=;
+	s=arc-20240116; t=1728054868; c=relaxed/simple;
+	bh=BBd2cv0aSYI8t2ZKTirS9fLNsi+alLAsqNd1tjSZuF4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ogh2V3adfQu3C7CDNb/9BCXZqPadB+QW91Fwewyp9DEqXpqSkgDqv8sBZ62fLpSQPuA0wRCE6XJhmuJYpbog4CpFv/d5WzSBqidwHtZF8eNuEQGjEj1aX/rJZwLqvVVle9tzivwp4FctE2GZ33rKaPoOFqBrA6dK8LXzXY1sPcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cv+AueeE; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=cKd+/xrBOKMb/OvfNO7f3dzD502XkSU+olRdwW+lY7emCAgCj387VReg6zWyYc4tY4aqYer0zWMJce8BW3SCoG9Qmxc+FCgJQNElvYzB96AtHjBd5R5dTTq8lM8qFqHCK9arLfI7X6NnoJMnaojYt6mLI/1G1mGEIYHc8zjuO1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ij4FxpK8; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cv+AueeE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ij4FxpK8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728048716; x=1759584716;
+  t=1728054866; x=1759590866;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LipIKJHXywUFaT6Rr6fuW2hVVH4tKy/aeS0F5KcrTXg=;
-  b=Cv+AueeEuKnFZh5G8sJybzceq+BljgOtbtPX66dQRIbwnxEo1ezZBDah
-   WXA/Iz+FUsZMh8FtwoC+MAq/+9nmGC+bCKvP+zo9DTmjVl9ta+dGYqcbz
-   G4KC9tGxYK1vdDCH4ExDM/fvoYureCs4Hq5hCbAxZcDF/+t/PSFg5cGor
-   TkY0c8RteZ8ntsWbdOea9e36m9GEHJZfX+j9QObQ59W1s/iPCrYwCIWcJ
-   EGafFnvrK4SR6wqQgiwTILA/nORejkDSmDZ9tzMQu+dkZsfSxAVn6+UhF
-   sjnfrUiRaRD/NIDKieP2hL5Xj+lOdd1o12X2kQcgRw87ofjvb/CTuNqGh
-   g==;
-X-CSE-ConnectionGUID: 9IUIXp0hS8q4vJTnKBKzkA==
-X-CSE-MsgGUID: dPqYiX90T+Wse3/KD+Q6GA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11214"; a="27150469"
+  bh=BBd2cv0aSYI8t2ZKTirS9fLNsi+alLAsqNd1tjSZuF4=;
+  b=ij4FxpK8H6wzji7rGzQnMeUpjNvNBDyB5bE+qV7wz48YjuDIJgotNU2n
+   dTzKy5hxf6eatOzggqoGSyTmcsvjVC+YMbIWIOGrFoKYcBy8zaoVBQPQ1
+   lmvESk387Y7O3LJXUCWC+LHr+yBwp4m4BB+qjEhjLmNQD6E2dl8JfJkwS
+   WMmYCBdJsI+2qYgeT5Y5AXOBab120g8v6+Y5J+GIKvOoaIARq5mjITJac
+   1i1rWS/jKM0TJdoSC46Emp9VkLsDEV2ewh4AXISHagqFDG90eLzyGSVcZ
+   l44h1AgsG8pJn3vf0unliWcrKD6gYk/Mt2avO08j21RzdlMWAulL0t6U9
+   w==;
+X-CSE-ConnectionGUID: 08HVlBAmTZGLh+EEe4kEVg==
+X-CSE-MsgGUID: W0DxrfLvR7eNANvU56iGRw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27371411"
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="27150469"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 06:30:21 -0700
-X-CSE-ConnectionGUID: IcluhS3fSAu9RiPnoDcCzg==
-X-CSE-MsgGUID: Ij+kEMolRPubbR9Jtmn+6w==
+   d="scan'208";a="27371411"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 08:14:26 -0700
+X-CSE-ConnectionGUID: hxCBzj0TQP2HhxetTbj6og==
+X-CSE-MsgGUID: dZeT7LeyQjG7WqGPPsjAFA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="74697089"
+   d="scan'208";a="79305543"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 04 Oct 2024 06:30:20 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 04 Oct 2024 08:14:24 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swiNt-0001fo-1R;
-	Fri, 04 Oct 2024 13:30:17 +0000
-Date: Fri, 4 Oct 2024 21:30:05 +0800
+	id 1swk0b-0001oW-1u;
+	Fri, 04 Oct 2024 15:14:21 +0000
+Date: Fri, 4 Oct 2024 23:13:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	intel-xe@lists.freedesktop.org
+To: Andrej Shadura <andrew.shadura@collabora.co.uk>,
+	linux-bluetooth@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Subject: Re: [PATCH v3 10/12] drm/xe: Make xe_ggtt_pt_ops private
-Message-ID: <202410042102.EdHRO7JI-lkp@intel.com>
-References: <20241003154421.33805-11-maarten.lankhorst@linux.intel.com>
+	Nathan Chancellor <nathan@kernel.org>,
+	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
+	George Burgess <gbiv@chromium.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] Bluetooth: Fix type of len in
+ rfcomm_sock_{bind,getsockopt_old}()
+Message-ID: <202410042221.Phncg973-lkp@intel.com>
+References: <20241002141217.663070-1-andrew.shadura@collabora.co.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,49 +67,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241003154421.33805-11-maarten.lankhorst@linux.intel.com>
+In-Reply-To: <20241002141217.663070-1-andrew.shadura@collabora.co.uk>
 
-Hi Maarten,
+Hi Andrej,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on drm-xe/drm-xe-next]
-[also build test WARNING on linus/master v6.12-rc1]
-[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip next-20241004]
+[auto build test ERROR on bluetooth-next/master]
+[also build test ERROR on bluetooth/master linus/master v6.12-rc1 next-20241004]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maarten-Lankhorst/drm-xe-display-Handle-stolen-bar-readout-in-the-same-way-as-lmem/20241004-000534
-base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-patch link:    https://lore.kernel.org/r/20241003154421.33805-11-maarten.lankhorst%40linux.intel.com
-patch subject: [PATCH v3 10/12] drm/xe: Make xe_ggtt_pt_ops private
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241004/202410042102.EdHRO7JI-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410042102.EdHRO7JI-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrej-Shadura/Bluetooth-Fix-type-of-len-in-rfcomm_sock_-bind-getsockopt_old/20241002-221656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20241002141217.663070-1-andrew.shadura%40collabora.co.uk
+patch subject: [PATCH] Bluetooth: Fix type of len in rfcomm_sock_{bind,getsockopt_old}()
+config: arm-randconfig-001-20241004 (https://download.01.org/0day-ci/archive/20241004/202410042221.Phncg973-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410042221.Phncg973-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410042102.EdHRO7JI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410042221.Phncg973-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/xe/xe_ggtt.c:906: warning: expecting prototype for xe_ggtt_write_pte(). Prototype was for xe_ggtt_get_encode_pte_bo_fn() instead
+   In file included from net/bluetooth/rfcomm/sock.c:32:
+   In file included from include/net/bluetooth/bluetooth.h:30:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> net/bluetooth/rfcomm/sock.c:339:8: error: call to '__compiletime_assert_549' declared with 'error' attribute: min(sizeof(sa), addr_len) signedness error
+     339 |         len = min(sizeof(sa), addr_len);
+         |               ^
+   include/linux/minmax.h:129:19: note: expanded from macro 'min'
+     129 | #define min(x, y)       __careful_cmp(min, x, y)
+         |                         ^
+   include/linux/minmax.h:105:2: note: expanded from macro '__careful_cmp'
+     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |         ^
+   include/linux/minmax.h:100:2: note: expanded from macro '__careful_cmp_once'
+     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
+         |         ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+     491 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:174:1: note: expanded from here
+     174 | __compiletime_assert_549
+         | ^
+   1 warning and 1 error generated.
 
 
-vim +906 drivers/gpu/drm/xe/xe_ggtt.c
+vim +339 net/bluetooth/rfcomm/sock.c
 
-   897	
-   898	/**
-   899	 * xe_ggtt_write_pte - Write a PTE to the GGTT
-   900	 * @ggtt: &xe_ggtt
-   901	 * @offset: the offset for which the mapping should be written.
-   902	 *
-   903	 * Used by display for DPT and GGTT paths to enccode BO's.
-   904	 */
-   905	xe_ggtt_pte_encode_bo_fn xe_ggtt_get_encode_pte_bo_fn(struct xe_ggtt *ggtt)
- > 906	{
+   326	
+   327	static int rfcomm_sock_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+   328	{
+   329		struct sockaddr_rc sa;
+   330		struct sock *sk = sock->sk;
+   331		int err = 0;
+   332		size_t len;
+   333	
+   334		if (!addr || addr_len < offsetofend(struct sockaddr, sa_family) ||
+   335		    addr->sa_family != AF_BLUETOOTH)
+   336			return -EINVAL;
+   337	
+   338		memset(&sa, 0, sizeof(sa));
+ > 339		len = min(sizeof(sa), addr_len);
+   340		memcpy(&sa, addr, len);
+   341	
+   342		BT_DBG("sk %p %pMR", sk, &sa.rc_bdaddr);
+   343	
+   344		lock_sock(sk);
+   345	
+   346		if (sk->sk_state != BT_OPEN) {
+   347			err = -EBADFD;
+   348			goto done;
+   349		}
+   350	
+   351		if (sk->sk_type != SOCK_STREAM) {
+   352			err = -EINVAL;
+   353			goto done;
+   354		}
+   355	
+   356		write_lock(&rfcomm_sk_list.lock);
+   357	
+   358		if (sa.rc_channel &&
+   359		    __rfcomm_get_listen_sock_by_addr(sa.rc_channel, &sa.rc_bdaddr)) {
+   360			err = -EADDRINUSE;
+   361		} else {
+   362			/* Save source address */
+   363			bacpy(&rfcomm_pi(sk)->src, &sa.rc_bdaddr);
+   364			rfcomm_pi(sk)->channel = sa.rc_channel;
+   365			sk->sk_state = BT_BOUND;
+   366		}
+   367	
+   368		write_unlock(&rfcomm_sk_list.lock);
+   369	
+   370	done:
+   371		release_sock(sk);
+   372		return err;
+   373	}
+   374	
 
 -- 
 0-DAY CI Kernel Test Service
