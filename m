@@ -1,70 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BCB153820;
-	Fri,  4 Oct 2024 23:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44B614D2B3;
+	Fri,  4 Oct 2024 23:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728085191; cv=none; b=GnX+XNgJ4qtr3B700I4vE3rV+XdzHJkXiVmnu6n1EjVNf+f+F4XiS0gMajmvsrO1CKorJrTt7cNCU4yMKPU6bBoyFPIKz9kaEH4H481Fe/OL98i+KzMGxJxzw15tHSSLYtQuS4lq3RJrQOfYuVi5OcGZKW/SwD4F7dY1GSb02pE=
+	t=1728086390; cv=none; b=QsZ3qjGX/Ok4xHtPV5afd5FPjo8+fXaNpenGLZeYps1hyrDYp1CDgEnyPsH48ehrYsyAOWue/osV+bcw/wN/6ExL4WCKySJQ0NC5mdQ4kcXKcVkfTNOGwsW8+8rG+KOan5WxoGtbdIu2hMPDorN1iymCRkoE5p/hQlWDOgnjs2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728085191; c=relaxed/simple;
-	bh=qn/t4LoP2AiEczzxO0xIU1CZNre1jHKaCVdh5Ta1IwM=;
+	s=arc-20240116; t=1728086390; c=relaxed/simple;
+	bh=pkFs7lkzwnAV7kMzsCAOU0nn92TjwRHRGRSsl5BbEFs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bq7h+9jNrZP0RBOXfS+mzkQoJP9bef3lCuIKJXtlxb2JLwm5ZYv40CJuUmXSCdmjmCUD04x+O9BHV5YyIQVsLiXIUbI+yM+aM+8BanaRRZ0Z1+LlS17kTCGJoOLULAQ2tHsd1jFeQfOez88DGeprXzEWPURJE3pjofIE1Cc8c8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S02Ad3Hy; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=gLMXONoPmkC19fyisOMAQPV0GOSLwQLGGr79rx4foTEH6Mrnz+k04L88m3upNU9NRNkTYugkXmS66Fl5Jfu3twAd/daAYajpvYoqy/l8fx2guINTFIpSGro2NiCFIXREqoG+2QWEbGohxgtvygRMkbcUydkhSqRrw1nQbSU33Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RZ1eSbao; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S02Ad3Hy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RZ1eSbao"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728085189; x=1759621189;
+  t=1728086389; x=1759622389;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qn/t4LoP2AiEczzxO0xIU1CZNre1jHKaCVdh5Ta1IwM=;
-  b=S02Ad3HybkEbGNIHypUY0MsfPDxsg5yPWHwlU+jNNq/uQCpXVNr3mELM
-   0Z0rEv/qsrWJoRIPk03g9F/qJDt3V05aAVW6UQUB86w/B/awribe6qf2n
-   n2LXlqmoLQLc7QjdQrBd6ozUVxFe/Ap7kN2IoSyBgsaNzIAZAImBm/LGo
-   2KkRxgHXi0N2YDY3kwJrI6nH8QOk6RNM/IrZyUiBtTtq2yeHMUPY58AOS
-   nvPw/Dm+gFqJbtnu6kQQqf3gMw6VL57k8lsvjuTodPk2yz3GNqZ8TcMGy
-   iwtX/NwLuWZOOj0y6zs+2NxZBm/K+GYeUF1SbaK463O0bGHUnG1MWakrb
-   w==;
-X-CSE-ConnectionGUID: h9TTjK7PRtKVNblAujTbOg==
-X-CSE-MsgGUID: d8uYHEAoQduL0MYWwh+4hA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="30204507"
+  bh=pkFs7lkzwnAV7kMzsCAOU0nn92TjwRHRGRSsl5BbEFs=;
+  b=RZ1eSbao5OoMKC5AnfmztMyOJgtWpl5yFo/1CAvLF33dXmcZPzG54SF0
+   Vy18BZ2WaeUPPtfcCyTaFrCj22BijCQ7BaT9wX7z792SsvFyMko8frBIx
+   AdGdjO0+hupEBlLW4SF9h+JJM9Cq8JOkiuvnknJFQPJIp/vU87s4lLNl7
+   5EeCB51v2fwbWvI9X4cWe44hMKedp9vftaRTfCqKfhsoBz8BOXYijhUJS
+   tBdIGCaWT9YCXRoasY+nN54VbizhRHWTe2KntiDHnAZbAlBkFoqcI9e5f
+   +0T33rLiVioFUSvYtTNPbc5oSiEBLyY3VT8AD87Hd5+Y0owXgBPfXcfHu
+   g==;
+X-CSE-ConnectionGUID: eCpcjtpKTX24uTPJrfeIBQ==
+X-CSE-MsgGUID: Lpa7XkWwQG+FDoKNNQEl2A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27456446"
 X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="30204507"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 16:39:49 -0700
-X-CSE-ConnectionGUID: 9TBlvmm2T2aq9/ECvRIJIw==
-X-CSE-MsgGUID: NqsC5WaFT6ehU/1rYsetKw==
+   d="scan'208";a="27456446"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 16:59:49 -0700
+X-CSE-ConnectionGUID: yyxXa65FQ2iEoW0f05Pnjw==
+X-CSE-MsgGUID: YO9UuW43Q5KtpCCGAybLWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="74977977"
+   d="scan'208";a="75290559"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 04 Oct 2024 16:39:45 -0700
+  by orviesa007.jf.intel.com with ESMTP; 04 Oct 2024 16:59:46 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swrtf-0002Kc-12;
-	Fri, 04 Oct 2024 23:39:43 +0000
-Date: Sat, 5 Oct 2024 07:38:53 +0800
+	id 1swsD2-0002Ly-0B;
+	Fri, 04 Oct 2024 23:59:44 +0000
+Date: Sat, 5 Oct 2024 07:59:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matteo Martelli <matteomartelli3@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Alisa-Dariana Roman <alisa.roman@analog.com>,
-	Christian Eggers <ceggers@arri.de>, Peter Rosin <peda@axentia.se>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Sebastian Reichel <sre@kernel.org>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-	Matteo Martelli <matteomartelli3@gmail.com>
-Subject: Re: [PATCH 7/7] power: supply: ingenic-battery: free scale buffer
- after use
-Message-ID: <202410050737.0PgqTuD1-lkp@intel.com>
-References: <20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0@gmail.com>
+	intel-gfx@lists.freedesktop.org,
+	Jani Nikula <jani.nikula@intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 1/8] drm/client: Constify modes
+Message-ID: <202410050750.I0iVowt8-lkp@intel.com>
+References: <20241003113304.11700-2-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,102 +66,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0@gmail.com>
+In-Reply-To: <20241003113304.11700-2-ville.syrjala@linux.intel.com>
 
-Hi Matteo,
+Hi Ville,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on fec496684388685647652ab4213454fbabdab099]
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on next-20241004]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm/drm-next drm-exynos/exynos-drm-next linus/master v6.12-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matteo-Martelli/iio-core-add-read_avail_release_resource-callback-to-fix-race/20241004-013654
-base:   fec496684388685647652ab4213454fbabdab099
-patch link:    https://lore.kernel.org/r/20241003-iio-read-avail-release-v1-7-c70cc7d9c2e0%40gmail.com
-patch subject: [PATCH 7/7] power: supply: ingenic-battery: free scale buffer after use
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410050737.0PgqTuD1-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050737.0PgqTuD1-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-client-Constify-modes/20241004-061843
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20241003113304.11700-2-ville.syrjala%40linux.intel.com
+patch subject: [PATCH 1/8] drm/client: Constify modes
+config: i386-buildonly-randconfig-002-20241005 (https://download.01.org/0day-ci/archive/20241005/202410050750.I0iVowt8-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050750.I0iVowt8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410050737.0PgqTuD1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410050750.I0iVowt8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/power/supply/ingenic-battery.c:120:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     120 |         kfree(scale_raw);
-         |         ^
+   In file included from drivers/gpu/drm/drm_client_modeset.c:1266:
+>> drivers/gpu/drm/tests/drm_client_modeset_test.c:108:7: error: assigning to 'struct drm_display_mode *' from 'const struct drm_display_mode *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     108 |         mode = drm_connector_pick_cmdline_mode(connector);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    1 error generated.
 
 
-vim +/kfree +120 drivers/power/supply/ingenic-battery.c
+vim +108 drivers/gpu/drm/tests/drm_client_modeset_test.c
 
-    59	
-    60	/* Set the most appropriate IIO channel voltage reference scale
-    61	 * based on the battery's max voltage.
-    62	 */
-    63	static int ingenic_battery_set_scale(struct ingenic_battery *bat)
-    64	{
-    65		const int *scale_raw;
-    66		int scale_len, scale_type, best_idx = -1, best_mV, max_raw, i, ret;
-    67		u64 max_mV;
-    68	
-    69		ret = iio_read_max_channel_raw(bat->channel, &max_raw);
-    70		if (ret) {
-    71			dev_err(bat->dev, "Unable to read max raw channel value\n");
-    72			return ret;
-    73		}
-    74	
-    75		ret = iio_read_avail_channel_attribute(bat->channel, &scale_raw,
-    76						       &scale_type, &scale_len,
-    77						       IIO_CHAN_INFO_SCALE);
-    78		if (ret < 0) {
-    79			dev_err(bat->dev, "Unable to read channel avail scale\n");
-    80			return ret;
-    81		}
-    82		if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2) {
-    83			ret = -EINVAL;
-    84			goto out;
-    85		}
-    86	
-    87		max_mV = bat->info->voltage_max_design_uv / 1000;
-    88	
-    89		for (i = 0; i < scale_len; i += 2) {
-    90			u64 scale_mV = (max_raw * scale_raw[i]) >> scale_raw[i + 1];
-    91	
-    92			if (scale_mV < max_mV)
-    93				continue;
-    94	
-    95			if (best_idx >= 0 && scale_mV > best_mV)
-    96				continue;
-    97	
-    98			best_mV = scale_mV;
-    99			best_idx = i;
-   100		}
-   101	
-   102		if (best_idx < 0) {
-   103			dev_err(bat->dev, "Unable to find matching voltage scale\n");
-   104			ret = -EINVAL;
-   105			goto out;
-   106		}
-   107	
-   108		/* Only set scale if there is more than one (fractional) entry */
-   109		if (scale_len > 2) {
-   110			ret = iio_write_channel_attribute(bat->channel,
-   111							  scale_raw[best_idx],
-   112							  scale_raw[best_idx + 1],
-   113							  IIO_CHAN_INFO_SCALE);
-   114			if (ret)
-   115				goto out;
-   116		}
-   117	
-   118		ret = 0;
-   119	out:
- > 120		kfree(scale_raw);
-   121		return ret;
-   122	}
-   123	
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   84  
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   85  static void drm_test_pick_cmdline_res_1920_1080_60(struct kunit *test)
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   86  {
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   87  	struct drm_client_modeset_test_priv *priv = test->priv;
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   88  	struct drm_device *drm = priv->drm;
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   89  	struct drm_connector *connector = &priv->connector;
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   90  	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   91  	struct drm_display_mode *expected_mode, *mode;
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   92  	const char *cmdline = "1920x1080@60";
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   93  	int ret;
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   94  
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   95  	expected_mode = drm_mode_find_dmt(priv->drm, 1920, 1080, 60, false);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   96  	KUNIT_ASSERT_NOT_NULL(test, expected_mode);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   97  
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   98  	KUNIT_ASSERT_TRUE(test,
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14   99  			  drm_mode_parse_command_line_for_connector(cmdline,
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  100  								    connector,
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  101  								    cmdline_mode));
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  102  
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  103  	mutex_lock(&drm->mode_config.mutex);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  104  	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  105  	mutex_unlock(&drm->mode_config.mutex);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  106  	KUNIT_ASSERT_GT(test, ret, 0);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  107  
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14 @108  	mode = drm_connector_pick_cmdline_mode(connector);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  109  	KUNIT_ASSERT_NOT_NULL(test, mode);
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  110  
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  111  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected_mode, mode));
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  112  }
+8fc0380f6ba7e94 Maxime Ripard 2022-11-14  113  
 
 -- 
 0-DAY CI Kernel Test Service
