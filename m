@@ -1,64 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9179E1741DC;
-	Fri,  4 Oct 2024 15:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74A91C3038;
+	Fri,  4 Oct 2024 15:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728054868; cv=none; b=uG99n7NqQ+Gxq79uT2lSHCfJcs9AbHDy9NFRpcc1xjRY2Bot36/ZmqbDKyJFNByBjy3rsO0af/dzQJH9bPDUiAZ9hPKZclebqIV4xZyJgaROk3EqxZ8+NYuAMvAtdzz7zCHKPLTrB6w90UzHQpB0XM6K/gQMCj2eeerkRs4pBvE=
+	t=1728056728; cv=none; b=BlCDWHUE05XDrEFZh2bmvcqr1C5c5guSIbh3YSxkCmbaqjutLl7xNSbzOHcLlgfmqvkE5YMnZtOvdJsblbPOX4TLaMDdgglvEiulvTG2ApARAX/KyIgkPrHf4ukBRN4IcCamWxMrhyboPPxdxqS2DLX0cyiP5h78Z0iAXPdqoUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728054868; c=relaxed/simple;
-	bh=BBd2cv0aSYI8t2ZKTirS9fLNsi+alLAsqNd1tjSZuF4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cKd+/xrBOKMb/OvfNO7f3dzD502XkSU+olRdwW+lY7emCAgCj387VReg6zWyYc4tY4aqYer0zWMJce8BW3SCoG9Qmxc+FCgJQNElvYzB96AtHjBd5R5dTTq8lM8qFqHCK9arLfI7X6NnoJMnaojYt6mLI/1G1mGEIYHc8zjuO1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ij4FxpK8; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1728056728; c=relaxed/simple;
+	bh=e7oCZOQEpb4KoIn9xoa0YLv2beWw5KGIE5hNlFZoaZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ygt+zAIT0DKHaWBqT/mFV45Sh+DsqIpf9/SHOOB+ED7n6GpuJYWN3h1qlw/KzAwioKqzu9ds5cjyaPK5WKwHe+J3/bgTsaozuDr0TQDflCUFZhL7vWdUWLTgpiIk/STVbP09WvRUNqjLYrRA5ddqse8Ad52IA3LVCBi6kGZYCSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HHn9CjMy; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ij4FxpK8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HHn9CjMy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728054866; x=1759590866;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BBd2cv0aSYI8t2ZKTirS9fLNsi+alLAsqNd1tjSZuF4=;
-  b=ij4FxpK8H6wzji7rGzQnMeUpjNvNBDyB5bE+qV7wz48YjuDIJgotNU2n
-   dTzKy5hxf6eatOzggqoGSyTmcsvjVC+YMbIWIOGrFoKYcBy8zaoVBQPQ1
-   lmvESk387Y7O3LJXUCWC+LHr+yBwp4m4BB+qjEhjLmNQD6E2dl8JfJkwS
-   WMmYCBdJsI+2qYgeT5Y5AXOBab120g8v6+Y5J+GIKvOoaIARq5mjITJac
-   1i1rWS/jKM0TJdoSC46Emp9VkLsDEV2ewh4AXISHagqFDG90eLzyGSVcZ
-   l44h1AgsG8pJn3vf0unliWcrKD6gYk/Mt2avO08j21RzdlMWAulL0t6U9
-   w==;
-X-CSE-ConnectionGUID: 08HVlBAmTZGLh+EEe4kEVg==
-X-CSE-MsgGUID: W0DxrfLvR7eNANvU56iGRw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27371411"
+  t=1728056727; x=1759592727;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e7oCZOQEpb4KoIn9xoa0YLv2beWw5KGIE5hNlFZoaZE=;
+  b=HHn9CjMyfGK/WH2yY6E4o+Ft1LdSYqDMvkpp19iLWf11laalFHjbm8XG
+   T0gLA0gLgzoGuCUyA33byKuLqO/zF8qJupdYV5q0JemXdvY7YqlgmJDpp
+   DrgykO1yIEquS6BXAgcQ9vZiDL6bWTCIP8r/iOSQx/X0zvD5Q465TXXkA
+   8vsKCLRgjkVnfQgsI+vjWRRz/EonBPcyel25hshWl1ToUdRaKRt0EC/ID
+   OkFak2Jzv7vWmBz3d/jjiCBRSsN2C5cvz5ROjBtqrnwyqijcCxFFJI188
+   FCvpR9U31Rnk3/i4mdH2DNIvcZ/329gkWqFCyObtDrd71CTfWz39MREh3
+   Q==;
+X-CSE-ConnectionGUID: bMExlRaTSuqnWKjlEYgQQw==
+X-CSE-MsgGUID: MkN3+O/YT1yhTlWyb08x4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27165125"
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="27371411"
+   d="scan'208";a="27165125"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 08:14:26 -0700
-X-CSE-ConnectionGUID: hxCBzj0TQP2HhxetTbj6og==
-X-CSE-MsgGUID: dZeT7LeyQjG7WqGPPsjAFA==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 08:45:26 -0700
+X-CSE-ConnectionGUID: sw+nxSv+Rs+nBYQXdeVUMg==
+X-CSE-MsgGUID: s+/cDWx0RPaDEIeWke7AYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="79305543"
+   d="scan'208";a="79312415"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 04 Oct 2024 08:14:24 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 04 Oct 2024 08:45:25 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swk0b-0001oW-1u;
-	Fri, 04 Oct 2024 15:14:21 +0000
-Date: Fri, 4 Oct 2024 23:13:28 +0800
+	id 1swkUc-0001qq-33;
+	Fri, 04 Oct 2024 15:45:22 +0000
+Date: Fri, 4 Oct 2024 23:44:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrej Shadura <andrew.shadura@collabora.co.uk>,
-	linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>, kernel@collabora.com,
-	George Burgess <gbiv@chromium.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] Bluetooth: Fix type of len in
- rfcomm_sock_{bind,getsockopt_old}()
-Message-ID: <202410042221.Phncg973-lkp@intel.com>
-References: <20241002141217.663070-1-andrew.shadura@collabora.co.uk>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-pie-v2 30/31] ld.lld: error: relocation R_X86_64_32S
+ cannot be used against symbol 'ftrace_trace_function'; recompile with -fPIC
+Message-ID: <202410042304.WtASql7r-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,123 +61,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241002141217.663070-1-andrew.shadura@collabora.co.uk>
 
-Hi Andrej,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on bluetooth/master linus/master v6.12-rc1 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrej-Shadura/Bluetooth-Fix-type-of-len-in-rfcomm_sock_-bind-getsockopt_old/20241002-221656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20241002141217.663070-1-andrew.shadura%40collabora.co.uk
-patch subject: [PATCH] Bluetooth: Fix type of len in rfcomm_sock_{bind,getsockopt_old}()
-config: arm-randconfig-001-20241004 (https://download.01.org/0day-ci/archive/20241004/202410042221.Phncg973-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410042221.Phncg973-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-pie-v2
+head:   1295be6d1a5cb6a30132ee8b01c79018794d0c3e
+commit: 61f3a3cf6f5940319514b36400d7c994b163d8c5 [30/31] x86/kernel: Switch to PIE linking for the core kernel
+config: x86_64-buildonly-randconfig-004-20241004 (https://download.01.org/0day-ci/archive/20241004/202410042304.WtASql7r-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241004/202410042304.WtASql7r-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410042221.Phncg973-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410042304.WtASql7r-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/bluetooth/rfcomm/sock.c:32:
-   In file included from include/net/bluetooth/bluetooth.h:30:
-   In file included from include/net/sock.h:46:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> net/bluetooth/rfcomm/sock.c:339:8: error: call to '__compiletime_assert_549' declared with 'error' attribute: min(sizeof(sa), addr_len) signedness error
-     339 |         len = min(sizeof(sa), addr_len);
-         |               ^
-   include/linux/minmax.h:129:19: note: expanded from macro 'min'
-     129 | #define min(x, y)       __careful_cmp(min, x, y)
-         |                         ^
-   include/linux/minmax.h:105:2: note: expanded from macro '__careful_cmp'
-     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ^
-   include/linux/minmax.h:100:2: note: expanded from macro '__careful_cmp_once'
-     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
-         |         ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
-     498 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
-     491 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:174:1: note: expanded from here
-     174 | __compiletime_assert_549
-         | ^
-   1 warning and 1 error generated.
+>> ld.lld: error: relocation R_X86_64_32S cannot be used against symbol 'ftrace_trace_function'; recompile with -fPIC
+   >>> defined in vmlinux.o
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(__fentry__)
+--
+>> ld.lld: error: relocation R_X86_64_32S cannot be used against symbol 'ftrace_stub'; recompile with -fPIC
+   >>> defined in vmlinux.o
+   >>> referenced by usercopy_64.c
+   >>>               vmlinux.o:(__fentry__)
 
-
-vim +339 net/bluetooth/rfcomm/sock.c
-
-   326	
-   327	static int rfcomm_sock_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
-   328	{
-   329		struct sockaddr_rc sa;
-   330		struct sock *sk = sock->sk;
-   331		int err = 0;
-   332		size_t len;
-   333	
-   334		if (!addr || addr_len < offsetofend(struct sockaddr, sa_family) ||
-   335		    addr->sa_family != AF_BLUETOOTH)
-   336			return -EINVAL;
-   337	
-   338		memset(&sa, 0, sizeof(sa));
- > 339		len = min(sizeof(sa), addr_len);
-   340		memcpy(&sa, addr, len);
-   341	
-   342		BT_DBG("sk %p %pMR", sk, &sa.rc_bdaddr);
-   343	
-   344		lock_sock(sk);
-   345	
-   346		if (sk->sk_state != BT_OPEN) {
-   347			err = -EBADFD;
-   348			goto done;
-   349		}
-   350	
-   351		if (sk->sk_type != SOCK_STREAM) {
-   352			err = -EINVAL;
-   353			goto done;
-   354		}
-   355	
-   356		write_lock(&rfcomm_sk_list.lock);
-   357	
-   358		if (sa.rc_channel &&
-   359		    __rfcomm_get_listen_sock_by_addr(sa.rc_channel, &sa.rc_bdaddr)) {
-   360			err = -EADDRINUSE;
-   361		} else {
-   362			/* Save source address */
-   363			bacpy(&rfcomm_pi(sk)->src, &sa.rc_bdaddr);
-   364			rfcomm_pi(sk)->channel = sa.rc_channel;
-   365			sk->sk_state = BT_BOUND;
-   366		}
-   367	
-   368		write_unlock(&rfcomm_sk_list.lock);
-   369	
-   370	done:
-   371		release_sock(sk);
-   372		return err;
-   373	}
-   374	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 -- 
 0-DAY CI Kernel Test Service
