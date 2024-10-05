@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EFE250F8;
-	Sat,  5 Oct 2024 10:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87504085D;
+	Sat,  5 Oct 2024 11:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728123132; cv=none; b=YpfO+LGjQ1l+QqBHU7czZEaWMs3cG67vo6FqzEcjT9WEBDyAXl93pTZImMbudmj+VfK/V2O82sJGRjildHJ+Z1FJHZVCu1kqw6McEXns1xZIvbAms0cI9uOKnrEdK6jPyAUYbleEL9TfD+VViwnfoaTf/lWKUjFOYxTemNgqxSE=
+	t=1728126850; cv=none; b=R0uQV+DnJNnB+zf5XEOvY2dKER6uhS56wKU7C1ya28LLLeTebI8EB/J4cJiGDE7jQZodf37TToMZhewzoP0rbenT8NTSKA+u7bU4/To3XZjQRQm4xu0REu90JlqDdlcZ8wFPZVQjEAma1NCoYntMjH3m7tBciIpdXvZirZG8Re8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728123132; c=relaxed/simple;
-	bh=CI77kQewLme6kjpyKd7vY6uErzaYvE1Weu1JnMCLcaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=raKUxUfgEtdp002bTWTG26SfeYki+0QqxsgBcF4+JzYIBZKiv7yiEQH1r9pGmXETA+TuWM5j8i7xro+2Ohf6OoPIAcpe2/YYf9WAb0qbLlFGuYkS58IZtJX8uuHx6RC2vhNQQxjZOTouy5+j4zmyT5WmrLIPjLyz0ML2doApU1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T3aerORn; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1728126850; c=relaxed/simple;
+	bh=msxtdD3ixfxDDOEqLZMZVUEzdYeNGA/EjpvvsSeLvXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Nz1DhMs4dxVbAvZls0HymV7gyCqgxp/b3+BIUharu+WdIgx7QgGB9vb8a/87+RfLZqQEIoS33NGFZ3ax2XHCP4S8zoJwvHR+rE5AeaXl9Z87IeokPbJb18BAdqQazJYPLOPAbH6EZTqOz0i+gcMnrS0V6GpyUP/5DOggFFmZJGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TiYMXrO+; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T3aerORn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TiYMXrO+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728123130; x=1759659130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CI77kQewLme6kjpyKd7vY6uErzaYvE1Weu1JnMCLcaA=;
-  b=T3aerORnyuXKP7OS+dvha8SVxucS2pyUbEHOtC9RtEEVRAlaUcBna0SG
-   WDlsDROvx7AkZHn5/mEfFg7cSs1ylNRlEFWX7XJdwcLKH49zJUmr32Byp
-   h2kmLhSPk0Y/b0voE0G2fPuXZ7lZ9NvXIaxFGdF7wPwCo4IrJhsb2FWTv
-   grbPjZG0tOHo8Dr8CXLJvi61pWYXq0xHVitok6/IrIubGU8K99bqoHxSO
-   eWA5comQjdXZR3IvWoqSyENXHNjfHTmZIA0ADaL4W+FZG8R+PvLcXmUfk
-   XbFQPfKijr1egGCJ+fkXCfIyS/J7NZOQTtl3E0xgbjkCuUy7uGxE+T0gH
+  t=1728126848; x=1759662848;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=msxtdD3ixfxDDOEqLZMZVUEzdYeNGA/EjpvvsSeLvXw=;
+  b=TiYMXrO+USDO9YpcxYVorwE81UhLBKP9/KS8lPUpJ2deUrcAoZtcwc4K
+   pG+k7wxcPdCaiNy9grdYSnTyR8nLCMVGUg/vplgPgRAatSvgQEbciNJYU
+   5BFUX4tXhbdN9i1g2tiNLqUWoQMoOs/yYpLEDu53uqRGXgHTIUGBNFL3Z
+   qVCQqCUKmwTjcFw1/GerF9n0rSPDe05SkB/cI9j7V9edSZqVwz+7YYTr8
+   kiqcE9P9+UNH99u5T85xMz2KRCLr9X+5Pc8GjnO+crkj7VHRTs5+tFuK0
+   C29N010Mx1WdCR+XgQzo1w8T/tgWWfPFag5r00lA5EUjLObqB6pi7MyBn
    g==;
-X-CSE-ConnectionGUID: vpIr9nIdQKqRkaQ7H9WN6w==
-X-CSE-MsgGUID: MF3BxiEsR02AEEKdPMluKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="26839747"
+X-CSE-ConnectionGUID: vs36EgySS66yaT/+maiHyA==
+X-CSE-MsgGUID: mTZFIatXRsGVh9vRsRDjEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27471186"
 X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
-   d="scan'208";a="26839747"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 03:12:08 -0700
-X-CSE-ConnectionGUID: upDFbmVVSIGjMBpB0M290w==
-X-CSE-MsgGUID: tgCoEkRuRhSz7ooS5kCXfA==
+   d="scan'208";a="27471186"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 04:14:08 -0700
+X-CSE-ConnectionGUID: mZN8iP82SGq+IIrk2JESxw==
+X-CSE-MsgGUID: NQaTG+5yR/iVgf4E6UaRyQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
-   d="scan'208";a="105801602"
+   d="scan'208";a="74963686"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 05 Oct 2024 03:12:05 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 05 Oct 2024 04:14:06 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sx1lb-0002qO-13;
-	Sat, 05 Oct 2024 10:12:03 +0000
-Date: Sat, 5 Oct 2024 18:11:22 +0800
+	id 1sx2jc-0002sw-1i;
+	Sat, 05 Oct 2024 11:14:04 +0000
+Date: Sat, 5 Oct 2024 19:13:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Manuel Quintero F <sakunix@yahoo.com>, duncan.sands@free.fr
+To: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Manuel Quintero F <sakunix@yahoo.com>
-Subject: Re: [PATCH] USB: atm: speedtch: do not use assignment in if condition
-Message-ID: <202410051833.7M7dq3rD-lkp@intel.com>
-References: <20241004030512.2036-1-sakunix@yahoo.com>
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: [jgunthorpe:for-vasant 2/10] include/linux/iommu.h:1103:1: error:
+ declaration of anonymous struct must be a definition
+Message-ID: <202410051943.59KUI762-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,242 +62,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241004030512.2036-1-sakunix@yahoo.com>
 
-Hi Manuel,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.12-rc1 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manuel-Quintero-F/USB-atm-speedtch-do-not-use-assignment-in-if-condition/20241004-113643
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20241004030512.2036-1-sakunix%40yahoo.com
-patch subject: [PATCH] USB: atm: speedtch: do not use assignment in if condition
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410051833.7M7dq3rD-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051833.7M7dq3rD-lkp@intel.com/reproduce)
+tree:   https://github.com/jgunthorpe/linux for-vasant
+head:   8aa0df6ce0d35430baeac4ee5e0ea77f82cf2ead
+commit: 9d7523756e213acff67f3b9264211becfbb5b7bb [2/10] iommu: Introduce iommu_paging_domain_alloc_flags()
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241005/202410051943.59KUI762-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051943.59KUI762-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410051833.7M7dq3rD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410051943.59KUI762-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/usb/atm/speedtch.c:26:
-   In file included from drivers/usb/atm/usbatm.h:14:
-   In file included from include/linux/atmdev.h:9:
-   In file included from include/linux/net.h:24:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/usb/atm/speedtch.c:26:
-   In file included from drivers/usb/atm/usbatm.h:14:
-   In file included from include/linux/atmdev.h:11:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/usb/atm/speedtch.c:26:
-   In file included from drivers/usb/atm/usbatm.h:14:
-   In file included from include/linux/atmdev.h:11:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/usb/atm/speedtch.c:26:
-   In file included from drivers/usb/atm/usbatm.h:14:
-   In file included from include/linux/atmdev.h:11:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/usb/atm/speedtch.c:329:2: error: expected ')'
-     329 |         if (ret < 0) {
-         |         ^
-   drivers/usb/atm/speedtch.c:327:25: note: to match this '('
-     327 |         ret = usb_set_interface(usb_dev, INTERFACE_DATA, instance->params.altsetting
-         |                                ^
-   7 warnings and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+   In file included from kernel/fork.c:104:
+>> include/linux/iommu.h:1103:1: error: declaration of anonymous struct must be a definition
+    1103 | struct inline iommu_domain *iommu_paging_domain_alloc_flags(struct device *dev,
+         | ^
+>> include/linux/iommu.h:1103:1: warning: declaration does not declare anything [-Wmissing-declarations]
+>> include/linux/iommu.h:1478:48: warning: declaration of 'struct msi_desc' will not be visible outside of this function [-Wvisibility]
+    1478 | static inline int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
+         |                                                ^
+   include/linux/iommu.h:1483:53: warning: declaration of 'struct msi_desc' will not be visible outside of this function [-Wvisibility]
+    1483 | static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+         |                                                     ^
+   3 warnings and 1 error generated.
+--
+   In file included from arch/x86/kernel/pci-dma.c:4:
+>> include/linux/iommu.h:1103:1: error: declaration of anonymous struct must be a definition
+    1103 | struct inline iommu_domain *iommu_paging_domain_alloc_flags(struct device *dev,
+         | ^
+>> include/linux/iommu.h:1103:1: warning: declaration does not declare anything [-Wmissing-declarations]
+>> include/linux/iommu.h:1478:48: warning: declaration of 'struct msi_desc' will not be visible outside of this function [-Wvisibility]
+    1478 | static inline int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
+         |                                                ^
+   include/linux/iommu.h:1483:53: warning: declaration of 'struct msi_desc' will not be visible outside of this function [-Wvisibility]
+    1483 | static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+         |                                                     ^
+>> arch/x86/kernel/pci-dma.c:162:4: error: call to undeclared function 'iommu_set_default_passthrough'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     162 |                         iommu_set_default_passthrough(true);
+         |                         ^
+>> arch/x86/kernel/pci-dma.c:164:4: error: call to undeclared function 'iommu_set_default_translated'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     164 |                         iommu_set_default_translated(true);
+         |                         ^
+   3 warnings and 3 errors generated.
+--
+   In file included from drivers/base/platform.c:33:
+>> include/linux/iommu.h:1103:1: error: declaration of anonymous struct must be a definition
+    1103 | struct inline iommu_domain *iommu_paging_domain_alloc_flags(struct device *dev,
+         | ^
+>> include/linux/iommu.h:1103:1: warning: declaration does not declare anything [-Wmissing-declarations]
+>> drivers/base/platform.c:1457:8: error: call to undeclared function 'iommu_device_use_default_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1457 |         ret = iommu_device_use_default_domain(dev);
+         |               ^
+>> drivers/base/platform.c:1469:3: error: call to undeclared function 'iommu_device_unuse_default_domain'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1469 |                 iommu_device_unuse_default_domain(dev);
+         |                 ^
+   1 warning and 3 errors generated.
 
 
-vim +329 drivers/usb/atm/speedtch.c
+vim +1103 include/linux/iommu.h
 
-   229	
-   230	static int speedtch_upload_firmware(struct speedtch_instance_data *instance,
-   231					     const struct firmware *fw1,
-   232					     const struct firmware *fw2)
-   233	{
-   234		unsigned char *buffer;
-   235		struct usbatm_data *usbatm = instance->usbatm;
-   236		struct usb_device *usb_dev = usbatm->usb_dev;
-   237		int actual_length;
-   238		int ret = 0;
-   239		int offset;
-   240	
-   241		usb_dbg(usbatm, "%s entered\n", __func__);
-   242	
-   243		buffer = (unsigned char *)__get_free_page(GFP_KERNEL);
-   244		if (!buffer) {
-   245			ret = -ENOMEM;
-   246			usb_dbg(usbatm, "%s: no memory for buffer!\n", __func__);
-   247			goto out;
-   248		}
-   249	
-   250		if (!usb_ifnum_to_if(usb_dev, 2)) {
-   251			ret = -ENODEV;
-   252			usb_dbg(usbatm, "%s: interface not found!\n", __func__);
-   253			goto out_free;
-   254		}
-   255	
-   256		/* URB 7 */
-   257		if (dl_512_first) {	/* some modems need a read before writing the firmware */
-   258			ret = usb_bulk_msg(usb_dev, usb_rcvbulkpipe(usb_dev, ENDPOINT_FIRMWARE),
-   259					   buffer, 0x200, &actual_length, 2000);
-   260	
-   261			if (ret < 0 && ret != -ETIMEDOUT)
-   262				usb_warn(usbatm, "%s: read BLOCK0 from modem failed (%d)!\n", __func__, ret);
-   263			else
-   264				usb_dbg(usbatm, "%s: BLOCK0 downloaded (%d bytes)\n", __func__, ret);
-   265		}
-   266	
-   267		/* URB 8 : both leds are static green */
-   268		for (offset = 0; offset < fw1->size; offset += PAGE_SIZE) {
-   269			int thislen = min_t(int, PAGE_SIZE, fw1->size - offset);
-   270			memcpy(buffer, fw1->data + offset, thislen);
-   271	
-   272			ret = usb_bulk_msg(usb_dev, usb_sndbulkpipe(usb_dev, ENDPOINT_FIRMWARE),
-   273					   buffer, thislen, &actual_length, DATA_TIMEOUT);
-   274	
-   275			if (ret < 0) {
-   276				usb_err(usbatm, "%s: write BLOCK1 to modem failed (%d)!\n", __func__, ret);
-   277				goto out_free;
-   278			}
-   279			usb_dbg(usbatm, "%s: BLOCK1 uploaded (%zu bytes)\n", __func__, fw1->size);
-   280		}
-   281	
-   282		/* USB led blinking green, ADSL led off */
-   283	
-   284		/* URB 11 */
-   285		ret = usb_bulk_msg(usb_dev, usb_rcvbulkpipe(usb_dev, ENDPOINT_FIRMWARE),
-   286				   buffer, 0x200, &actual_length, DATA_TIMEOUT);
-   287	
-   288		if (ret < 0) {
-   289			usb_err(usbatm, "%s: read BLOCK2 from modem failed (%d)!\n", __func__, ret);
-   290			goto out_free;
-   291		}
-   292		usb_dbg(usbatm, "%s: BLOCK2 downloaded (%d bytes)\n", __func__, actual_length);
-   293	
-   294		/* URBs 12 to 139 - USB led blinking green, ADSL led off */
-   295		for (offset = 0; offset < fw2->size; offset += PAGE_SIZE) {
-   296			int thislen = min_t(int, PAGE_SIZE, fw2->size - offset);
-   297			memcpy(buffer, fw2->data + offset, thislen);
-   298	
-   299			ret = usb_bulk_msg(usb_dev, usb_sndbulkpipe(usb_dev, ENDPOINT_FIRMWARE),
-   300					   buffer, thislen, &actual_length, DATA_TIMEOUT);
-   301	
-   302			if (ret < 0) {
-   303				usb_err(usbatm, "%s: write BLOCK3 to modem failed (%d)!\n", __func__, ret);
-   304				goto out_free;
-   305			}
-   306		}
-   307		usb_dbg(usbatm, "%s: BLOCK3 uploaded (%zu bytes)\n", __func__, fw2->size);
-   308	
-   309		/* USB led static green, ADSL led static red */
-   310	
-   311		/* URB 142 */
-   312		ret = usb_bulk_msg(usb_dev, usb_rcvbulkpipe(usb_dev, ENDPOINT_FIRMWARE),
-   313				   buffer, 0x200, &actual_length, DATA_TIMEOUT);
-   314	
-   315		if (ret < 0) {
-   316			usb_err(usbatm, "%s: read BLOCK4 from modem failed (%d)!\n", __func__, ret);
-   317			goto out_free;
-   318		}
-   319	
-   320		/* success */
-   321		usb_dbg(usbatm, "%s: BLOCK4 downloaded (%d bytes)\n", __func__, actual_length);
-   322	
-   323		/* Delay to allow firmware to start up. We can do this here
-   324		   because we're in our own kernel thread anyway. */
-   325		msleep_interruptible(1000);
-   326	
-   327		ret = usb_set_interface(usb_dev, INTERFACE_DATA, instance->params.altsetting
-   328	
- > 329		if (ret < 0) {
-   330			usb_err(usbatm, "%s: setting interface to %d failed (%d)!\n", __func__, instance->params.altsetting, ret);
-   331			goto out_free;
-   332		}
-   333	
-   334		/* Enable software buffering, if requested */
-   335		if (sw_buffering)
-   336			speedtch_set_swbuff(instance, 1);
-   337	
-   338		/* Magic spell; don't ask us what this does */
-   339		speedtch_test_sequence(instance);
-   340	
-   341		ret = 0;
-   342	
-   343	out_free:
-   344		free_page((unsigned long)buffer);
-   345	out:
-   346		return ret;
-   347	}
-   348	
+  1102	
+> 1103	struct inline iommu_domain *iommu_paging_domain_alloc_flags(struct device *dev,
+  1104								    unsigned int flags)
+  1105	{
+  1106		return ERR_PTR(-ENODEV);
+  1107	}
+  1108	
 
 -- 
 0-DAY CI Kernel Test Service
