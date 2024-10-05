@@ -1,67 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77A81369BC;
-	Sat,  5 Oct 2024 10:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D500136337;
+	Sat,  5 Oct 2024 10:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728122474; cv=none; b=kwtcrLa7GexeCwtIRp+rPmUXhwKpuuNjTGkDOyzrJpMIiOzllfrS1xee13mdzO5FNeElGlj8woTHPevofDmophuPdiYAyBIjlmRbhIVMOhCnitkQ7FeKiING1UfOLgS1pu8n/a9Wr/OsSZPMGfxQWU2k1zN9BNUPvjUcdZ42vgA=
+	t=1728123130; cv=none; b=MLs42Rgkvjkug0v8rCAmo842Kre9zxtxUli2c7kiN19uIn900SBwaErtBO8rdVlu/sJnr7AZNWghMZqBIXCXJKknsVUmjh7i1VMmzNJBSJ2N9Oc79Qrh86G+2J7DRPPLwY2ES6Q21HWp2vvWNv0tL8lX+Cb2zq2DwQ8LJsPtMB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728122474; c=relaxed/simple;
-	bh=AS66JIPtXx2sZQ/smwiZJMTI3t0JMMag9/KeDzC1/38=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S4On9m2w8eScfbU9RPPQS1f24nVvnOl29dsmWcG8b/a5lZ5OzuZv7Ezah9kR1VtP2bWsNa56009XA4gzBGNVqa8lZ6jRgLoVHhKEMe+us0elhNTUGiBGXBAiFhIQ/AwqJdtnXqXwt+iTC8fyeVBfwWz94nx3HTPQdWVOHB+AXn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eTREWfp8; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1728123130; c=relaxed/simple;
+	bh=zu67dF9F6Bjtd+21WJroC+KRLUyJEN+4cOuC2wxCcLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ViAJwPWVJzsgd+qn4/WZY9c5DDR1QutVyJvsVs0Z2V7ZCash7UFFhwCvtdb2LJpPaKrTCIeXsAgn6FOT3/0el67yfhdX+X+3POdEE1lvSgfYKmpcXA337pVGpryTkVBiPLgZUS58uLzhUbm6c7yMz9JZ6zZW3DAqzYenRvNICSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NJ7vn3a+; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eTREWfp8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NJ7vn3a+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728122470; x=1759658470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AS66JIPtXx2sZQ/smwiZJMTI3t0JMMag9/KeDzC1/38=;
-  b=eTREWfp8ffoJalNeTcPi7N+Vtc7naPckGIlksC8ce0GUaOu8VeDsEbS3
-   c7Dt3Zr3TdR+hvEKXzZK7L7FA5NGGLacqc1pvW+dCPrcvO//skOnOktil
-   7pe61WG/4o7qmjMkqptcdR0Y0RTYHZvs+uFqMdMPfMI0UfjwOPVM185dX
-   vbXDVFJ+x8gDzvNzGylNIdlAwP/U8vIvzkWG4jicGcqW4tmFmKjTgclhu
-   ugB5LxPwtYDT9Vmh2ng72J2tt/wpwOtxyk0fk/eC9uvrmTVgFS2akSIPv
-   n4uxqNf4XUAhG1H3q0tTuNpA29lwSOg88fJNjWbb21nWrfz1PK9NYftJT
+  t=1728123128; x=1759659128;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zu67dF9F6Bjtd+21WJroC+KRLUyJEN+4cOuC2wxCcLM=;
+  b=NJ7vn3a+e2Ub/wHdbzzBcKLq8O5+zX2ONcoUqzI7vuZ2ljiDDt3aj+WS
+   OG3pWHcgf3Xkv0+UUleLFZ+KsFBbhqnrWrPhcTwtNFCTfZRMnCwn6JzFU
+   P9QfExcpWnAIQ42X5yccOVt1inEI3GvWwJyGWc3n0GI/g2Lzj8vTecQ7A
+   /7h43bOI5uos7p7xdxEh3M7kzi6OvfAOPAlq9/R7/jV+bS6s+FwFPspNy
+   G10x5B5hAZdrTGuoNHqLm3UzasKL6KCIcJAyn6gXXh7/BPb94euIsnCib
+   e4K+WH+CeSZTPdpZTP+gskipirwrrpCE5GJZoRWaJv743IaBXvPS5kIpQ
    Q==;
-X-CSE-ConnectionGUID: xHK/XA7/SzazRUa2mToBvQ==
-X-CSE-MsgGUID: TKsN/P68SBC8cG+FfXQ/uw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27426131"
+X-CSE-ConnectionGUID: c/xStrNfSzSvICwLpSGnMA==
+X-CSE-MsgGUID: 614Yhih4TOi5EKxMHNGOcw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="26839743"
 X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
-   d="scan'208";a="27426131"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 03:01:10 -0700
-X-CSE-ConnectionGUID: qc9AevAoQe6hbVVwa7kNtw==
-X-CSE-MsgGUID: gqkgz86BSNeOu8NTBwAbZw==
+   d="scan'208";a="26839743"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 03:12:08 -0700
+X-CSE-ConnectionGUID: FL33m3gPRAqVXPPn7fSDkg==
+X-CSE-MsgGUID: vAoy2gjtRKOkYYQy2NGVVg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
-   d="scan'208";a="105707403"
+   d="scan'208";a="105801604"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Oct 2024 03:01:05 -0700
+  by orviesa002.jf.intel.com with ESMTP; 05 Oct 2024 03:12:05 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sx1ax-0002ps-0H;
-	Sat, 05 Oct 2024 10:01:03 +0000
-Date: Sat, 5 Oct 2024 18:00:52 +0800
+	id 1sx1lb-0002qQ-17;
+	Sat, 05 Oct 2024 10:12:03 +0000
+Date: Sat, 5 Oct 2024 18:11:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ryan Chen <ryan_chen@aspeedtech.com>, brendan.higgins@linux.dev,
-	benh@kernel.crashing.org, joel@jms.id.au, andi.shyti@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	andrew@codeconstruct.com.au, p.zabel@pengutronix.de,
-	andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-	openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new register
- mode driver
-Message-ID: <202410051759.bRIS387l-lkp@intel.com>
-References: <20241002070213.1165263-3-ryan_chen@aspeedtech.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: arch/x86/mm/pat/memtype.c:128:39: error: use of undeclared
+ identifier 'PG_arch_2'; did you mean 'PG_arch_1'?
+Message-ID: <202410051828.Pb7a79Gu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,101 +64,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241002070213.1165263-3-ryan_chen@aspeedtech.com>
 
-Hi Ryan,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v6.11]
-[cannot apply to andi-shyti/i2c/i2c-host v6.12-rc1 linus/master next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Chen/dt-bindings-i2c-aspeed-support-for-AST2600-i2cv2/20241002-150410
-base:   v6.11
-patch link:    https://lore.kernel.org/r/20241002070213.1165263-3-ryan_chen%40aspeedtech.com
-patch subject: [PATCH v14 2/3] i2c: aspeed: support AST2600 i2c new register mode driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241005/202410051759.bRIS387l-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   27cc6fdf720183dce1dbd293483ec5a9cb6b595e
+commit: 7a87225ae2c6c317c7b80cf599e5cf0eee699196 x86: remove PG_uncached
+date:   4 weeks ago
+config: x86_64-randconfig-003-20241002 (https://download.01.org/0day-ci/archive/20241005/202410051828.Pb7a79Gu-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051759.bRIS387l-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051828.Pb7a79Gu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410051759.bRIS387l-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410051828.Pb7a79Gu-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-ast2600.c:437:6: error: call to undeclared function 'get_unaligned_le16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     437 |                                         get_unaligned_le16(&msg->buf[i2c_bus->master_xfer_cnt + i]);
+>> arch/x86/mm/pat/memtype.c:128:39: error: use of undeclared identifier 'PG_arch_2'; did you mean 'PG_arch_1'?
+     128 |         unsigned long pg_flags = pg->flags & _PGMT_MASK;
+         |                                              ^
+   arch/x86/mm/pat/memtype.c:123:29: note: expanded from macro '_PGMT_MASK'
+     123 | #define _PGMT_MASK              (1UL << PG_arch_2 | 1UL << PG_arch_1)
          |                                         ^
->> drivers/i2c/busses/i2c-ast2600.c:441:6: error: call to undeclared function 'get_unaligned_le24'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     441 |                                         get_unaligned_le24(&msg->buf[i2c_bus->master_xfer_cnt + i]);
+   include/linux/page-flags.h:106:2: note: 'PG_arch_1' declared here
+     106 |         PG_arch_1,
+         |         ^
+   arch/x86/mm/pat/memtype.c:134:23: error: use of undeclared identifier 'PG_arch_2'; did you mean 'PG_arch_1'?
+     134 |         else if (pg_flags == _PGMT_UC_MINUS)
+         |                              ^
+   arch/x86/mm/pat/memtype.c:121:33: note: expanded from macro '_PGMT_UC_MINUS'
+     121 | #define _PGMT_UC_MINUS          (1UL << PG_arch_2)
          |                                         ^
->> drivers/i2c/busses/i2c-ast2600.c:445:6: error: call to undeclared function 'get_unaligned_le32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     445 |                                         get_unaligned_le32(&msg->buf[i2c_bus->master_xfer_cnt + i]);
+   include/linux/page-flags.h:106:2: note: 'PG_arch_1' declared here
+     106 |         PG_arch_1,
+         |         ^
+   arch/x86/mm/pat/memtype.c:152:19: error: use of undeclared identifier 'PG_arch_2'; did you mean 'PG_arch_1'?
+     152 |                 memtype_flags = _PGMT_UC_MINUS;
+         |                                 ^
+   arch/x86/mm/pat/memtype.c:121:33: note: expanded from macro '_PGMT_UC_MINUS'
+     121 | #define _PGMT_UC_MINUS          (1UL << PG_arch_2)
          |                                         ^
-   3 errors generated.
+   include/linux/page-flags.h:106:2: note: 'PG_arch_1' declared here
+     106 |         PG_arch_1,
+         |         ^
+   arch/x86/mm/pat/memtype.c:155:19: error: use of undeclared identifier 'PG_arch_2'; did you mean 'PG_arch_1'?
+     155 |                 memtype_flags = _PGMT_WT;
+         |                                 ^
+   arch/x86/mm/pat/memtype.c:122:27: note: expanded from macro '_PGMT_WT'
+     122 | #define _PGMT_WT                (1UL << PG_arch_2 | 1UL << PG_arch_1)
+         |                                         ^
+   include/linux/page-flags.h:106:2: note: 'PG_arch_1' declared here
+     106 |         PG_arch_1,
+         |         ^
+   arch/x86/mm/pat/memtype.c:165:28: error: use of undeclared identifier 'PG_arch_2'; did you mean 'PG_arch_1'?
+     165 |                 new_flags = (old_flags & _PGMT_CLEAR_MASK) | memtype_flags;
+         |                                          ^
+   arch/x86/mm/pat/memtype.c:124:28: note: expanded from macro '_PGMT_CLEAR_MASK'
+     124 | #define _PGMT_CLEAR_MASK        (~_PGMT_MASK)
+         |                                   ^
+   arch/x86/mm/pat/memtype.c:123:29: note: expanded from macro '_PGMT_MASK'
+     123 | #define _PGMT_MASK              (1UL << PG_arch_2 | 1UL << PG_arch_1)
+         |                                         ^
+   include/linux/page-flags.h:106:2: note: 'PG_arch_1' declared here
+     106 |         PG_arch_1,
+         |         ^
+   5 errors generated.
 
 
-vim +/get_unaligned_le16 +437 drivers/i2c/busses/i2c-ast2600.c
+vim +128 arch/x86/mm/pat/memtype.c
 
-   405	
-   406	static int ast2600_i2c_setup_buff_tx(u32 cmd, struct ast2600_i2c_bus *i2c_bus)
-   407	{
-   408		struct i2c_msg *msg = &i2c_bus->msgs[i2c_bus->msgs_index];
-   409		u32 wbuf_dword;
-   410		int xfer_len;
-   411		int i;
-   412	
-   413		cmd |= AST2600_I2CM_PKT_EN;
-   414		xfer_len = msg->len - i2c_bus->master_xfer_cnt;
-   415		if (xfer_len > i2c_bus->buf_size)
-   416			xfer_len = i2c_bus->buf_size;
-   417		else if (i2c_bus->msgs_index + 1 == i2c_bus->msgs_count)
-   418			cmd |= AST2600_I2CM_STOP_CMD;
-   419	
-   420		if (cmd & AST2600_I2CM_START_CMD)
-   421			cmd |= AST2600_I2CM_PKT_ADDR(msg->addr);
-   422	
-   423		if (xfer_len) {
-   424			cmd |= AST2600_I2CM_TX_BUFF_EN | AST2600_I2CM_TX_CMD;
-   425			/*
-   426			 * The controller's buffer register supports dword writes only.
-   427			 * Therefore, write dwords to the buffer register in a 4-byte aligned,
-   428			 * and write the remaining unaligned data at the end.
-   429			 */
-   430			for (i = 0; i < xfer_len; i += 4) {
-   431				switch (min(xfer_len - i, 4) % 4) {
-   432				case 1:
-   433					wbuf_dword = msg->buf[i2c_bus->master_xfer_cnt + i];
-   434					break;
-   435				case 2:
-   436					wbuf_dword =
- > 437						get_unaligned_le16(&msg->buf[i2c_bus->master_xfer_cnt + i]);
-   438					break;
-   439				case 3:
-   440					wbuf_dword =
- > 441						get_unaligned_le24(&msg->buf[i2c_bus->master_xfer_cnt + i]);
-   442					break;
-   443				default:
-   444					wbuf_dword =
- > 445						get_unaligned_le32(&msg->buf[i2c_bus->master_xfer_cnt + i]);
-   446					break;
-   447				}
-   448				writel(wbuf_dword, i2c_bus->buf_base + i);
-   449			}
-   450			writel(AST2600_I2CC_SET_TX_BUF_LEN(xfer_len),
-   451			       i2c_bus->reg_base + AST2600_I2CC_BUFF_CTRL);
-   452		}
-   453	
-   454		writel(cmd, i2c_bus->reg_base + AST2600_I2CM_CMD_STS);
-   455	
-   456		return 0;
-   457	}
-   458	
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  125  
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  126  static inline enum page_cache_mode get_page_memtype(struct page *pg)
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  127  {
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16 @128  	unsigned long pg_flags = pg->flags & _PGMT_MASK;
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  129  
+35a5a10411d87e arch/x86/mm/pat.c Toshi Kani      2015-06-04  130  	if (pg_flags == _PGMT_WB)
+35a5a10411d87e arch/x86/mm/pat.c Toshi Kani      2015-06-04  131  		return _PAGE_CACHE_MODE_WB;
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  132  	else if (pg_flags == _PGMT_WC)
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  133  		return _PAGE_CACHE_MODE_WC;
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  134  	else if (pg_flags == _PGMT_UC_MINUS)
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  135  		return _PAGE_CACHE_MODE_UC_MINUS;
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  136  	else
+35a5a10411d87e arch/x86/mm/pat.c Toshi Kani      2015-06-04  137  		return _PAGE_CACHE_MODE_WT;
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  138  }
+0dbcae884779fd arch/x86/mm/pat.c Thomas Gleixner 2014-11-16  139  
+
+:::::: The code at line 128 was first introduced by commit
+:::::: 0dbcae884779fdf7e2239a97ac7488877f0693d9 x86: mm: Move PAT only functions to mm/pat.c
+
+:::::: TO: Thomas Gleixner <tglx@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
 0-DAY CI Kernel Test Service
