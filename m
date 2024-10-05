@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AED14036E;
-	Sat,  5 Oct 2024 09:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F633231C87;
+	Sat,  5 Oct 2024 10:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728121869; cv=none; b=dUbt+OUla693Xx8BtmZQM0hwaI17RxjdU2E7Ps1O29wPaPZN7vihKle39RbcYLuJXn/LsNmhCaH3+Sa1Y0yrItwpHX2wX52HGipGzF2zK+68jimp3H7dw6tLS/Qgsw9BsnwvVF5BUlhcEZ3M7b5rF6yCfU7VSEgjLduwVvBaTC4=
+	t=1728122470; cv=none; b=LYl1Qdwn4tx3nN+dpDVDSnOVoUVIPZIpXyZybKrqKte2ZArCuJp9EYcEc7mGQYuTQ44V24O6WcAjOzOCE3mTaDH3/t5P7S1kLaay72HvqHUtkN/u+SLEpAwHVOVaAXVQk49h+VDDlmpLQSNZu049evlcwOS18RWhcg9HSQcSGTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728121869; c=relaxed/simple;
-	bh=7ccxXUDF8pnQG1efTiVY/xQwqLVgoUjnrfxZup8lDTA=;
+	s=arc-20240116; t=1728122470; c=relaxed/simple;
+	bh=nMf3pELHL1cs+msf2RX5vhmEapBTsV/nTOw2y1HKlzI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HH2emdj11Kdjtu8LCyV/L4T4/HyK34NE96vlZUainV2xfOQxqdQCj+H9yytOoP4wFYANiLTmd317t5lQzY57CvtiimLdpWI77VZlpL84yh6V3UNi3L7FCidq4po8CxaYIRrmGsQFTAdoBM4IqP08vMrHC6ZMm5YASudllSFMzcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P50sMQH2; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sh4m4uEbsBXrKyY8f1SDts+CG/JKGnjA+C8p9nwoZgcsWVr4aM2qNJCp+8SHGpTFU9D5hv73RKtmKGkrPg3I8v979VinvzVVQrGl9Jqy8odrMZ1sShLhVidRE9eiQ57UIvLpWVNAqrs0JvKtZaHeFbhNFMnwK7cUmtV7MDlxgpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kcV2vbCC; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P50sMQH2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kcV2vbCC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728121867; x=1759657867;
+  t=1728122468; x=1759658468;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7ccxXUDF8pnQG1efTiVY/xQwqLVgoUjnrfxZup8lDTA=;
-  b=P50sMQH2iM8cP9M7XXMun4XgYiQ0M/V0jPjVTUwJrY/6i9J+d4r9I/oh
-   85qXyRAzpvnhdPiMh5VyzyxRQaJqi+Jm3dXUdD/Upls5tS91/mOVSalIW
-   bGyd9E7UqwhtyuAcf4ZCPSlAFikqnex0pw6zZRS0Qg3YZQrRQ/fFaKWBv
-   PqAuIZ1jLadWCK/LLcI07k5TexFpJT8TQ9ekP71U/2VRa6H6kvzOiSX6J
-   u0UQ81EWEEfsNSol1Ottf1hVKY6Z0er2s5wDBbAImcBV+c7MfAoe1sSgv
-   S+Q3Snf37qiLkACkEGny/vlPbG5HEYQRDfjWivLj9TD6Q52AJJGiM27/1
-   w==;
-X-CSE-ConnectionGUID: KPkUc7THTGu37wFyBGefzg==
-X-CSE-MsgGUID: 3Khch0aSScmveVe0dgATRw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="44862879"
+  bh=nMf3pELHL1cs+msf2RX5vhmEapBTsV/nTOw2y1HKlzI=;
+  b=kcV2vbCCY9lWhYwGzSNcO8J5FiUDjFXJ6Lcz20E4n4PcRwzo/r4AuyVE
+   zDPL98rgVY9POiB1kQJIaw92zfe4ErRBWws5pcpz9zo+hAdzmuSvoOnk1
+   iIQUmGDKzDZy30A3cxFVkTmY3HB8I4dMK7LaobKxo+f9z5CL3QbGoS2Yi
+   ZBE6BQil74TWZu6A5ue/SokarP2gprZcbfIrCITAhh2gSnv3wnFdazw7x
+   zQ3BcxrKYlsGJnApdV48kVKd5lsEb1+SCuFn5H56kq3KIw4KqTbw1XSEz
+   dTxnKBoxBKatEEvdEl1GZtGU4p0SvW1YgPTfTUAl1NnE5zZQD3NwJkLYT
+   g==;
+X-CSE-ConnectionGUID: CG4YuW9GSMqca2N7RfzGrg==
+X-CSE-MsgGUID: 3v1iFeZbRUuHfgeNR9AiMg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27426127"
 X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
-   d="scan'208";a="44862879"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 02:51:06 -0700
-X-CSE-ConnectionGUID: gXfYx072SKyuF+ULT1IycA==
-X-CSE-MsgGUID: nL1w9jyrSS6aXFj/4+jdLw==
+   d="scan'208";a="27426127"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 03:01:07 -0700
+X-CSE-ConnectionGUID: JmKzTfbbTi20XzLvp0CRkg==
+X-CSE-MsgGUID: D+b79H58QH+6L4SnXtAb/A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,180,1725346800"; 
-   d="scan'208";a="79716068"
+   d="scan'208";a="105707402"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 05 Oct 2024 02:51:05 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 05 Oct 2024 03:01:05 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sx1RG-0002pH-2m;
-	Sat, 05 Oct 2024 09:51:02 +0000
-Date: Sat, 5 Oct 2024 17:50:34 +0800
+	id 1sx1ax-0002pq-0C;
+	Sat, 05 Oct 2024 10:01:03 +0000
+Date: Sat, 5 Oct 2024 18:00:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joe Damato <jdamato@fastly.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC net-next v4 5/9] net: napi: Add napi_config
-Message-ID: <202410051705.OzprttUB-lkp@intel.com>
-References: <20241001235302.57609-6-jdamato@fastly.com>
+To: Xiaofeng Lian <1198715581lxf@gmail.com>, stefani@seibold.net,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Xiaofeng Lian <1198715581lxf@gmail.com>
+Subject: Re: [PATCH v2] include/linux/kfifo.h: fix some IDEs Intelligence
+ errors and the previous patch was misnamed
+Message-ID: <202410051712.VDmFpiVZ-lkp@intel.com>
+References: <20241002172427.412715-1-1198715581lxf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,220 +65,197 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241001235302.57609-6-jdamato@fastly.com>
+In-Reply-To: <20241002172427.412715-1-1198715581lxf@gmail.com>
 
-Hi Joe,
+Hi Xiaofeng,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.12-rc1 next-20241004]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/net-napi-Make-napi_defer_hard_irqs-per-NAPI/20241002-075725
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241001235302.57609-6-jdamato%40fastly.com
-patch subject: [RFC net-next v4 5/9] net: napi: Add napi_config
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241005/202410051705.OzprttUB-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaofeng-Lian/include-linux-kfifo-h-fix-some-IDEs-Intelligence-errors-and-the-previous-patch-was-misnamed/20241003-012640
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241002172427.412715-1-1198715581lxf%40gmail.com
+patch subject: [PATCH v2] include/linux/kfifo.h: fix some IDEs Intelligence errors and the previous patch was misnamed
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241005/202410051712.VDmFpiVZ-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051705.OzprttUB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410051712.VDmFpiVZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410051705.OzprttUB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410051712.VDmFpiVZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/intel/idpf/idpf_singleq_txrx.c:7:
-   In file included from drivers/net/ethernet/intel/idpf/idpf.h:22:
->> drivers/net/ethernet/intel/idpf/idpf_txrx.h:440:1: error: static assertion failed due to requirement '__builtin_offsetof(struct idpf_q_vector, __cacheline_group_end__read_write) - (__builtin_offsetof(struct idpf_q_vector, __cacheline_group_begin__read_write) + sizeof ((((struct idpf_q_vector *)0)->__cacheline_group_begin__read_write))) == (440 + 2 * sizeof(struct dim))': offsetof(struct idpf_q_vector, __cacheline_group_end__read_write) - offsetofend(struct idpf_q_vector, __cacheline_group_begin__read_write) == (440 + 2 * sizeof(struct dim))
-     440 | libeth_cacheline_set_assert(struct idpf_q_vector, 112,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     441 |                             440 + 2 * sizeof(struct dim),
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     442 |                             8 + sizeof(cpumask_var_t));
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:62:2: note: expanded from macro 'libeth_cacheline_set_assert'
-      62 |         libeth_cacheline_group_assert(type, read_write, rw);                  \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:17:16: note: expanded from macro 'libeth_cacheline_group_assert'
-      17 |         static_assert(offsetof(type, __cacheline_group_end__##grp) -          \
-         |         ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |                       offsetofend(type, __cacheline_group_begin__##grp) ==    \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      19 |                       (sz))
-         |                       ~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/net/ethernet/intel/idpf/idpf_txrx.h:440:1: note: expression evaluates to '784 == 776'
-     440 | libeth_cacheline_set_assert(struct idpf_q_vector, 112,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     441 |                             440 + 2 * sizeof(struct dim),
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     442 |                             8 + sizeof(cpumask_var_t));
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:62:2: note: expanded from macro 'libeth_cacheline_set_assert'
-      62 |         libeth_cacheline_group_assert(type, read_write, rw);                  \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:18:59: note: expanded from macro 'libeth_cacheline_group_assert'
-      17 |         static_assert(offsetof(type, __cacheline_group_end__##grp) -          \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |                       offsetofend(type, __cacheline_group_begin__##grp) ==    \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-      19 |                       (sz))
-         |                       ~~~~~
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   1 error generated.
---
-   In file included from drivers/net/ethernet/intel/idpf/idpf_main.c:4:
-   In file included from drivers/net/ethernet/intel/idpf/idpf.h:22:
->> drivers/net/ethernet/intel/idpf/idpf_txrx.h:440:1: error: static assertion failed due to requirement '__builtin_offsetof(struct idpf_q_vector, __cacheline_group_end__read_write) - (__builtin_offsetof(struct idpf_q_vector, __cacheline_group_begin__read_write) + sizeof ((((struct idpf_q_vector *)0)->__cacheline_group_begin__read_write))) == (440 + 2 * sizeof(struct dim))': offsetof(struct idpf_q_vector, __cacheline_group_end__read_write) - offsetofend(struct idpf_q_vector, __cacheline_group_begin__read_write) == (440 + 2 * sizeof(struct dim))
-     440 | libeth_cacheline_set_assert(struct idpf_q_vector, 112,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     441 |                             440 + 2 * sizeof(struct dim),
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     442 |                             8 + sizeof(cpumask_var_t));
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:62:2: note: expanded from macro 'libeth_cacheline_set_assert'
-      62 |         libeth_cacheline_group_assert(type, read_write, rw);                  \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:17:16: note: expanded from macro 'libeth_cacheline_group_assert'
-      17 |         static_assert(offsetof(type, __cacheline_group_end__##grp) -          \
-         |         ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |                       offsetofend(type, __cacheline_group_begin__##grp) ==    \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      19 |                       (sz))
-         |                       ~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/net/ethernet/intel/idpf/idpf_txrx.h:440:1: note: expression evaluates to '784 == 776'
-     440 | libeth_cacheline_set_assert(struct idpf_q_vector, 112,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     441 |                             440 + 2 * sizeof(struct dim),
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     442 |                             8 + sizeof(cpumask_var_t));
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:62:2: note: expanded from macro 'libeth_cacheline_set_assert'
-      62 |         libeth_cacheline_group_assert(type, read_write, rw);                  \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/libeth/cache.h:18:59: note: expanded from macro 'libeth_cacheline_group_assert'
-      17 |         static_assert(offsetof(type, __cacheline_group_end__##grp) -          \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      18 |                       offsetofend(type, __cacheline_group_begin__##grp) ==    \
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-      19 |                       (sz))
-         |                       ~~~~~
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/net/ethernet/intel/idpf/idpf_main.c:167:39: warning: shift count >= width of type [-Wshift-count-overflow]
-     167 |         err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-         |                                              ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   1 warning and 1 error generated.
+>> arch/x86/kvm/hyperv.c:984:3: error: member reference base type 'u64' (aka 'unsigned long long') is not a structure or union
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:46: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:138:34: note: expanded from macro '__KFIFO_SIZE'
+     138 |                 DECLARE_KFIFO_PTR(__tmp_kfifo, get_kfifo_data_type(fifo));\
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:49: note: expanded from macro 'get_kfifo_data_type'
+     130 | #define get_kfifo_data_type(fifo) typeof(*(fifo)->type)
+         |                                                 ^ ~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/kfifo.h:84:28: note: expanded from macro 'STRUCT_KFIFO_PTR'
+      84 |         struct __STRUCT_KFIFO_PTR(type, 0, type)
+         |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   include/linux/kfifo.h:79:24: note: expanded from macro '__STRUCT_KFIFO_PTR'
+      79 |         __STRUCT_KFIFO_COMMON(type, recsize, ptrtype); \
+         |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:61:3: note: expanded from macro '__STRUCT_KFIFO_COMMON'
+      61 |                 datatype        *type; \
+         |                 ^~~~~~~~
+>> arch/x86/kvm/hyperv.c:984:3: error: member reference base type 'u64' (aka 'unsigned long long') is not a structure or union
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:46: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:138:34: note: expanded from macro '__KFIFO_SIZE'
+     138 |                 DECLARE_KFIFO_PTR(__tmp_kfifo, get_kfifo_data_type(fifo));\
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:49: note: expanded from macro 'get_kfifo_data_type'
+     130 | #define get_kfifo_data_type(fifo) typeof(*(fifo)->type)
+         |                                                 ^ ~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/kfifo.h:84:28: note: expanded from macro 'STRUCT_KFIFO_PTR'
+      84 |         struct __STRUCT_KFIFO_PTR(type, 0, type)
+         |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   include/linux/kfifo.h:79:24: note: expanded from macro '__STRUCT_KFIFO_PTR'
+      79 |         __STRUCT_KFIFO_COMMON(type, recsize, ptrtype); \
+         |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:62:9: note: expanded from macro '__STRUCT_KFIFO_COMMON'
+      62 |                 const datatype  *const_type; \
+         |                       ^~~~~~~~
+>> arch/x86/kvm/hyperv.c:984:3: error: member reference base type 'u64' (aka 'unsigned long long') is not a structure or union
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:46: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:138:34: note: expanded from macro '__KFIFO_SIZE'
+     138 |                 DECLARE_KFIFO_PTR(__tmp_kfifo, get_kfifo_data_type(fifo));\
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:49: note: expanded from macro 'get_kfifo_data_type'
+     130 | #define get_kfifo_data_type(fifo) typeof(*(fifo)->type)
+         |                                                 ^ ~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/kfifo.h:84:37: note: expanded from macro 'STRUCT_KFIFO_PTR'
+      84 |         struct __STRUCT_KFIFO_PTR(type, 0, type)
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/kfifo.h:79:39: note: expanded from macro '__STRUCT_KFIFO_PTR'
+      79 |         __STRUCT_KFIFO_COMMON(type, recsize, ptrtype); \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+   include/linux/kfifo.h:64:3: note: expanded from macro '__STRUCT_KFIFO_COMMON'
+      64 |                 ptrtype         *ptr; \
+         |                 ^~~~~~~
+>> arch/x86/kvm/hyperv.c:984:3: error: member reference base type 'u64' (aka 'unsigned long long') is not a structure or union
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:46: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:138:34: note: expanded from macro '__KFIFO_SIZE'
+     138 |                 DECLARE_KFIFO_PTR(__tmp_kfifo, get_kfifo_data_type(fifo));\
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:49: note: expanded from macro 'get_kfifo_data_type'
+     130 | #define get_kfifo_data_type(fifo) typeof(*(fifo)->type)
+         |                                                 ^ ~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/kfifo.h:84:37: note: expanded from macro 'STRUCT_KFIFO_PTR'
+      84 |         struct __STRUCT_KFIFO_PTR(type, 0, type)
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/kfifo.h:79:39: note: expanded from macro '__STRUCT_KFIFO_PTR'
+      79 |         __STRUCT_KFIFO_COMMON(type, recsize, ptrtype); \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+   include/linux/kfifo.h:65:3: note: expanded from macro '__STRUCT_KFIFO_COMMON'
+      65 |                 ptrtype const   *ptr_const; \
+         |                 ^~~~~~~
+>> arch/x86/kvm/hyperv.c:984:3: error: member reference base type 'u64' (aka 'unsigned long long') is not a structure or union
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:46: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:138:34: note: expanded from macro '__KFIFO_SIZE'
+     138 |                 DECLARE_KFIFO_PTR(__tmp_kfifo, get_kfifo_data_type(fifo));\
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:49: note: expanded from macro 'get_kfifo_data_type'
+     130 | #define get_kfifo_data_type(fifo) typeof(*(fifo)->type)
+         |                                                 ^ ~~~~
+   include/linux/kfifo.h:116:56: note: expanded from macro 'DECLARE_KFIFO_PTR'
+     116 | #define DECLARE_KFIFO_PTR(fifo, type)   STRUCT_KFIFO_PTR(type) fifo
+         |                                         ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/kfifo.h:84:28: note: expanded from macro 'STRUCT_KFIFO_PTR'
+      84 |         struct __STRUCT_KFIFO_PTR(type, 0, type)
+         |                ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   include/linux/kfifo.h:80:2: note: expanded from macro '__STRUCT_KFIFO_PTR'
+      80 |         type            buf[0]; \
+         |         ^~~~
+>> arch/x86/kvm/hyperv.c:984:3: error: member reference base type 'u64' (aka 'unsigned long long') is not a structure or union
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:46: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:139:52: note: expanded from macro '__KFIFO_SIZE'
+     139 |                 (sizeof(*(fifo)) - sizeof(__tmp_kfifo)) / sizeof(get_kfifo_data_type(fifo));\
+         |                                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:49: note: expanded from macro 'get_kfifo_data_type'
+     130 | #define get_kfifo_data_type(fifo) typeof(*(fifo)->type)
+         |                                           ~~~~~~^ ~~~~
+>> arch/x86/kvm/hyperv.c:984:3: error: invalid operands to binary expression ('void' and 'int')
+     984 |                 INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:151:71: note: expanded from macro 'INIT_KFIFO'
+     151 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : __KFIFO_SIZE(__tmp->buf) - 1;\
+         |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~
+   7 errors generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
+vim +984 arch/x86/kvm/hyperv.c
 
-vim +440 drivers/net/ethernet/intel/idpf/idpf_txrx.h
-
-4930fbf419a72d Pavan Kumar Linga 2023-08-07  375  
-4930fbf419a72d Pavan Kumar Linga 2023-08-07  376  /**
-4930fbf419a72d Pavan Kumar Linga 2023-08-07  377   * struct idpf_q_vector
-1c325aac10a82f Alan Brady        2023-08-07  378   * @vport: Vport back pointer
-5a816aae2d463d Alexander Lobakin 2024-06-20  379   * @num_rxq: Number of RX queues
-d4d5587182664b Pavan Kumar Linga 2023-08-07  380   * @num_txq: Number of TX queues
-5a816aae2d463d Alexander Lobakin 2024-06-20  381   * @num_bufq: Number of buffer queues
-e4891e4687c8dd Alexander Lobakin 2024-06-20  382   * @num_complq: number of completion queues
-5a816aae2d463d Alexander Lobakin 2024-06-20  383   * @rx: Array of RX queues to service
-1c325aac10a82f Alan Brady        2023-08-07  384   * @tx: Array of TX queues to service
-5a816aae2d463d Alexander Lobakin 2024-06-20  385   * @bufq: Array of buffer queues to service
-e4891e4687c8dd Alexander Lobakin 2024-06-20  386   * @complq: array of completion queues
-5a816aae2d463d Alexander Lobakin 2024-06-20  387   * @intr_reg: See struct idpf_intr_reg
-5a816aae2d463d Alexander Lobakin 2024-06-20  388   * @napi: napi handler
-5a816aae2d463d Alexander Lobakin 2024-06-20  389   * @total_events: Number of interrupts processed
-9c4a27da0ecc40 Joshua Hay        2024-09-04  390   * @wb_on_itr: whether WB on ITR is enabled
-c2d548cad1508d Joshua Hay        2023-08-07  391   * @tx_dim: Data for TX net_dim algorithm
-1c325aac10a82f Alan Brady        2023-08-07  392   * @tx_itr_value: TX interrupt throttling rate
-1c325aac10a82f Alan Brady        2023-08-07  393   * @tx_intr_mode: Dynamic ITR or not
-1c325aac10a82f Alan Brady        2023-08-07  394   * @tx_itr_idx: TX ITR index
-3a8845af66edb3 Alan Brady        2023-08-07  395   * @rx_dim: Data for RX net_dim algorithm
-95af467d9a4e3b Alan Brady        2023-08-07  396   * @rx_itr_value: RX interrupt throttling rate
-95af467d9a4e3b Alan Brady        2023-08-07  397   * @rx_intr_mode: Dynamic ITR or not
-95af467d9a4e3b Alan Brady        2023-08-07  398   * @rx_itr_idx: RX ITR index
-5a816aae2d463d Alexander Lobakin 2024-06-20  399   * @v_idx: Vector index
-bf9bf7042a38eb Alexander Lobakin 2024-06-20  400   * @affinity_mask: CPU affinity mask
-4930fbf419a72d Pavan Kumar Linga 2023-08-07  401   */
-4930fbf419a72d Pavan Kumar Linga 2023-08-07  402  struct idpf_q_vector {
-5a816aae2d463d Alexander Lobakin 2024-06-20  403  	__cacheline_group_begin_aligned(read_mostly);
-1c325aac10a82f Alan Brady        2023-08-07  404  	struct idpf_vport *vport;
-1c325aac10a82f Alan Brady        2023-08-07  405  
-5a816aae2d463d Alexander Lobakin 2024-06-20  406  	u16 num_rxq;
-d4d5587182664b Pavan Kumar Linga 2023-08-07  407  	u16 num_txq;
-5a816aae2d463d Alexander Lobakin 2024-06-20  408  	u16 num_bufq;
-e4891e4687c8dd Alexander Lobakin 2024-06-20  409  	u16 num_complq;
-5a816aae2d463d Alexander Lobakin 2024-06-20  410  	struct idpf_rx_queue **rx;
-e4891e4687c8dd Alexander Lobakin 2024-06-20  411  	struct idpf_tx_queue **tx;
-5a816aae2d463d Alexander Lobakin 2024-06-20  412  	struct idpf_buf_queue **bufq;
-e4891e4687c8dd Alexander Lobakin 2024-06-20  413  	struct idpf_compl_queue **complq;
-e4891e4687c8dd Alexander Lobakin 2024-06-20  414  
-5a816aae2d463d Alexander Lobakin 2024-06-20  415  	struct idpf_intr_reg intr_reg;
-5a816aae2d463d Alexander Lobakin 2024-06-20  416  	__cacheline_group_end_aligned(read_mostly);
-5a816aae2d463d Alexander Lobakin 2024-06-20  417  
-5a816aae2d463d Alexander Lobakin 2024-06-20  418  	__cacheline_group_begin_aligned(read_write);
-5a816aae2d463d Alexander Lobakin 2024-06-20  419  	struct napi_struct napi;
-5a816aae2d463d Alexander Lobakin 2024-06-20  420  	u16 total_events;
-9c4a27da0ecc40 Joshua Hay        2024-09-04  421  	bool wb_on_itr;
-5a816aae2d463d Alexander Lobakin 2024-06-20  422  
-c2d548cad1508d Joshua Hay        2023-08-07  423  	struct dim tx_dim;
-1c325aac10a82f Alan Brady        2023-08-07  424  	u16 tx_itr_value;
-1c325aac10a82f Alan Brady        2023-08-07  425  	bool tx_intr_mode;
-1c325aac10a82f Alan Brady        2023-08-07  426  	u32 tx_itr_idx;
-1c325aac10a82f Alan Brady        2023-08-07  427  
-3a8845af66edb3 Alan Brady        2023-08-07  428  	struct dim rx_dim;
-95af467d9a4e3b Alan Brady        2023-08-07  429  	u16 rx_itr_value;
-95af467d9a4e3b Alan Brady        2023-08-07  430  	bool rx_intr_mode;
-95af467d9a4e3b Alan Brady        2023-08-07  431  	u32 rx_itr_idx;
-5a816aae2d463d Alexander Lobakin 2024-06-20  432  	__cacheline_group_end_aligned(read_write);
-95af467d9a4e3b Alan Brady        2023-08-07  433  
-5a816aae2d463d Alexander Lobakin 2024-06-20  434  	__cacheline_group_begin_aligned(cold);
-5a816aae2d463d Alexander Lobakin 2024-06-20  435  	u16 v_idx;
-bf9bf7042a38eb Alexander Lobakin 2024-06-20  436  
-bf9bf7042a38eb Alexander Lobakin 2024-06-20  437  	cpumask_var_t affinity_mask;
-5a816aae2d463d Alexander Lobakin 2024-06-20  438  	__cacheline_group_end_aligned(cold);
-4930fbf419a72d Pavan Kumar Linga 2023-08-07  439  };
-9c4a27da0ecc40 Joshua Hay        2024-09-04 @440  libeth_cacheline_set_assert(struct idpf_q_vector, 112,
-cb5dc755af3703 Joe Damato        2024-10-01  441  			    440 + 2 * sizeof(struct dim),
-5a816aae2d463d Alexander Lobakin 2024-06-20  442  			    8 + sizeof(cpumask_var_t));
-0fe45467a1041e Pavan Kumar Linga 2023-08-07  443  
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  959  
+3be29eb7b5251a Sean Christopherson 2022-08-30  960  int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
+5c919412fe61c3 Andrey Smetanin     2015-11-10  961  {
+1cac8d9f6bd25d Sean Christopherson 2022-08-30  962  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  963  	int i;
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  964  
+1cac8d9f6bd25d Sean Christopherson 2022-08-30  965  	if (hv_vcpu)
+1cac8d9f6bd25d Sean Christopherson 2022-08-30  966  		return 0;
+1cac8d9f6bd25d Sean Christopherson 2022-08-30  967  
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  968  	hv_vcpu = kzalloc(sizeof(struct kvm_vcpu_hv), GFP_KERNEL_ACCOUNT);
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  969  	if (!hv_vcpu)
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  970  		return -ENOMEM;
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  971  
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  972  	vcpu->arch.hyperv = hv_vcpu;
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  973  	hv_vcpu->vcpu = vcpu;
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  974  
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  975  	synic_init(&hv_vcpu->synic);
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  976  
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  977  	bitmap_zero(hv_vcpu->stimer_pending_bitmap, HV_SYNIC_STIMER_COUNT);
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  978  	for (i = 0; i < ARRAY_SIZE(hv_vcpu->stimer); i++)
+1f4b34f825e8ce Andrey Smetanin     2015-11-30  979  		stimer_init(&hv_vcpu->stimer[i], i);
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  980  
+4eeef2424153e7 Sean Christopherson 2021-09-10  981  	hv_vcpu->vp_index = vcpu->vcpu_idx;
+fc08b628d7c96d Vitaly Kuznetsov    2021-01-26  982  
+53ca765a041d5a Vitaly Kuznetsov    2022-11-01  983  	for (i = 0; i < HV_NR_TLB_FLUSH_FIFOS; i++) {
+53ca765a041d5a Vitaly Kuznetsov    2022-11-01 @984  		INIT_KFIFO(hv_vcpu->tlb_flush_fifo[i].entries);
+53ca765a041d5a Vitaly Kuznetsov    2022-11-01  985  		spin_lock_init(&hv_vcpu->tlb_flush_fifo[i].write_lock);
+53ca765a041d5a Vitaly Kuznetsov    2022-11-01  986  	}
+0823570f01989d Vitaly Kuznetsov    2022-11-01  987  
+4592b7eaa87d35 Vitaly Kuznetsov    2021-01-26  988  	return 0;
+5c919412fe61c3 Andrey Smetanin     2015-11-10  989  }
+5c919412fe61c3 Andrey Smetanin     2015-11-10  990  
 
 -- 
 0-DAY CI Kernel Test Service
