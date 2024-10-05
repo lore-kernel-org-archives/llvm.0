@@ -1,373 +1,193 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020110.outbound.protection.outlook.com [52.101.196.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4C114C5B5;
-	Sat,  5 Oct 2024 19:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728156629; cv=none; b=hOiyPBrimkanGa0DZ40Z855TfbjD+awgOJEOJenK99POmSgVbEIOYEdisPyxUXg5UI30n6EHPikMIC2j8bApQXY3TfIyJkezZfwpyuenisgqcMGQIp7XNwpjGn1O49YLlw6kDF19VQ49SqJ0fwBoE+hOjCub13OJ4Q2/5WMBkrs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728156629; c=relaxed/simple;
-	bh=5P06dq+TvWBfznD7ETjNwrNzeQiFZ4Sc5rEvgffHhTw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Rg+Awb84A7ptn15KpgMQMr3LivwXm09AzaGDhZNowcS4mnagGSe+UgbO/GA9detVGVrGHhLYoK1Try0GPI5tRznNF2bNGPIxmKPrLEC16K2+Ygf6ApXhTG8oomJWZAs6A+1NrCMt2O/vR1LuN6fnETYGGhwRxfDb2LssGevAu+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kR7OiimW; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B778B165EFA
+	for <llvm@lists.linux.dev>; Sat,  5 Oct 2024 22:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.110
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728166256; cv=fail; b=s8Zy29ynrwdb4OEmflJozV3CflPQlC3VYxcSQ9Qp+okpeOxsh+r9GaL7cw15g1DyUSlEqn7CEIdDMmg9DShXfEWU8ny70Bx18dPrDJh1ZZs133hIUud3NrOaGsqq1ChDICqhpblAGyTXnaoRhwOf08JF/8OdaH/0Ay1lVRKjMU4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728166256; c=relaxed/simple;
+	bh=3IQr/IJDAqqavfLUwhu4WzleiOhuvwPVxFVKDFMMGvQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QakAmnKTu7hyGYdcFK64sla3r1M0jfiAlT9+KuUnJ1q248QrlVm/SC2UHBr4PS42VYhBEsMe4bkhJlJX8hhMandIiJpTJ2S0TfWLt7PUKu8R5+Im0kHPAoit39iWMx2chH6TlxJAuIzGBLj+vjBC8JFkZhWl+dcvMGz3B/r68LU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=S4oq/kkd; arc=fail smtp.client-ip=52.101.196.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kR7OiimW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728156627; x=1759692627;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5P06dq+TvWBfznD7ETjNwrNzeQiFZ4Sc5rEvgffHhTw=;
-  b=kR7OiimWrQ1akIshh84ef1YG9G8QuxAs+vDQJ80SRjZJWi6On37MxrC5
-   wsJt80WtvyJkajwkjlI0PShJGM4aSybhsFUfq4q1OL/9uNzKScWNCw/n/
-   znNy8A+SjAOdDSFvVNFtxEajmqG7QiMtB6rIB84q9ff4G6ELpabqksVjq
-   VIi/klhKf4kaBzwe67SaFQ14I1/7Y4CGr0aMnTbZU7VNgsbkR1I6R8/p/
-   iA5aq5ZbFj6LTTzI1BSHe2x2WEfSAYKTu4L4Ro6evV7bvHJJaMv3IZ82/
-   OlqWfvjj5qeIfpxNjhWhvRtQEluTjfCdUPWmiIo5T6PtOd895QJbeUhNu
-   Q==;
-X-CSE-ConnectionGUID: z5ekX2aeQmy1DMj65Mbz7w==
-X-CSE-MsgGUID: qH5/vv9qS2m2qzpP2UoClA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11216"; a="38008293"
-X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
-   d="scan'208";a="38008293"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 12:30:26 -0700
-X-CSE-ConnectionGUID: nUlgAJFzRvOkyb/pwytiag==
-X-CSE-MsgGUID: H3TIXbCTStS5wPGaEbcF9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
-   d="scan'208";a="105796574"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Oct 2024 12:30:25 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sxATu-0003IV-33;
-	Sat, 05 Oct 2024 19:30:22 +0000
-Date: Sun, 6 Oct 2024 03:29:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:guest-tpm 5/6] drivers/char/tpm/tpm_tdx.c:685:6: warning:
- variable 'ret' is used uninitialized whenever 'if' condition is true
-Message-ID: <202410060310.PMUz8eIJ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="S4oq/kkd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JfVdPtRHj9MQ+10NM+ie+uMWYrQXSs9bDMsENWRUtDrZCBW9Z1Gvwya7W5xfWcjio+J2WnCyLsHuw4Dxq9FCyj0pXTJ665zMJGN0/iH7migTDAlfFGwhqT57ZAH3l9idm0p833nMrRQ8XraW2D+JAlQ4fXKhuR17WnHXtvh3O774T6uBT8AiwVilDUj5ocILVipNYm3r5E+Y+jko02R7opm91cJN7xpfh5eTd6prS+i7LKSCfV05g9zmuGZkA4LjDj6WBCeUXpQZcXf4obDrdmTYOTIZuCrAIpm53g5hCJU5jSWhgJ/oHyspZuea/8IXv/ql90dkS0iMxw4rdehJOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3IQr/IJDAqqavfLUwhu4WzleiOhuvwPVxFVKDFMMGvQ=;
+ b=geH9lHbdFLUXFWCAeAaAE0H0FPdgyk5AloU5qpJ4SBEK6avPjo80AJkxixAf25HFej7A9UJm0921DzGRdTlw4FCoFcJhQ8e8yAuLTrSFQid49NE2tJQlvC2v1JRPjKb2RPZH/2Oc0oKYw4bnkRiAtv1sJEKKMgytF8SmG+pVelI3eU4ftX4FxK6c4gc1PHa7goEC7G4wIBYEEM0Gqi6n7B6tFDoxtOpGHPZVASIIy2O3MA0ZAId2ml+xHg80JF80Y29jvrQUHyVhZIFHfR+0UIz53uRIg8NVHJYpwdu+hrumqBwFpnQXkgZEI3r1HLZoobboZ5yNbE5TMGQHlq6HDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3IQr/IJDAqqavfLUwhu4WzleiOhuvwPVxFVKDFMMGvQ=;
+ b=S4oq/kkdp7szFfPoIw+1I8T18qm9j9l9JaPTR9ljckJSPMSfNMMuZHv7C4S+6TGBGNr2bD3IRqUU3PROZsVffta3oxGxxHh+LTADj0SvMtMu5VSMv6IzuNsChjBbx7Om0dnsRrdmmNauX54e5oaElDEBnezANp9HtK5xEEDXYJI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO3P265MB2204.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:107::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.20; Sat, 5 Oct
+ 2024 22:10:50 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7%3]) with mapi id 15.20.8026.019; Sat, 5 Oct 2024
+ 22:10:50 +0000
+Date: Sat, 5 Oct 2024 23:10:46 +0100
+From: Gary Guo <gary@garyguo.net>
+To: Trevor Gross <tmgross@umich.edu>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
+ Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/5] rust: fix size_t in bindgen prototypes of C
+ builtins
+Message-ID: <20241005231046.5f575779.gary@garyguo.net>
+In-Reply-To: <CALNs47sgdi4PU8YXxozMm4=7aQ9RspJsKkKrYuT++9KiC8E-KQ@mail.gmail.com>
+References: <20240913213041.395655-1-gary@garyguo.net>
+	<20240913213041.395655-2-gary@garyguo.net>
+	<CALNs47sgdi4PU8YXxozMm4=7aQ9RspJsKkKrYuT++9KiC8E-KQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P265CA0156.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c7::18) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB2204:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e542967-ab7e-4eff-c268-08dce58a924e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SkluZ1lzcE9PRjgyRlV2YUFQRHJ5N3l6TTVYVVRoZDJGMHJ5OTl0TS9MSUNv?=
+ =?utf-8?B?c3c5QjNaWDFRS3BFdzBueGJQa1dGM0hqVU81M2R1V3VmMnQ1N0tkaCs5NlVi?=
+ =?utf-8?B?aWJ0SG5lSHYyZVE5R2FhUjMvOFFCV2NZZjR5UlRxSlU3RFVMM3pIWkNZZmQ3?=
+ =?utf-8?B?YlMwYWJhZU5pVEV3RlpNcGd4L1drY2tBNmY3YWZnZmFac0NaVlRhaDJUTCtW?=
+ =?utf-8?B?dFVPYngzUXNZQlplb3l2U2FEYmo4Mi9MUGE3OUhvTUtQU0I3cjgrQXZDQVZx?=
+ =?utf-8?B?YVV6cGdZTnRBL1Y0MnNkazJpYzBmaWVQM2UwVUFacTFWVnhxTy9BK00rYmJC?=
+ =?utf-8?B?a3l2TXk0ZjVOSDlFeUljdzc1UHBaVFJOajhpNTc0WWpWRlZiZ1dYSWxOYm82?=
+ =?utf-8?B?NndMK2JhOWFBc3pUYWtSdnpBaUU4V0o0b2VXZVFiblZVV285MmwvVFFHWE0z?=
+ =?utf-8?B?MXlhbVQvdFlPbzYvMFpXVUxCSXdVQ25DamJVRERpRU5QYmFZY1NUcHE0Q3Rt?=
+ =?utf-8?B?OFp6VUJ3L3lZaUdobHpQUTZWOGlKNXZBb0RkZWV3aTdZNU5LVkUwR0hjengv?=
+ =?utf-8?B?TW1tbGdyYlczVTBhckg3RlRzdnNMd25MOVV4dkVBMnVPSWpsa0crcCthWC95?=
+ =?utf-8?B?WXhXZ0wxR2w1ZDNmVlZ3dDltNEVZaWJHWUpOSWV0elFic0FEOFRndnBLbFMr?=
+ =?utf-8?B?ZVF1SitPSmU2YUtwL1ZHVUJHL3lRUlJuZ2lRT0xld1JuTGFIak1tZjJGUnVV?=
+ =?utf-8?B?RGlNbk12N1kwa0RvMUxNdWhwYkFQNFVjaG1VNWs0Tm9iVWxEb3ZKZUlMLzdk?=
+ =?utf-8?B?N1BJMXczQnlBRkhIR3NnTUtVVDVCWUNVQ2hUUTd2YVdpVHpybkwwVGpkRmZQ?=
+ =?utf-8?B?N2hpaVJnOU1zVWYwY0ZGQkpHSU54QStmcS9LdEUyaUZvSTY2TmlqNUdzeDZj?=
+ =?utf-8?B?QU95RnV4aCtsZWl4YVZXdGRpRFV6RnphaXM4WGFVTmt6d3ErUkFGK2xRTDBn?=
+ =?utf-8?B?K01FRnNLR0xzMXE5ZVJ6bGN3V3dlYTlLbEh5V3ZsekNsS3VkMDNqV280SkhJ?=
+ =?utf-8?B?U2FmZ05CNXl4YTM5TXhhTCtMKzFubC9wVkYvdkNqVXdUcmRTZnJJU3k3c2ZF?=
+ =?utf-8?B?eGd3K2U1N2VVN3h4bkVBd0ZyV09YMmVTVnVlcFAvcDQxa1NTS1k5OG1IWG4x?=
+ =?utf-8?B?MzlHTHVrbzYzUkxaS2lUWG1VSGJWSlNwOTFjNm9jdUQ2Z092MDNYK2I5cU93?=
+ =?utf-8?B?LzRZMVFjNTQ0RTJ3VU9WS25zNW1lcWZaQnozbUFLblNQcHRqRy9XU2xlRnhJ?=
+ =?utf-8?B?aFJoRHZoMlFGU2gxTTQ2RGNYdy9nMEwvUTF0VVo3R1VTOUZqdGVPOEhERUhk?=
+ =?utf-8?B?bzIxdGNJeGhiRkEzaUNMaWNabll6amw3NTdHT2xVSWNWQUFPUFBVREhHdktr?=
+ =?utf-8?B?dGwyNmRZOEg3SWVBK24zTi80SGNwSzlrUWlqMTJhSDc0TzZ6aC9ETCtkVzlH?=
+ =?utf-8?B?d1BZV2ZiWWdmOWowVks0OStsd0pELzlSN09ETnh3d3NpVDh5aHdPME1NLzFt?=
+ =?utf-8?B?UnFDR2NtV1F6UllTRnEzdkpLc3Zvbmk2RTRNcWdyYkR5YnluV0ZQOFl6QmF5?=
+ =?utf-8?B?c1FGNkI3Rk04SjVnakc1dkYvZExIaUt5cVJpZWZKeVZERHB1bHRaSVA4dmU4?=
+ =?utf-8?B?SDZYOW5LVjZidjdBQlJPdzhzUHBlZXZkc3J2Q3MxTGhGeVAvMzZrMkRRPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(10070799003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WGpsWDRsdzNoUTFhNE9RdkNNb1EyTGk0Q3JhSXB5TTRZa0owNVZ1WXJVRHpG?=
+ =?utf-8?B?OWdsQmJYSHR0akpFejRDRCt6TnVvMGl1TUFxbkoyMGhXUCsvUENmbkZFSHJw?=
+ =?utf-8?B?bXZoaVZQQStaMkwwYld6NVFYOGhDRHR3cGlwZmdCYW5WdmpPaSs1azZFTklh?=
+ =?utf-8?B?NS9pd2dFdXpFWXBkeHRjSWs3YjZNaHlOUTd4OVVlSkVEeXFRaGdzck1vWEYx?=
+ =?utf-8?B?RDdEaFExMW1wbzR1eks2a2RCc3hpb0pqT0t6ZzFFQzQwekpVeERHZG1ITWFz?=
+ =?utf-8?B?SDB1WVZ3R1NPVlZmaGNBeEJkSVRVYmR1L3NZQlNEWmtrR1pEVUlFdndyYlJi?=
+ =?utf-8?B?Q09iUWNsc2M3eHhqUFBmUk1yNDVmQTZMbmVwd0ZSZytzNHp1UzVURzlzZXU3?=
+ =?utf-8?B?amNpcEJDYWsvTVNweFl4enNyVWRlMjgybENnVTZCdVQ5RkVHSERwUHp1Q3FC?=
+ =?utf-8?B?MlRvT3FGS3JRYWxqQWJTZUczZnIrMk5PVHNrdk4xaW85Kzl6OG5Fd2xFV0hF?=
+ =?utf-8?B?bHgrY1hlQU5nTWIrOVRwR2tWaHljZ0dsdEE0NThVcWUwTmpHZWRPY3F0TVgy?=
+ =?utf-8?B?eHJVN1MrSDJTTXRvcVJKOGRlQXV1YjBTdFhHN3JmSnpOWGRtQmFCaGp3azBV?=
+ =?utf-8?B?cG9HMXYrOWt2b1NjZTJsbTljaU5ZVW93Z0NGUTU3QlpxTkJWa1V5WnEzUWlT?=
+ =?utf-8?B?TmU3QXd1a2JLQzV1Qm9WQnA0Y2I5QzRyUC8xRkRCSk5HV1hUcCtJZ0RIeEJu?=
+ =?utf-8?B?S3JCWVZPQUdGc2s5b2tvKytyWnM0ZVlkamtMZnVKOW9BQ3F2V21QTzcrOXJz?=
+ =?utf-8?B?cVJ2ZHhQQS9SaVgwaFZJUDArY3JSdXoyT25BMFlVMzJQc2QrQUU4eEQvMzRM?=
+ =?utf-8?B?bHUxcVkxVExLeGRkaU5CaHNYMlFqb2NERGEybG01ZHVaMXF1amM0K21sT0NE?=
+ =?utf-8?B?QkFiWC9KZEc4bk8yUUJkS0hHbE1oVTFmOUtiZ1FQQkt5YU5RemcvRGZIM0h5?=
+ =?utf-8?B?dFhvQ1AzamZHdTNJVFg1TmFoRHpSenJWbHMveXNDZ0dHaFlrdER5MVdnWGx1?=
+ =?utf-8?B?dXFxMjdvdm81RkJyZnpKSGUzR1h4V3Zucit5WFZpbS9nTmFyNm40N2J6aGE3?=
+ =?utf-8?B?RGFrRHE2bUhTMTE5TEJDbkxtc28veWpITGFSRlBhQ2ZUZXJ6VVJmbFl3K3Yx?=
+ =?utf-8?B?ZjRoK3I1MnZzWWlvVjJHWk40eGVLVGlXMXJ3NWlnc0NoTlhlYzFLV3hRdnlI?=
+ =?utf-8?B?Uy8yT0hWdEZRclVZZElPQTEwaG9xNEI3amk0dStuWVp1WTUyRGZNTTI3cHZ6?=
+ =?utf-8?B?N0JCMm9vd2NZajRsYnBNdDlBSk1iaXV4anNQQ1IxbWZNNUZMU2xtd1VUQ3BO?=
+ =?utf-8?B?R0FkVVU0SEdaM0pkWVNVRlRyY3pUeGVsMi9NWWNabFhES0sxNW43U3pjcGVZ?=
+ =?utf-8?B?WFJWTURnazZNaE1Md2tlNDVaWnhNOXlGSXFTUzZFc2Q1RUhXTzBzWXZmaWtD?=
+ =?utf-8?B?NXlOUHFYMkRxa29RVmN2bnhDZ2NpMUNQMFcxQW9QcTBqcHhnQ0F4ZmFqeWFv?=
+ =?utf-8?B?cVBPVDZYQUU4c2ZmWTByTDdkeGZUSG5qRVB4VWVmTVJUeFZZK254OEtQSlBh?=
+ =?utf-8?B?S0FmNWE1RENWN0N5V09nRUZYYStLSjB3VDh0dHNscDkwUFdkYmZsRW0vb0tz?=
+ =?utf-8?B?NG5YNXpmY3BscFgxYXltNDhvcVVIYk9ibjh3ZTNmYVdWRFM5UThyOGxTUVJD?=
+ =?utf-8?B?Z0h6WnZra0VXdmgxVUg1UUQrd05mNWNkS2RxeGF6TEN4WG1iZTlDQkNrMkpK?=
+ =?utf-8?B?VWNTUE5FMy9EOHVUU3hweGdpOHhHRXFFRU00SW9ldFA0ZkxnYURJWHhBUVN1?=
+ =?utf-8?B?VGpSOUZ5YVhQWUZ2ajBGNXBsZ08zMU9MQ0tOQjhnMEQ4cWwxRWE4ZnVvb1JY?=
+ =?utf-8?B?cjVlaWE2SjFGSHl6Ritya0dSUzRVQVp3Z2t0SE1aTHBQVXQ5STIyS1FmTVZU?=
+ =?utf-8?B?aTZUUndHd2lEQXFLRmJ2UUtOUmZ5Y1UyaG51UlkzWXF0VkFCVjVrM1RyUTVR?=
+ =?utf-8?B?OHZWa0NQUkNaWUk4eWhtakc1UWZWSVJjMFlRZVQwZndDMTF6b3V5OGMrSzdB?=
+ =?utf-8?B?YWFzU1AyaWpwSUlpZ09sTEZOb3lhMWlRMkFyRFBqWDkvaWpKQnhURHllWVpO?=
+ =?utf-8?B?ckE9PQ==?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e542967-ab7e-4eff-c268-08dce58a924e
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2024 22:10:50.3676
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dfzgvIGrRsuocCLGujfLoXBXJ4hIEjjBdRcX+QuR2vJJQOeCv/cBuYnzVMyPngKqHVOfHNic11jOmIhXcQ5Q+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB2204
 
-tree:   https://github.com/intel/tdx.git guest-tpm
-head:   2e411a732a435e867d000fe01aa5c1380c9630c8
-commit: 6d4ad81993ed6f40f1f82c07cfe9fedf4b4d4722 [5/6] tpm: Add vTPM TDX support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241006/202410060310.PMUz8eIJ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241006/202410060310.PMUz8eIJ-lkp@intel.com/reproduce)
+On Sun, 29 Sep 2024 17:00:29 -0400
+Trevor Gross <tmgross@umich.edu> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410060310.PMUz8eIJ-lkp@intel.com/
+> On Fri, Sep 13, 2024 at 5:32=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote=
+:
+>=20
+> > -bindgen_c_flags_final =3D $(bindgen_c_flags_lto) -D__BINDGEN__
+> > +# `-fno-builtin` is passed to avoid bindgen from using clang builtin p=
+rototypes
+> > +# for functions like `memcpy` -- if this flag is not passed, bindgen-g=
+enerated
+> > +# prototypes use `c_ulong` or `c_uint` depending on architecture inste=
+ad of
+> > +# generating `usize`.
+> > +bindgen_c_flags_final =3D $(bindgen_c_flags_lto) -fno-builtin -D__BIND=
+GEN__ =20
+>=20
+> I wonder how reliable this behavior is. Maybe bindgen could do a
+> better job controlling this, is there an open issue?
+>=20
+> - Trevor
 
-All warnings (new ones prefixed by >>):
+I didn't search for bindgen issues when made this change, but
+apparently this is indeed the suggested approach in
+https://github.com/rust-lang/rust-bindgen/issues/1770
 
-   In file included from drivers/char/tpm/tpm_tdx.c:26:
-   In file included from drivers/char/tpm/tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-     167 |         int mapping_size;
-         |             ^
->> drivers/char/tpm/tpm_tdx.c:685:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     685 |         if (spdm->trans_ver != TDX_SESS_SPDM_TRANS_VER ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     686 |             spdm->aead_algo != TDX_AEAD_ALGO_AES_256) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/char/tpm/tpm_tdx.c:716:9: note: uninitialized use occurs here
-     716 |         return ret;
-         |                ^~~
-   drivers/char/tpm/tpm_tdx.c:685:2: note: remove the 'if' if its condition is always false
-     685 |         if (spdm->trans_ver != TDX_SESS_SPDM_TRANS_VER ||
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     686 |             spdm->aead_algo != TDX_AEAD_ALGO_AES_256) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     687 |                 dev_err(tdev->dev, "Invalid SPDM version or Algo\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     688 |                 goto unmap_addr;
-         |                 ~~~~~~~~~~~~~~~~
-     689 |         }
-         |         ~
->> drivers/char/tpm/tpm_tdx.c:685:6: warning: variable 'ret' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-     685 |         if (spdm->trans_ver != TDX_SESS_SPDM_TRANS_VER ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/char/tpm/tpm_tdx.c:716:9: note: uninitialized use occurs here
-     716 |         return ret;
-         |                ^~~
-   drivers/char/tpm/tpm_tdx.c:685:6: note: remove the '||' if its condition is always false
-     685 |         if (spdm->trans_ver != TDX_SESS_SPDM_TRANS_VER ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/char/tpm/tpm_tdx.c:658:9: note: initialize the variable 'ret' to silence this warning
-     658 |         int ret;
-         |                ^
-         |                 = 0
->> drivers/char/tpm/tpm_tdx.c:884:32: warning: unused variable 'tdx_guest_ids' [-Wunused-const-variable]
-     884 | static const struct x86_cpu_id tdx_guest_ids[] = {
-         |                                ^~~~~~~~~~~~~
-   4 warnings generated.
---
->> drivers/char/tpm/tpm_tdx.c:175: warning: Function parameter or member 'tdvmcall_status' not described in 'tdx_tpm_msg_resp'
->> drivers/char/tpm/tpm_tdx.c:175: warning: Function parameter or member 'service_cmd_status' not described in 'tdx_tpm_msg_resp'
->> drivers/char/tpm/tpm_tdx.c:175: warning: Function parameter or member 'rsvd' not described in 'tdx_tpm_msg_resp'
-
-
-vim +685 drivers/char/tpm/tpm_tdx.c
-
-   648	
-   649	/* Parse TDTK ACPI table and initialize the session object */
-   650	static int tdx_tpm_init_session(struct tdx_tpm_dev *tdev)
-   651	{
-   652		struct tdx_tpm_session *info = &tdev->session;
-   653		struct acpi_tdtk_aes_256_gcm *aes_gcm;
-   654		struct acpi_tdtk_spdm *spdm;
-   655		struct acpi_table_tdtk *tdtk;
-   656		void __iomem *addr;
-   657		acpi_status status;
-   658		int ret;
-   659	
-   660		status = acpi_get_table(ACPI_SIG_TDTK, 1,
-   661					(struct acpi_table_header **)&tdtk);
-   662		if (ACPI_FAILURE(status) || tdtk->header.length < sizeof(*tdtk)) {
-   663			dev_err(tdev->dev, FW_BUG "Failed to get TDTK ACPI table\n");
-   664			return -EINVAL;
-   665		}
-   666	
-   667		if (tdtk->version != TDX_SESS_INFO_VER ||
-   668		    tdtk->protocol != TDX_SESS_PROT_SPDM) {
-   669			dev_err(tdev->dev, "Unsupported TDTK protocol or version\n");
-   670			ret = -EINVAL;
-   671			goto put_table;
-   672		}
-   673	
-   674		addr = ioremap(tdtk->info_address, tdtk->info_len);
-   675		if (!addr) {
-   676			dev_err(tdev->dev, "Failed to remap SPDM table %llx\n",
-   677				tdtk->info_address);
-   678			ret = -EINVAL;
-   679			goto put_table;
-   680		}
-   681	
-   682		spdm = (struct acpi_tdtk_spdm *)addr;
-   683		aes_gcm = (struct acpi_tdtk_aes_256_gcm *)(addr + sizeof(*spdm));
-   684	
- > 685		if (spdm->trans_ver != TDX_SESS_SPDM_TRANS_VER ||
-   686		    spdm->aead_algo != TDX_AEAD_ALGO_AES_256) {
-   687			dev_err(tdev->dev, "Invalid SPDM version or Algo\n");
-   688			goto unmap_addr;
-   689		}
-   690	
-   691		info->ver = spdm->trans_ver;
-   692		info->algo = spdm->aead_algo;
-   693		info->sess_id = spdm->sess_id;
-   694	
-   695		ret = tdx_aes_256_init(&info->send_crypto, aes_gcm->req_key,
-   696				       TDX_AEAD_AES_256_KEY_LEN, aes_gcm->req_iv,
-   697				       TDX_AEAD_AES_256_IV_LEN,
-   698				       TDX_AEAD_AES_256_ATAG_LEN, aes_gcm->req_seq);
-   699		if (ret)
-   700			goto unmap_addr;
-   701	
-   702		ret = tdx_aes_256_init(&info->recv_crypto, aes_gcm->resp_key,
-   703				       TDX_AEAD_AES_256_KEY_LEN, aes_gcm->resp_iv,
-   704				       TDX_AEAD_AES_256_IV_LEN,
-   705				       TDX_AEAD_AES_256_ATAG_LEN, aes_gcm->resp_seq);
-   706		if (ret)
-   707			goto aes_deinit;
-   708	
-   709		goto unmap_addr;
-   710	aes_deinit:
-   711		tdx_aes_256_deinit(&info->send_crypto);
-   712	unmap_addr:
-   713		iounmap(addr);
-   714	put_table:
-   715		acpi_put_table((struct acpi_table_header *)tdtk);
-   716		return ret;
-   717	}
-   718	
-   719	static void free_shared_pages(void *buf, size_t len)
-   720	{
-   721		unsigned int count = PAGE_ALIGN(len) >> PAGE_SHIFT;
-   722	
-   723		set_memory_encrypted((unsigned long)buf, count);
-   724	
-   725		free_pages_exact(buf, PAGE_ALIGN(len));
-   726	}
-   727	
-   728	static void *alloc_shared_pages(size_t len)
-   729	{
-   730		unsigned int count = PAGE_ALIGN(len) >> PAGE_SHIFT;
-   731		void *addr;
-   732		int ret;
-   733	
-   734		addr = alloc_pages_exact(len, GFP_KERNEL);
-   735		if (!addr)
-   736			return NULL;
-   737	
-   738		ret = set_memory_decrypted((unsigned long)addr, count);
-   739		if (ret) {
-   740			free_pages_exact(addr, PAGE_ALIGN(len));
-   741			return NULL;
-   742		}
-   743	
-   744		return addr;
-   745	}
-   746	
-   747	static void tdx_tpm_free_buf(struct tdx_tpm_dev *tdev)
-   748	{
-   749		free_shared_pages((void *)tdev->req, tdev->msg_len);
-   750		free_shared_pages((void *)tdev->resp, tdev->msg_len);
-   751	}
-   752	
-   753	static int tdx_tpm_alloc_buf(struct tdx_tpm_dev *tdev)
-   754	{
-   755		tdev->msg_len = TDX_TPM_MSG_LEN;
-   756	
-   757		tdev->req = (struct tdx_tpm_msg_req *)alloc_shared_pages(tdev->msg_len);
-   758		if (!tdev->req)
-   759			goto alloc_failed;
-   760	
-   761		tdev->resp = (struct tdx_tpm_msg_resp *)alloc_shared_pages(tdev->msg_len);
-   762		if (!tdev->resp)
-   763			goto alloc_failed;
-   764	
-   765		return 0;
-   766	
-   767	alloc_failed:
-   768		dev_err(tdev->dev, "Buffer allocation failed\n");
-   769		tdx_tpm_free_buf(tdev);
-   770		return -ENOMEM;
-   771	}
-   772	
-   773	static int tdx_tpm_alloc_irq(struct tdx_tpm_dev *tdev)
-   774	{
-   775		int ret, irq;
-   776	
-   777		/* Allocate an IRQ vector for service callback */
-   778		irq = tdx_alloc_event_irq();
-   779		if (irq <= 0)
-   780			return -EIO;
-   781	
-   782		/*
-   783		 * VMM will use the same CPU that makes the TDX service call for
-   784		 * event notification. Set the IRQ with IRQF_NOBALANCING to prevent
-   785		 * its affinity from being changed.
-   786		 */
-   787		ret = request_irq(irq, tdx_service_irq_handler, IRQF_NOBALANCING | IRQF_SHARED,
-   788	                          "tdx_service_irq", tdev);
-   789	        if (ret) {
-   790	                pr_err("Event notification IRQ request failed ret:%d\n", ret);
-   791	                return -EIO;
-   792	        }
-   793	
-   794	
-   795		tdev->irq = irq;
-   796	
-   797		return ret;
-   798	}
-   799	
-   800	static void tdx_tpm_free_irq(struct tdx_tpm_dev *tdev)
-   801	{
-   802		if (tdev->irq <= 0)
-   803			return;
-   804	
-   805		free_irq(tdev->irq, tdev);
-   806		tdx_free_event_irq(tdev->irq);
-   807	}
-   808	
-   809	static int tdx_tpm_probe(struct platform_device *pdev)
-   810	{
-   811		struct tdx_tpm_dev *tdev;
-   812		struct tpm_chip *chip;
-   813		int err;
-   814	
-   815		tdev = kzalloc(sizeof(*tdev), GFP_KERNEL);
-   816		if (!tdev)
-   817			return -ENOMEM;
-   818	
-   819		tdev->dev = &pdev->dev;
-   820		mutex_init(&tdev->tpm_req_lock);
-   821	
-   822		err = tdx_tpm_alloc_buf(tdev);
-   823		if (err)
-   824			goto free_tdev;
-   825	
-   826		err = tdx_tpm_init_session(tdev);
-   827		if (err)
-   828			goto free_buf;
-   829	
-   830		init_completion(&tdev->service.compl);
-   831	
-   832		err = tdx_tpm_alloc_irq(tdev);
-   833		if (err)
-   834			goto free_session;
-   835	
-   836		chip = tpmm_chip_alloc(&pdev->dev, &tpm_chip_ops);
-   837		if (IS_ERR(chip)) {
-   838			err = PTR_ERR(chip);
-   839			goto free_cb;
-   840		}
-   841	
-   842		tdev->chip = chip;
-   843		dev_set_drvdata(&chip->dev, tdev);
-   844	
-   845		chip->flags |= TPM_CHIP_FLAG_IRQ;
-   846		err = tpm2_probe(chip);
-   847		if (err)
-   848			goto free_cb;
-   849	
-   850		err = tpm_chip_register(chip);
-   851		if (err)
-   852			goto free_cb;
-   853	
-   854		dev_info(&pdev->dev, "TDX vTPM %s device\n",
-   855			 (chip->flags & TPM_CHIP_FLAG_TPM2) ? "2.0" : "1.2");
-   856	
-   857		return 0;
-   858	
-   859	free_cb:
-   860		tdx_tpm_free_irq(tdev);
-   861	free_session:
-   862		tdx_tpm_deinit_session(tdev);
-   863	free_buf:
-   864		tdx_tpm_free_buf(tdev);
-   865	free_tdev:
-   866		kfree(tdev);
-   867	
-   868		return err;
-   869	}
-   870	
-   871	static int tdx_tpm_remove(struct platform_device *pdev)
-   872	{
-   873		struct tpm_chip *chip = dev_get_drvdata(&pdev->dev);
-   874		struct tdx_tpm_dev *tdev = dev_get_drvdata(&chip->dev);
-   875	
-   876		tdx_tpm_free_irq(tdev);
-   877		tdx_tpm_deinit_session(tdev);
-   878		tdx_tpm_free_buf(tdev);
-   879		tpm_chip_unregister(tdev->chip);
-   880		kfree(tdev);
-   881		return 0;
-   882	}
-   883	
- > 884	static const struct x86_cpu_id tdx_guest_ids[] = {
-   885		X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
-   886		{}
-   887	};
-   888	MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
-   889	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best,
+Gary
