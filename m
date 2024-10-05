@@ -1,63 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44B614D2B3;
-	Fri,  4 Oct 2024 23:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E481749A;
+	Sat,  5 Oct 2024 01:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728086390; cv=none; b=QsZ3qjGX/Ok4xHtPV5afd5FPjo8+fXaNpenGLZeYps1hyrDYp1CDgEnyPsH48ehrYsyAOWue/osV+bcw/wN/6ExL4WCKySJQ0NC5mdQ4kcXKcVkfTNOGwsW8+8rG+KOan5WxoGtbdIu2hMPDorN1iymCRkoE5p/hQlWDOgnjs2Y=
+	t=1728090835; cv=none; b=nqwKdd+mkL4qV0TDdK6Pd7BFAeXpySgyYJ1ts1RmD/EETzaXqQ2FbtPnBjtHXgmc9vvxM/zsbcUNM0dr24o0Ujl4gXlPwuqr939aG/EJ7y6zfqNkxo8QhW3vpcqQ6HVbhhg7O6R7L6WJ7odwDAquSodKporM6kTz3uYD7gFxoVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728086390; c=relaxed/simple;
-	bh=pkFs7lkzwnAV7kMzsCAOU0nn92TjwRHRGRSsl5BbEFs=;
+	s=arc-20240116; t=1728090835; c=relaxed/simple;
+	bh=ROpFcwVfpBZVEEAbzD/niLbgvfn+U8TQfekfFIK1SB4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gLMXONoPmkC19fyisOMAQPV0GOSLwQLGGr79rx4foTEH6Mrnz+k04L88m3upNU9NRNkTYugkXmS66Fl5Jfu3twAd/daAYajpvYoqy/l8fx2guINTFIpSGro2NiCFIXREqoG+2QWEbGohxgtvygRMkbcUydkhSqRrw1nQbSU33Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RZ1eSbao; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nlm/uOb6IafOxX3OkMnCJ0+m93mkI9xET4es3VDBVE2+wZzoOPg9bpdETvjZTdVQQ2RQpvX3GuOLz+wWYmD4XDHkh+J9VmM9FGr1X2nFTKsWPhhTDMoU0E3GycfDzLzj2vg+wIt0kpkqq3aqHKVkv62wrL4qdpeX3VeB1tZR+zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VEjnu/Dg; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RZ1eSbao"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VEjnu/Dg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728086389; x=1759622389;
+  t=1728090833; x=1759626833;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pkFs7lkzwnAV7kMzsCAOU0nn92TjwRHRGRSsl5BbEFs=;
-  b=RZ1eSbao5OoMKC5AnfmztMyOJgtWpl5yFo/1CAvLF33dXmcZPzG54SF0
-   Vy18BZ2WaeUPPtfcCyTaFrCj22BijCQ7BaT9wX7z792SsvFyMko8frBIx
-   AdGdjO0+hupEBlLW4SF9h+JJM9Cq8JOkiuvnknJFQPJIp/vU87s4lLNl7
-   5EeCB51v2fwbWvI9X4cWe44hMKedp9vftaRTfCqKfhsoBz8BOXYijhUJS
-   tBdIGCaWT9YCXRoasY+nN54VbizhRHWTe2KntiDHnAZbAlBkFoqcI9e5f
-   +0T33rLiVioFUSvYtTNPbc5oSiEBLyY3VT8AD87Hd5+Y0owXgBPfXcfHu
-   g==;
-X-CSE-ConnectionGUID: eCpcjtpKTX24uTPJrfeIBQ==
-X-CSE-MsgGUID: Lpa7XkWwQG+FDoKNNQEl2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="27456446"
-X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="27456446"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 16:59:49 -0700
-X-CSE-ConnectionGUID: yyxXa65FQ2iEoW0f05Pnjw==
-X-CSE-MsgGUID: YO9UuW43Q5KtpCCGAybLWw==
+  bh=ROpFcwVfpBZVEEAbzD/niLbgvfn+U8TQfekfFIK1SB4=;
+  b=VEjnu/DgY0VPytyJ/m2IpkBk8bKs5uvUfo5Rhih4L6JXSOQSojueiQj/
+   D+rqJ9103hITVU1m7Q8VZW4MTLUBRToGeoxycXRwVwWzao1AEw4wRhdSh
+   ihz5oDy0/9WrxUagLeGFxQAzQKbs1uY0tJyRSJVm8Ry18vKB04SWbUPoe
+   Yr80jtCe+cvT2NKvfyw8A4ViUdtloyRUGtmxbaebuMG+pIfGoPPchgnph
+   /ysE6RIgmIdaONgTY+Plcv0At2Q6SKTc/1a1h8S2+wWPcatazRmodBNeX
+   dNqXpIGEmxHGive7OavKPK2SKlXKUnJtti/yQoElS2nMXpCUp2pSszjwT
+   A==;
+X-CSE-ConnectionGUID: TwkWVeZATPGgGHxjjKaBVQ==
+X-CSE-MsgGUID: eqTtFRhnRASK+zTvswycMA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="37891408"
+X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
+   d="scan'208";a="37891408"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 18:13:53 -0700
+X-CSE-ConnectionGUID: Jq3hpcnDQ9SJ7qXh6xlIgQ==
+X-CSE-MsgGUID: YHkhactZQc2V34zPY3+UIw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="75290559"
+X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
+   d="scan'208";a="78857400"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 04 Oct 2024 16:59:46 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 04 Oct 2024 18:13:48 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1swsD2-0002Ly-0B;
-	Fri, 04 Oct 2024 23:59:44 +0000
-Date: Sat, 5 Oct 2024 07:59:25 +0800
+	id 1swtMf-0002P8-2G;
+	Sat, 05 Oct 2024 01:13:45 +0000
+Date: Sat, 5 Oct 2024 09:12:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ville Syrjala <ville.syrjala@linux.intel.com>,
-	dri-devel@lists.freedesktop.org
+To: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org,
+	peterz@infradead.org, oleg@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org,
-	Jani Nikula <jani.nikula@intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 1/8] drm/client: Constify modes
-Message-ID: <202410050750.I0iVowt8-lkp@intel.com>
-References: <20241003113304.11700-2-ville.syrjala@linux.intel.com>
+	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org,
+	willy@infradead.org, surenb@google.com, akpm@linux-foundation.org,
+	linux-mm@kvack.org, mjguzik@gmail.com, brauner@kernel.org,
+	jannh@google.com, mhocko@kernel.org, vbabka@suse.cz,
+	mingo@kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v2 tip/perf/core 5/5] uprobes: add speculative lockless
+ VMA-to-inode-to-uprobe resolution
+Message-ID: <202410050846.Zbsm9OI1-lkp@intel.com>
+References: <20241001225207.2215639-6-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,73 +70,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241003113304.11700-2-ville.syrjala@linux.intel.com>
+In-Reply-To: <20241001225207.2215639-6-andrii@kernel.org>
 
-Hi Ville,
+Hi Andrii,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on next-20241004]
-[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm/drm-next drm-exynos/exynos-drm-next linus/master v6.12-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on tip/perf/core]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-client-Constify-modes/20241004-061843
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20241003113304.11700-2-ville.syrjala%40linux.intel.com
-patch subject: [PATCH 1/8] drm/client: Constify modes
-config: i386-buildonly-randconfig-002-20241005 (https://download.01.org/0day-ci/archive/20241005/202410050750.I0iVowt8-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/mm-introduce-mmap_lock_speculation_-start-end/20241002-065354
+base:   tip/perf/core
+patch link:    https://lore.kernel.org/r/20241001225207.2215639-6-andrii%40kernel.org
+patch subject: [PATCH v2 tip/perf/core 5/5] uprobes: add speculative lockless VMA-to-inode-to-uprobe resolution
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20241005/202410050846.Zbsm9OI1-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050750.I0iVowt8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050846.Zbsm9OI1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410050750.I0iVowt8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410050846.Zbsm9OI1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/drm_client_modeset.c:1266:
->> drivers/gpu/drm/tests/drm_client_modeset_test.c:108:7: error: assigning to 'struct drm_display_mode *' from 'const struct drm_display_mode *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     108 |         mode = drm_connector_pick_cmdline_mode(connector);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/events/uprobes.c:2098:39: error: incompatible pointer types passing 'long *' to parameter of type 'int *' [-Werror,-Wincompatible-pointer-types]
+    2098 |         if (!mmap_lock_speculation_start(mm, &seq))
+         |                                              ^~~~
+   include/linux/mmap_lock.h:126:75: note: passing argument to parameter 'seq' here
+     126 | static inline bool mmap_lock_speculation_start(struct mm_struct *mm, int *seq) { return false; }
+         |                                                                           ^
    1 error generated.
 
 
-vim +108 drivers/gpu/drm/tests/drm_client_modeset_test.c
+vim +2098 kernel/events/uprobes.c
 
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   84  
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   85  static void drm_test_pick_cmdline_res_1920_1080_60(struct kunit *test)
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   86  {
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   87  	struct drm_client_modeset_test_priv *priv = test->priv;
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   88  	struct drm_device *drm = priv->drm;
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   89  	struct drm_connector *connector = &priv->connector;
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   90  	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   91  	struct drm_display_mode *expected_mode, *mode;
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   92  	const char *cmdline = "1920x1080@60";
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   93  	int ret;
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   94  
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   95  	expected_mode = drm_mode_find_dmt(priv->drm, 1920, 1080, 60, false);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   96  	KUNIT_ASSERT_NOT_NULL(test, expected_mode);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   97  
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   98  	KUNIT_ASSERT_TRUE(test,
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14   99  			  drm_mode_parse_command_line_for_connector(cmdline,
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  100  								    connector,
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  101  								    cmdline_mode));
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  102  
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  103  	mutex_lock(&drm->mode_config.mutex);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  104  	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  105  	mutex_unlock(&drm->mode_config.mutex);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  106  	KUNIT_ASSERT_GT(test, ret, 0);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  107  
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14 @108  	mode = drm_connector_pick_cmdline_mode(connector);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  109  	KUNIT_ASSERT_NOT_NULL(test, mode);
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  110  
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  111  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected_mode, mode));
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  112  }
-8fc0380f6ba7e94 Maxime Ripard 2022-11-14  113  
+  2086	
+  2087	static struct uprobe *find_active_uprobe_speculative(unsigned long bp_vaddr)
+  2088	{
+  2089		struct mm_struct *mm = current->mm;
+  2090		struct uprobe *uprobe = NULL;
+  2091		struct vm_area_struct *vma;
+  2092		struct file *vm_file;
+  2093		loff_t offset;
+  2094		long seq;
+  2095	
+  2096		guard(rcu)();
+  2097	
+> 2098		if (!mmap_lock_speculation_start(mm, &seq))
+  2099			return NULL;
+  2100	
+  2101		vma = vma_lookup(mm, bp_vaddr);
+  2102		if (!vma)
+  2103			return NULL;
+  2104	
+  2105		/* vm_file memory can be reused for another instance of struct file,
+  2106		 * but can't be freed from under us, so it's safe to read fields from
+  2107		 * it, even if the values are some garbage values; ultimately
+  2108		 * find_uprobe_rcu() + mmap_lock_speculation_end() check will ensure
+  2109		 * that whatever we speculatively found is correct
+  2110		 */
+  2111		vm_file = READ_ONCE(vma->vm_file);
+  2112		if (!vm_file)
+  2113			return NULL;
+  2114	
+  2115		offset = (loff_t)(vma->vm_pgoff << PAGE_SHIFT) + (bp_vaddr - vma->vm_start);
+  2116		uprobe = find_uprobe_rcu(vm_file->f_inode, offset);
+  2117		if (!uprobe)
+  2118			return NULL;
+  2119	
+  2120		/* now double check that nothing about MM changed */
+  2121		if (!mmap_lock_speculation_end(mm, seq))
+  2122			return NULL;
+  2123	
+  2124		return uprobe;
+  2125	}
+  2126	
 
 -- 
 0-DAY CI Kernel Test Service
