@@ -1,151 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E481749A;
-	Sat,  5 Oct 2024 01:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CD4322B
+	for <llvm@lists.linux.dev>; Sat,  5 Oct 2024 01:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728090835; cv=none; b=nqwKdd+mkL4qV0TDdK6Pd7BFAeXpySgyYJ1ts1RmD/EETzaXqQ2FbtPnBjtHXgmc9vvxM/zsbcUNM0dr24o0Ujl4gXlPwuqr939aG/EJ7y6zfqNkxo8QhW3vpcqQ6HVbhhg7O6R7L6WJ7odwDAquSodKporM6kTz3uYD7gFxoVE=
+	t=1728093191; cv=none; b=RgoQP1DuY2TSHBPMEiUu7nwgDkhjbtDwWazAMiTXgvbuaO0v0S/lNBew8HINO2Y7bGeM+NWDxGTgwa89oEJrLErxLFycJi/6AlherqhFii72wnWmp6B8SN9+y+wWjmGwPCYeET5Xh+1JCAPoDTNqpsxdJFc1Ur3weOzO1jv7Cuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728090835; c=relaxed/simple;
-	bh=ROpFcwVfpBZVEEAbzD/niLbgvfn+U8TQfekfFIK1SB4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nlm/uOb6IafOxX3OkMnCJ0+m93mkI9xET4es3VDBVE2+wZzoOPg9bpdETvjZTdVQQ2RQpvX3GuOLz+wWYmD4XDHkh+J9VmM9FGr1X2nFTKsWPhhTDMoU0E3GycfDzLzj2vg+wIt0kpkqq3aqHKVkv62wrL4qdpeX3VeB1tZR+zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VEjnu/Dg; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728093191; c=relaxed/simple;
+	bh=hj4ihVErneW3eKNctYaw85h1BxQXCkqspgU2pXKSEgM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jA4viQULaqyobZRexnHO9IOfydR12uX1AyEGIRTtpEWyjsCO3y+VfCB5aiRH87r1s73kxRIIYTw7jwEVYYMSq2of+D7Nb/2pYQI4BaqqxiCRYZwCuHlKDWYP0sP73fl54J696VT1pcn+jHauPVAyNUuYwdP9Bv4kQeIVkwO6pC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PU4vJOMY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VEjnu/Dg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728090833; x=1759626833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ROpFcwVfpBZVEEAbzD/niLbgvfn+U8TQfekfFIK1SB4=;
-  b=VEjnu/DgY0VPytyJ/m2IpkBk8bKs5uvUfo5Rhih4L6JXSOQSojueiQj/
-   D+rqJ9103hITVU1m7Q8VZW4MTLUBRToGeoxycXRwVwWzao1AEw4wRhdSh
-   ihz5oDy0/9WrxUagLeGFxQAzQKbs1uY0tJyRSJVm8Ry18vKB04SWbUPoe
-   Yr80jtCe+cvT2NKvfyw8A4ViUdtloyRUGtmxbaebuMG+pIfGoPPchgnph
-   /ysE6RIgmIdaONgTY+Plcv0At2Q6SKTc/1a1h8S2+wWPcatazRmodBNeX
-   dNqXpIGEmxHGive7OavKPK2SKlXKUnJtti/yQoElS2nMXpCUp2pSszjwT
-   A==;
-X-CSE-ConnectionGUID: TwkWVeZATPGgGHxjjKaBVQ==
-X-CSE-MsgGUID: eqTtFRhnRASK+zTvswycMA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="37891408"
-X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
-   d="scan'208";a="37891408"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 18:13:53 -0700
-X-CSE-ConnectionGUID: Jq3hpcnDQ9SJ7qXh6xlIgQ==
-X-CSE-MsgGUID: YHkhactZQc2V34zPY3+UIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
-   d="scan'208";a="78857400"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Oct 2024 18:13:48 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swtMf-0002P8-2G;
-	Sat, 05 Oct 2024 01:13:45 +0000
-Date: Sat, 5 Oct 2024 09:12:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org,
-	peterz@infradead.org, oleg@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org,
-	willy@infradead.org, surenb@google.com, akpm@linux-foundation.org,
-	linux-mm@kvack.org, mjguzik@gmail.com, brauner@kernel.org,
-	jannh@google.com, mhocko@kernel.org, vbabka@suse.cz,
-	mingo@kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v2 tip/perf/core 5/5] uprobes: add speculative lockless
- VMA-to-inode-to-uprobe resolution
-Message-ID: <202410050846.Zbsm9OI1-lkp@intel.com>
-References: <20241001225207.2215639-6-andrii@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PU4vJOMY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1728093188;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mU8G402SQ6eK1GETxTU1iO7+8QmaOcTXI/5rXr0xXpI=;
+	b=PU4vJOMY1wTGYBmuDnlmJCzxmbcq7DNP3AH/pND67bHwHT+t7e84Izs9MK/eA6j7bSlFA1
+	HoMgBpvfyQp/RhI7n2oDwglW8nzuAi9aevCNlqKhWjChd7cmbsPDxMjlFdlnerSCBy7eMr
+	RI8KP+mcBubUa8B32L5RZYVEbs5IcrY=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-619-NobZjclRO3uo7AfI0JloFg-1; Fri,
+ 04 Oct 2024 21:53:07 -0400
+X-MC-Unique: NobZjclRO3uo7AfI0JloFg-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2FE4819560A3
+	for <llvm@lists.linux.dev>; Sat,  5 Oct 2024 01:53:06 +0000 (UTC)
+Received: from [172.64.3.39] (unknown [10.30.33.101])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9233C3000198;
+	Sat,  5 Oct 2024 01:53:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc1,
+ mainline.kernel.org-clang, 27cc6fdf)
+Date: Sat, 05 Oct 2024 01:53:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241001225207.2215639-6-andrii@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <07859.124100421530700128@us-mta-619.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/perf/core]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/mm-introduce-mmap_lock_speculation_-start-end/20241002-065354
-base:   tip/perf/core
-patch link:    https://lore.kernel.org/r/20241001225207.2215639-6-andrii%40kernel.org
-patch subject: [PATCH v2 tip/perf/core 5/5] uprobes: add speculative lockless VMA-to-inode-to-uprobe resolution
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20241005/202410050846.Zbsm9OI1-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050846.Zbsm9OI1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410050846.Zbsm9OI1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/events/uprobes.c:2098:39: error: incompatible pointer types passing 'long *' to parameter of type 'int *' [-Werror,-Wincompatible-pointer-types]
-    2098 |         if (!mmap_lock_speculation_start(mm, &seq))
-         |                                              ^~~~
-   include/linux/mmap_lock.h:126:75: note: passing argument to parameter 'seq' here
-     126 | static inline bool mmap_lock_speculation_start(struct mm_struct *mm, int *seq) { return false; }
-         |                                                                           ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +2098 kernel/events/uprobes.c
+Kernel information:
+    Commit message: Merge tag 'linux_kselftest-fixes-6.12-rc2' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
-  2086	
-  2087	static struct uprobe *find_active_uprobe_speculative(unsigned long bp_vaddr)
-  2088	{
-  2089		struct mm_struct *mm = current->mm;
-  2090		struct uprobe *uprobe = NULL;
-  2091		struct vm_area_struct *vma;
-  2092		struct file *vm_file;
-  2093		loff_t offset;
-  2094		long seq;
-  2095	
-  2096		guard(rcu)();
-  2097	
-> 2098		if (!mmap_lock_speculation_start(mm, &seq))
-  2099			return NULL;
-  2100	
-  2101		vma = vma_lookup(mm, bp_vaddr);
-  2102		if (!vma)
-  2103			return NULL;
-  2104	
-  2105		/* vm_file memory can be reused for another instance of struct file,
-  2106		 * but can't be freed from under us, so it's safe to read fields from
-  2107		 * it, even if the values are some garbage values; ultimately
-  2108		 * find_uprobe_rcu() + mmap_lock_speculation_end() check will ensure
-  2109		 * that whatever we speculatively found is correct
-  2110		 */
-  2111		vm_file = READ_ONCE(vma->vm_file);
-  2112		if (!vm_file)
-  2113			return NULL;
-  2114	
-  2115		offset = (loff_t)(vma->vm_pgoff << PAGE_SHIFT) + (bp_vaddr - vma->vm_start);
-  2116		uprobe = find_uprobe_rcu(vm_file->f_inode, offset);
-  2117		if (!uprobe)
-  2118			return NULL;
-  2119	
-  2120		/* now double check that nothing about MM changed */
-  2121		if (!mmap_lock_speculation_end(mm, seq))
-  2122			return NULL;
-  2123	
-  2124		return uprobe;
-  2125	}
-  2126	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1482567263
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1482567263-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1482567263-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1482567263-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
