@@ -1,99 +1,149 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A275D14D2B9
-	for <llvm@lists.linux.dev>; Sat,  5 Oct 2024 14:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD25114B08E
+	for <llvm@lists.linux.dev>; Sat,  5 Oct 2024 15:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728139383; cv=none; b=Z12UEcqMyzp86hqESBEFnM6aUQrS5meN6LB/dhXqVUFaV6y8bY3ra/MPBGHGEJ3CEeSw9ydOqyD+sKTCRIkYEbe9JGDcIkyCh+G56h1xPyJhgxZfUTudJrhPN/D8DseqqDxsOl4xu5xBByrKxqmTUqz5C2IPxJ44AnBRP4nE8uI=
+	t=1728143327; cv=none; b=sot2Wz6yixUts51xQ8V4LrmNGY5Tl5NjFmmKWFET1XylPmwL9OyDCHRr+OX8ZR9Sd78l9P458yadrzz96rUpIdLjhGuYDPfwDDCdiLKAk2G93izuI1gBRvfNfNflHu801el8YVIbdWZ+j9ko+EH7DH+S6L8JaQ7qYEbjl+r+DDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728139383; c=relaxed/simple;
-	bh=kpSHQEms/Rvttwa5HYtYs+uKlFsj7N1NRyTtQWRzz+w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QVncdAhe4JVBFDjQpZxGZCNglzb6ydKJUZ7yrUpYOdoXORfWsvSIBhZD45C4OLXSRPRP02Qv5dI4YiY/C6jvPdlXiM8ZQOTTRqWyyGtz1pGsYRTCf+OCNK0NDYpQB49UKt4EFjHWOikTJmGHbhE0qFEYHLhRjJjcRSQa0Jwb3+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=nNC+sglF; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1728143327; c=relaxed/simple;
+	bh=CAwZZ/cbkZfNcTx3fD33ENauVSXB4fGFVU4Z9VQV5ng=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T9Iv6x2jwbUTjDk7KoKnhv3gqM6FEam2KMaa6j/xIatK9Kvyl2snpjkOuMjeC55g27Z6TxPiklKQ7saskz+2SgvcQkrrPxczVNcxXz9z5cojK7RGbTY65NhWRkpmFnKJ1gHSsKcPlQBGezRPte4/r/By3DHOtTyPTqycWJQGcQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aluYHm2t; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="nNC+sglF"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A660842B27
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1728139380; bh=1ghV5ihBKvKi7oCgzNLT9Q+CxNIVkuQosbBZs1PkcUo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=nNC+sglFQb2Y113jOnT5t5kTMDuqUx+XpA3Zb6KK1nYum8ML5G0LTRgPsA9frC1jN
-	 xg29VbvIKi2p47ooHcbkrHB4Tb/xibn4nya7hI36tWGMD2gC/8zPoktH7b8SALzXpX
-	 nWs3Y5qljNe6qbb15oSlGv1AjBRQKeDLMbNBUmlBoH0owKQZhejfNxXuaNVDHtf7Bt
-	 Rz7BPvlWZGSyFlZxAleTE2/C8vB3N7laoKq0qtxxKSIJY2py9EPUyVjbUbuPo53eaV
-	 rOBT1KiwPx5+OXdZeXT9nhSDArYsvA+2mWhi3q3FL4yNcxlGUXJH+osk9a1tR9SI5T
-	 jTNRR8Nf1KB+g==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id A660842B27;
-	Sat,  5 Oct 2024 14:43:00 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Rong Xu <xur@google.com>
-Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
- David Li <davidxl@google.com>, Krzysztof Pszeniczny
- <kpszeniczny@google.com>, Alice Ryhl <aliceryhl@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Bill Wendling
- <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao
- <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, Dave Hansen
- <dave.hansen@linux.intel.com>, Heiko Carstens <hca@linux.ibm.com>, "H.
- Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, Jann Horn
- <jannh@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross
- <jgross@suse.com>, Justin Stitt <justinstitt@google.com>,
- linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>, "Mike
- Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney"
- <paulmck@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Thomas
- Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>,
- workflows@vger.kernel.org, x86@kernel.org, "Xin Li (Intel)"
- <xin@zytor.com>, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 1/6] Add AutoFDO support for Clang build
-In-Reply-To: <202410041106.6C1BC9BDA@keescook>
-References: <20241002233409.2857999-1-xur@google.com>
- <20241002233409.2857999-2-xur@google.com>
- <20241003154143.GW5594@noisy.programming.kicks-ass.net>
- <202410041106.6C1BC9BDA@keescook>
-Date: Sat, 05 Oct 2024 08:42:59 -0600
-Message-ID: <87setapq4s.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aluYHm2t"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fad5024b8dso35620351fa.1
+        for <llvm@lists.linux.dev>; Sat, 05 Oct 2024 08:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728143322; x=1728748122; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dtxqmhjvfS2LHPA1jTETD3JSTrJ84jElXfjubNHHF9c=;
+        b=aluYHm2tNOIG/V917RIWHzuudL5VntrvBtDtwOMoMPL9hdGT2DU/WpKbdTx/R7jXI8
+         eX3K+n/0CeDyVjtWtpOVmcHkqjZKvjmbS+OsEQqaYJUU5xHJ3UQTsVZ9LH0VEEYe1PDJ
+         NxAnkMqLCZqKC0yXRVI9VKhDd9g1CZ2QUMYQjgLF10BV5owbExWb5KUZf7v2hnC8ncv3
+         aL82KR9ysT6Dee4LBZkLdOidWASF4mzFV8KMA7md3d1swa9SFuhVlFXkDU8fJMG1No8W
+         pkQFBGZJByamQPxo1dZyB2Z94/kjG4D+A7cAO5MvKgNNo0IY3d5p0gxwhfe/jfLDtS8S
+         zAlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728143322; x=1728748122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dtxqmhjvfS2LHPA1jTETD3JSTrJ84jElXfjubNHHF9c=;
+        b=m4CohpftJmVTy12CWbmLS5AR/mO3+kfgkQv1VmY9SD4gZy+FcV6Bw/cCbIgp06HpEV
+         8H/w5hGmZGALAB9Gi/5GtH/T8n78qkPIcqsWqx/+0r52+qOouEbWfZtJACLgDb5FBPBg
+         AkNEjKy+Q7yBfYgG9uHdV3DzZhGKBybxoyMFrcGOOYqJl8mzqAkatZ9KJGK4iQh00SOa
+         bQY3pwj6v07fXRdA0LE0NVa2uFnq769HvlGFZIIkUAXNPsuVfocIstP4k/CxYXFWsMNe
+         Y6ZGxBgXAXeBrGsPhNvB5AXwQxVoHfs3JfpoV06CcBevwmUeRawv1kP8XYokE8OzfliA
+         Fr2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU1bEePjeTnoJiepzqSwC1E9S25mczRvkybpQRVaO3JtBN2ASrF1P/FFU73SqMvduFEhuV2@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzg8RqrE4jkNYV4foh6zGbXMnr0hfw+fq4KMjSCISlMpGjhok4f
+	F5HLqbe3wBS4Qr5hz5yvx04w2rqUFeJTfHhuqthiru0JuKHCt5Rw1IRvkBqtqfsiK4zDUPDbFJu
+	hv5D/1P44J22qMHaEUwIaDzB6PQ==
+X-Google-Smtp-Source: AGHT+IFQhJujfFuTsYWjO3cyatW0jMKx8lC6zgFbyjgoqUx/Eap6iQT+vvVetq98t3rLbrv3vwXyYl9HWoEEK7CMN2w=
+X-Received: by 2002:a05:6512:baa:b0:534:3cdc:dbef with SMTP id
+ 2adb3069b0e04-539ab8add1fmr3167920e87.43.1728143321606; Sat, 05 Oct 2024
+ 08:48:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20241002092534.3163838-2-ardb+git@google.com> <CAMj1kXGDmkuwSROhnFkX_jYbWyAL738KmHbk5qYnThL6JWHapg@mail.gmail.com>
+In-Reply-To: <CAMj1kXGDmkuwSROhnFkX_jYbWyAL738KmHbk5qYnThL6JWHapg@mail.gmail.com>
+From: Brian Gerst <brgerst@gmail.com>
+Date: Sat, 5 Oct 2024 11:48:30 -0400
+Message-ID: <CAMzpN2i-EyGjkb9S6fWBXmZoj6GUEQNjSZ0-MviPJy-GiRxnPw@mail.gmail.com>
+Subject: Re: [PATCH] x86/stackprotector: Work around strict Clang TLS symbol requirements
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, x86@kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Fangrui Song <i@maskray.me>, Uros Bizjak <ubizjak@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Kees Cook <kees@kernel.org> writes:
-
-> The tradition in kernel .rst is to do this with the trailing "::", e.g.:
+On Wed, Oct 2, 2024 at 7:04=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wro=
+te:
 >
-> +Configure the kernel with::
-> +
-> +     CONFIG_AUTOFDO_CLANG=y
+> On Wed, 2 Oct 2024 at 11:25, Ard Biesheuvel <ardb+git@google.com> wrote:
+> >
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > GCC and Clang both implement stack protector support based on Thread
+> > Local Storage (TLS) variables, and this is used in the kernel to
+> > implement per-task stack cookies, by copying a task's stack cookie into
+> > a per-CPU variable every time it is scheduled in.
+> >
+> > Both now also implement -mstack-protector-guard-symbol=3D, which permit=
+s
+> > the TLS variable to be specified directly. This is useful because it
+> > will allow us to move away from using a fixed offset of 40 bytes into
+> > the per-CPU area on x86_64, which requires a lot of special handling in
+> > the per-CPU code and the runtime relocation code.
+> >
+> > However, while GCC is rather lax in its implementation of this command
+> > line option, Clang actually requires that the provided symbol name
+> > refers to a TLS variable (i.e., one declared with __thread), although i=
+t
+> > also permits the variable to be undeclared entirely, in which case it
+> > will use an implicit declaration of the right type.
+> >
+> > The upshot of this is that Clang will emit the correct references to th=
+e
+> > stack cookie variable in most cases, e.g.,
+> >
+> >    10d:       64 a1 00 00 00 00       mov    %fs:0x0,%eax
+> >                       10f: R_386_32   __stack_chk_guard
+> >
+> > However, if a non-TLS definition of the symbol in question is visible i=
+n
+> > the same compilation unit (which amounts to the whole of vmlinux if LTO
+> > is enabled), it will drop the per-CPU prefix and emit a load from a
+> > bogus address.
+> >
+> > Work around this by using a symbol name that never occurs in C code, an=
+d
+> > emit it as an alias in the linker script.
+> >
+> > Fixes: 3fb0fdb3bbe7 ("x86/stackprotector/32: Make the canary into a reg=
+ular percpu variable")
+> > Cc: <stable@vger.kernel.org>
+> > Cc: Fangrui Song <i@maskray.me>
+> > Cc: Brian Gerst <brgerst@gmail.com>
+> > Cc: Uros Bizjak <ubizjak@gmail.com>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Andy Lutomirski <luto@kernel.org>
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/1854
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >  arch/x86/Makefile             |  5 +++--
+> >  arch/x86/entry/entry.S        | 16 ++++++++++++++++
+> >  arch/x86/kernel/cpu/common.c  |  2 ++
+> >  arch/x86/kernel/vmlinux.lds.S |  3 +++
+> >  4 files changed, 24 insertions(+), 2 deletions(-)
+> >
 >
-> This loses the language-specific highlighting when rendered. Perhaps the
-> "::" extension can be further extended?
+> This needs the hunk below applied on top for CONFIG_MODVERSIONS:
 >
-> +Configure the kernel with::(make)
-> +
-> +     CONFIG_AUTOFDO_CLANG=y
+> --- a/arch/x86/include/asm/asm-prototypes.h
+> +++ b/arch/x86/include/asm/asm-prototypes.h
+> @@ -20,3 +20,6 @@
+>  extern void cmpxchg8b_emu(void);
+>  #endif
 >
-> Then we could avoid the extra 2 lines but still gain the rendered language
-> highlights?
+> +#ifdef CONFIG_STACKPROTECTOR
+> +extern unsigned long __ref_stack_chk_guard;
+> +#endif
 
-The :: notation is standard Sphinx, not an extension we have done.  So
-the proposed syntax would have to be done from the beginning, I'm not
-sure how easy or hard that would be, or whether it would be worth it.
-But then, I've always seen relatively little value in the highlighting;
-others clearly differ.
+Shouldn't this also be guarded by __GENKSYMS__, since the whole point
+of this is to hide the declaration from the compiler?
 
-Thanks,
-
-jon
+Brian Gerst
