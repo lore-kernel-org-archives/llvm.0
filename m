@@ -1,193 +1,172 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020110.outbound.protection.outlook.com [52.101.196.110])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B778B165EFA
-	for <llvm@lists.linux.dev>; Sat,  5 Oct 2024 22:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.110
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728166256; cv=fail; b=s8Zy29ynrwdb4OEmflJozV3CflPQlC3VYxcSQ9Qp+okpeOxsh+r9GaL7cw15g1DyUSlEqn7CEIdDMmg9DShXfEWU8ny70Bx18dPrDJh1ZZs133hIUud3NrOaGsqq1ChDICqhpblAGyTXnaoRhwOf08JF/8OdaH/0Ay1lVRKjMU4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728166256; c=relaxed/simple;
-	bh=3IQr/IJDAqqavfLUwhu4WzleiOhuvwPVxFVKDFMMGvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QakAmnKTu7hyGYdcFK64sla3r1M0jfiAlT9+KuUnJ1q248QrlVm/SC2UHBr4PS42VYhBEsMe4bkhJlJX8hhMandIiJpTJ2S0TfWLt7PUKu8R5+Im0kHPAoit39iWMx2chH6TlxJAuIzGBLj+vjBC8JFkZhWl+dcvMGz3B/r68LU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=S4oq/kkd; arc=fail smtp.client-ip=52.101.196.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1872F231C8F;
+	Sat,  5 Oct 2024 22:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728167194; cv=none; b=Zowh3Y5O4jmRCRpIs7Cc8jUdfJYRBPhGA+ibE4uFqBWpRJKmFwH2nvHSpldN2/UPDTV9IcS89rKdlu2gqCe50L8RM4AW/6uVrMNm1XljLMmLz1JFaBZpEt2UIazSfIdFsjt4M6M9yPP9OHS6UE4aVEdAMgbOJYNrZyafBA6AQbg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728167194; c=relaxed/simple;
+	bh=NRN+XmrObaWpC0cMaljPv9wGD6xfsxrY18o++erPKfQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d7XIlCBlBzG6jnQwu8n185QPQSu2sT7kTRZSdMS8Gl6unVvU9NmJxbltHCK0cP6avc8EWrEEnrPDtQZxsSFqi90ljGUVb5HFmMW4slh0cKMmPy79qDdySoNLObnBoJ0yTiWFbVyAyZ1q/0QUhvXFmQA8iONcXBi2CJBA7Ubs/NY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YoGNPnaR; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="S4oq/kkd"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JfVdPtRHj9MQ+10NM+ie+uMWYrQXSs9bDMsENWRUtDrZCBW9Z1Gvwya7W5xfWcjio+J2WnCyLsHuw4Dxq9FCyj0pXTJ665zMJGN0/iH7migTDAlfFGwhqT57ZAH3l9idm0p833nMrRQ8XraW2D+JAlQ4fXKhuR17WnHXtvh3O774T6uBT8AiwVilDUj5ocILVipNYm3r5E+Y+jko02R7opm91cJN7xpfh5eTd6prS+i7LKSCfV05g9zmuGZkA4LjDj6WBCeUXpQZcXf4obDrdmTYOTIZuCrAIpm53g5hCJU5jSWhgJ/oHyspZuea/8IXv/ql90dkS0iMxw4rdehJOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3IQr/IJDAqqavfLUwhu4WzleiOhuvwPVxFVKDFMMGvQ=;
- b=geH9lHbdFLUXFWCAeAaAE0H0FPdgyk5AloU5qpJ4SBEK6avPjo80AJkxixAf25HFej7A9UJm0921DzGRdTlw4FCoFcJhQ8e8yAuLTrSFQid49NE2tJQlvC2v1JRPjKb2RPZH/2Oc0oKYw4bnkRiAtv1sJEKKMgytF8SmG+pVelI3eU4ftX4FxK6c4gc1PHa7goEC7G4wIBYEEM0Gqi6n7B6tFDoxtOpGHPZVASIIy2O3MA0ZAId2ml+xHg80JF80Y29jvrQUHyVhZIFHfR+0UIz53uRIg8NVHJYpwdu+hrumqBwFpnQXkgZEI3r1HLZoobboZ5yNbE5TMGQHlq6HDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3IQr/IJDAqqavfLUwhu4WzleiOhuvwPVxFVKDFMMGvQ=;
- b=S4oq/kkdp7szFfPoIw+1I8T18qm9j9l9JaPTR9ljckJSPMSfNMMuZHv7C4S+6TGBGNr2bD3IRqUU3PROZsVffta3oxGxxHh+LTADj0SvMtMu5VSMv6IzuNsChjBbx7Om0dnsRrdmmNauX54e5oaElDEBnezANp9HtK5xEEDXYJI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO3P265MB2204.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:107::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.20; Sat, 5 Oct
- 2024 22:10:50 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%3]) with mapi id 15.20.8026.019; Sat, 5 Oct 2024
- 22:10:50 +0000
-Date: Sat, 5 Oct 2024 23:10:46 +0100
-From: Gary Guo <gary@garyguo.net>
-To: Trevor Gross <tmgross@umich.edu>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
- <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
- Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/5] rust: fix size_t in bindgen prototypes of C
- builtins
-Message-ID: <20241005231046.5f575779.gary@garyguo.net>
-In-Reply-To: <CALNs47sgdi4PU8YXxozMm4=7aQ9RspJsKkKrYuT++9KiC8E-KQ@mail.gmail.com>
-References: <20240913213041.395655-1-gary@garyguo.net>
-	<20240913213041.395655-2-gary@garyguo.net>
-	<CALNs47sgdi4PU8YXxozMm4=7aQ9RspJsKkKrYuT++9KiC8E-KQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: LO4P265CA0156.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c7::18) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YoGNPnaR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728167191; x=1759703191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NRN+XmrObaWpC0cMaljPv9wGD6xfsxrY18o++erPKfQ=;
+  b=YoGNPnaRsrYxuVeMGu72Vgs2IuMiMq3EV+4Ks6hkOwAy4iOuFLsZbchx
+   CooW3vwDSysCD6rTAeJtCiKaVBtF2ACjLx70IjsyI7GjTrgDhsKnyt8tW
+   srjwUGcxx3X8erwMovl+BwVvUILlS1KWyPAzTqPRlHTxNCUY7HbLcvTLO
+   0j0CnF4MJZDphThH82Jk1ox4SfW0vv2LOHNRirX0v2eKCqQSBNj015+nc
+   lD/8S9RN9x98aCSBiEeuC7EiWEaoPEbKJ9iyC8ilb9tou5PrYFp/QZn4e
+   gViyT6kIIz5F9fXcNuyF/I71av/e10YUgVjBz9IrTxN8Z5OLxRB2Bx9SW
+   w==;
+X-CSE-ConnectionGUID: 6QQ6oJKDQvKkUqgVEV96BA==
+X-CSE-MsgGUID: iZWx9hpmRvOXa1OQGCzsIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11216"; a="27446865"
+X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
+   d="scan'208";a="27446865"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 15:26:30 -0700
+X-CSE-ConnectionGUID: gf9FL0wZTi+Qj3PAyW7pMA==
+X-CSE-MsgGUID: 0jpWdUi0TxCA+N/x1G+lFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
+   d="scan'208";a="80025741"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 05 Oct 2024 15:26:29 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sxDEI-0003PX-35;
+	Sat, 05 Oct 2024 22:26:26 +0000
+Date: Sun, 6 Oct 2024 06:26:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: luca.boccassi@gmail.com, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	christian@brauner.io
+Subject: Re: [PATCH v4] pidfd: add ioctl to retrieve pid info
+Message-ID: <202410060624.Z84m82vK-lkp@intel.com>
+References: <20241004194751.215507-1-luca.boccassi@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB2204:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e542967-ab7e-4eff-c268-08dce58a924e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|10070799003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SkluZ1lzcE9PRjgyRlV2YUFQRHJ5N3l6TTVYVVRoZDJGMHJ5OTl0TS9MSUNv?=
- =?utf-8?B?c3c5QjNaWDFRS3BFdzBueGJQa1dGM0hqVU81M2R1V3VmMnQ1N0tkaCs5NlVi?=
- =?utf-8?B?aWJ0SG5lSHYyZVE5R2FhUjMvOFFCV2NZZjR5UlRxSlU3RFVMM3pIWkNZZmQ3?=
- =?utf-8?B?YlMwYWJhZU5pVEV3RlpNcGd4L1drY2tBNmY3YWZnZmFac0NaVlRhaDJUTCtW?=
- =?utf-8?B?dFVPYngzUXNZQlplb3l2U2FEYmo4Mi9MUGE3OUhvTUtQU0I3cjgrQXZDQVZx?=
- =?utf-8?B?YVV6cGdZTnRBL1Y0MnNkazJpYzBmaWVQM2UwVUFacTFWVnhxTy9BK00rYmJC?=
- =?utf-8?B?a3l2TXk0ZjVOSDlFeUljdzc1UHBaVFJOajhpNTc0WWpWRlZiZ1dYSWxOYm82?=
- =?utf-8?B?NndMK2JhOWFBc3pUYWtSdnpBaUU4V0o0b2VXZVFiblZVV285MmwvVFFHWE0z?=
- =?utf-8?B?MXlhbVQvdFlPbzYvMFpXVUxCSXdVQ25DamJVRERpRU5QYmFZY1NUcHE0Q3Rt?=
- =?utf-8?B?OFp6VUJ3L3lZaUdobHpQUTZWOGlKNXZBb0RkZWV3aTdZNU5LVkUwR0hjengv?=
- =?utf-8?B?TW1tbGdyYlczVTBhckg3RlRzdnNMd25MOVV4dkVBMnVPSWpsa0crcCthWC95?=
- =?utf-8?B?WXhXZ0wxR2w1ZDNmVlZ3dDltNEVZaWJHWUpOSWV0elFic0FEOFRndnBLbFMr?=
- =?utf-8?B?ZVF1SitPSmU2YUtwL1ZHVUJHL3lRUlJuZ2lRT0xld1JuTGFIak1tZjJGUnVV?=
- =?utf-8?B?RGlNbk12N1kwa0RvMUxNdWhwYkFQNFVjaG1VNWs0Tm9iVWxEb3ZKZUlMLzdk?=
- =?utf-8?B?N1BJMXczQnlBRkhIR3NnTUtVVDVCWUNVQ2hUUTd2YVdpVHpybkwwVGpkRmZQ?=
- =?utf-8?B?N2hpaVJnOU1zVWYwY0ZGQkpHSU54QStmcS9LdEUyaUZvSTY2TmlqNUdzeDZj?=
- =?utf-8?B?QU95RnV4aCtsZWl4YVZXdGRpRFV6RnphaXM4WGFVTmt6d3ErUkFGK2xRTDBn?=
- =?utf-8?B?K01FRnNLR0xzMXE5ZVJ6bGN3V3dlYTlLbEh5V3ZsekNsS3VkMDNqV280SkhJ?=
- =?utf-8?B?U2FmZ05CNXl4YTM5TXhhTCtMKzFubC9wVkYvdkNqVXdUcmRTZnJJU3k3c2ZF?=
- =?utf-8?B?eGd3K2U1N2VVN3h4bkVBd0ZyV09YMmVTVnVlcFAvcDQxa1NTS1k5OG1IWG4x?=
- =?utf-8?B?MzlHTHVrbzYzUkxaS2lUWG1VSGJWSlNwOTFjNm9jdUQ2Z092MDNYK2I5cU93?=
- =?utf-8?B?LzRZMVFjNTQ0RTJ3VU9WS25zNW1lcWZaQnozbUFLblNQcHRqRy9XU2xlRnhJ?=
- =?utf-8?B?aFJoRHZoMlFGU2gxTTQ2RGNYdy9nMEwvUTF0VVo3R1VTOUZqdGVPOEhERUhk?=
- =?utf-8?B?bzIxdGNJeGhiRkEzaUNMaWNabll6amw3NTdHT2xVSWNWQUFPUFBVREhHdktr?=
- =?utf-8?B?dGwyNmRZOEg3SWVBK24zTi80SGNwSzlrUWlqMTJhSDc0TzZ6aC9ETCtkVzlH?=
- =?utf-8?B?d1BZV2ZiWWdmOWowVks0OStsd0pELzlSN09ETnh3d3NpVDh5aHdPME1NLzFt?=
- =?utf-8?B?UnFDR2NtV1F6UllTRnEzdkpLc3Zvbmk2RTRNcWdyYkR5YnluV0ZQOFl6QmF5?=
- =?utf-8?B?c1FGNkI3Rk04SjVnakc1dkYvZExIaUt5cVJpZWZKeVZERHB1bHRaSVA4dmU4?=
- =?utf-8?B?SDZYOW5LVjZidjdBQlJPdzhzUHBlZXZkc3J2Q3MxTGhGeVAvMzZrMkRRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(10070799003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WGpsWDRsdzNoUTFhNE9RdkNNb1EyTGk0Q3JhSXB5TTRZa0owNVZ1WXJVRHpG?=
- =?utf-8?B?OWdsQmJYSHR0akpFejRDRCt6TnVvMGl1TUFxbkoyMGhXUCsvUENmbkZFSHJw?=
- =?utf-8?B?bXZoaVZQQStaMkwwYld6NVFYOGhDRHR3cGlwZmdCYW5WdmpPaSs1azZFTklh?=
- =?utf-8?B?NS9pd2dFdXpFWXBkeHRjSWs3YjZNaHlOUTd4OVVlSkVEeXFRaGdzck1vWEYx?=
- =?utf-8?B?RDdEaFExMW1wbzR1eks2a2RCc3hpb0pqT0t6ZzFFQzQwekpVeERHZG1ITWFz?=
- =?utf-8?B?SDB1WVZ3R1NPVlZmaGNBeEJkSVRVYmR1L3NZQlNEWmtrR1pEVUlFdndyYlJi?=
- =?utf-8?B?Q09iUWNsc2M3eHhqUFBmUk1yNDVmQTZMbmVwd0ZSZytzNHp1UzVURzlzZXU3?=
- =?utf-8?B?amNpcEJDYWsvTVNweFl4enNyVWRlMjgybENnVTZCdVQ5RkVHSERwUHp1Q3FC?=
- =?utf-8?B?MlRvT3FGS3JRYWxqQWJTZUczZnIrMk5PVHNrdk4xaW85Kzl6OG5Fd2xFV0hF?=
- =?utf-8?B?bHgrY1hlQU5nTWIrOVRwR2tWaHljZ0dsdEE0NThVcWUwTmpHZWRPY3F0TVgy?=
- =?utf-8?B?eHJVN1MrSDJTTXRvcVJKOGRlQXV1YjBTdFhHN3JmSnpOWGRtQmFCaGp3azBV?=
- =?utf-8?B?cG9HMXYrOWt2b1NjZTJsbTljaU5ZVW93Z0NGUTU3QlpxTkJWa1V5WnEzUWlT?=
- =?utf-8?B?TmU3QXd1a2JLQzV1Qm9WQnA0Y2I5QzRyUC8xRkRCSk5HV1hUcCtJZ0RIeEJu?=
- =?utf-8?B?S3JCWVZPQUdGc2s5b2tvKytyWnM0ZVlkamtMZnVKOW9BQ3F2V21QTzcrOXJz?=
- =?utf-8?B?cVJ2ZHhQQS9SaVgwaFZJUDArY3JSdXoyT25BMFlVMzJQc2QrQUU4eEQvMzRM?=
- =?utf-8?B?bHUxcVkxVExLeGRkaU5CaHNYMlFqb2NERGEybG01ZHVaMXF1amM0K21sT0NE?=
- =?utf-8?B?QkFiWC9KZEc4bk8yUUJkS0hHbE1oVTFmOUtiZ1FQQkt5YU5RemcvRGZIM0h5?=
- =?utf-8?B?dFhvQ1AzamZHdTNJVFg1TmFoRHpSenJWbHMveXNDZ0dHaFlrdER5MVdnWGx1?=
- =?utf-8?B?dXFxMjdvdm81RkJyZnpKSGUzR1h4V3Zucit5WFZpbS9nTmFyNm40N2J6aGE3?=
- =?utf-8?B?RGFrRHE2bUhTMTE5TEJDbkxtc28veWpITGFSRlBhQ2ZUZXJ6VVJmbFl3K3Yx?=
- =?utf-8?B?ZjRoK3I1MnZzWWlvVjJHWk40eGVLVGlXMXJ3NWlnc0NoTlhlYzFLV3hRdnlI?=
- =?utf-8?B?Uy8yT0hWdEZRclVZZElPQTEwaG9xNEI3amk0dStuWVp1WTUyRGZNTTI3cHZ6?=
- =?utf-8?B?N0JCMm9vd2NZajRsYnBNdDlBSk1iaXV4anNQQ1IxbWZNNUZMU2xtd1VUQ3BO?=
- =?utf-8?B?R0FkVVU0SEdaM0pkWVNVRlRyY3pUeGVsMi9NWWNabFhES0sxNW43U3pjcGVZ?=
- =?utf-8?B?WFJWTURnazZNaE1Md2tlNDVaWnhNOXlGSXFTUzZFc2Q1RUhXTzBzWXZmaWtD?=
- =?utf-8?B?NXlOUHFYMkRxa29RVmN2bnhDZ2NpMUNQMFcxQW9QcTBqcHhnQ0F4ZmFqeWFv?=
- =?utf-8?B?cVBPVDZYQUU4c2ZmWTByTDdkeGZUSG5qRVB4VWVmTVJUeFZZK254OEtQSlBh?=
- =?utf-8?B?S0FmNWE1RENWN0N5V09nRUZYYStLSjB3VDh0dHNscDkwUFdkYmZsRW0vb0tz?=
- =?utf-8?B?NG5YNXpmY3BscFgxYXltNDhvcVVIYk9ibjh3ZTNmYVdWRFM5UThyOGxTUVJD?=
- =?utf-8?B?Z0h6WnZra0VXdmgxVUg1UUQrd05mNWNkS2RxeGF6TEN4WG1iZTlDQkNrMkpK?=
- =?utf-8?B?VWNTUE5FMy9EOHVUU3hweGdpOHhHRXFFRU00SW9ldFA0ZkxnYURJWHhBUVN1?=
- =?utf-8?B?VGpSOUZ5YVhQWUZ2ajBGNXBsZ08zMU9MQ0tOQjhnMEQ4cWwxRWE4ZnVvb1JY?=
- =?utf-8?B?cjVlaWE2SjFGSHl6Ritya0dSUzRVQVp3Z2t0SE1aTHBQVXQ5STIyS1FmTVZU?=
- =?utf-8?B?aTZUUndHd2lEQXFLRmJ2UUtOUmZ5Y1UyaG51UlkzWXF0VkFCVjVrM1RyUTVR?=
- =?utf-8?B?OHZWa0NQUkNaWUk4eWhtakc1UWZWSVJjMFlRZVQwZndDMTF6b3V5OGMrSzdB?=
- =?utf-8?B?YWFzU1AyaWpwSUlpZ09sTEZOb3lhMWlRMkFyRFBqWDkvaWpKQnhURHllWVpO?=
- =?utf-8?B?ckE9PQ==?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e542967-ab7e-4eff-c268-08dce58a924e
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2024 22:10:50.3676
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dfzgvIGrRsuocCLGujfLoXBXJ4hIEjjBdRcX+QuR2vJJQOeCv/cBuYnzVMyPngKqHVOfHNic11jOmIhXcQ5Q+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB2204
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241004194751.215507-1-luca.boccassi@gmail.com>
 
-On Sun, 29 Sep 2024 17:00:29 -0400
-Trevor Gross <tmgross@umich.edu> wrote:
+Hi,
 
-> On Fri, Sep 13, 2024 at 5:32=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote=
-:
->=20
-> > -bindgen_c_flags_final =3D $(bindgen_c_flags_lto) -D__BINDGEN__
-> > +# `-fno-builtin` is passed to avoid bindgen from using clang builtin p=
-rototypes
-> > +# for functions like `memcpy` -- if this flag is not passed, bindgen-g=
-enerated
-> > +# prototypes use `c_ulong` or `c_uint` depending on architecture inste=
-ad of
-> > +# generating `usize`.
-> > +bindgen_c_flags_final =3D $(bindgen_c_flags_lto) -fno-builtin -D__BIND=
-GEN__ =20
->=20
-> I wonder how reliable this behavior is. Maybe bindgen could do a
-> better job controlling this, is there an open issue?
->=20
-> - Trevor
+kernel test robot noticed the following build errors:
 
-I didn't search for bindgen issues when made this change, but
-apparently this is indeed the suggested approach in
-https://github.com/rust-lang/rust-bindgen/issues/1770
+[auto build test ERROR on 9852d85ec9d492ebef56dc5f229416c925758edc]
 
-Best,
-Gary
+url:    https://github.com/intel-lab-lkp/linux/commits/luca-boccassi-gmail-com/pidfd-add-ioctl-to-retrieve-pid-info/20241005-041639
+base:   9852d85ec9d492ebef56dc5f229416c925758edc
+patch link:    https://lore.kernel.org/r/20241004194751.215507-1-luca.boccassi%40gmail.com
+patch subject: [PATCH v4] pidfd: add ioctl to retrieve pid info
+config: arm-randconfig-002-20241006 (https://download.01.org/0day-ci/archive/20241006/202410060624.Z84m82vK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241006/202410060624.Z84m82vK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410060624.Z84m82vK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/pidfs.c:156:25: error: implicit declaration of function 'task_css_check' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+                                         ^
+   fs/pidfs.c:156:64: error: member reference type 'int' is not a pointer
+                   struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
+   fs/pidfs.c:156:46: error: use of undeclared identifier 'pids_cgrp_id'
+                   struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+                                                              ^
+   3 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [m]:
+   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+
+
+vim +/task_css_check +156 fs/pidfs.c
+
+   117	
+   118	static long pidfd_info(struct task_struct *task, unsigned int cmd, unsigned long arg)
+   119	{
+   120		struct pidfd_info __user *uinfo = (struct pidfd_info __user *)arg;
+   121		size_t usize = _IOC_SIZE(cmd);
+   122		struct pidfd_info kinfo = {};
+   123		struct user_namespace *user_ns;
+   124		const struct cred *c;
+   125		__u64 request_mask;
+   126	
+   127		if (!uinfo)
+   128			return -EINVAL;
+   129		if (usize < sizeof(struct pidfd_info))
+   130			return -EINVAL; /* First version, no smaller struct possible */
+   131	
+   132		if (copy_from_user(&request_mask, &uinfo->request_mask, sizeof(request_mask)))
+   133			return -EFAULT;
+   134	
+   135		c = get_task_cred(task);
+   136		if (!c)
+   137			return -ESRCH;
+   138	
+   139		/* Unconditionally return identifiers and credentials, the rest only on request */
+   140	
+   141		kinfo.pid = task_pid_vnr(task);
+   142		kinfo.tgid = task_tgid_vnr(task);
+   143		kinfo.ppid = task_ppid_nr_ns(task, task_active_pid_ns(task));
+   144	
+   145		user_ns = current_user_ns();
+   146		kinfo.ruid = from_kuid_munged(user_ns, c->uid);
+   147		kinfo.rgid = from_kgid_munged(user_ns, c->gid);
+   148		kinfo.euid = from_kuid_munged(user_ns, c->euid);
+   149		kinfo.egid = from_kgid_munged(user_ns, c->egid);
+   150		kinfo.suid = from_kuid_munged(user_ns, c->suid);
+   151		kinfo.sgid = from_kgid_munged(user_ns, c->sgid);
+   152		kinfo.fsuid = from_kuid_munged(user_ns, c->fsuid);
+   153		kinfo.fsgid = from_kgid_munged(user_ns, c->fsgid);
+   154	
+   155		if (request_mask & PIDFD_INFO_CGROUPID) {
+ > 156			struct cgroup *cgrp = task_css_check(task, pids_cgrp_id, 1)->cgroup;
+   157			if (!cgrp)
+   158				return -ENODEV;
+   159	
+   160			kinfo.cgroupid = cgroup_id(cgrp);
+   161			kinfo.result_mask |= PIDFD_INFO_CGROUPID;
+   162		}
+   163	
+   164		/*
+   165		 * If userspace and the kernel have the same struct size it can just
+   166		 * be copied. If userspace provides an older struct, only the bits that
+   167		 * userspace knows about will be copied. If userspace provides a new
+   168		 * struct, only the bits that the kernel knows about will be copied and
+   169		 * the size value will be set to the size the kernel knows about.
+   170		 */
+   171		if (copy_to_user(uinfo, &kinfo, min(usize, sizeof(kinfo))))
+   172			return -EFAULT;
+   173	
+   174		return 0;
+   175	}
+   176	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
