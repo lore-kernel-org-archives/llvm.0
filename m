@@ -1,101 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729AC18A952
-	for <llvm@lists.linux.dev>; Sun,  6 Oct 2024 21:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EF4173320;
+	Sun,  6 Oct 2024 22:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728250389; cv=none; b=gClHJM5B9u6qsA3O1A6qxw9JhntX8Hh6L611/4bX/hDT/ZyGF3SuSICXqc3nQ09Bm0S+06c46OTHFhUFFSnUODmFzqGNAeO+g7SdvYEt1YS8YTf8VvQ8wcd2AJFodkogArevnbEwCbtdqAPJcQpzwGu6tqgvbwF2cYaqEb8Zp6Q=
+	t=1728253067; cv=none; b=bF2kuJtyXR7ItpeRbU9nxtBObwq8eq2BtCfuryTDoTrYkH3DAqDJszYWakY6fkZmUIO5Mm/rO+DdBvOhGxxrMfsBe54o9EceOy/Bd1BiG/C0GXIXQDWFdZ9NoulpvmwS/oqvAi8EUH0CcpBaz8KdwqUPQmiba1pohb2b+cRbcDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728250389; c=relaxed/simple;
-	bh=fAZ8RoF9KBCdhK6aWnCTyllvL3279ptSVF0dwlDzh1I=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=bGxk8RrLwxGLRUO6a+f7Wuf4hGMTDud4iJFj91m5YxYnOuOFWwa2RfcmZQz5CC24M0fL5n/vamlS84UIYeLEudR+oql8AXjA4drlBOaBPnzF17TdQP5evhd/HVHhU96MRvDbKNgQfdRa/f7jDXYdhm+j9Qvh5SbxIN1HhMrbhaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e0/Qluqr; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1728253067; c=relaxed/simple;
+	bh=JURLRwTFb7l8hlgN95q4TPgKQMn02C0KKgLcTADmxdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pW0TPoJlZ5FBKbI4ojHRy5/pKxWjp6JrtP2r2PdNKiIA2+zEMauTm6h2FxZsA/lE2xITpwiC9LniGh89nGbFoHfPPmRgKSJ797ogNBdFLSN12gmWKcwE6dwEyiZ7J5XOAvn6laStlYazQAFJG7HTfn7jF8HtivJdqgcQrg4pbxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdtcQHpr; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e0/Qluqr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728250386;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5eIgMYJAmZwFMQrsDbCZLCIOaSvGFw1hWd2g6It5EsU=;
-	b=e0/QluqrIwviK03km+0igbcMwYWy9SwUiJOuWMMGqtIv3re0kgkKUk0IkbYCxPG8wynd4O
-	jUBdjkvbHvuvbwuDVH4GDnHtT9Zy8exh4jyb9bzFbhcU85tDXeH3ZWbmsQW4bwjmzbxogL
-	9hWF9PzsEAWMTBUum3oViJUOuNcUruw=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-100-hDqsmzgFP-6jBe9-iByxIQ-1; Sun,
- 06 Oct 2024 17:33:04 -0400
-X-MC-Unique: hDqsmzgFP-6jBe9-iByxIQ-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ED64219560A2
-	for <llvm@lists.linux.dev>; Sun,  6 Oct 2024 21:33:03 +0000 (UTC)
-Received: from [172.64.3.39] (unknown [10.30.33.101])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9515619560A3;
-	Sun,  6 Oct 2024 21:33:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc1,
- mainline.kernel.org-clang, 2a130b7e)
-Date: Sun, 06 Oct 2024 21:33:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdtcQHpr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728253065; x=1759789065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JURLRwTFb7l8hlgN95q4TPgKQMn02C0KKgLcTADmxdE=;
+  b=UdtcQHpr8LK5/leulLcDc/YDGKRAgVQ1IQM6G3Pzamrvf3SOL3OlbRx6
+   1atUaWI6XgjRUZyksCeA4si36wN+obGBrigPb6ae2gsDCZEukWXq3sQwF
+   WSCsWMsTfDtYqQJpeO47vu77io2KrXyxmvJXAqXtXsf4Sp6teMDWvDVbz
+   wgo1bR+GBnTfSQkKeJQno04YFHcJRrUHCL1N48Vepth0dZ8IHdXVNaF7U
+   uIYuEYFhvi5A6NRISr8tiDVQft5THN5/rhRAhxjVhM1D3/I7ARaNGSVO3
+   tRECCCAxlG+nLL7EbIFd9u6V+vd/bnIm3a3Hb0q51kJw54sxQ/wOUnCN5
+   g==;
+X-CSE-ConnectionGUID: iYugrG+YTHiklH5l2mcJrw==
+X-CSE-MsgGUID: /p1AlxQRRS+zIB1N1k+4lQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11217"; a="27281419"
+X-IronPort-AV: E=Sophos;i="6.11,183,1725346800"; 
+   d="scan'208";a="27281419"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2024 15:17:44 -0700
+X-CSE-ConnectionGUID: xHzcSZmCTI+GnwjeGLp1Cw==
+X-CSE-MsgGUID: dL4BMa8UTg6IgVyFM4je0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,183,1725346800"; 
+   d="scan'208";a="74959925"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Oct 2024 15:17:42 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sxZZM-0004NA-0N;
+	Sun, 06 Oct 2024 22:17:40 +0000
+Date: Mon, 7 Oct 2024 06:16:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Luse <paulluselinux@gmail.com>, linux-raid@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	paul.e.luse@intel.com, Paul Luse <paulluselinux@gmail.com>
+Subject: Re: [PATCH] md:  CI log retrival test - do not review
+Message-ID: <202410070623.1WRxUPy0-lkp@intel.com>
+References: <20241004124227.3540-1-paulluselinux@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <72460.124100617330400485@us-mta-100.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241004124227.3540-1-paulluselinux@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Paul,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on song-md/md-next]
+[also build test ERROR on linus/master v6.12-rc1 next-20241004]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Luse/md-CI-log-retrival-test-do-not-review/20241004-204420
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
+patch link:    https://lore.kernel.org/r/20241004124227.3540-1-paulluselinux%40gmail.com
+patch subject: [PATCH] md:  CI log retrival test - do not review
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241007/202410070623.1WRxUPy0-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410070623.1WRxUPy0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410070623.1WRxUPy0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/md/raid1.c:68:1: error: use of undeclared identifier 'x'
+      68 | x
+         | ^
+   1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'kbuild-fixes-v6.12' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+vim +/x +68 drivers/md/raid1.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1483658988
+    54	
+    55	#define START(node) ((node)->start)
+    56	#define LAST(node) ((node)->last)
+    57	INTERVAL_TREE_DEFINE(struct serial_info, node, sector_t, _subtree_last,
+    58			     START, LAST, static inline, raid1_rb);
+    59	
+    60	static int check_and_add_serial(struct md_rdev *rdev, struct r1bio *r1_bio,
+    61					struct serial_info *si, int idx)
+    62	{
+    63		unsigned long flags;
+    64		int ret = 0;
+    65		sector_t lo = r1_bio->sector;
+    66		sector_t hi = lo + r1_bio->sectors;
+    67		struct serial_in_rdev *serial = &rdev->serial[idx];
+  > 68	x
+    69		spin_lock_irqsave(&serial->serial_lock, flags);
+    70		/* collision happened */
+    71		if (raid1_rb_iter_first(&serial->serial_rb, lo, hi))
+    72			ret = -EBUSY;
+    73		else {
+    74			si->start = lo;
+    75			si->last = hi;
+    76			raid1_rb_insert(si, &serial->serial_rb);
+    77		}
+    78		spin_unlock_irqrestore(&serial->serial_lock, flags);
+    79	
+    80		return ret;
+    81	}
+    82	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1483658988-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1483658988-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1483658988-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
