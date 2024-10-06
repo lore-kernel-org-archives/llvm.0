@@ -1,55 +1,55 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C761662E8
-	for <llvm@lists.linux.dev>; Sun,  6 Oct 2024 07:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B4415A85E
+	for <llvm@lists.linux.dev>; Sun,  6 Oct 2024 08:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728201592; cv=none; b=pVCHaoWB/xmc1Yo9j0TjD8oUF6Xd6SwfI8xazFFHqQU94f7VzhfJAg2IxrpJfZDxAzzuGi3ign4oPXoGQCOLMiPZyc/thS20jQJ5Q7lrSN8EJuiA+cDW4eCRSVwK1np77vfsn4jvUIc4DqiG7YHIueQEiniXUTp69+34Gbc1rzk=
+	t=1728202004; cv=none; b=potjgmwOvrtvyLk4qvSLInljovcaHkhQ0W3F/0uPL+q2OxD77M/u1ppBCdYIsC3WGqWeTbTUL3Iim1gWxqEGMQC4RoISJmA4Q8BA3SOOFbDoufUB1dutuyMwXbz/N40pVP17cWHfP62E/hmV+tS8wSkQf/uDx/IRx81U0RIeW2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728201592; c=relaxed/simple;
-	bh=0WxMKip1+Fw9+cCQhm/3A9AY/qyKiRCE5qbNsKoaojU=;
+	s=arc-20240116; t=1728202004; c=relaxed/simple;
+	bh=puHS7d7azwqNXLt828Ye1D2ZDeZMXjrh1xk6a66e+BY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PchLrEJs7UwXdIolqE4g1UoikMZCSOPmiOD5vCEopVo2aqF9ZdzDuud3jzQRcki1Cz1PMH12R10UYYgffACGGl4iePNGNtbunfP9xtbwHCf+C+lchmB+NQ5lfpxocv3PQwxEhFysRNiUbvxcS9aj4lA8vHtmb5T9jqjlWnBABWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ra+pjLPc; arc=none smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=roNF5bDbsvuUWU10g48JuYfh+U9ITXISe9Wx/I3XdXJxserno76LiARLxwkHk1xHXSEXL9o3i9BB6/+dHmSdEHDjkrMdrSRxKUznvCMZgOQDWky9kd9/rsOWi7YCAnBz8WolHpcpa3nN4EMixDGsT59rPYHsNDP/jptAcAfoL+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f7JLscSM; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ra+pjLPc"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2fad8337aa4so38420401fa.0
-        for <llvm@lists.linux.dev>; Sun, 06 Oct 2024 00:59:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f7JLscSM"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fac60ab585so35853781fa.0
+        for <llvm@lists.linux.dev>; Sun, 06 Oct 2024 01:06:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728201588; x=1728806388; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1728202001; x=1728806801; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TPKYyYBqIk2nde1TDg/wyIZWJzsFsCGXcjUuTc5pqeY=;
-        b=Ra+pjLPc6a23/8U29gMOJE2bPrDl14lyDnONYMeYuFji1hVcarZCCYEITL0qzqiC4l
-         9SHJAFxpiO8rJVZOL7oZg/y6CHDKTanV827oEqcAFc53lZnqhXhrVBQHB99gZE1j/dWp
-         A/4HzyvIIYQ1ciKzEh6w2yIO/25gvfY4cI1BDLHzYPLJxc6gwJI+fK5XLlR2kMMYz6BI
-         65H4bQKguFagrK0IPhgmQIQi3uHhWWhgucF8DhgssjWl7S7l9EXa32Zq5woAJhdkJ56L
-         qmeVRG1L6Hlnynw1yu36ukvUV2Kzh+gOqwBWPJkWuPzxdIAT2mpIu9b+B778fOjwKc4C
-         2t0w==
+        bh=puHS7d7azwqNXLt828Ye1D2ZDeZMXjrh1xk6a66e+BY=;
+        b=f7JLscSMM/PtB4idL7XuZr3OO6kNhQe+iRb51UMzQh5ifB2wcoZ5vB+ryj/xkIqlAc
+         T31ps3X8fMUMpa2Bi4D82phuZ14EYjvH4ueEJLEg75kvLXyJqtH/9hiAH5QJhlWkwxAC
+         t6ezunOMIBT1e1jmmP605aN4LTsjrnnkPlnw/iFfo4udQAHdByEAJ3PpLWPAIBP0YsIb
+         ngezxpJ+zFY5j2rSDnUHCjjKPqQTZ9tgPN4snvPfROwH71o0VAZu5nfvYKtnNEcb4YCZ
+         UnmQ1PYz5EQ2I3Ws4r6K8lBF4XI7IaCkeVoGZwIbn7ioDfLpHLoHWe7jcLbP3LAjgb+u
+         0oZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728201588; x=1728806388;
+        d=1e100.net; s=20230601; t=1728202001; x=1728806801;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TPKYyYBqIk2nde1TDg/wyIZWJzsFsCGXcjUuTc5pqeY=;
-        b=rImdb6X5hu5z40arYktsaNbGrSzHSBvc3Ff/NmoIrrjNbfAYdLdhpdeqgCXhJxB06h
-         gQ+oFnJimBLf+FY3Z9g8iyIJg5OPfsUgbd7lU+BBUKBSqbCFv3xyTbuklJYWXbqbhOpS
-         89N97GjR54UlLaONnZztOYF61ixQYUd4+cw/D7+RVozeG8/Nvh3eN6cbW46mrCMpBvEl
-         eHUanUwqERctG+lHteBU8nkzBI234Z2+s2GeZnqTnchCbsnP+ggU4evg29LRUlXds/qf
-         MHzaAlH1RPqdZbEAr8gh8dO2x8CQlsoVd910OMEku5MboHFiS7S5YgQOd8mIojyED1z+
-         TbEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWPRK/LxSylnwwWk0RsSXmHN4sijmEePDpo+BfbUXqRO2vZeX91TPBhqYPL0miDXsrpQKJ1@lists.linux.dev
-X-Gm-Message-State: AOJu0YwP0WmYzvSTAiSBIHlD1jLByV1cvM3QNTH6Z+5J+B4T3fuYqCkv
-	tTYXZvFPJSGXyvlKgveAOi4NOGkMzvs4VamPI9qtAQFTO1U9WgiETTdhn4yrIIsAPBcmAz1tzT2
-	K79c8pc+j6uCw5Hq56ucaB1CBP+g=
-X-Google-Smtp-Source: AGHT+IE2zUoTNKRDJOdgkWI5Cw6UcFhRdeh7rJkjxE6MXyTsb+8X3cwADhQlSBEhykzT0ML1M4fcluEMHpcmKEmwoVU=
-X-Received: by 2002:a05:651c:1549:b0:2fa:c873:45ce with SMTP id
- 38308e7fff4ca-2faf3c64dcemr33189261fa.30.1728201588155; Sun, 06 Oct 2024
- 00:59:48 -0700 (PDT)
+        bh=puHS7d7azwqNXLt828Ye1D2ZDeZMXjrh1xk6a66e+BY=;
+        b=Hi8TuPIJWIfA+5/MLgjYkcTNGEeoGBBQ0tk5NZJ+U74ad4v76l20xVqJqxqO6wHu9B
+         yNc6+tLYFlRIv2u7WH5C/5tLrAkO+HgNPQt5+BCNqiV9xVLmIDu46hLd35ZdVy0G6z5A
+         gvh0nLmaqjUxouv4LbWOMmagkkxKYYJOaefR+KoM+PmQurf2FKPlmRKiKzqUA1YPLjxV
+         k1O9ji//pFx7qd8x+vNnstPMowJhx1Jlow6qtOzjFb9PPNkgVHI9dha5NzVEJGCCXMkA
+         6Y4uy6Nh/Hma/wSa9KRvC0w1HpsgTOfZz5rqjqj7ly31CoWthqT9PK4DTdzUS7n+uRiA
+         yDwg==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ9hIljpL5Xb8OSg2T1DOhGNMCN7l6kxUGMzIZk+pA7riAxAo3UVm/LB5vKHXdBr12o0nH@lists.linux.dev
+X-Gm-Message-State: AOJu0YxK7X7YQGe7A5Zlxy6klVNyA2/G23K4kpU9ufahiK9e2ePq2oQx
+	SrvuZZaTy80eN/SIhxY9clZbSaqOFdVmg7eUh4pHth/6SmxmLXHNY2ZzdtuCjL5mN7SqnU3eiAd
+	5czBM0MMf98eKuUXmiCqtll4rmt4=
+X-Google-Smtp-Source: AGHT+IGS61n/I1TuC+MWyJZpRj63R+p8y0BprOkKwk0SOVREtUnFaMblR5HhGoJzVJpp1ktZzeiYw7JUqStdLpYUPwI=
+X-Received: by 2002:a2e:bc0e:0:b0:2fa:cc50:41b with SMTP id
+ 38308e7fff4ca-2faf3c508ffmr41878031fa.5.1728202000783; Sun, 06 Oct 2024
+ 01:06:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,15 +62,15 @@ References: <20240925150059.3955569-30-ardb+git@google.com>
  <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
  <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
  <5c7490bb-aa74-427b-849e-c28c343b7409@zytor.com> <CAFULd4Yj9LfTnWFu=c1M7Eh44+XFk0ibwL57r5H7wZjvKZ8yaA@mail.gmail.com>
- <3bbb85ae-8ba5-4777-999f-d20705c386e7@zytor.com>
-In-Reply-To: <3bbb85ae-8ba5-4777-999f-d20705c386e7@zytor.com>
+ <3bbb85ae-8ba5-4777-999f-d20705c386e7@zytor.com> <CAHk-=wgkgnyW2V4gQQTDAOKXGZH0fqN=hApz1LFAE3OC3fhhrQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgkgnyW2V4gQQTDAOKXGZH0fqN=hApz1LFAE3OC3fhhrQ@mail.gmail.com>
 From: Uros Bizjak <ubizjak@gmail.com>
-Date: Sun, 6 Oct 2024 09:59:40 +0200
-Message-ID: <CAFULd4b==a7H0zdGVfABntL0efrS-F3eeHGu-63oyz1eh1DwXQ@mail.gmail.com>
+Date: Sun, 6 Oct 2024 10:06:33 +0200
+Message-ID: <CAFULd4ZZxrJvJ9gF5tC-m-tmcDMvVM3te4xc7vnbF_OFU0D2=A@mail.gmail.com>
 Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, Ard Biesheuvel <ardb+git@google.com>, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, 
 	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Dennis Zhou <dennis@kernel.org>, 
 	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
@@ -91,50 +91,22 @@ Cc: Ard Biesheuvel <ardb@kernel.org>, Linus Torvalds <torvalds@linux-foundation.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 6, 2024 at 1:37=E2=80=AFAM H. Peter Anvin <hpa@zytor.com> wrote=
-:
+On Sun, Oct 6, 2024 at 2:00=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> On 10/5/24 01:31, Uros Bizjak wrote:
-> >>
-> >> movq $sym to leaq sym(%rip) which you said ought to be smaller (and in
-> >> reality appears to be the same size, 7 bytes) seems like a no-brainer
-> >> and can be treated as a code quality issue -- in other words, file bug
-> >> reports against gcc and clang.
+> On Sat, 5 Oct 2024 at 16:37, H. Peter Anvin <hpa@zytor.com> wrote:
 > >
-> > It is the kernel assembly source that should be converted to
-> > rip-relative form, gcc (and probably clang) have nothing with it.
-> >
+> > Sadly, that is not correct; neither gcc nor clang uses lea:
 >
-> Sadly, that is not correct; neither gcc nor clang uses lea:
+> Looking around, this may be intentional. At least according to Agner,
+> several cores do better at "mov immediate" compared to "lea".
 >
->         -hpa
->
->
-> gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC)
->
-> hpa@tazenda:/tmp$ cat foo.c
-> int foobar;
->
-> int *where_is_foobar(void)
-> {
->          return &foobar;
-> }
->
-> hpa@tazenda:/tmp$ gcc -mcmodel=3Dkernel -O2 -c -o foo.o foo.c
+> Eg a RIP-relative LEA on Zen 2 gets a throughput of two per cycle, but
+> a "MOV r,i" gets four. That got fixed in Zen 3 and later, but
+> apparently Intel had similar issues (Ivy Bridge: 1 LEA per cycle, vs 3
+> "mov i,r". Haswell is 1:4).
 
-Indeed, but my reply was in the context of -fpie, which guarantees RIP
-relative access. IOW, the compiler will always generate sym(%rip) with
--fpie, but (obviously) can't change assembly code in the kernel when
-the PIE is requested.
-
-Otherwise, MOV $immediate, %reg is faster when PIE is not required,
-which is the case with -mcmodel=3Dkernel. IIRC, LEA with %rip had some
-performance issues, which may not be the case anymore with newer
-processors.
-
-Due to the non-negligible impact of PIE, perhaps some kind of
-CONFIG_PIE config definition should be introduced, so the assembly
-code would be able to choose optimal asm sequence when PIE and non-PIE
-is requested?
+Yes, this is the case. I just missed your reply when replying to
+Peter's mail with a not so precise answer.
 
 Uros.
