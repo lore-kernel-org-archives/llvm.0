@@ -1,155 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75499155A47;
-	Sun,  6 Oct 2024 00:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E3B23B0
+	for <llvm@lists.linux.dev>; Sun,  6 Oct 2024 00:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728172840; cv=none; b=tSisFcjE+TqYGFYZ+yD2QpAZTEK3WY6hNZim8CABHu4JOnXQY/y6wL5unimHe/BgmHCGLiWdYy3cMhx6tw5ybI1BNHCKxLr0IKAGkyBYCUzHnj2isztejAKKodJ0gt345pXxzeoniJoY2XlioeFYbOWRvb5Ekd3U3hacWi/kBJc=
+	t=1728173213; cv=none; b=X32SnwhFKgpIDtURy0l0iWrQgIfZEp+HPG5DvhIFdAqYB485vNk9duVlS1QY/Fhvn8cD4c5Op9scquYdpjvCqlAVLFmGVrrYWXaFg0uzUE0+jCJKk+fsKxWKZ4LXFn5WCbNFm+LQ25o/jy+CgAz4u0OA2f8vJfYpcN+vAFdwM/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728172840; c=relaxed/simple;
-	bh=Ft3LL+wdKU04UatgGFJbXK4DYo5bqn4YMXzhNK3e5Vs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FynTY70b1ZkO34d3+4PV7pPvzjfJ1nomlOd9cyrr5oCbGCbVusqi4JZcHbwdVdJth60npYhnuybXtn3mJ66D/d53s1t1X7EI6RHa7V+pOFZQICxpbR75cg7xGveEpMDG0FGFR13rY9beBodzLCGGr9C4XcZgRctxXObWjVIaSEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a7Q9W/NJ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728173213; c=relaxed/simple;
+	bh=7PhV7mSmrjXdm322I5AhDI6uiC32DXT2Ek81VrbJ7rA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=itf9WRFEC+QoT23B3PMUfvKjfq8kbAtpDUQf0AFCfD1NOZ3RJduMq8BWzt5pwmDsLT0W9dM44odTzuMZa/kcw3DwNlUZ7p1/EfEhJuaKkUp74G8++65p0zzct3TddDcWHDsGu3Tg8pbwf6iUwuyrsAWs1fe/FFIwBA9lD7WjbsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RtrQsUd8; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a7Q9W/NJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728172834; x=1759708834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ft3LL+wdKU04UatgGFJbXK4DYo5bqn4YMXzhNK3e5Vs=;
-  b=a7Q9W/NJTUcCdPowC4PMWVp72oX8UcXXVH+KVF0zAFFZTfxZ4LSkDep4
-   C0R3QD4er+DW7Bgw7pb5PPg4Qns01WcyUPG6GPVL3nTqJS+jQsQNcIovL
-   ofl4H4EUS4vvzCs/ArL+qz/igf9ij/RS7qZCWPMqPR9Wi34apT1fAUvLw
-   g2mRM+muVwNI9XVeNbaicKa/4NdrEFTojPVS+/8dUUgoPIINO+yg7g/0j
-   YuFSgBL1GpUCDm37G1W8GkxOE1YZqoPFUerY+LYIQ8DJBVgz4oXDLvD/k
-   Dz6rUP/JG3UbLhXlPOMb5Y8eAP0Z8/j/Ql0HDz07jPuIn8y4/bm9jj6aF
-   w==;
-X-CSE-ConnectionGUID: bGXCQ9qrRKaNpcuMPsId/g==
-X-CSE-MsgGUID: 44CnUWoORAGI9gOYa0SQYQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11216"; a="26823619"
-X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
-   d="scan'208";a="26823619"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 17:00:34 -0700
-X-CSE-ConnectionGUID: oKwqKvbfTzWlDrwYog1H5Q==
-X-CSE-MsgGUID: 1HmDh7qfRPqoe5LgdGtmmA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
-   d="scan'208";a="74657740"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 05 Oct 2024 17:00:31 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sxEhI-0003T0-2a;
-	Sun, 06 Oct 2024 00:00:28 +0000
-Date: Sun, 6 Oct 2024 07:59:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prabhakar <prabhakar.csengg@gmail.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] v4l2-subdev: Return -EOPNOTSUPP for unsupported pad type
- in call_get_frame_desc()
-Message-ID: <202410060640.ykY9JvqZ-lkp@intel.com>
-References: <20240930074602.500968-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RtrQsUd8"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c882864d3aso3569541a12.2
+        for <llvm@lists.linux.dev>; Sat, 05 Oct 2024 17:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1728173210; x=1728778010; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zwWtZnU6O3CUnR/7Ge8+NpuQOrJwSLSqT8+8zcDG8JI=;
+        b=RtrQsUd8et5irRfCD6B0LQchIzOa0MITG4/dir2qiBTxTS3NuriXo+cDFPVn3bcSrQ
+         Oij3nb/BDn4CYgEl3kADhvVQHdQdQlxnMJSqDJ3pml820xqjam/B2t/7qNeVvpr5tCMf
+         qiRN9WwKenQpD9tYXrqWZnI7slZpQcKQGIOkI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728173210; x=1728778010;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zwWtZnU6O3CUnR/7Ge8+NpuQOrJwSLSqT8+8zcDG8JI=;
+        b=j+nB92O+s0EOSukNpDNFC3UB6leqWO5GBK+e8mnDiwvRDhJczK2NTSJzXQr4lRc0+8
+         E/UKnUVAiOUBoumfrHsV2wzxmOqT7+UEUr4HoiijdXrdwJKczP5uOh7y8Mi1WwQyA8vV
+         VO0+9aicfXJUUkxyVatC/TeNOSFuxEQK91C5qxBBsCa9FVRkaQQk4NayU+/IQGaUMEob
+         K8NGC9drtvE9cx7cb0RWjdVjzNNnKq8KUALPNhaW8PK0kCIHQdWASg5SKbeqvx5YkvfJ
+         oYngSo7AV6StuUW1l3MZHlllu0OJb8dfa1Cc5YQRnetOH74N4JVotDRMX8Qhw7/I14xD
+         1Gwg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0xJJlRoJLfsVsRYiY25dccH0/3y5NAd6osBo8jtO7Wfqpw2SfWG5ESlcDQqY9rdkYzHom@lists.linux.dev
+X-Gm-Message-State: AOJu0YzE3ofjH5nzmM4ZfA1FVRdIuMi7D8swG3/jITgPOPxWMph7uR2Q
+	XtTmeQKb6G1uWqYDcurOmpIb1kyztGgFw0iGTdLC/Yoja6nPDsVjVZhjIYSJgCCHMgEJDgNZE6X
+	4lo2oMQ==
+X-Google-Smtp-Source: AGHT+IHExMeogcrKhJQhdIuw/vno0bUWB8G6x7a0GZZanCZWjEX3g6JVnQCjLpH3/0JROM1QmqXeGw==
+X-Received: by 2002:a05:6402:3549:b0:5c8:a01e:a06d with SMTP id 4fb4d7f45d1cf-5c8d2eb2cf6mr5875543a12.30.1728173209825;
+        Sat, 05 Oct 2024 17:06:49 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c8e05f4e93sm1468252a12.96.2024.10.05.17.06.47
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Oct 2024 17:06:48 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c88370ad7bso3904637a12.3
+        for <llvm@lists.linux.dev>; Sat, 05 Oct 2024 17:06:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWmuuuBX8ZnUwSCCwsdLWo5AWMdCFWu+rmV0u3Bz9bcUWTtStHGmqghYjqkpbwO0r0pF/OJ@lists.linux.dev
+X-Received: by 2002:a17:907:9693:b0:a99:3d93:c8bc with SMTP id
+ a640c23a62f3a-a993d93cc22mr339286866b.13.1728172818387; Sat, 05 Oct 2024
+ 17:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240930074602.500968-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+ <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+ <CAHk-=wj0HG2M1JgoN-zdCwFSW=N7j5iMB0RR90aftTS3oqwKTg@mail.gmail.com>
+ <CAMj1kXEU5RU0i11zqD0433_LMMyNQH2gCoSkU7GeXmaRXGF1Yw@mail.gmail.com>
+ <5c7490bb-aa74-427b-849e-c28c343b7409@zytor.com> <CAFULd4Yj9LfTnWFu=c1M7Eh44+XFk0ibwL57r5H7wZjvKZ8yaA@mail.gmail.com>
+ <3bbb85ae-8ba5-4777-999f-d20705c386e7@zytor.com>
+In-Reply-To: <3bbb85ae-8ba5-4777-999f-d20705c386e7@zytor.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 5 Oct 2024 17:00:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgkgnyW2V4gQQTDAOKXGZH0fqN=hApz1LFAE3OC3fhhrQ@mail.gmail.com>
+Message-ID: <CAHk-=wgkgnyW2V4gQQTDAOKXGZH0fqN=hApz1LFAE3OC3fhhrQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Uros Bizjak <ubizjak@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Prabhakar,
+On Sat, 5 Oct 2024 at 16:37, H. Peter Anvin <hpa@zytor.com> wrote:
+>
+> Sadly, that is not correct; neither gcc nor clang uses lea:
 
-kernel test robot noticed the following build errors:
+Looking around, this may be intentional. At least according to Agner,
+several cores do better at "mov immediate" compared to "lea".
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on sailus-media-tree/master linus/master v6.12-rc1 next-20241004]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Eg a RIP-relative LEA on Zen 2 gets a throughput of two per cycle, but
+a "MOV r,i" gets four. That got fixed in Zen 3 and later, but
+apparently Intel had similar issues (Ivy Bridge: 1 LEA per cycle, vs 3
+"mov i,r". Haswell is 1:4).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prabhakar/v4l2-subdev-Return-EOPNOTSUPP-for-unsupported-pad-type-in-call_get_frame_desc/20240930-154811
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20240930074602.500968-1-prabhakar.mahadev-lad.rj%40bp.renesas.com
-patch subject: [PATCH] v4l2-subdev: Return -EOPNOTSUPP for unsupported pad type in call_get_frame_desc()
-config: x86_64-randconfig-003-20241002 (https://download.01.org/0day-ci/archive/20241006/202410060640.ykY9JvqZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241006/202410060640.ykY9JvqZ-lkp@intel.com/reproduce)
+Of course, Agner's tables are good, but not necessarily always the
+whole story. There are other instruction tables on the internet (eg
+uops.info) with possibly more info.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410060640.ykY9JvqZ-lkp@intel.com/
+And in reality, I would expect it to be a complete non-issue with any
+OoO engine and real code, because you are very seldom ALU limited
+particularly when there aren't any data dependencies.
 
-All errors (new ones prefixed by >>):
+But a RIP-relative LEA does seem to put a *bit* more pressure on the
+core resources, so the compilers are may be right to pick a "mov".
 
->> drivers/media/v4l2-core/v4l2-subdev.c:337:12: error: no member named 'entity' in 'struct v4l2_subdev'
-     337 |         if (!(sd->entity.pads[pad].flags & MEDIA_PAD_FL_SOURCE))
-         |               ~~  ^
-   1 error generated.
-
-
-vim +337 drivers/media/v4l2-core/v4l2-subdev.c
-
-   330	
-   331	static int call_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-   332				       struct v4l2_mbus_frame_desc *fd)
-   333	{
-   334		unsigned int i;
-   335		int ret;
-   336	
- > 337		if (!(sd->entity.pads[pad].flags & MEDIA_PAD_FL_SOURCE))
-   338			return -EOPNOTSUPP;
-   339	
-   340		memset(fd, 0, sizeof(*fd));
-   341	
-   342		ret = sd->ops->pad->get_frame_desc(sd, pad, fd);
-   343		if (ret)
-   344			return ret;
-   345	
-   346		dev_dbg(sd->dev, "Frame descriptor on pad %u, type %s\n", pad,
-   347			fd->type == V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL ? "parallel" :
-   348			fd->type == V4L2_MBUS_FRAME_DESC_TYPE_CSI2 ? "CSI-2" :
-   349			"unknown");
-   350	
-   351		for (i = 0; i < fd->num_entries; i++) {
-   352			struct v4l2_mbus_frame_desc_entry *entry = &fd->entry[i];
-   353			char buf[20] = "";
-   354	
-   355			if (fd->type == V4L2_MBUS_FRAME_DESC_TYPE_CSI2)
-   356				WARN_ON(snprintf(buf, sizeof(buf),
-   357						 ", vc %u, dt 0x%02x",
-   358						 entry->bus.csi2.vc,
-   359						 entry->bus.csi2.dt) >= sizeof(buf));
-   360	
-   361			dev_dbg(sd->dev,
-   362				"\tstream %u, code 0x%04x, length %u, flags 0x%04x%s\n",
-   363				entry->stream, entry->pixelcode, entry->length,
-   364				entry->flags, buf);
-   365		}
-   366	
-   367		return 0;
-   368	}
-   369	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+               Linus
