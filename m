@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EF4173320;
-	Sun,  6 Oct 2024 22:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E20C5733A;
+	Sun,  6 Oct 2024 23:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728253067; cv=none; b=bF2kuJtyXR7ItpeRbU9nxtBObwq8eq2BtCfuryTDoTrYkH3DAqDJszYWakY6fkZmUIO5Mm/rO+DdBvOhGxxrMfsBe54o9EceOy/Bd1BiG/C0GXIXQDWFdZ9NoulpvmwS/oqvAi8EUH0CcpBaz8KdwqUPQmiba1pohb2b+cRbcDM=
+	t=1728259164; cv=none; b=Vc3JJOlMTAoOXA79q30KIi+F8xhkaXLvB5SjxjzMyv1pzvrGjI6Bk5zLBAkrZkK6/d9uJrgT3nbXRXPB7jdhbCisYp+Mg9QH0eGiAb3gZ3Trh6qKtOceKS3+ajuat6Ow6xvxbfV91rdOka1eUlFcgzrTRqkk/mbGmb3hjbRl5q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728253067; c=relaxed/simple;
-	bh=JURLRwTFb7l8hlgN95q4TPgKQMn02C0KKgLcTADmxdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pW0TPoJlZ5FBKbI4ojHRy5/pKxWjp6JrtP2r2PdNKiIA2+zEMauTm6h2FxZsA/lE2xITpwiC9LniGh89nGbFoHfPPmRgKSJ797ogNBdFLSN12gmWKcwE6dwEyiZ7J5XOAvn6laStlYazQAFJG7HTfn7jF8HtivJdqgcQrg4pbxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdtcQHpr; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1728259164; c=relaxed/simple;
+	bh=yOBJj2Sy67vqu9gV4e3dv34v0kx8xWhf5JM9DdLiuZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pX+4MwkwewsfrNfyAc3OfccU/r+b1Z940by/Yje1zs09THDl1t9FCYaLXBtFKQTsdmbvwi06F/WHDaFqJAxVl8P0o6VC/lSPt5fvDGA2ymyBsSAL686J6L9/TMfnDk/fQAar6Wb04Sl64qNYfHCZ3TsYvH3GjDBKiiAsEltTAAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iusvkax2; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdtcQHpr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iusvkax2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728253065; x=1759789065;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JURLRwTFb7l8hlgN95q4TPgKQMn02C0KKgLcTADmxdE=;
-  b=UdtcQHpr8LK5/leulLcDc/YDGKRAgVQ1IQM6G3Pzamrvf3SOL3OlbRx6
-   1atUaWI6XgjRUZyksCeA4si36wN+obGBrigPb6ae2gsDCZEukWXq3sQwF
-   WSCsWMsTfDtYqQJpeO47vu77io2KrXyxmvJXAqXtXsf4Sp6teMDWvDVbz
-   wgo1bR+GBnTfSQkKeJQno04YFHcJRrUHCL1N48Vepth0dZ8IHdXVNaF7U
-   uIYuEYFhvi5A6NRISr8tiDVQft5THN5/rhRAhxjVhM1D3/I7ARaNGSVO3
-   tRECCCAxlG+nLL7EbIFd9u6V+vd/bnIm3a3Hb0q51kJw54sxQ/wOUnCN5
+  t=1728259163; x=1759795163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yOBJj2Sy67vqu9gV4e3dv34v0kx8xWhf5JM9DdLiuZw=;
+  b=iusvkax2sPdQdm/YZVNpPrZz5kiecQpDfdus3RjmULTIpZv5CG/ZBXJa
+   YmQR34HIOwKHuBImaHgrwje6Ngz9mdj5P/1FPTjWSVoN8oFVKC0BAZDFD
+   JTXHAMMfBF7XS+QlNVUMTYvtX87jVyQ+pxXfBenxBWgWtX4FiUoBHtBXM
+   K1wXDjNgGffoxjm10UxHD5qKz5nBUKOjrQW4zUjALiihvKxmiNKvQOCCJ
+   gqvvADXDqfUu8PsB5rxDBJQKyMvZGiWewNqrRAQ/RF78qZ71zL0vcmvx7
+   zos055yqF015Z7kut9kObGWpo17MdyXSt2E45wfTIudNRXCVJapszQ/j8
    g==;
-X-CSE-ConnectionGUID: iYugrG+YTHiklH5l2mcJrw==
-X-CSE-MsgGUID: /p1AlxQRRS+zIB1N1k+4lQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11217"; a="27281419"
+X-CSE-ConnectionGUID: Cu08YTbgTK2xsyRgOOLxBA==
+X-CSE-MsgGUID: wlywf7c0Tni52QDFtgQoFg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11217"; a="27209559"
 X-IronPort-AV: E=Sophos;i="6.11,183,1725346800"; 
-   d="scan'208";a="27281419"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2024 15:17:44 -0700
-X-CSE-ConnectionGUID: xHzcSZmCTI+GnwjeGLp1Cw==
-X-CSE-MsgGUID: dL4BMa8UTg6IgVyFM4je0Q==
+   d="scan'208";a="27209559"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2024 16:59:22 -0700
+X-CSE-ConnectionGUID: 2UvtZ9jeSQ6+f/lUg1Xp4Q==
+X-CSE-MsgGUID: 3AktDAANSAGjLxbNkgukZg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,183,1725346800"; 
-   d="scan'208";a="74959925"
+   d="scan'208";a="76143075"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 06 Oct 2024 15:17:42 -0700
+  by orviesa008.jf.intel.com with ESMTP; 06 Oct 2024 16:59:20 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sxZZM-0004NA-0N;
-	Sun, 06 Oct 2024 22:17:40 +0000
-Date: Mon, 7 Oct 2024 06:16:52 +0800
+	id 1sxb9i-0004S0-0Y;
+	Sun, 06 Oct 2024 23:59:18 +0000
+Date: Mon, 7 Oct 2024 07:58:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Luse <paulluselinux@gmail.com>, linux-raid@vger.kernel.org
+To: Hector Martin <marcan@marcan.st>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	paul.e.luse@intel.com, Paul Luse <paulluselinux@gmail.com>
-Subject: Re: [PATCH] md:  CI log retrival test - do not review
-Message-ID: <202410070623.1WRxUPy0-lkp@intel.com>
-References: <20241004124227.3540-1-paulluselinux@gmail.com>
+	Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/140-pci 9/18]
+ drivers/pci/controller/pcie-apple.c:468:19: error: call to undeclared
+ function 'FIELD_PREP'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202410070721.j29f9dlV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,70 +64,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241004124227.3540-1-paulluselinux@gmail.com>
 
-Hi Paul,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on song-md/md-next]
-[also build test ERROR on linus/master v6.12-rc1 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Luse/md-CI-log-retrival-test-do-not-review/20241004-204420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/song/md.git md-next
-patch link:    https://lore.kernel.org/r/20241004124227.3540-1-paulluselinux%40gmail.com
-patch subject: [PATCH] md:  CI log retrival test - do not review
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241007/202410070623.1WRxUPy0-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410070623.1WRxUPy0-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux bits/140-pci
+head:   c24f6a9c03023a15361d83d33b7c8320b84adb2b
+commit: fb2de8b4d47a54cd57e50cc6afa03383fa6ced8a [9/18] PCIE: apple: Add T602x PCIe support
+config: powerpc64-randconfig-003-20241006 (https://download.01.org/0day-ci/archive/20241007/202410070721.j29f9dlV-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410070721.j29f9dlV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410070623.1WRxUPy0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410070721.j29f9dlV-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/md/raid1.c:68:1: error: use of undeclared identifier 'x'
-      68 | x
-         | ^
-   1 error generated.
+   In file included from drivers/pci/controller/pcie-apple.c:23:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:24:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     504 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     511 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     524 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/pci/controller/pcie-apple.c:468:19: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     468 |                         writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
+         |                                        ^
+   4 warnings and 1 error generated.
 
 
-vim +/x +68 drivers/md/raid1.c
+vim +/FIELD_PREP +468 drivers/pci/controller/pcie-apple.c
 
-    54	
-    55	#define START(node) ((node)->start)
-    56	#define LAST(node) ((node)->last)
-    57	INTERVAL_TREE_DEFINE(struct serial_info, node, sector_t, _subtree_last,
-    58			     START, LAST, static inline, raid1_rb);
-    59	
-    60	static int check_and_add_serial(struct md_rdev *rdev, struct r1bio *r1_bio,
-    61					struct serial_info *si, int idx)
-    62	{
-    63		unsigned long flags;
-    64		int ret = 0;
-    65		sector_t lo = r1_bio->sector;
-    66		sector_t hi = lo + r1_bio->sectors;
-    67		struct serial_in_rdev *serial = &rdev->serial[idx];
-  > 68	x
-    69		spin_lock_irqsave(&serial->serial_lock, flags);
-    70		/* collision happened */
-    71		if (raid1_rb_iter_first(&serial->serial_rb, lo, hi))
-    72			ret = -EBUSY;
-    73		else {
-    74			si->start = lo;
-    75			si->last = hi;
-    76			raid1_rb_insert(si, &serial->serial_rb);
-    77		}
-    78		spin_unlock_irqrestore(&serial->serial_lock, flags);
-    79	
-    80		return ret;
-    81	}
-    82	
+   430	
+   431	static int apple_pcie_port_setup_irq(struct apple_pcie_port *port)
+   432	{
+   433		struct fwnode_handle *fwnode = &port->np->fwnode;
+   434		struct apple_pcie *pcie = port->pcie;
+   435		unsigned int irq;
+   436	
+   437		/* FIXME: consider moving each interrupt under each port */
+   438		irq = irq_of_parse_and_map(to_of_node(dev_fwnode(port->pcie->dev)),
+   439					   port->idx);
+   440		if (!irq)
+   441			return -ENXIO;
+   442	
+   443		port->domain = irq_domain_create_linear(fwnode, 32,
+   444							&apple_port_irq_domain_ops,
+   445							port);
+   446		if (!port->domain)
+   447			return -ENOMEM;
+   448	
+   449		/* Disable all interrupts */
+   450		writel_relaxed(~0, port->base + PORT_INTMSK);
+   451		writel_relaxed(~0, port->base + PORT_INTSTAT);
+   452		writel_relaxed(~0, port->base + PORT_LINKCMDSTS);
+   453	
+   454		irq_set_chained_handler_and_data(irq, apple_port_irq_handler, port);
+   455	
+   456		/* Configure MSI base address */
+   457		BUG_ON(upper_32_bits(DOORBELL_ADDR));
+   458		writel_relaxed(lower_32_bits(DOORBELL_ADDR),
+   459			       port->base + pcie->hw->port_msiaddr);
+   460		if (pcie->hw->port_msiaddr_hi)
+   461			writel_relaxed(0, port->base + pcie->hw->port_msiaddr_hi);
+   462	
+   463		/* Enable MSIs, shared between all ports */
+   464		if (pcie->hw->port_msimap) {
+   465			int i;
+   466	
+   467			for (i = 0; i < pcie->nvecs; i++) {
+ > 468				writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
+   469					       PORT_MSIMAP_ENABLE,
+   470					       port->base + pcie->hw->port_msimap + 4 * i);
+   471			}
+   472	
+   473			writel_relaxed(PORT_MSICFG_EN, port->base + PORT_MSICFG);
+   474		} else {
+   475			writel_relaxed(0, port->base + PORT_MSIBASE);
+   476			writel_relaxed((ilog2(pcie->nvecs) << PORT_MSICFG_L2MSINUM_SHIFT) |
+   477				PORT_MSICFG_EN, port->base + PORT_MSICFG);
+   478		}
+   479	
+   480		return 0;
+   481	}
+   482	
 
 -- 
 0-DAY CI Kernel Test Service
