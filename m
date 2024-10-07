@@ -1,166 +1,293 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774AA23AB
-	for <llvm@lists.linux.dev>; Mon,  7 Oct 2024 05:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A11942077;
+	Mon,  7 Oct 2024 06:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728279645; cv=none; b=NWZjIQHtjHBBxn7mW/QGqQixbaWah7iPSKEIPawi8IXWx0g0bSSyP1JdzIhtFtSFArYUhGKkNcq5+CezbYEc2vKThP9OCNE3zO1b/wyjgb1qhAIYILCdUgcK2x8ZNdnFnCjSZ7yPl7dY8Y/ZOQlhOYfUIXBkUn5wiFtQgSStADs=
+	t=1728283179; cv=none; b=JZAipj6djLJJqju57pGXJBofBJCfkH7301vrMLNFKVN2LZbFuwzs9dfYgwqDi8dts5muh/ETc0ON0bA1NwXd1JyJAW2GDKJqviTFqNnpRJE/0ua8j03v57CXlHvepac6GVb1BUJrcisU4OkpunT1zyIWtVpbpATnG9gUenyIelk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728279645; c=relaxed/simple;
-	bh=NW15jWfGTv6CdDOi6P06k5U18XEUpN8HTkfm1rnMo4s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E2hsfVd2adbFJy8jnnkuM1pgrJbQMop4uoKuy8Kt2bZsFAZsxTMiCBqyjEDHdqQBsoks/p61ZHLQX/Vg964UsfoY7lGLSwX0QRnF8Ca0FM5ukcKnso32DoSRrGOP7i5xR50JVgGwF7okWROrvdHn2oI+Qbg59rJQ4lmL60SSNXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sNjhjZjB; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1728283179; c=relaxed/simple;
+	bh=YbBFZkPeegye9VkAtGQ/c94oqahowfu2r81nZFLLOKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Re1l5B0agkvH9vhcinC7JLoo5qrOod9YV487hb+myrnHMBcfGkIBHsTK5bbY3Ue+hFRzy50UDY1fylJa3WZp63jWtMDVqYnMYzOqAu1txCpDJ/4BtGygRZ0zAheBM7iy7jv0QrZjIT0sG4Qt4sJpxrUlYtyXSV4Ub35iXMCqtr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AceIlWT7; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sNjhjZjB"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4974JsDb024539;
-	Mon, 7 Oct 2024 05:40:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=pp1; bh=YVpQRnzWLCjGXCfVMKGoRaXUhi
-	59IGwbCEnH+odbRp8=; b=sNjhjZjBre5eDLD4BD2645IxK4qQNaLlwbxKLv/+LL
-	Hi72lwAV2EB1nQxoa3Ypgaxsu5XKwc2qT0h/g2xEVSytan2q7gIqpx6ewvBXwRtX
-	7FR6WDlC4sz/iR0QCsCj0jbJKaboCJNcPsaivhdKMDYpTgQSNfPzLeUZFPIWS8Hi
-	YTkV/sYgFRfInqhLcIIoT8mARaD8pQ36EjWOq9EbLFleHljs0rCx6pWE2IeKLRtr
-	tsaRLjnTkDmJ1YgF0N7EATT0LNFNIrMVUNDgqOZFgqthZIrO03Ex8+Ro01SEtc++
-	eH02l4eL26NRuiuzJqsJbwkrEiE0YjVY9CPe7Ra9IL2A==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4248h1g8u3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Oct 2024 05:40:24 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4975eNpI021204;
-	Mon, 7 Oct 2024 05:40:23 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4248h1g8u2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Oct 2024 05:40:23 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49751H2a022867;
-	Mon, 7 Oct 2024 05:40:22 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg0mf3j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 07 Oct 2024 05:40:22 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4975eIKp52756846
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 7 Oct 2024 05:40:18 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6750A20049;
-	Mon,  7 Oct 2024 05:40:18 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0B53920040;
-	Mon,  7 Oct 2024 05:40:15 +0000 (GMT)
-Received: from li-80eaad4c-2afd-11b2-a85c-af8123d033e3.ibm.com (unknown [9.43.47.32])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  7 Oct 2024 05:40:14 +0000 (GMT)
-From: "Nysal Jan K.A." <nysal@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: linuxppc-dev@lists.ozlabs.org, "Nysal Jan K.A" <nysal@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] sched/membarrier: Fix redundant load of membarrier_state
-Date: Mon,  7 Oct 2024 11:09:32 +0530
-Message-ID: <20241007053936.833392-1-nysal@linux.ibm.com>
-X-Mailer: git-send-email 2.46.2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AceIlWT7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728283178; x=1759819178;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YbBFZkPeegye9VkAtGQ/c94oqahowfu2r81nZFLLOKY=;
+  b=AceIlWT7FUcRl8nWFPAq3Ei19nR0nxRAUdI+0q3Nizm6BJnsUTGe7cga
+   7hUgfaE/nLQ60kRVOriy4DDzJn7+uCUCR5GipGWEBrY4UPFD0KiMJIOCW
+   ENQywP5wp10OYtwMWaqod1xdgagwFYTm595Qn2aXs5EeTTYqel25ZeCZH
+   f5b40899qZs8MjwJqRZDxYE6aVpOuNuskHC89uLibjEV+p1I1jxPhIyEP
+   7OB16KPOXw48v9JkDTwry9+m1jSSifuogvoVCf93hbpNt+Qdif0D6GmQe
+   FU0vi1M3k7uUPkkcz8zScN3CnmbeMZVvwjym1SSxe/95zO8L764Q6Atvv
+   A==;
+X-CSE-ConnectionGUID: 1HYdea2lS9eglBRAXrIHTw==
+X-CSE-MsgGUID: 2pXpHcMoQOOkLlsFTYI++Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11217"; a="38024620"
+X-IronPort-AV: E=Sophos;i="6.11,183,1725346800"; 
+   d="scan'208";a="38024620"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2024 23:39:37 -0700
+X-CSE-ConnectionGUID: 30PtBwgiTmu5zhSIOMX8Aw==
+X-CSE-MsgGUID: Z9xG+7q9RpC7DVdDFsVm4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,183,1725346800"; 
+   d="scan'208";a="80202507"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 06 Oct 2024 23:39:33 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sxhP1-0004gC-0f;
+	Mon, 07 Oct 2024 06:39:31 +0000
+Date: Mon, 7 Oct 2024 14:38:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Per-Daniel Olsson <perdaniel.olsson@axis.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, rickard.andersson@axis.com,
+	kernel@axis.com, Per-Daniel Olsson <perdaniel.olsson@axis.com>
+Subject: Re: [PATCH v2 2/2] iio: light: Add support for TI OPT4060 color
+ sensor
+Message-ID: <202410071407.8Vp5xp85-lkp@intel.com>
+References: <20241005165119.3549472-3-perdaniel.olsson@axis.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Q1mO7SjCHn1YLn4pkYaKQsvL8C9UN_Cd
-X-Proofpoint-GUID: _-4VV4ZENx6hWaATop6qUVBBWxVEMWij
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-06_21,2024-10-04_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 adultscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 spamscore=0 clxscore=1011 malwarescore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410070036
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241005165119.3549472-3-perdaniel.olsson@axis.com>
 
-From: "Nysal Jan K.A" <nysal@linux.ibm.com>
+Hi Per-Daniel,
 
-On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-is not selected, sync_core_before_usermode() is a no-op.
-In membarrier_mm_sync_core_before_usermode() the compiler does not
-eliminate redundant branches and the load of mm->membarrier_state
-for this case as the atomic_read() cannot be optimized away.
+kernel test robot noticed the following build warnings:
 
-Here's a snippet of the code generated for finish_task_switch() on powerpc:
+[auto build test WARNING on 0c559323bbaabee7346c12e74b497e283aaafef5]
 
-1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
-.......
-1b78c8:   cmpdi   cr7,r26,0
-1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
-1b78d0:   ld      r9,2312(r13)    # current
-1b78d4:   ld      r9,1888(r9)     # current->mm
-1b78d8:   cmpd    cr7,r26,r9
-1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
-1b78e0:   hwsync
-1b78e4:   cmplwi  cr7,r27,128
-.......
-1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
-1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
+url:    https://github.com/intel-lab-lkp/linux/commits/Per-Daniel-Olsson/dt-bindings-iio-light-Document-TI-OPT4060-RGBW-sensor/20241006-005244
+base:   0c559323bbaabee7346c12e74b497e283aaafef5
+patch link:    https://lore.kernel.org/r/20241005165119.3549472-3-perdaniel.olsson%40axis.com
+patch subject: [PATCH v2 2/2] iio: light: Add support for TI OPT4060 color sensor
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241007/202410071407.8Vp5xp85-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410071407.8Vp5xp85-lkp@intel.com/reproduce)
 
-This was found while analyzing "perf c2c" reports on kernels prior
-to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
-where mm_count was false sharing with membarrier_state.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410071407.8Vp5xp85-lkp@intel.com/
 
-There is a minor improvement in the size of finish_task_switch().
-The following are results from bloat-o-meter:
+All warnings (new ones prefixed by >>):
 
-GCC 7.5.0:
-----------
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-Function                                     old     new   delta
-finish_task_switch                           884     852     -32
+   In file included from drivers/iio/light/opt4060.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/iio/light/opt4060.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/iio/light/opt4060.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from drivers/iio/light/opt4060.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/iio/light/opt4060.c:1026:8: warning: variable 'chan' is uninitialized when used here [-Wuninitialized]
+    1026 |                                                         chan,
+         |                                                         ^~~~
+   include/linux/iio/events.h:54:51: note: expanded from macro 'IIO_UNMOD_EVENT_CODE'
+      54 |         IIO_EVENT_CODE(chan_type, 0, 0, direction, type, number, 0, 0)
+         |                                                          ^~~~~~
+   include/linux/iio/events.h:29:9: note: expanded from macro 'IIO_EVENT_CODE'
+      29 |          ((u16)chan))
+         |                ^~~~
+   drivers/iio/light/opt4060.c:994:15: note: initialize the variable 'chan' to silence this warning
+     994 |         int ret, chan, dummy;
+         |                      ^
+         |                       = 0
+   14 warnings generated.
 
-GCC 12.2.1:
------------
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-Function                                     old     new   delta
-finish_task_switch.isra                      852     820     -32
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [m]:
+   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
 
-LLVM 17.0.6:
-------------
-add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
-Function                                     old     new   delta
-rt_mutex_schedule                            120     104     -16
-finish_task_switch                           792     772     -20
 
-Signed-off-by: Nysal Jan K.A <nysal@linux.ibm.com>
----
- include/linux/sched/mm.h | 2 ++
- 1 file changed, 2 insertions(+)
+vim +/chan +1026 drivers/iio/light/opt4060.c
 
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index 07bb8d4181d7..042e60ab853a 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -540,6 +540,8 @@ enum {
- 
- static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
- {
-+	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
-+		return;
- 	if (current->mm != mm)
- 		return;
- 	if (likely(!(atomic_read(&mm->membarrier_state) &
+   989	
+   990	static irqreturn_t opt4060_irq_thread(int irq, void *private)
+   991	{
+   992		struct iio_dev *idev = private;
+   993		struct opt4060_chip *chip = iio_priv(idev);
+   994		int ret, chan, dummy;
+   995		unsigned int int_res;
+   996	
+   997		ret = regmap_read(chip->regmap, OPT4060_RES_CTRL, &int_res);
+   998		if (ret < 0) {
+   999			dev_err(chip->dev, "Failed to read interrupt reasons.\n");
+  1000			return IRQ_NONE;
+  1001		}
+  1002	
+  1003		if (!chip->data_trigger_active) {
+  1004			/* Only trigger interrupts on thresholds */
+  1005			ret = opt4060_set_int_state(chip, OPT4060_INT_CTRL_THRESHOLD);
+  1006			if (ret) {
+  1007				dev_err(chip->dev, "Failed to set interrupt state\n");
+  1008				return IRQ_NONE;
+  1009			}
+  1010		}
+  1011	
+  1012		/* Read OPT4060_CTRL to clear interrupt */
+  1013		ret = regmap_read(chip->regmap, OPT4060_CTRL, &dummy);
+  1014		if (ret < 0) {
+  1015			dev_err(chip->dev, "Failed to clear interrupt\n");
+  1016			return IRQ_NONE;
+  1017		}
+  1018	
+  1019		/* Handle events */
+  1020		if (int_res & (OPT4060_RES_CTRL_FLAG_H | OPT4060_RES_CTRL_FLAG_L)) {
+  1021			u64 code;
+  1022	
+  1023			/* Check if the interrupt is from the lower threshold */
+  1024			if (int_res & OPT4060_RES_CTRL_FLAG_L) {
+  1025				code = IIO_UNMOD_EVENT_CODE(IIO_LIGHT,
+> 1026								chan,
+  1027								IIO_EV_TYPE_THRESH,
+  1028								IIO_EV_DIR_FALLING);
+  1029				iio_push_event(idev, code,
+  1030						iio_get_time_ns(idev));
+  1031			}
+  1032			/* Check if the interrupt is from the upper threshold */
+  1033			if (int_res & OPT4060_RES_CTRL_FLAG_H) {
+  1034				code = IIO_UNMOD_EVENT_CODE(IIO_LIGHT,
+  1035								chan,
+  1036								IIO_EV_TYPE_THRESH,
+  1037								IIO_EV_DIR_RISING);
+  1038				iio_push_event(idev, code,
+  1039						iio_get_time_ns(idev));
+  1040			}
+  1041			/* Handle threshold triggers */
+  1042			if (chip->threshold_trigger_active && iio_buffer_enabled(idev))
+  1043				iio_trigger_poll_nested(chip->threshold_trig);
+  1044		}
+  1045	
+  1046		/* Handle conversion ready */
+  1047		if (int_res & OPT4060_RES_CTRL_CONV_READY) {
+  1048			/* Signal completion for potentially waiting reads */
+  1049			complete(&chip->completion);
+  1050	
+  1051			/* Handle data ready triggers */
+  1052			if (chip->data_trigger_active && iio_buffer_enabled(idev))
+  1053				iio_trigger_poll_nested(chip->data_trig);
+  1054		}
+  1055		return IRQ_HANDLED;
+  1056	}
+  1057	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
