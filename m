@@ -1,70 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062181D2B0E;
-	Mon,  7 Oct 2024 12:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182091D318B;
+	Mon,  7 Oct 2024 13:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728305337; cv=none; b=qAToJUNGNbheBvtD82C7TtDmTxGl91kGJz/C7ZxZBH+rdjTh9VIUU22tE5Ed7ojR0GRJd/ZbBrSFZXTG2pm9QsM+g8+eVJLfH7sVFsj7NbtiE0DKnnMrzntLsZvuAY8w31iyhb9OWJ30VyL8U5iswprwlKon3s2pb4N353xRRJs=
+	t=1728307195; cv=none; b=ShqjUFB0BskUQC4Z9huzQ3BAg8JF/jEJZfTV7+WRYB4LE2wgeZjLsYdAR5w9M1FM91+qdyGbQx79VEgRiswzi53aKlxedkbxJppGzfwLm09x0KbR/l49nwPHMZCujrc0hcybzKU3Fim3MpZ7GVY5SLuqi55qSo473KYJh75wt80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728305337; c=relaxed/simple;
-	bh=XWgabam3fhc3PvpjHHnnru1mmimtxFrWT467mkfuww0=;
+	s=arc-20240116; t=1728307195; c=relaxed/simple;
+	bh=/e2E4Nsq+0Xkd5BF5AuSOGCkhvFjFskozi3D9yL97JI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DxJuWrHGk3KCXOrrHp3xidwDziNi+IdyPDwBbcRZPukYr1F8E1B9lrxBt/GA+SDv94rvQ8YszXryoRBW02GKW4Lj2/TsUTZfWe7fz70a9V77zIQocQBnYTfAMwt8CPbq74pplO2LOjJqfouG6uYsp2qB5BeZt9aEBhdiVXxghQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdGBAFz1; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=UdRaOzKFB8oz4CdCQxt0oICXnT3QIEALtdV87ncPTkT4rCUSkP6DCLIwJfbEjjcuklFgW8eOYyq8PHk9ClD4CH9WxeSGNv1wFHjhcIXpu3kBS7FQPsbba1JcGI49+UY/RtnJBGH93ODc/O9P2V5rOubspf74ziCXlmZlMM7a/qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z1CIejin; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdGBAFz1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z1CIejin"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728305337; x=1759841337;
+  t=1728307195; x=1759843195;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XWgabam3fhc3PvpjHHnnru1mmimtxFrWT467mkfuww0=;
-  b=TdGBAFz1gctBFaNvuP2HLd7UHw1XMfxCdG0ZodmaT1ZOhImu84+Wb7Fg
-   68M/qkgX/Y1m0BfBq/YPQTQ+7UA+BkG/ogsQTADxbqHTNdFbJI6cMjaGZ
-   M32yDT0E7sSxImHpydpaOoiLau+dUGawlnV9sTYRebOHeON/NNbAPJ1+g
-   8lkMXwSBEEmOYOxOxJ9ovbhsGaeIVDaXG2l+E8QKMif+CQMk6xg017Rvn
-   R4Bw9nYqg4t5h//yM2Oju83HdYmVPvzOTc5h8zr+rkXuyMvYnBJYqhwwf
-   fTzhfD4+rcRXgaz+Dmetym4CNoD5Okx0x+ZqP5P01EUDTshf+f/EOL2/S
-   w==;
-X-CSE-ConnectionGUID: W7PnSknlRgCFxnUcqpki6Q==
-X-CSE-MsgGUID: vTvR+kSgRtG5slW52Q7WYg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="31152293"
+  bh=/e2E4Nsq+0Xkd5BF5AuSOGCkhvFjFskozi3D9yL97JI=;
+  b=Z1CIejinADd8ZpXr+BCqfl3GRVqNwH5Z2b+p66W09VT/IPbNwDImKnVD
+   0yLaKjjCd9ZRExGJL8MqFjXK5P+M20lG8rZOgduJsb7ip2tMC+0aLl66t
+   Qk0YHxgY22tDFQRWEbB7iiYDKL6WqT1mO4OE0fsEV9tuH0cgZjHYyHhNz
+   mTguJNC9SoD0ZIBwoG9JEy3BRJnIrG9MFpBOtTORJg2ocKrn6i6yZBTTt
+   628Fu5nZmcYSflISuFysd3qiCXSC032Ihf43ZgtoOISsSCuZcMmgQ3CeC
+   BnkvcLD/GOpWXcBhPpV9Vw+CQMsDH7FcGoHNj1R++3sk51cIl4YWTMFsY
+   Q==;
+X-CSE-ConnectionGUID: 3oSlYICFS4u4EyVLm2yjUw==
+X-CSE-MsgGUID: jqnDW3BcS+qbqxRWuLt70w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="27265846"
 X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
-   d="scan'208";a="31152293"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 05:48:54 -0700
-X-CSE-ConnectionGUID: bP6fMKj0RnyrWoAmPTX4GQ==
-X-CSE-MsgGUID: rdegqp39TlWWvVoSaAoULg==
+   d="scan'208";a="27265846"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 06:19:54 -0700
+X-CSE-ConnectionGUID: fh6P6qQvQMq8c9iM7VC/xQ==
+X-CSE-MsgGUID: JSDqF9XzRSqXW0n+5D48+w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
-   d="scan'208";a="80055132"
+   d="scan'208";a="106306643"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Oct 2024 05:48:50 -0700
+  by orviesa002.jf.intel.com with ESMTP; 07 Oct 2024 06:19:51 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sxnAO-0004z2-0K;
-	Mon, 07 Oct 2024 12:48:48 +0000
-Date: Mon, 7 Oct 2024 20:48:42 +0800
+	id 1sxneP-00051K-2P;
+	Mon, 07 Oct 2024 13:19:49 +0000
+Date: Mon, 7 Oct 2024 21:19:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Yang <danielyangkang@gmail.com>,
-	Wenjia Zhang <wenjia@linux.ibm.com>,
-	Jan Karcher <jaka@linux.ibm.com>,
-	"D. Wythe" <alibuda@linux.alibaba.com>,
-	Tony Lu <tonylu@linux.alibaba.com>,
-	Wen Gu <guwen@linux.alibaba.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Sebastian Reichel <sre@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, danielyangkang@gmail.com,
-	syzbot+e953a8f3071f5c0a28fd@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] resolve gtp possible deadlock warning
-Message-ID: <202410072002.hT2D7135-lkp@intel.com>
-References: <20241005045411.118720-1-danielyangkang@gmail.com>
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 4/4] power: supply: hwmon: move interface to private
+ header
+Message-ID: <202410072120.3jlD28CJ-lkp@intel.com>
+References: <20241005-power-supply-cleanups-v1-4-45303b2d0a4d@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,46 +66,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241005045411.118720-1-danielyangkang@gmail.com>
+In-Reply-To: <20241005-power-supply-cleanups-v1-4-45303b2d0a4d@weissschuh.net>
 
-Hi Daniel,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.12-rc2 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 27cc6fdf720183dce1dbd293483ec5a9cb6b595e]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Yang/resolve-gtp-possible-deadlock-warning/20241005-125510
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241005045411.118720-1-danielyangkang%40gmail.com
-patch subject: [PATCH v2] resolve gtp possible deadlock warning
-config: x86_64-buildonly-randconfig-005-20241007 (https://download.01.org/0day-ci/archive/20241007/202410072002.hT2D7135-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/power-supply-core-use-device-mutex-wrappers/20241005-181114
+base:   27cc6fdf720183dce1dbd293483ec5a9cb6b595e
+patch link:    https://lore.kernel.org/r/20241005-power-supply-cleanups-v1-4-45303b2d0a4d%40weissschuh.net
+patch subject: [PATCH 4/4] power: supply: hwmon: move interface to private header
+config: x86_64-randconfig-003-20241007 (https://download.01.org/0day-ci/archive/20241007/202410072120.3jlD28CJ-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410072002.hT2D7135-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410072120.3jlD28CJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410072002.hT2D7135-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410072120.3jlD28CJ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/smc/af_smc.c:22:9: warning: 'pr_fmt' macro redefined [-Wmacro-redefined]
-      22 | #define pr_fmt(fmt) KMSG_COMPONENT ": " fmt
-         |         ^
-   include/linux/printk.h:380:9: note: previous definition is here
-     380 | #define pr_fmt(fmt) fmt
-         |         ^
-   1 warning generated.
+   In file included from drivers/power/supply/power_supply_hwmon.c:12:
+>> drivers/power/supply/power_supply.h:41:20: error: redefinition of 'power_supply_update_leds'
+      41 | static inline void power_supply_update_leds(struct power_supply *psy) {}
+         |                    ^
+   drivers/power/supply/power_supply.h:41:20: note: previous definition is here
+      41 | static inline void power_supply_update_leds(struct power_supply *psy) {}
+         |                    ^
+   In file included from drivers/power/supply/power_supply_hwmon.c:12:
+>> drivers/power/supply/power_supply.h:42:19: error: redefinition of 'power_supply_create_triggers'
+      42 | static inline int power_supply_create_triggers(struct power_supply *psy)
+         |                   ^
+   drivers/power/supply/power_supply.h:42:19: note: previous definition is here
+      42 | static inline int power_supply_create_triggers(struct power_supply *psy)
+         |                   ^
+   In file included from drivers/power/supply/power_supply_hwmon.c:12:
+>> drivers/power/supply/power_supply.h:44:20: error: redefinition of 'power_supply_remove_triggers'
+      44 | static inline void power_supply_remove_triggers(struct power_supply *psy) {}
+         |                    ^
+   drivers/power/supply/power_supply.h:44:20: note: previous definition is here
+      44 | static inline void power_supply_remove_triggers(struct power_supply *psy) {}
+         |                    ^
+   3 errors generated.
 
 
-vim +/pr_fmt +22 net/smc/af_smc.c
+vim +/power_supply_update_leds +41 drivers/power/supply/power_supply.h
 
-ac7138746e1413 Ursula Braun 2017-01-09 @22  #define pr_fmt(fmt) KMSG_COMPONENT ": " fmt
-ac7138746e1413 Ursula Braun 2017-01-09  23  
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04  40  
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04 @41  static inline void power_supply_update_leds(struct power_supply *psy) {}
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04 @42  static inline int power_supply_create_triggers(struct power_supply *psy)
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04  43  { return 0; }
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04 @44  static inline void power_supply_remove_triggers(struct power_supply *psy) {}
+4a11b59d828366 drivers/power/power_supply.h Anton Vorontsov 2007-05-04  45  
 
 -- 
 0-DAY CI Kernel Test Service
