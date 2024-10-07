@@ -1,122 +1,97 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC2D18BB91;
-	Mon,  7 Oct 2024 11:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F976101C4;
+	Mon,  7 Oct 2024 11:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728298883; cv=none; b=l5uaz6WsI6EjWBgx9NDUYmIeCEPnHwGnZW72VnoOPQkdD9C4wNAIDTwGODEnKuCq820YOXuvXoZF2DZaKYiYZI4MS9tB8tTj8q/SnivegSjWB8447GOTuc6o0lfZXcNEZrbVYNTOvjTlpf5rtGLR6wWnA8DSDfGzCoSU2Vlu7CE=
+	t=1728300950; cv=none; b=rlEh6mSqg8mz6nk9f5x6+Vwn3epC/fsMfmjunAqfS0a/GtO/k7ywfThL595WM4T9A+5KT3JvXC/M48BPm2VHMsDDUol5sigL4N5m8eSx8QabIJilsZ9RqNR5dPvZkGtd30gwzhBIC/VPdDICoQYnhN4XPVvDGUNu8qkVXhJ7InI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728298883; c=relaxed/simple;
-	bh=EsNyz/6NmQGIF7jRLtLbDpUUSAfjnZ0U4efmqd2xUf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZfoYGxwdhJZtMxE3bR1dHqAhhbHbkwwrQVuEBLl3rGoN0/BfKpbB5DqDj0ULP4Q3D/AQgdnFWEYjYHJEWOyGYVa25ewfqiFPphjJqeOICXsSEzMGcF3Jt+uZSOnaPV7bNpkJH0QQ4efa7FJw9hRKl2NpE64lT7V4oPNnA36PrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GvTaX+lQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7nR9JB7F; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1728300950; c=relaxed/simple;
+	bh=bk94yNr3SkJqcl81PUx1C+bptsWpnjkREN99Nty+b64=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DEGApG0OvY8Y4C7dvIAsdvvNaX/qZXXjZMxYEnGthUn8AXFufsU8AYOOd2/BrzaBue5zV7vUTfMOiXl+KjW3k7ICWlyhCv2IpAk/zk583Gs1tNH9eyYT4sbn7vzWHq1MC+hXsqDT50MsL3hUqt48EH/4YA6uzIsFdqSMeAuxx5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mbqj0nVY; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GvTaX+lQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7nR9JB7F"
-Date: Mon, 7 Oct 2024 13:01:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1728298879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c4gRHCcLb4jbQI6d/h1siM+v84iL2e+zAz1uss1+vmg=;
-	b=GvTaX+lQ3NFJaSD+N6WWBhRg2nHwOXDlCfeAs7i0mcIjLclUNFJo/jPF4FdOG1gOMhcqWO
-	Fnv568281VwxHzgCXFCxyX43gL2iWgdqLFWkI7Wi/lGFKkzHmg5cRP0yvEunImGAkl5Sag
-	vUtKBFVtaFrPqj7ePow9Mqmp1IR/Vm5ertGBjEXYCoBHJXhoLhjUR7YhklKST6C5a/loZj
-	U2vpMNH6ji0kD706Ne1F0UvXmvLQXz/otlk5pJY5ExiSpmW6wtF1uk6Yvd3h4uL1rm8+zn
-	JIlkUu059Vt9ILYFyGTIiEGjEVTk/1ZRA0YM8Na4rADk9GRmvIF+zNB4OOeKbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1728298879;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c4gRHCcLb4jbQI6d/h1siM+v84iL2e+zAz1uss1+vmg=;
-	b=7nR9JB7F/MR7pVgKbZWbz84B8/0uzBBvbTBoD4XEWdCFiRynDn+RBHbKDPmLk1OFpH6Rba
-	xGqMTFDovGI6M5BQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: David Laight <David.Laight@aculab.com>
-Cc: 'Mathieu Desnoyers' <mathieu.desnoyers@efficios.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	John Stultz <jstultz@google.com>,
-	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"maged.michael@gmail.com" <maged.michael@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-	"rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"lkmm@lists.linux.dev" <lkmm@lists.linux.dev>,
-	Gary Guo <gary@garyguo.net>, Nikita Popov <github@npopov.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: RE: [RFC PATCH v2 2/4] Documentation: RCU: Refer to ptr_eq()
-Message-ID: <20241007110118.RJ7zm3ie@linutronix.de>
-References: <20241004182734.1761555-1-mathieu.desnoyers@efficios.com>
- <20241004182734.1761555-3-mathieu.desnoyers@efficios.com>
- <72af935f4a2a4e23b68845d2f6855103@AcuMS.aculab.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mbqj0nVY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728300948; x=1759836948;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=bk94yNr3SkJqcl81PUx1C+bptsWpnjkREN99Nty+b64=;
+  b=Mbqj0nVYaeqsijyUPCUIVt799+9WF5WfYxcLMY646n746hdosMZ0OF0+
+   o9x+4QCFCEMntbuARSyJYV7Xo98fKi34F8Odu2tQiy3avdWQbAd1sGlU4
+   qMRWOAz8qsaEyEYCq81uZqkxNA9FRQCNx8hQnl8uM3ydJbgVA32uG3EDz
+   pKYv6DCngBeGUfclBifgLcR7b9GiIpNuE4bhNJ+oWVJTSAM5FDr6TdYlW
+   DL+syoaWTFulsKkWNpndWotWTn3AVGWuyTF5+3+rFWGyYgc3MsDt/UO8u
+   oWqsfuymQa044h6ZWWf51QTf5flUVlsAyKKjGnsGDXunC4efDTSHU0JTR
+   A==;
+X-CSE-ConnectionGUID: vFQtl5+LS8OHXjBN2pfuXw==
+X-CSE-MsgGUID: 5uvWEWusS+CynOApBo7Psg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11217"; a="27254768"
+X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
+   d="scan'208";a="27254768"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 04:35:47 -0700
+X-CSE-ConnectionGUID: GCP40wquTNSxOMC4nRRt0A==
+X-CSE-MsgGUID: LO2qCuRcQs2kS0QJWF5ctQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
+   d="scan'208";a="106196766"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 07 Oct 2024 04:35:46 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sxm1f-0004vk-3B;
+	Mon, 07 Oct 2024 11:35:43 +0000
+Date: Mon, 7 Oct 2024 19:35:35 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [asahilinux:bits/170-atcphy 4/17] ld.lld: error:
+ vmlinux.a(init/main.o):(function __traceiter_initcall_start: .text+0x50):
+ relocation R_RISCV_HI20 out of range: 534214 is not in [-524288, 524287];
+ references '__tracepoint_initcall_start'
+Message-ID: <202410071955.WeBWeNeS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <72af935f4a2a4e23b68845d2f6855103@AcuMS.aculab.com>
 
-On 2024-10-06 19:52:49 [+0000], David Laight wrote:
-> From: Mathieu Desnoyers
-> > Sent: 04 October 2024 19:28
-> > 
-> > Refer to ptr_eq() in the rcu_dereference() documentation.
-> > 
-> > ptr_eq() is a mechanism that preserves address dependencies when
-> > comparing pointers, and should be favored when comparing a pointer
-> > obtained from rcu_dereference() against another pointer.
-> 
-> Why does this ever really matter for rcu?
-> 
-> The check just ensure that any speculative load uses
-> a specific one of the pointers when they are different.
-> This can only matter if you care about the side effects
-> of the speculative load.
-> 
-> But rcu is all about (things like) lockless list following.
-> So you need to wait until it is impossible for another
-> execution context to have a reference to some memory
-> before actually completely invalidating it (ie kfree()).
+TO: Sven Peter <sven@svenpeter.dev>
+CC: Janne Grunau <j@jannau.net>
 
-Not always.
-Non-RCU could would have locking with a barrier to ensure a reload.
-RCU would not have the barrier. Assuming the pointer, points to a
-struct, the compiler could load an element from the first pointer and
-keeping it after it ensured the pointer are equal. However based on the
-logic, the content could have changed and the compiler would not load
-the new value but keep the previous one.
+tree:   https://github.com/AsahiLinux/linux bits/170-atcphy
+head:   38baa13adce4ad51eb53f0d18206d12db085daeb
+commit: 4f5b8aa35e68a33a1d20b6ce62014794768af7ad [4/17] WIP: phy: apple: Add Apple Type-C PHY
+config: riscv-randconfig-001-20241007 (https://download.01.org/0day-ci/archive/20241007/202410071955.WeBWeNeS-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410071955.WeBWeNeS-lkp@intel.com/reproduce)
 
-> 	David
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410071955.WeBWeNeS-lkp@intel.com/
 
-Sebastian
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(init/main.o):(function __traceiter_initcall_start: .text+0x50): relocation R_RISCV_HI20 out of range: 534214 is not in [-524288, 524287]; references '__tracepoint_initcall_start'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function __traceiter_initcall_finish: .text+0x96): relocation R_RISCV_HI20 out of range: 534214 is not in [-524288, 524287]; references '__tracepoint_initcall_finish'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function trace_event_raw_event_initcall_level: .text+0xf2): relocation R_RISCV_HI20 out of range: 532327 is not in [-524288, 524287]; references '.L.str.24'
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
