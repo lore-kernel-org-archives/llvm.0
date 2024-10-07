@@ -1,64 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D63189BBE;
-	Mon,  7 Oct 2024 20:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DA81C1AD4;
+	Mon,  7 Oct 2024 23:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728333200; cv=none; b=A3HQ82/2Rc7+L/8tHE/2Yxuuc4kmxH2VPEKfxMXL0lLhlOrHXvGT2DIZZ/ee633VEP3gId5gXyWEd7/jrEPNHAVxiyMJa+W4k4cbSrXRwuolYeNMdzago9jLR7yqwN1l/4G7JHazJcPg8JCCX1J3mxgiy5TPC8mhJzysted2anw=
+	t=1728342987; cv=none; b=NHKWs1lDwIYzbSg4V2BELnu53+2WZooi9ZLyZuMFgBuAZVKIimPp3TVNnznGOPBRRvZ2pfkbWMVR8Str/+HTV4lOWgx/UausWvO1UC2DBZ1Ct4yxqItSyBYZjcbkom8ZMyGAa1mfrEgpJBhpfqjoKd7f2RHFVUpGUEevHLrFkjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728333200; c=relaxed/simple;
-	bh=TjjBb5fKZp0UK0qeNyoIlUSup4FUvOReuGdIKpPHp6Q=;
+	s=arc-20240116; t=1728342987; c=relaxed/simple;
+	bh=DUb7kz4JTXYdL6/EMDIBmQrN8NitqplSXw+fsyqrMFI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p3jHjv6YvFw+vFxrQIMzMSlmBPUWs2GGxahJIJRQFangjAXLxwAfEbKbIEKJeAA9zIGteon4kdXfh9OwnThBaKlcmEh71Hebgn2nQYFSpjqpP2lE/6G+ytoQ+HUu/I3fcdMVER78Ji7J3xVgEIhTYrbwI18kJDPuYXoN5Av3Vxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vhh+yQ6X; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=IHOYcxiDX6mlY/x6eVIg+50eGnrZ0K4vq3HREpT+4i1wzNL5o2yonGKMuZPPiDzV+i6PnoK/Y+0/XMRBoq1DpVt+4PORuPv6s06UcCZj/QA2d0h/RkE//GeLZbLW/AgcjFfnEMkUEibxuvnWFgmAI8lxs1S+EfdWuzIq5MSY9ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BwhMWQRh; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vhh+yQ6X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BwhMWQRh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728333198; x=1759869198;
+  t=1728342986; x=1759878986;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TjjBb5fKZp0UK0qeNyoIlUSup4FUvOReuGdIKpPHp6Q=;
-  b=Vhh+yQ6XkR5ZP39N1G6oQFTpMSNW21cnLTB4su+vvjeE+pctSV4Snl1v
-   mMI0NLrDmbRzD+67h0prtWfpOUDMu/yKqFNcwKa3fzmBvUiHiaf2p2wZr
-   oMoa4fNvMpnmOWEhitirttGC6a7TTT+789Wdw0xyc5mdv+tswleisHxea
-   5kM+QO7CgvHn7GJPK60arkLfpxMTh6YADHxf8cWb/oBoO7qLg/kvTW19X
-   HlM7m9Bc7bVXmwH/Z+vJLMkQc9HUREEqN0ID5Syhi13qyDzZhLRo5I6Q8
-   r4/VrXEIRJA5ckB3NkrWrSRDCIq/fSKYtESnR9UL/YpX+1SJs4VA/I98/
-   w==;
-X-CSE-ConnectionGUID: pYRxxMPdQ4qNPw/w68BFCA==
-X-CSE-MsgGUID: 2K+H3aAMQAqV3l/cu8G5jw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="26994633"
-X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
-   d="scan'208";a="26994633"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 13:33:17 -0700
-X-CSE-ConnectionGUID: Qur5gHvSTbWXapcEHzkbGQ==
-X-CSE-MsgGUID: X9FBS0qYREmQCe04xJgDzA==
+  bh=DUb7kz4JTXYdL6/EMDIBmQrN8NitqplSXw+fsyqrMFI=;
+  b=BwhMWQRhQzOCknkg0Q+4xLKc0tAZr8oEHkNoQxjBwEbg58jrpFJrW+y0
+   vXYMUQPwhoGllMBgqAzVEvpxKqt12af20Scyi2PZ2LIc2mUmlwxZfp8wC
+   yuqKTgv0AZWGvwd9l07Xn/snPtEDz+Ags1QmE5QScPzJyxWnaNvA3uWOx
+   yfG4gKc7hKC21xmIjvo1mciOptvOih9twP0zkR/3L6DNwDD9GmtOYB5w9
+   TQPD1Hv+MMzZgUn1GqIkk3PNexzMpxdFuLUoSs7Vb2rVd/ZsEHNYoqFn0
+   DLkb6P/C+Q395i8Rde5Y+/LruDmhKyaBndhidD1wIVBh0VWHZVgmtAPLJ
+   g==;
+X-CSE-ConnectionGUID: qtDc2OOcSOiEH6Wv4PFV8g==
+X-CSE-MsgGUID: tn4rSdUoQt68Ok66yhWGTg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="50043022"
+X-IronPort-AV: E=Sophos;i="6.11,185,1725346800"; 
+   d="scan'208";a="50043022"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 16:16:26 -0700
+X-CSE-ConnectionGUID: WdcWUlizRpy4GVkqUpX3QQ==
+X-CSE-MsgGUID: imA9qnRfQd67i0hrQfr+LA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,184,1725346800"; 
-   d="scan'208";a="75711879"
+X-IronPort-AV: E=Sophos;i="6.11,185,1725346800"; 
+   d="scan'208";a="106479378"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Oct 2024 13:33:14 -0700
+  by orviesa002.jf.intel.com with ESMTP; 07 Oct 2024 16:16:22 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sxuPo-0005VI-00;
-	Mon, 07 Oct 2024 20:33:12 +0000
-Date: Tue, 8 Oct 2024 04:32:17 +0800
+	id 1sxwxf-0005eO-2j;
+	Mon, 07 Oct 2024 23:16:19 +0000
+Date: Tue, 8 Oct 2024 07:15:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, toke@redhat.com,
-	martin.lau@kernel.org, yonghong.song@linux.dev, puranjay@kernel.org,
-	xukuohai@huaweicloud.com, eddyz87@gmail.com, iii@linux.ibm.com,
-	leon.hwang@linux.dev, kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next v5 1/3] bpf: Prevent tailcall infinite loop
- caused by freplace
-Message-ID: <202410080455.vy5GT8Vz-lkp@intel.com>
-References: <20241006130130.77125-2-leon.hwang@linux.dev>
+To: Mohammed Anees <pvmohammedanees2003@gmail.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Mohammed Anees <pvmohammedanees2003@gmail.com>
+Subject: Re: [PATCH v2] net: dsa: Fix conditional handling of Wake-on-Lan
+ configuration in dsa_user_set_wol
+Message-ID: <202410080616.wpZV4fAa-lkp@intel.com>
+References: <20241006231938.4382-1-pvmohammedanees2003@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,346 +72,159 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241006130130.77125-2-leon.hwang@linux.dev>
+In-Reply-To: <20241006231938.4382-1-pvmohammedanees2003@gmail.com>
 
-Hi Leon,
+Hi Mohammed,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on net/main]
+[also build test ERROR on net-next/main linus/master v6.12-rc2 next-20241004]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Prevent-tailcall-infinite-loop-caused-by-freplace/20241006-210309
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20241006130130.77125-2-leon.hwang%40linux.dev
-patch subject: [PATCH bpf-next v5 1/3] bpf: Prevent tailcall infinite loop caused by freplace
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241008/202410080455.vy5GT8Vz-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410080455.vy5GT8Vz-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mohammed-Anees/net-dsa-Fix-conditional-handling-of-Wake-on-Lan-configuration-in-dsa_user_set_wol/20241007-072229
+base:   net/main
+patch link:    https://lore.kernel.org/r/20241006231938.4382-1-pvmohammedanees2003%40gmail.com
+patch subject: [PATCH v2] net: dsa: Fix conditional handling of Wake-on-Lan configuration in dsa_user_set_wol
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241008/202410080616.wpZV4fAa-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410080616.wpZV4fAa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410080455.vy5GT8Vz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410080616.wpZV4fAa-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from kernel/fork.c:53:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
->> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
-   2 warnings generated.
---
-   In file included from kernel/cpu.c:41:
-   In file included from include/trace/events/power.h:12:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
->> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
-   kernel/cpu.c:112:20: warning: unused function 'cpuhp_lock_acquire' [-Wunused-function]
-     112 | static inline void cpuhp_lock_acquire(bool bringup) { }
-         |                    ^~~~~~~~~~~~~~~~~~
-   kernel/cpu.c:113:20: warning: unused function 'cpuhp_lock_release' [-Wunused-function]
-     113 | static inline void cpuhp_lock_release(bool bringup) { }
-         |                    ^~~~~~~~~~~~~~~~~~
-   4 warnings generated.
---
-   In file included from kernel/sched/core.c:14:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
->> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
-   kernel/sched/core.c:3595:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-    3595 | static inline bool rq_has_pinned_tasks(struct rq *rq)
-         |                    ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:5751:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-    5751 | static inline void sched_tick_start(int cpu) { }
-         |                    ^~~~~~~~~~~~~~~~
-   kernel/sched/core.c:5752:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-    5752 | static inline void sched_tick_stop(int cpu) { }
-         |                    ^~~~~~~~~~~~~~~
-   kernel/sched/core.c:6470:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-    6470 | static inline void sched_core_cpu_starting(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:6471:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6471 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:6472:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-    6472 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   8 warnings generated.
---
-   In file included from kernel/sched/fair.c:54:
-   In file included from kernel/sched/sched.h:61:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
->> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
-   kernel/sched/fair.c:481:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
-     481 | static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:502:19: warning: unused function 'tg_is_idle' [-Wunused-function]
-     502 | static inline int tg_is_idle(struct task_group *tg)
-         |                   ^~~~~~~~~~
-   kernel/sched/fair.c:526:19: warning: unused function 'max_vruntime' [-Wunused-function]
-     526 | static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
-         |                   ^~~~~~~~~~~~
-   kernel/sched/fair.c:1389:20: warning: unused function 'is_core_idle' [-Wunused-function]
-    1389 | static inline bool is_core_idle(int cpu)
-         |                    ^~~~~~~~~~~~
-   kernel/sched/fair.c:3650:20: warning: unused function 'account_numa_enqueue' [-Wunused-function]
-    3650 | static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:3654:20: warning: unused function 'account_numa_dequeue' [-Wunused-function]
-    3654 | static inline void account_numa_dequeue(struct rq *rq, struct task_struct *p)
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:3658:20: warning: unused function 'update_scan_period' [-Wunused-function]
-    3658 | static inline void update_scan_period(struct task_struct *p, int new_cpu)
-         |                    ^~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:5225:20: warning: unused function 'cfs_rq_is_decayed' [-Wunused-function]
-    5225 | static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-         |                    ^~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:5240:20: warning: unused function 'remove_entity_load_avg' [-Wunused-function]
-    5240 | static inline void remove_entity_load_avg(struct sched_entity *se) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6753:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
-    6753 | static inline bool cfs_bandwidth_used(void)
-         |                    ^~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6761:20: warning: unused function 'sync_throttle' [-Wunused-function]
-    6761 | static inline void sync_throttle(struct task_group *tg, int cpu) {}
-         |                    ^~~~~~~~~~~~~
-   kernel/sched/fair.c:6774:19: warning: unused function 'throttled_lb_pair' [-Wunused-function]
-    6774 | static inline int throttled_lb_pair(struct task_group *tg,
-         |                   ^~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6785:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
-    6785 | static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
-         |                                     ^~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6789:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
-    6789 | static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6790:20: warning: unused function 'update_runtime_enabled' [-Wunused-function]
-    6790 | static inline void update_runtime_enabled(struct rq *rq) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:6791:20: warning: unused function 'unthrottle_offline_cfs_rqs' [-Wunused-function]
-    6791 | static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   18 warnings generated.
---
-   In file included from kernel/time/hrtimer.c:30:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
->> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
-   kernel/time/hrtimer.c:121:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     121 |         [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-     119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     122 |         [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-     119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     123 |         [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-     119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:124:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     124 |         [CLOCK_TAI]             = HRTIMER_BASE_TAI,
-         |                                   ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:119:27: note: previous initialization is here
-     119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:278:20: warning: unused function 'is_migration_base' [-Wunused-function]
-     278 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
-         |                    ^~~~~~~~~~~~~~~~~
-   7 warnings generated.
---
-   In file included from kernel/events/core.c:34:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
->> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
->> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         |     ^
-   include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-         | ^
-         | static 
-   kernel/events/core.c:9789:19: warning: unused function 'perf_event_set_bpf_handler' [-Wunused-function]
-    9789 | static inline int perf_event_set_bpf_handler(struct perf_event *event,
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/events/core.c:9796:20: warning: unused function 'perf_event_free_bpf_handler' [-Wunused-function]
-    9796 | static inline void perf_event_free_bpf_handler(struct perf_event *event)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+   In file included from net/dsa/user.c:8:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/dsa/user.c:8:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/dsa/user.c:8:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/dsa/user.c:8:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/dsa/user.c:1220:6: error: assigning to 'int' from incompatible type 'void'
+    1220 |         ret = phylink_ethtool_get_wol(dp->pl, w);
+         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   16 warnings and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +/bpf_extension_link_prog +1392 include/linux/bpf.h
+vim +1220 net/dsa/user.c
 
-  1348	
-  1349	#define DEFINE_BPF_DISPATCHER(name)					\
-  1350		__BPF_DISPATCHER_SC(name);					\
-  1351		noinline __bpfcall unsigned int bpf_dispatcher_##name##_func(	\
-  1352			const void *ctx,					\
-  1353			const struct bpf_insn *insnsi,				\
-  1354			bpf_func_t bpf_func)					\
-  1355		{								\
-  1356			return __BPF_DISPATCHER_CALL(name);			\
-  1357		}								\
-  1358		EXPORT_SYMBOL(bpf_dispatcher_##name##_func);			\
-  1359		struct bpf_dispatcher bpf_dispatcher_##name =			\
-  1360			BPF_DISPATCHER_INIT(bpf_dispatcher_##name);
-  1361	
-  1362	#define DECLARE_BPF_DISPATCHER(name)					\
-  1363		unsigned int bpf_dispatcher_##name##_func(			\
-  1364			const void *ctx,					\
-  1365			const struct bpf_insn *insnsi,				\
-  1366			bpf_func_t bpf_func);					\
-  1367		extern struct bpf_dispatcher bpf_dispatcher_##name;
-  1368	
-  1369	#define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
-  1370	#define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
-  1371	void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
-  1372					struct bpf_prog *to);
-  1373	/* Called only from JIT-enabled code, so there's no need for stubs. */
-  1374	void bpf_image_ksym_add(void *data, unsigned int size, struct bpf_ksym *ksym);
-  1375	void bpf_image_ksym_del(struct bpf_ksym *ksym);
-  1376	void bpf_ksym_add(struct bpf_ksym *ksym);
-  1377	void bpf_ksym_del(struct bpf_ksym *ksym);
-  1378	int bpf_jit_charge_modmem(u32 size);
-  1379	void bpf_jit_uncharge_modmem(u32 size);
-  1380	bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
-  1381	#else
-  1382	static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
-  1383						   struct bpf_trampoline *tr)
-  1384	{
-  1385		return -ENOTSUPP;
-  1386	}
-  1387	static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
-  1388						     struct bpf_trampoline *tr)
-  1389	{
-  1390		return -ENOTSUPP;
-  1391	}
-> 1392	int bpf_extension_link_prog(struct bpf_tramp_link *link,
-  1393				    struct bpf_trampoline *tr,
-  1394				    struct bpf_prog *tgt_prog)
-  1395	{
-  1396		return -ENOTSUPP;
-  1397	}
-> 1398	int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
-  1399				      struct bpf_trampoline *tr,
-  1400				      struct bpf_prog *tgt_prog)
-  1401	{
-  1402		return -ENOTSUPP;
-  1403	}
-  1404	static inline struct bpf_trampoline *bpf_trampoline_get(u64 key,
-  1405								struct bpf_attach_target_info *tgt_info)
-  1406	{
-  1407		return NULL;
-  1408	}
-  1409	static inline void bpf_trampoline_put(struct bpf_trampoline *tr) {}
-  1410	#define DEFINE_BPF_DISPATCHER(name)
-  1411	#define DECLARE_BPF_DISPATCHER(name)
-  1412	#define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_nop_func
-  1413	#define BPF_DISPATCHER_PTR(name) NULL
-  1414	static inline void bpf_dispatcher_change_prog(struct bpf_dispatcher *d,
-  1415						      struct bpf_prog *from,
-  1416						      struct bpf_prog *to) {}
-  1417	static inline bool is_bpf_image_address(unsigned long address)
-  1418	{
-  1419		return false;
-  1420	}
-  1421	static inline bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
-  1422	{
-  1423		return false;
-  1424	}
-  1425	#endif
-  1426	
+  1213	
+  1214	static int dsa_user_set_wol(struct net_device *dev, struct ethtool_wolinfo *w)
+  1215	{
+  1216		struct dsa_port *dp = dsa_user_to_port(dev);
+  1217		struct dsa_switch *ds = dp->ds;
+  1218		int ret;
+  1219	
+> 1220		ret = phylink_ethtool_get_wol(dp->pl, w);
+  1221	
+  1222		if (ret != -EOPNOTSUPP)
+  1223			return ret;
+  1224	
+  1225		if (ds->ops->set_wol)
+  1226			return ds->ops->set_wol(ds, dp->index, w);
+  1227	
+  1228		return -EOPNOTSUPP;
+  1229	}
+  1230	
 
 -- 
 0-DAY CI Kernel Test Service
