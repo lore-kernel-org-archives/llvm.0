@@ -1,121 +1,200 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6725826ADD;
-	Tue,  8 Oct 2024 13:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9B41DF97E;
+	Tue,  8 Oct 2024 13:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728395540; cv=none; b=TRdqrH3tmtEV/x10rmfOyqBaPUkY/OUU6nacDcEI790vRT2Jpq7UVdoozsw2TDmV3/DxmJp3jKl42sV7+LpyQbeuuH3oXZyIuVWpybTWN8uMKWA451f7zi1CMZd1BFtWgQ1UH8TpNeD6KNqV7cvQGqwrtF+vfxWbGBsEBCMjqOY=
+	t=1728395570; cv=none; b=Uvfl0tPCDKBXa45rsL7ViKFt1tyVWObegM7NoVuZrhr5CuD5eg21+L88KzkzVUk0siElkNyigjai59p/bvfZ08eOyBFKW3CwHVLKhEKmCOIdyp+yGMXkUY9ddrSr/Wo03T8ZfzmQh72rJ19s/pcz35V/OzRDNk+1uKVTrl46AUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728395540; c=relaxed/simple;
-	bh=8vZb9w6+CLQ4V7ABqShJswkUhfWg9AIbO9FzWOsl6cQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G7/GMIndV/YV7pLQhFe0U0xU0/xbeyKA46jC2ZM2ap7/spudJBcL4dCn+oldNf3bgqm+9iFaQBulaWXz4hH2A/YZB3JNou4Ns5puJLigvb+isBhG6UeW9SFy2vFz8WrwwO3WkrB6sQ69dlfQbCCkYYMhrR25EP9RWb+mnBVgIAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HktY9cc/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728395570; c=relaxed/simple;
+	bh=yje+Nf53ZMDX2ciH9OYWiJcxOcJxvL0v/cML/xD8LJI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=gcLGycvD6kp3LDu1hsiNdU+Z5unuW83aCoaTElsvD76Huv6rSPIcnb5NpkOllRyWbmQ+WmGbXbxqQchi7AgyJZi3/YqceHQBdQ/RjU5BTD3lW4DGoFUxKMl02flQ8OOKbVn2vrarlCN7MZ3nVgQvAErFGw9b5udXyTa6PlNP0Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=JUhZup11; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HktY9cc/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35885C4CEC7;
-	Tue,  8 Oct 2024 13:52:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728395539;
-	bh=8vZb9w6+CLQ4V7ABqShJswkUhfWg9AIbO9FzWOsl6cQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HktY9cc/CvaeJfzPqChfdqIENqDxLv71KGdqQus8w4q/lqjZtanz/A8sRoH3ohS6y
-	 9OO1yGRgjUG7EhKWbqWXmn/giCmng9Eyf3F5CnhJcosmbtYL+3Ds03BHX2T/UNEFqF
-	 KDvp3m5bsLm/YVaIKJDZ0r0tC6b0KcCsk5I6ovfkAVvsQ/rfJkHRjyB+u9wXGohpSf
-	 /VcR4vpT8ep4QapFEQr4betj5iKaUdtDJhOqHIc+OdVuZs2bllFyZ9IUWZrSpPpoCO
-	 CdV8o/y7jKiZ6hK2lmGlijcNE/LY4wpawNwzdG1BPE3HJY+QRTsFZPTHsBcgCYOnwI
-	 IJZ2Vb05pWfCw==
-Date: Tue, 8 Oct 2024 06:52:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="JUhZup11"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1728395562;
+	bh=yje+Nf53ZMDX2ciH9OYWiJcxOcJxvL0v/cML/xD8LJI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JUhZup11xZUM5lXz8AmFl7eRRRbNdTVJn/MAouIeqyExpdpC7wwzSy9hI/bDD7sTZ
+	 zMS9WBOhOM6injeA4saJAsztMqLPoIHRVPMs9V6IGJ7OLZUFUAbHuGH7I2h3JMmPTM
+	 dKXT7l/hdTnifrGM8Nctf6T/VvE4JryCejgDRtQ4aIiW7NFqaLuyjMnDIEkRXQC2c8
+	 AXZBOW/Lg9c/MmCwqVIp60r7R/DHkbkd9yjFgUEQVD48fYXvqco8rKZLfZNJxTssgk
+	 QctXWViwcxB7jAFx2bZZGRV7318YPgpZOPtHD0kNVZsevNkm7LfIYya52amK3TQzov
+	 ly7soWyCuYxoQ==
+Received: from thinkos.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XNHX965gyzLcG;
+	Tue,  8 Oct 2024 09:52:41 -0400 (EDT)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Keith Packard <keithp@keithp.com>, linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 3/3] powerpc: Include -m32 / -m64 for stack protector
- Kconfig test
-Message-ID: <20241008135217.GB3504203@thelio-3990X>
-References: <20241007-powerpc-fix-stackprotector-test-clang-v1-0-08c15b2694e4@kernel.org>
- <20241007-powerpc-fix-stackprotector-test-clang-v1-3-08c15b2694e4@kernel.org>
- <a57f21db-911c-4331-af7b-c02c0ea8b1e6@csgroup.eu>
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	John Stultz <jstultz@google.com>,
+	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Waiman Long <longman@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	maged.michael@gmail.com,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+	rcu@vger.kernel.org,
+	linux-mm@kvack.org,
+	lkmm@lists.linux.dev,
+	Gary Guo <gary@garyguo.net>,
+	Nikita Popov <github@npopov.com>,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH v3 2/4] Documentation: RCU: Refer to ptr_eq()
+Date: Tue,  8 Oct 2024 09:50:32 -0400
+Message-Id: <20241008135034.1982519-3-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20241008135034.1982519-1-mathieu.desnoyers@efficios.com>
+References: <20241008135034.1982519-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a57f21db-911c-4331-af7b-c02c0ea8b1e6@csgroup.eu>
 
-On Tue, Oct 08, 2024 at 07:14:26AM +0200, Christophe Leroy wrote:
-> Le 08/10/2024 à 06:22, Nathan Chancellor a écrit :
-> > Kbuild uses the powerpc64le-linux-gnu target for clang, which causes the
-> > Kconfig check for 32-bit powerpc stack protector support to fail because
-> > nothing flips the target to 32-bit:
-> > 
-> >    $ clang --target=powerpc64le-linux-gnu \
-> >            -mstack-protector-guard=tls
-> >            -mstack-protector-guard-reg=r2 \
-> >            -mstack-protector-guard-offset=0 \
-> >            -x c -c -o /dev/null /dev/null
-> >    clang: error: invalid value 'r2' in 'mstack-protector-guard-reg=', expected one of: r13
-> 
-> Why is there any restriction at all on which register can be used ? I can't
-> see such restriction in GCC documentation :
-> https://gcc.gnu.org/onlinedocs/gcc/RS_002f6000-and-PowerPC-Options.html
+Refer to ptr_eq() in the rcu_dereference() documentation.
 
-Keith may be able to answer this better than I can but I believe this is
-an existing restriction in the LLVM code that dates back to the original
-stack protector support:
+ptr_eq() is a mechanism that preserves address dependencies when
+comparing pointers, and should be favored when comparing a pointer
+obtained from rcu_dereference() against another pointer.
 
-https://github.com/llvm/llvm-project/commit/a1d8bc559761c94dded3d1e7200cb264a982d1c5
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: John Stultz <jstultz@google.com>
+Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Uladzislau Rezki <urezki@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Zqiang <qiang.zhang1211@gmail.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: maged.michael@gmail.com
+Cc: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Gary Guo <gary@garyguo.net>
+Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc: rcu@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: lkmm@lists.linux.dev
+Cc: Nikita Popov <github@npopov.com>
+Cc: llvm@lists.linux.dev
+---
+Changes since v0:
+- Include feedback from Alan Stern.
 
-It always uses r2 for 32-bit and r13 for 64-bit for loading the stack
-canary. Keith's patch basically just allows customizing the offset,
-rather than the register (ultimately for simplicity in the compiler
-patch I believe, since we really only care about supporting what the
-kernel uses).
+Changes since v1:
+- Include feedback from Paul E. McKenney.
+---
+ Documentation/RCU/rcu_dereference.rst | 38 +++++++++++++++++++++++----
+ 1 file changed, 33 insertions(+), 5 deletions(-)
 
-> > Use the Kconfig macro '$(m32-flag)', which expands to '-m32' when
-> > supported, in the stack protector support cc-option call to properly
-> > switch the target to a 32-bit one, which matches what happens in Kbuild.
-> > While the 64-bit macro does not strictly need it, add the equivalent
-> > 64-bit option for symmetry.
-> > 
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >   arch/powerpc/Kconfig | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index eb98050b8c016bb23887a9d669d29e69d933c9c8..6aaca48955a34b2a38af1415bfa36f74f35c3f3e 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -275,8 +275,8 @@ config PPC
-> >   	select HAVE_RSEQ
-> >   	select HAVE_SETUP_PER_CPU_AREA		if PPC64
-> >   	select HAVE_SOFTIRQ_ON_OWN_STACK
-> > -	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r2 -mstack-protector-guard-offset=0)
-> > -	select HAVE_STACKPROTECTOR		if PPC64 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r13 -mstack-protector-guard-offset=0)
-> > +	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,$(m32-flag) -mstack-protector-guard=tls -mstack-protector-guard-reg=r2 -mstack-protector-guard-offset=0)
-> > +	select HAVE_STACKPROTECTOR		if PPC64 && $(cc-option,$(m64-flag) -mstack-protector-guard=tls -mstack-protector-guard-reg=r13 -mstack-protector-guard-offset=0)
-> 
-> You modify the exact same line than Patch 1, if this patch is really
-> required it should be squashed into patch 1 I think.
+diff --git a/Documentation/RCU/rcu_dereference.rst b/Documentation/RCU/rcu_dereference.rst
+index 2524dcdadde2..de6175bf430f 100644
+--- a/Documentation/RCU/rcu_dereference.rst
++++ b/Documentation/RCU/rcu_dereference.rst
+@@ -104,11 +104,12 @@ readers working properly:
+ 	after such branches, but can speculate loads, which can again
+ 	result in misordering bugs.
+ 
+--	Be very careful about comparing pointers obtained from
+-	rcu_dereference() against non-NULL values.  As Linus Torvalds
+-	explained, if the two pointers are equal, the compiler could
+-	substitute the pointer you are comparing against for the pointer
+-	obtained from rcu_dereference().  For example::
++-	Use operations that preserve address dependencies (such as
++	"ptr_eq()") to compare pointers obtained from rcu_dereference()
++	against non-NULL pointers. As Linus Torvalds explained, if the
++	two pointers are equal, the compiler could substitute the
++	pointer you are comparing against for the pointer obtained from
++	rcu_dereference().  For example::
+ 
+ 		p = rcu_dereference(gp);
+ 		if (p == &default_struct)
+@@ -125,6 +126,29 @@ readers working properly:
+ 	On ARM and Power hardware, the load from "default_struct.a"
+ 	can now be speculated, such that it might happen before the
+ 	rcu_dereference().  This could result in bugs due to misordering.
++	Performing the comparison with "ptr_eq()" ensures the compiler
++	does not perform such transformation.
++
++	If the comparison is against another pointer, the compiler is
++	allowed to use either pointer for the following accesses, which
++	loses the address dependency and allows weakly-ordered
++	architectures such as ARM and PowerPC to speculate the
++	address-dependent load before rcu_dereference().  For example::
++
++		p1 = READ_ONCE(gp);
++		p2 = rcu_dereference(gp);
++		if (p1 == p2)  /* BUGGY!!! */
++			do_default(p2->a);
++
++	The compiler can use p1->a rather than p2->a, destroying the
++	address dependency.  Performing the comparison with "ptr_eq()"
++	ensures the compiler preserves the address dependencies.
++	Corrected code::
++
++		p1 = READ_ONCE(gp);
++		p2 = rcu_dereference(gp);
++		if (ptr_eq(p1, p2))
++			do_default(p2->a);
+ 
+ 	However, comparisons are OK in the following cases:
+ 
+@@ -204,6 +228,10 @@ readers working properly:
+ 		comparison will provide exactly the information that the
+ 		compiler needs to deduce the value of the pointer.
+ 
++	When in doubt, use operations that preserve address dependencies
++	(such as "ptr_eq()") to compare pointers obtained from
++	rcu_dereference() against non-NULL pointers.
++
+ -	Disable any value-speculation optimizations that your compiler
+ 	might provide, especially if you are making use of feedback-based
+ 	optimizations that take data collected from prior runs.  Such
+-- 
+2.39.2
 
-I believe it will still be required based on my comment above. I can
-certainly squash it into patch 1, although the commit message might get
-a bit wordy with both explanations in there. I suppose it still makes
-sense to do so since "fix the Kconfig test" can encompass both issues
-easily.
-
-Cheers,
-Nathan
