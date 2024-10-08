@@ -1,111 +1,245 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982DEF9EC;
-	Tue,  8 Oct 2024 02:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A18EEC8;
+	Tue,  8 Oct 2024 03:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728354917; cv=none; b=YA1l7V5CJBAq7ePh3RIvGaCPJ7gDRhvuRAWlxPtN3tEA15hJfrizp/5kOhUPOOYF8GNSAUOqWjhsJlw7HvOvPe+9FHsNNatbDcE68tBjL8jt5Fvs9xaI/SyUHcTt1Nj//XfGKhZw2bkoT4X4PCZmNSdRTofEggWrFYowBkTYT3s=
+	t=1728359075; cv=none; b=TfkfnLWreUGMS7VwCfhQIjCeVjdItntF2kaNBIWmCWYg72h8E5P1Q5iRSjKqMHYsKIQLG/SD7M0PVvDPWP7iczIVRf+smg9zeNTTU3pWpy96lpbWU8hciE2FPLZOz5tM0ysOlTv3gdfTCVkpEcLAFbPa/D/tFBhwjMWmx/uU1XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728354917; c=relaxed/simple;
-	bh=C/W3IWDD87ZTgEdJdyokhTKbCHO3oRTnOxRDfwyVUhY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WfO7EXtW5eFnF3t9beTDhCN+h3RoTq/hbQOzQgn4S+lNY2Vdm5gWdE+brt7ToGLlzLeVcMNoQQqy99MUaj/FH6a7QGM/B27l3fiIfkOSxNHNlavVwqn/XoULRMLLJFYdcA1sJZZh7yEWykOouo/O+lMVbKFeP9UPLtVpW2NJjrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FwBXSDOt; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728359075; c=relaxed/simple;
+	bh=WVHlI2Bqo5saCB7Ydz7vknkELu0nS4CbDrt9KN5e5zk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hNwcCRugK27/kHRvMT9acuxCD5KMWrUxnr6thMmqYua+CKx4rXhUvaHCC+D2kKp+KLnQ/G8kcEvOGm4wpMCDgUo5syutzuCBh2jTNaAc9AgPOUQnEHEG4CDYUADy0zDkjF1kGyaGbbPxlIK/j7vwNO+D8n2F8HOiqedZ3p+ak2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D96Ww0ca; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FwBXSDOt"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7cd8803fe0aso3482966a12.0;
-        Mon, 07 Oct 2024 19:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728354915; x=1728959715; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uaHHyDTZ0d5NaZSkzM6y1pMwvv24VCw6oN9ExhsOJRk=;
-        b=FwBXSDOtA/eriKLs+ClOhMa9yW4L70x3Anu2UVSMmiWNmw6nBPHksViLAFeMzc9oy8
-         tTRvAQYd7oHti9vnFsQIS8qnrwQu/KGZ4qUyaF5+1Dl68gAC+3FTdmh51RfT0tGZEKpJ
-         zbXFNwRurefiWcHKPShFVe2bCvRB0b0y/zWSHQSTctPtvBaNbIal93oolEhU1WNcwpqX
-         VDOUWuzmBXZ+y46/y7a+zXAvH8ry74WZVxZoBW44Xyd+gCLeP6CuH45E71tEOGryMJbw
-         zvKXVJ/rfXZDHIaeVeTZvaa9KB42Y7veA1+ojUT/6Nlvk9EV3ancGsYIdQ5l8fFDnojp
-         czXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728354915; x=1728959715;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uaHHyDTZ0d5NaZSkzM6y1pMwvv24VCw6oN9ExhsOJRk=;
-        b=vTy2jy2PFzEKKmHedw2XEXPR0VVEv87nVj9+rwEFMtMwsruNuFaLU7Jb1fDJ/wJlX0
-         vevs7HF0VR6zUfL5lzlSL05Apfe2zzGXuZQs8eeS0iNyh3/FzVcCFrHmL8U3Lq3wGRqB
-         QD8M5zrVonJzkTOFSTbq5POBEtssubH3ghkU2m0kKK28XPr+efpmF756YLAS2g0YOGav
-         osehgz4VqYwlL+eYNDsumnoWUMGEUX38kuOz023MGLPXxQdNAkwauVn3ntK+t5ERE9BG
-         y6Bl2k6OU1lH2vwqxoroY85zZDpkpwq+bk3BpsizroNcZT6UN5J6bMTO6v8rRjDVk24Q
-         NoRA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbTfK2zJ3vxzWUMvx5hRFOgE1XMt5SyE4CbZUDVRB5WKExWGBuUnlkuotapKpXncYtuiSvtFaHcB5TH8Ed9Q==@lists.linux.dev, AJvYcCVtaRve0v31/eqiEJJ77UumEN+UhAIH78O7hY7aK8elQ8hoiqZOAaGBrHfXTa0qsFnHyqRV@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx2p6bxaHSPu7tFkh2nUFmL9fkVNCvqrCcQ47TJe5Hinzmm/bz+
-	ywnFYBWEikWX80mBv56GLwiOiofyJ/zSNK1XRJAGJVH+z2N6hBT8yfetAzYKi6qFw/ingwbFF0a
-	up+HMRIPuf786hc9gNKaVWRZmV/g=
-X-Google-Smtp-Source: AGHT+IHYfukP36V0z2gYLJ/HbclCrt+viHg8RbDpyTrHSLRtEnGGEoCgvDAnqCHfZt3TprR9DvFLF75m59yFen0wrTc=
-X-Received: by 2002:a17:90a:640b:b0:2dd:5e86:8c2f with SMTP id
- 98e67ed59e1d1-2e1e626c37emr15952226a91.21.1728354914800; Mon, 07 Oct 2024
- 19:35:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D96Ww0ca"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728359074; x=1759895074;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WVHlI2Bqo5saCB7Ydz7vknkELu0nS4CbDrt9KN5e5zk=;
+  b=D96Ww0caVeXiJSCrMtw45+3MSS2fhmGeYyELIEoScb0bCRYkvfK83vBp
+   BmR+Ekbwwf8tJA+Uh32gev8isZcl/fWw9ZFeA7KvW7I+fHz5G/IEcvL/c
+   5T5V/FamLY4LOnnmZPcOXfmdfcfmicrIHAE+9zRCayglkDgjBk3IBLsTG
+   eJl1LdmJHd6hoU7FcyGvedQW7qKyTuqpTrTVMFDAz6gS3hiYoysIg0ZKb
+   zAuxRX4kojnjYdmFopD1Cu0WVZKN30szvO2QmJfqEiLaUnb3Ink6c7IUI
+   M8vrMCKX7RSGe/v1NJNx7A2leYk0u6sPiwe/1Xe5UnkO8qh74XGF5DJzi
+   g==;
+X-CSE-ConnectionGUID: yicbl7leR0mdA+ThOv9eUw==
+X-CSE-MsgGUID: Mo3RafEtR2Gnqs6V5RAHOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="26990126"
+X-IronPort-AV: E=Sophos;i="6.11,185,1725346800"; 
+   d="scan'208";a="26990126"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 20:44:33 -0700
+X-CSE-ConnectionGUID: r+rs9fL4QIC3G48dI5YOkA==
+X-CSE-MsgGUID: aw+A1k+ERnKCu9vAo8oZuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,185,1725346800"; 
+   d="scan'208";a="75254968"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Oct 2024 20:44:32 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sy19B-0005ry-3A;
+	Tue, 08 Oct 2024 03:44:29 +0000
+Date: Tue, 8 Oct 2024 11:44:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.12-rc1 81/132]
+ drivers/platform/arm64/mpam/mpam_devices.c:767:4: warning: variable
+ 'hw_managed' is used uninitialized whenever 'if' condition is true
+Message-ID: <202410081111.TZ8q7ksz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241004142504.4379-1-aha310510@gmail.com> <202410071223.t0yF8vP8-lkp@intel.com>
- <20241007183052.9d87f42e19db5f9777dc8e77@linux-foundation.org>
-In-Reply-To: <20241007183052.9d87f42e19db5f9777dc8e77@linux-foundation.org>
-From: Jeongjun Park <aha310510@gmail.com>
-Date: Tue, 8 Oct 2024 11:35:03 +0900
-Message-ID: <CAO9qdTHUW+SRkLsxdO_PXKw7qGvXKCWfa1GtVYNrnyGWEUe0Mw@mail.gmail.com>
-Subject: Re: [PATCH] mm: swap: prevent possible data-race in __try_to_reclaim_swap
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	kasong@tencent.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	syzbot+fa43f1b63e3aa6f66329@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 7 Oct 2024 13:06:49 +0800 kernel test robot <lkp@intel.com> wrote:
->
-> > Hi Jeongjun,
-> >
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on akpm-mm/mm-everything]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Jeongjun-Park/mm-swap-prevent-possible-data-race-in-__try_to_reclaim_swap/20241004-222733
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > patch link:    https://lore.kernel.org/r/20241004142504.4379-1-aha310510%40gmail.com
-> > patch subject: [PATCH] mm: swap: prevent possible data-race in __try_to_reclaim_swap
-> > config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241007/202410071223.t0yF8vP8-lkp@intel.com/config)
-> > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410071223.t0yF8vP8-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202410071223.t0yF8vP8-lkp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> mm/swapfile.c:203:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-> >      203 |         if (!folio_trylock(folio))
-> >          |             ^~~~~~~~~~~~~~~~~~~~~
-> >    mm/swapfile.c:254:9: note: uninitialized use occurs here
-> >      254 |         return ret;
->
-> This warning can't be correct?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.12-rc1
+head:   4d17b37b670795954fd7a70c8ec83fb705a5e2ad
+commit: ece606c59b5b8e95457696ebb299295f19c583a8 [81/132] arm_mpam: Probe the hardware features resctrl supports
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241008/202410081111.TZ8q7ksz-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410081111.TZ8q7ksz-lkp@intel.com/reproduce)
 
-I think it's correct. Even if folio_trylock fails, the return value
-should be -nr_pages. Not initializing ret like in the v1 patch
-goes against the design purpose of the function.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410081111.TZ8q7ksz-lkp@intel.com/
 
-So I think it's right to apply the v2 patch that I sent you.
+All warnings (new ones prefixed by >>):
 
-Regards,
-Jeongjun Park
+   In file included from drivers/platform/arm64/mpam/mpam_devices.c:6:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:473:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     473 |                         if (cache_id == ~0UL) {
+         |                             ~~~~~~~~ ^  ~~~~
+>> drivers/platform/arm64/mpam/mpam_devices.c:767:4: warning: variable 'hw_managed' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     767 |                         mpam_ris_hw_probe_hw_nrdy(ris, MBWU, hw_managed);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:670:6: note: expanded from macro 'mpam_ris_hw_probe_hw_nrdy'
+     670 |         if (WARN_ON_ONCE(!mpam_mon_sel_inner_lock(msc)))                        \
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:110:33: note: expanded from macro 'WARN_ON_ONCE'
+     110 | #define WARN_ON_ONCE(condition) ({                              \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     111 |         int __ret_warn_on = !!(condition);                      \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |         if (unlikely(__ret_warn_on))                            \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     114 |                              BUGFLAG_TAINT(TAINT_WARN));        \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     115 |         unlikely(__ret_warn_on);                                \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     116 | })
+         | ~~
+   drivers/platform/arm64/mpam/mpam_devices.c:768:8: note: uninitialized use occurs here
+     768 |                         if (hw_managed)
+         |                             ^~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:767:4: note: remove the 'if' if its condition is always false
+     767 |                         mpam_ris_hw_probe_hw_nrdy(ris, MBWU, hw_managed);
+         |                         ^
+   drivers/platform/arm64/mpam/mpam_devices.c:670:2: note: expanded from macro 'mpam_ris_hw_probe_hw_nrdy'
+     670 |         if (WARN_ON_ONCE(!mpam_mon_sel_inner_lock(msc)))                        \
+         |         ^
+   drivers/platform/arm64/mpam/mpam_devices.c:756:19: note: initialize the variable 'hw_managed' to silence this warning
+     756 |                         bool hw_managed;
+         |                                        ^
+         |                                         = 0
+   6 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+
+
+vim +767 drivers/platform/arm64/mpam/mpam_devices.c
+
+   687	
+   688	static void mpam_ris_hw_probe(struct mpam_msc_ris *ris)
+   689	{
+   690		int err;
+   691		struct mpam_msc *msc = ris->vmsc->msc;
+   692		struct mpam_props *props = &ris->props;
+   693	
+   694		lockdep_assert_held(&msc->probe_lock);
+   695		lockdep_assert_held(&msc->part_sel_lock);
+   696	
+   697		mpam_mon_sel_outer_lock(msc);
+   698	
+   699		/* Cache Portion partitioning */
+   700		if (FIELD_GET(MPAMF_IDR_HAS_CPOR_PART, ris->idr)) {
+   701			u32 cpor_features = mpam_read_partsel_reg(msc, CPOR_IDR);
+   702	
+   703			props->cpbm_wd = FIELD_GET(MPAMF_CPOR_IDR_CPBM_WD, cpor_features);
+   704			if (props->cpbm_wd)
+   705				mpam_set_feature(mpam_feat_cpor_part, props);
+   706		}
+   707	
+   708		/* Memory bandwidth partitioning */
+   709		if (FIELD_GET(MPAMF_IDR_HAS_MBW_PART, ris->idr)) {
+   710			u32 mbw_features = mpam_read_partsel_reg(msc, MBW_IDR);
+   711	
+   712			/* portion bitmap resolution */
+   713			props->mbw_pbm_bits = FIELD_GET(MPAMF_MBW_IDR_BWPBM_WD, mbw_features);
+   714			if (props->mbw_pbm_bits &&
+   715			    FIELD_GET(MPAMF_MBW_IDR_HAS_PBM, mbw_features))
+   716				mpam_set_feature(mpam_feat_mbw_part, props);
+   717	
+   718			props->bwa_wd = FIELD_GET(MPAMF_MBW_IDR_BWA_WD, mbw_features);
+   719			if (props->bwa_wd && FIELD_GET(MPAMF_MBW_IDR_HAS_MAX, mbw_features))
+   720				mpam_set_feature(mpam_feat_mbw_max, props);
+   721		}
+   722	
+   723		/* Performance Monitoring */
+   724		if (FIELD_GET(MPAMF_IDR_HAS_MSMON, ris->idr)) {
+   725			u32 msmon_features = mpam_read_partsel_reg(msc, MSMON_IDR);
+   726	
+   727			if (FIELD_GET(MPAMF_MSMON_IDR_MSMON_CSU, msmon_features)) {
+   728				u32 csumonidr;
+   729	
+   730				/*
+   731				 * If the firmware max-nrdy-us property is missing, the
+   732				 * CSU counters can't be used. Should we wait forever?
+   733				 */
+   734				err = device_property_read_u32(&msc->pdev->dev,
+   735							       "arm,not-ready-us",
+   736							       &msc->nrdy_usec);
+   737	
+   738				csumonidr = mpam_read_partsel_reg(msc, CSUMON_IDR);
+   739				props->num_csu_mon = FIELD_GET(MPAMF_CSUMON_IDR_NUM_MON, csumonidr);
+   740				if (props->num_csu_mon && !err) {
+   741					bool hw_managed = true;
+   742	
+   743					mpam_set_feature(mpam_feat_msmon_csu, props);
+   744	
+   745					/* Is NRDY hardware managed? */
+   746					mpam_ris_hw_probe_hw_nrdy(ris, CSU, hw_managed);
+   747					if (hw_managed)
+   748						mpam_set_feature(mpam_feat_msmon_csu_hw_nrdy, props);
+   749				}
+   750	
+   751				if (err && mpam_has_feature(mpam_feat_msmon_csu_hw_nrdy, props)) {
+   752					pr_err_once("Counters are not usable because not-ready timeout was not provided by firmware.");
+   753				}
+   754			}
+   755			if (FIELD_GET(MPAMF_MSMON_IDR_MSMON_MBWU, msmon_features)) {
+   756				bool hw_managed;
+   757				u32 mbwumonidr = mpam_read_partsel_reg(msc, MBWUMON_IDR);
+   758	
+   759				props->num_mbwu_mon = FIELD_GET(MPAMF_MBWUMON_IDR_NUM_MON, mbwumonidr);
+   760				if (props->num_mbwu_mon)
+   761					mpam_set_feature(mpam_feat_msmon_mbwu, props);
+   762	
+   763				if (FIELD_GET(MPAMF_MBWUMON_IDR_HAS_RWBW, mbwumonidr))
+   764					mpam_set_feature(mpam_feat_msmon_mbwu_rwbw, props);
+   765	
+   766				/* Is NRDY hardware managed? */
+ > 767				mpam_ris_hw_probe_hw_nrdy(ris, MBWU, hw_managed);
+   768				if (hw_managed)
+   769					mpam_set_feature(mpam_feat_msmon_mbwu_hw_nrdy, props);
+   770	
+   771			}
+   772		}
+   773	
+   774		mpam_mon_sel_outer_unlock(msc);
+   775	}
+   776	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
