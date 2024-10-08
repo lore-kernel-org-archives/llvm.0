@@ -1,112 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA05AA94A;
-	Tue,  8 Oct 2024 00:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8261388;
+	Tue,  8 Oct 2024 01:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728348698; cv=none; b=CJqeRJ2SOrsWSGeldslW5afJORpV5a4QLkCVMeFUJYNLUrGmRgp9+2JDn+OiRENH5M0ruvlGUkDk0XHID+LQPyTe2kFJBhD7hNk1Y3pKylMVUQRSWz2dBDCIXXNd1RCwIl4nSidBvBmG8WwHdLHNxmtZ4V+mOpa2UPiVvmYHZ2Y=
+	t=1728351054; cv=none; b=GKhY3C5dgzcXfjtKAPlsEeNb/Q+nrg9zr27dNnumkcXM/LkjvkOLS+8oLuNt/615EgMu4rBuIUSGb2u8Op4fQsk6EVbtmKlCLGeGT7LJpoE7JfU3FVStB3MYux78s2iY/BqDvBwQ7YVT4I9YkjjBuUOtZwtSrs2jihFgTDfcShE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728348698; c=relaxed/simple;
-	bh=9/RtIWdpgDZviXbTfuEqrXyHXgxiDx1Tc7Y5xLmLFcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GxmZ6Yvi4UVNwbzLTgrjdeAyYWVBHl+ukfawPtZ7ZGiaJ6Lo/6BldFaknMSTWiMpptC2O+rkMX859QcCjx1u1RloPHLucR44+JABCX7Qutj8x0pDjNTarFwv+Aq0539edUu1nIQkoLB60yKv3g+b0EEyANG5C3t+mj9NJXGOP0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C9id5lYj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728351054; c=relaxed/simple;
+	bh=vxCcy/wP0tEtAiAQ0trrZTIT30svRSVdwkpX1EAEGt4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=RlQq/yIi+slRONkmeSU9IHooCy6+7tu+YvlqFLmQocYcBbUQcSD5dm3QtUBQpdjPiKBlSuzfC2eu9GUiHStT2wl/91AW4kpjpSJpmoFKZxFCSZ5lO+MWZo8x0A5M0SueKPql9V0aoDqzFVcvpCyDLYX7cKkKImBg9MKUM05pbik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=wF94IDHO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C9id5lYj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB72C4CEC6;
-	Tue,  8 Oct 2024 00:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728348698;
-	bh=9/RtIWdpgDZviXbTfuEqrXyHXgxiDx1Tc7Y5xLmLFcQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C9id5lYjK92n5sZ/VTqlQbGQctviZIqwCK1nGi3B5hj2XxbSzzg9Jjk5VBhM08L63
-	 yGG34m6wGabcqhIO/0rs1SI8NDY5MD54ArcRXrgKPOrCWbcbZiSoPW9EPMNsRm9eZK
-	 LaBkOwQ1o5ydbMLsJdPuLIpOrJkAGrfp2622cW0s6iZWDp/yDa+0AllA953/b1/uLY
-	 D9mB14Bf3pPjSl9HdjhodKzpwvDt68SZdCRhY8qVX5FGi+6w1Aqrg3VjqHYm+7+G7D
-	 tY6uqbDGbtZV6ysFwr/tOPnKPRavrXwnfg5DDyk2BjEiaH/lLj2qFXdlnD1v0umAYS
-	 L9EhlrvSjjiJg==
-Date: Mon, 7 Oct 2024 17:51:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Aleksei Vetrov <vvvvvv@google.com>
-Cc: Shivamurthy Shastri <shivamurthy.shastri@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	akpm@linux-foundation.org, vbabka@suse.cz, willy@infradead.org,
-	hannes@cmpxchg.org, anna-maria@linutronix.de, tglx@linutronix.de,
-	arnd@arndb.de, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm/vmstat: Fix -Wenum-enum-conversion warning in vmstat.h
-Message-ID: <20241008005136.GA241099@thelio-3990X>
-References: <20240621111604.25330-1-shivamurthy.shastri@linutronix.de>
- <ZwRA9SOcOjjLJcpi@google.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="wF94IDHO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B035C4CEC6;
+	Tue,  8 Oct 2024 01:30:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1728351053;
+	bh=vxCcy/wP0tEtAiAQ0trrZTIT30svRSVdwkpX1EAEGt4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=wF94IDHOQAeyer+0lJ5Mckea+dNy8krILakDNpJqOzg+tg8ispVGQYFQXOm/FTmJN
+	 oW947/ZfzwLHLMvCCxMXdadu5OVEaYMZF2TU4yBjhtl98Z7Mn2Z+4OAzW71vxjHQ0h
+	 gAa5NjNqZuy0fz1A78aePnk2FhR1355LE0MRx4yg=
+Date: Mon, 7 Oct 2024 18:30:52 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Jeongjun Park <aha310510@gmail.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, kasong@tencent.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org,
+ syzbot+fa43f1b63e3aa6f66329@syzkaller.appspotmail.com
+Subject: Re: [PATCH] mm: swap: prevent possible data-race in
+ __try_to_reclaim_swap
+Message-Id: <20241007183052.9d87f42e19db5f9777dc8e77@linux-foundation.org>
+In-Reply-To: <202410071223.t0yF8vP8-lkp@intel.com>
+References: <20241004142504.4379-1-aha310510@gmail.com>
+	<202410071223.t0yF8vP8-lkp@intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZwRA9SOcOjjLJcpi@google.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Aleksei,
+On Mon, 7 Oct 2024 13:06:49 +0800 kernel test robot <lkp@intel.com> wrote:
 
-On Mon, Oct 07, 2024 at 08:13:41PM +0000, Aleksei Vetrov wrote:
-> Hi Shivamurthy,
+> Hi Jeongjun,
 > 
-> On Fri, Jun 21, 2024 at 01:16:04PM +0200, Shivamurthy Shastri wrote:
-> > A W=1 build with -Wenum-enum-conversion enabled, results in the
-> > following build warning due to an arithmetic operation between different
-> > enumeration types 'enum node_stat_item' and 'enum lru_list':
-> > 
-> >   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-> >     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> >         |                               ~~~~~~~~~~~ ^ ~~~
-> > 
-> > Address this by casting lru to the proper type.
-> > 
-> > Signed-off-by: Shivamurthy Shastri <shivamurthy.shastri@linutronix.de>
-> > Reviewed-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > ---
-> >  include/linux/vmstat.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
-> > index 735eae6e272c..72ecd46fd0c4 100644
-> > --- a/include/linux/vmstat.h
-> > +++ b/include/linux/vmstat.h
-> > @@ -511,7 +511,7 @@ static inline const char *node_stat_name(enum node_stat_item item)
-> >  
-> >  static inline const char *lru_list_name(enum lru_list lru)
-> >  {
-> > -	return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> > +	return node_stat_name(NR_LRU_BASE + (enum node_stat_item)lru) + 3; // skip "nr_"
-> >  }
-> >  
-> >  static inline const char *writeback_stat_name(enum writeback_stat_item item)
-> > -- 
-> > 2.34.1
-> > 
+> kernel test robot noticed the following build warnings:
 > 
-> We have encountered the same problem after trying to update Clang to the
-> latest version and this is a blocker because we use W=1 to compile the
-> kernel.
+> [auto build test WARNING on akpm-mm/mm-everything]
 > 
-> Do you plan to address review comments about casting to int instead of
-> enum node_stat_item? Or I can submit another patch myself that addresses
-> it.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jeongjun-Park/mm-swap-prevent-possible-data-race-in-__try_to_reclaim_swap/20241004-222733
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20241004142504.4379-1-aha310510%40gmail.com
+> patch subject: [PATCH] mm: swap: prevent possible data-race in __try_to_reclaim_swap
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241007/202410071223.t0yF8vP8-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410071223.t0yF8vP8-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202410071223.t0yF8vP8-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> mm/swapfile.c:203:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+>      203 |         if (!folio_trylock(folio))
+>          |             ^~~~~~~~~~~~~~~~~~~~~
+>    mm/swapfile.c:254:9: note: uninitialized use occurs here
+>      254 |         return ret;
 
-For what it's worth, I never really saw Matthew's comment around what
-value does this warning provide addressed. I was the one who originally
-moved it into W=1 at the request of Arnd because he felt that instances
-of this warning could be bugs and they should be audited.  However, I
-have not seen many instances of this warning pop up in new code through
-0day build reports and the ones that I have seen seem to be intentional,
-as they are using enums like integral values, such as here. If that is
-just going to result in a bunch of patches like this adding unnecessary
-casts, I think it would just be better to consider disabling this
-warning altogether or at the very least, moving it to W=2 (which is for
-warnings that are noisy but might contain bugs), since more people are
-using W=1 as their normal build configuration nowadays.
-
-Cheers,
-Nathan
+This warning can't be correct?
