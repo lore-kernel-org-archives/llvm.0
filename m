@@ -1,63 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69ABD1C1AD6;
-	Tue,  8 Oct 2024 08:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC441E0E05;
+	Tue,  8 Oct 2024 08:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728375708; cv=none; b=DUqpcUFXU2MOHCXQF5dBjcqzUKVINtE2MSLgSijZMj9kCECM5dJm6Nm39fgOyB4HFvgdYV3LIOz1odt8m5bmYeuFBBmFuBvdj3uaO/LOuge1n/7hBP/d+IpblK6IbQSco0orc5IntkgCMO/QrSMKVGdXoWdld/UM/LimGQDZFTU=
+	t=1728376310; cv=none; b=LNpaS8/QVJYGL/EO7JtRwcwFwW3c/Z1jaoM192If986OTJ0Xhxsp7bUjGe7pxET3jfESIlbS0hKbNWROxVxUzrP1/lnNCoZNBXuJ2dtCNKU659H9rCKygZ5DPmPasf/xhIy9io0qQe4okvxPHt1n+q+cfygEdU1Zs6iOfmhRnv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728375708; c=relaxed/simple;
-	bh=VDpf9/wkNVw6+eD/6ygGxcYnIzmLwJk/4ULDXyGGR80=;
+	s=arc-20240116; t=1728376310; c=relaxed/simple;
+	bh=+f/xsEFjXW1Goapy9ip1TIgiTvi7UsrdNU7dVcyqE/s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cSOrx/BnCRyjjUyA0W4XhOoLf5j8UAnxoOub23qFnCECNLsJQPz2wbmvecGXoyLfRsa+8mN22BV7j3KkPllGKJvpDBohP8brmImamkQyauERzTqMexS6UGNTnYtg4TiT3r3lUlUs52aOSXGDOj9KWNDpxJEpNONl2OfEqEalVok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MPE78sLv; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=MnbVkEJw5k9KQ6f7iyVErleDHCPI+MUwelOpb2RsV5PSjrqjehUudpXRyycnN1ybWwEDWHk1oE+T6a43lQD0Erh1Qw4hJvOqATDCwC678SxE/xykom/Yoe5cOJwoJQunmoDI1ieZwlqdqq1aLB4lFil1cristjpIkCPdF0eIkeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AcU1VuCk; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MPE78sLv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AcU1VuCk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728375706; x=1759911706;
+  t=1728376308; x=1759912308;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=VDpf9/wkNVw6+eD/6ygGxcYnIzmLwJk/4ULDXyGGR80=;
-  b=MPE78sLvSyNJKa4L8eGbfo1fw4RetNdi5rUbarg2yX9djR6wjj8Y4azq
-   P49PhjEn3dIzAH1ObNHbiB6T7a5arUlDfAHbib64xqeDEnVmCWYkj5QCP
-   QzvAl2d5AJ6dkym/WhXHSROXdsMDhiOm87pduxVPEOuJ87Vmn2BcqMpC/
-   i2+/wXv0VoqTho+mxvxc4NJgYtlDa4JQGksbgZUoZPZ2RtRcRpuv3KYU/
-   2we8+MDUdApRgUXrmqqA+BJqPF74OCZnGDVwcEAufYMYqEFzfs8TtKVzY
-   80KarGAFyETyFUzl94avG6F1bSGH04/YQsANKfqk3DjGQLZIDICHPxdLJ
-   g==;
-X-CSE-ConnectionGUID: EsWgDhOMR7m4ZDZkjuwgIA==
-X-CSE-MsgGUID: SehThCmfSzKa2gqExepfEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="38118282"
+  bh=+f/xsEFjXW1Goapy9ip1TIgiTvi7UsrdNU7dVcyqE/s=;
+  b=AcU1VuCkOjGJ593j3e5tHyJcthIObdMFvhX25KjEEs6V3dGx+L38oAkN
+   T+rJ+JRpeVim3fJtYqjrDwZlIE3INpXsosUW6t8jTqaqZ7LVE/TODD3R7
+   5heHH06dxxqB4yEHDIJdZ6wACCj5HAIlW5f2FuX7G5OZ17x1r5WZjqvN9
+   nCTd4T1N77LejXngMKvMWz5xcAZuAW9kCEiFaLOyNGpDS84+VnC6gmNx5
+   SRBuTT0PkMUQ7qGTgNp57uNoc6ElZU8CQ+kekL/IAjcunKj0Uu02s+kHi
+   JmuCyNxyRGcWNKXTskpDHon2Y7qFacJdVLMGIp//+D3Jz9ACL7ZomUa7V
+   A==;
+X-CSE-ConnectionGUID: KfqFeukiQSOBu0Iq2opxvg==
+X-CSE-MsgGUID: AvrPXrWhSIeQIvwVkbgh/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="27645399"
 X-IronPort-AV: E=Sophos;i="6.11,186,1725346800"; 
-   d="scan'208";a="38118282"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 01:21:45 -0700
-X-CSE-ConnectionGUID: 7Oez9WmLSUuIu35SHXCIhw==
-X-CSE-MsgGUID: 3dZ7tbTCRUqnAvtDqZvINg==
+   d="scan'208";a="27645399"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 01:31:47 -0700
+X-CSE-ConnectionGUID: +0vLyqs4S82TUFQ7q02+jw==
+X-CSE-MsgGUID: Kjx0nVjOSZu6aCM3KBP8RA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,186,1725346800"; 
-   d="scan'208";a="113216392"
+   d="scan'208";a="79752089"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 08 Oct 2024 01:21:43 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 08 Oct 2024 01:31:44 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sy5TQ-00065U-1a;
-	Tue, 08 Oct 2024 08:21:40 +0000
-Date: Tue, 8 Oct 2024 16:21:28 +0800
+	id 1sy5d7-00066w-0N;
+	Tue, 08 Oct 2024 08:31:41 +0000
+Date: Tue, 8 Oct 2024 16:31:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Markus Stockhausen <markus.stockhausen@gmx.de>,
-	linux-phy@lists.infradead.org, chris.packham@alliedtelesis.co.nz,
-	devicetree@vger.kernel.org, krzk@kernel.org
+To: Julien Stephan <jstephan@baylibre.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jonathan Corbet <corbet@lwn.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Markus Stockhausen <markus.stockhausen@gmx.de>
-Subject: Re: [PATCH v2 3/3] phy: Integrate Realtek Otto SerDes driver into
- build system
-Message-ID: <202410081607.EKE62jfx-lkp@intel.com>
-References: <20241007163623.3274510-4-markus.stockhausen@gmx.de>
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	Julien Stephan <jstephan@baylibre.com>
+Subject: Re: [PATCH 4/6] iio: adc: ad7380: add missing supplies
+Message-ID: <202410081608.ZxEPPZ0u-lkp@intel.com>
+References: <20241007-ad7380-fix-supplies-v1-4-badcf813c9b9@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,118 +74,166 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241007163623.3274510-4-markus.stockhausen@gmx.de>
+In-Reply-To: <20241007-ad7380-fix-supplies-v1-4-badcf813c9b9@baylibre.com>
 
-Hi Markus,
+Hi Julien,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on krzk-dt/for-next linus/master v6.12-rc2 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 8bea3878a1511bceadc2fbf284b00bcc5a2ef28d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Stockhausen/dt-bindings-phy-add-realtek-otto-serdes-PHY-binding/20241008-003929
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20241007163623.3274510-4-markus.stockhausen%40gmx.de
-patch subject: [PATCH v2 3/3] phy: Integrate Realtek Otto SerDes driver into build system
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241008/202410081607.EKE62jfx-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Julien-Stephan/dt-bindings-iio-adc-ad7380-remove-voltage-reference-for-supplies/20241007-234838
+base:   8bea3878a1511bceadc2fbf284b00bcc5a2ef28d
+patch link:    https://lore.kernel.org/r/20241007-ad7380-fix-supplies-v1-4-badcf813c9b9%40baylibre.com
+patch subject: [PATCH 4/6] iio: adc: ad7380: add missing supplies
+config: x86_64-buildonly-randconfig-003-20241008 (https://download.01.org/0day-ci/archive/20241008/202410081608.ZxEPPZ0u-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410081607.EKE62jfx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410081608.ZxEPPZ0u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410081607.EKE62jfx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410081608.ZxEPPZ0u-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:490:15: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
-     490 |         if (sid >= 2 || sid <= 9)
-         |             ~~~~~~~~~^~~~~~~~~~~
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:509:15: warning: overlapping comparisons always evaluate to true [-Wtautological-overlap-compare]
-     509 |         if (sid >= 2 || sid <= 9)
-         |             ~~~~~~~~~^~~~~~~~~~~
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:686:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     686 |         if (ret)
+>> drivers/iio/adc/ad7380.c:1045:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1045 |         if (ret)
          |             ^~~
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:677:9: note: initialize the variable 'ret' to silence this warning
-     677 |         int ret;
+   drivers/iio/adc/ad7380.c:1030:9: note: initialize the variable 'ret' to silence this warning
+    1030 |         int ret, i;
          |                ^
          |                 = 0
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:706:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     706 |         if (ret)
-         |             ^~~
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:697:9: note: initialize the variable 'ret' to silence this warning
-     697 |         int ret;
-         |                ^
-         |                 = 0
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:723:7: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     723 |         if (!ret)
-         |              ^~~
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:717:9: note: initialize the variable 'ret' to silence this warning
-     717 |         int ret;
-         |                ^
-         |                 = 0
->> drivers/phy/realtek/phy-rtk-otto-serdes.c:868:1: error: incompatible function pointer types passing 'ssize_t (struct seq_file *, void *)' (aka 'long (struct seq_file *, void *)') to parameter of type 'int (*)(struct seq_file *, void *)' [-Wincompatible-function-pointer-types]
-     868 | DEFINE_SHOW_STORE_ATTRIBUTE(rtsds_dbg_mode);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/seq_file.h:223:27: note: expanded from macro 'DEFINE_SHOW_STORE_ATTRIBUTE'
-     223 |         return single_open(file, __name ## _show, inode->i_private);    \
-         |                                  ^~~~~~~~~~~~~~~
-   <scratch space>:49:1: note: expanded from here
-      49 | rtsds_dbg_mode_show
-         | ^~~~~~~~~~~~~~~~~~~
-   include/linux/seq_file.h:176:38: note: passing argument to parameter here
-     176 | int single_open(struct file *, int (*)(struct seq_file *, void *), void *);
-         |                                      ^
-   drivers/phy/realtek/phy-rtk-otto-serdes.c:891:1: error: incompatible function pointer types passing 'ssize_t (struct seq_file *, void *)' (aka 'long (struct seq_file *, void *)') to parameter of type 'int (*)(struct seq_file *, void *)' [-Wincompatible-function-pointer-types]
-     891 | DEFINE_SHOW_STORE_ATTRIBUTE(rtsds_dbg_reset);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/seq_file.h:223:27: note: expanded from macro 'DEFINE_SHOW_STORE_ATTRIBUTE'
-     223 |         return single_open(file, __name ## _show, inode->i_private);    \
-         |                                  ^~~~~~~~~~~~~~~
-   <scratch space>:54:1: note: expanded from here
-      54 | rtsds_dbg_reset_show
-         | ^~~~~~~~~~~~~~~~~~~~
-   include/linux/seq_file.h:176:38: note: passing argument to parameter here
-     176 | int single_open(struct file *, int (*)(struct seq_file *, void *), void *);
-         |                                      ^
-   5 warnings and 2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+   1 warning generated.
 
 
-vim +868 drivers/phy/realtek/phy-rtk-otto-serdes.c
+vim +/ret +1045 drivers/iio/adc/ad7380.c
 
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  847  
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  848  static ssize_t rtsds_dbg_mode_write(struct file *file, const char __user *userbuf,
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  849  				size_t count, loff_t *ppos)
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  850  {
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  851  	struct seq_file *seqf = file->private_data;
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  852  	struct rtsds_macro *macro = dev_get_drvdata(seqf->private);
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  853  	struct rtsds_ctrl *ctrl = macro->ctrl;
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  854  	int ret, hwmode, phymode, sid = macro->sid;
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  855  
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  856  	ret = kstrtou32_from_user(userbuf, count, 16, &hwmode);
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  857  	if (ret)
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  858  		return ret;
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  859  	/*
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  860  	 * Allow to set arbitrary modes into the SerDes to improve error analysis. Accept that
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  861  	 * this might confuse the internal state tracking.
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  862  	 */
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  863  	phymode = rtsds_hwmode_to_phymode(ctrl, hwmode);
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  864  	rtsds_phy_set_mode_int(ctrl, sid, phymode, hwmode);
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  865  
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  866  	return count;
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  867  }
-40f1aea80b53b8 Markus Stockhausen 2024-10-07 @868  DEFINE_SHOW_STORE_ATTRIBUTE(rtsds_dbg_mode);
-40f1aea80b53b8 Markus Stockhausen 2024-10-07  869  
+  1024	
+  1025	static int ad7380_probe(struct spi_device *spi)
+  1026	{
+  1027		struct iio_dev *indio_dev;
+  1028		struct ad7380_state *st;
+  1029		bool external_ref_en;
+  1030		int ret, i;
+  1031	
+  1032		indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
+  1033		if (!indio_dev)
+  1034			return -ENOMEM;
+  1035	
+  1036		st = iio_priv(indio_dev);
+  1037		st->spi = spi;
+  1038		st->chip_info = spi_get_device_match_data(spi);
+  1039		if (!st->chip_info)
+  1040			return dev_err_probe(&spi->dev, -EINVAL, "missing match data\n");
+  1041	
+  1042		devm_regulator_bulk_get_enable(&spi->dev, st->chip_info->num_supplies,
+  1043					       st->chip_info->supplies);
+  1044	
+> 1045		if (ret)
+  1046			return dev_err_probe(&spi->dev, ret,
+  1047					     "Failed to enable power supplies\n");
+  1048		msleep(T_POWERUP_MS);
+  1049	
+  1050		/*
+  1051		 * If there is no REFIO supply, then it means that we are using
+  1052		 * the internal 2.5V reference, otherwise REFIO is reference voltage.
+  1053		 */
+  1054		ret = devm_regulator_get_enable_read_voltage(&spi->dev, "refio");
+  1055		if (ret < 0 && ret != -ENODEV)
+  1056			return dev_err_probe(&spi->dev, ret,
+  1057					     "Failed to get refio regulator\n");
+  1058	
+  1059		external_ref_en = ret != -ENODEV;
+  1060		st->vref_mv = external_ref_en ? ret / 1000 : AD7380_INTERNAL_REF_MV;
+  1061	
+  1062		if (st->chip_info->num_vcm_supplies > ARRAY_SIZE(st->vcm_mv))
+  1063			return dev_err_probe(&spi->dev, -EINVAL,
+  1064					     "invalid number of VCM supplies\n");
+  1065	
+  1066		/*
+  1067		 * pseudo-differential chips have common mode supplies for the negative
+  1068		 * input pin.
+  1069		 */
+  1070		for (i = 0; i < st->chip_info->num_vcm_supplies; i++) {
+  1071			const char *vcm = st->chip_info->vcm_supplies[i];
+  1072	
+  1073			ret = devm_regulator_get_enable_read_voltage(&spi->dev, vcm);
+  1074			if (ret < 0)
+  1075				return dev_err_probe(&spi->dev, ret,
+  1076						     "Failed to get %s regulator\n",
+  1077						     vcm);
+  1078	
+  1079			st->vcm_mv[i] = ret / 1000;
+  1080		}
+  1081	
+  1082		st->regmap = devm_regmap_init(&spi->dev, NULL, st, &ad7380_regmap_config);
+  1083		if (IS_ERR(st->regmap))
+  1084			return dev_err_probe(&spi->dev, PTR_ERR(st->regmap),
+  1085					     "failed to allocate register map\n");
+  1086	
+  1087		/*
+  1088		 * Setting up xfer structures for both normal and sequence mode. These
+  1089		 * struct are used for both direct read and triggered buffer. Additional
+  1090		 * fields will be set up in ad7380_update_xfers() based on the current
+  1091		 * state of the driver at the time of the read.
+  1092		 */
+  1093	
+  1094		/*
+  1095		 * In normal mode a read is composed of two steps:
+  1096		 *   - first, toggle CS (no data xfer) to trigger a conversion
+  1097		 *   - then, read data
+  1098		 */
+  1099		st->normal_xfer[0].cs_change = 1;
+  1100		st->normal_xfer[0].cs_change_delay.value = st->chip_info->timing_specs->t_csh_ns;
+  1101		st->normal_xfer[0].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
+  1102		st->normal_xfer[1].rx_buf = st->scan_data;
+  1103	
+  1104		spi_message_init_with_transfers(&st->normal_msg, st->normal_xfer,
+  1105						ARRAY_SIZE(st->normal_xfer));
+  1106		/*
+  1107		 * In sequencer mode a read is composed of four steps:
+  1108		 *   - CS toggle (no data xfer) to get the right point in the sequence
+  1109		 *   - CS toggle (no data xfer) to trigger a conversion of AinX0 and
+  1110		 *   acquisition of AinX1
+  1111		 *   - 2 data reads, to read AinX0 and AinX1
+  1112		 */
+  1113		st->seq_xfer[0].cs_change = 1;
+  1114		st->seq_xfer[0].cs_change_delay.value = st->chip_info->timing_specs->t_csh_ns;
+  1115		st->seq_xfer[0].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
+  1116		st->seq_xfer[1].cs_change = 1;
+  1117		st->seq_xfer[1].cs_change_delay.value = st->chip_info->timing_specs->t_csh_ns;
+  1118		st->seq_xfer[1].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
+  1119	
+  1120		st->seq_xfer[2].rx_buf = st->scan_data;
+  1121		st->seq_xfer[2].cs_change = 1;
+  1122		st->seq_xfer[2].cs_change_delay.value = st->chip_info->timing_specs->t_csh_ns;
+  1123		st->seq_xfer[2].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
+  1124	
+  1125		spi_message_init_with_transfers(&st->seq_msg, st->seq_xfer,
+  1126						ARRAY_SIZE(st->seq_xfer));
+  1127	
+  1128		indio_dev->channels = st->chip_info->channels;
+  1129		indio_dev->num_channels = st->chip_info->num_channels;
+  1130		indio_dev->name = st->chip_info->name;
+  1131		indio_dev->info = &ad7380_info;
+  1132		indio_dev->modes = INDIO_DIRECT_MODE;
+  1133		indio_dev->available_scan_masks = st->chip_info->available_scan_masks;
+  1134	
+  1135		ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
+  1136						      iio_pollfunc_store_time,
+  1137						      ad7380_trigger_handler,
+  1138						      &ad7380_buffer_setup_ops);
+  1139		if (ret)
+  1140			return ret;
+  1141	
+  1142		ret = ad7380_init(st, external_ref_en);
+  1143		if (ret)
+  1144			return ret;
+  1145	
+  1146		return devm_iio_device_register(&spi->dev, indio_dev);
+  1147	}
+  1148	
 
 -- 
 0-DAY CI Kernel Test Service
