@@ -1,78 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8261388;
-	Tue,  8 Oct 2024 01:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0E98F6D
+	for <llvm@lists.linux.dev>; Tue,  8 Oct 2024 01:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728351054; cv=none; b=GKhY3C5dgzcXfjtKAPlsEeNb/Q+nrg9zr27dNnumkcXM/LkjvkOLS+8oLuNt/615EgMu4rBuIUSGb2u8Op4fQsk6EVbtmKlCLGeGT7LJpoE7JfU3FVStB3MYux78s2iY/BqDvBwQ7YVT4I9YkjjBuUOtZwtSrs2jihFgTDfcShE=
+	t=1728351638; cv=none; b=nFJHf3fxyepa7niZNvEtW8541qHUJmbog7O0tXW9wRtQAS+uh8McZN46LBKeMyhEnRwNdsv+nQuBUzPobwDMs6RN4WK1hFRGdIDCaVp8wnpNnoYx00qairwpXfuiHLVeBCxXMCc+BxDfR/AfvuJIV/FXobYWgBAg8ABF5f6jSz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728351054; c=relaxed/simple;
-	bh=vxCcy/wP0tEtAiAQ0trrZTIT30svRSVdwkpX1EAEGt4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=RlQq/yIi+slRONkmeSU9IHooCy6+7tu+YvlqFLmQocYcBbUQcSD5dm3QtUBQpdjPiKBlSuzfC2eu9GUiHStT2wl/91AW4kpjpSJpmoFKZxFCSZ5lO+MWZo8x0A5M0SueKPql9V0aoDqzFVcvpCyDLYX7cKkKImBg9MKUM05pbik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=wF94IDHO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728351638; c=relaxed/simple;
+	bh=eKjkEiK0M8zCM/i2nDpciKQNkUtvOXU3e7KU34edvtM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kVvSsTX7DjshSJUUjfc2cKMN4RaaYVsU1bhC4a0Mufm7nIPjr2kb3ijlycQepE0ALAR6cZXS7455v6jactjpS0A8bBEOtDr9+pbrlf6SHWFEpXRvkmgt5zkO4bosopv+afo3xNmDJRQ8Hc+WT58hBN3LKcW3+gUeKRxgFUsv/CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TWIrOZoe; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="wF94IDHO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B035C4CEC6;
-	Tue,  8 Oct 2024 01:30:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1728351053;
-	bh=vxCcy/wP0tEtAiAQ0trrZTIT30svRSVdwkpX1EAEGt4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=wF94IDHOQAeyer+0lJ5Mckea+dNy8krILakDNpJqOzg+tg8ispVGQYFQXOm/FTmJN
-	 oW947/ZfzwLHLMvCCxMXdadu5OVEaYMZF2TU4yBjhtl98Z7Mn2Z+4OAzW71vxjHQ0h
-	 gAa5NjNqZuy0fz1A78aePnk2FhR1355LE0MRx4yg=
-Date: Mon, 7 Oct 2024 18:30:52 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jeongjun Park <aha310510@gmail.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, kasong@tencent.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org,
- syzbot+fa43f1b63e3aa6f66329@syzkaller.appspotmail.com
-Subject: Re: [PATCH] mm: swap: prevent possible data-race in
- __try_to_reclaim_swap
-Message-Id: <20241007183052.9d87f42e19db5f9777dc8e77@linux-foundation.org>
-In-Reply-To: <202410071223.t0yF8vP8-lkp@intel.com>
-References: <20241004142504.4379-1-aha310510@gmail.com>
-	<202410071223.t0yF8vP8-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TWIrOZoe"
+Message-ID: <dcf2d5e8-2c10-411e-8a19-d019696a0fbd@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1728351634;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1kT40hZD4JeJdpTAirLiYVovjWzYchmhEqCnIfHIpZo=;
+	b=TWIrOZoedTiJwPnN13yAhdLo/x0/uj4W+pZG2RBXU9mQQv1+o0nF2SfpPetO3WGfoBHNWh
+	6OjJHB1wS9GUug18nACXshxKulXd/ARs8aH/bkvXJNws+zdhtxjHe7I9r+zDwpi+flTiuj
+	bIlnz3p5xLDjlPussRkZaC20UZOuwrM=
+Date: Tue, 8 Oct 2024 09:40:23 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v5 1/3] bpf: Prevent tailcall infinite loop
+ caused by freplace
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, toke@redhat.com,
+ martin.lau@kernel.org, yonghong.song@linux.dev, puranjay@kernel.org,
+ xukuohai@huaweicloud.com, eddyz87@gmail.com, iii@linux.ibm.com,
+ kernel-patches-bot@fb.com
+References: <20241006130130.77125-2-leon.hwang@linux.dev>
+ <202410080455.vy5GT8Vz-lkp@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <202410080455.vy5GT8Vz-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 7 Oct 2024 13:06:49 +0800 kernel test robot <lkp@intel.com> wrote:
 
-> Hi Jeongjun,
+
+On 8/10/24 04:32, kernel test robot wrote:
+> Hi Leon,
 > 
 > kernel test robot noticed the following build warnings:
 > 
-> [auto build test WARNING on akpm-mm/mm-everything]
+> [auto build test WARNING on bpf-next/master]
 > 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jeongjun-Park/mm-swap-prevent-possible-data-race-in-__try_to_reclaim_swap/20241004-222733
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20241004142504.4379-1-aha310510%40gmail.com
-> patch subject: [PATCH] mm: swap: prevent possible data-race in __try_to_reclaim_swap
-> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241007/202410071223.t0yF8vP8-lkp@intel.com/config)
+> url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Prevent-tailcall-infinite-loop-caused-by-freplace/20241006-210309
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> patch link:    https://lore.kernel.org/r/20241006130130.77125-2-leon.hwang%40linux.dev
+> patch subject: [PATCH bpf-next v5 1/3] bpf: Prevent tailcall infinite loop caused by freplace
+> config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241008/202410080455.vy5GT8Vz-lkp@intel.com/config)
 > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241007/202410071223.t0yF8vP8-lkp@intel.com/reproduce)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410080455.vy5GT8Vz-lkp@intel.com/reproduce)
 > 
 > If you fix the issue in a separate patch/commit (i.e. not just a new version of
 > the same patch/commit), kindly add following tags
 > | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410071223.t0yF8vP8-lkp@intel.com/
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202410080455.vy5GT8Vz-lkp@intel.com/
 > 
 > All warnings (new ones prefixed by >>):
 > 
-> >> mm/swapfile.c:203:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->      203 |         if (!folio_trylock(folio))
->          |             ^~~~~~~~~~~~~~~~~~~~~
->    mm/swapfile.c:254:9: note: uninitialized use occurs here
->      254 |         return ret;
+>    In file included from kernel/fork.c:53:
+>    In file included from include/linux/security.h:35:
+>>> include/linux/bpf.h:1392:5: warning: no previous prototype for function 'bpf_extension_link_prog' [-Wmissing-prototypes]
+>     1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
+>          |     ^
+>    include/linux/bpf.h:1392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>     1392 | int bpf_extension_link_prog(struct bpf_tramp_link *link,
+>          | ^
+>          | static 
+>>> include/linux/bpf.h:1398:5: warning: no previous prototype for function 'bpf_extension_unlink_prog' [-Wmissing-prototypes]
+>     1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
+>          |     ^
+>    include/linux/bpf.h:1398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>     1398 | int bpf_extension_unlink_prog(struct bpf_tramp_link *link,
+>          | ^
+>          | static 
+>    2 warnings generated.
 
-This warning can't be correct?
+Ack.
+
+I'll add 'static' in patch v6.
+
+Thanks,
+Leon
+
+[...]
+
