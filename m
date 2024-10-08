@@ -1,96 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E43221264E
-	for <llvm@lists.linux.dev>; Tue,  8 Oct 2024 19:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAAD212EE2
+	for <llvm@lists.linux.dev>; Tue,  8 Oct 2024 19:13:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728414415; cv=none; b=IdFXVJCjBzBUid2GFQ4m0XPTiXTEOZngNfJRGd/E0E7ql15Lhu/eis83rXt4EDwgd8tL9a0EPX3xdivY8rddn3OtQWpWWQX7h95BSPPjlvlsc+o9WdetpS1bjfB3Fi5ZMW2hG4M3b5iJPcIJV9yAgNV22oXPBiLqaVcuJO+LnC0=
+	t=1728414817; cv=none; b=LWZbSyLUpxxvYvew+NKS2xCasvN1fMlV1wDnECg1nKfmYb5gnUPEfPRwB95FbASBKmBd4Gm6YgNkWExXh0hdXFVEuPeuT5z2rWaY5Vgjwy1G3kdCj9WHczBjWp25oTU515jTtdzLO+8jv/rkpP3KL6EzCuLhQfztBGv49vhGfaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728414415; c=relaxed/simple;
-	bh=la0Kwo1f4XfXE3oy1Lf402r4Bos2s1NoBdmV/Vr/sFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N78/4XuyIBf6dfbugapjDKBXt++u9KJb28rSIsPe4qznBIKcPCaW6K2XjX8btEOgw4bDDNyX4IBlLZayYckyFqWkCwp685lgf7Gn5PvW8CI6kkCVFzGdUw96OAkMjQu3C7zXk26Gcyo6FcQMTKUqNlYVeJgV7paXFibUih7C7jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gdH8a/U5; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1728414817; c=relaxed/simple;
+	bh=VeyLd080XrjX7LmXYGJDGzbJ4zxukfOJSEDHc+Nkdlo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=npyeJqB0DavBWwUPz0ZV3pUF76OgmGlBRl8K2OGhFK7lKmlO8HSZORX0HGRjvZ+ZRSiXYhy3igfku+gyOutG/Egj6E1e9WrHV4DVIhwWus8GOBkhj8r2VWMXS+lhn9v1GQYrOohgbMHvqtvOMIdjDlCMvtCccdTJT0MlWSCpDKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pz0/X7YJ; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gdH8a/U5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pz0/X7YJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728414414; x=1759950414;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=la0Kwo1f4XfXE3oy1Lf402r4Bos2s1NoBdmV/Vr/sFc=;
-  b=gdH8a/U515LkU0eFNwtQMkfxKl5NeKAXEsO9x7OWr5ms3y/VyeZZeKhH
-   mh4PItejQCKyS/WyaJTUHFvWy0R8bcObW9MzaNnfnMS3MgEQSJ+K4wtNS
-   o4/grbZkAiarNmS2XbdLLITxBm4dmJKU1mJyZWS8Xuuj9JRxiSSKdG6jU
-   G+qBgQFe20Whjd+4gfX+3ilIbl8ETH3M5XFjQGqK3X9XcBiDQwNGVgS9q
-   mILLvn1ghu9X7/8iuN3txpVZRTxgIo0W9xbCPhtHUDRzoppRBNpRHLEHL
-   6eNWMOW276Pm/vih7uJR+vDFZYSOW/yD1QYq1mOypsiMUpBu2zriTK2YG
+  t=1728414815; x=1759950815;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VeyLd080XrjX7LmXYGJDGzbJ4zxukfOJSEDHc+Nkdlo=;
+  b=Pz0/X7YJoHfx2WB6H5WlL15Xpc+9+Jo2ti1ryLA/xuLOQIM0QfODgEV0
+   ujKxjJOqR+liuGoMj5WFrzofUpiyrasH/CWbYAotZ0C2nrqx7T7sxmP1V
+   xSqQP+rwdke2P0Nt/3E85YTyvi21dKxtknGrD/O6mlbf1JlMfwy4HUnQH
+   9IEttX+LhEIb0CEBVc/9iiHQXxvv0bBlMrXkL4YgvelC5Drb9y9mqCvhe
+   BczjIxwY7kE+13Jkff/w+G2mUr7GTpwu7/IZgr6f/Fi2vPlQUhLOXdUz4
+   jGlrkfQBUudn2u1ssBF4Lb1iLZMgPCwSf19b606QnUDUlNPZUQRmxlpZy
    g==;
-X-CSE-ConnectionGUID: JlqKmm6wRjqV3wftSF8hEw==
-X-CSE-MsgGUID: SPj6aElUSJGP3XB3U5VYxg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27527191"
+X-CSE-ConnectionGUID: 76PkojldRT6vPYpz5l62hg==
+X-CSE-MsgGUID: IUSzbP8xShSs87+WZbu6Cw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27769472"
 X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="27527191"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 12:06:54 -0700
-X-CSE-ConnectionGUID: SYRsucHTSRi0zH2umojr3g==
-X-CSE-MsgGUID: kf5YP1SORoiV/1TUleL2yg==
+   d="scan'208";a="27769472"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 12:13:34 -0700
+X-CSE-ConnectionGUID: ulFTdNS7TKK9+EnYMVAMTA==
+X-CSE-MsgGUID: dkKWb7I+QEGNbOY65bYdOA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="75527485"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 12:06:52 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1syFXl-00000000pEm-1Eaz;
-	Tue, 08 Oct 2024 22:06:49 +0300
-Date: Tue, 8 Oct 2024 22:06:49 +0300
+   d="scan'208";a="79925645"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa003.fm.intel.com with ESMTP; 08 Oct 2024 12:13:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id D9C1126B; Tue, 08 Oct 2024 22:13:30 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Kuehne <thomas.kuehne@gmx.li>, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+To: Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] HID: debug: Remove duplicates from 'keys'
-Message-ID: <ZwWCydOAugOSZrFA@smile.fi.intel.com>
-References: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
+	Justin Stitt <justinstitt@google.com>,
+	Chuanhua Han <hanchuanhua@oppo.com>,
+	Barry Song <v-songbaohua@oppo.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] mm: Remove unused stub for can_swapin_thp()
+Date: Tue,  8 Oct 2024 22:13:29 +0300
+Message-ID: <20241008191329.2332346-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 05, 2024 at 09:43:50PM +0300, Andy Shevchenko wrote:
-> Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
-> CONFIG_WERROR=y, for example:
-> 
-> drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
->  3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
->       |                         ^~~~~~~~~
-> drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
->  3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
->       |                         ^~~~~~~~~
-> 
-> Fix this by removing them.
-> 
-> The logic of removal is that, remove...
-> 1) if there is a constant that uses another defined constant, OR
-> 2) the one that appears later in the list.
+When can_swapin_thp() is unused, it prevents kernel builds
+with clang, `make W=1` and CONFIG_WERROR=y:
 
-Can this be applied or is there another approach?
+mm/memory.c:4184:20: error: unused function 'can_swapin_thp' [-Werror,-Wunused-function]
 
+Fix this by removing the unused stub.
+
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
+
+Fixes: 242d12c98174 ("mm: support large folios swap-in for sync io devices")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ mm/memory.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/mm/memory.c b/mm/memory.c
+index 2366578015ad..c0869a962ddd 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4181,11 +4181,6 @@ static struct folio *alloc_swap_folio(struct vm_fault *vmf)
+ 	return __alloc_swap_folio(vmf);
+ }
+ #else /* !CONFIG_TRANSPARENT_HUGEPAGE */
+-static inline bool can_swapin_thp(struct vm_fault *vmf, pte_t *ptep, int nr_pages)
+-{
+-	return false;
+-}
+-
+ static struct folio *alloc_swap_folio(struct vm_fault *vmf)
+ {
+ 	return __alloc_swap_folio(vmf);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0.rc1.1336.g36b5255a03ac
 
