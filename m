@@ -1,145 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B94770E2
-	for <llvm@lists.linux.dev>; Tue,  8 Oct 2024 19:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDBF1213EC1;
+	Tue,  8 Oct 2024 19:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728414962; cv=none; b=bKv2KAFaZJ2mX94Id/13eKDbTqG8+WzCHueGTWmukYfAi3ucNvliugEAXfQPVqjid1ROiEEvVHerx2TspwRA967bFVbGNcO5YYMH7/E6xRN49Aq7Y6/TMK9wHEiF1dhtMM50/fFduTnfQGIGJm4hxguSCLDyH2J3I/amwwAaFi4=
+	t=1728415811; cv=none; b=JR2eXyQNANPUz9q8jRf0iPYsolQjsJ5s2WvBQyvwbDgAiwPVGvq7fdfFwGGWXtJO0tAHqEmF5PYmnHJDToixnasfecygV76n3nRxtgOwINJxto6Zy+lYUm+2bZuwiwtDgdmPkXB4suSXmTIZBN9rQpZIbjtMq5DYhgrAwtFMFbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728414962; c=relaxed/simple;
-	bh=TxBO9VR/XnPErLZzuLD3zeVVWu30037Kl7xHFMJLT4U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UYmMJGwaYWitvtpXo/UkusCd80PjI9wmv6rNbtyxoC63SveQdK5HbGYkNBvWAbk+GqAmTGz0dElEU3rq7OJGhQVfTFxoGXvV7jxfQQaLABHooOp5wwuUYAvM6/x1e2DyH5dVZJedRRRyaSRWIMlCbpn+Cm9Vv9QRYCxhodupkLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iA7pBZk4; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1728415811; c=relaxed/simple;
+	bh=dXtAb0QVDHqUCH+D1YOwgAbi29h8B3NCCdv1wgQL7eY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gaSJulX8k3Nje3UprTprP3sZJi7SRxXHXfxy1FVynDZzROWqrrlwGL5EUzQDGi55nemoMhmFTT/z/dyOT0hktFbhLPzqhB2pJSzGY/J9G9v/Qjt4oATQxvz/wHSvgaGre2S5P+SZjY+34zkkNH4z/AGPx3ECTj2W4lLx9kHXdpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ESSlpcru; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iA7pBZk4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ESSlpcru"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728414962; x=1759950962;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TxBO9VR/XnPErLZzuLD3zeVVWu30037Kl7xHFMJLT4U=;
-  b=iA7pBZk4it8b973hOj1VPg0/aM+RgmWpy68Wu60/VtuXkoybIYMViNAG
-   HFGLvb5SDynbeSGeZe9zJ1lCc+KZ9B+5vAkj35YT4696kYPsa0cPpN+he
-   YOKh6Akz2fkclcfaelrbwT2Eoxkut/uUBR+Xig/92/g1tYqX6oAv/3awQ
-   bjod1evHawolsSVQr0fYO4dQ/BFSpAtZZQT9NHUY90QA0+tFdsIdyjofb
-   +LBO8prmrcyzApLPPhwdLb/BI/R5nHmMjVK16yQT5hhLUsI/VmGZb8uDj
-   y4kPsLSH2JUUImXFG2DWXks4FUTydjKWQ6xb61tIsQC7+cuJa2vL4i3/B
+  t=1728415809; x=1759951809;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dXtAb0QVDHqUCH+D1YOwgAbi29h8B3NCCdv1wgQL7eY=;
+  b=ESSlpcrusj/kd4aAIJ8J00jTlFA9uOLpvmYMrvF6Kn+FCsuHm0DJk/gk
+   fyOBq/BC8Ufah2V2X74+LBrw7jX+zXxmfvdhlByBhOPzerSaeKiSQp5Gd
+   7liXLaumXkCozUoZhhOOl8DQlHTy3J9lW2AvnvfbJ1PBIWBfbXX1mthnT
+   XNp9pLKROE0vDw7oK+7xn5Nou6deqqdOGjbY4iYb+2NBXphoP7Gz8q0gm
+   2wm+TGs18H7smNbMKNktJ8KqW2WTB+h+kHr9fGttu7gETw1Sp/K+TQBsh
+   b6PSug6860w7EMt9s/gKOkrU/i3Q1aHkNNjjmv4lSSRyHrDAqmn0WRXr+
    Q==;
-X-CSE-ConnectionGUID: CA3slxn2TxGMbQlMhZj17w==
-X-CSE-MsgGUID: pCr3amugTS6HYSSfzmm7Kg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="38216005"
+X-CSE-ConnectionGUID: gom+yfgJTzW1sqaM32Mw0Q==
+X-CSE-MsgGUID: lMTEWgDATG6RzJGwEOGi0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27600552"
 X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="38216005"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 12:16:01 -0700
-X-CSE-ConnectionGUID: EqO+XfN9RnG0gMv1b1EVuQ==
-X-CSE-MsgGUID: IuMbrWGESd+l96IMpYNy2w==
+   d="scan'208";a="27600552"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 12:30:08 -0700
+X-CSE-ConnectionGUID: G+AnJdxlSwaMXXdfJ0fIag==
+X-CSE-MsgGUID: 5Uq+7RNCQ2i7djkSKD2oSg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="106793393"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa002.jf.intel.com with ESMTP; 08 Oct 2024 12:15:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id D684426B; Tue, 08 Oct 2024 22:15:56 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH v2 1/1] x86/reboot: KVM: Guard nmi_shootdown_cpus_on_restart() with ifdeffery
-Date: Tue,  8 Oct 2024 22:14:40 +0300
-Message-ID: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+   d="scan'208";a="75835543"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 08 Oct 2024 12:30:07 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1syFuG-0008JI-2H;
+	Tue, 08 Oct 2024 19:30:04 +0000
+Date: Wed, 9 Oct 2024 03:29:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: Re: [PATCH v2 5/7] bootmem: Stop using page->index
+Message-ID: <202410090311.eaqcL7IZ-lkp@intel.com>
+References: <20241005200121.3231142-6-willy@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241005200121.3231142-6-willy@infradead.org>
 
-The nmi_shootdown_cpus_on_restart() in some cases may be not used.
-This, in particular, prevents kernel builds with clang, `make W=1`
-and CONFIG_WERROR=y:
+Hi Matthew,
 
-arch/x86/kernel/reboot.c:957:20: error: unused function 'nmi_shootdown_cpus_on_restart' [-Werror,-Wunused-function]
-  957 | static inline void nmi_shootdown_cpus_on_restart(void)
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+kernel test robot noticed the following build errors:
 
-Fix this by guarging the definitions with the respective KVM ifdeffery.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on tip/locking/core tip/x86/mm dennis-percpu/for-next linus/master v6.12-rc2 next-20241008]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/mm-Convert-page_to_pgoff-to-page_pgoff/20241006-040239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241005200121.3231142-6-willy%40infradead.org
+patch subject: [PATCH v2 5/7] bootmem: Stop using page->index
+config: x86_64-randconfig-014-20241008 (https://download.01.org/0day-ci/archive/20241009/202410090311.eaqcL7IZ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410090311.eaqcL7IZ-lkp@intel.com/reproduce)
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v1: suggested by Dave Hansen
-v2: rebased on top of the latest changes in the file
- arch/x86/kernel/reboot.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410090311.eaqcL7IZ-lkp@intel.com/
 
-diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-index 615922838c51..67551c474203 100644
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -528,9 +528,9 @@ static inline void kb_wait(void)
- 	}
- }
- 
-+#if IS_ENABLED(CONFIG_KVM_X86)
- static inline void nmi_shootdown_cpus_on_restart(void);
- 
--#if IS_ENABLED(CONFIG_KVM_X86)
- /* RCU-protected callback to disable virtualization prior to reboot. */
- static cpu_emergency_virt_cb __rcu *cpu_emergency_virt_callback;
- 
-@@ -954,12 +954,6 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
- 	 */
- }
- 
--static inline void nmi_shootdown_cpus_on_restart(void)
--{
--	if (!crash_ipi_issued)
--		nmi_shootdown_cpus(NULL);
--}
--
- /*
-  * Check if the crash dumping IPI got issued and if so, call its callback
-  * directly. This function is used when we have already been in NMI handler.
-@@ -987,9 +981,19 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
- 	/* No other CPUs to shoot down */
- }
- 
--static inline void nmi_shootdown_cpus_on_restart(void) { }
--
- void run_crash_ipi_callback(struct pt_regs *regs)
- {
- }
- #endif
-+
-+#if IS_ENABLED(CONFIG_KVM_X86)
-+#if defined(CONFIG_SMP)
-+static inline void nmi_shootdown_cpus_on_restart(void)
-+{
-+	if (!crash_ipi_issued)
-+		nmi_shootdown_cpus(NULL);
-+}
-+#else /* !CONFIG_SMP */
-+static inline void nmi_shootdown_cpus_on_restart(void) { }
-+#endif /* !CONFIG_SMP */
-+#endif
+All errors (new ones prefixed by >>):
+
+>> arch/x86/mm/init_64.c:992:28: error: call to undeclared function 'bootmem_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     992 |                 enum bootmem_type type = bootmem_type(page);
+         |                                          ^
+   1 error generated.
+
+
+vim +/bootmem_type +992 arch/x86/mm/init_64.c
+
+   987	
+   988	static void __meminit free_pagetable(struct page *page, int order)
+   989	{
+   990		/* bootmem page has reserved flag */
+   991		if (PageReserved(page)) {
+ > 992			enum bootmem_type type = bootmem_type(page);
+   993			unsigned long nr_pages = 1 << order;
+   994	
+   995			if (type == SECTION_INFO || type == MIX_SECTION_INFO) {
+   996				while (nr_pages--)
+   997					put_page_bootmem(page++);
+   998			} else
+   999				while (nr_pages--)
+  1000					free_reserved_page(page++);
+  1001		} else
+  1002			free_pages((unsigned long)page_address(page), order);
+  1003	}
+  1004	
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
