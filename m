@@ -1,145 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944CE1D7E50;
-	Tue,  8 Oct 2024 07:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CF113C9A3
+	for <llvm@lists.linux.dev>; Tue,  8 Oct 2024 07:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728371446; cv=none; b=Rpa8OjKms3lgQb4ZMwEiOwY84rnAveho6vEfk4SzD+kL7ADzXoitC0JxIFd4VgvxRv1udwpJ9zpPqSd6kQfzpzb91Zp49A0/bJz+kcoxZgjTbBg7bQ6+JbXPRd/OHdgqsUHofEXibLKWQI88znt+nlwdwS9ROvlZd2FDdc5sDRs=
+	t=1728373230; cv=none; b=LsR58JZktxfFUtTlUCD7QEXipaSF97M60rKG9vIwvIX6gM+zCDYd7wysqI3o8qGIV98g2dF7felX1NTz52GoYEbyKN7jnW5VMT2zhBNRmLEUKmc6bStcQgdIcy0yjsPIlop7YD83n2js6NU/21ZeNSaFtQAWC5GoypCCY6vXza8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728371446; c=relaxed/simple;
-	bh=N5Ma5mFoM2e9QcVwT94+5B2d9Fv3qCQ9H2VljSoG55g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHX+Ol8m1LfvcvolDjXw9bI7iifW3rTu72ahpKqj0kvVTrs7apO61WW8MvJYJboUne1CGf6Iwi2R+Ywekth/SDgOa73hhDrIk02dPQJ7w3p/qYutpLgjKd60IpzYrojHmUU77R6yUzKL5MA+jUU08HDuONL/SJCHDmlQd6GxEOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhO+x6Jq; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728373230; c=relaxed/simple;
+	bh=QdNYVEqzHPo7pGfhv4hTteTh/N+9ljrUAbL82tcOG64=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=mskVpX3jS5Up+ZCzu/ABPqwwg2jmCMZ0LMipF4ZhLjU3Zo3YtO1e6k67dLC6s0wuyq4C6wpbvNlQ6hPsOlB5+EVQY6weKCJuK7mCmt86OEcJvZAMj6jDdKjwCQd0C4Nj5Eg7vOzhNyFgXEu4JYLIvC103Swxo6UHGxTpDK/JwfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vtmUJ/7R; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhO+x6Jq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728371444; x=1759907444;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N5Ma5mFoM2e9QcVwT94+5B2d9Fv3qCQ9H2VljSoG55g=;
-  b=FhO+x6Jq/54/q0wrozT27ZkUQ7Sysq0uZVwLf2mAjaBb6cjphgYQyX6x
-   HaYAUA9wYTikXi3a5vcORn9NV3UmkbdS3Mg4AIY+azyI8cxr1hFP554O2
-   MGhzDzqW/3sNk82d5umOYgrfsCrz4R7slWA2PR0rQ1p1TGAOeKnLRXTga
-   /A4VUyoyNnmOeqKcjpw9GY6a1M6AAorKueyR4zDUdXwlRujHzvvly7bBG
-   s1HkChZ2s1CHo729jXC+sjmQrqG6lYZEdvWviSkCxSBdecvghQOFDkcIA
-   1FL9Pnkq+Ath4iJJ1PAzlACQscUDje6Y0x+Ejt+5BfjJ18Gv0gdd7CQDe
-   g==;
-X-CSE-ConnectionGUID: 622XvOfETWiGmVYpc62CUg==
-X-CSE-MsgGUID: cJkYr/f/QyaAnetEUUR7Qw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11218"; a="38202690"
-X-IronPort-AV: E=Sophos;i="6.11,186,1725346800"; 
-   d="scan'208";a="38202690"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 00:10:44 -0700
-X-CSE-ConnectionGUID: b30XN+4gTou+oeMaKERnsg==
-X-CSE-MsgGUID: vSbX6Ko7TDSG1AkTAjPIUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,186,1725346800"; 
-   d="scan'208";a="75418054"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 08 Oct 2024 00:10:40 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sy4Mf-00061A-2h;
-	Tue, 08 Oct 2024 07:10:37 +0000
-Date: Tue, 8 Oct 2024 15:09:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>, marcel@holtmann.org,
-	luiz.dentz@gmail.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, amitkumar.karwar@nxp.com,
-	rohit.fule@nxp.com, neeraj.sanjaykale@nxp.com, sherry.sun@nxp.com,
-	ziniu.wang_1@nxp.com, haibo.chen@nxp.com, LnxRevLi@nxp.com
-Subject: Re: [PATCH v4 2/2] Bluetooth: btnxpuart: Add GPIO support to power
- save feature
-Message-ID: <202410081424.BaGORAHw-lkp@intel.com>
-References: <20241007131316.626690-3-neeraj.sanjaykale@nxp.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vtmUJ/7R"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a8a7596b7dfso908748266b.0
+        for <llvm@lists.linux.dev>; Tue, 08 Oct 2024 00:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728373224; x=1728978024; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yXA19ceyZZ+3Cf7+WfRq4udLadYCLPCelkPinKbVkjg=;
+        b=vtmUJ/7Rz4FCc7qXpKmsF9dbgmabhds63VGJqqyuLh/cl0dANASP/Y1LOgifOOg3KM
+         eArLRn2EC9ziuzRjnveBCMnWjECrtvw6ldlv/cPE1slPSM9ZxIbAGhPeOKGMrRRjKpqo
+         JKL9UkkGLVtrHdXxvpjzk45MnScHu/UZeT3Nk2Ot1cjFRl1WTLNl3xj/YjMg7YA90gZO
+         7r/Ie1iRK4HR4zD/FiG0RK/t9RTTMCfwvW2OpUfF46/EfaFnAQopWdldUm5Ks+5tfd9+
+         5uhb+QarxDWqESiFazoITZkhUzBR+OECYx0PnHXD2BST75N8rJEImz8SPiVahe66pOLO
+         Tuug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728373224; x=1728978024;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yXA19ceyZZ+3Cf7+WfRq4udLadYCLPCelkPinKbVkjg=;
+        b=LODLJqRQWP2bWehLITRU10BSg7XuwoV5hVbmdsctk+FYWMkL6JgPWhz95yUW8LFRXE
+         GmSn87NShDzg++q2pUQ3AEbicXjMHh5Ha61SXmo++CeFr0cs/NDZrbjWZVJI8bu0R3oH
+         lRssqUNtZRcImG+2IJwgZjPyx5t7eI9BFZcuUJZ04uOITzGvdRaD19W1SkHR8reTPq3h
+         wns+SW25uZWlaI+nNnwJq+UWVOrqK8vMH1xvKoPNW4LwwC5m+QqKIBkVGvZsX9PuNFFK
+         O+tzXODw77M4ILbFbE7jtx6DNcDGvKYKHmEu7WMenijW4dYVFbhVqWGYNWlrIH2lRMrU
+         5xpg==
+X-Gm-Message-State: AOJu0Ywy6yto1bsTUABFTyhkoYTEm9SLYH8Mvic/CnIElKfmFD7ahpoQ
+	S2IsRKSozgJe3BL24CFdoWoyjlO0W8Dt7ACjuuRt1D+U+JBP5ncPuCX4ZbhAhPIqW7u3ojeTCeS
+	F
+X-Google-Smtp-Source: AGHT+IHQsxK2bjpoHnf+wywr/ey9UvSHuUromPiewBWPpuCbchEz9L70ACR8FbEo/v3pFGIdgD4clg==
+X-Received: by 2002:a17:907:7fa8:b0:a99:4e74:52aa with SMTP id a640c23a62f3a-a9967953d80mr222870466b.33.1728373224497;
+        Tue, 08 Oct 2024 00:40:24 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a995096d0d3sm263756566b.217.2024.10.08.00.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 00:40:23 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Tue, 8 Oct 2024 07:40:22 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <637931286.20442.1728373223783@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-20-init-8119-gd2408c417cfa: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241007131316.626690-3-neeraj.sanjaykale@nxp.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_20441_1833911217.1728373222960"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Neeraj,
+------=_Part_20441_1833911217.1728373222960
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master robh/for-next linus/master v6.12-rc2 next-20241004]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Neeraj-Sanjay-Kale/dt-bindings-net-bluetooth-nxp-Add-support-for-power-save-feature-using-GPIO/20241007-211315
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20241007131316.626690-3-neeraj.sanjaykale%40nxp.com
-patch subject: [PATCH v4 2/2] Bluetooth: btnxpuart: Add GPIO support to power save feature
-config: x86_64-buildonly-randconfig-003-20241008 (https://download.01.org/0day-ci/archive/20241008/202410081424.BaGORAHw-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241008/202410081424.BaGORAHw-lkp@intel.com/reproduce)
+We track this report status in https://linaro.atlassian.net/browse/LLVM-1390 , please let us know if you are looking at the problem and/or when you have a fix.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410081424.BaGORAHw-lkp@intel.com/
+In CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig after:
 
-All errors (new ones prefixed by >>):
+  | commit llvmorg-20-init-8119-gd2408c417cfa
+  | Author: David Green <david.green@arm.com>
+  | Date:   Sun Oct 6 10:44:21 2024 +0100
+  | 
+  |     [InstCombine] Canonicalize more geps with constant gep bases and constant offsets. (#110033)
+  |     
+  |     This is another small but hopefully not performance negative step to
+  |     canonicalizing towards i8 geps. We looks for geps with a constant offset
+  |     base pointer of the form `gep (gep @glob, C1), x, C2` and expand the gep
+  | ... 2 lines of the commit log omitted.
 
->> drivers/bluetooth/btnxpuart.c:445:7: error: expected ')'
-     445 |                            PTR_ERR(psdata->h2c_ps_gpio));
-         |                            ^
-   drivers/bluetooth/btnxpuart.c:444:3: note: to match this '('
-     444 |                 bt_dev_err(hdev, "Error fetching device-wakeup-gpios: %ld"
-         |                 ^
-   include/net/bluetooth/bluetooth.h:278:2: note: expanded from macro 'bt_dev_err'
-     278 |         BT_ERR("%s: " fmt, bt_dev_name(hdev), ##__VA_ARGS__)
-         |         ^
-   include/net/bluetooth/bluetooth.h:263:32: note: expanded from macro 'BT_ERR'
-     263 | #define BT_ERR(fmt, ...)        bt_err(fmt "\n", ##__VA_ARGS__)
-         |                                       ^
-   1 error generated.
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+24511
 
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+33835
+# linux build successful:
+all
 
-vim +445 drivers/bluetooth/btnxpuart.c
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
 
-   434	
-   435	static int ps_setup(struct hci_dev *hdev)
-   436	{
-   437		struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-   438		struct serdev_device *serdev = nxpdev->serdev;
-   439		struct ps_data *psdata = &nxpdev->psdata;
-   440	
-   441		psdata->h2c_ps_gpio = devm_gpiod_get_optional(&serdev->dev, "device-wakeup",
-   442							      GPIOD_OUT_LOW);
-   443		if (IS_ERR(psdata->h2c_ps_gpio)) {
-   444			bt_dev_err(hdev, "Error fetching device-wakeup-gpios: %ld"
- > 445				   PTR_ERR(psdata->h2c_ps_gpio));
-   446			return PTR_ERR(psdata->h2c_ps_gpio);
-   447		}
-   448	
-   449		if (!psdata->h2c_ps_gpio)
-   450			psdata->h2c_wakeup_gpio = 0xff;
-   451	
-   452		psdata->hdev = hdev;
-   453		INIT_WORK(&psdata->work, ps_work_func);
-   454		mutex_init(&psdata->ps_lock);
-   455		timer_setup(&psdata->ps_timer, ps_timeout_func, 0);
-   456	
-   457		return 0;
-   458	}
-   459	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/214/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/213/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/d2408c417cfa71f1786c909788560374eb1aca96/tcwg_kernel/llvm-master-aarch64-lts-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/d2408c417cfa71f1786c909788560374eb1aca96
+------=_Part_20441_1833911217.1728373222960--
