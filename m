@@ -1,193 +1,174 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CAE18EFEB
-	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 10:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC8118B46B;
+	Wed,  9 Oct 2024 10:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728468570; cv=none; b=jayqW409df3CdHJvzuj/Rzg988726AWKxTwzDdL/VqFwR7ls9BHcZcZVrvgbnCB1BfTupQg9yCaD14fLWvEYknn4w5jYHkW0ciAoA+8y58MgeS7H2Xej53RXvJMyzxeh2g5P7A/9r2O66BlbKUaxLujubXEp1YQkVg4CbPnF5Jo=
+	t=1728470753; cv=none; b=IHFsanCa/+ftx1RufbWV6LNMnsSJqFFnO9dZBYImTncL6RyXLQYKIWgcnk30V9IQpHUraPxzZXWXKWgOFktEx+lvwYKTbk2BCAqG/V0gl76i+5kuViaf/YV4aMBlIGqMiXJxDw5hHiHPDVq4Q72UaYmUQsfZ0S6cvUaOqMqUUw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728468570; c=relaxed/simple;
-	bh=Yfb4Jj4d9DKxDIfB/e69j839hlEqbcwzQIsu8yjAq2g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sJa/n2J2YimqYrNPnAWSVZw/sMU4xkuZAd6J42kKdh6pXGhYDiwE9KQEWAZcaVRPHFXLLADz1AQTpNVVfNnIs2ZEP2YGeyqd+N4oP+F1XUT6Wr9Y126TFDKLyCdWQlJnCouXwG8B2oeI+6O3XpDc1nLcaec3UFgDMqwvqi2d7YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XNFXhXKM; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1728470753; c=relaxed/simple;
+	bh=Rz0400i01/18gf8WW+9D1OmW6L5UQVxYq75ozCXQxj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DGSlQjwKfDiEyItEgvgcB3lzgEJ2dtI+Lrmpl3Fum+58KiToa4+oWkZIhshwVoitrCSMjvNWCWFb5jTM2aJXjpv33YJkWL/+KtrS3lDOkVbaTDGxXULNgUBdg1D4zTtiDy5iNLpDj/XDlwwjox/msFw2FgRAyVoDXMb1YTAGn1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FbpCFnE/; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XNFXhXKM"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5399675e14cso7736075e87.3
-        for <llvm@lists.linux.dev>; Wed, 09 Oct 2024 03:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1728468565; x=1729073365; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/JCN+MqNwKB+xq7DJqcu2c22e3shYGFUi85UwCEHpck=;
-        b=XNFXhXKMsYGjDzDvkiR3a0g8nuogyHI94d1upCkESsH8OyqopBwbA9eiqvGvBODPoh
-         aQ1t946ZSzRDUThqCigkvj2/iE43Jay1XUL9UqdXX+eJhFdkM4/A2q+2yJl2POus4H6y
-         WuKqWutfBYMZknexjuMF5g90yChSCokYW696KqHLIXnyqII0eAcQlXVvUCHq12ECtLpB
-         M2D5IR1u+wWvhEyDZwUV0kaYuiws/dleOk+OH9r0jmlsPIwTqnXJPYLys5OTl7byEKqa
-         tZAvJ5aZdJMTtGX531hFKtsaMNY+awCGvZGZsTFFYrST4IJ3ugaE0vlQa5bEOiW+j+nO
-         aaoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728468565; x=1729073365;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/JCN+MqNwKB+xq7DJqcu2c22e3shYGFUi85UwCEHpck=;
-        b=rMnyJdBOdke5pDFoi0jFUVhk6asleF3KJrIV85CNNsQO6nVhkFJBL0yIAkKuf0XBYw
-         xz/yb/IzWQTqXaWrBuIMqa1M06UV8gPKyIdAUgPYobs3Xcni4CTzzQfbuEjKTR4pjCdC
-         jxZURC4U7BkQpg9QcPftVbpFk9I1brUDv8EMvs1Vmh6HhfMkU+N8nsTRRU2fDMp4seE0
-         9C/Dtdht3YmPHHEXh5ML9XBbNy+GJcuSKtyQowArb7VYV+5JPWIfU8jckA5h7XuFB6bZ
-         ioHHzstZAXLFif8VqwbXj2jMwPPaXvNZX52VTIQR4gwdKOMW2cLKdABYJEwXzVhYQi1S
-         7j+A==
-X-Gm-Message-State: AOJu0Yy2iRbtovjkceJQjdNlfHWfoIwzpR+INp+n5dT6zngbWnuVf1M0
-	yltqv1bQ+wmFCj08oDbPZbngumrTVT5WB2BQtPnaW7odzKEmYR/7lJbFt8fcAUfTbZk+j8Nm2kw
-	NPk/In2xGKZELkBKY8gGw/axf4jbHgpDGzLjY3g==
-X-Google-Smtp-Source: AGHT+IFTR4aAdG0xRnbrM1o9GBPsFiAJ6nHLa2xX7thhMATNrBF1ULIeimPZZaeqCiGE8ZQokCDJj12FbT6MOOZiYvk=
-X-Received: by 2002:a05:6512:110e:b0:536:a275:9d61 with SMTP id
- 2adb3069b0e04-539c48c3883mr1055475e87.21.1728468564615; Wed, 09 Oct 2024
- 03:09:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FbpCFnE/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728470751; x=1760006751;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rz0400i01/18gf8WW+9D1OmW6L5UQVxYq75ozCXQxj8=;
+  b=FbpCFnE/sBBlpIJGlJFnPSkMRkf4mjX9Qq/who2iQ+Bex9kHQCgPbeB3
+   SGmLmBCNNVg2dd/p8nV4029AnURY3DmFPd41Coas3trw5HdxLoxTK3XEX
+   xkxPFaGFw6KkgNdxfiLDJbK+JNYSdulo7P3A0TbVpZJBYQupRCdVLy3Ox
+   mR53KAiJ+aKWbJgOqUyzMamLLKp/7gK1wSH5Ibl/0hzYxWfXJLZvjKvot
+   GnXt80Tg9E5zWnYVZ5gKsGqQR79mm0QLDp57ECU3hJFSnmXC3/F2wKFGI
+   Jd8mwuVGzt/I+7oZeg3AcrcovYWMIsN30skufjXv7dhhpmMOwmiMRZeM4
+   g==;
+X-CSE-ConnectionGUID: ilKtWoa1RxuHzfH82hfEmg==
+X-CSE-MsgGUID: zlhdJAe+TsqXLw6KhXE4Hw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27921676"
+X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
+   d="scan'208";a="27921676"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 03:45:50 -0700
+X-CSE-ConnectionGUID: XSgv+dTUS+uwWQv5VW0mDg==
+X-CSE-MsgGUID: 5Bt0j+K+Tkm3V6T4ueyfmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
+   d="scan'208";a="76100543"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 09 Oct 2024 03:45:48 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1syUCP-00097M-2n;
+	Wed, 09 Oct 2024 10:45:45 +0000
+Date: Wed, 9 Oct 2024 18:44:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: Re: [PATCH 3/5] perf: Add pmu get/put
+Message-ID: <202410091848.aRUoRWWD-lkp@intel.com>
+References: <20241008183501.1354695-4-lucas.demarchi@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202410091038.SI34ZULQ-lkp@intel.com>
-In-Reply-To: <202410091038.SI34ZULQ-lkp@intel.com>
-From: Filipe Manana <fdmanana@suse.com>
-Date: Wed, 9 Oct 2024 11:09:13 +0100
-Message-ID: <CAKisOQHVBRbpsDnWRa40Rga1hjW_5xuwPAshXY=6+nNb6O8OOg@mail.gmail.com>
-Subject: Re: [linux-next:pending-fixes 207/319] fs/btrfs/qgroup.c:2014:6:
- error: use of undeclared identifier 'bytenr'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008183501.1354695-4-lucas.demarchi@intel.com>
 
-On Wed, Oct 9, 2024 at 3:55=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it pending-fixes
-> head:   47fa0de9b07c6214b57458e965646a3e25656b69
-> commit: 5c0ea18d992fffc948e087c0002560d747e6edd9 [207/319] btrfs: use sec=
-tor numbers as keys for the dirty extents xarray
-> config: arm-randconfig-002-20241009 (https://download.01.org/0day-ci/arch=
-ive/20241009/202410091038.SI34ZULQ-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfd=
-cc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20241009/202410091038.SI34ZULQ-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410091038.SI34ZULQ-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> fs/btrfs/qgroup.c:2014:6: error: use of undeclared identifier 'bytenr'
->            if (bytenr >=3D MAX_LFS_FILESIZE) {
+Hi Lucas,
 
-Ah this should be record->bytenr.
-The issue is actually fixed in a later patch of the same patchset,
-where bytenr is a function argument.
+kernel test robot noticed the following build warnings:
 
-I can update the patch but then it will require updating the patches
-that come next from the same patchset and rebasing the for-next
-branch.
-And I see it's already in the next-fixes branch.
+[auto build test WARNING on perf-tools-next/perf-tools-next]
+[cannot apply to tip/perf/core perf-tools/perf-tools acme/perf/core linus/master v6.12-rc2 next-20241008]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-David, how do you prefer to proceed here? Do you want me to fix this
-and resend the patchset?
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-De-Marchi/perf-Add-dummy-pmu-module/20241009-023728
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
+patch link:    https://lore.kernel.org/r/20241008183501.1354695-4-lucas.demarchi%40intel.com
+patch subject: [PATCH 3/5] perf: Add pmu get/put
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241009/202410091848.aRUoRWWD-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091848.aRUoRWWD-lkp@intel.com/reproduce)
 
-Thanks.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410091848.aRUoRWWD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/events/core.c:5235:17: warning: unused variable 'module' [-Wunused-variable]
+    5235 |         struct module *module;
+         |                        ^~~~~~
+   1 warning generated.
 
 
->                ^
->    fs/btrfs/qgroup.c:2017:9: error: use of undeclared identifier 'bytenr'
->                                 bytenr);
->                                 ^
->    2 errors generated.
->
->
-> vim +/bytenr +2014 fs/btrfs/qgroup.c
->
->   1991
->   1992  /*
->   1993   * Inform qgroup to trace one dirty extent, its info is recorded =
-in @record.
->   1994   * So qgroup can account it at transaction committing time.
->   1995   *
->   1996   * No lock version, caller must acquire delayed ref lock and allo=
-cated memory,
->   1997   * then call btrfs_qgroup_trace_extent_post() after exiting lock =
-context.
->   1998   *
->   1999   * Return 0 for success insert
->   2000   * Return >0 for existing record, caller can free @record safely.
->   2001   * Return <0 for insertion failure, caller can free @record safel=
-y.
->   2002   */
->   2003  int btrfs_qgroup_trace_extent_nolock(struct btrfs_fs_info *fs_inf=
-o,
->   2004                                  struct btrfs_delayed_ref_root *de=
-layed_refs,
->   2005                                  struct btrfs_qgroup_extent_record=
- *record)
->   2006  {
->   2007          struct btrfs_qgroup_extent_record *existing, *ret;
->   2008          const unsigned long index =3D (record->bytenr >> fs_info-=
->sectorsize_bits);
->   2009
->   2010          if (!btrfs_qgroup_full_accounting(fs_info))
->   2011                  return 1;
->   2012
->   2013  #if BITS_PER_LONG =3D=3D 32
-> > 2014          if (bytenr >=3D MAX_LFS_FILESIZE) {
->   2015                  btrfs_err_rl(fs_info,
->   2016  "qgroup record for extent at %llu is beyond 32bit page cache and =
-xarray index limit",
->   2017                               bytenr);
->   2018                  btrfs_err_32bit_limit(fs_info);
->   2019                  return -EOVERFLOW;
->   2020          }
->   2021  #endif
->   2022
->   2023          lockdep_assert_held(&delayed_refs->lock);
->   2024          trace_btrfs_qgroup_trace_extent(fs_info, record);
->   2025
->   2026          xa_lock(&delayed_refs->dirty_extents);
->   2027          existing =3D xa_load(&delayed_refs->dirty_extents, index)=
-;
->   2028          if (existing) {
->   2029                  if (record->data_rsv && !existing->data_rsv) {
->   2030                          existing->data_rsv =3D record->data_rsv;
->   2031                          existing->data_rsv_refroot =3D record->da=
-ta_rsv_refroot;
->   2032                  }
->   2033                  xa_unlock(&delayed_refs->dirty_extents);
->   2034                  return 1;
->   2035          }
->   2036
->   2037          ret =3D __xa_store(&delayed_refs->dirty_extents, index, r=
-ecord, GFP_ATOMIC);
->   2038          xa_unlock(&delayed_refs->dirty_extents);
->   2039          if (xa_is_err(ret)) {
->   2040                  qgroup_mark_inconsistent(fs_info);
->   2041                  return xa_err(ret);
->   2042          }
->   2043
->   2044          return 0;
->   2045  }
->   2046
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+vim +/module +5235 kernel/events/core.c
+
+  5232	
+  5233	static void _free_event(struct perf_event *event)
+  5234	{
+> 5235		struct module *module;
+  5236	
+  5237		irq_work_sync(&event->pending_irq);
+  5238		irq_work_sync(&event->pending_disable_irq);
+  5239		perf_pending_task_sync(event);
+  5240	
+  5241		unaccount_event(event);
+  5242	
+  5243		security_perf_event_free(event);
+  5244	
+  5245		if (event->rb) {
+  5246			/*
+  5247			 * Can happen when we close an event with re-directed output.
+  5248			 *
+  5249			 * Since we have a 0 refcount, perf_mmap_close() will skip
+  5250			 * over us; possibly making our ring_buffer_put() the last.
+  5251			 */
+  5252			mutex_lock(&event->mmap_mutex);
+  5253			ring_buffer_attach(event, NULL);
+  5254			mutex_unlock(&event->mmap_mutex);
+  5255		}
+  5256	
+  5257		if (is_cgroup_event(event))
+  5258			perf_detach_cgroup(event);
+  5259	
+  5260		if (!event->parent) {
+  5261			if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
+  5262				put_callchain_buffers();
+  5263		}
+  5264	
+  5265		perf_event_free_bpf_prog(event);
+  5266		perf_addr_filters_splice(event, NULL);
+  5267		kfree(event->addr_filter_ranges);
+  5268	
+  5269		if (event->destroy)
+  5270			event->destroy(event);
+  5271	
+  5272		/*
+  5273		 * Must be after ->destroy(), due to uprobe_perf_close() using
+  5274		 * hw.target.
+  5275		 */
+  5276		if (event->hw.target)
+  5277			put_task_struct(event->hw.target);
+  5278	
+  5279		if (event->pmu_ctx)
+  5280			put_pmu_ctx(event->pmu_ctx);
+  5281	
+  5282		/*
+  5283		 * perf_event_free_task() relies on put_ctx() being 'last', in particular
+  5284		 * all task references must be cleaned up.
+  5285		 */
+  5286		if (event->ctx)
+  5287			put_ctx(event->ctx);
+  5288	
+  5289		exclusive_event_destroy(event);
+  5290	
+  5291		pmu_module_put(&event->pmu);
+  5292	
+  5293		call_rcu(&event->rcu_head, free_event_rcu);
+  5294	}
+  5295	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
