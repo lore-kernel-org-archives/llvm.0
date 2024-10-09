@@ -1,150 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936FF1684AE;
-	Wed,  9 Oct 2024 21:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227451E282D;
+	Wed,  9 Oct 2024 22:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728509681; cv=none; b=RfqJy5LqMxCLN1FLSmmYW7OaBBAURp/YkjQ6xAqiFKpLw51hRodekaiWm/n1Cvk0c4CbB9eXagvbRgZVhIxLh36kS9JZtdxQrXNyopTQWIeciay/aHyolpzH6TWyc5JvMr/BLSePGe/6HxeI7IjuEXuvXT5yMLdBs/+2IKJ/KGw=
+	t=1728512069; cv=none; b=UfWcbqws9/YTny7iTaoZewizkPGwprtxsM4u97EWLExxuBHWsf0nf1hZqlU44YswHe63u4OkETQ9NwhoIXleIB+g+Xqgo2dNXjMNZZ7vnujeMjCzWpVQGmtsQNZ0uT68vticiFIdA8U8ZMWoKsPlkFHzLqUFTZwnpccLrWUHufQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728509681; c=relaxed/simple;
-	bh=AL/TAIuYwo9I9vylr0IBpxC01yZi40nGYC9ux9xmKqE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=h/jFADiH+SvFVW/5eL6FYVn2dhsRy6d9uPBgs7CoYlAkwZAeJD18de4zNn9VM0VTIAuLnqleELmJDkq5EvpARlpPedKHWA1KhdaRdiH50WKI0ockd4O0E0ADUWtHxTBkcvCYeQ2oeHbADTOH4kDMCgPct60JiqkYlu39ATT8G2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=xN6+xbk6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728512069; c=relaxed/simple;
+	bh=aPE8EeGv6cp9FSCthHiVZeteDR6lumGj+9qfHbzXBwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TkqHy2o6CPbSCdBZ3HDZ0gTNGFUC2GiHT3FgPrxYz3LCXFNjrpnskeGTnptHH1AiWE38/EIF3nyVjl7nl/KdqIDUfw59XWQMYgTS+5GjVTA1Hynt1vwPGBE7vDMGbGHFv5/vpWGNO178Sh3s4N/GmNbkYSl0ccaQ8DWA9moY6LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hfpggcsl; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="xN6+xbk6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E30B0C4CEC3;
-	Wed,  9 Oct 2024 21:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1728509681;
-	bh=AL/TAIuYwo9I9vylr0IBpxC01yZi40nGYC9ux9xmKqE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=xN6+xbk6AbriEnMTCDyd+KOtGhVVv/qPlXBYjJsaQtNAlrbj6vM5GPFw8LcX8pFmM
-	 nPtrgFZBCoubtJPNJaImbaQLO1f+pzB7nSdpL4oW66QnPp1PAKxIOGqhM0iDKORFT5
-	 l6KXMEX0uKww2OCtOKTGH0jYm6qUxbgswaXx4IHQ=
-Date: Wed, 9 Oct 2024 14:34:40 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 5/7] bootmem: Stop using page->index
-Message-Id: <20241009143440.7794c67db6406305730bb625@linux-foundation.org>
-In-Reply-To: <202410090311.eaqcL7IZ-lkp@intel.com>
-References: <20241005200121.3231142-6-willy@infradead.org>
-	<202410090311.eaqcL7IZ-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hfpggcsl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728512068; x=1760048068;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aPE8EeGv6cp9FSCthHiVZeteDR6lumGj+9qfHbzXBwk=;
+  b=hfpggcsl5nrmDpDrikLPvop0R+zUKpKeZiNjV7tgP387SCGnocB+WE27
+   r0ZaswiSRBfPA0XqQaedWCE1WhnIYZZh4sjJY7GJOZB+/r7Y1HGqm0N89
+   fA6pC8P+C/n5kcQw4+LS1CDVdJGznZ/ztcmzkC2YtV+4LjbLAOgpHOfLm
+   SHls0QaECh+sZdRh3Gn+jOoq4HuJJP21XwLSu6UlWzMQWCdInfr/jb4dU
+   aMpONtHjggtonVBWs2I3KKpXc2DSM/lZwvV8wucyPHYleX1a7gDL7m4v7
+   Yorz2sqV3H6dY5bV5beFn8ELK49UKmRPP3DihUfMv8bmQSHwURgM2Zlmt
+   A==;
+X-CSE-ConnectionGUID: k7zEHZeLS9K3MLoPkILonA==
+X-CSE-MsgGUID: qjxS1VD0T7yjDLy2UxE8Xg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="38425821"
+X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
+   d="scan'208";a="38425821"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 15:14:27 -0700
+X-CSE-ConnectionGUID: 6z05KTxjSCiv+6JPvI1nIw==
+X-CSE-MsgGUID: QqCrefYQR1CzjES9pNNYtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
+   d="scan'208";a="76008488"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Oct 2024 15:14:25 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1syewp-0009ru-0o;
+	Wed, 09 Oct 2024 22:14:23 +0000
+Date: Thu, 10 Oct 2024 06:14:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	Shuai Xue <xueshuai@linux.alibaba.com>,
+	Jing Zhang <renyu.zj@linux.alibaba.com>,
+	Will Deacon <will@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Subject: Re: [PATCH 2/3] perf/dwc_pcie: Load DesignWare PCIe PMU driver
+ automatically on Ampere SoCs
+Message-ID: <202410100514.xcrIAa1r-lkp@intel.com>
+References: <20241008231824.5102-3-ilkka@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008231824.5102-3-ilkka@os.amperecomputing.com>
 
-On Wed, 9 Oct 2024 03:29:37 +0800 kernel test robot <lkp@intel.com> wrote:
+Hi Ilkka,
 
-> Hi Matthew,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on tip/locking/core tip/x86/mm dennis-percpu/for-next linus/master v6.12-rc2 next-20241008]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/mm-Convert-page_to_pgoff-to-page_pgoff/20241006-040239
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20241005200121.3231142-6-willy%40infradead.org
-> patch subject: [PATCH v2 5/7] bootmem: Stop using page->index
-> config: x86_64-randconfig-014-20241008 (https://download.01.org/0day-ci/archive/20241009/202410090311.eaqcL7IZ-lkp@intel.com/config)
-> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410090311.eaqcL7IZ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410090311.eaqcL7IZ-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/x86/mm/init_64.c:992:28: error: call to undeclared function 'bootmem_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      992 |                 enum bootmem_type type = bootmem_type(page);
->          |                                          ^
->    1 error generated.
-> 
+kernel test robot noticed the following build warnings:
 
-Thanks, I did the below.  
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.12-rc2 next-20241009]
+[cannot apply to arm-perf/for-next/perf]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I do wonder whether we should be using free_bootmem_page() in the
-CONFIG_HAVE_BOOTMEM_INFO_NODE=n case,
+url:    https://github.com/intel-lab-lkp/linux/commits/Ilkka-Koskinen/perf-dwc_pcie-Add-support-for-Ampere-SoCs/20241009-072027
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241008231824.5102-3-ilkka%40os.amperecomputing.com
+patch subject: [PATCH 2/3] perf/dwc_pcie: Load DesignWare PCIe PMU driver automatically on Ampere SoCs
+config: arm-randconfig-002-20241010 (https://download.01.org/0day-ci/archive/20241010/202410100514.xcrIAa1r-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410100514.xcrIAa1r-lkp@intel.com/reproduce)
 
-And in the CONFIG_HAVE_BOOTMEM_INFO_NODE=y case, the logic in
-free_pagetable() looks quite duplicative of the logic in
-free_bootmem_page() (which seems too large to be inlined).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410100514.xcrIAa1r-lkp@intel.com/
 
-My new free_reserved_pages() should be moved elsewhere so riscv and
-powerpc (at least) can use it.
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/perf/dwc_pcie_pmu.c:16:
+   In file included from include/linux/perf_event.h:18:
+   In file included from include/uapi/linux/bpf_perf_event.h:11:
+   In file included from ./arch/arm/include/generated/uapi/asm/bpf_perf_event.h:1:
+   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/perf/dwc_pcie_pmu.c:785:35: warning: unused variable 'dwc_pcie_pmu_table' [-Wunused-const-variable]
+     785 | static const struct pci_device_id dwc_pcie_pmu_table[] = {
+         |                                   ^~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
+vim +/dwc_pcie_pmu_table +785 drivers/perf/dwc_pcie_pmu.c
 
-From: Andrew Morton <akpm@linux-foundation.org>
-Subject: bootmem-stop-using-page-index-fix
-Date: Wed Oct  9 02:16:16 PM PDT 2024
+   784	
+ > 785	static const struct pci_device_id dwc_pcie_pmu_table[] = {
+   786		{
+   787			PCI_DEVICE(PCI_VENDOR_ID_AMPERE, PCI_ANY_ID),
+   788			.class		= PCI_CLASS_BRIDGE_PCI_NORMAL,
+   789			.class_mask	= ~0,
+   790		},
+   791		{ }
+   792	};
+   793	MODULE_DEVICE_TABLE(pci, dwc_pcie_pmu_table);
+   794	
 
-fix arch/x86/mm/init_64.c build with !CONFIG_HAVE_BOOTMEM_INFO_NODE
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202410090311.eaqcL7IZ-lkp@intel.com/
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- arch/x86/mm/init_64.c |   21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
-
---- a/arch/x86/mm/init_64.c~bootmem-stop-using-page-index-fix
-+++ a/arch/x86/mm/init_64.c
-@@ -985,21 +985,32 @@ int arch_add_memory(int nid, u64 start,
- 	return add_pages(nid, start_pfn, nr_pages, params);
- }
- 
-+static void free_reserved_pages(struct page *page, unsigned long nr_pages)
-+{
-+	while (nr_pages--)
-+		free_reserved_page(page++);
-+}
-+
- static void __meminit free_pagetable(struct page *page, int order)
- {
- 	/* bootmem page has reserved flag */
- 	if (PageReserved(page)) {
--		enum bootmem_type type = bootmem_type(page);
- 		unsigned long nr_pages = 1 << order;
-+#ifdef CONFIG_HAVE_BOOTMEM_INFO_NODE
-+		enum bootmem_type type = bootmem_type(page);
- 
- 		if (type == SECTION_INFO || type == MIX_SECTION_INFO) {
- 			while (nr_pages--)
- 				put_page_bootmem(page++);
--		} else
--			while (nr_pages--)
--				free_reserved_page(page++);
--	} else
-+		} else {
-+			free_reserved_pages(page, nr_pages);
-+		}
-+#else
-+		free_reserved_pages(page, nr_pages);
-+#endif
-+	} else {
- 		free_pages((unsigned long)page_address(page), order);
-+	}
- }
- 
- static void __meminit free_hugepage_table(struct page *page,
-_
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
