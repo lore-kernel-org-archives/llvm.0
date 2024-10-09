@@ -1,151 +1,181 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2394920B0F;
-	Wed,  9 Oct 2024 02:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652417710C
+	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 03:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728442525; cv=none; b=WjGIUzvcNcdetfDE3r53wizvxdRe+Om7wZQvku5/DJfcmi9hO89oURUG0gSugaLVCctGjXHUM+BpbqkFNOeXohsNjXA57XFV9lDiKZiokE38DrITd+3JkfFg3kDM7D5Zhp3/Syh+iNarliJ205w60LIquiy9MY6IJQAwKeErDkM=
+	t=1728443882; cv=none; b=tJgk0XCWUdrKIhZPvBpiOWgNMCoaP9AUveHmFzBIPYmcuDsNZlYOJCCAhW5NA/E5iK/bM/Sye/Oj7uxKTkKgrcSS+vzsF5TZ9qYvsbXbWSfNmZAPsv2Ne+aqafq2kYGhWZeQGnw//+23M5ez2WXcXnYt2cNKcjcKsf20K7ElCT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728442525; c=relaxed/simple;
-	bh=IKAx6DCqtMaamqHSW4Z4VEl/bc8Clk7e32rT50Bgq80=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YLoeC3TJ7tndjatJE24KhYeMF75oOIpZIrm5KXfAGMBeGvh4Pm1t8AaX/KK53UkHv9qIF3MOtGDZyzlzS+xGVrlvCmE8KtcRDt35g/FkDrX1voJWFsiy+oDMtQFI5ElujSYgFINOaCiNRAH+vDysBZ3ooDRzLSv6JmXyKG8PXUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M06Rp+7K; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728443882; c=relaxed/simple;
+	bh=qeTeiqxFgtHkrwd4+T1jN4x/0VgEwAW/vhJtPYAJgZ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NjIYi9/lLewWW82SfQV5/SRlABvrBO1OaKqM+EusNpkPSc67xQmcmtrZAXxXfdjcP2Hp+q6ikOjz3j9dQT2hbsR4GtSbTi5TeKSOYmmV7x4S1lOzTIjF/8w22lM0AfCq1/2/ekM6mou0GQMzbG5cCWtybSpJVSDr4nzgP0cS0a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=e3pb92VF; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M06Rp+7K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728442524; x=1759978524;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IKAx6DCqtMaamqHSW4Z4VEl/bc8Clk7e32rT50Bgq80=;
-  b=M06Rp+7KpIyoGRvktrY37FH3aZDB6b2z06PHYlWyY+ujsBNOyQtc59Fn
-   dNUUU+nWzw5AhooDyAPAOkZTMoCxSMwao8HosD50eCdxV2VvOfYIvuV2h
-   XWbPsZMCrDbn+JvqtudP7NyuXPfwfIRHeBnoQ1NaHGO1Z8HXYQTF0Ly48
-   p8KmklQ7O0YTGGqrkdypXYa3eZDo9yGsRpc0SmOGae6mN/xPbkF5O3Fx6
-   6f0qWORC8M4Nrug6fIttkM2Dd1vz3FYV5VwYgskNBG1LTvSefi0wdGunQ
-   oy7ocKbl3EdSOqEdl1zhQ8S6bF3kSwt7tg6XgTUoEbsxjWLvcsH2H1xHS
-   Q==;
-X-CSE-ConnectionGUID: P6fzk7jMSGK3hkx8h9EQLg==
-X-CSE-MsgGUID: NfLjQp63QaqsYQDLo/RlVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="50252873"
-X-IronPort-AV: E=Sophos;i="6.11,188,1725346800"; 
-   d="scan'208";a="50252873"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 19:55:24 -0700
-X-CSE-ConnectionGUID: dAXbqeetSWygckUWRdCqnw==
-X-CSE-MsgGUID: N68XK36ATyKW7x14TFrPhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,188,1725346800"; 
-   d="scan'208";a="80919228"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 08 Oct 2024 19:55:22 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syMr9-0008dU-23;
-	Wed, 09 Oct 2024 02:55:19 +0000
-Date: Wed, 9 Oct 2024 10:54:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Filipe Manana <fdmanana@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>
-Subject: [linux-next:pending-fixes 207/319] fs/btrfs/qgroup.c:2014:6: error:
- use of undeclared identifier 'bytenr'
-Message-ID: <202410091038.SI34ZULQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="e3pb92VF"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6cb97afcec9so44961346d6.2
+        for <llvm@lists.linux.dev>; Tue, 08 Oct 2024 20:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1728443879; x=1729048679; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=thDgyfP+u4RJkN9ygN4eA5i7zuNDmPDTp6v1MVROO00=;
+        b=e3pb92VFhsYh06OARhluqk8+CCYwELxGYNd8TYL6B7GQNUT4EP9HPo7Mco29IN4f7j
+         y+C/19CqxxHzUylKwRxubV3AkMXaKEJrNuMAO8brlQ8/3KJCWYMBlQoeN6Mb6r+/1ROE
+         EUjKJKKpmNEPc16SgfNCJPLse2J17VPE9gTl8Zzbui9pQJjA33rlQyc1BRj+6T8XbZw3
+         bVPek8OPqqrgrOcOhcLwwyXFI5csn0rSwYvdCnO/7VwGyZnNJr4C8NSMKIzpfhLtd//5
+         4/MhkSfLeg5/q8VXFeqbGeaf9bk9YPOjCVcW2EgU+QHCi/CQfaq60rScDKtH68CxEPNk
+         bibw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728443879; x=1729048679;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=thDgyfP+u4RJkN9ygN4eA5i7zuNDmPDTp6v1MVROO00=;
+        b=OHlzwdu2APvs4H5vXHTyiD0ia4rvYkJHvK6duJlvxsiS/4ERglZEn2AYeOfiyGUfml
+         aeiCorxtwpkuHPdgQ1pJCSch0zq+c7EvPQRj3a3mhfyPgm1ZMhuGlGq6VnCU8PuJjzQT
+         E5u3VkJBVJ79A6xHoeV+ywbz+A0AT9h6VhoQoSyPnv4lu1CEBkOrNGZ/BWjZZOrlkfj2
+         VRbFsHtvb4Kdg9lQG4qiNPU/iZr6Br96c3KpSOzoZrsux9KKYxrmpxURf/+wDIi91Qlp
+         xCfL8jNgs/H8ny090XnNUs4/TsEduLJnXV1XFX3u11S7YhWckn/XBHMv3f9GFeyAJnKJ
+         nVpw==
+X-Forwarded-Encrypted: i=1; AJvYcCWoDw+bcTiR3xQufiwZtJ+KJ32gLAhibsJX81eSF+eyAQPZYx7YdJPcMRlz+BSVf0AnKCrJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YyT4zhX6s6wwW+RGTlDnL1mAonkKva/sVLxEUNOaSbyAowte8In
+	PSqfwGdQkoWirliMIKg38MYHJyhbsvqTCjiHynF4mjp6KeJHcTplMchvyfuN+g==
+X-Google-Smtp-Source: AGHT+IEhn9w/MP0oB2WKldelhVAKmKiL1d/EbmMPMKgnT2doMp+iZMaSHOVIOpO2jisfYNBEVmkdXg==
+X-Received: by 2002:a05:6214:5a04:b0:6cb:99db:bdbf with SMTP id 6a1803df08f44-6cbc95d4684mr18380106d6.43.1728443879197;
+        Tue, 08 Oct 2024 20:17:59 -0700 (PDT)
+Received: from node0.small1.linux-mcdc-pg0.clemson.cloudlab.us ([130.127.134.91])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cbcaad37f5sm1820886d6.130.2024.10.08.20.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 20:17:58 -0700 (PDT)
+From: Wentao Zhang <wentaoz5@illinois.edu>
+To: nathan@kernel.org
+Cc: Matt.Kelly2@boeing.com,
+	akpm@linux-foundation.org,
+	andrew.j.oppelt@boeing.com,
+	anton.ivanov@cambridgegreys.com,
+	ardb@kernel.org,
+	arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	chuck.wolber@boeing.com,
+	dave.hansen@linux.intel.com,
+	dvyukov@google.com,
+	hpa@zytor.com,
+	jinghao7@illinois.edu,
+	johannes@sipsolutions.net,
+	jpoimboe@kernel.org,
+	justinstitt@google.com,
+	kees@kernel.org,
+	kent.overstreet@linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	llvm@lists.linux.dev,
+	luto@kernel.org,
+	marinov@illinois.edu,
+	masahiroy@kernel.org,
+	maskray@google.com,
+	mathieu.desnoyers@efficios.com,
+	matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org,
+	mingo@redhat.com,
+	morbo@google.com,
+	ndesaulniers@google.com,
+	oberpar@linux.ibm.com,
+	paulmck@kernel.org,
+	peterz@infradead.org,
+	richard@nod.at,
+	rostedt@goodmis.org,
+	samitolvanen@google.com,
+	samuel.sarkisian@boeing.com,
+	steven.h.vanderleest@boeing.com,
+	tglx@linutronix.de,
+	tingxur@illinois.edu,
+	tyxu@illinois.edu,
+	wentaoz5@illinois.edu,
+	x86@kernel.org,
+	chuckwolber@gmail.com
+Subject: Re: [PATCH v2 0/4] Enable measuring the kernel's Source-based Code Coverage and MC/DC with Clang
+Date: Tue,  8 Oct 2024 22:17:38 -0500
+Message-ID: <20241009031738.2851980-1-wentaoz5@illinois.edu>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241003232938.GA1663252@thelio-3990X>
+References: <20241003232938.GA1663252@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git pending-fixes
-head:   47fa0de9b07c6214b57458e965646a3e25656b69
-commit: 5c0ea18d992fffc948e087c0002560d747e6edd9 [207/319] btrfs: use sector numbers as keys for the dirty extents xarray
-config: arm-randconfig-002-20241009 (https://download.01.org/0day-ci/archive/20241009/202410091038.SI34ZULQ-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091038.SI34ZULQ-lkp@intel.com/reproduce)
+On 2024-10-03 18:29, Nathan Chancellor wrote:
+> ...
+>>> I was able to successfully build that same configuration and setup with
+>>> my primary workstation, which is much beefier. Unfortunately, the
+>>> resulting kernel did not boot with my usual VM testing setup. I will see
+>>> if I can narrow down a particular configuration option that causes this
+>>> tomorrow because I did a test with defconfig +
+>>> CONFIG_LLVM_COV_PROFILE_ALL and it booted fine. Perhaps some other
+>>> option that is not compatible with this? I'll follow up with more
+>>> information as I have it.
+>>
+>> Good to hear that you've run it and thanks for reporting the booting issue.
+>> You may send me the config if appropriate and I'll also take a look.
+> 
+> I seem to have narrowed down it to a few different configurations on top
+> of x86_64_defconfig but I will include the full bad configuration as an
+> attachment just in case anything else is relevant.
+> 
+> $ echo 'CONFIG_LLVM_COV_KERNEL=y
+> CONFIG_LLVM_COV_PROFILE_ALL=y' >kernel/configs/llvm_cov.config
+> 
+> $ echo CONFIG_FORTIFY_SOURCE=y >kernel/configs/fortify_source.config
+> 
+> $ echo CONFIG_AMD_MEM_ENCRYPT=y >arch/x86/configs/amd_mem_encrypt.config
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410091038.SI34ZULQ-lkp@intel.com/
+Chuck and I can confirm the issue is reproducible these options, and we
+are still looking into it. Thanks for catching this!
 
-All errors (new ones prefixed by >>):
+> ...
+> 
+> Another thing I noticed with this series is there is no entries added to
+> MAINTAINERS. Who is going to be responsible for maintaining this code?
+> 
 
->> fs/btrfs/qgroup.c:2014:6: error: use of undeclared identifier 'bytenr'
-           if (bytenr >= MAX_LFS_FILESIZE) {
-               ^
-   fs/btrfs/qgroup.c:2017:9: error: use of undeclared identifier 'bytenr'
-                                bytenr);
-                                ^
-   2 errors generated.
+We are going to add the following as the fifth patch in v3:
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a097afd76..55438cb90 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13262,6 +13262,12 @@ F:	include/net/llc*
+ F:	include/uapi/linux/llc.h
+ F:	net/llc/
 
-vim +/bytenr +2014 fs/btrfs/qgroup.c
++LLVM-COV BASED KERNEL PROFILING
++M:	Wentao Zhang <wentaoz5@illinois.edu>
++M:	Chuck Wolber <chuck.wolber@boeing.com>
++S:	Maintained
++F:	kernel/llvm-cov/
++
+ LM73 HARDWARE MONITOR DRIVER
+ M:	Guillaume Ligneul <guillaume.ligneul@gmail.com>
+ L:	linux-hwmon@vger.kernel.org
 
-  1991	
-  1992	/*
-  1993	 * Inform qgroup to trace one dirty extent, its info is recorded in @record.
-  1994	 * So qgroup can account it at transaction committing time.
-  1995	 *
-  1996	 * No lock version, caller must acquire delayed ref lock and allocated memory,
-  1997	 * then call btrfs_qgroup_trace_extent_post() after exiting lock context.
-  1998	 *
-  1999	 * Return 0 for success insert
-  2000	 * Return >0 for existing record, caller can free @record safely.
-  2001	 * Return <0 for insertion failure, caller can free @record safely.
-  2002	 */
-  2003	int btrfs_qgroup_trace_extent_nolock(struct btrfs_fs_info *fs_info,
-  2004					struct btrfs_delayed_ref_root *delayed_refs,
-  2005					struct btrfs_qgroup_extent_record *record)
-  2006	{
-  2007		struct btrfs_qgroup_extent_record *existing, *ret;
-  2008		const unsigned long index = (record->bytenr >> fs_info->sectorsize_bits);
-  2009	
-  2010		if (!btrfs_qgroup_full_accounting(fs_info))
-  2011			return 1;
-  2012	
-  2013	#if BITS_PER_LONG == 32
-> 2014		if (bytenr >= MAX_LFS_FILESIZE) {
-  2015			btrfs_err_rl(fs_info,
-  2016	"qgroup record for extent at %llu is beyond 32bit page cache and xarray index limit",
-  2017				     bytenr);
-  2018			btrfs_err_32bit_limit(fs_info);
-  2019			return -EOVERFLOW;
-  2020		}
-  2021	#endif
-  2022	
-  2023		lockdep_assert_held(&delayed_refs->lock);
-  2024		trace_btrfs_qgroup_trace_extent(fs_info, record);
-  2025	
-  2026		xa_lock(&delayed_refs->dirty_extents);
-  2027		existing = xa_load(&delayed_refs->dirty_extents, index);
-  2028		if (existing) {
-  2029			if (record->data_rsv && !existing->data_rsv) {
-  2030				existing->data_rsv = record->data_rsv;
-  2031				existing->data_rsv_refroot = record->data_rsv_refroot;
-  2032			}
-  2033			xa_unlock(&delayed_refs->dirty_extents);
-  2034			return 1;
-  2035		}
-  2036	
-  2037		ret = __xa_store(&delayed_refs->dirty_extents, index, record, GFP_ATOMIC);
-  2038		xa_unlock(&delayed_refs->dirty_extents);
-  2039		if (xa_is_err(ret)) {
-  2040			qgroup_mark_inconsistent(fs_info);
-  2041			return xa_err(ret);
-  2042		}
-  2043	
-  2044		return 0;
-  2045	}
-  2046	
+Other than the booting issue, v3 is ready and being tested locally.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Wentao
+
+> Cheers,
+> Nathan
