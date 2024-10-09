@@ -1,66 +1,41 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227451E282D;
-	Wed,  9 Oct 2024 22:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15100169397
+	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 23:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728512069; cv=none; b=UfWcbqws9/YTny7iTaoZewizkPGwprtxsM4u97EWLExxuBHWsf0nf1hZqlU44YswHe63u4OkETQ9NwhoIXleIB+g+Xqgo2dNXjMNZZ7vnujeMjCzWpVQGmtsQNZ0uT68vticiFIdA8U8ZMWoKsPlkFHzLqUFTZwnpccLrWUHufQ=
+	t=1728517090; cv=none; b=Mb2+/i59MC2WYu6zkO9LebdSeRXCoCQWbntmU56wBXz42/gRDWSyOkaHpVEYzHiI1PcX/Zjy5sxlzLxXXnL/iEV7FFz6TOL9VmN7UnfGSTy1MzW0FY46+vWqzw+2pyIOG/uhaEWVRmtZ6ddcfD5tCDzZDnVQ+Aq4fCf7oJ/PEHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728512069; c=relaxed/simple;
-	bh=aPE8EeGv6cp9FSCthHiVZeteDR6lumGj+9qfHbzXBwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TkqHy2o6CPbSCdBZ3HDZ0gTNGFUC2GiHT3FgPrxYz3LCXFNjrpnskeGTnptHH1AiWE38/EIF3nyVjl7nl/KdqIDUfw59XWQMYgTS+5GjVTA1Hynt1vwPGBE7vDMGbGHFv5/vpWGNO178Sh3s4N/GmNbkYSl0ccaQ8DWA9moY6LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hfpggcsl; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hfpggcsl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728512068; x=1760048068;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aPE8EeGv6cp9FSCthHiVZeteDR6lumGj+9qfHbzXBwk=;
-  b=hfpggcsl5nrmDpDrikLPvop0R+zUKpKeZiNjV7tgP387SCGnocB+WE27
-   r0ZaswiSRBfPA0XqQaedWCE1WhnIYZZh4sjJY7GJOZB+/r7Y1HGqm0N89
-   fA6pC8P+C/n5kcQw4+LS1CDVdJGznZ/ztcmzkC2YtV+4LjbLAOgpHOfLm
-   SHls0QaECh+sZdRh3Gn+jOoq4HuJJP21XwLSu6UlWzMQWCdInfr/jb4dU
-   aMpONtHjggtonVBWs2I3KKpXc2DSM/lZwvV8wucyPHYleX1a7gDL7m4v7
-   Yorz2sqV3H6dY5bV5beFn8ELK49UKmRPP3DihUfMv8bmQSHwURgM2Zlmt
-   A==;
-X-CSE-ConnectionGUID: k7zEHZeLS9K3MLoPkILonA==
-X-CSE-MsgGUID: qjxS1VD0T7yjDLy2UxE8Xg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="38425821"
-X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
-   d="scan'208";a="38425821"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 15:14:27 -0700
-X-CSE-ConnectionGUID: 6z05KTxjSCiv+6JPvI1nIw==
-X-CSE-MsgGUID: QqCrefYQR1CzjES9pNNYtA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
-   d="scan'208";a="76008488"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 09 Oct 2024 15:14:25 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syewp-0009ru-0o;
-	Wed, 09 Oct 2024 22:14:23 +0000
-Date: Thu, 10 Oct 2024 06:14:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-	Shuai Xue <xueshuai@linux.alibaba.com>,
-	Jing Zhang <renyu.zj@linux.alibaba.com>,
-	Will Deacon <will@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Subject: Re: [PATCH 2/3] perf/dwc_pcie: Load DesignWare PCIe PMU driver
- automatically on Ampere SoCs
-Message-ID: <202410100514.xcrIAa1r-lkp@intel.com>
-References: <20241008231824.5102-3-ilkka@os.amperecomputing.com>
+	s=arc-20240116; t=1728517090; c=relaxed/simple;
+	bh=3G/6R++b9vYj4FRd5vTu0OZai85D5ZFaHhqrAG01FuY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qLSqvehEB2JKJG+ebNw8WDgkJ47ZmplZVmlDERyEa9WLxghUrxTbHq9zB1xmXrWOSCWiU1Aqb2NlyDhZN5vZQgOooTqnr1t68cvw74PYo+BKo3UkRrJoS0G/KjltkX+BqhnOXzJ2NwkFcvzoeZWBXb9nz1AXt0tpYbtH/J6K8v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-25-87.elisa-laajakaista.fi [88.113.25.87])
+	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+	id 84804db4-8697-11ef-8860-005056bdd08f;
+	Thu, 10 Oct 2024 02:37:59 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 10 Oct 2024 02:37:59 +0300
+To: Sean Christopherson <seanjc@google.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v2 1/1] x86/reboot: KVM: Guard
+ nmi_shootdown_cpus_on_restart() with ifdeffery
+Message-ID: <ZwcT149jx-iOmEfl@surfacebook.localdomain>
+References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
+ <ZwbazZpTSAn9aAC7@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,65 +44,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241008231824.5102-3-ilkka@os.amperecomputing.com>
+In-Reply-To: <ZwbazZpTSAn9aAC7@google.com>
 
-Hi Ilkka,
+Wed, Oct 09, 2024 at 12:34:37PM -0700, Sean Christopherson kirjoitti:
+> On Tue, Oct 08, 2024, Andy Shevchenko wrote:
+> > The nmi_shootdown_cpus_on_restart() in some cases may be not used.
+> > This, in particular, prevents kernel builds with clang, `make W=1`
+> > and CONFIG_WERROR=y:
+> > 
+> > arch/x86/kernel/reboot.c:957:20: error: unused function 'nmi_shootdown_cpus_on_restart' [-Werror,-Wunused-function]
+> >   957 | static inline void nmi_shootdown_cpus_on_restart(void)
+> >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Fix this by guarging the definitions with the respective KVM ifdeffery.
+> > 
+> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > inline functions for W=1 build").
 
-kernel test robot noticed the following build warnings:
+> Heh, I tried fixing this too, and have patches to clean things up, but I ended up
+> not posting them because I decided the W=1 warning was less ugly than the resulting
+> code in nmi_shootdown_cpus().
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.12-rc2 next-20241009]
-[cannot apply to arm-perf/for-next/perf]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+CONFIG_WERROR=y is the default (at least in the current defconfigs for x86).
+My goal is to match what ARM builds survive (to some extend?), i.e. W=1, so
+may one apply either version I provided or yours?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ilkka-Koskinen/perf-dwc_pcie-Add-support-for-Ampere-SoCs/20241009-072027
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241008231824.5102-3-ilkka%40os.amperecomputing.com
-patch subject: [PATCH 2/3] perf/dwc_pcie: Load DesignWare PCIe PMU driver automatically on Ampere SoCs
-config: arm-randconfig-002-20241010 (https://download.01.org/0day-ci/archive/20241010/202410100514.xcrIAa1r-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410100514.xcrIAa1r-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410100514.xcrIAa1r-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/perf/dwc_pcie_pmu.c:16:
-   In file included from include/linux/perf_event.h:18:
-   In file included from include/uapi/linux/bpf_perf_event.h:11:
-   In file included from ./arch/arm/include/generated/uapi/asm/bpf_perf_event.h:1:
-   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/perf/dwc_pcie_pmu.c:785:35: warning: unused variable 'dwc_pcie_pmu_table' [-Wunused-const-variable]
-     785 | static const struct pci_device_id dwc_pcie_pmu_table[] = {
-         |                                   ^~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +/dwc_pcie_pmu_table +785 drivers/perf/dwc_pcie_pmu.c
-
-   784	
- > 785	static const struct pci_device_id dwc_pcie_pmu_table[] = {
-   786		{
-   787			PCI_DEVICE(PCI_VENDOR_ID_AMPERE, PCI_ANY_ID),
-   788			.class		= PCI_CLASS_BRIDGE_PCI_NORMAL,
-   789			.class_mask	= ~0,
-   790		},
-   791		{ }
-   792	};
-   793	MODULE_DEVICE_TABLE(pci, dwc_pcie_pmu_table);
-   794	
+> If we're willing to take on a bit of weirdness in nmi_shootdown_cpus(), then much
+> of the #ifdeffery can go away.  Patches attached (lightly tested).
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
