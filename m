@@ -1,68 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11632142E86;
-	Wed,  9 Oct 2024 04:18:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D295C13F43A;
+	Wed,  9 Oct 2024 04:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728447514; cv=none; b=pONiqAWgfuN6XLMrA6DeLO8via1579KrcqmP/zfEoeoMihKTmbtvclyYi1umc046ZS0XhmtZbeOF2rPzJvHFccOCVXGr69IGE6I3I7FHr2Jy9SmDYwXktNSdyuimbVAMx24s5dSCqi7oLWU7cY3w7JqKb7RLZX+bJAUx6uX5jQc=
+	t=1728447515; cv=none; b=Cyc2Bg0/0+PUpQ6eWWKJjHbVlorOtU5+oZXvXfC5d9H6QcmOIWcYCzurpD7ZrrJqwecWR4DSVdE5Ptq4fDgLXyou7gzet6zKzMfb+6EMN8Yh5vzQQTl0j58xrc+wzZeMmXFQtWAuWIz6Yab8+d4CbePI/RLUcfp2y54VqkrOLfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728447514; c=relaxed/simple;
-	bh=yoWXUzKELCa1ksBE1m9NnlpRMB8vPRwuVFS2etPOcXY=;
+	s=arc-20240116; t=1728447515; c=relaxed/simple;
+	bh=AKaXIGUq/gkVNVDuKPwjXu1V75U9w/7vzRSecrXUglw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bO+Tfv0WbxiXZ3K2u/VW5PAlUfImZesf4CA+9zTjqtlZgZ/j2ktspYVu5OJepmS41ysNY3zrJB5koXG9F7nv3lpMYTTvF8MBq0F/+t3VP3LGvR4mFINZpTtpZM1hp5KM3P6wJF27XGDx/o0vUgjaSWuI6AF+RiWFFSMRrrRcTw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fw+L4QGI; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=cZilamyUz+bbVGxDLeOIelmxpjsKSgzCQcJwpE4I+FFHESnIKJ+DlTc/pW0Tl0ura+WEtFKv+W7kNbBLBFCZE2/wYtbZDH5LbHXCpkpqVpZExKwy1hk321uIPHu+imnDosVBOhzvDIf5XOK5W+me6NJ+F+RrsI3X8w0LFYMrEm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SgQWZsBq; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fw+L4QGI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SgQWZsBq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728447513; x=1759983513;
+  t=1728447512; x=1759983512;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=yoWXUzKELCa1ksBE1m9NnlpRMB8vPRwuVFS2etPOcXY=;
-  b=Fw+L4QGIprCYCJEjbBc66fRI+4TDcnPxF0VYU22zEwffTwuICz/ncJhi
-   DTxF+gCs19crbkiG5hAHlxlrwCZRBQ5+aEqhLJx2pkiRZRMCMFfYG3L2e
-   5MRR9YGYLDuLJ13Ri+N6bJZn+KYZHVsmzco0B+NNguWXQwrKyjDZjhe2T
-   5gmkf3QT51zK67/2vPwoYwtrtTbZvE6yxQsczqzoff4lDs+yo3nsF/hRs
-   FVlco5komaAWLwGaNJSQoWWsh601/kPLpHbBLy970Lj77TRzhPfRTXQYP
-   79V+uOl081IQcMViA23YWR1XWP9RrrvO5uf4r5AUK3RrCmE7rfkCURyH2
-   A==;
-X-CSE-ConnectionGUID: S8QhlqzFQZaUtXFUJ+CLLA==
-X-CSE-MsgGUID: NwPMn3nYQkWVLi1XsoTYvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27173137"
+  bh=AKaXIGUq/gkVNVDuKPwjXu1V75U9w/7vzRSecrXUglw=;
+  b=SgQWZsBq2y5ZkO4w1GPfY97jpKR6/PEb2hEa17OaGAHTDEqBKH9jn+IX
+   RqMDRTBw3/7JlZEuSj547biBz7HZKhLEZPe8u60HiiZTVNeFxdo6hWPxT
+   RcNGbJhqGDSVcz+zCs59dyqO8ji4lN/8i6ouDZOD+y5YJW1Ba0LQ2Q0rk
+   9wxecNg8PRdRsQcXugMezMuptg4yB/F5p2NYnb6A81mdemnMGjqCLJ0So
+   QhMhDhHH7aeXDQ+jvU/PzWu/VPfSFIZeQ5PHn9DhZT01s6/L7PnhSDXs1
+   TYqVfPX85BUWYM5xmY8IsHXBZr2Ln+YS4za5CTa7OpkE1C8/WutYd6vtR
+   g==;
+X-CSE-ConnectionGUID: XHoSC+C2TXqO6TuqdiNH1w==
+X-CSE-MsgGUID: YLA7on0YSaSMeNslq96Wkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="31614657"
 X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="27173137"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 21:18:29 -0700
-X-CSE-ConnectionGUID: OBiRs9b/R3aXTMzbTWGMrw==
-X-CSE-MsgGUID: SwDcFjEbTfqsS3f1KfH6Ng==
+   d="scan'208";a="31614657"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 21:18:32 -0700
+X-CSE-ConnectionGUID: i08YfiTcT0qzLw5FkrKvig==
+X-CSE-MsgGUID: RcYqUqsqTeurXpxaAGqJmQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="80909189"
+   d="scan'208";a="76077035"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Oct 2024 21:18:27 -0700
+  by orviesa009.jf.intel.com with ESMTP; 08 Oct 2024 21:18:27 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1syO9Y-0008iA-1d;
+	id 1syO9Y-0008iD-1i;
 	Wed, 09 Oct 2024 04:18:24 +0000
-Date: Wed, 9 Oct 2024 12:17:33 +0800
+Date: Wed, 9 Oct 2024 12:17:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thorsten Blum <thorsten.blum@linux.dev>,
-	Satish Kharat <satishkh@cisco.com>,
-	Sesidhar Baddela <sebaddel@cisco.com>,
-	Karan Tilak Kumar <kartilak@cisco.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
+To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	dsahern@kernel.org, willemdebruijn.kernel@gmail.com,
+	willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: fnic: Use vzalloc() instead of vmalloc() and
- memset(0)
-Message-ID: <202410091146.J4aNjGEe-lkp@intel.com>
-References: <20241008095152.1831-2-thorsten.blum@linux.dev>
+	bpf@vger.kernel.org, netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH net-next 8/9] net-timestamp: add bpf framework for rx
+ timestamps
+Message-ID: <202410091146.2OM6QWPq-lkp@intel.com>
+References: <20241008095109.99918-9-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,114 +72,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241008095152.1831-2-thorsten.blum@linux.dev>
+In-Reply-To: <20241008095109.99918-9-kerneljasonxing@gmail.com>
 
-Hi Thorsten,
+Hi Jason,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on jejb-scsi/for-next]
-[also build test ERROR on mkp-scsi/for-next linus/master v6.12-rc2 next-20241008]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thorsten-Blum/scsi-fnic-Use-vzalloc-instead-of-vmalloc-and-memset-0/20241008-175453
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20241008095152.1831-2-thorsten.blum%40linux.dev
-patch subject: [PATCH v2] scsi: fnic: Use vzalloc() instead of vmalloc() and memset(0)
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241009/202410091146.J4aNjGEe-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091146.J4aNjGEe-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Xing/net-timestamp-add-bpf-infrastructure-to-allow-exposing-more-information-later/20241008-175458
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241008095109.99918-9-kerneljasonxing%40gmail.com
+patch subject: [PATCH net-next 8/9] net-timestamp: add bpf framework for rx timestamps
+config: arm-exynos_defconfig (https://download.01.org/0day-ci/archive/20241009/202410091146.2OM6QWPq-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091146.2OM6QWPq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410091146.J4aNjGEe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410091146.2OM6QWPq-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/scsi/fnic/fnic_trace.c:559:27: error: incompatible pointer to integer conversion assigning to 'unsigned long' from 'typeof (vzalloc_noprof(size_mul(((1UL) << 12), fnic_fc_trace_max_pages)))' (aka 'void *') [-Wint-conversion]
-     559 |         fnic_fc_ctlr_trace_buf_p =
-         |                                  ^
-     560 |                 vzalloc(array_size(PAGE_SIZE, fnic_fc_trace_max_pages));
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/ipv4/tcp.c:2297:29: error: passing 'const struct sock *' to parameter of type 'struct sock *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+    2297 |         if (tcp_bpf_recv_timestamp(sk, tss))
+         |                                    ^~
+   net/ipv4/tcp.c:2279:49: note: passing argument to parameter 'sk' here
+    2279 | static bool tcp_bpf_recv_timestamp(struct sock *sk, struct scm_timestamping_internal *tss)
+         |                                                 ^
    1 error generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
+vim +2297 net/ipv4/tcp.c
 
-vim +559 drivers/scsi/fnic/fnic_trace.c
-
-abb14148c0f850 Hiral Shah         2014-04-18  537  
-abb14148c0f850 Hiral Shah         2014-04-18  538  /*
-abb14148c0f850 Hiral Shah         2014-04-18  539   * fnic_fc_ctlr_trace_buf_init -
-abb14148c0f850 Hiral Shah         2014-04-18  540   * Initialize trace buffer to log fnic control frames
-abb14148c0f850 Hiral Shah         2014-04-18  541   * Description:
-abb14148c0f850 Hiral Shah         2014-04-18  542   * Initialize trace buffer data structure by allocating
-abb14148c0f850 Hiral Shah         2014-04-18  543   * required memory for trace data as well as for Indexes.
-abb14148c0f850 Hiral Shah         2014-04-18  544   * Frame size is 256 bytes and
-abb14148c0f850 Hiral Shah         2014-04-18  545   * memory is allocated for 1024 entries of 256 bytes.
-abb14148c0f850 Hiral Shah         2014-04-18  546   * Page_offset(Index) is set to the address of trace entry
-abb14148c0f850 Hiral Shah         2014-04-18  547   * and page_offset is initialized by adding frame size
-abb14148c0f850 Hiral Shah         2014-04-18  548   * to the previous page_offset entry.
-abb14148c0f850 Hiral Shah         2014-04-18  549   */
-abb14148c0f850 Hiral Shah         2014-04-18  550  
-abb14148c0f850 Hiral Shah         2014-04-18  551  int fnic_fc_trace_init(void)
-abb14148c0f850 Hiral Shah         2014-04-18  552  {
-abb14148c0f850 Hiral Shah         2014-04-18  553  	unsigned long fc_trace_buf_head;
-abb14148c0f850 Hiral Shah         2014-04-18  554  	int err = 0;
-abb14148c0f850 Hiral Shah         2014-04-18  555  	int i;
-abb14148c0f850 Hiral Shah         2014-04-18  556  
-abb14148c0f850 Hiral Shah         2014-04-18  557  	fc_trace_max_entries = (fnic_fc_trace_max_pages * PAGE_SIZE)/
-abb14148c0f850 Hiral Shah         2014-04-18  558  				FC_TRC_SIZE_BYTES;
-42bc47b35320e0 Kees Cook          2018-06-12 @559  	fnic_fc_ctlr_trace_buf_p =
-c9ff42f1a76c7b Thorsten Blum      2024-10-08  560  		vzalloc(array_size(PAGE_SIZE, fnic_fc_trace_max_pages));
-abb14148c0f850 Hiral Shah         2014-04-18  561  	if (!fnic_fc_ctlr_trace_buf_p) {
-abb14148c0f850 Hiral Shah         2014-04-18  562  		pr_err("fnic: Failed to allocate memory for "
-abb14148c0f850 Hiral Shah         2014-04-18  563  		       "FC Control Trace Buf\n");
-abb14148c0f850 Hiral Shah         2014-04-18  564  		err = -ENOMEM;
-abb14148c0f850 Hiral Shah         2014-04-18  565  		goto err_fnic_fc_ctlr_trace_buf_init;
-abb14148c0f850 Hiral Shah         2014-04-18  566  	}
-abb14148c0f850 Hiral Shah         2014-04-18  567  
-abb14148c0f850 Hiral Shah         2014-04-18  568  	/* Allocate memory for page offset */
-42bc47b35320e0 Kees Cook          2018-06-12  569  	fc_trace_entries.page_offset =
-c9ff42f1a76c7b Thorsten Blum      2024-10-08  570  		vzalloc(array_size(fc_trace_max_entries,
-42bc47b35320e0 Kees Cook          2018-06-12  571  				   sizeof(unsigned long)));
-abb14148c0f850 Hiral Shah         2014-04-18  572  	if (!fc_trace_entries.page_offset) {
-abb14148c0f850 Hiral Shah         2014-04-18  573  		pr_err("fnic:Failed to allocate memory for page_offset\n");
-abb14148c0f850 Hiral Shah         2014-04-18  574  		if (fnic_fc_ctlr_trace_buf_p) {
-abb14148c0f850 Hiral Shah         2014-04-18  575  			pr_err("fnic: Freeing FC Control Trace Buf\n");
-abb14148c0f850 Hiral Shah         2014-04-18  576  			vfree((void *)fnic_fc_ctlr_trace_buf_p);
-abb14148c0f850 Hiral Shah         2014-04-18  577  			fnic_fc_ctlr_trace_buf_p = 0;
-abb14148c0f850 Hiral Shah         2014-04-18  578  		}
-abb14148c0f850 Hiral Shah         2014-04-18  579  		err = -ENOMEM;
-abb14148c0f850 Hiral Shah         2014-04-18  580  		goto err_fnic_fc_ctlr_trace_buf_init;
-abb14148c0f850 Hiral Shah         2014-04-18  581  	}
-abb14148c0f850 Hiral Shah         2014-04-18  582  
-abb14148c0f850 Hiral Shah         2014-04-18  583  	fc_trace_entries.rd_idx = fc_trace_entries.wr_idx = 0;
-abb14148c0f850 Hiral Shah         2014-04-18  584  	fc_trace_buf_head = fnic_fc_ctlr_trace_buf_p;
-abb14148c0f850 Hiral Shah         2014-04-18  585  
-abb14148c0f850 Hiral Shah         2014-04-18  586  	/*
-abb14148c0f850 Hiral Shah         2014-04-18  587  	* Set up fc_trace_entries.page_offset field with memory location
-abb14148c0f850 Hiral Shah         2014-04-18  588  	* for every trace entry
-abb14148c0f850 Hiral Shah         2014-04-18  589  	*/
-abb14148c0f850 Hiral Shah         2014-04-18  590  	for (i = 0; i < fc_trace_max_entries; i++) {
-abb14148c0f850 Hiral Shah         2014-04-18  591  		fc_trace_entries.page_offset[i] = fc_trace_buf_head;
-abb14148c0f850 Hiral Shah         2014-04-18  592  		fc_trace_buf_head += FC_TRC_SIZE_BYTES;
-abb14148c0f850 Hiral Shah         2014-04-18  593  	}
-1dbaa379a41934 Greg Kroah-Hartman 2019-01-22  594  	fnic_fc_trace_debugfs_init();
-abb14148c0f850 Hiral Shah         2014-04-18  595  	pr_info("fnic: Successfully Initialized FC_CTLR Trace Buffer\n");
-abb14148c0f850 Hiral Shah         2014-04-18  596  	return err;
-abb14148c0f850 Hiral Shah         2014-04-18  597  
-abb14148c0f850 Hiral Shah         2014-04-18  598  err_fnic_fc_ctlr_trace_buf_init:
-abb14148c0f850 Hiral Shah         2014-04-18  599  	return err;
-abb14148c0f850 Hiral Shah         2014-04-18  600  }
-abb14148c0f850 Hiral Shah         2014-04-18  601  
+  2288	
+  2289	/* Similar to __sock_recv_timestamp, but does not require an skb */
+  2290	void tcp_recv_timestamp(struct msghdr *msg, const struct sock *sk,
+  2291				struct scm_timestamping_internal *tss)
+  2292	{
+  2293		int new_tstamp = sock_flag(sk, SOCK_TSTAMP_NEW);
+  2294		u32 tsflags = READ_ONCE(sk->sk_tsflags);
+  2295		bool has_timestamping = false;
+  2296	
+> 2297		if (tcp_bpf_recv_timestamp(sk, tss))
+  2298			return;
+  2299	
+  2300		if (tss->ts[0].tv_sec || tss->ts[0].tv_nsec) {
+  2301			if (sock_flag(sk, SOCK_RCVTSTAMP)) {
+  2302				if (sock_flag(sk, SOCK_RCVTSTAMPNS)) {
+  2303					if (new_tstamp) {
+  2304						struct __kernel_timespec kts = {
+  2305							.tv_sec = tss->ts[0].tv_sec,
+  2306							.tv_nsec = tss->ts[0].tv_nsec,
+  2307						};
+  2308						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMPNS_NEW,
+  2309							 sizeof(kts), &kts);
+  2310					} else {
+  2311						struct __kernel_old_timespec ts_old = {
+  2312							.tv_sec = tss->ts[0].tv_sec,
+  2313							.tv_nsec = tss->ts[0].tv_nsec,
+  2314						};
+  2315						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMPNS_OLD,
+  2316							 sizeof(ts_old), &ts_old);
+  2317					}
+  2318				} else {
+  2319					if (new_tstamp) {
+  2320						struct __kernel_sock_timeval stv = {
+  2321							.tv_sec = tss->ts[0].tv_sec,
+  2322							.tv_usec = tss->ts[0].tv_nsec / 1000,
+  2323						};
+  2324						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMP_NEW,
+  2325							 sizeof(stv), &stv);
+  2326					} else {
+  2327						struct __kernel_old_timeval tv = {
+  2328							.tv_sec = tss->ts[0].tv_sec,
+  2329							.tv_usec = tss->ts[0].tv_nsec / 1000,
+  2330						};
+  2331						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMP_OLD,
+  2332							 sizeof(tv), &tv);
+  2333					}
+  2334				}
+  2335			}
+  2336	
+  2337			if (tsflags & SOF_TIMESTAMPING_SOFTWARE &&
+  2338			    (tsflags & SOF_TIMESTAMPING_RX_SOFTWARE ||
+  2339			     !(tsflags & SOF_TIMESTAMPING_OPT_RX_FILTER)))
+  2340				has_timestamping = true;
+  2341			else
+  2342				tss->ts[0] = (struct timespec64) {0};
+  2343		}
+  2344	
+  2345		if (tss->ts[2].tv_sec || tss->ts[2].tv_nsec) {
+  2346			if (tsflags & SOF_TIMESTAMPING_RAW_HARDWARE &&
+  2347			    (tsflags & SOF_TIMESTAMPING_RX_HARDWARE ||
+  2348			     !(tsflags & SOF_TIMESTAMPING_OPT_RX_FILTER)))
+  2349				has_timestamping = true;
+  2350			else
+  2351				tss->ts[2] = (struct timespec64) {0};
+  2352		}
+  2353	
+  2354		if (has_timestamping) {
+  2355			tss->ts[1] = (struct timespec64) {0};
+  2356			if (sock_flag(sk, SOCK_TSTAMP_NEW))
+  2357				put_cmsg_scm_timestamping64(msg, tss);
+  2358			else
+  2359				put_cmsg_scm_timestamping(msg, tss);
+  2360		}
+  2361	}
+  2362	
 
 -- 
 0-DAY CI Kernel Test Service
