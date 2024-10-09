@@ -1,88 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3F618C322;
-	Wed,  9 Oct 2024 08:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14C7189528;
+	Wed,  9 Oct 2024 08:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728463906; cv=none; b=JkLaM2CRj11gQKnH9FXqVFFy8A5lNVzJw1rZb2k5rTtRxxNusqeqYirvFl6Va0IJ9+4awcNlEbUA355jelzR6Haos+uufqxuOc9f8QzGwHu5kW3itqDzRhqKQPNky9b7oZu7F4c57ETwbXX4bPMrwj78wyhG7QirY4aBE1ppyqE=
+	t=1728464288; cv=none; b=AAZQ6xhch+2zRN8Aaz9I1Gno4dVx40EpXo5Mv5ds8Z6Cad9O/jyqcanhCXqQTQGOqFOL5LnB/d3hYL5/zDOKxrrQmcB/2dWaSJm5SxBPwEszbI86fgOgDdKeXePO3ryMnGdMckpAjJCsaspOeDYr0Td1zYO7YPjvpPx9TjGyiC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728463906; c=relaxed/simple;
-	bh=cVzlW9XzqOJKWJPIM8hjgHkAlSZH7W84lA6wCrhOJXk=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VQ9DgV3biUX3PJaWA7siQpU+iOmLTfkxKYJlbzUuwJ2qRs875lUCaRPsurKlhYHHTWP0X1lT14hMQnBuZEDpxJ9Rou40nQRce7EnNVXCWZMTaTyA++E2/IM9os2mPBjhaynwzt/g/Tub6013336DTXGLTmsAW5Jn8gDX6SLov9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CitejcST; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728464288; c=relaxed/simple;
+	bh=ARn9yfmpyUoe1zo2iyo+pgs2zsZ++EsKAVpos3PjaNI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IFqSj0L7onzoscCwyHtyv52m9UdALeJ7pQFOTtwmWsnpEG+q2wpCq2uRRwL3CCM7aLLhGj3jcDB51DIalaUceS1KCOccxG2fUeFV3vdDFnQW7bqFCuS34j6GHCDuaY8XQjQwazBxzDpll0cN2ke5Q56r6u2G6jLrjIv5CtNq3eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bJjq5dM5; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CitejcST"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728463905; x=1759999905;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=cVzlW9XzqOJKWJPIM8hjgHkAlSZH7W84lA6wCrhOJXk=;
-  b=CitejcSTfDv8mzi4KUdDzT8zFfI1Qj0jW+oADL1pT0PV4kKc/IW+8Bac
-   ZTgIBQPIFxbnh5+dCQyAbQQ9+xR4Twjwg16nCpFwrO7ZhSsiwyeK39EMQ
-   +DEIg693tO91PS2svi0Lj6OPBA8X+geOtEkUBQ/yDzjCde3VnvU/88mNB
-   0vh0REA3RaQcEoz5NQgTPqnA+RFP1zDqtpYWlMnXBp6uue7T0qyYSHHyD
-   O3q/KPTf4/Ubiy/pMySYAlquQuaUXEZ4rdqxNlEYUVoySKzW5aaQ9XoQG
-   PGoFQFprqYiqgTMUZGGfxKzea8QVnY2VvpgDTUgIWKenEa0UYEgvIcBmc
-   g==;
-X-CSE-ConnectionGUID: SOzDCl2TQM+Ha5KsZpemEQ==
-X-CSE-MsgGUID: JT3TVhwdTTatTqoDQieSNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="39104255"
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="39104255"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 01:51:44 -0700
-X-CSE-ConnectionGUID: qvjEl37ARkCpT4HpxJQwRQ==
-X-CSE-MsgGUID: Z+XIBQurR9mssjukKa/a/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="76057807"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 Oct 2024 01:51:44 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sySQ0-00091A-2w;
-	Wed, 09 Oct 2024 08:51:40 +0000
-Date: Wed, 9 Oct 2024 16:51:03 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [linux-next:master 1936/2853] drivers/hid/hid-core.o: warning:
- objtool: hid_scan_report+0x1e5: sibling call from callable instruction with
- modified stack frame
-Message-ID: <202410091654.50IJV143-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bJjq5dM5"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1728464278; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=DKxvwHZfnacsX7sqv4P183tNFvAODjSTuNfhtpMMbws=;
+	b=bJjq5dM5zSdN1QAUnlMEXyh41E8joVfXt63yjCBXuvE/V/d8PfMjGkSfpu0u7YIHdIARNUtlKC4YqcgraRENF2lbkShcAu3ZiJbBTNhyY+dNAuPZ5L7IiKwuK4efR6/NuX0lyKj4pn6Xdrr2bMMM80ml+nqh4eYjJOIq/DEBWjY=
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0WGiB8vX_1728464276)
+          by smtp.aliyun-inc.com;
+          Wed, 09 Oct 2024 16:57:57 +0800
+From: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	=?UTF-8?q?Pierre-Cl=C3=A9ment=20Tosi?= <ptosi@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] KVM: arm64: nVHE: gen-hyprel: Silent build warnings
+Date: Wed,  9 Oct 2024 16:57:51 +0800
+Message-ID: <20241009085751.35976-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-CC: Linux Memory Management List <linux-mm@kvack.org>
-TO: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC: Benjamin Tissoires <bentiss@kernel.org>
+This patch silent the some mismatch format build warnings
+with clang, like:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   33ce24234fca4c083e6685a18b460a18ebb5d5c1
-commit: 61595012f28036a58293df5a2ab75f80ca15c327 [1936/2853] HID: simplify code in fetch_item()
-config: x86_64-randconfig-004-20241009 (https://download.01.org/0day-ci/archive/20241009/202410091654.50IJV143-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091654.50IJV143-lkp@intel.com/reproduce)
+  arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:233:2: warning: format specifies
+  type 'unsigned long' but the argument has type 'Elf64_Off'
+  (aka 'unsigned long long') [-Wformat]
+    233 |         assert_ne(off, 0UL, "%lu");
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+        |                              %llu
+  arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:193:34: note: expanded from macro 'assert_ne'
+    193 | #define assert_ne(lhs, rhs, fmt)        assert_op(lhs, rhs, fmt, !=)
+        |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:188:19: note: expanded from macro 'assert_op'
+    187 |                                 " failed (lhs=" fmt ", rhs=" fmt        \
+        |                                                 ~~~
+    188 |                                 ", line=%d)", _lhs, _rhs, __LINE__);    \
+        |                                               ^~~~
+  arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:167:17: note: expanded from macro 'fatal_error'
+    166 |                 fprintf(stderr, "error: %s: " fmt "\n",                 \
+        |                                               ~~~
+    167 |                         elf.path, ## __VA_ARGS__);                      \
+        |                                      ^~~~~~~~~~~
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410091654.50IJV143-lkp@intel.com/
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ arch/arm64/kvm/hyp/nvhe/gen-hyprel.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/hid/hid-core.o: warning: objtool: hid_open_report() falls through to next function hid_parser_main()
->> drivers/hid/hid-core.o: warning: objtool: hid_scan_report+0x1e5: sibling call from callable instruction with modified stack frame
-
+diff --git a/arch/arm64/kvm/hyp/nvhe/gen-hyprel.c b/arch/arm64/kvm/hyp/nvhe/gen-hyprel.c
+index b63f4e1c1033..0d916d91b13c 100644
+--- a/arch/arm64/kvm/hyp/nvhe/gen-hyprel.c
++++ b/arch/arm64/kvm/hyp/nvhe/gen-hyprel.c
+@@ -230,7 +230,7 @@ static inline const char *section_begin(Elf64_Shdr *shdr)
+ /* Find a section by its offset from the beginning of the file. */
+ static inline Elf64_Shdr *section_by_off(Elf64_Off off)
+ {
+-	assert_ne(off, 0UL, "%lu");
++	assert_ne(off, 0ULL, "%llu");
+ 	return elf_ptr(Elf64_Shdr, off);
+ }
+ 
+@@ -276,7 +276,7 @@ static void init_elf(const char *path)
+ 	close(fd);
+ 
+ 	/* Get pointer to the ELF header. */
+-	assert_ge(stat.st_size, sizeof(*elf.ehdr), "%lu");
++	assert_ge(stat.st_size, (off_t)sizeof(*elf.ehdr), "%llu");
+ 	elf.ehdr = elf_ptr(Elf64_Ehdr, 0);
+ 
+ 	/* Check the ELF magic. */
+@@ -340,7 +340,7 @@ static void emit_rela_abs64(Elf64_Rela *rela, const char *sh_orig_name)
+ 	 * a symbol at the beginning of the relocated section, and <offset>
+ 	 * is `rela->r_offset`.
+ 	 */
+-	printf(".reloc %lu, R_AARCH64_PREL32, %s%s + 0x%lx\n",
++	printf(".reloc %lu, R_AARCH64_PREL32, %s%s + 0x%llx\n",
+ 	       reloc_offset, HYP_SECTION_SYMBOL_PREFIX, sh_orig_name,
+ 	       elf64toh(rela->r_offset));
+ 
+@@ -376,7 +376,7 @@ static void emit_rela_section(Elf64_Shdr *sh_rela)
+ 		uint32_t type = (uint32_t)elf64toh(rela->r_info);
+ 
+ 		/* Check that rela points inside the relocated section. */
+-		assert_lt(elf64toh(rela->r_offset), elf64toh(sh_orig->sh_size), "0x%lx");
++		assert_lt(elf64toh(rela->r_offset), elf64toh(sh_orig->sh_size), "0x%llx");
+ 
+ 		switch (type) {
+ 		/*
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.0
+
