@@ -1,101 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD21A1E105C;
-	Wed,  9 Oct 2024 17:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2430A1E131F
+	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 18:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728496095; cv=none; b=L56ODt4n4hmd115SAulAgAqW1nXOllxZjxvkWWFA2w3jO3Mhkzs3pfETfr3nNXIqWwma2vKe4LBf3ER/Aflcs0wVGEJ4hNhNnbuy/SNoHREKpxlbYkhlYAqAd+V0eFqtz2IMCH1p6DvR7XzToPowbUIBBvmVyxR30ochS1yVURc=
+	t=1728497113; cv=none; b=WyrtWYr4+F1S0VkE+25xk9ha8zpOQG1PUDk5NGq612QLw5OSg15wIEPSVEZp0D3EwfZxmISONZZ0aMyJiHYE/JFZ4n6QcJtqoOqpbuWUcWOLKv6Inpl9Q1QUQ7PtRzaTB9Rz2M+tZxUTPk5DlNLSiZk77V0aKaOBIhXe7kBqScM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728496095; c=relaxed/simple;
-	bh=bB++Q1UDkOF7ygQpl8qjqf+2mDeK1kvI7Rdv0/gpsac=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IYQbsAP1Jq+P1TYSE9YdtCwwYHjqtswF+MgBqV+Jql4JmHXZIor13SDY6NfzwacXBIgDZm4UzebKpfNpciUeGV+Oewjlpf3MV0hWYwj/LS73oKa4NyHOO2yeSt0+OFqQetXeNVIRm+wRmx5dxUv1QSvghnalTBdcLcDbdF1MccU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lR/Wtp83; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728497113; c=relaxed/simple;
+	bh=dTst3TzcEyw3tRqilTUktgkbQoYxklC5Ta/NvbE8BKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JsacD37Qd7nsMv7PieaiVI2I4cHzzJ6yiUUI+s7Z3e7XI7eNONEiwCbks9jEdWsNm8bZWajD8rsrG8yncWDF57L5zVzPwlhAw4+EtLeMJP1c51Z3RRdD3ShRdCTskrfQA4zJFQ6TMCtGaaKhsbM+d2WmIIMM5PXozZAlaiklZAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OCjO+Jvq; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lR/Wtp83"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728496094; x=1760032094;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bB++Q1UDkOF7ygQpl8qjqf+2mDeK1kvI7Rdv0/gpsac=;
-  b=lR/Wtp83nmIaeUdQmPPU8YSuedGNdyvvdEyp9cTegOa8sSKKVNNCQn6+
-   cfrnZJ9eNq1Vd/NfKMI9C5juaybbSVyhPvxxvAxscQ5gqjQGBZ40vs8Kh
-   F9IBAwypNr4SGyaRVPgoZlTRjdHBlEP04ys2MTVvzbZpFeMtf6ZLwzko7
-   3HTZ6UY3iGysJc0DxQhz+SgZo8wJygDsoZdmq5eh7bUSF0q2rmRlzaTH8
-   Ygvwm8J+VzijSOiV2TlPGTo+ZAqki5f8HDpkp4FSbpzFRrkDurOFuTz6Z
-   659iLO/HBilItsy3QxWku1A7S7SF2cz2/upbpWQUndDfhEr2LEAVvh3np
-   A==;
-X-CSE-ConnectionGUID: 5L+Ug7W0T9+y+Kt9iIxGjg==
-X-CSE-MsgGUID: T57x0h1tR42vakp/ePGuOQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="27933418"
-X-IronPort-AV: E=Sophos;i="6.11,190,1725346800"; 
-   d="scan'208";a="27933418"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 10:48:11 -0700
-X-CSE-ConnectionGUID: E1KNcOifSae4RuWpEUT/9A==
-X-CSE-MsgGUID: pfIZOaDqSmyHlUoVKfcc4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,190,1725346800"; 
-   d="scan'208";a="76273538"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 09 Oct 2024 10:48:10 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syanA-0009Yi-05;
-	Wed, 09 Oct 2024 17:48:08 +0000
-Date: Thu, 10 Oct 2024 01:47:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3426/3432] error[E0432]: unresolved import
- `crate::types::ARef`
-Message-ID: <202410100136.vvX9cS2a-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCjO+Jvq"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5366fd6fdf1so51463e87.0
+        for <llvm@lists.linux.dev>; Wed, 09 Oct 2024 11:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728497110; x=1729101910; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cg5cj1gCluVnGdiYqSgBY4zdUcGWuMAkq5T51OVrPiA=;
+        b=OCjO+JvqCWhqZzDcZCGe/FumOJPnheRWoTbDGv/3/eKP8a9U4XeS5pSMYBmmG+jEu4
+         QNUZXKSI7gUPQLJSUz11Te1iAPTH9c99RyAsslKK3LAMiJO8D3XNWWrDCAJc21q9DbA2
+         y33GtZYJ02CImJo0+AXQPg/iknGS8cAXow6KhBcwsrI0qWAiWqGxMSPTVd687DEpynMG
+         C7HuUDL2ZP3c6TvzbSHvPkqZaRk3VWEwAg6f39wCM7S+Xrao0D+PQVkDvppNkdfcp5lf
+         gKRlBOJvdRSASpX+HJV2wJnrS5J/bVI2b2Kmh5rTEUqxsKpsnS3umZAyTFqviTcR5Mb4
+         D9PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728497110; x=1729101910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cg5cj1gCluVnGdiYqSgBY4zdUcGWuMAkq5T51OVrPiA=;
+        b=rQiWxkr0suwH/qQ3p9CA9Tk56pebIsA4wrcS7kYEtscVWAAK5ZG6hCbQjBv7qCb6kj
+         hKy9R4gvVL4SqKTSwE56npu5yr4PKWQHABr4gUrGjkzjaK/3AWYR2QOlCTlABhar7lsf
+         4QfmVdVOl4h9jto9iJsXSXrI++SN6jRz7ASWS0KYSPm0udovNpqnr3/ulRDsAJtqquPD
+         gG6aFY3u7l+V6YegzQ5VZZ7AZuRfBJ33T8T7ybyx+REvRdos5cT0Q0dLE6Dxv8Tu2I+A
+         ZaRF8BXLqV8JNRLe1kbCpHAOHEwA8nDffREET7fDspek5aPRE37b6iZGQ8SBOHAALaKb
+         nLmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNIrBnQB+6hjLDWuka8nKvjZJwnLvteUnO+nKnSOZcJlMbV9vwKgws0HGK3XJif+Ke9LJn@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy3l4F2hqnFDNUnAuq6E0mDBmUmibfaGmQAiciQnIkHKtosOHE7
+	IswCan0RBM8dYkFqla+pHH7ogSTuZlfNY/nd59B1bOsfdP7xqjCI
+X-Google-Smtp-Source: AGHT+IEjRBA8jNMnfVfMn7a9XGrUXb9Bhm9Z7vnut0to/79rWfwo+X0c7kx8GI6nz487wAaM691i2w==
+X-Received: by 2002:a05:6512:3e25:b0:52c:e17c:3741 with SMTP id 2adb3069b0e04-539c4892c13mr2452171e87.5.1728497109987;
+        Wed, 09 Oct 2024 11:05:09 -0700 (PDT)
+Received: from teknoraver-mbp.access.network ([89.101.6.116])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d1697024fsm10972801f8f.95.2024.10.09.11.05.08
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 09 Oct 2024 11:05:08 -0700 (PDT)
+From: Matteo Croce <technoboy85@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Matteo Croce <teknoraver@meta.com>
+Subject: [PATCH bpf] bpf: fix argument type in bpf_loop documentation
+Date: Wed,  9 Oct 2024 19:05:00 +0100
+Message-ID: <20241009180500.87367-1-technoboy85@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   b6270c3bca987530eafc6a15f9d54ecd0033e0e3
-commit: 6f1eae733bf1bfb92f5339e096b6990f28e4262f [3426/3432] Merge branch 'rust-next' of https://github.com/Rust-for-Linux/linux.git
-config: x86_64-buildonly-randconfig-001-20241009 (https://download.01.org/0day-ci/archive/20241010/202410100136.vvX9cS2a-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410100136.vvX9cS2a-lkp@intel.com/reproduce)
+From: Matteo Croce <teknoraver@meta.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410100136.vvX9cS2a-lkp@intel.com/
+The `index` argument to bpf_loop() is threaded as an u64.
+This lead in a subtle verifier denial where clang cloned the argument
+in another register[1].
 
-All errors (new ones prefixed by >>):
+[1] https://github.com/systemd/systemd/pull/34650#issuecomment-2401092895
 
->> error[E0432]: unresolved import `crate::types::ARef`
-   --> rust/kernel/task.rs:10:13
-   |
-   10 |     types::{ARef, NotThreadSafe, Opaque},
-   |             ^^^^ no `ARef` in `types`
-   |
-   = help: consider importing this struct instead:
-   crate::sync::aref::ARef
---
->> error[E0690]: transparent struct needs at most one field with non-trivial size or alignment, but has 2
-   --> rust/kernel/seq_file.rs:11:1
-   |
-   11 | pub struct SeqFile {
-   | ^^^^^^^^^^^^^^^^^^ needs at most one field with non-trivial size or alignment, but has 2
-   12 |     inner: Opaque<bindings::seq_file>,
-   |     --------------------------------- this field has non-zero size or requires alignment
-   13 |     _not_send: NotThreadSafe,
-   |     ------------------------ this field has non-zero size or requires alignment
+Signed-off-by: Matteo Croce <teknoraver@meta.com>
+---
+ include/uapi/linux/bpf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 8ab4d8184b9d..874af0186fe8 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5371,7 +5371,7 @@ union bpf_attr {
+  *		Currently, the **flags** must be 0. Currently, nr_loops is
+  *		limited to 1 << 23 (~8 million) loops.
+  *
+- *		long (\*callback_fn)(u32 index, void \*ctx);
++ *		long (\*callback_fn)(u64 index, void \*ctx);
+  *
+  *		where **index** is the current index in the loop. The index
+  *		is zero-indexed.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.0
+
