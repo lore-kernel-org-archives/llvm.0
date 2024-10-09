@@ -1,124 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDBF1213EC1;
-	Tue,  8 Oct 2024 19:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF57E15E8B
+	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 02:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728415811; cv=none; b=JR2eXyQNANPUz9q8jRf0iPYsolQjsJ5s2WvBQyvwbDgAiwPVGvq7fdfFwGGWXtJO0tAHqEmF5PYmnHJDToixnasfecygV76n3nRxtgOwINJxto6Zy+lYUm+2bZuwiwtDgdmPkXB4suSXmTIZBN9rQpZIbjtMq5DYhgrAwtFMFbM=
+	t=1728439759; cv=none; b=PFXKlXU1OCk1Nu29VFHD+AJraRz3iH1JOKxNWKiFtBcv+DZmeaBGX9XQJgjLw9YKSKw3Y5eZ10mHwedlngXYSqqTOFAC/+Z728GSX9G9MDoB09WVPT1kbGHAeFmtFikdeQeFALwFwSoSL3VHEkdOcaJjkQxNHToeAMGxI9y2ogc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728415811; c=relaxed/simple;
-	bh=dXtAb0QVDHqUCH+D1YOwgAbi29h8B3NCCdv1wgQL7eY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gaSJulX8k3Nje3UprTprP3sZJi7SRxXHXfxy1FVynDZzROWqrrlwGL5EUzQDGi55nemoMhmFTT/z/dyOT0hktFbhLPzqhB2pJSzGY/J9G9v/Qjt4oATQxvz/wHSvgaGre2S5P+SZjY+34zkkNH4z/AGPx3ECTj2W4lLx9kHXdpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ESSlpcru; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728439759; c=relaxed/simple;
+	bh=A99ew9gZR5pmHUG8WxOzLSgHb8WnT/ZsItTFDnJ2YAM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wr+h1UOAxPXZKAUNWhP/sBWLjykH02VxbE8Bm4I8RsBQ8PliM09C+BN8JpvdPk/f5N/ywVxtj82EyasWRHYwkeQMVRb7lMq3tdCp801sknQw2AYzmPRqvBKXC0CwvZTqJbBL3X4FQwVfBZFXv0xVQMaV6EG81Tud215sLlDAMbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cQt9Hhsx; arc=none smtp.client-ip=209.85.221.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ESSlpcru"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728415809; x=1759951809;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dXtAb0QVDHqUCH+D1YOwgAbi29h8B3NCCdv1wgQL7eY=;
-  b=ESSlpcrusj/kd4aAIJ8J00jTlFA9uOLpvmYMrvF6Kn+FCsuHm0DJk/gk
-   fyOBq/BC8Ufah2V2X74+LBrw7jX+zXxmfvdhlByBhOPzerSaeKiSQp5Gd
-   7liXLaumXkCozUoZhhOOl8DQlHTy3J9lW2AvnvfbJ1PBIWBfbXX1mthnT
-   XNp9pLKROE0vDw7oK+7xn5Nou6deqqdOGjbY4iYb+2NBXphoP7Gz8q0gm
-   2wm+TGs18H7smNbMKNktJ8KqW2WTB+h+kHr9fGttu7gETw1Sp/K+TQBsh
-   b6PSug6860w7EMt9s/gKOkrU/i3Q1aHkNNjjmv4lSSRyHrDAqmn0WRXr+
-   Q==;
-X-CSE-ConnectionGUID: gom+yfgJTzW1sqaM32Mw0Q==
-X-CSE-MsgGUID: lMTEWgDATG6RzJGwEOGi0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27600552"
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="27600552"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 12:30:08 -0700
-X-CSE-ConnectionGUID: G+AnJdxlSwaMXXdfJ0fIag==
-X-CSE-MsgGUID: 5Uq+7RNCQ2i7djkSKD2oSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="75835543"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 08 Oct 2024 12:30:07 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syFuG-0008JI-2H;
-	Tue, 08 Oct 2024 19:30:04 +0000
-Date: Wed, 9 Oct 2024 03:29:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: Re: [PATCH v2 5/7] bootmem: Stop using page->index
-Message-ID: <202410090311.eaqcL7IZ-lkp@intel.com>
-References: <20241005200121.3231142-6-willy@infradead.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cQt9Hhsx"
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-50ca34282c4so1024324e0c.0
+        for <llvm@lists.linux.dev>; Tue, 08 Oct 2024 19:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728439756; x=1729044556; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qb1GBUE5bd79oRRfoU1wYzeVHp7KyK+orebRrydrldU=;
+        b=cQt9Hhsx6Fu1tRDlkCvTZZvAI/IdnESGkhzSpA89/kKuBvqnDAj6GsWHUCrmKePjUj
+         LiZPCvKjScAYLyVW7y6NKMv9Bl5SiM6+djb2KfWQ/K9yYZYptKK03kO4OmclQji7djXV
+         4Sbqt8adHBZKyu+4HUSSoWdXC8d4yOpjKWBstk2cxgEEL5pRqkmJvOQLOAr4eFvNbh7l
+         ZHYXu55zmtMuBafMpJ9p5NMZ4WRlDPkF2/+/A5sPQDG6TQiyyv0MM7zD/mHhc/AcVlx7
+         u2uML4aWjJll8YaceMY0BNVTNBL5ZkUR5+fVhiT1+UXO0yHe4V7OBsWk6mNRK8lwHWWd
+         S0qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728439756; x=1729044556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qb1GBUE5bd79oRRfoU1wYzeVHp7KyK+orebRrydrldU=;
+        b=Oq/84VCrSy03yk5AfMAFFdT/qxx5PDaXP2pWV5qsf6+OpbwkLlM6DWpQfKmDcE/YCa
+         Rdlgp/NkPuQiGMSpql7bNiy0DXHLNVM+sZQvHoPANDH5aK8+deouUPCAWRgm0ubrk9Kl
+         MfGaN8afCCEjzw907EIAj25jRixx/1hXZPdPC3l5Ip1j6sswe/2W1VN+oIMLAuT6zjGc
+         A6k0+qRaFvO/IXT6pmXPZ+loSi24hMzSnlbi/L9L/mFYydEHO68B58VZhMpXTBR/rLsM
+         TRu2ZeXwUi25TzRyvYRCbipa7I6tvV+zWgsXjdW5fSBv9Qp+/vFAfJwAw7JKpNZgNo9i
+         FyrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXu3pUr8jts984B7w24FAKhsxxFqLq7liDWsSSQCL7uAMag/syr30EMApwMayLGh52NpwVh@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxqcb5i/axc5sDUrAFs0HpezDeMh9/blM2qne6t0yNwz1eWVSVV
+	ppiaTGzDn+YMyq2lj5En7tUFGLN0/HK+AxbbLjiAig6wumLlIyytYcvvJd643u5WVc0bV4EyeX2
+	css4qGuuK9bQNQ9X55yMxT+PLiUk=
+X-Google-Smtp-Source: AGHT+IFu39wHmH+QO6CWG2Nv6HuHj1Qac8nNN58a1in00REEJe3X0XIxdNjzyUdLEZls7XOWPAn3Cnyf1yghCNWk3tQ=
+X-Received: by 2002:a05:6122:2a42:b0:50a:c73e:b337 with SMTP id
+ 71dfb90a1353d-50cf09d1e41mr496087e0c.6.1728439756402; Tue, 08 Oct 2024
+ 19:09:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241005200121.3231142-6-willy@infradead.org>
+References: <20241008191329.2332346-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20241008191329.2332346-1-andriy.shevchenko@linux.intel.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Wed, 9 Oct 2024 10:09:05 +0800
+Message-ID: <CAGsJ_4w3wBG7SvmoAFsnOBbNihAO+ioiNJmU1tEObwFNq5nnQg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] mm: Remove unused stub for can_swapin_thp()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Chuanhua Han <hanchuanhua@oppo.com>, Barry Song <v-songbaohua@oppo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matthew,
+On Wed, Oct 9, 2024 at 3:13=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> When can_swapin_thp() is unused, it prevents kernel builds
+> with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
+>
+> mm/memory.c:4184:20: error: unused function 'can_swapin_thp' [-Werror,-Wu=
+nused-function]
+>
+> Fix this by removing the unused stub.
+>
+> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> inline functions for W=3D1 build").
+>
+> Fixes: 242d12c98174 ("mm: support large folios swap-in for sync io device=
+s")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-kernel test robot noticed the following build errors:
+Acked-by: Barry Song <baohua@kernel.org>
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on tip/locking/core tip/x86/mm dennis-percpu/for-next linus/master v6.12-rc2 next-20241008]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/mm-Convert-page_to_pgoff-to-page_pgoff/20241006-040239
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241005200121.3231142-6-willy%40infradead.org
-patch subject: [PATCH v2 5/7] bootmem: Stop using page->index
-config: x86_64-randconfig-014-20241008 (https://download.01.org/0day-ci/archive/20241009/202410090311.eaqcL7IZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410090311.eaqcL7IZ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410090311.eaqcL7IZ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/mm/init_64.c:992:28: error: call to undeclared function 'bootmem_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     992 |                 enum bootmem_type type = bootmem_type(page);
-         |                                          ^
-   1 error generated.
-
-
-vim +/bootmem_type +992 arch/x86/mm/init_64.c
-
-   987	
-   988	static void __meminit free_pagetable(struct page *page, int order)
-   989	{
-   990		/* bootmem page has reserved flag */
-   991		if (PageReserved(page)) {
- > 992			enum bootmem_type type = bootmem_type(page);
-   993			unsigned long nr_pages = 1 << order;
-   994	
-   995			if (type == SECTION_INFO || type == MIX_SECTION_INFO) {
-   996				while (nr_pages--)
-   997					put_page_bootmem(page++);
-   998			} else
-   999				while (nr_pages--)
-  1000					free_reserved_page(page++);
-  1001		} else
-  1002			free_pages((unsigned long)page_address(page), order);
-  1003	}
-  1004	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  mm/memory.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 2366578015ad..c0869a962ddd 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4181,11 +4181,6 @@ static struct folio *alloc_swap_folio(struct vm_fa=
+ult *vmf)
+>         return __alloc_swap_folio(vmf);
+>  }
+>  #else /* !CONFIG_TRANSPARENT_HUGEPAGE */
+> -static inline bool can_swapin_thp(struct vm_fault *vmf, pte_t *ptep, int=
+ nr_pages)
+> -{
+> -       return false;
+> -}
+> -
+>  static struct folio *alloc_swap_folio(struct vm_fault *vmf)
+>  {
+>         return __alloc_swap_folio(vmf);
+> --
+> 2.43.0.rc1.1336.g36b5255a03ac
+>
+>
