@@ -1,174 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC8118B46B;
-	Wed,  9 Oct 2024 10:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F5918C35F;
+	Wed,  9 Oct 2024 11:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728470753; cv=none; b=IHFsanCa/+ftx1RufbWV6LNMnsSJqFFnO9dZBYImTncL6RyXLQYKIWgcnk30V9IQpHUraPxzZXWXKWgOFktEx+lvwYKTbk2BCAqG/V0gl76i+5kuViaf/YV4aMBlIGqMiXJxDw5hHiHPDVq4Q72UaYmUQsfZ0S6cvUaOqMqUUw0=
+	t=1728472041; cv=none; b=rMUUrfydVTyetB1YXqty535aVTdeB2lH1XSjj1lDtybmmBy7OZ9efF4oNZCLBYOA+fH7zHq7FahthIYYYFq5b9THOoeT7wzooqVGGPIlIHMFn22MEdSQ3BKoxl7rP6HYUsxDPa6VGimC1gB+iVLRtEEw3Pf5TnuDNm8FARi0vQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728470753; c=relaxed/simple;
-	bh=Rz0400i01/18gf8WW+9D1OmW6L5UQVxYq75ozCXQxj8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DGSlQjwKfDiEyItEgvgcB3lzgEJ2dtI+Lrmpl3Fum+58KiToa4+oWkZIhshwVoitrCSMjvNWCWFb5jTM2aJXjpv33YJkWL/+KtrS3lDOkVbaTDGxXULNgUBdg1D4zTtiDy5iNLpDj/XDlwwjox/msFw2FgRAyVoDXMb1YTAGn1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FbpCFnE/; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728472041; c=relaxed/simple;
+	bh=/R45ZpnbeeOexoK0D50lPQNMccspDFpOctCg08kNaKM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lNUYwQKHEVrNtf30a0nxX8FQFQJ6jozw5SEJaVxf6jQxk+D6U8XaWtry1MoFT3ltC1rsIFUfwlifrpVSwMQtxaHsAM6TyG796OXbA7mRp/VAjCLJtmHXzqL6xfXmns8YhedbGVx8NTkr0EgnRUG8s4JCJN7vPUgrc0QDfftsC5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i+QQBYww; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FbpCFnE/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728470751; x=1760006751;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rz0400i01/18gf8WW+9D1OmW6L5UQVxYq75ozCXQxj8=;
-  b=FbpCFnE/sBBlpIJGlJFnPSkMRkf4mjX9Qq/who2iQ+Bex9kHQCgPbeB3
-   SGmLmBCNNVg2dd/p8nV4029AnURY3DmFPd41Coas3trw5HdxLoxTK3XEX
-   xkxPFaGFw6KkgNdxfiLDJbK+JNYSdulo7P3A0TbVpZJBYQupRCdVLy3Ox
-   mR53KAiJ+aKWbJgOqUyzMamLLKp/7gK1wSH5Ibl/0hzYxWfXJLZvjKvot
-   GnXt80Tg9E5zWnYVZ5gKsGqQR79mm0QLDp57ECU3hJFSnmXC3/F2wKFGI
-   Jd8mwuVGzt/I+7oZeg3AcrcovYWMIsN30skufjXv7dhhpmMOwmiMRZeM4
-   g==;
-X-CSE-ConnectionGUID: ilKtWoa1RxuHzfH82hfEmg==
-X-CSE-MsgGUID: zlhdJAe+TsqXLw6KhXE4Hw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27921676"
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="27921676"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 03:45:50 -0700
-X-CSE-ConnectionGUID: XSgv+dTUS+uwWQv5VW0mDg==
-X-CSE-MsgGUID: 5Bt0j+K+Tkm3V6T4ueyfmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="76100543"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 Oct 2024 03:45:48 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syUCP-00097M-2n;
-	Wed, 09 Oct 2024 10:45:45 +0000
-Date: Wed, 9 Oct 2024 18:44:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
-	Ian Rogers <irogers@google.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@igalia.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: Re: [PATCH 3/5] perf: Add pmu get/put
-Message-ID: <202410091848.aRUoRWWD-lkp@intel.com>
-References: <20241008183501.1354695-4-lucas.demarchi@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i+QQBYww"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EFCC4CEC5;
+	Wed,  9 Oct 2024 11:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728472040;
+	bh=/R45ZpnbeeOexoK0D50lPQNMccspDFpOctCg08kNaKM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=i+QQBYww1OYht/1pn7PCIbm1ziNS3NLFv6msKUwvkpJWx0I4IsG6IWLBzuvmXsWNL
+	 1V1qN3+mTI6y/oRjrxve4zHCo+wre7i8YaJoso1kW+1X+EEJw6TODgeHwA6m3xlUfb
+	 cDGPQeBtPyJFSMgN57/nLiEVQqJFUPIiwZdqSMPVTDaZIQl74HD2UUvmyfE7//83Yt
+	 gpDhNzLbqklkP3EUuBUlWUxDOoqn934L8GQeYPsm6S4/G5h1k7Lv336QeM3BlMCF34
+	 MVZF6Y1Z0w+kmrwb1Sr4aaxzuybauOaadebbKwgb92AG/IRgTzMjDE/7UfXqI4+32K
+	 ujQoBZy2nFOGw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1syUXG-001nmB-7f;
+	Wed, 09 Oct 2024 12:07:18 +0100
+Date: Wed, 09 Oct 2024 12:07:17 +0100
+Message-ID: <86set55yca.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc: Oliver Upton <oliver.upton@linux.dev>,	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,	Zenghui Yu
+ <yuzenghui@huawei.com>,	Catalin Marinas <catalin.marinas@arm.com>,	Will
+ Deacon <will@kernel.org>,	Nathan Chancellor <nathan@kernel.org>,	Nick
+ Desaulniers <ndesaulniers@google.com>,	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,	=?UTF-8?B?UGllcnJlLUNsw6ltZW50?=
+ Tosi <ptosi@google.com>,	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,	linux-kernel@vger.kernel.org,	llvm@lists.linux.dev
+Subject: Re: [PATCH] KVM: arm64: nVHE: gen-hyprel: Silent build warnings
+In-Reply-To: <20241009085751.35976-1-tianjia.zhang@linux.alibaba.com>
+References: <20241009085751.35976-1-tianjia.zhang@linux.alibaba.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241008183501.1354695-4-lucas.demarchi@intel.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tianjia.zhang@linux.alibaba.com, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, ptosi@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi Lucas,
+On Wed, 09 Oct 2024 09:57:51 +0100,
+Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
+> 
+> This patch silent the some mismatch format build warnings
+> with clang, like:
+> 
+>   arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:233:2: warning: format specifies
+>   type 'unsigned long' but the argument has type 'Elf64_Off'
+>   (aka 'unsigned long long') [-Wformat]
+>     233 |         assert_ne(off, 0UL, "%lu");
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>         |                              %llu
+>   arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:193:34: note: expanded from macro 'assert_ne'
+>     193 | #define assert_ne(lhs, rhs, fmt)        assert_op(lhs, rhs, fmt, !=)
+>         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:188:19: note: expanded from macro 'assert_op'
+>     187 |                                 " failed (lhs=" fmt ", rhs=" fmt        \
+>         |                                                 ~~~
+>     188 |                                 ", line=%d)", _lhs, _rhs, __LINE__);    \
+>         |                                               ^~~~
+>   arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:167:17: note: expanded from macro 'fatal_error'
+>     166 |                 fprintf(stderr, "error: %s: " fmt "\n",                 \
+>         |                                               ~~~
+>     167 |                         elf.path, ## __VA_ARGS__);                      \
+>         |                                      ^~~~~~~~~~~
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-kernel test robot noticed the following build warnings:
+I don't see these warnings. What version of LLVM are you using?
 
-[auto build test WARNING on perf-tools-next/perf-tools-next]
-[cannot apply to tip/perf/core perf-tools/perf-tools acme/perf/core linus/master v6.12-rc2 next-20241008]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-De-Marchi/perf-Add-dummy-pmu-module/20241009-023728
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/20241008183501.1354695-4-lucas.demarchi%40intel.com
-patch subject: [PATCH 3/5] perf: Add pmu get/put
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241009/202410091848.aRUoRWWD-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091848.aRUoRWWD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410091848.aRUoRWWD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/events/core.c:5235:17: warning: unused variable 'module' [-Wunused-variable]
-    5235 |         struct module *module;
-         |                        ^~~~~~
-   1 warning generated.
-
-
-vim +/module +5235 kernel/events/core.c
-
-  5232	
-  5233	static void _free_event(struct perf_event *event)
-  5234	{
-> 5235		struct module *module;
-  5236	
-  5237		irq_work_sync(&event->pending_irq);
-  5238		irq_work_sync(&event->pending_disable_irq);
-  5239		perf_pending_task_sync(event);
-  5240	
-  5241		unaccount_event(event);
-  5242	
-  5243		security_perf_event_free(event);
-  5244	
-  5245		if (event->rb) {
-  5246			/*
-  5247			 * Can happen when we close an event with re-directed output.
-  5248			 *
-  5249			 * Since we have a 0 refcount, perf_mmap_close() will skip
-  5250			 * over us; possibly making our ring_buffer_put() the last.
-  5251			 */
-  5252			mutex_lock(&event->mmap_mutex);
-  5253			ring_buffer_attach(event, NULL);
-  5254			mutex_unlock(&event->mmap_mutex);
-  5255		}
-  5256	
-  5257		if (is_cgroup_event(event))
-  5258			perf_detach_cgroup(event);
-  5259	
-  5260		if (!event->parent) {
-  5261			if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
-  5262				put_callchain_buffers();
-  5263		}
-  5264	
-  5265		perf_event_free_bpf_prog(event);
-  5266		perf_addr_filters_splice(event, NULL);
-  5267		kfree(event->addr_filter_ranges);
-  5268	
-  5269		if (event->destroy)
-  5270			event->destroy(event);
-  5271	
-  5272		/*
-  5273		 * Must be after ->destroy(), due to uprobe_perf_close() using
-  5274		 * hw.target.
-  5275		 */
-  5276		if (event->hw.target)
-  5277			put_task_struct(event->hw.target);
-  5278	
-  5279		if (event->pmu_ctx)
-  5280			put_pmu_ctx(event->pmu_ctx);
-  5281	
-  5282		/*
-  5283		 * perf_event_free_task() relies on put_ctx() being 'last', in particular
-  5284		 * all task references must be cleaned up.
-  5285		 */
-  5286		if (event->ctx)
-  5287			put_ctx(event->ctx);
-  5288	
-  5289		exclusive_event_destroy(event);
-  5290	
-  5291		pmu_module_put(&event->pmu);
-  5292	
-  5293		call_rcu(&event->rcu_head, free_event_rcu);
-  5294	}
-  5295	
+	M.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Without deviation from the norm, progress is not possible.
