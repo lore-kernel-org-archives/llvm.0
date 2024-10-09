@@ -1,88 +1,88 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9856618CC0D
-	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 08:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3F618C322;
+	Wed,  9 Oct 2024 08:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728462857; cv=none; b=ovmGim2Rgqu5acb1m20bsQMTc0KnygdhpRimgTjDh5V+P3cqESbf3T3hMGYkZWbPtE+wLBYC6EJ+IQg5toWiQZ6AY3ToyMl3dwzWEy4MAOQRb2z/Qs/z5IqCAJSU/C/AziftWoHrQ6mvp5fs9Iihw28J8Wl5n0BjPsAgg6kOQcg=
+	t=1728463906; cv=none; b=JkLaM2CRj11gQKnH9FXqVFFy8A5lNVzJw1rZb2k5rTtRxxNusqeqYirvFl6Va0IJ9+4awcNlEbUA355jelzR6Haos+uufqxuOc9f8QzGwHu5kW3itqDzRhqKQPNky9b7oZu7F4c57ETwbXX4bPMrwj78wyhG7QirY4aBE1ppyqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728462857; c=relaxed/simple;
-	bh=k/zZEnbeleUoj/ObdgPZErMIxzolRJMUPjTuayZSUHk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qhxcAMM2WQRPE1lj2Jta0vSxM76Z4TSmBPOh87dwP0iN61smPZ4cZewTtCprpj26IedIUO3p+6WRnHyLgmUiwLODjQd29LSJbqUbhG3C/lnVf5HviLLlHkCLQV5bssxvScEoeEM+i9BQ/+Y0P/D8wiF+o0ccZ3ldi/9mTeDSb2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2958560009;
-	Wed,  9 Oct 2024 08:34:05 +0000 (UTC)
-Message-ID: <850ede17-6eb3-4269-bec6-2a2a0a629eee@ghiti.fr>
-Date: Wed, 9 Oct 2024 10:34:05 +0200
+	s=arc-20240116; t=1728463906; c=relaxed/simple;
+	bh=cVzlW9XzqOJKWJPIM8hjgHkAlSZH7W84lA6wCrhOJXk=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VQ9DgV3biUX3PJaWA7siQpU+iOmLTfkxKYJlbzUuwJ2qRs875lUCaRPsurKlhYHHTWP0X1lT14hMQnBuZEDpxJ9Rou40nQRce7EnNVXCWZMTaTyA++E2/IM9os2mPBjhaynwzt/g/Tub6013336DTXGLTmsAW5Jn8gDX6SLov9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CitejcST; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CitejcST"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728463905; x=1759999905;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=cVzlW9XzqOJKWJPIM8hjgHkAlSZH7W84lA6wCrhOJXk=;
+  b=CitejcSTfDv8mzi4KUdDzT8zFfI1Qj0jW+oADL1pT0PV4kKc/IW+8Bac
+   ZTgIBQPIFxbnh5+dCQyAbQQ9+xR4Twjwg16nCpFwrO7ZhSsiwyeK39EMQ
+   +DEIg693tO91PS2svi0Lj6OPBA8X+geOtEkUBQ/yDzjCde3VnvU/88mNB
+   0vh0REA3RaQcEoz5NQgTPqnA+RFP1zDqtpYWlMnXBp6uue7T0qyYSHHyD
+   O3q/KPTf4/Ubiy/pMySYAlquQuaUXEZ4rdqxNlEYUVoySKzW5aaQ9XoQG
+   PGoFQFprqYiqgTMUZGGfxKzea8QVnY2VvpgDTUgIWKenEa0UYEgvIcBmc
+   g==;
+X-CSE-ConnectionGUID: SOzDCl2TQM+Ha5KsZpemEQ==
+X-CSE-MsgGUID: JT3TVhwdTTatTqoDQieSNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="39104255"
+X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
+   d="scan'208";a="39104255"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 01:51:44 -0700
+X-CSE-ConnectionGUID: qvjEl37ARkCpT4HpxJQwRQ==
+X-CSE-MsgGUID: Z+XIBQurR9mssjukKa/a/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
+   d="scan'208";a="76057807"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 09 Oct 2024 01:51:44 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sySQ0-00091A-2w;
+	Wed, 09 Oct 2024 08:51:40 +0000
+Date: Wed, 9 Oct 2024 16:51:03 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linux-next:master 1936/2853] drivers/hid/hid-core.o: warning:
+ objtool: hid_scan_report+0x1e5: sibling call from callable instruction with
+ modified stack frame
+Message-ID: <202410091654.50IJV143-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] RISC-V: disallow gcc + rust builds
-Content-Language: en-US
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org, Conor Dooley
- <conor.dooley@microchip.com>, Jason Montleon <jmontleo@redhat.com>,
- ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
- gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
- a.hindborg@kernel.org, aliceryhl@google.com, paul.walmsley@sifive.com,
- palmer@dabbelt.com, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20241001-playlist-deceiving-16ece2f440f5@spud>
- <250e1e5d-5110-414f-abbd-fb002e715f32@ghiti.fr>
- <c4906bfc-5bc1-428e-a76f-3fb0bb8711ac@ghiti.fr>
- <20241009-tamale-revisit-7d2606c5fdf3@spud>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20241009-tamale-revisit-7d2606c5fdf3@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alex@ghiti.fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 09/10/2024 10:23, Conor Dooley wrote:
-> On Wed, Oct 09, 2024 at 10:10:14AM +0200, Alexandre Ghiti wrote:
->
->>>> , it is better
->>>> to disable gcc + rust builds to match the original intent, and
->>>> subsequently support it when an appropriate set of extensions can be
->>>> deduced from the version of libclang.
->>>>
->>>> Closes:
->>>> https://lore.kernel.org/all/20240917000848.720765-2-jmontleo@redhat.com/
->>>> [1]
->>>> Link:
->>>> https://lore.kernel.org/all/20240926-battering-revolt-6c6a7827413e@spud/
->>>> [2]
->>>> Fixes: 70a57b247251a ("RISC-V: enable building 64-bit kernels with
->>>> rust support")
->>
->> I also fixed the Fixes tag ^, it contains 13 characters instead of 12 and
->> added a cc: stable tag.
-> FYI, checkpatch is not an arbiter of truth, and I intentionally left the
-> 13th character that git determined it needed to have there. Apparently
-> the kernel now has enough objects that there can be 12 character
-> collisions.
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC: Benjamin Tissoires <bentiss@kernel.org>
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   33ce24234fca4c083e6685a18b460a18ebb5d5c1
+commit: 61595012f28036a58293df5a2ab75f80ca15c327 [1936/2853] HID: simplify code in fetch_item()
+config: x86_64-randconfig-004-20241009 (https://download.01.org/0day-ci/archive/20241009/202410091654.50IJV143-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091654.50IJV143-lkp@intel.com/reproduce)
 
-Ok, thanks for the explanation: do checkpatch and the documentation need 
-to be updated then? Is that a known issue?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410091654.50IJV143-lkp@intel.com/
 
- From https://docs.kernel.org/process/submitting-patches.html:
+All warnings (new ones prefixed by >>):
 
-"If your patch fixes a bug in a specific commit, e.g. you found an issue 
-using git bisect, please use the ‘Fixes:’ tag with the first 12 
-characters of the SHA-1 ID, and the one line summary."
+   drivers/hid/hid-core.o: warning: objtool: hid_open_report() falls through to next function hid_parser_main()
+>> drivers/hid/hid-core.o: warning: objtool: hid_scan_report+0x1e5: sibling call from callable instruction with modified stack frame
 
-
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
