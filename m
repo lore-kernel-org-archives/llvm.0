@@ -1,69 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D295C13F43A;
-	Wed,  9 Oct 2024 04:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AD817109B;
+	Wed,  9 Oct 2024 07:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728447515; cv=none; b=Cyc2Bg0/0+PUpQ6eWWKJjHbVlorOtU5+oZXvXfC5d9H6QcmOIWcYCzurpD7ZrrJqwecWR4DSVdE5Ptq4fDgLXyou7gzet6zKzMfb+6EMN8Yh5vzQQTl0j58xrc+wzZeMmXFQtWAuWIz6Yab8+d4CbePI/RLUcfp2y54VqkrOLfw=
+	t=1728458747; cv=none; b=oqSe3teDq9DoVV20xPhyg49SXp6yP79s2tyi4gPqJXe5bfSw7cakcn1Mp9f1mtDrn9FAmIspQIHE2Dg38ZMeCKvYZ+SdSS+h7p/wh6tOFoJe/LKrg6zgScYxydigVMCswqB59rPH68wV3x66r4NyZ1YJfZNxAtix+UhtryH7BBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728447515; c=relaxed/simple;
-	bh=AKaXIGUq/gkVNVDuKPwjXu1V75U9w/7vzRSecrXUglw=;
+	s=arc-20240116; t=1728458747; c=relaxed/simple;
+	bh=THs6DsM2Xg4UTWWWqLhNNVBQwRFrpO8EbsVy7gJTpJw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cZilamyUz+bbVGxDLeOIelmxpjsKSgzCQcJwpE4I+FFHESnIKJ+DlTc/pW0Tl0ura+WEtFKv+W7kNbBLBFCZE2/wYtbZDH5LbHXCpkpqVpZExKwy1hk321uIPHu+imnDosVBOhzvDIf5XOK5W+me6NJ+F+RrsI3X8w0LFYMrEm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SgQWZsBq; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=U5UJrmjiNaP7/BThqR8IDEsxQ6G+1JG6GoLrzOqmzx2/f2oE0yahJBMMfxPHqZ1XXgfljWPhVrLnr/73Mzw1/Hj3iTqlTlx8U7plT9l9Md91J04i3hYqq4NEaiLtLjs/AVQP0CSfwe69QiBzf/ZSzDYZPw71isgjaYXPJhz6aHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WnUWskTQ; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SgQWZsBq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WnUWskTQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728447512; x=1759983512;
+  t=1728458745; x=1759994745;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AKaXIGUq/gkVNVDuKPwjXu1V75U9w/7vzRSecrXUglw=;
-  b=SgQWZsBq2y5ZkO4w1GPfY97jpKR6/PEb2hEa17OaGAHTDEqBKH9jn+IX
-   RqMDRTBw3/7JlZEuSj547biBz7HZKhLEZPe8u60HiiZTVNeFxdo6hWPxT
-   RcNGbJhqGDSVcz+zCs59dyqO8ji4lN/8i6ouDZOD+y5YJW1Ba0LQ2Q0rk
-   9wxecNg8PRdRsQcXugMezMuptg4yB/F5p2NYnb6A81mdemnMGjqCLJ0So
-   QhMhDhHH7aeXDQ+jvU/PzWu/VPfSFIZeQ5PHn9DhZT01s6/L7PnhSDXs1
-   TYqVfPX85BUWYM5xmY8IsHXBZr2Ln+YS4za5CTa7OpkE1C8/WutYd6vtR
-   g==;
-X-CSE-ConnectionGUID: XHoSC+C2TXqO6TuqdiNH1w==
-X-CSE-MsgGUID: YLA7on0YSaSMeNslq96Wkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="31614657"
+  bh=THs6DsM2Xg4UTWWWqLhNNVBQwRFrpO8EbsVy7gJTpJw=;
+  b=WnUWskTQ1RnAAseWjMO4n3YEZ+F5P+dxA1BZWs1cmIG8mHvkxKODKsAT
+   mAj/GrnPdStbn3peL7RCGAIFHjDc1GaTdwCe0pv3zV+awhZzRcOje+g0H
+   x9IyrbfVTHmN8zHeOP58C93+q4TumZcHv+9zLaCov7kK/Bc1fVb5tqMu/
+   7tOA36OEkm1A30MIvCATvgc0TUi4IPiKTXKfoFt/Mn0FjrPQNeKP3cDH9
+   p78islm+Ea1P/Trgof2DgS/jby8YR3ZbuOX/l7FNkq9h0RvFHG9fYQh1E
+   pKhAtuFboKoE8ff1L4iJaqziSZO0LJBLhEr+kIw3jsyheD/hEeL3OQORD
+   w==;
+X-CSE-ConnectionGUID: kVKBbDe0TwuBq1GI/nkGCw==
+X-CSE-MsgGUID: Z82xRXnWQN+LRhnxuW5AlA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27619861"
 X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="31614657"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 21:18:32 -0700
-X-CSE-ConnectionGUID: i08YfiTcT0qzLw5FkrKvig==
-X-CSE-MsgGUID: RcYqUqsqTeurXpxaAGqJmQ==
+   d="scan'208";a="27619861"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 00:25:41 -0700
+X-CSE-ConnectionGUID: KcgUVk6zQhC/pebS0QZcaA==
+X-CSE-MsgGUID: 6KHKilN3SGaWaVPjcfJcpg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,189,1725346800"; 
-   d="scan'208";a="76077035"
+   d="scan'208";a="99482400"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Oct 2024 21:18:27 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 09 Oct 2024 00:25:39 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1syO9Y-0008iD-1i;
-	Wed, 09 Oct 2024 04:18:24 +0000
-Date: Wed, 9 Oct 2024 12:17:34 +0800
+	id 1syR4j-0008w4-0F;
+	Wed, 09 Oct 2024 07:25:37 +0000
+Date: Wed, 9 Oct 2024 15:24:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	dsahern@kernel.org, willemdebruijn.kernel@gmail.com,
-	willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org
+To: Tang Yizhou <yizhou.tang@shopee.com>, jack@suse.cz, hch@infradead.org,
+	willy@infradead.org, akpm@linux-foundation.org,
+	chandan.babu@oracle.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next 8/9] net-timestamp: add bpf framework for rx
- timestamps
-Message-ID: <202410091146.2OM6QWPq-lkp@intel.com>
-References: <20241008095109.99918-9-kerneljasonxing@gmail.com>
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, Tang Yizhou <yizhou.tang@shopee.com>
+Subject: Re: [PATCH v2 3/3] xfs: Let the max iomap length be consistent with
+ the writeback code
+Message-ID: <202410091559.uWiy0Oj0-lkp@intel.com>
+References: <20241006152849.247152-4-yizhou.tang@shopee.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,115 +67,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241008095109.99918-9-kerneljasonxing@gmail.com>
+In-Reply-To: <20241006152849.247152-4-yizhou.tang@shopee.com>
 
-Hi Jason,
+Hi Tang,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on brauner-vfs/vfs.all xfs-linux/for-next linus/master v6.12-rc2 next-20241008]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Xing/net-timestamp-add-bpf-infrastructure-to-allow-exposing-more-information-later/20241008-175458
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241008095109.99918-9-kerneljasonxing%40gmail.com
-patch subject: [PATCH net-next 8/9] net-timestamp: add bpf framework for rx timestamps
-config: arm-exynos_defconfig (https://download.01.org/0day-ci/archive/20241009/202410091146.2OM6QWPq-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091146.2OM6QWPq-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tang-Yizhou/mm-page-writeback-c-Rename-BANDWIDTH_INTERVAL-to-BW_DIRTYLIMIT_INTERVAL/20241006-225445
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241006152849.247152-4-yizhou.tang%40shopee.com
+patch subject: [PATCH v2 3/3] xfs: Let the max iomap length be consistent with the writeback code
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241009/202410091559.uWiy0Oj0-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241009/202410091559.uWiy0Oj0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410091146.2OM6QWPq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410091559.uWiy0Oj0-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/ipv4/tcp.c:2297:29: error: passing 'const struct sock *' to parameter of type 'struct sock *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    2297 |         if (tcp_bpf_recv_timestamp(sk, tss))
-         |                                    ^~
-   net/ipv4/tcp.c:2279:49: note: passing argument to parameter 'sk' here
-    2279 | static bool tcp_bpf_recv_timestamp(struct sock *sk, struct scm_timestamping_internal *tss)
-         |                                                 ^
-   1 error generated.
+>> fs/xfs/xfs_iomap.c:768:7: error: call to undeclared function 'inode_to_wb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     768 |         wb = inode_to_wb(wb);
+         |              ^
+>> fs/xfs/xfs_iomap.c:768:5: error: incompatible integer to pointer conversion assigning to 'struct bdi_writeback *' from 'int' [-Wint-conversion]
+     768 |         wb = inode_to_wb(wb);
+         |            ^ ~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +2297 net/ipv4/tcp.c
+vim +/inode_to_wb +768 fs/xfs/xfs_iomap.c
 
-  2288	
-  2289	/* Similar to __sock_recv_timestamp, but does not require an skb */
-  2290	void tcp_recv_timestamp(struct msghdr *msg, const struct sock *sk,
-  2291				struct scm_timestamping_internal *tss)
-  2292	{
-  2293		int new_tstamp = sock_flag(sk, SOCK_TSTAMP_NEW);
-  2294		u32 tsflags = READ_ONCE(sk->sk_tsflags);
-  2295		bool has_timestamping = false;
-  2296	
-> 2297		if (tcp_bpf_recv_timestamp(sk, tss))
-  2298			return;
-  2299	
-  2300		if (tss->ts[0].tv_sec || tss->ts[0].tv_nsec) {
-  2301			if (sock_flag(sk, SOCK_RCVTSTAMP)) {
-  2302				if (sock_flag(sk, SOCK_RCVTSTAMPNS)) {
-  2303					if (new_tstamp) {
-  2304						struct __kernel_timespec kts = {
-  2305							.tv_sec = tss->ts[0].tv_sec,
-  2306							.tv_nsec = tss->ts[0].tv_nsec,
-  2307						};
-  2308						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMPNS_NEW,
-  2309							 sizeof(kts), &kts);
-  2310					} else {
-  2311						struct __kernel_old_timespec ts_old = {
-  2312							.tv_sec = tss->ts[0].tv_sec,
-  2313							.tv_nsec = tss->ts[0].tv_nsec,
-  2314						};
-  2315						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMPNS_OLD,
-  2316							 sizeof(ts_old), &ts_old);
-  2317					}
-  2318				} else {
-  2319					if (new_tstamp) {
-  2320						struct __kernel_sock_timeval stv = {
-  2321							.tv_sec = tss->ts[0].tv_sec,
-  2322							.tv_usec = tss->ts[0].tv_nsec / 1000,
-  2323						};
-  2324						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMP_NEW,
-  2325							 sizeof(stv), &stv);
-  2326					} else {
-  2327						struct __kernel_old_timeval tv = {
-  2328							.tv_sec = tss->ts[0].tv_sec,
-  2329							.tv_usec = tss->ts[0].tv_nsec / 1000,
-  2330						};
-  2331						put_cmsg(msg, SOL_SOCKET, SO_TIMESTAMP_OLD,
-  2332							 sizeof(tv), &tv);
-  2333					}
-  2334				}
-  2335			}
-  2336	
-  2337			if (tsflags & SOF_TIMESTAMPING_SOFTWARE &&
-  2338			    (tsflags & SOF_TIMESTAMPING_RX_SOFTWARE ||
-  2339			     !(tsflags & SOF_TIMESTAMPING_OPT_RX_FILTER)))
-  2340				has_timestamping = true;
-  2341			else
-  2342				tss->ts[0] = (struct timespec64) {0};
-  2343		}
-  2344	
-  2345		if (tss->ts[2].tv_sec || tss->ts[2].tv_nsec) {
-  2346			if (tsflags & SOF_TIMESTAMPING_RAW_HARDWARE &&
-  2347			    (tsflags & SOF_TIMESTAMPING_RX_HARDWARE ||
-  2348			     !(tsflags & SOF_TIMESTAMPING_OPT_RX_FILTER)))
-  2349				has_timestamping = true;
-  2350			else
-  2351				tss->ts[2] = (struct timespec64) {0};
-  2352		}
-  2353	
-  2354		if (has_timestamping) {
-  2355			tss->ts[1] = (struct timespec64) {0};
-  2356			if (sock_flag(sk, SOCK_TSTAMP_NEW))
-  2357				put_cmsg_scm_timestamping64(msg, tss);
-  2358			else
-  2359				put_cmsg_scm_timestamping(msg, tss);
-  2360		}
-  2361	}
-  2362	
+   748	
+   749	/*
+   750	 * We cap the maximum length we map to a sane size to keep the chunks
+   751	 * of work done where somewhat symmetric with the work writeback does.
+   752	 * This is a completely arbitrary number pulled out of thin air as a
+   753	 * best guess for initial testing.
+   754	 *
+   755	 * Following the logic of writeback_chunk_size(), the length will be
+   756	 * rounded to the nearest 4MB boundary.
+   757	 *
+   758	 * Note that the values needs to be less than 32-bits wide until the
+   759	 * lower level functions are updated.
+   760	 */
+   761	static loff_t
+   762	xfs_max_map_length(struct inode *inode, loff_t length)
+   763	{
+   764		struct bdi_writeback *wb;
+   765		long pages;
+   766	
+   767		spin_lock(&inode->i_lock);
+ > 768		wb = inode_to_wb(wb);
+   769		pages = min(wb->avg_write_bandwidth / 2,
+   770			    global_wb_domain.dirty_limit / DIRTY_SCOPE);
+   771		spin_unlock(&inode->i_lock);
+   772		pages = round_down(pages + MIN_WRITEBACK_PAGES, MIN_WRITEBACK_PAGES);
+   773	
+   774		return min_t(loff_t, length, pages * PAGE_SIZE);
+   775	}
+   776	
 
 -- 
 0-DAY CI Kernel Test Service
