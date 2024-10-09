@@ -1,157 +1,101 @@
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7531891AA
-	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 08:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B86B178CC5;
+	Wed,  9 Oct 2024 08:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728461422; cv=none; b=f4+Z9YgUvTl/3fb04sZyPNKGzg/rZnMlAX3ACbLzEezl697mnLqSH2rWEoxDQjvLs8yRGaFm5I75i+yZWe2Y+eHzKbS5YeelcejXZsmP1k3djpLbM9IlkGcMnKJCuU/eDqxS/6B442N45xMOMYMK2Pnx/wxw2KIeUcZ1BmEoBRM=
+	t=1728462227; cv=none; b=Z+Z1nVNBTfxg+qKSoOmD71ricw5PgAEb1v2jQqNx8UmJt0jiHsWc0jppZEe1P2cYLHDDYv6zOwUaupbpQSOjv2uixOjNv8vEYzJCexdKRI6fnBM5DEUQnYlKVzKzeTdLmsAO7ImvJbnnsIAmeFteDgSmFt8GImgCQicg4OqWGcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728461422; c=relaxed/simple;
-	bh=IPLNQem0UzRFtRUVPfSLoseit8MPJ+up34xjwBm966g=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UGg8EvnWx2OFX6F966nLF0fW3Cqf8hIK64IljPBjT+EI5GvB+Knun4NXTaQinRroVHQt0g4HPBNOCwxOVEBWjYWp/WVPFF6801+rIIVVQyY/r+FIvBb3GC9FFr1oj9ukxPNVnW2S7d9pSRBg7fbP7YuQ3xaqQXe75Uo3/PPfSWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3E9941BF20C;
-	Wed,  9 Oct 2024 08:10:15 +0000 (UTC)
-Message-ID: <c4906bfc-5bc1-428e-a76f-3fb0bb8711ac@ghiti.fr>
-Date: Wed, 9 Oct 2024 10:10:14 +0200
+	s=arc-20240116; t=1728462227; c=relaxed/simple;
+	bh=tf9M2MlC4GQ+rXRXyfjKzifuwRwBlSOhhIUUVgfhJ7k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kRCRDTkfVIKtAd3r+Z52tWJ6UISFGN61DMLNhDa0kSqKNpeInEw1ftj11krU6KcnAT3pUOTBZY3zJd0SKTN+EjfSbQoyyqBSjkTgMSdeSM/pyRB5Are1o+h6BCR6lDjJ3raYYQloXgo1Y/0M9KUJPozCx/gCfJV92IvY3KvJdgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDFaQMJO; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDFaQMJO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F038DC4CEC5;
+	Wed,  9 Oct 2024 08:23:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728462226;
+	bh=tf9M2MlC4GQ+rXRXyfjKzifuwRwBlSOhhIUUVgfhJ7k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BDFaQMJOLjfxzs4l6rDWtLLI6a1AV4e4frrw90C0fI2R6dzfy6mfjd0Hg3yJkg81F
+	 O/LI2Ij8ywLd2HySu6eZGd6n6JkdcxbLqYFwhgvE7r16SQtbFeQJ4QahSsYO9Gq6hU
+	 oTsFWCaeoe8umjHXfR1lBOC0IhRQsLGeQ4/Wx5rEb7LaPSTzqfXc04ABgcsLtEspqa
+	 /va7AE4H0AvL6m4kMBAPJA+mzgIplmrAU9pH0WgmEYux03H6cxrTwqkFZmCxTr9Leq
+	 7ONUN6CjxA5PrPbr3qi1qgvLYqWsAOYDQuA+o/xzuy7WZY2TGkvfAO3jM2toZhrd+u
+	 v+0uiY2Nbku1A==
+Date: Wed, 9 Oct 2024 09:23:40 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-riscv@lists.infradead.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Jason Montleon <jmontleo@redhat.com>, ojeda@kernel.org,
+	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+	bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+	a.hindborg@kernel.org, aliceryhl@google.com,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, nathan@kernel.org,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1] RISC-V: disallow gcc + rust builds
+Message-ID: <20241009-tamale-revisit-7d2606c5fdf3@spud>
+References: <20241001-playlist-deceiving-16ece2f440f5@spud>
+ <250e1e5d-5110-414f-abbd-fb002e715f32@ghiti.fr>
+ <c4906bfc-5bc1-428e-a76f-3fb0bb8711ac@ghiti.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] RISC-V: disallow gcc + rust builds
-Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-To: Conor Dooley <conor@kernel.org>, linux-riscv@lists.infradead.org
-Cc: Conor Dooley <conor.dooley@microchip.com>,
- Jason Montleon <jmontleo@redhat.com>, ojeda@kernel.org,
- alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
- bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@kernel.org,
- aliceryhl@google.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-References: <20241001-playlist-deceiving-16ece2f440f5@spud>
- <250e1e5d-5110-414f-abbd-fb002e715f32@ghiti.fr>
-In-Reply-To: <250e1e5d-5110-414f-abbd-fb002e715f32@ghiti.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alex@ghiti.fr
-
-On 09/10/2024 09:46, Alexandre Ghiti wrote:
-> Hi Conor,
->
-> On 01/10/2024 13:28, Conor Dooley wrote:
->> From: Conor Dooley <conor.dooley@microchip.com>
->>
->> During the discussion before supporting rust on riscv, it was decided
->> not to support gcc yet, due to differences in extension handling
->> compared to llvm (only the version of libclang matching the c compiler
->> is supported). Recently Jason Montleon reported [1] that building with
->> gcc caused build issues, due to unsupported arguments being passed to
->> libclang. After some discussion between myself and Miguel
->
->
-> I have just added "[2]" here as it seemed to be missing.
->
-> Thanks,
->
-> Alex
->
->
->> , it is better
->> to disable gcc + rust builds to match the original intent, and
->> subsequently support it when an appropriate set of extensions can be
->> deduced from the version of libclang.
->>
->> Closes: 
->> https://lore.kernel.org/all/20240917000848.720765-2-jmontleo@redhat.com/ 
->> [1]
->> Link: 
->> https://lore.kernel.org/all/20240926-battering-revolt-6c6a7827413e@spud/ 
->> [2]
->> Fixes: 70a57b247251a ("RISC-V: enable building 64-bit kernels with 
->> rust support")
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Mdl99oyu/ETgEZlW"
+Content-Disposition: inline
+In-Reply-To: <c4906bfc-5bc1-428e-a76f-3fb0bb8711ac@ghiti.fr>
 
 
-I also fixed the Fixes tag ^, it contains 13 characters instead of 12 
-and added a cc: stable tag.
+--Mdl99oyu/ETgEZlW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Oct 09, 2024 at 10:10:14AM +0200, Alexandre Ghiti wrote:
 
->> Reported-by: Jason Montleon <jmontleo@redhat.com>
+> > > , it is better
+> > > to disable gcc + rust builds to match the original intent, and
+> > > subsequently support it when an appropriate set of extensions can be
+> > > deduced from the version of libclang.
+> > >=20
+> > > Closes:
+> > > https://lore.kernel.org/all/20240917000848.720765-2-jmontleo@redhat.c=
+om/
+> > > [1]
+> > > Link:
+> > > https://lore.kernel.org/all/20240926-battering-revolt-6c6a7827413e@sp=
+ud/
+> > > [2]
+> > > Fixes: 70a57b247251a ("RISC-V: enable building 64-bit kernels with
+> > > rust support")
+>=20
+>=20
+> I also fixed the Fixes tag ^, it contains 13 characters instead of 12 and
+> added a cc: stable tag.
 
+FYI, checkpatch is not an arbiter of truth, and I intentionally left the
+13th character that git determined it needed to have there. Apparently
+the kernel now has enough objects that there can be 12 character
+collisions.
 
-And I moved this tag above the Closes tag.
+--Mdl99oyu/ETgEZlW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-Alex
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZwY9jAAKCRB4tDGHoIJi
+0jz9APsGDsRXizGa8lwr7kwUr5aboz4Zn4SpVJbVATWgXGgBFAD/aIl8X+A4kSNE
+Zn3m0e/BumphE8b7xn/rF6HQW+zOywY=
+=qF7b
+-----END PGP SIGNATURE-----
 
-
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> ---
->>
->> Palmer, this is yours to take.
->>
->> CC: jmontleo@redhat.com
->> CC: ojeda@kernel.org
->> CC: alex.gaynor@gmail.com
->> CC: boqun.feng@gmail.com
->> CC: gary@garyguo.net
->> CC: bjorn3_gh@protonmail.com
->> CC: benno.lossin@proton.me
->> CC: a.hindborg@kernel.org
->> CC: aliceryhl@google.com
->> CC: paul.walmsley@sifive.com
->> CC: palmer@dabbelt.com
->> CC: nathan@kernel.org
->> CC: ndesaulniers@google.com
->> CC: morbo@google.com
->> CC: justinstitt@google.com
->> CC: rust-for-linux@vger.kernel.org
->> CC: linux-riscv@lists.infradead.org
->> CC: llvm@lists.linux.dev
->> ---
->>   Documentation/rust/arch-support.rst | 2 +-
->>   arch/riscv/Kconfig                  | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/rust/arch-support.rst 
->> b/Documentation/rust/arch-support.rst
->> index 750ff371570a0..54be7ddf3e57a 100644
->> --- a/Documentation/rust/arch-support.rst
->> +++ b/Documentation/rust/arch-support.rst
->> @@ -17,7 +17,7 @@ Architecture   Level of support  Constraints
->>   =============  ================ 
->> ==============================================
->>   ``arm64``      Maintained        Little Endian only.
->>   ``loongarch``  Maintained        \-
->> -``riscv``      Maintained        ``riscv64`` only.
->> +``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
->>   ``um``         Maintained        \-
->>   ``x86``        Maintained        ``x86_64`` only.
->>   =============  ================ 
->> ==============================================
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 22dc5ea4196ce..76843584960c2 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -177,7 +177,7 @@ config RISCV
->>       select HAVE_REGS_AND_STACK_ACCESS_API
->>       select HAVE_RETHOOK if !XIP_KERNEL
->>       select HAVE_RSEQ
->> -    select HAVE_RUST if RUSTC_SUPPORTS_RISCV
->> +    select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
->>       select HAVE_SAMPLE_FTRACE_DIRECT
->>       select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
->>       select HAVE_STACKPROTECTOR
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+--Mdl99oyu/ETgEZlW--
