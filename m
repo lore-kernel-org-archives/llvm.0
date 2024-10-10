@@ -1,240 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F02192D62;
-	Thu, 10 Oct 2024 03:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C427179A3
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 03:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728531889; cv=none; b=AsSCqmeYoj8pxB+dT9li+doSyWx7PqReyvfYVxtgdX4tTrkE0AOA+wxGaln+OkSwctnVAwAu/CbXnCt8yUjdWIO+CE9X4DZeaPuFf+j3alcxW9dJvugr2/Jzy5Zp9AK4S3xDkVQ7F4tLErCEP9QwpekdYjjsRKbdx8gItrtrRtc=
+	t=1728532620; cv=none; b=An5z3vq7uZ0emodbPW3YbcAtk3jK0kTGnVSg3ZLeJdJwI5YygGjNfrod4Mqf3Ahom3dKUL0yzY9oqEHFJgfoF/QpxdyJafeKT+Fq4XHLv6GovN1TKt5awA5Q7nuBvPqt1F9SPo8hz/BqYo7IWBc8Vr/yKGdTTiL4Hk7ckDJG+9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728531889; c=relaxed/simple;
-	bh=yFdYEg5rFGEP5S/sD0FVRqXqdQYwiHvsWbK0EjjO8Ec=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fuSfnLxNELzyxTbgG8Nd5Aekad4Nt7IXbn35zmtmUa72tiAQOCDGHCAgVyhPhdStraVUCxsgHUeyPiULBfSJsESpTCmErspeWubKIu7bdcROP6uQAxGQYngZu6xEndu3DpSKcuXrnbIUz13vzNNteqnycUARW/CpF5Bfn1tKGCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aMN5MdLc; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728532620; c=relaxed/simple;
+	bh=c69vCHD9sXglxFuU3cVQfkkP0kz++Bt/tDJFXTJAkGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=emDHmosu2zJEQuFaspgS775cFF8RyDnMjdIRDcegaCi7phaH0+1Fusd+P1DJOSxx9t9yhTpeDeJvGJEuhivQs2pwLPRDv8evCBh0Za4MvF8fZvQ6L0OrabbU5alye/tudzBhKJeJ96dD6jgFA9HKyan3R+BZA/RoRwCSgVZ4HvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U+qsHzHH; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aMN5MdLc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728531888; x=1760067888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yFdYEg5rFGEP5S/sD0FVRqXqdQYwiHvsWbK0EjjO8Ec=;
-  b=aMN5MdLcNkKymXRopyBFTejV/mRuYDE1OwM0XIk1Jz2BcOOipAVvIAfr
-   sqIr0lpbxitd2IeyBb+fXn3rL6UjQ92KosOxnspOdv+5mBLPWFTsoiDZt
-   +icH/Ng6BObxoBuRv8wFlGsCmM/n6KTOIREdRPE3V+L0/mvCjtnW+mNwI
-   F3hxws/w4c/LOyO4ZPG2S6Lmn87jzkYxVaLITH21uy6RizUtj9adwI7DP
-   oiPothNAoQYZ9WV2DpOQtgJuC1Zulk/ddCHwTSzTqb383DN+JXoFXsSr6
-   PU8Ugdrqr1kE6lirZFEjcMSeot0sskCYryJ9jigm2VnvF3tG5XKx16awy
-   g==;
-X-CSE-ConnectionGUID: h1gXtaUyTA+7/WVx5/oLOw==
-X-CSE-MsgGUID: 2ADqNnmLSuq9FCHJ1SnCsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="38452266"
-X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
-   d="scan'208";a="38452266"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 20:44:48 -0700
-X-CSE-ConnectionGUID: Y8VVCO4AQLO/TJOocVVzsA==
-X-CSE-MsgGUID: gLt6/uliQFSDQ80g5w6mmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
-   d="scan'208";a="107298148"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 09 Oct 2024 20:44:43 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syk6S-000A7n-2g;
-	Thu, 10 Oct 2024 03:44:40 +0000
-Date: Thu, 10 Oct 2024 11:44:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Damien Le Moal <dlemoal@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rockchip@lists.infradead.org,
-	Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-	Wilfred Mallawa <wilfred.mallawa@wdc.com>,
-	Niklas Cassel <cassel@kernel.org>
-Subject: Re: [PATCH v3 05/12] PCI: rockchip-ep: Implement the .map_align()
- controller operation
-Message-ID: <202410101109.J2ej9dSg-lkp@intel.com>
-References: <20241007041218.157516-6-dlemoal@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U+qsHzHH"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43117917eb9so1600235e9.0
+        for <llvm@lists.linux.dev>; Wed, 09 Oct 2024 20:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728532617; x=1729137417; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BIK6iHiUU8vNnmDPHqJUi9UmAD/kMAdpbZF6z5E3nlg=;
+        b=U+qsHzHHCPwt1aQRjNreEBYI2VfgkLNWlFcIMvnO8zT3y/Or9He0lW2XQRDpxmMGkg
+         Nwt4c+STp73qwEgPk8jkjcaCw+GBCHG0F5njac8pxe9fPLch/Tw/TRMWibznb6wCVqOj
+         LXkJANRy5eTQHLjKQMbCX7AU/1bW6LObe7cLoABkT5AzzZjkL9Hn2YUU+RA88UjSWTTY
+         E9luhdGtgLO4Bgucye4WFKqyWcTg4ez1tLVa7bn/xqv6mC/jHA2I2Fn7fnm1DS1WnKBG
+         BQTYUwloXI/7/TIetJq8DjyjnA2iVxg7u/YYx+Rzwbhn7jXJVT1rUYbpS+pd4PfZDCPB
+         JryQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728532617; x=1729137417;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BIK6iHiUU8vNnmDPHqJUi9UmAD/kMAdpbZF6z5E3nlg=;
+        b=dEfDG2B3zdR4KMUZCIMB0marM74ZxAamZAfA0ePTZi6j3Do+CZeER7H888/kZZrzaK
+         KZ+/WNjpjgn++GEJPLoYKxKPL8DqqZaKLX3eHLl+Aoxl5zTrYU/UFHdI5LO9szTNIwcB
+         GB/lZTzmWZ3NP3YHKcuzoiG2+obW5oFurKGNeqchN19tIw5j6ed8V7nAOApZxpB8cYJN
+         wmAStxUhxA4TS/6f3D5HC39PsxdoZiKx2IvpLTHVozsPeONgOX2WHoscmmM6n13Q/6/P
+         GI+6gUAfoB8Qoh0OEV9d1w29Z0WH8GsNQex29LmkD3RefJM0kONdL2ViL0kiY1A/3IPD
+         R5Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCXH2o44fQypbduYlyxbyqh4egtN0jkSV4g9AoL+Elp1o5MlYLlbLzh36ZEJg3MgXx4ZVo+Q@lists.linux.dev
+X-Gm-Message-State: AOJu0YwnpxEq3mMnkY7XhwgIEfVhxKDdqC9oK0fSVFgtETJTIY3rUGA3
+	yRtkc1bSNzQBkS7B2qOaf0W1ROEBqiHVS2UkFUTmMfWDt87klzVC
+X-Google-Smtp-Source: AGHT+IF2PPPAibzydI13yi59X74PcyvhPrQFB548ORc0y0pRt0MzmM/lGezSHvyjE3CG9Cr9BfeMyQ==
+X-Received: by 2002:a05:600c:8707:b0:42c:ae4e:a990 with SMTP id 5b1f17b1804b1-430d748ca2dmr31731065e9.35.1728532617099;
+        Wed, 09 Oct 2024 20:56:57 -0700 (PDT)
+Received: from teknoraver-mbp.access.network ([89.101.6.116])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-430ccf5188dsm35659375e9.24.2024.10.09.20.56.55
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 09 Oct 2024 20:56:56 -0700 (PDT)
+From: Matteo Croce <technoboy85@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Matteo Croce <teknoraver@meta.com>
+Subject: [PATCH bpf v2] bpf: fix argument type in bpf_loop documentation
+Date: Thu, 10 Oct 2024 04:56:52 +0100
+Message-ID: <20241010035652.17830-1-technoboy85@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241007041218.157516-6-dlemoal@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Damien,
+From: Matteo Croce <teknoraver@meta.com>
 
-kernel test robot noticed the following build errors:
+The `index` argument to bpf_loop() is threaded as an u64.
+This lead in a subtle verifier denial where clang cloned the argument
+in another register[1].
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus mani-mhi/mhi-next linus/master v6.12-rc2 next-20241009]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1] https://github.com/systemd/systemd/pull/34650#issuecomment-2401092895
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Le-Moal/PCI-rockchip-ep-Use-a-macro-to-define-EP-controller-align-feature/20241007-131224
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20241007041218.157516-6-dlemoal%40kernel.org
-patch subject: [PATCH v3 05/12] PCI: rockchip-ep: Implement the .map_align() controller operation
-config: i386-buildonly-randconfig-003-20241010 (https://download.01.org/0day-ci/archive/20241010/202410101109.J2ej9dSg-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410101109.J2ej9dSg-lkp@intel.com/reproduce)
+Signed-off-by: Matteo Croce <teknoraver@meta.com>
+---
+ include/uapi/linux/bpf.h       | 2 +-
+ kernel/bpf/verifier.c          | 2 +-
+ tools/include/uapi/linux/bpf.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410101109.J2ej9dSg-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/pci/controller/pcie-rockchip-ep.c:239:18: warning: declaration of 'struct pci_epc_map' will not be visible outside of this function [-Wvisibility]
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
->> drivers/pci/controller/pcie-rockchip-ep.c:245:10: error: incomplete definition of type 'struct pci_epc_map'
-     245 |                                                 map->pci_addr, map->pci_size);
-         |                                                 ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:245:25: error: incomplete definition of type 'struct pci_epc_map'
-     245 |                                                 map->pci_addr, map->pci_size);
-         |                                                                ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:247:5: error: incomplete definition of type 'struct pci_epc_map'
-     247 |         map->map_pci_addr = map->pci_addr & ~((1ULL << num_bits) - 1);
-         |         ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:247:25: error: incomplete definition of type 'struct pci_epc_map'
-     247 |         map->map_pci_addr = map->pci_addr & ~((1ULL << num_bits) - 1);
-         |                             ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:248:5: error: incomplete definition of type 'struct pci_epc_map'
-     248 |         map->map_ofst = map->pci_addr - map->map_pci_addr;
-         |         ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:248:21: error: incomplete definition of type 'struct pci_epc_map'
-     248 |         map->map_ofst = map->pci_addr - map->map_pci_addr;
-         |                         ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:248:37: error: incomplete definition of type 'struct pci_epc_map'
-     248 |         map->map_ofst = map->pci_addr - map->map_pci_addr;
-         |                                         ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:250:9: error: incomplete definition of type 'struct pci_epc_map'
-     250 |         if (map->map_ofst + map->pci_size > SZ_1M)
-         |             ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:250:25: error: incomplete definition of type 'struct pci_epc_map'
-     250 |         if (map->map_ofst + map->pci_size > SZ_1M)
-         |                             ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:251:6: error: incomplete definition of type 'struct pci_epc_map'
-     251 |                 map->pci_size = SZ_1M - map->map_ofst;
-         |                 ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:251:30: error: incomplete definition of type 'struct pci_epc_map'
-     251 |                 map->pci_size = SZ_1M - map->map_ofst;
-         |                                         ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:253:5: error: incomplete definition of type 'struct pci_epc_map'
-     253 |         map->map_size = ALIGN(map->map_ofst + map->pci_size,
-         |         ~~~^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:253:27: error: incomplete definition of type 'struct pci_epc_map'
-     253 |         map->map_size = ALIGN(map->map_ofst + map->pci_size,
-         |                               ~~~^
-   include/linux/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                                 ^
-   include/uapi/linux/const.h:48:51: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                                             ^
-   include/uapi/linux/const.h:49:41: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                            ^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-         |                                              ^
-   drivers/pci/controller/pcie-rockchip-ep.c:253:43: error: incomplete definition of type 'struct pci_epc_map'
-     253 |         map->map_size = ALIGN(map->map_ofst + map->pci_size,
-         |                                               ~~~^
-   include/linux/align.h:8:38: note: expanded from macro 'ALIGN'
-       8 | #define ALIGN(x, a)             __ALIGN_KERNEL((x), (a))
-         |                                                 ^
-   include/uapi/linux/const.h:48:51: note: expanded from macro '__ALIGN_KERNEL'
-      48 | #define __ALIGN_KERNEL(x, a)            __ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
-         |                                                             ^
-   include/uapi/linux/const.h:49:41: note: expanded from macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                            ^
-   drivers/pci/controller/pcie-rockchip-ep.c:239:18: note: forward declaration of 'struct pci_epc_map'
-     239 |                                       struct pci_epc_map *map)
-
-
-vim +245 drivers/pci/controller/pcie-rockchip-ep.c
-
-   237	
-   238	static int rockchip_pcie_ep_map_align(struct pci_epc *epc, u8 fn, u8 vfn,
- > 239					      struct pci_epc_map *map)
-   240	{
-   241		struct rockchip_pcie_ep *ep = epc_get_drvdata(epc);
-   242		int num_bits;
-   243	
-   244		num_bits = rockchip_pcie_ep_ob_atu_num_bits(&ep->rockchip,
- > 245							map->pci_addr, map->pci_size);
-   246	
-   247		map->map_pci_addr = map->pci_addr & ~((1ULL << num_bits) - 1);
-   248		map->map_ofst = map->pci_addr - map->map_pci_addr;
-   249	
-   250		if (map->map_ofst + map->pci_size > SZ_1M)
-   251			map->pci_size = SZ_1M - map->map_ofst;
-   252	
-   253		map->map_size = ALIGN(map->map_ofst + map->pci_size,
-   254				      ROCKCHIP_PCIE_AT_SIZE_ALIGN);
-   255	
-   256		return 0;
-   257	}
-   258	
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 8ab4d8184b9d..874af0186fe8 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5371,7 +5371,7 @@ union bpf_attr {
+  *		Currently, the **flags** must be 0. Currently, nr_loops is
+  *		limited to 1 << 23 (~8 million) loops.
+  *
+- *		long (\*callback_fn)(u32 index, void \*ctx);
++ *		long (\*callback_fn)(u64 index, void \*ctx);
+  *
+  *		where **index** is the current index in the loop. The index
+  *		is zero-indexed.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7d9b38ffd220..cfc62e0776bf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9917,7 +9917,7 @@ static int set_loop_callback_state(struct bpf_verifier_env *env,
+ {
+ 	/* bpf_loop(u32 nr_loops, void *callback_fn, void *callback_ctx,
+ 	 *	    u64 flags);
+-	 * callback_fn(u32 index, void *callback_ctx);
++	 * callback_fn(u64 index, void *callback_ctx);
+ 	 */
+ 	callee->regs[BPF_REG_1].type = SCALAR_VALUE;
+ 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7610883c8191..5937c39069ba 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5371,7 +5371,7 @@ union bpf_attr {
+  *		Currently, the **flags** must be 0. Currently, nr_loops is
+  *		limited to 1 << 23 (~8 million) loops.
+  *
+- *		long (\*callback_fn)(u32 index, void \*ctx);
++ *		long (\*callback_fn)(u64 index, void \*ctx);
+  *
+  *		where **index** is the current index in the loop. The index
+  *		is zero-indexed.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.0
+
