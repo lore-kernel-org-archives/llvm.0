@@ -1,78 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B959E1CF2A8;
-	Thu, 10 Oct 2024 19:52:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5905D1CEAD6
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 20:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728589933; cv=none; b=P3Wa1Y7K9HNIU82He1am57RFUJVqp/xCdUizxBVA/+p5nF508ZiE5GdBnxN0xrynTCfB1XGi41GuldHSXfhrgDzKP9R7IBnkPzFv+9r0nMrrxYS4eEK/jaSkUP9M2RjacAEv63u5V5C/rmJYToIGDmldZUwOsc4tSodJOwOb8mQ=
+	t=1728590809; cv=none; b=h6gVKefFP5+h7H37tvL41jNsi9SNWOW+IVT3iETTsc8WHxcJenEfa/VjWdnlOUhikl97OjmEHKng4LBzgXZPWR3p7LmmNirf2KOPSg1xGLqAyoivpAambNTAntA3jaTTbx//7o6H0m07R5DcjfMwIPxl+FLQXoefL/o7hheGgsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728589933; c=relaxed/simple;
-	bh=4PcPSnVpQIAzuHLA5cB0arAiAYZDpuk3RRZJZU+n8+4=;
+	s=arc-20240116; t=1728590809; c=relaxed/simple;
+	bh=ldTPRRZKRBJ5GB+hRVyfSXi2ehL2o0p5RYCW3Vi9srw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PwGgwYahTXLSToQmZYv9ay+/+ypwXyPxCGtYhiuNQAw8p8zL5327RmouGZAXaY9Anjw4ApxTDvbnCVHNKTDzt33FuR1qHYzs270DULHHc3DwD4y7ex/wmJpVBr+3NhWhZRAhY+dFjOKtOx9e84FQj9LeymGvLaxNe5inJz9BtGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSFCUWI+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=C9WVwboa6sz6e6oKPhBzJWUHUpU9oOY29YnUr5QTDyE/3a9thNC+MS2oEdQXN7ASOKRZDla+7FPfEmG1QvCGzWeUTjMhQnTYOQ5TQ/+YiUajCHPd0Y+bdpKpO7KE6IDUgdTHG4hyKndhqWRxIPYdBk1gbN+TYII3C/56ERfxyec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=streVKfQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSFCUWI+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD793C4CECC;
-	Thu, 10 Oct 2024 19:52:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="streVKfQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB89AC4CED0;
+	Thu, 10 Oct 2024 20:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728589933;
-	bh=4PcPSnVpQIAzuHLA5cB0arAiAYZDpuk3RRZJZU+n8+4=;
+	s=k20201202; t=1728590808;
+	bh=ldTPRRZKRBJ5GB+hRVyfSXi2ehL2o0p5RYCW3Vi9srw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bSFCUWI+MdFcSN3r/7YfKB6VNMbt0lYSJIPOz9eXkpo6v1/8cjn1/GRntzZ/JH08c
-	 A3Nur2bM20wNuLTlf3ICoNtbFzWGGSY/X0/6g0K6HVT/zcwdLrYQPCoKW8HBFtZaVo
-	 OepEv3EBsJfq/acl5v4+F/Rz2jvCpZLZB8zcpuB6PTEY+RqZooM3EicuThe240zB0W
-	 udHht+k41/slouJxu45H4xI3sZb2FV5dRs2tiyzfw5m/aYHlUnbTprx/0YpqoxtPfD
-	 VpC28ZpWMlXYfbXVKbvQA/wf9tJ4g7md5fm8KHYuRDz8u7maB1yoRIp4gLhqO/y/I3
-	 Ye6I7NjeQMiTw==
-Date: Thu, 10 Oct 2024 12:52:11 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	keescook@chromium.org, linux-hardening@vger.kernel.org,
-	nathan@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jan Beulich <jbeulich@suse.com>,
-	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v2 2/5] objtool: Allow arch code to discover jump table
- size
-Message-ID: <20241010195211.n22geblzb4ogxqcz@treble>
-References: <20241010122801.1321976-7-ardb+git@google.com>
- <20241010122801.1321976-9-ardb+git@google.com>
+	b=streVKfQsZc6pj0lr6nUnHQ2t43SI9q3TKw1LDEaqP9YhRQsvIvjOmvlzCkwqPdJQ
+	 qzLTU3CtCUyXoRKZLh9Z/RtoJjltGdxWx5RDhFTEz7sBR8Das+F2gIVpLqbUShhOpU
+	 I09a/3EFuZ6cKAEjQ9whY7dht29L66IXNkyU1J7N4DfHb2QxEIpsVuSbS7ejSFVc6O
+	 /MPAHAv30ETJoMuRcf/XSqv3se2Gu1nzXlLLhulQip+8FTGnHeprpeN3wGpaPAYVl9
+	 j/5XKmGuDImPG74beKKav/8P324/qi4j1VSsXl6MZqKHjfap7T+bPu9Tr/MeBTgWf9
+	 6MkGdzYXvC9rQ==
+Date: Thu, 10 Oct 2024 13:06:47 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: linaro-toolchain@lists.linaro.org
+Cc: llvm@lists.linux.dev
+Subject: Re: [Linaro-TCWG-CI] llvmorg-20-init-8119-gd2408c417cfa: Failure on
+ aarch64
+Message-ID: <20241010200647.GA1317667@thelio-3990X>
+References: <637931286.20442.1728373223783@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241010122801.1321976-9-ardb+git@google.com>
+In-Reply-To: <637931286.20442.1728373223783@jenkins.jenkins>
 
-On Thu, Oct 10, 2024 at 02:28:04PM +0200, Ard Biesheuvel wrote:
-> @@ -2222,7 +2234,6 @@ static void mark_func_jump_tables(struct objtool_file *file,
->  				    struct symbol *func)
->  {
->  	struct instruction *insn, *last = NULL;
-> -	struct reloc *reloc;
->  
->  	func_for_each_insn(file, func, insn) {
->  		if (!last)
-> @@ -2245,9 +2256,7 @@ static void mark_func_jump_tables(struct objtool_file *file,
->  		if (insn->type != INSN_JUMP_DYNAMIC)
->  			continue;
->  
-> -		reloc = find_jump_table(file, func, insn);
-> -		if (reloc)
-> -			insn->_jump_table = reloc;
-> +		find_jump_table(file, func, insn);
+Thanks for the report, I have opened
+https://github.com/llvm/llvm-project/issues/111903 for this.
 
-Can we detect the annotation here, and if it exists, pivot to a separate
-generic implementation which skips all the arch-specific code and hacks?
+On Tue, Oct 08, 2024 at 07:40:22AM +0000, ci_notify@linaro.org wrote:
+> Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+> 
+> We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
+> 
+> We track this report status in https://linaro.atlassian.net/browse/LLVM-1390 , please let us know if you are looking at the problem and/or when you have a fix.
+> 
+> In CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig after:
+> 
+>   | commit llvmorg-20-init-8119-gd2408c417cfa
+>   | Author: David Green <david.green@arm.com>
+>   | Date:   Sun Oct 6 10:44:21 2024 +0100
+>   | 
+>   |     [InstCombine] Canonicalize more geps with constant gep bases and constant offsets. (#110033)
+>   |     
+>   |     This is another small but hopefully not performance negative step to
+>   |     canonicalizing towards i8 geps. We looks for geps with a constant offset
+>   |     base pointer of the form `gep (gep @glob, C1), x, C2` and expand the gep
+>   | ... 2 lines of the commit log omitted.
+> 
+> The configuration of this build is:
+> CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
+> Results changed to
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 24511
+> 
+> From
+> # reset_artifacts:
+> -10
+> # build_abe binutils:
+> -9
+> # build_kernel_llvm:
+> -5
+> # build_abe qemu:
+> -2
+> # linux_n_obj:
+> 33835
+> # linux build successful:
+> all
+> 
+> -----------------8<--------------------------8<--------------------------8<--------------------------
+> The information below can be used to reproduce a debug environment:
+> 
+> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/214/artifact/artifacts
+> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/213/artifact/artifacts
+> 
+> Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/d2408c417cfa71f1786c909788560374eb1aca96/tcwg_kernel/llvm-master-aarch64-lts-allmodconfig/reproduction_instructions.txt
+> 
+> Full commit : https://github.com/llvm/llvm-project/commit/d2408c417cfa71f1786c909788560374eb1aca96
 
-That way we could keep the "ugly" separate, and also have all arches
-supported by default.
-
--- 
-Josh
