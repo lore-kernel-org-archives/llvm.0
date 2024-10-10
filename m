@@ -1,139 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8DA1925AF;
-	Thu, 10 Oct 2024 05:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728539453; cv=none; b=X7Y0EDGSqao5oe4FOBciDklEieE0T0a3AGvdrxESIkV1V8cigmis0EoKhMDxzL7DSWmqTq4yg8hhWMrKAaPlwdhiIlrGBbEkLW0IxILsDddC6+3d/L17UbbLRtS/OLQbz3ZFT4fJXuIOxuwN9sAW4I+NIt4VVSOUQqUyKBb6dbM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728539453; c=relaxed/simple;
-	bh=AmA6sqkOCSne/bl7i0P6cizwJB9nJBNvrv4IdKyPL/w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TECvo7DiMG02vbAkbQzSmVst4P3886BZwI8S42ghWAxhuY8QbqV3mR4iYNkQrwx7BqTw0xVzTidH+viVk3cCS2uYGdDksWgXZ6BA6/CvYlP2bm7rHQrEyED7e1AemX/gm4rOxyhjYKp3iDPYiEtcUwmTBh8DfXoVNtW+E20dGmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BYYjZ8LO; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D9129A2
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 06:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728543108; cv=pass; b=lec/a3P7fhxGTPRADd1h5hJIVgRnU8I6brsvBeH+9NZmRDlgCVlbSHDajCu65yXbubNTLQ5V6gYLwQNgfb2dLQZRZD6CNE1OAwqAg51FhYrNBajjxRJMSl5oJZU7OlCDM488iT4Tz7JX02XDYqnJhkhhdJXIm3LBRM8zDrBuNAI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728543108; c=relaxed/simple;
+	bh=vVgWuH7tvKPKwsxq5MoeNptohdViKzQtQtHhCjZ4uHs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=Fy/jWDLEFh//+jEE6uIztL14GFFfMUEO9oXayCS+AjIuHqJpnPNGojtYsAlkN4RRGcc9+YGxoet4vTnKwzN8QsYJrRYYdZnQJhNWfWfw+MIs9frgqezFVXBWf/RIM+0V+SujY8YDUPwedLsCBToORBlkpN98JsPqBAFdO0yr+z4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.co.uk; spf=pass smtp.mailfrom=collabora.co.uk; dkim=pass (1024-bit key) header.d=collabora.co.uk header.i=andrew.shadura@collabora.co.uk header.b=MByJbtZy; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BYYjZ8LO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728539451; x=1760075451;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AmA6sqkOCSne/bl7i0P6cizwJB9nJBNvrv4IdKyPL/w=;
-  b=BYYjZ8LOy1T6rHOCmRFekI60ucohTvFdB153dtLwGPrmOjH8OnGd4iE4
-   MpAWW+8mFQ9LdMSVYEDuva1gRrt7YVTN6siaKQ6xQeVq0tOzzFLYsdzF8
-   9Hprm9YtCIzxAzff1pdMrmYXCVu97D+MKEBCmJSDx/tAGp/vpkJf9RLRE
-   e14jmZA9XOgNiF5KOXRNjrClXEB/xDuYqhmyWOELHXmQHIvfkODoamlaR
-   ezI9Y9CshoNMmqvO1CtmNTPtHnmviFbwPTcjYPgsqd4dN+qXCQTRkfTpY
-   Fkw6GrCs0PLE1du1BH9GyVKnuAVPWn9KqA0lh0e8Wi7FBCgS3QcadttDi
-   w==;
-X-CSE-ConnectionGUID: H3+2RM6zTYyhDwweW4kngg==
-X-CSE-MsgGUID: pa9A1j9LQG6jWebbHou6oQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="27824332"
-X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
-   d="scan'208";a="27824332"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 22:50:51 -0700
-X-CSE-ConnectionGUID: Gxfx00wJQXS2HYMwN8vjAg==
-X-CSE-MsgGUID: /Ij/Pl05SS6iabzdQc3VWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
-   d="scan'208";a="76799202"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Oct 2024 22:50:49 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sym4V-000AEr-1D;
-	Thu, 10 Oct 2024 05:50:47 +0000
-Date: Thu, 10 Oct 2024 13:49:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org
-Subject: [viro-vfs:work.statx 1/3] fs/stat.c:770:11: warning: variable
- 'lflags' set but not used
-Message-ID: <202410101304.S1BUv98j-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=collabora.co.uk header.i=andrew.shadura@collabora.co.uk header.b="MByJbtZy"
+ARC-Seal: i=1; a=rsa-sha256; t=1728543097; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=hrjnByiJVDHCSRCJXvzR/jsvKWYPYiWoww+FaDE86j6vur6Iupid6W7rP422FozYsoYu4ekBcxZd4wJWoKgsaO7/ldSBCwo6Fhrekf2alXyF8aiG1/63Xknn2RraFKAnzI1kl10pcvs5lYoK0u4F79kT0V7ssTbtMBe2q8R+0jw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1728543097; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=NV4NWAt9hLTFZ48/H5oHJi+3QjFHmFEiaguAd0fABeE=; 
+	b=Mc0ByOphW4AAji+DreRmfINmIBHlh25Yu+nKLkPzd2bHJmE3DhjUcwBW5E9Aa8ON4vD4gw+xYS9oG+oSDaIE0cvKfuTD24e6OhXeODAe9RwvLjXV0pGoYEcSDtxe155XzorUGFqM9p+rPeNmSMRnjE7fDfut6V21/HXbXemW9Nw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.co.uk;
+	spf=pass  smtp.mailfrom=andrew.shadura@collabora.co.uk;
+	dmarc=pass header.from=<andrew.shadura@collabora.co.uk>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1728543097;
+	s=zoho; d=collabora.co.uk; i=andrew.shadura@collabora.co.uk;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=NV4NWAt9hLTFZ48/H5oHJi+3QjFHmFEiaguAd0fABeE=;
+	b=MByJbtZy6GHwmSyoRvl408/Qy+KCHWHsPPKun+RZ1nT+HZU3Oncg59xRNDUaKiu5
+	rxHle9Ic0a7wK0T9w85ut/0OHVLjT9+PFdKr15m+cjWE416fL8FNe2ENwOB/NxgCCkS
+	RAwz+DcC45BMHvFFnG2wYfFHoSyxjC2TIds913g4=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1728543095946469.6596726420195; Wed, 9 Oct 2024 23:51:35 -0700 (PDT)
+Date: Thu, 10 Oct 2024 08:51:35 +0200
+From: Andrej Shadura <andrew.shadura@collabora.co.uk>
+To: "David Laight" <David.Laight@ACULAB.COM>,
+	"linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>
+Cc: "Nathan Chancellor" <nathan@kernel.org>,
+	"Justin Stitt" <justinstitt@google.com>,
+	"Aleksei Vetrov" <vvvvvv@google.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"kernel@collabora.com" <kernel@collabora.com>,
+	"George Burgess" <gbiv@chromium.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Message-ID: <19275327c49.127586e67766243.1356460097137208113@collabora.co.uk>
+In-Reply-To: <49c81d21778b4ef5a7ab458b359a9993@AcuMS.aculab.com>
+References: <20241009121424.1472485-1-andrew.shadura@collabora.co.uk>
+ <49c81d21778b4ef5a7ab458b359a9993@AcuMS.aculab.com>
+Subject: Re: [PATCH v2] Bluetooth: Fix type of len in
+ rfcomm_sock_getsockopt{,_old}()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.statx
-head:   6bf8aea1847ea450c5bc8de1b7ef194c70e417ff
-commit: 8b3d898afb729019f0627a61f34622d115f54581 [1/3] getname_maybe_null() - the third variant of pathname copy-in
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241010/202410101304.S1BUv98j-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410101304.S1BUv98j-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410101304.S1BUv98j-lkp@intel.com/
+On 09/10/2024 18:37, David Laight wrote:
+>> Commit 9bf4e919ccad worked around an issue introduced after an innocuous
+>> optimisation change in LLVM main:
+>>
+>>> len is defined as an 'int' because it is assigned from
+>>> '__user int *optlen'. However, it is clamped against the result of
+>>> sizeof(), which has a type of 'size_t' ('unsigned long' for 64-bit
+>>> platforms). This is done with min_t() because min() requires compatible
+>>> types, which results in both len and the result of sizeof() being caste=
+d
+>>> to 'unsigned int', meaning len changes signs and the result of sizeof()
+>>> is truncated. From there, len is passed to copy_to_user(), which has a
+>>> third parameter type of 'unsigned long', so it is widened and changes
+>>> signs again.
 
-All warnings (new ones prefixed by >>):
+> That can't matter because the value is a small positive integer.
 
->> fs/stat.c:770:11: warning: variable 'lflags' set but not used [-Wunused-but-set-variable]
-     770 |         unsigned lflags;
-         |                  ^
-   1 warning generated.
+I agree that it shouldn=E2=80=99t, but it does in the currently released Cl=
+ang=20
+version until the bug is fixed.
 
+--=20
+Cheers,
+   Andrej
 
-vim +/lflags +770 fs/stat.c
-
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  751  
-a528d35e8bfcc5 David Howells 2017-01-31  752  /**
-a528d35e8bfcc5 David Howells 2017-01-31  753   * sys_statx - System call to get enhanced stats
-a528d35e8bfcc5 David Howells 2017-01-31  754   * @dfd: Base directory to pathwalk from *or* fd to stat.
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  755   * @filename: File to stat or either NULL or "" with AT_EMPTY_PATH
-a528d35e8bfcc5 David Howells 2017-01-31  756   * @flags: AT_* flags to control pathwalk.
-a528d35e8bfcc5 David Howells 2017-01-31  757   * @mask: Parts of statx struct actually required.
-a528d35e8bfcc5 David Howells 2017-01-31  758   * @buffer: Result buffer.
-a528d35e8bfcc5 David Howells 2017-01-31  759   *
-1e2f82d1e9d122 David Howells 2017-04-26  760   * Note that fstat() can be emulated by setting dfd to the fd of interest,
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  761   * supplying "" (or preferably NULL) as the filename and setting AT_EMPTY_PATH
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  762   * in the flags.
-a528d35e8bfcc5 David Howells 2017-01-31  763   */
-a528d35e8bfcc5 David Howells 2017-01-31  764  SYSCALL_DEFINE5(statx,
-a528d35e8bfcc5 David Howells 2017-01-31  765  		int, dfd, const char __user *, filename, unsigned, flags,
-a528d35e8bfcc5 David Howells 2017-01-31  766  		unsigned int, mask,
-a528d35e8bfcc5 David Howells 2017-01-31  767  		struct statx __user *, buffer)
-a528d35e8bfcc5 David Howells 2017-01-31  768  {
-1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  769  	int ret;
-0ef625bba6fb2b Mateusz Guzik 2024-06-25 @770  	unsigned lflags;
-8b3d898afb7290 Al Viro       2024-10-07  771  	struct filename *name = getname_maybe_null(filename, flags);
-1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  772  
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  773  	/*
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  774  	 * Short-circuit handling of NULL and "" paths.
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  775  	 *
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  776  	 * For a NULL path we require and accept only the AT_EMPTY_PATH flag
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  777  	 * (possibly |'d with AT_STATX flags).
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  778  	 *
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  779  	 * However, glibc on 32-bit architectures implements fstatat as statx
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  780  	 * with the "" pathname and AT_NO_AUTOMOUNT | AT_EMPTY_PATH flags.
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  781  	 * Supporting this results in the uglification below.
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  782  	 */
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  783  	lflags = flags & ~(AT_NO_AUTOMOUNT | AT_STATX_SYNC_TYPE);
-8b3d898afb7290 Al Viro       2024-10-07  784  	if (!name)
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  785  		return do_statx_fd(dfd, flags & ~AT_NO_AUTOMOUNT, mask, buffer);
-0ef625bba6fb2b Mateusz Guzik 2024-06-25  786  
-1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  787  	ret = do_statx(dfd, name, flags, mask, buffer);
-1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  788  	putname(name);
-1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  789  
-1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  790  	return ret;
-a528d35e8bfcc5 David Howells 2017-01-31  791  }
-a528d35e8bfcc5 David Howells 2017-01-31  792  
-
-:::::: The code at line 770 was first introduced by commit
-:::::: 0ef625bba6fb2bc0c8ed2aab9524fdf423f67dd5 vfs: support statx(..., NULL, AT_EMPTY_PATH, ...)
-
-:::::: TO: Mateusz Guzik <mjguzik@gmail.com>
-:::::: CC: Christian Brauner <brauner@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
