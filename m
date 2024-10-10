@@ -1,129 +1,139 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C427179A3
-	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 03:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8DA1925AF;
+	Thu, 10 Oct 2024 05:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728532620; cv=none; b=An5z3vq7uZ0emodbPW3YbcAtk3jK0kTGnVSg3ZLeJdJwI5YygGjNfrod4Mqf3Ahom3dKUL0yzY9oqEHFJgfoF/QpxdyJafeKT+Fq4XHLv6GovN1TKt5awA5Q7nuBvPqt1F9SPo8hz/BqYo7IWBc8Vr/yKGdTTiL4Hk7ckDJG+9g=
+	t=1728539453; cv=none; b=X7Y0EDGSqao5oe4FOBciDklEieE0T0a3AGvdrxESIkV1V8cigmis0EoKhMDxzL7DSWmqTq4yg8hhWMrKAaPlwdhiIlrGBbEkLW0IxILsDddC6+3d/L17UbbLRtS/OLQbz3ZFT4fJXuIOxuwN9sAW4I+NIt4VVSOUQqUyKBb6dbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728532620; c=relaxed/simple;
-	bh=c69vCHD9sXglxFuU3cVQfkkP0kz++Bt/tDJFXTJAkGc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=emDHmosu2zJEQuFaspgS775cFF8RyDnMjdIRDcegaCi7phaH0+1Fusd+P1DJOSxx9t9yhTpeDeJvGJEuhivQs2pwLPRDv8evCBh0Za4MvF8fZvQ6L0OrabbU5alye/tudzBhKJeJ96dD6jgFA9HKyan3R+BZA/RoRwCSgVZ4HvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U+qsHzHH; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728539453; c=relaxed/simple;
+	bh=AmA6sqkOCSne/bl7i0P6cizwJB9nJBNvrv4IdKyPL/w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TECvo7DiMG02vbAkbQzSmVst4P3886BZwI8S42ghWAxhuY8QbqV3mR4iYNkQrwx7BqTw0xVzTidH+viVk3cCS2uYGdDksWgXZ6BA6/CvYlP2bm7rHQrEyED7e1AemX/gm4rOxyhjYKp3iDPYiEtcUwmTBh8DfXoVNtW+E20dGmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BYYjZ8LO; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U+qsHzHH"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43117917eb9so1600235e9.0
-        for <llvm@lists.linux.dev>; Wed, 09 Oct 2024 20:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728532617; x=1729137417; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIK6iHiUU8vNnmDPHqJUi9UmAD/kMAdpbZF6z5E3nlg=;
-        b=U+qsHzHHCPwt1aQRjNreEBYI2VfgkLNWlFcIMvnO8zT3y/Or9He0lW2XQRDpxmMGkg
-         Nwt4c+STp73qwEgPk8jkjcaCw+GBCHG0F5njac8pxe9fPLch/Tw/TRMWibznb6wCVqOj
-         LXkJANRy5eTQHLjKQMbCX7AU/1bW6LObe7cLoABkT5AzzZjkL9Hn2YUU+RA88UjSWTTY
-         E9luhdGtgLO4Bgucye4WFKqyWcTg4ez1tLVa7bn/xqv6mC/jHA2I2Fn7fnm1DS1WnKBG
-         BQTYUwloXI/7/TIetJq8DjyjnA2iVxg7u/YYx+Rzwbhn7jXJVT1rUYbpS+pd4PfZDCPB
-         JryQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728532617; x=1729137417;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BIK6iHiUU8vNnmDPHqJUi9UmAD/kMAdpbZF6z5E3nlg=;
-        b=dEfDG2B3zdR4KMUZCIMB0marM74ZxAamZAfA0ePTZi6j3Do+CZeER7H888/kZZrzaK
-         KZ+/WNjpjgn++GEJPLoYKxKPL8DqqZaKLX3eHLl+Aoxl5zTrYU/UFHdI5LO9szTNIwcB
-         GB/lZTzmWZ3NP3YHKcuzoiG2+obW5oFurKGNeqchN19tIw5j6ed8V7nAOApZxpB8cYJN
-         wmAStxUhxA4TS/6f3D5HC39PsxdoZiKx2IvpLTHVozsPeONgOX2WHoscmmM6n13Q/6/P
-         GI+6gUAfoB8Qoh0OEV9d1w29Z0WH8GsNQex29LmkD3RefJM0kONdL2ViL0kiY1A/3IPD
-         R5Dg==
-X-Forwarded-Encrypted: i=1; AJvYcCXH2o44fQypbduYlyxbyqh4egtN0jkSV4g9AoL+Elp1o5MlYLlbLzh36ZEJg3MgXx4ZVo+Q@lists.linux.dev
-X-Gm-Message-State: AOJu0YwnpxEq3mMnkY7XhwgIEfVhxKDdqC9oK0fSVFgtETJTIY3rUGA3
-	yRtkc1bSNzQBkS7B2qOaf0W1ROEBqiHVS2UkFUTmMfWDt87klzVC
-X-Google-Smtp-Source: AGHT+IF2PPPAibzydI13yi59X74PcyvhPrQFB548ORc0y0pRt0MzmM/lGezSHvyjE3CG9Cr9BfeMyQ==
-X-Received: by 2002:a05:600c:8707:b0:42c:ae4e:a990 with SMTP id 5b1f17b1804b1-430d748ca2dmr31731065e9.35.1728532617099;
-        Wed, 09 Oct 2024 20:56:57 -0700 (PDT)
-Received: from teknoraver-mbp.access.network ([89.101.6.116])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-430ccf5188dsm35659375e9.24.2024.10.09.20.56.55
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 09 Oct 2024 20:56:56 -0700 (PDT)
-From: Matteo Croce <technoboy85@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Matteo Croce <teknoraver@meta.com>
-Subject: [PATCH bpf v2] bpf: fix argument type in bpf_loop documentation
-Date: Thu, 10 Oct 2024 04:56:52 +0100
-Message-ID: <20241010035652.17830-1-technoboy85@gmail.com>
-X-Mailer: git-send-email 2.46.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BYYjZ8LO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728539451; x=1760075451;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AmA6sqkOCSne/bl7i0P6cizwJB9nJBNvrv4IdKyPL/w=;
+  b=BYYjZ8LOy1T6rHOCmRFekI60ucohTvFdB153dtLwGPrmOjH8OnGd4iE4
+   MpAWW+8mFQ9LdMSVYEDuva1gRrt7YVTN6siaKQ6xQeVq0tOzzFLYsdzF8
+   9Hprm9YtCIzxAzff1pdMrmYXCVu97D+MKEBCmJSDx/tAGp/vpkJf9RLRE
+   e14jmZA9XOgNiF5KOXRNjrClXEB/xDuYqhmyWOELHXmQHIvfkODoamlaR
+   ezI9Y9CshoNMmqvO1CtmNTPtHnmviFbwPTcjYPgsqd4dN+qXCQTRkfTpY
+   Fkw6GrCs0PLE1du1BH9GyVKnuAVPWn9KqA0lh0e8Wi7FBCgS3QcadttDi
+   w==;
+X-CSE-ConnectionGUID: H3+2RM6zTYyhDwweW4kngg==
+X-CSE-MsgGUID: pa9A1j9LQG6jWebbHou6oQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="27824332"
+X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
+   d="scan'208";a="27824332"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 22:50:51 -0700
+X-CSE-ConnectionGUID: Gxfx00wJQXS2HYMwN8vjAg==
+X-CSE-MsgGUID: /Ij/Pl05SS6iabzdQc3VWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
+   d="scan'208";a="76799202"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 09 Oct 2024 22:50:49 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sym4V-000AEr-1D;
+	Thu, 10 Oct 2024 05:50:47 +0000
+Date: Thu, 10 Oct 2024 13:49:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:work.statx 1/3] fs/stat.c:770:11: warning: variable
+ 'lflags' set but not used
+Message-ID: <202410101304.S1BUv98j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Matteo Croce <teknoraver@meta.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.statx
+head:   6bf8aea1847ea450c5bc8de1b7ef194c70e417ff
+commit: 8b3d898afb729019f0627a61f34622d115f54581 [1/3] getname_maybe_null() - the third variant of pathname copy-in
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241010/202410101304.S1BUv98j-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410101304.S1BUv98j-lkp@intel.com/reproduce)
 
-The `index` argument to bpf_loop() is threaded as an u64.
-This lead in a subtle verifier denial where clang cloned the argument
-in another register[1].
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410101304.S1BUv98j-lkp@intel.com/
 
-[1] https://github.com/systemd/systemd/pull/34650#issuecomment-2401092895
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Matteo Croce <teknoraver@meta.com>
----
- include/uapi/linux/bpf.h       | 2 +-
- kernel/bpf/verifier.c          | 2 +-
- tools/include/uapi/linux/bpf.h | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+>> fs/stat.c:770:11: warning: variable 'lflags' set but not used [-Wunused-but-set-variable]
+     770 |         unsigned lflags;
+         |                  ^
+   1 warning generated.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 8ab4d8184b9d..874af0186fe8 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5371,7 +5371,7 @@ union bpf_attr {
-  *		Currently, the **flags** must be 0. Currently, nr_loops is
-  *		limited to 1 << 23 (~8 million) loops.
-  *
-- *		long (\*callback_fn)(u32 index, void \*ctx);
-+ *		long (\*callback_fn)(u64 index, void \*ctx);
-  *
-  *		where **index** is the current index in the loop. The index
-  *		is zero-indexed.
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7d9b38ffd220..cfc62e0776bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9917,7 +9917,7 @@ static int set_loop_callback_state(struct bpf_verifier_env *env,
- {
- 	/* bpf_loop(u32 nr_loops, void *callback_fn, void *callback_ctx,
- 	 *	    u64 flags);
--	 * callback_fn(u32 index, void *callback_ctx);
-+	 * callback_fn(u64 index, void *callback_ctx);
- 	 */
- 	callee->regs[BPF_REG_1].type = SCALAR_VALUE;
- 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 7610883c8191..5937c39069ba 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5371,7 +5371,7 @@ union bpf_attr {
-  *		Currently, the **flags** must be 0. Currently, nr_loops is
-  *		limited to 1 << 23 (~8 million) loops.
-  *
-- *		long (\*callback_fn)(u32 index, void \*ctx);
-+ *		long (\*callback_fn)(u64 index, void \*ctx);
-  *
-  *		where **index** is the current index in the loop. The index
-  *		is zero-indexed.
+
+vim +/lflags +770 fs/stat.c
+
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  751  
+a528d35e8bfcc5 David Howells 2017-01-31  752  /**
+a528d35e8bfcc5 David Howells 2017-01-31  753   * sys_statx - System call to get enhanced stats
+a528d35e8bfcc5 David Howells 2017-01-31  754   * @dfd: Base directory to pathwalk from *or* fd to stat.
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  755   * @filename: File to stat or either NULL or "" with AT_EMPTY_PATH
+a528d35e8bfcc5 David Howells 2017-01-31  756   * @flags: AT_* flags to control pathwalk.
+a528d35e8bfcc5 David Howells 2017-01-31  757   * @mask: Parts of statx struct actually required.
+a528d35e8bfcc5 David Howells 2017-01-31  758   * @buffer: Result buffer.
+a528d35e8bfcc5 David Howells 2017-01-31  759   *
+1e2f82d1e9d122 David Howells 2017-04-26  760   * Note that fstat() can be emulated by setting dfd to the fd of interest,
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  761   * supplying "" (or preferably NULL) as the filename and setting AT_EMPTY_PATH
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  762   * in the flags.
+a528d35e8bfcc5 David Howells 2017-01-31  763   */
+a528d35e8bfcc5 David Howells 2017-01-31  764  SYSCALL_DEFINE5(statx,
+a528d35e8bfcc5 David Howells 2017-01-31  765  		int, dfd, const char __user *, filename, unsigned, flags,
+a528d35e8bfcc5 David Howells 2017-01-31  766  		unsigned int, mask,
+a528d35e8bfcc5 David Howells 2017-01-31  767  		struct statx __user *, buffer)
+a528d35e8bfcc5 David Howells 2017-01-31  768  {
+1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  769  	int ret;
+0ef625bba6fb2b Mateusz Guzik 2024-06-25 @770  	unsigned lflags;
+8b3d898afb7290 Al Viro       2024-10-07  771  	struct filename *name = getname_maybe_null(filename, flags);
+1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  772  
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  773  	/*
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  774  	 * Short-circuit handling of NULL and "" paths.
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  775  	 *
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  776  	 * For a NULL path we require and accept only the AT_EMPTY_PATH flag
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  777  	 * (possibly |'d with AT_STATX flags).
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  778  	 *
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  779  	 * However, glibc on 32-bit architectures implements fstatat as statx
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  780  	 * with the "" pathname and AT_NO_AUTOMOUNT | AT_EMPTY_PATH flags.
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  781  	 * Supporting this results in the uglification below.
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  782  	 */
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  783  	lflags = flags & ~(AT_NO_AUTOMOUNT | AT_STATX_SYNC_TYPE);
+8b3d898afb7290 Al Viro       2024-10-07  784  	if (!name)
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  785  		return do_statx_fd(dfd, flags & ~AT_NO_AUTOMOUNT, mask, buffer);
+0ef625bba6fb2b Mateusz Guzik 2024-06-25  786  
+1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  787  	ret = do_statx(dfd, name, flags, mask, buffer);
+1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  788  	putname(name);
+1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  789  
+1b6fe6e0dfecf8 Stefan Roesch 2022-02-25  790  	return ret;
+a528d35e8bfcc5 David Howells 2017-01-31  791  }
+a528d35e8bfcc5 David Howells 2017-01-31  792  
+
+:::::: The code at line 770 was first introduced by commit
+:::::: 0ef625bba6fb2bc0c8ed2aab9524fdf423f67dd5 vfs: support statx(..., NULL, AT_EMPTY_PATH, ...)
+
+:::::: TO: Mateusz Guzik <mjguzik@gmail.com>
+:::::: CC: Christian Brauner <brauner@kernel.org>
+
 -- 
-2.46.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
