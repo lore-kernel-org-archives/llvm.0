@@ -1,59 +1,40 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2C7199FC5;
-	Thu, 10 Oct 2024 21:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF031E8829;
+	Thu, 10 Oct 2024 22:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728597519; cv=none; b=sECNpoRdjWsaZGkNBHtZKUsgjr4FVG93bT1eYAVcZigY6vxuPyKhT4U5Tv0QwLkabtRQYV6bVJdP1wNkPn0srkV7AwO4QHJnA2VS01juJFQ/zsSWE/q8UdZuOslbmrV+MoGbeUs5/dMk3oWq0j7r/CChYBTJrSCfU9tZKxov53s=
+	t=1728599093; cv=none; b=Wh4HouWb91k+bJahSqLuf/Z+mYJ2dN+fJC111fx1vJnSymBOgbvZUvPjF25GW9wtEQyYAMmM1QzCy9fw4M0POagHd8/8Pj9QEfUYIx/P0IuXE0JAtbR3S9DWeUV02+Fy9vxc+IiLXvs2EzH6nSLTUykVv0cLOYeQGxpiy+SIB9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728597519; c=relaxed/simple;
-	bh=ataDdnS0+FI3Z1CQ2RvtbFVgCVGF7FU9SJ8W8mNF1Aw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qTB1KwbvOyobOaDcGFYB8EzhcOJw7nE1nnNg4Nzi7WctE6JJkmEh7X3DNCOfoEbYtFP5ChAF1mzwgW7SznzFX5Krw+qR9xtIEDAejLuLuf00howHERHRKqZ/lxr8cIGTjvZw++zHRm+EuhXFSAMf8T34YYdUDR1e544r8xJs+Ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DOT0Q2zi; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728599093; c=relaxed/simple;
+	bh=EKsbnf9mUcRRkS47SOr4tSrOs3etmgqIWhCS2/QU4dA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y/pvWMfj8c2jFGzeHNJ9Ehi4HxCorfkNgqvyBaUOYKLnglR7dh6BPQSh4sJnFKwbJwowtTIRiacs/kVD/LeuzOOrIyPT46tburiXYjTTWOnTZpzH87BoesXL3xr5BXBpouYIQcWUEz/akA4oO1cOXhPkGUG5Q0PrvmzDDAfBzKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o4CULXzt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DOT0Q2zi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728597518; x=1760133518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ataDdnS0+FI3Z1CQ2RvtbFVgCVGF7FU9SJ8W8mNF1Aw=;
-  b=DOT0Q2ziXSxNrlaOpmdbzQm+5vbRT7o6f1acUB/l+h/LODDfqyyjcA4+
-   POGNtyIEZR2LAWyNFlRD5BdhOBffqtPHVq2a66bsch5b9ygaxnoynMJQl
-   XIHtONBqj6xaAO1RTw0vETjnuQZv+bFrycAS0JG6bMkChmSBfu3Fg0QR/
-   t3lWAXKEbyNVwcIOE9fKPFmsOScn5bu3LxJxjMx7d2t4h7VuYyNvOK/1v
-   GO9P/vcarcpTkAccI8CbBHyfzroUao5S1ywRNVBnRf6zOLHVM/LOu8fnS
-   57GaN9+dE6ZJ9lXm4Ib2ci/ppX0E/Xb3Nwom09xG9bj4h+YSYlIq9wE/s
-   g==;
-X-CSE-ConnectionGUID: 02ZUXjAlTcKcauWzxzpepA==
-X-CSE-MsgGUID: 7EpP3SzQSLS36PrUDWro1g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="38627917"
-X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
-   d="scan'208";a="38627917"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 14:58:37 -0700
-X-CSE-ConnectionGUID: 2VFkMRGMS6+6bbjHX+E6hA==
-X-CSE-MsgGUID: Z4HmlcvkToqqoQpxOn2MlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
-   d="scan'208";a="77542934"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 10 Oct 2024 14:58:36 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sz1B3-000BKF-2X;
-	Thu, 10 Oct 2024 21:58:33 +0000
-Date: Fri, 11 Oct 2024 05:58:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mnyman-xhci:for-usb-linus 4/4]
- drivers/usb/host/xhci-dbgtty.c:239:6: warning: variable 'written' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202410110551.Ko5PYzs9-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o4CULXzt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077ACC4CEC5;
+	Thu, 10 Oct 2024 22:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728599093;
+	bh=EKsbnf9mUcRRkS47SOr4tSrOs3etmgqIWhCS2/QU4dA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o4CULXzt5eVTD6F4bhRjtHSWGn+r+OtRB3ztzwRUXMYWD2W3ijffJFjzdYgQhq1J2
+	 NBIRlH8s3MOVF3ZyXVmmmIwfH/hqaE8kqroO3l3cUmd3ALhANaLxTn2jsO58FZne8p
+	 XN2+cnzf4DWAejoV9CcbstgycWDAn8pJombm0TifUG5meDvdnQbNLHKlCy6S/nv9SR
+	 ZTbOuFzgaToEe6qD2B6aQjmk1PzjL4IK/KlgBtLE4Wpu7TwNn7TrnNCpoWpm2ZaN0Q
+	 bxn4zjPQL5xbwGHtYWYnI5f8hoxT4ygiFCvzgNCoABoL1uqfGeBhNDS4nS3AT6QQk5
+	 9u56FvBqabQNQ==
+Date: Thu, 10 Oct 2024 15:24:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] HID: simplify code in fetch_item()
+Message-ID: <20241010222451.GA3571761@thelio-3990X>
+References: <ZvwYbESMZ667QZqY@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,74 +43,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZvwYbESMZ667QZqY@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git for-usb-linus
-head:   76f70639f29bc75f4e16748b0b5ee0e74ac01b4a
-commit: 76f70639f29bc75f4e16748b0b5ee0e74ac01b4a [4/4] xhci: dbc: honor usb transfer size boundaries.
-config: i386-randconfig-002-20241011 (https://download.01.org/0day-ci/archive/20241011/202410110551.Ko5PYzs9-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410110551.Ko5PYzs9-lkp@intel.com/reproduce)
+Hi Dmitry,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410110551.Ko5PYzs9-lkp@intel.com/
+On Tue, Oct 01, 2024 at 08:42:36AM -0700, Dmitry Torokhov wrote:
+> We can easily calculate the size of the item using arithmetic (shifts).
+> This allows to pull duplicated code out of the switch statement, making
+> it cleaner.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  drivers/hid/hid-core.c | 31 ++++++++++++++-----------------
+>  1 file changed, 14 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> index 988d0acbdf04..00942d40fe08 100644
+> --- a/drivers/hid/hid-core.c
+> +++ b/drivers/hid/hid-core.c
+> @@ -754,35 +754,32 @@ static u8 *fetch_item(__u8 *start, __u8 *end, struct hid_item *item)
+>  	}
+>  
+>  	item->format = HID_ITEM_FORMAT_SHORT;
+> -	item->size = b & 3;
+> +	item->size = BIT(b & 3) >> 1; /* 0, 1, 2, 3 -> 0, 1, 2, 4 */
+> +
+> +	if (end - start < item->size)
+> +		return NULL;
+>  
+>  	switch (item->size) {
+>  	case 0:
+> -		return start;
+> +		break;
+>  
+>  	case 1:
+> -		if ((end - start) < 1)
+> -			return NULL;
+> -		item->data.u8 = *start++;
+> -		return start;
+> +		item->data.u8 = *start;
+> +		break;
+>  
+>  	case 2:
+> -		if ((end - start) < 2)
+> -			return NULL;
+>  		item->data.u16 = get_unaligned_le16(start);
+> -		start = (__u8 *)((__le16 *)start + 1);
+> -		return start;
+> +		break;
+>  
+> -	case 3:
+> -		item->size++;
+> -		if ((end - start) < 4)
+> -			return NULL;
+> +	case 4:
+>  		item->data.u32 = get_unaligned_le32(start);
+> -		start = (__u8 *)((__le32 *)start + 1);
+> -		return start;
+> +		break;
+> +
+> +	default:
+> +		unreachable();
+>  	}
+>  
+> -	return NULL;
+> +	return start + item->size;
+>  }
 
-All warnings (new ones prefixed by >>):
+I am noticing some interesting behavior when building with clang, namely
+some objtool warnings and a failed boot when LTO is enabled, which I
+bisected to this change as commit 61595012f280 ("HID: simplify code in
+fetch_item()"), such as:
 
->> drivers/usb/host/xhci-dbgtty.c:239:6: warning: variable 'written' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     239 |         if (count) {
-         |             ^~~~~
-   drivers/usb/host/xhci-dbgtty.c:250:9: note: uninitialized use occurs here
-     250 |         return written;
-         |                ^~~~~~~
-   drivers/usb/host/xhci-dbgtty.c:239:2: note: remove the 'if' if its condition is always true
-     239 |         if (count) {
-         |         ^~~~~~~~~~
-   drivers/usb/host/xhci-dbgtty.c:225:18: note: initialize the variable 'written' to silence this warning
-     225 |         size_t                  written;
-         |                                        ^
-         |                                         = 0
-   1 warning generated.
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper defconfig vmlinux
+  vmlinux.o: warning: objtool: hid_open_report() falls through to next function hid_parser_main()
+  vmlinux.o: warning: objtool: hid_scan_report() falls through to next function hid_allocate_device()
 
+With LTO enabled, the warning becomes:
 
-vim +239 drivers/usb/host/xhci-dbgtty.c
+  vmlinux.o: warning: objtool: hid_open_report+0x21b: can't find jump dest instruction at .text.hid_open_report+0x40f
 
-   219	
-   220	static ssize_t dbc_tty_write(struct tty_struct *tty, const u8 *buf,
-   221				     size_t count)
-   222	{
-   223		struct dbc_port		*port = tty->driver_data;
-   224		unsigned long		flags;
-   225		size_t			written;
-   226	
-   227		spin_lock_irqsave(&port->port_lock, flags);
-   228	
-   229		/*
-   230		 * Treat tty write as one usb transfer. Make sure the writes are turned
-   231		 * into TRB request having the same size boundaries as the tty writes.
-   232		 * Don't add data to kfifo before previous write is turned into TRBs
-   233		 */
-   234		if (port->tx_boundary) {
-   235			spin_unlock_irqrestore(&port->port_lock, flags);
-   236			return 0;
-   237		}
-   238	
- > 239		if (count) {
-   240			written = kfifo_in(&port->port.xmit_fifo, buf, count);
-   241	
-   242			if (written == count)
-   243				port->tx_boundary = kfifo_len(&port->port.xmit_fifo);
-   244	
-   245			dbc_start_tx(port);
-   246		}
-   247	
-   248		spin_unlock_irqrestore(&port->port_lock, flags);
-   249	
-   250		return written;
-   251	}
-   252	
+A bare unreachable(), especially in the default case of a switch
+statement, is generally considered harmful in my experience, as it can
+introduce undefined behavior, which can mess up how a compiler might
+optimize a function. Commit d652d5f1eeeb ("drm/edid: fix objtool warning
+in drm_cvt_modes()") and commit 3764647b255a ("bcachefs: Remove
+undefined behavior in bch2_dev_buckets_reserved()") have some good
+commit messages talking about it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Getting rid of the unreachable() in some way resolves the issue. I
+tested using BUG() in lieu of unreachable() like the second change I
+mentioned above, which resolves the issue cleanly, as the default case
+clearly cannot happen. Another option I tested was some sort of printk
+statement and returning NULL, which some maintainers prefer, even in
+spite of impossible conditions. I am happy to send a patch with one of
+those changes or open to other suggestions.
+
+Cheers,
+Nathan
