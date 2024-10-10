@@ -1,63 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046121BD039;
-	Thu, 10 Oct 2024 09:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC64247A60
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 10:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728554289; cv=none; b=jrTCFYryXPGP2Ypta7ixVgUdRl6gFhmRt3LT1XEFPsU4dmDVBWbZ4KcLq6AuAypOOZ0QBBkoDCM0j66JqAe7LEGqHqh1v0OMvIo1dmIzW58SLohU+kQQenDlvWikGr4xJWm6w2zk8uFi0VqocwVoekw8cLljl6vXFX0UHh+q+G8=
+	t=1728556833; cv=none; b=EZtQwrhoR4XzglrYf0w59kkPo5k0+YUMOxmiM4hxYnWSMVtY8nE11fiCtD5NrCtaezIrszFm+Ad66XHUqZZkBxyC5mElD9v5XMUzjf+2bfiZ1AjieKaZ/jQfDcuGa9xbatmbzIafL0/sQFFmJ9yKB5SfbtGOrFnFZ/fC68xgm8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728554289; c=relaxed/simple;
-	bh=NfhfZqu2Su0RgqD8cq5nEWdseA734/1rsCzpimrRzr8=;
+	s=arc-20240116; t=1728556833; c=relaxed/simple;
+	bh=6IZ/lCHicleSJFqXu6KLb1FlJSmDUPAbcpMj5ss5U8U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tw3ybIahDgSD5iGIJLYKkLcToE5mwA9q6kZ6aOrC2XVP0zn+Lt7wbl34iKoz6UJaBwcrKEBcie9geZVK2raz+xnaSXkgZdcRf1lBcbgdT/7jNcYn4PLNwY7UK+ynbP7zt0IUKvSPdnArM9ece6h56B+zCbqQaGKZf4HXJHETFso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ku7zG7Ch; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KY8yyCXpn9CsAnuRLT1bgtOqsTiRP6O+Y2uhDtU8Pvz3IpYIRlUItUSI4OTnWsbkkcbXuJQ+h/H7jTxKIcdHJYrzWQcFfN862wZ9abtBEMm6Rcbq62FZkfQsfY6CD6IAq9zZwN6voNDYey5f/wrwaWtTp8LtH2VbfVVA5kpM0Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DluyClL1; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ku7zG7Ch"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728554288; x=1760090288;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NfhfZqu2Su0RgqD8cq5nEWdseA734/1rsCzpimrRzr8=;
-  b=Ku7zG7ChR2UEV/7zGR/M/hNJwKCGkFImMDcgpmMkSAnxXP4pqkjE+ARQ
-   +3Sd/BnpxbPadgzlDmX+T2i+nyBRmDAVIpR8QTqi8GS1RiCGrEmdPjy16
-   ZUPYjLyJ+sqfVFIsv4zZrAGH7MmsBmIWvqhUGhFulev9Bc/MoZalmubiM
-   fCbJxo27vNgXNrbfXi/6GYMT1qqTgQbSRZ8nwiYOLY/gYhX3ORp/pN7Ax
-   LjY317YxzhZ8uNwHbHpih+OS8N8SatGhONOnvZQfh3sQi0yUtXAhluHNH
-   y8Dr6bzCfKrBJqP7W7kN+XO8H04oljxxcwkpO6cEnuWe0mRCLVXRUDDgo
-   w==;
-X-CSE-ConnectionGUID: L2L90KDrQ/eIE4yAdj3qXw==
-X-CSE-MsgGUID: MhNbOHOjQaal7/rsneZ+Kg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="31797862"
-X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
-   d="scan'208";a="31797862"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 02:58:07 -0700
-X-CSE-ConnectionGUID: N7yLUXyFTj2JAcgUg+ExFA==
-X-CSE-MsgGUID: N+4A3YoOQVOSa5ysiTYLQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
-   d="scan'208";a="76742946"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2024 02:58:05 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sypvm-000Abe-1i;
-	Thu, 10 Oct 2024 09:58:02 +0000
-Date: Thu, 10 Oct 2024 17:57:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Edward Adam Davis <eadavis@qq.com>,
-	syzbot+e37dd1dfc814b10caa55@syzkaller.appspotmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	almaz.alexandrovich@paragon-software.com,
-	linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] ntfs3: Fix WARNING in ntfs_extend_initialized_size
-Message-ID: <202410101748.6VtnyCOG-lkp@intel.com>
-References: <tencent_EE134FDF8DFFA5E18D84121FDDE5DDB41907@qq.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DluyClL1"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d49a7207cso326974f8f.0
+        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 03:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728556830; x=1729161630; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EBHWiktfVYlgbYifeV/Ct3rZTbpPbZ7HKtEDGENAOyk=;
+        b=DluyClL1h6pbnf/b8cSN7GP2o3Oc9wNnPGPFEkdO2vbBvp+sYi5zH+Jz6UwXSN+scW
+         ciMkqAmn+3dA8AbKMjZLs60F8MvorAtvEx3wyDR0ZtzA3fbnOYhe9EvVKPucE5Ly9GTg
+         /OhoNL6yeRx8MMvfrYKAfIk3u9yLPkb+Z7F3pMmGArHHiCimyghxuj8xEvrBFi0apNfE
+         gyG5qJ0IHdZUHE6X+wkK1X97DYHLAxi8ZdFypnGVCeTK+kSs/nRK77UGluvCIgEbG8LY
+         ZQu5+mkrVpbBzriuS1DJrSOcCwYq0Mxl2/A2irPhY+wFsxf42WREkFmOsh9BXVpX+hcs
+         Od1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728556830; x=1729161630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EBHWiktfVYlgbYifeV/Ct3rZTbpPbZ7HKtEDGENAOyk=;
+        b=j/7OjtC3S0OAQv0Cc4axUuC+96OohEXngFOnq3oJV1AnSQy4fLIojjHI4PVUjAgGVx
+         T7+A+Pk7/sl4uW+mWXAnonUXZK5K981c6RtD9qnsQoX/1gjRD4lZ85ilInDsIzL9akp3
+         QW3rGKiRQ2i/c2lI75VU/Y3LZaLIOyUDs/trmo7bm7eJC7KWWeL1pnLVhWLFTAbFJz7C
+         xi24XnrNmbc9I98TwwOIxrlR2w5RoqTkUgfmJRludl0h3NWT1uEodjqVxhxGjrFQcaoC
+         uzP215Sdm3khOCApiP1Wo1rALE1XdSWfIgRcQVou1QTbQ6KPEC+V1tTI8rmdV26XOrPZ
+         hzvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUjl4w/TPY5FW8LnGCG1P/hjRz5B2S6W2rkCgalZQJK0CnhRT1Ha5zf8yx1b2yV82LbEHXd@lists.linux.dev
+X-Gm-Message-State: AOJu0YyjS4k5+nJGDP5t6cYNo6ZfXmVo97R0VVbRMcZQDPMHIMZFWiMk
+	0pq2Yog4esK+P8xuFUzZNRFSaI9SCQpSQ19QGF2Z5IibaK2k6VDEko8/a2Bmu33FmiIHj6/dfSY
+	x7fTu
+X-Google-Smtp-Source: AGHT+IFO5jDd08ddK1X0YjR9dIy7JGWXcVcRqZfK2+MjUcvEOY5tKA5RJvpLtMudOT6lSTGNeMHZZQ==
+X-Received: by 2002:adf:ecca:0:b0:37d:4a68:61a1 with SMTP id ffacd0b85a97d-37d4a68621cmr1116060f8f.56.1728556829836;
+        Thu, 10 Oct 2024 03:40:29 -0700 (PDT)
+Received: from localhost (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6a8269sm1183712f8f.1.2024.10.10.03.40.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 03:40:29 -0700 (PDT)
+Date: Thu, 10 Oct 2024 10:40:25 +0000
+From: Aleksei Vetrov <vvvvvv@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Shivamurthy Shastri <shivamurthy.shastri@linutronix.de>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	akpm@linux-foundation.org, vbabka@suse.cz, willy@infradead.org,
+	hannes@cmpxchg.org, anna-maria@linutronix.de, tglx@linutronix.de,
+	arnd@arndb.de, llvm@lists.linux.dev
+Subject: Re: [PATCH] mm/vmstat: Fix -Wenum-enum-conversion warning in vmstat.h
+Message-ID: <ZwevGZHiXOBqoslA@google.com>
+References: <20240621111604.25330-1-shivamurthy.shastri@linutronix.de>
+ <ZwRA9SOcOjjLJcpi@google.com>
+ <20241008005136.GA241099@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,97 +73,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_EE134FDF8DFFA5E18D84121FDDE5DDB41907@qq.com>
+In-Reply-To: <20241008005136.GA241099@thelio-3990X>
 
-Hi Edward,
+Hi Nathan,
 
-kernel test robot noticed the following build errors:
+On Mon, Oct 07, 2024 at 05:51:36PM -0700, Nathan Chancellor wrote:
+> For what it's worth, I never really saw Matthew's comment around what
+> value does this warning provide addressed. I was the one who originally
+> moved it into W=1 at the request of Arnd because he felt that instances
+> of this warning could be bugs and they should be audited.  However, I
+> have not seen many instances of this warning pop up in new code through
+> 0day build reports and the ones that I have seen seem to be intentional,
+> as they are using enums like integral values, such as here. If that is
+> just going to result in a bunch of patches like this adding unnecessary
+> casts, I think it would just be better to consider disabling this
+> warning altogether or at the very least, moving it to W=2 (which is for
+> warnings that are noisy but might contain bugs), since more people are
+> using W=1 as their normal build configuration nowadays.
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v6.12-rc2 next-20241010]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If time has proven that this warning has never found an unintended enum
+conversion, then it is worth to disable it for everyone. As you said in
+the original thread ([PATCH] kbuild: Disable two Clang specific
+enumeration warnings), W=2 is not run by any CI, so I would prefer to
+disable it completely.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/ntfs3-Fix-WARNING-in-ntfs_extend_initialized_size/20241007-191224
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/tencent_EE134FDF8DFFA5E18D84121FDDE5DDB41907%40qq.com
-patch subject: [PATCH] ntfs3: Fix WARNING in ntfs_extend_initialized_size
-config: i386-buildonly-randconfig-001-20241010 (https://download.01.org/0day-ci/archive/20241010/202410101748.6VtnyCOG-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410101748.6VtnyCOG-lkp@intel.com/reproduce)
+Alternatives considered:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410101748.6VtnyCOG-lkp@intel.com/
+* Enable -Wenum-enum-conversion only for 0day build reports through
+  KCFLAGS. It will eliminate noise for regular users while keeping
+  developers informed about new instances of this warning.
+* -Wno-error=enum-enum-conversion to keep warning but don't block
+  compilation for CONFIG_WERROR users.
 
-All errors (new ones prefixed by >>):
-
->> fs/ntfs3/file.c:402:15: error: no member named 'valid' in 'struct ntfs_inode'
-     402 |                 WARN_ON(ni->valid >= pos);
-         |                         ~~  ^
-   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
-     123 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   1 error generated.
-
-
-vim +402 fs/ntfs3/file.c
-
-   379	
-   380	static int ntfs_extend(struct inode *inode, loff_t pos, size_t count,
-   381			       struct file *file)
-   382	{
-   383		struct ntfs_inode *ni = ntfs_i(inode);
-   384		struct address_space *mapping = inode->i_mapping;
-   385		loff_t end = pos + count;
-   386		bool extend_init = file && pos > ni->i_valid;
-   387		int err;
-   388	
-   389		if (end <= inode->i_size && !extend_init)
-   390			return 0;
-   391	
-   392		/* Mark rw ntfs as dirty. It will be cleared at umount. */
-   393		ntfs_set_state(ni->mi.sbi, NTFS_DIRTY_DIRTY);
-   394	
-   395		if (end > inode->i_size) {
-   396			err = ntfs_set_size(inode, end);
-   397			if (err)
-   398				goto out;
-   399		}
-   400	
-   401		if (extend_init && !is_compressed(ni)) {
- > 402			WARN_ON(ni->valid >= pos);
-   403			err = ntfs_extend_initialized_size(file, ni, ni->i_valid, pos);
-   404			if (err)
-   405				goto out;
-   406		} else {
-   407			err = 0;
-   408		}
-   409	
-   410		inode_set_mtime_to_ts(inode, inode_set_ctime_current(inode));
-   411		mark_inode_dirty(inode);
-   412	
-   413		if (IS_SYNC(inode)) {
-   414			int err2;
-   415	
-   416			err = filemap_fdatawrite_range(mapping, pos, end - 1);
-   417			err2 = sync_mapping_buffers(mapping);
-   418			if (!err)
-   419				err = err2;
-   420			err2 = write_inode_now(inode, 1);
-   421			if (!err)
-   422				err = err2;
-   423			if (!err)
-   424				err = filemap_fdatawait_range(mapping, pos, end - 1);
-   425		}
-   426	
-   427	out:
-   428		return err;
-   429	}
-   430	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Arnd Bergmann, what do you think? Have you found it useful after all?
