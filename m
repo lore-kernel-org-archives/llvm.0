@@ -1,217 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7822F192B9E;
-	Thu, 10 Oct 2024 17:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE1E1CB30D
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 17:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728580233; cv=none; b=QV9wBpdUa1vgIJlU3zMrH3btzvixKSWJDZx0g4qDTkzg3wd2i844hjK+xKcnkHgxafH9eY27ZLdHg0OEfU9HEBREaDAwWOwUz0TCXBhqM5NaHBj6ar3T18hQo/W8d/mc2xkJ3PpATaEyMpXTI5b2Yvbdj43fmt6TVWwyg3RS1e4=
+	t=1728582630; cv=none; b=j2tp+OCItrWVzPl1Rqv2tJkjogxVNWT1mAZMiSGS5kLiDGhnwGReQzGzyQ+PFtgmRFNd5IwQRxJz4IYCOP1LQ94x2suRQtL0/n5zN9Fk5tW8o9Vc6NXBSGTg7ZLY2pj48Y69H2y4+O+Ew8wHxQj7pJLe1HXwFyQUTAhHTu0gAO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728580233; c=relaxed/simple;
-	bh=LKzg2xvYGT+aj/zGDlwFx/Y6GeQriTDfR72/HvFVDpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rf0ml5k8T19+O5X72PrWlpOW8X99YXshOD+jvDaBN3XYoQaiqx5rQ7GdARtfKYiNnAmYdOPn0lgp2FinMdw6CC4Qln/+TQt0119p5o8WwRE4bE3YEyiQjwWd07xChvJy+8vMMtmEcdYqQlECIuvqtvN4Qjxp5g41BtWwHCypxbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G9+VaxTK; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728582630; c=relaxed/simple;
+	bh=pUYajRi2n7G5qCJnnhPRK13bQLGsrt6/If8BJH4VHnw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oJV4JDItYyZAyvJmS9F3wHNIr6P3nemYww0pHqlrOzNeOqXSsnOk0IFu5bZJJvwJzKVqv4eGIeVe4SM3TsfWfaukepaDKZ+kGyZvG91jsIu4QXeLDyI7vy9FSHs6aWnCU/acVfgqmeeFszRE/dqXkLl0AzyzBw+ZdFNfM0T8pag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rk5GwsY0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G9+VaxTK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728580231; x=1760116231;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LKzg2xvYGT+aj/zGDlwFx/Y6GeQriTDfR72/HvFVDpk=;
-  b=G9+VaxTKUvRz4SR0R5umSQrD+nTR1azqccFXJlKT7w3di8NEonMW747z
-   yaK/JclbFpxWMgIOlnYkY9Dr8XK7QEEOGn2RF4+jkC9VK/TLLGCQUp7d2
-   qYmXt89dLvFla/zZbqPWeghLdTNigflgZtByNXAD9vQnXB1wxA4w2PVME
-   0cmi0k8bOicnyzCflWxy64O0YEUZTECegcKqknq7eXnA5rGg320oObdBf
-   N0q9gkLzm3Es+d4dZCjUS0OWv9qdCHlYWh84+bfAqMsNrHxTQP5pIcbfA
-   0Mz/ig/qTnb1zBHq9hzhfOYvEn7/n4gtFDaYzQldt9ONfBJzv2jdkHIco
-   w==;
-X-CSE-ConnectionGUID: 2POghTUNRDq0tuLMfK9eDQ==
-X-CSE-MsgGUID: uIlF0GMsR4uu0gW6vQCNHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="31750274"
-X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
-   d="scan'208";a="31750274"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 10:10:31 -0700
-X-CSE-ConnectionGUID: ithkfGpeTg+4UmbNz26Y9g==
-X-CSE-MsgGUID: W6eJiQsxQNCIh6d+i0WYow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
-   d="scan'208";a="76581573"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 10 Oct 2024 10:10:26 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sywgB-000B3z-1r;
-	Thu, 10 Oct 2024 17:10:23 +0000
-Date: Fri, 11 Oct 2024 01:10:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wei Fang <wei.fang@nxp.com>, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, vladimir.oltean@nxp.com,
-	claudiu.manoil@nxp.com, xiaoning.wang@nxp.com, Frank.Li@nxp.com,
-	christophe.leroy@csgroup.eu, linux@armlinux.org.uk,
-	bhelgaas@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	imx@lists.linux.dev, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH net-next 05/11] net: enetc: add enetc-pf-common driver
- support
-Message-ID: <202410110019.xUSLtcAC-lkp@intel.com>
-References: <20241009095116.147412-6-wei.fang@nxp.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rk5GwsY0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D019C4AF09
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 17:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728582630;
+	bh=pUYajRi2n7G5qCJnnhPRK13bQLGsrt6/If8BJH4VHnw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rk5GwsY0gjDOfZ/aX/F+VXm66fr68aUu9s3pll1w/1De7ltQV8O/BetYhH9pqitHZ
+	 QGmbNA6SK9EYvoOLNTd06CPA6QmL5QyXTLSClbPMjZ5kQUA1CZZO5NYyaY47fGMxlE
+	 MxnG+uBIcuf7pKqRXQEIzIq1R7EvEksVfNLTXdDazTjXw+WuXI9zactmzS4lThMaC6
+	 afmOaYxJT/xVEqDbQ+MKFu9k06kvLV7D+LFlNDt2vB7rM0Qgyn4TEKeC0GnA2tTVXx
+	 JGY9232aoIHWcJ9Vmaplu59IXe5vh1B2Eds3uUdWTzFFqpSsMIePMQu3lSH9y7dawU
+	 3xE8zvR/IQmFA==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb2f4b282cso1127521fa.2
+        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 10:50:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWXcrCqFJ7FmzH6dKNojKKTpiWYocxRHzYj6QPAqOuFI9ubEHyn75Q417UpqSCTDc/Y8MKZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YyQ+3w3EHZoWXXXNXefK9JNqGyk+vlodylIOfNLkoYikvL2Ore+
+	PoCGU5q4/mYPHgxTJnMh5XRpyALkDcAM9TLVo0U12bfbPbL2km6Wkku4JHSVZpbgc6+JrQ5egNp
+	cDtBN5Emt6U1bEWP1/HdAxtKU2PA=
+X-Google-Smtp-Source: AGHT+IETNbIV3bLEGPXj15vBbg83kY3qeg53JDA0AhiK/RXoGkPNvxclnUD5zi6uuyXBN7BiOyaiI3ISEcsp4cPhvE0=
+X-Received: by 2002:a05:651c:1548:b0:2f6:9787:5fc0 with SMTP id
+ 38308e7fff4ca-2fb187f7ca5mr47115911fa.40.1728582628460; Thu, 10 Oct 2024
+ 10:50:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241009095116.147412-6-wei.fang@nxp.com>
+References: <20241010122801.1321976-7-ardb+git@google.com>
+In-Reply-To: <20241010122801.1321976-7-ardb+git@google.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 10 Oct 2024 19:50:17 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE_ZQG0B5fTTxQUWB5wUQPYVgP3TE5Z4ouEXZtyhs=CQQ@mail.gmail.com>
+Message-ID: <CAMj1kXE_ZQG0B5fTTxQUWB5wUQPYVgP3TE5Z4ouEXZtyhs=CQQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] Improve objtool jump table handling
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, keescook@chromium.org, 
+	linux-hardening@vger.kernel.org, nathan@kernel.org, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Jan Beulich <jbeulich@suse.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Wei,
+On Thu, 10 Oct 2024 at 14:28, Ard Biesheuvel <ardb+git@google.com> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Jump table handling has faded into the background a little due to the
+> fact that jump tables are [currently] disabled when enabling retpoline
+> mitigations and/or IBT on x86.
+>
+> However, this is likely to come back and bite us later, so it still
+> needs to be addressed. Given the difficulty in identifying jump tables
+> from .rodata references and indirect jump instructions that often have
+> no obvious correlation, it would be better to do this in the compiler.
+>
+> This series implements [on the objtool side] the suggestion made at GNU
+> Cauldron this year to annotate the indirect jump with a R_X86_64_NONE
+> relocation that refers to the jump table, and ensure that it is covered
+> by a STT_OBJECT symbol whose size accurately reflects the size of the
+> jump table.
+>
 
-kernel test robot noticed the following build warnings:
+For the adventurous, I have a branch [0] that implements the first
+part of this in Clang.
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Fang/dt-bindings-net-add-compatible-string-for-i-MX95-EMDIO/20241009-181113
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241009095116.147412-6-wei.fang%40nxp.com
-patch subject: [PATCH net-next 05/11] net: enetc: add enetc-pf-common driver support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241011/202410110019.xUSLtcAC-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410110019.xUSLtcAC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410110019.xUSLtcAC-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf_common.c:3:
-   In file included from include/linux/fsl/enetc_mdio.h:7:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf_common.c:3:
-   In file included from include/linux/fsl/enetc_mdio.h:7:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf_common.c:3:
-   In file included from include/linux/fsl/enetc_mdio.h:7:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf_common.c:3:
-   In file included from include/linux/fsl/enetc_mdio.h:7:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf_common.c:3:
->> include/linux/fsl/enetc_mdio.h:62:18: warning: no previous prototype for function 'enetc_hw_alloc' [-Wmissing-prototypes]
-      62 | struct enetc_hw *enetc_hw_alloc(struct device *dev, void __iomem *port_regs)
-         |                  ^
-   include/linux/fsl/enetc_mdio.h:62:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      62 | struct enetc_hw *enetc_hw_alloc(struct device *dev, void __iomem *port_regs)
-         | ^
-         | static 
-   8 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+Getting the jump table emitted as a STT_OBJECT with a proper size
+shouldn't be too hard either, but I'll look into that later.
 
 
-vim +/enetc_hw_alloc +62 include/linux/fsl/enetc_mdio.h
-
-6517798dd3432a Claudiu Manoil 2020-01-06  49  
-80e87442e69ba8 Andrew Lunn    2023-01-12  50  static inline int enetc_mdio_read_c22(struct mii_bus *bus, int phy_id,
-80e87442e69ba8 Andrew Lunn    2023-01-12  51  				      int regnum)
-6517798dd3432a Claudiu Manoil 2020-01-06  52  { return -EINVAL; }
-80e87442e69ba8 Andrew Lunn    2023-01-12  53  static inline int enetc_mdio_write_c22(struct mii_bus *bus, int phy_id,
-80e87442e69ba8 Andrew Lunn    2023-01-12  54  				       int regnum, u16 value)
-80e87442e69ba8 Andrew Lunn    2023-01-12  55  { return -EINVAL; }
-80e87442e69ba8 Andrew Lunn    2023-01-12  56  static inline int enetc_mdio_read_c45(struct mii_bus *bus, int phy_id,
-80e87442e69ba8 Andrew Lunn    2023-01-12  57  				      int devad, int regnum)
-80e87442e69ba8 Andrew Lunn    2023-01-12  58  { return -EINVAL; }
-80e87442e69ba8 Andrew Lunn    2023-01-12  59  static inline int enetc_mdio_write_c45(struct mii_bus *bus, int phy_id,
-80e87442e69ba8 Andrew Lunn    2023-01-12  60  				       int devad, int regnum, u16 value)
-6517798dd3432a Claudiu Manoil 2020-01-06  61  { return -EINVAL; }
-6517798dd3432a Claudiu Manoil 2020-01-06 @62  struct enetc_hw *enetc_hw_alloc(struct device *dev, void __iomem *port_regs)
-6517798dd3432a Claudiu Manoil 2020-01-06  63  { return ERR_PTR(-EINVAL); }
-6517798dd3432a Claudiu Manoil 2020-01-06  64  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[0] https://github.com/ardbiesheuvel/llvm-project/tree/jump-table-annotations
