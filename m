@@ -1,107 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5905D1CEAD6
-	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 20:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87B91DF971;
+	Thu, 10 Oct 2024 20:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728590809; cv=none; b=h6gVKefFP5+h7H37tvL41jNsi9SNWOW+IVT3iETTsc8WHxcJenEfa/VjWdnlOUhikl97OjmEHKng4LBzgXZPWR3p7LmmNirf2KOPSg1xGLqAyoivpAambNTAntA3jaTTbx//7o6H0m07R5DcjfMwIPxl+FLQXoefL/o7hheGgsI=
+	t=1728591127; cv=none; b=CgnfSW1SBrilZRFh7sTBIdqW9iKGtbXio+RFDnjX8OPELsSyH9N0O9Zt8/Nc73JjGrlmQG+qTPQmqT08HwSbPfCj+EP7FpUWK+YxL/CCWeBQc9ddvAGc9edrjRAOC86V7Up4UE83jO6NKkk1G51guo4w4k+SYuxuNECPQHKpT3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728590809; c=relaxed/simple;
-	bh=ldTPRRZKRBJ5GB+hRVyfSXi2ehL2o0p5RYCW3Vi9srw=;
+	s=arc-20240116; t=1728591127; c=relaxed/simple;
+	bh=JCIc/THGumTBm6gTrXTiZZykyIoKUMdP02DbZlEOyqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C9WVwboa6sz6e6oKPhBzJWUHUpU9oOY29YnUr5QTDyE/3a9thNC+MS2oEdQXN7ASOKRZDla+7FPfEmG1QvCGzWeUTjMhQnTYOQ5TQ/+YiUajCHPd0Y+bdpKpO7KE6IDUgdTHG4hyKndhqWRxIPYdBk1gbN+TYII3C/56ERfxyec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=streVKfQ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=AYWv7cQ0AOItfVenIqVg1aPiYp49noyjnukRdXQogBjukuA09ArzXEisEQM5PhhsJSPf3K/AG+VIq6VaDHLZm+KrlAbnW6pKbvf+UoZopKoe4eBWg0K+r/wb7ywunD3m/UN4Ivk3PKerRziS9cIajkgK1pkSfNKw1dcDZJBFq0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCAAp+zv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="streVKfQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB89AC4CED0;
-	Thu, 10 Oct 2024 20:06:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCAAp+zv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19591C4CECD;
+	Thu, 10 Oct 2024 20:12:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728590808;
-	bh=ldTPRRZKRBJ5GB+hRVyfSXi2ehL2o0p5RYCW3Vi9srw=;
+	s=k20201202; t=1728591126;
+	bh=JCIc/THGumTBm6gTrXTiZZykyIoKUMdP02DbZlEOyqY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=streVKfQsZc6pj0lr6nUnHQ2t43SI9q3TKw1LDEaqP9YhRQsvIvjOmvlzCkwqPdJQ
-	 qzLTU3CtCUyXoRKZLh9Z/RtoJjltGdxWx5RDhFTEz7sBR8Das+F2gIVpLqbUShhOpU
-	 I09a/3EFuZ6cKAEjQ9whY7dht29L66IXNkyU1J7N4DfHb2QxEIpsVuSbS7ejSFVc6O
-	 /MPAHAv30ETJoMuRcf/XSqv3se2Gu1nzXlLLhulQip+8FTGnHeprpeN3wGpaPAYVl9
-	 j/5XKmGuDImPG74beKKav/8P324/qi4j1VSsXl6MZqKHjfap7T+bPu9Tr/MeBTgWf9
-	 6MkGdzYXvC9rQ==
-Date: Thu, 10 Oct 2024 13:06:47 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] llvmorg-20-init-8119-gd2408c417cfa: Failure on
- aarch64
-Message-ID: <20241010200647.GA1317667@thelio-3990X>
-References: <637931286.20442.1728373223783@jenkins.jenkins>
+	b=oCAAp+zv0FqZTtF3O++uZAxRsxIICg4grphlzdMZEA1hnpUCELd72WuLLZwyuqMU6
+	 WHet7FL96t55tJVuQLDKffCJXRCh19jgQ6QYwLN8wpHZsZJFu7OXSGcVQJZTaIJEr9
+	 s50KfW/+gwGzp3zgn+S/i3Tz13ebgRudoUPZocX8UIsb+kGqciMcMvmSqz5sZqNEs+
+	 31OnIyZv9d3JIoAkCVRev1HwU91Au2lYNg5QuGrgJQfsiy3hV6dBrjtz91LenbPh55
+	 Elww/B1TpnTZkCEM7DfSUCDfPqBTo+f8+Dg74OxBW9f6RakYEbwdYKPO3xXI0hFuab
+	 HkBZczOhZxdeA==
+Date: Thu, 10 Oct 2024 13:12:01 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	keescook@chromium.org, linux-hardening@vger.kernel.org,
+	nathan@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jan Beulich <jbeulich@suse.com>,
+	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v2 3/5] objtool: Add support for annotated jump tables
+Message-ID: <20241010201201.y2lrqqhcygun66pz@treble>
+References: <20241010122801.1321976-7-ardb+git@google.com>
+ <20241010122801.1321976-10-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <637931286.20442.1728373223783@jenkins.jenkins>
+In-Reply-To: <20241010122801.1321976-10-ardb+git@google.com>
 
-Thanks for the report, I have opened
-https://github.com/llvm/llvm-project/issues/111903 for this.
+On Thu, Oct 10, 2024 at 02:28:05PM +0200, Ard Biesheuvel wrote:
+> @@ -1394,8 +1396,12 @@ static struct reloc *insn_reloc(struct objtool_file *file, struct instruction *i
+>  	if (!file)
+>  		return NULL;
+>  
+> -	reloc = find_reloc_by_dest_range(file->elf, insn->sec,
+> -					 insn->offset, insn->len);
+> +	do {
+> +		/* Skip any R_*_NONE relocations */
+> +		reloc = find_reloc_by_dest_range(file->elf, insn->sec,
+> +						 offset++, len--);
+> +	} while (len && reloc && reloc_type(reloc) == 0);
 
-On Tue, Oct 08, 2024 at 07:40:22AM +0000, ci_notify@linaro.org wrote:
-> Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
-> 
-> We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
-> 
-> We track this report status in https://linaro.atlassian.net/browse/LLVM-1390 , please let us know if you are looking at the problem and/or when you have a fix.
-> 
-> In CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig after:
-> 
->   | commit llvmorg-20-init-8119-gd2408c417cfa
->   | Author: David Green <david.green@arm.com>
->   | Date:   Sun Oct 6 10:44:21 2024 +0100
->   | 
->   |     [InstCombine] Canonicalize more geps with constant gep bases and constant offsets. (#110033)
->   |     
->   |     This is another small but hopefully not performance negative step to
->   |     canonicalizing towards i8 geps. We looks for geps with a constant offset
->   |     base pointer of the form `gep (gep @glob, C1), x, C2` and expand the gep
->   | ... 2 lines of the commit log omitted.
-> 
-> The configuration of this build is:
-> CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
-> Results changed to
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 24511
-> 
-> From
-> # reset_artifacts:
-> -10
-> # build_abe binutils:
-> -9
-> # build_kernel_llvm:
-> -5
-> # build_abe qemu:
-> -2
-> # linux_n_obj:
-> 33835
-> # linux build successful:
-> all
-> 
-> -----------------8<--------------------------8<--------------------------8<--------------------------
-> The information below can be used to reproduce a debug environment:
-> 
-> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/214/artifact/artifacts
-> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/213/artifact/artifacts
-> 
-> Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/d2408c417cfa71f1786c909788560374eb1aca96/tcwg_kernel/llvm-master-aarch64-lts-allmodconfig/reproduction_instructions.txt
-> 
-> Full commit : https://github.com/llvm/llvm-project/commit/d2408c417cfa71f1786c909788560374eb1aca96
+s/0/R_NONE/
 
+-- 
+Josh
