@@ -1,171 +1,130 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939F51C578B
-	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 12:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D271C7B70;
+	Thu, 10 Oct 2024 13:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728563308; cv=none; b=jB7PSSIGzygUotiKmPwY2cYHM3iR/U5jcI8NHcbRUyFjBW68S1H/Lj+xLvROkfgWQzPCo4yx5Y+NwFptVis9ZZzWgj2vfcKBqe7fGXgxh2K6m6lGIrTB/ORUzaKcy4YREDjIuZkSUtbJ+vvZbMwfqBcaAAGrfxlAj/QBHVnG8jA=
+	t=1728565415; cv=none; b=XFIglxma88v5r+vZ42//7W2nkhPn7IhVT+ai8VFMk7QOgvxHI2KWPWvyGykyEmVmNNpdfyJPKC02If3uJQbIzBlh889CmO0UsNKoeC5560BS0dPxdRPyqKEQdWW5uRpN9VH7+dZXcv6aDJgzLzW1Ht/z3KZtjsc+9t2/jVl7g5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728563308; c=relaxed/simple;
-	bh=/o/yZ4swobCw3VY94GgXQ0C8aM777wTuhgBNMFNnV60=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Nqx3npx9wPuKuEB82gxI10qFzHO49HwMCF0S6m95b43G10R9KdMCJMlUGG2PrQV182nH/q5ZPqlBIi06BCFepX/s1WV6pMmkcwsnvXVPxx+NRg5BP57icN1PcwqzugOWkVf4AFc4R3/Yb0Sqos6dMC3MRePWPSatoi3J/uo1YFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MpytAvyB; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	s=arc-20240116; t=1728565415; c=relaxed/simple;
+	bh=lxTwG9FeY6tGa/suySl5tWQBbHE4hFx2E8w3ZHNgXu4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OLeTWvH7OVP6fUTCyiPouilYwS8aX1ejhZfAnafovvoOaiPaGTcFV3l1biOpFSMXuBuaLp1JpqzjkfFYDTCWchyrm18leWCc77klJKgiW7cNOgU8UTzLitdSJWrnfwwpB556W5/0RtwGm9ObUNYP42lwhni8UAN5RbWN/Ga3/p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UO5kNgvI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MpytAvyB"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e315a5b199so16685727b3.2
-        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 05:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728563305; x=1729168105; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysiTQYnIFAM+GVpiQPZxea96jDzKFB0S2bf0Q1srz24=;
-        b=MpytAvyBceiuFDvcvcLeUq9h4sKr6VTkw6z3C/Rv9OwN0wFWKGtHpOgcIkvig5mDst
-         wDf9Ycjis+PzcOhdE2zrSUSq8lL+v8AxXYHeTMqH0jFfn4WLKmy2bE5dSfR4OqrKQK2/
-         zWPgQpYR8438JWOErd+At8MzldYPlLu0DKGV5JsaLw5oS/UJ0hKkiyse60KUD56ERmCV
-         2dj50t54qaCnQQQ+ogKnPerWEI7GGx+C5MYuwmmyhDn73pvdtTn/C33dNpSaVvHvztUZ
-         5gbdNdlyG0h3Qb8Y5FQm3VytKrpO8vsLLDQ8+r7jvp0YJadqxXffE+4607joNlQjXYHm
-         Ykjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728563305; x=1729168105;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ysiTQYnIFAM+GVpiQPZxea96jDzKFB0S2bf0Q1srz24=;
-        b=gvovLV/ZOkHEVlo2Zcs3qVOHipJBaeFENQ0dO++hjOoTPZhrGawgG9WAOKHul3LBDY
-         HN2/OBH8yGCXBOPLQxzHu1VtflRHJBpnvLgcUSgYsqQQEFAh5YfeL8GdkjrfdrLXXzoY
-         g3/N3pEb9Z5gz9Co+Y09iWo2D6WY96hubrKf3Qq03UHsg5YG6b/R8xfJWwBsPfHy7kDh
-         /Ga/FLU6vVfKodJjIe/Mb5uHjmBHjCc8lJTeBvzZRz5eVn/r3Y/bMIAcuznAb4ECjqUF
-         IGE26ETjeZlWPeUzRCYSE9AuJkAw2iLpHrqc5Y16UTIt74s/xduR532drpBRjSd1SZ0F
-         otgQ==
-X-Gm-Message-State: AOJu0YwgxgPRsi5/DQ3Z1vflY/IkzVj/9s/vWNC4pyFkHACGXhip+dLN
-	YNv4gaO7+wbxfjc35BdDu6lVCdAulK80ClBDi/7FT0jb43ZWg6rvpKOHsYxCks/lG1qOIw==
-X-Google-Smtp-Source: AGHT+IGYzCVf/jII8KomABTrMZDoXEXfru199j0RK0tDWPSxK1xkfDqRPfD8R/E6mn2ZF9v6gg5pIreS
-X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:690c:731:b0:6e3:eab:18b1 with SMTP id
- 00721157ae682-6e3221767a6mr203727b3.1.1728563305577; Thu, 10 Oct 2024
- 05:28:25 -0700 (PDT)
-Date: Thu, 10 Oct 2024 14:28:07 +0200
-In-Reply-To: <20241010122801.1321976-7-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UO5kNgvI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9D1C4CECC;
+	Thu, 10 Oct 2024 13:03:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728565414;
+	bh=lxTwG9FeY6tGa/suySl5tWQBbHE4hFx2E8w3ZHNgXu4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UO5kNgvIcGDuHVNFYCYI0c+G0EbwoaMcgQWGOu4kZKes9aOcnYvxyWuBiC618dyNm
+	 QW0R+QFFjozmPlaezhHAuBP2U/1A0f55vTY68kB93dJ0gBFn5InP54GDYqomD+eIsY
+	 jRAvuk2q7UkZb7JNJwgfHPy+qnBHm3Ih75R17T0K1/99sx6vU/gDkp8yTMiB5OZKut
+	 px7ZyVjo8MgdeZkAAYYuM+U7p0MD+0yV7G0CpyqtEUMe901bxURJbPfJqk5LwSM/3O
+	 2WL7360heBCEkHl1qq7+TO6mSQPyJhcZsb0UUWiSrSa7L+Rq9IbP+pVLBFzqclMNrN
+	 TEFLMCrXJQVfw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1syspI-002BvM-9A;
+	Thu, 10 Oct 2024 14:03:32 +0100
+Date: Thu, 10 Oct 2024 14:03:31 +0100
+Message-ID: <86o73s5cv0.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "tianjia.zhang" <tianjia.zhang@linux.alibaba.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,	Oliver Upton
+ <oliver.upton@linux.dev>,	Joey Gouly <joey.gouly@arm.com>,	Suzuki K Poulose
+ <suzuki.poulose@arm.com>,	Zenghui Yu <yuzenghui@huawei.com>,	Catalin
+ Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,	Nathan
+ Chancellor <nathan@kernel.org>,	Bill Wendling <morbo@google.com>,	Justin
+ Stitt <justinstitt@google.com>,	=?UTF-8?B?UGllcnJlLUNsw6ltZW50?= Tosi
+ <ptosi@google.com>,	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,	linux-kernel@vger.kernel.org,	llvm@lists.linux.dev
+Subject: Re: [PATCH] KVM: arm64: nVHE: gen-hyprel: Silent build warnings
+In-Reply-To: <b3c21234-73a0-43dd-8365-9039c62b7aa7@linux.alibaba.com>
+References: <20241009085751.35976-1-tianjia.zhang@linux.alibaba.com>
+	<86set55yca.wl-maz@kernel.org>
+	<b3c21234-73a0-43dd-8365-9039c62b7aa7@linux.alibaba.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20241010122801.1321976-7-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2591; i=ardb@kernel.org;
- h=from:subject; bh=RmdquyWiyHUUPxUBLvM2Ygamlf/86/TxkgF8NWyXERA=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIZ39RGTnOvUT3GJzrx1X9JCRfnpo9w2pI/P+f72q8Y5HS
- 2VhS1hJRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZjI/VqGn4yKCg4MbTISnK/Y
- F87etqfSUuC0V+eSGs4vLtH5KVNelDP8M/12ry6phyVirtfhVYVX34UvNvU0q/3pKLY8Kf7HkZk prAA=
-X-Mailer: git-send-email 2.47.0.rc0.187.ge670bccf7e-goog
-Message-ID: <20241010122801.1321976-12-ardb+git@google.com>
-Subject: [PATCH v2 5/5] crypto: x86/crc32c - Tweak jump table to validate
- objtool logic
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, keescook@chromium.org, 
-	linux-hardening@vger.kernel.org, nathan@kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Jan Beulich <jbeulich@suse.com>, 
-	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tianjia.zhang@linux.alibaba.com, ndesaulniers@google.com, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org, morbo@google.com, justinstitt@google.com, ptosi@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Ard Biesheuvel <ardb@kernel.org>
+On Thu, 10 Oct 2024 09:12:29 +0100,
+"tianjia.zhang" <tianjia.zhang@linux.alibaba.com> wrote:
+> 
+> 
+> 
+> On 10/9/24 7:07 PM, Marc Zyngier wrote:
+> > On Wed, 09 Oct 2024 09:57:51 +0100,
+> > Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
+> >> 
+> >> This patch silent the some mismatch format build warnings
+> >> with clang, like:
+> >> 
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:233:2: warning: format specifies
+> >>    type 'unsigned long' but the argument has type 'Elf64_Off'
+> >>    (aka 'unsigned long long') [-Wformat]
+> >>      233 |         assert_ne(off, 0UL, "%lu");
+> >>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>          |                              %llu
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:193:34: note: expanded from macro 'assert_ne'
+> >>      193 | #define assert_ne(lhs, rhs, fmt)        assert_op(lhs, rhs, fmt, !=)
+> >>          |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:188:19: note: expanded from macro 'assert_op'
+> >>      187 |                                 " failed (lhs=" fmt ", rhs=" fmt        \
+> >>          |                                                 ~~~
+> >>      188 |                                 ", line=%d)", _lhs, _rhs, __LINE__);    \
+> >>          |                                               ^~~~
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:167:17: note: expanded from macro 'fatal_error'
+> >>      166 |                 fprintf(stderr, "error: %s: " fmt "\n",                 \
+> >>          |                                               ~~~
+> >>      167 |                         elf.path, ## __VA_ARGS__);                      \
+> >>          |                                      ^~~~~~~~~~~
+> >> 
+> >> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> > 
+> > I don't see these warnings. What version of LLVM are you using?
+> > 
+> 
+> I compiled the kernel on Apple Silicon M3 Pro in macOS 15.0.1, Maybe this is
+> a special scenario that is rarely used.
+> 
+> Details of clang:
+> 
+>     # clang --version
+>     Homebrew clang version 19.1.1
+>     Target: arm64-apple-darwin24.0.0
+>     Thread model: posix
+>     InstalledDir: /opt/homebrew/Cellar/llvm/19.1.1/bin
 
-Tweak the jump table so
-- the address is taken far way from its use
-- its offset from the start of .rodata is != 0x0
-- its type is STT_OBJECT and its size is set to the size of the actual
-  table
-- the indirect jump is annotated with a R_X86_64_NONE relocation
-  pointing to the jump table
+What I have is similar enough:
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S | 39 +++++++++++---------
- 1 file changed, 22 insertions(+), 17 deletions(-)
+ClangBuiltLinux clang version 19.1.1 (https://github.com/llvm/llvm-project.git d401987fe349a87c53fe25829215b080b70c0c1a)
+Target: aarch64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/maz/hot-poop/llvm/llvm-19.1.1-aarch64/bin
 
-diff --git a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-index 45b005935194..ba1cca66875b 100644
---- a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-+++ b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-@@ -93,10 +93,13 @@ SYM_FUNC_START(crc_pcl)
- #define    crc1		%r9
- #define    crc2		%r10
- 
-+	pushq	%rbp
- 	pushq   %rbx
- 	pushq   %rdi
- 	pushq   %rsi
- 
-+	leaq	jump_table(%rip), %rbp
-+
- 	## Move crc_init for Linux to a different
- 	mov     crc_init_arg, crc_init
- 
-@@ -168,9 +171,9 @@ SYM_FUNC_START(crc_pcl)
- 	xor     crc2, crc2
- 
- 	## branch into array
--	leaq	jump_table(%rip), %bufp
--	movslq	(%bufp,%rax,4), len
--	addq	len, %bufp
-+	movslq	(%rbp,%rax,4), %bufp
-+	addq	%rbp, %bufp
-+	.reloc	., R_X86_64_NONE, jump_table
- 	JMP_NOSPEC bufp
- 
- 	################################################################
-@@ -310,24 +313,11 @@ LABEL less_than_ %j			# less_than_j: Length should be in
- 	popq    %rsi
- 	popq    %rdi
- 	popq    %rbx
-+	popq    %rbp
-         RET
- SYM_FUNC_END(crc_pcl)
- 
- .section	.rodata, "a", @progbits
--        ################################################################
--        ## jump table        Table is 129 entries x 2 bytes each
--        ################################################################
--.align 4
--jump_table:
--	i=0
--.rept 129
--.altmacro
--JMPTBL_ENTRY %i
--.noaltmacro
--	i=i+1
--.endr
--
--
- 	################################################################
- 	## PCLMULQDQ tables
- 	## Table is 128 entries x 2 words (8 bytes) each
-@@ -462,3 +452,18 @@ K_table:
- 	.long 0x45cddf4e, 0xe0ac139e
- 	.long 0xacfa3103, 0x6c23e841
- 	.long 0xa51b6135, 0x170076fa
-+
-+        ################################################################
-+        ## jump table        Table is 129 entries x 2 bytes each
-+        ################################################################
-+.align 4
-+jump_table:
-+	i=0
-+.rept 129
-+.altmacro
-+JMPTBL_ENTRY %i
-+.noaltmacro
-+	i=i+1
-+.endr
-+.size	jump_table, . - jump_table
-+.type	jump_table, @object
+and yet this doesn't fire. Can you try with a compiler actually
+targeting with Linux instead of MacOS?
+
+Thanks,
+
+	M.
+
 -- 
-2.47.0.rc0.187.ge670bccf7e-goog
-
+Without deviation from the norm, progress is not possible.
