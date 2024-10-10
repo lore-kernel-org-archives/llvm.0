@@ -1,179 +1,162 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461D71BF800
-	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 09:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046121BD039;
+	Thu, 10 Oct 2024 09:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728553123; cv=none; b=Xq1Kai/P42TsvYVvAEPwrenf8+7GvTRb5XyY0JA/B0X2gOSc9dX/1GiR86waxGw2qa5l42LwplnqMS9s2cyiZEcMcfgOW68PzEKw6NcFft86kQDbkxlgOklcWVRnDVewKur5ePyxDjpGEg3tL79sDtENbr/aTC5nvQzKhzQAnyg=
+	t=1728554289; cv=none; b=jrTCFYryXPGP2Ypta7ixVgUdRl6gFhmRt3LT1XEFPsU4dmDVBWbZ4KcLq6AuAypOOZ0QBBkoDCM0j66JqAe7LEGqHqh1v0OMvIo1dmIzW58SLohU+kQQenDlvWikGr4xJWm6w2zk8uFi0VqocwVoekw8cLljl6vXFX0UHh+q+G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728553123; c=relaxed/simple;
-	bh=VT2SuDcWVnMzBAVEldlhHzTMoIA8IDGupx5zZhlV3n0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZpYW85e/Gka130O73p4IpLVLnFLQowGuKHk4UF5UFTJ6+i13Uc9nd7Pcr2eEA7dyYPWcZvaz9/ItD0Zj6VlrhenH6AZdvLZOqQUnjKZTJVpOCzN6C6xLjBFdKRPOs9IKcSl41ddVEWp0N91gMv1oTye6Dmn6QWlhXlvRAZSs1nY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h9hupciX; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1728554289; c=relaxed/simple;
+	bh=NfhfZqu2Su0RgqD8cq5nEWdseA734/1rsCzpimrRzr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tw3ybIahDgSD5iGIJLYKkLcToE5mwA9q6kZ6aOrC2XVP0zn+Lt7wbl34iKoz6UJaBwcrKEBcie9geZVK2raz+xnaSXkgZdcRf1lBcbgdT/7jNcYn4PLNwY7UK+ynbP7zt0IUKvSPdnArM9ece6h56B+zCbqQaGKZf4HXJHETFso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ku7zG7Ch; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h9hupciX"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e278b2a5c4so13153297b3.2
-        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 02:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728553120; x=1729157920; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eACD4XRROaCtgnocFX5+RB0Y2dfNcR6e9CG+8sSoYh4=;
-        b=h9hupciXr0qwMrfpU5oJJEi2PvVias5Pg1YCil7bhrvM+9kpCEgkzoWc/X255A/cmN
-         HZRGAKXEOSzVSdU1shcEaIKPlVCOpxUPAGt/id8j/rJ1nyjt2i1xtO/gmo7RjxrdwPdR
-         WYwrpre13ylpEeSaIk5yiNE73WR7xn78xDM+MpxfGYTQC8N61IDsLhRP58lV1JGHGl/f
-         CGzA88YChTMaeN1JZ2qnahgejdmVhbKws6wZs2+GmGAdIodKz04bx0vMoBbSvqviild5
-         cX/dtXePD7A0Xi/fC8/L6mWQRAfiQJHYdDX1Bg4r2IF10Nf3Be7VVUkbqifeokARlWQV
-         hT1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728553120; x=1729157920;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eACD4XRROaCtgnocFX5+RB0Y2dfNcR6e9CG+8sSoYh4=;
-        b=wI9lTF7y7YmO/tDpFypBMecDUNaNRlUiRlenMh0oqHn8W/rKlstorUvVhc+mPlZ+8+
-         6v/IvbLwCW8WJu0gJ+OyJ6i0xQQoXt4ZlKQKC1Nzw0GfcgZIdwu3EIcs8Dq/ksmhbg02
-         t6wDRSGnuvRe2qnPm0JPOtmt+gI50+V9afJ2t72qdPuCZQ1NNye9Bu5yunirL0q25+sF
-         lmuHkOkA7vZ3UnYI/Zn1E/YJcp5Mbw2iWxSUowAZLXyaY+Jn5OApEw+i3x1QKO7TkWmS
-         Dr9teXEAb+J8FW0V3S5C+OxLYMffv4kn6sQgsn6xKMdAva32pk9GqLAZLDkEQQBiOMw2
-         ZmDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX6AGN43TcRiUFWQVfhMs3HtFJmSe0JDGO/IT2nQ7kAYVbiil2dFtrkYLvGytJWQQeOkYcr@lists.linux.dev
-X-Gm-Message-State: AOJu0YxZfhOffVvhqMzwlg4FSEmrxDiKeQPEmbYWPytvnNRSVWoYgOhN
-	KtA0z6bfbmWK4ZoyaHfgqqIohYvPNiusc/m1NJD6dC7c7ko52WX74rGmM5Vl/YL04VO4FVP+BWQ
-	tZTOKN9IAF7Ui5Q==
-X-Google-Smtp-Source: AGHT+IEGcui+HlgSNQoktbhQh3A2G5+Kd6G/NcYjKQUmJw3bmKVSjI3w7gKgtE/Edkv8/1W9cri6mLPryjmTGjI=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:35bd])
- (user=aliceryhl job=sendgmr) by 2002:a05:690c:2c01:b0:6db:d257:b98 with SMTP
- id 00721157ae682-6e32215253bmr516967b3.3.1728553120372; Thu, 10 Oct 2024
- 02:38:40 -0700 (PDT)
-Date: Thu, 10 Oct 2024 09:38:27 +0000
-In-Reply-To: <20241010-icall-detect-vers-v1-0-8f114956aa88@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ku7zG7Ch"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728554288; x=1760090288;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NfhfZqu2Su0RgqD8cq5nEWdseA734/1rsCzpimrRzr8=;
+  b=Ku7zG7ChR2UEV/7zGR/M/hNJwKCGkFImMDcgpmMkSAnxXP4pqkjE+ARQ
+   +3Sd/BnpxbPadgzlDmX+T2i+nyBRmDAVIpR8QTqi8GS1RiCGrEmdPjy16
+   ZUPYjLyJ+sqfVFIsv4zZrAGH7MmsBmIWvqhUGhFulev9Bc/MoZalmubiM
+   fCbJxo27vNgXNrbfXi/6GYMT1qqTgQbSRZ8nwiYOLY/gYhX3ORp/pN7Ax
+   LjY317YxzhZ8uNwHbHpih+OS8N8SatGhONOnvZQfh3sQi0yUtXAhluHNH
+   y8Dr6bzCfKrBJqP7W7kN+XO8H04oljxxcwkpO6cEnuWe0mRCLVXRUDDgo
+   w==;
+X-CSE-ConnectionGUID: L2L90KDrQ/eIE4yAdj3qXw==
+X-CSE-MsgGUID: MhNbOHOjQaal7/rsneZ+Kg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="31797862"
+X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
+   d="scan'208";a="31797862"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 02:58:07 -0700
+X-CSE-ConnectionGUID: N7yLUXyFTj2JAcgUg+ExFA==
+X-CSE-MsgGUID: N+4A3YoOQVOSa5ysiTYLQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
+   d="scan'208";a="76742946"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2024 02:58:05 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sypvm-000Abe-1i;
+	Thu, 10 Oct 2024 09:58:02 +0000
+Date: Thu, 10 Oct 2024 17:57:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Edward Adam Davis <eadavis@qq.com>,
+	syzbot+e37dd1dfc814b10caa55@syzkaller.appspotmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	almaz.alexandrovich@paragon-software.com,
+	linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] ntfs3: Fix WARNING in ntfs_extend_initialized_size
+Message-ID: <202410101748.6VtnyCOG-lkp@intel.com>
+References: <tencent_EE134FDF8DFFA5E18D84121FDDE5DDB41907@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20241010-icall-detect-vers-v1-0-8f114956aa88@google.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4239; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=VT2SuDcWVnMzBAVEldlhHzTMoIA8IDGupx5zZhlV3n0=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBnB6CYs0u7blh+ZX5hDv0dKotrih6IeVcBm5Vhp
- EN1T0iq4B2JAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCZwegmAAKCRAEWL7uWMY5
- RhQFEACswAkfF3tGCsn7bv37wtSYjM0N0Gh3kSpV81MBZrV8NDPZJKdw5njIOrmlRvMtiVqZ0vn
- uaGVEOCtCJnJQgfUF3OVzu2Q5yBB54S1oXq3f3DNEuB2R9hHIexEM5E2QvXxNOvYPXR6REEwBR9
- xyXVgO0l6/Lx2O4GHUULGr2aULI7kGBqJMUQOt21mp1PS6lGMaWVeUq8OpmdBWOGQmPbXj0slsc
- XRVgymT4v5Nf1kWcQmQnZ6+w5ZfAMhw/CikqMwDIRlvV0cx8YgXvIDsJDDDcua0FR3MDhn84xFL
- jisqTVf+0h+1A9BRgwMz5wbgDvr/uUogd6A4nM32lL4tUBMl0KeruMKA8qIw+SfMYO21XmTrosy
- 1WmuqELMXSwO28R/oPaIdH+OS7Po874Nin7ktneBKuPIS6UPhdZuIXEBrf1tYs6t46AvdhHEktO
- AWkfHpXQCRiZ7LWiEngFArYMRDNCOfSKXBmEt4re54CTQOWvu2Qw2DI+EcOkvuUDIye+j7KEAVG
- Lb9b+s2UBP6k3+2DD2NKRlPPnors/rPhp7vRzBH2YKAujl1zfmCCl1OlqWyGwXI8Wg7FsPxeWZ3
- 4ItweSD98EgjTVkS/xw9FeweugxAKS6Z9ryfioYx1l8lVqsoyPacr4/LA3Uz6WSQC3HRtfi0Yl+ ISH/VMpZbdy3FoA==
-X-Mailer: b4 0.13.0
-Message-ID: <20241010-icall-detect-vers-v1-2-8f114956aa88@google.com>
-Subject: [PATCH 2/2] cfi: fix conditions for HAVE_CFI_ICALL_NORMALIZE_INTEGERS
-From: Alice Ryhl <aliceryhl@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, Alice Ryhl <aliceryhl@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_EE134FDF8DFFA5E18D84121FDDE5DDB41907@qq.com>
 
-The HAVE_CFI_ICALL_NORMALIZE_INTEGERS option has some tricky conditions
-when KASAN or GCOV are turned on, as in that case we need some clang and
-rustc fixes [1][2] to avoid boot failures. The intent with the current
-setup is that you should be able to override the check and turn on the
-option if your clang/rustc has the fix. However, this override does not
-work in practice. Thus, use the new RUSTC_LLVM_VERSION to correctly
-implement the check for whether the fix is available.
+Hi Edward,
 
-Additionally, remove KASAN_HW_TAGS from the list of incompatible
-options. The CFI_ICALL_NORMALIZE_INTEGERS option is incompatible with
-KASAN because LLVM will emit some constructors when using KASAN that are
-assigned incorrect CFI tags. These constructors are emitted due to use
-of -fsanitize=kernel-address or -fsanitize=kernel-hwaddress that are
-respectively passed when KASAN_GENERIC or KASAN_SW_TAGS are enabled.
-However, the KASAN_HW_TAGS option relies on hardware support for MTE
-instead and does not pass either flag. (Note also that KASAN_HW_TAGS
-does not `select CONSTRUCTORS`.)
+kernel test robot noticed the following build errors:
 
-Link: https://github.com/llvm/llvm-project/pull/104826 [1]
-Link: https://github.com/rust-lang/rust/pull/129373 [2]
-Fixes: 4c66f8307ac0 ("cfi: encode cfi normalized integers + kasan/gcov bug in Kconfig")
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
- arch/Kconfig | 26 ++++++++++++--------------
- init/Kconfig |  2 +-
- 2 files changed, 13 insertions(+), 15 deletions(-)
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on linus/master v6.12-rc2 next-20241010]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 8af374ea1adc..00163e4a237c 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -838,7 +838,7 @@ config CFI_CLANG
- config CFI_ICALL_NORMALIZE_INTEGERS
- 	bool "Normalize CFI tags for integers"
- 	depends on CFI_CLANG
--	depends on HAVE_CFI_ICALL_NORMALIZE_INTEGERS
-+	depends on HAVE_CFI_ICALL_NORMALIZE_INTEGERS_CLANG
- 	help
- 	  This option normalizes the CFI tags for integer types so that all
- 	  integer types of the same size and signedness receive the same CFI
-@@ -851,21 +851,19 @@ config CFI_ICALL_NORMALIZE_INTEGERS
- 
- 	  This option is necessary for using CFI with Rust. If unsure, say N.
- 
--config HAVE_CFI_ICALL_NORMALIZE_INTEGERS
--	def_bool !GCOV_KERNEL && !KASAN
--	depends on CFI_CLANG
-+config HAVE_CFI_ICALL_NORMALIZE_INTEGERS_CLANG
-+	def_bool y
- 	depends on $(cc-option,-fsanitize=kcfi -fsanitize-cfi-icall-experimental-normalize-integers)
--	help
--	  Is CFI_ICALL_NORMALIZE_INTEGERS supported with the set of compilers
--	  currently in use?
-+	# With GCOV/KASAN we need this fix: https://github.com/llvm/llvm-project/pull/104826
-+	depends on CLANG_VERSION >= 190000 || (!GCOV_KERNEL && !KASAN_GENERIC && !KASAN_SW_TAGS)
- 
--	  This option defaults to false if GCOV or KASAN is enabled, as there is
--	  an LLVM bug that makes normalized integers tags incompatible with
--	  KASAN and GCOV. Kconfig currently does not have the infrastructure to
--	  detect whether your rustc compiler contains the fix for this bug, so
--	  it is assumed that it doesn't. If your compiler has the fix, you can
--	  explicitly enable this option in your config file. The Kconfig logic
--	  needed to detect this will be added in a future kernel release.
-+config HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
-+	def_bool y
-+	depends on HAVE_CFI_ICALL_NORMALIZE_INTEGERS_CLANG
-+	depends on RUSTC_VERSION >= 107900
-+	# With GCOV/KASAN we need this fix: https://github.com/rust-lang/rust/pull/129373
-+	depends on (RUSTC_LLVM_VERSION >= 190000 && RUSTC_VERSION >= 108200) || \
-+		(!GCOV_KERNEL && !KASAN_GENERIC && !KASAN_SW_TAGS)
- 
- config CFI_PERMISSIVE
- 	bool "Use CFI in permissive mode"
-diff --git a/init/Kconfig b/init/Kconfig
-index 98cf859d58c2..c521e1421ad4 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1950,7 +1950,7 @@ config RUST
- 	depends on !GCC_PLUGIN_RANDSTRUCT
- 	depends on !RANDSTRUCT
- 	depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
--	depends on !CFI_CLANG || RUSTC_VERSION >= 107900 && HAVE_CFI_ICALL_NORMALIZE_INTEGERS
-+	depends on !CFI_CLANG || HAVE_CFI_ICALL_NORMALIZE_INTEGERS_RUSTC
- 	select CFI_ICALL_NORMALIZE_INTEGERS if CFI_CLANG
- 	depends on !CALL_PADDING || RUSTC_VERSION >= 108100
- 	depends on !KASAN_SW_TAGS
+url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/ntfs3-Fix-WARNING-in-ntfs_extend_initialized_size/20241007-191224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/tencent_EE134FDF8DFFA5E18D84121FDDE5DDB41907%40qq.com
+patch subject: [PATCH] ntfs3: Fix WARNING in ntfs_extend_initialized_size
+config: i386-buildonly-randconfig-001-20241010 (https://download.01.org/0day-ci/archive/20241010/202410101748.6VtnyCOG-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410101748.6VtnyCOG-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410101748.6VtnyCOG-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/ntfs3/file.c:402:15: error: no member named 'valid' in 'struct ntfs_inode'
+     402 |                 WARN_ON(ni->valid >= pos);
+         |                         ~~  ^
+   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   1 error generated.
+
+
+vim +402 fs/ntfs3/file.c
+
+   379	
+   380	static int ntfs_extend(struct inode *inode, loff_t pos, size_t count,
+   381			       struct file *file)
+   382	{
+   383		struct ntfs_inode *ni = ntfs_i(inode);
+   384		struct address_space *mapping = inode->i_mapping;
+   385		loff_t end = pos + count;
+   386		bool extend_init = file && pos > ni->i_valid;
+   387		int err;
+   388	
+   389		if (end <= inode->i_size && !extend_init)
+   390			return 0;
+   391	
+   392		/* Mark rw ntfs as dirty. It will be cleared at umount. */
+   393		ntfs_set_state(ni->mi.sbi, NTFS_DIRTY_DIRTY);
+   394	
+   395		if (end > inode->i_size) {
+   396			err = ntfs_set_size(inode, end);
+   397			if (err)
+   398				goto out;
+   399		}
+   400	
+   401		if (extend_init && !is_compressed(ni)) {
+ > 402			WARN_ON(ni->valid >= pos);
+   403			err = ntfs_extend_initialized_size(file, ni, ni->i_valid, pos);
+   404			if (err)
+   405				goto out;
+   406		} else {
+   407			err = 0;
+   408		}
+   409	
+   410		inode_set_mtime_to_ts(inode, inode_set_ctime_current(inode));
+   411		mark_inode_dirty(inode);
+   412	
+   413		if (IS_SYNC(inode)) {
+   414			int err2;
+   415	
+   416			err = filemap_fdatawrite_range(mapping, pos, end - 1);
+   417			err2 = sync_mapping_buffers(mapping);
+   418			if (!err)
+   419				err = err2;
+   420			err2 = write_inode_now(inode, 1);
+   421			if (!err)
+   422				err = err2;
+   423			if (!err)
+   424				err = filemap_fdatawait_range(mapping, pos, end - 1);
+   425		}
+   426	
+   427	out:
+   428		return err;
+   429	}
+   430	
 
 -- 
-2.47.0.rc0.187.ge670bccf7e-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
