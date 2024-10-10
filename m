@@ -1,54 +1,56 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BEF11CF2A6
-	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 19:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110121CF7CE
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 19:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728588251; cv=none; b=XWd35K44G7xCWwBBA4j0nJCEJAoh338otD5y75kQuDudFfVDLCXYYBk4qNTzDJ+/t975Twgh/xHWP6RgioEx/9tEemCezIVb6pEdKy/RxlZ2ZFfkvxY4LKKJb93QupEebVehwtcY5L64NFsoFUoqDQJLmetRM5FUQFfL97FPtBI=
+	t=1728588253; cv=none; b=ZQEfCGxw80IMD0YQYhkq+9CoS+5bh/58l4sczYmuVrPEDpoa8uF1v3QI4VjjRdX4uy1m4vSk44MXbUgcqLZ0ypu1+BSLlSy7xRW/8zXdNxWjyI0yYtLJaC3vj2052wXqsmsiCY7RAOQulgQn/EU/rYpKmfJjgNkrstGhaQYdMys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728588251; c=relaxed/simple;
-	bh=B/fTpCzd8QlJMQ3iEfz2aTZvNZTM1lTyUzt5b6yEoHA=;
+	s=arc-20240116; t=1728588253; c=relaxed/simple;
+	bh=LqcsOVQmv5GpC5shRDpw1q19kzqKid+XE2EfW/9oI3s=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Yy6XZw4KoRqdOFWvhGuFSpS3TNH7T451kTLqFugg9siqAqOr0r8Rm6Y7WFYQnqo3mOMib3F78vE+JGN7U9gWEoKjdSdRD05aiwuSkmD7JhRnjVLGv7pi3LLYFr8VkyCtuCu/pxsLsXMUyz42wf4kgDX2dA9hFRWKlh2B038KKog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p2Pvlrox; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=eSB//A4nzEf4clFVtVOmbH9o7Zwd2Ha2QylXDNJtrIwdytoyTYhdYAinz0IUqX5WXBk9fiEW29Wm9Gko1/MCQ8xK9GuRpdHqlwSg8RtfxOeldx0lyU7/h5J89xfsXjf43ER2pXd40mD/dJsH6UAaEF/6x2gxddvLw1ZTYdYVNVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B4Wt4j6T; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p2Pvlrox"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e1159159528so3705931276.1
-        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 12:24:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B4Wt4j6T"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e294f38bddso23415877b3.3
+        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 12:24:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728588249; x=1729193049; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwVGeNhEiYELCNV51bxA2EzTaJbA2K5Fr027Br3jO4Q=;
-        b=p2PvlroxSAe0qF1thlzd9se3Gyg18Gvc/YiYZKKNyE9j/2VkxI2j3Vja69JxJsynDT
-         4ltaPFKTGS+7rDtlzqVxoEwxJfm5Imncuym2/C5DTJ8geCl9CqAUIHiXe+TbV3/0oGEj
-         QRRmJrHzdgMevB089otoH5wEycIBwfxodhmlwzR23PU/x350/8kflwajCXg4lEFVeuZs
-         Tw4bXclhKUjk5V0rBb45nNB+cq54oCT6HSpWBHbieJeoZvGLsbNF110IWYBJBVYXNlDp
-         gImhD76HiBADGOR0p8mibp8OGuWohT23BfFZX1hgqFu7VB/5Zf4FzzrVpwJHNMLsCdOT
-         mEqw==
+        d=google.com; s=20230601; t=1728588251; x=1729193051; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3BOqTSYvoekh3ysMWFRZqW1diZJBhOLc/W4rCwg+Ukg=;
+        b=B4Wt4j6T/Ax4JKtnlkwmocoC2DKOTcVweHi5Z0eFiYv31db561NWJJBU//lB4Za/hU
+         TKRQhZHo0ZxxuztiXA7SsJv+SyElRIUSbsuIDU9B0dTF5rxrcooHpqQLwIcCrnxSLgqY
+         pNsL4wpTrLQTnZa33FmdVMDsrecoVlPq1vrF7z3PgcDqJINwL+UDmbsRAJIHfuUk/MjG
+         todafsVm8XIKbnKsttXgsy5ME9Fltidx3VQoooYmDwWw5vv27nzC1sgARyN3whRlwn1C
+         rYDmy96FtCNVQkPpvwLgvDlPUAK32PgoAfd8Vq/DZIZcdTvTzimWqRLvfxuG+PQs9R0o
+         mCig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728588249; x=1729193049;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwVGeNhEiYELCNV51bxA2EzTaJbA2K5Fr027Br3jO4Q=;
-        b=Hh3sYv8PVOp/95AiR3LoVyMaM/G5Xp/Q8lihjFKtaA3f3BAoClnAMl1zS4oULBhv7J
-         hyxepfgMrqfFeouHZKj75OwTgNJFmFFCp4mgYOOo0ZLR7d+f0obnTQHpN1pl9eTywpIA
-         CYLRxz9oUGxBd0tO3hEwr+4XdgQ6z60EA3cQ9q5FYeEA0+UzUt2MJJ3RxiinC7A1bXbJ
-         +8aZH8l8jwVwQfJWyDd80Pyb9gK4ALsyRTYufIQPUkfOSY0Ralsp9gKnLfakQpUg1fny
-         znNrmx3CoZ6viLs4KHyH8NvI7tV8DAIP5pQGxqwr8qytFFQtnQo9z4/A9TZqMK/35SIM
-         ioFw==
-X-Forwarded-Encrypted: i=1; AJvYcCVhr69zdfvJ16FvtuTSl7EL7ketUfgy9HdnbKgzC/OlIFpga2qeuCnrpFLNW1dgXZ4FfH+3@lists.linux.dev
-X-Gm-Message-State: AOJu0YyaMfpWWpW9oeOAX9nyZY5D3rzZOlS9h7E3RpdRjwkcLCouxPnw
-	2CZh4piMRnXCtmv982CZ7kcYX5qdTXY2ssLpS+xxHv1KimzWt3MT65fQeuzNZK/QLg==
-X-Google-Smtp-Source: AGHT+IET7ynYxoh2WLaFTqujq1dsN8li9OFmo1T7KNB2xR5JtuPPo+YvvfF+NvnbjuFxvNf7cf4DObk=
+        d=1e100.net; s=20230601; t=1728588251; x=1729193051;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3BOqTSYvoekh3ysMWFRZqW1diZJBhOLc/W4rCwg+Ukg=;
+        b=wrt6CGKP1L/BInG39WBLowqVZF6lAqnzXrbfXUQwVAqz8JIIUgodGcULaAQWlztXDm
+         DHQJovSMyuHY7JaFLGdl4yWDAtso8+HXs7/4S7uekbTqs7iJdyGFy0uyxEVWZko4q+R2
+         yGAP58x7K/AWAXFGa84TPk/1WjLSltRPjsIPRDlJ+mDscWK8pu7fMfGGiWnP9lhWdQvJ
+         7R+H0mNxYbRfNA67rEzfrmcldhOWSqMGwm3uYAXHeW+ot7rULuh52Yxzo4Nd7js88YnZ
+         bw0pb23i1QtuUMVj8iW03aLowq3TXagGDMCmqVox/JA8m0mFtBu7HR7xA6v56698Jogt
+         Wh/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUwbEBdv+AOlPPwoSv8WEJ5FqHQWc+qKHLaI+IKjs5Du/rk4+zWG8rgzUrfKidyiTGTatUF@lists.linux.dev
+X-Gm-Message-State: AOJu0YxWb1LFYwl19gIA8YMhnDFVXCET9YaC59eA1opbPAHKhCs70hqd
+	oVVRS9U96nx3yHj4sDMAaaPjNXRfYDqHCfPvj2dS1Z1r7vdvfW7Sg1W+bJPADBFeVg==
+X-Google-Smtp-Source: AGHT+IHEhJDc7jYHTPhzM4J4p0+oM2iW7zVVsM3E55tbL5mucatmOoOEuvmUjkSCKz7r7tlVC7+ixFs=
 X-Received: from xur.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:2330])
- (user=xur job=sendgmr) by 2002:a25:b104:0:b0:e29:a86:fd0d with SMTP id
- 3f1490d57ef6-e290bb40627mr73646276.5.1728588248551; Thu, 10 Oct 2024 12:24:08
- -0700 (PDT)
-Date: Thu, 10 Oct 2024 12:23:54 -0700
+ (user=xur job=sendgmr) by 2002:a81:b04d:0:b0:6e3:2693:ca6b with SMTP id
+ 00721157ae682-6e32693d36bmr176997b3.2.1728588250242; Thu, 10 Oct 2024
+ 12:24:10 -0700 (PDT)
+Date: Thu, 10 Oct 2024 12:23:55 -0700
 In-Reply-To: <20241010192400.451187-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -58,8 +60,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20241010192400.451187-1-xur@google.com>
 X-Mailer: git-send-email 2.47.0.rc1.288.g06298d1525-goog
-Message-ID: <20241010192400.451187-3-xur@google.com>
-Subject: [PATCH v3 2/6] objtool: Fix unreachable instruction warnings for weak funcitons
+Message-ID: <20241010192400.451187-4-xur@google.com>
+Subject: [PATCH v3 3/6] Change the symbols order when --ffuntion-sections is enabled
 From: Rong Xu <xur@google.com>
 To: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
@@ -81,29 +83,31 @@ Cc: x86@kernel.org, linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
 	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
 	Krzysztof Pszeniczny <kpszeniczny@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In the presence of both weak and strong function definitions, the
-linker drops the weak symbol in favor of a strong symbol, but
-leaves the code in place. Code in ignore_unreachable_insn() has
-some heuristics to suppress the warning, but it does not work when
--ffunction-sections is enabled.
+When the -ffunction-sections compiler option is enabled, each function
+is placed in a separate section named .text.function_name rather than
+putting all functions in a single .text section.
 
-Suppose function foo has both strong and weak definitions.
-Case 1: The strong definition has an annotated section name,
-like .init.text. Only the weak definition will be placed into
-.text.foo. But since the section has no symbols, there will be no
-"hole" in the section.
+However, using -function-sections can cause problems with the
+linker script. The comments included in include/asm-generic/vmlinux.lds.h
+note these issues.:
+  =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if dead
+   code elimination is enabled, so these sections should be converted
+   to use ".." first.=E2=80=9D
 
-Case 2: Both sections are without an annotated section name.
-Both will be placed into .text.foo section, but there will be only one
-symbol (the strong one). If the weak code is before the strong code,
-there is no "hole" as it fails to find the right-most symbol before
-the offset.
+It is unclear whether there is a straightforward method for converting
+a suffix to "..". This patch modifies the order of subsections within the
+text output section when the -ffunction-sections flag is enabled.
+Specifically, it repositions sections with certain fixed patterns (for
+example .text.unlikely) before TEXT_MAIN, ensuring that they are grouped
+and matched together.
 
-The fix is to use the first node to compute the hole if hole.sym
-is empty. If there is no symbol in the section, the first node
-will be NULL, in which case, -1 is returned to skip the whole
-section.
+Note that the limitation arises because the linker script employs glob
+patterns instead of regular expressions for string matching. While there
+is a method to maintain the current order using complex patterns, this
+significantly complicates the pattern and increases the likelihood of
+errors.
 
 Co-developed-by: Han Shen <shenhan@google.com>
 Signed-off-by: Han Shen <shenhan@google.com>
@@ -111,36 +115,47 @@ Signed-off-by: Rong Xu <xur@google.com>
 Suggested-by: Sriraman Tallam <tmsriram@google.com>
 Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
 ---
- tools/objtool/elf.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 3d27983dc908..6f64d611faea 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -224,12 +224,17 @@ int find_symbol_hole_containing(const struct section *sec, unsigned long offset)
- 	if (n)
- 		return 0; /* not a hole */
- 
--	/* didn't find a symbol for which @offset is after it */
--	if (!hole.sym)
--		return 0; /* not a hole */
-+	/*
-+	 * @offset >= sym->offset + sym->len, find symbol after it.
-+	 * When hole.sym is empty, use the first node to compute the hole.
-+	 * If there is no symbol in the section, the first node will be NULL,
-+	 * in which case, -1 is returned to skip the whole section.
-+	 */
-+	if (hole.sym)
-+		n = rb_next(&hole.sym->node);
-+	else
-+		n = rb_first_cached(&sec->symbol_tree);
- 
--	/* @offset >= sym->offset + sym->len, find symbol after it */
--	n = rb_next(&hole.sym->node);
- 	if (!n)
- 		return -1; /* until end of address space */
- 
--- 
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinu=
+x.lds.h
+index eeadbaeccf88..5df589c60401 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -554,9 +554,21 @@
+  * during second ld run in second ld pass when generating System.map
+  *
+  * TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
+- * code elimination is enabled, so these sections should be converted
+- * to use ".." first.
++ * code elimination or function-section is enabled. Match these symbols
++ * first when in these builds.
+  */
++#if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CL=
+ANG)
++#define TEXT_TEXT							\
++		ALIGN_FUNCTION();					\
++		*(.text.asan.* .text.tsan.*)				\
++		*(.text.unknown .text.unknown.*)			\
++		*(.text.unlikely .text.unlikely.*)			\
++		. =3D ALIGN(PAGE_SIZE);					\
++		*(.text.hot .text.hot.*)				\
++		*(TEXT_MAIN .text.fixup)				\
++		NOINSTR_TEXT						\
++		*(.ref.text)
++#else
+ #define TEXT_TEXT							\
+ 		ALIGN_FUNCTION();					\
+ 		*(.text.hot .text.hot.*)				\
+@@ -566,6 +578,7 @@
+ 		NOINSTR_TEXT						\
+ 		*(.ref.text)						\
+ 		*(.text.asan.* .text.tsan.*)
++#endif
+=20
+=20
+ /* sched.text is aling to function alignment to secure we have same
+--=20
 2.47.0.rc1.288.g06298d1525-goog
 
