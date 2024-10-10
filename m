@@ -1,123 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2531BF818;
-	Thu, 10 Oct 2024 10:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CB81C0DCC
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 10:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728557410; cv=none; b=Xzulm6ddZugfV9p83AmE8t+0ZrQTUpeOa689Wj8cCEVMe0VWLcjeR190kwKz0sFHLSaNgg1IEsPklRaX74Fgvf7hzBt/fM9tOEWW+AAUNnp7tstfH8zXcaOlRm/9KNHUTf0iuTmtz6vDiy2O2Rb0IAe57BR6dB1wyVhxcdh7lOA=
+	t=1728557739; cv=none; b=G5eIG3uyBe9n38MGVXaUJmXAEb6sbfObS4GDabMK1zatk1kHBLxhJCzjUvT/fgvVCWaYOtn0r9y/epJJU+74rEDPN6Ie892LlddSPJ0EbqLVKkAyLGEUl7pBQAP5GwwGKH1zaEjida6CxHU0LyTu9RG9Rd7HanY7IPWAykYQLqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728557410; c=relaxed/simple;
-	bh=oxIZOncvF3hv1M+oWjSmbkhm52CkRE8eY08NHEIADlQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jz9gSHRLfTGDyu2VsRGgrbTWc9h8wd5tcAALLDyUi8eq840jrINBB/jG8U4+Z7e+ccptODgmhWHLcZwKHtSrnNnGUkruAuG8hMNcygDu5b+GkonNvhQmVWk/YwBMsRcxj10gGO0bZRMrpzVEvI7Iq/dYLINmS8+EwU+Jn68O05g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OZ2gHUSb; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728557739; c=relaxed/simple;
+	bh=LxY7kWckS0SuvYaF2yrTWIemSOOZus+yEuXxUicIZnk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E5em9BvuvTH2RgNDiAYf9MF9ovUHPmvYdtscu+6/bnNQxNXcQQJYmmxfFAc028skfcgCtM6FM8KguE2dd33eRXnmVPuyc2yqIYCFu7OR+4vL9jo8B9Tn9eRh+s9O0+E7PRTueYwGlL8gaIuX6ka6e8DziWCeOSpwLPC4dz+m7Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QqoU7p/W; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OZ2gHUSb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728557409; x=1760093409;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oxIZOncvF3hv1M+oWjSmbkhm52CkRE8eY08NHEIADlQ=;
-  b=OZ2gHUSbzTqCJpitrLPyTLQSuAEAcjFZQbJ1VwLVkCntXAPEzMQy8PH5
-   Nu28suyXW59OJqC0TZfVZcOqsFQrzEAm/qWi7afmgBYjqoTMbV6kx0GHS
-   seeSio+7AfVHZTf300mz5NjK/6RO5ozVtXTXsuk146Rrl03N0p3eVH5Mi
-   vmhuy4+7Dfd7V+aivusgvOSy0SnINDudhakjlIrmnKLgMleZNfluY6b7T
-   B2NgfEZfku4J67BRya8hLr27WNCy9XkYyTlsNYhV+xLV0Gk9gR1Vd5r08
-   ZPlfBl24ntl9YW5sDq5487jhFpr6QRKA4x5U2hShTuTSDO3puKHRtyTBy
-   A==;
-X-CSE-ConnectionGUID: k4JAKEWBQ0ydkhrdzsn5Rw==
-X-CSE-MsgGUID: SbTZ//igRziaB40O2i+7yw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="39034010"
-X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
-   d="scan'208";a="39034010"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 03:50:08 -0700
-X-CSE-ConnectionGUID: mfNyIQT0SRKlmCF2bBAchg==
-X-CSE-MsgGUID: CxYADuicT0iubPklmbeSsw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,192,1725346800"; 
-   d="scan'208";a="76871627"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Oct 2024 03:50:06 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1syqk8-000Aef-0a;
-	Thu, 10 Oct 2024 10:50:04 +0000
-Date: Thu, 10 Oct 2024 18:49:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kevin Kim <ckkim@hardkernel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dongjin Kim <tobetter@gmail.com>,
-	Olliver Schinagl <oliver@schinagl.nl>
-Subject: [tobetter:odroid-5.15.y 46/204] drivers/pwm/pwm-gpio.c:60:22:
- warning: no previous prototype for function 'gpio_pwm_timer'
-Message-ID: <202410101837.pe8cMg2V-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QqoU7p/W"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7db3e962c2aso49707a12.0
+        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 03:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728557737; x=1729162537; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z7prhNlBf0rjgrPFlAZtBHJ4o24kuE9bb4AC/MN06Po=;
+        b=QqoU7p/W8sFGDQ6Wotb9O6rBr/A3L3faB8HVwejKhUqLjhENZjH/PTwAy2SNCOXgck
+         V5WF8c+d8VW8QcBgKM8YfAGLCFZwSpz+p9NBOG9NKaKRjkqyBN/sDk9IfiiM7eYONeEt
+         SxGdtVsBrmkmynkFecjgin12hrUfIz7MSJ4k0/6j5uwE/7ufjCiBNJuzoyXvVlO4m4jG
+         aB5yC30u/xH6Hijag80RToosCVb5Yvs9Jrzqb0mPyGmyTOT3nGoA27EoGx6pbJ8JzkWp
+         QPEebSw+WKQRQDBQIf8iJGZmws7A5EYXFljGpiNN1YBi9wI3D1laWhQleRGpmiUEw4jP
+         B5og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728557737; x=1729162537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z7prhNlBf0rjgrPFlAZtBHJ4o24kuE9bb4AC/MN06Po=;
+        b=uxbEIQqFdr5L5kwpGQJRR1jGn/AfEfqxrJQoUzYrqel+vlebahW5g6/yc1vBZGAW6c
+         BkK8e+yGtO1za8RnQw5Tmz2keV5nMhIF8wUA3ZHHQM2/VvM3SwVsHZvZ0g3S4KALCERb
+         Hr/oRQ+1UKY4LswXS2vx2sjzszmEvU60tfcy9z/qTYEvXKvO+Y/bKdBh3fXf2hoLS9kO
+         Ylo6JZoyKTClIOvAZa4lDSCVgzrU1hZ0NBZyA8pBUa2l8WAjueKtdYJZGA8CJKzWMXJY
+         R8CtIJvuZQ+9Cebt65pRIQ0CelQgSDEmMbvAOfJFh3mJ7dY/41yoVP8tO7dVvxUizK7T
+         hqsw==
+X-Forwarded-Encrypted: i=1; AJvYcCWavVNk0UfjUmcQArRlNQixo9nXtr0F1cSenoFr0EURc4AIpDkWaWzZZtk03lZXZfc+SH1Q@lists.linux.dev
+X-Gm-Message-State: AOJu0YxXM+nCeyU7cDvF9X6PGMNIN39psjLkDW6KF6fSUh8ptCbU7fqq
+	h3utbKGIceM38MbridTuAe54Gz9VVshki1/kaV57dv4ol/bS8zmD/h+GYAqT6HCsdHTl5Jc+rdZ
+	gQoe8BgqYwcyWQkv19d1W0NBuWn4=
+X-Google-Smtp-Source: AGHT+IHAJPvWSarPUcHM5fTP1XOvft1y95dzd2SSxjokwM/tDrb6430mBqh0ufFkL+MZrSQjwaTb5z7red4s3fH34oc=
+X-Received: by 2002:a05:6a00:3e28:b0:714:2051:89ea with SMTP id
+ d2e1a72fcca58-71e1db6491amr3947192b3a.1.1728557737046; Thu, 10 Oct 2024
+ 03:55:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241010-icall-detect-vers-v1-0-8f114956aa88@google.com> <20241010-icall-detect-vers-v1-1-8f114956aa88@google.com>
+In-Reply-To: <20241010-icall-detect-vers-v1-1-8f114956aa88@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 10 Oct 2024 12:55:24 +0200
+Message-ID: <CANiq72ndoSmGVzuPR6ikq0HG1kbMp6ADOY8BonD9=ij9tyU=EQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: rust: add `CONFIG_RUSTC_LLVM_VERSION`
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/tobetter/linux odroid-5.15.y
-head:   2402b85f3675cd92c0ba7cb5f051596e07bd3971
-commit: 6b8539046586e0d420e7f310df2da69b4a13d19f [46/204] ODROID-COMMON: pwm: gpio: Add a generic gpio based PWM driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241010/202410101837.pe8cMg2V-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410101837.pe8cMg2V-lkp@intel.com/reproduce)
+On Thu, Oct 10, 2024 at 11:38=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> =
+wrote:
+>
+> From: Gary Guo <gary@garyguo.net>
+>
+> Each version of Rust supports a range of LLVM versions. There are cases w=
+here
+> we want to gate a config on the LLVM version instead of the Rust version.
+> Normalized cfi integer tags are one example [1].
+>
+> For consistency with cc-version and ld-version, the new version number is=
+ added
+> to the existing rustc-version script, rather than being added to a new sc=
+ript.
+>
+> The invocation of rustc-version is being moved from init/Kconfig to
+> scripts/Kconfig.include to avoid invoking rustc-version.sh twice and for
+> consistency with cc-version.
+>
+> Link: https://lore.kernel.org/all/20240925-cfi-norm-kasan-fix-v1-1-032898=
+5cdf33@google.com/ [1]
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410101837.pe8cMg2V-lkp@intel.com/
+Alice: when I apply this, I will need to add your Signed-off-by here
+(i.e. when handling patches from others, you need to add your SoB
+too).
 
-All warnings (new ones prefixed by >>):
+> +if output=3D$("$@" --version --verbose 2>/dev/null | grep LLVM); then
+> +       set -- $output
+> +       rustc_llvm_version=3D$(get_llvm_canonical_version $3)
+> +else
+> +       echo 0 0
+> +       exit 1
+> +fi
 
->> drivers/pwm/pwm-gpio.c:60:22: warning: no previous prototype for function 'gpio_pwm_timer' [-Wmissing-prototypes]
-      60 | enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-         |                      ^
-   drivers/pwm/pwm-gpio.c:60:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      60 | enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-         | ^
-         | static 
-   1 warning generated.
+I guess if we don't find "LLVM" in the output, something weird is
+going on, so I guess it is reasonable not printing either here.
+Although, in principle, we could preserve information and print at
+least the `$rustc` one.
 
+Anyway, we may need to rethink this when we start supporting e.g. the
+GCC backend, so I think it is fine as it is.
 
-vim +/gpio_pwm_timer +60 drivers/pwm/pwm-gpio.c
+Thanks!
 
-    59	
-  > 60	enum hrtimer_restart gpio_pwm_timer(struct hrtimer *timer)
-    61	{
-    62		struct gpio_pwm_data *gpio_data = container_of(timer,
-    63							      struct gpio_pwm_data,
-    64							      timer);
-    65		if (!gpio_data->run) {
-    66			gpio_pwm_off(gpio_data);
-    67			gpio_data->pin_on = false;
-    68			return HRTIMER_NORESTART;
-    69		}
-    70	
-    71		if (!gpio_data->pin_on) {
-    72			hrtimer_forward_now(&gpio_data->timer,
-    73					    ns_to_ktime(gpio_data->on_time));
-    74			gpio_pwm_on(gpio_data);
-    75			gpio_data->pin_on = true;
-    76		} else {
-    77			hrtimer_forward_now(&gpio_data->timer,
-    78					    ns_to_ktime(gpio_data->off_time));
-    79			gpio_pwm_off(gpio_data);
-    80			gpio_data->pin_on = false;
-    81		}
-    82	
-    83		return HRTIMER_RESTART;
-    84	}
-    85	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
