@@ -1,85 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4E41CBEAB;
-	Thu, 10 Oct 2024 20:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCE71D041A;
+	Thu, 10 Oct 2024 20:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728592579; cv=none; b=Su8th4pe80Pt6o4bfZh+CNH+W5rfi77jTizrQXl0Uvg509Nu9XLXDnR/izP1CuzsfV+oyVCN8oqxw2SMpTxhBJHLVDexIvoN98NkhgHqTltx5i1n8A3BAVFRvbifQ+kDQoMP37vjZ4KvK6MJ3NmD/OHVGPGZkORRo5IBE9D8eH8=
+	t=1728592595; cv=none; b=q6lKvYnM4FDUusWWtNS8uF8A6KySr0XEeT1fHltKeC5lD6ExTe3TvsZ3NNFj50fQadaLOlJPvT8RNEYnYttSL4eqUgYEyQSyUQNtTAiHqVentZ9byimO715rpSSzXqNbh9n3+8yrcUPM32XxYE+1FvENpKIHzQ3WT/UMorQJUcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728592579; c=relaxed/simple;
-	bh=sdA8aU3qMJHXuA4j+Zh5kdQvXBoT7eGPim3lJix5Dqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a5vS3ttvhnI3j5dMsg8GPmT9zGVvxDYHmzsSE3dgJaeCBst9xVpcvCfxksfNx77aqLlLj5RBxGS/7Uq35rydCRIxkHf+lujHMaQrtwKMBIAcQqlHaPNbLWhrzYRi9TpixSZJP/8cSSuoqPfEkKZ2r5VMyYxaaJP0yULrvcKmaJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nGpZKrHF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728592595; c=relaxed/simple;
+	bh=d2Aw5DP9ua7gQuvx1cYA0VH+kutfaRfJs5BI5Z4ra/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uIy//404HjM4TlK41S3PZoG2Kqcvl/H9EjiHlJxKfB+vN3k+HsbA86ap0hUF4+uL8BWgAWSF+o7BoBtq+fGIpoMnKY6eKT4df0BzNiCjbCd4qQJzMV2wxb9GKgrCr4ZfoNWdImmDpruEGFClT2x2AhcJ8DEewSeeLKtT1iZ1jxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z1z2j5Pz; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nGpZKrHF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB80C4CEC5;
-	Thu, 10 Oct 2024 20:36:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728592579;
-	bh=sdA8aU3qMJHXuA4j+Zh5kdQvXBoT7eGPim3lJix5Dqk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nGpZKrHFtkTrucYKaQAlDV0dOKdOnWkfFsDVKrvjA2joluqe40jfrfzrth1hfwkz5
-	 X7VqRJ6li6uRnjn3mxS3TKkYj/z2T5PL2x7it2bmlyW9jkWTdrKmFqR6/XLXR3uoWp
-	 QN5zQUXsaB2d6iC5b46MfvcHvc8Hjujzdbw8jwSfR7m1OSESVnzxK8iAKRaNX/LSaP
-	 xtK9jnPmvohm/Gau03MZY7BWir2aqvBn4VnWDpY5xSwZ6UwLIZ1C9zLRUpHTYoFc0c
-	 BxUnSIu/sdkrfpp7lQTXLCTF7BeAxEg0jzTnLTbWjywEz41AkjJWTWAh0Qqr4KhixP
-	 a2dorIMaOfNSw==
-Date: Thu, 10 Oct 2024 13:36:17 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, keescook@chromium.org,
-	linux-hardening@vger.kernel.org, nathan@kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jan Beulich <jbeulich@suse.com>,
-	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v2 0/5] Improve objtool jump table handling
-Message-ID: <20241010203617.mlz76o5mxhyq6lxr@treble>
-References: <20241010122801.1321976-7-ardb+git@google.com>
- <CAMj1kXE_ZQG0B5fTTxQUWB5wUQPYVgP3TE5Z4ouEXZtyhs=CQQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z1z2j5Pz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728592593; x=1760128593;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d2Aw5DP9ua7gQuvx1cYA0VH+kutfaRfJs5BI5Z4ra/A=;
+  b=Z1z2j5Pz5TSf9GDw1JRs+WfF3GOYJ5ZO4S6D5XcJq18yaCK+eyh6xhrg
+   5XFIxkgjUvPtKLert27P7b9X+QvaxtjtRYy/LSN09PCwX+4jKSQfTYJPK
+   GM4LtIVF83Ny4OShq4i81sFO7LkiCbKlaBK1g0ykYNcav9E0KkXMa01rh
+   Y9uT9vhB3Ip/wsk2viD+4JFSENjDwaWEeweC+oN0OHh8ltt+48rDubRoA
+   9ch62lb+gxJ08agXzuSD8E4J1HHZ1hriWgDlY8yI8P1d9oUBiBk7zYA7g
+   RbE3CYibvGBwg8jg5Y0pVqRM9i+LmQjewVfdgWSJMm9W/M4a89F7llohp
+   g==;
+X-CSE-ConnectionGUID: ADj+ALoLR6WycPOsRJZlew==
+X-CSE-MsgGUID: 6gG3L5wfSHKjdPWtvB+cEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="28121497"
+X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
+   d="scan'208";a="28121497"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 13:36:33 -0700
+X-CSE-ConnectionGUID: q27T7ruVRLuIqPd/Ge3Qnw==
+X-CSE-MsgGUID: Qpc6BGtWT32/i+LJfWsw1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
+   d="scan'208";a="76912561"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2024 13:36:31 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1syztd-000BEj-1k;
+	Thu, 10 Oct 2024 20:36:29 +0000
+Date: Fri, 11 Oct 2024 04:35:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vincent-guittot:scmi/ffa-transport 1/1]
+ drivers/firmware/arm_scmi/transports/ffa.c:117: warning: Function parameter
+ or struct member 'ffa_dev' not described in 'scmi_ffa_service'
+Message-ID: <202410110427.dXKHEJVt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXE_ZQG0B5fTTxQUWB5wUQPYVgP3TE5Z4ouEXZtyhs=CQQ@mail.gmail.com>
 
-On Thu, Oct 10, 2024 at 07:50:17PM +0200, Ard Biesheuvel wrote:
-> On Thu, 10 Oct 2024 at 14:28, Ard Biesheuvel <ardb+git@google.com> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Jump table handling has faded into the background a little due to the
-> > fact that jump tables are [currently] disabled when enabling retpoline
-> > mitigations and/or IBT on x86.
-> >
-> > However, this is likely to come back and bite us later, so it still
-> > needs to be addressed. Given the difficulty in identifying jump tables
-> > from .rodata references and indirect jump instructions that often have
-> > no obvious correlation, it would be better to do this in the compiler.
-> >
-> > This series implements [on the objtool side] the suggestion made at GNU
-> > Cauldron this year to annotate the indirect jump with a R_X86_64_NONE
-> > relocation that refers to the jump table, and ensure that it is covered
-> > by a STT_OBJECT symbol whose size accurately reflects the size of the
-> > jump table.
-> >
-> 
-> For the adventurous, I have a branch [0] that implements the first
-> part of this in Clang.
-> 
-> Getting the jump table emitted as a STT_OBJECT with a proper size
-> shouldn't be too hard either, but I'll look into that later.
-> 
-> 
-> [0] https://github.com/ardbiesheuvel/llvm-project/tree/jump-table-annotations
+tree:   https://git.linaro.org/people/vincent.guittot/kernel.git scmi/ffa-transport
+head:   d613a19181fee0ca12b6b5a9dff302c1207a2e15
+commit: d613a19181fee0ca12b6b5a9dff302c1207a2e15 [1/1] scmi/ffa: add a new scmi transport layer based on ffa
+config: arm64-randconfig-002-20241011 (https://download.01.org/0day-ci/archive/20241011/202410110427.dXKHEJVt-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410110427.dXKHEJVt-lkp@intel.com/reproduce)
 
-That was fast!  This is good stuff, thank you for working on this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410110427.dXKHEJVt-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/arm_scmi/transports/ffa.c:117: warning: Function parameter or struct member 'ffa_dev' not described in 'scmi_ffa_service'
+>> drivers/firmware/arm_scmi/transports/ffa.c:117: warning: Excess struct member 'dev' description in 'scmi_ffa_service'
+
+
+vim +117 drivers/firmware/arm_scmi/transports/ffa.c
+
+   103	
+   104	/**
+   105	 * struct scmi_ffa_service - FFA transport private data
+   106	 *
+   107	 * @dev: Device used for communication with Secure Partition
+   108	 * @caps: Supported capabilities
+   109	 * @mu: Mutex for protection of @channel_list
+   110	 * @channel_list: List of all created channels for the agent
+   111	 */
+   112	struct scmi_ffa_service {
+   113		struct ffa_device *ffa_dev;
+   114		u32 caps;
+   115		struct mutex mu;
+   116		struct list_head channel_list;
+ > 117	};
+   118	
 
 -- 
-Josh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
