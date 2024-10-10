@@ -1,130 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D271C7B70;
-	Thu, 10 Oct 2024 13:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC691C9B6D;
+	Thu, 10 Oct 2024 13:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728565415; cv=none; b=XFIglxma88v5r+vZ42//7W2nkhPn7IhVT+ai8VFMk7QOgvxHI2KWPWvyGykyEmVmNNpdfyJPKC02If3uJQbIzBlh889CmO0UsNKoeC5560BS0dPxdRPyqKEQdWW5uRpN9VH7+dZXcv6aDJgzLzW1Ht/z3KZtjsc+9t2/jVl7g5o=
+	t=1728566789; cv=none; b=KVXB2lma3DqSB9zUuWewm4ye9kpVwhL8X3gfqSSHcvTpj9UlgL4Dq6+2lScds5zdBKllnijd9cpRukFUbLImmEdFs6B55FeY9iuQFirFGOCbnrkN78bzK+XMkWVYpOgbkNpPeavalaOWSvhxExek2Yl2LF+z0QruATEc4OjUtao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728565415; c=relaxed/simple;
-	bh=lxTwG9FeY6tGa/suySl5tWQBbHE4hFx2E8w3ZHNgXu4=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OLeTWvH7OVP6fUTCyiPouilYwS8aX1ejhZfAnafovvoOaiPaGTcFV3l1biOpFSMXuBuaLp1JpqzjkfFYDTCWchyrm18leWCc77klJKgiW7cNOgU8UTzLitdSJWrnfwwpB556W5/0RtwGm9ObUNYP42lwhni8UAN5RbWN/Ga3/p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UO5kNgvI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728566789; c=relaxed/simple;
+	bh=llPFfHa+YAlLecNr8hO6F+hVZetBYEaDSKxeKNHar78=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=paseTP1pbZo9weAIcNNxTJn6PtZupHEapAY0RJYXgLqYQgzqFEjNalMTTwxqIUQDnoKt7DQ4WpIWL11kJPk0ipA/QxtTe7KGx86PFAVvICNP23oMCj3zek+NB8D9C7P7sqAgQDVYbZjGkq+LRemu8Rbh/3k68OFHOc2YqbvH7jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jhXn5Pgu; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UO5kNgvI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9D1C4CECC;
-	Thu, 10 Oct 2024 13:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728565414;
-	bh=lxTwG9FeY6tGa/suySl5tWQBbHE4hFx2E8w3ZHNgXu4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UO5kNgvIcGDuHVNFYCYI0c+G0EbwoaMcgQWGOu4kZKes9aOcnYvxyWuBiC618dyNm
-	 QW0R+QFFjozmPlaezhHAuBP2U/1A0f55vTY68kB93dJ0gBFn5InP54GDYqomD+eIsY
-	 jRAvuk2q7UkZb7JNJwgfHPy+qnBHm3Ih75R17T0K1/99sx6vU/gDkp8yTMiB5OZKut
-	 px7ZyVjo8MgdeZkAAYYuM+U7p0MD+0yV7G0CpyqtEUMe901bxURJbPfJqk5LwSM/3O
-	 2WL7360heBCEkHl1qq7+TO6mSQPyJhcZsb0UUWiSrSa7L+Rq9IbP+pVLBFzqclMNrN
-	 TEFLMCrXJQVfw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1syspI-002BvM-9A;
-	Thu, 10 Oct 2024 14:03:32 +0100
-Date: Thu, 10 Oct 2024 14:03:31 +0100
-Message-ID: <86o73s5cv0.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "tianjia.zhang" <tianjia.zhang@linux.alibaba.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,	Oliver Upton
- <oliver.upton@linux.dev>,	Joey Gouly <joey.gouly@arm.com>,	Suzuki K Poulose
- <suzuki.poulose@arm.com>,	Zenghui Yu <yuzenghui@huawei.com>,	Catalin
- Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,	Nathan
- Chancellor <nathan@kernel.org>,	Bill Wendling <morbo@google.com>,	Justin
- Stitt <justinstitt@google.com>,	=?UTF-8?B?UGllcnJlLUNsw6ltZW50?= Tosi
- <ptosi@google.com>,	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,	linux-kernel@vger.kernel.org,	llvm@lists.linux.dev
-Subject: Re: [PATCH] KVM: arm64: nVHE: gen-hyprel: Silent build warnings
-In-Reply-To: <b3c21234-73a0-43dd-8365-9039c62b7aa7@linux.alibaba.com>
-References: <20241009085751.35976-1-tianjia.zhang@linux.alibaba.com>
-	<86set55yca.wl-maz@kernel.org>
-	<b3c21234-73a0-43dd-8365-9039c62b7aa7@linux.alibaba.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jhXn5Pgu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=AzHzS3nahWM1GRwGfK8kFMoHkVw2QFsfTemuA7o0jJQ=; b=jhXn5PguJPzif8eONzfX9KJrKX
+	aluBMJn0Ze+XWmCrCQ5cNuGLWIokKbciWVO9RMvqNU4S1HCRC55LLrGMneBRmEPdNQ5R4XwrfARp9
+	cGbqfM7x2uZfE+8n/F0916KRe6VuFxOg2G/kp6lbCgGFXujNmkHriJaMu02LA8Oe+XpRmMSR9HaRc
+	Xh5hU0c3viOwxGMMsSc7I0NxYU+FZCA74UcE3PcWEcxAH765lctZiyLOFWMD820QJFbfs5Ok4jnjI
+	JyPbsF8IhiZjlkSv+Y5dRcwr80qNx1sVNHSvk8bUp3ruR/TdTi9VF6VwRRM9fa5e8xqSeR0PcIv1z
+	kfbaCL2A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1sytBP-00000007gRY-0T8J;
+	Thu, 10 Oct 2024 13:26:23 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5A7B83002F0; Thu, 10 Oct 2024 15:26:23 +0200 (CEST)
+Date: Thu, 10 Oct 2024 15:26:23 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	keescook@chromium.org, linux-hardening@vger.kernel.org,
+	nathan@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jan Beulich <jbeulich@suse.com>,
+	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v2 1/5] objtool: Deal with relative jump tables correctly
+Message-ID: <20241010132623.GI17263@noisy.programming.kicks-ass.net>
+References: <20241010122801.1321976-7-ardb+git@google.com>
+ <20241010122801.1321976-8-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tianjia.zhang@linux.alibaba.com, ndesaulniers@google.com, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org, morbo@google.com, justinstitt@google.com, ptosi@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010122801.1321976-8-ardb+git@google.com>
 
-On Thu, 10 Oct 2024 09:12:29 +0100,
-"tianjia.zhang" <tianjia.zhang@linux.alibaba.com> wrote:
-> 
-> 
-> 
-> On 10/9/24 7:07 PM, Marc Zyngier wrote:
-> > On Wed, 09 Oct 2024 09:57:51 +0100,
-> > Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
-> >> 
-> >> This patch silent the some mismatch format build warnings
-> >> with clang, like:
-> >> 
-> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:233:2: warning: format specifies
-> >>    type 'unsigned long' but the argument has type 'Elf64_Off'
-> >>    (aka 'unsigned long long') [-Wformat]
-> >>      233 |         assert_ne(off, 0UL, "%lu");
-> >>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>          |                              %llu
-> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:193:34: note: expanded from macro 'assert_ne'
-> >>      193 | #define assert_ne(lhs, rhs, fmt)        assert_op(lhs, rhs, fmt, !=)
-> >>          |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:188:19: note: expanded from macro 'assert_op'
-> >>      187 |                                 " failed (lhs=" fmt ", rhs=" fmt        \
-> >>          |                                                 ~~~
-> >>      188 |                                 ", line=%d)", _lhs, _rhs, __LINE__);    \
-> >>          |                                               ^~~~
-> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:167:17: note: expanded from macro 'fatal_error'
-> >>      166 |                 fprintf(stderr, "error: %s: " fmt "\n",                 \
-> >>          |                                               ~~~
-> >>      167 |                         elf.path, ## __VA_ARGS__);                      \
-> >>          |                                      ^~~~~~~~~~~
-> >> 
-> >> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> > 
-> > I don't see these warnings. What version of LLVM are you using?
-> > 
-> 
-> I compiled the kernel on Apple Silicon M3 Pro in macOS 15.0.1, Maybe this is
-> a special scenario that is rarely used.
-> 
-> Details of clang:
-> 
->     # clang --version
->     Homebrew clang version 19.1.1
->     Target: arm64-apple-darwin24.0.0
->     Thread model: posix
->     InstalledDir: /opt/homebrew/Cellar/llvm/19.1.1/bin
+On Thu, Oct 10, 2024 at 02:28:03PM +0200, Ard Biesheuvel wrote:
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 3cb3e9b5ad0b..7f7981a93535 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -2101,6 +2101,8 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
+>  {
+>  	struct symbol *pfunc = insn_func(insn)->pfunc;
+>  	struct reloc *table = insn_jump_table(insn);
+> +	unsigned int rtype = reloc_type(table);
+> +	bool pcrel = rtype == R_X86_64_PC32;
 
-What I have is similar enough:
+R_DATA32 or R_TEXT32 please, the budding cross arch stuff has their own
+names for all that.
 
-ClangBuiltLinux clang version 19.1.1 (https://github.com/llvm/llvm-project.git d401987fe349a87c53fe25829215b080b70c0c1a)
-Target: aarch64-unknown-linux-gnu
-Thread model: posix
-InstalledDir: /home/maz/hot-poop/llvm/llvm-19.1.1-aarch64/bin
-
-and yet this doesn't fire. Can you try with a compiler actually
-targeting with Linux instead of MacOS?
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
