@@ -1,89 +1,162 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 147951CB32F;
-	Thu, 10 Oct 2024 14:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6111CBEBB
+	for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 15:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728569271; cv=none; b=W4M0l1NJs24sSldYQeHTsSoN4ZW0pk9GdD8JDdCcxU5i7OyjswiAigY13acb61wauCnTbvAvgtvmXvwJoPu32pqoaxpkdDkCFGVg3P7KJacpSXNIOEGETagLVLaRE6gtKq/iAfNYbnNpCZCscbQVhytDBMybvu55STMDHdP+QWg=
+	t=1728573839; cv=none; b=SIp5skcfyFq91ooytNnZYhMwp1V5+4KbZ/RjEP89AhXFdHB246aL45K+QTTicMIsgidDhLfF22r+UaFzw8rnogsFBNFGlo4aWE+cODthm5Lvvs66vh2zMOy0VsNtMQQOdgxPqKv5zDQ8zv3rebAXlDWWG6go4mNt6NQ+qSrRJtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728569271; c=relaxed/simple;
-	bh=rmM/AWDxoVG1QMUNHd6R8VhVr7+0gOvrFbuFhF7sQm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ixdqCwat1dcRoDnvW2X/m/YXVlydqHJl/6f38WtJENQyTxoBrsmjQQjU3AEMH9of506Jb1KScTThZZMKoKm4ajd8XMPc9dFxObehVui4N9g7uiy4WBBB+OGosa8DTkcZ7NSi58yqAsszXw1i/Kf2E6sr/yPDmB5Op6EgPTxhdRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LXI/9HI8; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1728573839; c=relaxed/simple;
+	bh=P8ixnDOeisvSETy0b4blVq+DcPJOGCQ7G8UzdQUATjs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mMIa3FwPxsF04d3xtguxqd+hfxyS7X2dBV7VFlgtCV9lnV6sv/YBUjAJanQp8IHff2sNkzP7xRhqkaJ0Mo0xyiE3qd+jj0FZLUax48KCJQRDE64texN3/l8TXUu9qPN0jj/pTUNSDhM2cijHJWNe7oZ/z7e150YkUXCGMUnNx8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3KEPu5+4; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LXI/9HI8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=/YWjnn5358vBZPgqLyx9cvMGPoYL6LKYQX7ZVmmyDJU=; b=LXI/9HI8VJxm8koOCRi6gi+O0c
-	iefV4K9uhYXbeNOdtok5aK8epMBK7Veh8S83uyuhpVkE+aycoR+XEbEmfKDcFS7wKha4kzom+MWzX
-	8aVXtotyOCitzmwsxe4pIbyQYFilY+iRS4Lcnof2x1O8JyIEktH7zitBOUQ2y5cdrnwqTrW2FfwZQ
-	fiqpi7L6S36Ri5iMJnOtSNlCwxm2KAv2JoNEqO6O2jPKHfXNkaClQVZLxXxtuatC9eKbLpG7wNCfX
-	QS/XG8bMbcxJ6jAZkQGU0BPCdlyCyppYTsD4YtFM6dmmd9uRwPKI46qi7eH27C8vaW4f4zVnODO9x
-	+lvHzWLA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1sytpR-00000007mcu-1P8R;
-	Thu, 10 Oct 2024 14:07:46 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8F84230088D; Thu, 10 Oct 2024 16:07:45 +0200 (CEST)
-Date: Thu, 10 Oct 2024 16:07:45 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, keescook@chromium.org,
-	linux-hardening@vger.kernel.org, nathan@kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jan Beulich <jbeulich@suse.com>,
-	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v2 1/5] objtool: Deal with relative jump tables correctly
-Message-ID: <20241010140745.GK17263@noisy.programming.kicks-ass.net>
-References: <20241010122801.1321976-7-ardb+git@google.com>
- <20241010122801.1321976-8-ardb+git@google.com>
- <20241010132623.GI17263@noisy.programming.kicks-ass.net>
- <CAMj1kXFg+JWMrfw40y2=0f9jr-3ebUxsFPprAK5diK4GQke_4A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3KEPu5+4"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-37d4612da0fso982049f8f.0
+        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 08:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728573836; x=1729178636; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RLZSqMwLpjl5AxpHBBnYo8ME2eAPTDkTk5fdaT/zvdU=;
+        b=3KEPu5+4TDnhrFBnYkFZgZ2SDA6kyPeiWz/m9V2z0clbDjl5KviZx/0Nb73xB7ziTW
+         PYnv2fdAMTL76euzKWuuUrVdJ2L7xOt9svWqz2C1JtVr2bJy1oFdYIPsQUlINYScXMOU
+         9tUKZaX2tgmXWED69oe4oiro+zhEb5VfA28/7hxUnYo4efTkQDFj+6Z9GrQPO1VJcsRK
+         TYAlw8xEC0PwnHYSz8X2DnaQXXflPJ9aU+9acOVmrJNeOcg+qqLg8H+irFpLFd87/ph0
+         zyGwKpWSi6Rj2xDAycPKDk8+rJwMzr/zX8ut48SFCG6/wN2+I8A7hnFfh3d7OT/HbOVb
+         dKvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728573836; x=1729178636;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RLZSqMwLpjl5AxpHBBnYo8ME2eAPTDkTk5fdaT/zvdU=;
+        b=qlpg3nWD3ZqGfxCo0s2KUSuDt+alyWqKgbyhWH06AJW1DeLgpcy62k66KcnAVMQf+k
+         oirru0nAUSnI9D7CZEXmdFedGaFcwRh/Nqi9Irrgcym34CoRLg9vdJVD2vQqh8Et0T5C
+         2ofEEIjnRLoVjoAj8f81QRmsslAxox4sqDO5Ii9w+e+UTI4t/2ah1g5b52KL9YxAV9lT
+         wEKQ2ZezqI/LNRrNRtzBTOoh4APMGlzGf7zB2qAabAeL/gLUPfbemo9IFUGJA/znkKWM
+         4ibyxoalv7ymkYsAjoX3gO39LKf9CC6PRy3n4/b8EoqpgNrrr0yHjmhPL5zO8BPLJ+xZ
+         lbRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJSrfr+/6H8sTdsjALCb8VcgQUMgYrW9+TzBmLXs8FX2uQtPIKmha34dMsGN5GkBlDaIM/@lists.linux.dev
+X-Gm-Message-State: AOJu0YxTomABEOZKub4v5zvNxeWg/4J2Sf37CjDGMRSqKrul7FLis0Cy
+	OT4ykvIakBVoyYWszJH2O3VOgZjmFVBzMCN2yDZhFVJZ1bwH5VzvlB7svEfI345L/lICwtg4nou
+	7LHbeHS14Sxixr4ucrKB604bVzYgFi6ACwtcM
+X-Google-Smtp-Source: AGHT+IE3uEJT1ooS9R2cTFDwYl+KsfVVeCZEwpAFYvUKvbTiV1yR9Rue7MKswAd/1p4ekTLLAWKNiALTr6wOrWfNIkM=
+X-Received: by 2002:a05:6000:10ce:b0:37c:f997:5b94 with SMTP id
+ ffacd0b85a97d-37d481749ebmr3135615f8f.12.1728573835943; Thu, 10 Oct 2024
+ 08:23:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFg+JWMrfw40y2=0f9jr-3ebUxsFPprAK5diK4GQke_4A@mail.gmail.com>
+References: <20241009085751.35976-1-tianjia.zhang@linux.alibaba.com>
+ <86set55yca.wl-maz@kernel.org> <b3c21234-73a0-43dd-8365-9039c62b7aa7@linux.alibaba.com>
+In-Reply-To: <b3c21234-73a0-43dd-8365-9039c62b7aa7@linux.alibaba.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 10 Oct 2024 08:23:41 -0700
+Message-ID: <CAKwvOdnkTOjV_j6zGAkghgU0L_tLkb=8Nh3Qzvdb1N-tV61wag@mail.gmail.com>
+Subject: Re: [PATCH] KVM: arm64: nVHE: gen-hyprel: Silent build warnings
+To: "tianjia.zhang" <tianjia.zhang@linux.alibaba.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, =?UTF-8?Q?Pierre=2DCl=C3=A9ment_Tosi?= <ptosi@google.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 10, 2024 at 03:59:43PM +0200, Ard Biesheuvel wrote:
-> On Thu, 10 Oct 2024 at 15:26, Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Oct 10, 2024 at 1:13=E2=80=AFAM tianjia.zhang
+<tianjia.zhang@linux.alibaba.com> wrote:
+>
+>
+>
+> On 10/9/24 7:07 PM, Marc Zyngier wrote:
+> > On Wed, 09 Oct 2024 09:57:51 +0100,
+> > Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
+> >>
+> >> This patch silent the some mismatch format build warnings
+> >> with clang, like:
+> >>
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:233:2: warning: format specifi=
+es
+> >>    type 'unsigned long' but the argument has type 'Elf64_Off'
+> >>    (aka 'unsigned long long') [-Wformat]
+> >>      233 |         assert_ne(off, 0UL, "%lu");
+> >>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>          |                              %llu
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:193:34: note: expanded from ma=
+cro 'assert_ne'
+> >>      193 | #define assert_ne(lhs, rhs, fmt)        assert_op(lhs, rhs,=
+ fmt, !=3D)
+> >>          |                                         ^~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:188:19: note: expanded from ma=
+cro 'assert_op'
+> >>      187 |                                 " failed (lhs=3D" fmt ", rh=
+s=3D" fmt        \
+> >>          |                                                 ~~~
+> >>      188 |                                 ", line=3D%d)", _lhs, _rhs,=
+ __LINE__);    \
+> >>          |                                               ^~~~
+> >>    arch/arm64/kvm/hyp/nvhe/gen-hyprel.c:167:17: note: expanded from ma=
+cro 'fatal_error'
+> >>      166 |                 fprintf(stderr, "error: %s: " fmt "\n",    =
+             \
+> >>          |                                               ~~~
+> >>      167 |                         elf.path, ## __VA_ARGS__);         =
+             \
+> >>          |                                      ^~~~~~~~~~~
+> >>
+> >> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 > >
-> > On Thu, Oct 10, 2024 at 02:28:03PM +0200, Ard Biesheuvel wrote:
-> > > diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> > > index 3cb3e9b5ad0b..7f7981a93535 100644
-> > > --- a/tools/objtool/check.c
-> > > +++ b/tools/objtool/check.c
-> > > @@ -2101,6 +2101,8 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
-> > >  {
-> > >       struct symbol *pfunc = insn_func(insn)->pfunc;
-> > >       struct reloc *table = insn_jump_table(insn);
-> > > +     unsigned int rtype = reloc_type(table);
-> > > +     bool pcrel = rtype == R_X86_64_PC32;
+> > I don't see these warnings. What version of LLVM are you using?
 > >
-> > R_DATA32 or R_TEXT32 please, the budding cross arch stuff has their own
-> > names for all that.
-> >
-> 
-> #define R_DATA32        R_X86_64_PC32
-> #define R_DATA64        R_X86_64_PC32
-> #define R_TEXT32        R_X86_64_PC32
-> #define R_TEXT64        R_X86_64_PC32
-> 
-> Clear as mud.
-> 
-> I'd guess we need the '64' variant here, but I'm not sure which one to
-> use for a .rodata relocation pointing to .text. Any hints?
+>
+> I compiled the kernel on Apple Silicon M3 Pro in macOS 15.0.1, Maybe this=
+ is
+> a special scenario that is rarely used.
 
-Josh? do R_{DATA,TEXT}64 want to be _PC64 ?
+Right, so I had an initial patch set for building the kernel from a
+MacOS host.  I sent a v1, but didn't chase sending a v2 at the time
+because there didn't appear to be any interest.
+
+https://www.phoronix.com/news/Linux-Compile-On-macOS
+
+Since then, I saw a v2 or even a v3 fly by (I was cc'ed).
+
+One issue I recall building from MacOS was that MacOS does not have an
+<elf.h> (their object file format is not ELF, but Mach-O).  I had to
+install some dependency through homebrew for that header.
+
+Just a guess but:
+Perhaps it defines Elf64_Off as a `unsigned long` incorrectly, and
+should be defining it as an `unsigned long long`.  I'd check if that's
+the case and if so, Tianjia, you may want to report that issue on the
+thread where folks are reposting the MacOS host support.
+
+>
+> Details of clang:
+>
+>      # clang --version
+>      Homebrew clang version 19.1.1
+>      Target: arm64-apple-darwin24.0.0
+>      Thread model: posix
+>      InstalledDir: /opt/homebrew/Cellar/llvm/19.1.1/bin
+>
+> Cheers,
+> Tianjia
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
