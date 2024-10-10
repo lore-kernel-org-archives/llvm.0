@@ -1,41 +1,61 @@
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15100169397
-	for <llvm@lists.linux.dev>; Wed,  9 Oct 2024 23:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E194EADB;
+	Thu, 10 Oct 2024 00:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728517090; cv=none; b=Mb2+/i59MC2WYu6zkO9LebdSeRXCoCQWbntmU56wBXz42/gRDWSyOkaHpVEYzHiI1PcX/Zjy5sxlzLxXXnL/iEV7FFz6TOL9VmN7UnfGSTy1MzW0FY46+vWqzw+2pyIOG/uhaEWVRmtZ6ddcfD5tCDzZDnVQ+Aq4fCf7oJ/PEHk=
+	t=1728520781; cv=none; b=eW9DwfePGjFFZYseUyP7a3i5vuIwh1SaUUZg90kCo/3bGjzv5oSwumU2AgoL2MBhk0gOOjcQI6OxbiXc80cRv/krCzqddHZ37Y61HFi4/E14j6r5siTe0gBQoWrkj2a8+YLNSTnK1L9+SS4H2TUXLYY1+c73KMGFuQjOPLRAgxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728517090; c=relaxed/simple;
-	bh=3G/6R++b9vYj4FRd5vTu0OZai85D5ZFaHhqrAG01FuY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qLSqvehEB2JKJG+ebNw8WDgkJ47ZmplZVmlDERyEa9WLxghUrxTbHq9zB1xmXrWOSCWiU1Aqb2NlyDhZN5vZQgOooTqnr1t68cvw74PYo+BKo3UkRrJoS0G/KjltkX+BqhnOXzJ2NwkFcvzoeZWBXb9nz1AXt0tpYbtH/J6K8v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Received: from localhost (88-113-25-87.elisa-laajakaista.fi [88.113.25.87])
-	by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-	id 84804db4-8697-11ef-8860-005056bdd08f;
-	Thu, 10 Oct 2024 02:37:59 +0300 (EEST)
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 10 Oct 2024 02:37:59 +0300
-To: Sean Christopherson <seanjc@google.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v2 1/1] x86/reboot: KVM: Guard
- nmi_shootdown_cpus_on_restart() with ifdeffery
-Message-ID: <ZwcT149jx-iOmEfl@surfacebook.localdomain>
-References: <20241008191555.2336659-1-andriy.shevchenko@linux.intel.com>
- <ZwbazZpTSAn9aAC7@google.com>
+	s=arc-20240116; t=1728520781; c=relaxed/simple;
+	bh=xjFlrItIBV0pAGOX0LCWxUernUT1V5AEqxoU9oXejVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tueR/U+pB7OyjqjnbSMPNCdVxvkW4BzBuZI6KaATD8+jNMoHIpTl1PsacnS4TIkSd3OjlGO6z/pIJq0d9Q9WwnzeU1schksqrVND0jWVSjMQndRfadFSJSjkV+ZcqWga1bu/FPOsJUCu+R1e/6HmSVBBJ+6FJmQ+EQJTs0BqaY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CSoWgePc; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CSoWgePc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728520779; x=1760056779;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xjFlrItIBV0pAGOX0LCWxUernUT1V5AEqxoU9oXejVE=;
+  b=CSoWgePcfCKCokCi7IOEc2jj4SzWiPaa/jxObibcOXmCIcK2Ur7MLSsW
+   90A2NmuBwq9nwfsZMmS9YBwZPig9zHUvt0J+dDPjom3ademBf7YGobcX0
+   t/OgpqfbR2knB0sZEOAUOSRYwpIJmG/8SjfUxARHmqxPoCihM4OFfnW2E
+   Gg2Vf50nlim1PDhcZq4h/EozIB+pedK6dOELlHRH/fZ0/DXh4CZW09Cix
+   EFrb6KBInrjjcWacbjGHY3MAwSSlqd/g2oWO1d5pGrDwk9PkzpBMqWEab
+   eKHG9OG3WD+3PVN/pKxyPdCeFOUo4toaomcm/CDHjGx2p85y1IJZG23i7
+   A==;
+X-CSE-ConnectionGUID: xETIs8VGSB2v2Zm7KnSk8w==
+X-CSE-MsgGUID: 9SQlnlDCSyWQsU09T7cujQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="27805826"
+X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
+   d="scan'208";a="27805826"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 17:39:37 -0700
+X-CSE-ConnectionGUID: bwHguJ4yQECSGbUQO39TNw==
+X-CSE-MsgGUID: 5BEQecfdSPyOCDxG034Flw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,191,1725346800"; 
+   d="scan'208";a="80944309"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 09 Oct 2024 17:39:35 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1syhDJ-0009z2-1e;
+	Thu, 10 Oct 2024 00:39:33 +0000
+Date: Thu, 10 Oct 2024 08:39:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [linux-next:master 2858/3432] arch/x86/mm/init_64.c:992:28: error:
+ call to undeclared function 'bootmem_type'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202410100816.bZNgCXpD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,36 +64,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZwbazZpTSAn9aAC7@google.com>
 
-Wed, Oct 09, 2024 at 12:34:37PM -0700, Sean Christopherson kirjoitti:
-> On Tue, Oct 08, 2024, Andy Shevchenko wrote:
-> > The nmi_shootdown_cpus_on_restart() in some cases may be not used.
-> > This, in particular, prevents kernel builds with clang, `make W=1`
-> > and CONFIG_WERROR=y:
-> > 
-> > arch/x86/kernel/reboot.c:957:20: error: unused function 'nmi_shootdown_cpus_on_restart' [-Werror,-Wunused-function]
-> >   957 | static inline void nmi_shootdown_cpus_on_restart(void)
-> >       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Fix this by guarging the definitions with the respective KVM ifdeffery.
-> > 
-> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> > inline functions for W=1 build").
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b6270c3bca987530eafc6a15f9d54ecd0033e0e3
+commit: cdaa5412be9ac6dcf7649c5f5ab8f8874b9716a8 [2858/3432] bootmem: stop using page->index
+config: x86_64-buildonly-randconfig-003-20241010 (https://download.01.org/0day-ci/archive/20241010/202410100816.bZNgCXpD-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241010/202410100816.bZNgCXpD-lkp@intel.com/reproduce)
 
-> Heh, I tried fixing this too, and have patches to clean things up, but I ended up
-> not posting them because I decided the W=1 warning was less ugly than the resulting
-> code in nmi_shootdown_cpus().
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410100816.bZNgCXpD-lkp@intel.com/
 
-CONFIG_WERROR=y is the default (at least in the current defconfigs for x86).
-My goal is to match what ARM builds survive (to some extend?), i.e. W=1, so
-may one apply either version I provided or yours?
+All errors (new ones prefixed by >>):
 
-> If we're willing to take on a bit of weirdness in nmi_shootdown_cpus(), then much
-> of the #ifdeffery can go away.  Patches attached (lightly tested).
+>> arch/x86/mm/init_64.c:992:28: error: call to undeclared function 'bootmem_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     992 |                 enum bootmem_type type = bootmem_type(page);
+         |                                          ^
+   1 error generated.
+
+
+vim +/bootmem_type +992 arch/x86/mm/init_64.c
+
+   987	
+   988	static void __meminit free_pagetable(struct page *page, int order)
+   989	{
+   990		/* bootmem page has reserved flag */
+   991		if (PageReserved(page)) {
+ > 992			enum bootmem_type type = bootmem_type(page);
+   993			unsigned long nr_pages = 1 << order;
+   994	
+   995			if (type == SECTION_INFO || type == MIX_SECTION_INFO) {
+   996				while (nr_pages--)
+   997					put_page_bootmem(page++);
+   998			} else
+   999				while (nr_pages--)
+  1000					free_reserved_page(page++);
+  1001		} else
+  1002			free_pages((unsigned long)page_address(page), order);
+  1003	}
+  1004	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
