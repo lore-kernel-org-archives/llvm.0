@@ -1,205 +1,188 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E892E1CFEB3
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 17:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2891C7B6F;
+	Fri, 11 Oct 2024 17:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728666566; cv=none; b=o32exfDKAkLHdVAp7g8kMnX+nXb5MGkpoFmwt6S3yRJUPu/X20LRYEPgBMZ0HWzMYw7lg2sqtafCjQhXITvgMPYDcFzfDvc6uMeIAmopv+oMUfbcYaBm+oWYpNfokC9UBMWQwBbdf6iG2cn2nfIuBplC5XK9XbwIO6IR6m+sORE=
+	t=1728666753; cv=none; b=XTJNdjsDEbS9jJS/dDEqIpu8fexqCPp8SbNV+PdqyoRCzVyfU0WbDOiFjzshgcPxx2ogKBLBRng4xPjrEGwQen8etVKP5MqtzeUITzau5pS1IyXUjl+ofumH48PXEz3bXkHAxF0g9z1SYCqzkzz66ABz4MYC9l2UoiMQgJdbn4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728666566; c=relaxed/simple;
-	bh=dmzPGrFW6aOYMzz1IH4ndQp0FtWFFlmkgAnMYm8LZsM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iDOrDmC64xKGHWdMCdaZ0z6sBIBb+NNfjp2XKuBtr6L9r4vzYu0ELfx3Wvo6wYhBrGinox6ZEAmVDowfLjz9+YPLDOMuu+ehXFtCJs/XI6qG9p5UdBDl9str2eJPmnrW1burKkX9uF5aIHPTaUs+oMTF25jm2pMRU5eMF3mw9eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nYHNjcFJ; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+	s=arc-20240116; t=1728666753; c=relaxed/simple;
+	bh=HyzgzEpwQ6CUwvYBP98vuPcTjkwqLs1z7z5alGx6okQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tQqK+CN1WBBT3+9uQFFNM7IMS68/1ORa++jmWfkL6+PeEIRdYp7uo6jEFuEmDi5sxXFmygW4aEH1ytjAS9U9NWfjs1cfqjD+xKzo3vGVpfgOVSqQikfMzKcyHjrq22jwgt7jwd7vZAKllkMI22j2JuNOSFja5qv06pKAeVemMgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRJk3LXq; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nYHNjcFJ"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e321d26b38so48339487b3.2
-        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 10:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728666563; x=1729271363; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e8u1CNDm2+Bhw3m92z5B6moO+Nki7WTk10wOgvZqSdE=;
-        b=nYHNjcFJ72ChZMhgtKAub2JvLkD+ukhm+o8K7UP/dpkAivD5GKmyFrTtpLj+QVDXPo
-         l4Kh14Yx9VDF59VGys7lKmE1KGVOlTJyH02vVGhHtER0YOf8VkXogRSxzzIiZWKiUTry
-         BLMO0AZCeGyBf7Q4u8TCp7h8nFe/9CTil42aJ2otyxwd1HbQ3tBcmzQG+fcxU0m6Wzro
-         xFPNRUegt6J7muwpQfW0Vs32y4oQUIiBDzPwwFDIK3UiaODayDfmlWqED/RWuPnl0WB0
-         5ABpMcNavbw32UIYUTophIoePTayNCPULW9n0Mpok9pfB7ySOqTqW4+VdBg+IFNGkr88
-         OxUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728666563; x=1729271363;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e8u1CNDm2+Bhw3m92z5B6moO+Nki7WTk10wOgvZqSdE=;
-        b=lQEHhZ468kN8CHM3fAhTVTAPuR9N9xbCZrTgR+S2Kr2oHRhBYJsok77GN6f7av/NSr
-         wh+XAu9uX8TA+wQylKP/FAiw1tf8/NTxLm/WaFoCkbGfTMKPxOr3+2WbrM6TjILSU+or
-         p73hTwCWohbUbHHxv98GGvx7STnti5UhZFE4e4tLRfLT97/Vm6cCgXBRUwZ6XbYmEMbj
-         CKhKIBpUzR0aDH0LGYShFXHaWn18WKxcIqN9I5MTVKef4f1r3IG69pyyxKYVDsF2/h8j
-         cK7lslld9ZnON9PSHDj8I+z6jxmeaYaMAuWSlN0pjmq3efqlAs3g6TE8dKkm9FfWPIB6
-         DJLw==
-X-Gm-Message-State: AOJu0YwO2Utyw2Q4Tuq4NdVuxNLvuvO2H6JgUaPZCCx3dOhmDY/grjsb
-	3WIIdmSgh9h5tzir4OjK/q3IWrDmnkdy0StYs12gPva8vpPDam86qWwK8De+uZY1UYxvPA==
-X-Google-Smtp-Source: AGHT+IELPWPtiT4Q82wAv9kxv2a+A02raZYpuKW6YkhpqdM8qkrH2v2YSZ25ymK9rG/ipEu3ysaoSds0
-X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:690c:3190:b0:6e2:120b:be57 with SMTP id
- 00721157ae682-6e347b4aec8mr83757b3.5.1728666562988; Fri, 11 Oct 2024 10:09:22
- -0700 (PDT)
-Date: Fri, 11 Oct 2024 19:08:56 +0200
-In-Reply-To: <20241011170847.334429-10-ardb+git@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRJk3LXq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728666752; x=1760202752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HyzgzEpwQ6CUwvYBP98vuPcTjkwqLs1z7z5alGx6okQ=;
+  b=iRJk3LXqDJ5GqOh8pU/Fy8zXJxCgg8bLNf83WGtBYs6RY3qw96Ks+5lP
+   ZE+RrGYQhPTCXM6L16UCkpTx4HxMq6efhrns5ZE4v5wavmXLe0hemrS1f
+   C5S7D2I+nAG3c4r/i30zdKIFkN8swQ9xRfAGD2JPjDDKGB2kKQ3EzQaiA
+   23tYStp9495fBt23iucqFFMmEjElywgwPNo80O4is0dr13/p0Ftqb2kdy
+   pEMUDkrrAVrWmmKYl1eJQDxF53QaFqXqhhtU0wpYMP+Ajsh/tNCUpA3m/
+   RDRW9kmDLrESUhJPQhkRV2J89MhrN0UHGr2P+FwgOyFKRX4JSlgWYRGzH
+   A==;
+X-CSE-ConnectionGUID: f5OnHWeZSgiYRWCjtX9rJw==
+X-CSE-MsgGUID: v4t2694FRUCqH+Fmfbimbg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39199833"
+X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
+   d="scan'208";a="39199833"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 10:12:31 -0700
+X-CSE-ConnectionGUID: TPnuj3nzQkSC8HF/G6hGcg==
+X-CSE-MsgGUID: EgMvq0ZMSj2HDRuNpYuKxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
+   d="scan'208";a="114426526"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 11 Oct 2024 10:12:28 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1szJBi-000CXX-18;
+	Fri, 11 Oct 2024 17:12:26 +0000
+Date: Sat, 12 Oct 2024 01:11:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stefan Wiehler <stefan.wiehler@nokia.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Stefan Wiehler <stefan.wiehler@nokia.com>
+Subject: Re: [PATCH net v3 3/4] ip6mr: Lock RCU before ip6mr_get_table() call
+ in ip6mr_compat_ioctl()
+Message-ID: <202410120109.QyXpPs23-lkp@intel.com>
+References: <20241010090741.1980100-7-stefan.wiehler@nokia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20241011170847.334429-10-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3351; i=ardb@kernel.org;
- h=from:subject; bh=Hfh910Y5sSnn5hBkeQ8p28eswlQr4LHqPbKbxMAVhc0=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIZ0zenW+ZiGDhuwr6Rk3jm4WtI45MFlvU1xb1zP3k1/yF
- Rq5VdI7SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwEQW9zMyrPey+hV86aRT/v8I
- 8defMvfutpU/FbW3Yf+0ugM2qzYLZDH8D5urnSY/RSlbw4UtxHhzheGW9zE9B0xVErOyXG3KbtV xAAA=
-X-Mailer: git-send-email 2.47.0.rc1.288.g06298d1525-goog
-Message-ID: <20241011170847.334429-18-ardb+git@google.com>
-Subject: [PATCH v3 8/8] crypto: x86/crc32c-intel - Tweaks to make objtool's
- life harder
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, keescook@chromium.org, 
-	linux-hardening@vger.kernel.org, nathan@kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Jan Beulich <jbeulich@suse.com>, 
-	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010090741.1980100-7-stefan.wiehler@nokia.com>
 
-From: Ard Biesheuvel <ardb@kernel.org>
+Hi Stefan,
 
-Tweak the asm crc32c asm code so that the jump table is more difficult
-to decipher for objtool:
+kernel test robot noticed the following build warnings:
 
-- load the address in the prologue
-- move the jump table to the middle of .rodata, so that the section
-  offset and the symbol offset differ
-- emit an entry following the jump table that is unrelated
-- add unconditional ENDBRs so we can test --ibt regardless of the kernel
-  config
+[auto build test WARNING on net/main]
 
-Test code only. Not intended for merging.
----
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S | 50 +++++++++++---------
- 1 file changed, 28 insertions(+), 22 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Wiehler/ip6mr-Lock-RCU-before-ip6mr_get_table-call-in-ip6mr_ioctl/20241010-171634
+base:   net/main
+patch link:    https://lore.kernel.org/r/20241010090741.1980100-7-stefan.wiehler%40nokia.com
+patch subject: [PATCH net v3 3/4] ip6mr: Lock RCU before ip6mr_get_table() call in ip6mr_compat_ioctl()
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20241012/202410120109.QyXpPs23-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241012/202410120109.QyXpPs23-lkp@intel.com/reproduce)
 
-diff --git a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-index 7292090e76dd..cbedf5820e30 100644
---- a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-+++ b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-@@ -93,10 +93,14 @@ SYM_FUNC_START(crc_pcl)
- #define    crc1		%r9
- #define    crc2		%r10
- 
-+	endbr64
-+	pushq	%rbp
- 	pushq   %rbx
- 	pushq   %rdi
- 	pushq   %rsi
- 
-+	leaq	jump_table(%rip), %rbp
-+
- 	## Move crc_init for Linux to a different
- 	mov     crc_init_arg, crc_init
- 
-@@ -168,9 +172,8 @@ SYM_FUNC_START(crc_pcl)
- 	xor     crc2, crc2
- 
- 	## branch into array
--	leaq	jump_table(%rip), %bufp
--	movslq	(%bufp,%rax,4), len
--	addq	len, %bufp
-+	movslq	(%rbp,%rax,4), %bufp
-+	addq	%rbp, %bufp
- 	.reloc	., R_X86_64_NONE, jump_table
- 	JMP_NOSPEC bufp
- 
-@@ -197,7 +200,7 @@ SYM_FUNC_START(crc_pcl)
- .altmacro
- LABEL crc_ %i
- .noaltmacro
--	ENDBR
-+	endbr64
- 	crc32q   -i*8(block_0), crc_init
- 	crc32q   -i*8(block_1), crc1
- 	crc32q   -i*8(block_2), crc2
-@@ -207,7 +210,7 @@ LABEL crc_ %i
- .altmacro
- LABEL crc_ %i
- .noaltmacro
--	ENDBR
-+	endbr64
- 	crc32q   -i*8(block_0), crc_init
- 	crc32q   -i*8(block_1), crc1
- # SKIP  crc32  -i*8(block_2), crc2 ; Don't do this one yet
-@@ -241,7 +244,7 @@ LABEL crc_ %i
- 	################################################################
- 
- LABEL crc_ 0
--	ENDBR
-+	endbr64
- 	mov     tmp, len
- 	cmp     $128*24, tmp
- 	jae     .Lfull_block
-@@ -311,26 +314,11 @@ LABEL less_than_ %j			# less_than_j: Length should be in
- 	popq    %rsi
- 	popq    %rdi
- 	popq    %rbx
-+	popq    %rbp
-         RET
- SYM_FUNC_END(crc_pcl)
- 
- .section	.rodata, "a", @progbits
--        ################################################################
--        ## jump table        Table is 129 entries x 2 bytes each
--        ################################################################
--.align 4
--jump_table:
--	i=0
--.rept 129
--.altmacro
--JMPTBL_ENTRY %i
--.noaltmacro
--	i=i+1
--.endr
--
--.size	jump_table, . - jump_table
--.type	jump_table, @object
--
- 	################################################################
- 	## PCLMULQDQ tables
- 	## Table is 128 entries x 2 words (8 bytes) each
-@@ -465,3 +453,21 @@ K_table:
- 	.long 0x45cddf4e, 0xe0ac139e
- 	.long 0xacfa3103, 0x6c23e841
- 	.long 0xa51b6135, 0x170076fa
-+
-+        ################################################################
-+        ## jump table        Table is 129 entries x 2 bytes each
-+        ################################################################
-+.align 4
-+jump_table:
-+	i=0
-+.rept 129
-+.altmacro
-+JMPTBL_ENTRY %i
-+.noaltmacro
-+	i=i+1
-+.endr
-+
-+.size	jump_table, . - jump_table
-+.type	jump_table, @object
-+
-+	.long	crc_pcl - .
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410120109.QyXpPs23-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/ipv6/ip6mr.c:1970:18: warning: variable 'mrt' is uninitialized when used here [-Wuninitialized]
+    1970 |                 if (vr.mifi >= mrt->maxvif)
+         |                                ^~~
+   net/ipv6/ip6mr.c:1963:22: note: initialize the variable 'mrt' to silence this warning
+    1963 |         struct mr_table *mrt;
+         |                             ^
+         |                              = NULL
+   1 warning generated.
+
+
+vim +/mrt +1970 net/ipv6/ip6mr.c
+
+e2d57766e6744f David S. Miller   2011-02-03  1955  
+e2d57766e6744f David S. Miller   2011-02-03  1956  int ip6mr_compat_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+e2d57766e6744f David S. Miller   2011-02-03  1957  {
+e2d57766e6744f David S. Miller   2011-02-03  1958  	struct compat_sioc_sg_req6 sr;
+e2d57766e6744f David S. Miller   2011-02-03  1959  	struct compat_sioc_mif_req6 vr;
+6853f21f764b04 Yuval Mintz       2018-02-28  1960  	struct vif_device *vif;
+e2d57766e6744f David S. Miller   2011-02-03  1961  	struct mfc6_cache *c;
+e2d57766e6744f David S. Miller   2011-02-03  1962  	struct net *net = sock_net(sk);
+b70432f7319eb7 Yuval Mintz       2018-02-28  1963  	struct mr_table *mrt;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1964  	int err;
+e2d57766e6744f David S. Miller   2011-02-03  1965  
+e2d57766e6744f David S. Miller   2011-02-03  1966  	switch (cmd) {
+e2d57766e6744f David S. Miller   2011-02-03  1967  	case SIOCGETMIFCNT_IN6:
+e2d57766e6744f David S. Miller   2011-02-03  1968  		if (copy_from_user(&vr, arg, sizeof(vr)))
+e2d57766e6744f David S. Miller   2011-02-03  1969  			return -EFAULT;
+e2d57766e6744f David S. Miller   2011-02-03 @1970  		if (vr.mifi >= mrt->maxvif)
+e2d57766e6744f David S. Miller   2011-02-03  1971  			return -EINVAL;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1972  		break;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1973  	case SIOCGETSGCNT_IN6:
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1974  		if (copy_from_user(&sr, arg, sizeof(sr)))
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1975  			return -EFAULT;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1976  		break;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1977  	default:
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1978  		return -ENOIOCTLCMD;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1979  	}
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1980  
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1981  
+638cf4a24a09d1 Eric Dumazet      2022-06-23  1982  	rcu_read_lock();
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1983  	mrt = ip6mr_get_table(net, raw6_sk(sk)->ip6mr_table ? : RT6_TABLE_DFLT);
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1984  	if (!mrt) {
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1985  		err = -ENOENT;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1986  		goto out;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1987  	}
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1988  
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1989  	switch (cmd) {
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1990  	case SIOCGETMIFCNT_IN6:
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1991  		if (vr.mifi >= mrt->maxvif) {
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1992  			err = -EINVAL;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1993  			goto out;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1994  		}
+9135a3aca0c10d Stefan Wiehler    2024-10-10  1995  		vr.mifi = array_index_nospec(vr.mifi, mrt->maxvif);
+b70432f7319eb7 Yuval Mintz       2018-02-28  1996  		vif = &mrt->vif_table[vr.mifi];
+b70432f7319eb7 Yuval Mintz       2018-02-28  1997  		if (VIF_EXISTS(mrt, vr.mifi)) {
+638cf4a24a09d1 Eric Dumazet      2022-06-23  1998  			vr.icount = READ_ONCE(vif->pkt_in);
+638cf4a24a09d1 Eric Dumazet      2022-06-23  1999  			vr.ocount = READ_ONCE(vif->pkt_out);
+638cf4a24a09d1 Eric Dumazet      2022-06-23  2000  			vr.ibytes = READ_ONCE(vif->bytes_in);
+638cf4a24a09d1 Eric Dumazet      2022-06-23  2001  			vr.obytes = READ_ONCE(vif->bytes_out);
+638cf4a24a09d1 Eric Dumazet      2022-06-23  2002  			rcu_read_unlock();
+e2d57766e6744f David S. Miller   2011-02-03  2003  
+e2d57766e6744f David S. Miller   2011-02-03  2004  			if (copy_to_user(arg, &vr, sizeof(vr)))
+e2d57766e6744f David S. Miller   2011-02-03  2005  				return -EFAULT;
+e2d57766e6744f David S. Miller   2011-02-03  2006  			return 0;
+e2d57766e6744f David S. Miller   2011-02-03  2007  		}
+638cf4a24a09d1 Eric Dumazet      2022-06-23  2008  		rcu_read_unlock();
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2009  		err = -EADDRNOTAVAIL;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2010  		goto out;
+e2d57766e6744f David S. Miller   2011-02-03  2011  	case SIOCGETSGCNT_IN6:
+e2d57766e6744f David S. Miller   2011-02-03  2012  		c = ip6mr_cache_find(mrt, &sr.src.sin6_addr, &sr.grp.sin6_addr);
+e2d57766e6744f David S. Miller   2011-02-03  2013  		if (c) {
+494fff56379c4a Yuval Mintz       2018-02-28  2014  			sr.pktcnt = c->_c.mfc_un.res.pkt;
+494fff56379c4a Yuval Mintz       2018-02-28  2015  			sr.bytecnt = c->_c.mfc_un.res.bytes;
+494fff56379c4a Yuval Mintz       2018-02-28  2016  			sr.wrong_if = c->_c.mfc_un.res.wrong_if;
+87c418bf1323d5 Yuval Mintz       2018-02-28  2017  			rcu_read_unlock();
+e2d57766e6744f David S. Miller   2011-02-03  2018  
+e2d57766e6744f David S. Miller   2011-02-03  2019  			if (copy_to_user(arg, &sr, sizeof(sr)))
+e2d57766e6744f David S. Miller   2011-02-03  2020  				return -EFAULT;
+e2d57766e6744f David S. Miller   2011-02-03  2021  			return 0;
+e2d57766e6744f David S. Miller   2011-02-03  2022  		}
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2023  		err = -EADDRNOTAVAIL;
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2024  		goto out;
+e2d57766e6744f David S. Miller   2011-02-03  2025  	}
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2026  
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2027  out:
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2028  	rcu_read_unlock();
+9135a3aca0c10d Stefan Wiehler    2024-10-10  2029  	return err;
+e2d57766e6744f David S. Miller   2011-02-03  2030  }
+e2d57766e6744f David S. Miller   2011-02-03  2031  #endif
+7bc570c8b4f75d YOSHIFUJI Hideaki 2008-04-03  2032  
+
 -- 
-2.47.0.rc1.288.g06298d1525-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
