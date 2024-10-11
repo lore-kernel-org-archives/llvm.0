@@ -1,63 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B311F7062;
-	Fri, 11 Oct 2024 05:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982061F8F0E;
+	Fri, 11 Oct 2024 05:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728624481; cv=none; b=K/spWdOB0z+L2HTiAUygkLn2fbA4wvuuUvAZir2ls/LjaAIQXhQxl+YKzHx4DBlgd9q63OeOY3xYm2IcV5qO7n6TBkf5vihp+3wFmM86y+HrrydfcvvVU7a+ikCuKavzg6C455YhyjO4h2RCQe2o3sctbXJCeLCBAmNF7fHPyqs=
+	t=1728625322; cv=none; b=kBxaArIHMsji+6D8Dxh+UzOpusxdA+9Fg8z3w/NOlJZOuMnGm/HzeUFoMCiMtMG22jLm5rI9uk6t3p/i/oZVSjcQTR8dXfVEQPQgQs4cdARTox8mpYBjlVPfqGbmbbTSpQT2GrEQ0/dLMDNeMTAmDEiT/N8vmO3MM1+ftwHw0c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728624481; c=relaxed/simple;
-	bh=goCG6LuCMyfTeKQKHyln6y/2A0/7zl/mSrjhumcIpf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IPc6/0BF8/7tvvl4Bmt41BUyokgugEiBfr2njE2VWQUTvs7fAAef/Lll081pPGUyMGLd9n/SdSX0ngMXJy3G2HDtTop+QzIGqxSlI8PNnKtIBeNIkbcW8C8rxZZptyrNM2+ZDGFLaIuh3nZZ1brOb2gbW7E2AjRSU82bpunYOVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuSrlhBs; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1728625322; c=relaxed/simple;
+	bh=1GnuJPx7TmfpbxrwXtxrx0oK5n9HSkMkpXKcS4JG84s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MuODRmURVq9YrW48vxT45/3sXzXdDlsl2kftE0yF7HAknd0zeIMzuNkWHt6qvscD6zUD0BC7HL5We4+3xJdWV/EfPMcBa4FQoK4Wm0MfV8Xx4Tlp30KCeo4Ma0MgMOA593SXDgC/vCy4XjwDMA5BEyhdMj+wipGdbua9+SNaa9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UbbiDFRY; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuSrlhBs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UbbiDFRY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728624480; x=1760160480;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=goCG6LuCMyfTeKQKHyln6y/2A0/7zl/mSrjhumcIpf8=;
-  b=BuSrlhBsGdesdRYHx2Vyot5wvyD6FKH4hcmYWmAYZ93e/RT0MJBe9m8J
-   pqLlcn3Z1soF/fLwtY+xjtxqACLvEXJHI1a2Os1WrjrlDG4JId7SfssJw
-   c2/3UIYZx5CGXZVLavmtEz1J1iZLXFzq38W56K+2npR3BDPQSWFr+2T2E
-   4+H6Uy8tRetkF1/ugjY/F/YHlHX2ZbaPShTPfcb6+YvczaWRURgM/8arU
-   Bfh4q2RbvcPIaDiz8DSvX7V+/RUh6ftc8zsDjxGdWhNPgkDmp+6mJHb3c
-   F72qeo0IaACDiHVHiMOUQk7IDjg5jVRtSUuMKEBGVkbuXB0jxXVIihR3r
-   w==;
-X-CSE-ConnectionGUID: ncX/jZlFSVC5UACylKQ3GQ==
-X-CSE-MsgGUID: aSZzVi1oT2uU38FMWI1k1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="28145118"
+  t=1728625320; x=1760161320;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1GnuJPx7TmfpbxrwXtxrx0oK5n9HSkMkpXKcS4JG84s=;
+  b=UbbiDFRYDRlBect3DtTOAApM6YgOwVxvhjw6oFLJVjRg6spsTlPcuX3T
+   HEqCfjw/y2SybKCULveKr31RGIDas1/sM3jJDtu6VZz1Om897SC5bFWsG
+   I5qMIiRIoT3UPkzjagYOV2cPgSNS8D1VM2w4qxVIEuNzABJ9RViZZMb6x
+   Ml1wyVeoIEp6qpnAOjWSFpjbRaShsBc4DsKYynErOv6KyAqvnPO0ToJs8
+   SzT0IR4uAwehzdsjn7kUe7BUDl3mN1d92D78A4hPdJupHmP46TaZP4Bx5
+   Y746AzD3wd2lbRKbElV+LUsDwzguX2bOqm7Tg7udJ0TZht3HlJaM3K1ld
+   g==;
+X-CSE-ConnectionGUID: 8dCkN0KBS2+eXjA54XGt+w==
+X-CSE-MsgGUID: Cw12VBBhQviajL1ahaTwOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="27483137"
 X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="28145118"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 22:27:59 -0700
-X-CSE-ConnectionGUID: gr19AF24RDe1lwNh+/M43w==
-X-CSE-MsgGUID: AUDeKc8zTfmC6HBM0MTIHg==
+   d="scan'208";a="27483137"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 22:41:58 -0700
+X-CSE-ConnectionGUID: lAxIf9tOT3mdnBpNW4D1VA==
+X-CSE-MsgGUID: DsHMejMCRq+zDpkXa4rBOQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="77017453"
+   d="scan'208";a="107544877"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Oct 2024 22:27:57 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 10 Oct 2024 22:41:57 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sz8Bu-000Bqb-1h;
-	Fri, 11 Oct 2024 05:27:54 +0000
-Date: Fri, 11 Oct 2024 13:27:53 +0800
+	id 1sz8PT-000BsS-19;
+	Fri, 11 Oct 2024 05:41:55 +0000
+Date: Fri, 11 Oct 2024 13:41:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dongcheng Yan <dongcheng.yan@intel.com>, linux-media@vger.kernel.org,
-	sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
-	daxing.li@intel.com, hao.yao@intel.com,
-	dongcheng.yan@linux.intel.com
-Subject: Re: [PATCH v1] media: i2c: add lt6911uxe hdmi bridge driver
-Message-ID: <202410111357.m9iK4rKf-lkp@intel.com>
-References: <20241010071010.3275452-1-dongcheng.yan@intel.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vincent-guittot:scmi/ffa-transport 1/1] ld.lld: error: undefined
+ symbol: tee_shm_get_va
+Message-ID: <202410111342.xleqPExp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,74 +61,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241010071010.3275452-1-dongcheng.yan@intel.com>
 
-Hi Dongcheng,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 6ba59ff4227927d3a8530fc2973b80e94b54d58f]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dongcheng-Yan/media-i2c-add-lt6911uxe-hdmi-bridge-driver/20241010-161811
-base:   6ba59ff4227927d3a8530fc2973b80e94b54d58f
-patch link:    https://lore.kernel.org/r/20241010071010.3275452-1-dongcheng.yan%40intel.com
-patch subject: [PATCH v1] media: i2c: add lt6911uxe hdmi bridge driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241011/202410111357.m9iK4rKf-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410111357.m9iK4rKf-lkp@intel.com/reproduce)
+tree:   https://git.linaro.org/people/vincent.guittot/kernel.git scmi/ffa-transport
+head:   d613a19181fee0ca12b6b5a9dff302c1207a2e15
+commit: d613a19181fee0ca12b6b5a9dff302c1207a2e15 [1/1] scmi/ffa: add a new scmi transport layer based on ffa
+config: arm64-randconfig-003-20241011 (https://download.01.org/0day-ci/archive/20241011/202410111342.xleqPExp-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410111342.xleqPExp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410111357.m9iK4rKf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410111342.xleqPExp-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/media/i2c/lt6911uxe.c:222:8: error: use of undeclared identifier 'V4L2_CID_CUR_LINK_FREQ'
-     222 |                                                  V4L2_CID_CUR_LINK_FREQ, 0,
-         |                                                  ^
-   1 error generated.
-
-
-vim +/V4L2_CID_CUR_LINK_FREQ +222 drivers/media/i2c/lt6911uxe.c
-
-   208	
-   209	static int lt6911uxe_init_controls(struct lt6911uxe *lt6911uxe)
-   210	{
-   211		struct v4l2_ctrl_handler *ctrl_hdlr;
-   212		s64 pixel_rate;
-   213		int ret;
-   214	
-   215		ctrl_hdlr = &lt6911uxe->ctrl_handler;
-   216		ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
-   217		if (ret)
-   218			return ret;
-   219	
-   220		ctrl_hdlr->lock = &lt6911uxe->mutex;
-   221		lt6911uxe->link_freq = v4l2_ctrl_new_std(ctrl_hdlr, NULL,
- > 222							 V4L2_CID_CUR_LINK_FREQ, 0,
-   223							 LT6911UXE_MAX_LINK_FREQ, 1,
-   224							 lt6911uxe->cur_mode.link_freq);
-   225	
-   226		pixel_rate = get_pixel_rate(lt6911uxe);
-   227		lt6911uxe->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, NULL,
-   228							  V4L2_CID_PIXEL_RATE,
-   229							  pixel_rate, pixel_rate, 1,
-   230							  pixel_rate);
-   231	
-   232		if (ctrl_hdlr->error) {
-   233			ret = ctrl_hdlr->error;
-   234			goto hdlr_free;
-   235		}
-   236		lt6911uxe->sd.ctrl_handler = ctrl_hdlr;
-   237	
-   238		return 0;
-   239	
-   240	hdlr_free:
-   241		v4l2_ctrl_handler_free(ctrl_hdlr);
-   242		return ret;
-   243	}
-   244	
+>> ld.lld: error: undefined symbol: tee_shm_get_va
+   >>> referenced by ffa.c:302 (drivers/firmware/arm_scmi/transports/ffa.c:302)
+   >>>               drivers/firmware/arm_scmi/transports/ffa.o:(scmi_ffa_chan_setup) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
