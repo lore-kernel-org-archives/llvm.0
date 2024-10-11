@@ -1,127 +1,101 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964021CF29E
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 19:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB6D199231
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 20:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728675165; cv=none; b=GwMLB7tIVkOJLRzxDrpdmXM5hKHqCzydyAAKmi1W82t+fWTj3M1wIxzIKba7XpIg+B9SPleFzW1oad+kr6shRDbjfQULUdI9WTz76bEiBcDCQ30JICpLQeuSpj7N9LfD6tx/TixsjqdXPdbY8Mn5zUny3Izgk2pmyNwNONAZg8A=
+	t=1728679566; cv=none; b=B3vu5FVNjEwpG2A04piVgdMOaU9GPyMNGrkAZjzIW6Y1d+SemEOhlq8BetcR3AU0WXLSTmVRKgpuA5nWaLtGx4tuQWkvIG8ljukTu39uE9sydTYX7RnH3757S9nX3wcnCqZnJYHRxPy2VJD/QKAgoOXMjis0e9+NV4U6JxnkTyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728675165; c=relaxed/simple;
-	bh=jTufO1eqHWvYONgG76j5xyUnwjzmD+Ejxhm+AhPj+AM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s9SD4yQsaNqvYK4jsrcQBbH2bT7iSOOTIq+vHPQuhyU5AuacrW+CHMuj3fYTKTFh5m13GtaBaFpnBMBYnikO5NMzYIliGd2p7JV1WDdDx7rfY4h+G0zS9s6U6QcxaKYXgseXEt3k/QMhcTOEuKBZ33z6ytrqOo0xJWXEpD3NWpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c0IrUw9Z; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728679566; c=relaxed/simple;
+	bh=Cm5FgDt/1jhlj0xelnuzcNAj/AJ2l7LkrvPbsmNiToI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SOSPwfKi5kqVyBCYElWY5358HsO5AuE88kyvtUh/XlrKOH7PjUYz4DbfIM+yqwLM+IcB+NNpYnTi+vvzihp7VncBE/hvZ0w/QrimYo9vflisKH1InDKYQJB2UCb78hT1ESSjRefsq//pMRWcCOM5v3vVlRPYFOzUHIJGLlI8s30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SPmUO0Pf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c0IrUw9Z"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d495d217bso1913118f8f.0
-        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 12:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728675162; x=1729279962; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+HS0NAdsOUYeGI7mRERtfLDO2iH3xgiX9etHXZcQn9A=;
-        b=c0IrUw9ZX+QMLG+1ZZGzuiticZTvCvCFVcI6fAuWtgCK6Dn86XnosocjUhSZMVO94S
-         VyMf96PGhsr/gEhjKgrf9TTbVmYY2qQ4gPeCwBmkqSqpQYTZ2ViXLf30h5Hu19vC1AuV
-         Qwqi4/XBhybR3cYpbr8577p3NXgE9ddr/A6IbzkM60CZmEggYZ13wH3If8lPNT/XbdNj
-         Bri9Z/ycIy70bEmGBPkig6atQzvR8d4vW61HZaRI3Y3lo8f+tGw710gMYL1jkuOjN/7K
-         walZ9lA+Wv5EexEHHGw29lPyPp+ulLXYnnseOM+B/14Ncstu2W/GZBL9AIsOvbllUNfA
-         K/pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728675162; x=1729279962;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HS0NAdsOUYeGI7mRERtfLDO2iH3xgiX9etHXZcQn9A=;
-        b=FxhqkSZ0DUCjlQTznQpJQ6gulpyccMHLuQPUcUcgu2EwgQwJwCcMldeRiH+rqaV6vS
-         WmdfulZ4AOu5v4SogR7Y4psPHKojbHotjSNu2WdKc/8RfVzVLlLmHjbEE455gFrJUDuq
-         T0vwQyMUm431AS+bl0L8tjIlYZR/i4ENCPWbl3h+6QOmL1ZxU7FO4VgkC4WDwqBWH9XL
-         cds1DVaCZCquZ5Vgg45lehr7vrt0MXTr86+z9y6GQvkO/jfSKqRiY5vVo4BP6bFrPWV+
-         Nmz8599EMe745ItG31SCk2tZU7YaQ7kgdnGW27ck9WuQfQ6qPrB9EtHyNQXumAeAvoK9
-         AGVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUXljtOM9vm2R5FdoHRGOe5CQ/dNcEba8ISCArvdrIWBC0lzcZ6CpheVxhyfWDXUNIiFrN@lists.linux.dev
-X-Gm-Message-State: AOJu0YzcJ7JTmrQbvrr5Y//L5YP1SV/Qv4x5NVn0ZRiQ4F5gVcjjypQ2
-	vRBHfY4nhORa4xnNTjRgMWuIVG3wxkUVr4mFlBwvy/AJNyjzkFUC
-X-Google-Smtp-Source: AGHT+IF9+FsG+E30CjlRvWbpTNN1lU2HNefQEhmynyvChYP7LCMUBll81Ko+v5AnAFFcNs3NnrwZbQ==
-X-Received: by 2002:a5d:62d2:0:b0:37c:d1c6:7e45 with SMTP id ffacd0b85a97d-37d600d2f59mr572270f8f.40.1728675161754;
-        Fri, 11 Oct 2024 12:32:41 -0700 (PDT)
-Received: from ?IPV6:2a02:8389:41cf:e200:55c0:165d:e76c:a019? (2a02-8389-41cf-e200-55c0-165d-e76c-a019.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:55c0:165d:e76c:a019])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6b8d13sm4601028f8f.25.2024.10.11.12.32.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 12:32:41 -0700 (PDT)
-Message-ID: <0ec5fd64-a172-4054-a2ef-1c12db41beb5@gmail.com>
-Date: Fri, 11 Oct 2024 21:32:38 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SPmUO0Pf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1728679560;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5XPdw4gYD7VMpyU7xvOce59KWx5tetX5xZvwVaMmsAI=;
+	b=SPmUO0PfQeMEqleXs08NpLMBLwKKLsoIYES3acUPV+HC759qFscahfJZgCm4ny0yS7RE6E
+	qvUCZBTsHrrFh0wv8fTiAsz6fL0LCy8NLiOzkURuPTI1x+FUexsKa55zgO1+7gw7BbSUP5
+	8JzBOkb+k5WV2/2ynK7x/7U6nDFSNCo=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-159-QVw9rx2_N3mEnM3SepA85g-1; Fri,
+ 11 Oct 2024 16:43:02 -0400
+X-MC-Unique: QVw9rx2_N3mEnM3SepA85g-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BC773195608C
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 20:43:01 +0000 (UTC)
+Received: from [172.64.0.80] (unknown [10.30.33.131])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 45E371956052;
+	Fri, 11 Oct 2024 20:43:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc2,
+ mainline.kernel.org-clang, 9e4c6c1a)
+Date: Fri, 11 Oct 2024 20:43:00 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] iio: Fix uninitialized variable
-To: Vasileios Aoiridis <vassilisamir@gmail.com>
-Cc: "Yo-Jung (Leo) Lin" <0xff07@gmail.com>,
- linux-kernel-mentees@lists.linuxfoundation.org, ricardo@marliere.net,
- skhan@linuxfoundation.org, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Angel Iglesias <ang.iglesiasg@gmail.com>, Adam Rizkalla
- <ajarizzo@gmail.com>, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20241011093752.30685-1-0xff07@gmail.com>
- <20241011115334.367736-1-0xff07@gmail.com>
- <26f2e35e-0a07-4b24-91a2-a48d4bc5dadc@gmail.com>
- <ZwlvJCxdiRqRWu6Z@vamoirid-laptop>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <ZwlvJCxdiRqRWu6Z@vamoirid-laptop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <46974.124101116430201113@us-mta-159.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-...
+Hi, we tested your kernel and here are the results:
 
-> 
-> Hi everyone!
-> 
-> So if you check also the conversations that we had here [1] and in the
-> previous versions, indeed the idea behind the offset is to use it as an
-> self-explanatory index to a char buffer that holds in fact s32 variables.
-> 
-> The data->buf here holds the values that have just been read from the
-> sensor. If you check on the channel specification of this sensor,
-> you will see ".realbits = 24" in both values that the sensor returns so
-> hence the value 3.
-> 
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-So you are using 3 = 24 bits, but s32 not as 4 bytes? the whole thing
-would have turned into sensor_data[0], sensor_data[4], and no variables
-implied, correct? But I am discussing too much for something that in the
-end is more or less the same, I am fine with this proposal.
 
-> I am not sure if it makes sense to use a macro here for each one of the
-> 3's that are going to be used only one time each and in order to be more
-> "consistent". But I might have a wrong view on this one so feel free to
-> correct me!
-> 
-> For the initialization of the offset indeed, it was already mentioned
-> here [2] this morning, but on a different patch!!! I couldn't get this
-> error though with gcc...
-> 
-> Cheers,
-> Vasilis
-> 
+Kernel information:
+    Commit message: Merge tag 'io_uring-6.12-20241011' of git://git.kernel.=
+dk/linux
 
-At least for the things I do in the kernel, clang catches more issues
-than gcc. Sometimes even gcc will not complain, and clang will fail to
-compile (e.g. a goto before a cleanup attribute).
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1492467201
 
-And if you run smatch before sending the series, you might discover a
-couple of extra "surprises".
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1492467201-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1492467201-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1492467201-x86_64-kernel-debug
 
-Best regards,
-Javier Carrasco
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
