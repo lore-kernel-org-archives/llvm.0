@@ -1,275 +1,246 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC122F22;
-	Fri, 11 Oct 2024 00:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8546C374CB;
+	Fri, 11 Oct 2024 01:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728605516; cv=none; b=Du05WZVNxO5dmaVc5k2E67Ti4UF0ysYNIWkMRMXkAP/9M28cC4tXzg0BWAQNfag/8BMjUM+e1XY0kPgufKZeh0zoGq+ZfjmIaRqNHjCz7VRDzd9LpDn7hE2+WD3f2WR24jMmxJsYpjCvWKUomrAegAadpdWRMwcQw6O+tLqGIA8=
+	t=1728611831; cv=none; b=acfouFYRTUpkgDmeWQZEROoiifzjOu6C4AXXySG5sE4/mKf4JGO3RKx2zb/HGbyL+cZpxcya35vDILZSj8NTmq/ERFDokRnaj65KcG3T3RzOtL6wPBVguXTgZVyEN1qWk/motVKcRXpBDBv458FYPkSMnSOR+08o6t0ywolfdPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728605516; c=relaxed/simple;
-	bh=u6VX0nC/ytIr+G5bsWAwAr0AQyvwq0E4hRHOXjus8mg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W1vtZyHFCFCp8RO/v4d9k+DTapxfVjmTrugp4YPhLMwIwYww/zqCw1ofrd45L+M3RnoA8SgzfsQJS1z9O6IKdrBar8vpgkiZbfgtQnW6czUa6L/zBv1skjrq8nUNfZKYDL7GgkTNVBIymXD2cBlmReRJ9gnSBlf/HIujDcVSdcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F66DC4CECD;
-	Fri, 11 Oct 2024 00:11:52 +0000 (UTC)
-Date: Thu, 10 Oct 2024 20:12:00 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: kernel test robot <lkp@intel.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, "x86@kernel.org"
- <x86@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao
- <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
- Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] ftrace: Make ftrace_regs abstract from direct use
-Message-ID: <20241010201200.729d4fcb@gandalf.local.home>
-In-Reply-To: <202410110707.uHvgl9S7-lkp@intel.com>
-References: <20241007204743.41314f1d@gandalf.local.home>
-	<202410110707.uHvgl9S7-lkp@intel.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1728611831; c=relaxed/simple;
+	bh=y5v0ffUW3sePYJlJh1R5AdFYt8vL8NVEWuQFuCT/85E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KuWvy6GLN8Cxh/33IFI8t1awxtWpuqGzpgMJA4+4Bks8RPdMM0mC6H1ZefAPlnJbyu3C5G7t54CmfT9n/pxxFmah7OWpBHuqmtz+xg7514rOnpnNbjHrS+Djt3IhWr0k4Ah+7xMJiEljj3c7UYbQwlVsps/9Oq2WWVqL23sbHDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NhMcDKuM; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NhMcDKuM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728611830; x=1760147830;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y5v0ffUW3sePYJlJh1R5AdFYt8vL8NVEWuQFuCT/85E=;
+  b=NhMcDKuM04jTB6eHnq5VoOpS0ChTOuKC0BVMWxn5sCPVTqMUyBcenyRq
+   0WL2htwddDEaU6A5+EZQrTm9Dznro+AcOVUkxGsq72H/shyblxG9iFFNQ
+   yA8L6jN+s8yHUCkySupycHW51sN5FSNhunsPUXtlNL2X8P4sq9XiMVmho
+   0PqEiQKZWQ90Cn/n+Bse6YdI+rznnKk1TiSMmOf3OCFmOGFx5SXgUbwgn
+   ztwLwWAEjMHr2NubgRXb7eNvdHnVmVOfkkkPhCwtgKLf7/v2L1XcG6QG8
+   Ddhr/G3G8Ba02mTd6650okOi9WIRKf61+v8VEkIliilN8ySfv9oQmVphV
+   g==;
+X-CSE-ConnectionGUID: v0lyNhT/TIqi3mFwcb0kEg==
+X-CSE-MsgGUID: n5FTa7vPSA2m++Q99T9MhA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="27450662"
+X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
+   d="scan'208";a="27450662"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 18:56:47 -0700
+X-CSE-ConnectionGUID: 81M4xkVJShKAog1uAPvfRA==
+X-CSE-MsgGUID: y3rP7b5uTeOoRBaCYCppIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
+   d="scan'208";a="76683888"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 10 Oct 2024 18:56:45 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sz4tX-000BZa-0p;
+	Fri, 11 Oct 2024 01:56:43 +0000
+Date: Fri, 11 Oct 2024 09:55:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 31/35] fs/utimes.c:25:25: error: variable has
+ incomplete type 'struct delegated_inode'
+Message-ID: <202410110901.Y7vQPBQV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 11 Oct 2024 08:00:21 +0800
-kernel test robot <lkp@intel.com> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   b91bc932b468b4c460faef8759fbae5a75b2ab5c
+commit: dfd80c5780301295a6cf5ed1f77cd4f724ec1d3e [31/35] fs: add struct delegated_inode
+config: i386-buildonly-randconfig-001-20241011 (https://download.01.org/0day-ci/archive/20241011/202410110901.Y7vQPBQV-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410110901.Y7vQPBQV-lkp@intel.com/reproduce)
 
-> Hi Steven,
-> 
-> kernel test robot noticed the following build errors:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410110901.Y7vQPBQV-lkp@intel.com/
 
-Hmm,
+All errors (new ones prefixed by >>):
 
-I wonder if we can not waste resources if a v2 version of a patch is sent
-out. Not sure when this was picked up, but I sent out an updated version
-with this fixed yesterday.
+>> fs/utimes.c:25:25: error: variable has incomplete type 'struct delegated_inode'
+      25 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   1 error generated.
+--
+>> fs/open.c:639:25: error: variable has incomplete type 'struct delegated_inode'
+     639 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/open.c:763:25: error: variable has incomplete type 'struct delegated_inode'
+     763 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   2 errors generated.
+--
+>> fs/posix_acl.c:1095:25: error: variable has incomplete type 'struct delegated_inode'
+    1095 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/posix_acl.c:1216:25: error: variable has incomplete type 'struct delegated_inode'
+    1216 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   2 errors generated.
+--
+>> fs/xattr.c:308:25: error: variable has incomplete type 'struct delegated_inode'
+     308 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/xattr.c:570:25: error: variable has incomplete type 'struct delegated_inode'
+     570 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   2 errors generated.
+--
+>> fs/namei.c:3666:25: error: variable has incomplete type 'struct delegated_inode'
+    3666 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4202:25: error: variable has incomplete type 'struct delegated_inode'
+    4202 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4325:25: error: variable has incomplete type 'struct delegated_inode'
+    4325 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4436:25: error: variable has incomplete type 'struct delegated_inode'
+    4436 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4585:25: error: variable has incomplete type 'struct delegated_inode'
+    4585 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4851:25: error: variable has incomplete type 'struct delegated_inode'
+    4851 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:5151:25: error: variable has incomplete type 'struct delegated_inode'
+    5151 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   7 errors generated.
 
-  https://lore.kernel.org/all/20241008230628.958778821@goodmis.org/
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
 
--- Steve
 
+vim +25 fs/utimes.c
 
-> 
-> [auto build test ERROR on next-20241004]
-> [cannot apply to s390/features arm64/for-next/core powerpc/next powerpc/fixes linus/master v6.12-rc2 v6.12-rc1 v6.11 v6.12-rc2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/ftrace-Make-ftrace_regs-abstract-from-direct-use/20241008-084930
-> base:   next-20241004
-> patch link:    https://lore.kernel.org/r/20241007204743.41314f1d%40gandalf.local.home
-> patch subject: [PATCH] ftrace: Make ftrace_regs abstract from direct use
-> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241011/202410110707.uHvgl9S7-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410110707.uHvgl9S7-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410110707.uHvgl9S7-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from kernel/time/time.c:31:
->    In file included from include/linux/timekeeper_internal.h:10:
->    In file included from include/linux/clocksource.h:22:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      548 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    In file included from kernel/time/time.c:31:
->    In file included from include/linux/timekeeper_internal.h:10:
->    In file included from include/linux/clocksource.h:22:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->          |                                                   ^
->    In file included from kernel/time/time.c:31:
->    In file included from include/linux/timekeeper_internal.h:10:
->    In file included from include/linux/clocksource.h:22:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      585 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      693 |         readsb(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      701 |         readsw(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      709 |         readsl(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      718 |         writesb(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      727 |         writesw(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      736 |         writesl(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    In file included from kernel/time/time.c:33:
->    In file included from include/linux/syscalls.h:93:
->    In file included from include/trace/syscall.h:7:
->    In file included from include/linux/trace_events.h:10:
->    In file included from include/linux/perf_event.h:52:
->    In file included from include/linux/ftrace.h:23:
->    In file included from ./arch/um/include/generated/asm/ftrace.h:1:
-> >> include/asm-generic/ftrace.h:5:2: error: unterminated conditional directive  
->        5 | #ifndef __ASM_GENERIC_FTRACE_H__
->          |  ^
->    12 warnings and 1 error generated.
-> --
->    In file included from kernel/time/hrtimer.c:30:
->    In file included from include/linux/syscalls.h:93:
->    In file included from include/trace/syscall.h:7:
->    In file included from include/linux/trace_events.h:9:
->    In file included from include/linux/hardirq.h:11:
->    In file included from arch/um/include/asm/hardirq.h:5:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      548 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    In file included from kernel/time/hrtimer.c:30:
->    In file included from include/linux/syscalls.h:93:
->    In file included from include/trace/syscall.h:7:
->    In file included from include/linux/trace_events.h:9:
->    In file included from include/linux/hardirq.h:11:
->    In file included from arch/um/include/asm/hardirq.h:5:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->          |                                                   ^
->    In file included from kernel/time/hrtimer.c:30:
->    In file included from include/linux/syscalls.h:93:
->    In file included from include/trace/syscall.h:7:
->    In file included from include/linux/trace_events.h:9:
->    In file included from include/linux/hardirq.h:11:
->    In file included from arch/um/include/asm/hardirq.h:5:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/um/include/asm/io.h:24:
->    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      585 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      693 |         readsb(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      701 |         readsw(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      709 |         readsl(PCI_IOBASE + addr, buffer, count);
->          |                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      718 |         writesb(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      727 |         writesw(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      736 |         writesl(PCI_IOBASE + addr, buffer, count);
->          |                 ~~~~~~~~~~ ^
->    In file included from kernel/time/hrtimer.c:30:
->    In file included from include/linux/syscalls.h:93:
->    In file included from include/trace/syscall.h:7:
->    In file included from include/linux/trace_events.h:10:
->    In file included from include/linux/perf_event.h:52:
->    In file included from include/linux/ftrace.h:23:
->    In file included from ./arch/um/include/generated/asm/ftrace.h:1:
-> >> include/asm-generic/ftrace.h:5:2: error: unterminated conditional directive  
->        5 | #ifndef __ASM_GENERIC_FTRACE_H__
->          |  ^
->    kernel/time/hrtimer.c:121:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
->      121 |         [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:119:27: note: previous initialization is here
->      119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:122:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
->      122 |         [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:119:27: note: previous initialization is here
->      119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:123:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
->      123 |         [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:119:27: note: previous initialization is here
->      119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:124:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
->      124 |         [CLOCK_TAI]             = HRTIMER_BASE_TAI,
->          |                                   ^~~~~~~~~~~~~~~~
->    kernel/time/hrtimer.c:119:27: note: previous initialization is here
->      119 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
->          |                                   ^~~~~~~~~~~~~~~~~~~~~~~
->    16 warnings and 1 error generated.
-> 
-> 
-> vim +5 include/asm-generic/ftrace.h
-> 
-> 38f5bf84bd588a GuanXuetao 2011-01-15 @5  #ifndef __ASM_GENERIC_FTRACE_H__
-> 38f5bf84bd588a GuanXuetao 2011-01-15  6  #define __ASM_GENERIC_FTRACE_H__
-> 38f5bf84bd588a GuanXuetao 2011-01-15  7  
-> 
+    19	
+    20	int vfs_utimes(const struct path *path, struct timespec64 *times)
+    21	{
+    22		int error;
+    23		struct iattr newattrs;
+    24		struct inode *inode = path->dentry->d_inode;
+  > 25		struct delegated_inode delegated_inode = { };
+    26	
+    27		if (times) {
+    28			if (!nsec_valid(times[0].tv_nsec) ||
+    29			    !nsec_valid(times[1].tv_nsec))
+    30				return -EINVAL;
+    31			if (times[0].tv_nsec == UTIME_NOW &&
+    32			    times[1].tv_nsec == UTIME_NOW)
+    33				times = NULL;
+    34		}
+    35	
+    36		error = mnt_want_write(path->mnt);
+    37		if (error)
+    38			goto out;
+    39	
+    40		newattrs.ia_valid = ATTR_CTIME | ATTR_MTIME | ATTR_ATIME;
+    41		if (times) {
+    42			if (times[0].tv_nsec == UTIME_OMIT)
+    43				newattrs.ia_valid &= ~ATTR_ATIME;
+    44			else if (times[0].tv_nsec != UTIME_NOW) {
+    45				newattrs.ia_atime = times[0];
+    46				newattrs.ia_valid |= ATTR_ATIME_SET;
+    47			}
+    48	
+    49			if (times[1].tv_nsec == UTIME_OMIT)
+    50				newattrs.ia_valid &= ~ATTR_MTIME;
+    51			else if (times[1].tv_nsec != UTIME_NOW) {
+    52				newattrs.ia_mtime = times[1];
+    53				newattrs.ia_valid |= ATTR_MTIME_SET;
+    54			}
+    55			/*
+    56			 * Tell setattr_prepare(), that this is an explicit time
+    57			 * update, even if neither ATTR_ATIME_SET nor ATTR_MTIME_SET
+    58			 * were used.
+    59			 */
+    60			newattrs.ia_valid |= ATTR_TIMES_SET;
+    61		} else {
+    62			newattrs.ia_valid |= ATTR_TOUCH;
+    63		}
+    64	retry_deleg:
+    65		inode_lock(inode);
+    66		error = notify_change(mnt_idmap(path->mnt), path->dentry, &newattrs,
+    67				      &delegated_inode);
+    68		inode_unlock(inode);
+    69		if (delegated_inode.di_inode) {
+    70			error = break_deleg_wait(&delegated_inode);
+    71			if (!error)
+    72				goto retry_deleg;
+    73		}
+    74	
+    75		mnt_drop_write(path->mnt);
+    76	out:
+    77		return error;
+    78	}
+    79	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
