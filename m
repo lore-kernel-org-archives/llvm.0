@@ -1,57 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECCB18C008
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 16:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7BE158218
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 16:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728663753; cv=none; b=C+isUq2YwbQTMy7Yv9dqsZpSPjbRCBQV2TYTRM2yaJZ9TG9pVNgb42eJnnXgAkiSIHn+BzWj+4v3dCl8HBfCY0vHXbkv1TJEs7OZNf7FgYVy91g/3jOmNwhJqDDAsCbm8lHQmsNYoo6mOhFf+YnlLrQMIPedmz/pjDlOxZYFATs=
+	t=1728665468; cv=none; b=eY37/P8Cv7xMAgPt2qfOyNOcCDXqF9Fcqc5UQi+k2KMYB0sntu76YCxYv/dkDILW2K/BZq7e54PgFw3Dqa9Brr7fKSD1GwNv9nQxbwdnazsIpZ0I5i8FgJ0T4Ar5Ou3M8eaCCepVNOpa3YZ3wCJRmVfeujWbTBLFnWu1y81y37Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728663753; c=relaxed/simple;
-	bh=TG4DIBFJ6ZIC+aXyEtgwbCfPgPi21gFjo4WUj0JAeOQ=;
+	s=arc-20240116; t=1728665468; c=relaxed/simple;
+	bh=VXG/GpcD4ZaPugyfbuMxoUDkz9d8ii6cVFf3ZaBPB70=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Jpq4NGktO/qpTeve9NV/epvtAs+8aw8CcLXrHdzy0rkk6jBlW4YEncoss60CMuRU0WoxmwQNtFcW9242zPiOgQeuSMqLxCt5D6iLLlvl2TpVmtPID3ZdLDeKH70KgUsMjFegpTTOtSFHDVEnbNv/GgMfuv0GSHj0w5cjTp1wyJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DnjQXIBr; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=FI8KondbhWgmqGUVMrShZ7+HQyF8nmrVFR6trNlYFb+rxsT4gWXPay6ZfNmVHgExnKo9DsmbMF+pB+/mRYQnBmJjN5Cwypk4wUJMmE7aTnNIGdt5zLoUwKXxQfcugM9hneyb+Y1UjBTwSYDhn948AD9fBtQl1PIucT3spIe8bkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l1yr6sdO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DnjQXIBr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD6AFC4CEC7
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 16:22:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l1yr6sdO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFE0C4CEC7
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 16:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728663752;
-	bh=TG4DIBFJ6ZIC+aXyEtgwbCfPgPi21gFjo4WUj0JAeOQ=;
+	s=k20201202; t=1728665468;
+	bh=VXG/GpcD4ZaPugyfbuMxoUDkz9d8ii6cVFf3ZaBPB70=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DnjQXIBrSidi4KTELiz5a9eA4Kq7xjj8adjeIwGIsEO3abMXc6xg3mavQlKbqZ32F
-	 GC08kA0qZ80qQbUAbI5R0NdS3V8jgcI3PMXFc+jds9KQGD0pezh85XvMhdUAsd8J6U
-	 isjN+b0RMWkvhgy9JxWSiIaJCoNL5qm0vnZvcmCnO6KQfLaZ8pNkTAiahhbLcmo3He
-	 9ACRwr7xct3Pupi1NGtK7j+rcNt0oSZCV0C9gngk8ng8FEcNWI5geZ/NSb+AMpwJ+S
-	 rEfGyFLo6rFfeCHRzNHKc+zKAae0kPkoiQ8+Q1o/ie8Skn1U7o4EDszvBFa3+vVhhx
-	 f6LWQ9tu7pvuQ==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5399041167cso3565304e87.0
-        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 09:22:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU0zOL2f3tWbHhbvViwkxOSYkyAmId8i/AcY1vW2lLngyRpRZyABASBzRrTT2R5uGsYnr3/@lists.linux.dev
-X-Gm-Message-State: AOJu0YzhP4CjeATovmi7eZf85/VW43S8wcTypxSKdC9W38Na6MnoVS1l
-	nv7v+9GZSMC6gxOPnTV555vHUMmo1LIByva48aIQxc3bpGISxXtus2HljrWmeLYly5F0VMSX9zE
-	ldMeKl8cyAyfVVbQU0vqQ844xeOs=
-X-Google-Smtp-Source: AGHT+IGBOD0uUl8CedMLDxOB5/KToVFNZdHF5xOTUxlpBw5ZkSYEhpFQTRBX7XMrDHDJlR2zXYKCVujoVelgfIoWcEo=
-X-Received: by 2002:a05:6512:3d23:b0:536:a4f1:d214 with SMTP id
- 2adb3069b0e04-539e54e819cmr64561e87.19.1728663751143; Fri, 11 Oct 2024
- 09:22:31 -0700 (PDT)
+	b=l1yr6sdOtwtxKq6/CvpLss3HR9GL+5gW9//IS4hIuKQ3hKEw07J33H3cf+TUkFSn8
+	 XNLmchhs9V/FstEhmNAvNRQIcdXcsYMqTYqjjSkPljltKkXX8t30IO/yiOVV4rHpdf
+	 OuKl1+WS4NQaWVX7ShMFfLKTpD9iOZi+krbxzNmwiQAVN8yy3oBhl3LaluFdDnNVgt
+	 B5Flk0lUTGX1VnVzzl4KrVT97Tyz8A2ll5ZAF/j83ppBoNI4dqMhtiW7oYSb53dI/P
+	 EOO3VZEmaQRaH0Gyf0qJ0LCKyZ8XCfQa6IOzh4JELlOBTpd7gvDJ2yrJdxXJeSR4Ko
+	 TX5fAQ4ZOEsHg==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539e044d32bso1103537e87.0
+        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 09:51:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUKdHaaTGK9GNA6CIXZSv+nJjYNHaBgM9BOqOxaffoRdjOCtIuTAlzqE4KSjqvWgBEZKu+8@lists.linux.dev
+X-Gm-Message-State: AOJu0YxflX9rlaY1PA6oMwWdR40D8PhJ2uk2yjkhuAlETbFJwf+6YCIT
+	5ntCORDEZBG/W6Pe7jwNJ0OKJG1RS+wzFvR8IKlALjiUt+Lb2M9WXJRsy399Ws5JQOUyf+q+Ni6
+	D9yo7JBx9rE8NY300pWLdGESBRcI=
+X-Google-Smtp-Source: AGHT+IFr4QA6SziiBfUmMc6IM6gCN+OvpGX21cJkCaQ5pNTmvRVSVpgDE8qM6X49xroZhvkO4gCrrlCdYmYQgYTgTdk=
+X-Received: by 2002:a05:6512:ad4:b0:52e:9b92:4990 with SMTP id
+ 2adb3069b0e04-539da4eb2d2mr1588962e87.32.1728665466750; Fri, 11 Oct 2024
+ 09:51:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241010122801.1321976-7-ardb+git@google.com> <20241010122801.1321976-12-ardb+git@google.com>
- <20241010203401.45ds362dpx52ne5z@treble> <CAMj1kXF_-wSM-rmxS5C_cG-srdUgzKQsSGxp54pZ4pMhXeNsfg@mail.gmail.com>
- <20241011160445.7clmhtgywqmkuh4u@treble>
-In-Reply-To: <20241011160445.7clmhtgywqmkuh4u@treble>
+References: <20241010122801.1321976-7-ardb+git@google.com> <20241010122801.1321976-9-ardb+git@google.com>
+ <20241010195211.n22geblzb4ogxqcz@treble>
+In-Reply-To: <20241010195211.n22geblzb4ogxqcz@treble>
 From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 11 Oct 2024 18:22:19 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEEYxDEJouXOHHUnGwOcGWc7c9HjNK=ubjvA2HMt9ONaA@mail.gmail.com>
-Message-ID: <CAMj1kXEEYxDEJouXOHHUnGwOcGWc7c9HjNK=ubjvA2HMt9ONaA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] crypto: x86/crc32c - Tweak jump table to validate
- objtool logic
+Date: Fri, 11 Oct 2024 18:50:55 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFaqij=OiJcPY7RcDd79V5qDKkXcxLbqNcnk7nBxiu=Bg@mail.gmail.com>
+Message-ID: <CAMj1kXFaqij=OiJcPY7RcDd79V5qDKkXcxLbqNcnk7nBxiu=Bg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] objtool: Allow arch code to discover jump table size
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
 	keescook@chromium.org, linux-hardening@vger.kernel.org, nathan@kernel.org, 
@@ -59,50 +57,37 @@ Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lis
 	"Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 11 Oct 2024 at 18:05, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+On Thu, 10 Oct 2024 at 21:52, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 >
-> On Fri, Oct 11, 2024 at 08:32:33AM +0200, Ard Biesheuvel wrote:
-> > On Thu, 10 Oct 2024 at 22:34, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> > >
-> > > On Thu, Oct 10, 2024 at 02:28:07PM +0200, Ard Biesheuvel wrote:
-> > > > From: Ard Biesheuvel <ardb@kernel.org>
-> > > >
-> > > > Tweak the jump table so
-> > > > - the address is taken far way from its use
-> > > > - its offset from the start of .rodata is != 0x0
-> > > > - its type is STT_OBJECT and its size is set to the size of the actual
-> > > >   table
-> > > > - the indirect jump is annotated with a R_X86_64_NONE relocation
-> > > >   pointing to the jump table
-> > > >
-> > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > This needs more "why", I assume the goals are to add the annotations +
-> > > confuse objtool if it doesn't read them properly?
-> > >
+> On Thu, Oct 10, 2024 at 02:28:04PM +0200, Ard Biesheuvel wrote:
+> > @@ -2222,7 +2234,6 @@ static void mark_func_jump_tables(struct objtool_file *file,
+> >                                   struct symbol *func)
+> >  {
+> >       struct instruction *insn, *last = NULL;
+> > -     struct reloc *reloc;
 > >
-> > As presented, this is just a vehicle to test the other changes in the
-> > series. That is why I split it off from the previous one.
+> >       func_for_each_insn(file, func, insn) {
+> >               if (!last)
+> > @@ -2245,9 +2256,7 @@ static void mark_func_jump_tables(struct objtool_file *file,
+> >               if (insn->type != INSN_JUMP_DYNAMIC)
+> >                       continue;
 > >
-> > Whether or not we want this code in the tree is up for debate, but I
-> > guess it could be useful as a canary for objtool, given that most
-> > configs now disable jump tables entirely.
+> > -             reloc = find_jump_table(file, func, insn);
+> > -             if (reloc)
+> > -                     insn->_jump_table = reloc;
+> > +             find_jump_table(file, func, insn);
 >
-> The annotations are definitely needed since that's the future of jump
-> table handling.
+> Can we detect the annotation here, and if it exists, pivot to a separate
+> generic implementation which skips all the arch-specific code and hacks?
 >
-
-Yeah, I'll split those off
-
-> The rest of the changes aren't worth the effort IMO.  In general we
-> don't compromise code quality to make objtool happy.
->
-> And "unit test for deprecated jump table detection" is even less of a
-> justification than would be something like "objtool can't otherwise
-> follow the code".
+> That way we could keep the "ugly" separate, and also have all arches
+> supported by default.
 >
 
-No, quite the opposite - the changes will confuse objtool and so it
-will only work correctly if the annotation is provided. That was the
-point of this patch, but as I said, I never intended those changes to
-be merged.
+I had a stab at this, and while the code changes are a bit intrusive,
+the end result is much better for it (IMHO).
+
+In the end, the logic in arch_find_switch_table() is mostly generic
+anyway, but it is the code traversal in check.c that is the "ugly". So
+I moved lots of things around. I'll send that out before signing off
+today.
