@@ -1,124 +1,145 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDFF1CDFA6
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 12:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4F8215015
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 14:05:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728649866; cv=none; b=P/Yb7stZdBmQrdlHjbQA95MmI+SbjTSRL/qHmW9/obXOr31QORWHGfkvpdDWj4xut+im1Payyg3EqnbfyTUyvockYgOjCzK5qSLMTXA9p2bncNtt0n8d0JYKzJHD5NcYw+Ue9aTLnW+V3HnTaJvF1UZOw1CxSCc48SH7J/x5eig=
+	t=1728655526; cv=none; b=JsPnk81ixhWrsqlqqbRtfmEbaLe7tHxdsR58mH9I69yZJbOHZdsKbnh0YYz5VHdWk2QcRsDe60l3LwrvxLM64dtXlpiYdaiQMuaK1eyKKUHTVAOzo4OGY285BOF4ytyUD36XXP9AP6ZULuOvswsaSJm1hnNJgjM77P0ofNd6Kdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728649866; c=relaxed/simple;
-	bh=mXF5tY1r8sZ+BePLSvut8fwsgeweL9N6J98VLTTvPLE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y/mE1XmvavyGfGTU0RO1MFVRc7nvqX+fXJ6tKK6vm1Bxu95JRBHay8XuP4fgv2wgiAvjD6vEGMcKXS9hi1Wm+XeGaqdgUcryQ9sx9zzMFmha/IONL1R7Clre+8QSwvAmomdafxirYJG4H89OUcYktJdy0fpU939ZeJ58ygG4DYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GP/2rNKV; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728655526; c=relaxed/simple;
+	bh=u6yT/Um4hvNM2ge9kKQ1JH8WLlPTlxc/21gqNhi91jQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=FcqDwDeTUCsgim+h2iwYzyUDfjjq0Ix4nEfoDZkCkTa2BvNOpySBo2HIIfe9i+/F9L7cXIMiARhhXyjfieVA4vZPdG1MhPqMFkqAVmQ92ZCSs5ZIj9D7EzdSIGpcuQXv/NrNWCjJxKsM+uVb1YYUrmuQUTyff480OCP9SfPKGeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=UI9p06EO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YTyAmV/u; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GP/2rNKV"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a99388e3009so272215566b.3
-        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 05:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728649863; x=1729254663; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=63D6g6LIgJSLc7UFUFlkwljQcLXEYto6STChMviNESg=;
-        b=GP/2rNKVo/H9EYJiTbrtoQ6Gh5OmDn5QkohQJ9UtrqiGYP/X8Olr3dtQIn4c+TGK6A
-         1YnXT69l1S13QALaY9pAzb9D9mSlKB9RBpvX4e5suRz1WZxtU+QJ7V0WC6i5wEXqzUmj
-         YRJJUj4qD46r8uGyMK/hkfvZbJ/DugmeHLuzKuzrvBqPZDaH1XSdjadmO0/MzbiSYz4V
-         W82e9RJhfjb33oqLywmMVfDV7jo5e0P9O7ALOeMfj2sdmsypSahD1IapxyKD90DXNEec
-         T7NLSfZaVwz5bW/WOMzD2xXGe/KUXAhISOGnEsQd2WWB0DnfYTjJY8uJMYSKc1+xiTtP
-         hVPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728649863; x=1729254663;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=63D6g6LIgJSLc7UFUFlkwljQcLXEYto6STChMviNESg=;
-        b=mRnd8gov+Uc9WUb3R5Hmjf95QuiIKGtBhF4FhrhxjKCSBxvMAN2Xobg0znVGbNokFA
-         RZoFdigRlKXhadAzkhj/Rgozf9UjGF8L6Q5KKsgmm3B9fXw1exECcQjtYcyt5xQhfg9T
-         nuK9qiD0D4vLoW6wSPTDbsf1+nj7BjkpzjnNYaTAphQnFmZwFuTPOXtzQC5jA1geyoOf
-         yZNnptw6zKfLZ43nvwOBEMiFFeZ01SYlJwDYkqMHZFoI7qPg6ae+qHx58fPNhNsiaVra
-         PMcYe1FsRhalSsOwyvfCdj/jUJ1e5BPxa90qcG6Ty2sGxYkzRlr8bYdIY0tKNUhrYxQQ
-         388g==
-X-Forwarded-Encrypted: i=1; AJvYcCV/eGN+BKGuV2huKYwRd96Id3KTFfYFxvi5wcPtfE9MiP8TJeFKsJuQ8GABXjZvLLZ/zh9S@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywmgle6AWzIh3e5uPDcr18ZjwV5NAe0OJKLHoc6Jm0Bigq2gka2
-	7X0/Xy2vih+wcQxJkxfDBc5H7Z8gP57WkfN/h7LHG6RKRzYiXw6U
-X-Google-Smtp-Source: AGHT+IHOI1+rAgiSZXEcbJ0u5CvDrlSaAtckGUxZS7Y/N9xHUmUDEO9strUSS97owHZQnmSzbyRzzw==
-X-Received: by 2002:a17:907:e297:b0:a99:8893:84d with SMTP id a640c23a62f3a-a99b95a7842mr217739866b.28.1728649862407;
-        Fri, 11 Oct 2024 05:31:02 -0700 (PDT)
-Received: from [10.10.12.27] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99a7f2437csm207068766b.57.2024.10.11.05.31.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 05:31:01 -0700 (PDT)
-Message-ID: <26f2e35e-0a07-4b24-91a2-a48d4bc5dadc@gmail.com>
-Date: Fri, 11 Oct 2024 14:31:00 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="UI9p06EO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YTyAmV/u"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 3D10011400E7;
+	Fri, 11 Oct 2024 10:05:23 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 11 Oct 2024 10:05:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1728655523;
+	 x=1728741923; bh=hSrJ7sThlVYb9UYhob4RXeFtpQGrFvUF+x++504Pu/Q=; b=
+	UI9p06EOODd0Ziey6j6Zyi6ivd8Z1a3Cw9Wj1IDPJfKhJaUrAb2hli0bQxn8vgiY
+	wDufsTGw83vHhYYVTSIZaO4ToxP5+7sdedC8+TqdaTyhm9IWy6cuspMMd0kEGD80
+	0vaaMgzFSueV0khU2Z/LSkkkQsFaplgXEfYvdozI7kIDzU4AsqpP3RIlhRNt9RjK
+	u9/cJ3eBpEfACw+vxSw7Pejh0wghjaacloVZRttPlLaeTfJg3DMXChnPRWc1/uMI
+	CjZVDv4Eixa9b6hB8rVgBsIQqgU92IjN/T9Fi2kYxTdAxG5N2vhFGtqefVDopwAx
+	0PN955KQOhLVCHjhhspFaA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728655523; x=
+	1728741923; bh=hSrJ7sThlVYb9UYhob4RXeFtpQGrFvUF+x++504Pu/Q=; b=Y
+	TyAmV/u/xqr0O1WCXpk8mIHXdY+Wmri7KUWDUHBf9SS9J9Kwpug7hdFVPFMyiBv5
+	d1IxSBgBDByAzayLT6iEYU3dH7YX5n/7P2ujlnC0+/PbtCzXGar2WCiz+DzOU9Vc
+	sOFmO/4pEj4StsVQWYbu1FdrDu6Qae+n0DNKr6XRCcyDiLjPuxEGm0rkLVx+5KcQ
+	AsBQGipJ/sljpHjwqLquzmv4kLQBP/KmrOowcnl/0wjhvRdTrhsSuIyEtGWXNps5
+	1I7xAsR1lojJkovj8CbIwBZxaeQLOXKym5+CbC/JBRE9icPU0p7k1xa5ORAEGMs4
+	U9AVD4bBmAtRo0jvoZJ8w==
+X-ME-Sender: <xms:ojAJZ1uqqdIYV2WGwCGfvX9xvRRg9fAwuWeEC_8cTSHn50r-zvFMPg>
+    <xme:ojAJZ-dmJV_1wpBxKYuaHEhaUsBc3G3gXgDOksaifZ9EB-jd-fKRpm02IF4JzKgMm
+    _8oKnLvB9HKhG430wk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefkedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddv
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehhrghnnhgvshestghmphigtghhgh
+    drohhrghdprhgtphhtthhopehvvhhvvhhvvhesghhoohhglhgvrdgtohhmpdhrtghpthht
+    ohepfihilhhlhiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehnrghthhgrnh
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhmsehkvhgrtghkrdho
+    rhhgpdhrtghpthhtoheprghnnhgrqdhmrghrihgrsehlihhnuhhtrhhonhhigidruggvpd
+    hrtghpthhtohepshhhihhvrghmuhhrthhhhidrshhhrghsthhriheslhhinhhuthhrohhn
+    ihigrdguvgdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtph
+    htthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
+X-ME-Proxy: <xmx:ojAJZ4yytEPiViAXMQ_k3_F0b_Ef-v-BOIZ0_xdfa5X7gcNal4ZWHg>
+    <xmx:ojAJZ8M5TXL6BxfWvmsYIPSH0tZqkGnbwwHxs6Mr6shhm-9Nh3LeHQ>
+    <xmx:ojAJZ1-OzqITbG9-QzPOeezqh-4zAomJ1IPszwfCu0EO0fbWvQuF-A>
+    <xmx:ojAJZ8WUVgjZUQLvVzPkH4z6xOpHOQGqM2iv6NAP14q3bjVpHCqpmQ>
+    <xmx:ozAJZ8Vi_1Lr83H3CkOKS9h1YvB0ej7WmOTIkKjJ0_SZ9yNB8d2mJAQN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E6D622220071; Fri, 11 Oct 2024 10:05:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] iio: Fix uninitialized variable
-To: "Yo-Jung (Leo) Lin" <0xff07@gmail.com>
-Cc: linux-kernel-mentees@lists.linuxfoundation.org, ricardo@marliere.net,
- skhan@linuxfoundation.org, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Vasileios Amoiridis <vassilisamir@gmail.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Angel Iglesias <ang.iglesiasg@gmail.com>, Adam Rizkalla
- <ajarizzo@gmail.com>, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20241011093752.30685-1-0xff07@gmail.com>
- <20241011115334.367736-1-0xff07@gmail.com>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20241011115334.367736-1-0xff07@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date: Fri, 11 Oct 2024 14:05:00 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Aleksei Vetrov" <vvvvvv@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>
+Cc: "Shivamurthy Shastri" <shivamurthy.shastri@linutronix.de>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Vlastimil Babka" <vbabka@suse.cz>, "Matthew Wilcox" <willy@infradead.org>,
+ "Johannes Weiner" <hannes@cmpxchg.org>,
+ "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
+ "Thomas Gleixner" <tglx@linutronix.de>, llvm@lists.linux.dev
+Message-Id: <a2e8a76a-9fad-4e3e-bce1-bf8a9d180464@app.fastmail.com>
+In-Reply-To: <ZwevGZHiXOBqoslA@google.com>
+References: <20240621111604.25330-1-shivamurthy.shastri@linutronix.de>
+ <ZwRA9SOcOjjLJcpi@google.com> <20241008005136.GA241099@thelio-3990X>
+ <ZwevGZHiXOBqoslA@google.com>
+Subject: Re: [PATCH] mm/vmstat: Fix -Wenum-enum-conversion warning in vmstat.h
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 11/10/2024 13:52, Yo-Jung (Leo) Lin wrote:
-> clang found that the "offset" in bmp580_trigger_handler doesn't get
-> initialized before access. Add proper initialization to this variable.
-> 
-> Signed-off-by: Yo-Jung (Leo) Lin <0xff07@gmail.com>
-> ---
-> Change in v2:
-> - Make value initialization immediate before its first use.
-> - Link to v1: https://lore.kernel.org/all/20241011093752.30685-1-0xff07@gmail.com/
-> 
-> ---
->  drivers/iio/pressure/bmp280-core.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-> index f4df222ed0c3..682329f81886 100644
-> --- a/drivers/iio/pressure/bmp280-core.c
-> +++ b/drivers/iio/pressure/bmp280-core.c
-> @@ -2222,6 +2222,8 @@ static irqreturn_t bmp580_trigger_handler(int irq, void *p)
->  		goto out;
->  	}
->  
-> +	offset = 0;
-> +
->  	/* Pressure calculations */
->  	memcpy(&data->sensor_data[offset], &data->buf[3], 3);
->  
+On Thu, Oct 10, 2024, at 10:40, Aleksei Vetrov wrote:
+> On Mon, Oct 07, 2024 at 05:51:36PM -0700, Nathan Chancellor wrote:
+>> For what it's worth, I never really saw Matthew's comment around what
+>> value does this warning provide addressed. I was the one who originally
+>> moved it into W=1 at the request of Arnd because he felt that instances
+>> of this warning could be bugs and they should be audited.  However, I
+>> have not seen many instances of this warning pop up in new code through
+>> 0day build reports and the ones that I have seen seem to be intentional,
+>> as they are using enums like integral values, such as here. If that is
+>> just going to result in a bunch of patches like this adding unnecessary
+>> casts, I think it would just be better to consider disabling this
+>> warning altogether or at the very least, moving it to W=2 (which is for
+>> warnings that are noisy but might contain bugs), since more people are
+>> using W=1 as their normal build configuration nowadays.
+>
+> If time has proven that this warning has never found an unintended enum
+> conversion, then it is worth to disable it for everyone. As you said in
+> the original thread ([PATCH] kbuild: Disable two Clang specific
+> enumeration warnings), W=2 is not run by any CI, so I would prefer to
+> disable it completely.
+>
+> Alternatives considered:
+>
+> * Enable -Wenum-enum-conversion only for 0day build reports through
+>   KCFLAGS. It will eliminate noise for regular users while keeping
+>   developers informed about new instances of this warning.
+> * -Wno-error=enum-enum-conversion to keep warning but don't block
+>   compilation for CONFIG_WERROR users.
+>
+> Arnd Bergmann, what do you think? Have you found it useful after all?
 
-That was a quick reply. I would recommend you to wait a little bit while
-the first version is under discussion.
+I'm fairly sure I saw users mix up 'dma_data_direction' with
+'dma_transfer_direction' and unrelated enum-enum mixups in
+amdgpu. There were probably more.
 
-I still see the offset thing a bit weird. data->sensor_data uses an
-offset to avoid hard-coded numbers, but for data->buf we do exactly
-that, in the very same lines.
+I think what happened is that in clang-18 and earlier, the
+warning option caught mistakes of passing the wrong enum 
+to a function and a few others, but it did not catch arithmetic
+operations between enums, so clang-19 now produces a lot more
+output than older versions, and I don't think we can
+control those independently.
 
-Setting offset to 0 to access the first element i.e. no offset required,
-and then adding the actual offset sizeof(s32), which could even be a
-const if the first access was to sensor_data[0], looks to verbose.
-
-These things are of course not critical, and the proposed fix is
-definitely ok, but I am missing some consistency here.
+       Arnd
