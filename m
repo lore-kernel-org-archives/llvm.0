@@ -1,665 +1,332 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53892139A8;
-	Fri, 11 Oct 2024 11:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E6821502D;
+	Fri, 11 Oct 2024 11:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728644658; cv=none; b=t90Dwh7ZLawZPNgkqd9Mrlt7w7jYRmD1TQTZeqIjZqNGPqlPJPJqhPk0xV0MCD0rr9U+EutUnHtmeQ6Sf+FZYuTYRIXqxNHJh+wAct+xYMZ14+pTqSnSLHeeTsIq2E2xfvYGja73F2t5Xka8AGNtSQqYrpmwP7NUbwZo6nqdr1w=
+	t=1728646161; cv=none; b=skLg9Eu5JsZ19PTLIzFlseVZrR28gmDUzA7PgFK1eZw87DV20vKI6w1TMl+NV+Di2QQg0xK03M/IQ9rJIQYl6UVb1oTo1Sn5OeqlslLzqQygBXZYg1YNCR7s5Eg7cNxl+VH1/m6nGgdmc14jhIftiQU1TLLzh6fI2K7jl5vd6ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728644658; c=relaxed/simple;
-	bh=bsHr9P9sn418fzmWs5e8FSsCYUJqwNAwWk9X37ZYTSU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T2rQdfBZ5t9JSwol1vfkB1ChDIX5XjprvB0c851W5k51244nM+FP5AIJ8dIXSlCxez2tNnyE6QgHYNAVuFXly6Q5quWPVfFzL7igzQ2V/DeRzZVAC94GSJ/4Ul8Z2Sicni2Yugpc68rJOjQ8aZLYc2Acx0v+am1dzJ0EurYaJEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=igh7jvd6; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728646161; c=relaxed/simple;
+	bh=hFOpFtbUp9WAKtIyShpJkQp3M6HRkqXocbx/H3nABFs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bl/2suvP0BNxmpDOMaqjZcIhPCJD4j+Fma5QgpKj9jDKO31AIzcb0ikSs7A6BglViPSCS3fKmE0jYjXbBVDRIiUn6dqC/c7I/E6uIcgq0DzRUYuohcS3zD6WWWq37cBMs1bQ83rbXt/FSnUW0xjSxSR6KzSGCYtfO1dDYaH3GLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B899h2vU; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="igh7jvd6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728644656; x=1760180656;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bsHr9P9sn418fzmWs5e8FSsCYUJqwNAwWk9X37ZYTSU=;
-  b=igh7jvd6KCUwlGdE8a2wKJIvkqqrGzix53339a3J91HzSWJWgliNg5cJ
-   xLTMlokr8cakeh9+ePeRYyRZQiYNyOasszExOfJ/69A5ldUq/IoxyUB34
-   10/4RTkvYnsLbi0RPJd5dH6TRhCQ8t/YieDuTLc1suNOz2i9iiG33eFq4
-   Q1fdpBIl7eNLO5hD9avtRIMFdPgGHDCGkN4uJwZoWFm66tmE4UD7zhebx
-   l86KrmNRoQVw2f1GHJqDETkdiBMTn9VNvoKBRDqVuW9hyieKjNKpnnpxd
-   s/5FyYVIHObbkJnI23DdvOOolN9F4/KyF7sIjS1yEFvWyiIBKP5GIlOU8
-   Q==;
-X-CSE-ConnectionGUID: Jg6BN/WjS0eRZu9qUuiLow==
-X-CSE-MsgGUID: zsVQ9L3bSsWe8PsbpalfdA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="27910860"
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="27910860"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 04:04:15 -0700
-X-CSE-ConnectionGUID: UiIz4troTV+b5Eg7RWr4cg==
-X-CSE-MsgGUID: 4LFB6g60QouKVazavHWv3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="76987510"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 11 Oct 2024 04:04:12 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1szDRK-000CDG-0P;
-	Fri, 11 Oct 2024 11:04:10 +0000
-Date: Fri, 11 Oct 2024 19:03:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v4 2/2] vdso: Introduce vdso/page.h
-Message-ID: <202410112106.mvc2U2p0-lkp@intel.com>
-References: <20241010135146.181175-3-vincenzo.frascino@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B899h2vU"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7afc5e480dbso115340985a.3;
+        Fri, 11 Oct 2024 04:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728646155; x=1729250955; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SXu5ilO0B38r9x9LA9hO6uH7HLlyNgMrFLahqmxyYSQ=;
+        b=B899h2vUgCaZrjrRatMhS9TDh3h80cIggGX3BFYDG8J9uW0GFOQ3DFr/8Vzg3nUp0P
+         C+VFucZzJu7kUfoG44y6eSoqMYB9gwgGwpjm9RZS6sF9brU8r7b/Rt0FeTuQl0YQZuem
+         kZGtXlNX3wb+QqGS1pIoMP9+Lg2AnxqAW++V2GAcx6Cl7MyQGSlH50GYjJAE3qxyf3IS
+         p7bWOSMG9LDR8YY5DLHNhBKmOqdZNHokzTCpOWE1H9q8ki96X7nYGmascGp6VUZiKlb6
+         rbquIi6WXNoQhsFLA+GJLjMqdRxIa0zROjW95UGWpoOfYzFxUrwkL3cie96ydb3ymJF+
+         5KVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728646155; x=1729250955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SXu5ilO0B38r9x9LA9hO6uH7HLlyNgMrFLahqmxyYSQ=;
+        b=BzdUkyZ74j3A7jMy2KSG0StGQ8NGM3AYyxyQi8qwdx45p3mIQmOZxS8J5hMEAR9Uc8
+         4BkkYNbX5155D5VPe+gcz7QUMys7RbJQgfhLUBeNMlGRap6S3UJ94R9O3q3EpvEhjglO
+         MgmxJhfFsbxOu4qhaMx8K0SpjI9B+lL3r7tzhNZ/szSWn7ovX1SCaSuVJJoo0LiH2Fzi
+         hfLGxO1aqsD3ggrwcSF7Gd8MBwi/ggqHGD3s7L4cVnmQcHxmZUeK4hciB5IhzUWV2chu
+         FHtISwbZ4vuOjHhI4/V3N4t9xLkEAmqSWcE2HPPxGF/9zL5kf11bgNXPfiC7JIg2kGr3
+         YAKg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsR9FrlzVjV5xtQu79awBTnE8amFw7dwoTy9pe9ZUvcy5aXJ5UTmHUYu09jeXAaK49sNiOGuGZEDuJia0y@lists.linux.dev
+X-Gm-Message-State: AOJu0YxmA22vJ0PQSRgxHwwcRnZm7xP0KBxY30QPosMFNUNkcqF/oatS
+	z40ctQSYKWmzwFsiBkTXquqVzvvbB1sUI2Ocbtf9WFU0bzPse9/8HSBqNXzYHfrRPGKjpOZ6xME
+	9c4Cis2YYs0J39nAaa144xbDuxio=
+X-Google-Smtp-Source: AGHT+IGIdZ9RneDbVf+jvFQoSDMu1X5ANp9aP2HxFsf3df9fY8O9MOS8o00aehWhn73S9SiDDTUUvLrfF3qHUiYn/zY=
+X-Received: by 2002:a05:620a:25b:b0:7b1:1d74:6b7d with SMTP id
+ af79cd13be357-7b11d746d3emr79677285a.53.1728646155120; Fri, 11 Oct 2024
+ 04:29:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241010135146.181175-3-vincenzo.frascino@arm.com>
+References: <20241008152118.453724-2-amir73il@gmail.com> <202410111804.pPMW9rqn-lkp@intel.com>
+In-Reply-To: <202410111804.pPMW9rqn-lkp@intel.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 11 Oct 2024 13:29:03 +0200
+Message-ID: <CAOQ4uxivE3P8aZw=tTP=wkaUWmOHdTOY7q2_CHNP+fT9di-NbQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] fs: prepare for "explicit connectable" file handles
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vincenzo,
+On Fri, Oct 11, 2024 at 1:04=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Amir,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on brauner-vfs/vfs.all]
+> [also build test ERROR on linus/master v6.12-rc2 next-20241011]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Amir-Goldstein/fs-=
+prepare-for-explicit-connectable-file-handles/20241008-232246
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.a=
+ll
+> patch link:    https://lore.kernel.org/r/20241008152118.453724-2-amir73il=
+%40gmail.com
+> patch subject: [PATCH v3 1/3] fs: prepare for "explicit connectable" file=
+ handles
+> config: s390-allnoconfig (https://download.01.org/0day-ci/archive/2024101=
+1/202410111804.pPMW9rqn-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7=
+0e0a7e7e6a8541bcc46908c592eed561850e416)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20241011/202410111804.pPMW9rqn-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202410111804.pPMW9rqn-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    In file included from fs/exportfs/expfs.c:15:
+>    In file included from include/linux/module.h:19:
+>    In file included from include/linux/elf.h:6:
+>    In file included from arch/s390/include/asm/elf.h:181:
+>    In file included from arch/s390/include/asm/mmu_context.h:11:
+>    In file included from arch/s390/include/asm/pgalloc.h:18:
+>    In file included from include/linux/mm.h:2213:
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
+numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
+onversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
+"nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+> >> fs/exportfs/expfs.c:447:10: error: incompatible integer to pointer con=
+version returning 'int' from a function with result type 'struct dentry *' =
+[-Wint-conversion]
+>      447 |                 return -EINVAL;
+>          |                        ^~~~~~~
+>    1 warning and 1 error generated.
+>
+>
 
-kernel test robot noticed the following build errors:
+This braino was already fixed in v4.
 
-[auto build test ERROR on vgupta-arc/for-curr]
-[also build test ERROR on arm64/for-next/core geert-m68k/for-next geert-m68k/for-linus deller-parisc/for-next powerpc/next powerpc/fixes s390/features uml/next tip/x86/core linus/master v6.12-rc2 next-20241011]
-[cannot apply to vgupta-arc/for-next uml/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Sorry for the noise.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincenzo-Frascino/drm-i915-Change-fault-type-to-unsigned-long/20241010-215325
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git for-curr
-patch link:    https://lore.kernel.org/r/20241010135146.181175-3-vincenzo.frascino%40arm.com
-patch subject: [PATCH v4 2/2] vdso: Introduce vdso/page.h
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241011/202410112106.mvc2U2p0-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410112106.mvc2U2p0-lkp@intel.com/reproduce)
+Thanks,
+Amir.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410112106.mvc2U2p0-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
->> arch/s390/include/asm/page.h:17:9: warning: 'PAGE_SHIFT' macro redefined [-Wmacro-redefined]
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |         ^
-   include/vdso/page.h:13:9: note: previous definition is here
-      13 | #define PAGE_SHIFT      CONFIG_PAGE_SHIFT
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
->> arch/s390/include/asm/page.h:18:9: warning: 'PAGE_SIZE' macro redefined [-Wmacro-redefined]
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |         ^
-   include/vdso/page.h:15:9: note: previous definition is here
-      15 | #define PAGE_SIZE       (_AC(1,UL) << CONFIG_PAGE_SHIFT)
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
->> arch/s390/include/asm/page.h:19:9: warning: 'PAGE_MASK' macro redefined [-Wmacro-redefined]
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |         ^
-   include/vdso/page.h:27:9: note: previous definition is here
-      27 | #define PAGE_MASK       (~(PAGE_SIZE - 1))
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
->> arch/s390/include/asm/page.h:253:14: error: use of undeclared identifier '_PAGE_SHIFT'
-     253 |         return __va(pfn_to_phys(pfn));
-         |                     ^
-   arch/s390/include/asm/page.h:244:36: note: expanded from macro 'pfn_to_phys'
-     244 | #define pfn_to_phys(pfn)        ((pfn) << PAGE_SHIFT)
-         |                                           ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   arch/s390/include/asm/page.h:258:9: error: use of undeclared identifier '_PAGE_SHIFT'
-     258 |         return phys_to_pfn(__pa(kaddr));
-         |                ^
-   arch/s390/include/asm/page.h:243:38: note: expanded from macro 'phys_to_pfn'
-     243 | #define phys_to_pfn(phys)       ((phys) >> PAGE_SHIFT)
-         |                                            ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
-   In file included from arch/s390/include/asm/page.h:273:
->> include/asm-generic/getorder.h:33:27: error: use of undeclared identifier '_PAGE_SHIFT'
-      33 |                         return BITS_PER_LONG - PAGE_SHIFT;
-         |                                                ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
-   In file included from arch/s390/include/asm/page.h:273:
-   include/asm-generic/getorder.h:35:22: error: use of undeclared identifier '_PAGE_SHIFT'
-      35 |                 if (size < (1UL << PAGE_SHIFT))
-         |                                    ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
-   In file included from arch/s390/include/asm/page.h:273:
-   include/asm-generic/getorder.h:38:30: error: use of undeclared identifier '_PAGE_SHIFT'
-      38 |                 return ilog2((size) - 1) - PAGE_SHIFT + 1;
-         |                                            ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from arch/s390/include/asm/preempt.h:6:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/s390/include/asm/thread_info.h:31:
-   In file included from arch/s390/include/asm/page.h:273:
-   include/asm-generic/getorder.h:42:11: error: use of undeclared identifier '_PAGE_SHIFT'
-      42 |         size >>= PAGE_SHIFT;
-         |                  ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:5:
-   In file included from include/linux/alloc_tag.h:14:
-   In file included from include/linux/smp.h:119:
-   In file included from arch/s390/include/asm/smp.h:12:
->> arch/s390/include/asm/processor.h:287:45: error: use of undeclared identifier '_PAGE_SIZE'
-     287 |         return !((ksp ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
-         |                                                    ^
-   arch/s390/include/asm/thread_info.h:25:22: note: expanded from macro 'THREAD_SIZE'
-      25 | #define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
-         |                      ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:12:
->> include/linux/sched.h:1890:22: error: use of undeclared identifier '_PAGE_SIZE'
-    1890 |         unsigned long stack[THREAD_SIZE/sizeof(long)];
-         |                             ^
-   arch/s390/include/asm/thread_info.h:25:22: note: expanded from macro 'THREAD_SIZE'
-      25 | #define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
-         |                      ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:5:
-   In file included from include/linux/context_tracking_state.h:5:
-   In file included from include/linux/percpu.h:12:
-   include/linux/sched.h:1897:33: error: use of undeclared identifier '_PAGE_SIZE'
-    1897 | extern unsigned long init_stack[THREAD_SIZE / sizeof(unsigned long)];
-         |                                 ^
-   arch/s390/include/asm/thread_info.h:25:22: note: expanded from macro 'THREAD_SIZE'
-      25 | #define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
-         |                      ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:116:5: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     116 |                         (set1->sig[1] == set2->sig[1]) &&
-         |                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:116:21: warning: array index 1 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     116 |                         (set1->sig[1] == set2->sig[1]) &&
-         |                                          ^         ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
---
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
-     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
-     175 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-     186 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
-     175 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:177:27: note: expanded from macro '_SIG_SET_OP'
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-     186 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:187:1: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:177:10: note: expanded from macro '_SIG_SET_OP'
-     177 |         case 2: set->sig[1] = op(set->sig[1]);                          \
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:198:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     198 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:211:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     211 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:242:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     242 |         case 2: set->sig[1] = 0;
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     255 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
->> include/linux/mm_types.h:547:6: warning: '_PAGE_SIZE' is not defined, evaluates to 0 [-Wundef]
-     547 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-         |      ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
->> include/linux/mm_types.h:547:18: warning: '_PAGE_MASK' is not defined, evaluates to 0 [-Wundef]
-     547 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-         |                  ^
-   include/linux/mm_types.h:524:55: note: expanded from macro 'PAGE_FRAG_CACHE_MAX_SIZE'
-     524 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
-         |                                                              ^
-   arch/s390/include/asm/page.h:19:19: note: expanded from macro 'PAGE_MASK'
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
->> include/linux/mm_types.h:547:18: warning: '_PAGE_MASK' is not defined, evaluates to 0 [-Wundef]
-   include/linux/mm_types.h:524:55: note: expanded from macro 'PAGE_FRAG_CACHE_MAX_SIZE'
-     524 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
-         |                                                              ^
-   arch/s390/include/asm/page.h:19:19: note: expanded from macro 'PAGE_MASK'
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:23:
->> include/linux/page-flags.h:214:38: error: use of undeclared identifier '_PAGE_SIZE'
-     214 |         if (IS_ALIGNED((unsigned long)page, PAGE_SIZE) &&
-         |                                             ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1777:23: warning: '_PAGE_SHIFT' is not defined, evaluates to 0 [-Wundef]
-    1777 | #if (MAX_PAGE_ORDER + PAGE_SHIFT) > SECTION_SIZE_BITS
-         |                       ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1783:16: error: use of undeclared identifier '_PAGE_SHIFT'
-    1783 |         return pfn >> PFN_SECTION_SHIFT;
-         |                       ^
-   include/linux/mmzone.h:1767:48: note: expanded from macro 'PFN_SECTION_SHIFT'
-    1767 | #define PFN_SECTION_SHIFT       (SECTION_SIZE_BITS - PAGE_SHIFT)
-         |                                                      ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1787:16: error: use of undeclared identifier '_PAGE_SHIFT'
-    1787 |         return sec << PFN_SECTION_SHIFT;
-         |                       ^
-   include/linux/mmzone.h:1767:48: note: expanded from macro 'PFN_SECTION_SHIFT'
-    1767 | #define PFN_SECTION_SHIFT       (SECTION_SIZE_BITS - PAGE_SHIFT)
-         |                                                      ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1875:23: error: use of undeclared identifier '_PAGE_SIZE'
-    1875 |         unsigned long root = SECTION_NR_TO_ROOT(nr);
-         |                              ^
-   include/linux/mmzone.h:1858:42: note: expanded from macro 'SECTION_NR_TO_ROOT'
-    1858 | #define SECTION_NR_TO_ROOT(sec) ((sec) / SECTIONS_PER_ROOT)
-         |                                          ^
-   include/linux/mmzone.h:1853:34: note: expanded from macro 'SECTIONS_PER_ROOT'
-    1853 | #define SECTIONS_PER_ROOT       (PAGE_SIZE / sizeof (struct mem_section))
-         |                                  ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1877:23: error: use of undeclared identifier '_PAGE_SIZE'
-    1877 |         if (unlikely(root >= NR_SECTION_ROOTS))
-         |                              ^
-   include/linux/mmzone.h:1859:56: note: expanded from macro 'NR_SECTION_ROOTS'
-    1859 | #define NR_SECTION_ROOTS        DIV_ROUND_UP(NR_MEM_SECTIONS, SECTIONS_PER_ROOT)
-         |                                                               ^
-   include/linux/mmzone.h:1853:34: note: expanded from macro 'SECTIONS_PER_ROOT'
-    1853 | #define SECTIONS_PER_ROOT       (PAGE_SIZE / sizeof (struct mem_section))
-         |                                  ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1877:23: error: use of undeclared identifier '_PAGE_SIZE'
-   include/linux/mmzone.h:1859:56: note: expanded from macro 'NR_SECTION_ROOTS'
-    1859 | #define NR_SECTION_ROOTS        DIV_ROUND_UP(NR_MEM_SECTIONS, SECTIONS_PER_ROOT)
-         |                                                               ^
-   include/linux/mmzone.h:1853:34: note: expanded from macro 'SECTIONS_PER_ROOT'
-    1853 | #define SECTIONS_PER_ROOT       (PAGE_SIZE / sizeof (struct mem_section))
-         |                                  ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1884:33: error: use of undeclared identifier '_PAGE_SIZE'
-    1884 |         return &mem_section[root][nr & SECTION_ROOT_MASK];
-         |                                        ^
-   include/linux/mmzone.h:1860:28: note: expanded from macro 'SECTION_ROOT_MASK'
-    1860 | #define SECTION_ROOT_MASK       (SECTIONS_PER_ROOT - 1)
-         |                                  ^
-   include/linux/mmzone.h:1853:34: note: expanded from macro 'SECTIONS_PER_ROOT'
-    1853 | #define SECTIONS_PER_ROOT       (PAGE_SIZE / sizeof (struct mem_section))
-         |                                  ^
-   arch/s390/include/asm/page.h:18:19: note: expanded from macro 'PAGE_SIZE'
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1996:18: error: use of undeclared identifier '_PAGE_SHIFT'
-    1996 |         return (pfn & ~(PAGE_SECTION_MASK)) / PAGES_PER_SUBSECTION;
-         |                         ^
-   include/linux/mmzone.h:1772:30: note: expanded from macro 'PAGE_SECTION_MASK'
-    1772 | #define PAGE_SECTION_MASK       (~(PAGES_PER_SECTION-1))
-         |                                    ^
-   include/linux/mmzone.h:1771:41: note: expanded from macro 'PAGES_PER_SECTION'
-    1771 | #define PAGES_PER_SECTION       (1UL << PFN_SECTION_SHIFT)
-         |                                         ^
-   include/linux/mmzone.h:1767:48: note: expanded from macro 'PFN_SECTION_SHIFT'
-    1767 | #define PFN_SECTION_SHIFT       (SECTION_SIZE_BITS - PAGE_SHIFT)
-         |                                                      ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1996:40: error: use of undeclared identifier '_PAGE_SHIFT'
-    1996 |         return (pfn & ~(PAGE_SECTION_MASK)) / PAGES_PER_SUBSECTION;
-         |                                               ^
-   include/linux/mmzone.h:1797:38: note: expanded from macro 'PAGES_PER_SUBSECTION'
-    1797 | #define PAGES_PER_SUBSECTION (1UL << PFN_SUBSECTION_SHIFT)
-         |                                      ^
-   include/linux/mmzone.h:1796:50: note: expanded from macro 'PFN_SUBSECTION_SHIFT'
-    1796 | #define PFN_SUBSECTION_SHIFT (SUBSECTION_SHIFT - PAGE_SHIFT)
-         |                                                  ^
-   arch/s390/include/asm/page.h:17:20: note: expanded from macro 'PAGE_SHIFT'
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:2037:15: error: use of undeclared identifier '_PAGE_SHIFT'
-    2037 |         if (PHYS_PFN(PFN_PHYS(pfn)) != pfn)
-         |                      ^
-   include/linux/pfn.h:21:42: note: expanded from macro 'PFN_PHYS'
-
-
-vim +/_PAGE_SHIFT +253 arch/s390/include/asm/page.h
-
-014b020475d4b9 Alexander Gordeev 2020-02-25  250  
-2d1494fb31405d Linus Walleij     2023-08-12  251  static inline void *pfn_to_virt(unsigned long pfn)
-2d1494fb31405d Linus Walleij     2023-08-12  252  {
-2d1494fb31405d Linus Walleij     2023-08-12 @253  	return __va(pfn_to_phys(pfn));
-2d1494fb31405d Linus Walleij     2023-08-12  254  }
-2d1494fb31405d Linus Walleij     2023-08-12  255  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> vim +447 fs/exportfs/expfs.c
+>
+>    434
+>    435  struct dentry *
+>    436  exportfs_decode_fh_raw(struct vfsmount *mnt, struct fid *fid, int=
+ fh_len,
+>    437                         int fileid_type, unsigned int flags,
+>    438                         int (*acceptable)(void *, struct dentry *)=
+,
+>    439                         void *context)
+>    440  {
+>    441          const struct export_operations *nop =3D mnt->mnt_sb->s_ex=
+port_op;
+>    442          struct dentry *result, *alias;
+>    443          char nbuf[NAME_MAX+1];
+>    444          int err;
+>    445
+>    446          if (WARN_ON_ONCE(FILEID_USER_FLAGS(fileid_type)))
+>  > 447                  return -EINVAL;
+>    448
+>    449          /*
+>    450           * Try to get any dentry for the given file handle from t=
+he filesystem.
+>    451           */
+>    452          if (!exportfs_can_decode_fh(nop))
+>    453                  return ERR_PTR(-ESTALE);
+>    454          result =3D nop->fh_to_dentry(mnt->mnt_sb, fid, fh_len, fi=
+leid_type);
+>    455          if (IS_ERR_OR_NULL(result))
+>    456                  return result;
+>    457
+>    458          if ((flags & EXPORT_FH_DIR_ONLY) && !d_is_dir(result)) {
+>    459                  err =3D -ENOTDIR;
+>    460                  goto err_result;
+>    461          }
+>    462
+>    463          /*
+>    464           * If no acceptance criteria was specified by caller, a d=
+isconnected
+>    465           * dentry is also accepatable. Callers may use this mode =
+to query if
+>    466           * file handle is stale or to get a reference to an inode=
+ without
+>    467           * risking the high overhead caused by directory reconnec=
+t.
+>    468           */
+>    469          if (!acceptable)
+>    470                  return result;
+>    471
+>    472          if (d_is_dir(result)) {
+>    473                  /*
+>    474                   * This request is for a directory.
+>    475                   *
+>    476                   * On the positive side there is only one dentry =
+for each
+>    477                   * directory inode.  On the negative side this im=
+plies that we
+>    478                   * to ensure our dentry is connected all the way =
+up to the
+>    479                   * filesystem root.
+>    480                   */
+>    481                  if (result->d_flags & DCACHE_DISCONNECTED) {
+>    482                          err =3D reconnect_path(mnt, result, nbuf)=
+;
+>    483                          if (err)
+>    484                                  goto err_result;
+>    485                  }
+>    486
+>    487                  if (!acceptable(context, result)) {
+>    488                          err =3D -EACCES;
+>    489                          goto err_result;
+>    490                  }
+>    491
+>    492                  return result;
+>    493          } else {
+>    494                  /*
+>    495                   * It's not a directory.  Life is a little more c=
+omplicated.
+>    496                   */
+>    497                  struct dentry *target_dir, *nresult;
+>    498
+>    499                  /*
+>    500                   * See if either the dentry we just got from the =
+filesystem
+>    501                   * or any alias for it is acceptable.  This is al=
+ways true
+>    502                   * if this filesystem is exported without the sub=
+treecheck
+>    503                   * option.  If the filesystem is exported with th=
+e subtree
+>    504                   * check option there's a fair chance we need to =
+look at
+>    505                   * the parent directory in the file handle and ma=
+ke sure
+>    506                   * it's connected to the filesystem root.
+>    507                   */
+>    508                  alias =3D find_acceptable_alias(result, acceptabl=
+e, context);
+>    509                  if (alias)
+>    510                          return alias;
+>    511
+>    512                  /*
+>    513                   * Try to extract a dentry for the parent directo=
+ry from the
+>    514                   * file handle.  If this fails we'll have to give=
+ up.
+>    515                   */
+>    516                  err =3D -ESTALE;
+>    517                  if (!nop->fh_to_parent)
+>    518                          goto err_result;
+>    519
+>    520                  target_dir =3D nop->fh_to_parent(mnt->mnt_sb, fid=
+,
+>    521                                  fh_len, fileid_type);
+>    522                  if (!target_dir)
+>    523                          goto err_result;
+>    524                  err =3D PTR_ERR(target_dir);
+>    525                  if (IS_ERR(target_dir))
+>    526                          goto err_result;
+>    527
+>    528                  /*
+>    529                   * And as usual we need to make sure the parent d=
+irectory is
+>    530                   * connected to the filesystem root.  The VFS rea=
+lly doesn't
+>    531                   * like disconnected directories..
+>    532                   */
+>    533                  err =3D reconnect_path(mnt, target_dir, nbuf);
+>    534                  if (err) {
+>    535                          dput(target_dir);
+>    536                          goto err_result;
+>    537                  }
+>    538
+>    539                  /*
+>    540                   * Now that we've got both a well-connected paren=
+t and a
+>    541                   * dentry for the inode we're after, make sure th=
+at our
+>    542                   * inode is actually connected to the parent.
+>    543                   */
+>    544                  err =3D exportfs_get_name(mnt, target_dir, nbuf, =
+result);
+>    545                  if (err) {
+>    546                          dput(target_dir);
+>    547                          goto err_result;
+>    548                  }
+>    549
+>    550                  inode_lock(target_dir->d_inode);
+>    551                  nresult =3D lookup_one(mnt_idmap(mnt), nbuf,
+>    552                                       target_dir, strlen(nbuf));
+>    553                  if (!IS_ERR(nresult)) {
+>    554                          if (unlikely(nresult->d_inode !=3D result=
+->d_inode)) {
+>    555                                  dput(nresult);
+>    556                                  nresult =3D ERR_PTR(-ESTALE);
+>    557                          }
+>    558                  }
+>    559                  inode_unlock(target_dir->d_inode);
+>    560                  /*
+>    561                   * At this point we are done with the parent, but=
+ it's pinned
+>    562                   * by the child dentry anyway.
+>    563                   */
+>    564                  dput(target_dir);
+>    565
+>    566                  if (IS_ERR(nresult)) {
+>    567                          err =3D PTR_ERR(nresult);
+>    568                          goto err_result;
+>    569                  }
+>    570                  dput(result);
+>    571                  result =3D nresult;
+>    572
+>    573                  /*
+>    574                   * And finally make sure the dentry is actually a=
+cceptable
+>    575                   * to NFSD.
+>    576                   */
+>    577                  alias =3D find_acceptable_alias(result, acceptabl=
+e, context);
+>    578                  if (!alias) {
+>    579                          err =3D -EACCES;
+>    580                          goto err_result;
+>    581                  }
+>    582
+>    583                  return alias;
+>    584          }
+>    585
+>    586   err_result:
+>    587          dput(result);
+>    588          return ERR_PTR(err);
+>    589  }
+>    590  EXPORT_SYMBOL_GPL(exportfs_decode_fh_raw);
+>    591
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
