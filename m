@@ -1,221 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBDF179BF
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 02:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C5B3D64;
+	Fri, 11 Oct 2024 02:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728612243; cv=none; b=e7LYUL0z/dPQn5NCNxYXnuGqLvuQcB0XLmrWMB5Y2xT7yemKiCpEhYiHQcCzhD+5BLkYL2ogL7S1cu8Tm3N6lLhgfwTqJTCwKLVQeftbPAUFwmoR5jlhbqU5I0yUN75Qq1MPMivw7vX+uhqzwHIGP3G0XbFu1yXaoUFuytVR7jg=
+	t=1728614931; cv=none; b=eAfGfhIZYIBlM1xvVhEnedORS6Y0nTW3AWalwjKbAqz86cBwSDukCxnnfmmr//KnodUlAfCXAEoZf98SyCpXPaCOxn38Zk6M+ZsX+GIwHzy+DrP1o3BOvNGo6Wu3c2ge7IEXfQyA1VKEDG8gJpQ9sUDJ0Dc4IKe9JaRh+aUtCc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728612243; c=relaxed/simple;
-	bh=rc7c6U7V+zKbL4Na9AR8IkBF02SXaIKLBlAX9ny1e1Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DDia1o+R/HB+gyUrTvW342CkAXiBTR+0pWcOzrboeY1LYrxqtmFqLM8oMIYG3m0GQV0vz+UYkFntdJD8CFBJZadrluDzMgKzuN5vL9C7lNfpOMHX5Yg2xp9ZHZjHEUB/8hfR/Wg9VQTdSCTS95+kEhYalHys4bDOeUh0l9wBxI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uVD0G3gI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728614931; c=relaxed/simple;
+	bh=4/Oz2VPpHBFcZj5de13qgjiFEEnmrWQYG/R8YNP9kq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BXZBLiVC/bbQh3BUDN+nOzSG0i1drb/6Bhb5GWFvIQazNboYQqE5YbjcIzqFpb03+NS/7rLeiIArd0i7S8xzyNKPGf98nqChVW33BwP2GgxdAbov83+7caY1NlPuw6R6G9sI4LLvKHbPEcd3/xqwYhnQMcMMzn0HXRP7W0Sbl8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XxKpCyk0; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uVD0G3gI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6117C4AF09
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 02:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728612242;
-	bh=rc7c6U7V+zKbL4Na9AR8IkBF02SXaIKLBlAX9ny1e1Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uVD0G3gIiD6YJxFZfEBrloWB3WS2Od2GzHKENU21HmWaPl1ZmFhEeIjboUmX+tON6
-	 teRK2fQv3hoJsY17cjBMs9igZeMeWvvcasqizHGWB7XxxnI+kpcuSzoY6FaR59STlQ
-	 BgiKrtaYf919RgANF3zbiqxmR0ZEU2WVX/8iEA0J8p9hiiOj4/V7yLAPte/PPR//LE
-	 gEPq0ttVcXX6Kbd/MNE8k3IbGLnKHg9xFVQKRNvLnPk2Dp2G0bRVk56jsHZkz/PXGO
-	 sCoVmJRYmooFfPdWQVu8+R5MNCdnvTMuT38Uow58fgLAWiqzPRW/N438aQcs+E+s4S
-	 Kkfwo0zbAwwxQ==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5398ec2f3c3so2164652e87.1
-        for <llvm@lists.linux.dev>; Thu, 10 Oct 2024 19:04:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXnVL/NW6nIUTTBANzcMdFfyhImo4g5jMRRZbMZR6yG7tHfXqaQRLuUcaLrxQx/YhZ7vuqL@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz3W8iV8pfEmV24tEsy6ApnS/mzpmJuHYSHxRkhu4+toUOWYYi7
-	xlz9Lr+6bdfakLnGzi/l12MAEje3AEaGC4DJf25btFZJh0UC+NzDuKuMyPSX1fy7e8dn6cYoboX
-	Yo32SX+pmdpSwBP541FSxDLosW1c=
-X-Google-Smtp-Source: AGHT+IFSWVXmtFDfsV71FZjubAv2ssNQTvktk2A9cPcXvkGTOGP5RscegNrsCuvPZmJrSlVe3670sSObcbXz/X43boo=
-X-Received: by 2002:a05:6512:220a:b0:533:4477:28a2 with SMTP id
- 2adb3069b0e04-539da3c4bb0mr433254e87.16.1728612241253; Thu, 10 Oct 2024
- 19:04:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XxKpCyk0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728614929; x=1760150929;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4/Oz2VPpHBFcZj5de13qgjiFEEnmrWQYG/R8YNP9kq4=;
+  b=XxKpCyk0btFaWj3Tgsbdpp96Ft+dNAdW0AzSELghs9gAHx8Oiwd3G+ZL
+   95OYR1qYkUKEcEW2f4wZvAbfYbkRFjXiLTo9kW01SoPJ9OhftQLx/L3pR
+   PTixB/t2KgBCneYPWCFIPqquFP5MeKUqiVopoHAUspQh1IrZQHdBCOACD
+   Rt9cLaT79/8EC+m9DlIcPbHVInN9nFmC4fQqy+Qdv+WLRO33ow8x2zZLn
+   cV3EV8kVZb3Wfe6NZSkmVOCPlSBxukItdi+cEjRXpw9f7ZDz14tuXCVxO
+   X9b5ABKaUj6abvWj23k0oe6uURR1+cufYgxdgvPnXGinYLNMLXfDBxWRZ
+   w==;
+X-CSE-ConnectionGUID: 0MUhJg8WTTyyfSe5btM/rQ==
+X-CSE-MsgGUID: PzqkaHbLR4+uNMqzKmICZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="45518793"
+X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
+   d="scan'208";a="45518793"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 19:48:49 -0700
+X-CSE-ConnectionGUID: JqNfMz6pTuSwNoWw14oubA==
+X-CSE-MsgGUID: 9GyxNOEpRmqNNdSjkh5LYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,194,1725346800"; 
+   d="scan'208";a="76783056"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 10 Oct 2024 19:48:48 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sz5ht-000BeJ-2q;
+	Fri, 11 Oct 2024 02:48:45 +0000
+Date: Fri, 11 Oct 2024 10:48:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 32/35] fs/namei.c:3279:31: error: use of
+ undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+Message-ID: <202410111043.5k0K9SJH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241010-icall-detect-vers-v1-0-8f114956aa88@google.com> <20241010-icall-detect-vers-v1-1-8f114956aa88@google.com>
-In-Reply-To: <20241010-icall-detect-vers-v1-1-8f114956aa88@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 11 Oct 2024 11:03:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
-Message-ID: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kbuild: rust: add `CONFIG_RUSTC_LLVM_VERSION`
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Oct 10, 2024 at 6:38=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
-rote:
->
-> From: Gary Guo <gary@garyguo.net>
->
-> Each version of Rust supports a range of LLVM versions. There are cases w=
-here
-> we want to gate a config on the LLVM version instead of the Rust version.
-> Normalized cfi integer tags are one example [1].
->
-> For consistency with cc-version and ld-version, the new version number is=
- added
-> to the existing rustc-version script, rather than being added to a new sc=
-ript.
->
-> The invocation of rustc-version is being moved from init/Kconfig to
-> scripts/Kconfig.include to avoid invoking rustc-version.sh twice and for
-> consistency with cc-version.
->
-> Link: https://lore.kernel.org/all/20240925-cfi-norm-kasan-fix-v1-1-032898=
-5cdf33@google.com/ [1]
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> ---
->  init/Kconfig             |  6 +++++-
->  scripts/Kconfig.include  |  4 ++++
->  scripts/rustc-version.sh | 31 +++++++++++++++++++++++++------
->  3 files changed, 34 insertions(+), 7 deletions(-)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 530a382ee0fe..98cf859d58c2 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -62,7 +62,7 @@ config LLD_VERSION
->
->  config RUSTC_VERSION
->         int
-> -       default $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
-> +       default $(rustc-version)
->         help
->           It does not depend on `RUST` since that one may need to use the=
- version
->           in a `depends on`.
-> @@ -78,6 +78,10 @@ config RUST_IS_AVAILABLE
->           In particular, the Makefile target 'rustavailable' is useful to=
- check
->           why the Rust toolchain is not being detected.
->
-> +config RUSTC_LLVM_VERSION
-> +       int
-> +       default $(rustc-llvm-version)
-> +
->  config CC_CAN_LINK
->         bool
->         default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG=
-_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
-> diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
-> index 785a491e5996..788097a55731 100644
-> --- a/scripts/Kconfig.include
-> +++ b/scripts/Kconfig.include
-> @@ -65,6 +65,10 @@ cc-option-bit =3D $(if-success,$(CC) -Werror $(1) -E -=
-x c /dev/null -o /dev/null,$
->  m32-flag :=3D $(cc-option-bit,-m32)
->  m64-flag :=3D $(cc-option-bit,-m64)
->
-> +rustc-info :=3D $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
-> +rustc-version :=3D $(shell,set -- $(rustc-info) && echo $1)
-> +rustc-llvm-version :=3D $(shell,set -- $(rustc-info) && echo $2)
-> +
->  # $(rustc-option,<flag>)
->  # Return y if the Rust compiler supports <flag>, n otherwise
->  # Calls to this should be guarded so that they are not evaluated if
-> diff --git a/scripts/rustc-version.sh b/scripts/rustc-version.sh
-> index 4e22593e2eab..24e19ed8f234 100755
-> --- a/scripts/rustc-version.sh
-> +++ b/scripts/rustc-version.sh
-> @@ -3,14 +3,23 @@
->  #
->  # Usage: $ ./rustc-version.sh rustc
->  #
-> -# Print the Rust compiler version in a 6 or 7-digit form.
-> +# Print the Rust compiler version and the LLVM version it uses in a 6 or
-> +# 7-digit form.
-> +
-> +# Convert the version string x.y.z to a canonical up-to-6-digits form.
-> +get_llvm_canonical_version()
-> +{
-> +       IFS=3D.
-> +       set -- $1
-> +       echo $((10000 * $1 + 100 * $2 + $3))
-> +}
->
->  # Convert the version string x.y.z to a canonical up-to-7-digits form.
->  #
-> -# Note that this function uses one more digit (compared to other
-> -# instances in other version scripts) to give a bit more space to
-> +# Note that this function uses one more digit (compared to other instanc=
-es in
-> +# other version scripts and the instance above) to give a bit more space=
- to
->  # `rustc` since it will reach 1.100.0 in late 2026.
-> -get_canonical_version()
-> +get_rustc_canonical_version()
->  {
->         IFS=3D.
->         set -- $1
-> @@ -19,8 +28,18 @@ get_canonical_version()
->
->  if output=3D$("$@" --version 2>/dev/null); then
->         set -- $output
-> -       get_canonical_version $2
-> +       rustc_version=3D$(get_rustc_canonical_version $2)
->  else
-> -       echo 0
-> +       echo 0 0
->         exit 1
->  fi
-> +
-> +if output=3D$("$@" --version --verbose 2>/dev/null | grep LLVM); then
-> +       set -- $output
-> +       rustc_llvm_version=3D$(get_llvm_canonical_version $3)
-> +else
-> +       echo 0 0
-> +       exit 1
-> +fi
-> +
-> +echo $rustc_version $rustc_llvm_version
->
-> --
-> 2.47.0.rc0.187.ge670bccf7e-goog
->
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   b91bc932b468b4c460faef8759fbae5a75b2ab5c
+commit: 65bf014be263dadeb74c9d0f75333ae09b373f8b [32/35] fs: add a "reason" parameter to try_break_deleg
+config: i386-buildonly-randconfig-001-20241011 (https://download.01.org/0day-ci/archive/20241011/202410111043.5k0K9SJH-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410111043.5k0K9SJH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410111043.5k0K9SJH-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/namei.c:3279:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3279 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:3599:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3599 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                    ^
+   fs/namei.c:3666:25: error: variable has incomplete type 'struct delegated_inode'
+    3666 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4144:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4144 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4202:25: error: variable has incomplete type 'struct delegated_inode'
+    4202 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4287:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4287 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4325:25: error: variable has incomplete type 'struct delegated_inode'
+    4325 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:4386:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4386 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4436:25: error: variable has incomplete type 'struct delegated_inode'
+    4436 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4543:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4543 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                                      ^
+   fs/namei.c:4585:25: error: variable has incomplete type 'struct delegated_inode'
+    4585 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4817:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4817 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                              ^
+   fs/namei.c:4851:25: error: variable has incomplete type 'struct delegated_inode'
+    4851 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:5086:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
+    5086 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
+         |                                                      ^
+   fs/namei.c:5087:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5087 |                                                      LEASE_BREAK_DIR_DELETE,
+         |                                                      ^
+   fs/namei.c:5092:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5092 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                  ^
+   fs/namei.c:5154:25: error: variable has incomplete type 'struct delegated_inode'
+    5154 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   17 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
 
 
+vim +/LEASE_BREAK_DIR_CREATE +3279 fs/namei.c
 
-Please notice there is no reason to process
-rustc_version and rustc_llvm_version in the same script
-because they are completely independent.
-It even invokes "rustc --version" twice.
+  3261	
+  3262	static int __vfs_create(struct mnt_idmap *idmap, struct inode *dir,
+  3263				struct dentry *dentry, umode_t mode, bool want_excl,
+  3264				struct delegated_inode *delegated_inode)
+  3265	{
+  3266		int error;
+  3267	
+  3268		error = may_create(idmap, dir, dentry);
+  3269		if (error)
+  3270			return error;
+  3271	
+  3272		if (!dir->i_op->create)
+  3273			return -EACCES;	/* shouldn't it be ENOSYS? */
+  3274	
+  3275		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
+  3276		error = security_inode_create(dir, dentry, mode);
+  3277		if (error)
+  3278			return error;
+> 3279		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+  3280		if (error)
+  3281			return error;
+  3282		error = dir->i_op->create(idmap, dir, dentry, mode, want_excl);
+  3283		if (!error)
+  3284			fsnotify_create(dir, dentry);
+  3285		return error;
+  3286	}
+  3287	
 
-If you implement it this way, you do not need to
-touch scripts/rustc-version.sh at all.
-
-
-
-If both rustc_version and rustc_llvm_version were
-retrieved from the single invocation of "rustc --version",
-I would agree "OK, it makes sense to implement it in the
-same script". But, it isn't.
-
-
-
-
-
---
-Best Regards
-
-
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
