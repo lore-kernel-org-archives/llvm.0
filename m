@@ -1,332 +1,252 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020087.outbound.protection.outlook.com [52.101.196.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E6821502D;
-	Fri, 11 Oct 2024 11:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728646161; cv=none; b=skLg9Eu5JsZ19PTLIzFlseVZrR28gmDUzA7PgFK1eZw87DV20vKI6w1TMl+NV+Di2QQg0xK03M/IQ9rJIQYl6UVb1oTo1Sn5OeqlslLzqQygBXZYg1YNCR7s5Eg7cNxl+VH1/m6nGgdmc14jhIftiQU1TLLzh6fI2K7jl5vd6ME=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728646161; c=relaxed/simple;
-	bh=hFOpFtbUp9WAKtIyShpJkQp3M6HRkqXocbx/H3nABFs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bl/2suvP0BNxmpDOMaqjZcIhPCJD4j+Fma5QgpKj9jDKO31AIzcb0ikSs7A6BglViPSCS3fKmE0jYjXbBVDRIiUn6dqC/c7I/E6uIcgq0DzRUYuohcS3zD6WWWq37cBMs1bQ83rbXt/FSnUW0xjSxSR6KzSGCYtfO1dDYaH3GLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B899h2vU; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBCD21643F
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 11:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728646866; cv=fail; b=DJO8qRF3pYkUd6SrPpYzqOGNhqqSMbb2svaqK0wywSC0CNpOuXmmEK4jv3MvDn2cydcfMrPeRVZEusixc2jbNOw3rNXM3MsitJi0J7eqJtnYsLKTfNCOgiE9sAE9zyYXNV4stZICX3EfFQB+MsLDXH2sRacVCiGIqxiHEcV4Dws=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728646866; c=relaxed/simple;
+	bh=JcccRRsPniAGLkqMnQiqfz5bSm7USb+wXGcqWUMU1jo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=N8V8AQuAi0qb+ws8B6EuSuJ4EsO38aNKUcKp57OfkD3+kzwSYB4yRSqinQNVJmCceBwC1X5Fe8rneccIt770qyHwT8oJl/JqwWJRf7zWSQ83RwiGTb/u+kkQlUOd9C5DTkdPS/NOuVgQKzlxuCIz7e9b97I1eGOEvdraiA7pzwQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=NMnumxg4; arc=fail smtp.client-ip=52.101.196.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B899h2vU"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7afc5e480dbso115340985a.3;
-        Fri, 11 Oct 2024 04:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728646155; x=1729250955; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SXu5ilO0B38r9x9LA9hO6uH7HLlyNgMrFLahqmxyYSQ=;
-        b=B899h2vUgCaZrjrRatMhS9TDh3h80cIggGX3BFYDG8J9uW0GFOQ3DFr/8Vzg3nUp0P
-         C+VFucZzJu7kUfoG44y6eSoqMYB9gwgGwpjm9RZS6sF9brU8r7b/Rt0FeTuQl0YQZuem
-         kZGtXlNX3wb+QqGS1pIoMP9+Lg2AnxqAW++V2GAcx6Cl7MyQGSlH50GYjJAE3qxyf3IS
-         p7bWOSMG9LDR8YY5DLHNhBKmOqdZNHokzTCpOWE1H9q8ki96X7nYGmascGp6VUZiKlb6
-         rbquIi6WXNoQhsFLA+GJLjMqdRxIa0zROjW95UGWpoOfYzFxUrwkL3cie96ydb3ymJF+
-         5KVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728646155; x=1729250955;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SXu5ilO0B38r9x9LA9hO6uH7HLlyNgMrFLahqmxyYSQ=;
-        b=BzdUkyZ74j3A7jMy2KSG0StGQ8NGM3AYyxyQi8qwdx45p3mIQmOZxS8J5hMEAR9Uc8
-         4BkkYNbX5155D5VPe+gcz7QUMys7RbJQgfhLUBeNMlGRap6S3UJ94R9O3q3EpvEhjglO
-         MgmxJhfFsbxOu4qhaMx8K0SpjI9B+lL3r7tzhNZ/szSWn7ovX1SCaSuVJJoo0LiH2Fzi
-         hfLGxO1aqsD3ggrwcSF7Gd8MBwi/ggqHGD3s7L4cVnmQcHxmZUeK4hciB5IhzUWV2chu
-         FHtISwbZ4vuOjHhI4/V3N4t9xLkEAmqSWcE2HPPxGF/9zL5kf11bgNXPfiC7JIg2kGr3
-         YAKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVsR9FrlzVjV5xtQu79awBTnE8amFw7dwoTy9pe9ZUvcy5aXJ5UTmHUYu09jeXAaK49sNiOGuGZEDuJia0y@lists.linux.dev
-X-Gm-Message-State: AOJu0YxmA22vJ0PQSRgxHwwcRnZm7xP0KBxY30QPosMFNUNkcqF/oatS
-	z40ctQSYKWmzwFsiBkTXquqVzvvbB1sUI2Ocbtf9WFU0bzPse9/8HSBqNXzYHfrRPGKjpOZ6xME
-	9c4Cis2YYs0J39nAaa144xbDuxio=
-X-Google-Smtp-Source: AGHT+IGIdZ9RneDbVf+jvFQoSDMu1X5ANp9aP2HxFsf3df9fY8O9MOS8o00aehWhn73S9SiDDTUUvLrfF3qHUiYn/zY=
-X-Received: by 2002:a05:620a:25b:b0:7b1:1d74:6b7d with SMTP id
- af79cd13be357-7b11d746d3emr79677285a.53.1728646155120; Fri, 11 Oct 2024
- 04:29:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="NMnumxg4"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=J2a4mh8ikrTgoSsMS8Ncod8DH3VysJaJKpTWi2DVMjRevMCS9Muu7vXV/s+J4/ct+kPIo/3KSVimVUBVpAeJDSDSXnYOrxpTxPNDuvDQdlCMb9+I6hMKrIycvCNm4yfxQ5eE/tFmSOwZ0RwpcmSpzlCvQfV25zDJLRieT6Yh309WXl0V+tRCa5yXXoHEngn0rM/vU7IDp0QHdq3xQzK0hxfMvPcffJX+P4Kq6L3j3nd9Xw0TLiWUL4msn0tAP4R+ixwwwVTQFI82yV+63dj77bXC00xo/KX3hmsPG87Wv8adbejCkGYIWTtRc4VY4mtm/veySKIdMbpae+qxZ0+7Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ckjQRWwDT/eRcydao40iiwrZxOFMUcFU8yVTIXP/b7E=;
+ b=hAP0wKRQdyfhYpCHzKU1XGLajp5ha9W+GBmrOzaekiajpRc17ZuXiD9C3DsBsrRDJgkqVDzxMTy22OS+6q8rY7ZBEGa93sjLSpLc+bIIdluonUtcs1Y0eEJeitexL0l4RJwAfpBkifjFym0x2mvrKpuNR3RB4PedOO12WXWzJy+Xf+EGTC3bYenbNEEiXjQ7VkzatLoKNWZbMd1eglhju2NYlGYqRRXxnq4/HN0fI9xH5t/ARXJQmIE4kZj8ukhWz10922VyD0bBCQjNrmbxHbmntGGRyt5qzIwx3WPemXf+q8RVCiItj6gvNWm3ujTRO66XS9ulbogh4AEEzfvKhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ckjQRWwDT/eRcydao40iiwrZxOFMUcFU8yVTIXP/b7E=;
+ b=NMnumxg4J6QlO+803oTJdLNq34JzqzXrZ2wZLwzPRI/sWg2REV/H/Eqw8U6ldJxu7AqBzAnCGcibFURcm8Ix98B5uPhR7y4liIsJEzBaK/B2XMf5C6LuD8R5Z4rOdBbjw5mjf+3vOmHfgoDQJAM0LsOnFYK4lkE7zkWPBmpgHGI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by CW1P265MB7424.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:217::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.20; Fri, 11 Oct
+ 2024 11:40:59 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7%3]) with mapi id 15.20.8048.013; Fri, 11 Oct 2024
+ 11:40:59 +0000
+From: Gary Guo <gary@garyguo.net>
+To: masahiroy@kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Tejun Heo <tj@kernel.org>,
+	Yoann Congal <yoann.congal@smile.fr>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Jens Axboe <axboe@kernel.dk>,
+	Jann Horn <jannh@google.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Cc: kees@kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	rust-for-linux@vger.kernel.org,
+	samitolvanen@google.com
+Subject: [PATCH] kbuild: rust: add `CONFIG_RUSTC_LLVM_VERSION`
+Date: Fri, 11 Oct 2024 12:40:33 +0100
+Message-ID: <20241011114040.3900487-1-gary@garyguo.net>
+X-Mailer: git-send-email 2.44.1
+In-Reply-To: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
+References: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0548.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:319::11) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241008152118.453724-2-amir73il@gmail.com> <202410111804.pPMW9rqn-lkp@intel.com>
-In-Reply-To: <202410111804.pPMW9rqn-lkp@intel.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Fri, 11 Oct 2024 13:29:03 +0200
-Message-ID: <CAOQ4uxivE3P8aZw=tTP=wkaUWmOHdTOY7q2_CHNP+fT9di-NbQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] fs: prepare for "explicit connectable" file handles
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CW1P265MB7424:EE_
+X-MS-Office365-Filtering-Correlation-Id: dbb6152f-24c8-49e7-a1d9-08dce9e99397
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sZxygTeTy5E1tufDO/YH3B/EMT893w5t3QGPu0uOoIWM496+EMyVYofuQ5tG?=
+ =?us-ascii?Q?rLa8qSBcTk+UosQJG48Yeox98paeotySXhUgOl764Tj826mEKcevZPdJcwlu?=
+ =?us-ascii?Q?5eXEHc7l0nOTc7M12kYtRyR0h2Z/nr1s4gTepRcZTbe/tKbVbY3ZyK7QBFDO?=
+ =?us-ascii?Q?7B4RGPg6q2CzNQSyLRwChmXK2FDXaEPu6XU4Hc2EO+y81anTVqTUxKixSgSD?=
+ =?us-ascii?Q?w1YB9I+avJQwMEq3uC3fb8tcr4UmznAj1mYB6KE+37sopGgTr3A63AnVh6i7?=
+ =?us-ascii?Q?alzzBTIhCwlf+ea4dgZHe0SB7iPKG6GNX8r1BqghQ8RuUP/K0oxjUAtJ7xr7?=
+ =?us-ascii?Q?2FNBFNNx8UUKpeTW1CkRq+JspK8N4GIWIZi3eBoa7g0ar/L+0iZhuWwt0UG/?=
+ =?us-ascii?Q?7G3BVeVNklczn4aV9sSSm+JVuLlmgpMQ3d/RQfW51N6pPly008YRmY8JIaJB?=
+ =?us-ascii?Q?ljg/TB19IQkx4Qh+3dlTuSJNz1Fsp7qy/VRHxaUPTnxWIwae9yjMVtwLxGh7?=
+ =?us-ascii?Q?k4bnANietEQKQqvRAsLBn7Nr4CMXsy04w/4F367jVccELDB/am2BOhQ/UW/s?=
+ =?us-ascii?Q?wWMi2Zj8nwpQ4O7eCR1kFYzen1pAb/t8EhMMnZXplNxW7aH+RmqJ56PIX3MP?=
+ =?us-ascii?Q?GKZN8A5zCy3axhjl4KGzFzdjlkK90oanHa+O6foTJNGic5A/9s2eUskdZyoT?=
+ =?us-ascii?Q?k1Gq7wL1pFqeb7jLmTDVg1zXuPKY8OZyPbuBDXP2nT/lOX668J/C9w3iWctj?=
+ =?us-ascii?Q?Pu7Ci7DsXLEY6TY34DAJvU3js2z1W7YhUyIGC8EJIs0JXUL0jbf0t8d1Hz3I?=
+ =?us-ascii?Q?kgve8Xf4nQjoUbI9TkKB8DtGqGR68NsaGu4K4gZ+qfOlSijts8YlvjyMLE4N?=
+ =?us-ascii?Q?zODiA8vsEWx4BdkpvXJ2S1F2th0Ot6yqEoTUBc0+6jYBKGZF4jpMiCDDINol?=
+ =?us-ascii?Q?OyEJ9pEfKMovrOu6qB9OG/4lOrHQK5N2NOIqnyeNmSQHOJo1cpEba3UVsSzS?=
+ =?us-ascii?Q?LqS/YztUAS17FRqisey5jOZEkw31OBsQIlgXuyN4kb285JKcM3JvcHEXeR/o?=
+ =?us-ascii?Q?2KU5THXPLlxOGBF9Uz7CLKcFqkn9sDXGawRpSHtQqdcEP/5ngOPTsUUzhoI1?=
+ =?us-ascii?Q?CnxDmnPvcj2mecO1AFF4X3k56c4i2qARXTRX5Idaa+CrYB/OA6m3iFT/Nu6R?=
+ =?us-ascii?Q?47aD0QK0M0aW5l7yUxB5HUe7VmbagPPMgHz9InbI6rL0oNqefJ0w2lW+yB0K?=
+ =?us-ascii?Q?nlhVxZFLnkozeKWRaXMmls5cZi1SWDpbidE+AeHTf+PNC9dseymfCuJGwjEB?=
+ =?us-ascii?Q?oUagcklAZl0cdElzV33TmPO0?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024)(921020);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?uGg1tmJn72KCynIwO3RuuILZbwCNWlmDELgnsWiopu8R+y/Z//fsV3hDwQk3?=
+ =?us-ascii?Q?C2zF64I/XROm4aTYiCC0AUmQdcKKYtvWmRNAnQ4QKa+lCIzD5hT5irhIQQ1v?=
+ =?us-ascii?Q?nj53rN34oGEiS0F0Km9FWXuJH46CzwUxHOAi3o7A6olMXIRZwed3jmV+/gpE?=
+ =?us-ascii?Q?MQqBPcdT+KZT7rVkCf9paSiwcBk4UWT4nzrJFgdlpWX1A8A6fmalgiK8WDCt?=
+ =?us-ascii?Q?8myZodUbvt8ze+cZdj9B1JOgaRLaDSOUozmboEcF37RD13rNQGg1HeXMMd9F?=
+ =?us-ascii?Q?/IpKybWsVDtWsn9RzJcaEGoF6r4mAHnm5If4fnEH6xH6y+lw4WGPt2+se0l6?=
+ =?us-ascii?Q?KNgG0VlCctIwlBUDb0Cw9pN9c1zWMlRexYyAW0LgmJoYNM8tblvw1RaAaHrX?=
+ =?us-ascii?Q?Sosw/siKzbp9PQj4nLbfFFWX0F3lKrWUYVCIIt/atXQgYYruoQNQVQLl4NkQ?=
+ =?us-ascii?Q?FBcrx0qhreYUdvw8k7MNa2D1DFqP8MYPL+i+yUZHTJZZRP+SZKcmgKhjzYyI?=
+ =?us-ascii?Q?AtTSvW0TqJJXTcwzWmj+BJQnZLKg2Vjie9bqDyVaxCkWShwMoBmOki5D3ciN?=
+ =?us-ascii?Q?rzXuqzNHu4QRToxodW5IFne585Z1bHC69tXDZX69fC2OMM3l9kfW3kpDJGR0?=
+ =?us-ascii?Q?t064xuWNQnaUbIpRWWg5lznP12XkFvtnMyuyY8DVhKltWy3AbhwYUXhnk1FT?=
+ =?us-ascii?Q?RZ2RHVIURCNQajQKh+X2y/LxdkmB+7yiDqxV2xDy8+ci4YenMoKjO/2q/LJ8?=
+ =?us-ascii?Q?NXObuPzSayLXJdpICzJ6h5jx2gW4gpRHRNf+3SWAyAjuW8QXxr1sUB8P8BzF?=
+ =?us-ascii?Q?e5VPkVlKHXcSQMsbLzcaZH7n6JEMen8cFU0H2+Cnc2D2yvmn+zg3UEl1kEDJ?=
+ =?us-ascii?Q?IMT0zUofk5fukWqUu7c6vucn2SfQx7yrDbnyKTnHfU4iSDOWK7Q+miACmcmw?=
+ =?us-ascii?Q?GvC9YLYufoCARWU3D53qThT9M8g3AZHXn4YSQifSd3qUNASXWT8WGNBGYpIH?=
+ =?us-ascii?Q?bhACTJ10/i6iXaTOcGVcDeNlwouQhlf3zImz8WFrIb4/fqmYNZo4yTiu6bXc?=
+ =?us-ascii?Q?ajHbvM1Gg3Nq0gX0jWlNdDOoy/3b/Bh4u6NUDHzfsboeHIq5sTQr1dwCXAaS?=
+ =?us-ascii?Q?ML4TsGP6VR+TqpGmWXEph039J6AScImcKCgz+GTIPv9jgcGa/k9ULt6e6HBy?=
+ =?us-ascii?Q?KZqHpdhTOPpZay/6E9lYNSJftTo4ZxKAp8MeVKwUlIw6w1/zWBnvJluajyXB?=
+ =?us-ascii?Q?38SQG3SC6yYN/qaXprbZ6jVHEU2s3rs3Hx0wPzcMDAC+eclcDJ4cFlTAP9Z+?=
+ =?us-ascii?Q?VPLSwyidOGVEK8FotwE+m74a2m3f18poEQmub7dR6L1olRiyuPhyx56Q1+MA?=
+ =?us-ascii?Q?kBjaNdru0wK/F8sb/yzfADGm9L9SiJnA8o8Yr8BuzHcZO++yKIZF8uBZOqCK?=
+ =?us-ascii?Q?gVfLyDVaCiaJrb8CyOvKgUAYPuMa1N7fc8FmVyhOgCfCaWoFI/HB+FvwMj7y?=
+ =?us-ascii?Q?/PK9YeNXlRDYQFj8stn8u0FvqTdhr+4JNOxOjhofQw9OWBOpQYBCpP8GlP+5?=
+ =?us-ascii?Q?UgOU51QlYEGDdKEhzuYQ1whABlUW0mrPiExjYKe8?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbb6152f-24c8-49e7-a1d9-08dce9e99397
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 11:40:59.4227
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0oxEZqg8jiXjBQMngJ3CfkhGovWiatj3gmTyiERAz/PzDjcULEYBMklupGv+qaV5P37PtN+hEtWAgYTjVU6bQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB7424
 
-On Fri, Oct 11, 2024 at 1:04=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Amir,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on brauner-vfs/vfs.all]
-> [also build test ERROR on linus/master v6.12-rc2 next-20241011]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Amir-Goldstein/fs-=
-prepare-for-explicit-connectable-file-handles/20241008-232246
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.a=
-ll
-> patch link:    https://lore.kernel.org/r/20241008152118.453724-2-amir73il=
-%40gmail.com
-> patch subject: [PATCH v3 1/3] fs: prepare for "explicit connectable" file=
- handles
-> config: s390-allnoconfig (https://download.01.org/0day-ci/archive/2024101=
-1/202410111804.pPMW9rqn-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 7=
-0e0a7e7e6a8541bcc46908c592eed561850e416)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20241011/202410111804.pPMW9rqn-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410111804.pPMW9rqn-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    In file included from fs/exportfs/expfs.c:15:
->    In file included from include/linux/module.h:19:
->    In file included from include/linux/elf.h:6:
->    In file included from arch/s390/include/asm/elf.h:181:
->    In file included from arch/s390/include/asm/mmu_context.h:11:
->    In file included from arch/s390/include/asm/pgalloc.h:18:
->    In file included from include/linux/mm.h:2213:
->    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
-numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
-onversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
-"nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
-> >> fs/exportfs/expfs.c:447:10: error: incompatible integer to pointer con=
-version returning 'int' from a function with result type 'struct dentry *' =
-[-Wint-conversion]
->      447 |                 return -EINVAL;
->          |                        ^~~~~~~
->    1 warning and 1 error generated.
->
->
+Each version of Rust supports a range of LLVM versions. There are cases where
+we want to gate a config on the LLVM version instead of the Rust version.
+Normalized cfi integer tags are one example [1].
 
-This braino was already fixed in v4.
+The invocation of rustc-version is being moved from init/Kconfig to
+scripts/Kconfig.include for consistency with cc-version.
 
-Sorry for the noise.
+Link: https://lore.kernel.org/all/20240925-cfi-norm-kasan-fix-v1-1-0328985cdf33@google.com/ [1]
+Signed-off-by: Gary Guo <gary@garyguo.net>
+---
+ init/Kconfig                  |  6 +++++-
+ scripts/Kconfig.include       |  3 +++
+ scripts/rustc-llvm-version.sh | 22 ++++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100755 scripts/rustc-llvm-version.sh
 
-Thanks,
-Amir.
+diff --git a/init/Kconfig b/init/Kconfig
+index fbd0cb06a50a..304e2bd32bfd 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -62,7 +62,7 @@ config LLD_VERSION
+ 
+ config RUSTC_VERSION
+ 	int
+-	default $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
++	default $(rustc-version)
+ 	help
+ 	  It does not depend on `RUST` since that one may need to use the version
+ 	  in a `depends on`.
+@@ -78,6 +78,10 @@ config RUST_IS_AVAILABLE
+ 	  In particular, the Makefile target 'rustavailable' is useful to check
+ 	  why the Rust toolchain is not being detected.
+ 
++config RUSTC_LLVM_VERSION
++	int
++	default $(rustc-llvm-version)
++
+ config CC_CAN_LINK
+ 	bool
+ 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
+diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+index 785a491e5996..33193ca6e803 100644
+--- a/scripts/Kconfig.include
++++ b/scripts/Kconfig.include
+@@ -65,6 +65,9 @@ cc-option-bit = $(if-success,$(CC) -Werror $(1) -E -x c /dev/null -o /dev/null,$
+ m32-flag := $(cc-option-bit,-m32)
+ m64-flag := $(cc-option-bit,-m64)
+ 
++rustc-version := $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
++rustc-llvm-version := $(shell,$(srctree)/scripts/rustc-llvm-version.sh $(RUSTC))
++
+ # $(rustc-option,<flag>)
+ # Return y if the Rust compiler supports <flag>, n otherwise
+ # Calls to this should be guarded so that they are not evaluated if
+diff --git a/scripts/rustc-llvm-version.sh b/scripts/rustc-llvm-version.sh
+new file mode 100755
+index 000000000000..b8ffa24afea8
+--- /dev/null
++++ b/scripts/rustc-llvm-version.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Usage: $ ./rustc-version.sh rustc
++#
++# Print the LLVM version that the Rust compiler uses in a 6 digit form.
++
++# Convert the version string x.y.z to a canonical up-to-6-digits form.
++get_canonical_version()
++{
++	IFS=.
++	set -- $1
++	echo $((10000 * $1 + 100 * $2 + $3))
++}
++
++if output=$("$@" --version --verbose 2>/dev/null | grep LLVM); then
++	set -- $output
++	get_canonical_version $3
++else
++	echo 0
++	exit 1
++fi
 
-> vim +447 fs/exportfs/expfs.c
->
->    434
->    435  struct dentry *
->    436  exportfs_decode_fh_raw(struct vfsmount *mnt, struct fid *fid, int=
- fh_len,
->    437                         int fileid_type, unsigned int flags,
->    438                         int (*acceptable)(void *, struct dentry *)=
-,
->    439                         void *context)
->    440  {
->    441          const struct export_operations *nop =3D mnt->mnt_sb->s_ex=
-port_op;
->    442          struct dentry *result, *alias;
->    443          char nbuf[NAME_MAX+1];
->    444          int err;
->    445
->    446          if (WARN_ON_ONCE(FILEID_USER_FLAGS(fileid_type)))
->  > 447                  return -EINVAL;
->    448
->    449          /*
->    450           * Try to get any dentry for the given file handle from t=
-he filesystem.
->    451           */
->    452          if (!exportfs_can_decode_fh(nop))
->    453                  return ERR_PTR(-ESTALE);
->    454          result =3D nop->fh_to_dentry(mnt->mnt_sb, fid, fh_len, fi=
-leid_type);
->    455          if (IS_ERR_OR_NULL(result))
->    456                  return result;
->    457
->    458          if ((flags & EXPORT_FH_DIR_ONLY) && !d_is_dir(result)) {
->    459                  err =3D -ENOTDIR;
->    460                  goto err_result;
->    461          }
->    462
->    463          /*
->    464           * If no acceptance criteria was specified by caller, a d=
-isconnected
->    465           * dentry is also accepatable. Callers may use this mode =
-to query if
->    466           * file handle is stale or to get a reference to an inode=
- without
->    467           * risking the high overhead caused by directory reconnec=
-t.
->    468           */
->    469          if (!acceptable)
->    470                  return result;
->    471
->    472          if (d_is_dir(result)) {
->    473                  /*
->    474                   * This request is for a directory.
->    475                   *
->    476                   * On the positive side there is only one dentry =
-for each
->    477                   * directory inode.  On the negative side this im=
-plies that we
->    478                   * to ensure our dentry is connected all the way =
-up to the
->    479                   * filesystem root.
->    480                   */
->    481                  if (result->d_flags & DCACHE_DISCONNECTED) {
->    482                          err =3D reconnect_path(mnt, result, nbuf)=
-;
->    483                          if (err)
->    484                                  goto err_result;
->    485                  }
->    486
->    487                  if (!acceptable(context, result)) {
->    488                          err =3D -EACCES;
->    489                          goto err_result;
->    490                  }
->    491
->    492                  return result;
->    493          } else {
->    494                  /*
->    495                   * It's not a directory.  Life is a little more c=
-omplicated.
->    496                   */
->    497                  struct dentry *target_dir, *nresult;
->    498
->    499                  /*
->    500                   * See if either the dentry we just got from the =
-filesystem
->    501                   * or any alias for it is acceptable.  This is al=
-ways true
->    502                   * if this filesystem is exported without the sub=
-treecheck
->    503                   * option.  If the filesystem is exported with th=
-e subtree
->    504                   * check option there's a fair chance we need to =
-look at
->    505                   * the parent directory in the file handle and ma=
-ke sure
->    506                   * it's connected to the filesystem root.
->    507                   */
->    508                  alias =3D find_acceptable_alias(result, acceptabl=
-e, context);
->    509                  if (alias)
->    510                          return alias;
->    511
->    512                  /*
->    513                   * Try to extract a dentry for the parent directo=
-ry from the
->    514                   * file handle.  If this fails we'll have to give=
- up.
->    515                   */
->    516                  err =3D -ESTALE;
->    517                  if (!nop->fh_to_parent)
->    518                          goto err_result;
->    519
->    520                  target_dir =3D nop->fh_to_parent(mnt->mnt_sb, fid=
-,
->    521                                  fh_len, fileid_type);
->    522                  if (!target_dir)
->    523                          goto err_result;
->    524                  err =3D PTR_ERR(target_dir);
->    525                  if (IS_ERR(target_dir))
->    526                          goto err_result;
->    527
->    528                  /*
->    529                   * And as usual we need to make sure the parent d=
-irectory is
->    530                   * connected to the filesystem root.  The VFS rea=
-lly doesn't
->    531                   * like disconnected directories..
->    532                   */
->    533                  err =3D reconnect_path(mnt, target_dir, nbuf);
->    534                  if (err) {
->    535                          dput(target_dir);
->    536                          goto err_result;
->    537                  }
->    538
->    539                  /*
->    540                   * Now that we've got both a well-connected paren=
-t and a
->    541                   * dentry for the inode we're after, make sure th=
-at our
->    542                   * inode is actually connected to the parent.
->    543                   */
->    544                  err =3D exportfs_get_name(mnt, target_dir, nbuf, =
-result);
->    545                  if (err) {
->    546                          dput(target_dir);
->    547                          goto err_result;
->    548                  }
->    549
->    550                  inode_lock(target_dir->d_inode);
->    551                  nresult =3D lookup_one(mnt_idmap(mnt), nbuf,
->    552                                       target_dir, strlen(nbuf));
->    553                  if (!IS_ERR(nresult)) {
->    554                          if (unlikely(nresult->d_inode !=3D result=
-->d_inode)) {
->    555                                  dput(nresult);
->    556                                  nresult =3D ERR_PTR(-ESTALE);
->    557                          }
->    558                  }
->    559                  inode_unlock(target_dir->d_inode);
->    560                  /*
->    561                   * At this point we are done with the parent, but=
- it's pinned
->    562                   * by the child dentry anyway.
->    563                   */
->    564                  dput(target_dir);
->    565
->    566                  if (IS_ERR(nresult)) {
->    567                          err =3D PTR_ERR(nresult);
->    568                          goto err_result;
->    569                  }
->    570                  dput(result);
->    571                  result =3D nresult;
->    572
->    573                  /*
->    574                   * And finally make sure the dentry is actually a=
-cceptable
->    575                   * to NFSD.
->    576                   */
->    577                  alias =3D find_acceptable_alias(result, acceptabl=
-e, context);
->    578                  if (!alias) {
->    579                          err =3D -EACCES;
->    580                          goto err_result;
->    581                  }
->    582
->    583                  return alias;
->    584          }
->    585
->    586   err_result:
->    587          dput(result);
->    588          return ERR_PTR(err);
->    589  }
->    590  EXPORT_SYMBOL_GPL(exportfs_decode_fh_raw);
->    591
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+base-commit: f5e50614e39e74401b492a2fa125f2e2b6458bab
+-- 
+2.44.1
+
