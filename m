@@ -1,252 +1,106 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020087.outbound.protection.outlook.com [52.101.196.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBCD21643F
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 11:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728646866; cv=fail; b=DJO8qRF3pYkUd6SrPpYzqOGNhqqSMbb2svaqK0wywSC0CNpOuXmmEK4jv3MvDn2cydcfMrPeRVZEusixc2jbNOw3rNXM3MsitJi0J7eqJtnYsLKTfNCOgiE9sAE9zyYXNV4stZICX3EfFQB+MsLDXH2sRacVCiGIqxiHEcV4Dws=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728646866; c=relaxed/simple;
-	bh=JcccRRsPniAGLkqMnQiqfz5bSm7USb+wXGcqWUMU1jo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=N8V8AQuAi0qb+ws8B6EuSuJ4EsO38aNKUcKp57OfkD3+kzwSYB4yRSqinQNVJmCceBwC1X5Fe8rneccIt770qyHwT8oJl/JqwWJRf7zWSQ83RwiGTb/u+kkQlUOd9C5DTkdPS/NOuVgQKzlxuCIz7e9b97I1eGOEvdraiA7pzwQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=NMnumxg4; arc=fail smtp.client-ip=52.101.196.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A164320ADD3
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 11:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728647642; cv=none; b=IQoYByyciii0240gafhcj9jmrJUM9IovQjDNQgkPOTeHWE60xuhDTL55uqa4RwmmYORwPkwKfdm2/ED86fPhTuFvw5LD86doiPrUflecGyAYrHkH9SabbTWdvEAW7I6wuu4MJ32ffGMwGb35RGAsJTvBhhl8dFbGnugW/WfWBRA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728647642; c=relaxed/simple;
+	bh=SPK6c2GAoBBXdan9Km9M5WuJLVPVEFl8rnDe//urjWY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p4iCeQDtgNNEt3l4WXWoh8tX0YTe7CgLeJJ4NrP5A4erSBMEjXGbSuDy4CA5xlbcfdAJAXzdpB7Tf0e56V/n+cFnUYXW88lDgz/W8y/PcTkKeLQyYxCOwmxeKhy2XwMQTMk00OGAXi5mx+OKO19ZxgEN6jPXLO33nVpHvvazIGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezhpyUbP; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="NMnumxg4"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J2a4mh8ikrTgoSsMS8Ncod8DH3VysJaJKpTWi2DVMjRevMCS9Muu7vXV/s+J4/ct+kPIo/3KSVimVUBVpAeJDSDSXnYOrxpTxPNDuvDQdlCMb9+I6hMKrIycvCNm4yfxQ5eE/tFmSOwZ0RwpcmSpzlCvQfV25zDJLRieT6Yh309WXl0V+tRCa5yXXoHEngn0rM/vU7IDp0QHdq3xQzK0hxfMvPcffJX+P4Kq6L3j3nd9Xw0TLiWUL4msn0tAP4R+ixwwwVTQFI82yV+63dj77bXC00xo/KX3hmsPG87Wv8adbejCkGYIWTtRc4VY4mtm/veySKIdMbpae+qxZ0+7Hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ckjQRWwDT/eRcydao40iiwrZxOFMUcFU8yVTIXP/b7E=;
- b=hAP0wKRQdyfhYpCHzKU1XGLajp5ha9W+GBmrOzaekiajpRc17ZuXiD9C3DsBsrRDJgkqVDzxMTy22OS+6q8rY7ZBEGa93sjLSpLc+bIIdluonUtcs1Y0eEJeitexL0l4RJwAfpBkifjFym0x2mvrKpuNR3RB4PedOO12WXWzJy+Xf+EGTC3bYenbNEEiXjQ7VkzatLoKNWZbMd1eglhju2NYlGYqRRXxnq4/HN0fI9xH5t/ARXJQmIE4kZj8ukhWz10922VyD0bBCQjNrmbxHbmntGGRyt5qzIwx3WPemXf+q8RVCiItj6gvNWm3ujTRO66XS9ulbogh4AEEzfvKhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ckjQRWwDT/eRcydao40iiwrZxOFMUcFU8yVTIXP/b7E=;
- b=NMnumxg4J6QlO+803oTJdLNq34JzqzXrZ2wZLwzPRI/sWg2REV/H/Eqw8U6ldJxu7AqBzAnCGcibFURcm8Ix98B5uPhR7y4liIsJEzBaK/B2XMf5C6LuD8R5Z4rOdBbjw5mjf+3vOmHfgoDQJAM0LsOnFYK4lkE7zkWPBmpgHGI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CW1P265MB7424.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:217::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.20; Fri, 11 Oct
- 2024 11:40:59 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%3]) with mapi id 15.20.8048.013; Fri, 11 Oct 2024
- 11:40:59 +0000
-From: Gary Guo <gary@garyguo.net>
-To: masahiroy@kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Tejun Heo <tj@kernel.org>,
-	Yoann Congal <yoann.congal@smile.fr>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Jens Axboe <axboe@kernel.dk>,
-	Jann Horn <jannh@google.com>,
-	Mark Rutland <mark.rutland@arm.com>
-Cc: kees@kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	rust-for-linux@vger.kernel.org,
-	samitolvanen@google.com
-Subject: [PATCH] kbuild: rust: add `CONFIG_RUSTC_LLVM_VERSION`
-Date: Fri, 11 Oct 2024 12:40:33 +0100
-Message-ID: <20241011114040.3900487-1-gary@garyguo.net>
-X-Mailer: git-send-email 2.44.1
-In-Reply-To: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
-References: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0548.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:319::11) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezhpyUbP"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-71e018dfb5fso123216b3a.2
+        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 04:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728647640; x=1729252440; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SPK6c2GAoBBXdan9Km9M5WuJLVPVEFl8rnDe//urjWY=;
+        b=ezhpyUbPUJrTYlJmaHdyY6cOzOKM8Q3wuKGX6G5MOuEXSjw7Iu9cMc30B9QK0IHYkx
+         xVSuxeUAjaOh65UwmJN5H4KUMvfl2SVOCq8wMf46El5rEa7d0S/VdWeKf+3Qxc2IQQHQ
+         lQggdujOOX2XaU8ihymfbGfWe/IVaNZygSDLUZ15lGi1kiVFDGMPHygZf7luXWxO1oOf
+         ZijnpPkMd4hyHnV2lURStxb4DscPa5FqPDtX2S59EQYkMVzzjgkEI+5rNQB3otE/3HHE
+         EuI0frM2AuUae9aor+A8g+8Quu6Kh8qeSuCdHSJNHbDD4Ieyo7//RecMCiD6pobmsMWO
+         Hy6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728647640; x=1729252440;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SPK6c2GAoBBXdan9Km9M5WuJLVPVEFl8rnDe//urjWY=;
+        b=rKL8fIwPjQJYZHcBb4kJwNJl7n0eajDfM9ASAl2JgIzr5eX0YTQ+KZ3486haOcMHU4
+         jX/t7Hk4rDKWB7nTSQ6Htmlon2D5XN90L/oDhev3Gra4sofQN1Y0JOfOGvc5zVEcvMId
+         bd1eQ6cJqWFl/sBsa0spwl9HSTlyUiQuTaCIf/SECzDYSY4KMmQTVjcwIuPSoFdsqne5
+         2+mlTQQuHdf4HUcB3qF3Z6cSqRMcrq2ABg5hn1EJfrbE51OPXK2sE4pZJ+Xqtp559/ij
+         McSmHY1Oy0Un7T4OJklvKwqOxxf+R7QYFiduroWp1ctDe9+hnEAHTmQ6jZ/PYOreipN9
+         6Tug==
+X-Forwarded-Encrypted: i=1; AJvYcCUS2kadqXsw1jylGUM4TAVFJX8Ssa57HuSGp/56GZy2b0GzRzFqunxqCI+jsM7gifSFh7VK@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHee3i9kvmRKTbu7+potKdp2A8KHAuRuQXGjRUYx/eAZx13Cnt
+	1HFDr6W4qtq6xIigrq5Agjoi0WLs589p4t7bRUP6m/uH0PajxWyclYv+jtWjKdq8ZvernryIQ5G
+	j/T9qQzm6cvdZP+f30IIkMag2sGs=
+X-Google-Smtp-Source: AGHT+IG6mdYSQEBCdNPomgnZ5qhOSdJ27W22RJLc7pOXm6QMfyY2DvNJ+8gPgure2Y2WOI5rcCP9gbXFeGoIxKRb3d4=
+X-Received: by 2002:a05:6a00:2d09:b0:717:8b4e:98ad with SMTP id
+ d2e1a72fcca58-71e37c4fccamr1660879b3a.0.1728647639851; Fri, 11 Oct 2024
+ 04:53:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CW1P265MB7424:EE_
-X-MS-Office365-Filtering-Correlation-Id: dbb6152f-24c8-49e7-a1d9-08dce9e99397
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sZxygTeTy5E1tufDO/YH3B/EMT893w5t3QGPu0uOoIWM496+EMyVYofuQ5tG?=
- =?us-ascii?Q?rLa8qSBcTk+UosQJG48Yeox98paeotySXhUgOl764Tj826mEKcevZPdJcwlu?=
- =?us-ascii?Q?5eXEHc7l0nOTc7M12kYtRyR0h2Z/nr1s4gTepRcZTbe/tKbVbY3ZyK7QBFDO?=
- =?us-ascii?Q?7B4RGPg6q2CzNQSyLRwChmXK2FDXaEPu6XU4Hc2EO+y81anTVqTUxKixSgSD?=
- =?us-ascii?Q?w1YB9I+avJQwMEq3uC3fb8tcr4UmznAj1mYB6KE+37sopGgTr3A63AnVh6i7?=
- =?us-ascii?Q?alzzBTIhCwlf+ea4dgZHe0SB7iPKG6GNX8r1BqghQ8RuUP/K0oxjUAtJ7xr7?=
- =?us-ascii?Q?2FNBFNNx8UUKpeTW1CkRq+JspK8N4GIWIZi3eBoa7g0ar/L+0iZhuWwt0UG/?=
- =?us-ascii?Q?7G3BVeVNklczn4aV9sSSm+JVuLlmgpMQ3d/RQfW51N6pPly008YRmY8JIaJB?=
- =?us-ascii?Q?ljg/TB19IQkx4Qh+3dlTuSJNz1Fsp7qy/VRHxaUPTnxWIwae9yjMVtwLxGh7?=
- =?us-ascii?Q?k4bnANietEQKQqvRAsLBn7Nr4CMXsy04w/4F367jVccELDB/am2BOhQ/UW/s?=
- =?us-ascii?Q?wWMi2Zj8nwpQ4O7eCR1kFYzen1pAb/t8EhMMnZXplNxW7aH+RmqJ56PIX3MP?=
- =?us-ascii?Q?GKZN8A5zCy3axhjl4KGzFzdjlkK90oanHa+O6foTJNGic5A/9s2eUskdZyoT?=
- =?us-ascii?Q?k1Gq7wL1pFqeb7jLmTDVg1zXuPKY8OZyPbuBDXP2nT/lOX668J/C9w3iWctj?=
- =?us-ascii?Q?Pu7Ci7DsXLEY6TY34DAJvU3js2z1W7YhUyIGC8EJIs0JXUL0jbf0t8d1Hz3I?=
- =?us-ascii?Q?kgve8Xf4nQjoUbI9TkKB8DtGqGR68NsaGu4K4gZ+qfOlSijts8YlvjyMLE4N?=
- =?us-ascii?Q?zODiA8vsEWx4BdkpvXJ2S1F2th0Ot6yqEoTUBc0+6jYBKGZF4jpMiCDDINol?=
- =?us-ascii?Q?OyEJ9pEfKMovrOu6qB9OG/4lOrHQK5N2NOIqnyeNmSQHOJo1cpEba3UVsSzS?=
- =?us-ascii?Q?LqS/YztUAS17FRqisey5jOZEkw31OBsQIlgXuyN4kb285JKcM3JvcHEXeR/o?=
- =?us-ascii?Q?2KU5THXPLlxOGBF9Uz7CLKcFqkn9sDXGawRpSHtQqdcEP/5ngOPTsUUzhoI1?=
- =?us-ascii?Q?CnxDmnPvcj2mecO1AFF4X3k56c4i2qARXTRX5Idaa+CrYB/OA6m3iFT/Nu6R?=
- =?us-ascii?Q?47aD0QK0M0aW5l7yUxB5HUe7VmbagPPMgHz9InbI6rL0oNqefJ0w2lW+yB0K?=
- =?us-ascii?Q?nlhVxZFLnkozeKWRaXMmls5cZi1SWDpbidE+AeHTf+PNC9dseymfCuJGwjEB?=
- =?us-ascii?Q?oUagcklAZl0cdElzV33TmPO0?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?uGg1tmJn72KCynIwO3RuuILZbwCNWlmDELgnsWiopu8R+y/Z//fsV3hDwQk3?=
- =?us-ascii?Q?C2zF64I/XROm4aTYiCC0AUmQdcKKYtvWmRNAnQ4QKa+lCIzD5hT5irhIQQ1v?=
- =?us-ascii?Q?nj53rN34oGEiS0F0Km9FWXuJH46CzwUxHOAi3o7A6olMXIRZwed3jmV+/gpE?=
- =?us-ascii?Q?MQqBPcdT+KZT7rVkCf9paSiwcBk4UWT4nzrJFgdlpWX1A8A6fmalgiK8WDCt?=
- =?us-ascii?Q?8myZodUbvt8ze+cZdj9B1JOgaRLaDSOUozmboEcF37RD13rNQGg1HeXMMd9F?=
- =?us-ascii?Q?/IpKybWsVDtWsn9RzJcaEGoF6r4mAHnm5If4fnEH6xH6y+lw4WGPt2+se0l6?=
- =?us-ascii?Q?KNgG0VlCctIwlBUDb0Cw9pN9c1zWMlRexYyAW0LgmJoYNM8tblvw1RaAaHrX?=
- =?us-ascii?Q?Sosw/siKzbp9PQj4nLbfFFWX0F3lKrWUYVCIIt/atXQgYYruoQNQVQLl4NkQ?=
- =?us-ascii?Q?FBcrx0qhreYUdvw8k7MNa2D1DFqP8MYPL+i+yUZHTJZZRP+SZKcmgKhjzYyI?=
- =?us-ascii?Q?AtTSvW0TqJJXTcwzWmj+BJQnZLKg2Vjie9bqDyVaxCkWShwMoBmOki5D3ciN?=
- =?us-ascii?Q?rzXuqzNHu4QRToxodW5IFne585Z1bHC69tXDZX69fC2OMM3l9kfW3kpDJGR0?=
- =?us-ascii?Q?t064xuWNQnaUbIpRWWg5lznP12XkFvtnMyuyY8DVhKltWy3AbhwYUXhnk1FT?=
- =?us-ascii?Q?RZ2RHVIURCNQajQKh+X2y/LxdkmB+7yiDqxV2xDy8+ci4YenMoKjO/2q/LJ8?=
- =?us-ascii?Q?NXObuPzSayLXJdpICzJ6h5jx2gW4gpRHRNf+3SWAyAjuW8QXxr1sUB8P8BzF?=
- =?us-ascii?Q?e5VPkVlKHXcSQMsbLzcaZH7n6JEMen8cFU0H2+Cnc2D2yvmn+zg3UEl1kEDJ?=
- =?us-ascii?Q?IMT0zUofk5fukWqUu7c6vucn2SfQx7yrDbnyKTnHfU4iSDOWK7Q+miACmcmw?=
- =?us-ascii?Q?GvC9YLYufoCARWU3D53qThT9M8g3AZHXn4YSQifSd3qUNASXWT8WGNBGYpIH?=
- =?us-ascii?Q?bhACTJ10/i6iXaTOcGVcDeNlwouQhlf3zImz8WFrIb4/fqmYNZo4yTiu6bXc?=
- =?us-ascii?Q?ajHbvM1Gg3Nq0gX0jWlNdDOoy/3b/Bh4u6NUDHzfsboeHIq5sTQr1dwCXAaS?=
- =?us-ascii?Q?ML4TsGP6VR+TqpGmWXEph039J6AScImcKCgz+GTIPv9jgcGa/k9ULt6e6HBy?=
- =?us-ascii?Q?KZqHpdhTOPpZay/6E9lYNSJftTo4ZxKAp8MeVKwUlIw6w1/zWBnvJluajyXB?=
- =?us-ascii?Q?38SQG3SC6yYN/qaXprbZ6jVHEU2s3rs3Hx0wPzcMDAC+eclcDJ4cFlTAP9Z+?=
- =?us-ascii?Q?VPLSwyidOGVEK8FotwE+m74a2m3f18poEQmub7dR6L1olRiyuPhyx56Q1+MA?=
- =?us-ascii?Q?kBjaNdru0wK/F8sb/yzfADGm9L9SiJnA8o8Yr8BuzHcZO++yKIZF8uBZOqCK?=
- =?us-ascii?Q?gVfLyDVaCiaJrb8CyOvKgUAYPuMa1N7fc8FmVyhOgCfCaWoFI/HB+FvwMj7y?=
- =?us-ascii?Q?/PK9YeNXlRDYQFj8stn8u0FvqTdhr+4JNOxOjhofQw9OWBOpQYBCpP8GlP+5?=
- =?us-ascii?Q?UgOU51QlYEGDdKEhzuYQ1whABlUW0mrPiExjYKe8?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbb6152f-24c8-49e7-a1d9-08dce9e99397
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 11:40:59.4227
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0oxEZqg8jiXjBQMngJ3CfkhGovWiatj3gmTyiERAz/PzDjcULEYBMklupGv+qaV5P37PtN+hEtWAgYTjVU6bQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB7424
+References: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
+ <20241011114040.3900487-1-gary@garyguo.net>
+In-Reply-To: <20241011114040.3900487-1-gary@garyguo.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 11 Oct 2024 13:53:47 +0200
+Message-ID: <CANiq72ne6F1HpoA5gLYu9K0CcNB13JUFK5QgF_Cf4tAyvOm4qQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: rust: add `CONFIG_RUSTC_LLVM_VERSION`
+To: Gary Guo <gary@garyguo.net>
+Cc: masahiroy@kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, Tejun Heo <tj@kernel.org>, 
+	Yoann Congal <yoann.congal@smile.fr>, Randy Dunlap <rdunlap@infradead.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Jens Axboe <axboe@kernel.dk>, Jann Horn <jannh@google.com>, 
+	Mark Rutland <mark.rutland@arm.com>, kees@kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	rust-for-linux@vger.kernel.org, samitolvanen@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Each version of Rust supports a range of LLVM versions. There are cases where
-we want to gate a config on the LLVM version instead of the Rust version.
-Normalized cfi integer tags are one example [1].
+On Fri, Oct 11, 2024 at 1:41=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+>
+> The invocation of rustc-version is being moved from init/Kconfig to
+> scripts/Kconfig.include for consistency with cc-version.
 
-The invocation of rustc-version is being moved from init/Kconfig to
-scripts/Kconfig.include for consistency with cc-version.
+Yeah, I am ambivalent. Dropping them would minimize changes and avoid
+introducing something only used once, which would be nice too. Happy
+either way.
 
-Link: https://lore.kernel.org/all/20240925-cfi-norm-kasan-fix-v1-1-0328985cdf33@google.com/ [1]
-Signed-off-by: Gary Guo <gary@garyguo.net>
----
- init/Kconfig                  |  6 +++++-
- scripts/Kconfig.include       |  3 +++
- scripts/rustc-llvm-version.sh | 22 ++++++++++++++++++++++
- 3 files changed, 30 insertions(+), 1 deletion(-)
- create mode 100755 scripts/rustc-llvm-version.sh
+> +if output=3D$("$@" --version --verbose 2>/dev/null | grep LLVM); then
 
-diff --git a/init/Kconfig b/init/Kconfig
-index fbd0cb06a50a..304e2bd32bfd 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -62,7 +62,7 @@ config LLD_VERSION
- 
- config RUSTC_VERSION
- 	int
--	default $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
-+	default $(rustc-version)
- 	help
- 	  It does not depend on `RUST` since that one may need to use the version
- 	  in a `depends on`.
-@@ -78,6 +78,10 @@ config RUST_IS_AVAILABLE
- 	  In particular, the Makefile target 'rustavailable' is useful to check
- 	  why the Rust toolchain is not being detected.
- 
-+config RUSTC_LLVM_VERSION
-+	int
-+	default $(rustc-llvm-version)
-+
- config CC_CAN_LINK
- 	bool
- 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
-diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
-index 785a491e5996..33193ca6e803 100644
---- a/scripts/Kconfig.include
-+++ b/scripts/Kconfig.include
-@@ -65,6 +65,9 @@ cc-option-bit = $(if-success,$(CC) -Werror $(1) -E -x c /dev/null -o /dev/null,$
- m32-flag := $(cc-option-bit,-m32)
- m64-flag := $(cc-option-bit,-m64)
- 
-+rustc-version := $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
-+rustc-llvm-version := $(shell,$(srctree)/scripts/rustc-llvm-version.sh $(RUSTC))
-+
- # $(rustc-option,<flag>)
- # Return y if the Rust compiler supports <flag>, n otherwise
- # Calls to this should be guarded so that they are not evaluated if
-diff --git a/scripts/rustc-llvm-version.sh b/scripts/rustc-llvm-version.sh
-new file mode 100755
-index 000000000000..b8ffa24afea8
---- /dev/null
-+++ b/scripts/rustc-llvm-version.sh
-@@ -0,0 +1,22 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Usage: $ ./rustc-version.sh rustc
-+#
-+# Print the LLVM version that the Rust compiler uses in a 6 digit form.
-+
-+# Convert the version string x.y.z to a canonical up-to-6-digits form.
-+get_canonical_version()
-+{
-+	IFS=.
-+	set -- $1
-+	echo $((10000 * $1 + 100 * $2 + $3))
-+}
-+
-+if output=$("$@" --version --verbose 2>/dev/null | grep LLVM); then
-+	set -- $output
-+	get_canonical_version $3
-+else
-+	echo 0
-+	exit 1
-+fi
+Similarly, I wonder if we should use '^LLVM version: ' here or similar
+to minimize the chances the "LLVM" string appears elsewhere in the
+future (perhaps in a custom string a vendor adds, though I would
+expect them to add it lowercase). We are relying on having a $3 when
+splitting anyway.
 
-base-commit: f5e50614e39e74401b492a2fa125f2e2b6458bab
--- 
-2.44.1
+Depending on what Masahiro prefers, I will take this one or the
+one-invocation-only one.
 
+Thanks Gary!
+
+Cheers,
+Miguel
