@@ -1,60 +1,136 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006802185B0
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 14:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8F7219C8C
+	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 14:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728656733; cv=none; b=aHcP6d8/boE2n+bDvnK2rIuSQAVX7thx4DiBeKrBTSjuUZSv6mDuDvB9LHxSE6kawA08h+C2NGYZSjqjUnD6cAJZJulwCUS7nU8pzE7SWYZjYFRnKKvuKjl2xiLHR9YG/MMIgxbJJi43+NCrt+9I0BTbE8vDiD0JTaEPd6mNeMw=
+	t=1728656875; cv=none; b=jZ48/tDdp6JVNqhuQYbULoALfR9WRxH9Zh3RyJybrMOIJzmbvK5L75eoLNJjqrdBTMmdvlcZxYzKqJgJbQQ3L01EjyVidNh+NS7THepxXtRogMUy/4L2bPrZcqYf9q4Fc7LGBsUai3pyJVHfy4zysiQhp28t7r8xC3iwzmrMoLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728656733; c=relaxed/simple;
-	bh=Kg5c6UvEtUhEc5DMSJea3v9/rsk6G1aNDbZ0lXvgIlE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPKUP0Yt7RRRgOmQoVP4tip7tO1IWiXJnf4vfw31iIaNRMEyUqyyIspqXQbb/YyQuyvUZnhSy+snulkqqxF2d/ifhENmQojX44Onh0kO5yFDIZUJol6FP196dtTchl7ZI4lAVQYQ9UZgXWGHCT0Hu3+WtJxpfTOWOCD6hzDV76k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1524ADA7;
-	Fri, 11 Oct 2024 07:26:00 -0700 (PDT)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C6A83F5A1;
-	Fri, 11 Oct 2024 07:25:28 -0700 (PDT)
-Date: Fri, 11 Oct 2024 15:25:25 +0100
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Su Hui <suhui@nfschina.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] firmware: arm_scmi: fix the double free in
- scmi_debugfs_common_setup()
-Message-ID: <Zwk1VUXi5BBeU9n9@pluto>
-References: <20241011104001.1546476-1-suhui@nfschina.com>
+	s=arc-20240116; t=1728656875; c=relaxed/simple;
+	bh=L+gXCKny+WaarEbGPHZM3dwhDvC1Mp2ZZsPvrE1lgBo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=tlNcaFutFTIspPDfo/NsPYTsImJMc+5FIbuY9R5/oqcx3W8QYVyHDM8m0CyyN3NUz4SuLsl9gTqSZzBwB5+SBPmkQK6/Qx8pCuW+UDpiu3vrvLFQxHJzFLBHJbYqTKTkgIJ6lKpnfQjSBq+AuyQnaye8MN0nhU7bB4f9xiKQb6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WHVjerdU; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WHVjerdU"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49BAw7hA006577;
+	Fri, 11 Oct 2024 14:27:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	zLNY1QKiA67jtVorzKmEfKmwe+WAqPbBGq8S+bpyAzo=; b=WHVjerdUlVtW0KCl
+	4Mmxrn7fqWOKdGLTvuSQ7eOjr1shNhGb3FwZ3egWxs/g6Qlv+CKrtIvps+CbGtq3
+	+BR/EvjprAGPDGkz7KJSqEJ67eI/2NAnvcYeai6duKssWbkx0cDiQwhz7mdblEc1
+	AFZvnoHgBBwUw5qOZO2q5e+w5hVUy8v+G7FHAG5SMFHyVZRPHi3wTs6K7YvNotwZ
+	faoXMu9wKCNQKjm0O9Ngk37uP0XA52Beojq2Hxn6M/Z1OFRIsJWbozEkBCbUhkSj
+	8/0BnYOcfOy86+1sVonlUI5IfkvFEyR46B9iQQU1LBEkVIlZCwTNXbQ2/vPFltBA
+	NnsPMw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 426t7st170-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Oct 2024 14:27:46 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49BERjhn002310
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Oct 2024 14:27:45 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 11 Oct
+ 2024 07:27:44 -0700
+Message-ID: <468f05e2-1717-3bd1-2ccb-280865180b0c@quicinc.com>
+Date: Fri, 11 Oct 2024 08:27:43 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241011104001.1546476-1-suhui@nfschina.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH net-next 3/3] accel/qaic: Pass string literal as format
+ argument of alloc_workqueue()
+Content-Language: en-US
+To: Simon Horman <horms@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        "Paolo
+ Abeni" <pabeni@redhat.com>
+CC: Woojung Huh <woojung.huh@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jiawen Wu
+	<jiawenwu@trustnetic.com>,
+        Mengyuan Lou <mengyuanlou@net-swift.com>,
+        "Nathan
+ Chancellor" <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Carl Vanderlip" <quic_carlv@quicinc.com>,
+        Oded Gabbay <ogabbay@kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <20241011-string-thing-v1-0-acc506568033@kernel.org>
+ <20241011-string-thing-v1-3-acc506568033@kernel.org>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20241011-string-thing-v1-3-acc506568033@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PSMKLJF5TTSph64DwS_tuqCkpSa_1WXE
+X-Proofpoint-ORIG-GUID: PSMKLJF5TTSph64DwS_tuqCkpSa_1WXE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 clxscore=1011 adultscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410110100
 
-On Fri, Oct 11, 2024 at 06:40:02PM +0800, Su Hui wrote:
-> Clang static checker(scan-build) warning：
-> drivers/firmware/arm_scmi/driver.c:line 2915, column 2
-> Attempt to free released memory.
+On 10/11/2024 3:57 AM, Simon Horman wrote:
+> Recently I noticed that both gcc-14 and clang-18 report that passing
+> a non-string literal as the format argument of alloc_workqueue()
+> is potentially insecure.
 > 
-> When devm_add_action_or_reset() failed , scmi_debugfs_common_cleanup()
-> will run twice which caused double free of 'dbg->name'.
-> Remove the redundant scmi_debugfs_common_cleanup() to fix this problem.
+> E.g. clang-18 says:
 > 
+> .../qaic_drv.c:61:23: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+>     61 |         wq = alloc_workqueue(fmt, WQ_UNBOUND, 0);
+>        |                              ^~~
+> .../qaic_drv.c:61:23: note: treat the string as an argument to avoid this
+>     61 |         wq = alloc_workqueue(fmt, WQ_UNBOUND, 0);
+>        |                              ^
+>        |                              "%s",
+> 
+> It is always the case where the contents of fmt is safe to pass as the
+> format argument. That is, in my understanding, it never contains any
+> format escape sequences.
+> 
+> But, it seems better to be safe than sorry. And, as a bonus, compiler
+> output becomes less verbose by addressing this issue as suggested by
+> clang-18.
+> 
+> Also, change the name of the parameter of qaicm_wq_init from
+> fmt to name to better reflect it's purpose.
+> 
+> Compile tested only.
 
-Oh Yes...my bad, Good Catch !
+I'm not sure why this looks like it is targeted for net-next.  I'm not 
+seeing any dependencies on net code, nor is this a net driver.  My 
+confusion makes me think I might be missing something.
 
-LGTM.
-Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+I'll plan on independently taking this through DRM, unless something is 
+brought to my attention.
 
-Thanks,
-Cristian
+Regarding the patch itself, looks sane to me.  I'll give it run through 
+on hardware soon.
+
+-Jeff
