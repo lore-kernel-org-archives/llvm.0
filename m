@@ -1,107 +1,82 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0ED820CCDC
-	for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 09:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1929020FA9C;
+	Fri, 11 Oct 2024 09:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728639651; cv=none; b=ERzquiWjOewCNSUR76/rzSJmIw6uF7/o6P7bc2q0p4ekm0/l32VSakDhf9NI+4b3D05qOPf7rSe0tFQRV6gHNJRaFvmh0m1rvFSdB7jKI0Z+OM3yUcf5uSBN/cX4xJaESH39qUv7qcK7/uCeLMOWf5CfRYE4bHANk9Or1JbuApE=
+	t=1728640639; cv=none; b=kTyl2IgecFr7QTtP0PmWLhJ4MMcI0OOJ2E43rEsvt8mQ6jkzRSFkt8m/yjkyitn+NbSuhT230o6auIa9JDuhHHqM4AP4ijZmk+V/Si2K02+qtraNMCLxAvzfw4s+BIIK71jQU8fCTP4Rqec3EUmSx/7lSMxLuOTEH3CyjkniuDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728639651; c=relaxed/simple;
-	bh=iQNhq+CQhhscdKGYDFLYkitEdQ89YDdaFMFypvyo1dU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fRdOglqVAtAE3Lw5vNNXvtvYPCcmr1JuFjHDhbOlRq7evdSLBHOx/ALuPihJTqIL3YOA5faJNKW/M9Z3hn173rl5CaqaS9GFPxcrCDurtiSgbrtUxz4rhDQiBYT6xfEv2pcLDBpt0bWxc+OsUjsHsmwbzd5Jq3joY5gWbK7yEcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lCCUEkBU; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728640639; c=relaxed/simple;
+	bh=Rz/W9QlH6CCASPfisYQo2Uxdr9sj88V+CDnZpNAOLWY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CgBtZFnMANesP8Y20oUq+pDa8o+1r/gsalTXyMRWPn37tGWWLKWtnENhCqhriuNQHyTMDkCCqdNXlBzrXPWNiY3UevGic2lAR7QWKBWvQ912I5dhrUxoulPxJ6k89gu9xGHFHMMEhNV2nA1TyV+5BtT9ZPfAJ2HHWHxBBjsVcB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uu45pac7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lCCUEkBU"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7b10ed5e7cdso187277485a.3
-        for <llvm@lists.linux.dev>; Fri, 11 Oct 2024 02:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728639649; x=1729244449; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7AhjpOVVAnhOPJgZn0n/MxJSbqlC44iwzEWSMXLlrU=;
-        b=lCCUEkBUUsrshd+aTnwGrKgtjW1HJ7QeNZW7qzX1i5U5w43M2ic5VpQt2GeX5kOByH
-         x9pEAqZSKrTU1xb7OUaudBNQi0G+F3jMDRECXsPO/Ro4sMZCtFhOGrIrzlzkJOSJ/Yqf
-         dKPrHDoy0PAP1irPDbLq9dROR4fffl/GBTVFwMeSbGadR9+Z7LrotpDdTwNvNzNpook9
-         bQ3dh+0ofiPmRwzx7fAwAtWq63hA2iWaEsWzy4lJUFJLbCfuVBfiUaTPS7i0KRzRUUde
-         KZZt8S/XZkVQ7BgpEhmbXPjDmpwagQrgPUeUTyO8Qt/3N0y8G3UBhHm+InYklFTDPgl/
-         0uvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728639649; x=1729244449;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O7AhjpOVVAnhOPJgZn0n/MxJSbqlC44iwzEWSMXLlrU=;
-        b=O1bT7fqtekyfegiLci6BrXvSUtpfGUNuLgqKw5uwii/lrelSz7wP5lq3oYi8rcN4q8
-         fUWGgHV8A27px9IxinwXlubfEYJnhQtO2QUvuHbeMofs3E7bdo9aau8D8oipjaYUn10G
-         t+tFojnx6SIFI3U+65Ptp094uBsPXmBO2Z+TfqGBnaGXg4Xfa2mQjsqkg0PI9cNa4PHq
-         HhO6MhUsgh71QEflLRReceSZAW7o32OFI722wv1+8RMbx1DDxm4Iue2nC/AnKVh01gJ1
-         OyuzQBxRPxi0ErS6EYUfDey5QT8Pzns7FxskCVUkFMEdUcfVXftjxuD2grn7/a4nqJ8/
-         Bklg==
-X-Forwarded-Encrypted: i=1; AJvYcCWSAhE2wFju25btViJ1U518cOcc9hwitszbJYq/MUlMy6yTPa+HDk0Bz78V18qApttHu5cl@lists.linux.dev
-X-Gm-Message-State: AOJu0YwUSre7VI8Ac4t9avObZjQbPiDEsMw/rFaZS+G8CODJCtsSntj6
-	K5ZEQgD9+7/nJnJjM58/+J5CSH0be4ogItrsiHU2/fHsSLJ+NK/z
-X-Google-Smtp-Source: AGHT+IG/+cAgSQ+5fGXIcN1uMcpXrVrmlk8jdj2JQFkFspeYwHXnn69GCnIs8Iu6eLdEN3k7633Y6A==
-X-Received: by 2002:a05:6214:449b:b0:6cb:e770:f50b with SMTP id 6a1803df08f44-6cbeffc1ee7mr36700466d6.33.1728639648775;
-        Fri, 11 Oct 2024 02:40:48 -0700 (PDT)
-Received: from ernestox.. (211-75-139-220.hinet-ip.hinet.net. [211.75.139.220])
-        by smtp.googlemail.com with ESMTPSA id 6a1803df08f44-6cbe85a5b7fsm13855256d6.2.2024.10.11.02.40.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 02:40:48 -0700 (PDT)
-From: "Yo-Jung (Leo) Lin" <0xff07@gmail.com>
-To: 
-Cc: linux-kernel-mentees@lists.linuxfoundation.org,
-	ricardo@marliere.net,
-	skhan@linuxfoundation.org,
-	0xff07@gmail.com,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vasileios Amoiridis <vassilisamir@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Angel Iglesias <ang.iglesiasg@gmail.com>,
-	Adam Rizkalla <ajarizzo@gmail.com>,
-	linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] iio: Fix uninitialized variable
-Date: Fri, 11 Oct 2024 17:37:45 +0800
-Message-ID: <20241011093752.30685-1-0xff07@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uu45pac7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F0D7C4CEC3;
+	Fri, 11 Oct 2024 09:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728640638;
+	bh=Rz/W9QlH6CCASPfisYQo2Uxdr9sj88V+CDnZpNAOLWY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Uu45pac7QlRCjDze5nXkdD3zdJRa8iASemsM6nXnwldHPXwQ5b4L/JUsH+wbmbNDw
+	 oDP2kOGu7RArTS+Fb33fCO2Gv8DpZAkRZVi1H9NwVfXsU605YwWCA9/aebTPMNdYql
+	 EFW9ycJ7FMxOw64JIHx2n9Wkg0EZ+u4yHVWMsFwwDO4dQoZU3OLiFiw04z5TmlqAlU
+	 1ixVxAF0QTTeo83suulLa4SEDDi4zKY3gCc4Hy4P38PkPbr/U7KLysbkQS9eF7SY50
+	 nJ4kZdICJgqAyx53rkUtiB6EOM6EVQsfqBH9gHUQJt2oesInVFBGMPKWm0lmz552IV
+	 0DWKPXb3dXhCQ==
+From: Simon Horman <horms@kernel.org>
+Subject: [PATCH net-next 0/3] net: String format safety updates
+Date: Fri, 11 Oct 2024 10:57:09 +0100
+Message-Id: <20241011-string-thing-v1-0-acc506568033@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHX2CGcC/x2MywqAIBAAfyX2nKBW9PiV6FC22V62UAlB/Pesy
+ 8AcZhJ4dIQepiqBw4c8XVxE1RWYc2WLgvbioKVulVRK+OCIrQjnRzOu7WB0tzX9ACW5HR4U/90
+ MjEEwxgBLzi/82WLDaAAAAA==
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Woojung Huh <woojung.huh@microchip.com>, Andrew Lunn <andrew@lunn.ch>, 
+ Florian Fainelli <f.fainelli@gmail.com>, 
+ Vladimir Oltean <olteanv@gmail.com>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Jiawen Wu <jiawenwu@trustnetic.com>, 
+ Mengyuan Lou <mengyuanlou@net-swift.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jeffrey Hugo <quic_jhugo@quicinc.com>, 
+ Carl Vanderlip <quic_carlv@quicinc.com>, Oded Gabbay <ogabbay@kernel.org>, 
+ UNGLinuxDriver@microchip.com, netdev@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org
+X-Mailer: b4 0.14.0
 
-clang found that the "offset" in bmp580_trigger_handler doesn't get
-initialized before access. Add proper initialization to this variable.
+Hi,
 
-Signed-off-by: Yo-Jung (Leo) Lin <0xff07@gmail.com>
+This series addresses string format safety issues that are
+flagged by tooling in files touched by recent patches.
+
+I do not believe that any of these issues are bugs.
+Rather, I am providing these updates as I think there is a value
+in addressing such warnings so real problems stand out.
+
 ---
- drivers/iio/pressure/bmp280-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Simon Horman (3):
+      net: dsa: microchip: copy string using strscpy
+      net: txgbe: Pass string literal as format argument of alloc_workqueue()
+      accel/qaic: Pass string literal as format argument of alloc_workqueue()
 
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index f4df222ed0c3..7d4151826b86 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -2210,7 +2210,7 @@ static irqreturn_t bmp580_trigger_handler(int irq, void *p)
- 	struct iio_poll_func *pf = p;
- 	struct iio_dev *indio_dev = pf->indio_dev;
- 	struct bmp280_data *data = iio_priv(indio_dev);
--	int ret, offset;
-+	int ret, offset = 0;
- 
- 	guard(mutex)(&data->lock);
- 
--- 
-2.43.0
+ drivers/accel/qaic/qaic_drv.c                  | 4 ++--
+ drivers/net/dsa/microchip/ksz_ptp.c            | 2 +-
+ drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+base-commit: 59ae83dcf102710f097aa14de88ea5cb1396b866
 
