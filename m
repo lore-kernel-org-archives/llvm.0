@@ -1,50 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF0D187330;
-	Sat, 12 Oct 2024 11:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F9E1AB507;
+	Sat, 12 Oct 2024 11:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728732391; cv=none; b=lBz9PhpkymdVvq/D9XadkFPIbm/jTSuLMJ4LYPT6gTe6f4Jmn9p7a0IvtVRdky2+7tgoktMMnfqNi9+MDSGAJh2Iom82GC/oPCK05Q3em2MLKzv97LwXUz1Gfdrts/h4P+IHpWup59vorX6GJH6sfUSbHymZyVbJAc69wx7ukcw=
+	t=1728732457; cv=none; b=Vc1kROrx0GMqtgeA7zrsKcfhq1AufCLIRfhezvPecTQ1BMBw3WtR/jGMvjBxg/BY0nsT255XdLUSWHvdAM+yjNtGq811MIVOyJatcWC5RvYzs518/+EK0Z2pt9Q9EazuEeFeYz0hDzkiwqSyBf3J4c2s/lmMpCP6GIbdWGB4sBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728732391; c=relaxed/simple;
-	bh=lrRuZmbItQXT9jpY1mp53Ktvwuv/GGccoxSxctyMX64=;
+	s=arc-20240116; t=1728732457; c=relaxed/simple;
+	bh=lGrsBWzdm1BuLDIslzhYFqNiKFN3zkGBzaOPQb/Y4hk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OQFv28qEiGwoz8rODZM6x0F1Apx89qIh8F6va/7zSBvrvqKggfPfEbvmBFZ7isu3N+wNTXFwuVA11uoOlBMUzTldKfnWymLUcXqEz9m7FKuQEmanaspxXk1tnnXDMUgDTraFYmaPdDVlA7qz+7soeILGDGGjyebOL00JlX8swww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e36xhZIh; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Ohwmonk4iB6RBkxRFVZRAs+NOUds1N1Df4DfKcNFGtaPszBxoa08NCGvBzgij2pcVJZInHrXcSh+rtkyEEqW4ZtV3iAa3TGkTC9nG2eP2hKZMMhWzevQYD/1o65DobAdh+fZrezitdCU3/+huSfde6Le1kpqKjca2asodyjbwRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YsTnFPD9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e36xhZIh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB39CC4CED0;
-	Sat, 12 Oct 2024 11:26:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YsTnFPD9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4DDC4CEC6;
+	Sat, 12 Oct 2024 11:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728732391;
-	bh=lrRuZmbItQXT9jpY1mp53Ktvwuv/GGccoxSxctyMX64=;
+	s=k20201202; t=1728732457;
+	bh=lGrsBWzdm1BuLDIslzhYFqNiKFN3zkGBzaOPQb/Y4hk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=e36xhZIh0dMrcA2gnP+YAY/TcgS0Febfx/mSPZMQYxUtIoGiTjUVycM5s0eM62t0C
-	 /+lguaplyRv5tMldPSYAxQECQZNv6UrPMHLwqBNeKY797ERc2JM+h01h3B24QXdenG
-	 fKeevxR8772oft+tVamobMxOKK0q4P4OJiuTcKzMFDyDSwzcTOyqkSLBRWIEVwRls5
-	 WmdoPhL66Wi2k0zPI4Vsxu/Os3koJ0KGs5aGC9r0KzZ7OnPs5rnjDpyAktKvtjKqZ6
-	 363gnlTU47Pyc9ZzsZZsw/IZdCkzMy0cDomzg+1fZy008tePfecXIUU/A+sQuPHgOm
-	 XkCubVmOnLWTg==
+	b=YsTnFPD9v6Y9NwGOIBheBDicHcbQRl6bqsBP1ZKTCjjnwStczh7Xzfe4LHzMn4TIP
+	 WuPvkjCrukwtfX0K7LQjU5/yTntfQAF1XbR9/RgthzDb4z8baQVqHEOD9ZeP02st0G
+	 wurGEHxtsJjcCv3CLRJxW1FyKor7LJLRUNT9TuCBPIYIAHYz9laO39RVnn5ircQAw1
+	 aIgUV4FeVIK8IgYPrEd7x2NczFmz7aW5SQppdT/uTDZ+Gkdcg8pZDlrAwccoNH69qR
+	 loNr3LKum/E9P44ETLPYeKrPYEbju0fBGcgDlCrd+Ut4j96NQaGdgPkVPEJMDX7mrG
+	 /7Rk99AJFzoPw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Boqun Feng <boqun.feng@gmail.com>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+	alex.gaynor@gmail.com,
+	nathan@kernel.org,
+	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.11 05/16] arm64: Force position-independent veneers
-Date: Sat, 12 Oct 2024 07:26:01 -0400
-Message-ID: <20241012112619.1762860-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 09/20] rust: add intrinsics to fix `-Os` builds
+Date: Sat, 12 Oct 2024 07:26:41 -0400
+Message-ID: <20241012112715.1763241-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241012112619.1762860-1-sashal@kernel.org>
-References: <20241012112619.1762860-1-sashal@kernel.org>
+In-Reply-To: <20241012112715.1763241-1-sashal@kernel.org>
+References: <20241012112715.1763241-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,114 +53,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.3
+X-stable-base: Linux 6.6.56
 Content-Transfer-Encoding: 8bit
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Miguel Ojeda <ojeda@kernel.org>
 
-[ Upstream commit 9abe390e689f4f5c23c5f507754f8678431b4f72 ]
+[ Upstream commit 02dfd63afe65f7bacad543ba2b10f77083ae7929 ]
 
-Certain portions of code always need to be position-independent
-regardless of CONFIG_RELOCATABLE, including code which is executed in an
-idmap or which is executed before relocations are applied. In some
-kernel configurations the LLD linker generates position-dependent
-veneers for such code, and when executed these result in early boot-time
-failures.
+Alice reported [1] that an arm64 build failed with:
 
-Marc Zyngier encountered a boot failure resulting from this when
-building a (particularly cursed) configuration with LLVM, as he reported
-to the list:
+    ld.lld: error: undefined symbol: __extendsfdf2
+    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
+    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
+    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
+    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
 
-  https://lore.kernel.org/linux-arm-kernel/86wmjwvatn.wl-maz@kernel.org/
+    ld.lld: error: undefined symbol: __truncdfsf2
+    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
+    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
 
-In Marc's kernel configuration, the .head.text and .rodata.text sections
-end up more than 128MiB apart, requiring a veneer to branch between the
-two:
+Rust 1.80.0 or later together with `CONFIG_CC_OPTIMIZE_FOR_SIZE=y`
+is what triggers it.
 
-| [mark@lakrids:~/src/linux]% usekorg 14.1.0 aarch64-linux-objdump -t vmlinux | grep -w _text
-| ffff800080000000 g       .head.text     0000000000000000 _text
-| [mark@lakrids:~/src/linux]% usekorg 14.1.0 aarch64-linux-objdump -t vmlinux | grep -w primary_entry
-| ffff8000889df0e0 g       .rodata.text   000000000000006c primary_entry,
+In addition, x86_64 builds also fail the same way.
 
-... consequently, LLD inserts a position-dependent veneer for the branch
-from _stext (in .head.text) to primary_entry (in .rodata.text):
+Similarly, compiling with Rust 1.82.0 (currently in nightly) makes
+another one appear, possibly due to the LLVM 19 upgrade there:
 
-| ffff800080000000 <_text>:
-| ffff800080000000:       fa405a4d        ccmp    x18, #0x0, #0xd, pl     // pl = nfrst
-| ffff800080000004:       14003fff        b       ffff800080010000 <__AArch64AbsLongThunk_primary_entry>
-...
-| ffff800080010000 <__AArch64AbsLongThunk_primary_entry>:
-| ffff800080010000:       58000050        ldr     x16, ffff800080010008 <__AArch64AbsLongThunk_primary_entry+0x8>
-| ffff800080010004:       d61f0200        br      x16
-| ffff800080010008:       889df0e0        .word   0x889df0e0
-| ffff80008001000c:       ffff8000        .word   0xffff8000
+    ld.lld: error: undefined symbol: __eqdf2
+    >>> referenced by core.20495ea57a9f069d-cgu.0
+    >>>               rust/core.o:(<f64>::next_up) in archive vmlinux.a
+    >>> referenced by core.20495ea57a9f069d-cgu.0
+    >>>               rust/core.o:(<f64>::next_down) in archive vmlinux.a
 
-... and as this is executed early in boot before the kernel is mapped in
-TTBR1 this results in a silent boot failure.
+Gary adds [1]:
 
-Fix this by passing '--pic-veneer' to the linker, which will cause the
-linker to use position-independent veneers, e.g.
+> Usually the fix on rustc side is to mark those functions as `#[inline]`
+>
+> All of {midpoint,next_up,next_down} are indeed unstable functions not
+> marked as inline...
 
-| ffff800080000000 <_text>:
-| ffff800080000000:       fa405a4d        ccmp    x18, #0x0, #0xd, pl     // pl = nfrst
-| ffff800080000004:       14003fff        b       ffff800080010000 <__AArch64ADRPThunk_primary_entry>
-...
-| ffff800080010000 <__AArch64ADRPThunk_primary_entry>:
-| ffff800080010000:       f004e3f0        adrp    x16, ffff800089c8f000 <__idmap_text_start>
-| ffff800080010004:       91038210        add     x16, x16, #0xe0
-| ffff800080010008:       d61f0200        br      x16
+Fix all those by adding those intrinsics to our usual workaround.
 
-I've opted to pass '--pic-veneer' unconditionally, as:
+[ Trevor quickly submitted a fix to upstream Rust [2] that has already
+  been merged, to be released in Rust 1.82.0 (2024-10-17). - Miguel ]
 
-* In addition to solving the boot failure, these sequences are generally
-  nicer as they require fewer instructions and don't need to perform
-  data accesses.
-
-* While the position-independent veneer sequences have a limited +/-2GiB
-  range, this is not a new restriction. Even kernels built with
-  CONFIG_RELOCATABLE=n are limited to 2GiB in size as we have several
-  structues using 32-bit relative offsets and PPREL32 relocations, which
-  are similarly limited to +/-2GiB in range. These include extable
-  entries, jump table entries, and alt_instr entries.
-
-* GNU LD defaults to using position-independent veneers, and supports
-  the same '--pic-veneer' option, so this change is not expected to
-  adversely affect GNU LD.
-
-I've tested with GNU LD 2.30 to 2.42 inclusive and LLVM 13.0.1 to 19.1.0
-inclusive, using the kernel.org binaries from:
-
-* https://mirrors.edge.kernel.org/pub/tools/crosstool/
-* https://mirrors.edge.kernel.org/pub/tools/llvm/
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Reported-by: Marc Zyngier <maz@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Will Deacon <will@kernel.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20240927101838.3061054-1-mark.rutland@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Gary Guo <gary@garyguo.net>
+Reported-by: Alice Ryhl <aliceryhl@google.com>
+Closes: https://rust-for-linux.zulipchat.com/#narrow/stream/x/topic/x/near/455637364 [1]
+Reviewed-by: Trevor Gross <tmgross@umich.edu>
+Tested-by: Alice Ryhl <aliceryhl@google.com>
+Tested-by: Boqun Feng <boqun.feng@gmail.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Link: https://github.com/rust-lang/rust/pull/128749 [2]
+Link: https://lore.kernel.org/r/20240806150619.192882-1-ojeda@kernel.org
+[ Shortened Zulip link. - Miguel ]
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ rust/Makefile             | 4 ++--
+ rust/compiler_builtins.rs | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index f6bc3da1ef110..c8e237b20ef29 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -10,7 +10,7 @@
- #
- # Copyright (C) 1995-2001 by Russell King
+diff --git a/rust/Makefile b/rust/Makefile
+index 060ba8cfa9149..9e0939b8fa78b 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -411,8 +411,8 @@ rust-analyzer:
+ 		$(if $(KBUILD_EXTMOD),$(extmod_prefix),$(objtree))/rust-project.json
  
--LDFLAGS_vmlinux	:=--no-undefined -X
-+LDFLAGS_vmlinux	:=--no-undefined -X --pic-veneer
+ redirect-intrinsics = \
+-	__addsf3 __eqsf2 __gesf2 __lesf2 __ltsf2 __mulsf3 __nesf2 __unordsf2 \
+-	__adddf3 __ledf2 __ltdf2 __muldf3 __unorddf2 \
++	__addsf3 __eqsf2 __extendsfdf2 __gesf2 __lesf2 __ltsf2 __mulsf3 __nesf2 __truncdfsf2 __unordsf2 \
++	__adddf3 __eqdf2 __ledf2 __ltdf2 __muldf3 __unorddf2 \
+ 	__muloti4 __multi3 \
+ 	__udivmodti4 __udivti3 __umodti3
  
- ifeq ($(CONFIG_RELOCATABLE), y)
- # Pass --no-apply-dynamic-relocs to restore pre-binutils-2.27 behaviour
+diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
+index bba2922c6ef77..f14b8d7caf899 100644
+--- a/rust/compiler_builtins.rs
++++ b/rust/compiler_builtins.rs
+@@ -40,16 +40,19 @@ pub extern "C" fn $ident() {
+ define_panicking_intrinsics!("`f32` should not be used", {
+     __addsf3,
+     __eqsf2,
++    __extendsfdf2,
+     __gesf2,
+     __lesf2,
+     __ltsf2,
+     __mulsf3,
+     __nesf2,
++    __truncdfsf2,
+     __unordsf2,
+ });
+ 
+ define_panicking_intrinsics!("`f64` should not be used", {
+     __adddf3,
++    __eqdf2,
+     __ledf2,
+     __ltdf2,
+     __muldf3,
 -- 
 2.43.0
 
