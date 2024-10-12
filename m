@@ -1,122 +1,166 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE562153801;
-	Sat, 12 Oct 2024 10:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF0D187330;
+	Sat, 12 Oct 2024 11:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728730291; cv=none; b=EfNZ69jCBFrgzqhjDw83bbi8tJYNErEXf61rVCvB47U7vXcEFvq3DliCFgVq16g3dY4B49v4B5inJRgBvWo9XR4oWEOUdM1u7L0PF+ASZYMx4A8gCsPF0gFhJNAlx9tHxlIt+Lqtel/p3T6fNWyfdQtdRnQLJrqPVeqYl/1eop0=
+	t=1728732391; cv=none; b=lBz9PhpkymdVvq/D9XadkFPIbm/jTSuLMJ4LYPT6gTe6f4Jmn9p7a0IvtVRdky2+7tgoktMMnfqNi9+MDSGAJh2Iom82GC/oPCK05Q3em2MLKzv97LwXUz1Gfdrts/h4P+IHpWup59vorX6GJH6sfUSbHymZyVbJAc69wx7ukcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728730291; c=relaxed/simple;
-	bh=cWkgJyHchFqQkQzMAty5VXFu0OvWDcKpssWdpuQVmlk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uH/mz6ghRyA4wsWk1RDAXB8wm5Aw41gSDNz7q6B9zfpDrvoi77YkXWdH8+eQC4QivNB0UzdLybYx4rdvKOWEoSfa9OdoZCpNYASM5CYkFOzWkSGxseGRZwHRjTFRXEesGRaP4jBE2KzjcFhU814VX6Lf+ypSzXCTR9ZB3bmIkl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9qg3qSx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728732391; c=relaxed/simple;
+	bh=lrRuZmbItQXT9jpY1mp53Ktvwuv/GGccoxSxctyMX64=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OQFv28qEiGwoz8rODZM6x0F1Apx89qIh8F6va/7zSBvrvqKggfPfEbvmBFZ7isu3N+wNTXFwuVA11uoOlBMUzTldKfnWymLUcXqEz9m7FKuQEmanaspxXk1tnnXDMUgDTraFYmaPdDVlA7qz+7soeILGDGGjyebOL00JlX8swww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e36xhZIh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9qg3qSx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AA7C4CEC6;
-	Sat, 12 Oct 2024 10:51:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e36xhZIh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB39CC4CED0;
+	Sat, 12 Oct 2024 11:26:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728730291;
-	bh=cWkgJyHchFqQkQzMAty5VXFu0OvWDcKpssWdpuQVmlk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=m9qg3qSxqZu+Ez3HFM+bg1WbTdOuzqgPXL6xSLLH7WXmPp74fQ+Bgo4JDNEDal+DU
-	 +v0wh8owWsB0aJsIREvvsF2oCzTEuMP61WoU72qRnh+eWlsX9p41+kx7PMrgEa0Ouq
-	 b9stQKrznha8WmoIBdcliua87Bz1Cg/B46Ch2vRkMtyOLBgoxHv4Zmy4S4R7orNTEu
-	 y/b+2V81W/4RWczgFqNlTvEU4ihQfDn0EbaFWVi20cVdmvaZ3lcoCXHWNcX9Y9xKdv
-	 4C+74mlE8vySg8SkdHv4mTL8DbXIZKFX2vP33IXRdKsw0LdspvvI9aBSIXZWgOT9jL
-	 Gic6VY5ZL5XJQ==
-Date: Sat, 12 Oct 2024 11:51:21 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Julia Lawall <julia.lawall@inria.fr>, Su Hui <suhui@nfschina.com>,
- jagathjog1996@gmail.com, lars@metafoo.de, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- benato.denis96@gmail.com, Jonathan.Cameron@huawei.com,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] iio: bmi323: mark bmi323_ext_reg_savestate as maybe
- unused
-Message-ID: <20241012115121.037be954@jic23-huawei>
-In-Reply-To: <e210f9c6-9070-4b6d-b938-9a35b7a16380@gmail.com>
-References: <20241012083701.2189663-1-suhui@nfschina.com>
-	<alpine.DEB.2.22.394.2410121110540.8471@hadrien>
-	<e210f9c6-9070-4b6d-b938-9a35b7a16380@gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=k20201202; t=1728732391;
+	bh=lrRuZmbItQXT9jpY1mp53Ktvwuv/GGccoxSxctyMX64=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=e36xhZIh0dMrcA2gnP+YAY/TcgS0Febfx/mSPZMQYxUtIoGiTjUVycM5s0eM62t0C
+	 /+lguaplyRv5tMldPSYAxQECQZNv6UrPMHLwqBNeKY797ERc2JM+h01h3B24QXdenG
+	 fKeevxR8772oft+tVamobMxOKK0q4P4OJiuTcKzMFDyDSwzcTOyqkSLBRWIEVwRls5
+	 WmdoPhL66Wi2k0zPI4Vsxu/Os3koJ0KGs5aGC9r0KzZ7OnPs5rnjDpyAktKvtjKqZ6
+	 363gnlTU47Pyc9ZzsZZsw/IZdCkzMy0cDomzg+1fZy008tePfecXIUU/A+sQuPHgOm
+	 XkCubVmOnLWTg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.11 05/16] arm64: Force position-independent veneers
+Date: Sat, 12 Oct 2024 07:26:01 -0400
+Message-ID: <20241012112619.1762860-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241012112619.1762860-1-sashal@kernel.org>
+References: <20241012112619.1762860-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.11.3
+Content-Transfer-Encoding: 8bit
 
-On Sat, 12 Oct 2024 12:08:39 +0200
-Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
+From: Mark Rutland <mark.rutland@arm.com>
 
-> On 12/10/2024 11:11, Julia Lawall wrote:
-> > 
-> > 
-> > On Sat, 12 Oct 2024, Su Hui wrote:
-> >   
-> >> When running 'make CC=clang drivers/iio/imu/bmi323/bmi323_core.o', there
-> >> is a clang warning as follows:
-> >>
-> >> drivers/iio/imu/bmi323/bmi323_core.c:133:27: error:
-> >> variable 'bmi323_ext_reg_savestate' is not needed and will not be emitted
-> >> [-Werror,-Wunneeded-internal-declaration]
-> >>   133 | static const unsigned int bmi323_ext_reg_savestate[] = {
-> >>       |                           ^~~~~~~~~~~~~~~~~~~~~~~~
-> >> 1 error generated.
-> >>
-> >> Mark bmi323_ext_reg_savestate as __maybe_unused to silent this warning.  
-> > 
-> > Why might it be unused?
-> > 
-> > julia
-> >   
-> >>
-> >> Fixes: 16531118ba63 ("iio: bmi323: peripheral in lowest power state on suspend")
-> >> Signed-off-by: Su Hui <suhui@nfschina.com>
-> >> ---
-> >>  drivers/iio/imu/bmi323/bmi323_core.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/iio/imu/bmi323/bmi323_core.c b/drivers/iio/imu/bmi323/bmi323_core.c
-> >> index beda8d2de53f..1167984809c5 100644
-> >> --- a/drivers/iio/imu/bmi323/bmi323_core.c
-> >> +++ b/drivers/iio/imu/bmi323/bmi323_core.c
-> >> @@ -130,7 +130,7 @@ static const unsigned int bmi323_reg_savestate[] = {
-> >>  	BMI323_FIFO_CONF_REG
-> >>  };
-> >>
-> >> -static const unsigned int bmi323_ext_reg_savestate[] = {
-> >> +static const unsigned int bmi323_ext_reg_savestate[] __maybe_unused = {
-> >>  	BMI323_GEN_SET1_REG,
-> >>  	BMI323_TAP1_REG,
-> >>  	BMI323_TAP2_REG,
-> >> --
-> >> 2.30.2
-> >>
-> >>
-> >>  
-> >   
-> 
-> This issue has already been found and discussed here:
-> 
-> https://lore.kernel.org/linux-iio/AS8PR02MB10217F8B5827B69E6438488679C762@AS8PR02MB10217.eurprd02.prod.outlook.com/
-> 
-> where I got lectured by Nathan Chancellor about such warnings.
-> 
-> The fix was not marking the array as unused, because it should have been
-> used. The proper fix can be found in iio/fixes-togreg.
-> 
-> Best regards,
-> Javier Carrasco
+[ Upstream commit 9abe390e689f4f5c23c5f507754f8678431b4f72 ]
 
-Busy week so I haven't gotten a pull request out yet. Should send one with this
-fix later this weekend.
+Certain portions of code always need to be position-independent
+regardless of CONFIG_RELOCATABLE, including code which is executed in an
+idmap or which is executed before relocations are applied. In some
+kernel configurations the LLD linker generates position-dependent
+veneers for such code, and when executed these result in early boot-time
+failures.
 
-Jonathan
+Marc Zyngier encountered a boot failure resulting from this when
+building a (particularly cursed) configuration with LLVM, as he reported
+to the list:
+
+  https://lore.kernel.org/linux-arm-kernel/86wmjwvatn.wl-maz@kernel.org/
+
+In Marc's kernel configuration, the .head.text and .rodata.text sections
+end up more than 128MiB apart, requiring a veneer to branch between the
+two:
+
+| [mark@lakrids:~/src/linux]% usekorg 14.1.0 aarch64-linux-objdump -t vmlinux | grep -w _text
+| ffff800080000000 g       .head.text     0000000000000000 _text
+| [mark@lakrids:~/src/linux]% usekorg 14.1.0 aarch64-linux-objdump -t vmlinux | grep -w primary_entry
+| ffff8000889df0e0 g       .rodata.text   000000000000006c primary_entry,
+
+... consequently, LLD inserts a position-dependent veneer for the branch
+from _stext (in .head.text) to primary_entry (in .rodata.text):
+
+| ffff800080000000 <_text>:
+| ffff800080000000:       fa405a4d        ccmp    x18, #0x0, #0xd, pl     // pl = nfrst
+| ffff800080000004:       14003fff        b       ffff800080010000 <__AArch64AbsLongThunk_primary_entry>
+...
+| ffff800080010000 <__AArch64AbsLongThunk_primary_entry>:
+| ffff800080010000:       58000050        ldr     x16, ffff800080010008 <__AArch64AbsLongThunk_primary_entry+0x8>
+| ffff800080010004:       d61f0200        br      x16
+| ffff800080010008:       889df0e0        .word   0x889df0e0
+| ffff80008001000c:       ffff8000        .word   0xffff8000
+
+... and as this is executed early in boot before the kernel is mapped in
+TTBR1 this results in a silent boot failure.
+
+Fix this by passing '--pic-veneer' to the linker, which will cause the
+linker to use position-independent veneers, e.g.
+
+| ffff800080000000 <_text>:
+| ffff800080000000:       fa405a4d        ccmp    x18, #0x0, #0xd, pl     // pl = nfrst
+| ffff800080000004:       14003fff        b       ffff800080010000 <__AArch64ADRPThunk_primary_entry>
+...
+| ffff800080010000 <__AArch64ADRPThunk_primary_entry>:
+| ffff800080010000:       f004e3f0        adrp    x16, ffff800089c8f000 <__idmap_text_start>
+| ffff800080010004:       91038210        add     x16, x16, #0xe0
+| ffff800080010008:       d61f0200        br      x16
+
+I've opted to pass '--pic-veneer' unconditionally, as:
+
+* In addition to solving the boot failure, these sequences are generally
+  nicer as they require fewer instructions and don't need to perform
+  data accesses.
+
+* While the position-independent veneer sequences have a limited +/-2GiB
+  range, this is not a new restriction. Even kernels built with
+  CONFIG_RELOCATABLE=n are limited to 2GiB in size as we have several
+  structues using 32-bit relative offsets and PPREL32 relocations, which
+  are similarly limited to +/-2GiB in range. These include extable
+  entries, jump table entries, and alt_instr entries.
+
+* GNU LD defaults to using position-independent veneers, and supports
+  the same '--pic-veneer' option, so this change is not expected to
+  adversely affect GNU LD.
+
+I've tested with GNU LD 2.30 to 2.42 inclusive and LLVM 13.0.1 to 19.1.0
+inclusive, using the kernel.org binaries from:
+
+* https://mirrors.edge.kernel.org/pub/tools/crosstool/
+* https://mirrors.edge.kernel.org/pub/tools/llvm/
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Reported-by: Marc Zyngier <maz@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Will Deacon <will@kernel.org>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20240927101838.3061054-1-mark.rutland@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm64/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index f6bc3da1ef110..c8e237b20ef29 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -10,7 +10,7 @@
+ #
+ # Copyright (C) 1995-2001 by Russell King
+ 
+-LDFLAGS_vmlinux	:=--no-undefined -X
++LDFLAGS_vmlinux	:=--no-undefined -X --pic-veneer
+ 
+ ifeq ($(CONFIG_RELOCATABLE), y)
+ # Pass --no-apply-dynamic-relocs to restore pre-binutils-2.27 behaviour
+-- 
+2.43.0
 
