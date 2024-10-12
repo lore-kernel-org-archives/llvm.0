@@ -1,58 +1,110 @@
-Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 2A84F153BD7
-	for <llvm@lists.linux.dev>; Sat, 12 Oct 2024 10:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8D134CDE;
+	Sat, 12 Oct 2024 10:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728728823; cv=none; b=URkaMvcQXkSesnaJ7y46NdsLht8WPrjjD05ptYZ/ZPoEwcoInG8wjfFuRVtidXOQQdpUzXFFDP12tiaAV5U17NfB5Wde3qzPMRIUhnkbSDmrE4VkVQykbLTk0BcTvt2HwfICx+QHZAq3oiEZP5cLcowYCUWfjbUfwPMJnFHBXaM=
+	t=1728730205; cv=none; b=snueZq+5rBJuvvZGVaXUpYku2gfVjEVu8QYVVCEDI/ZHKZHgmKXX93UzeMzJ+l01UYxKN5oRPMJFeK3F+MRClFfsDqqJNhLVaFijuj6UGmutPD4cKOZjeD4pxNe0hlJLvWJpKidr6gTbMBFsZuXJ3LG1JjTmEqJ3NBSsrEhHcIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728728823; c=relaxed/simple;
-	bh=fvWAAvtLtXnWYyocEqzco45h8BNHi1j6ke6Jt6W8mck=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type; b=Xv5p/kOLEcLVoh4m3JnjUglHHOB4ZK8dfKebdoiVfmKxEdB+jkh5mPnb4wrT9Ahh97S2aM5Q0Bm1g3kTR9OIjCdNEDeZ1wiAaDUAScDgUHTIilxyPdGlCHCwLFUo9Fr/aQKx/VGuesSBR2Q4td6q+NXtIvFZNFqp+PjxxvDShAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from [172.30.20.101] (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 5F43460B23F6E;
-	Sat, 12 Oct 2024 18:26:55 +0800 (CST)
-Message-ID: <cc5d419f-0326-e683-6e84-ce55b8b1331f@nfschina.com>
-Date: Sat, 12 Oct 2024 18:26:54 +0800
+	s=arc-20240116; t=1728730205; c=relaxed/simple;
+	bh=qIdTHnB1Iea+3YXWC7zVPebZwNXSxXSOPYpHQYxvP0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bjXfvAMeMfCH/DSQrak/PQ4oZgkqoEvI+R1iBAGGhuiO4AD21p7G3nOTkfFiQBo50jXq/6Gmywqx43HoBzIslxOLEwdyVgpoq88CBFuod07FyUDZFbSbcBJPKgIuG6IBF0gsaW9KiMjmaEtPaup1Sm3pTx12CkTzsOvHnH63AiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOQLADPc; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOQLADPc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059D5C4CEC6;
+	Sat, 12 Oct 2024 10:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728730205;
+	bh=qIdTHnB1Iea+3YXWC7zVPebZwNXSxXSOPYpHQYxvP0M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vOQLADPc/sqK9vLeDVFajf1QBSFysGWh/5AkabOIwWRW0Q9qOtvZLbLwng/e7yIBj
+	 PBOGVvxUX3jMHP5mvFrwGhDJmTx5R5DVdiI6vLhQDF0iv0vez3juFkF8F3hIJbLC7S
+	 ERJdjhVABPtSDcCJ5rLMNDl6y0QYPRYVTIK97HoeG/PZyzSLWQG+llGMEbGdGTteuk
+	 3DZ/6shlgYHdJXxc7o0HWZz2JdA+NaoAdgTL0TGpJUdlHU8llB+psqKYoM2UHHY2gt
+	 Ay7hw6LXe7D+JddyDsDgGoDQ08eUXvl5jnFpFWQtX0wP5DokjxLZVqISyY/ZGPFU14
+	 9aYmAOlm+Fzow==
+Date: Sat, 12 Oct 2024 11:49:53 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Vasileios Aoiridis <vassilisamir@gmail.com>, "Yo-Jung (Leo) Lin"
+ <0xff07@gmail.com>, linux-kernel-mentees@lists.linuxfoundation.org,
+ ricardo@marliere.net, skhan@linuxfoundation.org, Lars-Peter Clausen
+ <lars@metafoo.de>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Angel Iglesias
+ <ang.iglesiasg@gmail.com>, Adam Rizkalla <ajarizzo@gmail.com>,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH v2] iio: Fix uninitialized variable
+Message-ID: <20241012114953.25a958ef@jic23-huawei>
+In-Reply-To: <0ec5fd64-a172-4054-a2ef-1c12db41beb5@gmail.com>
+References: <20241011093752.30685-1-0xff07@gmail.com>
+	<20241011115334.367736-1-0xff07@gmail.com>
+	<26f2e35e-0a07-4b24-91a2-a48d4bc5dadc@gmail.com>
+	<ZwlvJCxdiRqRWu6Z@vamoirid-laptop>
+	<0ec5fd64-a172-4054-a2ef-1c12db41beb5@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH] iio: bmi323: mark bmi323_ext_reg_savestate as maybe
- unused
-Content-Language: en-US
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Julia Lawall <julia.lawall@inria.fr>
-Cc: jagathjog1996@gmail.com, jic23@kernel.org, lars@metafoo.de,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, benato.denis96@gmail.com,
- Jonathan.Cameron@huawei.com, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- kernel-janitors@vger.kernel.org
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-In-Reply-To: <e210f9c6-9070-4b6d-b938-9a35b7a16380@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> This issue has already been found and discussed here:
->
-> https://lore.kernel.org/linux-iio/AS8PR02MB10217F8B5827B69E6438488679C762@AS8PR02MB10217.eurprd02.prod.outlook.com/
->
-> where I got lectured by Nathan Chancellor about such warnings.
->
-> The fix was not marking the array as unused, because it should have been
-> used. The proper fix can be found in iio/fixes-togreg.
+On Fri, 11 Oct 2024 21:32:38 +0200
+Javier Carrasco <javier.carrasco.cruz@gmail.com> wrote:
 
-Oh , I just saw this email. Thanks!
+> ...
+> 
+> > 
+> > Hi everyone!
+> > 
+> > So if you check also the conversations that we had here [1] and in the
+> > previous versions, indeed the idea behind the offset is to use it as an
+> > self-explanatory index to a char buffer that holds in fact s32 variables.
+> > 
+> > The data->buf here holds the values that have just been read from the
+> > sensor. If you check on the channel specification of this sensor,
+> > you will see ".realbits = 24" in both values that the sensor returns so
+> > hence the value 3.
+> >   
+> 
+> So you are using 3 = 24 bits, but s32 not as 4 bytes? the whole thing
+> would have turned into sensor_data[0], sensor_data[4], and no variables
+> implied, correct? But I am discussing too much for something that in the
+> end is more or less the same, I am fine with this proposal.
+Applied the fix.  Thanks,
 
-Su Hui
+Jonathan
+
+
+> 
+> > I am not sure if it makes sense to use a macro here for each one of the
+> > 3's that are going to be used only one time each and in order to be more
+> > "consistent". But I might have a wrong view on this one so feel free to
+> > correct me!
+> > 
+> > For the initialization of the offset indeed, it was already mentioned
+> > here [2] this morning, but on a different patch!!! I couldn't get this
+> > error though with gcc...
+> > 
+> > Cheers,
+> > Vasilis
+> >   
+> 
+> At least for the things I do in the kernel, clang catches more issues
+> than gcc. Sometimes even gcc will not complain, and clang will fail to
+> compile (e.g. a goto before a cleanup attribute).
+> 
+> And if you run smatch before sending the series, you might discover a
+> couple of extra "surprises".
+> 
+> Best regards,
+> Javier Carrasco
 
