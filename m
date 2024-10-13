@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4780028E8;
-	Sun, 13 Oct 2024 04:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FD2374D1;
+	Sun, 13 Oct 2024 05:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728792101; cv=none; b=JQpReYNO+cRJeb4+Ys7CBMSgyqIf7Ty9zk1O2oaxEeb07FpSAkq336eFC2PpF6VYLUcjsOwgmfmUPMQGnR52Wj8uLDFiHZQ/qTv3X9s6ds/qSeF0UflD8sCcgAEhXR0+Rq0DnF6MUeQF6NncAHQDEWzhRp7MXP52OebAweoPZls=
+	t=1728796605; cv=none; b=nINKjjI7W6FLEVENEV/TKClqxpkM6f5mnui1IlwAYyisEpUBLS7PHNxOgrvyk/2qYFowYru1YmKEP/xMvVN7/90RpfUqYtbl4QaMbUyvliO7vmgOSsmGA5kjvr7lXLM0b4gLo4n0lASMXAc/Sncz+RHsCcbpayV2XeCsBMRd/cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728792101; c=relaxed/simple;
-	bh=oocklscEBCSjq1rJjo1SBNYankaIRti27cp1754HjiU=;
+	s=arc-20240116; t=1728796605; c=relaxed/simple;
+	bh=dDEb9KPSfDkk4dMvl8+gZX9+2Yq+zVtsM2W8q+8arOk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nH6/YXHKAuJxFhhKIFY41ydGURW06qYfovQo7TBetjN+locI13mr9ZlgT7oyybONA1tNFTMNb/mFLHeBGEZTpYVhYZ16p8Me7H3AcUM5AWEjcVHnAd4eGRuUD9fBndRpZrcZm8bA0DjwZWwWDdpDMdAuQs3kasxDhMaA1rms3+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V4QrNF7i; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=oni40L8zzUfF8kjTKukWStSjNvwjNebs27IWhMuayzA3aWSxZ4fbt7C6BX0rJ5J6S9aLrqBb1elLxzWrKG7Nj7QdVHU9675OdkP8QfO1dNTrublXGQ+cDmtlcIIyUhqTrGeutsSBYghL5/49YdFefxOKfcmbsE5Vdsa/XVK2d4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a/8lr/eL; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V4QrNF7i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a/8lr/eL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728792099; x=1760328099;
+  t=1728796601; x=1760332601;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=oocklscEBCSjq1rJjo1SBNYankaIRti27cp1754HjiU=;
-  b=V4QrNF7itD6sfuMrCKBPzO0W9oxT9VqikJmtL0mqxNWiG7uPwjV1zExd
-   nssgQ7wR3DvJhbfkiihQBd9UQPjpCLUSy3WSj/6JdlGwjvJ39tQg2aoZV
-   KZb3L9De+PGjuq2FExmgBCtLP9+m/HD9lZrokZNpAySqg2VEb/xPodLII
-   EcO+ejb76OssjIiEBAo5a4gU/fWWk8WKtaibLgLMCjKt7koyFWSJC35m4
-   lvkmAo5BB/20y7i6Ho3xNd6NU4j93kSTaMn+cpjeisjlHlkCIkdyx+Ag3
-   pS4S8J42VDZtdCwkXYe31+s0HgGGHXXg4Pls5W7Q6nCWt/qdDdNz20Cwh
+  bh=dDEb9KPSfDkk4dMvl8+gZX9+2Yq+zVtsM2W8q+8arOk=;
+  b=a/8lr/eL6DPAeSIKFdH/ktYrjYYYnKTvMVi8VjKCJU/HN8LsyXhj6YOF
+   7c47R+4QY+56NfmEv5IZ+3v5fvllkrlQSAY7SavKGez2zvVCRh9+H5yBz
+   5iGkbyZ6tErNzI3+uPiexZh4hi6mM8jT0IhGMYrU1jbzBjkBE5lyZ7+mU
+   q7slLkMchGpUrATRO9QJVkaJB2rUSmjsYJv8+xvGSED5Or/qrmZz88UZk
+   VPACfWAQe4IWQqmAlbfVGnb/tx/UCA8/4x8MPGkwlpRQrakSiJKGF28xr
+   SBl7nFAEXhJXILp7R5m494nGfbYc+Yv9rabd+Bs1C6WKduADSOIR60uVB
    w==;
-X-CSE-ConnectionGUID: uds6yCfQRDSb6V0o9YI8bA==
-X-CSE-MsgGUID: lVVnPSrsQQOLHobItnYY7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28108159"
+X-CSE-ConnectionGUID: y4bppJR1Rw+2dKAE9zHfTQ==
+X-CSE-MsgGUID: SzKMoYuaSluz4Vb14FKbuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28253433"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28108159"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2024 21:01:38 -0700
-X-CSE-ConnectionGUID: fS4uKx4lSLqGC5MxWgjg4Q==
-X-CSE-MsgGUID: cNa69fAOT4qgjSuSnsTeow==
+   d="scan'208";a="28253433"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2024 22:16:40 -0700
+X-CSE-ConnectionGUID: O5AzXYBFSjqv1gceKNBZhg==
+X-CSE-MsgGUID: nLYs637tQfuP3qnB4gLT4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="78080134"
+   d="scan'208";a="81274022"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 12 Oct 2024 21:01:33 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 12 Oct 2024 22:16:37 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1szpnP-000E3X-0v;
-	Sun, 13 Oct 2024 04:01:31 +0000
-Date: Sun, 13 Oct 2024 12:01:24 +0800
+	id 1szqy2-000E75-2s;
+	Sun, 13 Oct 2024 05:16:34 +0000
+Date: Sun, 13 Oct 2024 13:16:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Przemek Kitszel <przemyslaw.kitszel@intel.com>,
 	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
@@ -64,7 +64,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Subject: Re: [PATCH v3] cleanup: adjust scoped_guard() macros to avoid
  potential warning
-Message-ID: <202410131151.SBnGQot0-lkp@intel.com>
+Message-ID: <202410131247.7EWZ1WLP-lkp@intel.com>
 References: <20241011121535.28049-1-przemyslaw.kitszel@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -72,7 +72,7 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20241011121535.28049-1-przemyslaw.kitszel@intel.com>
@@ -87,20 +87,58 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Przemek-Kitszel/cleanup-a
 base:   44badc908f2c85711cb18e45e13119c10ad3a05f
 patch link:    https://lore.kernel.org/r/20241011121535.28049-1-przemyslaw.kitszel%40intel.com
 patch subject: [PATCH v3] cleanup: adjust scoped_guard() macros to avoid potential warning
-config: i386-buildonly-randconfig-005-20241013 (https://download.01.org/0day-ci/archive/20241013/202410131151.SBnGQot0-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410131151.SBnGQot0-lkp@intel.com/reproduce)
+config: hexagon-randconfig-001-20241013 (https://download.01.org/0day-ci/archive/20241013/202410131247.7EWZ1WLP-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410131247.7EWZ1WLP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410131151.SBnGQot0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410131247.7EWZ1WLP-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/firewire/core-device.c:1041:2: warning: variable 'found' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1041 |         scoped_guard(rwsem_read, &fw_device_rwsem) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from sound/core/pcm_native.c:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from sound/core/pcm_native.c:15:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from sound/core/pcm_native.c:15:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from sound/core/pcm_native.c:15:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> sound/core/pcm_native.c:2277:2: warning: variable 'target_group' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2277 |         scoped_guard(pcm_stream_lock_irq, substream) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -113,17 +151,11 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
       57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
          |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firewire/core-device.c:1045:6: note: uninitialized use occurs here
-    1045 |         if (found) {
-         |             ^~~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   drivers/firewire/core-device.c:1041:2: note: remove the 'if' if its condition is always false
-    1041 |         scoped_guard(rwsem_read, &fw_device_rwsem) {
+   sound/core/pcm_native.c:2285:25: note: uninitialized use occurs here
+    2285 |         snd_pcm_group_lock_irq(target_group, nonatomic);
+         |                                ^~~~~~~~~~~~
+   sound/core/pcm_native.c:2277:2: note: remove the 'if' if its condition is always false
+    2277 |         scoped_guard(pcm_stream_lock_irq, substream) {
          |         ^
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
@@ -134,57 +166,13 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:55:23: note: expanded from macro 'if'
       55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
          |                       ^
-   drivers/firewire/core-device.c:1008:22: note: initialize the variable 'found' to silence this warning
-    1008 |         struct device *found;
-         |                             ^
-         |                              = NULL
-   1 warning generated.
---
->> drivers/firewire/core-transaction.c:912:2: warning: variable 'handler' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     912 |         scoped_guard(rcu) {
-         |         ^~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firewire/core-transaction.c:921:7: note: uninitialized use occurs here
-     921 |         if (!handler)
-         |              ^~~~~~~
-   include/linux/compiler.h:55:47: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                                               ^~~~
-   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   drivers/firewire/core-transaction.c:912:2: note: remove the 'if' if its condition is always false
-     912 |         scoped_guard(rcu) {
-         |         ^
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/firewire/core-transaction.c:903:36: note: initialize the variable 'handler' to silence this warning
-     903 |         struct fw_address_handler *handler;
+   sound/core/pcm_native.c:2249:36: note: initialize the variable 'target_group' to silence this warning
+    2249 |         struct snd_pcm_group *target_group;
          |                                           ^
          |                                            = NULL
-   1 warning generated.
---
->> drivers/firewire/core-cdev.c:508:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     508 |         scoped_guard(spinlock_irqsave, &client->lock) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/core/pcm_native.c:2993:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2993 |         scoped_guard(pcm_stream_lock_irq, substream) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -197,11 +185,11 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
       57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
          |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firewire/core-cdev.c:530:9: note: uninitialized use occurs here
-     530 |         return ret < 0 ? ret : 0;
+   sound/core/pcm_native.c:3001:9: note: uninitialized use occurs here
+    3001 |         return ret;
          |                ^~~
-   drivers/firewire/core-cdev.c:508:2: note: remove the 'if' if its condition is always false
-     508 |         scoped_guard(spinlock_irqsave, &client->lock) {
+   sound/core/pcm_native.c:2993:2: note: remove the 'if' if its condition is always false
+    2993 |         scoped_guard(pcm_stream_lock_irq, substream) {
          |         ^
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
@@ -212,13 +200,13 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:55:23: note: expanded from macro 'if'
       55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
          |                       ^
-   drivers/firewire/core-cdev.c:506:9: note: initialize the variable 'ret' to silence this warning
-     506 |         int ret;
-         |                ^
-         |                 = 0
->> drivers/firewire/core-cdev.c:1327:2: warning: variable 'skip' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1327 |         scoped_guard(spinlock_irq, &client->lock) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/core/pcm_native.c:2988:23: note: initialize the variable 'ret' to silence this warning
+    2988 |         snd_pcm_sframes_t ret;
+         |                              ^
+         |                               = 0
+   sound/core/pcm_native.c:3012:2: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    3012 |         scoped_guard(pcm_stream_lock_irq, substream) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,17 +219,87 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
       57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
          |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firewire/core-cdev.c:1346:6: note: uninitialized use occurs here
-    1346 |         if (skip)
-         |             ^~~~
+   sound/core/pcm_native.c:3020:9: note: uninitialized use occurs here
+    3020 |         return ret;
+         |                ^~~
+   sound/core/pcm_native.c:3012:2: note: remove the 'if' if its condition is always false
+    3012 |         scoped_guard(pcm_stream_lock_irq, substream) {
+         |         ^
+   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
+     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
+         |         ^
+   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
+     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
+         |                 ^
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^
+   sound/core/pcm_native.c:3007:23: note: initialize the variable 'ret' to silence this warning
+    3007 |         snd_pcm_sframes_t ret;
+         |                              ^
+         |                               = 0
+>> sound/core/pcm_native.c:3028:2: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    3028 |         scoped_guard(pcm_stream_lock_irq, substream) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
+     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
+     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/core/pcm_native.c:3035:9: note: uninitialized use occurs here
+    3035 |         return err;
+         |                ^~~
+   sound/core/pcm_native.c:3028:2: note: remove the 'if' if its condition is always false
+    3028 |         scoped_guard(pcm_stream_lock_irq, substream) {
+         |         ^
+   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
+     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
+         |         ^
+   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
+     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
+         |                 ^
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^
+   sound/core/pcm_native.c:3026:9: note: initialize the variable 'err' to silence this warning
+    3026 |         int err;
+         |                ^
+         |                 = 0
+   11 warnings generated.
+--
+>> sound/core/sound.c:152:2: warning: variable 'new_fops' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     152 |         scoped_guard(mutex, &sound_mutex) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
+     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
+     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/core/sound.c:161:7: note: uninitialized use occurs here
+     161 |         if (!new_fops)
+         |              ^~~~~~~~
    include/linux/compiler.h:55:47: note: expanded from macro 'if'
       55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
          |                                               ^~~~
    include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
       57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
          |                                                    ^~~~
-   drivers/firewire/core-cdev.c:1327:2: note: remove the 'if' if its condition is always false
-    1327 |         scoped_guard(spinlock_irq, &client->lock) {
+   sound/core/sound.c:152:2: note: remove the 'if' if its condition is always false
+     152 |         scoped_guard(mutex, &sound_mutex) {
          |         ^
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
@@ -252,15 +310,63 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:55:23: note: expanded from macro 'if'
       55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
          |                       ^
-   drivers/firewire/core-cdev.c:1325:11: note: initialize the variable 'skip' to silence this warning
-    1325 |         bool skip, free, success;
-         |                  ^
-         |                   = 0
-   2 warnings generated.
+   sound/core/sound.c:147:40: note: initialize the variable 'new_fops' to silence this warning
+     147 |         const struct file_operations *new_fops;
+         |                                               ^
+         |                                                = NULL
+   1 warning generated.
 --
->> drivers/gpio/gpio-sim.c:179:2: warning: variable 'direction' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     179 |         scoped_guard(mutex, &chip->lock)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/mailbox/arm_mhuv3.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/mailbox/arm_mhuv3.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/mailbox/arm_mhuv3.c:15:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/mailbox/arm_mhuv3.c:642:3: warning: variable 'fired_dbs' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     642 |                 scoped_guard(spinlock_irqsave, &e->pending_lock) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -273,12 +379,12 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
       57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
          |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:182:9: note: uninitialized use occurs here
-     182 |         return direction ? GPIO_LINE_DIRECTION_IN : GPIO_LINE_DIRECTION_OUT;
-         |                ^~~~~~~~~
-   drivers/gpio/gpio-sim.c:179:2: note: remove the 'if' if its condition is always false
-     179 |         scoped_guard(mutex, &chip->lock)
-         |         ^
+   drivers/mailbox/arm_mhuv3.c:650:3: note: uninitialized use occurs here
+     650 |                 fired_dbs &= ~BIT(*db);
+         |                 ^~~~~~~~~
+   drivers/mailbox/arm_mhuv3.c:642:3: note: remove the 'if' if its condition is always false
+     642 |                 scoped_guard(spinlock_irqsave, &e->pending_lock) {
+         |                 ^
    include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
      197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
          |         ^
@@ -288,309 +394,76 @@ All warnings (new ones prefixed by >>):
    include/linux/compiler.h:55:23: note: expanded from macro 'if'
       55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
          |                       ^
-   drivers/gpio/gpio-sim.c:177:15: note: initialize the variable 'direction' to silence this warning
-     177 |         int direction;
-         |                      ^
-         |                       = 0
->> drivers/gpio/gpio-sim.c:277:2: warning: variable 'val' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     277 |         scoped_guard(mutex, &chip->lock)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:280:33: note: uninitialized use occurs here
-     280 |         return sysfs_emit(buf, "%d\n", val);
-         |                                        ^~~
-   drivers/gpio/gpio-sim.c:277:2: note: remove the 'if' if its condition is always false
-     277 |         scoped_guard(mutex, &chip->lock)
-         |         ^
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/gpio/gpio-sim.c:275:9: note: initialize the variable 'val' to silence this warning
-     275 |         int val;
-         |                ^
-         |                 = 0
->> drivers/gpio/gpio-sim.c:307:2: warning: variable 'pull' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     307 |         scoped_guard(mutex, &chip->lock)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:310:61: note: uninitialized use occurs here
-     310 |         return sysfs_emit(buf, "%s\n", gpio_sim_sysfs_pull_strings[pull]);
-         |                                                                    ^~~~
-   drivers/gpio/gpio-sim.c:307:2: note: remove the 'if' if its condition is always false
-     307 |         scoped_guard(mutex, &chip->lock)
-         |         ^
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/gpio/gpio-sim.c:305:10: note: initialize the variable 'pull' to silence this warning
-     305 |         int pull;
-         |                 ^
-         |                  = 0
->> drivers/gpio/gpio-sim.c:756:2: warning: variable 'live' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     756 |         scoped_guard(mutex, &dev->lock)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:759:31: note: uninitialized use occurs here
-     759 |         return sprintf(page, "%c\n", live ? '1' : '0');
-         |                                      ^~~~
-   drivers/gpio/gpio-sim.c:756:2: note: remove the 'if' if its condition is always false
-     756 |         scoped_guard(mutex, &dev->lock)
-         |         ^
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/gpio/gpio-sim.c:754:11: note: initialize the variable 'live' to silence this warning
-     754 |         bool live;
-         |                  ^
-         |                   = 0
->> drivers/gpio/gpio-sim.c:1266:2: warning: variable 'dir' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1266 |         scoped_guard(mutex, &dev->lock)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpio/gpio-sim.c:1269:10: note: uninitialized use occurs here
-    1269 |         switch (dir) {
-         |                 ^~~
-   drivers/gpio/gpio-sim.c:1266:2: note: remove the 'if' if its condition is always false
-    1266 |         scoped_guard(mutex, &dev->lock)
-         |         ^
-   include/linux/cleanup.h:197:2: note: expanded from macro 'scoped_guard'
-     197 |         __scoped_guard(_name, /* empty */, __UNIQUE_ID(label), args)
-         |         ^
-   include/linux/cleanup.h:190:3: note: expanded from macro '__scoped_guard'
-     190 |                 if (!__guard_ptr(_name)(&scope) && __is_cond_ptr(_name)) {      \
-         |                 ^
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/gpio/gpio-sim.c:1264:9: note: initialize the variable 'dir' to silence this warning
-    1264 |         int dir;
-         |                ^
-         |                 = 0
-   5 warnings generated.
+   drivers/mailbox/arm_mhuv3.c:634:28: note: initialize the variable 'fired_dbs' to silence this warning
+     634 |                 u32 active_dbs, fired_dbs;
+         |                                          ^
+         |                                           = 0
+   7 warnings generated.
 ..
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
 
-vim +1041 drivers/firewire/core-device.c
 
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1002  
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1003  static void fw_device_init(struct work_struct *work)
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1004  {
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1005  	struct fw_device *device =
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1006  		container_of(work, struct fw_device, work.work);
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1007  	struct fw_card *card = device->card;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1008  	struct device *found;
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1009  	u32 minor;
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1010  	int ret;
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1011  
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1012  	/*
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1013  	 * All failure paths here set node->data to NULL, so that we
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1014  	 * don't try to do device_for_each_child() on a kfree()'d
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1015  	 * device.
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1016  	 */
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1017  
-94fba9fbeac444 drivers/firewire/core-device.c Clemens Ladisch   2012-04-11  1018  	ret = read_config_rom(device, device->generation);
-94fba9fbeac444 drivers/firewire/core-device.c Clemens Ladisch   2012-04-11  1019  	if (ret != RCODE_COMPLETE) {
-855c603d61ede7 drivers/firewire/fw-device.c   Stefan Richter    2008-02-27  1020  		if (device->config_rom_retries < MAX_RETRIES &&
-855c603d61ede7 drivers/firewire/fw-device.c   Stefan Richter    2008-02-27  1021  		    atomic_read(&device->state) == FW_DEVICE_INITIALIZING) {
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1022  			device->config_rom_retries++;
-6ea9e7bbfc389a drivers/firewire/core-device.c Stefan Richter    2010-10-13  1023  			fw_schedule_device_work(device, RETRY_DELAY);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1024  		} else {
-115881d395959b drivers/firewire/core-device.c Stefan Richter    2011-03-15  1025  			if (device->node->link_on)
-94fba9fbeac444 drivers/firewire/core-device.c Clemens Ladisch   2012-04-11  1026  				fw_notice(card, "giving up on node %x: reading config rom failed: %s\n",
-94fba9fbeac444 drivers/firewire/core-device.c Clemens Ladisch   2012-04-11  1027  					  device->node_id,
-94fba9fbeac444 drivers/firewire/core-device.c Clemens Ladisch   2012-04-11  1028  					  fw_rcode_string(ret));
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1029  			if (device->node == card->root_node)
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1030  				fw_schedule_bm_work(card, 0);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1031  			fw_device_release(&device->device);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1032  		}
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1033  		return;
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1034  	}
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1035  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1036  	// If a device was pending for deletion because its node went away but its bus info block
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1037  	// and root directory header matches that of a newly discovered device, revive the
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1038  	// existing fw_device. The newly allocated fw_device becomes obsolete instead.
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1039  	//
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1040  	// serialize config_rom access.
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20 @1041  	scoped_guard(rwsem_read, &fw_device_rwsem) {
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1042  		found = device_find_child(card->device, (void *)device->config_rom,
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1043  					  compare_configuration_rom);
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1044  	}
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1045  	if (found) {
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1046  		struct fw_device *reused = fw_device(found);
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1047  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1048  		if (atomic_cmpxchg(&reused->state,
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1049  				   FW_DEVICE_GONE,
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1050  				   FW_DEVICE_RUNNING) == FW_DEVICE_GONE) {
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1051  			// serialize node access
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1052  			scoped_guard(spinlock_irq, &card->lock) {
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1053  				struct fw_node *current_node = device->node;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1054  				struct fw_node *obsolete_node = reused->node;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1055  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1056  				device->node = obsolete_node;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1057  				device->node->data = device;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1058  				reused->node = current_node;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1059  				reused->node->data = reused;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1060  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1061  				reused->max_speed = device->max_speed;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1062  				reused->node_id = current_node->node_id;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1063  				smp_wmb();  /* update node_id before generation */
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1064  				reused->generation = card->generation;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1065  				reused->config_rom_retries = 0;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1066  				fw_notice(card, "rediscovered device %s\n",
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1067  					  dev_name(found));
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1068  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1069  				reused->workfn = fw_device_update;
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1070  				fw_schedule_device_work(reused, 0);
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1071  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1072  				if (current_node == card->root_node)
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1073  					fw_schedule_bm_work(card, 0);
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1074  			}
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1075  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1076  			put_device(found);
-3d36a0df3b473f drivers/firewire/fw-device.c   Stefan Richter    2009-01-17  1077  			fw_device_release(&device->device);
-3d36a0df3b473f drivers/firewire/fw-device.c   Stefan Richter    2009-01-17  1078  
-3d36a0df3b473f drivers/firewire/fw-device.c   Stefan Richter    2009-01-17  1079  			return;
-3d36a0df3b473f drivers/firewire/fw-device.c   Stefan Richter    2009-01-17  1080  		}
-3d36a0df3b473f drivers/firewire/fw-device.c   Stefan Richter    2009-01-17  1081  
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1082  		put_device(found);
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1083  	}
-e2c87f484190b1 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-20  1084  
-6230582320b721 drivers/firewire/fw-device.c   Stefan Richter    2009-01-09  1085  	device_initialize(&device->device);
-96b19062e741b7 drivers/firewire/fw-device.c   Stefan Richter    2008-02-02  1086  
-96b19062e741b7 drivers/firewire/fw-device.c   Stefan Richter    2008-02-02  1087  	fw_device_get(device);
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1088  
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1089  	// The index of allocated entry is used for minor identifier of device node.
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1090  	ret = xa_alloc(&fw_device_xa, &minor, device, XA_LIMIT(0, MINORMASK), GFP_KERNEL);
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1091  	if (ret < 0)
-a3aca3dabbcf00 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-07  1092  		goto error;
-a3aca3dabbcf00 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-07  1093  
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1094  	device->device.bus = &fw_bus_type;
-21351dbe4e6127 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-20  1095  	device->device.type = &fw_device_type;
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1096  	device->device.parent = card->device;
-a3aca3dabbcf00 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-07  1097  	device->device.devt = MKDEV(fw_cdev_major, minor);
-a1f64819fe9f13 drivers/firewire/fw-device.c   Kay Sievers       2008-10-30  1098  	dev_set_name(&device->device, "fw%d", minor);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1099  
-e5333db9285e08 drivers/firewire/fw-device.c   Stefan Richter    2009-05-22  1100  	BUILD_BUG_ON(ARRAY_SIZE(device->attribute_group.attrs) <
-e5333db9285e08 drivers/firewire/fw-device.c   Stefan Richter    2009-05-22  1101  			ARRAY_SIZE(fw_device_attributes) +
-e5333db9285e08 drivers/firewire/fw-device.c   Stefan Richter    2009-05-22  1102  			ARRAY_SIZE(config_rom_attributes));
-6f2e53d5135a86 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-27  1103  	init_fw_attribute_group(&device->device,
-6f2e53d5135a86 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-27  1104  				fw_device_attributes,
-6f2e53d5135a86 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-27  1105  				&device->attribute_group);
-e5333db9285e08 drivers/firewire/fw-device.c   Stefan Richter    2009-05-22  1106  
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1107  	if (device_add(&device->device)) {
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1108  		fw_err(card, "failed to add device\n");
-a3aca3dabbcf00 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-07  1109  		goto error_with_cdev;
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1110  	}
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1111  
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1112  	create_units(device);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1113  
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1114  	/*
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1115  	 * Transition the device to running state.  If it got pulled
-183b8021fc0a5f drivers/firewire/core-device.c Masahiro Yamada   2017-02-27  1116  	 * out from under us while we did the initialization work, we
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1117  	 * have to shut down the device again here.  Normally, though,
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1118  	 * fw_node_event will be responsible for shutting it down when
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1119  	 * necessary.  We have to use the atomic cmpxchg here to avoid
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1120  	 * racing with the FW_NODE_DESTROYED case in
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1121  	 * fw_node_event().
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1122  	 */
-641f8791f031d6 drivers/firewire/fw-device.c   Stefan Richter    2007-01-27  1123  	if (atomic_cmpxchg(&device->state,
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1124  			   FW_DEVICE_INITIALIZING,
-3d36a0df3b473f drivers/firewire/fw-device.c   Stefan Richter    2009-01-17  1125  			   FW_DEVICE_RUNNING) == FW_DEVICE_GONE) {
-70044d71d31d69 drivers/firewire/core-device.c Tejun Heo         2014-03-07  1126  		device->workfn = fw_device_shutdown;
-6ea9e7bbfc389a drivers/firewire/core-device.c Stefan Richter    2010-10-13  1127  		fw_schedule_device_work(device, SHUTDOWN_DELAY);
-fa6e697b85d705 drivers/firewire/fw-device.c   Stefan Richter    2008-02-03  1128  	} else {
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1129  		fw_notice(card, "created device %s: GUID %08x%08x, S%d00\n",
-a1f64819fe9f13 drivers/firewire/fw-device.c   Kay Sievers       2008-10-30  1130  			  dev_name(&device->device),
-fa6e697b85d705 drivers/firewire/fw-device.c   Stefan Richter    2008-02-03  1131  			  device->config_rom[3], device->config_rom[4],
-f1397490017e33 drivers/firewire/fw-device.c   Stefan Richter    2007-06-10  1132  			  1 << device->max_speed);
-c9755e14a01987 drivers/firewire/fw-device.c   Stefan Richter    2008-03-24  1133  		device->config_rom_retries = 0;
-7889b60ee71eaf drivers/firewire/fw-device.c   Stefan Richter    2009-03-10  1134  
-099d54143e49d4 drivers/firewire/core-device.c Stefan Richter    2009-06-06  1135  		set_broadcast_channel(device, device->generation);
-badfcb24891ccd drivers/firewire/core-device.c Clemens Ladisch   2012-08-13  1136  
-badfcb24891ccd drivers/firewire/core-device.c Clemens Ladisch   2012-08-13  1137  		add_device_randomness(&device->config_rom[3], 8);
-fa6e697b85d705 drivers/firewire/fw-device.c   Stefan Richter    2008-02-03  1138  	}
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1139  
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1140  	/*
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1141  	 * Reschedule the IRM work if we just finished reading the
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1142  	 * root node config rom.  If this races with a bus reset we
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1143  	 * just end up running the IRM work a couple of extra times -
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1144  	 * pretty harmless.
-c781c06d119d04 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-05-07  1145  	 */
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1146  	if (device->node == card->root_node)
-26b4950de174bc drivers/firewire/core-device.c Stefan Richter    2012-02-18  1147  		fw_schedule_bm_work(card, 0);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1148  
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1149  	return;
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1150  
-a3aca3dabbcf00 drivers/firewire/fw-device.c   Kristian Høgsberg 2007-03-07  1151   error_with_cdev:
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1152  	xa_erase(&fw_device_xa, minor);
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1153   error:
-7e5a7725a0e403 drivers/firewire/core-device.c Takashi Sakamoto  2024-08-12  1154  	fw_device_put(device);		// fw_device_xa's reference.
-96b19062e741b7 drivers/firewire/fw-device.c   Stefan Richter    2008-02-02  1155  
-96b19062e741b7 drivers/firewire/fw-device.c   Stefan Richter    2008-02-02  1156  	put_device(&device->device);	/* our reference */
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1157  }
-19a15b937b2663 drivers/firewire/fw-device.c   Kristian Høgsberg 2006-12-19  1158  
+vim +2277 sound/core/pcm_native.c
+
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2240  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2241  /*
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2242   * PCM link handling
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2243   */
+877211f5e1b119 Takashi Iwai    2005-11-17  2244  static int snd_pcm_link(struct snd_pcm_substream *substream, int fd)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2245  {
+877211f5e1b119 Takashi Iwai    2005-11-17  2246  	struct snd_pcm_file *pcm_file;
+877211f5e1b119 Takashi Iwai    2005-11-17  2247  	struct snd_pcm_substream *substream1;
+ae921398486419 Takashi Iwai    2024-02-22  2248  	struct snd_pcm_group *group __free(kfree) = NULL;
+ae921398486419 Takashi Iwai    2024-02-22  2249  	struct snd_pcm_group *target_group;
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2250  	bool nonatomic = substream->pcm->nonatomic;
+d90950c6a2658e Takashi Iwai    2024-02-23  2251  	CLASS(fd, f)(fd);
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2252  
+1da91ea87aefe2 Al Viro         2024-05-31  2253  	if (!fd_file(f))
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2254  		return -EBADFD;
+1da91ea87aefe2 Al Viro         2024-05-31  2255  	if (!is_pcm_file(fd_file(f)))
+d90950c6a2658e Takashi Iwai    2024-02-23  2256  		return -EBADFD;
+ae921398486419 Takashi Iwai    2024-02-22  2257  
+1da91ea87aefe2 Al Viro         2024-05-31  2258  	pcm_file = fd_file(f)->private_data;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2259  	substream1 = pcm_file->substream;
+951e2736f4b11b MichaÅ‚ MirosÅ‚aw 2020-06-08  2260  
+d90950c6a2658e Takashi Iwai    2024-02-23  2261  	if (substream == substream1)
+d90950c6a2658e Takashi Iwai    2024-02-23  2262  		return -EINVAL;
+951e2736f4b11b MichaÅ‚ MirosÅ‚aw 2020-06-08  2263  
+73365cb10b280e Takashi Iwai    2019-01-13  2264  	group = kzalloc(sizeof(*group), GFP_KERNEL);
+d90950c6a2658e Takashi Iwai    2024-02-23  2265  	if (!group)
+d90950c6a2658e Takashi Iwai    2024-02-23  2266  		return -ENOMEM;
+73365cb10b280e Takashi Iwai    2019-01-13  2267  	snd_pcm_group_init(group);
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2268  
+dd0da75b9a2768 Takashi Iwai    2024-02-27  2269  	guard(rwsem_write)(&snd_pcm_link_rwsem);
+f0061c18c169f0 Takashi Iwai    2022-09-26  2270  	if (substream->runtime->state == SNDRV_PCM_STATE_OPEN ||
+f0061c18c169f0 Takashi Iwai    2022-09-26  2271  	    substream->runtime->state != substream1->runtime->state ||
+dd0da75b9a2768 Takashi Iwai    2024-02-27  2272  	    substream->pcm->nonatomic != substream1->pcm->nonatomic)
+dd0da75b9a2768 Takashi Iwai    2024-02-27  2273  		return -EBADFD;
+dd0da75b9a2768 Takashi Iwai    2024-02-27  2274  	if (snd_pcm_stream_linked(substream1))
+dd0da75b9a2768 Takashi Iwai    2024-02-27  2275  		return -EALREADY;
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2276  
+650224fe8d5f6d Takashi Iwai    2024-02-27 @2277  	scoped_guard(pcm_stream_lock_irq, substream) {
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2278  		if (!snd_pcm_stream_linked(substream)) {
+a41c4cb913b53b Takashi Iwai    2019-01-13  2279  			snd_pcm_group_assign(substream, group);
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2280  			group = NULL; /* assigned, don't free this one below */
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2281  		}
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2282  		target_group = substream->group;
+650224fe8d5f6d Takashi Iwai    2024-02-27  2283  	}
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2284  
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2285  	snd_pcm_group_lock_irq(target_group, nonatomic);
+e18035cf5cb3d2 MichaÅ‚ MirosÅ‚aw 2020-06-08  2286  	snd_pcm_stream_lock_nested(substream1);
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2287  	snd_pcm_group_assign(substream1, target_group);
+0e279dcea0ec89 Takashi Iwai    2019-07-19  2288  	refcount_inc(&target_group->refs);
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2289  	snd_pcm_stream_unlock(substream1);
+f57f3df03a8e60 Takashi Iwai    2019-01-13  2290  	snd_pcm_group_unlock_irq(target_group, nonatomic);
+dd0da75b9a2768 Takashi Iwai    2024-02-27  2291  	return 0;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2292  }
+^1da177e4c3f41 Linus Torvalds  2005-04-16  2293  
 
 -- 
 0-DAY CI Kernel Test Service
