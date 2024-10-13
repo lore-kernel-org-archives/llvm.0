@@ -1,61 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF49B13D504;
-	Sun, 13 Oct 2024 12:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC3D1EB2E;
+	Sun, 13 Oct 2024 13:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728823252; cv=none; b=E4wbMqCa/t0HmFbnvUbRlLYYFnG/rqTG4KZwL4CafQda8iahDhOVUnqOjXJ92JWhyV7dZGAK0BZ/rAg6FmSCbzv1EyDNYjGYedG7o/kGHU2G0IMJ9wddnoUB5+xHBj8giDIUGFLaCQ7PWyvXI9a6g7NxNJzZb7d3BroM/0XdtlU=
+	t=1728826974; cv=none; b=PD1CTa4v8BiFt3z/c8CJlDuEpE0jR/mnNdR1Ge5uPmC3hHtduVc0yj26uLZvwXbiGAmpN08t/6sJzBtlVkDVBPvhM0sm3ZeGTasQvGkeDKNsX9TCw4bTmKy846fuMus6mL1J5TGPkW/8UZYRyFTcyknqwa33BcAhE44WH9ACIVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728823252; c=relaxed/simple;
-	bh=RLpaMXDfUakxynthv8XolAg1Sclf4muscRuSRMQTz4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oyK236LUKKnRGnLKzRwEgs0HQETAiiXDGNhHNcnhsrXoOBTNpiB/fR65Cl+Ns6Xl1vgHgid/hhw+21ouzc/6Dx7XCN9GYQzk721ux31CIc1ntIwLr4iKgkNSTUpfe2d86Ex5YHqIl1YPbidkBQW4dxO8AaXdYtiUWHPQxOetueI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FUmNVV4z; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1728826974; c=relaxed/simple;
+	bh=XS5iblfw1egF4iIUL7nQOMVI6cY6Z0WNfAVeAajuod0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kvTHHPBs7rYDcUiSdp++0hi/KsGtmXoj1aKcE1gv97uMR1lEg+VM/svSTObuXCz+SUHxmS7jwa9O1QSRwRmmHpTihVtrO4dFQusAm703F9HmzmhoXXYyQFTqMKuVM06lqL3urGNwCj6DpOrMBcKwLuD+K9ZPLRZbkwj8eFTsGAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vwdl2COu; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FUmNVV4z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vwdl2COu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728823249; x=1760359249;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RLpaMXDfUakxynthv8XolAg1Sclf4muscRuSRMQTz4Y=;
-  b=FUmNVV4zQQr6of0MBRbgPVIB07WqrkXVUSihnvmFne8lgnCh+flyilsz
-   BUF9ovq+TSqrIBIQl4mNBr508wKyrp+zo6v8R7tfLD8zUoIUvMjEbNAZt
-   jZhRJBhNFb/bsARJYLLOGyVxAwHZyFNPKASXqARfGzY3Y6TcMT3F7HXN+
-   tbtaP0OzuNtX1Dhhr8Cnz5tE2K1SlHL9oesT3eYgcFUWaSWUxbba4nftI
-   TGyW0Okiz3WI3qycMYLp76FgGGye5k3Cr3eakm7rfKHZVXOu5SfNlMoSt
-   3j7XKHvgBLsQHetzSIRvR2M/ROryPMsnmHgJg1w/0Or+/Te+tpq9pt9Nh
-   g==;
-X-CSE-ConnectionGUID: iAZKU7AcTFOkn84vI9ErCg==
-X-CSE-MsgGUID: tA4nZuiHQ/CWNk9VzEIYRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31871401"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="31871401"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 05:40:49 -0700
-X-CSE-ConnectionGUID: 7Rwf/GtbRreGSNd4EmIItw==
-X-CSE-MsgGUID: ZgcExqH3SZmq34LLKDBhbw==
+  t=1728826972; x=1760362972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XS5iblfw1egF4iIUL7nQOMVI6cY6Z0WNfAVeAajuod0=;
+  b=Vwdl2COuTzKHuyPJhHn37kcS2gBYz0AtDjKfjwpA4Om1q5ImeVrHPYjr
+   HFRil4GRHeqP6t6JODpfDUR+axdQpCPTrO/ZW5vr5/gT2fXBNemUpXqd1
+   BafEYqf+rDwAx1/qu6vSDG2E0gGpICd0unkxL2VhBeI20n0W80kY0/6K7
+   O4Mv9vqW3mNSmH7epaKLwGbVvn8TNvPLV8ri6EWqWt3Cv1JNgER+yr38U
+   UJf4nrkkrz7c2h4+jRsTutyuB5/OfVeMu1v+crc9HSoxz5LH2/A4k7nUP
+   PYjn2+8EflZ1Ivt9f3v2wf66Fm5Oi+gPEjeXKbX/OeMvk/uAPrSOTZkCd
+   Q==;
+X-CSE-ConnectionGUID: A93jJNQzRh2nUoyFtzbLYA==
+X-CSE-MsgGUID: cPdAn7BiRNqqX2GEq2z2FA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="27663438"
+X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
+   d="scan'208";a="27663438"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 06:42:51 -0700
+X-CSE-ConnectionGUID: LXyp+TOFRHqudCYB3U6i2w==
+X-CSE-MsgGUID: lCrNGTVASvK6mJLG8hKoYg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="76978328"
+   d="scan'208";a="81333291"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 13 Oct 2024 05:40:46 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 13 Oct 2024 06:42:48 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1szxts-000EMl-0d;
-	Sun, 13 Oct 2024 12:40:44 +0000
-Date: Sun, 13 Oct 2024 20:40:34 +0800
+	id 1szyru-000EOh-2N;
+	Sun, 13 Oct 2024 13:42:46 +0000
+Date: Sun, 13 Oct 2024 21:41:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	andi.shyti@kernel.org, quic_bjorande@quicinc.com,
+	--cc=linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
+	quic_vdadhani@quicinc.com, vkoul@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 158/161]
- drivers/thermal/thermal_sysfs.c:726:8: error: use of undeclared label
- 'unlock'
-Message-ID: <202410132024.xuSMJC7v-lkp@intel.com>
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: Re: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early
+ resume stage
+Message-ID: <202410132130.a2tOwnm4-lkp@intel.com>
+References: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,89 +68,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   c7d553cb161f03e4424c88bddc26fadcbbf4b6d5
-commit: db8666152df8b016530452714b0ad8c7f1b37f3c [158/161] thermal: core: Add and use cooling device guard
-config: i386-buildonly-randconfig-005-20241013 (https://download.01.org/0day-ci/archive/20241013/202410132024.xuSMJC7v-lkp@intel.com/config)
+Hi Mukesh,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on v6.12-rc2]
+[also build test ERROR on linus/master]
+[cannot apply to andi-shyti/i2c/i2c-host next-20241011]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Kumar-Savaliya/i2c-i2c-qcom-geni-Serve-transfer-during-early-resume-stage/20241011-202013
+base:   v6.12-rc2
+patch link:    https://lore.kernel.org/r/20241011121757.2267336-1-quic_msavaliy%40quicinc.com
+patch subject: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early resume stage
+config: i386-buildonly-randconfig-001-20241013 (https://download.01.org/0day-ci/archive/20241013/202410132130.a2tOwnm4-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410132024.xuSMJC7v-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410132130.a2tOwnm4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410132024.xuSMJC7v-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410132130.a2tOwnm4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/thermal/thermal_sysfs.c:726:8: error: use of undeclared label 'unlock'
-     726 |                 goto unlock;
-         |                      ^
+>> drivers/i2c/busses/i2c-qcom-geni.c:711:28: error: no member named 'usage_count' in 'struct dev_pm_info'
+     711 |                         atomic_read(&dev->power.usage_count));
+         |                                      ~~~~~~~~~~ ^
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
    1 error generated.
 
 
-vim +/unlock +726 drivers/thermal/thermal_sysfs.c
+vim +711 drivers/i2c/busses/i2c-qcom-geni.c
 
-8ea229511e06f9 Viresh Kumar      2018-04-02  702  
-33e678d47d1f3e Viresh Kumar      2018-04-03  703  static ssize_t trans_table_show(struct device *dev,
-33e678d47d1f3e Viresh Kumar      2018-04-03  704  				struct device_attribute *attr, char *buf)
-8ea229511e06f9 Viresh Kumar      2018-04-02  705  {
-8ea229511e06f9 Viresh Kumar      2018-04-02  706  	struct thermal_cooling_device *cdev = to_cooling_device(dev);
-790930f44289c8 Rafael J. Wysocki 2023-03-17  707  	struct cooling_dev_stats *stats;
-8ea229511e06f9 Viresh Kumar      2018-04-02  708  	ssize_t len = 0;
-8ea229511e06f9 Viresh Kumar      2018-04-02  709  	int i, j;
-8ea229511e06f9 Viresh Kumar      2018-04-02  710  
-db8666152df8b0 Rafael J. Wysocki 2024-10-11  711  	guard(cooling_dev)(cdev);
-790930f44289c8 Rafael J. Wysocki 2023-03-17  712  
-790930f44289c8 Rafael J. Wysocki 2023-03-17  713  	stats = cdev->stats;
-db8666152df8b0 Rafael J. Wysocki 2024-10-11  714  	if (!stats)
-db8666152df8b0 Rafael J. Wysocki 2024-10-11  715  		return -ENODATA;
-790930f44289c8 Rafael J. Wysocki 2023-03-17  716  
-8ea229511e06f9 Viresh Kumar      2018-04-02  717  	len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
-8ea229511e06f9 Viresh Kumar      2018-04-02  718  	len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
-a365105c685cad Viresh Kumar      2022-10-17  719  	for (i = 0; i <= cdev->max_state; i++) {
-8ea229511e06f9 Viresh Kumar      2018-04-02  720  		if (len >= PAGE_SIZE)
-8ea229511e06f9 Viresh Kumar      2018-04-02  721  			break;
-8ea229511e06f9 Viresh Kumar      2018-04-02  722  		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u  ", i);
-8ea229511e06f9 Viresh Kumar      2018-04-02  723  	}
-790930f44289c8 Rafael J. Wysocki 2023-03-17  724  	if (len >= PAGE_SIZE) {
-790930f44289c8 Rafael J. Wysocki 2023-03-17  725  		len = PAGE_SIZE;
-790930f44289c8 Rafael J. Wysocki 2023-03-17 @726  		goto unlock;
-790930f44289c8 Rafael J. Wysocki 2023-03-17  727  	}
-8ea229511e06f9 Viresh Kumar      2018-04-02  728  
-8ea229511e06f9 Viresh Kumar      2018-04-02  729  	len += snprintf(buf + len, PAGE_SIZE - len, "\n");
-8ea229511e06f9 Viresh Kumar      2018-04-02  730  
-a365105c685cad Viresh Kumar      2022-10-17  731  	for (i = 0; i <= cdev->max_state; i++) {
-8ea229511e06f9 Viresh Kumar      2018-04-02  732  		if (len >= PAGE_SIZE)
-8ea229511e06f9 Viresh Kumar      2018-04-02  733  			break;
-8ea229511e06f9 Viresh Kumar      2018-04-02  734  
-8ea229511e06f9 Viresh Kumar      2018-04-02  735  		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u:", i);
-8ea229511e06f9 Viresh Kumar      2018-04-02  736  
-a365105c685cad Viresh Kumar      2022-10-17  737  		for (j = 0; j <= cdev->max_state; j++) {
-8ea229511e06f9 Viresh Kumar      2018-04-02  738  			if (len >= PAGE_SIZE)
-8ea229511e06f9 Viresh Kumar      2018-04-02  739  				break;
-8ea229511e06f9 Viresh Kumar      2018-04-02  740  			len += snprintf(buf + len, PAGE_SIZE - len, "%8u ",
-a365105c685cad Viresh Kumar      2022-10-17  741  				stats->trans_table[i * (cdev->max_state + 1) + j]);
-8ea229511e06f9 Viresh Kumar      2018-04-02  742  		}
-8ea229511e06f9 Viresh Kumar      2018-04-02  743  		if (len >= PAGE_SIZE)
-8ea229511e06f9 Viresh Kumar      2018-04-02  744  			break;
-8ea229511e06f9 Viresh Kumar      2018-04-02  745  		len += snprintf(buf + len, PAGE_SIZE - len, "\n");
-8ea229511e06f9 Viresh Kumar      2018-04-02  746  	}
-8ea229511e06f9 Viresh Kumar      2018-04-02  747  
-8ea229511e06f9 Viresh Kumar      2018-04-02  748  	if (len >= PAGE_SIZE) {
-8ea229511e06f9 Viresh Kumar      2018-04-02  749  		pr_warn_once("Thermal transition table exceeds PAGE_SIZE. Disabling\n");
-790930f44289c8 Rafael J. Wysocki 2023-03-17  750  		len = -EFBIG;
-8ea229511e06f9 Viresh Kumar      2018-04-02  751  	}
-790930f44289c8 Rafael J. Wysocki 2023-03-17  752  
-8ea229511e06f9 Viresh Kumar      2018-04-02  753  	return len;
-8ea229511e06f9 Viresh Kumar      2018-04-02  754  }
-8ea229511e06f9 Viresh Kumar      2018-04-02  755  
-
-:::::: The code at line 726 was first introduced by commit
-:::::: 790930f44289c8209c57461b2db499fcc702e0b3 thermal: core: Introduce thermal_cooling_device_update()
-
-:::::: TO: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+   696	
+   697	static int geni_i2c_xfer(struct i2c_adapter *adap,
+   698				 struct i2c_msg msgs[],
+   699				 int num)
+   700	{
+   701		struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
+   702		struct device *dev = gi2c->se.dev;
+   703		int ret;
+   704	
+   705		gi2c->err = 0;
+   706		reinit_completion(&gi2c->done);
+   707	
+   708		/* Serve I2C transfer by forced resume whether Runtime PM is enbled or not */
+   709		if (!pm_runtime_enabled(dev) && gi2c->suspended) {
+   710			dev_dbg(dev, "Runtime PM is disabled hence force resume, pm_usage_count: %d\n",
+ > 711				atomic_read(&dev->power.usage_count));
+   712			ret = geni_i2c_force_resume(gi2c);
+   713			if (ret)
+   714				return ret;
+   715		} else {
+   716			ret = pm_runtime_get_sync(dev);
+   717			if (ret == -EACCES && gi2c->suspended) {
+   718				dev_dbg(dev, "pm_runtime_get_sync() failed-%d, force resume\n", ret);
+   719				ret = geni_i2c_force_resume(gi2c);
+   720				if (ret)
+   721					return ret;
+   722			}
+   723		}
+   724	
+   725		qcom_geni_i2c_conf(gi2c);
+   726	
+   727		if (gi2c->gpi_mode)
+   728			ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
+   729		else
+   730			ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
+   731	
+   732		/* Does Opposite to Forced Resume when runtime PM was not enabled and served
+   733		 * Transfer via forced resume.
+   734		 */
+   735		if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
+   736			pm_runtime_put_noidle(dev);
+   737			pm_runtime_set_suspended(dev);
+   738			/* Reset flag same as runtime suspend, next xfer PM can be enabled */
+   739			gi2c->suspended = 0;
+   740		} else {
+   741			pm_runtime_mark_last_busy(gi2c->se.dev);
+   742			pm_runtime_put_autosuspend(gi2c->se.dev);
+   743		}
+   744	
+   745		gi2c->cur = NULL;
+   746		gi2c->err = 0;
+   747		return ret;
+   748	}
+   749	
 
 -- 
 0-DAY CI Kernel Test Service
