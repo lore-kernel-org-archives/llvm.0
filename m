@@ -1,125 +1,147 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876EE2907
-	for <llvm@lists.linux.dev>; Sun, 13 Oct 2024 09:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EC513BAC6;
+	Sun, 13 Oct 2024 09:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728813205; cv=none; b=RnviQaYiReD1XFC7ThwaOHdeFKjVegkKMA1Jzjtq2A1DF6Uty5sNm82Hy5Ev8GO3l3bSV+6HKmBQXNGCvXWkQnNaaWS4CWNP8iWGwB4t7OrO7NbRhgrAbcI5WWk9U6ni+X97UvWYYn5U8nZ6UHKf4kRNRQUf29UbN/wh6/yW6oM=
+	t=1728813352; cv=none; b=IjjOrQug2kRbb2bwgPt0GpYPabikc3A+/PTQ48R1K+h9l90kTx1iabhqx61v2ODFTYJoOMmA4utrxOzoD6fZ0gYNw6KfOviX6VtmMDDBGkMQuTl+hXbOBMdjhxhT8TbpJhBiVahKujGKj1UKzjdgciE6+gquDwAtAL2TZiGWb4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728813205; c=relaxed/simple;
-	bh=UnjVHzXxbyrm6dBNgzmBWG95oOhZhEuahhTR4t6B0TM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lrg+bN7XHo0aWkOODMxMmsOdLGJyPSGbcKYWBeU/3vVimD0C5ewUWGNxlr/7vJuXt4lwv5ypzhD4UxoM0hHxPD5sQqeJZKvSZmN7mNCahTJz+VTVPCPnPub3ylKeA21YY6DOXQKTCi6knEkWwDqPTzUgpM7WnH1M82Sre2xsUTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=GK3LqFg6; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1728813352; c=relaxed/simple;
+	bh=YHPZ9HiYk7Nmr2TKI3svodLUHbz2SvWcrN7V2Xi/ln8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WwdDD0Rqh995uQ8iFRyIzt3lkHvgytiGsGuwEp1TV5TZ3Qu6oOP2CTdyYWeMANo0/xalSRvGmmIzSQa5WS31u5P9cn9hX4iLsvRr/sxwgSEgvHHEpPxT0dvRdT9acZhmyMKWDydr229259vNT799ez4VSRgGUHCSrc7nFhu+0do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1J6nc0X; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="GK3LqFg6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1J6nc0X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1728813204; x=1760349204;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728813351; x=1760349351;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UnjVHzXxbyrm6dBNgzmBWG95oOhZhEuahhTR4t6B0TM=;
-  b=GK3LqFg6CzUOtEdmkZkm8bggwwp5F/d6uCksIBzCmIGg341ZL3dDxwbO
-   k/ElD+EtVowitMEXuUJC2UtYmrdTXIh9cyYXc0msfvgov06J+NHt2wgGL
-   EQtvbWH6/tSOHbhIXokijVSIyN5vl9tHQPiycNnYsOPIPB/+7zGBHVRwM
-   ygu7Z2C9rCwkdn6FLRJ+AlP9atSnko3Uq73eEi7HVrPEA07BBHWIQhwNe
-   kXAEQ7LKVOY1c0/0qBzYJCmk8HXZF+rRsMTTQYJXm2YV0r3eZk+4lPIWG
-   EeZsaCWLmC1yBZ2NlaGpz51t07u7Cs1WdhNRPkbp8D1KRqthGlhZhCV0x
+  bh=YHPZ9HiYk7Nmr2TKI3svodLUHbz2SvWcrN7V2Xi/ln8=;
+  b=b1J6nc0XHI4NnpMFjocBTJB2g03qvt+6rrVrhKg/eLpw/Tz7/3dB34LB
+   Iv/T6u0573Q4jZEseCvCpOBlp4fSxMGOciszttdphvD+0bto9NABvnms7
+   +bv9RRxSYd3EqQ/ZCOmu/PGmJulnwx9KJL+ZHxHXPmIuel8rTUW5cEkx4
+   cpXDAxmRKJ/TWOUNmxCzRzROtqK6qOOl5GZoYNEo1Jj++gmSZmTGNdb5b
+   omWjbD53XDJvWVTlaD39a6iwJZb/vsInRCYGMEpN5cx2ZXXu1jRY59YfK
+   dI7vfk6RYxbBEdo69jzcUJ8Og/YZKH16TNIxUHDzaes0gMkSTQvjO/oM9
    w==;
-X-CSE-ConnectionGUID: WbtJBVtfTFKCjrEfhWFFuQ==
-X-CSE-MsgGUID: RTC9G46iT7KBEuwPZLnxug==
+X-CSE-ConnectionGUID: TtcNcVLNRxKtL77+9MXi9w==
+X-CSE-MsgGUID: YqRnYxENTWS4rll/V4L30w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="45646577"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="45646577"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 02:55:46 -0700
+X-CSE-ConnectionGUID: 5QuhQ/mXQVaASKUyPZhk6Q==
+X-CSE-MsgGUID: lRhOdtMGSBKWB5HRI+PRKg==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="264005111"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Oct 2024 02:53:17 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 13 Oct 2024 02:52:36 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Sun, 13 Oct 2024 02:52:32 -0700
-Date: Sun, 13 Oct 2024 09:52:31 +0000
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Simon Horman <horms@kernel.org>
-CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Woojung Huh <woojung.huh@microchip.com>, Andrew Lunn
-	<andrew@lunn.ch>, Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean
-	<olteanv@gmail.com>, Richard Cochran <richardcochran@gmail.com>, Jiawen Wu
-	<jiawenwu@trustnetic.com>, Mengyuan Lou <mengyuanlou@net-swift.com>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	Jeffrey Hugo <quic_jhugo@quicinc.com>, Carl Vanderlip
-	<quic_carlv@quicinc.com>, Oded Gabbay <ogabbay@kernel.org>,
-	<UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH net-next 1/3] net: dsa: microchip: copy string using
- strscpy
-Message-ID: <20241013095231.qoy3aa5zvrftezso@DEN-DL-M70577>
-References: <20241011-string-thing-v1-0-acc506568033@kernel.org>
- <20241011-string-thing-v1-1-acc506568033@kernel.org>
+   d="scan'208";a="108051969"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 13 Oct 2024 02:55:42 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1szvK8-000EGp-1L;
+	Sun, 13 Oct 2024 09:55:40 +0000
+Date: Sun, 13 Oct 2024 17:54:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	peterz@infradead.org, tglx@linutronix.de, paulmck@kernel.org,
+	mingo@kernel.org, bigeasy@linutronix.de, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+	vschneid@redhat.com, frederic@kernel.org, ankur.a.arora@oracle.com,
+	efault@gmx.de
+Subject: Re: [PATCH 1/7] sched: warn for high latency with
+ TIF_NEED_RESCHED_LAZY
+Message-ID: <202410131726.Gi9qvUP8-lkp@intel.com>
+References: <20241009165411.3426937-2-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241011-string-thing-v1-1-acc506568033@kernel.org>
+In-Reply-To: <20241009165411.3426937-2-ankur.a.arora@oracle.com>
 
-> Prior to this patch ksz_ptp_msg_irq_setup() uses snprintf() to copy
-> strings. It does so by passing strings as the format argument of
-> snprintf(). This appears to be safe, due to the absence of format
-> specifiers in the strings, which are declared within the same function.
-> But nonetheless GCC 14 warns about it:
-> 
-> .../ksz_ptp.c:1109:55: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
->  1109 |         snprintf(ptpmsg_irq->name, sizeof(ptpmsg_irq->name), name[n]);
->       |                                                              ^~~~~~~
-> .../ksz_ptp.c:1109:55: note: treat the string as an argument to avoid this
->  1109 |         snprintf(ptpmsg_irq->name, sizeof(ptpmsg_irq->name), name[n]);
->       |                                                              ^
->       |                                                              "%s",
-> 
-> As what we are really dealing with here is a string copy, it seems make
-> sense to use a function designed for this purpose. In this case null
-> padding is not required, so strscpy is appropriate. And as the
-> destination is an array, the 2-argument variant may be used.
+Hi Ankur,
 
-.. is an array - and of fixed size.
+kernel test robot noticed the following build errors:
 
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
->  drivers/net/dsa/microchip/ksz_ptp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
-> index 050f17c43ef6..22fb9ef4645c 100644
-> --- a/drivers/net/dsa/microchip/ksz_ptp.c
-> +++ b/drivers/net/dsa/microchip/ksz_ptp.c
-> @@ -1106,7 +1106,7 @@ static int ksz_ptp_msg_irq_setup(struct ksz_port *port, u8 n)
->         ptpmsg_irq->port = port;
->         ptpmsg_irq->ts_reg = ops->get_port_addr(port->num, ts_reg[n]);
-> 
-> -       snprintf(ptpmsg_irq->name, sizeof(ptpmsg_irq->name), name[n]);
-> +       strscpy(ptpmsg_irq->name, name[n]);
-> 
->         ptpmsg_irq->num = irq_find_mapping(port->ptpirq.domain, n);
->         if (ptpmsg_irq->num < 0)
-> 
-> --
-> 2.45.2
->
+[auto build test ERROR on paulmck-rcu/dev]
+[also build test ERROR on powerpc/next powerpc/fixes tip/sched/core linus/master v6.12-rc2 next-20241011]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This looks good to me.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ankur-Arora/sched-warn-for-high-latency-with-TIF_NEED_RESCHED_LAZY/20241010-005819
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+patch link:    https://lore.kernel.org/r/20241009165411.3426937-2-ankur.a.arora%40oracle.com
+patch subject: [PATCH 1/7] sched: warn for high latency with TIF_NEED_RESCHED_LAZY
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241013/202410131726.Gi9qvUP8-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410131726.Gi9qvUP8-lkp@intel.com/reproduce)
 
-Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410131726.Gi9qvUP8-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> kernel/sched/core.c:5528:27: error: call to undeclared function 'tif_need_resched_lazy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5528 |         if ((!need_resched() && !tif_need_resched_lazy()) || !latency_warn_ms)
+         |                                  ^
+   kernel/sched/core.c:5528:27: note: did you mean 'tif_need_resched'?
+   include/linux/thread_info.h:182:29: note: 'tif_need_resched' declared here
+     182 | static __always_inline bool tif_need_resched(void)
+         |                             ^
+   1 error generated.
+
+
+vim +/tif_need_resched_lazy +5528 kernel/sched/core.c
+
+  5517	
+  5518	#ifdef CONFIG_SCHED_DEBUG
+  5519	static u64 cpu_resched_latency(struct rq *rq)
+  5520	{
+  5521		int latency_warn_ms = READ_ONCE(sysctl_resched_latency_warn_ms);
+  5522		u64 resched_latency, now = rq_clock(rq);
+  5523		static bool warned_once;
+  5524	
+  5525		if (sysctl_resched_latency_warn_once && warned_once)
+  5526			return 0;
+  5527	
+> 5528		if ((!need_resched() && !tif_need_resched_lazy()) || !latency_warn_ms)
+  5529			return 0;
+  5530	
+  5531		if (system_state == SYSTEM_BOOTING)
+  5532			return 0;
+  5533	
+  5534		if (!rq->last_seen_need_resched_ns) {
+  5535			rq->last_seen_need_resched_ns = now;
+  5536			rq->ticks_without_resched = 0;
+  5537			return 0;
+  5538		}
+  5539	
+  5540		rq->ticks_without_resched++;
+  5541		resched_latency = now - rq->last_seen_need_resched_ns;
+  5542		if (resched_latency <= latency_warn_ms * NSEC_PER_MSEC)
+  5543			return 0;
+  5544	
+  5545		warned_once = true;
+  5546	
+  5547		return resched_latency;
+  5548	}
+  5549	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
