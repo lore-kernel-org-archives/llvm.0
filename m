@@ -1,66 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EC513BAC6;
-	Sun, 13 Oct 2024 09:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF49B13D504;
+	Sun, 13 Oct 2024 12:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728813352; cv=none; b=IjjOrQug2kRbb2bwgPt0GpYPabikc3A+/PTQ48R1K+h9l90kTx1iabhqx61v2ODFTYJoOMmA4utrxOzoD6fZ0gYNw6KfOviX6VtmMDDBGkMQuTl+hXbOBMdjhxhT8TbpJhBiVahKujGKj1UKzjdgciE6+gquDwAtAL2TZiGWb4w=
+	t=1728823252; cv=none; b=E4wbMqCa/t0HmFbnvUbRlLYYFnG/rqTG4KZwL4CafQda8iahDhOVUnqOjXJ92JWhyV7dZGAK0BZ/rAg6FmSCbzv1EyDNYjGYedG7o/kGHU2G0IMJ9wddnoUB5+xHBj8giDIUGFLaCQ7PWyvXI9a6g7NxNJzZb7d3BroM/0XdtlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728813352; c=relaxed/simple;
-	bh=YHPZ9HiYk7Nmr2TKI3svodLUHbz2SvWcrN7V2Xi/ln8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WwdDD0Rqh995uQ8iFRyIzt3lkHvgytiGsGuwEp1TV5TZ3Qu6oOP2CTdyYWeMANo0/xalSRvGmmIzSQa5WS31u5P9cn9hX4iLsvRr/sxwgSEgvHHEpPxT0dvRdT9acZhmyMKWDydr229259vNT799ez4VSRgGUHCSrc7nFhu+0do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1J6nc0X; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1728823252; c=relaxed/simple;
+	bh=RLpaMXDfUakxynthv8XolAg1Sclf4muscRuSRMQTz4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oyK236LUKKnRGnLKzRwEgs0HQETAiiXDGNhHNcnhsrXoOBTNpiB/fR65Cl+Ns6Xl1vgHgid/hhw+21ouzc/6Dx7XCN9GYQzk721ux31CIc1ntIwLr4iKgkNSTUpfe2d86Ex5YHqIl1YPbidkBQW4dxO8AaXdYtiUWHPQxOetueI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FUmNVV4z; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1J6nc0X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FUmNVV4z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728813351; x=1760349351;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YHPZ9HiYk7Nmr2TKI3svodLUHbz2SvWcrN7V2Xi/ln8=;
-  b=b1J6nc0XHI4NnpMFjocBTJB2g03qvt+6rrVrhKg/eLpw/Tz7/3dB34LB
-   Iv/T6u0573Q4jZEseCvCpOBlp4fSxMGOciszttdphvD+0bto9NABvnms7
-   +bv9RRxSYd3EqQ/ZCOmu/PGmJulnwx9KJL+ZHxHXPmIuel8rTUW5cEkx4
-   cpXDAxmRKJ/TWOUNmxCzRzROtqK6qOOl5GZoYNEo1Jj++gmSZmTGNdb5b
-   omWjbD53XDJvWVTlaD39a6iwJZb/vsInRCYGMEpN5cx2ZXXu1jRY59YfK
-   dI7vfk6RYxbBEdo69jzcUJ8Og/YZKH16TNIxUHDzaes0gMkSTQvjO/oM9
-   w==;
-X-CSE-ConnectionGUID: TtcNcVLNRxKtL77+9MXi9w==
-X-CSE-MsgGUID: YqRnYxENTWS4rll/V4L30w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="45646577"
+  t=1728823249; x=1760359249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RLpaMXDfUakxynthv8XolAg1Sclf4muscRuSRMQTz4Y=;
+  b=FUmNVV4zQQr6of0MBRbgPVIB07WqrkXVUSihnvmFne8lgnCh+flyilsz
+   BUF9ovq+TSqrIBIQl4mNBr508wKyrp+zo6v8R7tfLD8zUoIUvMjEbNAZt
+   jZhRJBhNFb/bsARJYLLOGyVxAwHZyFNPKASXqARfGzY3Y6TcMT3F7HXN+
+   tbtaP0OzuNtX1Dhhr8Cnz5tE2K1SlHL9oesT3eYgcFUWaSWUxbba4nftI
+   TGyW0Okiz3WI3qycMYLp76FgGGye5k3Cr3eakm7rfKHZVXOu5SfNlMoSt
+   3j7XKHvgBLsQHetzSIRvR2M/ROryPMsnmHgJg1w/0Or+/Te+tpq9pt9Nh
+   g==;
+X-CSE-ConnectionGUID: iAZKU7AcTFOkn84vI9ErCg==
+X-CSE-MsgGUID: tA4nZuiHQ/CWNk9VzEIYRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31871401"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="45646577"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 02:55:46 -0700
-X-CSE-ConnectionGUID: 5QuhQ/mXQVaASKUyPZhk6Q==
-X-CSE-MsgGUID: lRhOdtMGSBKWB5HRI+PRKg==
+   d="scan'208";a="31871401"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 05:40:49 -0700
+X-CSE-ConnectionGUID: 7Rwf/GtbRreGSNd4EmIItw==
+X-CSE-MsgGUID: ZgcExqH3SZmq34LLKDBhbw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="108051969"
+   d="scan'208";a="76978328"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Oct 2024 02:55:42 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 13 Oct 2024 05:40:46 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1szvK8-000EGp-1L;
-	Sun, 13 Oct 2024 09:55:40 +0000
-Date: Sun, 13 Oct 2024 17:54:43 +0800
+	id 1szxts-000EMl-0d;
+	Sun, 13 Oct 2024 12:40:44 +0000
+Date: Sun, 13 Oct 2024 20:40:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peterz@infradead.org, tglx@linutronix.de, paulmck@kernel.org,
-	mingo@kernel.org, bigeasy@linutronix.de, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	vschneid@redhat.com, frederic@kernel.org, ankur.a.arora@oracle.com,
-	efault@gmx.de
-Subject: Re: [PATCH 1/7] sched: warn for high latency with
- TIF_NEED_RESCHED_LAZY
-Message-ID: <202410131726.Gi9qvUP8-lkp@intel.com>
-References: <20241009165411.3426937-2-ankur.a.arora@oracle.com>
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 158/161]
+ drivers/thermal/thermal_sysfs.c:726:8: error: use of undeclared label
+ 'unlock'
+Message-ID: <202410132024.xuSMJC7v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,78 +64,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241009165411.3426937-2-ankur.a.arora@oracle.com>
 
-Hi Ankur,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on paulmck-rcu/dev]
-[also build test ERROR on powerpc/next powerpc/fixes tip/sched/core linus/master v6.12-rc2 next-20241011]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankur-Arora/sched-warn-for-high-latency-with-TIF_NEED_RESCHED_LAZY/20241010-005819
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-patch link:    https://lore.kernel.org/r/20241009165411.3426937-2-ankur.a.arora%40oracle.com
-patch subject: [PATCH 1/7] sched: warn for high latency with TIF_NEED_RESCHED_LAZY
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241013/202410131726.Gi9qvUP8-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   c7d553cb161f03e4424c88bddc26fadcbbf4b6d5
+commit: db8666152df8b016530452714b0ad8c7f1b37f3c [158/161] thermal: core: Add and use cooling device guard
+config: i386-buildonly-randconfig-005-20241013 (https://download.01.org/0day-ci/archive/20241013/202410132024.xuSMJC7v-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410131726.Gi9qvUP8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410132024.xuSMJC7v-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410131726.Gi9qvUP8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410132024.xuSMJC7v-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/sched/core.c:5528:27: error: call to undeclared function 'tif_need_resched_lazy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5528 |         if ((!need_resched() && !tif_need_resched_lazy()) || !latency_warn_ms)
-         |                                  ^
-   kernel/sched/core.c:5528:27: note: did you mean 'tif_need_resched'?
-   include/linux/thread_info.h:182:29: note: 'tif_need_resched' declared here
-     182 | static __always_inline bool tif_need_resched(void)
-         |                             ^
+>> drivers/thermal/thermal_sysfs.c:726:8: error: use of undeclared label 'unlock'
+     726 |                 goto unlock;
+         |                      ^
    1 error generated.
 
 
-vim +/tif_need_resched_lazy +5528 kernel/sched/core.c
+vim +/unlock +726 drivers/thermal/thermal_sysfs.c
 
-  5517	
-  5518	#ifdef CONFIG_SCHED_DEBUG
-  5519	static u64 cpu_resched_latency(struct rq *rq)
-  5520	{
-  5521		int latency_warn_ms = READ_ONCE(sysctl_resched_latency_warn_ms);
-  5522		u64 resched_latency, now = rq_clock(rq);
-  5523		static bool warned_once;
-  5524	
-  5525		if (sysctl_resched_latency_warn_once && warned_once)
-  5526			return 0;
-  5527	
-> 5528		if ((!need_resched() && !tif_need_resched_lazy()) || !latency_warn_ms)
-  5529			return 0;
-  5530	
-  5531		if (system_state == SYSTEM_BOOTING)
-  5532			return 0;
-  5533	
-  5534		if (!rq->last_seen_need_resched_ns) {
-  5535			rq->last_seen_need_resched_ns = now;
-  5536			rq->ticks_without_resched = 0;
-  5537			return 0;
-  5538		}
-  5539	
-  5540		rq->ticks_without_resched++;
-  5541		resched_latency = now - rq->last_seen_need_resched_ns;
-  5542		if (resched_latency <= latency_warn_ms * NSEC_PER_MSEC)
-  5543			return 0;
-  5544	
-  5545		warned_once = true;
-  5546	
-  5547		return resched_latency;
-  5548	}
-  5549	
+8ea229511e06f9 Viresh Kumar      2018-04-02  702  
+33e678d47d1f3e Viresh Kumar      2018-04-03  703  static ssize_t trans_table_show(struct device *dev,
+33e678d47d1f3e Viresh Kumar      2018-04-03  704  				struct device_attribute *attr, char *buf)
+8ea229511e06f9 Viresh Kumar      2018-04-02  705  {
+8ea229511e06f9 Viresh Kumar      2018-04-02  706  	struct thermal_cooling_device *cdev = to_cooling_device(dev);
+790930f44289c8 Rafael J. Wysocki 2023-03-17  707  	struct cooling_dev_stats *stats;
+8ea229511e06f9 Viresh Kumar      2018-04-02  708  	ssize_t len = 0;
+8ea229511e06f9 Viresh Kumar      2018-04-02  709  	int i, j;
+8ea229511e06f9 Viresh Kumar      2018-04-02  710  
+db8666152df8b0 Rafael J. Wysocki 2024-10-11  711  	guard(cooling_dev)(cdev);
+790930f44289c8 Rafael J. Wysocki 2023-03-17  712  
+790930f44289c8 Rafael J. Wysocki 2023-03-17  713  	stats = cdev->stats;
+db8666152df8b0 Rafael J. Wysocki 2024-10-11  714  	if (!stats)
+db8666152df8b0 Rafael J. Wysocki 2024-10-11  715  		return -ENODATA;
+790930f44289c8 Rafael J. Wysocki 2023-03-17  716  
+8ea229511e06f9 Viresh Kumar      2018-04-02  717  	len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
+8ea229511e06f9 Viresh Kumar      2018-04-02  718  	len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
+a365105c685cad Viresh Kumar      2022-10-17  719  	for (i = 0; i <= cdev->max_state; i++) {
+8ea229511e06f9 Viresh Kumar      2018-04-02  720  		if (len >= PAGE_SIZE)
+8ea229511e06f9 Viresh Kumar      2018-04-02  721  			break;
+8ea229511e06f9 Viresh Kumar      2018-04-02  722  		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u  ", i);
+8ea229511e06f9 Viresh Kumar      2018-04-02  723  	}
+790930f44289c8 Rafael J. Wysocki 2023-03-17  724  	if (len >= PAGE_SIZE) {
+790930f44289c8 Rafael J. Wysocki 2023-03-17  725  		len = PAGE_SIZE;
+790930f44289c8 Rafael J. Wysocki 2023-03-17 @726  		goto unlock;
+790930f44289c8 Rafael J. Wysocki 2023-03-17  727  	}
+8ea229511e06f9 Viresh Kumar      2018-04-02  728  
+8ea229511e06f9 Viresh Kumar      2018-04-02  729  	len += snprintf(buf + len, PAGE_SIZE - len, "\n");
+8ea229511e06f9 Viresh Kumar      2018-04-02  730  
+a365105c685cad Viresh Kumar      2022-10-17  731  	for (i = 0; i <= cdev->max_state; i++) {
+8ea229511e06f9 Viresh Kumar      2018-04-02  732  		if (len >= PAGE_SIZE)
+8ea229511e06f9 Viresh Kumar      2018-04-02  733  			break;
+8ea229511e06f9 Viresh Kumar      2018-04-02  734  
+8ea229511e06f9 Viresh Kumar      2018-04-02  735  		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u:", i);
+8ea229511e06f9 Viresh Kumar      2018-04-02  736  
+a365105c685cad Viresh Kumar      2022-10-17  737  		for (j = 0; j <= cdev->max_state; j++) {
+8ea229511e06f9 Viresh Kumar      2018-04-02  738  			if (len >= PAGE_SIZE)
+8ea229511e06f9 Viresh Kumar      2018-04-02  739  				break;
+8ea229511e06f9 Viresh Kumar      2018-04-02  740  			len += snprintf(buf + len, PAGE_SIZE - len, "%8u ",
+a365105c685cad Viresh Kumar      2022-10-17  741  				stats->trans_table[i * (cdev->max_state + 1) + j]);
+8ea229511e06f9 Viresh Kumar      2018-04-02  742  		}
+8ea229511e06f9 Viresh Kumar      2018-04-02  743  		if (len >= PAGE_SIZE)
+8ea229511e06f9 Viresh Kumar      2018-04-02  744  			break;
+8ea229511e06f9 Viresh Kumar      2018-04-02  745  		len += snprintf(buf + len, PAGE_SIZE - len, "\n");
+8ea229511e06f9 Viresh Kumar      2018-04-02  746  	}
+8ea229511e06f9 Viresh Kumar      2018-04-02  747  
+8ea229511e06f9 Viresh Kumar      2018-04-02  748  	if (len >= PAGE_SIZE) {
+8ea229511e06f9 Viresh Kumar      2018-04-02  749  		pr_warn_once("Thermal transition table exceeds PAGE_SIZE. Disabling\n");
+790930f44289c8 Rafael J. Wysocki 2023-03-17  750  		len = -EFBIG;
+8ea229511e06f9 Viresh Kumar      2018-04-02  751  	}
+790930f44289c8 Rafael J. Wysocki 2023-03-17  752  
+8ea229511e06f9 Viresh Kumar      2018-04-02  753  	return len;
+8ea229511e06f9 Viresh Kumar      2018-04-02  754  }
+8ea229511e06f9 Viresh Kumar      2018-04-02  755  
+
+:::::: The code at line 726 was first introduced by commit
+:::::: 790930f44289c8209c57461b2db499fcc702e0b3 thermal: core: Introduce thermal_cooling_device_update()
+
+:::::: TO: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
