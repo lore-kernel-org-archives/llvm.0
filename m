@@ -1,179 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC3D1EB2E;
-	Sun, 13 Oct 2024 13:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3662D7F48C
+	for <llvm@lists.linux.dev>; Sun, 13 Oct 2024 21:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728826974; cv=none; b=PD1CTa4v8BiFt3z/c8CJlDuEpE0jR/mnNdR1Ge5uPmC3hHtduVc0yj26uLZvwXbiGAmpN08t/6sJzBtlVkDVBPvhM0sm3ZeGTasQvGkeDKNsX9TCw4bTmKy846fuMus6mL1J5TGPkW/8UZYRyFTcyknqwa33BcAhE44WH9ACIVw=
+	t=1728853930; cv=none; b=SwCq2k+Cy819SOJzJt4a1HPGdq7SSXyZCwUcQAnK/o4u9mYPAPKNEfQyvLtFxzR8rfUYBqiWTwmkDrac3olPWSEJSfSZKbkDaf4W1iQmZE+iQyfSBwqQXH+wFjgHQXO2BCnXdrI3RHVrMvw7JVMFSx48yVh8n6IhwNa/ve+7B24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728826974; c=relaxed/simple;
-	bh=XS5iblfw1egF4iIUL7nQOMVI6cY6Z0WNfAVeAajuod0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kvTHHPBs7rYDcUiSdp++0hi/KsGtmXoj1aKcE1gv97uMR1lEg+VM/svSTObuXCz+SUHxmS7jwa9O1QSRwRmmHpTihVtrO4dFQusAm703F9HmzmhoXXYyQFTqMKuVM06lqL3urGNwCj6DpOrMBcKwLuD+K9ZPLRZbkwj8eFTsGAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vwdl2COu; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728853930; c=relaxed/simple;
+	bh=YYXGAZXsOalgz1fza0GKmpcVsDdSA8PgrLI8gT4mKE0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=oZfzIQDXIhAYGNuPVUGTxiJm6D6o3uU6XssYhYakLOWfov8snhBfTTRxD5GCpBSXPv6NascYeSUS5mHiZnjGc809/6ZhwZMzy4DQ0dkFm47MuolGK29t2GqhX08QZ0o64LCwyJT6D3JNYYJQG4dCxTJ44w1Y/kIrR7WRoievO4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y66r6Pdx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vwdl2COu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728826972; x=1760362972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XS5iblfw1egF4iIUL7nQOMVI6cY6Z0WNfAVeAajuod0=;
-  b=Vwdl2COuTzKHuyPJhHn37kcS2gBYz0AtDjKfjwpA4Om1q5ImeVrHPYjr
-   HFRil4GRHeqP6t6JODpfDUR+axdQpCPTrO/ZW5vr5/gT2fXBNemUpXqd1
-   BafEYqf+rDwAx1/qu6vSDG2E0gGpICd0unkxL2VhBeI20n0W80kY0/6K7
-   O4Mv9vqW3mNSmH7epaKLwGbVvn8TNvPLV8ri6EWqWt3Cv1JNgER+yr38U
-   UJf4nrkkrz7c2h4+jRsTutyuB5/OfVeMu1v+crc9HSoxz5LH2/A4k7nUP
-   PYjn2+8EflZ1Ivt9f3v2wf66Fm5Oi+gPEjeXKbX/OeMvk/uAPrSOTZkCd
-   Q==;
-X-CSE-ConnectionGUID: A93jJNQzRh2nUoyFtzbLYA==
-X-CSE-MsgGUID: cPdAn7BiRNqqX2GEq2z2FA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11224"; a="27663438"
-X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="27663438"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2024 06:42:51 -0700
-X-CSE-ConnectionGUID: LXyp+TOFRHqudCYB3U6i2w==
-X-CSE-MsgGUID: lCrNGTVASvK6mJLG8hKoYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,200,1725346800"; 
-   d="scan'208";a="81333291"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 13 Oct 2024 06:42:48 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1szyru-000EOh-2N;
-	Sun, 13 Oct 2024 13:42:46 +0000
-Date: Sun, 13 Oct 2024 21:41:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	andi.shyti@kernel.org, quic_bjorande@quicinc.com,
-	--cc=linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
-	quic_vdadhani@quicinc.com, vkoul@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early
- resume stage
-Message-ID: <202410132130.a2tOwnm4-lkp@intel.com>
-References: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y66r6Pdx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1728853927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nZ7LkSLIY0d3VdmiVQPsd2jLZ6W383VEn90ZgsDOwnA=;
+	b=Y66r6Pdx9jY5+81xs0YwLgsi1EokND40dy+Ur6HY9iaVmysO6PDXNFBIdaLmB066ulzUDz
+	lqlalInQUbrpiabWm4MNnF2C9QdqJX8vYrP9TIGT+6qw2CqIN+AQCFCTRJTkfv5jNRNkq2
+	y/wbRZcnv9mkQGfa+h6LOzkkmD2voWs=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-640-1heUYBdWOu6RKhp64Fff6g-1; Sun,
+ 13 Oct 2024 17:12:05 -0400
+X-MC-Unique: 1heUYBdWOu6RKhp64Fff6g-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F69619560AF
+	for <llvm@lists.linux.dev>; Sun, 13 Oct 2024 21:12:04 +0000 (UTC)
+Received: from [172.64.0.80] (unknown [10.30.33.131])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C560F19560AE;
+	Sun, 13 Oct 2024 21:12:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc2,
+ mainline.kernel.org-clang, cfea70e8)
+Date: Sun, 13 Oct 2024 21:12:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241011121757.2267336-1-quic_msavaliy@quicinc.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <09167.124101317120500420@us-mta-640.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mukesh,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v6.12-rc2]
-[also build test ERROR on linus/master]
-[cannot apply to andi-shyti/i2c/i2c-host next-20241011]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Kumar-Savaliya/i2c-i2c-qcom-geni-Serve-transfer-during-early-resume-stage/20241011-202013
-base:   v6.12-rc2
-patch link:    https://lore.kernel.org/r/20241011121757.2267336-1-quic_msavaliy%40quicinc.com
-patch subject: [PATCH v2] i2c: i2c-qcom-geni: Serve transfer during early resume stage
-config: i386-buildonly-randconfig-001-20241013 (https://download.01.org/0day-ci/archive/20241013/202410132130.a2tOwnm4-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410132130.a2tOwnm4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410132130.a2tOwnm4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-qcom-geni.c:711:28: error: no member named 'usage_count' in 'struct dev_pm_info'
-     711 |                         atomic_read(&dev->power.usage_count));
-         |                                      ~~~~~~~~~~ ^
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +711 drivers/i2c/busses/i2c-qcom-geni.c
+Kernel information:
+    Commit message: Merge tag '6.12-rc2-cifs-fixes' of git://git.samba.org/=
+sfrench/cifs-2.6
 
-   696	
-   697	static int geni_i2c_xfer(struct i2c_adapter *adap,
-   698				 struct i2c_msg msgs[],
-   699				 int num)
-   700	{
-   701		struct geni_i2c_dev *gi2c = i2c_get_adapdata(adap);
-   702		struct device *dev = gi2c->se.dev;
-   703		int ret;
-   704	
-   705		gi2c->err = 0;
-   706		reinit_completion(&gi2c->done);
-   707	
-   708		/* Serve I2C transfer by forced resume whether Runtime PM is enbled or not */
-   709		if (!pm_runtime_enabled(dev) && gi2c->suspended) {
-   710			dev_dbg(dev, "Runtime PM is disabled hence force resume, pm_usage_count: %d\n",
- > 711				atomic_read(&dev->power.usage_count));
-   712			ret = geni_i2c_force_resume(gi2c);
-   713			if (ret)
-   714				return ret;
-   715		} else {
-   716			ret = pm_runtime_get_sync(dev);
-   717			if (ret == -EACCES && gi2c->suspended) {
-   718				dev_dbg(dev, "pm_runtime_get_sync() failed-%d, force resume\n", ret);
-   719				ret = geni_i2c_force_resume(gi2c);
-   720				if (ret)
-   721					return ret;
-   722			}
-   723		}
-   724	
-   725		qcom_geni_i2c_conf(gi2c);
-   726	
-   727		if (gi2c->gpi_mode)
-   728			ret = geni_i2c_gpi_xfer(gi2c, msgs, num);
-   729		else
-   730			ret = geni_i2c_fifo_xfer(gi2c, msgs, num);
-   731	
-   732		/* Does Opposite to Forced Resume when runtime PM was not enabled and served
-   733		 * Transfer via forced resume.
-   734		 */
-   735		if (!pm_runtime_enabled(dev) && !gi2c->suspended) {
-   736			pm_runtime_put_noidle(dev);
-   737			pm_runtime_set_suspended(dev);
-   738			/* Reset flag same as runtime suspend, next xfer PM can be enabled */
-   739			gi2c->suspended = 0;
-   740		} else {
-   741			pm_runtime_mark_last_busy(gi2c->se.dev);
-   742			pm_runtime_put_autosuspend(gi2c->se.dev);
-   743		}
-   744	
-   745		gi2c->cur = NULL;
-   746		gi2c->err = 0;
-   747		return ret;
-   748	}
-   749	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1494111126
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1494111126-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1494111126-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1494111126-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
