@@ -1,112 +1,133 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B630F1CBE8B
-	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 19:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5763D1C879E;
+	Mon, 14 Oct 2024 19:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728933772; cv=none; b=MTz+gwmHLO6QlKCzanUHbRAq5yhIP14Tl58XLEMOZw/CQlQX7br5xPOOfJpd3gfFinj+nqzwSq+IOPXTDjnWiAyjrfnNtD0chPjakYAjpCmCpck+5sKGBE1eCzSAyskMrFboIdn0OopVoGELv7f3JUW6TI+s/S385Z/XI+w6+Tc=
+	t=1728934565; cv=none; b=VYmnVaq0mYtPkd89Y1cOO2baYejzjfv61qaCSrkXqOJjMo3X3TZPfnYVEgHYZL9T/zZVewmZzMWx9KfQxyJzoI1W1tNV+Ax0cSgmca0S+cGbqI3EnHL9vXT+hBWPEVR3YQiQQBUWWVKfOOLumncr79cmT/Q0kzC8st1PU2x38Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728933772; c=relaxed/simple;
-	bh=u0t0qNkf0QAtWuaQXJkECXunLokaWI6GNjPYrhSs6Fo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=VzEuWulhBsZSoqvoC/dF1m95a/8dMcCHk+u+Ifv9x4/GmdGITIBaYKlBvC8HyeVmbKuucJW5HSfIeeaO4Y4yChYz89Pc/IK1P+IKyXmrnWZYHd0KLXWNX53rnxl4Vu7y/9ai1prH2XERKQI+Q/zQQuRuAFiUaREURUYKcPRhvMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KH1RNvPZ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1728934565; c=relaxed/simple;
+	bh=y92CkpN+2tfdYaKR34UuAF8ksRa0TIOALaEj4otfh38=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tvaox8AMwNik5HpG95r66gdvOjuSAt4glMMPy0b/5OjhXO9sVqUpjRtKR0w1EF2sX4hRR8GAEZEJPoEETxYs+xAA7IiTYPTYXPpf3H+qNe3Df/EQ8aR+i+cyMGn13XHNHz4/VlHVbuZo3oXvmlOBIFI8SoREgZzbGjtxoXXaDGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ASX/8Pfz; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KH1RNvPZ"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49EB551u004976;
-	Mon, 14 Oct 2024 19:22:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+IFnL4mUMiitkJabSAAeUc+H/UvzVDoulSrPcPlL1KI=; b=KH1RNvPZcZ/qRI6t
-	gC2ACP2gFUsltxUqhfnsJACkT4/US0zycLAHi2KhWFrF9hqBHc0UEuTSXEb94PCT
-	iw+Y6NqB2fXuMHAt7swgGiBRKuWp4jD2Ovse2FQ04sQfw4WfjghkJ8DgQj3pS4eq
-	5S9PN54vnMa7uOrpDT6VlN0t8a6ZrK6mATgRkFMHp0seqJkSS9UmIWDZgvz3C+xt
-	s3NLDohSHGrETzwVlzae2ZqGamYGz/rtovuO1vmXLVCTrrd9Pi44FSbwvCT5CwaO
-	jpf9Y9xhNsTqC5xyO6xBkytXyaiV7wREJrY9kfvgLVraLojRG1+dpMP7C5EPmbbU
-	qQOfPA==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 427jd8waer-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Oct 2024 19:22:40 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49EJMeFO026699
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 14 Oct 2024 19:22:40 GMT
-Received: from [10.110.109.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 14 Oct
- 2024 12:22:39 -0700
-Message-ID: <e938ac3d-48f3-488a-96df-80c94b7686cf@quicinc.com>
-Date: Mon, 14 Oct 2024 12:22:38 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ASX/8Pfz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728934564; x=1760470564;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y92CkpN+2tfdYaKR34UuAF8ksRa0TIOALaEj4otfh38=;
+  b=ASX/8PfzELW2CKT5FGhInI40fEEM9we8pXJxhZ249XSTriUuXhbYMzah
+   j0OZn4a9rphN7/enKTxFB1fqc2b3FOI9L+Z7RhFsm+kp2uKqYryjBDV/1
+   2Nu2mBzHIGS5ySoAzKUSPk0fGDFCEZtR6OQItD3xoIsplXMzsUAX40OHC
+   43NWwpt1YEbuJ8OTRJ4gvOKVxkdTWM7H+RnjbIWquQUvnb9SbBtyB3faL
+   +mEx4f0k0du8GGo0+VNie0W+6tJEiImdd0i9x6YniMkCWOMDjzLDncyF1
+   Jfl/Bbo5AaiDsCAJDJS70HCGMajKpmCURgKz8In8CVVVmZwQEf+fVEcZz
+   w==;
+X-CSE-ConnectionGUID: XYRexntaRnKPXmKz/Y1hjQ==
+X-CSE-MsgGUID: AH/+skAKSGC1Cxl4KUBGTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31999230"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31999230"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 12:36:03 -0700
+X-CSE-ConnectionGUID: dcLyOhQnQ9myiIrIBNPWUw==
+X-CSE-MsgGUID: d3J12DlxTu6xihDIAlqThA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
+   d="scan'208";a="115121765"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 14 Oct 2024 12:36:02 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t0QrH-000H43-0Z;
+	Mon, 14 Oct 2024 19:35:59 +0000
+Date: Tue, 15 Oct 2024 03:35:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:vfs.experiments 3/3]
+ include/linux/rcuref_long.h:49:14: error: use of undeclared identifier
+ 'RCUREF_RELEASED'
+Message-ID: <202410150319.k34MiJ5b-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/msm/hdmi: drop pll_cmp_to_fdata from hdmi_phy_8998
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark
-	<robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten
-	<marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona
- Vetter <simona@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick
- Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, Jani Nikula <jani.nikula@intel.com>
-References: <20240922-msm-drop-unused-func-v1-1-c5dc083415b8@linaro.org>
-Content-Language: en-US
-From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20240922-msm-drop-unused-func-v1-1-c5dc083415b8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qdud2PHy7wMKhm9ZGVxgrNFYTxrpsi4i
-X-Proofpoint-ORIG-GUID: qdud2PHy7wMKhm9ZGVxgrNFYTxrpsi4i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 mlxlogscore=887 malwarescore=0 priorityscore=1501 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410140137
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://github.com/brauner/linux.git vfs.experiments
+head:   007604382bae5e5955ef294a676bd3eb1c1bbac2
+commit: 007604382bae5e5955ef294a676bd3eb1c1bbac2 [3/3] fs: port files to rcuref_long_t
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20241015/202410150319.k34MiJ5b-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410150319.k34MiJ5b-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410150319.k34MiJ5b-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:48:
+>> include/linux/rcuref_long.h:49:14: error: use of undeclared identifier 'RCUREF_RELEASED'
+      49 |         return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
+         |                     ^
+   include/linux/rcuref_long.h:23:30: note: expanded from macro 'RCUREF_LONG_RELEASED'
+      23 | #define RCUREF_LONG_RELEASED    RCUREF_RELEASED
+         |                                 ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   1 warning and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/arm/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
+vim +/RCUREF_RELEASED +49 include/linux/rcuref_long.h
 
-On 9/21/2024 2:14 PM, Dmitry Baryshkov wrote:
-> The pll_cmp_to_fdata() was never used by the working code. Drop it to
-> prevent warnings with W=1 and clang.
-> 
-> Reported-by: Jani Nikula <jani.nikula@intel.com>
-> Closes: https://lore.kernel.org/dri-devel/3553b1db35665e6ff08592e35eb438a574d1ad65.1725962479.git.jani.nikula@intel.com
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c | 9 ---------
->   1 file changed, 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c b/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
-> index 0e3a2b16a2ce..e6ffaf92d26d 100644
-> --- a/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
-> +++ b/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
-> @@ -153,15 +153,6 @@ static inline u32 pll_get_pll_cmp(u64 fdata, unsigned long ref_clk)
->   	return dividend - 1;
->   }
->   
+d72d156a1254d8 Christian Brauner 2024-09-18  37  
+d72d156a1254d8 Christian Brauner 2024-09-18  38  /**
+d72d156a1254d8 Christian Brauner 2024-09-18  39   * rcuref_long_read - Read the number of held reference counts of a rcuref
+d72d156a1254d8 Christian Brauner 2024-09-18  40   * @ref:	Pointer to the reference count
+d72d156a1254d8 Christian Brauner 2024-09-18  41   *
+d72d156a1254d8 Christian Brauner 2024-09-18  42   * Return: The number of held references (0 ... N)
+d72d156a1254d8 Christian Brauner 2024-09-18  43   */
+d72d156a1254d8 Christian Brauner 2024-09-18  44  static inline unsigned long rcuref_long_read(rcuref_long_t *ref)
+d72d156a1254d8 Christian Brauner 2024-09-18  45  {
+d72d156a1254d8 Christian Brauner 2024-09-18  46  	unsigned long c = atomic_long_read(&ref->refcnt);
+d72d156a1254d8 Christian Brauner 2024-09-18  47  
+d72d156a1254d8 Christian Brauner 2024-09-18  48  	/* Return 0 if within the DEAD zone. */
+d72d156a1254d8 Christian Brauner 2024-09-18 @49  	return c >= RCUREF_LONG_RELEASED ? 0 : c + 1;
+d72d156a1254d8 Christian Brauner 2024-09-18  50  }
+d72d156a1254d8 Christian Brauner 2024-09-18  51  
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+:::::: The code at line 49 was first introduced by commit
+:::::: d72d156a1254d8298d22a59f13b5ed47126b6b5d rcurf: add rcuref_long_*() helpers
+
+:::::: TO: Christian Brauner <brauner@kernel.org>
+:::::: CC: Christian Brauner <brauner@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
