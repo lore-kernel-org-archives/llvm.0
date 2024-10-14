@@ -1,84 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4101A4AB3;
-	Mon, 14 Oct 2024 12:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22E31AA786
+	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 12:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728909024; cv=none; b=cVzPqbZ0rRLcttWxozpxvPALmDaFptaEjcPqgYmSOssB47NAOhUe48cFYMGEF+c5ZIRs7Bcztfx20JVgDB1bnQOFGjxgM3ev7Rekth4XL4IrDeUpGGyDWjwSKcQSfmtXtDqK3h/uaYoaqWzFSc6ofNJ99wsO5H6gL9ioNfTsaiI=
+	t=1728910426; cv=none; b=V2E14DDDN3ovV+EhOlgdAJIQKzFBkSsBB90CvLpe9Zt1n+OgmSXDyeDSyMh0j7pSUqu8xpRooAAG5wNu9DUcxe/1YiOMI1yABBKgLyUivKyNqj61pF1vNVpZzJ0S8AYEC5xm84/0+aBdi7+DY2dqofzRgr9NxxFE7g6Ua0wMKS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728909024; c=relaxed/simple;
-	bh=XVK9EjCdeEAv4B/wdJyWPtMZjV/x5MQsY7gUvvin5dU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=OEfjGcPXhf1hlLofS+tA/gjifnXuJL7CK2Ii8Vu6bu2c5FpaaViFcJ8IuYkblzU1/wXyDfFh7sdQTk4DrD+FQRQjmbBo5a/BisEe5VwAm8WYCUd+xnyp9RmKxb01adV56r9trK/VISBjSdl7WhDYeWPorwpPcs97hyaKVmz4qzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cc8oNisw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728910426; c=relaxed/simple;
+	bh=+pcu92eMqg+NHXSehZfy3gPTkISBMTAQR/PVez1N+qk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kFWZ43UdC6dDQMT2V40qkIyA+6AehzuY26asacsnb8uGHredm1LnbkLy+D+J8Y1LJPRQ7yTkIYejo4Kut0aetnlRm3ITQwIPntlE87XFtVgMAuAN1YaT9PsSHSgNnl4fC3eu/cUSk8U0veuG2Eg1rzdEOHl47U3DeHPAW46j4xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g+plPr0S; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cc8oNisw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E56C4CEC3;
-	Mon, 14 Oct 2024 12:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728909024;
-	bh=XVK9EjCdeEAv4B/wdJyWPtMZjV/x5MQsY7gUvvin5dU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=cc8oNisw3v0g4p9hXkd/PebHJc8em1Ay7gUAztHCIcaSLKYcZGeuxAa85xc8Lesh2
-	 YZAu+IiiwkmJha+280HQYX1OjvSeTxCYtJnxqsLD3BwYiNQ7JHQVUb3va3xHvwsPYk
-	 6Kr+k8zsYuRh6baZVOFmSs65IiuaFt/E3JX6KRH6YggGultzGAJtKpycu1pZuF8arZ
-	 +TxvbfVZ3PJopZ2mLbPoEcGYYUdAux8ETpus6v6ZkGVuPJ0zagBWPVbmV2uiW3ifbz
-	 G+k3Ia3/9pW/RmP7kKKxuvGiyHmaONsP8A5D7eAmxwXtkxXWlO7yIAVkVJU86d7voX
-	 flCAHVNoh6ZGA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 715D43822E4C;
-	Mon, 14 Oct 2024 12:30:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g+plPr0S"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a994ecf79e7so668263566b.0
+        for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 05:53:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728910423; x=1729515223; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SyCHsuV/E8d70gfcK9ip53tgwN234YxCxe5zH8xLMPY=;
+        b=g+plPr0SMZ7MnLS8GqslsgbnbKg0AbR1x+cz5f3Ho72Dpeq76oW8+58cHT5u+jUZ17
+         qztDan0hliIRZAdS00MwRVYQN3gBi4dxh47E2U7zJsON8tMwc66rmyYQ3cdZcB6zTdGk
+         4ykkJfuYuWuuASh0HB4qcVc7T4D8mPwVzntAwP2U0x9eKrtEdSLhXYvt8rnEJpLivopv
+         +WQ0resir75iYhaxGX5i+dqac3Q1CpJRhnYiLLCeE55tG8DRyvCt+2n8FVGuKgPRrdWv
+         +y9LlrXSHOZi3J0FugHwcso0ybGd6tG1KhQlhe5YtvNzwrlPte0IC9irSwF0Fb07qZRG
+         KF2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728910423; x=1729515223;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SyCHsuV/E8d70gfcK9ip53tgwN234YxCxe5zH8xLMPY=;
+        b=Q32pFNeP1RLXWttwsCj4LKpr4xnHlTq75a0HHorsCwduPZnBxI4Vncof0E0klO1eyq
+         8oUDj6ZFA3ojHJxWT3gcDo1ZNfEOnYu/4I7vGHkGpy3f6Rhfjq7NPdXzFQSvCGHEpwGt
+         M1IBydg8zl8s5hPdQys8uKv1nwI4UyXKjilR4gMT3WaPlG0+TlxHBTlZbtkmODyxWNKB
+         ZElD3Q+5CbBzgKNCTcJP31+ykOYKcbfs+t0pji7HrfqfoWAzj24/c33bMZAvT1gexIXD
+         bA1sHMrPIx8G1BhxDLGb0bPkIVCIuQUjFPYC6p9XdWXJH/Aw/I6mrprRSc8X78fbkY02
+         7JIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWU1N927wAsXnHcWzJ1KRjFnn4FiSow9htvA9WelHm2dzz1K/ysfbyUuqu+eepp/uos+vcw@lists.linux.dev
+X-Gm-Message-State: AOJu0YyklKJ8JV1dFWMnSdHWIGQDkb9/hFetFYh3eVReuCXN0bjrvVfj
+	VNsh3ATNYommDmr33IgcbaQknAHcOtEdBtKHQ8P2l9iKIG6mL51yuUdHhXET6UE=
+X-Google-Smtp-Source: AGHT+IHqHcsA+FZtp+v7kI5pgeIQE8uQgQTumNO5wX6KZkk6/bkHGwus6vrXYrx9c73EQIuXhgDQGA==
+X-Received: by 2002:a17:906:c14c:b0:a99:6163:d4f8 with SMTP id a640c23a62f3a-a99b966b148mr1069583166b.58.1728910422787;
+        Mon, 14 Oct 2024 05:53:42 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99f375db53sm303654866b.113.2024.10.14.05.53.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 05:53:42 -0700 (PDT)
+Date: Mon, 14 Oct 2024 15:53:38 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Su Hui <suhui@nfschina.com>
+Cc: sfrench@samba.org, pc@manguebit.com, ronniesahlberg@gmail.com,
+	sprasad@microsoft.com, stfrench@microsoft.com, tom@talpey.com,
+	bharathsm@microsoft.com, nathan@kernel.org, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com,
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] smb: client: fix possible double free in smb2_set_ea()
+Message-ID: <8bd0fae3-82fe-41c4-a4e8-3c28aa2b1826@stanley.mountain>
+References: <20241014113416.2280986-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/3] net: ethernet: ti: Address some warnings
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172890902927.497553.15127625651293052823.git-patchwork-notify@kernel.org>
-Date: Mon, 14 Oct 2024 12:30:29 +0000
-References: <20241010-ti-warn-v2-0-9c8304af5544@kernel.org>
-In-Reply-To: <20241010-ti-warn-v2-0-9c8304af5544@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, s-vadapalli@ti.com, rogerq@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- kalesh-anakkur.purayil@broadcom.com, netdev@vger.kernel.org,
- linux-omap@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20241014113416.2280986-1-suhui@nfschina.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 10 Oct 2024 12:04:09 +0100 you wrote:
-> Hi,
+On Mon, Oct 14, 2024 at 07:34:17PM +0800, Su Hui wrote:
+> Clang static checker(scan-build) warning：
+> fs/smb/client/smb2ops.c:1304:2: Attempt to free released memory.
+>  1304 |         kfree(ea);
+>       |         ^~~~~~~~~
 > 
-> This patchset addresses some warnings flagged by Sparse, and clang-18 in
-> TI Ethernet drivers.
+> There is a double free in such case:
+> 'ea is initialized to NULL' -> 'first successful memory allocation for
+> ea' -> 'something failed, goto sea_exit' -> 'first memory release for ea'
+> -> 'goto replay_again' -> 'second goto sea_exit before allocate memory
+> for ea' -> 'second memory release for ea resulted in double free'.
 > 
-> Although these changes do not alter the functionality of the code, by
-> addressing them real problems introduced in future which are flagged by
-> tooling will stand out more readily.
+> Assign NULL value to 'ea' after 'kfree(ea)', it can fix this double free
+> problem.
 > 
-> [...]
+> Fixes: 4f1fffa23769 ("cifs: commands that are retried should have replay flag set")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>  fs/smb/client/smb2ops.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
+> index 6b385fce3f2a..5b42b352b703 100644
+> --- a/fs/smb/client/smb2ops.c
+> +++ b/fs/smb/client/smb2ops.c
+> @@ -1302,6 +1302,7 @@ smb2_set_ea(const unsigned int xid, struct cifs_tcon *tcon,
+>  
+>   sea_exit:
+>  	kfree(ea);
+> +	ea = NULL;
 
-Here is the summary with links:
-  - [net-next,v2,1/3] net: ethernet: ti: am65-cpsw: Use __be64 type for id_temp
-    https://git.kernel.org/netdev/net-next/c/5c16e118b796
-  - [net-next,v2,2/3] net: ethernet: ti: am65-cpsw: Use tstats instead of open coded version
-    https://git.kernel.org/netdev/net-next/c/4a7b2ba94a59
-  - [net-next,v2,3/3] net: ethernet: ti: cpsw_ale: Remove unused accessor functions
-    https://git.kernel.org/netdev/net-next/c/2c9eacbb56de
+That's very clever.  But I think that it would be better to do the "ea = NULL"
+near to the replay_again label.  There are some lines where we re-initialize
+resp_buftype[], utf16_path and vars etc.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+	ea = NULL;
+	resp_buftype[0] = resp_buftype[1] = resp_buftype[2] = CIFS_NO_BUFFER;
 
+regards,
+dan carpenter
 
