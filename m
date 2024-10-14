@@ -1,134 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B67139D0B
-	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 16:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B630F1CBE8B
+	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 19:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728923273; cv=none; b=Fve7T2/9VTJZjKlFc3+mUr0F6Ix1KvGF7PSbOvUlyKyiTzPTQ25Kt/iKMGouvDIRAT2cunzL5BNengb8sG/d3tJSPkUbPsl840KpEBJ0BWrf8WFpGAA+zXpuES9vg1R3ritcx28KTZsIhMG7KK4QGj2/2yZy0QsofuGKWPEBCSA=
+	t=1728933772; cv=none; b=MTz+gwmHLO6QlKCzanUHbRAq5yhIP14Tl58XLEMOZw/CQlQX7br5xPOOfJpd3gfFinj+nqzwSq+IOPXTDjnWiAyjrfnNtD0chPjakYAjpCmCpck+5sKGBE1eCzSAyskMrFboIdn0OopVoGELv7f3JUW6TI+s/S385Z/XI+w6+Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728923273; c=relaxed/simple;
-	bh=jwGpfimwWzt6q1jU1lTtwpABN94Ujy5vGGuJ89kzZ9o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VeSaFXrS9QrTnz5BvsKcq2nAimL/amEkKqtsRFJNcILglba73UgFwcIQYXusuhHuLvVhFEzeeCGKDtidFHUiBHOljx/KX82k1DTXgkYirdLzoWQumZdsRXkfXcmWubxf4ALCGDlQKPUvwHXoVY7NiV1C4YBbdxsaKsw+ISqeGXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUg9pbJF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728933772; c=relaxed/simple;
+	bh=u0t0qNkf0QAtWuaQXJkECXunLokaWI6GNjPYrhSs6Fo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=VzEuWulhBsZSoqvoC/dF1m95a/8dMcCHk+u+Ifv9x4/GmdGITIBaYKlBvC8HyeVmbKuucJW5HSfIeeaO4Y4yChYz89Pc/IK1P+IKyXmrnWZYHd0KLXWNX53rnxl4Vu7y/9ai1prH2XERKQI+Q/zQQuRuAFiUaREURUYKcPRhvMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KH1RNvPZ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUg9pbJF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF73C4CEDA
-	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 16:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728923273;
-	bh=jwGpfimwWzt6q1jU1lTtwpABN94Ujy5vGGuJ89kzZ9o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lUg9pbJFApuU7+cKFC8TJT9PLCMcC+2YmqTCXR7o2JFwZ+6haPcSJ9hof8c2ABbZo
-	 WrlYJpivucRzEXUrEvMn4NBP49o02nz4n53H0Vc0RfNGssziXNwAwrZ/xzuXQ54a2j
-	 w2FYV9RdYIyBqKjTIFHVEoQHKlrMWGTUhLVg1hetaEFhhjaMIEnepgfJInNaSnqIh0
-	 LhGTOUF0sR9vF5t+bIwSERkTh1n2U0dRpKja0+zDgs37STpHF1KY/UuJju2bERkyxV
-	 H0IxvTKDoPrvqRxm6NvUcUlDinzxtM9OZJq328syP7OpBePv6hFb/YPXYsaz1ExDJH
-	 mHja8eGE0PM+w==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539e4b7409fso2260158e87.0
-        for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 09:27:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVuIb2ZZROytYxKvq6l7wohP2Nk11+m98ful+HsVxbhymvnD+f9R1PzDrgviARuyoU3j+BR@lists.linux.dev
-X-Gm-Message-State: AOJu0YxgnswP/Pdhwwtxs20ybnhHHUrDl48/HhMoToCU2tfJpybL49M0
-	jl12aIEy9/yhsuBhetTf4+AWdqSUAyqFf1rrP8p8QaunCvs9YIf4PauhEgIWnFFMSlEQuVW/EWb
-	96o6g+IsildJoEQPWVsA825PJGBk=
-X-Google-Smtp-Source: AGHT+IHRF2uisuPIUJzp50NFyDqu/2E1pwV8KKK4/ZYkn1oh1Xf8Ul+foIxD0JDMpFxbu8Fe1rebinaBenD5NcvRsMQ=
-X-Received: by 2002:a05:6512:32c3:b0:536:7a79:b4df with SMTP id
- 2adb3069b0e04-539d6e6063amr3853452e87.14.1728923271760; Mon, 14 Oct 2024
- 09:27:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KH1RNvPZ"
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49EB551u004976;
+	Mon, 14 Oct 2024 19:22:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+IFnL4mUMiitkJabSAAeUc+H/UvzVDoulSrPcPlL1KI=; b=KH1RNvPZcZ/qRI6t
+	gC2ACP2gFUsltxUqhfnsJACkT4/US0zycLAHi2KhWFrF9hqBHc0UEuTSXEb94PCT
+	iw+Y6NqB2fXuMHAt7swgGiBRKuWp4jD2Ovse2FQ04sQfw4WfjghkJ8DgQj3pS4eq
+	5S9PN54vnMa7uOrpDT6VlN0t8a6ZrK6mATgRkFMHp0seqJkSS9UmIWDZgvz3C+xt
+	s3NLDohSHGrETzwVlzae2ZqGamYGz/rtovuO1vmXLVCTrrd9Pi44FSbwvCT5CwaO
+	jpf9Y9xhNsTqC5xyO6xBkytXyaiV7wREJrY9kfvgLVraLojRG1+dpMP7C5EPmbbU
+	qQOfPA==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 427jd8waer-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Oct 2024 19:22:40 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49EJMeFO026699
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 14 Oct 2024 19:22:40 GMT
+Received: from [10.110.109.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 14 Oct
+ 2024 12:22:39 -0700
+Message-ID: <e938ac3d-48f3-488a-96df-80c94b7686cf@quicinc.com>
+Date: Mon, 14 Oct 2024 12:22:38 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAK7LNARBXt=CWy5CgtHqdePw5L6EtD15emS2Fvre4QWfm_LjUg@mail.gmail.com>
- <20241011114040.3900487-1-gary@garyguo.net> <CANiq72ne6F1HpoA5gLYu9K0CcNB13JUFK5QgF_Cf4tAyvOm4qQ@mail.gmail.com>
- <20241011130641.4a8419c1@eugeo>
-In-Reply-To: <20241011130641.4a8419c1@eugeo>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 15 Oct 2024 01:27:15 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT99FbYh5nvUoEh9OHoPODYPEhyhaKAkELpi+3K0P8L-A@mail.gmail.com>
-Message-ID: <CAK7LNAT99FbYh5nvUoEh9OHoPODYPEhyhaKAkELpi+3K0P8L-A@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: rust: add `CONFIG_RUSTC_LLVM_VERSION`
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, Tejun Heo <tj@kernel.org>, 
-	Yoann Congal <yoann.congal@smile.fr>, Randy Dunlap <rdunlap@infradead.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Jens Axboe <axboe@kernel.dk>, Jann Horn <jannh@google.com>, 
-	Mark Rutland <mark.rutland@arm.com>, kees@kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	rust-for-linux@vger.kernel.org, samitolvanen@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Oct 11, 2024 at 9:06=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
->
-> On Fri, 11 Oct 2024 13:53:47 +0200
-> Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
->
-> > On Fri, Oct 11, 2024 at 1:41=E2=80=AFPM Gary Guo <gary@garyguo.net> wro=
-te:
-> > >
-> > > The invocation of rustc-version is being moved from init/Kconfig to
-> > > scripts/Kconfig.include for consistency with cc-version.
-> >
-> > Yeah, I am ambivalent. Dropping them would minimize changes and avoid
-> > introducing something only used once, which would be nice too. Happy
-> > either way.
->
-> Another motivation is that in my helper inline series, I need to do
-> arithmetic on LLVM version (divide it by 10000 to get major verison),
-> which isn't possible for config options, but will work for variables
-> defiend in Kconfig.include.
->
-> I didn't mention it in the commit message for this patch because this
-> is not my patch series :)
-
-
-I tend to agree with Muguel.
-The motivation of having cc-version in scripts/Kconfig.include
-is to check the presence of the supported C compiler, as C compiler
-is mandatory (in contrast, Rust compiler is optional).
-
-If you have a reason to have it in scripts/Kconfig.include
-for your future works, it is OK with me, but I cannot judge it.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/msm/hdmi: drop pll_cmp_to_fdata from hdmi_phy_8998
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark
+	<robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona
+ Vetter <simona@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick
+ Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Jani Nikula <jani.nikula@intel.com>
+References: <20240922-msm-drop-unused-func-v1-1-c5dc083415b8@linaro.org>
+Content-Language: en-US
+From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20240922-msm-drop-unused-func-v1-1-c5dc083415b8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qdud2PHy7wMKhm9ZGVxgrNFYTxrpsi4i
+X-Proofpoint-ORIG-GUID: qdud2PHy7wMKhm9ZGVxgrNFYTxrpsi4i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=887 malwarescore=0 priorityscore=1501 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410140137
 
 
 
+On 9/21/2024 2:14 PM, Dmitry Baryshkov wrote:
+> The pll_cmp_to_fdata() was never used by the working code. Drop it to
+> prevent warnings with W=1 and clang.
+> 
+> Reported-by: Jani Nikula <jani.nikula@intel.com>
+> Closes: https://lore.kernel.org/dri-devel/3553b1db35665e6ff08592e35eb438a574d1ad65.1725962479.git.jani.nikula@intel.com
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c | 9 ---------
+>   1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c b/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
+> index 0e3a2b16a2ce..e6ffaf92d26d 100644
+> --- a/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
+> +++ b/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
+> @@ -153,15 +153,6 @@ static inline u32 pll_get_pll_cmp(u64 fdata, unsigned long ref_clk)
+>   	return dividend - 1;
+>   }
+>   
 
-
-
->
-> Best,
-> Gary
->
-> > > +if output=3D$("$@" --version --verbose 2>/dev/null | grep LLVM); the=
-n
-> >
-> > Similarly, I wonder if we should use '^LLVM version: ' here or similar
-> > to minimize the chances the "LLVM" string appears elsewhere in the
-> > future (perhaps in a custom string a vendor adds, though I would
-> > expect them to add it lowercase). We are relying on having a $3 when
-> > splitting anyway.
-> >
-> > Depending on what Masahiro prefers, I will take this one or the
-> > one-invocation-only one.
-> >
-> > Thanks Gary!
-> >
-> > Cheers,
-> > Miguel
->
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
