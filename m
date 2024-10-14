@@ -1,108 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2BB156C5F;
-	Mon, 14 Oct 2024 08:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE88F15667B
+	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 09:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728895959; cv=none; b=kEXGLhKm9Idv14295k+4tL03Ghng3BG6ugWqIuCWvHV+9IXVhEFqfUK084uyCCz4ZslEEkXsN46mWwy5fRzKMZW/D5VYsjOrxXdcazjr6QxN0J6Ua82UVE0Tcc05aBOvnnRC0tEua6ULV64qoE+cbqGItgloH2nsinHQ8EWxpmc=
+	t=1728898584; cv=none; b=JZhlx3HZ2QMDRM7DGE3IDSXLJcndEsMm03TmPD4Eq3yJcYNKzlYsBAJxRH98GWiQ1crOINYGZflkXikFhbIgW8cHGpoAcnE7pi4NxFL8RPEVWSVsY01ClkKGW5ixo7cRDIjbb7P9gHc+AQOwdQ3LsjmIi4vmiUBw87BVqX4DRz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728895959; c=relaxed/simple;
-	bh=3XMChqUk8p9xN3e3V3TIITrB6Da+CGbGZaKpJzpAmIY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uEjcbx1U8NHciBzTXhebgpn7cXX3BrpUJKElNYrJo91H03ky+2p7Aj7bAXPdSX3BYE50rtiS0NMra8vW3DLOPqfXffSnxIvtZqd9ncM551bXSDnVfSSfDVWNi10LF0vGnxySrM+4IkmdPhGgEjMxBkm8X4nfpJuDAvvpSy4o57c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCPooX2W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728898584; c=relaxed/simple;
+	bh=qBsDQzAs7QP3X6cKNCdApLam/YNuSrGBVVymI8+/YI0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YxIIYOMzS128yBjSvvdeunuB0Uobe70HGZne3OuphLJk0Jtfvf83Wot6SNgxGHsmR8R25tAi/wRflvkw90Jjfwfba/8z+OQDQe1uON63WudPXQ78FzmNffLSBfYtRLashGBO9AZ58lOPlO+YMh/7SQH15GCZhWeUuvniAW1KO18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZlqLdla; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCPooX2W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A12CC4CEC7;
-	Mon, 14 Oct 2024 08:52:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZlqLdla"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55D82C4CED3
+	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 09:36:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728895958;
-	bh=3XMChqUk8p9xN3e3V3TIITrB6Da+CGbGZaKpJzpAmIY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=CCPooX2WLLO2zlzh81zErlzEgxHtaXmUBViCaNDP3/nu7mBP5tB5W2M/HGRaFmSH1
-	 zHHFAYGHbn2RVwWofXCao4prLUIHxUqyMh8qaFf00MsFexiYZ8VZ4nHrhR9ohsJYcI
-	 HETJr2/cRx3ObjNr1LKxNorjlCqHkDnBzpvj/8wM+6ObTUoxSYORmRDoDd4cKmkcpQ
-	 k0cF46I3K1NnbjVBjdFhZ2pwushzI0csSHd6L+NXi6vPi7K9XaZ/llGt+yK4w3x+h8
-	 Mr+vC51lKe1BxQL48xKUAgva5FhMGJCoAmxGLV52q9YTe+0rybEjNr8L4P7iBrChoY
-	 cdp1Ckx+hMwfw==
-From: Simon Horman <horms@kernel.org>
-Date: Mon, 14 Oct 2024 09:52:26 +0100
-Subject: [PATCH net-next v2 2/2] net: txgbe: Pass string literal as format
- argument of alloc_workqueue()
+	s=k20201202; t=1728898584;
+	bh=qBsDQzAs7QP3X6cKNCdApLam/YNuSrGBVVymI8+/YI0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZZlqLdlafNYwTQp3iI6kjWi2EgQo9Meag/2vRweHt4QP1snZ0W0Elr5wgiN4V+eEj
+	 qy6Hpp6Ditayif0vktZFh2pewpX/V7lBF+/TUzKpiyn2jJgNnwmD/JpcXnrBLTQXKM
+	 +ep1sq6jSo2Pia4oODy2Vhf5nwgbOIDIgz+JvUVujdVCjVnagGzZg7da9/HXPp36Uc
+	 h4teqzrRrPLRQRScFWwCzoPdw6aDnQF2dJYyoUFRxhHJmXJ8MwG9UeTF6i3jgjXzbi
+	 SE+JlhgpsqWKuGrJGJprdR75iIN7metAVc8dLRR0HddZp5EzgAm/SMlKRcced3a63e
+	 ghui9ZmMtkjfg==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539ebb5a20aso1289372e87.2
+        for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 02:36:24 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWR6sCe4FlEa42p5EawN5rWpLXl3o4uZrOUn9R1R6mTV0KeeCSq9TeaJGfNcr68doGJVV+e@lists.linux.dev
+X-Gm-Message-State: AOJu0YwrS5QB/f1rjbQBG5+cTsYn+v9W/rB/X0LED0v55cddewf/zoCG
+	run157fIsm7yg1fg3z0oA+ACIOEiy2TuCh6qJj3BLBAlKc4ULaXxt+hoaPmd0Y0+P5E2AWBuFOu
+	6Nnx+l7HtqpZWfae2lr6964RZ8Ko=
+X-Google-Smtp-Source: AGHT+IGt5EXUDsyicAY+SuCAlZVRwBl+6YpbpfCaQBaSxgEH6ByDW9QmHgxUn/tZZr9bNYXXcX0C91ipOf90HXHxHTA=
+X-Received: by 2002:ac2:4c46:0:b0:539:968a:91a8 with SMTP id
+ 2adb3069b0e04-539e571da42mr3496869e87.47.1728898582693; Mon, 14 Oct 2024
+ 02:36:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241014-string-thing-v2-2-b9b29625060a@kernel.org>
-References: <20241014-string-thing-v2-0-b9b29625060a@kernel.org>
-In-Reply-To: <20241014-string-thing-v2-0-b9b29625060a@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>
-Cc: Bill Wendling <morbo@google.com>, 
- Daniel Machon <daniel.machon@microchip.com>, 
- Florian Fainelli <f.fainelli@gmail.com>, 
- Jiawen Wu <jiawenwu@trustnetic.com>, Justin Stitt <justinstitt@google.com>, 
- Mengyuan Lou <mengyuanlou@net-swift.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Richard Cochran <richardcochran@gmail.com>, 
- Vladimir Oltean <olteanv@gmail.com>, 
- Woojung Huh <woojung.huh@microchip.com>, UNGLinuxDriver@microchip.com, 
- netdev@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.14.0
+References: <20241011170847.334429-10-ardb+git@google.com> <20241011170847.334429-16-ardb+git@google.com>
+ <20241014042833.GA20015@sol.localdomain>
+In-Reply-To: <20241014042833.GA20015@sol.localdomain>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 14 Oct 2024 11:36:10 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXERhCiKMqCr7wCPitQCcPNj7uuEJsgC9jGxSdBWxAwqdg@mail.gmail.com>
+Message-ID: <CAMj1kXERhCiKMqCr7wCPitQCcPNj7uuEJsgC9jGxSdBWxAwqdg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/8] crypto: x86/crc32c - Use idiomatic relative jump table
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	keescook@chromium.org, linux-hardening@vger.kernel.org, nathan@kernel.org, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Jan Beulich <jbeulich@suse.com>, "Jose E. Marchesi" <jemarch@gnu.org>, Kees Cook <kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Recently I noticed that both gcc-14 and clang-18 report that passing
-a non-string literal as the format argument of clkdev_create()
-is potentially insecure.
+On Mon, 14 Oct 2024 at 06:28, Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Fri, Oct 11, 2024 at 07:08:54PM +0200, Ard Biesheuvel wrote:
+> > diff --git a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
+> > index bbcff1fb78cb..45b005935194 100644
+> > --- a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
+> > +++ b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
+> > @@ -53,7 +53,7 @@
+> >  .endm
+> >
+> >  .macro JMPTBL_ENTRY i
+> > -.quad .Lcrc_\i
+> > +.long .Lcrc_\i - jump_table
+> >  .endm
+> >
+> >  .macro JNC_LESS_THAN j
+> > @@ -169,7 +169,8 @@ SYM_FUNC_START(crc_pcl)
+> >
+> >       ## branch into array
+> >       leaq    jump_table(%rip), %bufp
+> > -     mov     (%bufp,%rax,8), %bufp
+> > +     movslq  (%bufp,%rax,4), len
+> > +     addq    len, %bufp
+> >       JMP_NOSPEC bufp
+>
+> I think it would be much better to just get rid of the jump table here.
+>
 
-E.g. clang-18 says:
+Good point.
 
-.../txgbe_phy.c:582:35: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-  581 |         clock = clkdev_create(clk, NULL, clk_name);
-      |                                          ^~~~~~~~
-.../txgbe_phy.c:582:35: note: treat the string as an argument to avoid this
-  581 |         clock = clkdev_create(clk, NULL, clk_name);
-      |                                          ^
-      |                                          "%s",
+> I have done this at
+> https://lore.kernel.org/linux-crypto/20241014042447.50197-4-ebiggers@kernel.org/
+>
 
-It is always the case where the contents of clk_name is safe to pass as the
-format argument. That is, in my understanding, it never contains any
-format escape sequences.
-
-However, it seems better to be safe than sorry. And, as a bonus, compiler
-output becomes less verbose by addressing this issue as suggested by
-clang-18.
-
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
---
-v2
-- No changes
----
- drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c b/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-index 3dd89dafe7c7..a0e4920b4761 100644
---- a/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-+++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_phy.c
-@@ -578,7 +578,7 @@ static int txgbe_clock_register(struct txgbe *txgbe)
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
--	clock = clkdev_create(clk, NULL, clk_name);
-+	clock = clkdev_create(clk, NULL, "%s", clk_name);
- 	if (!clock) {
- 		clk_unregister(clk);
- 		return -ENOMEM;
-
--- 
-2.45.2
-
+I'll go and take a look - thanks.
