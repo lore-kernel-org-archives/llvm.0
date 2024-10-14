@@ -1,101 +1,62 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133281D0F4D
-	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 20:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620BC4683;
+	Mon, 14 Oct 2024 20:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728937927; cv=none; b=N53oJYYBt5qtOCbfc5UiFS45EmZKrzzYkWBlPlgpJkz5WMYNB4RnxwkkIo8a2GHvJG866XzLXxVF+G0ZnjCuNfZ6J9Gn7iFzLGCQc+HFyS9ah1lBaF7TjLxR8Pq3hNfjwZzttIqwq6NHghcLXT6l6LB8dI2Ttxa0Sf8Onb/uTVQ=
+	t=1728939593; cv=none; b=AE+Sz/5aOFSZ5o+AICmt1DgKwzBsR0Q8IPgHB7PCWe93jcL7wzcB89e11b+XRoAVYH8XLIO3MmGFuVDndESb0yiSeHpoVnSGU2QgCT7wRzSDevtzqcJlzVmrKvMMO6d3Gv4BP59mXe+t/kAI9jMWX2whExm64eqz5veD4DmsWzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728937927; c=relaxed/simple;
-	bh=TMxLqduIw6kA1ss36IhCl4VL1rlLiuHaiMfW3ij+fks=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WuejBMmhUZNMVMRxt9fW4SMoGpaHFo3GnLtT09M4A8xZqnfTXtMbAnjxH8fDJKVom8CxT3gFypIFk+Z80lyvJnXYIKJrORmyNDaCvGDt0ICLDPFmeNks+2+LjhH0ZLxbVUk089y9UVp/flZYZZ9X71hpBfxlGXt2qarCjha142g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hk4Jq43e; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1728939593; c=relaxed/simple;
+	bh=64JiN4LK453yYlyTEVc6A5l5hKQQdefneibH0xbetKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vmtu4wIMz9NZFmSUMDVHsYU7gcz9juVcbaBSkvdlMpPGZXShMx+b6lWzjMc1QdmUWHEZU/duO/ZAy+31FR37VxHEmXwAJcHG8wibWzYrgd5jjj0pv3EUQci5O25L4wB4gG2edd66nsXSNoSHqqgWfxYLq7cQu5p5/5DIKyJoybs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mSCe6BXM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hk4Jq43e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728937924;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=A+XFi8p5Wa4vRFJDFaQ7fuuwB9lpUcOqyAfiWpRSFTU=;
-	b=hk4Jq43ecyOaICGYcIv7Lr7VP0/y9i0dyzwnk6QM+uAUuPbZXhsQSJSZ7EealZSlOw7BaB
-	OOf1JSf90e/EpoCl1AUETZF7v8bugVE0qvG9Mb188CO9cTdrCz7p9kKQ0a2wTBCUV6frlg
-	jhsmo/SCZwhsm1T7tHCmupxCWU023XY=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-187-IgzEHuiDNUGwvZSQ4OZcNw-1; Mon,
- 14 Oct 2024 16:32:03 -0400
-X-MC-Unique: IgzEHuiDNUGwvZSQ4OZcNw-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E7D7919560A3
-	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 20:32:02 +0000 (UTC)
-Received: from [172.64.5.20] (unknown [10.30.32.29])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 92999300019D;
-	Mon, 14 Oct 2024 20:32:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc3,
- mainline.kernel.org-clang, eca631b8)
-Date: Mon, 14 Oct 2024 20:32:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mSCe6BXM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7DBC4CEC3;
+	Mon, 14 Oct 2024 20:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728939592;
+	bh=64JiN4LK453yYlyTEVc6A5l5hKQQdefneibH0xbetKs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mSCe6BXMnOx7FDUAIn8waEDA/WZt0F1wrrmrxotrcoQ+Eyg/hRTEzeGtG+NKZSFQX
+	 puWljPl1Isas5r+5Cv8YIZO3n0+f1bfL3O7lRGIZz42fH7V0cTrExYPth1ffUUUD+M
+	 HbwyPa1zIg97TEW00vwiLhcnTIxAz14ItKdaF1/i0NHCfveeeJVMmlo63Ap+VZpsnQ
+	 UIt7jmU2zjB4+D+F8Oa8njSsjgNQKMImxNXQ+bPL+V0vRYAY79evESHTZx9TLNsgWL
+	 jdEX0FGsmFNRP98uo01EolcpbdvL++vW5jn9XnuHufSToJ+h56eOhaOCITj91MDU8n
+	 agHAGQmwowVlw==
+Date: Mon, 14 Oct 2024 13:59:49 -0700
+From: Kees Cook <kees@kernel.org>
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: x86@kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>, stable@vger.kernel.org,
+	Fangrui Song <i@maskray.me>, Brian Gerst <brgerst@gmail.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2] x86/stackprotector: Work around strict Clang TLS
+ symbol requirements
+Message-ID: <202410141357.3B2A71A340@keescook>
+References: <20241009124352.3105119-2-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <48612.124101416320400133@us-mta-187.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009124352.3105119-2-ardb+git@google.com>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Oct 09, 2024 at 02:43:53PM +0200, Ard Biesheuvel wrote:
+> However, if a non-TLS definition of the symbol in question is visible in
+> the same compilation unit (which amounts to the whole of vmlinux if LTO
+> is enabled), it will drop the per-CPU prefix and emit a load from a
+> bogus address.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+I take this to mean that x86 32-bit kernels built with the stack
+protector and using Clang LTO will crash very quickly?
 
-
-Kernel information:
-    Commit message: Merge tag 'f2fs-6.12-rc4' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/jaegeuk/f2fs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1495666868
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1495666868-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1495666868-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1495666868-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Kees Cook
