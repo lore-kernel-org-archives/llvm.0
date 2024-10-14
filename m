@@ -1,96 +1,196 @@
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD43B1D9A57
-	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 23:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728949127; cv=pass; b=K4r91A68IyQgO11PX+PLJWykRnpNu6Bjs+Pu3AUR0JEQR6mwWdOO7fUFLlwv0+5JpBd1FUdfKULry82X/CO0c3fDo/wfxyUIK57AQsz3G+vYNbC00hU6REXDthYuikPcvomntmgE0USZUC7ynTDtNta7c9G6fyeGeIGE0qa4yCY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728949127; c=relaxed/simple;
-	bh=siBBuvR3ZHWRrR2Loxb5JSYH4735HK7/mjVTgW/Kh6Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VhBoR1Ru91SfF4xFAGeAuNMUrv+KGMynBvHrFZXqE+RG69ueyCflfLrvX4yzb4eu6ACVJvI+t1Zpwc4EX8a3zQ5cj+Kp0Q4rBkWGtxLix/KhDEoH7KM5VUxBsxWRqf0Mcge8+IdVODqu1OF5FErTVrSAUKRvo82ANlYThvn8prY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=iHUrBMYt; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447B51DAC88;
+	Mon, 14 Oct 2024 23:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728950003; cv=none; b=aeLVyhw5CD1warQZycqq524fHjXA6GHlFvcXQsi2BjWmYoLzoUJg3MkG5jEGY8H1Z/ZSR9zN8S7oY1gbpho0ObFIx0NZN6Aw2La0aP6oIK7Dm0J5mDHeb4+fL44ilmp+13xorobkMrIup8m2CeY4O/g9JvfAe+jP3T/CVDsXszk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728950003; c=relaxed/simple;
+	bh=XerAkngai8u+DuuprsMQt/pVzZ3XZC5gXNaTekETm9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I7gaotnvdqJuGIB4sF0tod7AHd0NHrz2cSTV7APyaINiQVWsgyEwiDt2TIAK2CxQCj8WaKdp7lBbbRA8yed6yBfatBR1iSDtv1+T2635V0kb/deTL/nlixc+KjcSy6vvN1UUNPsL+qLcVEzdR5NUGUT4KMbgZcBfb+cT4qP1aoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IoXKOOz7; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="iHUrBMYt"
-ARC-Seal: i=1; a=rsa-sha256; t=1728949118; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Wzkx/UJGOZrXqVxlmZTVxDuFtXyIF3nds/uJrYxLSS33l0ItvrCGuYj7+1nLRAj6UTKJCyvT1dSElCgMgpE2BAqZqCnd8+GSRNiiuMCMzQ1M0QCqRX4DKId9esyo4MqPL+sxtYLSaE04QyKYItFgO+eYIkfR/mzFriCooU03a8Q=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1728949118; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=qn2Rk8Ugffxfl5LMvo+WmO3g460JFKXzoiCtcH0gUi8=; 
-	b=YZ4aCBuZ9ulpliM3Kamj/i7vE/XFVZGn76WTNOamMBzw6Yf1BYCjfzhh6SWSUoByEUf51GgjltIyHJx3+avODg5JjojuydzxnTP1tTpioWNAyQjrdKUbz8Sl5wntiFJREDZHQqaFVJZGIjC2BKnVKzIxdUXSu4lj+1D3rtOW2Jc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
-	dmarc=pass header.from=<adrian.larumbe@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1728949118;
-	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=qn2Rk8Ugffxfl5LMvo+WmO3g460JFKXzoiCtcH0gUi8=;
-	b=iHUrBMYthLTLgQXbAY+yK1K5dUVx/qjE5E4UDhApA9/tLdnX+A9bVXETeOm3RTWb
-	BMAMWJ/V7NcP4EppFmLg/DKoJ+6BgUcNmTkZkV1eKZGR/RvzjiQRbh6i4XNedxei0C7
-	bs7FCwJQ8Xk4T4OmlvXY1QCP/XmXcdiTngUya34A=
-Received: by mx.zohomail.com with SMTPS id 1728949117928981.8020714538841;
-	Mon, 14 Oct 2024 16:38:37 -0700 (PDT)
-From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
-To: Boris Brezillon <boris.brezillon@collabora.com>,
-	Rob Herring <robh@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: kernel@collabora.com,
-	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 8/9] drm/panfrost: Add forward declaration and types header
-Date: Tue, 15 Oct 2024 00:31:43 +0100
-Message-ID: <20241014233758.994861-8-adrian.larumbe@collabora.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241014233758.994861-1-adrian.larumbe@collabora.com>
-References: <20241014233758.994861-1-adrian.larumbe@collabora.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IoXKOOz7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728950002; x=1760486002;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XerAkngai8u+DuuprsMQt/pVzZ3XZC5gXNaTekETm9k=;
+  b=IoXKOOz7GiDgzxaziZbmwqr+6Lw1vXxIzi148Oa0lOsRTaMyZFMT6bpp
+   l5K/TlqPYq7Dsx3LRaqRjEM6KXVJ2hj1dmAjDJV7SoghPLIJ9qEBlhHGD
+   pejx1mJlRwFUWTb7cYOXQ5P0xf/cvS9p2GptWzc8W+QyuunY9sSK3NOf4
+   jbPVcqyiMF0bZtJCMLxcMxU7OflWfs45GqqTzfu13UwurN6TiQhnSKBse
+   3y+lPdrtrKULCkRzr8NZ5+d3XGiQoCcjCtQ97haWLuQk9J4clNGLg8B8Z
+   Dt1rVHxQlz67ubG/QSoxjftycRpya3gZWKdtcd7oFwZtwgkHQxLs9Lj8E
+   w==;
+X-CSE-ConnectionGUID: w4K7MrPSRtycMghMTGFEAg==
+X-CSE-MsgGUID: t6tON56cTGySRjDHiZJyMg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28408287"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28408287"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 16:53:21 -0700
+X-CSE-ConnectionGUID: 86hYXFeaQmmPgp4Ydmcztw==
+X-CSE-MsgGUID: JzPgZJZPQGGQDS1K1Drjrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
+   d="scan'208";a="77590266"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 14 Oct 2024 16:53:14 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t0UsB-000HL5-1w;
+	Mon, 14 Oct 2024 23:53:11 +0000
+Date: Tue, 15 Oct 2024 07:52:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>,
+	Theodore Ts'o <tytso@mit.edu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+	Alejandro Colomar <alx@kernel.org>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Christian Heimes <christian@python.org>,
+	Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes <enh@google.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Eric Chiang <ericchiang@google.com>,
+	Fan Wu <wufan@linux.microsoft.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>,
+	Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH v20 2/6] security: Add EXEC_RESTRICT_FILE and
+ EXEC_DENY_INTERACTIVE securebits
+Message-ID: <202410150756.KOkRl5oz-lkp@intel.com>
+References: <20241011184422.977903-3-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241011184422.977903-3-mic@digikod.net>
 
-This is to make LLVM syntactic analysers happy.
+Hi Mickaël,
 
-Signed-off-by: AdriÃ¡n Larumbe <adrian.larumbe@collabora.com>
----
- drivers/gpu/drm/panfrost/panfrost_mmu.h | 3 +++
- 1 file changed, 3 insertions(+)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.h b/drivers/gpu/drm/panfrost/panfrost_mmu.h
-index 0b2c0b59db3f..a19282a22aab 100644
---- a/drivers/gpu/drm/panfrost/panfrost_mmu.h
-+++ b/drivers/gpu/drm/panfrost/panfrost_mmu.h
-@@ -4,6 +4,9 @@
- #ifndef __PANFROST_MMU_H__
- #define __PANFROST_MMU_H__
- 
-+#include <linux/types.h>
-+
-+struct panfrost_device;
- struct panfrost_gem_mapping;
- struct panfrost_file_priv;
- struct panfrost_mmu;
+[auto build test WARNING on 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micka-l-Sala-n/exec-Add-a-new-AT_CHECK-flag-to-execveat-2/20241012-024801
+base:   8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b
+patch link:    https://lore.kernel.org/r/20241011184422.977903-3-mic%40digikod.net
+patch subject: [PATCH v20 2/6] security: Add EXEC_RESTRICT_FILE and EXEC_DENY_INTERACTIVE securebits
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20241015/202410150756.KOkRl5oz-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410150756.KOkRl5oz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410150756.KOkRl5oz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from init/init_task.c:2:
+   In file included from include/linux/init_task.h:9:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from init/init_task.c:2:
+   In file included from include/linux/init_task.h:13:
+   In file included from include/linux/securebits.h:5:
+>> include/uapi/linux/securebits.h:135:23: warning: '/*' within block comment [-Wcomment]
+     135 |  *       (e.g. sh /tmp/*.sh).  This makes sense for (semi-restricted) user
+         |                       ^
+   2 warnings generated.
+
+
+vim +135 include/uapi/linux/securebits.h
+
+    97	
+    98	#define SECBIT_EXEC_RESTRICT_FILE (issecure_mask(SECURE_EXEC_RESTRICT_FILE))
+    99	#define SECBIT_EXEC_RESTRICT_FILE_LOCKED \
+   100				(issecure_mask(SECURE_EXEC_RESTRICT_FILE_LOCKED))
+   101	
+   102	/*
+   103	 * When SECBIT_EXEC_DENY_INTERACTIVE is set, a process should never interpret
+   104	 * interactive user commands (e.g. scripts).  However, if such commands are
+   105	 * passed through a file descriptor (e.g. stdin), its content should be
+   106	 * interpreted if a call to execveat(2) with the related file descriptor and
+   107	 * the AT_CHECK flag succeed.
+   108	 *
+   109	 * For instance, script interpreters called with a script snippet as argument
+   110	 * should always deny such execution if SECBIT_EXEC_DENY_INTERACTIVE is set.
+   111	 *
+   112	 * This secure bit may be set by user session managers, service managers,
+   113	 * container runtimes, sandboxer tools...  Except for test environments, the
+   114	 * related SECBIT_EXEC_DENY_INTERACTIVE_LOCKED bit should also be set.
+   115	 *
+   116	 * See the SECBIT_EXEC_RESTRICT_FILE documentation.
+   117	 *
+   118	 * Here is the expected behavior for a script interpreter according to
+   119	 * combination of any exec securebits:
+   120	 *
+   121	 * 1. SECURE_EXEC_RESTRICT_FILE=0 SECURE_EXEC_DENY_INTERACTIVE=0 (default)
+   122	 *    Always interpret scripts, and allow arbitrary user commands.
+   123	 *    => No threat, everyone and everything is trusted, but we can get ahead of
+   124	 *       potential issues thanks to the call to execveat with AT_CHECK which
+   125	 *       should always be performed but ignored by the script interpreter.
+   126	 *       Indeed, this check is still important to enable systems administrators
+   127	 *       to verify requests (e.g. with audit) and prepare for migration to a
+   128	 *       secure mode.
+   129	 *
+   130	 * 2. SECURE_EXEC_RESTRICT_FILE=1 SECURE_EXEC_DENY_INTERACTIVE=0
+   131	 *    Deny script interpretation if they are not executable, but allow
+   132	 *    arbitrary user commands.
+   133	 *    => The threat is (potential) malicious scripts run by trusted (and not
+   134	 *       fooled) users.  That can protect against unintended script executions
+ > 135	 *       (e.g. sh /tmp/*.sh).  This makes sense for (semi-restricted) user
+   136	 *       sessions.
+   137	 *
+   138	 * 3. SECURE_EXEC_RESTRICT_FILE=0 SECURE_EXEC_DENY_INTERACTIVE=1
+   139	 *    Always interpret scripts, but deny arbitrary user commands.
+   140	 *    => This use case may be useful for secure services (i.e. without
+   141	 *       interactive user session) where scripts' integrity is verified (e.g.
+   142	 *       with IMA/EVM or dm-verity/IPE) but where access rights might not be
+   143	 *       ready yet.  Indeed, arbitrary interactive commands would be much more
+   144	 *       difficult to check.
+   145	 *
+   146	 * 4. SECURE_EXEC_RESTRICT_FILE=1 SECURE_EXEC_DENY_INTERACTIVE=1
+   147	 *    Deny script interpretation if they are not executable, and also deny
+   148	 *    any arbitrary user commands.
+   149	 *    => The threat is malicious scripts run by untrusted users (but trusted
+   150	 *       code).  This makes sense for system services that may only execute
+   151	 *       trusted scripts.
+   152	 */
+   153	#define SECURE_EXEC_DENY_INTERACTIVE		10
+   154	#define SECURE_EXEC_DENY_INTERACTIVE_LOCKED	11  /* make bit-10 immutable */
+   155	
+
 -- 
-2.46.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
