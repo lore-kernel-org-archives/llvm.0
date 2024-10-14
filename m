@@ -1,94 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8631D150C;
-	Mon, 14 Oct 2024 22:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728946274; cv=none; b=K4a44jJ2ol64XgQAEc+uXJ41EDZ3rBKG8X7Mi2R/0htDFt9AfqcxrQlyJavYRx44lHo9IKrs084idaiHMtGx7C9hdU1Ld5gQYHVxbicdpQc6I1gUrKanBA1hNaP11mCzBpHgVTOOJmfNBO5zmcsrRe/pgckD6iOeq8JMGkGlnPo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728946274; c=relaxed/simple;
-	bh=I8iZwc13wwROx2qHWE8aH5AmC/hTBF6so8r1yE+XYzo=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DIUoubwqxK7I8tVGfzJHUkapW8TgE7llFwUr1a4zPVn8a/G/O3tdrIkWjXpDFs1VtmX1x/MxprK3NIpujy0/3p1Vi3ftvfPJtm73ZUMgPoHmE+CsbJscMnHT8n4O43/qYyeKqYcFIPcZyLDHR2hpTSG5VetPNyB5nIDZ+jTUphA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LAzdMmrN; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD43B1D9A57
+	for <llvm@lists.linux.dev>; Mon, 14 Oct 2024 23:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728949127; cv=pass; b=K4r91A68IyQgO11PX+PLJWykRnpNu6Bjs+Pu3AUR0JEQR6mwWdOO7fUFLlwv0+5JpBd1FUdfKULry82X/CO0c3fDo/wfxyUIK57AQsz3G+vYNbC00hU6REXDthYuikPcvomntmgE0USZUC7ynTDtNta7c9G6fyeGeIGE0qa4yCY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728949127; c=relaxed/simple;
+	bh=siBBuvR3ZHWRrR2Loxb5JSYH4735HK7/mjVTgW/Kh6Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VhBoR1Ru91SfF4xFAGeAuNMUrv+KGMynBvHrFZXqE+RG69ueyCflfLrvX4yzb4eu6ACVJvI+t1Zpwc4EX8a3zQ5cj+Kp0Q4rBkWGtxLix/KhDEoH7KM5VUxBsxWRqf0Mcge8+IdVODqu1OF5FErTVrSAUKRvo82ANlYThvn8prY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b=iHUrBMYt; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LAzdMmrN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728946273; x=1760482273;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=I8iZwc13wwROx2qHWE8aH5AmC/hTBF6so8r1yE+XYzo=;
-  b=LAzdMmrNeCdWoKH137q5OsSuzEjO3O7nj0ePqCFMOlQ90Dg6LWbh7TLC
-   n3BPzUOmIRWwxbRthJ/q0ax+wofYTV77vzU/f75w1f9v3fIZ9uL/y7q5l
-   jGW2pXBn23htl91uvFll6+chcu34GS4zZBASvyd4DJFHjb/FG0EzHlXRe
-   Qs4MSTRQq8JcK3WC8XM+0fI9QJk9ZEnxV6W46S9JLCnpc1KMNkHis/f4P
-   noZ0MZxvfE6Kvzjo3nVG984JCgbKbnwQgwIZS6eTEKBV3/XUQ/0UspwxQ
-   79dlqRZ3vnYQzGJ3m1p0xExhd6S9fr5h4eCcvMAh0oaS56jbeH6IvXFJH
-   g==;
-X-CSE-ConnectionGUID: iy7uOTBDRXCBNN3OkRoTAw==
-X-CSE-MsgGUID: PdGOiMyYTjGmyEViT21d1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="27803626"
-X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
-   d="scan'208";a="27803626"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 15:51:12 -0700
-X-CSE-ConnectionGUID: x0DFjZB5Qtq1MAI+NOlDjw==
-X-CSE-MsgGUID: KGVvjLV8RDenOyrs/JiiZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="82489053"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 14 Oct 2024 15:51:11 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t0Tu8-000HHj-2q;
-	Mon, 14 Oct 2024 22:51:08 +0000
-Date: Tue, 15 Oct 2024 06:50:57 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: clang: error: linker command failed with exit code 1 (use -v to see
- invocation)
-Message-ID: <202410150637.wr8rQn2A-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=adrian.larumbe@collabora.com header.b="iHUrBMYt"
+ARC-Seal: i=1; a=rsa-sha256; t=1728949118; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Wzkx/UJGOZrXqVxlmZTVxDuFtXyIF3nds/uJrYxLSS33l0ItvrCGuYj7+1nLRAj6UTKJCyvT1dSElCgMgpE2BAqZqCnd8+GSRNiiuMCMzQ1M0QCqRX4DKId9esyo4MqPL+sxtYLSaE04QyKYItFgO+eYIkfR/mzFriCooU03a8Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1728949118; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=qn2Rk8Ugffxfl5LMvo+WmO3g460JFKXzoiCtcH0gUi8=; 
+	b=YZ4aCBuZ9ulpliM3Kamj/i7vE/XFVZGn76WTNOamMBzw6Yf1BYCjfzhh6SWSUoByEUf51GgjltIyHJx3+avODg5JjojuydzxnTP1tTpioWNAyQjrdKUbz8Sl5wntiFJREDZHQqaFVJZGIjC2BKnVKzIxdUXSu4lj+1D3rtOW2Jc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=adrian.larumbe@collabora.com;
+	dmarc=pass header.from=<adrian.larumbe@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1728949118;
+	s=zohomail; d=collabora.com; i=adrian.larumbe@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=qn2Rk8Ugffxfl5LMvo+WmO3g460JFKXzoiCtcH0gUi8=;
+	b=iHUrBMYthLTLgQXbAY+yK1K5dUVx/qjE5E4UDhApA9/tLdnX+A9bVXETeOm3RTWb
+	BMAMWJ/V7NcP4EppFmLg/DKoJ+6BgUcNmTkZkV1eKZGR/RvzjiQRbh6i4XNedxei0C7
+	bs7FCwJQ8Xk4T4OmlvXY1QCP/XmXcdiTngUya34A=
+Received: by mx.zohomail.com with SMTPS id 1728949117928981.8020714538841;
+	Mon, 14 Oct 2024 16:38:37 -0700 (PDT)
+From: =?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>
+To: Boris Brezillon <boris.brezillon@collabora.com>,
+	Rob Herring <robh@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: kernel@collabora.com,
+	=?UTF-8?q?Adri=C3=A1n=20Larumbe?= <adrian.larumbe@collabora.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 8/9] drm/panfrost: Add forward declaration and types header
+Date: Tue, 15 Oct 2024 00:31:43 +0100
+Message-ID: <20241014233758.994861-8-adrian.larumbe@collabora.com>
+X-Mailer: git-send-email 2.46.2
+In-Reply-To: <20241014233758.994861-1-adrian.larumbe@collabora.com>
+References: <20241014233758.994861-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-CC: linux-kernel@vger.kernel.org
-TO: Peter Foley <pefoley2@pefoley.com>
-CC: Richard Weinberger <richard@nod.at>
+This is to make LLVM syntactic analysers happy.
 
-Hi Peter,
+Signed-off-by: Adrián Larumbe <adrian.larumbe@collabora.com>
+---
+ drivers/gpu/drm/panfrost/panfrost_mmu.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   eca631b8fe808748d7585059c4307005ca5c5820
-commit: 83e913f52aba69149261742aa9ea4ceea7bf182d um: Support LTO
-date:   1 year, 8 months ago
-config: um-randconfig-001-20241014 (https://download.01.org/0day-ci/archive/20241015/202410150637.wr8rQn2A-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410150637.wr8rQn2A-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410150637.wr8rQn2A-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   /usr/bin/ld: ../lib/LLVMgold.so: cannot open shared object file: No such file or directory
->> clang: error: linker command failed with exit code 1 (use -v to see invocation)
---
->> llvm-objcopy: error: 'arch/x86/um/vdso/vdso.so.dbg': No such file or directory
-
+diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.h b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+index 0b2c0b59db3f..a19282a22aab 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_mmu.h
++++ b/drivers/gpu/drm/panfrost/panfrost_mmu.h
+@@ -4,6 +4,9 @@
+ #ifndef __PANFROST_MMU_H__
+ #define __PANFROST_MMU_H__
+ 
++#include <linux/types.h>
++
++struct panfrost_device;
+ struct panfrost_gem_mapping;
+ struct panfrost_file_priv;
+ struct panfrost_mmu;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.2
+
