@@ -1,195 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447B51DAC88;
-	Mon, 14 Oct 2024 23:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3261BF58;
+	Tue, 15 Oct 2024 00:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728950003; cv=none; b=aeLVyhw5CD1warQZycqq524fHjXA6GHlFvcXQsi2BjWmYoLzoUJg3MkG5jEGY8H1Z/ZSR9zN8S7oY1gbpho0ObFIx0NZN6Aw2La0aP6oIK7Dm0J5mDHeb4+fL44ilmp+13xorobkMrIup8m2CeY4O/g9JvfAe+jP3T/CVDsXszk=
+	t=1728953721; cv=none; b=nvxn5ghdQVLWsIh0zATpM02ZVJ9i5hyaxQg1i5VQigcZveUyoMdw3LIb1uoAR08sOgLN3c3DNJCWlsI1d5T0lrORaVD4lWPsyKAQ++f42g8Zm0BWT+1JOfyG2UNa2PdXzEE/2RxndnW27xvgXejyB6rMWdQCndY704w3Cay08Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728950003; c=relaxed/simple;
-	bh=XerAkngai8u+DuuprsMQt/pVzZ3XZC5gXNaTekETm9k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I7gaotnvdqJuGIB4sF0tod7AHd0NHrz2cSTV7APyaINiQVWsgyEwiDt2TIAK2CxQCj8WaKdp7lBbbRA8yed6yBfatBR1iSDtv1+T2635V0kb/deTL/nlixc+KjcSy6vvN1UUNPsL+qLcVEzdR5NUGUT4KMbgZcBfb+cT4qP1aoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IoXKOOz7; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1728953721; c=relaxed/simple;
+	bh=+N0sTIgv975VDn8Bs7GxqvHTBoaiWaixmReazI1tdoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=SOsgYTz9EmGPVarFreCkBdaF6sFtFEFePadt+VTMDBCHz06Hbtxh2hsb6W50fMMclj3LxGpNIREcCUUGiQR6Wddk0wojQ0zgB8NTnZwifQPPsYLHtdaBav8B3Z3/q8OUhsFDFONLfhBVMQzIuBbZjCzSURNVo2yaTkrUi/gCKSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW8lHevj; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IoXKOOz7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW8lHevj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728950002; x=1760486002;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=XerAkngai8u+DuuprsMQt/pVzZ3XZC5gXNaTekETm9k=;
-  b=IoXKOOz7GiDgzxaziZbmwqr+6Lw1vXxIzi148Oa0lOsRTaMyZFMT6bpp
-   l5K/TlqPYq7Dsx3LRaqRjEM6KXVJ2hj1dmAjDJV7SoghPLIJ9qEBlhHGD
-   pejx1mJlRwFUWTb7cYOXQ5P0xf/cvS9p2GptWzc8W+QyuunY9sSK3NOf4
-   jbPVcqyiMF0bZtJCMLxcMxU7OflWfs45GqqTzfu13UwurN6TiQhnSKBse
-   3y+lPdrtrKULCkRzr8NZ5+d3XGiQoCcjCtQ97haWLuQk9J4clNGLg8B8Z
-   Dt1rVHxQlz67ubG/QSoxjftycRpya3gZWKdtcd7oFwZtwgkHQxLs9Lj8E
+  t=1728953719; x=1760489719;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+N0sTIgv975VDn8Bs7GxqvHTBoaiWaixmReazI1tdoI=;
+  b=NW8lHevjhzYrLGAKp69xxDnIdvN9li1goV78wc2dvWtGe6hs49XIhiY+
+   B80YCzxBLsoYBJru6jwQT67VqIcMsYTgQG+dXCn+V9ZOo9Bie4tTEQJVI
+   Yw74tSKlDmBmXBq2ETCOFylwYSWG7eOSD4khIJqM2YEnf6yyvT6S61GHJ
+   myBnSeZUffibmwwiMQPg0DZf1uQPhvPuYZOY/yzFqjoe9NZ1P3J9ps2BY
+   u5vYWuhLMIZStUF+8oCOXBCbUQODlPxl+TYyNjYTKGedQoAkn9WYhFXhL
+   xDMuu5YT85pJD02MEopzNI3YbuMo/p+HIWt0zH1a+gwtE8XOsZV0XvgKZ
    w==;
-X-CSE-ConnectionGUID: w4K7MrPSRtycMghMTGFEAg==
-X-CSE-MsgGUID: t6tON56cTGySRjDHiZJyMg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28408287"
+X-CSE-ConnectionGUID: wFVCpSl2Tf2/pQeVyWvS5Q==
+X-CSE-MsgGUID: EurlY2irRwSSYLCZrSUEiA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="50856844"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28408287"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 16:53:21 -0700
-X-CSE-ConnectionGUID: 86hYXFeaQmmPgp4Ydmcztw==
-X-CSE-MsgGUID: JzPgZJZPQGGQDS1K1Drjrw==
+   d="scan'208";a="50856844"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 17:55:18 -0700
+X-CSE-ConnectionGUID: +iDCFSh3RhGtU2PPbkisQw==
+X-CSE-MsgGUID: SeMNkn6PSxG0c9R9fjPRFw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,203,1725346800"; 
-   d="scan'208";a="77590266"
+X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
+   d="scan'208";a="77813887"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 14 Oct 2024 16:53:14 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 14 Oct 2024 17:55:17 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t0UsB-000HL5-1w;
-	Mon, 14 Oct 2024 23:53:11 +0000
-Date: Tue, 15 Oct 2024 07:52:49 +0800
+	id 1t0VqE-000HOZ-2X;
+	Tue, 15 Oct 2024 00:55:14 +0000
+Date: Tue, 15 Oct 2024 08:54:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>,
-	Theodore Ts'o <tytso@mit.edu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-	Alejandro Colomar <alx@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Christian Heimes <christian@python.org>,
-	Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes <enh@google.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Eric Chiang <ericchiang@google.com>,
-	Fan Wu <wufan@linux.microsoft.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Jan Kara <jack@suse.cz>, Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v20 2/6] security: Add EXEC_RESTRICT_FILE and
- EXEC_DENY_INTERACTIVE securebits
-Message-ID: <202410150756.KOkRl5oz-lkp@intel.com>
-References: <20241011184422.977903-3-mic@digikod.net>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [daniel-lezcano:thermal/dev-perf-v1 8/9]
+ kernel/power/perf_qos.c:478:6: warning: variable 'ret' is used uninitialized
+ whenever 'if' condition is true
+Message-ID: <202410150841.ENr6fkg9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241011184422.977903-3-mic@digikod.net>
 
-Hi Mickaël,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Micka-l-Sala-n/exec-Add-a-new-AT_CHECK-flag-to-execveat-2/20241012-024801
-base:   8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b
-patch link:    https://lore.kernel.org/r/20241011184422.977903-3-mic%40digikod.net
-patch subject: [PATCH v20 2/6] security: Add EXEC_RESTRICT_FILE and EXEC_DENY_INTERACTIVE securebits
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20241015/202410150756.KOkRl5oz-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410150756.KOkRl5oz-lkp@intel.com/reproduce)
+tree:   http://git.linaro.org/people/daniel.lezcano/linux thermal/dev-perf-v1
+head:   03ae7e42a7f5cb3a3639292f533c1dd6c4c3c11b
+commit: 1f7344467a794485263db9704f9d20fea8e2d1d7 [8/9] selftests: Add perf_qos selftests
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241015/202410150841.ENr6fkg9-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410150841.ENr6fkg9-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410150756.KOkRl5oz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410150841.ENr6fkg9-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:9:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from init/init_task.c:2:
-   In file included from include/linux/init_task.h:13:
-   In file included from include/linux/securebits.h:5:
->> include/uapi/linux/securebits.h:135:23: warning: '/*' within block comment [-Wcomment]
-     135 |  *       (e.g. sh /tmp/*.sh).  This makes sense for (semi-restricted) user
-         |                       ^
-   2 warnings generated.
+>> kernel/power/perf_qos.c:478:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     478 |         if (pq->minor < 0)
+         |             ^~~~~~~~~~~~~
+   kernel/power/perf_qos.c:513:17: note: uninitialized use occurs here
+     513 |         return ERR_PTR(ret);
+         |                        ^~~
+   kernel/power/perf_qos.c:478:2: note: remove the 'if' if its condition is always false
+     478 |         if (pq->minor < 0)
+         |         ^~~~~~~~~~~~~~~~~~
+     479 |                 goto out_kfree_pq_descr;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/power/perf_qos.c:440:9: note: initialize the variable 'ret' to silence this warning
+     440 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +135 include/uapi/linux/securebits.h
+vim +478 kernel/power/perf_qos.c
 
-    97	
-    98	#define SECBIT_EXEC_RESTRICT_FILE (issecure_mask(SECURE_EXEC_RESTRICT_FILE))
-    99	#define SECBIT_EXEC_RESTRICT_FILE_LOCKED \
-   100				(issecure_mask(SECURE_EXEC_RESTRICT_FILE_LOCKED))
-   101	
-   102	/*
-   103	 * When SECBIT_EXEC_DENY_INTERACTIVE is set, a process should never interpret
-   104	 * interactive user commands (e.g. scripts).  However, if such commands are
-   105	 * passed through a file descriptor (e.g. stdin), its content should be
-   106	 * interpreted if a call to execveat(2) with the related file descriptor and
-   107	 * the AT_CHECK flag succeed.
-   108	 *
-   109	 * For instance, script interpreters called with a script snippet as argument
-   110	 * should always deny such execution if SECBIT_EXEC_DENY_INTERACTIVE is set.
-   111	 *
-   112	 * This secure bit may be set by user session managers, service managers,
-   113	 * container runtimes, sandboxer tools...  Except for test environments, the
-   114	 * related SECBIT_EXEC_DENY_INTERACTIVE_LOCKED bit should also be set.
-   115	 *
-   116	 * See the SECBIT_EXEC_RESTRICT_FILE documentation.
-   117	 *
-   118	 * Here is the expected behavior for a script interpreter according to
-   119	 * combination of any exec securebits:
-   120	 *
-   121	 * 1. SECURE_EXEC_RESTRICT_FILE=0 SECURE_EXEC_DENY_INTERACTIVE=0 (default)
-   122	 *    Always interpret scripts, and allow arbitrary user commands.
-   123	 *    => No threat, everyone and everything is trusted, but we can get ahead of
-   124	 *       potential issues thanks to the call to execveat with AT_CHECK which
-   125	 *       should always be performed but ignored by the script interpreter.
-   126	 *       Indeed, this check is still important to enable systems administrators
-   127	 *       to verify requests (e.g. with audit) and prepare for migration to a
-   128	 *       secure mode.
-   129	 *
-   130	 * 2. SECURE_EXEC_RESTRICT_FILE=1 SECURE_EXEC_DENY_INTERACTIVE=0
-   131	 *    Deny script interpretation if they are not executable, but allow
-   132	 *    arbitrary user commands.
-   133	 *    => The threat is (potential) malicious scripts run by trusted (and not
-   134	 *       fooled) users.  That can protect against unintended script executions
- > 135	 *       (e.g. sh /tmp/*.sh).  This makes sense for (semi-restricted) user
-   136	 *       sessions.
-   137	 *
-   138	 * 3. SECURE_EXEC_RESTRICT_FILE=0 SECURE_EXEC_DENY_INTERACTIVE=1
-   139	 *    Always interpret scripts, but deny arbitrary user commands.
-   140	 *    => This use case may be useful for secure services (i.e. without
-   141	 *       interactive user session) where scripts' integrity is verified (e.g.
-   142	 *       with IMA/EVM or dm-verity/IPE) but where access rights might not be
-   143	 *       ready yet.  Indeed, arbitrary interactive commands would be much more
-   144	 *       difficult to check.
-   145	 *
-   146	 * 4. SECURE_EXEC_RESTRICT_FILE=1 SECURE_EXEC_DENY_INTERACTIVE=1
-   147	 *    Deny script interpretation if they are not executable, and also deny
-   148	 *    any arbitrary user commands.
-   149	 *    => The threat is malicious scripts run by untrusted users (but trusted
-   150	 *       code).  This makes sense for system services that may only execute
-   151	 *       trusted scripts.
-   152	 */
-   153	#define SECURE_EXEC_DENY_INTERACTIVE		10
-   154	#define SECURE_EXEC_DENY_INTERACTIVE_LOCKED	11  /* make bit-10 immutable */
-   155	
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  433  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  434  struct perf_qos *perf_qos_device_create(const char *name,
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  435  					struct perf_qos_ops *ops,
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  436  					struct perf_qos_value_descr *descr)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  437  {
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  438  	struct device *dev;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  439  	struct perf_qos *pq;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  440  	int ret;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  441  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  442  	if (!ops->set_perf_qos_max || !ops->set_perf_qos_min)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  443  		return ERR_PTR(-EINVAL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  444  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  445  	if (descr->unit < 0 || descr->unit >= PERF_QOS_UNIT_MAX)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  446  		return ERR_PTR(-EINVAL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  447  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  448  	if (descr->limit_min > descr->limit_max)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  449  		return ERR_PTR(-EINVAL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  450  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  451  	if (descr->unit == PERF_QOS_UNIT_NORMAL) {
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  452  		if (descr->limit_min < 0 || descr->limit_max > 1024)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  453  			return ERR_PTR(-EINVAL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  454  	}
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  455  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  456  	pq = kzalloc(sizeof(*pq), GFP_KERNEL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  457  	if (!pq)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  458  		return ERR_PTR(-ENOMEM);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  459  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  460  	INIT_LIST_HEAD(&pq->perf_min);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  461  	INIT_LIST_HEAD(&pq->perf_max);	
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  462  	spin_lock_init(&pq->lock);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  463  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  464  	pq->ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  465  	if (!pq->ops) {
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  466  		ret = -ENOMEM;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  467  		goto out_kfree_pq;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  468  	}
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  469  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  470  	pq->descr = kmemdup(descr, sizeof(*descr), GFP_KERNEL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  471  	if (!pq->descr) {
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  472  		ret = -ENOMEM;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  473  		goto out_kfree_pq_ops;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  474  	}
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  475  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  476  	pq->minor = idr_alloc(&perf_qos_minors, pq, 0,
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  477  			      NUM_PERF_QOS_MINORS, GFP_KERNEL);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07 @478  	if (pq->minor < 0)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  479  		goto out_kfree_pq_descr;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  480  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  481  	pq->perf_qos_devt = MKDEV(MAJOR(perf_qos_devt), pq->minor);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  482  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  483  	cdev_init(&pq->perf_qos_cdev, &perf_qos_fops);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  484  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  485  	ret = cdev_add(&pq->perf_qos_cdev, pq->perf_qos_devt, 1);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  486  	if (ret < 0)
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  487  		goto out_idr_remove;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  488  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  489  	dev = device_create(perf_qos_class, NULL,
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  490  			    pq->perf_qos_devt, NULL, name);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  491  	if (IS_ERR(dev)) {
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  492  		ret = PTR_ERR(dev);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  493  		goto out_cdev_del;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  494  	}
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  495  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  496  	return pq;
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  497  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  498  out_cdev_del:
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  499  	cdev_del(&pq->perf_qos_cdev);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  500  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  501  out_idr_remove:
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  502  	idr_remove(&perf_qos_minors, pq->minor);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  503  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  504  out_kfree_pq_descr:
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  505  	kfree(pq->descr);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  506  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  507  out_kfree_pq_ops:
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  508  	kfree(pq->ops);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  509  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  510  out_kfree_pq:
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  511  	kfree(pq);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  512  
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  513  	return ERR_PTR(ret);
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  514  }
+0fc86ce46fc05c Daniel Lezcano 2024-10-07  515  
+
+:::::: The code at line 478 was first introduced by commit
+:::::: 0fc86ce46fc05cc6b90d32d578efabf2530078a7 power: Userspace performance QoS
+
+:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
+:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
