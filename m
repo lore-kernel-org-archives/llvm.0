@@ -1,130 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0091BF2B;
-	Tue, 15 Oct 2024 09:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2948A1B0137;
+	Tue, 15 Oct 2024 09:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728984765; cv=none; b=qwnBgpGq/7AzyZbOm5ULIrurNPHaWkYlkAoKUSZaFJNMZoWoICnY5j8sfEQ1B9Z4jSRvnv44nGJknaAEA+NMD07X6RLsbRdlTdaE81t5eu4akW79FXt7uD6UeJ0n+AJoy9YdXmr9abGNU/2CfTGpmBNf2rBNPr459q4U7kGIQuc=
+	t=1728985015; cv=none; b=KHgaL4Siz/tbkxArq3u9tVDk6cuwekhH8y/nckaPIjlzk0gIwOGwHAFbizWkFw7dkgS/1UsPaCWN/UdGeozuvr1x5VbADAg560hvbIXhtXqQdVyzZK9yKb33wuLnWYX9Ax9Hp0g38PAcRywN7hGBYmuy5+ga92xCNianKZDgHVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728984765; c=relaxed/simple;
-	bh=DwXAbaj6iK+ikSt7t5O4YawWvOvZYFFiTORjiswVQak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=toqXH/BM0krJEVb+05sLB84/U/JETwMyaiIxNElI9NKXlgn16T8Mg4j9W71HNkqGniWfE7uDJilFfkk7VvILWI8AkBqeZr06OUnCxyT2e3rBZkqpC7oPH6QvQBl4oTymKvkqx8OQ/8MFHBXE2JwRx7LJYtfxCF4o3+EGh0htZGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U2+cFv9U; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728985015; c=relaxed/simple;
+	bh=EuHSVp0ma6AF7blC/RGH7eF4epMQJtOuLhIEBG/TvBI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iaWIfYsXokkDoCyGSvFTXEwMjoJ9seEc0lVOV8N2b2onjkYUyBORUmVIMKm2uY+8rPu4+IUDNwrKHTPFHPqZlCEfQkMTO35gXG9HoDWJORwsmzvoPmiql4giB6vTL1xVt4+twFi5VYR1jbJ4O41O7KvmUTRO/Pr/YE6OehY4/6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LkGxGTj6; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U2+cFv9U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728984764; x=1760520764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DwXAbaj6iK+ikSt7t5O4YawWvOvZYFFiTORjiswVQak=;
-  b=U2+cFv9U58M1kVoi2MCpr36vg4FW/L0aTIE932aX+u8A8EArlPpN0ryO
-   MJ2WSOseA91KplVFosc/f38i/btQ7IgbESYqFr8iV1Kpd6c5RRnoc7u0k
-   QU9ZFhEQXTHcWBQwI0YlHx1Q6WjlHXqVtJqvMxTPMAAlCXAI8+tL7Ut2E
-   2nT27XP6oapbm1ZWIsKoS6/73BXaPirTIfTbVwwKxE0HRZVDusAZsULgR
-   Z6UtDt3YyATZwRbYRa6WdWJfqjA2aBmxlmpptN+zDysn9mJ7db4cQDGll
-   g0BKnN9v2uIsOSBXZHi1jM5KzGzVPihWEim8s/pmTtBZxtZRPZAVNHr8V
-   Q==;
-X-CSE-ConnectionGUID: W1cIMR3OSb6Vn8MhKSvPEQ==
-X-CSE-MsgGUID: LIMUuTD5T7ScHJAmSjzveQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="39756193"
-X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
-   d="scan'208";a="39756193"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 02:32:43 -0700
-X-CSE-ConnectionGUID: 5bGJdhoxTrm6JryRqu//MA==
-X-CSE-MsgGUID: hnhVU1fWQHqxY7sBb6MPlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,204,1725346800"; 
-   d="scan'208";a="77505309"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 15 Oct 2024 02:32:42 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t0dux-000Hsl-2J;
-	Tue, 15 Oct 2024 09:32:39 +0000
-Date: Tue, 15 Oct 2024 17:32:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Duan Chenghao <duanchenghao@kylinos.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3] USB: Fix the issue of task recovery failure caused by
- USB status when S4 wakes up
-Message-ID: <202410151722.rfjtknRz-lkp@intel.com>
-References: <20241012094633.126736-1-duanchenghao@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LkGxGTj6"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a39620ff54so18858085ab.1;
+        Tue, 15 Oct 2024 02:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728985013; x=1729589813; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sOzlHPSBobGuPptS2qSZ1QwRtjfsUbv4gGiNiZWPFR4=;
+        b=LkGxGTj6zWlRmNXI4QQA7yFWIovFgvqLZqnotcbnlM3xo/FoCBeolePQxzEqOeZbkh
+         zFz+nE/vWPW9qT/t3ErAsiV75h32YHcE3lJyJlyLT4xHWv6YDFFL4dFn9xQa0U+OlxCw
+         AuVKwlDTVc+wSvUtdobmkBV5jhTSyjLLqHaTlLXbqxpjciVVlyk6hMUsGMUKunIq28DL
+         2nagvRoy7vNSYHLyqk8oB6IUni27YbvwpzMIruUmyowu4x2oWE0wAUTu4Smt2jDMHxKs
+         BCvidtZsEkVHOmWh5MYm4bU0YsZdu8zw9rckuRN5JTmtgtTiIwswYXBlHv/4gZfo4GnT
+         kJxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728985013; x=1729589813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sOzlHPSBobGuPptS2qSZ1QwRtjfsUbv4gGiNiZWPFR4=;
+        b=cXBtGY3nhvgeFLAPz37vFxAU4BMV1d9vStPDmM9Sn19kwU9qMRBoU7V+Kx/FQnwOi1
+         m9TFrGIb85VWNoOeHX7mgiD+ecKtUo0qlGG5Hyzq5r94sQTu+GpPXqg28W2OuEy/sYaZ
+         4mV5MMcbfOjfWujiRaGYC64/W0fra8oeicTPScks66+pTqpVzSJbbKgKct/rUg0Vdfkj
+         6GrwqWNe0eUKIC0uRsh8SJea8i0AB6lUorb01krjrgqZLn39GG0LXgrmmnlLVFb/01Cq
+         s19wZ+03Gafx4FWhEDbfdV+zXVOAL9wlj/DXlqLNy7s9XSefM2rSB5JPBXczQraY3LGs
+         VEzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUYMUN5c+eeLMtRQ66y3VyhnRd4uJylceaGmUA9jtblUdWzWe2cToqvP7OH4gJRGHs795OAW/dUif+mxDTtLg==@lists.linux.dev, AJvYcCX8ffq57bDKKirAbNYAG7bR7oONvdj+3fre6Eb0gBL1UWm8R8ClAqa5rYCL4jRMVQUivhqm@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPKJVI3cNd2Q1f3rPucgA7q8ShTcTQaU4RbTGOsQ6X/yTMRiNb
+	AS6/u28TvBlXqMLcyBWJQ0a+BbBohi9v9idHHgmWjTvaVlRDFVCJRuRqTyRLgHmtsiLvahx7JjB
+	O/C7NaBtvLfeqljyHXQUJ1SAwrBs=
+X-Google-Smtp-Source: AGHT+IHAUit3P2s0RoURPDSBc3P7BsQ0e7J7JlVGM9tYWDXEhA89gyrAqTmPloyMh7hBhGScnTLEFj/4VJVnn72WJvY=
+X-Received: by 2002:a05:6e02:1a0b:b0:3a3:b4dd:4db with SMTP id
+ e9e14a558f8ab-3a3b5c73b7fmr147541985ab.0.1728985013202; Tue, 15 Oct 2024
+ 02:36:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241012094633.126736-1-duanchenghao@kylinos.cn>
+References: <20241012040651.95616-10-kerneljasonxing@gmail.com> <202410151628.hcAdeahi-lkp@intel.com>
+In-Reply-To: <202410151628.hcAdeahi-lkp@intel.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Tue, 15 Oct 2024 17:36:16 +0800
+Message-ID: <CAL+tcoCsWdDKSfWfbAD2DtSFJRaCMJNVy4UbKqoLH8RfkPkBvA@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 09/12] net-timestamp: add tx OPT_ID_TCP
+ support for bpf case
+To: kernel test robot <lkp@intel.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, dsahern@kernel.org, willemdebruijn.kernel@gmail.com, 
+	willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Duan,
+On Tue, Oct 15, 2024 at 4:41=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Jason,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Xing/net-tim=
+estamp-introduce-socket-tsflag-requestors/20241012-121010
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20241012040651.95616-10-kernelja=
+sonxing%40gmail.com
+> patch subject: [PATCH net-next v2 09/12] net-timestamp: add tx OPT_ID_TCP=
+ support for bpf case
+> config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241015/20=
+2410151628.hcAdeahi-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b=
+5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20241015/202410151628.hcAdeahi-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202410151628.hcAdeahi-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> net/core/sock.c:926:2: warning: variable 'tsflags' is uninitialized wh=
+en used here [-Wuninitialized]
+>      926 |         tsflags |=3D (sk->sk_tsflags[SOCKETOPT_TS_REQUESTOR] |
+>          |         ^~~~~~~
+>    net/core/sock.c:920:13: note: initialize the variable 'tsflags' to sil=
+ence this warning
+>      920 |         u32 tsflags;
+>          |                    ^
+>          |                     =3D 0
+>    1 warning generated.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.12-rc3 next-20241014]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Duan-Chenghao/USB-Fix-the-issue-of-task-recovery-failure-caused-by-USB-status-when-S4-wakes-up/20241012-174830
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20241012094633.126736-1-duanchenghao%40kylinos.cn
-patch subject: [PATCH v3] USB: Fix the issue of task recovery failure caused by USB status when S4 wakes up
-config: i386-randconfig-004-20241015 (https://download.01.org/0day-ci/archive/20241015/202410151722.rfjtknRz-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410151722.rfjtknRz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/core/hcd-pci.c:637:13: error: use of undeclared identifier 'hcd_pci_freeze'
-     637 |         .freeze         = hcd_pci_freeze,
-         |                           ^
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
-
-
-vim +/hcd_pci_freeze +637 drivers/usb/core/hcd-pci.c
-
-   631	
-   632	const struct dev_pm_ops usb_hcd_pci_pm_ops = {
-   633		.suspend	= hcd_pci_suspend,
-   634		.suspend_noirq	= hcd_pci_suspend_noirq,
-   635		.resume_noirq	= hcd_pci_resume_noirq,
-   636		.resume		= hcd_pci_resume,
- > 637		.freeze		= hcd_pci_freeze,
-   638		.freeze_noirq	= check_root_hub_suspended,
-   639		.thaw_noirq	= NULL,
-   640		.thaw		= hcd_pci_resume,
-   641		.poweroff	= hcd_pci_suspend,
-   642		.poweroff_late	= hcd_pci_poweroff_late,
-   643		.poweroff_noirq	= hcd_pci_suspend_noirq,
-   644		.restore_noirq	= hcd_pci_resume_noirq,
-   645		.restore	= hcd_pci_restore,
-   646		.runtime_suspend = hcd_pci_runtime_suspend,
-   647		.runtime_resume	= hcd_pci_runtime_resume,
-   648	};
-   649	EXPORT_SYMBOL_GPL(usb_hcd_pci_pm_ops);
-   650	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks! I will fix it!
