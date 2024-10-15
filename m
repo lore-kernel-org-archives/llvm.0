@@ -1,61 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7B71F9ECE;
-	Tue, 15 Oct 2024 17:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D901F9413;
+	Tue, 15 Oct 2024 17:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729011762; cv=none; b=l8J8Wwl4+X2+2ACJt5ZnZC7NMVeftcKr7iiXzdcudGzGxImhRMDK0xdF7L47tpvt/82Yqj671+NiU2zTPqeQ/f4HjS4OGynFrdE1rJZ9Qq9WqGnsQzpCSYIuur7VCyodrA05qwVlbKMr3DeuJV1npaw/o2xtG26cYWtdg/qWN8M=
+	t=1729012966; cv=none; b=TcV0mHfvxJwqJ5/dxQ5lTIr113ssA9k3So98sesY1NcDUSZbZhuiOkpQN/o2j912PaWT9YBRFFZl4sAVHY9jEFhjH5sIAll1GSK7i9jkjcxP4Odtx5RPjMpjVX6eQMWwsJZHm0PZf0g+UG+M7oW/NIgsa6aVPiFiKcX5qwTHLLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729011762; c=relaxed/simple;
-	bh=25hxaowDpDYK8TbQdGfXRUfKvGkgzt+94kBWLP8fHPg=;
+	s=arc-20240116; t=1729012966; c=relaxed/simple;
+	bh=Lot1+gKgQJ4DS8C3BfB5DwPPrYEDl7u6igAbiWgKgV0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Di8XuYw2xf0KM47J+muFj3pBRYDdOpnPuwPZkRDm/5TdDrqgLpP0fnqbzXgicR0gZESSMouoQoK050BCSym6I9I9vtAo0ucYzkJbfqF2hj8/FxFQHMeM/j2qqTMkvor2V5B0RiBIfYCVlcoCAh5+fBWuqE1T9ZNoNA4AD/dbk+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BVEy19Cq; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=phomkyQVZtYnwQnxw1sVTRWrmtH2kMR9BynwRhHAgb/wxaUsHvKGC/OYe0iDTd1erxSfptCFFNV3EvBf5aaAdfb15uw8Up5hoHmX5oMahbUUFPrCfsgBff5z+FESCRhyHjUg069f0qm4Tqg/qFxVn+PA1RStlnTZ2SphCj8jfto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h6Tj/F0G; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BVEy19Cq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h6Tj/F0G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729011761; x=1760547761;
+  t=1729012964; x=1760548964;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=25hxaowDpDYK8TbQdGfXRUfKvGkgzt+94kBWLP8fHPg=;
-  b=BVEy19CqfS6trmppdI2a0By8mswxYT+J5U2nLf11LWKYhNVa2kq25f5U
-   mywUZVylxRhRCbE5+qMMi9GcGVbb5FZ4bGoYMWaBNRWq5qjqOeWMjrEfi
-   hLCu20NKR6l9jlhp5HmD2PUGKs5n4Gfi4j1+sD4jQ+WHHa7HDzsnFV+/y
-   pUVwG3Mfg1zP0gkQKhZRkSV9ftyJyNUDZ78fdznsZweTaaJpWYf0tMGgY
-   BTercVS86bnvDJFwMgxwU1daRZ+dgEwmmxwES6+FPIOIGYb/kjaUNCBGE
-   eIHzBWPdWQGLe65grFIl06ssAwup5SoTc1yv3aEz1ZNN0y+iUHetvLIUn
+  bh=Lot1+gKgQJ4DS8C3BfB5DwPPrYEDl7u6igAbiWgKgV0=;
+  b=h6Tj/F0G10rwCCzSZUyYh3/p4JdETD5QU219lqevuT+KHnhedhOJG4FS
+   b1fEgDIqvXCncBuZNTye4bVGCX/R3EENIBLS9XKri/hWup5fEiD7C+hvz
+   //zwnB5jeHrka79pxiB+LgVV4URDdzrJTEt/8GO6Ugzid+dCzLiZDG8jm
+   R4N21htepHfy+jiG10uRsAN7Fy6zZ3VM17pjanuzF9LpQ+sMZr20QSRZU
+   eCj2GG9T6TzIdtpele0l6plw4x/dVimKao04yLIR9keIwIxVjRsPuT/jP
+   cdysIespMQiGD76StKVcra18TOQAHV09nj9pWAB9l0muMX76Xf6vJZqAp
    A==;
-X-CSE-ConnectionGUID: OjxhCVDwTEm9EJDXLCeZFw==
-X-CSE-MsgGUID: nDG4u00ORRyzG4vmrmzE5A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="50957232"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="50957232"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 10:02:40 -0700
-X-CSE-ConnectionGUID: Bz2CBDoUQRq+0/Vjxz6R0Q==
-X-CSE-MsgGUID: OvGl0Vz1S8+8azJHYkXYfw==
+X-CSE-ConnectionGUID: 0xwmlB9qTha346gXw4Z9hQ==
+X-CSE-MsgGUID: H8qbUOqaRVuMpDD6f5oCYg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="32342120"
+X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
+   d="scan'208";a="32342120"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 10:22:42 -0700
+X-CSE-ConnectionGUID: oyrji+fDSWOQBSTWfFdqww==
+X-CSE-MsgGUID: wS/0al/+RIGuii96E6E9Ig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
-   d="scan'208";a="108691617"
+   d="scan'208";a="77627836"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 15 Oct 2024 10:02:38 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 15 Oct 2024 10:22:39 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t0kwO-000Jdz-17;
-	Tue, 15 Oct 2024 17:02:36 +0000
-Date: Wed, 16 Oct 2024 01:01:51 +0800
+	id 1t0lFl-000Jf3-11;
+	Tue, 15 Oct 2024 17:22:37 +0000
+Date: Wed, 16 Oct 2024 01:22:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
-	intel-gfx@lists.freedesktop.org
+To: Markus Stockhausen <markus.stockhausen@gmx.de>, vkoul@kernel.org,
+	kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org, chris.packham@alliedtelesis.co.nz
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-xe@lists.freedesktop.org
-Subject: Re: [PATCH 6/9] drm/i915/display: Add DSC pixel replication
-Message-ID: <202410160018.hjWyI23D-lkp@intel.com>
-References: <20241014081000.2844245-7-ankit.k.nautiyal@intel.com>
+	Markus Stockhausen <markus.stockhausen@gmx.de>
+Subject: Re: [PATCH v3 2/2] phy: Realtek Otto SerDes driver
+Message-ID: <202410160149.TNGsZcue-lkp@intel.com>
+References: <20241012134834.1306992-3-markus.stockhausen@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,94 +66,114 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241014081000.2844245-7-ankit.k.nautiyal@intel.com>
+In-Reply-To: <20241012134834.1306992-3-markus.stockhausen@gmx.de>
 
-Hi Ankit,
+Hi Markus,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on next-20241015]
-[cannot apply to drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.12-rc3]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.12-rc3 next-20241015]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankit-Nautiyal/drm-i915-display-Prepare-for-dsc-3-stream-splitter/20241014-161007
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20241014081000.2844245-7-ankit.k.nautiyal%40intel.com
-patch subject: [PATCH 6/9] drm/i915/display: Add DSC pixel replication
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20241016/202410160018.hjWyI23D-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Stockhausen/dt-bindings-phy-add-realtek-rtl8380m-serdes/20241012-214949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20241012134834.1306992-3-markus.stockhausen%40gmx.de
+patch subject: [PATCH v3 2/2] phy: Realtek Otto SerDes driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241016/202410160149.TNGsZcue-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410160018.hjWyI23D-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410160149.TNGsZcue-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410160018.hjWyI23D-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410160149.TNGsZcue-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_vdsc.c:1022:6: warning: variable 'dss_ctl3' is uninitialized when used here [-Wuninitialized]
-    1022 |         if (dss_ctl3 & DSC_PIXEL_REPLICATION_MASK)
-         |             ^~~~~~~~
-   drivers/gpu/drm/i915/display/intel_vdsc.c:991:34: note: initialize the variable 'dss_ctl3' to silence this warning
-     991 |         u32 dss_ctl1, dss_ctl2, dss_ctl3;
-         |                                         ^
-         |                                          = 0
+>> drivers/phy/realtek/phy-rtk-otto-serdes.c:120:12: warning: format specifies type 'int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+     119 |         dev_info(ctrl->dev, "firmware %s: loaded with %d bytes, %d sequences\n",
+         |                                                       ~~
+         |                                                       %zu
+     120 |                  fwname, ctrl->firmware->size, h->dirsize);
+         |                          ^~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
    1 warning generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
-vim +/dss_ctl3 +1022 drivers/gpu/drm/i915/display/intel_vdsc.c
 
-   983	
-   984	void intel_dsc_get_config(struct intel_crtc_state *crtc_state)
-   985	{
-   986		struct intel_crtc *crtc = to_intel_crtc(crtc_state->uapi.crtc);
-   987		struct drm_i915_private *dev_priv = to_i915(crtc->base.dev);
-   988		enum transcoder cpu_transcoder = crtc_state->cpu_transcoder;
-   989		enum intel_display_power_domain power_domain;
-   990		intel_wakeref_t wakeref;
-   991		u32 dss_ctl1, dss_ctl2, dss_ctl3;
-   992	
-   993		if (!intel_dsc_source_support(crtc_state))
-   994			return;
-   995	
-   996		power_domain = intel_dsc_power_domain(crtc, cpu_transcoder);
-   997	
-   998		wakeref = intel_display_power_get_if_enabled(dev_priv, power_domain);
-   999		if (!wakeref)
-  1000			return;
-  1001	
-  1002		dss_ctl1 = intel_de_read(dev_priv, dss_ctl1_reg(crtc, cpu_transcoder));
-  1003		dss_ctl2 = intel_de_read(dev_priv, dss_ctl2_reg(crtc, cpu_transcoder));
-  1004	
-  1005		if (IS_BATTLEMAGE(dev_priv))
-  1006			dss_ctl3 = intel_de_read(dev_priv, BMG_PIPE_DSS_CTL3(crtc_state->cpu_transcoder));
-  1007	
-  1008		crtc_state->dsc.compression_enable = dss_ctl2 & VDSC0_ENABLE;
-  1009		if (!crtc_state->dsc.compression_enable)
-  1010			goto out;
-  1011	
-  1012		if (dss_ctl1 & JOINER_ENABLE) {
-  1013			if (dss_ctl2 & (VDSC2_ENABLE | SMALL_JOINER_CONFIG_3_ENGINES))
-  1014				crtc_state->dsc.dsc_split = INTEL_DSC_SPLIT_3_STREAMS;
-  1015	
-  1016			else if (dss_ctl2 & VDSC1_ENABLE)
-  1017				crtc_state->dsc.dsc_split = INTEL_DSC_SPLIT_2_STREAMS;
-  1018		} else {
-  1019			crtc_state->dsc.dsc_split = INTEL_DSC_SPLIT_DISABLED;
-  1020		}
-  1021	
-> 1022		if (dss_ctl3 & DSC_PIXEL_REPLICATION_MASK)
-  1023			crtc_state->dsc.pixel_replication_count =
-  1024				dss_ctl3 & DSC_PIXEL_REPLICATION_MASK;
-  1025	
-  1026		intel_dsc_get_pps_config(crtc_state);
-  1027	out:
-  1028		intel_display_power_put(dev_priv, power_domain, wakeref);
-  1029	}
-  1030	
+vim +120 drivers/phy/realtek/phy-rtk-otto-serdes.c
+
+    71	
+    72	static int rtsds_fw_load(struct rtsds_ctrl *ctrl)
+    73	{
+    74		int ret;
+    75		struct rtsds_fw_head *h;
+    76		u32 checksum;
+    77		const char *msg;
+    78		const char *fwprop;
+    79		char fwname[128];
+    80	
+    81		ret = device_property_read_string(ctrl->dev, "firmware-name", &fwprop);
+    82		if (ret)
+    83			snprintf(fwname, sizeof(fwname), "realtek/%s", ctrl->conf->fwname);
+    84		else if (strcmp(fwprop, ""))
+    85			snprintf(fwname, sizeof(fwname), "realtek/%s", fwprop);
+    86		else {
+    87			dev_info(ctrl->dev, "firmware deactivated, patching disabled\n");
+    88			return 0;
+    89		}
+    90	
+    91		ret = firmware_request_nowarn(&ctrl->firmware, fwname, ctrl->dev);
+    92		if (ret < 0) {
+    93			msg = "not found";
+    94			goto error;
+    95		}
+    96	
+    97		if (ctrl->firmware->size < 16) {
+    98			msg = "size to small";
+    99			goto error;
+   100		}
+   101	
+   102		h = (struct rtsds_fw_head *)ctrl->firmware->data;
+   103		if (h->magic != RTSDS_FW_MAGIC) {
+   104			msg = "magic mismatch";
+   105			goto error;
+   106		}
+   107	
+   108		if (h->filesize != ctrl->firmware->size) {
+   109			msg = "size mismatch";
+   110			goto error;
+   111		}
+   112	
+   113		checksum = ~crc32(0xFFFFFFFFU, ctrl->firmware->data + 8, ctrl->firmware->size - 8);
+   114		if (h->checksum != checksum) {
+   115			msg = "checksum mismatch";
+   116			goto error;
+   117		}
+   118	
+   119		dev_info(ctrl->dev, "firmware %s: loaded with %d bytes, %d sequences\n",
+ > 120			 fwname, ctrl->firmware->size, h->dirsize);
+   121	
+   122		return 0;
+   123	error:
+   124		dev_err(ctrl->dev, "firmware %s: %s, patching disabled\n", fwname, msg);
+   125		ctrl->firmware = NULL;
+   126		return -EINVAL;
+   127	}
+   128	
 
 -- 
 0-DAY CI Kernel Test Service
