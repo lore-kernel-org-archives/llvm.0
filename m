@@ -1,106 +1,73 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CBF1C7608
-	for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 10:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F7B1EABD6
+	for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 10:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728989136; cv=none; b=SbyIWggvE/wJ0cImBwQZtWi3g/Oqw+bPrkePtHnEZDL9tiSTPtgWM/XbnqSdQhCFbcl6D83wqorr+2E8njX0gzAIvTmllrHmEkCltCOmRJTdMj7a1abOnyIsc7mjBZ3Vb6nyhghAliVjh1yc9fjnMx6UO+KkloWhDDtCddUitS4=
+	t=1728989831; cv=none; b=iqRZtB+qTp69CpDRR5Cf7FiyUNCQJy8hMifBE6quIrCeXOT7v2wBtPSP4oxSCFLZXV19k70/3k57OvFRvvheT1Qla+Lw8T4LGG9WJEw6AOPQ6Jbra46nXtV8SXVWXgmYPAB8sWuZY7Q1TYqqK7C8uptYv7HbpVabkQH/ExDVl3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728989136; c=relaxed/simple;
-	bh=2RUa+Wp78UJcnBTaHrcjGmfuvysTndxMqeQSnUj1y4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E8WcgMmfB6WtZ/TX8gBzpwbSiT5EBbT/UNfkPUof9TyF2wo5pEYHhT/Qnspk/g0f37IGeqeRVBP1iYVTwoINvLiTJMbjqOATQE4kIZJjYg2SkzZhzuWU31G5nv86/bRNC7tQQV/dIgy+bbYY8uS67Nm3Q9knry92j6RdIpSezs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aB/H8ohr; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1728989831; c=relaxed/simple;
+	bh=mBWDy+/1LsU2mdwv1xP65UODLZMmvWYLMSfi4wfkJQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WQIppIEBuYWxkmUxSiNkmRZOskftZ3XaobF0NA1IFs6cLTXh5tub8RkjwQJ0hc++9klHsjbtlfx1sGZnqHJC1oIHjoi18ITLxJFIacvtzo3aBortudMV+goQ0eTNCWNEXBmjvltK60+lbFcgvejnauGl/v1WGNw5HdRSMwn/BYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmQQoh4Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aB/H8ohr"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a99ffeea60bso356589966b.3
-        for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 03:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728989133; x=1729593933; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TCL9tE7kD/pEAlw/bIpW3296DIJpWExNiDbcmpjDgj8=;
-        b=aB/H8ohr7UmsZWRDqXR04XxhJ/p8/S6cAxUPM+vTG2DGbkjZdVJ/JfvE9frptON2G4
-         lpJhwPN0K/vp17RCAQDLvFXkVbdrhvktMCHgp9LpIgaA4sHUq1lhmv/FRoa0ahf16CYI
-         RFOWZ7G0bSi9cnWpLkwG4pLcBIJiWueve5sTpv7N1eedxd8qmCeBYleRAxS/wMcuB1j7
-         HTmrmykp4wwCqcH3MxIxnXipmnVhTYLzZmwBQgLfDVT5eNlQCIt4Hr6i9pQTKj6YECaO
-         A0G6qVb6AEipuANyUhKMqo6xgog/CLIxkL/ZVGbMH+OoJuBXLK/PmoIGfDezXjwkEl3r
-         ZiMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728989133; x=1729593933;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TCL9tE7kD/pEAlw/bIpW3296DIJpWExNiDbcmpjDgj8=;
-        b=W0Yw33K1CbzN/il6f1XSBlTjF0rqIyjeplDO7myGxhyGtOf8/2l6IkSZw5ZlVDyjAF
-         vQRyB/M58W2st7zmcW3WGHmlV8LTHieh0L5lxYgWQYFf3nLyXg+X8spi+gVYWhah3A6i
-         rGueFgN8rPGOVU7hUkdHxIZJXryeOsVfPqsYSQq2iMsopEgavUrnMciekPj2Vi/7Ljt5
-         VcXBcVSgoOCf5aZQxO1knyPQLw+ArF5oNkszBOLMScJuvJce1gzfH1DIqpGfpxWXwAsZ
-         Znj129BCMpOWI+W/SqRyz6m6cRMO9ABl82vq64+ajwI2dlE0OozNcb6gjjNZUPjXcvwh
-         5zZg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4pp/B3kbgKldraJDx2pC81tgI/rhiKOWlz4W51X6+rNzEyJuSgt+fvDNFMrH4EJyiwKpz@lists.linux.dev
-X-Gm-Message-State: AOJu0YwFNhLpk7ToCXT3/c5U6wrLUTz+5Lz1Ip8ckdOakhKdMdAsaOd0
-	KJLIHPdrMrFjV2A80baQhEljOsnCnXkeongr4DWH5LJS3Q0vMAbWPtThdznfhhQ=
-X-Google-Smtp-Source: AGHT+IGr2iqgWL4Av+20XWPNQ/ZE7fyuLmJsKSn2ZOfDWIZori+kUOfJFFddL5wMKnYz/zgwCRipDQ==
-X-Received: by 2002:a17:907:7e8e:b0:a9a:61d:7084 with SMTP id a640c23a62f3a-a9a061d7325mr751772566b.50.1728989133267;
-        Tue, 15 Oct 2024 03:45:33 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a29843318sm56079066b.150.2024.10.15.03.45.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 03:45:32 -0700 (PDT)
-Date: Tue, 15 Oct 2024 13:45:28 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Su Hui <suhui@nfschina.com>
-Cc: sfrench@samba.org, pc@manguebit.com, ronniesahlberg@gmail.com,
-	sprasad@microsoft.com, stfrench@microsoft.com, tom@talpey.com,
-	bharathsm@microsoft.com, nathan@kernel.org, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] smb: client: fix possible double free in smb2_set_ea()
-Message-ID: <c0afa02b-991c-4601-bacb-13ace9cb96f2@stanley.mountain>
-References: <20241015102036.2882322-1-suhui@nfschina.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmQQoh4Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0693C4CED0
+	for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 10:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728989830;
+	bh=mBWDy+/1LsU2mdwv1xP65UODLZMmvWYLMSfi4wfkJQk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kmQQoh4YxBvbkgspgx/X973q8Bmnwb/dxh0QPJgtrtv4OL6LV1HiiqItFg8p8vNuU
+	 WDckni2cX6kck54UNdTc5ptOBGtVzPy2j7x7uNmUwNAgCbgn6zep12SgPqOFLHiqgu
+	 FVChmW1hYmKKgfLfdVBLApUp+1i130fdXK47Q93WZ5qfLuOq6v95Aw84pl4a5O/HKk
+	 VigB64Fhopnb9x8lHMVIcBCID+vI8d52T6NNs7rCT+qfxoJ28Yztr5cnzkGkvNUPz4
+	 dXloIa6rMCxrsRFz8Ue4JQHcQNoGK49JtdtRTN6T8mk408GISGsT9f9ON9idQiMeub
+	 tVQcnVTOD+IKA==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539ebb5a20aso2670283e87.2
+        for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 03:57:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX66ybgxPyp1vn7Bjc+FfCCvsw43FhoqpD2FfByzo6E7kefCehpqnDuzn2G5za1YOgcNC8X@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx3Bj3hIgSSkkY7yasFgB5kHYEaG2cRsFWFnFIUlqh5I/23x0jM
+	+s0KFCyEW8EG5M27NcTGHVDrxV7ScjgWKchGVS6OKIdeTOv1ny0bptLPhDLrQm0qNrGXiGuoSZp
+	6lBDsFKgZJkQXZvXm+sBm4A1fneA=
+X-Google-Smtp-Source: AGHT+IHDatbRRWflHG79t76g/ZmQOloSnfcbXHBgCIHWzrSGdpAhWGwB4xFU17eSKij3R1NnXzvhVTbId4qaUTC+x1c=
+X-Received: by 2002:a05:6512:2398:b0:52c:9468:c991 with SMTP id
+ 2adb3069b0e04-539e54e72a2mr5276430e87.14.1728989828934; Tue, 15 Oct 2024
+ 03:57:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241015102036.2882322-1-suhui@nfschina.com>
+References: <20241009124352.3105119-2-ardb+git@google.com> <202410141357.3B2A71A340@keescook>
+In-Reply-To: <202410141357.3B2A71A340@keescook>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 15 Oct 2024 12:56:57 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com>
+Message-ID: <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/stackprotector: Work around strict Clang TLS
+ symbol requirements
+To: Kees Cook <kees@kernel.org>
+Cc: Ard Biesheuvel <ardb+git@google.com>, x86@kernel.org, llvm@lists.linux.dev, 
+	linux-hardening@vger.kernel.org, stable@vger.kernel.org, 
+	Fangrui Song <i@maskray.me>, Brian Gerst <brgerst@gmail.com>, Uros Bizjak <ubizjak@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 15, 2024 at 06:20:37PM +0800, Su Hui wrote:
-> Clang static checker(scan-build) warning：
-> fs/smb/client/smb2ops.c:1304:2: Attempt to free released memory.
->  1304 |         kfree(ea);
->       |         ^~~~~~~~~
-> 
-> There is a double free in such case:
-> 'ea is initialized to NULL' -> 'first successful memory allocation for
-> ea' -> 'something failed, goto sea_exit' -> 'first memory release for ea'
-> -> 'goto replay_again' -> 'second goto sea_exit before allocate memory
-> for ea' -> 'second memory release for ea resulted in double free'.
-> 
-> Re-initialie 'ea' to NULL near to the replay_again label, it can fix this
-> double free problem.
-> 
-> Fixes: 4f1fffa23769 ("cifs: commands that are retried should have replay flag set")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
-> v2: 
-> - Move 'ea = NULL' near to the replay_again label.(Dan's suggestion)
+On Mon, 14 Oct 2024 at 22:59, Kees Cook <kees@kernel.org> wrote:
+>
+> On Wed, Oct 09, 2024 at 02:43:53PM +0200, Ard Biesheuvel wrote:
+> > However, if a non-TLS definition of the symbol in question is visible in
+> > the same compilation unit (which amounts to the whole of vmlinux if LTO
+> > is enabled), it will drop the per-CPU prefix and emit a load from a
+> > bogus address.
+>
+> I take this to mean that x86 32-bit kernels built with the stack
+> protector and using Clang LTO will crash very quickly?
+>
 
-Thanks!
-
-Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
-
-regards,
-dan carpenter
-
+Yeah. The linked issue is not quite clear, but it does suggest things
+are pretty broken in that case.
