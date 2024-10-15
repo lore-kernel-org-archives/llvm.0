@@ -1,149 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099091C57B1;
-	Tue, 15 Oct 2024 12:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2658D29B0;
+	Tue, 15 Oct 2024 12:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728994091; cv=none; b=Zat8dCLqz7wenNuH+gQSSwtoa2ZmMhjhzKUjiMyhZBxVq8lDBvnyxLAX6oZcGrFbQVmS3luIZl7PlyeFMfwfoPJcoPiWiUaUmA8+R+WjWUZ9ldDa/jAhnPURwtS+Teqo4yR2aPmQP0nHn1iXAvucijFrOd72CFI0qiNm5EtdxBE=
+	t=1728994825; cv=none; b=iqdsHp/V15DH1p7P2jxHqzBWrWw0nEDlRsrjDBRYcjv9JAQaHhX0nYbePrghTkttQfJ0d8UkuGu5UYqMNKn8Ek7KBgdKiFDaPVaNBOwwCJ1B48QTNPgsbMjTPUO4820oP5xdRvcYp9VpEAL1ay84EquLCUDimESIz1IKufc5Uc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728994091; c=relaxed/simple;
-	bh=prcWaevsNJkB7b1NJvXK8hYUAEJ/OhWYpq8lsaV3Gvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kmm/bCzGWSVvYYuUy0H3BE8FYmHfRYvGBECqWfvGQSAO9brL3B8UJNLFgPrjvikZJ3aLbCA9SVyG4hr7pfsno/vWu3Rc4XOiUAQWiPOB0KPglscIW3ZriQD5kDtK9uLF5lU+N/zI0aaNrMXgV7wwbW9oDqG/h3JAGCo3uF0QSh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GKI4w507; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1728994825; c=relaxed/simple;
+	bh=J3XcQcWQMfT43WX1MCPAGxpvnrd+g9EPEM5cz1VWY2U=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=GLjH63CTlDUWEEQEfypyx0QpmH5v9c4QFbUl7HDznnQ28E/to3RKNV4Swn8LRDES49GOmjAivFn0SNfV/MD2nX50iMOEcnEK2hzNUknV5PkWD32lDc1GM8BTAfvlg6/wmSEJrK+AZuFdHApRgAYKu4+CrzTsu3fkfEfbOcJLFVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJkymGs8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GKI4w507"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728994090; x=1760530090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=prcWaevsNJkB7b1NJvXK8hYUAEJ/OhWYpq8lsaV3Gvw=;
-  b=GKI4w507HhZPNNPevmyp7l6cob9U2UF24+uJsJg3DT4EzXUAhJ8BtyJm
-   CFVqh/zcK3yZXMLvBE6rBC7nXndctkbdF0bOa357OkCpXUO4JnzwTCDex
-   KeCTxGtzfuewFR0tebRn97QZIchhWsxSPB1kqecVXz1tP24J7A1cMaTvy
-   lbDGNneZqhPXD+EMDRzKGDVrJmzQH+RTfqKdzEY9A2QSPr3HZjcyXj/tI
-   WOlYTHoeoLDgc3NkZ15XGFmFQ+yf4ZY/QuzBxTBZVxoTI9LdaeTDplDlA
-   iHM9hgN8DkM+cUIrYX3qdPiZ8LyCqIIuM1y4C3Oi80yha2KIyZovAnh63
-   Q==;
-X-CSE-ConnectionGUID: rSGvZXdDQtiSvcpwGV86Mg==
-X-CSE-MsgGUID: oSPo9bPBTEuZsICJYsFO9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28172400"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28172400"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 05:08:10 -0700
-X-CSE-ConnectionGUID: NyU+83L1TIG+d/TFC7lO8Q==
-X-CSE-MsgGUID: pePk9I4fS3yWDCgNVJ+rYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
-   d="scan'208";a="82663378"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2024 05:08:06 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t0gLL-000Idh-28;
-	Tue, 15 Oct 2024 12:08:03 +0000
-Date: Tue, 15 Oct 2024 20:07:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-	Sebastian Fricke <sebastian.fricke@collabora.com>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: Re: [PATCH v4 08/28] media: iris: implement power management
-Message-ID: <202410151938.Q3kFJFnO-lkp@intel.com>
-References: <20241014-qcom-video-iris-v4-v4-8-c5eaa4e9ab9e@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJkymGs8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FDCC4CECF;
+	Tue, 15 Oct 2024 12:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728994824;
+	bh=J3XcQcWQMfT43WX1MCPAGxpvnrd+g9EPEM5cz1VWY2U=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=pJkymGs8gX00h3/gx9xw5iwYkirHwsQVe+vjc3o/Uig9u9myyipCEI6OTKU5+BSyn
+	 Rhg4Zk2M+ybn14g8aR/coqZzE8uBuBSJt2jID19dSC++gUMzaL//G3EtgVqmJemKVM
+	 g6HVX1SylgnW6N+oF4rnAFEIgSC2DGsXZWuQxEs8e/ehQYMC7Yh2ru85gIeCzQC0a4
+	 BHV8bjQnX0k1xIkZS4yN17+9YK5F5972UZvblK6jc2QptOgx/fF9tFpGZvdkzKWS5A
+	 Rpr0gLFzXEsqwxSDbPvp52Zv5JiNzzYLePdjp99dYUWOKwhmloHnXWN5nfCRTZwK7g
+	 XAcKTg435TRew==
+Date: Tue, 15 Oct 2024 14:20:19 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc: Thomas Kuehne <thomas.kuehne@gmx.li>, linux-input@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+    Benjamin Tissoires <bentiss@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] HID: debug: Remove duplicates from 'keys'
+In-Reply-To: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <nycvar.YFH.7.76.2410151419110.20286@cbobk.fhfr.pm>
+References: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241014-qcom-video-iris-v4-v4-8-c5eaa4e9ab9e@quicinc.com>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Dikshita,
+On Thu, 5 Sep 2024, Andy Shevchenko wrote:
 
-kernel test robot noticed the following build warnings:
+> Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
+> CONFIG_WERROR=y, for example:
+> 
+> drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+>  3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
+>       |                         ^~~~~~~~~
+> drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
+>  3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
+>       |                         ^~~~~~~~~
+> 
+> Fix this by removing them.
+> 
+> The logic of removal is that, remove...
+> 1) if there is a constant that uses another defined constant, OR
+> 2) the one that appears later in the list.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/hid/hid-debug.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+> index d5abfe652fb5..618ebaa3bfc0 100644
+> --- a/drivers/hid/hid-debug.c
+> +++ b/drivers/hid/hid-debug.c
+> @@ -3214,7 +3214,7 @@ static const char *keys[KEY_MAX + 1] = {
+>  	[KEY_VOLUMEUP] = "VolumeUp",		[KEY_POWER] = "Power",
+>  	[KEY_KPEQUAL] = "KPEqual",		[KEY_KPPLUSMINUS] = "KPPlusMinus",
+>  	[KEY_PAUSE] = "Pause",			[KEY_KPCOMMA] = "KPComma",
+> -	[KEY_HANGUEL] = "Hangeul",		[KEY_HANJA] = "Hanja",
 
-[auto build test WARNING on 67cefecf2a039b9ed0030b9213ceafcd45e6f9e3]
+The problem specifically with this one is really there to fix a typo 
+someone did at some point in the past. See b9ab58dd8e771d ("Input: fix 
+misspelling of Hangeul key").
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal/dt-bindings-media-Add-video-support-for-QCOM-SM8550-SoC/20241014-171950
-base:   67cefecf2a039b9ed0030b9213ceafcd45e6f9e3
-patch link:    https://lore.kernel.org/r/20241014-qcom-video-iris-v4-v4-8-c5eaa4e9ab9e%40quicinc.com
-patch subject: [PATCH v4 08/28] media: iris: implement power management
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241015/202410151938.Q3kFJFnO-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410151938.Q3kFJFnO-lkp@intel.com/reproduce)
+So I think we should preserve it somehow.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410151938.Q3kFJFnO-lkp@intel.com/
+The remaining ones seem indeed to be duplicates and I don't see a problem 
+removing them.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/qcom/iris/iris_probe.c:281:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     281 |         if (core->state != IRIS_CORE_INIT)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_probe.c:289:9: note: uninitialized use occurs here
-     289 |         return ret;
-         |                ^~~
-   drivers/media/platform/qcom/iris/iris_probe.c:281:2: note: remove the 'if' if its condition is always false
-     281 |         if (core->state != IRIS_CORE_INIT)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     282 |                 goto exit;
-         |                 ~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_probe.c:276:9: note: initialize the variable 'ret' to silence this warning
-     276 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-
-
-vim +281 drivers/media/platform/qcom/iris/iris_probe.c
-
-   272	
-   273	static int iris_pm_suspend(struct device *dev)
-   274	{
-   275		struct iris_core *core;
-   276		int ret;
-   277	
-   278		core = dev_get_drvdata(dev);
-   279	
-   280		mutex_lock(&core->lock);
- > 281		if (core->state != IRIS_CORE_INIT)
-   282			goto exit;
-   283	
-   284		ret = iris_hfi_pm_suspend(core);
-   285	
-   286	exit:
-   287		mutex_unlock(&core->lock);
-   288	
-   289		return ret;
-   290	}
-   291	
+Thanks,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jiri Kosina
+SUSE Labs
+
