@@ -1,43 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3AF1F80A1;
-	Tue, 15 Oct 2024 19:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04191F80A1;
+	Tue, 15 Oct 2024 19:26:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729020366; cv=none; b=nxL1e0AsjET6vaoLDtr8H6l85XDo3fapuKoWzXlie7mcUxeuDLjk46P9lhlBKXphjfufvWFOUmt4KBCS9RDMQUjGXsJAjIS11kk5GC4p0ctZfB75AmmlaRK1BN+7YfvuQlY9UNHwdbCg2esxtZvoZQgLzuwU2AYQdhQuTksw8wA=
+	t=1729020392; cv=none; b=GrDlx0n4WHLB3/TRUN6joqyzY/E9zCq8BCLr/NMpHBd2cFvCfB/94cBcPo1bvb9mD1FWiGyP2tQkIfDD5bAr8u0OOtQhOkmr91gZ3F/Eso40FBKNFLlpdnrtoXpmvIoAprqvt1wup8f/mBLCmRUQrpbZrdKn59DJQmDynmvA+EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729020366; c=relaxed/simple;
-	bh=aNWCWP+NRA+HcsIkQGIQiYbM8rf1blOIC5ksfv4YQq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OVcNmWKlU+5yNx6Y7juoADbYn7eFdZXDhvWPQwCMTDnEWCAmofehmOG3j6Z13uGUQ5Q32YK7WK8m70b+7Ftxvesymp8klD5UE0r1WYymsoqfZQd8XAPaw4Ef+9TJ/TiER7Hec/bv+P9TbE6ju0w3PEeBEck+eUUpNBx69JoOGHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gg8tqodP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729020392; c=relaxed/simple;
+	bh=RCm4pxa5IwSPQr+kRJ7ZG2XMJgL6YqyYvgj/rZlIuOQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Nmp6lcOLBXr+Y9KfL0VBQUElMEnjwqmJyXZNhZdf+zNiz0bWYx8m1RYqgB1MQKw8ubvbclnCQatJw2LzG7VfadLev/PQ3LlhXaeh7BfT/sImASA2y4XByiZ8BrwSxa2HUKVX9IsVLhLvJLeCc2jCJ8O6LIa0S0WFbZpKCRjQK2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LKDdWx8L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gg8tqodP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF548C4CEC6;
-	Tue, 15 Oct 2024 19:26:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LKDdWx8L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04363C4CEC6;
+	Tue, 15 Oct 2024 19:26:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729020366;
-	bh=aNWCWP+NRA+HcsIkQGIQiYbM8rf1blOIC5ksfv4YQq4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gg8tqodPEX1BMYb6xsEUk8uXZosp8TAAaSWq7coYG6yKU8NJMjWQSdzwgrZYBqXXy
-	 ydgM4bIfOEsHUtMtxHtClKKP0HAFhD1ItkK0CE5k+oZng4HMEGbbHVd5xs/jCw6LLp
-	 S5dInlYBzsE7OzUHkMAcCuaSkAUwtjfVe7FP6kO04omTg0iiQKYpOz67XK7qU0hguK
-	 JkcnBD66Dcg/42chsCjvNwOx4tgFRLZoBhE+iAHygOZs9jx3WOfFlPmXWBG2H+Iex6
-	 ZD+kU6gtELGyxO1k40sorCr767zva5B/EcsPqlqi1uyu7o2Lv7XG53s3CjsGML/Ve6
-	 9Z0YVYXKnnsCw==
-Date: Tue, 15 Oct 2024 12:26:04 -0700
+	s=k20201202; t=1729020392;
+	bh=RCm4pxa5IwSPQr+kRJ7ZG2XMJgL6YqyYvgj/rZlIuOQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LKDdWx8L3S+oU3ss+NUqXW5ItEquHG+YIGBroL5qNc9Z9x4/1IIyBeowfe0mk4z6k
+	 lqbZJMTJJ/UvsoCns4udPfIE9hVkGWxmZw3KBq9GNxSvpTWXPKLgFZTt+J4+1Nj6zG
+	 uW98Z38xpvRZ+KW9jNBYHX5XwOYp1PfuJxPb6HTeQoHhCmyhd4GgiTe65rLuM1wIoB
+	 u8nPxO3TMp75pqmq/fD65J4jrdWa9DWvgM1o0c6O1M/EDNHp5Vq2S2bSv9gXbE/utf
+	 9zBSBPXBgw4Pa764WaVa4AYx3mn4ehW4b1VV5F6kXh4jcMS9wkQFMQPPE48RUlAUdy
+	 RReXS3K3ahrDQ==
+Date: Tue, 15 Oct 2024 12:26:30 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, paulmck@kernel.org, sfr@canb.auug.org.au,
-	jpoimboe@kernel.org, linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH] HID: simplify code in fetch_item()
-Message-ID: <20241015192604.GA1329867@thelio-3990X>
-References: <ZvwYbESMZ667QZqY@google.com>
- <20241010222451.GA3571761@thelio-3990X>
- <Zw60Sj-iFh1KWwWG@google.com>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: conor@kernel.org, ojeda@kernel.org
+Subject: Prebuilt LLVM 19.1.2 uploaded
+Message-ID: <20241015192630.GA1410876@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,19 +40,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zw60Sj-iFh1KWwWG@google.com>
 
-On Tue, Oct 15, 2024 at 11:28:26AM -0700, Dmitry Torokhov wrote:
-> Oh well, if our toolchain does not like "unreachable()" then we can
-> simply remove it - the switch does cover all possible values and the
-> "return" statement should be valid even if compiler somehow decides that
-> "switch" statement can be skipped.
-> 
-> If you can send a patch that would be great.
+Hi all,
 
-Done, thanks a lot for the input!
+I have built and uploaded LLVM 19.1.2 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-https://lore.kernel.org/20241015-hid-fix-fetch_item-unreachable-v1-1-b131cd10dbd1@kernel.org/
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 19.x
+series is no longer supported.
 
 Cheers,
 Nathan
