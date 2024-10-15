@@ -1,73 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F7B1EABD6
-	for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 10:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099091C57B1;
+	Tue, 15 Oct 2024 12:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728989831; cv=none; b=iqRZtB+qTp69CpDRR5Cf7FiyUNCQJy8hMifBE6quIrCeXOT7v2wBtPSP4oxSCFLZXV19k70/3k57OvFRvvheT1Qla+Lw8T4LGG9WJEw6AOPQ6Jbra46nXtV8SXVWXgmYPAB8sWuZY7Q1TYqqK7C8uptYv7HbpVabkQH/ExDVl3A=
+	t=1728994091; cv=none; b=Zat8dCLqz7wenNuH+gQSSwtoa2ZmMhjhzKUjiMyhZBxVq8lDBvnyxLAX6oZcGrFbQVmS3luIZl7PlyeFMfwfoPJcoPiWiUaUmA8+R+WjWUZ9ldDa/jAhnPURwtS+Teqo4yR2aPmQP0nHn1iXAvucijFrOd72CFI0qiNm5EtdxBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728989831; c=relaxed/simple;
-	bh=mBWDy+/1LsU2mdwv1xP65UODLZMmvWYLMSfi4wfkJQk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WQIppIEBuYWxkmUxSiNkmRZOskftZ3XaobF0NA1IFs6cLTXh5tub8RkjwQJ0hc++9klHsjbtlfx1sGZnqHJC1oIHjoi18ITLxJFIacvtzo3aBortudMV+goQ0eTNCWNEXBmjvltK60+lbFcgvejnauGl/v1WGNw5HdRSMwn/BYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmQQoh4Y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728994091; c=relaxed/simple;
+	bh=prcWaevsNJkB7b1NJvXK8hYUAEJ/OhWYpq8lsaV3Gvw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kmm/bCzGWSVvYYuUy0H3BE8FYmHfRYvGBECqWfvGQSAO9brL3B8UJNLFgPrjvikZJ3aLbCA9SVyG4hr7pfsno/vWu3Rc4XOiUAQWiPOB0KPglscIW3ZriQD5kDtK9uLF5lU+N/zI0aaNrMXgV7wwbW9oDqG/h3JAGCo3uF0QSh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GKI4w507; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmQQoh4Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0693C4CED0
-	for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 10:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728989830;
-	bh=mBWDy+/1LsU2mdwv1xP65UODLZMmvWYLMSfi4wfkJQk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kmQQoh4YxBvbkgspgx/X973q8Bmnwb/dxh0QPJgtrtv4OL6LV1HiiqItFg8p8vNuU
-	 WDckni2cX6kck54UNdTc5ptOBGtVzPy2j7x7uNmUwNAgCbgn6zep12SgPqOFLHiqgu
-	 FVChmW1hYmKKgfLfdVBLApUp+1i130fdXK47Q93WZ5qfLuOq6v95Aw84pl4a5O/HKk
-	 VigB64Fhopnb9x8lHMVIcBCID+vI8d52T6NNs7rCT+qfxoJ28Yztr5cnzkGkvNUPz4
-	 dXloIa6rMCxrsRFz8Ue4JQHcQNoGK49JtdtRTN6T8mk408GISGsT9f9ON9idQiMeub
-	 tVQcnVTOD+IKA==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539ebb5a20aso2670283e87.2
-        for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 03:57:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX66ybgxPyp1vn7Bjc+FfCCvsw43FhoqpD2FfByzo6E7kefCehpqnDuzn2G5za1YOgcNC8X@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3Bj3hIgSSkkY7yasFgB5kHYEaG2cRsFWFnFIUlqh5I/23x0jM
-	+s0KFCyEW8EG5M27NcTGHVDrxV7ScjgWKchGVS6OKIdeTOv1ny0bptLPhDLrQm0qNrGXiGuoSZp
-	6lBDsFKgZJkQXZvXm+sBm4A1fneA=
-X-Google-Smtp-Source: AGHT+IHDatbRRWflHG79t76g/ZmQOloSnfcbXHBgCIHWzrSGdpAhWGwB4xFU17eSKij3R1NnXzvhVTbId4qaUTC+x1c=
-X-Received: by 2002:a05:6512:2398:b0:52c:9468:c991 with SMTP id
- 2adb3069b0e04-539e54e72a2mr5276430e87.14.1728989828934; Tue, 15 Oct 2024
- 03:57:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GKI4w507"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728994090; x=1760530090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=prcWaevsNJkB7b1NJvXK8hYUAEJ/OhWYpq8lsaV3Gvw=;
+  b=GKI4w507HhZPNNPevmyp7l6cob9U2UF24+uJsJg3DT4EzXUAhJ8BtyJm
+   CFVqh/zcK3yZXMLvBE6rBC7nXndctkbdF0bOa357OkCpXUO4JnzwTCDex
+   KeCTxGtzfuewFR0tebRn97QZIchhWsxSPB1kqecVXz1tP24J7A1cMaTvy
+   lbDGNneZqhPXD+EMDRzKGDVrJmzQH+RTfqKdzEY9A2QSPr3HZjcyXj/tI
+   WOlYTHoeoLDgc3NkZ15XGFmFQ+yf4ZY/QuzBxTBZVxoTI9LdaeTDplDlA
+   iHM9hgN8DkM+cUIrYX3qdPiZ8LyCqIIuM1y4C3Oi80yha2KIyZovAnh63
+   Q==;
+X-CSE-ConnectionGUID: rSGvZXdDQtiSvcpwGV86Mg==
+X-CSE-MsgGUID: oSPo9bPBTEuZsICJYsFO9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28172400"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28172400"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 05:08:10 -0700
+X-CSE-ConnectionGUID: NyU+83L1TIG+d/TFC7lO8Q==
+X-CSE-MsgGUID: pePk9I4fS3yWDCgNVJ+rYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,205,1725346800"; 
+   d="scan'208";a="82663378"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2024 05:08:06 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t0gLL-000Idh-28;
+	Tue, 15 Oct 2024 12:08:03 +0000
+Date: Tue, 15 Oct 2024 20:07:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+	Sebastian Fricke <sebastian.fricke@collabora.com>,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: Re: [PATCH v4 08/28] media: iris: implement power management
+Message-ID: <202410151938.Q3kFJFnO-lkp@intel.com>
+References: <20241014-qcom-video-iris-v4-v4-8-c5eaa4e9ab9e@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241009124352.3105119-2-ardb+git@google.com> <202410141357.3B2A71A340@keescook>
-In-Reply-To: <202410141357.3B2A71A340@keescook>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 15 Oct 2024 12:56:57 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com>
-Message-ID: <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/stackprotector: Work around strict Clang TLS
- symbol requirements
-To: Kees Cook <kees@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, x86@kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, stable@vger.kernel.org, 
-	Fangrui Song <i@maskray.me>, Brian Gerst <brgerst@gmail.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Andy Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241014-qcom-video-iris-v4-v4-8-c5eaa4e9ab9e@quicinc.com>
 
-On Mon, 14 Oct 2024 at 22:59, Kees Cook <kees@kernel.org> wrote:
->
-> On Wed, Oct 09, 2024 at 02:43:53PM +0200, Ard Biesheuvel wrote:
-> > However, if a non-TLS definition of the symbol in question is visible in
-> > the same compilation unit (which amounts to the whole of vmlinux if LTO
-> > is enabled), it will drop the per-CPU prefix and emit a load from a
-> > bogus address.
->
-> I take this to mean that x86 32-bit kernels built with the stack
-> protector and using Clang LTO will crash very quickly?
->
+Hi Dikshita,
 
-Yeah. The linked issue is not quite clear, but it does suggest things
-are pretty broken in that case.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 67cefecf2a039b9ed0030b9213ceafcd45e6f9e3]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal/dt-bindings-media-Add-video-support-for-QCOM-SM8550-SoC/20241014-171950
+base:   67cefecf2a039b9ed0030b9213ceafcd45e6f9e3
+patch link:    https://lore.kernel.org/r/20241014-qcom-video-iris-v4-v4-8-c5eaa4e9ab9e%40quicinc.com
+patch subject: [PATCH v4 08/28] media: iris: implement power management
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241015/202410151938.Q3kFJFnO-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241015/202410151938.Q3kFJFnO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410151938.Q3kFJFnO-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/platform/qcom/iris/iris_probe.c:281:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     281 |         if (core->state != IRIS_CORE_INIT)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/qcom/iris/iris_probe.c:289:9: note: uninitialized use occurs here
+     289 |         return ret;
+         |                ^~~
+   drivers/media/platform/qcom/iris/iris_probe.c:281:2: note: remove the 'if' if its condition is always false
+     281 |         if (core->state != IRIS_CORE_INIT)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     282 |                 goto exit;
+         |                 ~~~~~~~~~
+   drivers/media/platform/qcom/iris/iris_probe.c:276:9: note: initialize the variable 'ret' to silence this warning
+     276 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+
+
+vim +281 drivers/media/platform/qcom/iris/iris_probe.c
+
+   272	
+   273	static int iris_pm_suspend(struct device *dev)
+   274	{
+   275		struct iris_core *core;
+   276		int ret;
+   277	
+   278		core = dev_get_drvdata(dev);
+   279	
+   280		mutex_lock(&core->lock);
+ > 281		if (core->state != IRIS_CORE_INIT)
+   282			goto exit;
+   283	
+   284		ret = iris_hfi_pm_suspend(core);
+   285	
+   286	exit:
+   287		mutex_unlock(&core->lock);
+   288	
+   289		return ret;
+   290	}
+   291	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
