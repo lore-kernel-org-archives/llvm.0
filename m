@@ -1,67 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23B5207205;
-	Wed, 16 Oct 2024 11:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A48206059;
+	Wed, 16 Oct 2024 12:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729079715; cv=none; b=hzRO6bDcsa4t2t/W6fZ8URIzUE1wvUC7VyX+Cr9p7sbyUyYlC9oac8FOJ0EFU/hISYo6n/FtAtZHrb5DPzIvpDEiaUP5plT0YB3vx36GWr7oMeAaSIK1u0F0ORaya4ZxFdhAu8HnmP2700YYXnvAQx3GmF/eSPcvX54uQldRqMU=
+	t=1729080384; cv=none; b=h2QFd6zPYGbQOoFrGDt3AazXrKIu5jTDr2hniU46plh6N3WmoD7o+8Ca5YzasOlVTWjN/Xi4rod/5/sMK9HZSGTedUGdWhp6H06FI4wJkZg5/WC0lsNGuHM/nkxX2F6EDUZQ0mBjzLN9KItXIXKlXsJYlKgUFfBG080vFJ390+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729079715; c=relaxed/simple;
-	bh=o7YO58RNpvfnQHJ3ozrIWkOlQxmvd503Se20J7MJq6s=;
+	s=arc-20240116; t=1729080384; c=relaxed/simple;
+	bh=yr131OHwh6p7SKAQDgvSbW6R8Cppve4kOb48UjyIjao=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fdaVXoB3iNLrTvF6K7p59BOUNJqoRipc1qwDZpZXGedE28xaZsKI6CD8eFrOgBuJwpJO+KM0qEQvzxPwTMEGYpKwzDiBMmWqAx2/CIx8h0Ff7xNEEhaMTKP7cMDxInRVff86oT5zOFSyh8q6YguyVQoEk9ffSgOPmBtVHEy4LE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2Sqb0b4; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=Poc6GeUWtHMVt/6E4AeDt2//8/RTo1TIodHfPSFr18l56T43iVX7eqMqaAoPeyk2j8wl0++Su8qMYR36og7LJqF4JfCtWAP7XYMs9wdEmwmYa66H2HwjMrR6D6k+rAklqfdWRKZi40/FANE9Ej37TCXmZuIhaJBAOwbeVVwQfjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WmZASWmC; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2Sqb0b4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WmZASWmC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729079714; x=1760615714;
+  t=1729080373; x=1760616373;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=o7YO58RNpvfnQHJ3ozrIWkOlQxmvd503Se20J7MJq6s=;
-  b=X2Sqb0b47+mN4E1aS2/gArAJbgAI1Y/4iZ3rwIZh2K4flyKkWANhNcZ/
-   +vlwzGee0IFPXZ3AhNfn/H8iGA/CqUZGoNqM/OnpnT/xyZgaUrL30JuYK
-   pDFtEw3gzVfjIfBBSvjDPnDp2nazqD935Y9crCueaMu1a0O/MDOcFaPGR
-   Ep/xEAbcHRolxW/YOISulTgmITLnzeWSk64TcZS+eUzw5clXaSwNRQNW8
-   ZEnrKzoh9bP5PWCBcvxI4rc4c6gjGasp8NSNBeE3+8yjo0aJyih6I2dt9
-   7qVqxspB/emStkW9CIeJ8/bkVFd8mulKrDGpDMTrZzaaB5r5nFFydCbuv
-   w==;
-X-CSE-ConnectionGUID: SHSOTOJ1T6u1EaGFQq/hWg==
-X-CSE-MsgGUID: Dzd6m7AATTqxh+akzowKSA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="53936585"
+  bh=yr131OHwh6p7SKAQDgvSbW6R8Cppve4kOb48UjyIjao=;
+  b=WmZASWmCYnsqO4g9egaUfDyfJWrSulCHqr8M2kXPszrYPJfHF732UGHE
+   i2NIWDH0AM7poaGsO4h2fNT+F+IuWDVr4rT2GhIVzexUZ2C8vD8vk6xiU
+   q+v7XTcpx8lhYsDBaQXlkhvIeKS1DLMcHW9xOHlXLJvLseEWryxymWqoS
+   uDPqLEwE3ER/zdurzdilQUlf+w4MGG/CsKaqtJDuXC6zXf3Wi1gJ2dkZd
+   9ac3+B6qB4Lt3r9MKsWbeBEnN7hed26ZpkAur1rwqYaflumqcO+LITBX2
+   KT8mXfylJsSNKz0/2dp3XL4/Yj/V/JBEePNnMiZokFU8EAMMb+0jBfZYD
+   A==;
+X-CSE-ConnectionGUID: TfWLn5QWQqC6r3bsfHHgcw==
+X-CSE-MsgGUID: hCwYM3sBTeGxKeXa2ZnhiQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="32442125"
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="53936585"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 04:55:13 -0700
-X-CSE-ConnectionGUID: /wFpulPVTRCYTLPdhADYSw==
-X-CSE-MsgGUID: Kl3Kqs7jSK+0ZBbfJKxBCg==
+   d="scan'208";a="32442125"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 05:06:12 -0700
+X-CSE-ConnectionGUID: Pcsrg82oRlGOGHjum8f1xw==
+X-CSE-MsgGUID: StjWqrhHT0Ck8nRnWQFrEA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="82167923"
+   d="scan'208";a="77887319"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 16 Oct 2024 04:55:10 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 16 Oct 2024 05:06:10 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t12cO-000Krv-02;
-	Wed, 16 Oct 2024 11:55:08 +0000
-Date: Wed, 16 Oct 2024 19:54:55 +0800
+	id 1t12n2-000Kse-1E;
+	Wed, 16 Oct 2024 12:06:08 +0000
+Date: Wed, 16 Oct 2024 20:05:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Edwin Peer <edwin.peer@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH net] bnxt_en: replace ptp_lock with irqsave variant
-Message-ID: <202410161945.GNueTqcE-lkp@intel.com>
-References: <20241015185310.608328-1-vadfed@meta.com>
+To: Simon Ser <contact@emersion.fr>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] drm/prime: introduce DRM_PRIME_FD_TO_HANDLE_NO_MOVE
+Message-ID: <202410161956.1kSWZNlc-lkp@intel.com>
+References: <20241013133431.1356874-1-contact@emersion.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,452 +62,219 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015185310.608328-1-vadfed@meta.com>
+In-Reply-To: <20241013133431.1356874-1-contact@emersion.fr>
 
-Hi Vadim,
+Hi Simon,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on net/main]
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-exynos/exynos-drm-next linus/master v6.12-rc3 next-20241016]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bnxt_en-replace-ptp_lock-with-irqsave-variant/20241016-025931
-base:   net/main
-patch link:    https://lore.kernel.org/r/20241015185310.608328-1-vadfed%40meta.com
-patch subject: [PATCH net] bnxt_en: replace ptp_lock with irqsave variant
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241016/202410161945.GNueTqcE-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Simon-Ser/drm-prime-introduce-DRM_PRIME_FD_TO_HANDLE_NO_MOVE/20241013-213609
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+patch link:    https://lore.kernel.org/r/20241013133431.1356874-1-contact%40emersion.fr
+patch subject: [RFC PATCH] drm/prime: introduce DRM_PRIME_FD_TO_HANDLE_NO_MOVE
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241016/202410161956.1kSWZNlc-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410161945.GNueTqcE-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410161956.1kSWZNlc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410161945.GNueTqcE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410161956.1kSWZNlc-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/broadcom/bnxt/bnxt.c:2259:5: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    2259 |                                 spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:2767:5: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    2767 |                                 spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:13501:3: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    13501 |                 spin_lock_irqsave(&ptp->ptp_lock, flags);
-          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:13570:4: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    13570 |                         spin_lock_irqsave(&ptp->ptp_lock, flags);
-          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   4 warnings generated.
---
->> drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:70:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-      70 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:108:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     108 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:158:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     158 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:197:3: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     197 |                 spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:214:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     214 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:249:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     249 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:264:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     264 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:406:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     406 |         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:714:3: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     714 |                 spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:770:3: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     770 |                 spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:847:4: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-     847 |                         spin_lock_irqsave(&ptp->ptp_lock, flags);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/spinlock_rt.h:99:3: note: expanded from macro 'spin_lock_irqsave'
-      99 |                 typecheck(unsigned long, flags);         \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:1008:2: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (flags) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    1008 |         spin_lock_irqsave(&bp->ptp_cfg->ptp_lock, flags);
+>> drivers/dma-buf/dma-buf.c:928:7: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+     928 |                 if (DMA_BUF_ATTACH_NO_MOVE &&
+         |                     ^
+   include/linux/dma-buf.h:602:35: note: expanded from macro 'DMA_BUF_ATTACH_NO_MOVE'
+     602 | #define DMA_BUF_ATTACH_NO_MOVE (1 << 0)
+         |                                   ^
+   1 warning generated.
 
 
-vim +2259 drivers/net/ethernet/broadcom/bnxt/bnxt.c
+vim +928 drivers/dma-buf/dma-buf.c
 
-  2010	
-  2011	/* returns the following:
-  2012	 * 1       - 1 packet successfully received
-  2013	 * 0       - successful TPA_START, packet not completed yet
-  2014	 * -EBUSY  - completion ring does not have all the agg buffers yet
-  2015	 * -ENOMEM - packet aborted due to out of memory
-  2016	 * -EIO    - packet aborted due to hw error indicated in BD
-  2017	 */
-  2018	static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
-  2019			       u32 *raw_cons, u8 *event)
-  2020	{
-  2021		struct bnxt_napi *bnapi = cpr->bnapi;
-  2022		struct bnxt_rx_ring_info *rxr = bnapi->rx_ring;
-  2023		struct net_device *dev = bp->dev;
-  2024		struct rx_cmp *rxcmp;
-  2025		struct rx_cmp_ext *rxcmp1;
-  2026		u32 tmp_raw_cons = *raw_cons;
-  2027		u16 cons, prod, cp_cons = RING_CMP(tmp_raw_cons);
-  2028		struct bnxt_sw_rx_bd *rx_buf;
-  2029		unsigned int len;
-  2030		u8 *data_ptr, agg_bufs, cmp_type;
-  2031		bool xdp_active = false;
-  2032		dma_addr_t dma_addr;
-  2033		struct sk_buff *skb;
-  2034		struct xdp_buff xdp;
-  2035		u32 flags, misc;
-  2036		u32 cmpl_ts;
-  2037		void *data;
-  2038		int rc = 0;
-  2039	
-  2040		rxcmp = (struct rx_cmp *)
-  2041				&cpr->cp_desc_ring[CP_RING(cp_cons)][CP_IDX(cp_cons)];
-  2042	
-  2043		cmp_type = RX_CMP_TYPE(rxcmp);
-  2044	
-  2045		if (cmp_type == CMP_TYPE_RX_TPA_AGG_CMP) {
-  2046			bnxt_tpa_agg(bp, rxr, (struct rx_agg_cmp *)rxcmp);
-  2047			goto next_rx_no_prod_no_len;
-  2048		}
-  2049	
-  2050		tmp_raw_cons = NEXT_RAW_CMP(tmp_raw_cons);
-  2051		cp_cons = RING_CMP(tmp_raw_cons);
-  2052		rxcmp1 = (struct rx_cmp_ext *)
-  2053				&cpr->cp_desc_ring[CP_RING(cp_cons)][CP_IDX(cp_cons)];
-  2054	
-  2055		if (!RX_CMP_VALID(rxcmp1, tmp_raw_cons))
-  2056			return -EBUSY;
-  2057	
-  2058		/* The valid test of the entry must be done first before
-  2059		 * reading any further.
-  2060		 */
-  2061		dma_rmb();
-  2062		prod = rxr->rx_prod;
-  2063	
-  2064		if (cmp_type == CMP_TYPE_RX_L2_TPA_START_CMP ||
-  2065		    cmp_type == CMP_TYPE_RX_L2_TPA_START_V3_CMP) {
-  2066			bnxt_tpa_start(bp, rxr, cmp_type,
-  2067				       (struct rx_tpa_start_cmp *)rxcmp,
-  2068				       (struct rx_tpa_start_cmp_ext *)rxcmp1);
-  2069	
-  2070			*event |= BNXT_RX_EVENT;
-  2071			goto next_rx_no_prod_no_len;
-  2072	
-  2073		} else if (cmp_type == CMP_TYPE_RX_L2_TPA_END_CMP) {
-  2074			skb = bnxt_tpa_end(bp, cpr, &tmp_raw_cons,
-  2075					   (struct rx_tpa_end_cmp *)rxcmp,
-  2076					   (struct rx_tpa_end_cmp_ext *)rxcmp1, event);
-  2077	
-  2078			if (IS_ERR(skb))
-  2079				return -EBUSY;
-  2080	
-  2081			rc = -ENOMEM;
-  2082			if (likely(skb)) {
-  2083				bnxt_deliver_skb(bp, bnapi, skb);
-  2084				rc = 1;
-  2085			}
-  2086			*event |= BNXT_RX_EVENT;
-  2087			goto next_rx_no_prod_no_len;
-  2088		}
-  2089	
-  2090		cons = rxcmp->rx_cmp_opaque;
-  2091		if (unlikely(cons != rxr->rx_next_cons)) {
-  2092			int rc1 = bnxt_discard_rx(bp, cpr, &tmp_raw_cons, rxcmp);
-  2093	
-  2094			/* 0xffff is forced error, don't print it */
-  2095			if (rxr->rx_next_cons != 0xffff)
-  2096				netdev_warn(bp->dev, "RX cons %x != expected cons %x\n",
-  2097					    cons, rxr->rx_next_cons);
-  2098			bnxt_sched_reset_rxr(bp, rxr);
-  2099			if (rc1)
-  2100				return rc1;
-  2101			goto next_rx_no_prod_no_len;
-  2102		}
-  2103		rx_buf = &rxr->rx_buf_ring[cons];
-  2104		data = rx_buf->data;
-  2105		data_ptr = rx_buf->data_ptr;
-  2106		prefetch(data_ptr);
-  2107	
-  2108		misc = le32_to_cpu(rxcmp->rx_cmp_misc_v1);
-  2109		agg_bufs = (misc & RX_CMP_AGG_BUFS) >> RX_CMP_AGG_BUFS_SHIFT;
-  2110	
-  2111		if (agg_bufs) {
-  2112			if (!bnxt_agg_bufs_valid(bp, cpr, agg_bufs, &tmp_raw_cons))
-  2113				return -EBUSY;
-  2114	
-  2115			cp_cons = NEXT_CMP(cp_cons);
-  2116			*event |= BNXT_AGG_EVENT;
-  2117		}
-  2118		*event |= BNXT_RX_EVENT;
-  2119	
-  2120		rx_buf->data = NULL;
-  2121		if (rxcmp1->rx_cmp_cfa_code_errors_v2 & RX_CMP_L2_ERRORS) {
-  2122			u32 rx_err = le32_to_cpu(rxcmp1->rx_cmp_cfa_code_errors_v2);
-  2123	
-  2124			bnxt_reuse_rx_data(rxr, cons, data);
-  2125			if (agg_bufs)
-  2126				bnxt_reuse_rx_agg_bufs(cpr, cp_cons, 0, agg_bufs,
-  2127						       false);
-  2128	
-  2129			rc = -EIO;
-  2130			if (rx_err & RX_CMPL_ERRORS_BUFFER_ERROR_MASK) {
-  2131				bnapi->cp_ring.sw_stats->rx.rx_buf_errors++;
-  2132				if (!(bp->flags & BNXT_FLAG_CHIP_P5_PLUS) &&
-  2133				    !(bp->fw_cap & BNXT_FW_CAP_RING_MONITOR)) {
-  2134					netdev_warn_once(bp->dev, "RX buffer error %x\n",
-  2135							 rx_err);
-  2136					bnxt_sched_reset_rxr(bp, rxr);
-  2137				}
-  2138			}
-  2139			goto next_rx_no_len;
-  2140		}
-  2141	
-  2142		flags = le32_to_cpu(rxcmp->rx_cmp_len_flags_type);
-  2143		len = flags >> RX_CMP_LEN_SHIFT;
-  2144		dma_addr = rx_buf->mapping;
-  2145	
-  2146		if (bnxt_xdp_attached(bp, rxr)) {
-  2147			bnxt_xdp_buff_init(bp, rxr, cons, data_ptr, len, &xdp);
-  2148			if (agg_bufs) {
-  2149				u32 frag_len = bnxt_rx_agg_pages_xdp(bp, cpr, &xdp,
-  2150								     cp_cons, agg_bufs,
-  2151								     false);
-  2152				if (!frag_len)
-  2153					goto oom_next_rx;
-  2154			}
-  2155			xdp_active = true;
-  2156		}
-  2157	
-  2158		if (xdp_active) {
-  2159			if (bnxt_rx_xdp(bp, rxr, cons, &xdp, data, &data_ptr, &len, event)) {
-  2160				rc = 1;
-  2161				goto next_rx;
-  2162			}
-  2163		}
-  2164	
-  2165		if (len <= bp->rx_copy_thresh) {
-  2166			if (!xdp_active)
-  2167				skb = bnxt_copy_skb(bnapi, data_ptr, len, dma_addr);
-  2168			else
-  2169				skb = bnxt_copy_xdp(bnapi, &xdp, len, dma_addr);
-  2170			bnxt_reuse_rx_data(rxr, cons, data);
-  2171			if (!skb) {
-  2172				if (agg_bufs) {
-  2173					if (!xdp_active)
-  2174						bnxt_reuse_rx_agg_bufs(cpr, cp_cons, 0,
-  2175								       agg_bufs, false);
-  2176					else
-  2177						bnxt_xdp_buff_frags_free(rxr, &xdp);
-  2178				}
-  2179				goto oom_next_rx;
-  2180			}
-  2181		} else {
-  2182			u32 payload;
-  2183	
-  2184			if (rx_buf->data_ptr == data_ptr)
-  2185				payload = misc & RX_CMP_PAYLOAD_OFFSET;
-  2186			else
-  2187				payload = 0;
-  2188			skb = bp->rx_skb_func(bp, rxr, cons, data, data_ptr, dma_addr,
-  2189					      payload | len);
-  2190			if (!skb)
-  2191				goto oom_next_rx;
-  2192		}
-  2193	
-  2194		if (agg_bufs) {
-  2195			if (!xdp_active) {
-  2196				skb = bnxt_rx_agg_pages_skb(bp, cpr, skb, cp_cons, agg_bufs, false);
-  2197				if (!skb)
-  2198					goto oom_next_rx;
-  2199			} else {
-  2200				skb = bnxt_xdp_build_skb(bp, skb, agg_bufs, rxr->page_pool, &xdp, rxcmp1);
-  2201				if (!skb) {
-  2202					/* we should be able to free the old skb here */
-  2203					bnxt_xdp_buff_frags_free(rxr, &xdp);
-  2204					goto oom_next_rx;
-  2205				}
-  2206			}
-  2207		}
-  2208	
-  2209		if (RX_CMP_HASH_VALID(rxcmp)) {
-  2210			enum pkt_hash_types type;
-  2211	
-  2212			if (cmp_type == CMP_TYPE_RX_L2_V3_CMP) {
-  2213				type = bnxt_rss_ext_op(bp, rxcmp);
-  2214			} else {
-  2215				u32 hash_type = RX_CMP_HASH_TYPE(rxcmp);
-  2216	
-  2217				/* RSS profiles 1 and 3 with extract code 0 for inner
-  2218				 * 4-tuple
-  2219				 */
-  2220				if (hash_type != 1 && hash_type != 3)
-  2221					type = PKT_HASH_TYPE_L3;
-  2222				else
-  2223					type = PKT_HASH_TYPE_L4;
-  2224			}
-  2225			skb_set_hash(skb, le32_to_cpu(rxcmp->rx_cmp_rss_hash), type);
-  2226		}
-  2227	
-  2228		if (cmp_type == CMP_TYPE_RX_L2_CMP)
-  2229			dev = bnxt_get_pkt_dev(bp, RX_CMP_CFA_CODE(rxcmp1));
-  2230		skb->protocol = eth_type_trans(skb, dev);
-  2231	
-  2232		if (skb->dev->features & BNXT_HW_FEATURE_VLAN_ALL_RX) {
-  2233			skb = bnxt_rx_vlan(skb, cmp_type, rxcmp, rxcmp1);
-  2234			if (!skb)
-  2235				goto next_rx;
-  2236		}
-  2237	
-  2238		skb_checksum_none_assert(skb);
-  2239		if (RX_CMP_L4_CS_OK(rxcmp1)) {
-  2240			if (dev->features & NETIF_F_RXCSUM) {
-  2241				skb->ip_summed = CHECKSUM_UNNECESSARY;
-  2242				skb->csum_level = RX_CMP_ENCAP(rxcmp1);
-  2243			}
-  2244		} else {
-  2245			if (rxcmp1->rx_cmp_cfa_code_errors_v2 & RX_CMP_L4_CS_ERR_BITS) {
-  2246				if (dev->features & NETIF_F_RXCSUM)
-  2247					bnapi->cp_ring.sw_stats->rx.rx_l4_csum_errors++;
-  2248			}
-  2249		}
-  2250	
-  2251		if (bnxt_rx_ts_valid(bp, flags, rxcmp1, &cmpl_ts)) {
-  2252			if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
-  2253				u64 ns, ts;
-  2254	
-  2255				if (!bnxt_get_rx_ts_p5(bp, &ts, cmpl_ts)) {
-  2256					struct bnxt_ptp_cfg *ptp = bp->ptp_cfg;
-  2257					unsigned int flags;
-  2258	
-> 2259					spin_lock_irqsave(&ptp->ptp_lock, flags);
-  2260					ns = timecounter_cyc2time(&ptp->tc, ts);
-  2261					spin_unlock_irqrestore(&ptp->ptp_lock, flags);
-  2262					memset(skb_hwtstamps(skb), 0,
-  2263					       sizeof(*skb_hwtstamps(skb)));
-  2264					skb_hwtstamps(skb)->hwtstamp = ns_to_ktime(ns);
-  2265				}
-  2266			}
-  2267		}
-  2268		bnxt_deliver_skb(bp, bnapi, skb);
-  2269		rc = 1;
-  2270	
-  2271	next_rx:
-  2272		cpr->rx_packets += 1;
-  2273		cpr->rx_bytes += len;
-  2274	
-  2275	next_rx_no_len:
-  2276		rxr->rx_prod = NEXT_RX(prod);
-  2277		rxr->rx_next_cons = RING_RX(bp, NEXT_RX(cons));
-  2278	
-  2279	next_rx_no_prod_no_len:
-  2280		*raw_cons = tmp_raw_cons;
-  2281	
-  2282		return rc;
-  2283	
-  2284	oom_next_rx:
-  2285		cpr->sw_stats->rx.rx_oom_discards += 1;
-  2286		rc = -ENOMEM;
-  2287		goto next_rx;
-  2288	}
-  2289	
+   815	
+   816	/**
+   817	 * DOC: locking convention
+   818	 *
+   819	 * In order to avoid deadlock situations between dma-buf exports and importers,
+   820	 * all dma-buf API users must follow the common dma-buf locking convention.
+   821	 *
+   822	 * Convention for importers
+   823	 *
+   824	 * 1. Importers must hold the dma-buf reservation lock when calling these
+   825	 *    functions:
+   826	 *
+   827	 *     - dma_buf_pin()
+   828	 *     - dma_buf_unpin()
+   829	 *     - dma_buf_map_attachment()
+   830	 *     - dma_buf_unmap_attachment()
+   831	 *     - dma_buf_vmap()
+   832	 *     - dma_buf_vunmap()
+   833	 *
+   834	 * 2. Importers must not hold the dma-buf reservation lock when calling these
+   835	 *    functions:
+   836	 *
+   837	 *     - dma_buf_attach()
+   838	 *     - dma_buf_dynamic_attach()
+   839	 *     - dma_buf_detach()
+   840	 *     - dma_buf_export()
+   841	 *     - dma_buf_fd()
+   842	 *     - dma_buf_get()
+   843	 *     - dma_buf_put()
+   844	 *     - dma_buf_mmap()
+   845	 *     - dma_buf_begin_cpu_access()
+   846	 *     - dma_buf_end_cpu_access()
+   847	 *     - dma_buf_map_attachment_unlocked()
+   848	 *     - dma_buf_unmap_attachment_unlocked()
+   849	 *     - dma_buf_vmap_unlocked()
+   850	 *     - dma_buf_vunmap_unlocked()
+   851	 *
+   852	 * Convention for exporters
+   853	 *
+   854	 * 1. These &dma_buf_ops callbacks are invoked with unlocked dma-buf
+   855	 *    reservation and exporter can take the lock:
+   856	 *
+   857	 *     - &dma_buf_ops.attach()
+   858	 *     - &dma_buf_ops.detach()
+   859	 *     - &dma_buf_ops.release()
+   860	 *     - &dma_buf_ops.begin_cpu_access()
+   861	 *     - &dma_buf_ops.end_cpu_access()
+   862	 *     - &dma_buf_ops.mmap()
+   863	 *
+   864	 * 2. These &dma_buf_ops callbacks are invoked with locked dma-buf
+   865	 *    reservation and exporter can't take the lock:
+   866	 *
+   867	 *     - &dma_buf_ops.pin()
+   868	 *     - &dma_buf_ops.unpin()
+   869	 *     - &dma_buf_ops.map_dma_buf()
+   870	 *     - &dma_buf_ops.unmap_dma_buf()
+   871	 *     - &dma_buf_ops.vmap()
+   872	 *     - &dma_buf_ops.vunmap()
+   873	 *
+   874	 * 3. Exporters must hold the dma-buf reservation lock when calling these
+   875	 *    functions:
+   876	 *
+   877	 *     - dma_buf_move_notify()
+   878	 */
+   879	
+   880	/**
+   881	 * dma_buf_dynamic_attach - Add the device to dma_buf's attachments list
+   882	 * @dmabuf:		[in]	buffer to attach device to.
+   883	 * @dev:		[in]	device to be attached.
+   884	 * @importer_ops:	[in]	importer operations for the attachment
+   885	 * @importer_priv:	[in]	importer private pointer for the attachment
+   886	 *
+   887	 * Returns struct dma_buf_attachment pointer for this attachment. Attachments
+   888	 * must be cleaned up by calling dma_buf_detach().
+   889	 *
+   890	 * Optionally this calls &dma_buf_ops.attach to allow device-specific attach
+   891	 * functionality.
+   892	 *
+   893	 * Returns:
+   894	 *
+   895	 * A pointer to newly created &dma_buf_attachment on success, or a negative
+   896	 * error code wrapped into a pointer on failure.
+   897	 *
+   898	 * Note that this can fail if the backing storage of @dmabuf is in a place not
+   899	 * accessible to @dev, and cannot be moved to a more suitable place. This is
+   900	 * indicated with the error code -EBUSY.
+   901	 */
+   902	struct dma_buf_attachment *
+   903	dma_buf_dynamic_attach(struct dma_buf *dmabuf, struct device *dev,
+   904			       const struct dma_buf_attach_ops *importer_ops,
+   905			       void *importer_priv, int flags)
+   906	{
+   907		struct dma_buf_attachment *attach;
+   908		int ret;
+   909	
+   910		if (WARN_ON(!dmabuf || !dev))
+   911			return ERR_PTR(-EINVAL);
+   912	
+   913		if (WARN_ON(importer_ops && !importer_ops->move_notify))
+   914			return ERR_PTR(-EINVAL);
+   915	
+   916		attach = kzalloc(sizeof(*attach), GFP_KERNEL);
+   917		if (!attach)
+   918			return ERR_PTR(-ENOMEM);
+   919	
+   920		attach->dev = dev;
+   921		attach->dmabuf = dmabuf;
+   922		if (importer_ops)
+   923			attach->peer2peer = importer_ops->allow_peer2peer;
+   924		attach->importer_ops = importer_ops;
+   925		attach->importer_priv = importer_priv;
+   926	
+   927		if (dmabuf->ops->attach) {
+ > 928			if (DMA_BUF_ATTACH_NO_MOVE &&
+   929			    (!dmabuf->ops->attach_needs_move ||
+   930			      dmabuf->ops->attach_needs_move(dmabuf, attach))) {
+   931				ret = -EINVAL;
+   932				goto err_attach;
+   933			}
+   934	
+   935			ret = dmabuf->ops->attach(dmabuf, attach);
+   936			if (ret)
+   937				goto err_attach;
+   938		}
+   939		dma_resv_lock(dmabuf->resv, NULL);
+   940		list_add(&attach->node, &dmabuf->attachments);
+   941		dma_resv_unlock(dmabuf->resv);
+   942	
+   943		/* When either the importer or the exporter can't handle dynamic
+   944		 * mappings we cache the mapping here to avoid issues with the
+   945		 * reservation object lock.
+   946		 */
+   947		if (dma_buf_attachment_is_dynamic(attach) !=
+   948		    dma_buf_is_dynamic(dmabuf)) {
+   949			struct sg_table *sgt;
+   950	
+   951			dma_resv_lock(attach->dmabuf->resv, NULL);
+   952			if (dma_buf_is_dynamic(attach->dmabuf)) {
+   953				ret = dmabuf->ops->pin(attach);
+   954				if (ret)
+   955					goto err_unlock;
+   956			}
+   957	
+   958			sgt = __map_dma_buf(attach, DMA_BIDIRECTIONAL);
+   959			if (!sgt)
+   960				sgt = ERR_PTR(-ENOMEM);
+   961			if (IS_ERR(sgt)) {
+   962				ret = PTR_ERR(sgt);
+   963				goto err_unpin;
+   964			}
+   965			dma_resv_unlock(attach->dmabuf->resv);
+   966			attach->sgt = sgt;
+   967			attach->dir = DMA_BIDIRECTIONAL;
+   968		}
+   969	
+   970		return attach;
+   971	
+   972	err_attach:
+   973		kfree(attach);
+   974		return ERR_PTR(ret);
+   975	
+   976	err_unpin:
+   977		if (dma_buf_is_dynamic(attach->dmabuf))
+   978			dmabuf->ops->unpin(attach);
+   979	
+   980	err_unlock:
+   981		dma_resv_unlock(attach->dmabuf->resv);
+   982	
+   983		dma_buf_detach(dmabuf, attach);
+   984		return ERR_PTR(ret);
+   985	}
+   986	EXPORT_SYMBOL_NS_GPL(dma_buf_dynamic_attach, DMA_BUF);
+   987	
 
 -- 
 0-DAY CI Kernel Test Service
