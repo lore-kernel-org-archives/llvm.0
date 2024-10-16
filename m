@@ -1,47 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59EB1494CC;
-	Wed, 16 Oct 2024 14:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD452076B3;
+	Wed, 16 Oct 2024 15:19:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729088241; cv=none; b=tXCvPeDwEIQQDQxdk5Bba8i6LgRyJpUVse+Io9jXwezbvhGwbyIh8xi5vdpTIVaSPRwikgDgmIFjCINbWUnDNjVAcC/+e5UvL7sjxTklK/nGsCkTZxeqqkMSyfNj6LULdk6O8Prk6HrIgQkLxtNB8vJNuQMTgpD5qcsHN44R2zY=
+	t=1729091986; cv=none; b=EMlTzUvFyvARd23kG6ZJuLbm4QcWQL9dfyQB1onN7daUBKHUBTuxyvmPlrHAmDFAdPOVEa6TuLw8MpknMTVvxpcvJKOwfzm07qwDEt4qmtYOS1TbsDb0TuSulzedQw00MGCthsNJITP3X3VDzu7j8ktiwWclxorYP925kce9gng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729088241; c=relaxed/simple;
-	bh=xvD0EGIlA23nJe+ETgrqTCv8spRK9sqdryQTaYwbPe4=;
+	s=arc-20240116; t=1729091986; c=relaxed/simple;
+	bh=9tawWsXOr7a9uNsOj09sklWZDzYGbRNHPnpkMUvRBeA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pl9pSA3RGM+0gJEQDSELjyqarLfKTOw7n4EgW0N8ZmAMIc6f3zGdXcT64EBZiK4mh0qak4KxtqUuhSn+peyahY7W21xvpiarYTHpl4cTpfLww8FPaUdlNrRBy+i7lyvElfo0xpRhCKTmYqbFxiNOZcQHrypOQODEwRRjBX+tbmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Che9ZTe0; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=C569dkmbDBDsOYSbCvf5BYgeIzTSFUjqHNfFVNr2G6Xw7HXmaFC2bTLkxQuI9GmNkyxYYvMBeO4eyoEpZAzr6j6Hm5+oft5xkksah8CgXllTVBZSQ2Yvab5JqTloZIhN1mOUc2ZyKP33OGkDQktm7U+gnh8wR+UqYLZOToKutqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l59W5P20; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Che9ZTe0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EDEC4CEC5;
-	Wed, 16 Oct 2024 14:17:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l59W5P20"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F48C4CEC5;
+	Wed, 16 Oct 2024 15:19:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729088240;
-	bh=xvD0EGIlA23nJe+ETgrqTCv8spRK9sqdryQTaYwbPe4=;
+	s=k20201202; t=1729091986;
+	bh=9tawWsXOr7a9uNsOj09sklWZDzYGbRNHPnpkMUvRBeA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Che9ZTe0y868yFLJ7Yq2FLCfwnzruS+q+UMoHXrFDUL2yTI9P5tjg6MxCcayTTwVz
-	 JRihxVb/WGD25c/VayBpzr/R2no38EsBzMneisUa4g4gT/lLwmwuAjXaGU2kPDcSUj
-	 IULsR7ZSm4dSV0GLTLEft36j7i2pn5PV0OC/a9s79hRLEcsQMuHdHq9bFUQkrRrkAw
-	 tQ/aPVwNRLaw4ZCRprft1qx6CShDjpjdF0jRR5fIzaskNOsgB2iuMzHYLB7AOsti3+
-	 yfiRcZaW4WX2zy3iaHzURerzYv26CTuBeXV0lKCP6EkQFDFgDYFpf6OcI7A2V9MD7F
-	 ApPVP4W5IetiA==
-Date: Wed, 16 Oct 2024 15:17:15 +0100
-From: Simon Horman <horms@kernel.org>
-To: boehm.jakub@gmail.com
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] net: plip: fix break; causing plip to never transmit
-Message-ID: <20241016141715.GH2162@kernel.org>
-References: <20241015-net-plip-tx-fix-v1-1-32d8be1c7e0b@gmail.com>
+	b=l59W5P20smFSHFiu2vnnYkATCLiJrpvR4QXUZRCxI5lOXF5MG7ffJw4d/zA9fyBEF
+	 w/kD5szhUmuWjGgU0pZk+Y6QlH6JkoXWP8C5Vw0uKOnmN+nF78Nt4is4PBwyzAeFTI
+	 H3hXdltlHccbReFf3YeWBDrW7M3G3AkKzNdxaLmhb/7XtSZXM4VU1xpkB8d9/b09G+
+	 aX7zY4Vk7zwMXvIhEe0+nt3q5UAlGI6G1hMbPkNNVtugPLnTV6kjdpvhmRnp6XfWdd
+	 +3kEmKUiDjfWOkNofq8uo3Glr0BR//dhSEcWyXKMIsAyeL3jOx8f4yFWbEbK63PfNU
+	 KC0HI05AwjAFg==
+Date: Wed, 16 Oct 2024 08:19:44 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Dave Penkler <dpenkler@gmail.com>, linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] staging: gpid: fmh: Drop residue from
+ fmh_gpid_fifo_read_countable()
+Message-ID: <20241016151944.GA3153413@thelio-3990X>
+References: <20241015-staging-gpib-fmh-fix-residue-used-uninitialized-v1-1-23ef05b099da@kernel.org>
+ <2024101607-unmovable-serving-6a0d@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,23 +44,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015-net-plip-tx-fix-v1-1-32d8be1c7e0b@gmail.com>
+In-Reply-To: <2024101607-unmovable-serving-6a0d@gregkh>
 
-On Tue, Oct 15, 2024 at 05:16:04PM +0200, Jakub Boehm via B4 Relay wrote:
-> From: Jakub Boehm <boehm.jakub@gmail.com>
+On Wed, Oct 16, 2024 at 09:59:31AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 15, 2024 at 01:09:02PM -0700, Nathan Chancellor wrote:
+> > Clang warns (or errors with CONFIG_WERROR=y):
 > 
-> Since commit
->   71ae2cb30531 ("net: plip: Fix fall-through warnings for Clang")
+> <snip>
 > 
-> plip was not able to send any packets, this patch replaces one
-> unintended break; with fallthrough; which was originally missed by
-> commit 9525d69a3667 ("net: plip: mark expected switch fall-throughs").
-> 
-> I have verified with a real hardware PLIP connection that everything
-> works once again after applying this patch.
-> 
-> Fixes: 71ae2cb30531 ("net: plip: Fix fall-through warnings for Clang")
-> Signed-off-by: Jakub Boehm <boehm.jakub@gmail.com>
+> Nit, the subject should have had "gpib" not "gpid".  I've fixed it up
+> when applying, thanks for the fix!
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Thanks for doing that and not making me send a v2. Looks like I messed
+it up in the function name too :/ I was also putting gbip at one point
+but I caught that one, it's not a great abbreviation to try and remember
+heh.
 
+Cheers,
+Nathan
