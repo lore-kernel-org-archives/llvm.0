@@ -1,144 +1,132 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CD818B481;
-	Wed, 16 Oct 2024 19:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926572144A9
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 19:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729106430; cv=none; b=SYQyiiaEWDYMRO+bu3b3+UU6r54trKY+CHOUSBcZ6jQWiAxVxRoppnlcxXeDIe1pY38O93exvSWH+yeGcUmzfvoHGbD+jUc3MyfZvf1yrmCRVud+e6gkKvICJ5OjTF0Xk6aTl5q7jtdYNizJ8tNfLOPD86MeHWHJDtIGvghoKs4=
+	t=1729107830; cv=none; b=js+sKXqgexM0Wa9YzDBv1YyM+sAQsVANXwfL1/FYyV+5Vxo2XtsqG0wZBH/b4J4IfW8fVqwjBUFvwQK0Kn3ykWDZ7vPGyUTb4lTcx+9u1iHs4r2cca1R3QKvcF6uEDQ8MyZtTWmUdZvLRhPxxVC2BY7Tq6w/pvmnXiebmL2dApM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729106430; c=relaxed/simple;
-	bh=zy2vnCmqC5q8dP1XS7bM49+n95NVXsGGxJQUl+m54Ts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rgcrNH1zK6Zjvfxq7k7LV0bpRIVAz5Nrro8pGiw9oW80EeTB+iZ1FHZBMztKnML/qgziDGvlXiZBnNeyZk8i+H21TtK73zQoKBKkSa8sR0eazBcaH8qiPsIwDTn7KsSydranQW8JZimvO7OpsQnwHnGlDk+WATzk/nzxC9foTTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s+AE5uFV; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1729107830; c=relaxed/simple;
+	bh=sDSKmpxYE9rh2jjOsxbNkFDWO/cqOxbWBd3xn9LCO+g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cgt8exFt3x1SPk2Mm0LtxtdAyy3msEqZJlG496MUjVRRtL02yb1esA6lfbA2ukJuGfNuGaZ+Nyr09qCIaeCqBthAK1o/38X9deCQpIJR2wi2N6ysYfRsvGuxY/mGsB/T2NDHb4ciQ2JXFHgWLKOxk2fRFPJsaMKklNlKCwSEMb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WTHw7X82; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s+AE5uFV"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=r2FMoZv7GZi36tQ4QRe51XXDDSE6b5fb9oopiYGqumo=; b=s+AE5uFVm06tAz5ZjzacGLzCuJ
-	7YUtR0tG2I+4egdsgithCbAgd3zsLGdV8yCaIEjKbeBgV87U71Ofh39b9aSu8hDRqf14HqKd1KZrE
-	vmWv06vwCWlEgqjpQ+ZysBpfND0RsjWHsYjxoX2/jifAMK6emeUb3AsW0FZQDmp0/MKAGPRdjCnY5
-	RmYUt/FDwOnzXNlD8SZxhtVXakkE+zrsYTk0T1kambUxLcvA2qKy2rZrvA8PGSBG4PhbxYIXWkMjV
-	10fV2Vuop+Bhe86fVueT9fbwJpx3ofurJWTW93Llo69b3bU2QYK8Fp0OeyG1jG4ijS2kmShyFtPkn
-	wvn5DgSA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t19Z6-00000008naR-10Hi;
-	Wed, 16 Oct 2024 19:20:13 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id CE99B300777; Wed, 16 Oct 2024 21:20:11 +0200 (CEST)
-Date: Wed, 16 Oct 2024 21:20:11 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
- comparing in percpu_add_op()
-Message-ID: <20241016192011.GY17263@noisy.programming.kicks-ass.net>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
- <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WTHw7X82"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729107828; x=1760643828;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sDSKmpxYE9rh2jjOsxbNkFDWO/cqOxbWBd3xn9LCO+g=;
+  b=WTHw7X827HX+x11+EQZWe66eHLN7HEc3niyiAFz182V1Z2naouX02oAI
+   dXRro55/P7yjsdREfM2XGmnj3veD7MzGqxCpLOjyLYho9J/Jd1jPMS/mw
+   w5Dk5glUqttGDKIkzg/02QQljld68/aTUnp8oub2YSFv39uQqNRCrzJzS
+   E/5XYtxlbh/e4feNToAo3OIbvN9czcb9vNPZXzRolBSr0hFNEglmw6q72
+   4Bv/9EJhR5V8uGnI0PkQ07rNCiOM0mH1M8GfRPNOcge7rts/yISWrm/qi
+   4aEx6yMPf/9MIqqQoUbarT8P3J8p8WzA4mKAOcwpRalgn0m+r6l4iY8VA
+   w==;
+X-CSE-ConnectionGUID: MjfjT/xDQQenoTmNx1NorA==
+X-CSE-MsgGUID: AKJGAHGSTYih0GRuNjs4qQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="28044376"
+X-IronPort-AV: E=Sophos;i="6.11,209,1725346800"; 
+   d="scan'208";a="28044376"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 12:43:47 -0700
+X-CSE-ConnectionGUID: SR/kJhNATrisyTIR4DfzTA==
+X-CSE-MsgGUID: 7RJqfyk+R0ar2XkMlNzOCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,209,1725346800"; 
+   d="scan'208";a="109091285"
+Received: from iweiny-desk3.amr.corp.intel.com (HELO [10.124.222.19]) ([10.124.222.19])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 12:43:47 -0700
+Message-ID: <33c61588-7083-4851-965a-f4f1d46ff44c@intel.com>
+Date: Wed, 16 Oct 2024 12:43:46 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
+ comparing in percpu_add_op()
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Christoph Lameter <cl@linux.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
+ <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+ <ZxAAlEyvxzWpwQQ0@smile.fi.intel.com> <ZxAD0-kQJ0_lDxje@smile.fi.intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <ZxAD0-kQJ0_lDxje@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 16, 2024 at 08:44:56AM -0700, Dave Hansen wrote:
-> Andy,
+On 10/16/24 11:20, Andy Shevchenko wrote:
+>> Maybe more readable, but wouldn't it be theoretically buggy for u64?
+>> I'm talking about the case when u64 == UINT_MAX, which will be true
+>> in your case and false in mine.
+>>
+>>>         const int pao_ID__ = (__builtin_constant_p(val) &&
+>>>                               ((val) == 1 || (int)(val) == -1)) ?
+>>>
+>>>                                 (int)(val) : 0;
+> This code _is_ buggy, thanks to my new test case.
 > 
-> The subject here is not very informative.  It explains the "what" of the
-> patch, but not the "why".
-> 
-> A better subject might have been:
-> 
-> 	x86/percpu: Fix clang warning when dealing with unsigned types
-> 
-> > --- a/arch/x86/include/asm/percpu.h
-> > +++ b/arch/x86/include/asm/percpu.h
-> > @@ -234,9 +234,10 @@ do {									\
-> >   */
-> >  #define percpu_add_op(size, qual, var, val)				\
-> >  do {									\
-> > -	const int pao_ID__ = (__builtin_constant_p(val) &&		\
-> > -			      ((val) == 1 || (val) == -1)) ?		\
-> > -				(int)(val) : 0;				\
-> > +	const int pao_ID__ =						\
-> > +		(__builtin_constant_p(val) &&				\
-> > +			((val) == 1 ||					\
-> > +			 (val) == (typeof(val))-1)) ? (int)(val) : 0;	\
-> 
-> This doesn't _look_ right.
-> 
-> Let's assume 'val' is a u8.  (u8)-1 is 255, right?  So casting the -1
-> over to a u8 actually changed its value.  So the comparison that you
-> added would actually trigger for 255:
-> 
-> 	(val) == (typeof(val))-1))
-> 
-> 	255 == (u8)-1
-> 	255 == 255
+> [   66.161375] pcp -1 (0xffffffffffffffff) != expected 4294967295 (0xffffffff)
 
-Which is correct, no? Add of 255 to an u8 is the same as decrement one.
-
-> That's not the end of the world because the pao_ID__ still ends up at
-> 255 and the lower if() falls into the "add" bucket, but it isn't great
-> for reading the macro.  It seems like it basically works on accident.
-
-You're correct in that it does not achieve the desired result (in all
-cases). But this is because (int)(val) will never turn into -1 when val
-== 255.
-
-> Wouldn't casting 'val' over to an int be shorter, more readable, not
-> have that logical false match *and* line up with the cast later on in
-> the expression?
-> 
->         const int pao_ID__ = (__builtin_constant_p(val) &&
->                               ((val) == 1 || (int)(val) == -1)) ?
-> 
->                                 (int)(val) : 0;
-> 
-> Other suggestions to make it more readable would be welcome.
-
-This is very very wrong. No u8 value when cast to int will ever equal
--1. Notably (int)(u8)255 == 255.
-
-> Since I'm making comments, I would have really appreciated some extra
-> info here like why you are hitting this and nobody else is.  This is bog
-> standard code that everybody compiles.  Is clang use _that_ unusual?  Or
-> do most clang users just ignore all the warnings?  Or are you using a
-> bleeding edge version of clang that spits out new warnings that other
-> clang users aren't seeing?
-
-The code as is, is wrong, I don't think we'll ever end up in the dec
-case for 'short' unsigned types. Clang is just clever enough to realize
-this and issues a warning.
-
-Something like so might work:
-
-	const int pao_ID__ = __builtin_constant_p(val) ?
-				((typeof(var))(val) == 1 ? 1 :
-				 ((typeof(var))(val) == (typeof(var))-1 ? -1 : 0 )) : 0;
-
-This should get, assuming typeof(var) is u8, a dec for both 255 and -1.
-
-
+Thanks for pointing that out Andy (and Peter too)!
