@@ -1,118 +1,190 @@
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F44918A937
-	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 05:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB9060B8A;
+	Wed, 16 Oct 2024 06:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729056971; cv=none; b=X+0HWBS4Px1mXAI295+r1+lt4vTXff76GwSz0wh3wREw2L7KobycpmKOlJQMsPmx60Sjvn1fInVJ+ZO7VtU4CiQwxof5sYamJKu2S6I22TKCPSWPrl8OQDY4WpxhFKfrtONlWDVJ1iVqTUfWNy2S6lsnU4T2Kyfk121z7T61bJc=
+	t=1729059606; cv=none; b=C+DhQITDtF2AA3bDmWB47PTE0moo5ZQfOJBPAD/EW2pr9FIdWWnsLYewnJ4XlpiO+knyoUW81eCElqZ5PWfLhOdiuqRUhKFRMcnzuyueSfKEMx9nz4Eu6fhBv2/kd1E3+9Id6g3h+oIsIemV9iDnzdPpLNVh2WE7GAMLgP25SuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729056971; c=relaxed/simple;
-	bh=AkFlicyemJIypTbpaoNWqMseVAcg9/xRYW9x0I/QujU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mTw1EDtqX3As/FhV4PJlIv0xx07/vkdi2F71ufzxDbYTbaGo5TX560Bcgt+IRs5lM2mPudVAd33A/1/wjrtpA4rAXbl8IkHf4xXkyuQlDmiperG03DaaJo8r/ghSchC49X0Xzq6WqGCu7CmfCJFkYWcacX6L7cytc3dzQg3ocVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EobLnUxb; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729059606; c=relaxed/simple;
+	bh=qoQIhnscpiMhEnHFEwY7bxIRzEKmXMR4NV1svM0kguw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r6ZRTohZ4eUKdyNxihF+FNBnrUB66TktAbR4EbZwd9yN4UjE5F2JKrsyhVESXDbo9vB99Z0eIUiMiHLmCJ62kse1HzpS2fYu8+B0HVF+pjEuI9Y48tfhzLlGKWZaAdt0+MUGz1CT1Bv5T/fKF8JEXpRFcML3ka9bl+H3Gfz+HdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A2eRYinE; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EobLnUxb"
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-539f4d8ef84so3677040e87.0
-        for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 22:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729056968; x=1729661768; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FpFzgW48v/2WJ52rpa7W+YR88yLyOSmQvacK2YcE0vs=;
-        b=EobLnUxbGUchDUEIR4pft3gyaqZ4nWwu+NzRf+aFEBZUCKkVg5ctAfoRwwYEkieErf
-         zVRCYnN/AR/dHo8K87ZelefB+SqC6R87lPt8CABYIfPS24UhI5t/kKwEvMA0NpRjdoTJ
-         qTIBQ4R8eWlCZQIkpVN6KRxWZ4lwqxvE2GsRILL+YhHaDWA1tR/EtE2p4VDwcwEO5xAm
-         yuWLG97IqMe4eNiSeROsThveITKAH0g77ZHWg01eEut/O+izImQ7mZ2oEyHcacLObTIt
-         DDUjQbnEoVU7uBbeO33FrIU05+bRy2t7+NOYemIidb/qpxLXtYrBZHQLybVJAsy0d2p5
-         T6Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729056968; x=1729661768;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FpFzgW48v/2WJ52rpa7W+YR88yLyOSmQvacK2YcE0vs=;
-        b=aodUREv3kd6jrRT0HNnOXBQvXBv6CMv4LJ74SThv8ilnLnGghXb19NNwq70FzUYZl2
-         q4JA1/jhfdZXqQwzXGaKVbh58/q2dbrwlw6NxOqbZhnb8uLvav8IRPDIPUa14wJdZN/6
-         9enGGpIyMY3yzIKLYLZr65pHL+BTOqc3YXiVFoBqwYTcwvK/Jc5xEgz8fN+St6mm3MvK
-         d3RVLpu/OiOBZgC+KzBOvpNow41Ba+5533fNXeVpeuthoEKuHsC5YHwnWHVMNI4+p4bD
-         RzDM9JMkDBdrrqsamyRwZCjHAOn4kZvA+RXO/PBrKc+bJ8Kno0Lh8WuvNiwckbrhtuYh
-         hwFw==
-X-Forwarded-Encrypted: i=1; AJvYcCV6lgPnR7l8ZmY9NoFrjaRwLYpMxWOBpa/AeGH2wYezpy7s5a29qkmeJIefhbqAqgpSPSSz@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz1ANy9hVm8Pg3gDLbInO1UVzBOO2GZ+okSDi2f/prGHmG+Vbfl
-	UuIMwFSkJPUFcF9FcMbIqm0WSQd3BMtthtZoj9YBTfxqA2T2R7hvMNUSYCduZfUnTb0q/6Ifmyu
-	m+ZAkW/WHmb/stzcOaQSA3r3XARU=
-X-Google-Smtp-Source: AGHT+IHndmCm/EMXJXuOFINZjOEoWro6KrtmVvkmaBHgAUiFCfIOV+zT26SggvV9rS71zmBuYVLfzcWnox5WdYRK8qs=
-X-Received: by 2002:a05:6512:3f29:b0:539:ee04:2321 with SMTP id
- 2adb3069b0e04-539ee0424e1mr5151271e87.33.1729056967486; Tue, 15 Oct 2024
- 22:36:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A2eRYinE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729059604; x=1760595604;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qoQIhnscpiMhEnHFEwY7bxIRzEKmXMR4NV1svM0kguw=;
+  b=A2eRYinEShSWyvaXYeeiR8E3G6hRyLhn+0vdi420zezs56bEZhC+112L
+   sm2fP7Hv0X4UzyPHhZUUW0JqHIegAQPemd2LgbjHdV6IpsdqZwymvxj6j
+   N4HnV64XdPE7SXRy52E5/2mW83zLXF3jPKfAkfiL+x+cW/z0yL06o7WiM
+   WfsMsk8Is6NHYSze5NNBBinW+dCkoxpRJQFYK6llETDRDTR71BJ0HJk3I
+   0V8kluihSWsgDZbTYnHm0PzCYxsiyaSMy+mlbKSKh0+JH3Kwhn/vlwLFz
+   b+gvQHtxsuM9bs5jOaHM5cvahNTcvOVyODwoyIOpXcLrKZ3lsNZhvLPSz
+   Q==;
+X-CSE-ConnectionGUID: YSdtog4HQiSATmxO5Z3c8w==
+X-CSE-MsgGUID: HNMA4XU6T5ySuE6WoYAI+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="31359177"
+X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
+   d="scan'208";a="31359177"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 23:20:03 -0700
+X-CSE-ConnectionGUID: hiR/INNfShqLgmZEeaXA2w==
+X-CSE-MsgGUID: ZxHKS3cmSV2OIpmrPJpQVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
+   d="scan'208";a="78295489"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 15 Oct 2024 23:20:01 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t0xO2-000KRX-0i;
+	Wed, 16 Oct 2024 06:19:58 +0000
+Date: Wed, 16 Oct 2024 14:19:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sven Schnelle <svens@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 3/3] s390/time: Add PtP driver
+Message-ID: <202410161414.jC5t2eWE-lkp@intel.com>
+References: <20241015105414.2825635-4-svens@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241015102036.2882322-1-suhui@nfschina.com> <c0afa02b-991c-4601-bacb-13ace9cb96f2@stanley.mountain>
-In-Reply-To: <c0afa02b-991c-4601-bacb-13ace9cb96f2@stanley.mountain>
-From: Steve French <smfrench@gmail.com>
-Date: Wed, 16 Oct 2024 00:35:56 -0500
-Message-ID: <CAH2r5msLmsCn_uHqyzFy8CXy6uCheOECNSXLReJdS4u1C4aN0w@mail.gmail.com>
-Subject: Re: [PATCH v2] smb: client: fix possible double free in smb2_set_ea()
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Su Hui <suhui@nfschina.com>, sfrench@samba.org, pc@manguebit.com, 
-	ronniesahlberg@gmail.com, sprasad@microsoft.com, stfrench@microsoft.com, 
-	tom@talpey.com, bharathsm@microsoft.com, nathan@kernel.org, 
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015105414.2825635-4-svens@linux.ibm.com>
 
-merged into cifs-2.6.git for-next pending additional testing
+Hi Sven,
 
-On Tue, Oct 15, 2024 at 5:45=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> On Tue, Oct 15, 2024 at 06:20:37PM +0800, Su Hui wrote:
-> > Clang static checker(scan-build) warning=EF=BC=9A
-> > fs/smb/client/smb2ops.c:1304:2: Attempt to free released memory.
-> >  1304 |         kfree(ea);
-> >       |         ^~~~~~~~~
-> >
-> > There is a double free in such case:
-> > 'ea is initialized to NULL' -> 'first successful memory allocation for
-> > ea' -> 'something failed, goto sea_exit' -> 'first memory release for e=
-a'
-> > -> 'goto replay_again' -> 'second goto sea_exit before allocate memory
-> > for ea' -> 'second memory release for ea resulted in double free'.
-> >
-> > Re-initialie 'ea' to NULL near to the replay_again label, it can fix th=
-is
-> > double free problem.
-> >
-> > Fixes: 4f1fffa23769 ("cifs: commands that are retried should have repla=
-y flag set")
-> > Signed-off-by: Su Hui <suhui@nfschina.com>
-> > ---
-> > v2:
-> > - Move 'ea =3D NULL' near to the replay_again label.(Dan's suggestion)
->
-> Thanks!
->
-> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
->
-> regards,
-> dan carpenter
->
->
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on s390/features]
+[also build test ERROR on linus/master v6.12-rc3 next-20241015]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sven-Schnelle/s390-time-Add-clocksource-id-to-TOD-clock/20241015-185651
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
+patch link:    https://lore.kernel.org/r/20241015105414.2825635-4-svens%40linux.ibm.com
+patch subject: [PATCH 3/3] s390/time: Add PtP driver
+config: x86_64-buildonly-randconfig-003-20241016 (https://download.01.org/0day-ci/archive/20241016/202410161414.jC5t2eWE-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410161414.jC5t2eWE-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410161414.jC5t2eWE-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/ptp/ptp_s390.c:21:52: warning: declaration of 'union tod_clock' will not be visible outside of this function [-Wvisibility]
+      21 | static struct timespec64 eitod_to_timespec64(union tod_clock *clk)
+         |                                                    ^
+>> drivers/ptp/ptp_s390.c:23:26: error: call to undeclared function 'eitod_to_ns'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      23 |         return ns_to_timespec64(eitod_to_ns(clk));
+         |                                 ^
+>> drivers/ptp/ptp_s390.c:28:26: error: call to undeclared function 'tod_to_ns'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      28 |         return ns_to_timespec64(tod_to_ns(tod - TOD_UNIX_EPOCH));
+         |                                 ^
+>> drivers/ptp/ptp_s390.c:28:42: error: use of undeclared identifier 'TOD_UNIX_EPOCH'
+      28 |         return ns_to_timespec64(tod_to_ns(tod - TOD_UNIX_EPOCH));
+         |                                                 ^
+>> drivers/ptp/ptp_s390.c:34:18: error: variable has incomplete type 'union tod_clock'
+      34 |         union tod_clock tod;
+         |                         ^
+   drivers/ptp/ptp_s390.c:34:8: note: forward declaration of 'union tod_clock'
+      34 |         union tod_clock tod;
+         |               ^
+>> drivers/ptp/ptp_s390.c:36:7: error: call to undeclared function 'stp_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      36 |         if (!stp_enabled())
+         |              ^
+>> drivers/ptp/ptp_s390.c:39:2: error: call to undeclared function 'store_tod_clock_ext_cc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      39 |         store_tod_clock_ext_cc(&tod);
+         |         ^
+>> drivers/ptp/ptp_s390.c:49:2: error: call to undeclared function 'ptff'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      49 |         ptff(&tod, sizeof(tod), PTFF_QPT);
+         |         ^
+>> drivers/ptp/ptp_s390.c:49:26: error: use of undeclared identifier 'PTFF_QPT'
+      49 |         ptff(&tod, sizeof(tod), PTFF_QPT);
+         |                                 ^
+   drivers/ptp/ptp_s390.c:64:18: error: variable has incomplete type 'union tod_clock'
+      64 |         union tod_clock clk;
+         |                         ^
+   drivers/ptp/ptp_s390.c:64:8: note: forward declaration of 'union tod_clock'
+      64 |         union tod_clock clk;
+         |               ^
+   drivers/ptp/ptp_s390.c:66:2: error: call to undeclared function 'store_tod_clock_ext_cc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      66 |         store_tod_clock_ext_cc(&clk);
+         |         ^
+   drivers/ptp/ptp_s390.c:67:29: error: call to undeclared function 'tod_to_ns'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      67 |         *device_time = ns_to_ktime(tod_to_ns(clk.tod - TOD_UNIX_EPOCH));
+         |                                    ^
+   drivers/ptp/ptp_s390.c:67:49: error: use of undeclared identifier 'TOD_UNIX_EPOCH'
+      67 |         *device_time = ns_to_ktime(tod_to_ns(clk.tod - TOD_UNIX_EPOCH));
+         |                                                        ^
+   drivers/ptp/ptp_s390.c:76:7: error: call to undeclared function 'stp_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      76 |         if (!stp_enabled())
+         |              ^
+   1 warning and 13 errors generated.
 
 
---=20
-Thanks,
+vim +/eitod_to_ns +23 drivers/ptp/ptp_s390.c
 
-Steve
+    20	
+  > 21	static struct timespec64 eitod_to_timespec64(union tod_clock *clk)
+    22	{
+  > 23		return ns_to_timespec64(eitod_to_ns(clk));
+    24	}
+    25	
+    26	static struct timespec64 tod_to_timespec64(unsigned long tod)
+    27	{
+  > 28		return ns_to_timespec64(tod_to_ns(tod - TOD_UNIX_EPOCH));
+    29	}
+    30	
+    31	static int ptp_s390_stcke_gettime(struct ptp_clock_info *ptp,
+    32					  struct timespec64 *ts)
+    33	{
+  > 34		union tod_clock tod;
+    35	
+  > 36		if (!stp_enabled())
+    37			return -EOPNOTSUPP;
+    38	
+  > 39		store_tod_clock_ext_cc(&tod);
+    40		*ts = eitod_to_timespec64(&tod);
+    41		return 0;
+    42	}
+    43	
+    44	static int ptp_s390_qpt_gettime(struct ptp_clock_info *ptp,
+    45					struct timespec64 *ts)
+    46	{
+    47		unsigned long tod;
+    48	
+  > 49		ptff(&tod, sizeof(tod), PTFF_QPT);
+    50		*ts = tod_to_timespec64(tod);
+    51		return 0;
+    52	}
+    53	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
