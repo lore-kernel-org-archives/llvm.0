@@ -1,122 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76E460B8A;
-	Wed, 16 Oct 2024 06:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D410F18CC01
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 06:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729059608; cv=none; b=Dsak0Rrmyfqwt/h6/psNT86WlHbTq71NPUFxrpTKLOxJhVrJb4QlWaLnnoodMhMfIDs/RFBrNckYSGrxf7ikA9mRs7tfjJ9XGU0Jsys/SwgEHt7qAXGIm2VHrq3g8h6rn8TfKe8dNRkbIcq+fVOlNCqjSBgSSVirDRHswMy/qEE=
+	t=1729061330; cv=none; b=d5Z7vZMMj+FFg5ZF/7LAYchsVVXZzVw9aWE2KgCsiu8rdJlfLNXWM+fUYt3hflHpPqYtdPaGN//aVjDChlbMVJ0gTsGBQGr8uc+0K/5ADm46pufVLDMDogVilU/btYw/UZStVLkyVHNZEfHE32p4HKBcYsotHQB0+nOWYIcXDM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729059608; c=relaxed/simple;
-	bh=qaJLAfJ+hrsrmwGpkbpiwW/a3cmep1qGh4KcmkUooaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uyi7i4Woj7oeBOhHrGrFdCAo/NAdBE7GSPHfes591n5lth2sAgFwOrr6qk2jR9kPZ4DFZbhBdBpKrBGwCWRw+bI8pt/bePDgMNjds3GCsmjqX46TueIQ4kYLrpTOBCyNHfw629LK4seFEkYnBBztiKGvam2h6yj1kjZB4eWfE6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cARZK30U; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729061330; c=relaxed/simple;
+	bh=fmU7uxTE54D0PHJcTsRBgR1QW1OTKNsFQljXPaCsJRg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nNg09MX6FtqDo63eUwaQICTce8+Xai5C97EqdYSXhU+ydnrEgA4rvcwjE7KB0CRHmKR+nVs5nYHuDHDahdGl28JKKfX8jgCSrmBh7YGzRPM1ZhivARuGIHe7sjRduduf3WVX/fQfBjpHY8yrUuAsKZhmWjXNfQNjgO5nYeJBHiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWnM+t+d; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cARZK30U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729059606; x=1760595606;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qaJLAfJ+hrsrmwGpkbpiwW/a3cmep1qGh4KcmkUooaY=;
-  b=cARZK30UzojA8Xr4PnCcAqIptt8DOmoyFhPc+q0SW36horY8KZXdRhA7
-   mFq5fW4+G+2VtOQsrDkdXB9ACFU/HWZZrfoF1s6rr069JL2tyrQVV68WK
-   IsAKeGCZou3lBsIE88BNQnejpofE+51e+o66A6jhQffnBmkZp+7JmLXuS
-   uG/Cb7NEMeivwa/6HwH6O8i4KTXTaDep6Ot4XWAo8e0iIMCXYHMnAEfeh
-   RTmG71HE9iU3gTbc1a/J6GCoC5Szz9KVY/7WDByKCRoXAOpjtyI5hpEKA
-   yTNuZ/0kNjxHyh7bYcNwKmQwH6KfUcfmhWCkXxGbv90Z8mw1xGgOwbZqP
-   g==;
-X-CSE-ConnectionGUID: W3sS2AZ7QpCClu8ml1WCDA==
-X-CSE-MsgGUID: Oo7TpiZxSzuzlzGAsVvk6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="31359194"
-X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
-   d="scan'208";a="31359194"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 23:20:06 -0700
-X-CSE-ConnectionGUID: Qz2YFxCPRX+DL4A1Q90/JA==
-X-CSE-MsgGUID: pir6H9ovQH2NODdk0aN8xA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
-   d="scan'208";a="78295490"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 15 Oct 2024 23:20:01 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t0xO2-000KRU-0W;
-	Wed, 16 Oct 2024 06:19:58 +0000
-Date: Wed, 16 Oct 2024 14:19:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yicong Yang <yangyicong@huawei.com>, catalin.marinas@arm.com,
-	will@kernel.org, sudeep.holla@arm.com, tglx@linutronix.de,
-	mpe@ellerman.id.au, linux-arm-kernel@lists.infradead.org,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	pierre.gondois@arm.com, dietmar.eggemann@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-	linux-kernel@vger.kernel.org, morten.rasmussen@arm.com,
-	msuchanek@suse.de, gregkh@linuxfoundation.org, rafael@kernel.org,
-	jonathan.cameron@huawei.com, prime.zeng@hisilicon.com,
-	linuxarm@huawei.com, yangyicong@hisilicon.com, xuwei5@huawei.com,
-	guohanjun@huawei.com
-Subject: Re: [PATCH v6 2/4] arch_topology: Support SMT control for OF based
- system
-Message-ID: <202410161302.HjmSau6j-lkp@intel.com>
-References: <20241015021841.35713-3-yangyicong@huawei.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWnM+t+d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 787ECC4CEC5
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 06:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729061330;
+	bh=fmU7uxTE54D0PHJcTsRBgR1QW1OTKNsFQljXPaCsJRg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VWnM+t+d/k1rHK9tCiLGn7AHfjOCmrz/bng8NXy08SjSDwsKJwHilBgpTEvYcK3+Q
+	 gD65vJSlxV42tiHdEEUnAwWMLfkzujYa97w8zfnJcLQPO5gmSs2fXJgG0ckd+FbA5y
+	 Rsx+p1UOLntozP24AaoCZ/sQl7/xNdAOHPwu4rT5cyTcLACDfDcIpzGlDX2TLNgjhp
+	 Pt4v//HKh+mdtd8p0BMDxE7GXRWI9yfVSBIUQmiQKHljmNgY/uu2rK57k7QxeZfpu8
+	 /+jiRxI9ZiN5PqkHoFDcRxitIwypIpgKeQbdut/hX+AKYifpKg2o837s1uYtqGOgXn
+	 9ZZaBQaeAywXQ==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2fb51f39394so29235311fa.2
+        for <llvm@lists.linux.dev>; Tue, 15 Oct 2024 23:48:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWAvSDzfjTRb3Nh5MXwLV/Wlu6B++UFoq5hUWc80HhI5Gjzz7UXPEJv7cVKF89Or9h+wYB6@lists.linux.dev
+X-Gm-Message-State: AOJu0YxImczGbJwfjcm4rulwfoIDBgHCcZ72r4cJNO4JR/g3SQmH244I
+	J79//5+mehjmOuJne9I72T66BQKmR1lWjqA+5FAd0Rw0clBlbSy3b1FyB02ghJvCOdvW21zszC/
+	E+nsKoI7cghMqhJ+Yo1aTO8T/xoo=
+X-Google-Smtp-Source: AGHT+IG9tnlXI2ZfzZkeEyz6reqUWeb7wdqsPblvzu3blaMxGsNfStStdPddqdSzbtCARYKog1dKSyNsxvGJwYlUOhg=
+X-Received: by 2002:a2e:a544:0:b0:2fa:d317:b777 with SMTP id
+ 38308e7fff4ca-2fb61b3e457mr19589811fa.2.1729061328835; Tue, 15 Oct 2024
+ 23:48:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241015021841.35713-3-yangyicong@huawei.com>
+References: <20241009124352.3105119-2-ardb+git@google.com> <202410141357.3B2A71A340@keescook>
+ <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com> <20241016021045.GA1000009@thelio-3990X>
+In-Reply-To: <20241016021045.GA1000009@thelio-3990X>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 16 Oct 2024 08:48:37 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEprSJpugRhVt7x2c1QfYxzFPHyBukpntPekT5N0ED-aA@mail.gmail.com>
+Message-ID: <CAMj1kXEprSJpugRhVt7x2c1QfYxzFPHyBukpntPekT5N0ED-aA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/stackprotector: Work around strict Clang TLS
+ symbol requirements
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Ard Biesheuvel <ardb+git@google.com>, x86@kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org, stable@vger.kernel.org, 
+	Fangrui Song <i@maskray.me>, Brian Gerst <brgerst@gmail.com>, Uros Bizjak <ubizjak@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yicong,
+On Wed, 16 Oct 2024 at 04:10, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Tue, Oct 15, 2024 at 12:56:57PM +0200, Ard Biesheuvel wrote:
+> > On Mon, 14 Oct 2024 at 22:59, Kees Cook <kees@kernel.org> wrote:
+> > >
+> > > On Wed, Oct 09, 2024 at 02:43:53PM +0200, Ard Biesheuvel wrote:
+> > > > However, if a non-TLS definition of the symbol in question is visib=
+le in
+> > > > the same compilation unit (which amounts to the whole of vmlinux if=
+ LTO
+> > > > is enabled), it will drop the per-CPU prefix and emit a load from a
+> > > > bogus address.
+> > >
+> > > I take this to mean that x86 32-bit kernels built with the stack
+> > > protector and using Clang LTO will crash very quickly?
+> > >
+> >
+> > Yeah. The linked issue is not quite clear, but it does suggest things
+> > are pretty broken in that case.
+>
+> Yeah, i386_defconfig with CONFIG_LTO_CLANG_FULL=3Dy explodes on boot for
+> me without this change:
+>
+>   [    0.000000] Linux version 6.12.0-rc3-00044-g2f87d0916ce0 (nathan@the=
+lio-3990X) (ClangBuiltLinux clang version 19.1.2 (https://github.com/llvm/l=
+lvm-project.git 7ba7d8e2f7b6445b60679da826210cdde29eaf8b), ClangBuiltLinux =
+LLD 19.1.2 (https://github.com/llvm/llvm-project.git 7ba7d8e2f7b6445b60679d=
+a826210cdde29eaf8b)) #1 SMP PREEMPT_DYNAMIC Tue Oct 15 19:00:21 MST 2024
+>   ...
+>   [    0.631002] Freeing unused kernel image (initmem) memory: 936K
+>   [    0.631613] Kernel panic - not syncing: stack-protector: Kernel stac=
+k is corrupted in: free_initmem+0x95/0x98
+>   [    0.632606] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-=
+rc3-00044-g2f87d0916ce0 #1
+>   [    0.633467] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
+ rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
+>   [    0.634583] Call Trace:
+>   [    0.634837]  panic+0xd4/0x2cc
+>   [    0.635146]  ? _vdso_rng_data+0xd80/0xd80
+>   [    0.635550]  ? _vdso_rng_data+0xd80/0xd80
+>   [    0.635965]  ? rest_init+0xb0/0xb0
+>   [    0.636312]  __stack_chk_fail+0x10/0x10
+>   [    0.636701]  ? free_initmem+0x95/0x98
+>   [    0.637074]  free_initmem+0x95/0x98
+>   [    0.637434]  ? _vdso_rng_data+0xd80/0xd80
+>   [    0.637838]  ? rest_init+0xb0/0xb0
+>   [    0.638196]  kernel_init+0x42/0x1e4
+>   [    0.638558]  ret_from_fork+0x2b/0x40
+>   [    0.638922]  ret_from_fork_asm+0x12/0x18
+>   [    0.639331]  entry_INT80_32+0x108/0x108
+>   [    0.639864] Kernel Offset: disabled
+>   [    0.640224] ---[ end Kernel panic - not syncing: stack-protector: Ke=
+rnel stack is corrupted in: free_initmem+0x95/0x98 ]---
+>
+> I can confirm that this patch resolves that issue for me and LKDTM's
+> REPORT_STACK_CANARY test passes with that configuration.
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+>
 
-kernel test robot noticed the following build warnings:
+Thanks.
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on powerpc/next powerpc/fixes driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master tip/x86/core v6.12-rc3 next-20241015]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> I presume the '#ifndef CONFIG_X86_64' in arch/x86/entry/entry.S is
+> present because only X86_32 uses '-mstack-protector-guard-reg=3D'? I
+> assume that will disappear when X86_64 supports this option (IIRC that
+> was the plan)?
+>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yicong-Yang/cpu-SMT-Provide-a-default-topology_is_primary_thread/20241015-102147
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20241015021841.35713-3-yangyicong%40huawei.com
-patch subject: [PATCH v6 2/4] arch_topology: Support SMT control for OF based system
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20241016/202410161302.HjmSau6j-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410161302.HjmSau6j-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410161302.HjmSau6j-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/base/arch_topology.c:32:21: warning: unused variable 'max_smt_thread_num' [-Wunused-variable]
-   static unsigned int max_smt_thread_num;
-                       ^
-   1 warning generated.
-
-
-vim +/max_smt_thread_num +32 drivers/base/arch_topology.c
-
-    28	
-    29	static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
-    30	static struct cpumask scale_freq_counters_mask;
-    31	static bool scale_freq_invariant;
-  > 32	static unsigned int max_smt_thread_num;
-    33	DEFINE_PER_CPU(unsigned long, capacity_freq_ref) = 1;
-    34	EXPORT_PER_CPU_SYMBOL_GPL(capacity_freq_ref);
-    35	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes, I noticed this issue while enabling
+'-mstack-protector-guard-reg=3D' for x86_64, but i386 is already broken.
