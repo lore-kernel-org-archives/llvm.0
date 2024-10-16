@@ -1,112 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA5518DF6E
-	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 18:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68B818BC33;
+	Wed, 16 Oct 2024 18:31:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729102813; cv=none; b=OnVWtD95VQT5LkWO4lPyDZzSx8z6ski6GFtkK0n0/DIPxbxukkmylUjdQepOjXCGizJazw/6TIDPpCoA0WtKLOg/ymE5QYqMDsJYg2YiWY4G/wS5ssoxWoQkht98XAoBNgJBwns2aJlfYlvPP/LxmFfbyjKmG+dOi+YBRj/qhuc=
+	t=1729103514; cv=none; b=O+8uuqoIrexROcJb8LC+XX+6qTpHJqCfM/NkaufzhFszdmDfv5N5ResQC8d6Ft0+h6yvWSs46hy4MS+T6t9UBJ8k76d/1ai3SoEuD/76ZoiYOaj85O+lEo+frev4tBSfPU0IPkAVWFE0Z/K0OvUNN8fgftUI4H40HV/M+QNDFrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729102813; c=relaxed/simple;
-	bh=asShdv9v8uS093w6wQHmJM/MPm08b8CD1idDYHcSA9M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NfFe/rzyhhySXouynFyHf24LO7hlTjtuS8zGQQXmDDz787ryLNVdTS0cxs+PsMe9IcmyDePOVy+9Fwk0jA3ZmvwZZgbFLcFaZN230O/rD4GQQO8EH8rbOOAoeAZvk+hcjbzviDrtIbphKZa/5HqHo8l2oyhfzPD5P7BP2l3clx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eChrfsz8; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1729103514; c=relaxed/simple;
+	bh=ikOpzjgJe3gcfyHssEJF6ZOgvgAufMIFjvvQE6QbR5s=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=TmwUNYOkvosogC/Mb9et+HuHAtKLErtEHK+EkvsvXS9Oty7oqy0pj/W9dhHbxNSR7zETDxvvrY0kXW5j5QQroApn9yMXEEjd+W5wjSCEEtfsmUiIXBa11xvBLNQgx5jULSeJGgNmb+pfHixJnKrCd96dzfGzZMGoBFj1ANkxm3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=l3HD1PDs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gD73Fl19; arc=none smtp.client-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eChrfsz8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729102812; x=1760638812;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=asShdv9v8uS093w6wQHmJM/MPm08b8CD1idDYHcSA9M=;
-  b=eChrfsz8g0W1iT0TFspMdvGCQwLbxJoPDaS1jJzwbI7BMVM4euxM6YVn
-   QXQ3lcZ8oYZzS9zw1vNpYDymsvlcQhJgX8PJqqrJQ1HuaO22cWi2T3sNK
-   wHmi7gcfkoNBJAvKcPXgPj4/HXUJQif4E5DIW3DnlzMr5cwFbtVBa35+Y
-   dX9PWqcxPE3zqonNbpSY9370zUm/Bx3l/iiXPi5QfKsd5cWiUdvhjzF7Y
-   O0kriNxcHdQpQlv2Mb+7MSDPRbplICzuqUB9aRAmxH1lfhTna8BkPRJa3
-   eNSEPGoHEF25r7ROot0A5f0cfOowcG8pR5X0b5OVFtBoJYvZYdrGJMmPq
-   A==;
-X-CSE-ConnectionGUID: 8gr6tdvSR/icpHPHM4IhsQ==
-X-CSE-MsgGUID: FQiFknhTS6eUmFIOxyF1Vg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="28008343"
-X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="28008343"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 11:20:11 -0700
-X-CSE-ConnectionGUID: 3niBpy1/R624DLq2Gby+eQ==
-X-CSE-MsgGUID: GgC6IEmPTQi7O/UgQS9nvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="78341263"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 11:20:07 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t18cu-00000003ruF-02Dx;
-	Wed, 16 Oct 2024 21:20:04 +0300
-Date: Wed, 16 Oct 2024 21:20:03 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
- comparing in percpu_add_op()
-Message-ID: <ZxAD0-kQJ0_lDxje@smile.fi.intel.com>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
- <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
- <ZxAAlEyvxzWpwQQ0@smile.fi.intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="l3HD1PDs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gD73Fl19"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 7091A254008F;
+	Wed, 16 Oct 2024 14:31:50 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Wed, 16 Oct 2024 14:31:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1729103510;
+	 x=1729189910; bh=ymGZ+F5Q+6zPxDfr5uhRuaVWQUin2zTqLDTQDUD/5PE=; b=
+	l3HD1PDs+ckm9NTo6Wp3KL1YG4eDim3EXFL5O8lIlK1nvAG5maQT0GMiq7bgp0Mm
+	BFxqSq7SA7wRQhD7zX+y81HI97AI1AuIqiPqj5f8DVU4j/usDnNZzqvkDzYo1FRD
+	2z/5qV3iHam6oC85KTsUsIFzGQ2/DD7CSVep9e6F3C0yR6QRCn73pARXJUoVpQIX
+	KGNfdASjDFap1Ap7iwQDXi3qYboF++vtB+NG2biOKEB0ztBzU+F9Far/cKI4anS+
+	vUY5xjqvuElbQtdhwzJjVTvcuT4moucAvivPkPM0ZLGxTIc7NUysfLjzs1vQax+j
+	u38YgMcxJQlB921nsyhZ+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1729103510; x=
+	1729189910; bh=ymGZ+F5Q+6zPxDfr5uhRuaVWQUin2zTqLDTQDUD/5PE=; b=g
+	D73Fl19tfnCBvECN06RsGbwNewsF66hmbpRs3EKqqLo4r1qltkUb46jcN5IhtUMU
+	RGXH8pewTHRDNcYNDXTl4yjM8ULacslFJRboX4NCQ05hp16OlVIXXLDAP9/YP855
+	zMSgCjTUrgOHB3RtjlokBMdl0Hfh5B/Fp9FF11oFOR/Ik5l8vHx6oYbx94iy/xRu
+	fK3xi5G3lS2TqyXLdAuJWqIkyOk9gAU5oi+/VEJgCzXdLX5rcrm6YUnyGm9F7Gau
+	JGtZ52k89IJ/VFItPBhCjmiWLXorStBoKz9Q22JeP2+bsQqRcCljBYTxM6HRqX92
+	b31/YFbJ2EGeiCjsi4mOQ==
+X-ME-Sender: <xms:lQYQZzKp_IJOdGFoM-IhqH-28UuuQimulDAq-WmMbpkLMSAWCyn68w>
+    <xme:lQYQZ3ISpWMOtoaYn1ErUIwiOSs8B4ESqcpGq2iDQdVbljLnKpFLkXYj0Zc382AsP
+    DA-7q5IRwoCgStVO5E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdegledguddvjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    vddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhitgholhgrshesfhhjrghslh
+    gvrdgvuhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdp
+    rhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvsh
+    gruhhlnhhivghrshesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvhhvvhhvvhhvsehg
+    ohhoghhlvgdrtghomhdprhgtphhtthhopehmrghsrghhihhrohihsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    lhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepphgrthgthhgvsh
+    eslhhishhtshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:lQYQZ7ueU5DPlczQvLMOSZ402Fns57FWEvtlvrTxC2QKh_gAXiFeLg>
+    <xmx:lQYQZ8YDflcpQC-rxh-OvuLs3aMyx7VQBf0XgCh1D2L39i5h8NADFg>
+    <xmx:lQYQZ6ZD1-JfOc0fkTAD_FQxFFwtLUBOOgVQSHkVe5mVcdg6NCAZ1Q>
+    <xmx:lQYQZwCOXc4t7puz8fgvDcgZ8xZp5ME-AkhR23BLQJ2xOQe-UoWLVg>
+    <xmx:lgYQZ8Agc7dtrBbXc3v3q1z6VfnjQ_xbmHEnvoqXXnBlHlZNLXbBE0Us>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 5DD572220071; Wed, 16 Oct 2024 14:31:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZxAAlEyvxzWpwQQ0@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Date: Wed, 16 Oct 2024 18:31:27 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>
+Cc: "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Aleksei Vetrov" <vvvvvv@google.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
+ stable@vger.kernel.org
+Message-Id: <a22ab6cb-6eb6-44df-9e82-b6e95b9ae08e@app.fastmail.com>
+In-Reply-To: 
+ <20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org>
+References: 
+ <20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org>
+Subject: Re: [PATCH] kbuild: Fully disable -Wenum-{compare-conditional,enum-conversion}
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 16, 2024 at 09:06:13PM +0300, Andy Shevchenko wrote:
-> On Wed, Oct 16, 2024 at 08:44:56AM -0700, Dave Hansen wrote:
+On Wed, Oct 16, 2024, at 18:01, Nathan Chancellor wrote:
+> -Wenum-enum-conversion and -Wenum-compare-conditional were strengthened
+> in clang-19 to warn in C mode, which caused the kernel to move them to
+> W=1 in commit 75b5ab134bb5 ("kbuild: Move
+> -Wenum-{compare-conditional,enum-conversion} into W=1") because there
+> were numerous instances of each that would break builds with -Werror.
+> Unfortunately, this is not a full solution, as more and more developers,
+> subsystems, and distributors are building with W=1 as well, so they
+> continue to see the numerous instances of these warnings.
+>
+> Since the move to W=1, there have not been many new instances that have
+> appeared through various build reports and the ones that have appeared
+> seem to be following similar existing patterns, suggesting that most
+> instances of these warnings will not be real issues. The only
+> alternatives for silencing these warnings are adding casts (which is
+> generally seen as an ugly practice) or refactoring the enums to macro
+> defines or a unified enum (which may be undesirable because of type
+> safety in other parts of the code).
+>
+> Disable the warnings altogether so that W=1 users do not see them.
 
-...
+I don't think we have to go all the way of completely disabling
+the warnings here, they are still potentially useful. I can see
+three ways of being less aggressive with them:
 
-> > This doesn't _look_ right.
+- keep -Wno-enum-compare-conditional in W=1 and fix up the
+  remaining warnings for that, iirc the Wno-enum-enum-conversion
+  is the one that causes the problems.
 
-See below.
+- Move them to W=2 instead of always disabled
 
-...
+- Leave the warnings enabled for clang-18 and older.
 
-> Maybe more readable, but wouldn't it be theoretically buggy for u64?
-> I'm talking about the case when u64 == UINT_MAX, which will be true
-> in your case and false in mine.
-> 
-> >         const int pao_ID__ = (__builtin_constant_p(val) &&
-> >                               ((val) == 1 || (int)(val) == -1)) ?
-> > 
-> >                                 (int)(val) : 0;
-
-This code _is_ buggy, thanks to my new test case.
-
-[   66.161375] pcp -1 (0xffffffffffffffff) != expected 4294967295 (0xffffffff)
-
-Hence, I'll send a v2 with the test case and updated Subject.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+     Arnd
