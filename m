@@ -1,100 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9842076D7;
-	Wed, 16 Oct 2024 10:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D2FB67E;
+	Wed, 16 Oct 2024 10:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729074553; cv=none; b=Tyh6r5SkE93+QYW1leIM62k88pLQVEGjwZ6VutEPvtJjjtuyEW+EoRy0m4FUc60iVK1n5BCJ4KQ98RcFGAawKfo6+iAA0tMWRWakUUjAupnRI/JcI983D6gjOZhUOwZHwsnmqGcJQH1OIUOnhdw2nbv26U0fZ7EZ/7Ra6i0Pdh4=
+	t=1729075258; cv=none; b=BAHwxWJwi2D51jMBGy4HL/t5xRmVqxjzoftq3Ramp8Mqt3qYVHdcmRq4QQKctNxL3llI43125gnNzVRs8JyO7jO51uitBLhlN4z08MQ264GFNdF+IRQGb1ClbSTYCL1Hxf0T2/EL5ceCxXPs7AqrwWJY1+unINl8q7xuignmPpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729074553; c=relaxed/simple;
-	bh=5rZFoh+Y1JgPLov3W4TEp/1JpxxYqNMQAFfPZoGsZdA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PxiutAVRtxpLEJbY9ix5XSAVgllKtZt0eOMHf6NTtAseveWJoEaG9SrNnjsIkvVnjlOSQdGEYxXe1h0iTxv5i5qDpdbzTlOFlDV734JMrbyPrgslgu3HXHaViNfAr2OgvFJH/Wi5GylfLzHDO40+SV5/qEKIBOtaWl/evUAsfqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZxfRenl5; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729075258; c=relaxed/simple;
+	bh=Mll0mPwF2ihobJp02zCEgEgBwbqhStJkbk5l1xAiSII=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K/vnLvv1v0x/XQ2fiZOYhy7mYT5a1tyroNyi9vNXjqcYp2xb5w/Jy5KfvJMFlCw7urX3ThP/YQhuyVrSaJ3EYK2x1+R+ihG+haU3NPvNlSnBN3kmZ6j1Gd2j2YBdIQhQiQKVQQg2f9D8usvAH6libQmRN+KxfgjccdA7HER1ih8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Be2NH1sE; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZxfRenl5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729074552; x=1760610552;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5rZFoh+Y1JgPLov3W4TEp/1JpxxYqNMQAFfPZoGsZdA=;
-  b=ZxfRenl5iNZAzuFJYZ2nGiPq6sbW5HmnFTlhvYjmQLafEXC/kyAnbbjS
-   DGwf36F6peycAc2pVvU4uIisWe2L+yjmQH7ffPsiVjXM+zggfOBRceLDt
-   nQp7T+0ljmEfRwxd2A4U51Ne0E8WR/mqSf6ObuwrSgMjqAKyjoBJ8ILRE
-   iUKosL1oAU8xh0AIL/11rfnKeoMsGedU8bieSwiPk6zzuucHN54gn0Vaz
-   snwid0xU02AGeHpOLxnGtKta4p2RXWqYTwvHhw5n0ofdLsRNEMWBlAU43
-   0ps4T5r0iHhia5tkAW+SeLY84zPULWU/JZJ9RIC6w17gYV3YPtINEY0O+
-   A==;
-X-CSE-ConnectionGUID: PUkrS7viTEiQuLmrbtDnug==
-X-CSE-MsgGUID: AeOvtymjSaq1tpP0FM3eng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="46008972"
-X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
-   d="scan'208";a="46008972"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 03:29:08 -0700
-X-CSE-ConnectionGUID: UTCAk8eYQYChbp1boK7LiA==
-X-CSE-MsgGUID: XEmuIg2sRqaLD99j5Nyoqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
-   d="scan'208";a="78633959"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 16 Oct 2024 03:29:08 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t11H6-000Km6-39;
-	Wed, 16 Oct 2024 10:29:04 +0000
-Date: Wed, 16 Oct 2024 18:28:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miklos Szeredi <mszeredi@redhat.com>
-Subject: [linux-next:master 4258/4954] fs/overlayfs/file.c:234:57: warning:
- omitting the parameter name in a function definition is a C23 extension
-Message-ID: <202410161847.oG293ywD-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Be2NH1sE"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b1457ba751so38461385a.3;
+        Wed, 16 Oct 2024 03:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729075256; x=1729680056; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R2i3NqB8GxXUWyeepDjFITep28fiJMthRR7FM+yUWlU=;
+        b=Be2NH1sE9Zb4R6fv1K7TTeisVnsZeygFaSZ4LvHrlEld9+djrKkkMOUrjTyZWm8JGe
+         cEcJdaHSJEhF2IYu7VEhaMSIAJoBrFHkrm5pKaVemqc27K3GBXvJ4kCDljblQ1C3hZPv
+         qwH58nfGausPbRmCx2gCuRsUo6nZhsBxfleFOVHnLtQd/lX86te/xtHsQB5ovs4RaZEe
+         lNWPj9icm36BmAhelzHlAFSrkkb82Yo8F/NbuRT8XtIYNn9rJ3Yow+2JIJUwBl0hTlrm
+         hZF+4iky7ciKidlb9FmrHNKn+w8mlEIYsuVOWEnts0YLAP/ytN/MlxxmaeQvRnft0dRV
+         aCng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729075256; x=1729680056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R2i3NqB8GxXUWyeepDjFITep28fiJMthRR7FM+yUWlU=;
+        b=GXvxALetmetYrQ2Y4fND/jc7L5siy8+24BhSCNc0LY9kQjgKAuJwr2u33iQ5fDPD0f
+         P+/2FaxnAr1WQVoe/KyhIpk7qT+JVsTSUKRiuuH5bDi3rm82VmsYK9qATW3MpDtfp5dp
+         xwym5asWThqvK0sQYr/VCiaxqb8L+JE6la1QPCjMJoNMBcrz7FdOD91GlFBoutYKSgL1
+         spdy2H7/hAv601f/ZVu7YBw7ArNeF9WQtK5Gh9vDxPlyJtb0QC7vkAkpUTL1vYR90fL0
+         K0UBfv7dNXJcf8AVcCTYATAgk3hvMEukTcUAMS/Kd+u3SndHA33U8tBWwGXc8wkUgIEO
+         sYHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXgLw8qG0weGQv0nABcrz59ZoWPRVk2WWk9/APHonqETpoWP5qWqNIseJpeicP/4HjnoPk7sd3HMK20JRf2@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw26V8kPbXVcI7XK2k2Qr4AUZXKRRaFyKC45IfZAaEaAZDIOgFd
+	8s+6Pg6x3D1Iq9wMPEJaEKVTqioeN4e+Svt3jObtA85HF0ZyTmeDZnywtvog/eRtrr7BYWGt6m/
+	nGiq5b5gHW6g+effFF7T725PZIAs=
+X-Google-Smtp-Source: AGHT+IGTOksWfLUuL/KlW8e1i77FBbNWUSXq42QyFXKEgMd4+5AZ7TTP1Zc+zXzUawuRmsGyXou5G5XjrdI+fDdUqHI=
+X-Received: by 2002:a05:620a:24cb:b0:7b1:3b99:de1b with SMTP id
+ af79cd13be357-7b1418a039fmr486277585a.61.1729075255775; Wed, 16 Oct 2024
+ 03:40:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202410161847.oG293ywD-lkp@intel.com>
+In-Reply-To: <202410161847.oG293ywD-lkp@intel.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Wed, 16 Oct 2024 12:40:44 +0200
+Message-ID: <CAOQ4uxhD1QYnZHRekQPm-A+3SFXMzv3vZW6r59kSOFAtXNWHEA@mail.gmail.com>
+Subject: Re: [linux-next:master 4258/4954] fs/overlayfs/file.c:234:57:
+ warning: omitting the parameter name in a function definition is a C23 extension
+To: Miklos Szeredi <mszeredi@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	overlayfs <linux-unionfs@vger.kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   15e7d45e786a62a211dd0098fee7c57f84f8c681
-commit: 291f180e5929ec636ecffd8a0bba00da907e0f89 [4258/4954] fs: pass offset and result to backing_file end_write() callback
-config: i386-buildonly-randconfig-001-20241016 (https://download.01.org/0day-ci/archive/20241016/202410161847.oG293ywD-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410161847.oG293ywD-lkp@intel.com/reproduce)
+On Wed, Oct 16, 2024 at 12:29=E2=80=AFPM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it master
+> head:   15e7d45e786a62a211dd0098fee7c57f84f8c681
+> commit: 291f180e5929ec636ecffd8a0bba00da907e0f89 [4258/4954] fs: pass off=
+set and result to backing_file end_write() callback
+> config: i386-buildonly-randconfig-001-20241016 (https://download.01.org/0=
+day-ci/archive/20241016/202410161847.oG293ywD-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b=
+5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20241016/202410161847.oG293ywD-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202410161847.oG293ywD-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> fs/overlayfs/file.c:234:57: warning: omitting the parameter name in a =
+function definition is a C23 extension [-Wc23-extensions]
+>      234 | static void ovl_file_end_write(struct file *file, loff_t, ssiz=
+e_t)
+>          |                                                         ^
+>    fs/overlayfs/file.c:234:66: warning: omitting the parameter name in a =
+function definition is a C23 extension [-Wc23-extensions]
+>      234 | static void ovl_file_end_write(struct file *file, loff_t, ssiz=
+e_t)
+>          |                                                               =
+   ^
+>    2 warnings generated.
+>
+>
+> vim +234 fs/overlayfs/file.c
+>
+>    233
+>  > 234  static void ovl_file_end_write(struct file *file, loff_t, ssize_t=
+)
+>    235  {
+>    236          ovl_file_modified(file);
+>    237  }
+>    238
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410161847.oG293ywD-lkp@intel.com/
+Miklos,
 
-All warnings (new ones prefixed by >>):
+Could you fix that in your branch?
+Preferably also the fuse_passthrough_end_write() function in the
+first patch, so there is no build warning mid series.
 
->> fs/overlayfs/file.c:234:57: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     234 | static void ovl_file_end_write(struct file *file, loff_t, ssize_t)
-         |                                                         ^
-   fs/overlayfs/file.c:234:66: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     234 | static void ovl_file_end_write(struct file *file, loff_t, ssize_t)
-         |                                                                  ^
-   2 warnings generated.
-
-
-vim +234 fs/overlayfs/file.c
-
-   233	
- > 234	static void ovl_file_end_write(struct file *file, loff_t, ssize_t)
-   235	{
-   236		ovl_file_modified(file);
-   237	}
-   238	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Amir.
