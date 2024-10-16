@@ -1,72 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C39502BE;
-	Wed, 16 Oct 2024 01:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FFF1586D3;
+	Wed, 16 Oct 2024 02:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729043411; cv=none; b=PoJRrTj3JVdVU9VLd26TC8pMUrNSI5hTayMjX++aCHBnREiqttXdDS9wKmRbXXcIzoi4UqjLByVnrTeCeqMgQtyXiR40Tx3EXY2aTeVeRY5grELa9CkWnTVQZarETkQHBhZ9SJ9VPceUfns9w8HKsmfhHyPi+/tlrdfGWHU10jc=
+	t=1729044648; cv=none; b=oQeHDqDZ6oIGY4GrmfVWfUApAreB3h9GgRBodt0YBvT7mXXp7H50XkPsQtBKoP8luH+ap6uEythI38gVcmqG88QVNPJj1aumflL7vuy4ulH+eHVEUH2JhrUfupTi9/Oja8vCVlGHQoDkIyLyeEqu7lBDyKQ7IR1rOa7p0f6LNAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729043411; c=relaxed/simple;
-	bh=ogJRD7lo4S6s+KuznmGPgcg7uHGMRwprMLi5z+gZn+8=;
+	s=arc-20240116; t=1729044648; c=relaxed/simple;
+	bh=JkUIGZNfmaj7qem7eaChoukIOjSZILLEEE0eS94aM58=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AD1fAeHwvcnJpEpzCImxi05nwkOdusBq/twudc9colAt07/cyHRUJR+NFcS/ySU2sQhjMO7zKeN6hbkYlfZS+B2o5rhRyGTIJ1Co9tkq1kJAjfRIUv3MdoA2La7XD2zVjO3Lp7RAjxe5KVPOlQyO9iZDHtkZQE1EpKWRcgSOZEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H+vIragI; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDMxkS19dn4ImeohZuvA2niG/6dm0vnOHWNNfZYBsgCzcfJKpUo56nTAscxZVlpTBmWelgZnAA/qpFBfwtY6tGYh2d5h4RilQdEbfmegul8+v8uJrmmecow3iR6LjiF0TB52xP1R1K5c59Mvhf7DtgdBJaVscTklCH0QQef60c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/gAVy8Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H+vIragI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729043410; x=1760579410;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ogJRD7lo4S6s+KuznmGPgcg7uHGMRwprMLi5z+gZn+8=;
-  b=H+vIragIqWwfMCbXDNVNNQ57z/boEQsZcM0LoJC7XI43odNca74wV7TZ
-   QFz8trIu8+n7J0So1X212BU/Q5JOcyXctJL5TAUVPtXyXncsS0xCMiQmR
-   QpGQnog1/1qtgo+RltWRzAYhDf6+5n/WAt8gBCTIUzNVeBXeA3shoKwWH
-   K/7RkdyCwWPQnj5qeUPWKTBDdkcId8+lpFuAhO2VyYuBeowhUkKu3ER57
-   9Xq7PSZFYo85OhBFShmiiQZoMi5ak57ZtVp02KcuLnPk1zlXJCcxXG/5n
-   Ciey3jJzcECxMTpwUI+wVCJJKNEAqqAGGLDMogAb3sFiGX1rwT8lNipYk
-   g==;
-X-CSE-ConnectionGUID: IuP5pPBQQgWAvBjV1DJejA==
-X-CSE-MsgGUID: lhq7EFp5TqKpoYRWurPrUQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="28568955"
-X-IronPort-AV: E=Sophos;i="6.11,206,1725346800"; 
-   d="scan'208";a="28568955"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 18:50:10 -0700
-X-CSE-ConnectionGUID: ooHWMSH5QEWTfsT6B5/V8A==
-X-CSE-MsgGUID: nQ632r7fQSCDFT/zHroR2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,206,1725346800"; 
-   d="scan'208";a="78028952"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 15 Oct 2024 18:50:05 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t0tAo-000K9V-2K;
-	Wed, 16 Oct 2024 01:50:02 +0000
-Date: Wed, 16 Oct 2024 09:49:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sean Wang <sean.wang@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Lee Jones <lee@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	upstream@airoha.com, benjamin.larsson@genexis.eu,
-	ansuelsmth@gmail.com, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v6 5/6] pinctrl: airoha: Add support for EN7581 SoC
-Message-ID: <202410160957.YN6r1XvO-lkp@intel.com>
-References: <20241013-en7581-pinctrl-v6-5-2048e2d099c2@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/gAVy8Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2835C4CEC6;
+	Wed, 16 Oct 2024 02:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729044648;
+	bh=JkUIGZNfmaj7qem7eaChoukIOjSZILLEEE0eS94aM58=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J/gAVy8YxNjwbTlTatVY2kT3t/dj5nfy4x4C4clrwBwimQpbJSogH7LRb0ln/8dCF
+	 l3qajIB9MLDv2QJ0sUTAdnGEq8I+o1Dwf6OB2jg4TxhwEj1pxLNxKT/vuP8aZohrcb
+	 9rXoxOCm6JwsiVr5rFirbIPqrwCMSMQ0BsJVZXU37TIopDkfnYtFihl0/yDUAem5OI
+	 me1JGRAGo/kXVod9WsKl/BpoYw3RTIK8VquLdiXXi1fDtsb01mibFfipaemEfpgRnJ
+	 645IlC93qY0vVNpqJqPV0O7CPhRaciVqe7YSt93ZaZJ3RpOSOLmf//sHBCAwt2MYJu
+	 Lzpu8bTXRu1ug==
+Date: Tue, 15 Oct 2024 19:10:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Ard Biesheuvel <ardb+git@google.com>,
+	x86@kernel.org, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org, stable@vger.kernel.org,
+	Fangrui Song <i@maskray.me>, Brian Gerst <brgerst@gmail.com>,
+	Uros Bizjak <ubizjak@gmail.com>, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2] x86/stackprotector: Work around strict Clang TLS
+ symbol requirements
+Message-ID: <20241016021045.GA1000009@thelio-3990X>
+References: <20241009124352.3105119-2-ardb+git@google.com>
+ <202410141357.3B2A71A340@keescook>
+ <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,51 +48,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241013-en7581-pinctrl-v6-5-2048e2d099c2@kernel.org>
+In-Reply-To: <CAMj1kXF7aFyBOOxQQsvsAsnvo3FYrkU=KA1BiMeSuKq1KHC1qA@mail.gmail.com>
 
-Hi Lorenzo,
+On Tue, Oct 15, 2024 at 12:56:57PM +0200, Ard Biesheuvel wrote:
+> On Mon, 14 Oct 2024 at 22:59, Kees Cook <kees@kernel.org> wrote:
+> >
+> > On Wed, Oct 09, 2024 at 02:43:53PM +0200, Ard Biesheuvel wrote:
+> > > However, if a non-TLS definition of the symbol in question is visible in
+> > > the same compilation unit (which amounts to the whole of vmlinux if LTO
+> > > is enabled), it will drop the per-CPU prefix and emit a load from a
+> > > bogus address.
+> >
+> > I take this to mean that x86 32-bit kernels built with the stack
+> > protector and using Clang LTO will crash very quickly?
+> >
+> 
+> Yeah. The linked issue is not quite clear, but it does suggest things
+> are pretty broken in that case.
 
-kernel test robot noticed the following build warnings:
+Yeah, i386_defconfig with CONFIG_LTO_CLANG_FULL=y explodes on boot for
+me without this change:
 
-[auto build test WARNING on 6dbd1577b7dc10263d515045ef6460e80d6c9afa]
+  [    0.000000] Linux version 6.12.0-rc3-00044-g2f87d0916ce0 (nathan@thelio-3990X) (ClangBuiltLinux clang version 19.1.2 (https://github.com/llvm/llvm-project.git 7ba7d8e2f7b6445b60679da826210cdde29eaf8b), ClangBuiltLinux LLD 19.1.2 (https://github.com/llvm/llvm-project.git 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)) #1 SMP PREEMPT_DYNAMIC Tue Oct 15 19:00:21 MST 2024
+  ...
+  [    0.631002] Freeing unused kernel image (initmem) memory: 936K
+  [    0.631613] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: free_initmem+0x95/0x98
+  [    0.632606] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-rc3-00044-g2f87d0916ce0 #1
+  [    0.633467] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
+  [    0.634583] Call Trace:
+  [    0.634837]  panic+0xd4/0x2cc
+  [    0.635146]  ? _vdso_rng_data+0xd80/0xd80
+  [    0.635550]  ? _vdso_rng_data+0xd80/0xd80
+  [    0.635965]  ? rest_init+0xb0/0xb0
+  [    0.636312]  __stack_chk_fail+0x10/0x10
+  [    0.636701]  ? free_initmem+0x95/0x98
+  [    0.637074]  free_initmem+0x95/0x98
+  [    0.637434]  ? _vdso_rng_data+0xd80/0xd80
+  [    0.637838]  ? rest_init+0xb0/0xb0
+  [    0.638196]  kernel_init+0x42/0x1e4
+  [    0.638558]  ret_from_fork+0x2b/0x40
+  [    0.638922]  ret_from_fork_asm+0x12/0x18
+  [    0.639331]  entry_INT80_32+0x108/0x108
+  [    0.639864] Kernel Offset: disabled
+  [    0.640224] ---[ end Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: free_initmem+0x95/0x98 ]---
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Bianconi/dt-bindings-arm-airoha-Add-the-chip-scu-node-for-EN7581-SoC/20241013-060857
-base:   6dbd1577b7dc10263d515045ef6460e80d6c9afa
-patch link:    https://lore.kernel.org/r/20241013-en7581-pinctrl-v6-5-2048e2d099c2%40kernel.org
-patch subject: [PATCH v6 5/6] pinctrl: airoha: Add support for EN7581 SoC
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241016/202410160957.YN6r1XvO-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410160957.YN6r1XvO-lkp@intel.com/reproduce)
+I can confirm that this patch resolves that issue for me and LKDTM's
+REPORT_STACK_CANARY test passes with that configuration.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410160957.YN6r1XvO-lkp@intel.com/
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-All warnings (new ones prefixed by >>):
+I presume the '#ifndef CONFIG_X86_64' in arch/x86/entry/entry.S is
+present because only X86_32 uses '-mstack-protector-guard-reg='? I
+assume that will disappear when X86_64 supports this option (IIRC that
+was the plan)?
 
->> drivers/pinctrl/mediatek/pinctrl-airoha.c:2884:35: warning: unused variable 'regmap_config' [-Wunused-const-variable]
-    2884 | static const struct regmap_config regmap_config = {
-         |                                   ^~~~~~~~~~~~~
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-
-
-vim +/regmap_config +2884 drivers/pinctrl/mediatek/pinctrl-airoha.c
-
-  2883	
-> 2884	static const struct regmap_config regmap_config = {
-  2885		.reg_bits		= 32,
-  2886		.val_bits		= 32,
-  2887		.reg_stride		= 4,
-  2888	};
-  2889	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
