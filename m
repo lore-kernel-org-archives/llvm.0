@@ -1,104 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FD013B298;
-	Wed, 16 Oct 2024 21:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0C118C33C
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 22:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729113869; cv=none; b=AgJxa+ipRFXg1h5J2uweyQqY2LXr43aOZDukBk598I9sThsyHL5PZK3MwOWeWBnrI7F6L6KtOAFokVmFSXePWmrqt8B5Cp2jILofQAdni19k2wfefUZ56W/JCqk96seK5GT4C5BseIuzMQtEw5HqPMWOZpOUbJaTUJFHC0AYJUc=
+	t=1729116731; cv=none; b=ZAA5u4iI9iwMPKY74mqJ1FBEjqA23jE/bn0lHCHkfsEK0bX80IvplopPkNZrMFxxQaUIbmvihR73/Dl+R1vX1Mi75vyeVHYl5dxZp1pFIzTC20N5uRcD4lQaf/t9gI/TnZMov8v8G/fLpfUSQsVHFJ2BqDvJkT3GWSd8rEPp4Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729113869; c=relaxed/simple;
-	bh=WmRyooRpNUPsrOSIwLEuGtI5tETK3P7F58Xs9VK/nqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UbrZUyKlISAXdX69mhNKd8lEvtJPJr7HO4BuQfUHbXsJGEX0fZ2bWKXLEm4lCBZAHDl1Xuo0WXFEH56q/U1RTy8FQynKXynKWShL5T1vkMqF1d9YqjObNDV6ay9o0emPcFrrM0uWVsn+7Wxm/xgbmoj9EjFtZlPDfzrEeNab1FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7/6Prv0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729116731; c=relaxed/simple;
+	bh=yWInCML9zjPUsdBSo1X+WJWAgOkbTtKSSw0niK5Cy8I=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gCQUmUg1kHQZW+DpGm+HGjE10WdZiq3KHznfceKY7s8e5N+jmtX/13/T8ZjiHY99WgIL/+EXqsVZVWykZzkzLRuRzyoa7vv+eW32aXTuJYijmmPT1tNWq4UC9pJ148sf+LPP0nHy+qvpAAuHS0hWSnZm0SGX5QJRUxMwoS864/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZyhJ8jgG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7/6Prv0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D230C4CECD;
-	Wed, 16 Oct 2024 21:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729113869;
-	bh=WmRyooRpNUPsrOSIwLEuGtI5tETK3P7F58Xs9VK/nqU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c7/6Prv0V/3uEKt5DQtqrnxyPW+061zPoW9DD2m5SSMpeREYxcAQtl3ic6CvySKSN
-	 e50H621ALjxb7Te6UYMKh3m6wM5StaKEuuqc8NRN/zN8Zamof45GxR2lZx6lc1OuD7
-	 2waucJwnFs8bNs+Nfwzs9+WbTiSK4saf+HJRmnWkdDYfcK5zzR63me4hK3IzJmlP2K
-	 CsBg0dTzFDLeEyEKVCZc889Lju7SQOZCGpIkE579Kds6XwFCXUVqiFAFTXygSjB5GS
-	 bYqIUtBFrUhuynUF6pos3ukihM0+vjR1XMURbBndqor8amdckbZFcuY7QFixWHNEQI
-	 +RP/ffKudQJCw==
-Date: Wed, 16 Oct 2024 14:24:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Aleksei Vetrov <vvvvvv@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Fully disable
- -Wenum-{compare-conditional,enum-conversion}
-Message-ID: <20241016212427.GA695927@thelio-3990X>
-References: <20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org>
- <a22ab6cb-6eb6-44df-9e82-b6e95b9ae08e@app.fastmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZyhJ8jgG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729116728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ugLpzmGdZJNxV5TdIqRMcuJFHVZvT6Kk8jtusDjjLSg=;
+	b=ZyhJ8jgGFw7LQ/Eaqel/57U+VSyXz6+PLObP8en6mW4ReVdGMMs6biIqjvZ9AtEvbBBVzD
+	OgXbuklvxnkVuJ5htY9exW37aWsJ4oxrOzDV5c4vON2YACE2Y632nem858reT+kksLPct6
+	fls4b6Iei+VMz77RfkccARJDMCDzB54=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-634-qOEmMV56MuaRf_nD-UloFA-1; Wed,
+ 16 Oct 2024 18:12:07 -0400
+X-MC-Unique: qOEmMV56MuaRf_nD-UloFA-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 81CE419560BA
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 22:12:06 +0000 (UTC)
+Received: from [172.64.13.36] (unknown [10.30.32.93])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 12F1E19560A3;
+	Wed, 16 Oct 2024 22:12:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc3,
+ mainline.kernel.org-clang, c964ced7)
+Date: Wed, 16 Oct 2024 22:12:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a22ab6cb-6eb6-44df-9e82-b6e95b9ae08e@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <71318.124101618120700502@us-mta-634.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 16, 2024 at 06:31:27PM +0000, Arnd Bergmann wrote:
-> On Wed, Oct 16, 2024, at 18:01, Nathan Chancellor wrote:
-> > -Wenum-enum-conversion and -Wenum-compare-conditional were strengthened
-> > in clang-19 to warn in C mode, which caused the kernel to move them to
-> > W=1 in commit 75b5ab134bb5 ("kbuild: Move
-> > -Wenum-{compare-conditional,enum-conversion} into W=1") because there
-> > were numerous instances of each that would break builds with -Werror.
-> > Unfortunately, this is not a full solution, as more and more developers,
-> > subsystems, and distributors are building with W=1 as well, so they
-> > continue to see the numerous instances of these warnings.
-> >
-> > Since the move to W=1, there have not been many new instances that have
-> > appeared through various build reports and the ones that have appeared
-> > seem to be following similar existing patterns, suggesting that most
-> > instances of these warnings will not be real issues. The only
-> > alternatives for silencing these warnings are adding casts (which is
-> > generally seen as an ugly practice) or refactoring the enums to macro
-> > defines or a unified enum (which may be undesirable because of type
-> > safety in other parts of the code).
-> >
-> > Disable the warnings altogether so that W=1 users do not see them.
-> 
-> I don't think we have to go all the way of completely disabling
-> the warnings here, they are still potentially useful. I can see
-> three ways of being less aggressive with them:
-> 
-> - keep -Wno-enum-compare-conditional in W=1 and fix up the
->   remaining warnings for that, iirc the Wno-enum-enum-conversion
->   is the one that causes the problems.
-> 
-> - Move them to W=2 instead of always disabled
-> 
-> - Leave the warnings enabled for clang-18 and older.
+Hi, we tested your kernel and here are the results:
 
-Arnd and I talked about this offline in the ClangBuiltLinux meeting
-today. I am going to run my usual test matrix against a tree with
--Wenum-compare-conditional turned on to see how many instances of these
-warnings are in the tree and how difficult it would be to silence them
-to address the first point above. I will move -Wenum-enum-conversion to
-W=2 and send that as v2 soon to satisfy point two, which should clear up
-the blockage for the Android folks.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-While disabling the warnings for clang-19 and newer and leaving them on
-for clang-18 and older would technically address the issue at hand, it
-won't result in increased coverage because the whole point of the change
-that caused this in clang-19 is enabling the warning for C code, so
-clang-18 and older won't ever emit these warnings.
 
-Cheers,
-Nathan
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/rdma/rdma
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1499262081
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1499262081-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1499262081-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1499262081-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
