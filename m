@@ -1,52 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7503514A09E;
-	Wed, 16 Oct 2024 18:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225A816DEAC
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 18:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729101754; cv=none; b=ltvNDOsJUkTWu+NErXEHQ5zMJXOnDovIQ8vJ+UbT4DuD9USVRXkWSVNWIhBIKimk3rURpY2Hjw20AzB4gLpAs3POC0Khl9Q/6m7hV3iJKMOpO/sLXUEV+B1+LSJRsKuhLk344hI92T6aq1htoTH4G9fy0X9Ft4wW7jzRuxMHPzE=
+	t=1729101982; cv=none; b=c5wFbD3ZXAQX1Olb1jHmjGw4Mu/EabIxnmI7eWJQg8gdcckv+ti1Axl3ELMbYCcoDbDotVMRhczZc5VXQjtoMdsusG0iEsKyq7kGL5iU3VbTQb8FPAUg0gGByX/Kvn/EynVG9TMF7oGP1emr0+5/O3sdT3LWea5Udc7oyN59tNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729101754; c=relaxed/simple;
-	bh=TcPyZdTnaIYXAuUmmvyj7ZWwq0e+jb+mIokAQ7+7r5Q=;
+	s=arc-20240116; t=1729101982; c=relaxed/simple;
+	bh=w6TvOZ8DUKkyB3QMeexFvF0T7Chl1fSWJvxGf79kMr0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HxV8ZlQC9ACJDUSy5kq2JjT21D5qrQxxON3ahU/wH+a8j1REIFo2LZQJq/4ngQRyI0MzCP0NTXc3iYHIrvwJJkROzS+O/emhxF2FrIsgE1s4n4yJj+eQFQRLE1x4tqlUUtgLDA/+RgkxYvcr3p0YBgM3iTislyhXEIvKpcpWdEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bCGZuu2J; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=BSt778arcsL0d46lFMpK9IsekNPh9zf2rrGwiJKusTd9kZkGRdqcpWZ0Z3dZ9pud8OnK4ArQaX75IcVhtbN6TjcZpvAukDhYXq1PnqkV7mCocf0UB/z7d39W2qXSikk0uleEALEStCPUwCWOKaU98OdGT5byjBnLkTkZKB0SjmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EXPrpEvh; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bCGZuu2J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBF1C4CECE;
-	Wed, 16 Oct 2024 18:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729101754;
-	bh=TcPyZdTnaIYXAuUmmvyj7ZWwq0e+jb+mIokAQ7+7r5Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bCGZuu2J5ZYLOtEnuByMoAXHN/mMto+o0Yu0y2Sq15NBhiwGb9YZC3p0nHMNRm6mU
-	 OfqgRK5Jx+1BFku0DvEThgaj96BP9dLqM18A7P2zDxQCDbdzoAHcewo0FoWYqUNc7d
-	 r1gcK3qDhYzG62Ggv7P2MYC4W/RxzsvxQU67Mp+slxtEDxLB8tEVtbwp9Vlqsta09C
-	 NlNnfTRef7v5dth38dKZkcxDFBtA9jhdWYUZC+3Hvu7Tu/dlV09oFqfvmxGOWAuV1s
-	 U8g26tX633+ZtgtHHOr+PhVWQyRldFmDk+0DWSCN5ay98ymTDWxpGJPX6vTinYaiAw
-	 r7SSeBfiQgNKQ==
-Date: Wed, 16 Oct 2024 11:02:31 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Aleksei Vetrov <vvvvvv@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Shivamurthy Shastri <shivamurthy.shastri@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Matthew Wilcox <willy@infradead.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Anna-Maria Gleixner <anna-maria@linutronix.de>,
-	Thomas Gleixner <tglx@linutronix.de>, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm/vmstat: Fix -Wenum-enum-conversion warning in vmstat.h
-Message-ID: <20241016180231.GA2939437@thelio-3990X>
-References: <20240621111604.25330-1-shivamurthy.shastri@linutronix.de>
- <ZwRA9SOcOjjLJcpi@google.com>
- <20241008005136.GA241099@thelio-3990X>
- <ZwevGZHiXOBqoslA@google.com>
- <a2e8a76a-9fad-4e3e-bce1-bf8a9d180464@app.fastmail.com>
- <20241015084714.GA1546610@thelio-3990X>
- <Zw6ee6PAz-kZzRAG@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EXPrpEvh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729101981; x=1760637981;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w6TvOZ8DUKkyB3QMeexFvF0T7Chl1fSWJvxGf79kMr0=;
+  b=EXPrpEvhHXM5gGqkMZj8DRL5rhQS8Ra9tmFSOe8DR4tm84ViVsyNo/Vz
+   bRiTpFw6rpZQq5Dl1CKbgfHP4YlOjHkPK5JDQiFjUJXefVk8HqRMem1Ni
+   3tT4v9lD1liEot+rxvlvLIMm2tQWDuix/UUVRs09PNUro2i5CzNC/ng0G
+   O9mwGxEMTnEOP0AT5p3T90nftTHpCeKRd29C1cO/N1ImojE2ypM2nk3JL
+   tiwtRvKo7qaw19MvsoC2E0BzlACES0G0TkZ8rlrmdogrbBO1BDIE4OgYg
+   EyzR+oib6JZZWYF31LTgcci51p4gD96wfoKjud+aVRty6TBh0ois5rgkI
+   A==;
+X-CSE-ConnectionGUID: 1p90TA6nRg6oQgB3Lnkmew==
+X-CSE-MsgGUID: /syWL2WKQI6dqh5sIj8Jfw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28451275"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28451275"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 11:06:20 -0700
+X-CSE-ConnectionGUID: kcO4ws1BQNecWp2AlLE9KQ==
+X-CSE-MsgGUID: p1h4AFT5TFy1O02nh+y4Vw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
+   d="scan'208";a="83070346"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 11:06:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1t18PV-00000003rcY-0FHZ;
+	Wed, 16 Oct 2024 21:06:13 +0300
+Date: Wed, 16 Oct 2024 21:06:12 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
+ comparing in percpu_add_op()
+Message-ID: <ZxAAlEyvxzWpwQQ0@smile.fi.intel.com>
+References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
+ <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,21 +75,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zw6ee6PAz-kZzRAG@google.com>
+In-Reply-To: <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Oct 15, 2024 at 04:55:23PM +0000, Aleksei Vetrov wrote:
-> On Tue, Oct 15, 2024 at 01:47:14AM -0700, Nathan Chancellor wrote:
-> > We should be able to disable -Wenum-enum-conversion without impacting
-> > the ability to catch the cases that you mentioned above. It also helps
-> > that GCC supports -Wenum-conversion, but it does not seem like they have
-> > an equivalent for -Wenum-enum-conversion.
+On Wed, Oct 16, 2024 at 08:44:56AM -0700, Dave Hansen wrote:
+> Andy,
 > 
-> Could you please create and send a patch to disable
-> -Wenum-enum-conversion?
+> The subject here is not very informative.  It explains the "what" of the
+> patch, but not the "why".
+> 
+> A better subject might have been:
+> 
+> 	x86/percpu: Fix clang warning when dealing with unsigned types
 
-Sure, I have sent
-https://lore.kernel.org/20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org/
-now, we can continue discussion over there.
+Thanks, makes sense!
 
-Cheers,
-Nathan
+> > --- a/arch/x86/include/asm/percpu.h
+> > +++ b/arch/x86/include/asm/percpu.h
+> > @@ -234,9 +234,10 @@ do {									\
+> >   */
+> >  #define percpu_add_op(size, qual, var, val)				\
+> >  do {									\
+> > -	const int pao_ID__ = (__builtin_constant_p(val) &&		\
+> > -			      ((val) == 1 || (val) == -1)) ?		\
+> > -				(int)(val) : 0;				\
+> > +	const int pao_ID__ =						\
+> > +		(__builtin_constant_p(val) &&				\
+> > +			((val) == 1 ||					\
+> > +			 (val) == (typeof(val))-1)) ? (int)(val) : 0;	\
+> 
+> This doesn't _look_ right.
+
+But if feels right if we really want to supply unsigned types here.
+Maybe some more magic is needed (like in min() case).
+
+> Let's assume 'val' is a u8.  (u8)-1 is 255, right?  So casting the -1
+> over to a u8 actually changed its value.  So the comparison that you
+> added would actually trigger for 255:
+> 
+> 	(val) == (typeof(val))-1))
+> 
+> 	255 == (u8)-1
+> 	255 == 255
+> 
+> That's not the end of the world because the pao_ID__ still ends up at
+> 255 and the lower if() falls into the "add" bucket, but it isn't great
+> for reading the macro.  It seems like it basically works on accident.
+
+> Wouldn't casting 'val' over to an int be shorter, more readable, not
+> have that logical false match *and* line up with the cast later on in
+> the expression?
+
+Maybe more readable, but wouldn't it be theoretically buggy for u64?
+I'm talking about the case when u64 == UINT_MAX, which will be true
+in your case and false in mine.
+
+>         const int pao_ID__ = (__builtin_constant_p(val) &&
+>                               ((val) == 1 || (int)(val) == -1)) ?
+> 
+>                                 (int)(val) : 0;
+> 
+> Other suggestions to make it more readable would be welcome.
+> 
+> Since I'm making comments, I would have really appreciated some extra
+> info here like why you are hitting this and nobody else is.  This is bog
+> standard code that everybody compiles.  Is clang use _that_ unusual?
+
+Why are you asking me about this? I don't know...
+
+> Or do most clang users just ignore all the warnings?
+
+Same here. I don't know...
+
+Both Qs sounds rhetorical to me.
+
+> Or are you using a bleeding edge version of clang that spits out new warnings
+> that other clang users aren't seeing?
+
+AFAICT It's *not* even close to the bleeding edge. It's standard Debian supply.
+
+> Another nice thing would have been to say that this produces the exact
+> same code with and without the patch.  Or that you had tested it in
+> *some* way.
+
+I have run percpu_test in both cases and also checked code with `bloat-o-meter`
+and `cmp -b`. Everything is the same. I even added a test case for the above
+mentioned situation.
+
+> It took me a couple of minutes to convince myself that your
+> version works and doesn't do something silly like a "dec" if you hand in
+> val==255.
+
+It took me much more to find the best solution that appears
+not everyone likes :-)
+
+P.S. And as Nick pointed out it's simple `make W=1`,
+     what the additional information you wanna see here?
+     Care to provide a template?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
