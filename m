@@ -1,420 +1,130 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43F61E531
-	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 13:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF913A8F0
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 13:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729084677; cv=none; b=p9CXxxutP8tSsvHYyeTUeYtBmpK0FzGdG3c8cUwmK+FR371tCnQFRz2IiQ7eSg52RRzxvJf70JBFt9UTGjxTRe+v14A5C2GKkkNZxXSqqPbtrhZaa2wFF5XMsPYfrbbTlLc35q8vdEfXqiRpLY1FJZcaL38XmjYY1CLAGyYL3c4=
+	t=1729085733; cv=none; b=G+it5ZK69KywwXqFOrwreCf3dsYHWx7Apal2Ne9c471pdt3lqpgtYep0I2qvvbfTObwhdueIFTnd6kvxJlNnj9nZvj781H2xImpIOonvJmEr0gvy21jt/uBmmn6FXLnJKx3BDC1Fu6Q2pqcQVLQv1SaDxqvEz76pbcY8MwRRNjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729084677; c=relaxed/simple;
-	bh=o9QojEEoVu3EJyh7dPNCtmVzfQrHAuliI6UgMyrEw4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mb3Av64+6KzzYqRNcjyrVrYktJP0gqffZF69phknms9ME1I0cfCChYFn04LEB+Vwn5DuGKJtSXgPXzc8f1jsD1U6uHBQ1lOvEY06Gou050kpWQI7xjsGftXumhdLFqSTFytwcTsW8ky9AnXuPvmUibHHeHYnI6fhg7ExCcReHqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=207.46.229.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app2 (Coremail) with SMTP id HwEQrABXX8_ivA9nM4gTAQ--.1884S2;
-	Wed, 16 Oct 2024 21:17:22 +0800 (CST)
-Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
-	by gateway (Coremail) with SMTP id _____wDHksbhvA9nECJCAA--.14301S2;
-	Wed, 16 Oct 2024 21:17:22 +0800 (CST)
-From: Dongliang Mu <dzm91@hust.edu.cn>
-To: Alex Shi <alexs@kernel.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
+	s=arc-20240116; t=1729085733; c=relaxed/simple;
+	bh=FzAlRA8pLPeLqTdYnVhbuzSLx+1InD1DoZ5BCd9/5w8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cKE90jTZQcvSG4pBZRp8DASxDwgOsVt3jrjEG2WG1gcZ/lJHiGtmRxW1pXmmWRSI9TtwG4ujaopNvx/l7oI0ZAdaqM2z/LPRF0EObkh+cqD1LfGuyyZRiX4Ij/8JdCu6rREzjZ0uz0iSY7pNLGVKUT2FGcicFvAXEhVsjzLtnxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TvunK528; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TvunK528"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729085732; x=1760621732;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FzAlRA8pLPeLqTdYnVhbuzSLx+1InD1DoZ5BCd9/5w8=;
+  b=TvunK528zYZ1sfUeP2e1P9fj14HSYMgq9cJuXTGg7QEtwgY9d5j2edYW
+   5nnpC3Kc3ENZIjOmqlaTDTZ6J2qr+T01iMtxK67i5vR9Pd7z8z5qZa3kH
+   qKRD0nLxzn25Qpi0SCMjDPgclZ8zHIThbx8hW0x7FuTe9UowsGuxw/eRH
+   EKYyn9myTpbXupW2wk9CKglaD57Z3KRJry3WNVzzBCGI5ewSd3fpVwHXj
+   iO7FzZkTS4RefBfMxUIa9UrDYWauRywUjslPgFpo/Q7HhGpUgwcqEohC7
+   VEoWc9By+VS74WUl4YsYsjmLl/4kZIPi9ZcLPyZI8Okfk7D4V3EcRtCuw
+   Q==;
+X-CSE-ConnectionGUID: dqYhfFQlSKmgAdeXKrTi6w==
+X-CSE-MsgGUID: 2TttHo+AQOywfUVAVm953g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="32333969"
+X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
+   d="scan'208";a="32333969"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:35:32 -0700
+X-CSE-ConnectionGUID: +fk8pQQYTMO5/oV9c5J9Zw==
+X-CSE-MsgGUID: L7IWNxReRwuBJdeHS+ZKSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
+   d="scan'208";a="77905325"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 16 Oct 2024 06:35:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 8B267165; Wed, 16 Oct 2024 16:35:27 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thomas Kuehne <thomas.kuehne@gmx.li>,
+	linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	Yanteng Si <si.yanteng@linux.dev>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] docs/zh_CN: add the translation of kbuild/kbuild.rst
-Date: Wed, 16 Oct 2024 21:16:32 +0800
-Message-ID: <20241016131710.2619567-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.43.0
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] HID: debug: Remove duplicates from 'keys'
+Date: Wed, 16 Oct 2024 16:32:40 +0300
+Message-ID: <20241016133523.899754-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrABXX8_ivA9nM4gTAQ--.1884S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW3Cr43KFWUtr4DtFW8ZF48tFb_yoWkZw47pa
-	n3u347t3ZrtryrZFy7KFWjvr18Jr1kJw1Yq3WDtF92qw1xZrWDZr4UKry0yF9rG348J34D
-	CFyUGry7AryUA3JanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQab7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	126r1DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
-	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
-	WxJVW8Jr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
-	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43Mx
-	AIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-	xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UApnPUUUUU=
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-Finish the translation of kbuild/kbuild.rst and move kbuild
-from TODO to the main body.
+Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
+CONFIG_WERROR=y, for example:
 
-Update to commit 2eb5d7f24299 ("kbuild: doc: describe the -C
-option precisely for external module builds")
+drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+ 3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
+      |                         ^~~~~~~~~
+drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
+ 3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
+      |                         ^~~~~~~~~
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+Fix this by removing them.
+
+The logic of removal is that, remove...
+1) if there is a constant that uses another defined constant, OR
+2) the one that appears later in the list.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../translations/zh_CN/kbuild/index.rst       |   2 +-
- .../translations/zh_CN/kbuild/kbuild.rst      | 304 ++++++++++++++++++
- 2 files changed, 305 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/kbuild/kbuild.rst
+v2: fixed which one to remove for KEY_HANGEUL (Jiri)
+ drivers/hid/hid-debug.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
-index e8eb448c1197..c06268cf44be 100644
---- a/Documentation/translations/zh_CN/kbuild/index.rst
-+++ b/Documentation/translations/zh_CN/kbuild/index.rst
-@@ -15,12 +15,12 @@
-     kconfig
-     headers_install
-     gcc-plugins
-+    kbuild
- 
- TODO:
- 
- - kconfig-language
- - kconfig-macro-language
--- kbuild
- - makefiles
- - modules
- - issues
-diff --git a/Documentation/translations/zh_CN/kbuild/kbuild.rst b/Documentation/translations/zh_CN/kbuild/kbuild.rst
-new file mode 100644
-index 000000000000..e5e2aebe1ebc
---- /dev/null
-+++ b/Documentation/translations/zh_CN/kbuild/kbuild.rst
-@@ -0,0 +1,304 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/kbuild/kbuild.rst
-+:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
-+
-+======
-+Kbuild
-+======
-+
-+
-+输出文件
-+========
-+
-+modules.order
-+-------------
-+该文件记录模块在 Makefile 中出现的顺序。modprobe 使用该文件来确定性
-+解析匹配多个模块的别名。
-+
-+modules.builtin
-+---------------
-+该文件列出了所有内置到内核中的模块。modprobe 使用该文件来避免尝试加载
-+内置模块时出错。
-+
-+modules.builtin.modinfo
-+-----------------------
-+该文件包含所有内置模块的 modinfo。与单独模块的 modinfo 不同，所有字段
-+都带有模块名称前缀。
-+
-+modules.builtin.ranges
-+----------------------
-+该文件包含所有内核内置模块的地址偏移范围（每个 ELF 节）。结合 System.map
-+文件，它可以用来将模块名称与符号关联起来。
-+
-+环境变量
-+========
-+
-+KCPPFLAGS
-+---------
-+在预处理时传递的额外选项。kbuild 进行所有预处理（包括构建 C 文件和汇编文件）
-+时，都会使用这些预处理选项。
-+
-+KAFLAGS
-+-------
-+传递给汇编器的额外选项（适用于内置模块和外部模块）。
-+
-+AFLAGS_MODULE
-+-------------
-+外部模块的额外汇编选项。
-+
-+AFLAGS_KERNEL
-+-------------
-+内置模块的额外汇编选项。
-+
-+KCFLAGS
-+-------
-+传递给 C 编译器的额外选项（适用于内置模块和外部模块）。
-+
-+KRUSTFLAGS
-+----------
-+传递给 Rust 编译器的额外选项（适用于内置模块和外部模块）。
-+
-+CFLAGS_KERNEL
-+-------------
-+在编译内置代码时，传递给 $(CC) 的额外选项。
-+
-+CFLAGS_MODULE
-+-------------
-+编译外部模块时，传递给 $(CC) 的额外模块特定选项。
-+
-+RUSTFLAGS_KERNEL
-+----------------
-+在编译内置代码时，传递给 $(RUSTC) 的额外选项。
-+
-+RUSTFLAGS_MODULE
-+----------------
-+用于 $(RUSTC) 的额外模块特定选项。
-+
-+LDFLAGS_MODULE
-+--------------
-+用于 $(LD) 链接模块时的额外选项。
-+
-+HOSTCFLAGS
-+----------
-+在构建主机程序时传递给 $(HOSTCC) 的额外标志。
-+
-+HOSTCXXFLAGS
-+------------
-+在构建主机程序时传递给 $(HOSTCXX) 的额外标志。
-+
-+HOSTRUSTFLAGS
-+-------------
-+在构建主机程序时传递给 $(HOSTRUSTC) 的额外标志。
-+
-+HOSTLDFLAGS
-+-----------
-+链接主机程序时传递的额外选项。
-+
-+HOSTLDLIBS
-+----------
-+在构建主机程序时链接的额外库。
-+
-+.. _zh_cn_userkbuildflags:
-+
-+USERCFLAGS
-+----------
-+用于 $(CC) 编译用户程序（userprogs）时的额外选项。
-+
-+USERLDFLAGS
-+-----------
-+用于 $(LD) 链接用户程序时的额外选项。用户程序（userprogs）是使用 CC 链接的，
-+因此 $(USERLDFLAGS) 应该根据需要包含 "-Wl," 前缀。
-+
-+KBUILD_KCONFIG
-+--------------
-+将顶级 Kconfig 文件设置为此环境变量的值。默认名称为 "Kconfig"。
-+
-+KBUILD_VERBOSE
-+--------------
-+设置 kbuild 的详细程度。可以分配与 "V=..." 相同的值。
-+
-+有关完整列表，请参见 `make help`。
-+
-+设置 "V=..." 优先于 KBUILD_VERBOSE。
-+
-+KBUILD_EXTMOD
-+-------------
-+在构建外部模块时设置内核源代码的搜索目录。
-+
-+设置 "M=..." 优先于 KBUILD_EXTMOD。
-+
-+KBUILD_OUTPUT
-+-------------
-+指定内核构建的输出目录。
-+
-+在单独的构建目录中为预构建内核构建外部模块时，这个变量也可以指向内核输出目录。请注意，
-+这并不指定外部模块本身的输出目录。
-+
-+输出目录也可以使用 "O=..." 指定。
-+
-+设置 "O=..." 优先于 KBUILD_OUTPUT。
-+
-+KBUILD_EXTRA_WARN
-+-----------------
-+指定额外的构建检查。也可以通过在命令行传递 "W=..." 来设置相同的值。
-+
-+请参阅 `make help` 了解支持的值列表。
-+
-+设置 "W=..." 优先于 KBUILD_EXTRA_WARN。
-+
-+KBUILD_DEBARCH
-+--------------
-+对于 deb-pkg 目标，允许覆盖 deb-pkg 部署的正常启发式方法。通常 deb-pkg 尝试根据
-+UTS_MACHINE 变量（在某些架构中还包括内核配置）来猜测正确的架构。KBUILD_DEBARCH
-+的值假定（不检查）为有效的 Debian 架构。
-+
-+KDOCFLAGS
-+---------
-+指定在构建过程中用于 kernel-doc 检查的额外（警告/错误）标志，查看
-+scripts/kernel-doc 了解支持的标志。请注意，这目前不适用于文档构建。
-+
-+ARCH
-+----
-+设置 ARCH 为要构建的架构。
-+
-+在大多数情况下，架构的名称与 arch/ 目录中的子目录名称相同。
-+
-+但某些架构（如 x86 和 sparc）有别名。
-+
-+- x86: i386 表示 32 位，x86_64 表示 64 位
-+- parisc: parisc64 表示 64 位
-+- sparc: sparc32 表示 32 位，sparc64 表示 64 位
-+
-+CROSS_COMPILE
-+-------------
-+指定 binutils 文件名的可选固定部分。CROSS_COMPILE 可以是文件名的一部分或完整路径。
-+
-+在某些设置中，CROSS_COMPILE 也用于 ccache。
-+
-+CF
-+--
-+用于 sparse 的额外选项。
-+
-+CF 通常在命令行中如下所示使用::
-+
-+    make CF=-Wbitwise C=2
-+
-+INSTALL_PATH
-+------------
-+INSTALL_PATH 指定放置更新后的内核和系统映像的路径。默认值是 /boot，但你可以设置
-+为其他值。
-+
-+INSTALLKERNEL
-+-------------
-+使用 "make install" 时调用的安装脚本。
-+默认名称是 "installkernel"。
-+
-+该脚本将会以以下参数调用：
-+
-+   - $1 - 内核版本
-+   - $2 - 内核映像文件
-+   - $3 - 内核映射文件
-+   - $4 - 默认安装路径（如果为空，则使用根目录）
-+
-+"make install" 的实现是架构特定的，可能与上述有所不同。
-+
-+提供 INSTALLKERNEL 以便在交叉编译内核时可以指定自定义安装程序。
-+
-+MODLIB
-+------
-+指定模块的安装位置。
-+默认值为::
-+
-+    $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
-+
-+该值可以被覆盖，在这种情况下将忽略默认值。
-+
-+INSTALL_MOD_PATH
-+----------------
-+INSTALL_MOD_PATH 指定了模块目录重定位时 MODLIB 的前缀，通常由构建根
-+（build roots）所需。它没有在 makefile 中定义，但如果需要，可以作为
-+参数传递给 make。
-+
-+INSTALL_MOD_STRIP
-+-----------------
-+如果 INSTALL_MOD_STRIP 被定义，内核模块在安装后会被剥离。如果
-+INSTALL_MOD_STRIP 的值为 '1'，则会使用默认选项 --strip-debug。否则，
-+INSTALL_MOD_STRIP 的值将作为 strip 命令的选项。
-+
-+INSTALL_HDR_PATH
-+----------------
-+INSTALL_HDR_PATH 指定了执行 "make headers_*" 时，用户空间头文件的安装位置。
-+
-+默认值为::
-+
-+    $(objtree)/usr
-+
-+$(objtree) 是保存输出文件的目录。
-+输出目录通常使用命令行中的 "O=..." 进行设置。
-+
-+该值可以被覆盖，在这种情况下将忽略默认值。
-+
-+INSTALL_DTBS_PATH
-+-----------------
-+INSTALL_DTBS_PATH 指定了设备树二进制文件的安装位置，通常由构建根（build roots）所需。
-+它没有在 makefile 中定义，但如果需要，可以作为参数传递给 make。
-+
-+KBUILD_ABS_SRCTREE
-+--------------------------------------------------
-+Kbuild 在可能的情况下使用相对路径指向源代码树。例如，在源代码树中构建时，源代码树路径是
-+'.'。
-+
-+设置该标志请求 Kbuild 使用源代码树的绝对路径。
-+在某些情况下这是有用的，例如在生成带有绝对路径条目的标签文件时等。
-+
-+KBUILD_SIGN_PIN
-+---------------
-+当签署内核模块时，如果私钥需要密码或 PIN，此变量允许将密码或 PIN 传递给 sign-file 工具。
-+
-+KBUILD_MODPOST_WARN
-+-------------------
-+KBUILD_MODPOST_WARN 可以设置为在最终模块链接阶段出现未定义符号时避免错误。它将这些错误
-+转为警告。
-+
-+KBUILD_MODPOST_NOFINAL
-+----------------------
-+KBUILD_MODPOST_NOFINAL 可以设置为跳过模块的最终链接。这仅在加速编译测试时有用。
-+
-+KBUILD_EXTRA_SYMBOLS
-+--------------------
-+用于依赖其他模块符号的模块。详见 modules.rst。
-+
-+ALLSOURCE_ARCHS
-+---------------
-+对于 tags/TAGS/cscope 目标，可以指定包含在数据库中的多个架构，用空格分隔。例如::
-+
-+    $ make ALLSOURCE_ARCHS="x86 mips arm" tags
-+
-+要获取所有可用架构，也可以指定 all。例如::
-+
-+    $ make ALLSOURCE_ARCHS=all tags
-+
-+IGNORE_DIRS
-+-----------
-+对于 tags/TAGS/cscope 目标，可以选择不包含在数据库中的目录，用空格分隔。例如::
-+
-+    $ make IGNORE_DIRS="drivers/gpu/drm/radeon tools" cscope
-+
-+KBUILD_BUILD_TIMESTAMP
-+----------------------
-+将该环境变量设置为日期字符串，可以覆盖在 UTS_VERSION 定义中使用的时间戳
-+（运行内核时的 uname -v）。该值必须是一个可以传递给 date -d 的字符串。默认值是
-+内核构建某个时刻的 date 命令输出。
-+
-+KBUILD_BUILD_USER, KBUILD_BUILD_HOST
-+------------------------------------
-+这两个变量允许覆盖启动时显示的 user@host 字符串以及 /proc/version 中的信息。
-+默认值分别是 whoami 和 host 命令的输出。
-+
-+LLVM
-+----
-+如果该变量设置为 1，Kbuild 将使用 Clang 和 LLVM 工具，而不是 GCC 和 GNU
-+binutils 来构建内核。
+diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+index d5abfe652fb5..541d682af15a 100644
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -3309,9 +3309,9 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_EPG] = "EPG",			[KEY_PVR] = "PVR",
+ 	[KEY_MHP] = "MHP",			[KEY_LANGUAGE] = "Language",
+ 	[KEY_TITLE] = "Title",			[KEY_SUBTITLE] = "Subtitle",
+-	[KEY_ANGLE] = "Angle",			[KEY_ZOOM] = "Zoom",
++	[KEY_ANGLE] = "Angle",
+ 	[KEY_MODE] = "Mode",			[KEY_KEYBOARD] = "Keyboard",
+-	[KEY_SCREEN] = "Screen",		[KEY_PC] = "PC",
++	[KEY_PC] = "PC",
+ 	[KEY_TV] = "TV",			[KEY_TV2] = "TV2",
+ 	[KEY_VCR] = "VCR",			[KEY_VCR2] = "VCR2",
+ 	[KEY_SAT] = "Sat",			[KEY_SAT2] = "Sat2",
+@@ -3409,8 +3409,7 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[BTN_TRIGGER_HAPPY35] = "TriggerHappy35", [BTN_TRIGGER_HAPPY36] = "TriggerHappy36",
+ 	[BTN_TRIGGER_HAPPY37] = "TriggerHappy37", [BTN_TRIGGER_HAPPY38] = "TriggerHappy38",
+ 	[BTN_TRIGGER_HAPPY39] = "TriggerHappy39", [BTN_TRIGGER_HAPPY40] = "TriggerHappy40",
+-	[BTN_DIGI] = "Digi",			[BTN_STYLUS3] = "Stylus3",
+-	[BTN_TOOL_QUINTTAP] = "ToolQuintTap",	[BTN_WHEEL] = "Wheel",
++	[BTN_STYLUS3] = "Stylus3",		 [BTN_TOOL_QUINTTAP] = "ToolQuintTap",
+ 	[KEY_10CHANNELSDOWN] = "10ChannelsDown",
+ 	[KEY_10CHANNELSUP] = "10ChannelsUp",
+ 	[KEY_3D_MODE] = "3DMode",		[KEY_ADDRESSBOOK] = "Addressbook",
+@@ -3440,7 +3439,7 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_FN_RIGHT_SHIFT] = "FnRightShift",	[KEY_FRAMEBACK] = "FrameBack",
+ 	[KEY_FRAMEFORWARD] = "FrameForward",	[KEY_FULL_SCREEN] = "FullScreen",
+ 	[KEY_GAMES] = "Games",			[KEY_GRAPHICSEDITOR] = "GraphicsEditor",
+-	[KEY_HANGEUL] = "HanGeul",		[KEY_HANGUP_PHONE] = "HangUpPhone",
++	[KEY_HANGUP_PHONE] = "HangUpPhone",
+ 	[KEY_IMAGES] = "Images",		[KEY_KBD_LCD_MENU1] = "KbdLcdMenu1",
+ 	[KEY_KBD_LCD_MENU2] = "KbdLcdMenu2",	[KEY_KBD_LCD_MENU3] = "KbdLcdMenu3",
+ 	[KEY_KBD_LCD_MENU4] = "KbdLcdMenu4",	[KEY_KBD_LCD_MENU5] = "KbdLcdMenu5",
 -- 
-2.43.0
+2.43.0.rc1.1336.g36b5255a03ac
 
