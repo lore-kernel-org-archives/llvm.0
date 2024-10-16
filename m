@@ -1,100 +1,86 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A36199944;
-	Wed, 16 Oct 2024 09:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0851FDF87;
+	Wed, 16 Oct 2024 09:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729071047; cv=none; b=RjEXEntuYUCBF7C2RLuUcMe9AvIwAXAgo9RypIpxj28OAM5YX+jhtNICAr8qZkJ7z5CJ9Io0tlzG9GQ+cnIW1fdv6YGm8KUqNcG1+hXzQOIlnCxYbyXvbOB27wR6gZTf++VCKWx9LAtT/G6kf/gcrpEvtd3XzECGqdwmmbU1dAg=
+	t=1729071366; cv=none; b=gZFfs7P/w+ovocKCSTn4zyLEqfQEdbX6LtRHoTmNM5F+WeoPeO6lk0T4tA03lgwXRq0+qyXhHIe1Os8Ht7eOqrVuhrI248lOT8/Ww1fSdOq4EC7e+M83K051semb1Ayx1mx6mdPk6mLA6cUAu9B8iEUpGA4qwlnTi0ADzjovFto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729071047; c=relaxed/simple;
-	bh=jWunuh+WAOu/m9kWPUPfgofOPJ7ITrkLr+y6tBmXkcE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IHNeRv07msLRkkXS2wwL1DQDyxjXt6icJyb526QWGz84L++uKX0FnrPswhWnyaTf02xHVnZEfIfPK7wpeq5Ue4tDW2pyd/LFK6iHxRlVpys6WCfiBX22mjdxNo8/6C+CEjz+9b7nfmY2sN2M0rQd+fcuBqdyIW9ZW7idCyMlR8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=I95NIB25; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1729071366; c=relaxed/simple;
+	bh=Yhj6cd091kQ/pOwqBFbNErCYqoedpgLs45KQ6TSbvP0=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hi43fcC9PMbMwrVPu5z7FzjO9tjB1C21YVunsydC3aBl5zt6E5xWKiky+zfMgi8E9U5cbHRmFCZW0hJW0ZrytqJ6QYHcC0U03N5E9OA9mDtT8SAHClWxK/CxSaRoEUvV2JrXquEZGek6gngpyEjat+2iomc+53OuemsfnjBmRPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G0nQKbje; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="I95NIB25"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1729071042; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=94ydymEXiNCQH8u0qLCo3od56nTu0QsdTRSZryzX7Jw=;
-	b=I95NIB25xQzWGkqf34TRBtFWRwskwCMZgofasBjlQTc3AqsTxQg0bdWER7jF84EfHmipym41KcXTlSb8oLjRZ86Bzol1BNZBXikhaWpIx8728xgoOiHhcnPor378Kpaco3ojb9B1kf6gNt3CKyAu0NQCPNkZ6GJ8MmHvmi5gMpc=
-Received: from 30.74.144.157(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WHGyp3d_1729071040 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 16 Oct 2024 17:30:41 +0800
-Message-ID: <452eb6d3-0b34-4bd6-b7b0-817bd3389efb@linux.alibaba.com>
-Date: Wed, 16 Oct 2024 17:30:40 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G0nQKbje"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729071365; x=1760607365;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Yhj6cd091kQ/pOwqBFbNErCYqoedpgLs45KQ6TSbvP0=;
+  b=G0nQKbje76fmjUfc9Wg9pfuzqSvwGja/ENi/1CwAjl9ITPRSpkvGKBlY
+   JVKxA+M958ZaGRe0/xKcVkaRqsk5lAbfTebsSSsZC1lpu8erUMHfKbVWJ
+   +hlnNAeqA0EhAKCKdSY4LFw0D5yqeDjn9vv2wtUfwnpdgw+Jykx07cp15
+   BOCyxm0BTo8ZEqE8bcaBvID9zWZxvgNtHu34qj2bn8ZWBD7fpgeDG/Wc4
+   d+mjAqeFlqGY+SIQR+XUOihFty3MkzizcbVKwxFh+gMdYaZN/EZ4Rdfod
+   6wLk5KdTXVOWyNy+LZoM3wbCnS6VRatCxH98ffskOxG0VktEAjGDWWQC0
+   w==;
+X-CSE-ConnectionGUID: OmoaRT14QXKDWk4LQi6Mcg==
+X-CSE-MsgGUID: lesV8+rdQJCZKu1KYuRz7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="31376578"
+X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
+   d="scan'208";a="31376578"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 02:36:04 -0700
+X-CSE-ConnectionGUID: aS1IdZqbQW++Ly42c+pkXA==
+X-CSE-MsgGUID: QLHPNtTJQUS/MZnqiNr8uQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,207,1725346800"; 
+   d="scan'208";a="115618430"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 16 Oct 2024 02:36:03 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t10Rk-000KhH-2b;
+	Wed, 16 Oct 2024 09:36:00 +0000
+Date: Wed, 16 Oct 2024 17:35:54 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linux-next:master 1848/4954] vmlinux.o: warning: objtool:
+ hid_open_report+0x849: sibling call from callable instruction with modified
+ stack frame
+Message-ID: <202410161730.CRySyFey-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 2/4] mm: shmem: change shmem_huge_global_enabled()
- to return huge order bitmap
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <b1804b973d3ee800a2f233be45732b71ce3917cb.1728548374.git.baolin.wang@linux.alibaba.com>
- <202410131132.b6FEas2V-lkp@intel.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <202410131132.b6FEas2V-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+TO: Benjamin Tissoires <bentiss@kernel.org>
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   15e7d45e786a62a211dd0098fee7c57f84f8c681
+commit: 2370acea1fa43deace47467ede6c400a4640d224 [1848/4954] Merge branch 'for-6.13/bpf' into for-next
+config: x86_64-randconfig-003-20241016 (https://download.01.org/0day-ci/archive/20241016/202410161730.CRySyFey-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410161730.CRySyFey-lkp@intel.com/reproduce)
 
-On 2024/10/13 11:30, kernel test robot wrote:
-> Hi Baolin,
-> 
-> [This is a private test report for your RFC patch.]
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on linus/master v6.12-rc2 next-20241011]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/mm-factor-out-the-order-calculation-into-a-new-helper/20241010-175904
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/b1804b973d3ee800a2f233be45732b71ce3917cb.1728548374.git.baolin.wang%40linux.alibaba.com
-> patch subject: [RFC PATCH v3 2/4] mm: shmem: change shmem_huge_global_enabled() to return huge order bitmap
-> config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241013/202410131132.b6FEas2V-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241013/202410131132.b6FEas2V-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410131132.b6FEas2V-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->     In file included from mm/shmem.c:28:
->     In file included from include/linux/ramfs.h:5:
->     In file included from include/linux/fs_parser.h:11:
->     In file included from include/linux/fs_context.h:14:
->     In file included from include/linux/security.h:33:
->     In file included from include/linux/mm.h:2213:
->     include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->       518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->           |                               ~~~~~~~~~~~ ^ ~~~
->     In file included from mm/shmem.c:86:
->     In file included from mm/internal.h:13:
->     include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->        47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
->           |                                    ~~~~~~~~~~~ ^ ~~~
->     include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->        49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
->           |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->     mm/shmem.c:1608:20: warning: unused function 'shmem_show_mpol' [-Wunused-function]
->      1608 | static inline void shmem_show_mpol(struct seq_file *seq, struct mempolicy *mpol)
->           |                    ^~~~~~~~~~~~~~~
->>> mm/shmem.c:1174:10: error: call to '__compiletime_assert_405' declared with 'error' attribute: BUILD_BUG failed
->      1174 |             BIT(HPAGE_PMD_ORDER))
->           |                 ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410161730.CRySyFey-lkp@intel.com/
 
-Thanks for reporting. Will fix in next version.
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: hid_open_report+0x849: sibling call from callable instruction with modified stack frame
+   vmlinux.o: warning: objtool: hid_scan_report() falls through to next function __cfi_hid_allocate_device()
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
