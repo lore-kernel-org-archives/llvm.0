@@ -1,130 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF913A8F0
-	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 13:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E15820966C
+	for <llvm@lists.linux.dev>; Wed, 16 Oct 2024 13:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729085733; cv=none; b=G+it5ZK69KywwXqFOrwreCf3dsYHWx7Apal2Ne9c471pdt3lqpgtYep0I2qvvbfTObwhdueIFTnd6kvxJlNnj9nZvj781H2xImpIOonvJmEr0gvy21jt/uBmmn6FXLnJKx3BDC1Fu6Q2pqcQVLQv1SaDxqvEz76pbcY8MwRRNjA=
+	t=1729085776; cv=none; b=oYIjN7cwDr6d7jHcYPBC5llx02/21/0uEEXzEZqefAziCk2RgZ7ycLhN43m37xBta+Ni3mA9h6P2I8umzL4DTEiiubR9TKfkUHx2j9XtQj7U566T6m172FKOeGohbN51Eg2Cyp6yupMuXwunz30MsiZ3kEmnmF3FMgXmf7pkCIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729085733; c=relaxed/simple;
-	bh=FzAlRA8pLPeLqTdYnVhbuzSLx+1InD1DoZ5BCd9/5w8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cKE90jTZQcvSG4pBZRp8DASxDwgOsVt3jrjEG2WG1gcZ/lJHiGtmRxW1pXmmWRSI9TtwG4ujaopNvx/l7oI0ZAdaqM2z/LPRF0EObkh+cqD1LfGuyyZRiX4Ij/8JdCu6rREzjZ0uz0iSY7pNLGVKUT2FGcicFvAXEhVsjzLtnxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TvunK528; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1729085776; c=relaxed/simple;
+	bh=rR6IpmpJR2hYPl+Sz7LXG5Quja+oS8PBbrmHcgriooQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QBONSCdKz015sGC60WHTPuTciPoFL8QF+lV5E1rY+5kgTQJa1vNRSD9zdzsGtNOuptulXKSVPYosruuKnmwUWH6ETrT0gc4i868p6NzW6ajRn/m5bgQSkSS2nYkx+p3V4Sl9wXXQIhhZD55PW3EXzxkPWE/a+bMgASNGwj9Cur0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H+aG+yGk; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TvunK528"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H+aG+yGk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729085732; x=1760621732;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FzAlRA8pLPeLqTdYnVhbuzSLx+1InD1DoZ5BCd9/5w8=;
-  b=TvunK528zYZ1sfUeP2e1P9fj14HSYMgq9cJuXTGg7QEtwgY9d5j2edYW
-   5nnpC3Kc3ENZIjOmqlaTDTZ6J2qr+T01iMtxK67i5vR9Pd7z8z5qZa3kH
-   qKRD0nLxzn25Qpi0SCMjDPgclZ8zHIThbx8hW0x7FuTe9UowsGuxw/eRH
-   EKYyn9myTpbXupW2wk9CKglaD57Z3KRJry3WNVzzBCGI5ewSd3fpVwHXj
-   iO7FzZkTS4RefBfMxUIa9UrDYWauRywUjslPgFpo/Q7HhGpUgwcqEohC7
-   VEoWc9By+VS74WUl4YsYsjmLl/4kZIPi9ZcLPyZI8Okfk7D4V3EcRtCuw
-   Q==;
-X-CSE-ConnectionGUID: dqYhfFQlSKmgAdeXKrTi6w==
-X-CSE-MsgGUID: 2TttHo+AQOywfUVAVm953g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="32333969"
+  t=1729085775; x=1760621775;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rR6IpmpJR2hYPl+Sz7LXG5Quja+oS8PBbrmHcgriooQ=;
+  b=H+aG+yGkjrQnHo3oHz5mSHGPs2/rorccP/b3HWskTP5WEqcKC2kfo0Gv
+   zx6QKNLpPr+Xh0WF22QmWq5Hc+kzIEkmFh7FXuirB6NccAFkuAMb69mPx
+   D2Uw3j5MSc1oWcBSbfFe7uUeaIvQwhneYaXBmIBmhDDLsGPLHaLggBeLn
+   eHcQf/E/woBCX8bVmgNr4RNhDVyqR06QIxxk0z/kJLuG7I6lpTzUtjiej
+   IlKbiFJKtEWr7eE1hC22d6JvfCcj2HAJ3akfiXSBCsHTD3GnV0NZa8wBj
+   9XBh23RHGtCKsgbm0vEWIZaZtV80ORy3jo7lrtV4SP2HRJKZSY8Q+sl2V
+   w==;
+X-CSE-ConnectionGUID: 81XIV08gQcuNSIMQo2SVnw==
+X-CSE-MsgGUID: qbCnwDo7QzWGlYwVWhPlhA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11226"; a="16152832"
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="32333969"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:35:32 -0700
-X-CSE-ConnectionGUID: +fk8pQQYTMO5/oV9c5J9Zw==
-X-CSE-MsgGUID: L7IWNxReRwuBJdeHS+ZKSg==
+   d="scan'208";a="16152832"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:36:15 -0700
+X-CSE-ConnectionGUID: GbQmjdefSuaD3UhFg4hVHQ==
+X-CSE-MsgGUID: KAZrQ2luTYO7HPfgityxLQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,208,1725346800"; 
-   d="scan'208";a="77905325"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 16 Oct 2024 06:35:29 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 8B267165; Wed, 16 Oct 2024 16:35:27 +0300 (EEST)
+   d="scan'208";a="83308332"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 06:36:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1t14C9-00000003m9b-1v1Q;
+	Wed, 16 Oct 2024 16:36:09 +0300
+Date: Wed, 16 Oct 2024 16:36:09 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Kuehne <thomas.kuehne@gmx.li>,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jiri Kosina <jikos@kernel.org>,
+To: Jiri Kosina <jikos@kernel.org>
+Cc: Thomas Kuehne <thomas.kuehne@gmx.li>, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	Benjamin Tissoires <bentiss@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] HID: debug: Remove duplicates from 'keys'
-Date: Wed, 16 Oct 2024 16:32:40 +0300
-Message-ID: <20241016133523.899754-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] HID: debug: Remove duplicates from 'keys'
+Message-ID: <Zw_BSeDEZpTQTf6J@smile.fi.intel.com>
+References: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
+ <nycvar.YFH.7.76.2410151419110.20286@cbobk.fhfr.pm>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.76.2410151419110.20286@cbobk.fhfr.pm>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
-CONFIG_WERROR=y, for example:
+On Tue, Oct 15, 2024 at 02:20:19PM +0200, Jiri Kosina wrote:
+> On Thu, 5 Sep 2024, Andy Shevchenko wrote:
 
-drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
- 3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
-      |                         ^~~~~~~~~
-drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
- 3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
-      |                         ^~~~~~~~~
+...
 
-Fix this by removing them.
+> > drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+> >  3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
+> >       |                         ^~~~~~~~~
+> > drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
+> >  3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
+> >       |                         ^~~~~~~~~
+> > 
+> > Fix this by removing them.
+> > 
+> > The logic of removal is that, remove...
+> > 1) if there is a constant that uses another defined constant, OR
+> > 2) the one that appears later in the list.
 
-The logic of removal is that, remove...
-1) if there is a constant that uses another defined constant, OR
-2) the one that appears later in the list.
+...
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed which one to remove for KEY_HANGEUL (Jiri)
- drivers/hid/hid-debug.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> > -	[KEY_HANGUEL] = "Hangeul",		[KEY_HANJA] = "Hanja",
+> 
+> The problem specifically with this one is really there to fix a typo 
+> someone did at some point in the past. See b9ab58dd8e771d ("Input: fix 
+> misspelling of Hangeul key").
+> 
+> So I think we should preserve it somehow.
 
-diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-index d5abfe652fb5..541d682af15a 100644
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -3309,9 +3309,9 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_EPG] = "EPG",			[KEY_PVR] = "PVR",
- 	[KEY_MHP] = "MHP",			[KEY_LANGUAGE] = "Language",
- 	[KEY_TITLE] = "Title",			[KEY_SUBTITLE] = "Subtitle",
--	[KEY_ANGLE] = "Angle",			[KEY_ZOOM] = "Zoom",
-+	[KEY_ANGLE] = "Angle",
- 	[KEY_MODE] = "Mode",			[KEY_KEYBOARD] = "Keyboard",
--	[KEY_SCREEN] = "Screen",		[KEY_PC] = "PC",
-+	[KEY_PC] = "PC",
- 	[KEY_TV] = "TV",			[KEY_TV2] = "TV2",
- 	[KEY_VCR] = "VCR",			[KEY_VCR2] = "VCR2",
- 	[KEY_SAT] = "Sat",			[KEY_SAT2] = "Sat2",
-@@ -3409,8 +3409,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[BTN_TRIGGER_HAPPY35] = "TriggerHappy35", [BTN_TRIGGER_HAPPY36] = "TriggerHappy36",
- 	[BTN_TRIGGER_HAPPY37] = "TriggerHappy37", [BTN_TRIGGER_HAPPY38] = "TriggerHappy38",
- 	[BTN_TRIGGER_HAPPY39] = "TriggerHappy39", [BTN_TRIGGER_HAPPY40] = "TriggerHappy40",
--	[BTN_DIGI] = "Digi",			[BTN_STYLUS3] = "Stylus3",
--	[BTN_TOOL_QUINTTAP] = "ToolQuintTap",	[BTN_WHEEL] = "Wheel",
-+	[BTN_STYLUS3] = "Stylus3",		 [BTN_TOOL_QUINTTAP] = "ToolQuintTap",
- 	[KEY_10CHANNELSDOWN] = "10ChannelsDown",
- 	[KEY_10CHANNELSUP] = "10ChannelsUp",
- 	[KEY_3D_MODE] = "3DMode",		[KEY_ADDRESSBOOK] = "Addressbook",
-@@ -3440,7 +3439,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_FN_RIGHT_SHIFT] = "FnRightShift",	[KEY_FRAMEBACK] = "FrameBack",
- 	[KEY_FRAMEFORWARD] = "FrameForward",	[KEY_FULL_SCREEN] = "FullScreen",
- 	[KEY_GAMES] = "Games",			[KEY_GRAPHICSEDITOR] = "GraphicsEditor",
--	[KEY_HANGEUL] = "HanGeul",		[KEY_HANGUP_PHONE] = "HangUpPhone",
-+	[KEY_HANGUP_PHONE] = "HangUpPhone",
- 	[KEY_IMAGES] = "Images",		[KEY_KBD_LCD_MENU1] = "KbdLcdMenu1",
- 	[KEY_KBD_LCD_MENU2] = "KbdLcdMenu2",	[KEY_KBD_LCD_MENU3] = "KbdLcdMenu3",
- 	[KEY_KBD_LCD_MENU4] = "KbdLcdMenu4",	[KEY_KBD_LCD_MENU5] = "KbdLcdMenu5",
+Right, I fixed that in v2 that has been just sent out.
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+With Best Regards,
+Andy Shevchenko
+
 
