@@ -1,249 +1,431 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1EC1991C3;
-	Thu, 17 Oct 2024 06:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F581CDFB8
+	for <llvm@lists.linux.dev>; Thu, 17 Oct 2024 08:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729147206; cv=none; b=V/UtqDQQOgBdV+l0p7jeGnG7YUqlTmQ/feesg9PTBZWTDquy7bwARIJlh30kFk7ciz547fZxFFWytt5q6SIbkGwKFkY0gt6DfqRKvHbmTAOv4esDuq1UxXhNqKX/I4olTpCJ2Vw6bV4OtbTmRA7DtFLFOHmMzdP/sygs3obnMeU=
+	t=1729152919; cv=none; b=UTk32DI6MIX8qCw6QuveNkrJE63cTABD1A+Ap6qowI1j3xeTjpNzeTWwII33fBAKYwrGSSK+DYnQLW2efQ3y7idSxhh++3wRjgA4IbBHON2hj1AYLXHrVIjYetU6GDvZ59ps3jbR3eVIgZSRZdps5Q2YDf8gcW5wxixtuZO4+Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729147206; c=relaxed/simple;
-	bh=8KN18dCnH9UO79LbKMRoexRW6pAmOCl0RhJaZVzUi+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vlz6ljgsFmdk7XjUKXcH9EVp2PEVf/zNYpBVOL0vBdD2MJHUatR858htsBSHNnV5ViTX/G8vMz+dgYh6hT9eoxonEmY3wU6spSPxHXb6wTXY6QmOKSHxAkR8nUyOl5BDd+dKJi65yd2SRZ3Hkt82G32lSEJtUO8Xnh7O4+s4k+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NHDDgVZU; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729152919; c=relaxed/simple;
+	bh=ODMEvT+7qb5RcnLcqwsjd+5KgEx+en9ndAfwLA3x60I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HRqugk4OL4TZeh6WaQTlSSCYFDuuTX+ad6yYyy0h5ds5m4y4LzxEavPKOR7bTU2aHY5oL9FwrXueXiX1raUTzZ+OdR9BWS/dUfv+m3LYraiYj0EqLSxiKhpcdmefDhOhByCHh47fc0saRXKrpfLdyOUS/il15hc8k5nAo5pIZnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lpqXzGjA; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NHDDgVZU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729147204; x=1760683204;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8KN18dCnH9UO79LbKMRoexRW6pAmOCl0RhJaZVzUi+8=;
-  b=NHDDgVZUcTwV+WMN9hdF/r+/z2fUurFxviCgxGoravEksgTNTuHbjoqe
-   Dul6653R6/N+H3BV0Qe2/CT+bnO38hlSRmsPPL52XtQkj4dj/aK2dTXKc
-   LTWpySH2fqr8Lj1j4SwgEsAYJGUrr/dm5c9WzJ7Pok3Qj/x4J9GGafWMn
-   vdr/aKlnGQBLVPagNoFlpeduV3rz6vhTNBDLoYIQZFw1XGMjEbWL1l/fJ
-   9Fenrm4gMAYtgNdCaQwq/cbGh2JZ9ujeJY7IbOvfb4HjV3kAZHgSUmv7a
-   mVQe+k/hQYcTJIr+lqoR0Df4xgaI87yRaZMP+vCC603t2HPl72zHTqaTN
-   Q==;
-X-CSE-ConnectionGUID: kMW5g8iBTtuwmKzNDYmDRA==
-X-CSE-MsgGUID: 7MqOAuz1QFKzClSrYdBw7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="39205117"
-X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
-   d="scan'208";a="39205117"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2024 23:40:03 -0700
-X-CSE-ConnectionGUID: R35pB6d2SUG7/0+FEpINFA==
-X-CSE-MsgGUID: f5dIgtBoSTu1XNWFaEnINw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="83280997"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 16 Oct 2024 23:40:01 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1KAx-000LpN-0u;
-	Thu, 17 Oct 2024 06:39:59 +0000
-Date: Thu, 17 Oct 2024 14:39:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Woudstra <ericwouds@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v1 net-next 02/12] netfilter: bridge: Add conntrack
- double vlan and pppoe
-Message-ID: <202410171456.dIcQWQ3O-lkp@intel.com>
-References: <20241013185509.4430-3-ericwouds@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lpqXzGjA"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e3d7e6f832so6995017b3.0
+        for <llvm@lists.linux.dev>; Thu, 17 Oct 2024 01:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729152915; x=1729757715; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5WvhUb8ItT1IXqKKnFo6ymSL6Bt/koZbJ8vsU2XeI80=;
+        b=lpqXzGjAKv7O+aRBV2mbvGSFwtCHL5UGihKvOhoxI3XcTB9sfRw04f0UeCMc7S+gH6
+         EL1ZLnynkGrgaRSKlfwL/5d6GVRDDIjMLK4nc6tI5h8+N5revrIjSxRP95JSvib8DxnG
+         XxfhxpNh7PXK+YeEqEWbJdIyOuXlqFr6HwJQl2C7UwqC6hNHGFIMIagz7aVxAsFNGVjL
+         wivl/+Gh30Ky3DVNtqwWte9os1k2I6+aoy1aIUjy5JwMEUJ6L3BBogvcqJhywU9IRV8/
+         d+miOrqA9RSfCcyO3wEiZjLEpy5TpPf1Polhg7nNmzhzuTaTg+R1LdUeA1Ot7DtwZ4cq
+         KWDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729152915; x=1729757715;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WvhUb8ItT1IXqKKnFo6ymSL6Bt/koZbJ8vsU2XeI80=;
+        b=gn1OQdQ5RtPpNteTH068J6ZSEtBgQaboVxFKeg/u8fGMGOGiMlBzy+S5IxrWQqs/Hr
+         G9UBNSEY/JEVzAwRH3rY2IZjZ/MAgKCDlWcMbPtBL6VT8tDNEFb6E3EiiUjHkGozpLxX
+         pLXWo934KSOTwn9l03K1Z/+sPWaN3nQDflKDqfF+PcYTFEwxVh3o6reAHI4TtWIzNzWI
+         7YUOH54kHYmJh3WoB9QLAsRMoW5CRirDuDZW+6de2Yw0faya5kofkQG/wuWQW645ZXa1
+         47NdnJCf2cOYKw3dl+2Smg3mCuXx6onFlwmhq8ao+d+B4QS1Bdd6rUFblFyimTHo5N0P
+         ublg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5odFVX7AU80LQ7wrKvy3NvIPCibEYbjdsN7CXBKBs90YYcF9LpF+7dpNYW4pdGr8wgHQP@lists.linux.dev
+X-Gm-Message-State: AOJu0YzAN3krf3TWqbso5HIeOQaAoLCXMdW+wFtDXJdxQxJmDBdJG5Jb
+	rZMqn5gS1xiAKdTooggE5H2KKKPMyFIdsyZMtcUIiFXiJ+a5lzqW
+X-Google-Smtp-Source: AGHT+IG0KsSE6VD2YX/aV8k68GgO4g3H0CiuJaxA7ijK0YheXHjErYeg0Ux9n/xahOmS4Op5tN9ERQ==
+X-Received: by 2002:a05:690c:6ac2:b0:6e5:b495:27d1 with SMTP id 00721157ae682-6e5b49580f0mr2139547b3.19.1729152915106;
+        Thu, 17 Oct 2024 01:15:15 -0700 (PDT)
+Received: from [192.168.2.226] ([107.175.133.150])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e3c5cbdbe7sm10267587b3.92.2024.10.17.01.15.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Oct 2024 01:15:13 -0700 (PDT)
+Message-ID: <d75654e3-729e-47a7-be87-be786e112ea2@gmail.com>
+Date: Thu, 17 Oct 2024 16:15:00 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241013185509.4430-3-ericwouds@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] docs/zh_CN: add the translation of kbuild/kbuild.rst
+To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com, Yanteng Si
+ <si.yanteng@linux.dev>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20241016131710.2619567-1-dzm91@hust.edu.cn>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <20241016131710.2619567-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Eric,
+LGTM
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Reviewed-by: Alex Shi <alexs@kernel.org>
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Woudstra/netfilter-nf_flow_table_offload-Add-nf_flow_encap_push-for-xmit-direct/20241014-030018
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241013185509.4430-3-ericwouds%40gmail.com
-patch subject: [PATCH RFC v1 net-next 02/12] netfilter: bridge: Add conntrack double vlan and pppoe
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241017/202410171456.dIcQWQ3O-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241017/202410171456.dIcQWQ3O-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410171456.dIcQWQ3O-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/bridge/netfilter/nf_conntrack_bridge.c:257:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     257 |                 struct ppp_hdr {
-         |                 ^
-   net/bridge/netfilter/nf_conntrack_bridge.c:277:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     277 |                 struct vlan_hdr *vhdr = (struct vlan_hdr *)(skb->data);
-         |                 ^
-   2 warnings generated.
-
-
-vim +257 net/bridge/netfilter/nf_conntrack_bridge.c
-
-   239	
-   240	static unsigned int nf_ct_bridge_pre(void *priv, struct sk_buff *skb,
-   241					     const struct nf_hook_state *state)
-   242	{
-   243		struct nf_hook_state bridge_state = *state;
-   244		__be16 outer_proto, inner_proto;
-   245		enum ip_conntrack_info ctinfo;
-   246		int ret, offset = 0;
-   247		struct nf_conn *ct;
-   248		u32 len, data_len;
-   249	
-   250		ct = nf_ct_get(skb, &ctinfo);
-   251		if ((ct && !nf_ct_is_template(ct)) ||
-   252		    ctinfo == IP_CT_UNTRACKED)
-   253			return NF_ACCEPT;
-   254	
-   255		switch (skb->protocol) {
-   256		case htons(ETH_P_PPP_SES):
- > 257			struct ppp_hdr {
-   258				struct pppoe_hdr hdr;
-   259				__be16 proto;
-   260			} *ph = (struct ppp_hdr *)(skb->data);
-   261	
-   262			data_len = ntohs(ph->hdr.length) - 2;
-   263			offset = PPPOE_SES_HLEN;
-   264			outer_proto = skb->protocol;
-   265			switch (ph->proto) {
-   266			case htons(PPP_IP):
-   267				inner_proto = htons(ETH_P_IP);
-   268				break;
-   269			case htons(PPP_IPV6):
-   270				inner_proto = htons(ETH_P_IPV6);
-   271				break;
-   272			default:
-   273				return NF_ACCEPT;
-   274			}
-   275			break;
-   276		case htons(ETH_P_8021Q):
-   277			struct vlan_hdr *vhdr = (struct vlan_hdr *)(skb->data);
-   278	
-   279			data_len = 0xffffffff;
-   280			offset = VLAN_HLEN;
-   281			outer_proto = skb->protocol;
-   282			inner_proto = vhdr->h_vlan_encapsulated_proto;
-   283			break;
-   284		default:
-   285			data_len = 0xffffffff;
-   286			break;
-   287		}
-   288	
-   289		if (offset) {
-   290			switch (inner_proto) {
-   291			case htons(ETH_P_IP):
-   292			case htons(ETH_P_IPV6):
-   293				if (!pskb_may_pull(skb, offset))
-   294					return NF_ACCEPT;
-   295				skb_pull_rcsum(skb, offset);
-   296				skb_reset_network_header(skb);
-   297				skb->protocol = inner_proto;
-   298				break;
-   299			default:
-   300				return NF_ACCEPT;
-   301			}
-   302		}
-   303	
-   304		ret = NF_ACCEPT;
-   305		switch (skb->protocol) {
-   306		case htons(ETH_P_IP):
-   307			if (!pskb_may_pull(skb, sizeof(struct iphdr)))
-   308				goto do_not_track;
-   309	
-   310			len = skb_ip_totlen(skb);
-   311			if (data_len < len)
-   312				len = data_len;
-   313			if (pskb_trim_rcsum(skb, len))
-   314				goto do_not_track;
-   315	
-   316			if (nf_ct_br_ip_check(skb))
-   317				goto do_not_track;
-   318	
-   319			bridge_state.pf = NFPROTO_IPV4;
-   320			ret = nf_ct_br_defrag4(skb, &bridge_state);
-   321			break;
-   322		case htons(ETH_P_IPV6):
-   323			if (!pskb_may_pull(skb, sizeof(struct ipv6hdr)))
-   324				goto do_not_track;
-   325	
-   326			len = sizeof(struct ipv6hdr) + ntohs(ipv6_hdr(skb)->payload_len);
-   327			if (data_len < len)
-   328				len = data_len;
-   329			if (pskb_trim_rcsum(skb, len))
-   330				goto do_not_track;
-   331	
-   332			if (nf_ct_br_ipv6_check(skb))
-   333				goto do_not_track;
-   334	
-   335			bridge_state.pf = NFPROTO_IPV6;
-   336			ret = nf_ct_br_defrag6(skb, &bridge_state);
-   337			break;
-   338		default:
-   339			nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
-   340			goto do_not_track;
-   341		}
-   342	
-   343		if (ret == NF_ACCEPT)
-   344			ret = nf_conntrack_in(skb, &bridge_state);
-   345	
-   346	do_not_track:
-   347		if (offset) {
-   348			skb_push_rcsum(skb, offset);
-   349			skb_reset_network_header(skb);
-   350			skb->protocol = outer_proto;
-   351		}
-   352		return ret;
-   353	}
-   354	static unsigned int nf_ct_bridge_in(void *priv, struct sk_buff *skb,
-   355					    const struct nf_hook_state *state)
-   356	{
-   357		bool promisc = BR_INPUT_SKB_CB(skb)->promisc;
-   358		struct nf_conntrack *nfct = skb_nfct(skb);
-   359		struct nf_conn *ct;
-   360	
-   361		if (promisc) {
-   362			nf_reset_ct(skb);
-   363			return NF_ACCEPT;
-   364		}
-   365	
-   366		if (!nfct || skb->pkt_type == PACKET_HOST)
-   367			return NF_ACCEPT;
-   368	
-   369		/* nf_conntrack_confirm() cannot handle concurrent clones,
-   370		 * this happens for broad/multicast frames with e.g. macvlan on top
-   371		 * of the bridge device.
-   372		 */
-   373		ct = container_of(nfct, struct nf_conn, ct_general);
-   374		if (nf_ct_is_confirmed(ct) || nf_ct_is_template(ct))
-   375			return NF_ACCEPT;
-   376	
-   377		/* let inet prerouting call conntrack again */
-   378		skb->_nfct = 0;
-   379		nf_ct_put(ct);
-   380	
-   381		return NF_ACCEPT;
-   382	}
-   383	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 10/16/24 21:16, Dongliang Mu wrote:
+> Finish the translation of kbuild/kbuild.rst and move kbuild
+> from TODO to the main body.
+> 
+> Update to commit 2eb5d7f24299 ("kbuild: doc: describe the -C
+> option precisely for external module builds")
+> 
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+>  .../translations/zh_CN/kbuild/index.rst       |   2 +-
+>  .../translations/zh_CN/kbuild/kbuild.rst      | 304 ++++++++++++++++++
+>  2 files changed, 305 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/kbuild/kbuild.rst
+> 
+> diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+> index e8eb448c1197..c06268cf44be 100644
+> --- a/Documentation/translations/zh_CN/kbuild/index.rst
+> +++ b/Documentation/translations/zh_CN/kbuild/index.rst
+> @@ -15,12 +15,12 @@
+>      kconfig
+>      headers_install
+>      gcc-plugins
+> +    kbuild
+>  
+>  TODO:
+>  
+>  - kconfig-language
+>  - kconfig-macro-language
+> -- kbuild
+>  - makefiles
+>  - modules
+>  - issues
+> diff --git a/Documentation/translations/zh_CN/kbuild/kbuild.rst b/Documentation/translations/zh_CN/kbuild/kbuild.rst
+> new file mode 100644
+> index 000000000000..e5e2aebe1ebc
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/kbuild/kbuild.rst
+> @@ -0,0 +1,304 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/kbuild/kbuild.rst
+> +:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
+> +
+> +======
+> +Kbuild
+> +======
+> +
+> +
+> +输出文件
+> +========
+> +
+> +modules.order
+> +-------------
+> +该文件记录模块在 Makefile 中出现的顺序。modprobe 使用该文件来确定性
+> +解析匹配多个模块的别名。
+> +
+> +modules.builtin
+> +---------------
+> +该文件列出了所有内置到内核中的模块。modprobe 使用该文件来避免尝试加载
+> +内置模块时出错。
+> +
+> +modules.builtin.modinfo
+> +-----------------------
+> +该文件包含所有内置模块的 modinfo。与单独模块的 modinfo 不同，所有字段
+> +都带有模块名称前缀。
+> +
+> +modules.builtin.ranges
+> +----------------------
+> +该文件包含所有内核内置模块的地址偏移范围（每个 ELF 节）。结合 System.map
+> +文件，它可以用来将模块名称与符号关联起来。
+> +
+> +环境变量
+> +========
+> +
+> +KCPPFLAGS
+> +---------
+> +在预处理时传递的额外选项。kbuild 进行所有预处理（包括构建 C 文件和汇编文件）
+> +时，都会使用这些预处理选项。
+> +
+> +KAFLAGS
+> +-------
+> +传递给汇编器的额外选项（适用于内置模块和外部模块）。
+> +
+> +AFLAGS_MODULE
+> +-------------
+> +外部模块的额外汇编选项。
+> +
+> +AFLAGS_KERNEL
+> +-------------
+> +内置模块的额外汇编选项。
+> +
+> +KCFLAGS
+> +-------
+> +传递给 C 编译器的额外选项（适用于内置模块和外部模块）。
+> +
+> +KRUSTFLAGS
+> +----------
+> +传递给 Rust 编译器的额外选项（适用于内置模块和外部模块）。
+> +
+> +CFLAGS_KERNEL
+> +-------------
+> +在编译内置代码时，传递给 $(CC) 的额外选项。
+> +
+> +CFLAGS_MODULE
+> +-------------
+> +编译外部模块时，传递给 $(CC) 的额外模块特定选项。
+> +
+> +RUSTFLAGS_KERNEL
+> +----------------
+> +在编译内置代码时，传递给 $(RUSTC) 的额外选项。
+> +
+> +RUSTFLAGS_MODULE
+> +----------------
+> +用于 $(RUSTC) 的额外模块特定选项。
+> +
+> +LDFLAGS_MODULE
+> +--------------
+> +用于 $(LD) 链接模块时的额外选项。
+> +
+> +HOSTCFLAGS
+> +----------
+> +在构建主机程序时传递给 $(HOSTCC) 的额外标志。
+> +
+> +HOSTCXXFLAGS
+> +------------
+> +在构建主机程序时传递给 $(HOSTCXX) 的额外标志。
+> +
+> +HOSTRUSTFLAGS
+> +-------------
+> +在构建主机程序时传递给 $(HOSTRUSTC) 的额外标志。
+> +
+> +HOSTLDFLAGS
+> +-----------
+> +链接主机程序时传递的额外选项。
+> +
+> +HOSTLDLIBS
+> +----------
+> +在构建主机程序时链接的额外库。
+> +
+> +.. _zh_cn_userkbuildflags:
+> +
+> +USERCFLAGS
+> +----------
+> +用于 $(CC) 编译用户程序（userprogs）时的额外选项。
+> +
+> +USERLDFLAGS
+> +-----------
+> +用于 $(LD) 链接用户程序时的额外选项。用户程序（userprogs）是使用 CC 链接的，
+> +因此 $(USERLDFLAGS) 应该根据需要包含 "-Wl," 前缀。
+> +
+> +KBUILD_KCONFIG
+> +--------------
+> +将顶级 Kconfig 文件设置为此环境变量的值。默认名称为 "Kconfig"。
+> +
+> +KBUILD_VERBOSE
+> +--------------
+> +设置 kbuild 的详细程度。可以分配与 "V=..." 相同的值。
+> +
+> +有关完整列表，请参见 `make help`。
+> +
+> +设置 "V=..." 优先于 KBUILD_VERBOSE。
+> +
+> +KBUILD_EXTMOD
+> +-------------
+> +在构建外部模块时设置内核源代码的搜索目录。
+> +
+> +设置 "M=..." 优先于 KBUILD_EXTMOD。
+> +
+> +KBUILD_OUTPUT
+> +-------------
+> +指定内核构建的输出目录。
+> +
+> +在单独的构建目录中为预构建内核构建外部模块时，这个变量也可以指向内核输出目录。请注意，
+> +这并不指定外部模块本身的输出目录。
+> +
+> +输出目录也可以使用 "O=..." 指定。
+> +
+> +设置 "O=..." 优先于 KBUILD_OUTPUT。
+> +
+> +KBUILD_EXTRA_WARN
+> +-----------------
+> +指定额外的构建检查。也可以通过在命令行传递 "W=..." 来设置相同的值。
+> +
+> +请参阅 `make help` 了解支持的值列表。
+> +
+> +设置 "W=..." 优先于 KBUILD_EXTRA_WARN。
+> +
+> +KBUILD_DEBARCH
+> +--------------
+> +对于 deb-pkg 目标，允许覆盖 deb-pkg 部署的正常启发式方法。通常 deb-pkg 尝试根据
+> +UTS_MACHINE 变量（在某些架构中还包括内核配置）来猜测正确的架构。KBUILD_DEBARCH
+> +的值假定（不检查）为有效的 Debian 架构。
+> +
+> +KDOCFLAGS
+> +---------
+> +指定在构建过程中用于 kernel-doc 检查的额外（警告/错误）标志，查看
+> +scripts/kernel-doc 了解支持的标志。请注意，这目前不适用于文档构建。
+> +
+> +ARCH
+> +----
+> +设置 ARCH 为要构建的架构。
+> +
+> +在大多数情况下，架构的名称与 arch/ 目录中的子目录名称相同。
+> +
+> +但某些架构（如 x86 和 sparc）有别名。
+> +
+> +- x86: i386 表示 32 位，x86_64 表示 64 位
+> +- parisc: parisc64 表示 64 位
+> +- sparc: sparc32 表示 32 位，sparc64 表示 64 位
+> +
+> +CROSS_COMPILE
+> +-------------
+> +指定 binutils 文件名的可选固定部分。CROSS_COMPILE 可以是文件名的一部分或完整路径。
+> +
+> +在某些设置中，CROSS_COMPILE 也用于 ccache。
+> +
+> +CF
+> +--
+> +用于 sparse 的额外选项。
+> +
+> +CF 通常在命令行中如下所示使用::
+> +
+> +    make CF=-Wbitwise C=2
+> +
+> +INSTALL_PATH
+> +------------
+> +INSTALL_PATH 指定放置更新后的内核和系统映像的路径。默认值是 /boot，但你可以设置
+> +为其他值。
+> +
+> +INSTALLKERNEL
+> +-------------
+> +使用 "make install" 时调用的安装脚本。
+> +默认名称是 "installkernel"。
+> +
+> +该脚本将会以以下参数调用：
+> +
+> +   - $1 - 内核版本
+> +   - $2 - 内核映像文件
+> +   - $3 - 内核映射文件
+> +   - $4 - 默认安装路径（如果为空，则使用根目录）
+> +
+> +"make install" 的实现是架构特定的，可能与上述有所不同。
+> +
+> +提供 INSTALLKERNEL 以便在交叉编译内核时可以指定自定义安装程序。
+> +
+> +MODLIB
+> +------
+> +指定模块的安装位置。
+> +默认值为::
+> +
+> +    $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)
+> +
+> +该值可以被覆盖，在这种情况下将忽略默认值。
+> +
+> +INSTALL_MOD_PATH
+> +----------------
+> +INSTALL_MOD_PATH 指定了模块目录重定位时 MODLIB 的前缀，通常由构建根
+> +（build roots）所需。它没有在 makefile 中定义，但如果需要，可以作为
+> +参数传递给 make。
+> +
+> +INSTALL_MOD_STRIP
+> +-----------------
+> +如果 INSTALL_MOD_STRIP 被定义，内核模块在安装后会被剥离。如果
+> +INSTALL_MOD_STRIP 的值为 '1'，则会使用默认选项 --strip-debug。否则，
+> +INSTALL_MOD_STRIP 的值将作为 strip 命令的选项。
+> +
+> +INSTALL_HDR_PATH
+> +----------------
+> +INSTALL_HDR_PATH 指定了执行 "make headers_*" 时，用户空间头文件的安装位置。
+> +
+> +默认值为::
+> +
+> +    $(objtree)/usr
+> +
+> +$(objtree) 是保存输出文件的目录。
+> +输出目录通常使用命令行中的 "O=..." 进行设置。
+> +
+> +该值可以被覆盖，在这种情况下将忽略默认值。
+> +
+> +INSTALL_DTBS_PATH
+> +-----------------
+> +INSTALL_DTBS_PATH 指定了设备树二进制文件的安装位置，通常由构建根（build roots）所需。
+> +它没有在 makefile 中定义，但如果需要，可以作为参数传递给 make。
+> +
+> +KBUILD_ABS_SRCTREE
+> +--------------------------------------------------
+> +Kbuild 在可能的情况下使用相对路径指向源代码树。例如，在源代码树中构建时，源代码树路径是
+> +'.'。
+> +
+> +设置该标志请求 Kbuild 使用源代码树的绝对路径。
+> +在某些情况下这是有用的，例如在生成带有绝对路径条目的标签文件时等。
+> +
+> +KBUILD_SIGN_PIN
+> +---------------
+> +当签署内核模块时，如果私钥需要密码或 PIN，此变量允许将密码或 PIN 传递给 sign-file 工具。
+> +
+> +KBUILD_MODPOST_WARN
+> +-------------------
+> +KBUILD_MODPOST_WARN 可以设置为在最终模块链接阶段出现未定义符号时避免错误。它将这些错误
+> +转为警告。
+> +
+> +KBUILD_MODPOST_NOFINAL
+> +----------------------
+> +KBUILD_MODPOST_NOFINAL 可以设置为跳过模块的最终链接。这仅在加速编译测试时有用。
+> +
+> +KBUILD_EXTRA_SYMBOLS
+> +--------------------
+> +用于依赖其他模块符号的模块。详见 modules.rst。
+> +
+> +ALLSOURCE_ARCHS
+> +---------------
+> +对于 tags/TAGS/cscope 目标，可以指定包含在数据库中的多个架构，用空格分隔。例如::
+> +
+> +    $ make ALLSOURCE_ARCHS="x86 mips arm" tags
+> +
+> +要获取所有可用架构，也可以指定 all。例如::
+> +
+> +    $ make ALLSOURCE_ARCHS=all tags
+> +
+> +IGNORE_DIRS
+> +-----------
+> +对于 tags/TAGS/cscope 目标，可以选择不包含在数据库中的目录，用空格分隔。例如::
+> +
+> +    $ make IGNORE_DIRS="drivers/gpu/drm/radeon tools" cscope
+> +
+> +KBUILD_BUILD_TIMESTAMP
+> +----------------------
+> +将该环境变量设置为日期字符串，可以覆盖在 UTS_VERSION 定义中使用的时间戳
+> +（运行内核时的 uname -v）。该值必须是一个可以传递给 date -d 的字符串。默认值是
+> +内核构建某个时刻的 date 命令输出。
+> +
+> +KBUILD_BUILD_USER, KBUILD_BUILD_HOST
+> +------------------------------------
+> +这两个变量允许覆盖启动时显示的 user@host 字符串以及 /proc/version 中的信息。
+> +默认值分别是 whoami 和 host 命令的输出。
+> +
+> +LLVM
+> +----
+> +如果该变量设置为 1，Kbuild 将使用 Clang 和 LLVM 工具，而不是 GCC 和 GNU
+> +binutils 来构建内核。
