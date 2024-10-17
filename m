@@ -1,83 +1,129 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D351DEFCB;
-	Thu, 17 Oct 2024 18:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FF71D097F;
+	Thu, 17 Oct 2024 20:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729189164; cv=none; b=WO25nc/7iqELHR+lmh/leis3KM9VBLbTbeQqtntWHaDV8UMbwcafstmOM5CpbSfFUfaurJH0J6WB6SzYAWLAusJ0NLxg6TKjHL3FdyC4wCXShqKlXLrVxxCDkLjYLkv4ofxv/9sadZMzr51rLH6K40DRkrampyFEStkch5SZGgE=
+	t=1729196422; cv=none; b=XsVAz5uKUGmxFv8OXBdKQe3V3EKT/PEcE+O6l0dURmuGDu+b3pFjJ9xBsX9BgY7ItGStVeDVusqDzMm8hvn6GKJWovzqu84VkdOLCT9AjIfRYDA1+j38/0kC0TgJx6SOvk6ob8WZ9ZY/kkjWuDZnsBtrM4xeJ1OSLsXi7CuJdsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729189164; c=relaxed/simple;
-	bh=jyUqzb/A0N9zdnI7o+n8FN8Dd4qhMHr+GFRQkf/6cL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z8QnhymPhnIH3wvIiAaqRluQo66rHIXGrkbkqYiTFoyAS5ZDcQTG+48wDrbn+rDs3TCMRf2/RQMl1euAmdhnL3ODooaKTF0fB+iGYCFdtD8vy8R0mQdlFCiNfYahAiWt9ykJF+9FV1fuphThJ/+KpE0s4RUqHRwz6Xn/snKDPAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YiQttMWe; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1729196422; c=relaxed/simple;
+	bh=XVVHSpwPe5HZHIHmXyXLtKocHLxVUhDN4zyjgfNLGBc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=rKk43fZSkVpMu+h+FsTgXvZryKuMGopXlKTXWLXZWmNAs4oHrOd8dpIjWm7K/kM8vylJrf49t3MGfCyFHGcHkWp8RM6Hjgd0NtM62n0UQ6vI+cG3FTZ7x8X9DGIY/8R+jjRaODGNmo3nxoZq/Rt1UGaHq0hl39gvmy4n57ma1/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SYSRcHS5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=esjRwHfr; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YiQttMWe"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xclDtdCQh4Pro8+1C8nyQBevu1jc9Opn3i3g6aw6TIQ=; b=YiQttMWesBvhjOmjze//gvjsSC
-	K9dfxqy8ou8ljKxmx8vI/8un+ibX0xt6v8/RC9uhACdylw4q3/VYRifGbx5CHwHfvA6/B9bXOOH8c
-	9+VV9B/+S1UCHv29aO0fcR7ebE2g5u3lQGeo1ckdweJVaPks3OaG2pO2tL8CeRYl9eRhUUjHEx8il
-	oKiOeI4XmnbeYsD3eOem+t1QkYd+KOlxBDH0OJ05F/V7IT/b6Kce9y+fFyPud3sn9jAP4tFZzBZ4I
-	Rs0hUiRlFVMbrVZ5yDjrxZ609tn/wOdGyAsTie05mDjQMSnplqpuQ5hK63NC3+nTalE31lyPJmljK
-	5fgatYtA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t1V5P-0000000Bm6e-3UxJ;
-	Thu, 17 Oct 2024 18:19:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A56AA3005AF; Thu, 17 Oct 2024 20:18:59 +0200 (CEST)
-Date: Thu, 17 Oct 2024 20:18:59 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
- comparing in percpu_add_op()
-Message-ID: <20241017181859.GB17263@noisy.programming.kicks-ass.net>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
- <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
- <20241016192011.GY17263@noisy.programming.kicks-ass.net>
- <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SYSRcHS5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="esjRwHfr"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E3C2F114008E;
+	Thu, 17 Oct 2024 16:20:15 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Thu, 17 Oct 2024 16:20:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1729196415;
+	 x=1729282815; bh=/elZsdY9jdfXA5CNoGnQjupWAHOxpp9CXjyZ+kdKV3U=; b=
+	SYSRcHS536J51tTNmu7p25c8eCeTwmReNsfcMZiUUFX3HerJXw2PCihWwZHywWGm
+	XtkRVqaf0bJUmpkEr0xel839tS3XZKe0Q7GrlVPy/KuOMsxVKWYaCXew3geWnrC/
+	2AEFRgONyP55oSc0QSDD5A+rtP38y+mK2Fw6zWyJ83U5DM3dCA+7Q7RGJxT3V3qK
+	PXJu6LX3+OCfkkQqFeAUqfiFuvsHdGemIYGzXF1Ja2J2o4FTrcpXI5uxtJpRMkIv
+	XhFTs7AtGEAXYvpVaDtpGH4eJAuwb4/Q6FiFaEtvfeq236LL7BLQ38NPRLeiZOIE
+	aanvzf71Rdt12wyTdJhEJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1729196415; x=
+	1729282815; bh=/elZsdY9jdfXA5CNoGnQjupWAHOxpp9CXjyZ+kdKV3U=; b=e
+	sjRwHfrPQL/I7PGEXUrHIwKI9uBSCibtGL35CXJcreL1HM2WdOhwX9hJ+PDSM78Q
+	Ig1UZIXJvzm35koI59fUZ9ZX2QSjEld4Iw1Od2PVIcfq/dWuMgFt7c/quxQ5ONwy
+	eiUo4X7xzVfvb93XvPY9a56E4K9d3eXJq32kenGz7RhA3x71OpZR64CD6jMi3jwy
+	pbtKPBJFESt9sUAlo5oOmyjeqXAud3nrjZUce/MZsBnnNXNHM1MrRoXCLNar4yLp
+	Hk5naff+RPsXrx+1fOGHjUZ1mAi0FZUO49ifQRH75s31llKW4ZYfI3hJSZNt/3zX
+	4L9Mcr5c8LLxYcCTkmyyA==
+X-ME-Sender: <xms:f3ERZxp_Ga5mu0cJjb7aVzvymuknjw_5FzNpeIWT8fvF--o0ifQuMw>
+    <xme:f3ERZzqW-gjkWsKt8u4-NBxKeY8aWgxHLMxbHivCu_csd1FzacTkIdfr58rFcHaV2
+    Nhkk9DLtBu1303d_K4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdehuddgudehudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeefhfehteffuddvgfeigefhjeetvdekteekjeef
+    keekleffjeetvedvgefhhfeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopehnihgtohhlrghssehfjhgrshhlvgdrvghupdhrtghpthhtohepjhhushht
+    ihhnshhtihhtthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhooh
+    hglhgvrdgtohhmpdhrtghpthhtohepnhguvghsrghulhhnihgvrhhssehgohhoghhlvgdr
+    tghomhdprhgtphhtthhopehvvhhvvhhvvhesghhoohhglhgvrdgtohhmpdhrtghpthhtoh
+    epmhgrshgrhhhirhhohieskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghn
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugi
+    druggvvhdprhgtphhtthhopehprghttghhvghssehlihhsthhsrdhlihhnuhigrdguvghv
+X-ME-Proxy: <xmx:f3ERZ-NqgrYOAN4t_T3U9HhDYT3z9ZTa-_7sOybYYgyxU_LXhOoBug>
+    <xmx:f3ERZ87gtondBc9e_O9u301RZAiPLrHRd91WUdkF9RmeEX3YDeqP4w>
+    <xmx:f3ERZw6QAg_-99Hcc-GQ3pILjqgzkTd9-bUPX1s9_8yAJzNpAHiDTw>
+    <xmx:f3ERZ0iGUiPXLHw2MWllSX_rnjgWR--yQS_mLHBrM3SVOzC6qJyv4Q>
+    <xmx:f3ERZwi7NrQID7mZR1fAGrsOfdwTOygTsFkxqm8wvhiJUsxLKdp3gMSz>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 161932220072; Thu, 17 Oct 2024 16:20:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
+Date: Thu, 17 Oct 2024 20:19:54 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>
+Cc: "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Aleksei Vetrov" <vvvvvv@google.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev,
+ stable@vger.kernel.org
+Message-Id: <079876f3-19c6-41bf-8e70-8764fd4c62e4@app.fastmail.com>
+In-Reply-To: 
+ <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
+References: 
+ <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
+Subject: Re: [PATCH v2] kbuild: Move -Wenum-enum-conversion to W=2
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 16, 2024 at 12:44:18PM -0700, Dave Hansen wrote:
+On Thu, Oct 17, 2024, at 17:09, Nathan Chancellor wrote:
+> -Wenum-enum-conversion was strengthened in clang-19 to warn for C, which
+> caused the kernel to move it to W=1 in commit 75b5ab134bb5 ("kbuild:
+> Move -Wenum-{compare-conditional,enum-conversion} into W=1") because
+> there were numerous instances that would break builds with -Werror.
+> Unfortunately, this is not a full solution, as more and more developers,
+> subsystems, and distributors are building with W=1 as well, so they
+> continue to see the numerous instances of this warning.
+>
+> Since the move to W=1, there have not been many new instances that have
+> appeared through various build reports and the ones that have appeared
+> seem to be following similar existing patterns, suggesting that most
+> instances of this warning will not be real issues. The only alternatives
+> for silencing this warning are adding casts (which is generally seen as
+> an ugly practice) or refactoring the enums to macro defines or a unified
+> enum (which may be undesirable because of type safety in other parts of
+> the code).
+>
+> Move the warning to W=2, where warnings that occur frequently but may be
+> relevant should reside.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 75b5ab134bb5 ("kbuild: Move 
+> -Wenum-{compare-conditional,enum-conversion} into W=1")
+> Link: https://lore.kernel.org/ZwRA9SOcOjjLJcpi@google.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-> Would anybody hate if we broke this up a bit, like:
-> 
->         const typeof(var) _val = val;
->         const int paoconst = __builtin_constant_p(val);
->         const int paoinc   = paoconst && ((_val) == 1);
->         const int paodec   = paoconst && ((_val) == (typeof(var))-1);
-> 
-> and then did
-> 
-> 	if (paoinc)
-> 		percpu_unary_op(size, qual, "inc", var);
-> 	...
-
-I think that is an overall improvement. Proceed! :-)
+Acked-by: Arnd Bergmann <arnd@arndb.de>
