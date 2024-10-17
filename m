@@ -1,129 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981291DFE06;
-	Thu, 17 Oct 2024 17:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D351DEFCB;
+	Thu, 17 Oct 2024 18:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729184968; cv=none; b=Gv66/nZNxWxAlDQtyywZ3g/c45JrSB64AK/ZO/njOvaryNZVvcYtjXKMFOx6IqzyxS1TXWnzoumQqZfe3QCdrlcz1Veu7ZRESs0BR+htl44tX4yYzs6FS6XoMjO9TbeK/XBx0pOpCcuRZMj2W65OSJ1JNE1jY0kFH/FAR0a2pGM=
+	t=1729189164; cv=none; b=WO25nc/7iqELHR+lmh/leis3KM9VBLbTbeQqtntWHaDV8UMbwcafstmOM5CpbSfFUfaurJH0J6WB6SzYAWLAusJ0NLxg6TKjHL3FdyC4wCXShqKlXLrVxxCDkLjYLkv4ofxv/9sadZMzr51rLH6K40DRkrampyFEStkch5SZGgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729184968; c=relaxed/simple;
-	bh=m/EkYw2s59ro8v1uZNnuDskZpSm80+cYs5IMSQ2weqM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YYY77m22uRjJRwfPrCkrxe/Vuks2Z6euMSBYimQotuqqiMVULX2n9D+5ziQnXbs5JSHsBYmemVSiic++RJFyjsVFXuOOw2Xp2KuGuOidDawk1XiIPQ7NfhgV8QKc2Dw6dPSe4gkqbpBoKfk0cQsXnhHPjTAt/IvLiUxXkFfkhd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pua+mYqJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729189164; c=relaxed/simple;
+	bh=jyUqzb/A0N9zdnI7o+n8FN8Dd4qhMHr+GFRQkf/6cL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z8QnhymPhnIH3wvIiAaqRluQo66rHIXGrkbkqYiTFoyAS5ZDcQTG+48wDrbn+rDs3TCMRf2/RQMl1euAmdhnL3ODooaKTF0fB+iGYCFdtD8vy8R0mQdlFCiNfYahAiWt9ykJF+9FV1fuphThJ/+KpE0s4RUqHRwz6Xn/snKDPAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YiQttMWe; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pua+mYqJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E892C4CECD;
-	Thu, 17 Oct 2024 17:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729184968;
-	bh=m/EkYw2s59ro8v1uZNnuDskZpSm80+cYs5IMSQ2weqM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Pua+mYqJLoNh+RDMls9nHh47VkCBtx0Z6qNwUxJRFavT/4z3wW4udsyzim87WtxR0
-	 MopPUu+rsQ5I5h35/UoD4GFtg/WD7DNLDW0UP2UKAV3ZM4PLFZD5nMWJtcIFGXSbKi
-	 g6X+oxFN/JyehtYm8rymAZ7kGjw5FyHbQcbQqVbXEcDt+JUxykg+9YgMHsl25yqoXo
-	 mWM3aj5QR0E92SuuHd1s/Hqbg2mAEUSf60uxU+30dAWduGtq0gnNss1oJnz1N1n/sd
-	 jCdoxThuJaEEpJWq90GMP12T5jEoy5/TcH0CKj/0gUuFQJHIykEPRIpOufxe7hWKHC
-	 /ucwMxjONORZQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 17 Oct 2024 10:09:22 -0700
-Subject: [PATCH v2] kbuild: Move -Wenum-enum-conversion to W=2
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YiQttMWe"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=xclDtdCQh4Pro8+1C8nyQBevu1jc9Opn3i3g6aw6TIQ=; b=YiQttMWesBvhjOmjze//gvjsSC
+	K9dfxqy8ou8ljKxmx8vI/8un+ibX0xt6v8/RC9uhACdylw4q3/VYRifGbx5CHwHfvA6/B9bXOOH8c
+	9+VV9B/+S1UCHv29aO0fcR7ebE2g5u3lQGeo1ckdweJVaPks3OaG2pO2tL8CeRYl9eRhUUjHEx8il
+	oKiOeI4XmnbeYsD3eOem+t1QkYd+KOlxBDH0OJ05F/V7IT/b6Kce9y+fFyPud3sn9jAP4tFZzBZ4I
+	Rs0hUiRlFVMbrVZ5yDjrxZ609tn/wOdGyAsTie05mDjQMSnplqpuQ5hK63NC3+nTalE31lyPJmljK
+	5fgatYtA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t1V5P-0000000Bm6e-3UxJ;
+	Thu, 17 Oct 2024 18:19:00 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A56AA3005AF; Thu, 17 Oct 2024 20:18:59 +0200 (CEST)
+Date: Thu, 17 Oct 2024 20:18:59 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
+ comparing in percpu_add_op()
+Message-ID: <20241017181859.GB17263@noisy.programming.kicks-ass.net>
+References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
+ <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+ <20241016192011.GY17263@noisy.programming.kicks-ass.net>
+ <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMFEEWcC/42NQQ6CMBBFr0Jm7RjaNEBdeQ/DotIRJmJrpggaw
- t2tnMDl+/l5b4VEwpTgVKwgNHPiGDLoQwHd4EJPyD4z6FIbVaoKPSd3HQmnJWI35gdSeD1wcRI
- 49AmpttZ4Y27WNJAtT6Ebv/fCpc08cJqifPbgrH7r/+5ZoUJHTVP52pW6suc7SaDxGKWHdtu2L
- 5iU4GXPAAAA
-X-Change-ID: 20241016-disable-two-clang-enum-warnings-e7994d44f948
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Arnd Bergmann <arnd@arndb.de>, Aleksei Vetrov <vvvvvv@google.com>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2857; i=nathan@kernel.org;
- h=from:subject:message-id; bh=m/EkYw2s59ro8v1uZNnuDskZpSm80+cYs5IMSQ2weqM=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOmCLsc1Q+du8D5w+Vl7NoeOedrz8lO6juJzsu9rfNU/5
- WoWdqaho5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExkvgYjw9eT/9m+/1nAdpSn
- +WzLtTdvdNSm/CiftlahejmbF+/BB6oMfzi7ZT3WLpuYGXzqSvS/LIVzmooRLvnS/oz/H+8MDA0
- S5gMA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
 
--Wenum-enum-conversion was strengthened in clang-19 to warn for C, which
-caused the kernel to move it to W=1 in commit 75b5ab134bb5 ("kbuild:
-Move -Wenum-{compare-conditional,enum-conversion} into W=1") because
-there were numerous instances that would break builds with -Werror.
-Unfortunately, this is not a full solution, as more and more developers,
-subsystems, and distributors are building with W=1 as well, so they
-continue to see the numerous instances of this warning.
+On Wed, Oct 16, 2024 at 12:44:18PM -0700, Dave Hansen wrote:
 
-Since the move to W=1, there have not been many new instances that have
-appeared through various build reports and the ones that have appeared
-seem to be following similar existing patterns, suggesting that most
-instances of this warning will not be real issues. The only alternatives
-for silencing this warning are adding casts (which is generally seen as
-an ugly practice) or refactoring the enums to macro defines or a unified
-enum (which may be undesirable because of type safety in other parts of
-the code).
+> Would anybody hate if we broke this up a bit, like:
+> 
+>         const typeof(var) _val = val;
+>         const int paoconst = __builtin_constant_p(val);
+>         const int paoinc   = paoconst && ((_val) == 1);
+>         const int paodec   = paoconst && ((_val) == (typeof(var))-1);
+> 
+> and then did
+> 
+> 	if (paoinc)
+> 		percpu_unary_op(size, qual, "inc", var);
+> 	...
 
-Move the warning to W=2, where warnings that occur frequently but may be
-relevant should reside.
-
-Cc: stable@vger.kernel.org
-Fixes: 75b5ab134bb5 ("kbuild: Move -Wenum-{compare-conditional,enum-conversion} into W=1")
-Link: https://lore.kernel.org/ZwRA9SOcOjjLJcpi@google.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Move -Wenum-enum-conversion to W=2, instead of disabling it
-  outright (Arnd)
-- Leave -Wenum-compare-conditional in W=1, as there are not that
-  many instances, so it can be turned on fully at some point (Arnd)
-- Link to v1: https://lore.kernel.org/r/20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org
----
- scripts/Makefile.extrawarn | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 1d13cecc7cc7808610e635ddc03476cf92b3a8c1..04faf15ed316a9c291dc952b6cc40fb6c8c330cf 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -130,7 +130,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
- KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
- KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
- KBUILD_CFLAGS += -Wno-enum-compare-conditional
--KBUILD_CFLAGS += -Wno-enum-enum-conversion
- endif
- 
- endif
-@@ -154,6 +153,10 @@ KBUILD_CFLAGS += -Wno-missing-field-initializers
- KBUILD_CFLAGS += -Wno-type-limits
- KBUILD_CFLAGS += -Wno-shift-negative-value
- 
-+ifdef CONFIG_CC_IS_CLANG
-+KBUILD_CFLAGS += -Wno-enum-enum-conversion
-+endif
-+
- ifdef CONFIG_CC_IS_GCC
- KBUILD_CFLAGS += -Wno-maybe-uninitialized
- endif
-
----
-base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
-change-id: 20241016-disable-two-clang-enum-warnings-e7994d44f948
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+I think that is an overall improvement. Proceed! :-)
