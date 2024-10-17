@@ -1,80 +1,85 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992BF1DEFCC
-	for <llvm@lists.linux.dev>; Thu, 17 Oct 2024 15:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CE21DF96C;
+	Thu, 17 Oct 2024 16:30:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729180013; cv=none; b=C/344pFfJqjz/ZzRVwmw7gMMasJDXB2rruqvfFVWTCalIBL3ssSnMTUFmOx2i6nHaLK+Rm7j3cfPzRi5bEq5KfzyUZEgwQB/uyq7Y5B34VTq7hqVc/jFirsSJWlLYTrqoJ2uvq+1/RIsQKeiFRArrMWLy4qN7Kjjw5Vr7AYBaOI=
+	t=1729182631; cv=none; b=bn+FToRc77otFnxOs3PIGnJ8uQgeQma9CrSJk8Hiq1liAGA64aZbXQjtbN2MhYja9uO4CTsMC6mNl+J9hN2n0F4XL2QOAN+Wc2gdu2CV4YDrJo4qErCkn3DjXIR13NLtK4uEgH72lQQ/mbHmp4p4kdOpWXbeqV5x5oN9KIO3ojI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729180013; c=relaxed/simple;
-	bh=xfZsdaouK9c11NS8MJBUJaGS9qi4/dGFd60QE8h2lGU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=l17WSo9S5uwzDudTTdy+CfDEOe+UVlJIUFgjNCoBeFIGB5w9bQDSRuGkNJYcDz7Ma313qTX18LWhqvy0drWrI2zz/tKnTdxxKogXLGcXN6KFMVONb8ipuq/msnmimKAoRoDMc8BIigSPLDzOMPNcp8pqdK05IexBIgOiGw5PH6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=AOOtwpWa; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1729182631; c=relaxed/simple;
+	bh=KH8o1h7M6XpFzHWRszjgrArk3aExRlRWHv7xNLYme7Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PWH3+S7RnCo3zTTuvXRZOZ74KNQK64PFoOFM5CjQdvXJJ/NWkQFiJAKVELjbHJyBHuwIU8CJjQhx8MZGgB1mzrCsDXFs3x6Xb50pZdcGVUx2McGX5sqC8+GcM8qsuhI1iXD5emWKiENx5pMddDtdJKritxO+SfZcQdwpbeRQJ5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ArAZ9c+I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="AOOtwpWa"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B371B42C26
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1729180006; bh=lbIoIO+xJXLQRNK9loyEZijJ54dZ/V3Q+NLtfSIBhHU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=AOOtwpWa+OXFoGebwTqmsOuOwOuQAVD231H5Cy2aG/2WvwRUXy/Fgo7zNdEWSIYsH
-	 dVeyt1gQWtsUABzjRSuAWK67VHUn3qPNoSws+FGsMsgZnaTYOL+WYX4KjGyeiJILwG
-	 riPBpEOfiNQ2QXBdADanVZbkaQvZi+UA+sVooc/mBNPTDtOJNSkumqjECGojmjQ6n3
-	 si17Ah8F7segVuQmpdMf1snL1easHlQicqHmXQg3mbur35G4jyUKg7uMYTCcn1nHV9
-	 w092ccf9272m0oBEqHD7VdSXmBtUIcBs+6TgjQcX8WCdK+0fOaqCAWelHVLe8dL1T1
-	 AVp0ymaM9m2DA==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id B371B42C26;
-	Thu, 17 Oct 2024 15:46:46 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>, Yanteng
- Si <siyanteng@loongson.cn>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
- <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno
- Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com, Yanteng Si
- <si.yanteng@linux.dev>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] docs/zh_CN: add the translation of kbuild/kbuild.rst
-In-Reply-To: <20241016131710.2619567-1-dzm91@hust.edu.cn>
-References: <20241016131710.2619567-1-dzm91@hust.edu.cn>
-Date: Thu, 17 Oct 2024 09:46:45 -0600
-Message-ID: <8734ku3f6i.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ArAZ9c+I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D6EC4CECD;
+	Thu, 17 Oct 2024 16:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729182630;
+	bh=KH8o1h7M6XpFzHWRszjgrArk3aExRlRWHv7xNLYme7Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ArAZ9c+IdoghXXrlY3tLFBAVCWiI0Y3XQYprK57xOgHXiKn4jyful/WcYoqBjSZeX
+	 /Jj3r0ZKrKmX0ogEX3MyMXQ+4B1bl9H74dRlNsJxZCRmTT+V8oYWV9IsPPlzcvqVEv
+	 JRAm8kRzDsarLBLsL5Pk+Zi/f2rLCwGSH1AQqSGdzc4JEuf+Kt/8vAtUH6iUwvcjRG
+	 UZiqx7UKH1OsV4pqUORI8BM5+YiA9q8qmsLvzaLSSGqJpH10EFTVSls+E/KcUQrE2Z
+	 7eDoZHJsqSSk9VQJ8i9rWEciGlGlZWkJlMRHWOdSnT7N0J7UFzVJh36kvJDy8xq+ju
+	 zrqmkVk67DpEw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 715943809A8A;
+	Thu, 17 Oct 2024 16:30:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1] RISC-V: disallow gcc + rust builds
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <172918263598.2528145.14698302036420162335.git-patchwork-notify@kernel.org>
+Date: Thu, 17 Oct 2024 16:30:35 +0000
+References: <20241001-playlist-deceiving-16ece2f440f5@spud>
+In-Reply-To: <20241001-playlist-deceiving-16ece2f440f5@spud>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-riscv@lists.infradead.org, conor.dooley@microchip.com,
+ jmontleo@redhat.com, ojeda@kernel.org, alex.gaynor@gmail.com,
+ boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+ benno.lossin@proton.me, a.hindborg@kernel.org, aliceryhl@google.com,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
 
-Dongliang Mu <dzm91@hust.edu.cn> writes:
+Hello:
 
-> Finish the translation of kbuild/kbuild.rst and move kbuild
-> from TODO to the main body.
->
-> Update to commit 2eb5d7f24299 ("kbuild: doc: describe the -C
-> option precisely for external module builds")
->
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
->  .../translations/zh_CN/kbuild/index.rst       |   2 +-
->  .../translations/zh_CN/kbuild/kbuild.rst      | 304 ++++++++++++++++++
->  2 files changed, 305 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/translations/zh_CN/kbuild/kbuild.rst
+This patch was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Applied, thanks.
+On Tue,  1 Oct 2024 12:28:13 +0100 you wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> During the discussion before supporting rust on riscv, it was decided
+> not to support gcc yet, due to differences in extension handling
+> compared to llvm (only the version of libclang matching the c compiler
+> is supported). Recently Jason Montleon reported [1] that building with
+> gcc caused build issues, due to unsupported arguments being passed to
+> libclang. After some discussion between myself and Miguel, it is better
+> to disable gcc + rust builds to match the original intent, and
+> subsequently support it when an appropriate set of extensions can be
+> deduced from the version of libclang.
+> 
+> [...]
 
-jon
+Here is the summary with links:
+  - [v1] RISC-V: disallow gcc + rust builds
+    https://git.kernel.org/riscv/c/e52d5050a0d2
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
