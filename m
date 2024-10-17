@@ -1,199 +1,156 @@
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002091DD89A
-	for <llvm@lists.linux.dev>; Thu, 17 Oct 2024 12:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AF01DDC22;
+	Thu, 17 Oct 2024 13:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729167310; cv=none; b=uJQaMa/OAmm98So1/xeXp9WOMeGnrfbO5a3wGJT7OyKge1afhvt1EH8pKkCWxqZt3JL25EtxFKr7x7aRWEIkY5YJcSRAjGgqWrz/BGLvXZCKMbiHLeZPntcJFGN/Mjyzc/QvCoETgpaqx8vOkiMfNWk0WUqUWylrcvjtsQhYkxk=
+	t=1729171353; cv=none; b=omG5wDlFdKxCDvWi/8U/UnCl/HFEygyWtZU43pdm+bXNuDgcjODSAUr1V4D4/XPmCA6/jlDGeOYhZ+fB9lGzLDbO1DMBE1VsBMFCrvcAFWynhoSh3WYqtqn0B7spvSon6CDBA+/P+/vVLo0XEtqDfgXXheNmJUU2fu/cibJgSXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729167310; c=relaxed/simple;
-	bh=KR6k2M9sJjNlxnNK+VdzSRJZKqP1DzeXSFhCkLSKWjc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hI4kdquDF3E3B4tL1zgSJVHIMjScP5IsFzUm0rgIEjboYyVYJSQ33+VtWpmCGQi+oVPqSouOn5OxfWoOK7NsIF5Ymk2mJPqh3VG0/PlHLxPjqB5wSaFK+p4yJrFrRHOrROZsAxDuAhjJ4Swa6euMJcQdyYEKLel0PZ1YpgV9aTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.21.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.50])
-	by app2 (Coremail) with SMTP id HwEQrADXfxSY_xBne_YVAQ--.18195S2;
-	Thu, 17 Oct 2024 20:14:16 +0800 (CST)
-Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
-	by gateway (Coremail) with SMTP id _____wAXAkGS_xBni3daAA--.37840S2;
-	Thu, 17 Oct 2024 20:14:11 +0800 (CST)
-From: Dongliang Mu <dzm91@hust.edu.cn>
-To: Alex Shi <alexs@kernel.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] docs/zh_CN: update the translation of process/programming-language.rst
-Date: Thu, 17 Oct 2024 20:13:59 +0800
-Message-ID: <20241017121407.3431231-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1729171353; c=relaxed/simple;
+	bh=45iTvW2dP9MKnjDQp7mUsRsXZ8PTM299CRt8UGVh6dc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=g9PQpLQo6KmhwQX/kZ49OXRT+Qu5K/FFeWtjGKBXgAE0ZIC0BVe+d6sDp5GcI4t6vJ75a3NaFb32KUNBfp+/h6fzdwe4L0Ff8OoIAF7UM6/HiDoGW0HFUSVI/viAIxd/pS3FsxYQz9usdWVD1x5ksldCbYgl80OovOrTNRiW5Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+06ZtEQ; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+06ZtEQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729171350; x=1760707350;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=45iTvW2dP9MKnjDQp7mUsRsXZ8PTM299CRt8UGVh6dc=;
+  b=Y+06ZtEQ6dd9pzgbNOdUUhQRGSSLeT8LvVsb9yjddXyzBnpWeSUjv9Xc
+   il7ZXy06kJdVT6UfaMmI6Kf/PmGs4x5S7YQ0Kl8aLM3LUwhSj/TDLqt1Y
+   QU9pgPc/F49uyGDXqAU+IS+in0Y4NGWFOl7CuYbReGpvXUtsORVuOzcGt
+   JYlma8mPbLWus/O46CTP6H5R30Kieq4sVm8rspo5vm2Dqq3DQoJxvqBvj
+   eCECI4XNSAIvXsTgoYs8g6vCO+rrAjNq5B4Zj1W8dakRsUNktJdKHOQEd
+   bFQmEd/fqOHLOPHXvhKidXb2nS5LkQMmfpw1KaZChX9Bn2d9ya7WHTWEt
+   Q==;
+X-CSE-ConnectionGUID: sDDYA/gCSQiC3I1TNQlsfg==
+X-CSE-MsgGUID: IiZwwZhpSLOxX+fJjPz0Iw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11227"; a="54069266"
+X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
+   d="scan'208";a="54069266"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 06:22:27 -0700
+X-CSE-ConnectionGUID: LrSZgGBtS4Kp7SfSpeBvZA==
+X-CSE-MsgGUID: wDHFXdEuRNSG+4FDqS+rJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,210,1725346800"; 
+   d="scan'208";a="78689342"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 17 Oct 2024 06:22:25 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t1QSM-000MOD-25;
+	Thu, 17 Oct 2024 13:22:22 +0000
+Date: Thu, 17 Oct 2024 21:22:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>
+Subject: [brauner-github:vfs.file 3/3] fs/file.c:86: warning: Function
+ parameter or struct member 'cnt' not described in '__file_ref_put'
+Message-ID: <202410172117.cBYQGs00-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrADXfxSY_xBne_YVAQ--.18195S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW3WrW3Gw18WF1rCF4fZr43ZFb_yoW7tr1UpF
-	W7Kr9rKa18J3WxGrZ7Kr17Zr1FkFZ5Ka48trWUt3WYyF40ya9IqFyxKrsxX342vryxCFWD
-	Zw1fuFW8X3y3AFDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHmb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	1Y6r17M2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
-	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
-	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
-	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtw
-	CF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Y
-	z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_GFv_Wrylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYY7kG6IIYr7AKxVW8JVW5
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUn
-	czVUUUUUU==
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Update to commit 0b02076f9953 ("docs: programming-language: add Rust
-programming language section")
+tree:   https://github.com/brauner/linux.git vfs.file
+head:   e7aacb8102608f8026fb8cf145141460834bfac2
+commit: 51b75c2e26e2f265788b5408290b015413ab2ff7 [3/3] file_ref_t: allow for valid race
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241017/202410172117.cBYQGs00-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241017/202410172117.cBYQGs00-lkp@intel.com/reproduce)
 
-scripts/checktranstatus.py reports:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410172117.cBYQGs00-lkp@intel.com/
 
-Documentation/translations/zh_CN/process/programming-language.rst
-commit 0b02076f9953 ("docs: programming-language: add Rust programming
-language section")
-commit 38484a1d0c50 ("docs: programming-language: remove mention of the
-Intel compiler")
-2 commits needs resolving in total
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- .../zh_CN/process/programming-language.rst    | 78 +++++++------------
- 1 file changed, 30 insertions(+), 48 deletions(-)
+>> fs/file.c:86: warning: Function parameter or struct member 'cnt' not described in '__file_ref_put'
 
-diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
-index fabdc338dbfb..55f132a4b212 100644
---- a/Documentation/translations/zh_CN/process/programming-language.rst
-+++ b/Documentation/translations/zh_CN/process/programming-language.rst
-@@ -3,25 +3,22 @@
- :Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
- :Translator: Alex Shi <alex.shi@linux.alibaba.com>
- 
--.. _cn_programming_language:
--
- 程序设计语言
- ============
- 
--内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
--在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
--
--这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
-+内核是用 C 编程语言编写的 [zh_cn_c-language]_。更准确地说，内核通常使用 ``gcc`` [gcc]_ 编译，
-+并且使用 ``-std=gnu11`` [zh_cn_gcc-c-dialect-options]_：这是 ISO C11 的 GNU 方言。
-+``clang`` [zh_cn_clang]_ 也得到了支持，详见文档：
-+:ref:`使用 Clang/LLVM 构建 Linux <kbuild_llvm>`。
- 
--对于一些体系结构，有一些使用 :ref:`clang <cn_clang>` 和 :ref:`icc <cn_icc>` 编译内核
--的支持，尽管在编写此文档时还没有完成，仍需要第三方补丁。
-+这种方言包含对 C 语言的许多扩展 [zh_cn_gnu-extensions]_，当然，它们许多都在内核中使用。
- 
- 属性
- ----
- 
--在整个内核中使用的一个常见扩展是属性（attributes） :ref:`gcc-attribute-syntax <cn_gcc-attribute-syntax>`
-+在整个内核中使用的一个常见扩展是属性（attributes） [zh_cn_gcc-attribute-syntax]_。
- 属性允许将实现定义的语义引入语言实体（如变量、函数或类型），而无需对语言进行
--重大的语法更改（例如添加新关键字） :ref:`n2049 <cn_n2049>`
-+重大的语法更改（例如添加新关键字） [zh_cn_n2049]_。
- 
- 在某些情况下，属性是可选的（即不支持这些属性的编译器仍然应该生成正确的代码，
- 即使其速度较慢或执行的编译时检查/诊断次数不够）
-@@ -30,42 +27,27 @@
- ``__attribute__((__pure__))`` ），以检测可以使用哪些关键字和/或缩短代码, 具体
- 请参阅 ``include/linux/compiler_attributes.h``
- 
--.. _cn_c-language:
--
--c-language
--   http://www.open-std.org/jtc1/sc22/wg14/www/standards
--
--.. _cn_gcc:
--
--gcc
--   https://gcc.gnu.org
--
--.. _cn_clang:
--
--clang
--   https://clang.llvm.org
--
--.. _cn_icc:
--
--icc
--   https://software.intel.com/en-us/c-compilers
--
--.. _cn_gcc-c-dialect-options:
--
--c-dialect-options
--   https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
--
--.. _cn_gnu-extensions:
--
--gnu-extensions
--   https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
--
--.. _cn_gcc-attribute-syntax:
--
--gcc-attribute-syntax
--   https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
--
--.. _cn_n2049:
-+Rust
-+----
- 
--n2049
--   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
-+内核对 Rust 编程语言 [zh_cn_rust-language]_ 的支持是实验性的，并且可以通过配置选项
-+``CONFIG_RUST`` 来启用。Rust 代码使用 ``rustc`` [rustc]_ 编译器在
-+``--edition=2021`` [zh_cn_rust-editions]_ 选项下进行编译。版本（Editions）是一种
-+在语言中引入非后向兼容的小型变更的方式。
-+
-+除此之外，内核中还使用了一些不稳定的特性 [zh_cn_rust-unstable-features]_。这些不稳定
-+的特性将来可能会发生变化，因此，一个重要的目标是达到仅使用稳定特性的程度。
-+
-+具体请参阅 Documentation/rust/index.rst
-+
-+.. [zh_cn_c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
-+.. [gcc] https://gcc.gnu.org
-+.. [zh_cn_clang] https://clang.llvm.org
-+.. [zh_cn_gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
-+.. [zh_cn_gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
-+.. [zh_cn_gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
-+.. [zh_cn_n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
-+.. [zh_cn_rust-language] https://www.rust-lang.org
-+.. [rustc] https://doc.rust-lang.org/rustc/
-+.. [zh_cn_rust-editions] https://doc.rust-lang.org/edition-guide/editions/
-+.. [zh_cn_rust-unstable-features] https://github.com/Rust-for-Linux/linux/issues/2
+
+vim +86 fs/file.c
+
+bef236c3c0fea5 Christian Brauner 2024-10-07   68  
+bef236c3c0fea5 Christian Brauner 2024-10-07   69  /**
+bef236c3c0fea5 Christian Brauner 2024-10-07   70   * __file_ref_put - Slowpath of file_ref_put()
+bef236c3c0fea5 Christian Brauner 2024-10-07   71   * @ref:	Pointer to the reference count
+bef236c3c0fea5 Christian Brauner 2024-10-07   72   *
+bef236c3c0fea5 Christian Brauner 2024-10-07   73   * Invoked when the reference count is outside of the valid zone.
+bef236c3c0fea5 Christian Brauner 2024-10-07   74   *
+bef236c3c0fea5 Christian Brauner 2024-10-07   75   * Return:
+bef236c3c0fea5 Christian Brauner 2024-10-07   76   *	True if this was the last reference with no future references
+bef236c3c0fea5 Christian Brauner 2024-10-07   77   *	possible. This signals the caller that it can safely schedule the
+bef236c3c0fea5 Christian Brauner 2024-10-07   78   *	object, which is protected by the reference counter, for
+bef236c3c0fea5 Christian Brauner 2024-10-07   79   *	deconstruction.
+bef236c3c0fea5 Christian Brauner 2024-10-07   80   *
+bef236c3c0fea5 Christian Brauner 2024-10-07   81   *	False if there are still active references or the put() raced
+bef236c3c0fea5 Christian Brauner 2024-10-07   82   *	with a concurrent get()/put() pair. Caller is not allowed to
+bef236c3c0fea5 Christian Brauner 2024-10-07   83   *	deconstruct the protected object.
+bef236c3c0fea5 Christian Brauner 2024-10-07   84   */
+51b75c2e26e2f2 Christian Brauner 2024-10-16   85  bool __file_ref_put(file_ref_t *ref, unsigned long cnt)
+bef236c3c0fea5 Christian Brauner 2024-10-07  @86  {
+bef236c3c0fea5 Christian Brauner 2024-10-07   87  	/* Did this drop the last reference? */
+bef236c3c0fea5 Christian Brauner 2024-10-07   88  	if (likely(cnt == FILE_REF_NOREF)) {
+bef236c3c0fea5 Christian Brauner 2024-10-07   89  		/*
+bef236c3c0fea5 Christian Brauner 2024-10-07   90  		 * Carefully try to set the reference count to FILE_REF_DEAD.
+bef236c3c0fea5 Christian Brauner 2024-10-07   91  		 *
+bef236c3c0fea5 Christian Brauner 2024-10-07   92  		 * This can fail if a concurrent get() operation has
+bef236c3c0fea5 Christian Brauner 2024-10-07   93  		 * elevated it again or the corresponding put() even marked
+bef236c3c0fea5 Christian Brauner 2024-10-07   94  		 * it dead already. Both are valid situations and do not
+bef236c3c0fea5 Christian Brauner 2024-10-07   95  		 * require a retry. If this fails the caller is not
+bef236c3c0fea5 Christian Brauner 2024-10-07   96  		 * allowed to deconstruct the object.
+bef236c3c0fea5 Christian Brauner 2024-10-07   97  		 */
+bef236c3c0fea5 Christian Brauner 2024-10-07   98  		if (!atomic_long_try_cmpxchg_release(&ref->refcnt, &cnt, FILE_REF_DEAD))
+bef236c3c0fea5 Christian Brauner 2024-10-07   99  			return false;
+bef236c3c0fea5 Christian Brauner 2024-10-07  100  
+bef236c3c0fea5 Christian Brauner 2024-10-07  101  		/*
+bef236c3c0fea5 Christian Brauner 2024-10-07  102  		 * The caller can safely schedule the object for
+bef236c3c0fea5 Christian Brauner 2024-10-07  103  		 * deconstruction. Provide acquire ordering.
+bef236c3c0fea5 Christian Brauner 2024-10-07  104  		 */
+bef236c3c0fea5 Christian Brauner 2024-10-07  105  		smp_acquire__after_ctrl_dep();
+bef236c3c0fea5 Christian Brauner 2024-10-07  106  		return true;
+bef236c3c0fea5 Christian Brauner 2024-10-07  107  	}
+bef236c3c0fea5 Christian Brauner 2024-10-07  108  
+bef236c3c0fea5 Christian Brauner 2024-10-07  109  	/*
+bef236c3c0fea5 Christian Brauner 2024-10-07  110  	 * If the reference count was already in the dead zone, then this
+bef236c3c0fea5 Christian Brauner 2024-10-07  111  	 * put() operation is imbalanced. Warn, put the reference count back to
+bef236c3c0fea5 Christian Brauner 2024-10-07  112  	 * DEAD and tell the caller to not deconstruct the object.
+bef236c3c0fea5 Christian Brauner 2024-10-07  113  	 */
+bef236c3c0fea5 Christian Brauner 2024-10-07  114  	if (WARN_ONCE(cnt >= FILE_REF_RELEASED, "imbalanced put on file reference count")) {
+bef236c3c0fea5 Christian Brauner 2024-10-07  115  		atomic_long_set(&ref->refcnt, FILE_REF_DEAD);
+bef236c3c0fea5 Christian Brauner 2024-10-07  116  		return false;
+bef236c3c0fea5 Christian Brauner 2024-10-07  117  	}
+bef236c3c0fea5 Christian Brauner 2024-10-07  118  
+bef236c3c0fea5 Christian Brauner 2024-10-07  119  	/*
+bef236c3c0fea5 Christian Brauner 2024-10-07  120  	 * This is a put() operation on a saturated refcount. Restore the
+bef236c3c0fea5 Christian Brauner 2024-10-07  121  	 * mean saturation value and tell the caller to not deconstruct the
+bef236c3c0fea5 Christian Brauner 2024-10-07  122  	 * object.
+bef236c3c0fea5 Christian Brauner 2024-10-07  123  	 */
+bef236c3c0fea5 Christian Brauner 2024-10-07  124  	if (cnt > FILE_REF_MAXREF)
+bef236c3c0fea5 Christian Brauner 2024-10-07  125  		atomic_long_set(&ref->refcnt, FILE_REF_SATURATED);
+bef236c3c0fea5 Christian Brauner 2024-10-07  126  	return false;
+bef236c3c0fea5 Christian Brauner 2024-10-07  127  }
+bef236c3c0fea5 Christian Brauner 2024-10-07  128  EXPORT_SYMBOL_GPL(__file_ref_put);
+bef236c3c0fea5 Christian Brauner 2024-10-07  129  
+
+:::::: The code at line 86 was first introduced by commit
+:::::: bef236c3c0fea5fc0dce2e729c1482ca9df4d82e fs: add file_ref
+
+:::::: TO: Christian Brauner <brauner@kernel.org>
+:::::: CC: Christian Brauner <brauner@kernel.org>
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
