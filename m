@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAE520E32D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D3517DFF2;
 	Fri, 18 Oct 2024 19:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729278362; cv=none; b=bv2WdLrOYO1E+26i4R74t5H13BuW1TUkJllRAbycLFgu4QBg7IRU7dPrMjcsnDHcjPbEYbmE6DbJrIy6LYYv/xy/Yk2JeUmbrdorr2GWh1ZNUMUK8h7TJQwo3fC8rpzaLz5a1ddSje2Exu3/WHKwHC+GvXm/yA2fMzkOkXSfa5Y=
+	t=1729278362; cv=none; b=mOxU8rAtjMIMGpF8pHR0xcb6YG2kIhlyS0XnIOYBc7d0MHo6GPBKfAL/IcXbnk94aVCqmCLZa6HV19EouYKiIKQSaamkoKC/SWpJRXBMv9SzmflJmtCaf8pABKOhRDFHx+7YuJwfxZ7CZiKFu6+6FbQXKMhhOTYqWtksPPrXpOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729278362; c=relaxed/simple;
-	bh=rsidbJXWRVyi8VIWS4wWcpnhhkzGrsk3s4V2tA0lUa0=;
+	bh=cuJnHKfYPHx+T7+eIrHdDccHIyJj/imfFqwvr7A2PpA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oHT/rftOAqJHEOiBQdEzD2j5XfNn3CzwrEnvb9b7MA/mTlPhYMSw/LLUuyJemY1q4jvc73OV++emecRdDLYvAWnfWVyPzETEr2EXyqKhNoISZIOmlV20ST1Hal4TIRsYuw2QYY0tOyyfS7gV9EGfkCc1/ugBk0w54ubbwJlaehs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d5dRm9pC; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=aKnq4xVxlLaVKms1S+b/7AWVNebkt+gaB3LiAAzo4g33RE0MK45YlzKRY0MhkA8ha2/A1rQ4WDBBzWUwzPUIFD4HAEKSEiTx9qmf8bpF0sFqPMz33hWDXJNoCG7folDhZchGr05Yu1UK7gb+mrjv0KKjT6YcrvwH0eMe/0bkGBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hrcl3MGF; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d5dRm9pC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hrcl3MGF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729278360; x=1760814360;
+  t=1729278361; x=1760814361;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rsidbJXWRVyi8VIWS4wWcpnhhkzGrsk3s4V2tA0lUa0=;
-  b=d5dRm9pCJq6atkGLN4hlwGunBQYMgtO/WaTQcL0QolUgXeGuZqwuoYEB
-   3hlQ9lMtQvo2kJnPOBNLweg4jJEyXoNhEwjPDZmE28jcTh2MujdhZ+9Be
-   tdXPHZjjA0W+9tvwa+Q1QSLtC+sG57IMdrd3AD0JjhbaXJenlTbvgXlGe
-   WEyPBEKX4GBlIiXFEj3eTZ7sZKaniAcpS/cRf7jx97m1h1n52R4tyIWOb
-   xqSOaxVOGQEhPIctXexmlt1ik+1I7Px/12SxJUt0dHwueYbUy76eK0glA
-   nOwXQ/aae8z7jc24xLt7gJ2fEe/RR/7Sr4FgYnqHaXQOrJ01Jsx1NaHDS
-   g==;
-X-CSE-ConnectionGUID: eTtz1NSRRgqIZNrxqcvSDw==
-X-CSE-MsgGUID: 14r25LZYTBCvD8eJ7K5ZwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="40218962"
+  bh=cuJnHKfYPHx+T7+eIrHdDccHIyJj/imfFqwvr7A2PpA=;
+  b=Hrcl3MGFTc3eaInEAZ/IHEzDmOb/tP2yScuQpAEAKB3rd5RsDO66b0CB
+   EjtN9OtbECcHZ2pcGflcZFK8S2dLlWIJQXlxNJ9mPuXqu+hiyx22XGnlK
+   GgoQDl7r8Mj0hkPfBtlvhw/4O1HJ56v75782k/Zr0hVf01Bh1WCgJ8fAF
+   o9MKy7oVJSMhVSvoSn29yGcBqAEuwlv33gIIOlvFbmlI1mCAQn/C9Ry+X
+   2d6qzwBJgKDN5nd0X5vLQ296a4lyjwqxoGFLNqNjpuacfwXkLrhtvRMMm
+   jcZg199woIZrKRHyhwncyHvZ9XcEhTJHYe97EI+L3e92zZodqm9U5c7Np
+   w==;
+X-CSE-ConnectionGUID: MabRAFgqSZyZ4CJ6IH7qSw==
+X-CSE-MsgGUID: Y74hf5o8Q0G3ncRoCkgJmA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="16439100"
 X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="40218962"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 12:05:59 -0700
-X-CSE-ConnectionGUID: ThQUX7rYRLOGKNint6jmlA==
-X-CSE-MsgGUID: dw8eyjaeQ/Cy8AHS+ollNw==
+   d="scan'208";a="16439100"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 12:06:00 -0700
+X-CSE-ConnectionGUID: 2YWhcCKWSnOXk+TcUBcLxw==
+X-CSE-MsgGUID: 5nezl1K3SGONNPY98mSgHA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="102248179"
+   d="scan'208";a="109776749"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 18 Oct 2024 12:05:58 -0700
+  by orviesa002.jf.intel.com with ESMTP; 18 Oct 2024 12:05:59 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t1sIO-000OCj-10;
+	id 1t1sIO-000OCl-14;
 	Fri, 18 Oct 2024 19:05:56 +0000
 Date: Sat, 19 Oct 2024 03:05:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+To: David Gow <davidgow@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] kasan: migrate copy_user_test to kunit
-Message-ID: <202410190209.emZVkzss-lkp@intel.com>
-References: <20241011071657.3032690-1-snovitoll@gmail.com>
+Subject: Re: [PATCH] um: Fix misaligned stack in stub_exe
+Message-ID: <202410190227.cYsvc9ss-lkp@intel.com>
+References: <20241017231007.1500497-2-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,36 +62,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241011071657.3032690-1-snovitoll@gmail.com>
+In-Reply-To: <20241017231007.1500497-2-davidgow@google.com>
 
-Hi Sabyrzhan,
+Hi David,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on akpm-mm/mm-nonmm-unstable linus/master v6.12-rc3]
-[cannot apply to next-20241018]
+[auto build test ERROR on uml/next]
+[also build test ERROR on next-20241018]
+[cannot apply to linus/master v6.12-rc3]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sabyrzhan-Tasbolatov/kasan-migrate-copy_user_test-to-kunit/20241014-062132
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241011071657.3032690-1-snovitoll%40gmail.com
-patch subject: [PATCH] kasan: migrate copy_user_test to kunit
-config: arm-randconfig-003-20241018 (https://download.01.org/0day-ci/archive/20241019/202410190209.emZVkzss-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190209.emZVkzss-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/um-Fix-misaligned-stack-in-stub_exe/20241018-071148
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux next
+patch link:    https://lore.kernel.org/r/20241017231007.1500497-2-davidgow%40google.com
+patch subject: [PATCH] um: Fix misaligned stack in stub_exe
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241019/202410190227.cYsvc9ss-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190227.cYsvc9ss-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410190209.emZVkzss-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410190227.cYsvc9ss-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> make[5]: *** No rule to make target 'mm/kasan/kasan_test_module.o', needed by 'mm/kasan/modules.order'.
-   make[5]: Target 'mm/kasan/' not remade because of errors.
+>> arch/um/kernel/skas/stub_exe.c:84:2: error: non-ASM statement in naked function is not supported
+      84 |         char *alloc;
+         |         ^
+   arch/um/kernel/skas/stub_exe.c:82:16: note: attribute is here
+      82 | __attribute__((naked)) void _start(void)
+         |                ^
+   1 error generated.
+
+
+vim +84 arch/um/kernel/skas/stub_exe.c
+
+32e8eaf263d9be Benjamin Berg 2024-09-19  81  
+ae9ffda02a9904 David Gow     2024-10-18  82  __attribute__((naked)) void _start(void)
+32e8eaf263d9be Benjamin Berg 2024-09-19  83  {
+32e8eaf263d9be Benjamin Berg 2024-09-19 @84  	char *alloc;
 
 -- 
 0-DAY CI Kernel Test Service
