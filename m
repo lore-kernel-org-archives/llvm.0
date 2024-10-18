@@ -1,201 +1,147 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.231.56.155])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6D420E327
-	for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 01:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=20.231.56.155
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C788B1509AF;
+	Fri, 18 Oct 2024 03:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729216392; cv=none; b=PtEzxiVclp8RGeE4saj3mXgaSvtAVfJhjKS9C0tF1o/jcVk8Ysjlg/KJGTcdoycC00QRj+IEdS7TECJahreXjlCylwXBCMu9CbgvSYNYl9hTz11UbBfe4tTytb+QRVvrZmq1wXb/AmPmvFvPX3WuFsjkwPX7U221tsjLsigGxS8=
+	t=1729220586; cv=none; b=OMOo6+YQTHv9I5XSNQB2tznrh71SlTt0aqsZlf+/NjMiOt8ppuSsIzpuOcKAgoCMWTmjQmOP49r3Eu7hcesMnyS1V+0P/AQ1VxIhQLMhuVYt4ZgMEhMUxTh57+swyCIEF5K0NG04ky2pbkkNddpi6wXtNYG5FN7LH36ImFe/f9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729216392; c=relaxed/simple;
-	bh=GwT3A+NOL2q0+cWVmACAjiU4di5jpTAluA9HNpF8cyo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M09qbldk5tZxUAmRwlNzxwS5kdUfzl6oLEqQXifUZxmp96KGMU6KwAIt/QK8V4UjJYdUqqrWBx5jWeqkWGj7f/ioFqnkOXl9W83/bK4uWFpXkg3LaVhWRkVLSN3n9svYDxtpnHe9kSCZsNTTRJCpArOnj6zd3XFU+AbDy7KwN0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=20.231.56.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app2 (Coremail) with SMTP id HwEQrAC3vs5hvxFn9U4XAQ--.56015S2;
-	Fri, 18 Oct 2024 09:52:33 +0800 (CST)
-Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
-	by gateway (Coremail) with SMTP id _____wB3M8ZcvxFnm+lRAA--.59195S2;
-	Fri, 18 Oct 2024 09:52:28 +0800 (CST)
-From: Dongliang Mu <dzm91@hust.edu.cn>
-To: si.yanteng@linux.dev,
-	Alex Shi <alexs@kernel.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2] docs/zh_CN: update the translation of process/programming-language.rst
-Date: Fri, 18 Oct 2024 09:52:18 +0800
-Message-ID: <20241018015226.3786020-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1729220586; c=relaxed/simple;
+	bh=kyXZIAP4Et8R+7JyclYm8M65sAcZ8G9p99HBRO+kfM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OtcbBuPQ05mC7ZAZSg9ZTsUWm2WXU12Uk60tb+vsEnHB7chE0sL3S92GJdDmduiHbVHDCCMkY7ql8o1JgPgOF1uy6eGr/wIVxgrcJu0gGFMLMSHzlEdgn2oCABadg6jz+r7+p7jwoFMegCk7RAKV8Y8l6eAFBAH8eQ556c8iRgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DdHA9/xY; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DdHA9/xY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729220585; x=1760756585;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kyXZIAP4Et8R+7JyclYm8M65sAcZ8G9p99HBRO+kfM8=;
+  b=DdHA9/xYHT9MYPTV9wcqLaw2JBQf+ecLKYqxobv8T5NaWVSWofifq4Hk
+   dCJ3y7Tq6dwidB3SMw2atIkzDuJP8nDb8J9MyVkVXEeBN9FU5VwzQSEz/
+   lZUVmqPBJDPRG58PatPokWcfQU5j7ktWE2l6PLSvUx5qddDryIpfUcy7g
+   n9ZWw/pE0OzCjlWMelsamEiBykYjDpAiVmc2wROoQIvrHu5UeEtpGhvZC
+   YtTXasMn202J/cottbpgPHUUIqqKh+DogtXWEkeGjisW1TqBY3hT6fNZL
+   KpZ0jT8POF6JgnSetGE6GayCeCvodtTJxinMHxhvcsrRlpZ3r+xRJ926a
+   Q==;
+X-CSE-ConnectionGUID: 6Nu/4f24TzWOf/Y75Ec3fg==
+X-CSE-MsgGUID: 03z87WmsSUWy0LdNMMVPTg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="28621308"
+X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
+   d="scan'208";a="28621308"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 20:03:02 -0700
+X-CSE-ConnectionGUID: gN4LXjRgQrqp2d8AZGJlBw==
+X-CSE-MsgGUID: XnjKZdmUSZ+eHbVff6ldvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
+   d="scan'208";a="83383154"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 17 Oct 2024 20:03:01 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t1dGU-000NCV-1w;
+	Fri, 18 Oct 2024 03:02:58 +0000
+Date: Fri, 18 Oct 2024 11:02:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: jeffxu@chromium.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2 1/1] exec: seal system mappings
+Message-ID: <202410181037.HW3qkHxT-lkp@intel.com>
+References: <20241014215022.68530-2-jeffxu@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrAC3vs5hvxFn9U4XAQ--.56015S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW3WrW3Gw18WF1rCF4fZr43ZFb_yoW7tryfpF
-	W7Kr9rKa18J3WxCrZ7Kr12vr1FkFZ5Ka48trWUt3WYyF40ya9IqFyxKr43J342vryxCFWD
-	Z34fuFW8X3y3AFDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHmb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	126r1DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
-	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
-	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
-	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8Zw
-	CF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Y
-	z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Wrv_ZF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYY7kG6IIYr7AKxVW8JVW5
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	_MaUUUUUU==
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241014215022.68530-2-jeffxu@google.com>
 
-Update to commit 0b02076f9953 ("docs: programming-language: add Rust
-programming language section")
+Hi,
 
-scripts/checktransupdate.py reports:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Documentation/translations/zh_CN/process/programming-language.rst
-commit 0b02076f9953 ("docs: programming-language: add Rust programming
-language section")
-commit 38484a1d0c50 ("docs: programming-language: remove mention of the
-Intel compiler")
-2 commits needs resolving in total
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on brauner-vfs/vfs.all perf-tools-next/perf-tools-next tip/perf/core perf-tools/perf-tools linus/master v6.12-rc3 next-20241017]
+[cannot apply to kees/for-next/execve kees/for-next/pstore kees/for-next/kspp tip/x86/asm acme/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v1->v2: revise the script name
- .../zh_CN/process/programming-language.rst    | 78 +++++++------------
- 1 file changed, 30 insertions(+), 48 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/exec-seal-system-mappings/20241015-055145
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241014215022.68530-2-jeffxu%40google.com
+patch subject: [RFC PATCH v2 1/1] exec: seal system mappings
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20241018/202410181037.HW3qkHxT-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410181037.HW3qkHxT-lkp@intel.com/reproduce)
 
-diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
-index fabdc338dbfb..55f132a4b212 100644
---- a/Documentation/translations/zh_CN/process/programming-language.rst
-+++ b/Documentation/translations/zh_CN/process/programming-language.rst
-@@ -3,25 +3,22 @@
- :Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
- :Translator: Alex Shi <alex.shi@linux.alibaba.com>
- 
--.. _cn_programming_language:
--
- 程序设计语言
- ============
- 
--内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
--在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
--
--这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
-+内核是用 C 编程语言编写的 [zh_cn_c-language]_。更准确地说，内核通常使用 ``gcc`` [gcc]_ 编译，
-+并且使用 ``-std=gnu11`` [zh_cn_gcc-c-dialect-options]_：这是 ISO C11 的 GNU 方言。
-+``clang`` [zh_cn_clang]_ 也得到了支持，详见文档：
-+:ref:`使用 Clang/LLVM 构建 Linux <kbuild_llvm>`。
- 
--对于一些体系结构，有一些使用 :ref:`clang <cn_clang>` 和 :ref:`icc <cn_icc>` 编译内核
--的支持，尽管在编写此文档时还没有完成，仍需要第三方补丁。
-+这种方言包含对 C 语言的许多扩展 [zh_cn_gnu-extensions]_，当然，它们许多都在内核中使用。
- 
- 属性
- ----
- 
--在整个内核中使用的一个常见扩展是属性（attributes） :ref:`gcc-attribute-syntax <cn_gcc-attribute-syntax>`
-+在整个内核中使用的一个常见扩展是属性（attributes） [zh_cn_gcc-attribute-syntax]_。
- 属性允许将实现定义的语义引入语言实体（如变量、函数或类型），而无需对语言进行
--重大的语法更改（例如添加新关键字） :ref:`n2049 <cn_n2049>`
-+重大的语法更改（例如添加新关键字） [zh_cn_n2049]_。
- 
- 在某些情况下，属性是可选的（即不支持这些属性的编译器仍然应该生成正确的代码，
- 即使其速度较慢或执行的编译时检查/诊断次数不够）
-@@ -30,42 +27,27 @@
- ``__attribute__((__pure__))`` ），以检测可以使用哪些关键字和/或缩短代码, 具体
- 请参阅 ``include/linux/compiler_attributes.h``
- 
--.. _cn_c-language:
--
--c-language
--   http://www.open-std.org/jtc1/sc22/wg14/www/standards
--
--.. _cn_gcc:
--
--gcc
--   https://gcc.gnu.org
--
--.. _cn_clang:
--
--clang
--   https://clang.llvm.org
--
--.. _cn_icc:
--
--icc
--   https://software.intel.com/en-us/c-compilers
--
--.. _cn_gcc-c-dialect-options:
--
--c-dialect-options
--   https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
--
--.. _cn_gnu-extensions:
--
--gnu-extensions
--   https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
--
--.. _cn_gcc-attribute-syntax:
--
--gcc-attribute-syntax
--   https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
--
--.. _cn_n2049:
-+Rust
-+----
- 
--n2049
--   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
-+内核对 Rust 编程语言 [zh_cn_rust-language]_ 的支持是实验性的，并且可以通过配置选项
-+``CONFIG_RUST`` 来启用。Rust 代码使用 ``rustc`` [rustc]_ 编译器在
-+``--edition=2021`` [zh_cn_rust-editions]_ 选项下进行编译。版本（Editions）是一种
-+在语言中引入非后向兼容的小型变更的方式。
-+
-+除此之外，内核中还使用了一些不稳定的特性 [zh_cn_rust-unstable-features]_。这些不稳定
-+的特性将来可能会发生变化，因此，一个重要的目标是达到仅使用稳定特性的程度。
-+
-+具体请参阅 Documentation/rust/index.rst
-+
-+.. [zh_cn_c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
-+.. [gcc] https://gcc.gnu.org
-+.. [zh_cn_clang] https://clang.llvm.org
-+.. [zh_cn_gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
-+.. [zh_cn_gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
-+.. [zh_cn_gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
-+.. [zh_cn_n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
-+.. [zh_cn_rust-language] https://www.rust-lang.org
-+.. [rustc] https://doc.rust-lang.org/rustc/
-+.. [zh_cn_rust-editions] https://doc.rust-lang.org/edition-guide/editions/
-+.. [zh_cn_rust-unstable-features] https://github.com/Rust-for-Linux/linux/issues/2
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410181037.HW3qkHxT-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/events/uprobes.c:1507:42: error: use of undeclared identifier 'VM_SEALED'
+    1507 |                                 VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|VM_IO|VM_SEALED,
+         |                                                                      ^
+   1 error generated.
+
+
+vim +/VM_SEALED +1507 kernel/events/uprobes.c
+
+  1481	
+  1482	/* Slot allocation for XOL */
+  1483	static int xol_add_vma(struct mm_struct *mm, struct xol_area *area)
+  1484	{
+  1485		struct vm_area_struct *vma;
+  1486		int ret;
+  1487	
+  1488		if (mmap_write_lock_killable(mm))
+  1489			return -EINTR;
+  1490	
+  1491		if (mm->uprobes_state.xol_area) {
+  1492			ret = -EALREADY;
+  1493			goto fail;
+  1494		}
+  1495	
+  1496		if (!area->vaddr) {
+  1497			/* Try to map as high as possible, this is only a hint. */
+  1498			area->vaddr = get_unmapped_area(NULL, TASK_SIZE - PAGE_SIZE,
+  1499							PAGE_SIZE, 0, 0);
+  1500			if (IS_ERR_VALUE(area->vaddr)) {
+  1501				ret = area->vaddr;
+  1502				goto fail;
+  1503			}
+  1504		}
+  1505	
+  1506		vma = _install_special_mapping(mm, area->vaddr, PAGE_SIZE,
+> 1507					VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|VM_IO|VM_SEALED,
+  1508					&xol_mapping);
+  1509		if (IS_ERR(vma)) {
+  1510			ret = PTR_ERR(vma);
+  1511			goto fail;
+  1512		}
+  1513	
+  1514		ret = 0;
+  1515		/* pairs with get_xol_area() */
+  1516		smp_store_release(&mm->uprobes_state.xol_area, area); /* ^^^ */
+  1517	 fail:
+  1518		mmap_write_unlock(mm);
+  1519	
+  1520		return ret;
+  1521	}
+  1522	
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
