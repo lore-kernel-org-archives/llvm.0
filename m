@@ -1,111 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D3517DFF2;
-	Fri, 18 Oct 2024 19:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650F5757F3
+	for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 19:38:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729278362; cv=none; b=mOxU8rAtjMIMGpF8pHR0xcb6YG2kIhlyS0XnIOYBc7d0MHo6GPBKfAL/IcXbnk94aVCqmCLZa6HV19EouYKiIKQSaamkoKC/SWpJRXBMv9SzmflJmtCaf8pABKOhRDFHx+7YuJwfxZ7CZiKFu6+6FbQXKMhhOTYqWtksPPrXpOQ=
+	t=1729280337; cv=none; b=kiLecPoGxJDvZpeGYd4jL/g3b3JWvj32dNKtR1tnb8nLb1VjF0E1Fnn4VeLGLW9425B8WUKGEsV0/Mr6q28Sseg935dj30MsKdI7h1TnIvPQUYNrbZwlbac8pfHVsrpGCu1qdIbbPQ18V4VviH8BF7SUACqgWcASfoKqDzLim9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729278362; c=relaxed/simple;
-	bh=cuJnHKfYPHx+T7+eIrHdDccHIyJj/imfFqwvr7A2PpA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aKnq4xVxlLaVKms1S+b/7AWVNebkt+gaB3LiAAzo4g33RE0MK45YlzKRY0MhkA8ha2/A1rQ4WDBBzWUwzPUIFD4HAEKSEiTx9qmf8bpF0sFqPMz33hWDXJNoCG7folDhZchGr05Yu1UK7gb+mrjv0KKjT6YcrvwH0eMe/0bkGBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hrcl3MGF; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729280337; c=relaxed/simple;
+	bh=Iwyg+25TIYtgfAEaV6q2T6HEhw+qHxjWTb1ZRIVlhOA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=bB2QvSr4ZyrWhhrIMmJZp7OEQLlAVWulXnGzxgvQiSXCOYKGNsA+LevRXrHR5b6CsLf6HsWClFbSTyHHi30m8h+WqEsn11XQXmS91j3mYCWWgSuRNHecyu2fE8CfXJy0uMNVg1iB4H0ABNmeJp17Hun1cfv9eqZ9XkvLHpfSBj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iFOjLaHx; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hrcl3MGF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729278361; x=1760814361;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cuJnHKfYPHx+T7+eIrHdDccHIyJj/imfFqwvr7A2PpA=;
-  b=Hrcl3MGFTc3eaInEAZ/IHEzDmOb/tP2yScuQpAEAKB3rd5RsDO66b0CB
-   EjtN9OtbECcHZ2pcGflcZFK8S2dLlWIJQXlxNJ9mPuXqu+hiyx22XGnlK
-   GgoQDl7r8Mj0hkPfBtlvhw/4O1HJ56v75782k/Zr0hVf01Bh1WCgJ8fAF
-   o9MKy7oVJSMhVSvoSn29yGcBqAEuwlv33gIIOlvFbmlI1mCAQn/C9Ry+X
-   2d6qzwBJgKDN5nd0X5vLQ296a4lyjwqxoGFLNqNjpuacfwXkLrhtvRMMm
-   jcZg199woIZrKRHyhwncyHvZ9XcEhTJHYe97EI+L3e92zZodqm9U5c7Np
-   w==;
-X-CSE-ConnectionGUID: MabRAFgqSZyZ4CJ6IH7qSw==
-X-CSE-MsgGUID: Y74hf5o8Q0G3ncRoCkgJmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="16439100"
-X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="16439100"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 12:06:00 -0700
-X-CSE-ConnectionGUID: 2YWhcCKWSnOXk+TcUBcLxw==
-X-CSE-MsgGUID: 5nezl1K3SGONNPY98mSgHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="109776749"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 18 Oct 2024 12:05:59 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1sIO-000OCl-14;
-	Fri, 18 Oct 2024 19:05:56 +0000
-Date: Sat, 19 Oct 2024 03:05:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Gow <davidgow@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] um: Fix misaligned stack in stub_exe
-Message-ID: <202410190227.cYsvc9ss-lkp@intel.com>
-References: <20241017231007.1500497-2-davidgow@google.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iFOjLaHx"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49IExEVk006854;
+	Fri, 18 Oct 2024 19:38:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	FuVO4fMb5MpofPajt/wbYGl7xsfzqelPI7oc0YLKb0g=; b=iFOjLaHxy1+GgJzM
+	L5SnqAq1G9C2YFL9cZMePU5/d4Z7xA+CS7OHA39mGv9XGMTwbnrwqJhqzgF/0UbU
+	DXMwZcYBvIQiQvp8mkw7RO3sX+o0cT6q/ENWov9XHznSheAomaVAINFIjff+1t5n
+	KkmEJiQP5l/gCv2sdrUSPg6CKBLfbw7AOsyYccvzL4nH56/WAUCwQl23Rj5GWCBA
+	kNELMuepvYIr6UFtpm/QwgCmSEXIlvnzZ+PdWnb/tbYupRgHFLyaTtEYh513vtzA
+	d2CoUzVc3uEEyXZ6UA8nQcimS2mOaX0TkwmUtT+LICJEbIUjf9GQ0nIAGpubyiO4
+	TtxM7A==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42b5hsvb4w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 19:38:44 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49IJchRS025521
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 19:38:43 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 18 Oct
+ 2024 12:38:41 -0700
+Message-ID: <b1b4f049-66e8-5077-c40d-e76a9a73944f@quicinc.com>
+Date: Fri, 18 Oct 2024 13:38:41 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017231007.1500497-2-davidgow@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH net-next 3/3] accel/qaic: Pass string literal as format
+ argument of alloc_workqueue()
+Content-Language: en-US
+To: Simon Horman <horms@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        "Paolo
+ Abeni" <pabeni@redhat.com>
+CC: Woojung Huh <woojung.huh@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jiawen Wu
+	<jiawenwu@trustnetic.com>,
+        Mengyuan Lou <mengyuanlou@net-swift.com>,
+        "Nathan
+ Chancellor" <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Carl Vanderlip" <quic_carlv@quicinc.com>,
+        Oded Gabbay <ogabbay@kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <netdev@vger.kernel.org>, <llvm@lists.linux.dev>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+References: <20241011-string-thing-v1-0-acc506568033@kernel.org>
+ <20241011-string-thing-v1-3-acc506568033@kernel.org>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20241011-string-thing-v1-3-acc506568033@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kB3xAD1z7POfq5DS0_Xvxp7aKJljz9Rv
+X-Proofpoint-ORIG-GUID: kB3xAD1z7POfq5DS0_Xvxp7aKJljz9Rv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410180125
 
-Hi David,
+On 10/11/2024 3:57 AM, Simon Horman wrote:
+> Recently I noticed that both gcc-14 and clang-18 report that passing
+> a non-string literal as the format argument of alloc_workqueue()
+> is potentially insecure.
+> 
+> E.g. clang-18 says:
+> 
+> .../qaic_drv.c:61:23: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+>     61 |         wq = alloc_workqueue(fmt, WQ_UNBOUND, 0);
+>        |                              ^~~
+> .../qaic_drv.c:61:23: note: treat the string as an argument to avoid this
+>     61 |         wq = alloc_workqueue(fmt, WQ_UNBOUND, 0);
+>        |                              ^
+>        |                              "%s",
+> 
+> It is always the case where the contents of fmt is safe to pass as the
+> format argument. That is, in my understanding, it never contains any
+> format escape sequences.
+> 
+> But, it seems better to be safe than sorry. And, as a bonus, compiler
+> output becomes less verbose by addressing this issue as suggested by
+> clang-18.
+> 
+> Also, change the name of the parameter of qaicm_wq_init from
+> fmt to name to better reflect it's purpose.
+> 
+> Compile tested only.
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on uml/next]
-[also build test ERROR on next-20241018]
-[cannot apply to linus/master v6.12-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/um-Fix-misaligned-stack-in-stub_exe/20241018-071148
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux next
-patch link:    https://lore.kernel.org/r/20241017231007.1500497-2-davidgow%40google.com
-patch subject: [PATCH] um: Fix misaligned stack in stub_exe
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241019/202410190227.cYsvc9ss-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190227.cYsvc9ss-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410190227.cYsvc9ss-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/um/kernel/skas/stub_exe.c:84:2: error: non-ASM statement in naked function is not supported
-      84 |         char *alloc;
-         |         ^
-   arch/um/kernel/skas/stub_exe.c:82:16: note: attribute is here
-      82 | __attribute__((naked)) void _start(void)
-         |                ^
-   1 error generated.
-
-
-vim +84 arch/um/kernel/skas/stub_exe.c
-
-32e8eaf263d9be Benjamin Berg 2024-09-19  81  
-ae9ffda02a9904 David Gow     2024-10-18  82  __attribute__((naked)) void _start(void)
-32e8eaf263d9be Benjamin Berg 2024-09-19  83  {
-32e8eaf263d9be Benjamin Berg 2024-09-19 @84  	char *alloc;
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
