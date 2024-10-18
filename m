@@ -1,112 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E5C8F6B
-	for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 12:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A7A1DFD9B
+	for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 13:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729254109; cv=none; b=Q1T43MunVabHf2wFUzn3iUpmeW34vGQdaDvLwATzJrIejrw09mMDs502HewaL+3eKJDuC03bSNNMbPST9n1mvI/c82gRNk5oxSFea7QqRk65GT9sLMvsuy8oriLX34CXKuhhHk0Y0EyLn9Kn8ZrJu7csI0Qz1NVC6OWceuxHle0=
+	t=1729259358; cv=none; b=NORzQy1G/UOIuCFfvOnwxn4+He74D97MrXWGYEPHQYwTCm1uo04p0OE9yfW+EiMtja04D6qJsjhrMZQXpZuT5VCBu6/xklCSvzuv9GsQ8mCh2jVKjhwqClwwEqcJ5uYWJiiKz8VRVUOhzQv0VI7DRBtWfH/K71SBfyQOaKE7Fic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729254109; c=relaxed/simple;
-	bh=Uv1d5K1klaFSKeuuhCGcrtsGP+uBJnKXAv1ai7A8dK0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XeZeNFEGvBTuf6P4kumdAYlQZereeG0dKAHw48iHN5clG2SZENiW0b9D6Yp0Kx42bkmPQQvztHkefh0l+Dn8VBVlNxk3mnBZWjm5D8g8S2VK4Yp9pTUr2vELslfJZffKXYo/jJ92EHU9bnKJhRaLv5iW+aWY///952Sot0CcdHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CGEBP3FC; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CGEBP3FC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729254108; x=1760790108;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uv1d5K1klaFSKeuuhCGcrtsGP+uBJnKXAv1ai7A8dK0=;
-  b=CGEBP3FCPhbxZD6CNM8Pea2Hx+63wcO4/Kaeeb2gS+5IlBGGkE7dfMVA
-   rlO/EUktp+4BA1LiXrWS4eZeBfxVuGj42Hc/PJUGXOVyzoX25UWL0kpzD
-   bEB5OQ9Z6/PvqA6Eyja3P7MceIam/Z/SVZT5HW/qJWqEbgJU/W0NyMI/i
-   P3YCZGJbuG2g2dSkeA8wqIHh7J4CM8HR9kvdm7A2juohpMcL8LZEFCWCT
-   nrHQM1vVHEQGIg2NUltMlXQWiuHX12uyLYrEvK8SJaxF1mjUTs4YBpl6K
-   hqcFMxl1wTWVaOEQms77bNpcLuW22hlno11KuTr9XuUy7NuGnstbL42Gl
-   g==;
-X-CSE-ConnectionGUID: EbBB7y93THOuymgnwJQA8A==
-X-CSE-MsgGUID: jxRU3CsPSVS+cgn1aoz51A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28659213"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28659213"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:21:47 -0700
-X-CSE-ConnectionGUID: 2AneYokkR8iQpnnn0XyHCQ==
-X-CSE-MsgGUID: TB8hpo0kR9Sn1jG5bguG/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; 
-   d="scan'208";a="82823777"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:21:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t1lzA-00000004SPs-0tbc;
-	Fri, 18 Oct 2024 15:21:40 +0300
-Date: Fri, 18 Oct 2024 15:21:39 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Dave Hansen <dave.hansen@intel.com>, Ingo Molnar <mingo@kernel.org>,
-	Uros Bizjak <ubizjak@gmail.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
+	s=arc-20240116; t=1729259358; c=relaxed/simple;
+	bh=WMN500FkcCksA8b8kjayGiuGQKSoRSU7nonRd9vIpOc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nj+btpnOviSvJvor3Yy6sqyPYY07I5+wRrf8sB0ZngQ1gfONlm0o4TM2FrTDWWsdXOAhKNdsHfnWcWL8rlr1Kk9wEx5W23btbTU2JGmx/hKvDNgjyXT3995U8xsX/yb2b7uNER4G21XpV1LblPQYnIYfuelZpzbgL6+ihdZVBxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app2 (Coremail) with SMTP id HwEQrAAnL88tZxJniKkYAQ--.5039S2;
+	Fri, 18 Oct 2024 21:48:29 +0800 (CST)
+Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
+	by gateway (Coremail) with SMTP id _____wDHGAwsZxJnn+VmAA--.4455S2;
+	Fri, 18 Oct 2024 21:48:29 +0800 (CST)
+From: Dongliang Mu <dzm91@hust.edu.cn>
+To: si.yanteng@linux.dev,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
- comparing in percpu_add_op()
-Message-ID: <ZxJS0_DUfgi4mHe1@smile.fi.intel.com>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
- <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
- <20241016192011.GY17263@noisy.programming.kicks-ass.net>
- <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
- <20241017181859.GB17263@noisy.programming.kicks-ass.net>
+Cc: hust-os-kernel-patches@googlegroups.com,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/2] Add the translation of documents in kbuild
+Date: Fri, 18 Oct 2024 21:47:51 +0800
+Message-ID: <cover.1729259177.git.dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017181859.GB17263@noisy.programming.kicks-ass.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HwEQrAAnL88tZxJniKkYAQ--.5039S2
+Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvdXoWruw4xWw1UXF1rWr4kuFy7Awb_yoWxuwbE9w
+	1kXayFywnrGFnrJFWkCr1fAry09an5Kry0qFn8t39xt39IqryDGw1qqrna9FW0gF42kryf
+	Gw4vqryfXrnrWjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbmkYjsxI4VWUCwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+	s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
+	8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2
+	z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUAV
+	WUtwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AI
+	YIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_Cr
+	0_Gr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1UMcvj
+	eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04
+	k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRiZqXtUUUUU==
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-On Thu, Oct 17, 2024 at 08:18:59PM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 16, 2024 at 12:44:18PM -0700, Dave Hansen wrote:
-> 
-> > Would anybody hate if we broke this up a bit, like:
-> > 
-> >         const typeof(var) _val = val;
-> >         const int paoconst = __builtin_constant_p(val);
-> >         const int paoinc   = paoconst && ((_val) == 1);
-> >         const int paodec   = paoconst && ((_val) == (typeof(var))-1);
-> > 
-> > and then did
-> > 
-> > 	if (paoinc)
-> > 		percpu_unary_op(size, qual, "inc", var);
-> > 	...
-> 
-> I think that is an overall improvement. Proceed! :-)
+Since llvm refers to reproducible-builds.html, so I create this patchset
+and add the translation of these two documents
 
-Wouldn't typeof(var) be a regression? The val can be wider (in term of bits)
-than var and cutting it like this might bring different result depending on
-the signedness. TL;DR: Whatever is done, please add more (corner) test cases
-to the percpu_test.c.
+Dongliang Mu (2):
+  docs/zh_CN: add the translation of kbuild/kbuild.rst
+  docs/zh_CN: add the translations of kbuild/reproducible-builds.rst
+
+ .../translations/zh_CN/kbuild/index.rst       |   4 +-
+ .../translations/zh_CN/kbuild/kbuild.rst      | 304 ++++++++++++++++++
+ .../zh_CN/kbuild/reproducible-builds.rst      | 114 +++++++
+ 3 files changed, 420 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/translations/zh_CN/kbuild/kbuild.rst
+ create mode 100644 Documentation/translations/zh_CN/kbuild/reproducible-builds.rst
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
