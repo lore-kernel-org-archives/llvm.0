@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49370133987;
-	Fri, 18 Oct 2024 16:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9229514900E;
+	Fri, 18 Oct 2024 17:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729267795; cv=none; b=fuAt4oq5JIxFfcQK7N3YjOQnNmnxaodrpz662ltSU17DLmJzfG7CEMUqSldB72huHEfbxUN6dkLormPP969+wgn7ts2rQTqP91qWXk3/DkQ+M6x97mnNHKUrHfDeREe6T5GTuiK8nbQTITbNq3sQFCK/tuPwV0KafX6ErrP5CcU=
+	t=1729274041; cv=none; b=S8EwNowSTMbIZ4j1MmUxEFNsswQZf1MbybDcSute8GHUnu8cK+LVcKVjj2JEnwB9rRsg4gH6Hz9ylfDPbHTnzELWKdAu6t3J7ldD+SAepfM75uM4ru8xH4ov5WB9J/pE3TrkAM/a/BQ8BQOLWXev8ftrv4CIAZqPry1+5JBKKGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729267795; c=relaxed/simple;
-	bh=HdjnmFHZ6Xw7oO5nQowfoWY7yJAqQKqxmuY33sxUdng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mS2LZefGor9lMGdbXJu1Z6Mux+XGhEVt+Rck57k0WZsv8FKyTI9VVP0EOPqZmOShFFKPCk6HODAxVwqg2V0TD673EzGBo9srxafZjlz7U+N6nHEErizCkevWGyKNXWycps1pyQV0OqA7tEbZDwvGv5okoAc+4c4Ko5vnxoyDFQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Thi6R4xP; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1729274041; c=relaxed/simple;
+	bh=9Hb1ZoaLuzUwCvltKII0T8s/Of2MHigpgwk4CdxcD4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WKvxI5OyJDThI7RJnDCyWqz27kfP4YTtv8jK6DaMhYb/Ve8mkROuRxcL595Ezv4QirTJDvplb59L+jI3O0pedpDrWQS8FhlA+lamnxAaLR8BysIN/juSm5X6wyhPMtc72jgir0BetQdNoX1Agb0okohmjtp1pU7iYN3x6ldAv9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nfzg0DFW; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Thi6R4xP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nfzg0DFW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729267792; x=1760803792;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HdjnmFHZ6Xw7oO5nQowfoWY7yJAqQKqxmuY33sxUdng=;
-  b=Thi6R4xP+1H2T6gCL3WHYiFlWyXMgph/FjoVfWVZGncUzBeIdReJ6ljT
-   SjIwqg31B9YmliRe/CX6nc+yPz3cEpQmiq4fNZmVomOcg1cvwaITV3F80
-   CjucfGyvlRV/X/Dfgw2FtRE2LK0ScJvqMaD3C0EapLs140UP/p/8uPxxH
-   y1HG7yEGuNGHDea/a9en7gcnZvRF3ECMiRFqA/x+iEo6jskVKoMqW/Jax
-   kfFjKK0R0A2hlntuKHU3S87ehKvFDFRK55gNMQQ62ysdUes1mlWW2C/P3
-   r3d2yc1hrOxxJcmxhJ3mdJlQvzpe0Fq0i9jk57945f0I6ht0Le+VuC0w3
-   w==;
-X-CSE-ConnectionGUID: GmBAoAOLRIycpwxQjKnOpg==
-X-CSE-MsgGUID: 69Ol5cyOQyedaKlQmF6MqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39351129"
+  t=1729274039; x=1760810039;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9Hb1ZoaLuzUwCvltKII0T8s/Of2MHigpgwk4CdxcD4k=;
+  b=nfzg0DFWyo40Htc/8DV4Iz2+n6KuLw8uXhudaxzP0MZ2MA2GNJ/C9my/
+   Hxq2ZFFFmtE3TIwoDhGIqM0jO33zyUC+IeN2lb7r4aehvzLbYMIez7vuW
+   t/x24hgllnf0ngBeSGoFn0THPTks1EOMYMi7rvJsw+R5g4tdcPwoV6Pe+
+   gcxJPh3T/6K/MO5BbjzZdSbRrTETJUM0TaWuVgDOQ/oUpiaVxWGpu3agP
+   il4n3Y9YSc85SMn7CW8S5k9MnXa1pEoA5xBCW62rm4h++EMRNO5P+G/E5
+   JUHtmUkM4wcV5X6wgLszd3ue5B9cZGH5Jh8KlFGl16+CtNDAdE2hmVBSY
+   Q==;
+X-CSE-ConnectionGUID: h1QLCbKaT3eGh24E+e2t+Q==
+X-CSE-MsgGUID: 9vgPG/wSRimgr0pWzgZfUQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="32502537"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="39351129"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 09:09:52 -0700
-X-CSE-ConnectionGUID: GYtBrye3TiOQx2JqaqGINg==
-X-CSE-MsgGUID: i/YI6FnoQc2A2hXpYjyiUw==
+   d="scan'208";a="32502537"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 10:53:58 -0700
+X-CSE-ConnectionGUID: 2qFaqh4ySV+lVmoIblKNBQ==
+X-CSE-MsgGUID: r/ip/swuRh2GBE+qJdIQWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="109730096"
+   d="scan'208";a="109680176"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 18 Oct 2024 09:09:49 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 18 Oct 2024 10:53:56 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t1pXu-000O0H-0J;
-	Fri, 18 Oct 2024 16:09:46 +0000
-Date: Sat, 19 Oct 2024 00:09:29 +0800
+	id 1t1rAg-000O9R-0C;
+	Fri, 18 Oct 2024 17:53:54 +0000
+Date: Sat, 19 Oct 2024 01:53:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Lorenzo Bianconi <lorenzo@kernel.org>, upstream@airoha.com
+To: Jens Wiklander <jens.wiklander@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] thermal: Add support for Airoha EN7581 thermal
- sensor
-Message-ID: <202410182328.IP4meFxF-lkp@intel.com>
-References: <20241017143830.1656-2-ansuelsmth@gmail.com>
+Subject: [jens-wiklander-tee:testing/tuxbuild 1/2]
+ drivers/tee/tee_rstmem.c:40:29: error: call to undeclared function
+ 'phys_to_page'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202410190146.hY3MF4rH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,97 +63,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241017143830.1656-2-ansuelsmth@gmail.com>
 
-Hi Christian,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on linus/master v6.12-rc3 next-20241018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/thermal-Add-support-for-Airoha-EN7581-thermal-sensor/20241017-224102
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20241017143830.1656-2-ansuelsmth%40gmail.com
-patch subject: [PATCH v2 2/2] thermal: Add support for Airoha EN7581 thermal sensor
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241018/202410182328.IP4meFxF-lkp@intel.com/config)
+tree:   http://git.linaro.org/people/jens.wiklander/linux-tee testing/tuxbuild
+head:   971e80da23e2fbfd044ec231e75a61dfeb6ce61a
+commit: bc4386e9f6899baeaf60b57076495f2336c1f7f7 [1/2] tee: add restricted memory allocation
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241019/202410190146.hY3MF4rH-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410182328.IP4meFxF-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190146.hY3MF4rH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410182328.IP4meFxF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410190146.hY3MF4rH-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/thermal/airoha_thermal.c:239:39: error: incomplete definition of type 'struct thermal_zone_device'
-     239 |         struct airoha_thermal_priv *priv = tz->devdata;
-         |                                            ~~^
-   include/linux/thermal.h:32:8: note: forward declaration of 'struct thermal_zone_device'
-      32 | struct thermal_zone_device;
-         |        ^
-   drivers/thermal/airoha_thermal.c:268:39: error: incomplete definition of type 'struct thermal_zone_device'
-     268 |         struct airoha_thermal_priv *priv = tz->devdata;
-         |                                            ~~^
-   include/linux/thermal.h:32:8: note: forward declaration of 'struct thermal_zone_device'
-      32 | struct thermal_zone_device;
-         |        ^
-   drivers/thermal/airoha_thermal.c:466:10: error: incomplete definition of type 'struct thermal_zone_device'
-     466 |         priv->tz->tzp->offset = priv->default_offset;
-         |         ~~~~~~~~^
-   include/linux/thermal.h:32:8: note: forward declaration of 'struct thermal_zone_device'
-      32 | struct thermal_zone_device;
-         |        ^
-   drivers/thermal/airoha_thermal.c:467:10: error: incomplete definition of type 'struct thermal_zone_device'
-     467 |         priv->tz->tzp->slope = priv->default_slope;
-         |         ~~~~~~~~^
-   include/linux/thermal.h:32:8: note: forward declaration of 'struct thermal_zone_device'
-      32 | struct thermal_zone_device;
-         |        ^
-   4 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+>> drivers/tee/tee_rstmem.c:40:29: error: call to undeclared function 'phys_to_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      40 |                 sg_set_page(a->table.sgl, phys_to_page(shm->paddr), shm->size,
+         |                                           ^
+   drivers/tee/tee_rstmem.c:40:29: note: did you mean 'phys_to_virt'?
+   arch/x86/include/asm/io.h:148:21: note: 'phys_to_virt' declared here
+     148 | static inline void *phys_to_virt(phys_addr_t address)
+         |                     ^
+>> drivers/tee/tee_rstmem.c:40:29: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct page *' [-Wint-conversion]
+      40 |                 sg_set_page(a->table.sgl, phys_to_page(shm->paddr), shm->size,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/scatterlist.h:136:69: note: passing argument to parameter 'page' here
+     136 | static inline void sg_set_page(struct scatterlist *sg, struct page *page,
+         |                                                                     ^
+   2 errors generated.
 
 
-vim +239 drivers/thermal/airoha_thermal.c
+vim +/phys_to_page +40 drivers/tee/tee_rstmem.c
 
-   236	
-   237	static int airoha_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-   238	{
- > 239		struct airoha_thermal_priv *priv = tz->devdata;
-   240		int min, max, avg_temp, temp_adc;
-   241		int i;
-   242	
-   243		/* Get the starting temp */
-   244		temp_adc = airoha_get_thermal_ADC(priv);
-   245		min = temp_adc;
-   246		max = temp_adc;
-   247		avg_temp = temp_adc;
-   248	
-   249		/* Make 5 more measurement and average the temp ADC difference */
-   250		for (i = 0; i < 5; i++) {
-   251			temp_adc = airoha_get_thermal_ADC(priv);
-   252			avg_temp += temp_adc;
-   253			if (temp_adc > max)
-   254				max = temp_adc;
-   255			if (temp_adc < min)
-   256				min = temp_adc;
-   257		}
-   258		avg_temp = avg_temp - max - min;
-   259		avg_temp /= 4;
-   260	
-   261		*temp = RAW_TO_TEMP(priv, avg_temp);
-   262		return 0;
-   263	}
-   264	
+    17	
+    18	static int rstmem_dma_attach(struct dma_buf *dmabuf,
+    19				     struct dma_buf_attachment *attachment)
+    20	{
+    21		struct tee_shm *shm = dmabuf->priv;
+    22		struct tee_rstmem_attachment *a;
+    23		int rc;
+    24	
+    25		a = kzalloc(sizeof(*a), GFP_KERNEL);
+    26		if (!a)
+    27			return -ENOMEM;
+    28	
+    29		if (shm->pages) {
+    30			rc = sg_alloc_table_from_pages(&a->table, shm->pages,
+    31						       shm->num_pages, 0,
+    32						       shm->num_pages * PAGE_SIZE,
+    33						       GFP_KERNEL);
+    34			if (rc)
+    35				goto err;
+    36		} else {
+    37			rc = sg_alloc_table(&a->table, 1, GFP_KERNEL);
+    38			if (rc)
+    39				goto err;
+  > 40			sg_set_page(a->table.sgl, phys_to_page(shm->paddr), shm->size,
+    41				    0);
+    42		}
+    43	
+    44		a->dev = attachment->dev;
+    45		attachment->priv = a;
+    46	
+    47		return 0;
+    48	err:
+    49		kfree(a);
+    50		return rc;
+    51	}
+    52	
 
 -- 
 0-DAY CI Kernel Test Service
