@@ -1,80 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5EF18C938;
-	Fri, 18 Oct 2024 10:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6969720101C
+	for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 10:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729247079; cv=none; b=g82PnxHY0ETnoTEyxHrClPoNl//oKHS5VKUS8DtlvIBxlMgBhXOTM47LrD6hOL14sKA2heAYLLKo753hdqXUQKPmGcvBDqsSY/pdxjyJEM/3u3C+jrVLnfxZPonR7bSOasl7NazvqIEJavKGGXcVzD7EJkmOmqb3C9s806wJsek=
+	t=1729247757; cv=none; b=RkR1E+6ty23iTZcdE7tr90F3Kd15bmPrzTFUxk5KlOy9ZVblB/6nrmDpV7zVizW7SgeCPipJ4BuSmyAEMmdzBNav9FIibQ0c384MVCW7g69auVxyKzQ/rBdUt2ontLESeE/f9DdWhgue7P/tdQOxLNuD6W1H/bkCgSMzDrmKrv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729247079; c=relaxed/simple;
-	bh=cWX64qorojrVQ5gx13d3kqEmpkphq2oQIx91nL2B81c=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=qbgMiHqpLDEqwNbCiYDFc5IWzwhPbF/ssv5SqbE869aqxu5ch4tuQxan1idLrfM7lWhctSpBcwYOWUpfFzxy9z9Y240neHPidU0RTPM2vRQyqLtaFVf2Uwk/VtasvYTRidiUP77yiuYhqZl43K5VaVmFSuCGOKbq6DslCWMCI9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rEqiHmDl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729247757; c=relaxed/simple;
+	bh=MYW6dbPyv1LA2KO8BAnlhzC9LvUw5Q9ucfBBjD7XiEY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=HkiEj1V56QmBWSZeSxgPsknoa3S1GHLZQr1qplt6wwtncrIFRM5FzhYdlVSktfSNpRSy06cZ2mojgEg8GvdFyIFKVjTT/QHrs2B57A0N2fAMBZabHoDHcuQHbACFWE5cBg6j50JzAFY0nyNRWcfdBeOGtB0Egb9zVSmIeHfwbH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YwLpEOAD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rEqiHmDl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBC6C4CECF;
-	Fri, 18 Oct 2024 10:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729247079;
-	bh=cWX64qorojrVQ5gx13d3kqEmpkphq2oQIx91nL2B81c=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=rEqiHmDlbXHi19ZDDGDIrdmMBHBHsHGuEuxZKzv+9Ceo0AEAiadc4BjtPox3md3+k
-	 x0w+oWU2bTwUCPTnu6YvbY2E6aKq8AFxbe1x8+zGuE9uznQRZUE97POg6Kl0ZEoVui
-	 t4UUfwNvh0Wf7myerJJA/JiaP1rg80ACocc1PgU9a/HgOI//R0nUEgciHdhEYWcOBM
-	 rT9dxAtvxDY8Vke4RDEwcPqsFnj9ijK5UxrUH5jeuiol0Ii1uhzSWHbFkCV5TXnzm/
-	 Gl9WsM2F8s1/GUVYMZbO8nTnkA0u1vQacWth/JSL23RnDOZAWLtfJGwcHXTE8bRGdZ
-	 0aKFk+NRxfJiA==
-Date: Fri, 18 Oct 2024 12:24:36 +0200 (CEST)
-From: Jiri Kosina <jikos@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc: Thomas Kuehne <thomas.kuehne@gmx.li>, linux-input@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-    Benjamin Tissoires <bentiss@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v2 1/1] HID: debug: Remove duplicates from 'keys'
-In-Reply-To: <20241016133523.899754-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <nycvar.YFH.7.76.2410181224270.20286@cbobk.fhfr.pm>
-References: <20241016133523.899754-1-andriy.shevchenko@linux.intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YwLpEOAD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729247755;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HrTOHGvby1w1ZPMwlyiQRBjU/VK2YYsb8ixcq/NW7Fo=;
+	b=YwLpEOADa1wTKcJ0kupaZOLeZjr6MaBKm70SeJMrbnYeP8darKY/rXlUWynWYm8D2/Ze/F
+	YCEKdFq/+SMPkz2g1f8sMK1asFFftcVO9ODcMnApcpf3l2yn+DQtf9pZ6u0yJI/YDQmr+u
+	ZhCnbwsaaOMrCW4IobU2mmnsGpi+U/I=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-596-vLB7zixpP5SeNB7ejmZv4Q-1; Fri, 18 Oct 2024 06:35:54 -0400
+X-MC-Unique: vLB7zixpP5SeNB7ejmZv4Q-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4315af466d9so10959425e9.3
+        for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 03:35:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729247753; x=1729852553;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HrTOHGvby1w1ZPMwlyiQRBjU/VK2YYsb8ixcq/NW7Fo=;
+        b=Y0mqPF9X2PVdKO27ZY5Plz5rCReIBT9Opn1M6JLPKyO1ty8ZyP0f3bYyF2E6wjpdAY
+         c9mO1vN30gm3O9o04/dvcnuohNJFyiQp9b8kMogOfxnIva74eTpyPVwBJUi+Bjt73Yn9
+         +5Har6eA7RbgIhitcN3ZUDe6diADFARYD6t60lw0v3VYzDQCzP3iN4Rw5FhXAhvSUOiH
+         f/Sc5i93PLl1nNNuZqUUWbT8anSuFPo3RR7F6VZNvAccToqZViKMtq9imFHqiuqbtx2n
+         PpBy7oPJa/T8bpjUsxQPyOAB3VGjaip6G7CRjv/B2QRA5jDrSUy4VAlf0OI7rsfdNhl4
+         yl8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXB18+bJuEznSMl8MFPNpqEODgho/672DXd0vO4akkeUeYBqrgs5GtpJf95L3+jAmybIV8q@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx3Rlu992yHfW3DXSsZSiyUjntyt2SvFw32PWNcDgTBXwrGttwp
+	OVxeQPRyzQr3kWHmUE8TUr6PFdFx/a12b5wJUxw1BUWo0xpBaCbmqU4hLCzgNRp7gfXlayY62/q
+	XC04WGYKpaScZmIYo8XGrGNVUGVO8q/7Jv5zjNiCazl+romoUuGA=
+X-Received: by 2002:a05:6000:c81:b0:37d:52fc:edf1 with SMTP id ffacd0b85a97d-37eab6ec059mr1250824f8f.58.1729247752865;
+        Fri, 18 Oct 2024 03:35:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFugxrw1zdOmWyzIUEN18vLVXOK89+UGpHiLlPe5ww0HM+JYH2Pkhn6/X2q66XMH9V2lOuQLQ==
+X-Received: by 2002:a05:6000:c81:b0:37d:52fc:edf1 with SMTP id ffacd0b85a97d-37eab6ec059mr1250799f8f.58.1729247752374;
+        Fri, 18 Oct 2024 03:35:52 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ecf06922dsm1569144f8f.40.2024.10.18.03.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Oct 2024 03:35:51 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 97D28160ACB6; Fri, 18 Oct 2024 12:35:50 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Simon Horman <horms@kernel.org>, Pablo Neira Ayuso
+ <pablo@netfilter.org>, Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH nf-next] netfilter: bpf: Pass string literal as format
+ argument of request_module()
+In-Reply-To: <20241018-nf-mod-fmt-v1-1-b5a275d6861c@kernel.org>
+References: <20241018-nf-mod-fmt-v1-1-b5a275d6861c@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Fri, 18 Oct 2024 12:35:50 +0200
+Message-ID: <87ttd9y9yx.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 16 Oct 2024, Andy Shevchenko wrote:
+Simon Horman <horms@kernel.org> writes:
 
-> Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
-> CONFIG_WERROR=y, for example:
-> 
-> drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
->  3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
->       |                         ^~~~~~~~~
-> drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
->  3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
->       |                         ^~~~~~~~~
-> 
-> Fix this by removing them.
-> 
-> The logic of removal is that, remove...
-> 1) if there is a constant that uses another defined constant, OR
-> 2) the one that appears later in the list.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: fixed which one to remove for KEY_HANGEUL (Jiri)
->  drivers/hid/hid-debug.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+> Both gcc-14 and clang-18 report that passing a non-string literal as the
+> format argument of request_module() is potentially insecure.
+>
+> E.g. clang-18 says:
+>
+> .../nf_bpf_link.c:46:24: warning: format string is not a string literal (=
+potentially insecure) [-Wformat-security]
+>    46 |                 err =3D request_module(mod);
+>       |                                      ^~~
+> .../kmod.h:25:55: note: expanded from macro 'request_module'
+>    25 | #define request_module(mod...) __request_module(true, mod)
+>       |                                                       ^~~
+> .../nf_bpf_link.c:46:24: note: treat the string as an argument to avoid t=
+his
+>    46 |                 err =3D request_module(mod);
+>       |                                      ^
+>       |                                      "%s",
+> .../kmod.h:25:55: note: expanded from macro 'request_module'
+>    25 | #define request_module(mod...) __request_module(true, mod)
+>       |                                                       ^
+>
+> It is always the case where the contents of mod is safe to pass as the
+> format argument. That is, in my understanding, it never contains any
+> format escape sequences.
+>
+> But, it seems better to be safe than sorry. And, as a bonus, compiler
+> output becomes less verbose by addressing this issue as suggested by
+> clang-18.
+>
+> No functional change intended.
+> Compile tested only.
+>
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-Applied, thanks.
-
--- 
-Jiri Kosina
-SUSE Labs
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
