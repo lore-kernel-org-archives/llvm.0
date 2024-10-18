@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A343D76C61;
-	Fri, 18 Oct 2024 15:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852CA23D2;
+	Fri, 18 Oct 2024 15:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729264496; cv=none; b=JPudZrWNSMX2P8DbQtEkivvQIOBgRUodPny92fvHPm/YqeiJgXDtTxVH/EwsUXVFE2MJ3AlUoC7ZJvxpG+1cKeF7cahPt76v5m2pPHYIlG3S+Q7b2UtMTyyuev4O4yrTp+dyXICEMueczdPdIWT3qL2bFPGqxBkrDU5cF7Fj5rc=
+	t=1729264894; cv=none; b=CyRHX0xhoKwUAqHBWj2gUEdVSAi0kfBvsgoTnu7kdldtAxvTXySPZMgIhsnSApTOBU0ncKt9isuw051PgQMMDFM/x9QDD6+93eqdNeayF46vOOMLr/C8PipDj1rhE1ipKzJrpb6brMtfr4qH7hPICDysbem2jPIw7u8SSjUu74c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729264496; c=relaxed/simple;
-	bh=wGv8jPPiROeuMxdNHPFP2YovhdUZEU8BVdG/fDTbVUk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cAoaq4UoXtpv6BrQsnSj1OthkqjwAQART9AMNGrKrhQhKoyte+ay3vDiB/WKNCAi+2vNZt/jwysHUnInMRuHDKtcoShEeGNXEmlHUfieldxX1T9rZNqEYwYqMo7wgmAbkBexkz3HTEHsJt5J89DrbXD/X9QbkqefZc+snW+3w50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r6v2Ui0I; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729264894; c=relaxed/simple;
+	bh=mx87PZ0fJUAC0aOMm3blO7HIkucZJPoFvoNzVO2DGLE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LZ8gaZZxroIGyIeMEC873QcSgNFEZwr9sLz7bn4N9aBuYs2BeoEkrda9mGFdbCUwx1bDbOPG3+ypkTnvuG2V+7Zos/HrjamC6YjqS7vFiDoUG6UOZjk3jcAl5NZpC8W7tXMQGIwTI6eRc4J9cqHwFcuDBT2rzcghyW1AvN/B8Cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwlbPMPm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r6v2Ui0I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1663C4CEC3;
-	Fri, 18 Oct 2024 15:14:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwlbPMPm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28513C4CEC3;
+	Fri, 18 Oct 2024 15:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729264496;
-	bh=wGv8jPPiROeuMxdNHPFP2YovhdUZEU8BVdG/fDTbVUk=;
+	s=k20201202; t=1729264894;
+	bh=mx87PZ0fJUAC0aOMm3blO7HIkucZJPoFvoNzVO2DGLE=;
 	h=From:To:Cc:Subject:Date:From;
-	b=r6v2Ui0IRj6XKF+J/obS7ioyIJ41+8RMhQmnTdTxUqxRwAMLyD5vNxrj7PQ2VLzwC
-	 xtB1VWF2Z9P/miSklSkUTBewkOX4YuyzipIFzjM7e1jgQ5xdDMHf6VHS3tU+Zoy6/C
-	 GhAMdJUVeeoqjupZi6bIpf+asTlNfChkyW2femw6bItSD70XgG5Y4K7FMFoIcZ5bRB
-	 /FiKp7QVVnPOpMCmEOfg7CIVL5/1SoMFgxeuPox10E89mW5R+GlQ15d7pB1+xgWsEs
-	 jgXZmxjX3Ojm1+yyrhP0XAJI8/HRzajHr1T4nrvzTlx26EUQ32IV4kVtjN3A6Lbwny
-	 3S1m4tb2P3YgA==
+	b=bwlbPMPmuPOb+/LqJ4WWncgzj2FxM9cJbcXhcNpVUBcuxbuOLQmxcIwfK2EQiaAM2
+	 wFW+zK6d9BgpayW1uV2DDKEJzHDzPGQdwW5P5SbcxxSi/WWWP8RC218y679NVZFbve
+	 Gfdf8hG7p2CdRRC4m/fW9y2L+cLdWsySOdOtalASlfjX7eu6p5RH7PmppentunxdkY
+	 nMcB7FI2w4FI/qiI18Rje10jYVIg1m/VFNst5Tj/Gyl4dagpE9Mq+pQD6ZVTlL6lUu
+	 rgE355uhVy6JVgvJFz5jlu3ThFMqgqjMIpfNaXquZ1lE9W1IiuWby/GpZjexiBoSfJ
+	 tJhIEAUL6c7Qg==
 From: Arnd Bergmann <arnd@kernel.org>
 To: Tiffany Lin <tiffany.lin@mediatek.com>,
 	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
@@ -32,22 +32,22 @@ To: Tiffany Lin <tiffany.lin@mediatek.com>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Nathan Chancellor <nathan@kernel.org>
+	Nathan Chancellor <nathan@kernel.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Alexandre Courbot <acourbot@chromium.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Sebastian Fricke <sebastian.fricke@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	Fei Shao <fshao@chromium.org>,
 	linux-media@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] media: mediatek: vcodec: mark vdec_vp9_slice_map_counts_eob_coef noinline
-Date: Fri, 18 Oct 2024 15:14:42 +0000
-Message-Id: <20241018151448.3694052-1-arnd@kernel.org>
+Subject: [PATCH] media: mtk-vcodec: venc: avoid -Wenum-compare-conditional warning
+Date: Fri, 18 Oct 2024 15:21:10 +0000
+Message-Id: <20241018152127.3958436-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,41 +59,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-With KASAN enabled, clang fails to optimize the inline version of
-vdec_vp9_slice_map_counts_eob_coef() properly, leading to kilobytes
-of temporary values spilled to the stack:
+This is one of three clang warnings about incompatible enum types
+in a conditional expression:
 
-drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c:1526:12: error: stack frame size (2160) exceeds limit (2048) in 'vdec_vp9_slice_update_prob' [-Werror,-Wframe-larger-than]
+drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:597:29: error: conditional expression between different enumeration types ('enum scp_ipi_id' and 'enum ipi_id') [-Werror,-Wenum-compare-conditional]
+  597 |         inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
+      |                                    ^ ~~~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~
 
-This seems to affect all versions of clang including the latest (clang-20),
-but the degree of stack overhead is different per release.
+The code is correct, so just rework it to avoid the warning.
 
-Marking the function as noinline_for_stack is harmless here and avoids
-the problem completely.
-
+Fixes: 0dc4b3286125 ("media: mtk-vcodec: venc: support SCP firmware")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-I have not come to a conclusion on how exactly clang fails to do this
-right, but can provide the .config and/or preprocessed source files
-and command line if we think this should be fixed in clang.
----
- .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c         | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../platform/mediatek/vcodec/encoder/venc/venc_h264_if.c    | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-index eea709d93820..47c302745c1d 100644
---- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-@@ -1188,7 +1188,8 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
- 	return ret;
- }
+diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
+index f8145998fcaf..8522f71fc901 100644
+--- a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
+@@ -594,7 +594,11 @@ static int h264_enc_init(struct mtk_vcodec_enc_ctx *ctx)
  
--static
-+/* clang stack usage explodes if this is inlined */
-+static noinline_for_stack
- void vdec_vp9_slice_map_counts_eob_coef(unsigned int i, unsigned int j, unsigned int k,
- 					struct vdec_vp9_slice_frame_counts *counts,
- 					struct v4l2_vp9_frame_symbol_counts *counts_helper)
+ 	inst->ctx = ctx;
+ 	inst->vpu_inst.ctx = ctx;
+-	inst->vpu_inst.id = is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
++	if (is_ext)
++		inst->vpu_inst.id = SCP_IPI_VENC_H264;
++	else
++		inst->vpu_inst.id = IPI_VENC_H264;
++
+ 	inst->hw_base = mtk_vcodec_get_reg_addr(inst->ctx->dev->reg_base, VENC_SYS);
+ 
+ 	ret = vpu_enc_init(&inst->vpu_inst);
 -- 
 2.39.5
 
