@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C788B1509AF;
-	Fri, 18 Oct 2024 03:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BD713BC26;
+	Fri, 18 Oct 2024 04:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729220586; cv=none; b=OMOo6+YQTHv9I5XSNQB2tznrh71SlTt0aqsZlf+/NjMiOt8ppuSsIzpuOcKAgoCMWTmjQmOP49r3Eu7hcesMnyS1V+0P/AQ1VxIhQLMhuVYt4ZgMEhMUxTh57+swyCIEF5K0NG04ky2pbkkNddpi6wXtNYG5FN7LH36ImFe/f9M=
+	t=1729224911; cv=none; b=ZGlkjl3J400QbeZqZpMinu5VERnrCZNiGVQOrfxQrutJjt+IA3kkqYST2+EFswpYkHn5Pe+pe2gUro4/hwJL4EHEFi0WI0PQTnnmAmYknf+iAdHnMC2rgVT7+PTMkjtDwy2EQbVuTLCfaa+uP5MEZqTmWuOf34vZoVzgfQr4Y+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729220586; c=relaxed/simple;
-	bh=kyXZIAP4Et8R+7JyclYm8M65sAcZ8G9p99HBRO+kfM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OtcbBuPQ05mC7ZAZSg9ZTsUWm2WXU12Uk60tb+vsEnHB7chE0sL3S92GJdDmduiHbVHDCCMkY7ql8o1JgPgOF1uy6eGr/wIVxgrcJu0gGFMLMSHzlEdgn2oCABadg6jz+r7+p7jwoFMegCk7RAKV8Y8l6eAFBAH8eQ556c8iRgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DdHA9/xY; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1729224911; c=relaxed/simple;
+	bh=FbQqc1zQSgkYKn9lIqCD8eHE5RYQPBRfj23Mrk7HTWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PpLmuqndCBGa4p/NYMtUptnFZjoe+kByrt7P7ZHRo8nvrkGGic7/idaXFP/r5pcR1Tpve5zbKU04Vb69tqBP7DVkQd4Ui7rmPfXOE1rpSKVcGMG6WxoTD9pF9yXTZESncP2BX2F4JJo/H2n7/5ZBStDQkojbuwBbn55PAVbuayw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PviSbnGN; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DdHA9/xY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PviSbnGN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729220585; x=1760756585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kyXZIAP4Et8R+7JyclYm8M65sAcZ8G9p99HBRO+kfM8=;
-  b=DdHA9/xYHT9MYPTV9wcqLaw2JBQf+ecLKYqxobv8T5NaWVSWofifq4Hk
-   dCJ3y7Tq6dwidB3SMw2atIkzDuJP8nDb8J9MyVkVXEeBN9FU5VwzQSEz/
-   lZUVmqPBJDPRG58PatPokWcfQU5j7ktWE2l6PLSvUx5qddDryIpfUcy7g
-   n9ZWw/pE0OzCjlWMelsamEiBykYjDpAiVmc2wROoQIvrHu5UeEtpGhvZC
-   YtTXasMn202J/cottbpgPHUUIqqKh+DogtXWEkeGjisW1TqBY3hT6fNZL
-   KpZ0jT8POF6JgnSetGE6GayCeCvodtTJxinMHxhvcsrRlpZ3r+xRJ926a
-   Q==;
-X-CSE-ConnectionGUID: 6Nu/4f24TzWOf/Y75Ec3fg==
-X-CSE-MsgGUID: 03z87WmsSUWy0LdNMMVPTg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="28621308"
-X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="28621308"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 20:03:02 -0700
-X-CSE-ConnectionGUID: gN4LXjRgQrqp2d8AZGJlBw==
-X-CSE-MsgGUID: XnjKZdmUSZ+eHbVff6ldvw==
+  t=1729224910; x=1760760910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FbQqc1zQSgkYKn9lIqCD8eHE5RYQPBRfj23Mrk7HTWU=;
+  b=PviSbnGNTAEJpLHiJlHUjGwmcTxD8upxdoVmblvm9ub8bg+VGZh2xZuB
+   36wyA2e5y1Vxf6dy+mkFW6Um6aI8qgTHoiBUzBAVWCrk3IHZCpY895FM/
+   ojsXePH/4Q7L2i5eO890GTiBLkwPme+AfcESrF5o7mi5bfYsDw8YAy8tl
+   2LpSQ5bChItCF3xtFz0m4rVra/evzxklIOf4K5it9XCXGdU5n1IZ0SM3H
+   3uJDOMbN1St9gxNdcOKBlc1ebx8LqxMVQNDOkW0zI2dsdc0p0ZLdR2sma
+   hcX5WoZcKdFtbSjjOOqz+ledW//hKTE8w5MkxVhVlEQk37DgAPXL2tv6k
+   A==;
+X-CSE-ConnectionGUID: iPKAlen8RcOrLs3iQcgA6w==
+X-CSE-MsgGUID: vm8vwB8jTxy255D/kXKKrA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28621689"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28621689"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 21:15:10 -0700
+X-CSE-ConnectionGUID: Q9u/UBQjSDWMD21Yh50Xmg==
+X-CSE-MsgGUID: 8mfI0yr8R/21HKhCUmlGrg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="83383154"
+   d="scan'208";a="109569637"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 17 Oct 2024 20:03:01 -0700
+  by orviesa002.jf.intel.com with ESMTP; 17 Oct 2024 21:15:05 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t1dGU-000NCV-1w;
-	Fri, 18 Oct 2024 03:02:58 +0000
-Date: Fri, 18 Oct 2024 11:02:13 +0800
+	id 1t1eOD-000NFv-1o;
+	Fri, 18 Oct 2024 04:15:01 +0000
+Date: Fri, 18 Oct 2024 12:14:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: jeffxu@chromium.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 1/1] exec: seal system mappings
-Message-ID: <202410181037.HW3qkHxT-lkp@intel.com>
-References: <20241014215022.68530-2-jeffxu@google.com>
+To: Petr Machata <petrm@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Amit Cohen <amcohen@nvidia.com>
+Subject: [jpirko-mlxsw:combined_queue 28/41]
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c:427:19: error: use of
+ undeclared identifier 'dev'
+Message-ID: <202410181221.6D97Ylog-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,85 +63,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241014215022.68530-2-jeffxu@google.com>
 
-Hi,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on brauner-vfs/vfs.all perf-tools-next/perf-tools-next tip/perf/core perf-tools/perf-tools linus/master v6.12-rc3 next-20241017]
-[cannot apply to kees/for-next/execve kees/for-next/pstore kees/for-next/kspp tip/x86/asm acme/perf/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/exec-seal-system-mappings/20241015-055145
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241014215022.68530-2-jeffxu%40google.com
-patch subject: [RFC PATCH v2 1/1] exec: seal system mappings
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20241018/202410181037.HW3qkHxT-lkp@intel.com/config)
+tree:   https://github.com/jpirko/linux_mlxsw combined_queue
+head:   c70959e2f11b805035442d8a222cc9e8a18c2b84
+commit: dc3c6de632d0a35d3e4a1b8416d8941f113c156a [28/41] ndo_fdb_add: Shift responsibility for notifying to drivers
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241018/202410181221.6D97Ylog-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410181037.HW3qkHxT-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410181221.6D97Ylog-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410181037.HW3qkHxT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410181221.6D97Ylog-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/events/uprobes.c:1507:42: error: use of undeclared identifier 'VM_SEALED'
-    1507 |                                 VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|VM_IO|VM_SEALED,
-         |                                                                      ^
-   1 error generated.
+>> drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c:427:19: error: use of undeclared identifier 'dev'
+     427 |                 rtnl_fdb_notify(dev, addr, vid, RTM_NEWNEIGH, ndm->ndm_state);
+         |                                 ^
+   drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c:2440:46: warning: shift count >= width of type [-Wshift-count-overflow]
+    2440 |         err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 1 error generated.
 
 
-vim +/VM_SEALED +1507 kernel/events/uprobes.c
+vim +/dev +427 drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
 
-  1481	
-  1482	/* Slot allocation for XOL */
-  1483	static int xol_add_vma(struct mm_struct *mm, struct xol_area *area)
-  1484	{
-  1485		struct vm_area_struct *vma;
-  1486		int ret;
-  1487	
-  1488		if (mmap_write_lock_killable(mm))
-  1489			return -EINTR;
-  1490	
-  1491		if (mm->uprobes_state.xol_area) {
-  1492			ret = -EALREADY;
-  1493			goto fail;
-  1494		}
-  1495	
-  1496		if (!area->vaddr) {
-  1497			/* Try to map as high as possible, this is only a hint. */
-  1498			area->vaddr = get_unmapped_area(NULL, TASK_SIZE - PAGE_SIZE,
-  1499							PAGE_SIZE, 0, 0);
-  1500			if (IS_ERR_VALUE(area->vaddr)) {
-  1501				ret = area->vaddr;
-  1502				goto fail;
-  1503			}
-  1504		}
-  1505	
-  1506		vma = _install_special_mapping(mm, area->vaddr, PAGE_SIZE,
-> 1507					VM_EXEC|VM_MAYEXEC|VM_DONTCOPY|VM_IO|VM_SEALED,
-  1508					&xol_mapping);
-  1509		if (IS_ERR(vma)) {
-  1510			ret = PTR_ERR(vma);
-  1511			goto fail;
-  1512		}
-  1513	
-  1514		ret = 0;
-  1515		/* pairs with get_xol_area() */
-  1516		smp_store_release(&mm->uprobes_state.xol_area, area); /* ^^^ */
-  1517	 fail:
-  1518		mmap_write_unlock(mm);
-  1519	
-  1520		return ret;
-  1521	}
-  1522	
+   393	
+   394	static int qlcnic_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
+   395				struct net_device *netdev,
+   396				const unsigned char *addr, u16 vid, u16 flags,
+   397				struct netlink_ext_ack *extack)
+   398	{
+   399		struct qlcnic_adapter *adapter = netdev_priv(netdev);
+   400		int err = 0;
+   401	
+   402		if (!adapter->fdb_mac_learn)
+   403			return ndo_dflt_fdb_add(ndm, tb, netdev, addr, vid, flags);
+   404	
+   405		if (!(adapter->flags & QLCNIC_ESWITCH_ENABLED) &&
+   406		    !qlcnic_sriov_check(adapter)) {
+   407			pr_info("%s: FDB e-switch is not enabled\n", __func__);
+   408			return -EOPNOTSUPP;
+   409		}
+   410	
+   411		if (ether_addr_equal(addr, adapter->mac_addr))
+   412			goto out;
+   413	
+   414		if (is_unicast_ether_addr(addr)) {
+   415			if (netdev_uc_count(netdev) < adapter->ahw->max_uc_count)
+   416				err = dev_uc_add_excl(netdev, addr);
+   417			else
+   418				err = -ENOMEM;
+   419		} else if (is_multicast_ether_addr(addr)) {
+   420			err = dev_mc_add_excl(netdev, addr);
+   421		} else {
+   422			err = -EINVAL;
+   423		}
+   424	
+   425	out:
+   426		if (!err)
+ > 427			rtnl_fdb_notify(dev, addr, vid, RTM_NEWNEIGH, ndm->ndm_state);
+   428	
+   429		return err;
+   430	}
+   431	
 
 -- 
 0-DAY CI Kernel Test Service
