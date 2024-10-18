@@ -1,70 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C904A0A;
-	Fri, 18 Oct 2024 12:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E5C8F6B
+	for <llvm@lists.linux.dev>; Fri, 18 Oct 2024 12:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729252902; cv=none; b=rEEbYG8fLr2OF/bu/KkmiA85zCs1UkN9VENpoS3QRg1qucYW9m2gRm7531FWqo4lDoGi4NLfCbFVYisQdcA2QbS1Orr223HRyJb6wMJLLauf/L/BFtRp/zKo3yRPXhBpHHpw4OUSb3Pru0Q3v5jKStSe0FMtC2nXX4wX82WWldY=
+	t=1729254109; cv=none; b=Q1T43MunVabHf2wFUzn3iUpmeW34vGQdaDvLwATzJrIejrw09mMDs502HewaL+3eKJDuC03bSNNMbPST9n1mvI/c82gRNk5oxSFea7QqRk65GT9sLMvsuy8oriLX34CXKuhhHk0Y0EyLn9Kn8ZrJu7csI0Qz1NVC6OWceuxHle0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729252902; c=relaxed/simple;
-	bh=zUhrMsNA1295rQ+PzX7CTzRhRBEqQzICzfaHp5sUdcM=;
+	s=arc-20240116; t=1729254109; c=relaxed/simple;
+	bh=Uv1d5K1klaFSKeuuhCGcrtsGP+uBJnKXAv1ai7A8dK0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oOfb5V/1yS6aDOx/01zzza9ExidYQB8A7aD9gvAqyHPqHnlLE0yLIFza4Wt9hPs4tY3pPwrLboDlE5V4Jg4ZWcBouKzZMfLX7DGiHd7TBNz7CaMLYkiqNSsbH0424bMmmrXXohvkXtgstz2hrbe1a/TPp302WO+vbXwGRhOMcqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AGhy5E21; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=XeZeNFEGvBTuf6P4kumdAYlQZereeG0dKAHw48iHN5clG2SZENiW0b9D6Yp0Kx42bkmPQQvztHkefh0l+Dn8VBVlNxk3mnBZWjm5D8g8S2VK4Yp9pTUr2vELslfJZffKXYo/jJ92EHU9bnKJhRaLv5iW+aWY///952Sot0CcdHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CGEBP3FC; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AGhy5E21"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CGEBP3FC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729252900; x=1760788900;
+  t=1729254108; x=1760790108;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zUhrMsNA1295rQ+PzX7CTzRhRBEqQzICzfaHp5sUdcM=;
-  b=AGhy5E21yZKRbddpxgxXy456zRPGjnDbbD3SEsIeYMZtG/eMyk8Fax9V
-   nUKVTtx9gxyItzaV3jpStKwj86b4dtJB16i2v+Zs+sBQsXVek8PbQro7D
-   Ro9NCsLhlflquKKHhpChivtg2b74UMu/Z9nZYSXiAXcmRc5KTRQKvGB0x
-   IWzmhg8gf+5jfeqFrmYa8PTSAlTWV9wvHtHUw6MHg5f2VHPp+VdvlYwTY
-   OfbIVYiR7dT+Sv+KHM9XPqJpPi9ECZe3Ih4dpzNX4565Z+a/NpJcrjjEw
-   EAABYtevlybt1yiBcPVINkKGD69Uc/unPvPhpbFO8+0ihYsB+/HjseDRa
-   w==;
-X-CSE-ConnectionGUID: YdfbSmHqSaiYKTg2Cfu+Tg==
-X-CSE-MsgGUID: 4eYOpxDeT6mNeP5LDB0MdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="28659986"
-X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; 
-   d="scan'208";a="28659986"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:01:39 -0700
-X-CSE-ConnectionGUID: Tx1tGTk9S1iXf93rDkJeeg==
-X-CSE-MsgGUID: M9SS7Z/3Q7Kg7Vmu6ITNuA==
+  bh=Uv1d5K1klaFSKeuuhCGcrtsGP+uBJnKXAv1ai7A8dK0=;
+  b=CGEBP3FCPhbxZD6CNM8Pea2Hx+63wcO4/Kaeeb2gS+5IlBGGkE7dfMVA
+   rlO/EUktp+4BA1LiXrWS4eZeBfxVuGj42Hc/PJUGXOVyzoX25UWL0kpzD
+   bEB5OQ9Z6/PvqA6Eyja3P7MceIam/Z/SVZT5HW/qJWqEbgJU/W0NyMI/i
+   P3YCZGJbuG2g2dSkeA8wqIHh7J4CM8HR9kvdm7A2juohpMcL8LZEFCWCT
+   nrHQM1vVHEQGIg2NUltMlXQWiuHX12uyLYrEvK8SJaxF1mjUTs4YBpl6K
+   hqcFMxl1wTWVaOEQms77bNpcLuW22hlno11KuTr9XuUy7NuGnstbL42Gl
+   g==;
+X-CSE-ConnectionGUID: EbBB7y93THOuymgnwJQA8A==
+X-CSE-MsgGUID: jxRU3CsPSVS+cgn1aoz51A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28659213"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28659213"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:21:47 -0700
+X-CSE-ConnectionGUID: 2AneYokkR8iQpnnn0XyHCQ==
+X-CSE-MsgGUID: TB8hpo0kR9Sn1jG5bguG/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,213,1725346800"; 
-   d="scan'208";a="78867687"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 18 Oct 2024 05:01:32 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1lfd-000Nlj-3B;
-	Fri, 18 Oct 2024 12:01:29 +0000
-Date: Fri, 18 Oct 2024 20:01:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
-	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com,
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org,
-	roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
-	liam.howlett@oracle.com, pasha.tatashin@soleen.com,
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
-	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com,
-	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com
-Subject: Re: [PATCH v3 3/5] alloc_tag: populate memory for module tags as
- needed
-Message-ID: <202410181939.vLqV33c7-lkp@intel.com>
-References: <20241014203646.1952505-4-surenb@google.com>
+   d="scan'208";a="82823777"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 05:21:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1t1lzA-00000004SPs-0tbc;
+	Fri, 18 Oct 2024 15:21:40 +0300
+Date: Fri, 18 Oct 2024 15:21:39 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Dave Hansen <dave.hansen@intel.com>, Ingo Molnar <mingo@kernel.org>,
+	Uros Bizjak <ubizjak@gmail.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
+ comparing in percpu_add_op()
+Message-ID: <ZxJS0_DUfgi4mHe1@smile.fi.intel.com>
+References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
+ <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+ <20241016192011.GY17263@noisy.programming.kicks-ass.net>
+ <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
+ <20241017181859.GB17263@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,78 +79,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241014203646.1952505-4-surenb@google.com>
+In-Reply-To: <20241017181859.GB17263@noisy.programming.kicks-ass.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Suren,
+On Thu, Oct 17, 2024 at 08:18:59PM +0200, Peter Zijlstra wrote:
+> On Wed, Oct 16, 2024 at 12:44:18PM -0700, Dave Hansen wrote:
+> 
+> > Would anybody hate if we broke this up a bit, like:
+> > 
+> >         const typeof(var) _val = val;
+> >         const int paoconst = __builtin_constant_p(val);
+> >         const int paoinc   = paoconst && ((_val) == 1);
+> >         const int paodec   = paoconst && ((_val) == (typeof(var))-1);
+> > 
+> > and then did
+> > 
+> > 	if (paoinc)
+> > 		percpu_unary_op(size, qual, "inc", var);
+> > 	...
+> 
+> I think that is an overall improvement. Proceed! :-)
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 828d7267c42c2aab3877c08b4bb00b1e56769557]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/maple_tree-add-mas_for_each_rev-helper/20241015-044156
-base:   828d7267c42c2aab3877c08b4bb00b1e56769557
-patch link:    https://lore.kernel.org/r/20241014203646.1952505-4-surenb%40google.com
-patch subject: [PATCH v3 3/5] alloc_tag: populate memory for module tags as needed
-config: i386-randconfig-006-20241018 (https://download.01.org/0day-ci/archive/20241018/202410181939.vLqV33c7-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410181939.vLqV33c7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410181939.vLqV33c7-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/alloc_tag.c:394:4: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     393 |                 pr_err("Failed to map %lu bytes for module allocation tags\n",
-         |                                       ~~~
-         |                                       %u
-     394 |                         MODULE_ALLOC_TAG_VMAP_SIZE);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:533:33: note: expanded from macro 'pr_err'
-     533 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:490:60: note: expanded from macro 'printk'
-     490 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:462:19: note: expanded from macro 'printk_index_wrap'
-     462 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   lib/alloc_tag.c:386:36: note: expanded from macro 'MODULE_ALLOC_TAG_VMAP_SIZE'
-     386 | #define MODULE_ALLOC_TAG_VMAP_SIZE (100000 * sizeof(struct alloc_tag))
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +394 lib/alloc_tag.c
-
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  387  
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  388  static int __init alloc_mod_tags_mem(void)
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  389  {
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  390  	/* Map space to copy allocation tags */
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  391  	vm_module_tags = execmem_vmap(EXECMEM_MODULE_DATA, MODULE_ALLOC_TAG_VMAP_SIZE);
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  392  	if (!vm_module_tags) {
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  393  		pr_err("Failed to map %lu bytes for module allocation tags\n",
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14 @394  			MODULE_ALLOC_TAG_VMAP_SIZE);
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  395  		module_tags.start_addr = 0;
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  396  		return -ENOMEM;
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  397  	}
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  398  
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  399  	vm_module_tags->pages = kmalloc_array(get_vm_area_size(vm_module_tags) >> PAGE_SHIFT,
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  400  					sizeof(struct page *), GFP_KERNEL | __GFP_ZERO);
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  401  	if (!vm_module_tags->pages) {
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  402  		free_vm_area(vm_module_tags);
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  403  		return -ENOMEM;
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  404  	}
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  405  
-f0d7ffe60ce5cf0 Suren Baghdasaryan 2024-10-14  406  	module_tags.start_addr = (unsigned long)vm_module_tags->addr;
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  407  	module_tags.end_addr = module_tags.start_addr + MODULE_ALLOC_TAG_VMAP_SIZE;
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  408  
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  409  	return 0;
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  410  }
-5b662b363f38b01 Suren Baghdasaryan 2024-10-14  411  
+Wouldn't typeof(var) be a regression? The val can be wider (in term of bits)
+than var and cutting it like this might bring different result depending on
+the signedness. TL;DR: Whatever is done, please add more (corner) test cases
+to the percpu_test.c.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
