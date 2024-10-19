@@ -1,62 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76641190688;
-	Sat, 19 Oct 2024 11:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F9C190688;
+	Sat, 19 Oct 2024 11:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729336654; cv=none; b=O23DIoIh3AfCatdNImFSPK2bPCcajeXmX+9DjFc3l54SXxLRhB+Bjp7/EI8P+4e2TpwGOXzrn8ls2XjICyFF8iV0S1FpjDfrHcHCpAbZ+BPsTEULr986T8lBeZ73coaZ1Bw9yWVc0A+9I7kKQMHpGvRFCZlIqNisQncPZUsJVlk=
+	t=1729337253; cv=none; b=DFAhYqG9UBODboFomjiLJPctSj1JwAmel6nTBBQemjWWWaVM5Ya8bUetb5pV6Fqi9BY8BegvUmkyW1kexJVyblCZrqTy5tFRCKTfoa2BdKqhORhgOSQ5PzAwwbzpKhTDyQNZCXz8ARNvw5I8lnB6/6YB0GuYXCdKJLA+qZ2akCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729336654; c=relaxed/simple;
-	bh=Zjiq7e1fFQI6X20ENIuIYMu1sQf5Z3jfLjief1a2hqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BUIacBS3mxuBS1yfnLv7RcmCBug6rwVKck1SjnHNb8xsb+M+bwznVLBX8KkXhhmsYaRQZTziIdNbyBh/l2/fE3qzXhhA2DiQKp1O9raHjAqdBXEouBX2g4ukGaCV488CePjyi+VHMa63BSseCkRN2WGGFRERa53zn3e3dVkH9ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsKQxZL2; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1729337253; c=relaxed/simple;
+	bh=pijQNZSBTeZTeE0FiP4YiVUtT/+A1Dr/Rvv/n3DysKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hq86CTXrsqz0d7Yvp3Yr2050X/2eRSMwMdDk5DugPraETnsIuhiCza0mpSuUPw9Z7M3Wp/cn7ECYm7JJ2upYujpe/dByDhPVoJTOgiulV8lbJmGfW14MNqB0zGLAgAHwzW3pUIcqPw9o0LSn3Z2eSF5fo33c6sEMEw9ewzBtgao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ov706yF6; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsKQxZL2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ov706yF6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729336652; x=1760872652;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Zjiq7e1fFQI6X20ENIuIYMu1sQf5Z3jfLjief1a2hqk=;
-  b=nsKQxZL2ZmlfOFZfEaznKsN5u4Z42D08CCo0C2rLeUeGVGyMyKJtokay
-   vKsMNHn6CeE6voNdodh8spxEW6o0sPQ7fDVxI4PWbu3PhZNq6Uc7XQxpN
-   yzg/RZA0xBzi2VGG+QwiQQONT9yNqbCDyWReLjxPHNckADsX302b5HTpB
-   a+UvxZd3OVwQi+H0e5xl7VBwJBNy7MsVw0VeiZR069WkBQf6UytMUGjQx
-   msS5Q1GvfNsaKguD8/Zhj+i5jbGJ6uBl96HP4kJPc1jObw5xoaLmNVj1T
-   ITg9oEcuz0+PNvcvQIHloKOHk6lJ/wlcZEefLj/Tkvw9BYZimaIk0IwOx
-   Q==;
-X-CSE-ConnectionGUID: nTsr5WZhSGWhVShBMfXsqQ==
-X-CSE-MsgGUID: qHomZh/oQJaJI+pWroY70Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="46364196"
+  t=1729337251; x=1760873251;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pijQNZSBTeZTeE0FiP4YiVUtT/+A1Dr/Rvv/n3DysKc=;
+  b=Ov706yF6XyIRseH5elRo8kyrxgipHtFIRbL7YNgNe6zqWollFIW05EmN
+   Ahe/L+ppUX76MICRa4Vbwi7q/acbnlWPoCJigY5z7G+3iLE/qvJ4ad+DE
+   hkGZHqusvF/w0YNbb5I4/5W6LAg4RjnaWKsGeM9KvFp5gyyh+Vf6leBhU
+   PnLzC7bZOxZirN7BMeibeLT18tlJxOoKE0eZZWb29JKj1iJytFK+ItTx9
+   07HEAkCEEkjLek999WBr37u0CV8lA+30cUR3ZPIOxXokEemjgF5vX7lrK
+   oGyfBlD5KIbxf8JuUeDeURD5D+TZK6vMqkPXrucb52zEvluEutoFJCaSz
+   A==;
+X-CSE-ConnectionGUID: j6D3raZkQQqzEHgn8Ikh+g==
+X-CSE-MsgGUID: gztP17uRRaWR4ZArY3UgBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="31729969"
 X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="46364196"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 04:17:31 -0700
-X-CSE-ConnectionGUID: VewpjysSTHuDo4gn7sRuMA==
-X-CSE-MsgGUID: v6rEaqerTWi0W5BAs9KmaQ==
+   d="scan'208";a="31729969"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 04:27:31 -0700
+X-CSE-ConnectionGUID: me8hvPDrQPyaIzdK4Q3S1A==
+X-CSE-MsgGUID: xukNM0uBQ9KZDew/YACVvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="109852558"
+   d="scan'208";a="83724503"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Oct 2024 04:17:30 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 19 Oct 2024 04:27:30 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t27SZ-000OvZ-2Q;
-	Sat, 19 Oct 2024 11:17:27 +0000
-Date: Sat, 19 Oct 2024 19:16:47 +0800
+	id 1t27cG-000Ovz-07;
+	Sat, 19 Oct 2024 11:27:28 +0000
+Date: Sat, 19 Oct 2024 19:27:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb+git@google.com>, linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ebiggers@kernel.org, herbert@gondor.apana.org.au,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 2/2] crypto/crc32c: Provide crc32c-base alias to enable
- fuzz testing
-Message-ID: <202410191558.TPVuZtME-lkp@intel.com>
-References: <20241015141514.3000757-6-ardb+git@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:smmuv3_nesting 16/17] drivers/iommu/intel/svm.c:614:10:
+ error: incompatible integer to pointer conversion returning 'int' from a
+ function with result type 'struct iommu_domain *'
+Message-ID: <202410191934.kB3gdW2G-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,40 +62,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015141514.3000757-6-ardb+git@google.com>
 
-Hi Ard,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master linus/master v6.12-rc3 next-20241018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/crypto-crc32-Provide-crc32-base-alias-to-enable-fuzz-testing/20241015-221858
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20241015141514.3000757-6-ardb%2Bgit%40google.com
-patch subject: [PATCH 2/2] crypto/crc32c: Provide crc32c-base alias to enable fuzz testing
-config: hexagon-randconfig-001-20241018 (https://download.01.org/0day-ci/archive/20241019/202410191558.TPVuZtME-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410191558.TPVuZtME-lkp@intel.com/reproduce)
+tree:   https://github.com/jgunthorpe/linux smmuv3_nesting
+head:   fa1528253d221071f2c743b194d5aebad4b55a93
+commit: 5675560a272cf55e51613638426723221922c75a [16/17] iommu/vt-d: Check if SVA is supported when attaching the SVA domain
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241019/202410191934.kB3gdW2G-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410191934.kB3gdW2G-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410191558.TPVuZtME-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410191934.kB3gdW2G-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "__crc32c_le_base" [crypto/crc32c_generic.ko] undefined!
+>> drivers/iommu/intel/svm.c:614:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct iommu_domain *' [-Wint-conversion]
+     614 |                 return ret;
+         |                        ^~~
+   1 error generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+
+vim +614 drivers/iommu/intel/svm.c
+
+   605	
+   606	struct iommu_domain *intel_svm_domain_alloc(struct device *dev,
+   607						    struct mm_struct *mm)
+   608	{
+   609		struct dmar_domain *domain;
+   610		int ret;
+   611	
+   612		ret = intel_iommu_sva_supported(dev);
+   613		if (ret)
+ > 614			return ret;
 
 -- 
 0-DAY CI Kernel Test Service
