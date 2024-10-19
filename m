@@ -1,100 +1,87 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA3F28EF;
-	Sat, 19 Oct 2024 06:09:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79F59185B5F
+	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 06:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729318170; cv=none; b=OJkL9mweCsVqfFQPaP8QRo+IgeKLHaAx2gfMQiEabxaLBcXufkJkwokQCGnFxBgHj4tAdaV0i+C0IG9WFOm5TDp/TIe7WuRf1uiMLsU8cvBYzI8xKNLakRuMKT5aqHn3vDJZiSchNT7E5hMv+3gMQiawYbUYDtPYIK1atn7p4D4=
+	t=1729318786; cv=none; b=YYj8GVqhy5gBGHp26GSx5ZRCEPwsw88jbBGNyu2XUrXKEdMBFDJeaGIJ4IbpHpAJr2+RmBDtZ+1zQsbsAvr8k5ebKIboC07+nxU/iNKAGvey8Z5jtbjqOw/q1m21xopHBgHaJ1rFfqaoVEv1xgWxcuSjMqqCOkdaViIK+dFAdLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729318170; c=relaxed/simple;
-	bh=l0XaHCKYiAqR0O4A9yZFaL9PW+FnfGa9m1DBVGxwkC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mbiJs59OTBLjeAJL41M4kQgT1gO9SvJsCQF7dVlof1smcc+k37u61xln0MXruSEhOT/eoxhaLmI1pn0lsp5n/TMokU6LmB2OYi5N7Yvf9LTeMfc2uSs2tgw2UAi/riJYBBoF9LXyd/GsGOVlYJJZ/BNHwWMJd44Yj7EOfG8zF4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W65FEbYr; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W65FEbYr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729318166; x=1760854166;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l0XaHCKYiAqR0O4A9yZFaL9PW+FnfGa9m1DBVGxwkC4=;
-  b=W65FEbYrp1wc6mZZpmhCrbRqpV7/UH0086Q3Cre5xt8R/RZsrBqfexr7
-   vudiOMem/nGNG3Jsr/55UXwfqxSoS8gqYPA7MwclRn/CQ2xS82WJBdxuk
-   pjiK8k1TixMA88Lrq77cnkduGObOqr8z187Ois1x4SF1O7QrFHTyIEbZW
-   n2MX3skB9eR4My76BKpXsBSBJ7sVQtDqJXSmph4l40XRZt3d2CYlVcyB2
-   kIH2sOL5fmRsxdKuKK3bBQ95U1KVOnXsNfcbOJSp9XRL5elbYE045DH0s
-   7E+UEh6PIlJftr9oH4JeRUAWyvUn5YAS1GZGkPdoZKjdd4+DafLM5PxTQ
-   w==;
-X-CSE-ConnectionGUID: vpEosXOLRSehNDOGSC3mAQ==
-X-CSE-MsgGUID: LnCCOocvQSe2LMKJrmqcIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28964275"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28964275"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 23:09:25 -0700
-X-CSE-ConnectionGUID: XTIGuKcdSj6OqDAkjS+tnQ==
-X-CSE-MsgGUID: fOK5EzP4QgaAu5EWU4cgVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,215,1725346800"; 
-   d="scan'208";a="79870646"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 18 Oct 2024 23:09:23 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t22eP-000Ojx-00;
-	Sat, 19 Oct 2024 06:09:21 +0000
-Date: Sat, 19 Oct 2024 14:09:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>
-Subject: [rust:staging/rust-pci 13/13] error[E0433]: failed to resolve: could
- not find `module_pci_driver` in `kernel`
-Message-ID: <202410191436.oOXV1ArA-lkp@intel.com>
+	s=arc-20240116; t=1729318786; c=relaxed/simple;
+	bh=kqc1IZzjYnTyZ/I2YQiVnanSFIHUEPYNgToDtn/QhCA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P9WPHFP+YqUwSjCZxPHU86HceHTKCzI23U1ILI4k2aaQTn68NkGlyY9JXY/W59Sr3BKXxCsVK/Qqq0vCH8kjyG1PlVixliXbqg+Daphx8rP0de3KyZy8VS/1H3xQ5RbiDmtc6/o+3ry/IDUikDRFPVI+BXCqtvsoC3bwREV8zDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app1 (Coremail) with SMTP id HgEQrABXm6RkTxNnDAYdCA--.42252S2;
+	Sat, 19 Oct 2024 14:19:16 +0800 (CST)
+Received: from [10.12.173.122] (unknown [10.12.173.122])
+	by gateway (Coremail) with SMTP id _____wBnPsViTxNnZmNdAA--.22033S2;
+	Sat, 19 Oct 2024 14:19:15 +0800 (CST)
+Message-ID: <8a882bc0-7125-4036-b939-fbd9e821c041@hust.edu.cn>
+Date: Sat, 19 Oct 2024 14:19:14 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Add the translation of documents in kbuild
+To: si.yanteng@linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>
+Cc: hust-os-kernel-patches@googlegroups.com, llvm@lists.linux.dev
+References: <cover.1729259177.git.dzm91@hust.edu.cn>
+From: Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <cover.1729259177.git.dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HgEQrABXm6RkTxNnDAYdCA--.42252S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw48uFWkWryxXw4xAry7Jrb_yoWDCrbEyr
+	1vqayxA3WDZFnrJF4kur4fAry8uan5Kr10yFn0yrZIy39xWr4DJw1qqrna9FWvgF4akryf
+	Ww1vq34Sqr17CjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbPkYjsxI4VW5JwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+	s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
+	8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2
+	z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXV
+	WUAwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AI
+	YIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_Gr
+	1j6F4UJwAv7VCjz48v1sIEY20_GFW3Jr1UJwAv7VCY1x0262k0Y48FwI0_Gr1j6F4UJwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
+	IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUUD73UUUUU
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-tree:   https://github.com/Rust-for-Linux/linux staging/rust-pci
-head:   d6146e25775c14aac6abb51dfe52c06ec5de8a2e
-commit: d6146e25775c14aac6abb51dfe52c06ec5de8a2e [13/13] samples: rust: add Rust PCI sample driver
-config: x86_64-randconfig-016-20241017 (https://download.01.org/0day-ci/archive/20241019/202410191436.oOXV1ArA-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410191436.oOXV1ArA-lkp@intel.com/reproduce)
++to Jon and Alex.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410191436.oOXV1ArA-lkp@intel.com/
+It seems that tocmd and cccmd does not work with cover letter. Any 
+suggestions?
 
-All errors (new ones prefixed by >>):
+     tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --norolestats --nol"
+     cccmd ="`pwd`/scripts/get_maintainer.pl --nogit --norolestats --nom"
 
->> error[E0432]: unresolved import `kernel::pci`
-   --> samples/rust/rust_driver_pci.rs:7:67
-   |
-   7  | use kernel::{bindings, c_str, device_id::IdArray, devres::Devres, pci, prelude::*};
-   |                                                                   ^^^ no `pci` in the root
-   |
-   note: found an item that was configured out
-   --> rust/kernel/lib.rs:77:9
-   |
-   77 | pub mod pci;
-   |         ^^^
---
->> error[E0433]: failed to resolve: could not find `module_pci_driver` in `kernel`
-   --> samples/rust/rust_driver_pci.rs:96:9
-   |
-   96 | kernel::module_pci_driver! {
-   |         ^^^^^^^^^^^^^^^^^ could not find `module_pci_driver` in `kernel`
+Dongliang Mu
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 2024/10/18 21:47, Dongliang Mu wrote:
+> Since llvm refers to reproducible-builds.html, so I create this patchset
+> and add the translation of these two documents
+>
+> Dongliang Mu (2):
+>    docs/zh_CN: add the translation of kbuild/kbuild.rst
+>    docs/zh_CN: add the translations of kbuild/reproducible-builds.rst
+>
+>   .../translations/zh_CN/kbuild/index.rst       |   4 +-
+>   .../translations/zh_CN/kbuild/kbuild.rst      | 304 ++++++++++++++++++
+>   .../zh_CN/kbuild/reproducible-builds.rst      | 114 +++++++
+>   3 files changed, 420 insertions(+), 2 deletions(-)
+>   create mode 100644 Documentation/translations/zh_CN/kbuild/kbuild.rst
+>   create mode 100644 Documentation/translations/zh_CN/kbuild/reproducible-builds.rst
+>
+
