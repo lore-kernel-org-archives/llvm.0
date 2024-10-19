@@ -1,60 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2591D0E10;
-	Sat, 19 Oct 2024 03:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CF43716D;
+	Sat, 19 Oct 2024 03:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729307606; cv=none; b=MoNWy1RbyH+1lieD+47n9DaRLDUufCEJ3gBWKXhjfoJ8K+CUEFiTDk2a3LrifSq8ODUCjLnLy7nIKvySG6+wrquSeFy83myQejqo+P6/uSSMQz+IpM8uuhru5who/Rtd16IATqfC1JsVjjWEjE1TJgB//nbYWMvvDgZzpaUjAg8=
+	t=1729307606; cv=none; b=VccyyineeQqgnsRafu6SqOdtGm8ZClNuZub12axXOsRB4jR9d5sknANozuczJV9kR4meynJWgfBmBkkt1gTsbOXA9G8G4Czc/uuKUkfWJTYhPbqs2Z+B9vBdySfWfVeQV6buKBrwTeI2vY9MQ/XfBQRPorqxJiWGLxkC86BmG6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729307606; c=relaxed/simple;
-	bh=K1DDiyyJFmyX3NDcj+7loBjGjsMitL4UrFk5Q+3hEec=;
+	bh=dR9eqwoS2/MjwMyc2R6rl4VZK398RMY6+HoZhNmDKxc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ucsj0ldb/I2KfcghJBYcna2AEPcOoLF88z9q9MxZnIVfjFiOaeYr+J+JuyheN7W6KaqaKgAPd2n4OtiujBevg0dZOv8oFE252wfJTRJUYeTkxSHFMOXNxaxd4MK/4l9Er94Q0A9esORLrPr2Lgu7zQLHgtWt6dvdEGtoMxb0LqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Juj86sM9; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=ozrlf6UTTAnVRB23r090O4mNmy2+T5oYMSpQLXFQCxOquQ5D8oBKtKa+hkT+tz/aw+AwiB2MREDzjGdDfgaGVmvNJw/IL3qoN3Fw7AfJ4AVy7f72izZ4ztz7t3IMveMyTvjQVQ7urkLYif1gdVHZ7gIooYm0V3fILZLcnC0u7Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XxghqhZp; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Juj86sM9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XxghqhZp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1729307605; x=1760843605;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=K1DDiyyJFmyX3NDcj+7loBjGjsMitL4UrFk5Q+3hEec=;
-  b=Juj86sM97vyS8vQhCuX//n4i7Tj5EHJ1aK0s3eEvjbPvtEawfHH+mIzL
-   scasKTqwYhJU3dUjbfdnYEoOD6lXfvaj4wRvHL+WY9QOR/XQGrELkZ9Gf
-   UJN8SFfTn5EIIbrMiBeEdARy1wEe1qllgWrATecIPt408Ky3SvBxDsPki
-   HBxNs29SkvGQ6Ii5LRvAvHrqHBV3XJz2H1s6N0BndUdSelZ2NineD+Y6W
-   at9Le30bf3wveJMPY5ivIF7l934mncCCuTcTrCu40ggWwgMGlbChtqI95
-   HCsmQ+XYVlD65V5KvNf78fdcNQEBuULXqR33+EmSSbajUW36mLYgxOD6c
-   Q==;
-X-CSE-ConnectionGUID: vnQAJZe5QH6n5+ZoWYyWlw==
-X-CSE-MsgGUID: 5S8kilBxRMK7/kAci+WL4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29012316"
+  bh=dR9eqwoS2/MjwMyc2R6rl4VZK398RMY6+HoZhNmDKxc=;
+  b=XxghqhZpAOcWlJkbxi7p/wdz0hSWLMXOgk8HhKF0tai+c34Jp5uSWgSW
+   sqgGnZj/AR2ek1JhBgpsd4wCAa8WAnG2PBEWFRY8jdLhpSvtjNrY0yIwL
+   U3uglojBz6kyQ7tn70A58F5Z1V3YeDcfFWT10Q+CPL3MWVRYDW9oQoDAy
+   s7O1ZjvD5QeOfsoVQTWS3qDAq/su+4EJMwhGD31ssfk3qMxPs0bDbBlMn
+   IhJoy38HHwO5I6tmG45CWBSuhMxWWD2+D8rv9b1tuIXhYNxeK9yXGiZp1
+   /vRDz7+h5NE0P1YljujUtj+8y8bz5URfXzQhyNe9Bdi6KymTDBScwRruo
+   A==;
+X-CSE-ConnectionGUID: YBI86Y+yRpqxEzHE99/zvw==
+X-CSE-MsgGUID: sqWB1C3qT5CV2w2UIyALEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29012318"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29012316"
+   d="scan'208";a="29012318"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
   by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 20:13:22 -0700
-X-CSE-ConnectionGUID: 0Yl2qMTZRRixcc56LWcCMg==
-X-CSE-MsgGUID: R4Wv5t7DS8CVrTmET+K6Dw==
+X-CSE-ConnectionGUID: xNRwf6QbQeqggMWiFUEKuA==
+X-CSE-MsgGUID: NvWgH/fiS9GXVkJwkWEtRQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,215,1725346800"; 
-   d="scan'208";a="116490933"
+   d="scan'208";a="116490937"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 18 Oct 2024 20:13:19 -0700
+  by orviesa001.jf.intel.com with ESMTP; 18 Oct 2024 20:13:20 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t1zu1-000OdX-1Y;
+	id 1t1zu1-000Odc-1g;
 	Sat, 19 Oct 2024 03:13:17 +0000
-Date: Sat, 19 Oct 2024 11:12:20 +0800
+Date: Sat, 19 Oct 2024 11:12:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bernd Schubert <bschubert@ddn.com>
+To: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v4 08/15] fuse: {uring} Add uring sqe commit and
- fetch support
-Message-ID: <202410191037.neVRHnb0-lkp@intel.com>
-References: <20241016-fuse-uring-for-6-10-rfc4-v4-8-9739c753666e@ddn.com>
+Subject: Re: [RFC PATCH v1 11/13] mm: swap: Add IAA batch compression API
+ swap_crypto_acomp_compress_batch().
+Message-ID: <202410191141.BwtDVXQ6-lkp@intel.com>
+References: <20241018064101.336232-12-kanchana.p.sridhar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,107 +63,146 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241016-fuse-uring-for-6-10-rfc4-v4-8-9739c753666e@ddn.com>
+In-Reply-To: <20241018064101.336232-12-kanchana.p.sridhar@intel.com>
 
-Hi Bernd,
+Hi Kanchana,
 
 [This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 0c3836482481200ead7b416ca80c68a29cfdaabd]
+[auto build test WARNING on 817952b8be34aad40e07f6832fb9d1fc08961550]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bernd-Schubert/fuse-rename-to-fuse_dev_end_requests-and-make-non-static/20241016-084030
-base:   0c3836482481200ead7b416ca80c68a29cfdaabd
-patch link:    https://lore.kernel.org/r/20241016-fuse-uring-for-6-10-rfc4-v4-8-9739c753666e%40ddn.com
-patch subject: [PATCH RFC v4 08/15] fuse: {uring} Add uring sqe commit and fetch support
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241019/202410191037.neVRHnb0-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kanchana-P-Sridhar/crypto-acomp-Add-a-poll-operation-to-acomp_alg-and-acomp_req/20241018-144331
+base:   817952b8be34aad40e07f6832fb9d1fc08961550
+patch link:    https://lore.kernel.org/r/20241018064101.336232-12-kanchana.p.sridhar%40intel.com
+patch subject: [RFC PATCH v1 11/13] mm: swap: Add IAA batch compression API swap_crypto_acomp_compress_batch().
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241019/202410191141.BwtDVXQ6-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410191037.neVRHnb0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410191141.BwtDVXQ6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410191037.neVRHnb0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410191141.BwtDVXQ6-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/fuse/dev_uring.c:533:15: warning: variable 'hash' set but not used [-Wunused-but-set-variable]
-     533 |         unsigned int hash;
-         |                      ^
-   fs/fuse/dev_uring.c:712:3: error: use of undeclared identifier 'ret'
-     712 |                 ret = fuse_uring_commit_fetch(cmd, issue_flags, fc);
-         |                 ^
-   1 warning and 1 error generated.
+>> mm/swap_state.c:750: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * This API provides IAA compress batching functionality for use by swap
 
 
-vim +/hash +533 fs/fuse/dev_uring.c
+vim +750 mm/swap_state.c
 
-   521	
-   522	/* FUSE_URING_REQ_COMMIT_AND_FETCH handler */
-   523	static int fuse_uring_commit_fetch(struct io_uring_cmd *cmd, int issue_flags,
-   524					   struct fuse_conn *fc)
-   525	{
-   526		const struct fuse_uring_cmd_req *cmd_req = io_uring_sqe_cmd(cmd->sqe);
-   527		struct fuse_ring_ent *ring_ent;
-   528		int err;
-   529		struct fuse_ring *ring = fc->ring;
-   530		struct fuse_ring_queue *queue;
-   531		uint64_t commit_id = cmd_req->commit_id;
-   532		struct fuse_pqueue fpq;
- > 533		unsigned int hash;
-   534		struct fuse_req *req;
-   535	
-   536		err = -ENOTCONN;
-   537		if (!ring)
-   538			return err;
-   539	
-   540		queue = ring->queues[cmd_req->qid];
-   541		if (!queue)
-   542			return err;
-   543		fpq = queue->fpq;
-   544	
-   545		spin_lock(&queue->lock);
-   546		/* Find a request based on the unique ID of the fuse request
-   547		 * This should get revised, as it needs a hash calculation and list
-   548		 * search. And full struct fuse_pqueue is needed (memory overhead).
-   549		 * As well as the link from req to ring_ent.
-   550		 */
-   551		hash = fuse_req_hash(commit_id);
-   552		req = fuse_request_find(&fpq, commit_id);
-   553		err = -ENOENT;
-   554		if (!req) {
-   555			pr_info("qid=%d commit_id %llu not found\n", queue->qid,
-   556				commit_id);
-   557			spin_unlock(&queue->lock);
-   558			return err;
-   559		}
-   560		ring_ent = req->ring_entry;
-   561		req->ring_entry = NULL;
-   562	
-   563		err = fuse_ring_ring_ent_unset_userspace(ring_ent);
-   564		if (err != 0) {
-   565			pr_info_ratelimited("qid=%d commit_id %llu state %d",
-   566					    queue->qid, commit_id, ring_ent->state);
-   567			spin_unlock(&queue->lock);
-   568			return err;
-   569		}
-   570	
-   571		ring_ent->cmd = cmd;
-   572		spin_unlock(&queue->lock);
-   573	
-   574		/* without the queue lock, as other locks are taken */
-   575		fuse_uring_commit(ring_ent, issue_flags);
-   576	
-   577		/*
-   578		 * Fetching the next request is absolutely required as queued
-   579		 * fuse requests would otherwise not get processed - committing
-   580		 * and fetching is done in one step vs legacy fuse, which has separated
-   581		 * read (fetch request) and write (commit result).
-   582		 */
-   583		fuse_uring_next_fuse_req(ring_ent, queue);
-   584		return 0;
-   585	}
-   586	
+   748	
+   749	/**
+ > 750	 * This API provides IAA compress batching functionality for use by swap
+   751	 * modules.
+   752	 * The acomp_ctx mutex should be locked/unlocked before/after calling this
+   753	 * procedure.
+   754	 *
+   755	 * @pages: Pages to be compressed.
+   756	 * @dsts: Pre-allocated destination buffers to store results of IAA compression.
+   757	 * @dlens: Will contain the compressed lengths.
+   758	 * @errors: Will contain a 0 if the page was successfully compressed, or a
+   759	 *          non-0 error value to be processed by the calling function.
+   760	 * @nr_pages: The number of pages, up to SWAP_CRYPTO_SUB_BATCH_SIZE,
+   761	 *            to be compressed.
+   762	 * @acomp_ctx: The acomp context for iaa_crypto/other compressor.
+   763	 */
+   764	void swap_crypto_acomp_compress_batch(
+   765		struct page *pages[],
+   766		u8 *dsts[],
+   767		unsigned int dlens[],
+   768		int errors[],
+   769		int nr_pages,
+   770		struct crypto_acomp_ctx *acomp_ctx)
+   771	{
+   772		struct scatterlist inputs[SWAP_CRYPTO_SUB_BATCH_SIZE];
+   773		struct scatterlist outputs[SWAP_CRYPTO_SUB_BATCH_SIZE];
+   774		bool compressions_done = false;
+   775		int i, j;
+   776	
+   777		BUG_ON(nr_pages > SWAP_CRYPTO_SUB_BATCH_SIZE);
+   778	
+   779		/*
+   780		 * Prepare and submit acomp_reqs to IAA.
+   781		 * IAA will process these compress jobs in parallel in async mode.
+   782		 * If the compressor does not support a poll() method, or if IAA is
+   783		 * used in sync mode, the jobs will be processed sequentially using
+   784		 * acomp_ctx->req[0] and acomp_ctx->wait.
+   785		 */
+   786		for (i = 0; i < nr_pages; ++i) {
+   787			j = acomp_ctx->acomp->poll ? i : 0;
+   788			sg_init_table(&inputs[i], 1);
+   789			sg_set_page(&inputs[i], pages[i], PAGE_SIZE, 0);
+   790	
+   791			/*
+   792			 * Each acomp_ctx->buffer[] is of size (PAGE_SIZE * 2).
+   793			 * Reflect same in sg_list.
+   794			 */
+   795			sg_init_one(&outputs[i], dsts[i], PAGE_SIZE * 2);
+   796			acomp_request_set_params(acomp_ctx->req[j], &inputs[i],
+   797						 &outputs[i], PAGE_SIZE, dlens[i]);
+   798	
+   799			/*
+   800			 * If the crypto_acomp provides an asynchronous poll()
+   801			 * interface, submit the request to the driver now, and poll for
+   802			 * a completion status later, after all descriptors have been
+   803			 * submitted. If the crypto_acomp does not provide a poll()
+   804			 * interface, submit the request and wait for it to complete,
+   805			 * i.e., synchronously, before moving on to the next request.
+   806			 */
+   807			if (acomp_ctx->acomp->poll) {
+   808				errors[i] = crypto_acomp_compress(acomp_ctx->req[j]);
+   809	
+   810				if (errors[i] != -EINPROGRESS)
+   811					errors[i] = -EINVAL;
+   812				else
+   813					errors[i] = -EAGAIN;
+   814			} else {
+   815				errors[i] = crypto_wait_req(
+   816						      crypto_acomp_compress(acomp_ctx->req[j]),
+   817						      &acomp_ctx->wait);
+   818				if (!errors[i])
+   819					dlens[i] = acomp_ctx->req[j]->dlen;
+   820			}
+   821		}
+   822	
+   823		/*
+   824		 * If not doing async compressions, the batch has been processed at
+   825		 * this point and we can return.
+   826		 */
+   827		if (!acomp_ctx->acomp->poll)
+   828			return;
+   829	
+   830		/*
+   831		 * Poll for and process IAA compress job completions
+   832		 * in out-of-order manner.
+   833		 */
+   834		while (!compressions_done) {
+   835			compressions_done = true;
+   836	
+   837			for (i = 0; i < nr_pages; ++i) {
+   838				/*
+   839				 * Skip, if the compression has already completed
+   840				 * successfully or with an error.
+   841				 */
+   842				if (errors[i] != -EAGAIN)
+   843					continue;
+   844	
+   845				errors[i] = crypto_acomp_poll(acomp_ctx->req[i]);
+   846	
+   847				if (errors[i]) {
+   848					if (errors[i] == -EAGAIN)
+   849						compressions_done = false;
+   850				} else {
+   851					dlens[i] = acomp_ctx->req[i]->dlen;
+   852				}
+   853			}
+   854		}
+   855	}
+   856	EXPORT_SYMBOL_GPL(swap_crypto_acomp_compress_batch);
+   857	
 
 -- 
 0-DAY CI Kernel Test Service
