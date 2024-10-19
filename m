@@ -1,57 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6D06088F;
-	Sat, 19 Oct 2024 20:36:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE771922DB;
+	Sat, 19 Oct 2024 21:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729370163; cv=none; b=eQ1CoQy7enjvOruvubUhws4ws0VshZa93ZzNK+g3s6oj5BmrR2m6sJGXpQ0ySt7aNG3CwsfQ8UBTGDQ6xuJu4RfIv8F+Fyo4PArafScbl5evhvEcwRcEXIUVgUB0Pws1jCiF2dyYps1n+ujoP9UYvw9myVU4NUA2iv8KyRAsX7w=
+	t=1729375087; cv=none; b=Ca0lVTwvxJQi7MLgrhg3NEw+jQaIhhGJbDj+n2AW31d4HPO7RaW0Yn/Oa+tCo2d3xbRrkm/4nxxrqwMOe3Wm9LhVYJF9wMamkNgeNRxSQG3MyE4nCgpRpIj2yyxxjfy7Qdi7tE1ON7C8WZhfNR3NKhL82HJtFvx8PafK6aXX/vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729370163; c=relaxed/simple;
-	bh=9u8tht2g98RvUBZFrj0Ff0kborgkfW2EuKqP7u4qJI0=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=m5eEqvNMRK972huWzfyHDig/l1PFcU+h1reLiKQnOI53y+SEntVfR6Qw0UcLPbkEE3A4a9yWye+YhkSOwMZzoN6SRMAT4A7aoXbbIpdIAw63WWRzIT7zF8PrM01NZJG+ipnCgJvgHlxGFc7eZivmTPuuOslwHjq+LvQs4lPMfDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F2J0GflS; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1729375087; c=relaxed/simple;
+	bh=kF4o32H6Y+d5GRg9+dYDAFXUYee3JdV9QlWYoFKJKBQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NUV+zLuIvwViPUwGnPROX4Ncm0nRTJx4yV7DLQJkqVKHdwVCWVAk60eyFJ1I4p6IjjxWDhiTF9Vi865gts1RUGb2WfVh66XFz3ebRcSf+rFjqDvrbGMPbNQoto3AEVc9fzH3MJ/AJbRsXZA40tH2BYVm24uGNvOQX/A8PfH93/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=du6bVCJ8; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2J0GflS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="du6bVCJ8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729370160; x=1760906160;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=9u8tht2g98RvUBZFrj0Ff0kborgkfW2EuKqP7u4qJI0=;
-  b=F2J0GflSkKX7t8A/mYPHxbZIwkvzA4Zl2Ay7A1cQhyO6N4AUo0K8rzsZ
-   cEX6sWz4zgfmmassbZiGI8H/b6O2NokMtIjD6rQbpdeHD7T1vuxe0Sjl4
-   3sl1JxXhonjc/pQXn/Lmp5RJUk+symCY7zicRkTUr6ogUaOGEdT+almlJ
-   TeKwBuHrMI+g4uUXz3gGT6oOw8ssFEYIXb57fxWP91PnsCnlF3rWA/LNJ
-   VJX2yJeneF9ZVaM1yEq/+bn3Mre5rOPV+xhTuD5ppJhIJKMwpR2aX+qo7
-   nr/OywERcn1RPqQtbQns96wxEDJjCcl47+wwxUKKHvOzy7onhiHZQmOf0
-   Q==;
-X-CSE-ConnectionGUID: C+Hbi3AnQeamwdw6bn7UzA==
-X-CSE-MsgGUID: e5o9xjR+RZKnEYKaNnlGHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28839414"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28839414"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 13:36:00 -0700
-X-CSE-ConnectionGUID: jCn0YChLSRSRcTdyOOoREA==
-X-CSE-MsgGUID: X0qoTiy+QuKGXCJewWBRMA==
+  t=1729375085; x=1760911085;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kF4o32H6Y+d5GRg9+dYDAFXUYee3JdV9QlWYoFKJKBQ=;
+  b=du6bVCJ82ZYYkBbDdZzytc7j9DaEPM/AQvYryzqa1iApiejZUw0Nn1bS
+   vWP/3x3q1A9BHwlKWMor8tYR9KtuFeVMQX/rtw4/RrvWeIoNSARWtIdF+
+   K+AtVUdcK2GkIt1W4mpWi+VblUvGBZD50SABHk/fc02d3Y6b+t1rpgjJZ
+   aqTxP8aH7dgN/xqchbi+fprdqbV7Pa4ns84sjRz7ybqLiaGM/lSuOIwEQ
+   2tiu477wgaki53V8e7pmnobeQBn9Pf2IB8ZLgbtpInRCrLY3rM3ZRrpvc
+   g27C3G8K12RYT+DK2cZtNKGJF8hykZG7BE1QiNXxBY674tz2R3PnT/eCP
+   g==;
+X-CSE-ConnectionGUID: QAXcys5tTUeYj90bEZxV+w==
+X-CSE-MsgGUID: OwVoCv7PQ46okjlxUCxaog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="28983916"
+X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
+   d="scan'208";a="28983916"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 14:58:05 -0700
+X-CSE-ConnectionGUID: fPl6equpT0uNzjD4ZHvRgQ==
+X-CSE-MsgGUID: jZ/gyGMvRW2olnQDoGkwHQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
-   d="scan'208";a="102474934"
+   d="scan'208";a="83737408"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 19 Oct 2024 13:35:58 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 19 Oct 2024 14:58:02 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2GB2-000PWV-1U;
-	Sat, 19 Oct 2024 20:35:56 +0000
-Date: Sun, 20 Oct 2024 04:34:56 +0800
+	id 1t2HSS-000PaT-0f;
+	Sat, 19 Oct 2024 21:58:00 +0000
+Date: Sun, 20 Oct 2024 05:57:30 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [net-next PATCH 5/6] octeontx2-af: CN20K mbox implementation for
- AF's VF
-Message-ID: <202410200408.6OIxr2hh-lkp@intel.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>,
+	jaegeuk@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, Chao Yu <yuchao0@huawei.com>,
+	Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH] f2fs: fix to convert log type to segment data type
+ correctly
+Message-ID: <202410200521.Mc4H4BHm-lkp@intel.com>
+References: <20241018092200.2792472-1-chao@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,167 +67,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241018092200.2792472-1-chao@kernel.org>
 
-In-Reply-To: <20241018203058.3641959-6-saikrishnag@marvell.com>
-References: <20241018203058.3641959-6-saikrishnag@marvell.com>
-TO: Sai Krishna <saikrishnag@marvell.com>
-TO: davem@davemloft.net
-TO: edumazet@google.com
-TO: kuba@kernel.org
-TO: pabeni@redhat.com
-TO: netdev@vger.kernel.org
-TO: linux-kernel@vger.kernel.org
-TO: sgoutham@marvell.com
-TO: gakula@marvell.com
-TO: lcherian@marvell.com
-TO: jerinj@marvell.com
-TO: hkelam@marvell.com
-TO: sbhatta@marvell.com
-CC: Sai Krishna <saikrishnag@marvell.com>
+Hi Chao,
 
-Hi Sai,
+kernel test robot noticed the following build errors:
 
-kernel test robot noticed the following build warnings:
+[auto build test ERROR on jaegeuk-f2fs/dev-test]
+[also build test ERROR on jaegeuk-f2fs/dev linus/master v6.12-rc3 next-20241018]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Krishna/octeontx2-Set-appropriate-PF-VF-masks-and-shifts-based-on-silicon/20241019-043511
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241018203058.3641959-6-saikrishnag%40marvell.com
-patch subject: [net-next PATCH 5/6] octeontx2-af: CN20K mbox implementation for AF's VF
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241020/202410200408.6OIxr2hh-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410200408.6OIxr2hh-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chao-Yu/f2fs-fix-to-convert-log-type-to-segment-data-type-correctly/20241018-172401
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+patch link:    https://lore.kernel.org/r/20241018092200.2792472-1-chao%40kernel.org
+patch subject: [PATCH] f2fs: fix to convert log type to segment data type correctly
+config: i386-buildonly-randconfig-002-20241019 (https://download.01.org/0day-ci/archive/20241020/202410200521.Mc4H4BHm-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410200521.Mc4H4BHm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410200408.6OIxr2hh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410200521.Mc4H4BHm-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/marvell/octeontx2/af/rvu.c:8:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/marvell/octeontx2/af/rvu.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/marvell/octeontx2/af/rvu.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/marvell/octeontx2/af/rvu.c:11:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:589:33: warning: arithmetic between different enumeration types ('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e') [-Wenum-enum-conversion]
-     589 |                 min_vecs = RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT;
-         |                            ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2991:54: warning: arithmetic between different enumeration types ('enum rvu_af_cn20k_int_vec_e' and 'enum rvu_mbox_pf_int_vec_e') [-Wenum-enum-conversion]
-    2991 |                 return (pfvf->msix.max >= RVU_AF_CN20K_INT_VEC_CNT +
-         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    2992 |                         RVU_MBOX_PF_INT_VEC_CNT) && offset;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2994:47: warning: arithmetic between different enumeration types ('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e') [-Wenum-enum-conversion]
-    2994 |         return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT) &&
-         |                                   ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
-   19 warnings generated.
+>> fs/f2fs/segment.c:3818:38: warning: declaration of 'enum log_type' will not be visible outside of this function [-Wvisibility]
+    3818 | static int log_type_to_seg_type(enum log_type type)
+         |                                      ^
+>> fs/f2fs/segment.c:3818:47: error: variable has incomplete type 'enum log_type'
+    3818 | static int log_type_to_seg_type(enum log_type type)
+         |                                               ^
+   fs/f2fs/segment.c:3818:38: note: forward declaration of 'enum log_type'
+    3818 | static int log_type_to_seg_type(enum log_type type)
+         |                                      ^
+   fs/f2fs/segment.c:3843:16: error: variable has incomplete type 'enum log_type'
+    3843 |         enum log_type type = __get_segment_type(fio);
+         |                       ^
+   fs/f2fs/segment.c:3843:7: note: forward declaration of 'enum log_type'
+    3843 |         enum log_type type = __get_segment_type(fio);
+         |              ^
+>> fs/f2fs/segment.c:4828:44: error: argument type 'enum log_type' is incomplete
+    4828 |                 array[i].seg_type = log_type_to_seg_type(i);
+         |                                                          ^
+   fs/f2fs/segment.c:3818:38: note: forward declaration of 'enum log_type'
+    3818 | static int log_type_to_seg_type(enum log_type type)
+         |                                      ^
+   1 warning and 3 errors generated.
 
 
-vim +2991 drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+vim +3818 fs/f2fs/segment.c
 
-  2977	
-  2978	static int rvu_afvf_msix_vectors_num_ok(struct rvu *rvu)
-  2979	{
-  2980		struct rvu_pfvf *pfvf = &rvu->pf[0];
-  2981		int offset;
-  2982	
-  2983		pfvf = &rvu->pf[0];
-  2984		offset = rvu_read64(rvu, BLKADDR_RVUM, RVU_PRIV_PFX_INT_CFG(0)) & 0x3ff;
-  2985	
-  2986		/* Make sure there are enough MSIX vectors configured so that
-  2987		 * VF interrupts can be handled. Offset equal to zero means
-  2988		 * that PF vectors are not configured and overlapping AF vectors.
-  2989		 */
-  2990		if (is_cn20k(rvu->pdev))
-> 2991			return (pfvf->msix.max >= RVU_AF_CN20K_INT_VEC_CNT +
-  2992				RVU_MBOX_PF_INT_VEC_CNT) && offset;
-  2993	
-  2994		return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT) &&
-  2995		       offset;
-  2996	}
-  2997	
+  3817	
+> 3818	static int log_type_to_seg_type(enum log_type type)
+  3819	{
+  3820		int seg_type = CURSEG_COLD_DATA;
+  3821	
+  3822		switch (type) {
+  3823		case CURSEG_HOT_DATA:
+  3824		case CURSEG_WARM_DATA:
+  3825		case CURSEG_COLD_DATA:
+  3826		case CURSEG_HOT_NODE:
+  3827		case CURSEG_WARM_NODE:
+  3828		case CURSEG_COLD_NODE:
+  3829			seg_type = (int)type;
+  3830			break;
+  3831		case CURSEG_COLD_DATA_PINNED:
+  3832		case CURSEG_ALL_DATA_ATGC:
+  3833			seg_type = CURSEG_COLD_DATA;
+  3834			break;
+  3835		default:
+  3836			break;
+  3837		}
+  3838		return seg_type;
+  3839	}
+  3840	
 
 -- 
 0-DAY CI Kernel Test Service
