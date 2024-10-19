@@ -1,159 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06222BB0D;
-	Sat, 19 Oct 2024 00:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483EE29CF6
+	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 00:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729298242; cv=none; b=A0G8gVL0Zv7PDmEoMzDPnfUWjajhOy+rwvZP/3efYokz35/nZ2szCQi0g3+i3Yzt3dQyuvFCmQfQUC+mHxPBeyLyzt7AOY7tqFv/m2ufr754w0d0FWVT7o51J9JnLyw86XuV+xNfFuKQWPrmBwStcihl+WvfTgofaF1CHPSxoIo=
+	t=1729298533; cv=none; b=ls7gYjRYnUMjOTTnVYgUFpMNePfnZocAGtm7ky98kMDdEO8qaNXpsIiB2ZyBa9NjP+8PZUE5PYbNdy7iAmW/AfwIk8QwYH9PrfY8uw37dPzSW8PuoAxNDEdkO2J64seezncHBvG4a4N1GTtQgR0vyQWjxlWy4UphUaqKQ0npHtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729298242; c=relaxed/simple;
-	bh=PfaYoaaPCu5DWdfaaTW12VQJY6h3MD3ntyNmux/6daA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T77OoZxGnU5B/UYtANG+TEGZo6ymyOeiaxPPli6jPPeS+iaOsgdE7Oc1N4cJrmgY9uIi9TxoawfocB9kMh7i93O0SDfooHfBU73ti+9isUmS3w11UzZb11bJZw61JXQtP/mHMl9IvlLRMpEk+zoTBcJkrIRIOlsve+dKPwRKtlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gcv56uEv; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729298533; c=relaxed/simple;
+	bh=/Ttc43jTiExeS4mwlVJpyxiSdkAis7CMj1QoNxjbzjM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=P0s5Yg/roVJPW0InWcAtBD+oBFy+jSZ096cn/YCfhFc2QA93uVYyP4R3LY2WyAjGz8rnu5LI8NyEpOH3254dy/6MHFbnOSMOGyKYjdLJZLKOOsWKfqc5NYz0XNgYWd2Sn/UatvMcvWw9r16UghtHHv0JX7Q2BBcZoFYZTDaBgT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JuYuFwUu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gcv56uEv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729298241; x=1760834241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PfaYoaaPCu5DWdfaaTW12VQJY6h3MD3ntyNmux/6daA=;
-  b=gcv56uEva/ctlcfisaZHxrXvvu0APnuamyfhAUh3Jfzvx1YxkuMIcm14
-   GB/tP+4qx0qFnlb17rnW+WFVKAmCdG82AOXsayVk4I82LiAm3jH8zWyFC
-   lb5q+0R0NPVgKz868Jh/+b2cOxpQFXL+Ecf8iHYu/3s0gwt3BxvtE85ko
-   8L+J6bg8XVVGDobC4HAT0buGdXfWy5Lzb0wqaMOFH5ftzNtSvMkAbaEyT
-   PF13VZ+qrPi1Qk4oLEibUqoOuCamUfRbIpZ6Ao39MhB0jKZkJnK7JtI2w
-   18Y2v3gz6TnHjuvI6dZ0J4L6KdjMiCgvvvZ9xXvCN1GmFO28Sw7gcDKzp
-   g==;
-X-CSE-ConnectionGUID: 3m8xrjO5T7e0AV/ICto8Ew==
-X-CSE-MsgGUID: 1T62z1zoSoKvVCz5YknatQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="29054678"
-X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="29054678"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 17:37:18 -0700
-X-CSE-ConnectionGUID: 6YMgxZiVR9emesg1GpNAHA==
-X-CSE-MsgGUID: 7zFAV9PvT6+fQq/pN8dEoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="109771570"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Oct 2024 17:37:13 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1xSw-000OTl-3C;
-	Sat, 19 Oct 2024 00:37:10 +0000
-Date: Sat, 19 Oct 2024 08:36:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guillaume Stols <gstols@baylibre.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	aardelean@baylibre.com, dlechner@baylibre.com,
-	jstephan@baylibre.com, nuno.sa@analog.com,
-	Guillaume Stols <gstols@baylibre.com>
-Subject: Re: [PATCH v5 7/8] iio: adc: ad7606: Add iio-backend support
-Message-ID: <202410190802.CLaySBOq-lkp@intel.com>
-References: <20241015-ad7606_add_iio_backend_support-v5-7-654faf1ae08c@baylibre.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JuYuFwUu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729298530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qSWaoaPaxvlR9Tj6YqbqBhwSH7hpLJvck2y+HRaWRp8=;
+	b=JuYuFwUuAdFIJz9i0ArLJwjrm0HElYdPgBls/mtMxI2Mfoo6PXN3hXV3B0yMPgcz4/pfvp
+	zMUJrdfT5+lTenpZYyYX3kBmxaTiWp8WXPocIP7H4THoCV1Um2UvP/neSZiRFAFFkOjayq
+	eR3z0qGPNBTODElyZl/Zx9aL5Vn2xxs=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-Mat-2CAOMwGDpZCbuoE12Q-1; Fri,
+ 18 Oct 2024 20:42:06 -0400
+X-MC-Unique: Mat-2CAOMwGDpZCbuoE12Q-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E2FF019560AA
+	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 00:42:05 +0000 (UTC)
+Received: from [172.64.5.43] (unknown [10.30.32.29])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 621AE19560AD;
+	Sat, 19 Oct 2024 00:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc3,
+ mainline.kernel.org-clang, dbafeddb)
+Date: Sat, 19 Oct 2024 00:42:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241015-ad7606_add_iio_backend_support-v5-7-654faf1ae08c@baylibre.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <96966.124101820420700106@us-mta-589.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Guillaume,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 465644ac29536d10178b5ca4684d0b84765b9fa4]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Guillaume-Stols/dt-bindings-iio-adc-ad7606-Remove-spi-cpha-from-required/20241015-215831
-base:   465644ac29536d10178b5ca4684d0b84765b9fa4
-patch link:    https://lore.kernel.org/r/20241015-ad7606_add_iio_backend_support-v5-7-654faf1ae08c%40baylibre.com
-patch subject: [PATCH v5 7/8] iio: adc: ad7606: Add iio-backend support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241019/202410190802.CLaySBOq-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190802.CLaySBOq-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410190802.CLaySBOq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/adc/ad7606_par.c:173:22: warning: unused variable 'back' [-Wunused-variable]
-     173 |         struct iio_backend *back;
-         |                             ^~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/back +173 drivers/iio/adc/ad7606_par.c
+Kernel information:
+    Commit message: Merge tag 'linux_kselftest-fixes-6.12-rc4' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
-   164	
-   165	static int ad7606_par_probe(struct platform_device *pdev)
-   166	{
-   167		const struct ad7606_chip_info *chip_info;
-   168		const struct platform_device_id *id;
-   169		struct resource *res;
-   170		void __iomem *addr;
-   171		resource_size_t remap_size;
-   172		int irq;
- > 173		struct iio_backend *back;
-   174	
-   175		/*
-   176		 * If a firmware node is available (ACPI or DT), platform_device_id is null
-   177		 * and we must use get_match_data.
-   178		 */
-   179		if (dev_fwnode(&pdev->dev)) {
-   180			chip_info = device_get_match_data(&pdev->dev);
-   181			if (device_property_present(&pdev->dev, "io-backends"))
-   182				/*
-   183				 * If a backend is available ,call the core probe with backend
-   184				 * bops, otherwise use the former bops.
-   185				 */
-   186				return ad7606_probe(&pdev->dev, 0, NULL,
-   187						    chip_info,
-   188						    &ad7606_bi_bops);
-   189		} else {
-   190			id = platform_get_device_id(pdev);
-   191			chip_info = (const struct ad7606_chip_info *)id->driver_data;
-   192		}
-   193	
-   194		irq = platform_get_irq(pdev, 0);
-   195		if (irq < 0)
-   196			return irq;
-   197	
-   198		addr = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-   199		if (IS_ERR(addr))
-   200			return PTR_ERR(addr);
-   201	
-   202		remap_size = resource_size(res);
-   203	
-   204		return ad7606_probe(&pdev->dev, irq, addr, chip_info,
-   205				    remap_size > 1 ? &ad7606_par16_bops :
-   206				    &ad7606_par8_bops);
-   207	}
-   208	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1502950668
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1502950668-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1502950668-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1502950668-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
