@@ -1,101 +1,101 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547D8171C9
-	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 13:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596A5155CAA
+	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 17:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729343661; cv=none; b=tIXIA83V7lgod6qoxIPyjz46di9JWYxMiFi5HLMH8Hh7BYvTWZXNBdA/RotDnhVfwhTyVWuqm80O2tbywuIDdY2KNtjX6AHtMJ1YXADCJjoqyH9w5grF7VijaD827DJNk2KCkEzDoPW2ZAz1nlqL9F4caKMNYzRT5wEUCCsYQLU=
+	t=1729359788; cv=none; b=sUOixBZ/maOQ18q+7e3vvEFCbFziDfvNgpoDCZ3r9qlAfqL+RKDl/G6rPZIxobHdt22amRyU2jPb+sf0g9fVCpE3RANbbBnD/3VcubNSr20l32FKoJ/RIxWISGqsTAs1DqdLBW+VKjyiHCQFRT85AUXzeT1K1ujkivDRNSmdWRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729343661; c=relaxed/simple;
-	bh=nFttUmTwQuRiqVsH4U6ZQZ/PMt4PrXLz7NgQU/oEK8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G1WxyqLt6Zcg72bPk2ddWcVJmioJDVRweON53oaT9Ak4XL0ptdWhToVSs7b9atg/t4sUGin71em6dsBMFBCjsdXGdF3umJi8NwUtbwql0M71Weoy3bsgnI2k9rZSWpXGTieN3hfOuuJKcStmGsvE4qSDIbtBJmX0a6gmar1fpZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CS/pD5Zt; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1729359788; c=relaxed/simple;
+	bh=HUlPZPGsRbcg0f837VPmegTsH27/OUIVd+yjcX7eVTk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TkH7vAQn8rd73H0s5NmdeddWup04Dv78BJXV8BCZ+VnioMqlgN+MXYJdbbEfpify0QzRbB4S+sZ098k7DFMatpBl1RF/pjGRqOPCUP8aeEY6uGFxEorpxp8J9fLoNdb5Tc4g2Trsptkr97msffS36wnUOdJnGGawRag2kvcYWp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h2BlhkPI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CS/pD5Zt"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb587d0436so30521181fa.2
-        for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 06:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729343657; x=1729948457; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DsxiJAaLUxZ8WyINPgvN9VPitcA+1/D6dK458s/cN50=;
-        b=CS/pD5Zt84j0EeslmBurEtmmRYF69WARMXHUwWqPVVlMdLovj++WIhw7zpPH2uAeNK
-         G9xgI2CVQNZJCG6laD/4mNWnhyGWw4niJXZ2qhkIxBRBkAA7wg5m9iJuPKzZMvP1j4k3
-         q4XEGKFIvk6Xeu/DL3rBDxHgrTSY3Eh5F6sbNH96t3MAuxNJ9SWMSytDc3BnFAbgyHiB
-         uCuRqJy0ItLoGRRVsX2ThLvEcsNJJED2anyCnn4uLyEQsdrs4N1TNP4WfwGqHNXDb+4k
-         gSPmAK9j7qHHIRcoSwP/nfKwmcQCbAcJoEAgcQs6bRRMorDgXVSc9gTlSktNGKPiceh0
-         fqAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729343657; x=1729948457;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DsxiJAaLUxZ8WyINPgvN9VPitcA+1/D6dK458s/cN50=;
-        b=tU/lf1TEGTmIqY/wLLrTBh7THz1wAcNln9w3kA04nLs0ESohYvexpyeMquxx9XdN3x
-         cJH7fFuU+Pqgpxo/tZ10ylXAHtD/Qk2rkhiTujFLL49cgVl51xDmBRtgSlYDtAsegHsw
-         l8Njggwal6ZrZRlOEnBXO6wCH7wfkg6FmBFcF+NKHzIFETYdDI4xvV2qLBWfVGgkOM20
-         fX+R2QjVfaOt2kI+beokhpYovh2/hR2HIg/sApqyuAx69Hz3JU7MxxhFHio0RtdJS8x7
-         nxEmyzA7G54eeGlxB82cKGYpWOlo8jkUEtAt4hEaaofpLTBmHAF+F3hYjcKbHMY7sder
-         iN4A==
-X-Forwarded-Encrypted: i=1; AJvYcCXjQ9hQtDGcgHwgZ+tTWN4nwsMtXN2bnsaRziyt9zVOVZKR5AdjHwPHSlXX85WjAA9tI+Ud@lists.linux.dev
-X-Gm-Message-State: AOJu0YzUdSS2FnVjo3yt1KuUluTZjtfhyZmYyGXmI3ohB99ylGE6qu13
-	fdHBkf8g7aHseIjkFLK7I8Fw13QawRi6FRTCVoOJQsT/ahe5slfP9S3LZ8lE+4o=
-X-Google-Smtp-Source: AGHT+IEjv+MXakpefCsgi5HLZxPHwYDurtx/yD0nuWtCXMQYx9C38W3JKkkERUExxV4d2KBsbM6yEQ==
-X-Received: by 2002:a2e:e01:0:b0:2fa:cdd1:4f16 with SMTP id 38308e7fff4ca-2fb82ea761bmr22402471fa.14.1729343657256;
-        Sat, 19 Oct 2024 06:14:17 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fb80712069sm5028321fa.0.2024.10.19.06.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 06:14:15 -0700 (PDT)
-Date: Sat, 19 Oct 2024 16:14:13 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>, 
-	Abhinav Kumar <quic_abhinavk@quicinc.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Sean Paul <sean@poorly.run>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
-Message-ID: <k42wmgziqia6balqsrfualbg73giesjxxtyaldkxsrdxkro2li@6neybqsu27me>
-References: <20241018151143.3543939-1-arnd@kernel.org>
- <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h2BlhkPI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729359785;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=74uPXpkDCfJiAIq3st4SJjBsSLIpMAdN52q2EV4lImk=;
+	b=h2BlhkPI3OU2jlB7WLA4RYPJXNPbPejDvd9/Zibwd2rOGjq0JJRILzZGtsZ8qwICdp4anT
+	3yxsErXKeFgqB4Dh3sXn2VXUIHh6WjfzPL4RoZWO3xbgPlVoG2igAJp1gPD8o+ycmAAfmH
+	KS4qoBB5tPaFeN7FnecuxkqrqdlypM4=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-235-wNvPz5dAPzSolq-62SnbIw-1; Sat,
+ 19 Oct 2024 13:43:03 -0400
+X-MC-Unique: wNvPz5dAPzSolq-62SnbIw-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B547F1956088
+	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 17:43:02 +0000 (UTC)
+Received: from [172.64.5.43] (unknown [10.30.32.29])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 52FDA19560A2;
+	Sat, 19 Oct 2024 17:43:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc3,
+ mainline.kernel.org-clang, 9197b73f)
+Date: Sat, 19 Oct 2024 17:43:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <29063.124101913430300613@us-mta-235.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 19, 2024 at 03:01:46PM +0530, Akhil P Oommen wrote:
-> On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > Clang-19 and above sometimes end up with multiple copies of the large
-> > a6xx_hfi_msg_bw_table structure on the stack. The problem is that
-> > a6xx_hfi_send_bw_table() calls a number of device specific functions to
-> > fill the structure, but these create another copy of the structure on
-> > the stack which gets copied to the first.
-> > 
-> > If the functions get inlined, that busts the warning limit:
-> > 
-> > drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
-> 
-> Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
+Hi, we tested your kernel and here are the results:
 
-Kernel stacks are expected to be space limited, so 1024 is a logical
-limit for a single function.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
--- 
-With best wishes
-Dmitry
+Kernel information:
+    Commit message: Merge tag '9p-for-6.12-rc4' of https://github.com/marti=
+netd/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1503420999
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1503420999-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1503420999-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1503420999-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
