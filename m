@@ -1,62 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6013C18C90A;
-	Fri, 18 Oct 2024 23:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06222BB0D;
+	Sat, 19 Oct 2024 00:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729295714; cv=none; b=sG2Ce4kGNuQc2VBurmb56qICguaHra+4aIYiFEsB63Fk+pBWIdUcY2PDcQcjW1mzFtmTCsOwVT9EKZF8KwihX88pmp4GxHEGR36c1eXM5eK3s0VlEsAJ3zfooA3puCNxn0zg5ddw3xgfJptje+JaImtxuapM7q/EAsaxzHE2trQ=
+	t=1729298242; cv=none; b=A0G8gVL0Zv7PDmEoMzDPnfUWjajhOy+rwvZP/3efYokz35/nZ2szCQi0g3+i3Yzt3dQyuvFCmQfQUC+mHxPBeyLyzt7AOY7tqFv/m2ufr754w0d0FWVT7o51J9JnLyw86XuV+xNfFuKQWPrmBwStcihl+WvfTgofaF1CHPSxoIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729295714; c=relaxed/simple;
-	bh=MJjIeO3loNc/duwvXwN1EGCcLC/ZJhsZTCKwhBQqNA0=;
+	s=arc-20240116; t=1729298242; c=relaxed/simple;
+	bh=PfaYoaaPCu5DWdfaaTW12VQJY6h3MD3ntyNmux/6daA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dv8Xjg4h+pt0o3sVGnP/VSEn3D0Y3AyoD/wd3mZdyOyIswurvOy1cdf8LW6M+/MDOWwYlV8OLfeWaAwQ6Nh0y256zxLGUblyMo17NrrCd4ugb3C4t8M3ekvPI813fspKq0XggttdyIrTBROT1UBs1GMjpWb7sJcrrJFRyMMGUFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S5rhTkT9; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=T77OoZxGnU5B/UYtANG+TEGZo6ymyOeiaxPPli6jPPeS+iaOsgdE7Oc1N4cJrmgY9uIi9TxoawfocB9kMh7i93O0SDfooHfBU73ti+9isUmS3w11UzZb11bJZw61JXQtP/mHMl9IvlLRMpEk+zoTBcJkrIRIOlsve+dKPwRKtlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gcv56uEv; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S5rhTkT9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gcv56uEv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729295712; x=1760831712;
+  t=1729298241; x=1760834241;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MJjIeO3loNc/duwvXwN1EGCcLC/ZJhsZTCKwhBQqNA0=;
-  b=S5rhTkT9kC3PFDwDeZb0SEBMP0/wmCWc96Pbw6h4zOielF1xmq8MvRSK
-   JrCXc+4TE0jsu9kkt2zebbcW1tfyFU/GKwX4Pr7IGo4QjsZg5QqBwcrW+
-   bbv6wYNKogjbb+jBZ0gOWNtI1xFilev5k0rCRYuXhKY1sCKXjjY+BBJ9S
-   jZDRZU9nosvE34UpMqimoKrFpqplqGJ/lZgQ++oTRyz14jWXuNc6pT5ZP
-   UTSM7QvsqXqVYDpa30azopSIiKjQKzZFSx4mCb0fJ2zK6U3UT7VLhVVXR
-   1PAIuVNil9LGy6JcKXKI9/kjQlKGCivP55kAX2W3mJOp9FsYmk5GFI38v
-   Q==;
-X-CSE-ConnectionGUID: 4uoGh/0nSe6QqlE0oU5TVQ==
-X-CSE-MsgGUID: E5nkAuORS4WPHshC07L0BA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28800073"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28800073"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 16:55:11 -0700
-X-CSE-ConnectionGUID: PSWMNZc6R4GHJbkGTXLarQ==
-X-CSE-MsgGUID: sVZLQ4YaRCKnJlz7q+gtAw==
+  bh=PfaYoaaPCu5DWdfaaTW12VQJY6h3MD3ntyNmux/6daA=;
+  b=gcv56uEva/ctlcfisaZHxrXvvu0APnuamyfhAUh3Jfzvx1YxkuMIcm14
+   GB/tP+4qx0qFnlb17rnW+WFVKAmCdG82AOXsayVk4I82LiAm3jH8zWyFC
+   lb5q+0R0NPVgKz868Jh/+b2cOxpQFXL+Ecf8iHYu/3s0gwt3BxvtE85ko
+   8L+J6bg8XVVGDobC4HAT0buGdXfWy5Lzb0wqaMOFH5ftzNtSvMkAbaEyT
+   PF13VZ+qrPi1Qk4oLEibUqoOuCamUfRbIpZ6Ao39MhB0jKZkJnK7JtI2w
+   18Y2v3gz6TnHjuvI6dZ0J4L6KdjMiCgvvvZ9xXvCN1GmFO28Sw7gcDKzp
+   g==;
+X-CSE-ConnectionGUID: 3m8xrjO5T7e0AV/ICto8Ew==
+X-CSE-MsgGUID: 1T62z1zoSoKvVCz5YknatQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11229"; a="29054678"
+X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
+   d="scan'208";a="29054678"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2024 17:37:18 -0700
+X-CSE-ConnectionGUID: 6YMgxZiVR9emesg1GpNAHA==
+X-CSE-MsgGUID: 7zFAV9PvT6+fQq/pN8dEoA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,214,1725346800"; 
-   d="scan'208";a="78969679"
+   d="scan'208";a="109771570"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 18 Oct 2024 16:55:09 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 18 Oct 2024 17:37:13 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t1woF-000ORJ-01;
-	Fri, 18 Oct 2024 23:55:07 +0000
-Date: Sat, 19 Oct 2024 07:55:05 +0800
+	id 1t1xSw-000OTl-3C;
+	Sat, 19 Oct 2024 00:37:10 +0000
+Date: Sat, 19 Oct 2024 08:36:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb+git@google.com>, linux-crypto@vger.kernel.org
+To: Guillaume Stols <gstols@baylibre.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ebiggers@kernel.org, herbert@gondor.apana.org.au,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 1/2] crypto/crc32: Provide crc32-base alias to enable
- fuzz testing
-Message-ID: <202410190753.2wu0ZufT-lkp@intel.com>
-References: <20241015141514.3000757-5-ardb+git@google.com>
+	linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fbdev@vger.kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	aardelean@baylibre.com, dlechner@baylibre.com,
+	jstephan@baylibre.com, nuno.sa@analog.com,
+	Guillaume Stols <gstols@baylibre.com>
+Subject: Re: [PATCH v5 7/8] iio: adc: ad7606: Add iio-backend support
+Message-ID: <202410190802.CLaySBOq-lkp@intel.com>
+References: <20241015-ad7606_add_iio_backend_support-v5-7-654faf1ae08c@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,35 +77,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015141514.3000757-5-ardb+git@google.com>
+In-Reply-To: <20241015-ad7606_add_iio_backend_support-v5-7-654faf1ae08c@baylibre.com>
 
-Hi Ard,
+Hi Guillaume,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on herbert-crypto-2.6/master linus/master v6.12-rc3 next-20241018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 465644ac29536d10178b5ca4684d0b84765b9fa4]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/crypto-crc32-Provide-crc32-base-alias-to-enable-fuzz-testing/20241015-221858
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/20241015141514.3000757-5-ardb%2Bgit%40google.com
-patch subject: [PATCH 1/2] crypto/crc32: Provide crc32-base alias to enable fuzz testing
-config: i386-buildonly-randconfig-002-20241018 (https://download.01.org/0day-ci/archive/20241019/202410190753.2wu0ZufT-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Guillaume-Stols/dt-bindings-iio-adc-ad7606-Remove-spi-cpha-from-required/20241015-215831
+base:   465644ac29536d10178b5ca4684d0b84765b9fa4
+patch link:    https://lore.kernel.org/r/20241015-ad7606_add_iio_backend_support-v5-7-654faf1ae08c%40baylibre.com
+patch subject: [PATCH v5 7/8] iio: adc: ad7606: Add iio-backend support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241019/202410190802.CLaySBOq-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190753.2wu0ZufT-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410190802.CLaySBOq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410190753.2wu0ZufT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410190802.CLaySBOq-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_inflate/zlib_inflate.o
->> ERROR: modpost: "crc32_le_base" [crypto/crc32_generic.ko] undefined!
+>> drivers/iio/adc/ad7606_par.c:173:22: warning: unused variable 'back' [-Wunused-variable]
+     173 |         struct iio_backend *back;
+         |                             ^~~~
+   1 warning generated.
+
+
+vim +/back +173 drivers/iio/adc/ad7606_par.c
+
+   164	
+   165	static int ad7606_par_probe(struct platform_device *pdev)
+   166	{
+   167		const struct ad7606_chip_info *chip_info;
+   168		const struct platform_device_id *id;
+   169		struct resource *res;
+   170		void __iomem *addr;
+   171		resource_size_t remap_size;
+   172		int irq;
+ > 173		struct iio_backend *back;
+   174	
+   175		/*
+   176		 * If a firmware node is available (ACPI or DT), platform_device_id is null
+   177		 * and we must use get_match_data.
+   178		 */
+   179		if (dev_fwnode(&pdev->dev)) {
+   180			chip_info = device_get_match_data(&pdev->dev);
+   181			if (device_property_present(&pdev->dev, "io-backends"))
+   182				/*
+   183				 * If a backend is available ,call the core probe with backend
+   184				 * bops, otherwise use the former bops.
+   185				 */
+   186				return ad7606_probe(&pdev->dev, 0, NULL,
+   187						    chip_info,
+   188						    &ad7606_bi_bops);
+   189		} else {
+   190			id = platform_get_device_id(pdev);
+   191			chip_info = (const struct ad7606_chip_info *)id->driver_data;
+   192		}
+   193	
+   194		irq = platform_get_irq(pdev, 0);
+   195		if (irq < 0)
+   196			return irq;
+   197	
+   198		addr = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+   199		if (IS_ERR(addr))
+   200			return PTR_ERR(addr);
+   201	
+   202		remap_size = resource_size(res);
+   203	
+   204		return ad7606_probe(&pdev->dev, irq, addr, chip_info,
+   205				    remap_size > 1 ? &ad7606_par16_bops :
+   206				    &ad7606_par8_bops);
+   207	}
+   208	
 
 -- 
 0-DAY CI Kernel Test Service
