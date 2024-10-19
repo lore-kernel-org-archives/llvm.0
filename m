@@ -1,59 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F9C190688;
-	Sat, 19 Oct 2024 11:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547D8171C9
+	for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 13:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729337253; cv=none; b=DFAhYqG9UBODboFomjiLJPctSj1JwAmel6nTBBQemjWWWaVM5Ya8bUetb5pV6Fqi9BY8BegvUmkyW1kexJVyblCZrqTy5tFRCKTfoa2BdKqhORhgOSQ5PzAwwbzpKhTDyQNZCXz8ARNvw5I8lnB6/6YB0GuYXCdKJLA+qZ2akCo=
+	t=1729343661; cv=none; b=tIXIA83V7lgod6qoxIPyjz46di9JWYxMiFi5HLMH8Hh7BYvTWZXNBdA/RotDnhVfwhTyVWuqm80O2tbywuIDdY2KNtjX6AHtMJ1YXADCJjoqyH9w5grF7VijaD827DJNk2KCkEzDoPW2ZAz1nlqL9F4caKMNYzRT5wEUCCsYQLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729337253; c=relaxed/simple;
-	bh=pijQNZSBTeZTeE0FiP4YiVUtT/+A1Dr/Rvv/n3DysKc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hq86CTXrsqz0d7Yvp3Yr2050X/2eRSMwMdDk5DugPraETnsIuhiCza0mpSuUPw9Z7M3Wp/cn7ECYm7JJ2upYujpe/dByDhPVoJTOgiulV8lbJmGfW14MNqB0zGLAgAHwzW3pUIcqPw9o0LSn3Z2eSF5fo33c6sEMEw9ewzBtgao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ov706yF6; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729343661; c=relaxed/simple;
+	bh=nFttUmTwQuRiqVsH4U6ZQZ/PMt4PrXLz7NgQU/oEK8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G1WxyqLt6Zcg72bPk2ddWcVJmioJDVRweON53oaT9Ak4XL0ptdWhToVSs7b9atg/t4sUGin71em6dsBMFBCjsdXGdF3umJi8NwUtbwql0M71Weoy3bsgnI2k9rZSWpXGTieN3hfOuuJKcStmGsvE4qSDIbtBJmX0a6gmar1fpZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CS/pD5Zt; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ov706yF6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729337251; x=1760873251;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pijQNZSBTeZTeE0FiP4YiVUtT/+A1Dr/Rvv/n3DysKc=;
-  b=Ov706yF6XyIRseH5elRo8kyrxgipHtFIRbL7YNgNe6zqWollFIW05EmN
-   Ahe/L+ppUX76MICRa4Vbwi7q/acbnlWPoCJigY5z7G+3iLE/qvJ4ad+DE
-   hkGZHqusvF/w0YNbb5I4/5W6LAg4RjnaWKsGeM9KvFp5gyyh+Vf6leBhU
-   PnLzC7bZOxZirN7BMeibeLT18tlJxOoKE0eZZWb29JKj1iJytFK+ItTx9
-   07HEAkCEEkjLek999WBr37u0CV8lA+30cUR3ZPIOxXokEemjgF5vX7lrK
-   oGyfBlD5KIbxf8JuUeDeURD5D+TZK6vMqkPXrucb52zEvluEutoFJCaSz
-   A==;
-X-CSE-ConnectionGUID: j6D3raZkQQqzEHgn8Ikh+g==
-X-CSE-MsgGUID: gztP17uRRaWR4ZArY3UgBA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="31729969"
-X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="31729969"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 04:27:31 -0700
-X-CSE-ConnectionGUID: me8hvPDrQPyaIzdK4Q3S1A==
-X-CSE-MsgGUID: xukNM0uBQ9KZDew/YACVvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,216,1725346800"; 
-   d="scan'208";a="83724503"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 19 Oct 2024 04:27:30 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t27cG-000Ovz-07;
-	Sat, 19 Oct 2024 11:27:28 +0000
-Date: Sat, 19 Oct 2024 19:27:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:smmuv3_nesting 16/17] drivers/iommu/intel/svm.c:614:10:
- error: incompatible integer to pointer conversion returning 'int' from a
- function with result type 'struct iommu_domain *'
-Message-ID: <202410191934.kB3gdW2G-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CS/pD5Zt"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb587d0436so30521181fa.2
+        for <llvm@lists.linux.dev>; Sat, 19 Oct 2024 06:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1729343657; x=1729948457; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DsxiJAaLUxZ8WyINPgvN9VPitcA+1/D6dK458s/cN50=;
+        b=CS/pD5Zt84j0EeslmBurEtmmRYF69WARMXHUwWqPVVlMdLovj++WIhw7zpPH2uAeNK
+         G9xgI2CVQNZJCG6laD/4mNWnhyGWw4niJXZ2qhkIxBRBkAA7wg5m9iJuPKzZMvP1j4k3
+         q4XEGKFIvk6Xeu/DL3rBDxHgrTSY3Eh5F6sbNH96t3MAuxNJ9SWMSytDc3BnFAbgyHiB
+         uCuRqJy0ItLoGRRVsX2ThLvEcsNJJED2anyCnn4uLyEQsdrs4N1TNP4WfwGqHNXDb+4k
+         gSPmAK9j7qHHIRcoSwP/nfKwmcQCbAcJoEAgcQs6bRRMorDgXVSc9gTlSktNGKPiceh0
+         fqAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729343657; x=1729948457;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DsxiJAaLUxZ8WyINPgvN9VPitcA+1/D6dK458s/cN50=;
+        b=tU/lf1TEGTmIqY/wLLrTBh7THz1wAcNln9w3kA04nLs0ESohYvexpyeMquxx9XdN3x
+         cJH7fFuU+Pqgpxo/tZ10ylXAHtD/Qk2rkhiTujFLL49cgVl51xDmBRtgSlYDtAsegHsw
+         l8Njggwal6ZrZRlOEnBXO6wCH7wfkg6FmBFcF+NKHzIFETYdDI4xvV2qLBWfVGgkOM20
+         fX+R2QjVfaOt2kI+beokhpYovh2/hR2HIg/sApqyuAx69Hz3JU7MxxhFHio0RtdJS8x7
+         nxEmyzA7G54eeGlxB82cKGYpWOlo8jkUEtAt4hEaaofpLTBmHAF+F3hYjcKbHMY7sder
+         iN4A==
+X-Forwarded-Encrypted: i=1; AJvYcCXjQ9hQtDGcgHwgZ+tTWN4nwsMtXN2bnsaRziyt9zVOVZKR5AdjHwPHSlXX85WjAA9tI+Ud@lists.linux.dev
+X-Gm-Message-State: AOJu0YzUdSS2FnVjo3yt1KuUluTZjtfhyZmYyGXmI3ohB99ylGE6qu13
+	fdHBkf8g7aHseIjkFLK7I8Fw13QawRi6FRTCVoOJQsT/ahe5slfP9S3LZ8lE+4o=
+X-Google-Smtp-Source: AGHT+IEjv+MXakpefCsgi5HLZxPHwYDurtx/yD0nuWtCXMQYx9C38W3JKkkERUExxV4d2KBsbM6yEQ==
+X-Received: by 2002:a2e:e01:0:b0:2fa:cdd1:4f16 with SMTP id 38308e7fff4ca-2fb82ea761bmr22402471fa.14.1729343657256;
+        Sat, 19 Oct 2024 06:14:17 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2fb80712069sm5028321fa.0.2024.10.19.06.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2024 06:14:15 -0700 (PDT)
+Date: Sat, 19 Oct 2024 16:14:13 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>, 
+	Abhinav Kumar <quic_abhinavk@quicinc.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Sean Paul <sean@poorly.run>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
+Message-ID: <k42wmgziqia6balqsrfualbg73giesjxxtyaldkxsrdxkro2li@6neybqsu27me>
+References: <20241018151143.3543939-1-arnd@kernel.org>
+ <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,40 +74,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
 
-tree:   https://github.com/jgunthorpe/linux smmuv3_nesting
-head:   fa1528253d221071f2c743b194d5aebad4b55a93
-commit: 5675560a272cf55e51613638426723221922c75a [16/17] iommu/vt-d: Check if SVA is supported when attaching the SVA domain
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241019/202410191934.kB3gdW2G-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241019/202410191934.kB3gdW2G-lkp@intel.com/reproduce)
+On Sat, Oct 19, 2024 at 03:01:46PM +0530, Akhil P Oommen wrote:
+> On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > Clang-19 and above sometimes end up with multiple copies of the large
+> > a6xx_hfi_msg_bw_table structure on the stack. The problem is that
+> > a6xx_hfi_send_bw_table() calls a number of device specific functions to
+> > fill the structure, but these create another copy of the structure on
+> > the stack which gets copied to the first.
+> > 
+> > If the functions get inlined, that busts the warning limit:
+> > 
+> > drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
+> 
+> Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410191934.kB3gdW2G-lkp@intel.com/
+Kernel stacks are expected to be space limited, so 1024 is a logical
+limit for a single function.
 
-All errors (new ones prefixed by >>):
-
->> drivers/iommu/intel/svm.c:614:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct iommu_domain *' [-Wint-conversion]
-     614 |                 return ret;
-         |                        ^~~
-   1 error generated.
-
-
-vim +614 drivers/iommu/intel/svm.c
-
-   605	
-   606	struct iommu_domain *intel_svm_domain_alloc(struct device *dev,
-   607						    struct mm_struct *mm)
-   608	{
-   609		struct dmar_domain *domain;
-   610		int ret;
-   611	
-   612		ret = intel_iommu_sva_supported(dev);
-   613		if (ret)
- > 614			return ret;
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
