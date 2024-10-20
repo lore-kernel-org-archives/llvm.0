@@ -1,61 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A484FBF6;
-	Sun, 20 Oct 2024 06:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E133E49E;
+	Sun, 20 Oct 2024 08:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729405407; cv=none; b=M59ZDUyHYA7xIRSTrSOFVjxJEp+inTOhUY4wI6SO1JsMSgxVAI/+GvaP099ngF0kyoztc0J15nB6u0VvRxKhPQUWQGRJuyT6BCaUkh74KViPdWojVyBKgyUIUsjuhV6sus2XINPuxYqk2ROavA8PKcOHPne2Is/LDtyQJUvo3dA=
+	t=1729413570; cv=none; b=iVKxAH6DXgsB7cKp1++dRLas/95jzDkuSROxlwn/qJZt9MKKw+13m21xGXwcm63eI3xUux+N/NUCEYdf/yaBahm4uFfgPx6DAEUWnvrd1J2YKCq1PrK9nsmWYlob2SjuGLNV+a0+NRnJ0sXBONOIg7+ZEf5xGC3VHcTLWw4S2Ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729405407; c=relaxed/simple;
-	bh=YOgoFs16A+Y3ecRnnziswAMdFiSgBFhfuQnmuNNhXEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uG5yDnSjLFdhs+WadLIzXlEZu9v9JcsvlCfThrBZOtbcPwp3wIlslKSsPD4PPMX/4eINSzyLPoIDXwiyRJsv9yDK934hG9A4mpW9egdSkNjgKuo7HNLX+UOmHOSQXTbQv8fhDafdIAPDANCrgW5CWG8JRE6HKnG1HcAEhBRzk6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O+S6bFDp; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1729413570; c=relaxed/simple;
+	bh=5+0nPxWhqKb/RVZif0rjfToHtLz9i7HKFWWwkAw5SJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QK5P7YB5xPvmrYS3L4bwTKefGB4fW0zMqLhQb0c7p33eomHKRVXiz8oexbppSTsz/SHyWUnLhEfFYgDVjVzDV8mHmk8gtaQsF1pltfKigUJ7g0SSA4kY7VjhvKEIfw01IB9qK6FzZw/b8gTujmZ4wa2VRrpBdg5DXx9+O0T03iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Up1b4o+9; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O+S6bFDp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Up1b4o+9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729405404; x=1760941404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YOgoFs16A+Y3ecRnnziswAMdFiSgBFhfuQnmuNNhXEs=;
-  b=O+S6bFDpDuWiW5Sh6E64JoZy+REAT6mVuGtasg80awCLK4x7c7XynSAG
-   EWkyJEQQ9ygLe8eD24vTi2y1sJhLqR98Y6nFWpchDu5/UT6WVJufihRCb
-   9lmpfdcHHvhgiamJB0bAky4yBVq5R8ZZwOcBmRCgaRdsC9+eD5w6XptJb
-   vKds3qL1qlIUJ8nfY9FElI45NIZuTw6JAiq2JGH3e1hO1LjQEqSEOrCKu
-   /W7ynTSjkVg2aGA6oNP3ltecQiCSVmw9wbMlk+qPqdQSX8R7gVtK/I8ty
-   Yfe6DGVmhbKk/0pp07h30nfE8s1MlxWhCW0QZRGGmh03/Np/S/gOW+9hp
-   A==;
-X-CSE-ConnectionGUID: JnZjastTSPGRoFPQEKaRkg==
-X-CSE-MsgGUID: I3lGBmWdTHOJeh0ngLz2IA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="29117577"
-X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="29117577"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 23:23:23 -0700
-X-CSE-ConnectionGUID: o2wIV/AdRvqdj2qMlY04HQ==
-X-CSE-MsgGUID: esxB1rTeSJ2S6sjBYarB8A==
+  t=1729413568; x=1760949568;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5+0nPxWhqKb/RVZif0rjfToHtLz9i7HKFWWwkAw5SJ4=;
+  b=Up1b4o+9f2hIyp5FVBoQmFRQXd2rKETRfdQ09SC8f9v2ngrB97XiUyQI
+   BYS4oJBb1El/Pcau92heFy/Bu/r2kxIFrT3IxAevQwy/4opNPMArL9JNm
+   c/D8egX1Ig1vihENVo4Z7NsYDyn65gONVBAKDSs+k0xCSV/9eOCfBNjTI
+   Gme3IRkHdlDyQ781u19F/U0IP//g0QbEafcCWybK9HufSSANWoWB+hkoT
+   ABCvZT6SewLN82eAnMxPg/q8dNQdvKz316yxKQL9uVN/go1CEpExlRQ0H
+   3DgWcPbumDKLrC0qLVJHK++UQa7UzUb7tgoGqsdujEUcG6sur2NLsHsSm
+   g==;
+X-CSE-ConnectionGUID: 7EUBGZOtQ0ihxOfdp/aA9w==
+X-CSE-MsgGUID: v2nBsFJwQq+GpAa6xxN2ug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28693293"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28693293"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 01:39:28 -0700
+X-CSE-ConnectionGUID: agmxnTZ8QDaRsz7NzfkBXg==
+X-CSE-MsgGUID: 7q6nrsBUQzWIbZwzbC57dQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="79157493"
+   d="scan'208";a="83875283"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 19 Oct 2024 23:23:22 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 20 Oct 2024 01:39:26 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2PLT-000Pyn-1H;
-	Sun, 20 Oct 2024 06:23:19 +0000
-Date: Sun, 20 Oct 2024 14:23:02 +0800
+	id 1t2RTA-000Q7R-2E;
+	Sun, 20 Oct 2024 08:39:24 +0000
+Date: Sun, 20 Oct 2024 16:38:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ba Jing <bajing@cmss.chinamobile.com>, mporter@kernel.crashing.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alex.bou9@gmail.com, linux-kernel@vger.kernel.org,
-	Ba Jing <bajing@cmss.chinamobile.com>
-Subject: Re: [PATCH] rapidio: rio-access: remove unused macros
-Message-ID: <202410201348.MoFc4X0v-lkp@intel.com>
-References: <20241015000207.5047-1-bajing@cmss.chinamobile.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 39/39] fs/nfsd/nfs4state.c:5493:6: error:
+ redefinition of 'mask'
+Message-ID: <202410201607.joGn9Azm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,154 +61,155 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015000207.5047-1-bajing@cmss.chinamobile.com>
 
-Hi Ba,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.12-rc3 next-20241018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ba-Jing/rapidio-rio-access-remove-unused-macros/20241017-152330
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241015000207.5047-1-bajing%40cmss.chinamobile.com
-patch subject: [PATCH] rapidio: rio-access: remove unused macros
-config: i386-buildonly-randconfig-002-20241020 (https://download.01.org/0day-ci/archive/20241020/202410201348.MoFc4X0v-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   380a610024a1525d57e7d65bb495f7ecb87cb5ff
+commit: 380a610024a1525d57e7d65bb495f7ecb87cb5ff [39/39] nfsd: add notification handlers for dir events
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241020/202410201607.joGn9Azm-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201348.MoFc4X0v-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201607.joGn9Azm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410201348.MoFc4X0v-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410201607.joGn9Azm-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/rapidio/rio-access.c:52:1: error: use of undeclared identifier 'RIO_8_BAD'
-      52 | RIO_LOP_READ(8, u8, 1)
-         | ^
-   drivers/rapidio/rio-access.c:29:6: note: expanded from macro 'RIO_LOP_READ'
-      29 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
+>> fs/nfsd/nfs4state.c:5493:6: error: redefinition of 'mask'
+    5493 |         u32 mask = 0;
          |             ^
-   <scratch space>:171:1: note: expanded from here
-     171 | RIO_8_BAD
+   fs/nfsd/nfs4state.c:5488:31: note: previous definition is here
+    5488 | int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
+         |                               ^
+>> fs/nfsd/nfs4state.c:5501:27: error: expected expression
+    5501 |                 struct file_lease *fl = container_of(struct file_lock_core,
+         |                                         ^
+   include/linux/container_of.h:19:30: note: expanded from macro 'container_of'
+      19 |         void *__mptr = (void *)(ptr);                                   \
+         |                                     ^
+>> fs/nfsd/nfs4state.c:5501:27: error: expected expression
+   include/linux/container_of.h:20:16: note: expanded from macro 'container_of'
+      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^
+   include/linux/compiler_types.h:458:64: note: expanded from macro '__same_type'
+     458 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                ^
+>> fs/nfsd/nfs4state.c:5501:27: error: expected expression
+   include/linux/container_of.h:21:9: note: expanded from macro 'container_of'
+      21 |                       __same_type(*(ptr), void),                        \
+         |                       ^
+   include/linux/compiler_types.h:458:64: note: expanded from macro '__same_type'
+     458 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                ^
+>> fs/nfsd/nfs4state.c:5501:27: error: no member named 'flc_list' in 'file_lease'
+    5501 |                 struct file_lease *fl = container_of(struct file_lock_core,
+         |                                         ^
+    5502 |                                                      struct file_lease, flc_list);
+         |                                                                         ~~~~~~~~
+   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
+      23 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^              ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                        ~~~~~~
+>> fs/nfsd/nfs4state.c:5501:22: error: initializing 'struct file_lease *' with an expression of incompatible type 'void'
+    5501 |                 struct file_lease *fl = container_of(struct file_lock_core,
+         |                                    ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    5502 |                                                      struct file_lease, flc_list);
+         |                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/nfsd/nfs4state.c:5505:12: error: no member named 'fl_lmops' in 'struct file_lock_core'
+    5505 |                 if (flc->fl_lmops != &nfsd_dir_lease_mng_ops)
+         |                     ~~~  ^
+>> fs/nfsd/nfs4state.c:5510:40: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
+    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
+         |                                                         ~~~~^
+         |                                                             ->
+   fs/nfsd/nfs4state.c:5510:61: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
+    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
+         |                                                                              ~~~~^
+         |                                                                                  ->
+>> fs/nfsd/nfs4state.c:5510:28: error: field designator 'count' does not refer to any field in type 'component4' (aka 'opaque')
+    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
+         |                                                ~^~~~~~~~~~~~~~~~
+>> fs/nfsd/nfs4state.c:5510:47: error: field designator 'element' does not refer to any field in type 'component4' (aka 'opaque')
+    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
+         |                                                                   ~^~~~~~~~~~~~~~~~~~~
+>> fs/nfsd/nfs4state.c:5510:68: error: expected ';' at end of declaration
+    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
+         |                                                                                         ^
+         |                                                                                         ;
+>> fs/nfsd/nfs4state.c:5513:29: error: no member named 'count' in 'opaque'
+    5513 |                         nr.nrm_old_entry.ne_file.count = name.len;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   fs/nfsd/nfs4state.c:5513:41: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
+    5513 |                         nr.nrm_old_entry.ne_file.count = name.len;
+         |                                                          ~~~~^
+         |                                                              ->
+>> fs/nfsd/nfs4state.c:5514:29: error: no member named 'element' in 'opaque'
+    5514 |                         nr.nrm_old_entry.ne_file.element = name.name;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   fs/nfsd/nfs4state.c:5514:43: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
+    5514 |                         nr.nrm_old_entry.ne_file.element = name.name;
+         |                                                            ~~~~^
+         |                                                                ->
+>> fs/nfsd/nfs4state.c:5516:26: error: redefinition of 'nr'
+    5516 |                         struct notify_remove4 nr;
+         |                                               ^
+   fs/nfsd/nfs4state.c:5511:26: note: previous definition is here
+    5511 |                         struct notify_remove4 nr = { };
+         |                                               ^
+>> fs/nfsd/nfs4state.c:5488:5: warning: no previous prototype for function 'nfsd_handle_dir_event' [-Wmissing-prototypes]
+    5488 | int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
+         |     ^
+   fs/nfsd/nfs4state.c:5488:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    5488 | int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
          | ^
->> drivers/rapidio/rio-access.c:53:1: error: use of undeclared identifier 'RIO_16_BAD'
-      53 | RIO_LOP_READ(16, u16, 2)
-         | ^
-   drivers/rapidio/rio-access.c:29:6: note: expanded from macro 'RIO_LOP_READ'
-      29 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:174:1: note: expanded from here
-     174 | RIO_16_BAD
-         | ^
->> drivers/rapidio/rio-access.c:54:1: error: use of undeclared identifier 'RIO_32_BAD'
-      54 | RIO_LOP_READ(32, u32, 4)
-         | ^
-   drivers/rapidio/rio-access.c:29:6: note: expanded from macro 'RIO_LOP_READ'
-      29 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:177:1: note: expanded from here
-     177 | RIO_32_BAD
-         | ^
-   drivers/rapidio/rio-access.c:55:1: error: use of undeclared identifier 'RIO_8_BAD'
-      55 | RIO_LOP_WRITE(8, u8, 1)
-         | ^
-   drivers/rapidio/rio-access.c:48:6: note: expanded from macro 'RIO_LOP_WRITE'
-      48 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:180:1: note: expanded from here
-     180 | RIO_8_BAD
-         | ^
-   drivers/rapidio/rio-access.c:56:1: error: use of undeclared identifier 'RIO_16_BAD'
-      56 | RIO_LOP_WRITE(16, u16, 2)
-         | ^
-   drivers/rapidio/rio-access.c:48:6: note: expanded from macro 'RIO_LOP_WRITE'
-      48 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:183:1: note: expanded from here
-     183 | RIO_16_BAD
-         | ^
-   drivers/rapidio/rio-access.c:57:1: error: use of undeclared identifier 'RIO_32_BAD'
-      57 | RIO_LOP_WRITE(32, u32, 4)
-         | ^
-   drivers/rapidio/rio-access.c:48:6: note: expanded from macro 'RIO_LOP_WRITE'
-      48 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:186:1: note: expanded from here
-     186 | RIO_32_BAD
-         | ^
-   drivers/rapidio/rio-access.c:105:1: error: use of undeclared identifier 'RIO_8_BAD'
-     105 | RIO_OP_READ(8, u8, 1)
-         | ^
-   drivers/rapidio/rio-access.c:81:6: note: expanded from macro 'RIO_OP_READ'
-      81 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:25:1: note: expanded from here
-      25 | RIO_8_BAD
-         | ^
-   drivers/rapidio/rio-access.c:106:1: error: use of undeclared identifier 'RIO_16_BAD'
-     106 | RIO_OP_READ(16, u16, 2)
-         | ^
-   drivers/rapidio/rio-access.c:81:6: note: expanded from macro 'RIO_OP_READ'
-      81 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:28:1: note: expanded from here
-      28 | RIO_16_BAD
-         | ^
-   drivers/rapidio/rio-access.c:107:1: error: use of undeclared identifier 'RIO_32_BAD'
-     107 | RIO_OP_READ(32, u32, 4)
-         | ^
-   drivers/rapidio/rio-access.c:81:6: note: expanded from macro 'RIO_OP_READ'
-      81 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:31:1: note: expanded from here
-      31 | RIO_32_BAD
-         | ^
-   drivers/rapidio/rio-access.c:108:1: error: use of undeclared identifier 'RIO_8_BAD'
-     108 | RIO_OP_WRITE(8, u8, 1)
-         | ^
-   drivers/rapidio/rio-access.c:100:6: note: expanded from macro 'RIO_OP_WRITE'
-     100 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:34:1: note: expanded from here
-      34 | RIO_8_BAD
-         | ^
-   drivers/rapidio/rio-access.c:109:1: error: use of undeclared identifier 'RIO_16_BAD'
-     109 | RIO_OP_WRITE(16, u16, 2)
-         | ^
-   drivers/rapidio/rio-access.c:100:6: note: expanded from macro 'RIO_OP_WRITE'
-     100 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:37:1: note: expanded from here
-      37 | RIO_16_BAD
-         | ^
-   drivers/rapidio/rio-access.c:110:1: error: use of undeclared identifier 'RIO_32_BAD'
-     110 | RIO_OP_WRITE(32, u32, 4)
-         | ^
-   drivers/rapidio/rio-access.c:100:6: note: expanded from macro 'RIO_OP_WRITE'
-     100 |         if (RIO_##size##_BAD) return RIO_BAD_SIZE;                      \
-         |             ^
-   <scratch space>:40:1: note: expanded from here
-      40 | RIO_32_BAD
-         | ^
-   12 errors generated.
+         | static 
+   1 warning and 17 errors generated.
 
 
-vim +/RIO_8_BAD +52 drivers/rapidio/rio-access.c
+vim +/mask +5493 fs/nfsd/nfs4state.c
 
-394b701ce4fbfd Matt Porter 2005-11-07  51  
-394b701ce4fbfd Matt Porter 2005-11-07 @52  RIO_LOP_READ(8, u8, 1)
-394b701ce4fbfd Matt Porter 2005-11-07 @53  RIO_LOP_READ(16, u16, 2)
-394b701ce4fbfd Matt Porter 2005-11-07 @54  RIO_LOP_READ(32, u32, 4)
-394b701ce4fbfd Matt Porter 2005-11-07  55  RIO_LOP_WRITE(8, u8, 1)
-394b701ce4fbfd Matt Porter 2005-11-07  56  RIO_LOP_WRITE(16, u16, 2)
-394b701ce4fbfd Matt Porter 2005-11-07  57  RIO_LOP_WRITE(32, u32, 4)
-394b701ce4fbfd Matt Porter 2005-11-07  58  
+  5487	
+> 5488	int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
+  5489				  const struct qstr *name)
+  5490	{
+  5491		struct file_lock_context *ctx;
+  5492		struct file_lock_core *flc;
+> 5493		u32 mask = 0;
+  5494	
+  5495		ctx = locks_inode_context(inode);
+  5496		if (!ctx)
+  5497			return 0;
+  5498	
+  5499		spin_lock(&ctx->flc_lock);
+  5500		list_for_each_entry(flc, &ctx->flc_lease, flc_list) {
+> 5501			struct file_lease *fl = container_of(struct file_lock_core,
+  5502							     struct file_lease, flc_list);
+  5503			struct nfs4_delegation *dp = flc->flc_owner;
+  5504	
+> 5505			if (flc->fl_lmops != &nfsd_dir_lease_mng_ops)
+  5506				continue;
+  5507	
+  5508			/* find delegation, check IGN bits, marshal notify if they match */
+  5509			if (mask & FS_DELETE) {
+> 5510				component4 oldname = { .count = name.len, .element = name.name }
+  5511				struct notify_remove4 nr = { };
+  5512	
+> 5513				nr.nrm_old_entry.ne_file.count = name.len;
+> 5514				nr.nrm_old_entry.ne_file.element = name.name;
+  5515	
+> 5516				struct notify_remove4 nr;
+  5517	
+  5518				if (!(flc->flc_flags & FL_IGN_DIR_DELETE))
+  5519					continue;
+  5520			}
+  5521	
+  5522		}
+  5523		spin_unlock(&ctx->flc_lock);
+  5524	}
+  5525	
 
 -- 
 0-DAY CI Kernel Test Service
