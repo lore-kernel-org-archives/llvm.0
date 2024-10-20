@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3710417C200;
-	Sun, 20 Oct 2024 11:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E4719259F;
+	Sun, 20 Oct 2024 11:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729422946; cv=none; b=THQ3NPfoYmQ7BheSohmWTMFhRhYlZJhpUTv+dvD+vvST07ypeN1ae1ME4KsAIqKdoqWj0AjFvGXo2WqmXXnUC6KjuBCLS7snpgbMP+eND0HiVzGdK7G6sQNDgfA+zoHUSnz4kvuY3FwIDjVlnYkGTvEFoMvz/Co5+xNmQMABrW4=
+	t=1729425466; cv=none; b=iiw/iwXVV9vKD4xtoXKolxi7p9/IBU39QPzWtmOlTCihTutKwH7gfOC93RZja0M9h27KWOl2EDBARphy8zIuftEukm3rcAJ0xIuvVUR2B5Vm3QznrXGsuFDXOkXonQCvDzMOFGzZaT66RuIFEfFXepzAA/11I3+X5/sWp62SzVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729422946; c=relaxed/simple;
-	bh=dNaIP19J6t4liRQU078lv5AlRenmylPH0pYmXw92tqg=;
+	s=arc-20240116; t=1729425466; c=relaxed/simple;
+	bh=NusKdUyvj/EWpbxU2J1ZIMoe76mgSStPu5zFOKCDzTo=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xw7l5pI7a7lAveNlFRoDTp4Yk7YItxo8r4RmC20E7nQt4DTRwtxg1oMsgalSH5c10C/ASDUBOS+fhrk0rod4dxdZ5MWSUWsAVXRH8/p87YlKZca8N059F+RsA1Qe9m9F9DuSOi/o7HXncmUdBv62xW3jE0wR43GQZ7JMxfyQ3MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nrNhfY4k; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=qc/nFGodOG2e1uDy0AhF6XeUX4Ut6W5pfLuHbI+Geqm8pg/QO/89Q0i94R3W7FwExR0BIZlxVXq4MtZ+2vAm2iOg17QGzAZLF19boiUfMex0eVxU/PIeql2NNH2NBzCIEiehsYYJrbiDOy67WoAbFrmDh3LXJct9PaTZxQcV2h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PlVGDAFe; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nrNhfY4k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PlVGDAFe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729422945; x=1760958945;
+  t=1729425462; x=1760961462;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dNaIP19J6t4liRQU078lv5AlRenmylPH0pYmXw92tqg=;
-  b=nrNhfY4kl3tp1cvs98eT/vAs8YNBXZMT7rB1A6h39ltmNLeFmrN7GGft
-   T9ATmRBwlPcYa8iPsLKTZgle47jNkvjKHgbxNv2BsT1bkjuwksWHtMWGd
-   5P4mhb5Oh80svGpIICsWGvezld9FO0L+Hh+apjB+w5GPQuIn1W6aCU2F7
-   UHNQwmafSb9kd2jLNg2hT9GtVMbacJoJJNbAd2snsHl+cu/IoKAc1PF4b
-   btSkfFl7U7PxzCvxQS/2D1iv6TYOPtABCeJfWuchMEEmkw3cn+LeMTaj1
-   VVwFzbHB19In4kxVGYQWpfzpbQ3y3YqsTl5PnfgTDbH/ARlyE10Nz4XCL
+  bh=NusKdUyvj/EWpbxU2J1ZIMoe76mgSStPu5zFOKCDzTo=;
+  b=PlVGDAFeoU4PS6qHktlsij82dO5aizryxJV4hUh/bIaN7XmLBHdsx8Tg
+   aqSKdgd53R8to/OBjO6I0uBOKC4+TmVUCaon1x4W84tha1tAnfTsBgJ29
+   QFoZy8z3zp8ajvmBAxIe5E7fQy4xfBZGR6mf4/2PjbG+hcmjrcp6Lr2am
+   sqodv7HqJJdoQKd7Qgmmxdu9tUnvNs/UjWvqyHkTT8Ak5Dt4dmzyZGxbK
+   PYKqhICRYLjHRVhD/tGTtnMvVdXslj5vmQlJ0fjHiFP6CSHO1FxFDvSX6
+   WbkW6U3DY84XRXvbH8VRZvQ3PNA9RUpVQtiiutlbdI1Ex5SkRJJvZfJUh
    Q==;
-X-CSE-ConnectionGUID: Dy2dIGjNRu+wi/OuqhCuxg==
-X-CSE-MsgGUID: sQU4rFVPT76Hda8ehKcsdg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="32824829"
-X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="32824829"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 04:15:41 -0700
-X-CSE-ConnectionGUID: A6B/A7DvQ/iP0D80kWE+og==
-X-CSE-MsgGUID: 1Vkx7wxuS6qZ7Auow41H/g==
+X-CSE-ConnectionGUID: TahBUggNROyG6v25cBMWKA==
+X-CSE-MsgGUID: KlKUN7x1QHGtP7NKXBQ7QQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40037176"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40037176"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 04:57:42 -0700
+X-CSE-ConnectionGUID: v6NiQ6sBQ+qqRS+IjZIsrQ==
+X-CSE-MsgGUID: pdnp1tNOT0Wiu3T4XRR+kQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="84061052"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="84091136"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 20 Oct 2024 04:15:40 -0700
+  by orviesa003.jf.intel.com with ESMTP; 20 Oct 2024 04:57:41 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2TuL-000QEB-1B;
-	Sun, 20 Oct 2024 11:15:37 +0000
-Date: Sun, 20 Oct 2024 19:15:19 +0800
+	id 1t2UZ0-000QGD-2U;
+	Sun, 20 Oct 2024 11:57:38 +0000
+Date: Sun, 20 Oct 2024 19:56:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20241015-2 1/20]
- kernel/sched/ext.c:3454:10: error: incompatible pointer types returning
- 'struct cgroup_hdr *' from a function with result type 'struct cgroup *'
-Message-ID: <202410201911.RjSrvRuo-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation
+ between different enumeration types ('enum sti_plane_type' and 'enum
+ sti_plane_id_of_type')
+Message-ID: <202410201951.B9q3AL5V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,53 +64,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20241015-2
-head:   f4f8ca5cd7f039bcab816194342c7b6101e891fe
-commit: 7c9abd83f6b3412752cbb1a76954568b5316ad61 [1/20] cgroup: Avoid -Wflex-array-member-not-at-end warnings
-config: i386-buildonly-randconfig-003-20241020 (https://download.01.org/0day-ci/archive/20241020/202410201911.RjSrvRuo-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201911.RjSrvRuo-lkp@intel.com/reproduce)
+Hi Ville,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f9e4825524aaf28af6b2097776616f27c31d6847
+commit: 74bde7581df3e18061119e1b27b63d0a9ea57b7a drm/sti: Allow build with COMPILE_TEST=y
+date:   5 months ago
+config: powerpc64-randconfig-001-20241019 (https://download.01.org/0day-ci/archive/20241020/202410201951.B9q3AL5V-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201951.B9q3AL5V-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410201911.RjSrvRuo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410201951.B9q3AL5V-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/build_policy.c:63:
->> kernel/sched/ext.c:3454:10: error: incompatible pointer types returning 'struct cgroup_hdr *' from a function with result type 'struct cgroup *' [-Werror,-Wincompatible-pointer-types]
-    3454 |                 return &cgrp_dfl_root.cgrp;
-         |                        ^~~~~~~~~~~~~~~~~~~
->> kernel/sched/ext.c:7152:17: error: incompatible pointer types initializing 'struct cgroup *' with an expression of type 'struct cgroup_hdr *' [-Werror,-Wincompatible-pointer-types]
-    7152 |         struct cgroup *cgrp = &cgrp_dfl_root.cgrp;
-         |                        ^      ~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   In file included from drivers/gpu/drm/sti/sti_vid.c:8:
+   In file included from include/drm/drm_debugfs.h:38:
+   In file included from include/drm/drm_gpuvm.h:34:
+   In file included from include/drm/drm_gem.h:42:
+   In file included from include/drm/drm_vma_manager.h:27:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/sti/sti_vid.c:12:
+>> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   9 errors generated.
 
 
-vim +3454 kernel/sched/ext.c
+vim +32 drivers/gpu/drm/sti/sti_plane.h
 
-f0e1a0643a59bf Tejun Heo 2024-06-18  3442  
-8195136669661f Tejun Heo 2024-09-04  3443  #ifdef CONFIG_EXT_GROUP_SCHED
-8195136669661f Tejun Heo 2024-09-04  3444  static struct cgroup *tg_cgrp(struct task_group *tg)
-8195136669661f Tejun Heo 2024-09-04  3445  {
-8195136669661f Tejun Heo 2024-09-04  3446  	/*
-8195136669661f Tejun Heo 2024-09-04  3447  	 * If CGROUP_SCHED is disabled, @tg is NULL. If @tg is an autogroup,
-8195136669661f Tejun Heo 2024-09-04  3448  	 * @tg->css.cgroup is NULL. In both cases, @tg can be treated as the
-8195136669661f Tejun Heo 2024-09-04  3449  	 * root cgroup.
-8195136669661f Tejun Heo 2024-09-04  3450  	 */
-8195136669661f Tejun Heo 2024-09-04  3451  	if (tg && tg->css.cgroup)
-8195136669661f Tejun Heo 2024-09-04  3452  		return tg->css.cgroup;
-8195136669661f Tejun Heo 2024-09-04  3453  	else
-8195136669661f Tejun Heo 2024-09-04 @3454  		return &cgrp_dfl_root.cgrp;
-8195136669661f Tejun Heo 2024-09-04  3455  }
-8195136669661f Tejun Heo 2024-09-04  3456  
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  30  
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  31  enum sti_plane_desc {
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31 @32  	STI_GDP_0       = STI_GDP | STI_ID_0,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  33  	STI_GDP_1       = STI_GDP | STI_ID_1,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  34  	STI_GDP_2       = STI_GDP | STI_ID_2,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  35  	STI_GDP_3       = STI_GDP | STI_ID_3,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  36  	STI_HQVDP_0     = STI_VDP | STI_ID_0,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  37  	STI_CURSOR      = STI_CUR,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  38  	STI_BACK        = STI_BCK
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  39  };
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  40  
 
-:::::: The code at line 3454 was first introduced by commit
-:::::: 8195136669661fdfe54e9a8923c33b31c92fc1da sched_ext: Add cgroup support
+:::::: The code at line 32 was first introduced by commit
+:::::: 871bcdfea68560991bd650406e47a801ab9d635d drm/sti: code clean up
 
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Tejun Heo <tj@kernel.org>
+:::::: TO: Vincent Abriou <vincent.abriou@st.com>
+:::::: CC: Benjamin Gaignard <benjamin.gaignard@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
