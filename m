@@ -1,75 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C15191F85;
-	Sat, 19 Oct 2024 23:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84E92107;
+	Sun, 20 Oct 2024 01:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729380672; cv=none; b=Kw80aJx2YWYA72BaUMpI4UEeJaCNeLoNTCsRmdiLZaldoMO3XJowYbv7aCFEE4dh+ljzLqDLO0hQb6n5AfDVwza7IxgJHIcwYglP39h2Gk0xr2Z1FglelshfaKKFDHR5YSfcj6tpGuIrc1/vKazDK5RbBoUqjj2c3LrT9vcFKlg=
+	t=1729387453; cv=none; b=ABpBvMtPHnHE0hKhaD5/T+ojlp6gKegC2+JkcCivUwGnyHhFCaeigm2FelazTGKvRbC8gEkUsyIu2Gra6QrgNISTOmVGocHLyOPvsZxFE1nLSoq95HrtqixrMpCfpMbimBWguK7FLlDEbWRpFmzdy21ip6eazv0I7Xx2SmSjxQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729380672; c=relaxed/simple;
-	bh=QJFaiLJx8wP1o0F9cMZ2/TiWHrNvfHJ/0KxFQ/SqVaw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UwqtVP2sw1j8/EKT/ceeXq+w4KVjX7mOI5YFOpKVauFeuurHLqbjxES8DQHW9DcMTAqQibt06OyeYV4IwQLLhKtiZMKuZFv71KcbxgmVrwkHtuMHr2QXRnvR0g1N8iUHUc6+Q7RJVLgsTiIWpgZroNUzozJgpbhhQ7b+bpI0opk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a6r7uJlC; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1729387453; c=relaxed/simple;
+	bh=80wYCNlnn8HZ+vn47bySEclsc/5vOzrrhU7T65FVjSM=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nF7MOxOdwftTOtdQ8jicCwulsp4467JSJvLIic4WhW+llYc4DpON0b7ND6ZfIs3YRxnQcQN/3dVNR6/IqZGqV07ZOJ7hfrOzUTajKli0SohqkOQZ5fszRIGfiDj8e4xjviMQV/8Sqyhyr9eQaDQ+HrVDMuXEz/Ap4W+51lcP+hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jVVm+7bA; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a6r7uJlC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jVVm+7bA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729380670; x=1760916670;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QJFaiLJx8wP1o0F9cMZ2/TiWHrNvfHJ/0KxFQ/SqVaw=;
-  b=a6r7uJlC5Xp8sUTtebtDMoZUMvLdHPJHSmWZ1OROpjb5tfxwBYdOlh7X
-   yNQF+lB4yYVykTE/aB4RqZEpD9pDLeLT9jXW8i/lbWxm6AW4IQKcJqGpQ
-   bbiumYlOHG+D9ALCk979Hqfhm+G5p73UnBQp1tNj9GFaUMAKFYAmpH+AN
-   6YWONOCifwcS8c+WHcw3v3+9gVzeCJp3P7RybG2w6FU7sonP9vs3Cuol8
-   lKZ/1EjLgdBnhUkbQhJtToE5dTm3VDKk5NSuN0Fe6Dl+BppxwJP3DWHMs
-   st0kq5Rf7CJ/IQDv1sSJHulvVYOHP4wdtAJg0/3Nl3oYKxdqb4W8iLIHG
+  t=1729387451; x=1760923451;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=80wYCNlnn8HZ+vn47bySEclsc/5vOzrrhU7T65FVjSM=;
+  b=jVVm+7bAwn+7l7PrzG23lY7COJVloBSfgGBdKy0UIlc/ekXzZuTXA0Ce
+   BPO30T1wfA+iQ8zBX0PoZqknx0FQAqYYDUTJYiqI5Zuv1kfLSfwBmmd8s
+   /oTlGNTdaQH3UmT1uNL9RM9Gl5XvSv985RubyLi1I8w/U1QuzfYB7C6jN
+   dpCa+i5BCumwtbFVRDqQJVlATcIX3kHHsr4YsFEbsA1g+4LU1MuZ6dJpR
+   TbrmJb7LhRvnLYRL7nRxop4yjLphZRVbZjg6rQ5x9MYqZKuQ1I99gNNDQ
+   hX0UaqmH4vM6ZcrlFJhBcHHtZGFjcN6pJXxNqqE30PTIIH/fk4ALMvhWa
    Q==;
-X-CSE-ConnectionGUID: D6VxRDtWRJGwYjKBvWfSYw==
-X-CSE-MsgGUID: BLQTz5ZrQIKRk6FiZUSJyw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29052600"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29052600"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 16:31:09 -0700
-X-CSE-ConnectionGUID: Ah9d7WF/Qw2YlxG1P2hU9Q==
-X-CSE-MsgGUID: c6jHdY2PQMeFhMQQ9pJuaw==
+X-CSE-ConnectionGUID: U4+6GKVFSzGb2d7neojIMA==
+X-CSE-MsgGUID: iCo+MoGaSd6R3oYlBd8AEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="31754107"
+X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
+   d="scan'208";a="31754107"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2024 18:24:10 -0700
+X-CSE-ConnectionGUID: tlrmPKDHRGOM5vhP5SAezw==
+X-CSE-MsgGUID: te1B8AEOQUiUpCA6J4RVGg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,217,1725346800"; 
-   d="scan'208";a="79590031"
+   d="scan'208";a="78782569"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 19 Oct 2024 16:31:05 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 19 Oct 2024 18:24:09 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2IuU-000Pdl-0u;
-	Sat, 19 Oct 2024 23:31:02 +0000
-Date: Sun, 20 Oct 2024 07:30:34 +0800
+	id 1t2Kfv-000Pkb-1n;
+	Sun, 20 Oct 2024 01:24:07 +0000
+Date: Sun, 20 Oct 2024 09:23:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hermes Wu via B4 Relay <devnull+Hermes.wu.ite.com.tw@kernel.org>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Pin-yen Lin <treapking@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Kenneth Hung <Kenneth.hung@ite.com.tw>,
-	Pet Weng <Pet.Weng@ite.com.tw>, Hermes Wu <Hermes.wu@ite.com.tw>
-Subject: Re: [PATCH v6 03/10] drm/bridge: it6505: add AUX operation for HDCP
- KSV list read
-Message-ID: <202410200756.KlsPLE8A-lkp@intel.com>
-References: <20241016-upstream-v6-v6-3-4d93a0c46de1@ite.com.tw>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [ardb:objtool-jump-table-annotations-v3 3/9] vmlinux.o: warning:
+ objtool: .text+0x3: unreachable instruction
+Message-ID: <202410200918.miJX4gn5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,248 +60,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241016-upstream-v6-v6-3-4d93a0c46de1@ite.com.tw>
 
-Hi Hermes,
+TO: Ard Biesheuvel <ardb@kernel.org>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on b8128f7815ff135f0333c1b46dcdf1543c41b860]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hermes-Wu-via-B4-Relay/drm-bridge-it6505-Change-definition-of-AUX_FIFO_MAX_SIZE/20241016-155607
-base:   b8128f7815ff135f0333c1b46dcdf1543c41b860
-patch link:    https://lore.kernel.org/r/20241016-upstream-v6-v6-3-4d93a0c46de1%40ite.com.tw
-patch subject: [PATCH v6 03/10] drm/bridge: it6505: add AUX operation for HDCP KSV list read
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241020/202410200756.KlsPLE8A-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410200756.KlsPLE8A-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git objtool-jump-table-annotations-v3
+head:   f9d0cfe1d2d90f5c65b29dec3adc01fb3b64a20e
+commit: a23f44312feaa9f028f2dfb8318f1cf90c86144f [3/9] objtool: Deal with relative jump tables correctly
+config: x86_64-buildonly-randconfig-006-20241020 (https://download.01.org/0day-ci/archive/20241020/202410200918.miJX4gn5-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410200918.miJX4gn5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410200756.KlsPLE8A-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410200918.miJX4gn5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/bridge/ite-it6505.c:13:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/bridge/ite-it6505.c:13:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/bridge/ite-it6505.c:13:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/bridge/ite-it6505.c:13:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/gpu/drm/bridge/ite-it6505.c:1004:40: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1004 |         it6505_write(it6505, REG_AUX_CMD_REQ, FIELD_GET(M_AUX_REQ_CMD, cmd));
-         |                                               ^
-   7 warnings and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
-
-
-vim +/FIELD_GET +1004 drivers/gpu/drm/bridge/ite-it6505.c
-
-   956	
-   957	static ssize_t it6505_aux_operation(struct it6505 *it6505,
-   958					    enum aux_cmd_type cmd,
-   959					    unsigned int address, u8 *buffer,
-   960					    size_t size, enum aux_cmd_reply *reply)
-   961	{
-   962		int i, ret;
-   963		bool aux_write_check = false;
-   964	
-   965		if (!it6505_get_sink_hpd_status(it6505))
-   966			return -EIO;
-   967	
-   968		/* set AUX user mode */
-   969		it6505_set_bits(it6505, REG_AUX_CTRL, AUX_USER_MODE, AUX_USER_MODE);
-   970	
-   971	aux_op_start:
-   972		/* HW AUX FIFO supports only EDID and DCPD KSV FIFO area */
-   973		if (cmd == CMD_AUX_I2C_EDID_READ || cmd == CMD_AUX_GET_KSV_LIST) {
-   974			/* AUX EDID FIFO has max length of AUX_FIFO_MAX_SIZE bytes. */
-   975			size = min_t(size_t, size, AUX_FIFO_MAX_SIZE);
-   976			/* Enable AUX FIFO read back and clear FIFO */
-   977			it6505_set_bits(it6505, REG_AUX_CTRL,
-   978					AUX_EN_FIFO_READ | CLR_EDID_FIFO,
-   979					AUX_EN_FIFO_READ | CLR_EDID_FIFO);
-   980	
-   981			it6505_set_bits(it6505, REG_AUX_CTRL,
-   982					AUX_EN_FIFO_READ | CLR_EDID_FIFO,
-   983					AUX_EN_FIFO_READ);
-   984		} else {
-   985			/* The DP AUX transmit buffer has 4 bytes. */
-   986			size = min_t(size_t, size, 4);
-   987			it6505_set_bits(it6505, REG_AUX_CTRL, AUX_NO_SEGMENT_WR,
-   988					AUX_NO_SEGMENT_WR);
-   989		}
-   990	
-   991		/* Start Address[7:0] */
-   992		it6505_write(it6505, REG_AUX_ADR_0_7, (address >> 0) & 0xFF);
-   993		/* Start Address[15:8] */
-   994		it6505_write(it6505, REG_AUX_ADR_8_15, (address >> 8) & 0xFF);
-   995		/* WriteNum[3:0]+StartAdr[19:16] */
-   996		it6505_write(it6505, REG_AUX_ADR_16_19,
-   997			     ((address >> 16) & 0x0F) | ((size - 1) << 4));
-   998	
-   999		if (cmd == CMD_AUX_NATIVE_WRITE)
-  1000			regmap_bulk_write(it6505->regmap, REG_AUX_OUT_DATA0, buffer,
-  1001					  size);
-  1002	
-  1003		/* Aux Fire */
-> 1004		it6505_write(it6505, REG_AUX_CMD_REQ, FIELD_GET(M_AUX_REQ_CMD, cmd));
-  1005	
-  1006		ret = it6505_aux_wait(it6505);
-  1007		if (ret < 0)
-  1008			goto aux_op_err;
-  1009	
-  1010		ret = it6505_read(it6505, REG_AUX_ERROR_STS);
-  1011		if (ret < 0)
-  1012			goto aux_op_err;
-  1013	
-  1014		switch ((ret >> 6) & 0x3) {
-  1015		case 0:
-  1016			*reply = REPLY_ACK;
-  1017			break;
-  1018		case 1:
-  1019			*reply = REPLY_DEFER;
-  1020			ret = -EAGAIN;
-  1021			goto aux_op_err;
-  1022		case 2:
-  1023			*reply = REPLY_NACK;
-  1024			ret = -EIO;
-  1025			goto aux_op_err;
-  1026		case 3:
-  1027			ret = -ETIMEDOUT;
-  1028			goto aux_op_err;
-  1029		}
-  1030	
-  1031		/* Read back Native Write data */
-  1032		if (cmd == CMD_AUX_NATIVE_WRITE) {
-  1033			aux_write_check = true;
-  1034			cmd = CMD_AUX_NATIVE_READ;
-  1035			goto aux_op_start;
-  1036		}
-  1037	
-  1038		if (cmd == CMD_AUX_I2C_EDID_READ || cmd == CMD_AUX_GET_KSV_LIST) {
-  1039			for (i = 0; i < size; i++) {
-  1040				ret = it6505_read(it6505, REG_AUX_DATA_FIFO);
-  1041				if (ret < 0)
-  1042					goto aux_op_err;
-  1043				buffer[i] = ret;
-  1044			}
-  1045		} else {
-  1046			for (i = 0; i < size; i++) {
-  1047				ret = it6505_read(it6505, REG_AUX_DATA_0_7 + i);
-  1048				if (ret < 0)
-  1049					goto aux_op_err;
-  1050	
-  1051				if (aux_write_check && buffer[size - 1 - i] != ret) {
-  1052					ret = -EINVAL;
-  1053					goto aux_op_err;
-  1054				}
-  1055	
-  1056				buffer[size - 1 - i] = ret;
-  1057			}
-  1058		}
-  1059	
-  1060		ret = i;
-  1061	
-  1062	aux_op_err:
-  1063		if (cmd == CMD_AUX_I2C_EDID_READ || cmd == CMD_AUX_GET_KSV_LIST) {
-  1064			/* clear AUX FIFO */
-  1065			it6505_set_bits(it6505, REG_AUX_CTRL,
-  1066					AUX_EN_FIFO_READ | CLR_EDID_FIFO,
-  1067					AUX_EN_FIFO_READ | CLR_EDID_FIFO);
-  1068			it6505_set_bits(it6505, REG_AUX_CTRL,
-  1069					AUX_EN_FIFO_READ | CLR_EDID_FIFO, 0x00);
-  1070		}
-  1071	
-  1072		/* Leave AUX user mode */
-  1073		it6505_set_bits(it6505, REG_AUX_CTRL, AUX_USER_MODE, 0);
-  1074	
-  1075		return ret;
-  1076	}
-  1077	
+>> vmlinux.o: warning: objtool: .text+0x3: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x8: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0xc: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x13: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x1a: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x1f: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x26: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x2b: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x2d: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x2f: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x31: unreachable instruction
+   vmlinux.o: warning: objtool: .text+0x33: unreachable instruction
 
 -- 
 0-DAY CI Kernel Test Service
