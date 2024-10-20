@@ -1,58 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E133E49E;
-	Sun, 20 Oct 2024 08:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7286984D0E;
+	Sun, 20 Oct 2024 09:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729413570; cv=none; b=iVKxAH6DXgsB7cKp1++dRLas/95jzDkuSROxlwn/qJZt9MKKw+13m21xGXwcm63eI3xUux+N/NUCEYdf/yaBahm4uFfgPx6DAEUWnvrd1J2YKCq1PrK9nsmWYlob2SjuGLNV+a0+NRnJ0sXBONOIg7+ZEf5xGC3VHcTLWw4S2Ng=
+	t=1729416101; cv=none; b=UCFwx+rtVZh5hkJpPjMIm6MF9TWbmmaMam0tGFPFbemDaZhC6bFd7oOFsjhBLXPQkZGefuTTRguekEWRGtghEMye9tq6jowxuXbexIkmaPR3k81gmJJoeAAHUOu7Wr3frZJo/ifiSff01wM5z6pZ4YwKzObNeHsM/98Y14Pfpyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729413570; c=relaxed/simple;
-	bh=5+0nPxWhqKb/RVZif0rjfToHtLz9i7HKFWWwkAw5SJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QK5P7YB5xPvmrYS3L4bwTKefGB4fW0zMqLhQb0c7p33eomHKRVXiz8oexbppSTsz/SHyWUnLhEfFYgDVjVzDV8mHmk8gtaQsF1pltfKigUJ7g0SSA4kY7VjhvKEIfw01IB9qK6FzZw/b8gTujmZ4wa2VRrpBdg5DXx9+O0T03iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Up1b4o+9; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1729416101; c=relaxed/simple;
+	bh=0FjaOJikJqwtGL+Y9iaV7osiQQ6qFUvD/z2eON8YtPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=alv9HYZvCkWwYIctfQx1FfNT43xQ1/5p2+KPe783Ik4MYArmK5fefTcEqrmqywUNDAOVT65QW9tAh4BKv4f/6nC5Je600L/CXIYz2NOS4jOsskFnytetKmX/Qgsj9ifzpboLq0Zi8SlF0ru/Z43eRgFJ7/tWygzHY30XhLK0DCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dNjtUK7F; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Up1b4o+9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dNjtUK7F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729413568; x=1760949568;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5+0nPxWhqKb/RVZif0rjfToHtLz9i7HKFWWwkAw5SJ4=;
-  b=Up1b4o+9f2hIyp5FVBoQmFRQXd2rKETRfdQ09SC8f9v2ngrB97XiUyQI
-   BYS4oJBb1El/Pcau92heFy/Bu/r2kxIFrT3IxAevQwy/4opNPMArL9JNm
-   c/D8egX1Ig1vihENVo4Z7NsYDyn65gONVBAKDSs+k0xCSV/9eOCfBNjTI
-   Gme3IRkHdlDyQ781u19F/U0IP//g0QbEafcCWybK9HufSSANWoWB+hkoT
-   ABCvZT6SewLN82eAnMxPg/q8dNQdvKz316yxKQL9uVN/go1CEpExlRQ0H
-   3DgWcPbumDKLrC0qLVJHK++UQa7UzUb7tgoGqsdujEUcG6sur2NLsHsSm
-   g==;
-X-CSE-ConnectionGUID: 7EUBGZOtQ0ihxOfdp/aA9w==
-X-CSE-MsgGUID: v2nBsFJwQq+GpAa6xxN2ug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28693293"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28693293"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 01:39:28 -0700
-X-CSE-ConnectionGUID: agmxnTZ8QDaRsz7NzfkBXg==
-X-CSE-MsgGUID: 7q6nrsBUQzWIbZwzbC57dQ==
+  t=1729416099; x=1760952099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0FjaOJikJqwtGL+Y9iaV7osiQQ6qFUvD/z2eON8YtPE=;
+  b=dNjtUK7FvyLxTdjqI8ap/9O2It1EdDvvlPAyodFgJHdFKpJiCwZP7Cov
+   4CSpuEn38Xcq1+XBZz/gXTutMteEkfo6Q1uYmY04axRCe+mmqQZnYPOij
+   E5SPf1L2dnOcYqLe5AU6OfiOCFL1k0fkEFqbraX0DVPtgSIRvWFQ1MT98
+   uZHJNM1Z1pGP7sSaqZPy2V4qT6tsClsusZeA2qSQwPsUwZkLuT4kUEalA
+   MsCIDcy7gUO0Zel5pIBS6ieOf3Yn85sQQiDoYA8WyOJwaHvJ70sahxHJG
+   VYbIaxJdRefHyQ0TGALmUZNNgzEp6Q3SPNnv/CeJJ0fSgJJ697ZD325NQ
+   w==;
+X-CSE-ConnectionGUID: iiW//E5OTQaTtVMlB9eubg==
+X-CSE-MsgGUID: Ym8Cv4jRSzyFcYyZs9hK3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="39528697"
+X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
+   d="scan'208";a="39528697"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 02:21:36 -0700
+X-CSE-ConnectionGUID: S96oavzKT2aa8bDdJHdbug==
+X-CSE-MsgGUID: ISIQzx7HTDKxdHRiAqcjcw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="83875283"
+   d="scan'208";a="79183515"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 20 Oct 2024 01:39:26 -0700
+  by orviesa009.jf.intel.com with ESMTP; 20 Oct 2024 02:21:30 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2RTA-000Q7R-2E;
-	Sun, 20 Oct 2024 08:39:24 +0000
-Date: Sun, 20 Oct 2024 16:38:38 +0800
+	id 1t2S7r-000Q9C-2Q;
+	Sun, 20 Oct 2024 09:21:27 +0000
+Date: Sun, 20 Oct 2024 17:20:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:dir-deleg 39/39] fs/nfsd/nfs4state.c:5493:6: error:
- redefinition of 'mask'
-Message-ID: <202410201607.joGn9Azm-lkp@intel.com>
+To: jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org,
+	torvalds@linux-foundation.org, usama.anjum@collabora.com,
+	corbet@lwn.net, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jeffxu@google.com,
+	jorgelo@chromium.org, groeck@chromium.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, jannh@google.com, sroettger@google.com,
+	pedro.falcato@gmail.com, linux-hardening@vger.kernel.org,
+	willy@infradead.org, gregkh@linuxfoundation.org,
+	deraadt@openbsd.org, surenb@google.com, merimus@google.com,
+	rdunlap@infradead.org, Jeff Xu <jeffxu@chromium.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when
+ sealed
+Message-ID: <202410201724.kKCsANsw-lkp@intel.com>
+References: <20241017005105.3047458-2-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,155 +73,196 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241017005105.3047458-2-jeffxu@chromium.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
-head:   380a610024a1525d57e7d65bb495f7ecb87cb5ff
-commit: 380a610024a1525d57e7d65bb495f7ecb87cb5ff [39/39] nfsd: add notification handlers for dir events
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241020/202410201607.joGn9Azm-lkp@intel.com/config)
+Hi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.12-rc3 next-20241018]
+[cannot apply to kees/for-next/pstore kees/for-next/kspp linux/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mseal-Two-fixes-for-madvise-MADV_DONTNEED-when-sealed/20241017-085203
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241017005105.3047458-2-jeffxu%40chromium.org
+patch subject: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when sealed
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20241020/202410201724.kKCsANsw-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201607.joGn9Azm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201724.kKCsANsw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410201607.joGn9Azm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410201724.kKCsANsw-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/nfsd/nfs4state.c:5493:6: error: redefinition of 'mask'
-    5493 |         u32 mask = 0;
-         |             ^
-   fs/nfsd/nfs4state.c:5488:31: note: previous definition is here
-    5488 | int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
-         |                               ^
->> fs/nfsd/nfs4state.c:5501:27: error: expected expression
-    5501 |                 struct file_lease *fl = container_of(struct file_lock_core,
-         |                                         ^
-   include/linux/container_of.h:19:30: note: expanded from macro 'container_of'
-      19 |         void *__mptr = (void *)(ptr);                                   \
+>> mm/mprotect.c:825:16: error: use of undeclared identifier 'VM_WASWRITE'
+     825 |                         newflags |= VM_WASWRITE;
          |                                     ^
->> fs/nfsd/nfs4state.c:5501:27: error: expected expression
-   include/linux/container_of.h:20:16: note: expanded from macro 'container_of'
-      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-         |                       ^
-   include/linux/compiler_types.h:458:64: note: expanded from macro '__same_type'
-     458 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                ^
->> fs/nfsd/nfs4state.c:5501:27: error: expected expression
-   include/linux/container_of.h:21:9: note: expanded from macro 'container_of'
-      21 |                       __same_type(*(ptr), void),                        \
-         |                       ^
-   include/linux/compiler_types.h:458:64: note: expanded from macro '__same_type'
-     458 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                ^
->> fs/nfsd/nfs4state.c:5501:27: error: no member named 'flc_list' in 'file_lease'
-    5501 |                 struct file_lease *fl = container_of(struct file_lock_core,
-         |                                         ^
-    5502 |                                                      struct file_lease, flc_list);
-         |                                                                         ~~~~~~~~
-   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
-      23 |         ((type *)(__mptr - offsetof(type, member))); })
-         |                            ^              ~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^                        ~~~~~~
->> fs/nfsd/nfs4state.c:5501:22: error: initializing 'struct file_lease *' with an expression of incompatible type 'void'
-    5501 |                 struct file_lease *fl = container_of(struct file_lock_core,
-         |                                    ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    5502 |                                                      struct file_lease, flc_list);
-         |                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/nfsd/nfs4state.c:5505:12: error: no member named 'fl_lmops' in 'struct file_lock_core'
-    5505 |                 if (flc->fl_lmops != &nfsd_dir_lease_mng_ops)
-         |                     ~~~  ^
->> fs/nfsd/nfs4state.c:5510:40: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
-    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
-         |                                                         ~~~~^
-         |                                                             ->
-   fs/nfsd/nfs4state.c:5510:61: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
-    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
-         |                                                                              ~~~~^
-         |                                                                                  ->
->> fs/nfsd/nfs4state.c:5510:28: error: field designator 'count' does not refer to any field in type 'component4' (aka 'opaque')
-    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
-         |                                                ~^~~~~~~~~~~~~~~~
->> fs/nfsd/nfs4state.c:5510:47: error: field designator 'element' does not refer to any field in type 'component4' (aka 'opaque')
-    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
-         |                                                                   ~^~~~~~~~~~~~~~~~~~~
->> fs/nfsd/nfs4state.c:5510:68: error: expected ';' at end of declaration
-    5510 |                         component4 oldname = { .count = name.len, .element = name.name }
-         |                                                                                         ^
-         |                                                                                         ;
->> fs/nfsd/nfs4state.c:5513:29: error: no member named 'count' in 'opaque'
-    5513 |                         nr.nrm_old_entry.ne_file.count = name.len;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   fs/nfsd/nfs4state.c:5513:41: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
-    5513 |                         nr.nrm_old_entry.ne_file.count = name.len;
-         |                                                          ~~~~^
-         |                                                              ->
->> fs/nfsd/nfs4state.c:5514:29: error: no member named 'element' in 'opaque'
-    5514 |                         nr.nrm_old_entry.ne_file.element = name.name;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   fs/nfsd/nfs4state.c:5514:43: error: member reference type 'const struct qstr *' is a pointer; did you mean to use '->'?
-    5514 |                         nr.nrm_old_entry.ne_file.element = name.name;
-         |                                                            ~~~~^
-         |                                                                ->
->> fs/nfsd/nfs4state.c:5516:26: error: redefinition of 'nr'
-    5516 |                         struct notify_remove4 nr;
-         |                                               ^
-   fs/nfsd/nfs4state.c:5511:26: note: previous definition is here
-    5511 |                         struct notify_remove4 nr = { };
-         |                                               ^
->> fs/nfsd/nfs4state.c:5488:5: warning: no previous prototype for function 'nfsd_handle_dir_event' [-Wmissing-prototypes]
-    5488 | int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
-         |     ^
-   fs/nfsd/nfs4state.c:5488:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    5488 | int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
-         | ^
-         | static 
-   1 warning and 17 errors generated.
+   1 error generated.
 
 
-vim +/mask +5493 fs/nfsd/nfs4state.c
+vim +/VM_WASWRITE +825 mm/mprotect.c
 
-  5487	
-> 5488	int nfsd_handle_dir_event(u32 mask, const struct inode *inode, const struct inode *dir,
-  5489				  const struct qstr *name)
-  5490	{
-  5491		struct file_lock_context *ctx;
-  5492		struct file_lock_core *flc;
-> 5493		u32 mask = 0;
-  5494	
-  5495		ctx = locks_inode_context(inode);
-  5496		if (!ctx)
-  5497			return 0;
-  5498	
-  5499		spin_lock(&ctx->flc_lock);
-  5500		list_for_each_entry(flc, &ctx->flc_lease, flc_list) {
-> 5501			struct file_lease *fl = container_of(struct file_lock_core,
-  5502							     struct file_lease, flc_list);
-  5503			struct nfs4_delegation *dp = flc->flc_owner;
-  5504	
-> 5505			if (flc->fl_lmops != &nfsd_dir_lease_mng_ops)
-  5506				continue;
-  5507	
-  5508			/* find delegation, check IGN bits, marshal notify if they match */
-  5509			if (mask & FS_DELETE) {
-> 5510				component4 oldname = { .count = name.len, .element = name.name }
-  5511				struct notify_remove4 nr = { };
-  5512	
-> 5513				nr.nrm_old_entry.ne_file.count = name.len;
-> 5514				nr.nrm_old_entry.ne_file.element = name.name;
-  5515	
-> 5516				struct notify_remove4 nr;
-  5517	
-  5518				if (!(flc->flc_flags & FL_IGN_DIR_DELETE))
-  5519					continue;
-  5520			}
-  5521	
-  5522		}
-  5523		spin_unlock(&ctx->flc_lock);
-  5524	}
-  5525	
+   705	
+   706	/*
+   707	 * pkey==-1 when doing a legacy mprotect()
+   708	 */
+   709	static int do_mprotect_pkey(unsigned long start, size_t len,
+   710			unsigned long prot, int pkey)
+   711	{
+   712		unsigned long nstart, end, tmp, reqprot;
+   713		struct vm_area_struct *vma, *prev;
+   714		int error;
+   715		const int grows = prot & (PROT_GROWSDOWN|PROT_GROWSUP);
+   716		const bool rier = (current->personality & READ_IMPLIES_EXEC) &&
+   717					(prot & PROT_READ);
+   718		struct mmu_gather tlb;
+   719		struct vma_iterator vmi;
+   720	
+   721		start = untagged_addr(start);
+   722	
+   723		prot &= ~(PROT_GROWSDOWN|PROT_GROWSUP);
+   724		if (grows == (PROT_GROWSDOWN|PROT_GROWSUP)) /* can't be both */
+   725			return -EINVAL;
+   726	
+   727		if (start & ~PAGE_MASK)
+   728			return -EINVAL;
+   729		if (!len)
+   730			return 0;
+   731		len = PAGE_ALIGN(len);
+   732		end = start + len;
+   733		if (end <= start)
+   734			return -ENOMEM;
+   735		if (!arch_validate_prot(prot, start))
+   736			return -EINVAL;
+   737	
+   738		reqprot = prot;
+   739	
+   740		if (mmap_write_lock_killable(current->mm))
+   741			return -EINTR;
+   742	
+   743		/*
+   744		 * If userspace did not allocate the pkey, do not let
+   745		 * them use it here.
+   746		 */
+   747		error = -EINVAL;
+   748		if ((pkey != -1) && !mm_pkey_is_allocated(current->mm, pkey))
+   749			goto out;
+   750	
+   751		vma_iter_init(&vmi, current->mm, start);
+   752		vma = vma_find(&vmi, end);
+   753		error = -ENOMEM;
+   754		if (!vma)
+   755			goto out;
+   756	
+   757		if (unlikely(grows & PROT_GROWSDOWN)) {
+   758			if (vma->vm_start >= end)
+   759				goto out;
+   760			start = vma->vm_start;
+   761			error = -EINVAL;
+   762			if (!(vma->vm_flags & VM_GROWSDOWN))
+   763				goto out;
+   764		} else {
+   765			if (vma->vm_start > start)
+   766				goto out;
+   767			if (unlikely(grows & PROT_GROWSUP)) {
+   768				end = vma->vm_end;
+   769				error = -EINVAL;
+   770				if (!(vma->vm_flags & VM_GROWSUP))
+   771					goto out;
+   772			}
+   773		}
+   774	
+   775		prev = vma_prev(&vmi);
+   776		if (start > vma->vm_start)
+   777			prev = vma;
+   778	
+   779		tlb_gather_mmu(&tlb, current->mm);
+   780		nstart = start;
+   781		tmp = vma->vm_start;
+   782		for_each_vma_range(vmi, vma, end) {
+   783			unsigned long mask_off_old_flags;
+   784			unsigned long newflags;
+   785			int new_vma_pkey;
+   786	
+   787			if (vma->vm_start != tmp) {
+   788				error = -ENOMEM;
+   789				break;
+   790			}
+   791	
+   792			/* Does the application expect PROT_READ to imply PROT_EXEC */
+   793			if (rier && (vma->vm_flags & VM_MAYEXEC))
+   794				prot |= PROT_EXEC;
+   795	
+   796			/*
+   797			 * Each mprotect() call explicitly passes r/w/x permissions.
+   798			 * If a permission is not passed to mprotect(), it must be
+   799			 * cleared from the VMA.
+   800			 */
+   801			mask_off_old_flags = VM_ACCESS_FLAGS | VM_FLAGS_CLEAR;
+   802	
+   803			new_vma_pkey = arch_override_mprotect_pkey(vma, prot, pkey);
+   804			newflags = calc_vm_prot_bits(prot, new_vma_pkey);
+   805			newflags |= (vma->vm_flags & ~mask_off_old_flags);
+   806	
+   807			/* newflags >> 4 shift VM_MAY% in place of VM_% */
+   808			if ((newflags & ~(newflags >> 4)) & VM_ACCESS_FLAGS) {
+   809				error = -EACCES;
+   810				break;
+   811			}
+   812	
+   813			if (map_deny_write_exec(vma, newflags)) {
+   814				error = -EACCES;
+   815				break;
+   816			}
+   817	
+   818			/* Allow architectures to sanity-check the new flags */
+   819			if (!arch_validate_flags(newflags)) {
+   820				error = -EINVAL;
+   821				break;
+   822			}
+   823	
+   824			if ((vma->vm_flags & VM_WRITE) && !(newflags & VM_WRITE))
+ > 825				newflags |= VM_WASWRITE;
+   826	
+   827			error = security_file_mprotect(vma, reqprot, prot);
+   828			if (error)
+   829				break;
+   830	
+   831			tmp = vma->vm_end;
+   832			if (tmp > end)
+   833				tmp = end;
+   834	
+   835			if (vma->vm_ops && vma->vm_ops->mprotect) {
+   836				error = vma->vm_ops->mprotect(vma, nstart, tmp, newflags);
+   837				if (error)
+   838					break;
+   839			}
+   840	
+   841			error = mprotect_fixup(&vmi, &tlb, vma, &prev, nstart, tmp, newflags);
+   842			if (error)
+   843				break;
+   844	
+   845			tmp = vma_iter_end(&vmi);
+   846			nstart = tmp;
+   847			prot = reqprot;
+   848		}
+   849		tlb_finish_mmu(&tlb);
+   850	
+   851		if (!error && tmp < end)
+   852			error = -ENOMEM;
+   853	
+   854	out:
+   855		mmap_write_unlock(current->mm);
+   856		return error;
+   857	}
+   858	
 
 -- 
 0-DAY CI Kernel Test Service
