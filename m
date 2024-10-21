@@ -1,60 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899403D6D;
-	Mon, 21 Oct 2024 02:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D78224EA;
+	Mon, 21 Oct 2024 02:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729478918; cv=none; b=AjdNwpBTMzwoqUszaAfXLsOTjFhat+VkHLlgF90+jLyHyXvTvxZ6au8xI+YFFU2MOb6aL1MX/jzpmvh4LFGr6aoVzrWS/rXjgCO8Nzm3L++BODaQRlIhToVbnx0yAGzqJ9mgJ38x+ZxylSeq612in0mYRJJ0mUjOU2VIrjt5lXs=
+	t=1729478925; cv=none; b=KVla20IVzwv7F/lvyy6Ehez7mdwOCAOoxJrPoxVFDBL1hK04WEqcJFnx8fBBFxU0K6fCGYoyEhiLLlsgNkuK8tA82oKIAj9cN2Eq/SFxirphrZFw6MMLIX3h1MCI3We7AvIoFxZk6NU5QXM0vIY4TGmPelLQRfjf76sEuP51rDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729478918; c=relaxed/simple;
-	bh=uVQHywV46Z3ILsJbikiLROf8ZMq1+NxFZ8hAJ9jZ3OY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kfUzC7/Lx/6WSI9CxTOj6EuT4TRs336KMb3FcBHxgBt3kq4slBYRacVZ0aeVlEUeHedSpJjSm78nvSRHIwuX/PoYT+bbAE2F2pSnQdxUmyqVseppm9HimJ4PQZfjyOW/XjLYBF1nI5V3Ir5DC26a9ZfS4x7Npp2V9z5Ko9Ljlik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VXm0ta82; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1729478925; c=relaxed/simple;
+	bh=Cr/IcJU+i0W4asDlN443uFwPMZgQlI6G+rafZwdkb3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TVmMjQJGeG/C+uY1La+BbezV8lHIjaGHRvGjZvmMjp536aPoEgKniBSD/zUREOqsaJdDdkEZ8bjmlbKqzWxumfv+SAk6lp80t9ObfHFb9lv78He1V9q/WhPdZedxPi96GuuelipHnaZOdQ5auToaqAo9xPWjOehJda1VA7dpWVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdgXgu48; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VXm0ta82"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdgXgu48"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729478916; x=1761014916;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uVQHywV46Z3ILsJbikiLROf8ZMq1+NxFZ8hAJ9jZ3OY=;
-  b=VXm0ta82ThDcnbp6DJv1s+tu++/ZyHQKyXE9LHgElIzaPlGwawPAqtKr
-   eFKVu3+ELTPEQaQPhFdzSFKWgjpf+2YwO5u2sy01ZHoZ0NgbKTadG/bXS
-   87XQeTIdY9D2/cHA1JUjO38rDZnpcnROmDWt4CpzmjwmX5I1l4QiFFY8J
-   NrVt9SPY+46vpBukiCNe10SZMYk7kzTsuTrp3DeMD4k4KPM4dagYyNMfC
-   gToGdfD/DbQm6Fa3l8zc+ZHVYfbqrbfmaCdKehW6QjVhMiLqUAHa9+ErR
-   atcbmX2OLSHBDg0x432i/ccvsTs/KR5Cl5+OvYcnxJ0fgGIEwbnZFv9Ds
-   w==;
-X-CSE-ConnectionGUID: 2vJMV8aDSVWw+mbC4uFiIQ==
-X-CSE-MsgGUID: 9ermA+XyR5KYJgt30r/2jg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="51488979"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="51488979"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 19:48:35 -0700
-X-CSE-ConnectionGUID: aZyCJVabS1e8Diap24k4rQ==
-X-CSE-MsgGUID: yZXyv7X0TeKqGJngx86AMw==
+  t=1729478923; x=1761014923;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cr/IcJU+i0W4asDlN443uFwPMZgQlI6G+rafZwdkb3A=;
+  b=UdgXgu48OfHaqYRBhHsduNQCtC6ZsrFcD5a8LGKGgCaSeLmtoWxvq5jK
+   Fww8/SqSrR2/T+TWj+GPC+7qdp0/NJ0D8G8maltlofPHorbddW5vPuXMe
+   vY+7172/O27ALOMQisIg2wSwNIK3sG07wJcwIrXdyUj3TQgerqW1gnGrA
+   S/Mr7sZqoyV2tM/5S+4J+3VVXLDoQK0Vo+nC9ok/rdHZzIQCf3ISj0BXG
+   zZlG/G31djmNSpEHSLT3jcb185IxVWIYbBVu0heGloDDxsTVhbt/gGEKV
+   03AO4dL1RLnvAf4BPLEaCWLCeuorwpZFXb3tAWb6hvplYnLvzF+n+vvEs
+   g==;
+X-CSE-ConnectionGUID: JU3ia+maQ9GgFiZQ/rNmbw==
+X-CSE-MsgGUID: DwLFcmyVRVuq9uTEa5kQ7w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="29159684"
+X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
+   d="scan'208";a="29159684"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 19:48:38 -0700
+X-CSE-ConnectionGUID: E5c7vqo5QEyzjElefJQcRA==
+X-CSE-MsgGUID: /cIoSbYOR4mFZlKLjpnhsg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
-   d="scan'208";a="79406061"
+   d="scan'208";a="79346293"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 20 Oct 2024 19:48:33 -0700
+  by orviesa010.jf.intel.com with ESMTP; 20 Oct 2024 19:48:34 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2iT9-000R4f-0x;
+	id 1t2iT9-000R4d-0t;
 	Mon, 21 Oct 2024 02:48:31 +0000
-Date: Mon, 21 Oct 2024 10:48:15 +0800
+Date: Mon, 21 Oct 2024 10:48:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
+To: Prabhakar <prabhakar.csengg@gmail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Subject: [arm64:for-next/core 11/42] ld.lld: error: HYP init code too big
-Message-ID: <202410211052.8GubCgxd-lkp@intel.com>
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 6/7] pinctrl: pinmux: Introduce API to check if a pin is
+ requested
+Message-ID: <202410211007.sFKERNFY-lkp@intel.com>
+References: <20241017113942.139712-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,32 +74,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241017113942.139712-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-head:   b8be9b42e20c26ceff1335f7a0eee5bac99206ea
-commit: ff5181d8a2a82c982276a7e035896185c390e856 [11/42] arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241021/202410211052.8GubCgxd-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 70e0a7e7e6a8541bcc46908c592eed561850e416)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241021/202410211052.8GubCgxd-lkp@intel.com/reproduce)
+Hi Prabhakar,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on geert-renesas-drivers/renesas-pinctrl]
+[also build test WARNING on linusw-pinctrl/devel linusw-pinctrl/for-next geert-renesas-devel/next linus/master v6.12-rc4 next-20241018]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Prabhakar/arm64-dts-renesas-rzg3s-smarc-Drop-hogging-of-GPIO-pins/20241017-194200
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-pinctrl
+patch link:    https://lore.kernel.org/r/20241017113942.139712-7-prabhakar.mahadev-lad.rj%40bp.renesas.com
+patch subject: [PATCH 6/7] pinctrl: pinmux: Introduce API to check if a pin is requested
+config: hexagon-randconfig-001-20241021 (https://download.01.org/0day-ci/archive/20241021/202410211007.sFKERNFY-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241021/202410211007.sFKERNFY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410211052.8GubCgxd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410211007.sFKERNFY-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: HYP init code too big
->> ld.lld: error: HYP init code too big
->> ld.lld: error: HYP init code too big
->> ld.lld: error: HYP init code too big
->> ld.lld: error: HYP init code too big
+   In file included from drivers/pinctrl/core.c:28:
+   In file included from include/linux/gpio/driver.h:8:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/pinctrl/core.c:28:
+   In file included from include/linux/gpio/driver.h:8:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/pinctrl/core.c:28:
+   In file included from include/linux/gpio/driver.h:8:
+   In file included from include/linux/irqchip/chained_irq.h:10:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/pinctrl/core.c:38:
+>> drivers/pinctrl/pinmux.h:104:6: warning: no previous prototype for function 'pin_requested' [-Wmissing-prototypes]
+     104 | bool pin_requested(struct pinctrl_dev *pctldev, int pin)
+         |      ^
+   drivers/pinctrl/pinmux.h:104:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     104 | bool pin_requested(struct pinctrl_dev *pctldev, int pin)
+         | ^
+         | static 
+   7 warnings generated.
 
 Kconfig warnings: (for reference only)
    WARNING: unmet direct dependencies detected for MODVERSIONS
    Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
    Selected by [y]:
    - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+
+
+vim +/pin_requested +104 drivers/pinctrl/pinmux.h
+
+   103	
+ > 104	bool pin_requested(struct pinctrl_dev *pctldev, int pin)
+   105	{
+   106		return false;
+   107	}
+   108	#endif
+   109	
 
 -- 
 0-DAY CI Kernel Test Service
