@@ -1,135 +1,189 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-43167.protonmail.ch (mail-43167.protonmail.ch [185.70.43.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDB946B5
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 05:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8F11CFED1
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 06:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729489143; cv=none; b=Jlk5cV3TbEDBG14pE/BrusKiSb486ef1asxEWlPXzdgUZzRj9B0qkqzJ+uRSs0qE62pTHNvCpaPWUmKcqacQpB4fAXfQOsnVkBgJvp0KAJOCInAtRp11T4STqJKBjdqWavAmQCkaR7GLaCvg6K39fUbLaGIGTi8pUnjLE6v6+E0=
+	t=1729493691; cv=none; b=iQwY5hEXTV4AUEuxGKvVvxK504S09s29a7iyBkLQBWK/0qaD2voTX0b1KR4frpad4QffVMStD6b+FXMSUi3/Ieb9O0n7zIITtskKjim2gtpLndPm570raPuUXtZx0sNm1GONId6iAr6rcKD7xg02/U1fnxOWvXjQm571H2oQ/L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729489143; c=relaxed/simple;
-	bh=f5+ggXlq6yLXkoBxQqpQzfX/xnlrafFn3SMvSsi5wwg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RaPf3Km4ae8TQR7ZIxHRDzk7MMe6aElYO2KZ6qLU4kaa1Ljj4pqNQIGh6OB7yDubccrCiAho8N9OxeTLe0HuViEXCpd+2N6hMVxI/jDrVy9Amb2oRlUt0stP+BcfJPVxBd8fPWdBkujrnhVjZ0hDFAHqhx43olx/doCsmptxtDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gm9MfpDa; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1729493691; c=relaxed/simple;
+	bh=mKszSO2uodhB/SVawf/fZzSNYzvQqPz+HdN5wa27pkY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pQ+7fdFZkpZMXSWeo56ilS4Ei+JMxoIYI3PAYHeH9D6ZuzDCS4hC7W5H1tg829W/XX7n8OBgAwoRNNJaqIv3E1FHzJtVfJ7jtPOknhixWspQYWpSgeheYSagcHKQ01+CCaAwBIlLP2TRHuOGe+tJvhzCrLoBGGIHz/cDSDXo01s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=svGzb9j9; arc=none smtp.client-ip=185.70.43.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gm9MfpDa"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb50e84ec7so28797861fa.1
-        for <llvm@lists.linux.dev>; Sun, 20 Oct 2024 22:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729489138; x=1730093938; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M9zNYRiu9uknolFzwLlq15Mi6j/Tjr3sPHN/TktoqH0=;
-        b=gm9MfpDafRWNaH1dKIF+T7QM6NmS3bJnChSK2bYgArILmCZjiiU6sV1GrecSeYnj2n
-         zs4oL1g4pBKCz60PPiXm0a1COo5OPU7zPJbGogcrhD3mM0mXFcBYENNzc7/2QMW0zED6
-         16n84E7FqXWA1aH1p+o1R2aMrG7fmDJ3nT74E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729489138; x=1730093938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M9zNYRiu9uknolFzwLlq15Mi6j/Tjr3sPHN/TktoqH0=;
-        b=lNS03QD5qlLWvOZtS7+OCO5+QEW3dcA42fMtmsAD3G7fGd4U7sxnLy8N04tAbT3ure
-         NELUuLKMEAdN5FpYYXL22byzmu9yN2Buy/abY1zQoSAN0CE4/fuKni1i++btlTpQXaEV
-         VNaFChIVkRCqhMgH1/m3FGdC6aeReu1lYjNaFjBELwNpH0YwD9mT7/cXAQtKS+fYIIX/
-         eE2v4D7ZSiUgPFAhw4k88MFOY3zpOD4iejIs2Fsj4IZF+1mn3YZZ+EeZVbsKFjE2iH87
-         vwJtLVlvIUVIeqo/lBTkcT01u+WDEzD7C9f2rvyG213JsvsdQZWYVknDO0LR+27KypK+
-         b9sA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4lO2ZL2srWCFausncqogvfpT6YSZA5aOcLHCeecrjthkle236VuHlD7sm+0dYEm9ZtsUM@lists.linux.dev
-X-Gm-Message-State: AOJu0YyPaz3YS6WVGX78VlzT/z+xpvkltrRmzWAkqTiMmdGDMVvjP+7B
-	4oq+ahSu6NDv8xeMFAlHwIjVCxbP1KRz8exw59oHcgbiuo4E1zcx5WD+mPePl9pevU6Bgq3zvK0
-	=
-X-Google-Smtp-Source: AGHT+IF/b6CUdFOAEHZSRcPyh/AQN93sngj4hhT6HZD5aW2ivYGsW7cUseiA8rxJKCzxCpH8LEdHzw==
-X-Received: by 2002:a05:6512:ea2:b0:539:d10b:e389 with SMTP id 2adb3069b0e04-53a15218b50mr4660726e87.13.1729489138323;
-        Sun, 20 Oct 2024 22:38:58 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53a223e5f0esm396799e87.50.2024.10.20.22.38.56
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Oct 2024 22:38:57 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539f84907caso4425228e87.3
-        for <llvm@lists.linux.dev>; Sun, 20 Oct 2024 22:38:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX2sFoK7FAXcvpoycb1RCIAX2cVKQOUT1yyd364a5xI4fZhPuAGNfLMZh8qpdnk/mh0KeVd@lists.linux.dev
-X-Received: by 2002:a05:6512:1315:b0:52e:76d5:9504 with SMTP id
- 2adb3069b0e04-53a1520bd38mr5443903e87.3.1729489135981; Sun, 20 Oct 2024
- 22:38:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="svGzb9j9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1729493686; x=1729752886;
+	bh=mKszSO2uodhB/SVawf/fZzSNYzvQqPz+HdN5wa27pkY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=svGzb9j9yZ6ZgssC/fXMy4RKdUYPQffidIAYoe/ApFaTyB8MkhZOhmcEfUX0hPBYk
+	 3uYrjo4iu3EqDsETxwGX+t8K1/ulpiq1Hroq76Y6ss0EkspVhadprAzHn3FvEodqiX
+	 t8ohW57R+bBpRDOg3aBNFApODJqyi3kw9Yauc0gV6sHtelEn/y8DzJcDhbxkW9pLrz
+	 Woya34sWO4648EQuTjwJ6erBTTmc5GXt2mCvuIg6xJZCRxv+souHirafYcw1dcCym1
+	 /vV2avSDVGoV3j4SExIkSdZb1ZXbPkr+1YNdsulgAU7tvwiKGhMCkaLzwwRW+djg7X
+	 s6huH1Adf+n6A==
+Date: Mon, 21 Oct 2024 06:54:39 +0000
+To: koachan@protonmail.com
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] sparc/vdso: Add helper function for 64-bit right shift on 32-bit target
+Message-ID: <-I-Ljs420E94P091A2LOUkq7SOKMg2yY3jCj8aTjDtN4r3hH3NvnoNfuGQbrJTEMAKKZP-BV2Qsmu9ARUjpngc7-71R26iB4q0bpZgxBgzk=@protonmail.com>
+In-Reply-To: <20240808-sparc-shr64-v2-1-fd18f1b2cea9@protonmail.com>
+References: <20240808-sparc-shr64-v2-1-fd18f1b2cea9@protonmail.com>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 1fda092beb2bf4a3b6ea843d0280416627e36948
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241018152127.3958436-1-arnd@kernel.org>
-In-Reply-To: <20241018152127.3958436-1-arnd@kernel.org>
-From: Alexandre Courbot <acourbot@chromium.org>
-Date: Mon, 21 Oct 2024 14:38:42 +0900
-X-Gmail-Original-Message-ID: <CAPBb6MXgv1sHy+F1psxiN0wu0ryg5shX_u7orzgLz9+-hU59jA@mail.gmail.com>
-Message-ID: <CAPBb6MXgv1sHy+F1psxiN0wu0ryg5shX_u7orzgLz9+-hU59jA@mail.gmail.com>
-Subject: Re: [PATCH] media: mtk-vcodec: venc: avoid -Wenum-compare-conditional warning
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Tiffany Lin <tiffany.lin@mediatek.com>, Andrew-CT Chen <andrew-ct.chen@mediatek.com>, 
-	Yunfei Dong <yunfei.dong@mediatek.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Hans Verkuil <hverkuil@xs4all.nl>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Fei Shao <fshao@chromium.org>, linux-media@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 19, 2024 at 12:21=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> This is one of three clang warnings about incompatible enum types
-> in a conditional expression:
->
-> drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c:597:29=
-: error: conditional expression between different enumeration types ('enum =
-scp_ipi_id' and 'enum ipi_id') [-Werror,-Wenum-compare-conditional]
->   597 |         inst->vpu_inst.id =3D is_ext ? SCP_IPI_VENC_H264 : IPI_VE=
-NC_H264;
->       |                                    ^ ~~~~~~~~~~~~~~~~~   ~~~~~~~~=
-~~~~~
->
-> The code is correct, so just rework it to avoid the warning.
->
-> Fixes: 0dc4b3286125 ("media: mtk-vcodec: venc: support SCP firmware")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org> wrote:
 
-Reviewed-by: Alexandre Courbot <acourbot@google.com>
-
+> From: Koakuma koachan@protonmail.com
+>
+>
+> Add helper function for 64-bit right shift on 32-bit target so that
+> clang does not emit a runtime library call.
+>
+> Signed-off-by: Koakuma koachan@protonmail.com
+>
 > ---
->  .../platform/mediatek/vcodec/encoder/venc/venc_h264_if.c    | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> Hi~
 >
-> diff --git a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h26=
-4_if.c b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
-> index f8145998fcaf..8522f71fc901 100644
-> --- a/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/encoder/venc/venc_h264_if.c
-> @@ -594,7 +594,11 @@ static int h264_enc_init(struct mtk_vcodec_enc_ctx *=
-ctx)
+> This adds a small function to do 64-bit right shifts for use in vDSO
+> code, needed so that clang does not emit a call to runtime library.
+> ---
+> Changes in v2:
+> - Move __shr64 to sparc code since there are no other users of it.
+> - Now that __shr64 is not in portable code, redo it in inline asm for sim=
+pler implementation & better performance.
+> - Link to v1: https://lore.kernel.org/r/20240804-sparc-shr64-v1-1-2505096=
+8339a@protonmail.com
+> ---
+> arch/sparc/vdso/vclock_gettime.c | 28 ++++++++++++++++++++++++----
+> 1 file changed, 24 insertions(+), 4 deletions(-)
 >
->         inst->ctx =3D ctx;
->         inst->vpu_inst.ctx =3D ctx;
-> -       inst->vpu_inst.id =3D is_ext ? SCP_IPI_VENC_H264 : IPI_VENC_H264;
-> +       if (is_ext)
-> +               inst->vpu_inst.id =3D SCP_IPI_VENC_H264;
-> +       else
-> +               inst->vpu_inst.id =3D IPI_VENC_H264;
+> diff --git a/arch/sparc/vdso/vclock_gettime.c b/arch/sparc/vdso/vclock_ge=
+ttime.c
+> index e794edde6755..79607804ea1b 100644
+> --- a/arch/sparc/vdso/vclock_gettime.c
+> +++ b/arch/sparc/vdso/vclock_gettime.c
+> @@ -86,6 +86,11 @@ notrace static long vdso_fallback_gettimeofday(struct =
+__kernel_old_timeval *tv,
+> }
+>
+> #ifdef CONFIG_SPARC64
+> +notrace static __always_inline u64 __shr64(u64 val, int amt)
+> +{
+> + return val >> amt;
+>
+> +}
 > +
->         inst->hw_base =3D mtk_vcodec_get_reg_addr(inst->ctx->dev->reg_bas=
-e, VENC_SYS);
+> notrace static __always_inline u64 vread_tick(void)
+> {
+> u64 ret;
+> @@ -102,6 +107,21 @@ notrace static __always_inline u64 vread_tick_stick(=
+void)
+> return ret;
+> }
+> #else
+> +notrace static __always_inline u64 __shr64(u64 val, int amt)
+> +{
+> + u64 ret;
+> +
+> + asm volatile("sllx %H1, 32, %%g1\n\t"
+> + "srl %L1, 0, %L1\n\t"
+> + "or %%g1, %L1, %%g1\n\t"
+> + "srlx %%g1, %2, %L0\n\t"
+> + "srlx %L0, 32, %H0"
+> + : "=3Dr" (ret)
+> + : "r" (val), "r" (amt)
+> + : "g1");
+> + return ret;
+> +}
+> +
+> notrace static __always_inline u64 vread_tick(void)
+> {
+> register unsigned long long ret asm("o4");
+> @@ -154,7 +174,7 @@ notrace static __always_inline int do_realtime(struct=
+ vvar_data *vvar,
+> ts->tv_sec =3D vvar->wall_time_sec;
 >
->         ret =3D vpu_enc_init(&inst->vpu_inst);
+> ns =3D vvar->wall_time_snsec;
+>
+> ns +=3D vgetsns(vvar);
+> - ns >>=3D vvar->clock.shift;
+>
+> + ns =3D __shr64(ns, vvar->clock.shift);
+>
+> } while (unlikely(vvar_read_retry(vvar, seq)));
+>
+> ts->tv_sec +=3D __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>
+> @@ -174,7 +194,7 @@ notrace static __always_inline int do_realtime_stick(=
+struct vvar_data *vvar,
+> ts->tv_sec =3D vvar->wall_time_sec;
+>
+> ns =3D vvar->wall_time_snsec;
+>
+> ns +=3D vgetsns_stick(vvar);
+> - ns >>=3D vvar->clock.shift;
+>
+> + ns =3D __shr64(ns, vvar->clock.shift);
+>
+> } while (unlikely(vvar_read_retry(vvar, seq)));
+>
+> ts->tv_sec +=3D __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>
+> @@ -194,7 +214,7 @@ notrace static __always_inline int do_monotonic(struc=
+t vvar_data *vvar,
+> ts->tv_sec =3D vvar->monotonic_time_sec;
+>
+> ns =3D vvar->monotonic_time_snsec;
+>
+> ns +=3D vgetsns(vvar);
+> - ns >>=3D vvar->clock.shift;
+>
+> + ns =3D __shr64(ns, vvar->clock.shift);
+>
+> } while (unlikely(vvar_read_retry(vvar, seq)));
+>
+> ts->tv_sec +=3D __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>
+> @@ -214,7 +234,7 @@ notrace static __always_inline int do_monotonic_stick=
+(struct vvar_data *vvar,
+> ts->tv_sec =3D vvar->monotonic_time_sec;
+>
+> ns =3D vvar->monotonic_time_snsec;
+>
+> ns +=3D vgetsns_stick(vvar);
+> - ns >>=3D vvar->clock.shift;
+>
+> + ns =3D __shr64(ns, vvar->clock.shift);
+>
+> } while (unlikely(vvar_read_retry(vvar, seq)));
+>
+> ts->tv_sec +=3D __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+>
+>
+> ---
+> base-commit: defaf1a2113a22b00dfa1abc0fd2014820eaf065
+> change-id: 20240717-sparc-shr64-2f00a7884770
+>
+> Best regards,
 > --
-> 2.39.5
+> Koakuma koachan@protonmail.com
 >
+>
+
+Hi, is there anything else I need to do for this patch?
