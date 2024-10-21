@@ -1,131 +1,224 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A2C208DA
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 03:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E9F629;
+	Mon, 21 Oct 2024 05:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729480735; cv=none; b=K9zr15xNQ6hGzORntIT6sbqIiUlW/4x+nfM3IHOuZiHApuhhuPEtqCZpWWJAIhnKf2r125e+1JLowGlvYq6mbkVlhRM1Df9znvFjhnEeh2OF2C5lNAqRitVn2OE3kP+/9yK1NDg2ndNoNRZCS5AS+etVLvt6UkQ3/AdPy6FSi/s=
+	t=1729486846; cv=none; b=tjEaV+W6kNyGd9X4Q1OPPAxTh3JOR1g7N3+mnrlIY9mmUIWh0iSBSjcsnolzOTOkIGdPpn6Cg6YnjQY/8bwBpcwq91ss8oWZDgc7t1QZcUyFj45X7Zk2i2TLlmJGETVN+KTQI+facsXcRO04LdYO63uomkoG+HDq0eh/EQik7CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729480735; c=relaxed/simple;
-	bh=Nie2AFcFSUfc/tFdc/pmxlhQ189rqt/EUrhnGQ9Geo8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XqqxkGsmnIyq0FbIEyUKscozZKby6CXX+SrAGX1I1LFM+V+KTKReoT7xtrJVISI2qaegIM76BLd61zrPPB7ezHbopRMc2hKB1Ak8rgeCnQqxYtUce5oP28wRCSeGIduPqWY0gbkfowRGj5yZdyws7FtU1Snu/29/xwgg9l4ooUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TABi75Fd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729486846; c=relaxed/simple;
+	bh=4U/3PcWfZlYZ4WfDtR9bAAMNJ+5ntQixs46dtHZBgds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=STKzU8ym00dHbrZ0sBqncelGAuu4n1cUpvnljDReyFdb1/dGQvEbHSwBDrP/6vhcyScdb0SvM1Dq0OCjPib/jiQbVNreDgVTGvGhW4x5X/RRkMjsJKpr7qlatgFvh9D7JxYbXMLc5DQiJ2pIi3bHQKQpAQQHtPDE92JdVEnat+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ilG1pzRo; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TABi75Fd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE32C4AF09
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 03:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729480734;
-	bh=Nie2AFcFSUfc/tFdc/pmxlhQ189rqt/EUrhnGQ9Geo8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TABi75FdBaoOqSod8UvE6rF34pp3dGkoSsLNDQ9gZvM1YQes8MFBtgQXofPpazonz
-	 gIyCXFFOWHPiXx3K6o4Yqau09U66BLNpx/GT+GBOcoscXIT6POPLLJkh976s65uw9v
-	 2gu0XIR75/D+2T8YESyGs4nfSb6KvlO0z5CTQjZR8ag8NjtoayTqt8TX6hM+vKUSdo
-	 9uAZ71bXTKUBUe5GjPj0F8dZd86uwtdL6lEk3UzAe7Rp4f9mT1Xpi+e/c8h/AmBEpP
-	 SKM4IXx+qMVJ+JU1cNWj1p2Br1+KexfXrKPhBUCAx1Y9U5s/+78eDdtLSZKEjiIMn4
-	 1fgbGMSbcAOdQ==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539e59dadebso5043981e87.0
-        for <llvm@lists.linux.dev>; Sun, 20 Oct 2024 20:18:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX+aG2ttlk+cuNzCdaikY+YmlgJWM2/Xdhob5inP0vv3K+uFfCqgzk9il1AlP25Cz8AhIUH@lists.linux.dev
-X-Gm-Message-State: AOJu0YyuP8+mvLIm2UlqE5uBdX2X1aLKEowZI7oJf3V5XG6UV7VxcDUW
-	OIJwKyP+ibe0N1dMZ0VOfAzX9SR09QAWquGgy7uFDbHlUv1Y5PGesqnodpPM3mjqvQARBlFtoAo
-	U+d0uSXaSHQ4oAAiPYgQmHt/C06s=
-X-Google-Smtp-Source: AGHT+IFF+6OY++aC6VgSvFOGFIPuUwbQy2uTC0O38gyEQAjFUkHkDmaIEUyBHfWpTEdN9+71dto4vZQ2X+vvT37eHI4=
-X-Received: by 2002:a05:6512:b19:b0:539:df2f:e115 with SMTP id
- 2adb3069b0e04-53a1521993cmr4056473e87.23.1729480732824; Sun, 20 Oct 2024
- 20:18:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ilG1pzRo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729486844; x=1761022844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4U/3PcWfZlYZ4WfDtR9bAAMNJ+5ntQixs46dtHZBgds=;
+  b=ilG1pzRo1JZS9pXSAsjD511rz6qwepG4tC/Cok/1br8a0aq+mIVQrexn
+   uDu96Ccdy3SeeF9l7gljPK88TamGEYARxBAYYH487Wsxg5PxNtffqwXYG
+   sbaPHVV2+ilooT11TzEyS56s5HXtoyBRxpAz5bQ5NX6G+OC8UeNOAKQp9
+   qv0hhje+AtXiLEzBiHqf3QAEmpf9LziU7rm1/Xyl8udePxOrEyuWeGXRG
+   s1KcE47s93yvT4EWgkN/jAb5LGXEGDLUrjanedyh5FmNz/kLf9WwkjHA9
+   d3sC1nwah/UsJAafUTRMEwLMQMP6B1Z9DO+HOvndSr4bpvB9wGEqfMKP5
+   A==;
+X-CSE-ConnectionGUID: utHN04mwSCinl6/1yUnpwA==
+X-CSE-MsgGUID: QpAR3zWrTn+pEUMYHNe1ZQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="28831836"
+X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
+   d="scan'208";a="28831836"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 22:00:43 -0700
+X-CSE-ConnectionGUID: ig1KX80tRiOl1h60Lktmcw==
+X-CSE-MsgGUID: iNrY/yq/Slyga0kJ1pK+KA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
+   d="scan'208";a="79560774"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 20 Oct 2024 22:00:41 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t2kX0-000RCl-1f;
+	Mon, 21 Oct 2024 05:00:38 +0000
+Date: Mon, 21 Oct 2024 13:00:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>
+Subject: Re: [PATCH 02/10] clockevents: Shutdown and unregister current
+ clockevents at CPUHP_AP_TICK_DYING
+Message-ID: <202410211134.JXHThFcy-lkp@intel.com>
+References: <20241017165041.6954-3-frederic@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-6-xur@google.com>
-In-Reply-To: <20241014213342.1480681-6-xur@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 21 Oct 2024 12:18:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ0RwJYkCXHj8QMH3sqXgY2LBTiYV8HnKD8oANB8Bb+Yg@mail.gmail.com>
-Message-ID: <CAK7LNAQ0RwJYkCXHj8QMH3sqXgY2LBTiYV8HnKD8oANB8Bb+Yg@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] AutoFDO: Enable machine function split
- optimization for AutoFDO
-To: Rong Xu <xur@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, x86@kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017165041.6954-3-frederic@kernel.org>
 
-On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
->
-> Enable the machine function split optimization for AutoFDO in Clang.
->
-> Machine function split (MFS) is a pass in the Clang compiler that
-> splits a function into hot and cold parts. The linker groups all
-> cold blocks across functions together. This decreases hot code
-> fragmentation and improves iCache and iTLB utilization.
->
-> MFS requires a profile so this is enabled only for the AutoFDO builds.
->
-> Co-developed-by: Han Shen <shenhan@google.com>
-> Signed-off-by: Han Shen <shenhan@google.com>
-> Signed-off-by: Rong Xu <xur@google.com>
-> Suggested-by: Sriraman Tallam <tmsriram@google.com>
-> Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
-> ---
->  include/asm-generic/vmlinux.lds.h | 6 ++++++
->  scripts/Makefile.autofdo          | 2 ++
->  2 files changed, 8 insertions(+)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
-nux.lds.h
-> index ace617d1af9b..20e46c0917db 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -565,9 +565,14 @@ defined(CONFIG_AUTOFDO_CLANG)
->                 __unlikely_text_start =3D .;                             =
- \
->                 *(.text.unlikely .text.unlikely.*)                      \
->                 __unlikely_text_end =3D .;
-> +#define TEXT_SPLIT                                                     \
-> +               __split_text_start =3D .;                                =
- \
-> +               *(.text.split .text.split.[0-9a-zA-Z_]*)                \
-> +               __split_text_end =3D .;
->  #else
->  #define TEXT_HOT *(.text.hot .text.hot.*)
->  #define TEXT_UNLIKELY *(.text.unlikely .text.unlikely.*)
-> +#define TEXT_SPLIT
->  #endif
+Hi Frederic,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on tip/smp/core tegra/for-next linus/master v6.12-rc4 next-20241018]
+[cannot apply to tip/timers/nohz daniel-lezcano/clockevents/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Frederic-Weisbecker/clockevents-Improve-clockevents_notify_released-comment/20241018-010807
+base:   tip/timers/core
+patch link:    https://lore.kernel.org/r/20241017165041.6954-3-frederic%40kernel.org
+patch subject: [PATCH 02/10] clockevents: Shutdown and unregister current clockevents at CPUHP_AP_TICK_DYING
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241021/202410211134.JXHThFcy-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241021/202410211134.JXHThFcy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410211134.JXHThFcy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/time/clockevents.c:10:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from kernel/time/clockevents.c:10:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from kernel/time/clockevents.c:10:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from kernel/time/clockevents.c:13:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> kernel/time/clockevents.c:632:6: error: redefinition of 'tick_offline_cpu'
+     632 | void tick_offline_cpu(unsigned int cpu)
+         |      ^
+   kernel/time/tick-internal.h:148:20: note: previous definition is here
+     148 | static inline void tick_offline_cpu(unsigned int cpu) { }
+         |                    ^
+   13 warnings and 1 error generated.
 
 
-Why conditional?
+vim +/tick_offline_cpu +632 kernel/time/clockevents.c
 
+1b72d43237980e Thomas Gleixner     2019-03-21  623  
+1b72d43237980e Thomas Gleixner     2019-03-21  624  /**
+86e36067908464 Frederic Weisbecker 2024-10-17  625   * tick_offline_cpu - Shutdown all clock events related
+86e36067908464 Frederic Weisbecker 2024-10-17  626   *                    to this CPU and take it out of the
+86e36067908464 Frederic Weisbecker 2024-10-17  627   *                    broadcast mechanism.
+1b72d43237980e Thomas Gleixner     2019-03-21  628   * @cpu:	The outgoing CPU
+1b72d43237980e Thomas Gleixner     2019-03-21  629   *
+86e36067908464 Frederic Weisbecker 2024-10-17  630   * Called by the dying CPU during teardown.
+1b72d43237980e Thomas Gleixner     2019-03-21  631   */
+1b72d43237980e Thomas Gleixner     2019-03-21 @632  void tick_offline_cpu(unsigned int cpu)
+d316c57ff6bfad Thomas Gleixner     2007-02-16  633  {
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  634  	struct clock_event_device *dev, *tmp;
+0b858e6ff9a38b Li Zefan            2008-02-08  635  
+86e36067908464 Frederic Weisbecker 2024-10-17  636  	raw_spin_lock(&clockevents_lock);
+d316c57ff6bfad Thomas Gleixner     2007-02-16  637  
+86e36067908464 Frederic Weisbecker 2024-10-17  638  	tick_broadcast_offline(cpu);
+a49b116dcb1265 Thomas Gleixner     2015-04-03  639  	tick_shutdown(cpu);
+86e36067908464 Frederic Weisbecker 2024-10-17  640  
+d316c57ff6bfad Thomas Gleixner     2007-02-16  641  	/*
+d316c57ff6bfad Thomas Gleixner     2007-02-16  642  	 * Unregister the clock event devices which were
+86e36067908464 Frederic Weisbecker 2024-10-17  643  	 * released above.
+d316c57ff6bfad Thomas Gleixner     2007-02-16  644  	 */
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  645  	list_for_each_entry_safe(dev, tmp, &clockevents_released, list)
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  646  		list_del(&dev->list);
+86e36067908464 Frederic Weisbecker 2024-10-17  647  
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  648  	/*
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  649  	 * Now check whether the CPU has left unused per cpu devices
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  650  	 */
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  651  	list_for_each_entry_safe(dev, tmp, &clockevent_devices, list) {
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  652  		if (cpumask_test_cpu(cpu, dev->cpumask) &&
+ea9d8e3f45404d Xiaotian Feng       2010-01-07  653  		    cpumask_weight(dev->cpumask) == 1 &&
+ea9d8e3f45404d Xiaotian Feng       2010-01-07  654  		    !tick_is_broadcast_device(dev)) {
+472c4a9437d3c6 Viresh Kumar        2015-05-21  655  			BUG_ON(!clockevent_state_detached(dev));
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  656  			list_del(&dev->list);
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  657  		}
+bb6eddf7676e1c Thomas Gleixner     2009-12-10  658  	}
+86e36067908464 Frederic Weisbecker 2024-10-17  659  
+86e36067908464 Frederic Weisbecker 2024-10-17  660  	raw_spin_unlock(&clockevents_lock);
+d316c57ff6bfad Thomas Gleixner     2007-02-16  661  }
+a49b116dcb1265 Thomas Gleixner     2015-04-03  662  #endif
+501f867064e95f Thomas Gleixner     2013-04-25  663  
 
-Where are __unlikely_text_start and __unlikely_text_end used?
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
