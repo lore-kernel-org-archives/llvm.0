@@ -1,122 +1,124 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE711EE02F
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 17:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38121E8852
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 17:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729530787; cv=none; b=PHNj4gn1dkU0JVYG8mppNJN5QuBygJuMpZfxl+jJH8w8bG9ILgdMhIuf/6l4i3CR/8Cv9LJb7wo4IsLZSlXca3nh6d9ZY2F9wQ5XA0TMBXKet4TTdhx44vkptHM+CVQ+vG2ytJirAQlPwbzBxTg0gUkSvlS8PbFcR1jJBEfaU9Q=
+	t=1729530800; cv=none; b=WR//x9QgRcRSrSG4bAlDTiz3HS67yicLdFRXrka0hgD14plRq+kxVUnh03LynAem6MUHFgryyva5U9t8LOFXqQuLRkzDLnCmD/K/yfWpxeNrO1LA2tzPcqgpzgHGPYe7Em7ikRI9TX/S5ION3R4W/HxPbSbtP0VPq7cBmX6eBlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729530787; c=relaxed/simple;
-	bh=StgDsdmjWTJEqKodEWbwepqiFWVBxNKa8zEwL3TWimY=;
+	s=arc-20240116; t=1729530800; c=relaxed/simple;
+	bh=AKGUa9HVhL1DgtmZqXIpB957RrjigEuHhMqNpUgoZNs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cgTP55qpTZ1SOiuZy7Y7b0saJGdIrLOWAi5Rz14yw4bhF3IFdqFHRMKZsdXCkPqgMUFH6iwhNBr4Qhq1j9viUv0JMBx8M0C6Js3Ppke8kEJt+tjMSsKbkN+fDxQJGdBeupbiRaBgyQNebaUwxHqIQMFlT5tYoDXZiXN5VKWoHkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2Q9+RRn; arc=none smtp.client-ip=209.85.128.45
+	 To:Cc:Content-Type; b=IMmheUnUQk4U/IkOg7JRPGKzA9BnmlmA+SSF49ruYfaZAif2Qr8ibTIwankB/SzBA19hNbN3hXgyeNxuzttbrVDX1/T0RtVUYGHurr3ycqQ/IB5o+5IbKpa8G9E5C8VJZt/Bo/vDzf6Pkh3jGXdUYadC+4u8MTMdzvKUyVXyEc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KIVVorEa; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2Q9+RRn"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4315e62afe0so45379345e9.1
-        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 10:13:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KIVVorEa"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4315e9e9642so38947865e9.0
+        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 10:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729530783; x=1730135583; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1729530796; x=1730135596; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Yu/DhZu6HvkLJQug5aPr8YQgLzNKRwKw+qMAOmhuUh8=;
-        b=R2Q9+RRnUefuwPtVinjseb5ItxJjEPFBP+wePIJUB4k9MwdWT5B04+XLJuxYymIgGX
-         OLH9gRlRduOo8TvV/kimvL5FieHJQPYj1XdfjQXZGAhT+4nrp4swpujZ9CXHRL+W0drD
-         ayjL9Yjzy+uRlvaMTvxa7nqEXr12qoi77faVhLu/Ua++/bygPlM4WacKoItOGla5Cj8f
-         7444l3f2JxaZjlOOr5+qvzTndPDFz8bTcfo0gkAmhPHSihWuHkz1EbxFiFNJgE2qTv1r
-         rRYMVYYYk5Ki8DO0+JtHLtzG5omNAkYkkCRj9dE0NlNg4/2smGedJfeaZupOfppiLtRI
-         PXrA==
+        bh=vIluIAwMUTUE/eR1vRRj+RdoUmdMgjbC2v9uVOonL6s=;
+        b=KIVVorEayT/sRt/d1OXL7/D2AXhBHjTsokUFBUlB7WlsSN1EGQ99VpRPuxDXz45pz5
+         N3M0Wsz8N94pZ3fZQIbTnVHdCLRn1x+mfyCpYSXh4wGIxGYMO5ugdDu5s4uJhlEVNan3
+         GdUIbwUZF9lz8N3qMaecRjS5a5ErImV/b++OVUcjR3HB0g96GwLeDvJwTK1R1mlA9rsu
+         XGJVWXX0obO0haWsjUk/1BjTD2yNd7DP6ID2y67+9eHi+QQEMm0AGcC6qyC8/dp+iPP1
+         W3OyMLCGisGv1rsKIbsOjT5CXhubcbkHHGMVIJthkXao+3KXog21my7xykg1s2ysPjkU
+         CbwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729530783; x=1730135583;
+        d=1e100.net; s=20230601; t=1729530796; x=1730135596;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Yu/DhZu6HvkLJQug5aPr8YQgLzNKRwKw+qMAOmhuUh8=;
-        b=kXI6t6yV3402qd7cQmyc0r3JwZQLTMfuXo5wRCzAPVXWrKdO5o6X+hzmOqNiQNzjGm
-         ZYTynpeI3Q1yTInRSamLQtvbHjPip1cp31IHilosRjHX2Qs5Wg7lXCp2nYJ3WG4Hm4BP
-         8GsWPTx1Q7Whg6fti1FTOgp/GpEF83ezlj+W8o2D0xgMxN/cNrHVIS6ijeMkzpPM6wPe
-         0sGzHK0P9cfscZlInkGKqx7irePCQzYBzw/ZauzLmVdVlacO0YE9lwBH5GV76lssvYRN
-         rg9Mj6nBHHmnsmAo7KNfv1/uU2sZcr12EuUQKO2zhLJVtJTXfZ/qaHfiNZjJZ4sBuq6w
-         wkSw==
-X-Forwarded-Encrypted: i=1; AJvYcCXGzV4xJneQVm3gNkPBZElrbRCXhQ1I+dacmQC9snBMAQ5U+DW2WSGMhq6H7/amU6sjedTx@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx6SWuatl4rHqHrRTJKVbQKEpp186+nWwEChGCp+MFxdx3pPqOF
-	WSj7M4CSo2cJ213+z9hlNdPrZrN/SCQOQ9rLBDGUVbkkWzravJgLliLhvYPZ4oNTV/AexWqbfK2
-	+iuHl70fa2u6nCLlglfVvBWmxKwI=
-X-Google-Smtp-Source: AGHT+IGvg+ZOjt+aJJtnJj8yzwXxnCSUxiSwTE4yQInYvSm883y1SLFNZiKzJVLqmUO1MDxA7cME3bK/dnoIqpAcfXY=
-X-Received: by 2002:a05:6000:4013:b0:371:8319:4dbd with SMTP id
- ffacd0b85a97d-37eab7436f6mr9252003f8f.17.1729530783265; Mon, 21 Oct 2024
- 10:13:03 -0700 (PDT)
+        bh=vIluIAwMUTUE/eR1vRRj+RdoUmdMgjbC2v9uVOonL6s=;
+        b=JHuyNx1b/SA8C43niRLAP77rkc5zI7twRtduqvsXi9t9TyOiBvg/Akp2dXfvcQfQPK
+         j6CTH37kDaKUOvvH4OVxkoz0lsBwHlrhD89mCILzR9FnyQHtz3N+pBkiDvCxfWPt2dBA
+         2yf5aT/gB/2lg2d5oLyko0h88eSgoch5tKGMayNrgzMfE2PA+V2tOioniQQdugJb5aBz
+         6l9sb4YwHDUzUthLWAkRLvp3atbn1v4n7Qdx1A89FKhzRGzqeTM3bY6mQ16Ed6Ygdtdi
+         7N6yxUupmG7Xx8SK9URTMotg0aPltXzzVAlVJGIfgDwLld4IMhN0RnBhX6aXSXi0E4da
+         QDzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX7d0SurFoyWtqoTxGQgP/VwK7jD+yI+7ZbpCPIEBscaeEMMwLLgRjtQZiXxD+fRKC/DZqQ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy4Nx4u3s7hOACAwZIaoCE+Rf+I/HS2vNR6Tu8/0wtNqZ9QpEqO
+	iR1WagHkDnJ2cfRN3mr1zGjVb+q4oLB7v1OktpO5BSIioFpQWTON5kXOmzi9IfaKqarYuVsk/pn
+	K4WWSaKZ+l7vKCMBLisFfs1RglSI=
+X-Google-Smtp-Source: AGHT+IFvFFwCBZPEFVvJfGZmKvzpSgoyd0lix8VnZz9h/ZZELYJi0jCL2irDzbC73GlnOsRJ1sx57L07id50l89bL6w=
+X-Received: by 2002:a05:600c:19d2:b0:431:3c67:fb86 with SMTP id
+ 5b1f17b1804b1-431616a404dmr89446045e9.33.1729530795938; Mon, 21 Oct 2024
+ 10:13:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241021120013.3209481-1-elver@google.com>
-In-Reply-To: <20241021120013.3209481-1-elver@google.com>
+References: <20241021120013.3209481-1-elver@google.com> <20241021120013.3209481-2-elver@google.com>
+In-Reply-To: <20241021120013.3209481-2-elver@google.com>
 From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Mon, 21 Oct 2024 19:12:52 +0200
-Message-ID: <CA+fCnZdr4drxL9UDjAS7sCaDCG_nBJkg=wfX8j=itvo9RdbOsw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kasan: Fix Software Tag-Based KASAN with GCC
+Date: Mon, 21 Oct 2024 19:13:05 +0200
+Message-ID: <CA+fCnZcU1P5RxLmHekgsWGWQZ+oOQQLqH_LC0JxqBtLJqR3c7A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Revert "kasan: Disable Software Tag-Based KASAN with GCC"
 To: Marco Elver <elver@google.com>
 Cc: Will Deacon <will@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
 	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
 	Vincenzo Frascino <vincenzo.frascino@arm.com>, Mark Rutland <mark.rutland@arm.com>, 
 	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, syzbot+908886656a02769af987@syzkaller.appspotmail.com, 
-	Andrew Pinski <pinskia@gmail.com>
+	llvm@lists.linux.dev, Andrew Pinski <pinskia@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, Oct 21, 2024 at 2:00=E2=80=AFPM Marco Elver <elver@google.com> wrot=
 e:
 >
-> Per [1], -fsanitize=3Dkernel-hwaddress with GCC currently does not disabl=
-e
-> instrumentation in functions with __attribute__((no_sanitize_address)).
+> This reverts commit 7aed6a2c51ffc97a126e0ea0c270fab7af97ae18.
 >
-> However, __attribute__((no_sanitize("hwaddress"))) does correctly
-> disable instrumentation. Use it instead.
+> Now that __no_sanitize_address attribute is fixed for KASAN_SW_TAGS with
+> GCC, allow re-enabling KASAN_SW_TAGS with GCC.
 >
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D117196 [1]
-> Link: https://lore.kernel.org/r/000000000000f362e80620e27859@google.com
-> Link: https://lore.kernel.org/r/ZvFGwKfoC4yVjN_X@J2N7QTR9R3
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D218854
-> Reported-by: syzbot+908886656a02769af987@syzkaller.appspotmail.com
-> Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
 > Cc: Andrew Pinski <pinskia@gmail.com>
 > Cc: Mark Rutland <mark.rutland@arm.com>
 > Cc: Will Deacon <will@kernel.org>
 > Signed-off-by: Marco Elver <elver@google.com>
 > ---
->  include/linux/compiler-gcc.h | 4 ++++
->  1 file changed, 4 insertions(+)
+>  lib/Kconfig.kasan | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
-> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> index f805adaa316e..cd6f9aae311f 100644
-> --- a/include/linux/compiler-gcc.h
-> +++ b/include/linux/compiler-gcc.h
-> @@ -80,7 +80,11 @@
->  #define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
->  #endif
+> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> index 233ab2096924..98016e137b7f 100644
+> --- a/lib/Kconfig.kasan
+> +++ b/lib/Kconfig.kasan
+> @@ -22,11 +22,8 @@ config ARCH_DISABLE_KASAN_INLINE
+>  config CC_HAS_KASAN_GENERIC
+>         def_bool $(cc-option, -fsanitize=3Dkernel-address)
 >
-> +#ifdef __SANITIZE_HWADDRESS__
-> +#define __no_sanitize_address __attribute__((__no_sanitize__("hwaddress"=
-)))
-> +#else
->  #define __no_sanitize_address __attribute__((__no_sanitize_address__))
-> +#endif
+> -# GCC appears to ignore no_sanitize_address when -fsanitize=3Dkernel-hwa=
+ddress
+> -# is passed. See https://bugzilla.kernel.org/show_bug.cgi?id=3D218854 (a=
+nd
+> -# the linked LKML thread) for more details.
+>  config CC_HAS_KASAN_SW_TAGS
+> -       def_bool !CC_IS_GCC && $(cc-option, -fsanitize=3Dkernel-hwaddress=
+)
+> +       def_bool $(cc-option, -fsanitize=3Dkernel-hwaddress)
 >
->  #if defined(__SANITIZE_THREAD__)
->  #define __no_sanitize_thread __attribute__((__no_sanitize_thread__))
+>  # This option is only required for software KASAN modes.
+>  # Old GCC versions do not have proper support for no_sanitize_address.
+> @@ -101,7 +98,7 @@ config KASAN_SW_TAGS
+>         help
+>           Enables Software Tag-Based KASAN.
+>
+> -         Requires Clang.
+> +         Requires GCC 11+ or Clang.
+>
+>           Supported only on arm64 CPUs and relies on Top Byte Ignore.
+>
 > --
 > 2.47.0.rc1.288.g06298d1525-goog
 >
 
 Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-
-Thank you!
