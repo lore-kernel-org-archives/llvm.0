@@ -1,120 +1,187 @@
-Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6C31D04BB
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 06:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9461E00BB;
+	Mon, 21 Oct 2024 07:35:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729493744; cv=none; b=dKzKT7+hDvHhZGIXtmFmODoKSlnb6hrZdGgL6eJ4zqmebpnDoM/pVFztDdpFszkxJJo+uSvAl071ibQjF8+PgLijFfenNxmT9CylO1cYUB8aEdMHBafMds8/0zF8yW2g8snjc8m/8v0L7tpj66tiH3OHA/sAyYGIksTLU8PM2r8=
+	t=1729496155; cv=none; b=rofhfdS+c8s6Nwi67LTcYcpLRk/BcyXM66SGtw/lnKPPTRMOlb/PQQNZy8IcRlY68OrfshVyTEa8v28GGyJEq+jHZtDoCF4l4qUlj5JFEIyP9VdCI1m0kafULZ4JyRsuOBx08+tMxeJFiHvZVQcpSVT/4iGY+04Kmm0TTaWm3iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729493744; c=relaxed/simple;
-	bh=arkWI03su4YSBSMmr5PkdZjKRvultl8DVI/Ao8Lq9UQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vc3k+437CKWYX/fXTHcCsFkDrLNLz9qf7Q7QD3F14cbc2MIloUVUGMqo2LhHJCbJl1CiAnR1yIGuX4qXAKa9RO9lKqTudQte85f4VfrE7ZycsBykLhQCoTavTg/7q7e92e0gWIqsqDYDbSBiee0oO1doSWEUTNp6X7dU9U/hQHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=F71kmBZ5; arc=none smtp.client-ip=185.70.40.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+	s=arc-20240116; t=1729496155; c=relaxed/simple;
+	bh=eyKMY0O6mnjml0jyJU60F1X055RmKPZvZQ9fciG1aJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l8Qln1+L+3t7cqjjrCNPISst2rKJuqO6cTQo4aawFQNSECFMQ8I9GF9qRYoW7ahbtAse54ZOXeN1UvwSsp6ASNA7ipndfKSbtavjgcXahYJqxXfYolP1WYZr2i8X6ZtUzDiqh25lwHBbNke/k1H1bYPjxHDDARSzpYDIDrbrtgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f8+3IGt5; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="F71kmBZ5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1729493740; x=1729752940;
-	bh=arkWI03su4YSBSMmr5PkdZjKRvultl8DVI/Ao8Lq9UQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=F71kmBZ5RES2Ir+IWSGNZDbm78U1UiT1fbYk0BVQxwXV3CfipwjYeWB6dN3WtMQTm
-	 dmK6v2GCZ5Obtz51Ri8F94paK6LNY54/kv/QWr57jVdCd7sU7/OWUwTfoTryRrxyqU
-	 EAQ33pIbKn5Qe2HDgwQAnut7GQTL21RaqeQkD0hKEuP9B9kPNldkcezZTez4Hk9gU7
-	 fApobs8rITw0PG91KlrICVVkyHC6htMV/vGKtqelCzpoHgaNHbyK6LGXmMxcPKDNQ5
-	 qwKE0b8wABFGDC3qIz7YyG5KaqbyRSl8zCXoSWY8Zx4B73F0dJJEvVb5Rq9ufoehFx
-	 BN74jFVgsNYtQ==
-Date: Mon, 21 Oct 2024 06:55:35 +0000
-To: koachan@protonmail.com
-From: Koakuma <koachan@protonmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] sparc/build: Remove all usage of -fcall-used* flags
-Message-ID: <iBnrR9d4gRwtBGXlD_1AXH2OXuzLp6oR4PGkk4pg7KUVIsfs0G1zvzJTrO8o4y5ZHBWHdYOifN2_ZhbnrVd9jUTwJjeA5sdQhIcHp1o4xd0=@protonmail.com>
-In-Reply-To: <20240716-sparc-cflags-v2-1-40bdc4484d10@protonmail.com>
-References: <20240716-sparc-cflags-v2-0-40bdc4484d10@protonmail.com> <20240716-sparc-cflags-v2-1-40bdc4484d10@protonmail.com>
-Feedback-ID: 6608610:user:proton
-X-Pm-Message-ID: 1a094c75eebe4bf961b497dbdf4c0791a94cc949
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f8+3IGt5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729496154; x=1761032154;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eyKMY0O6mnjml0jyJU60F1X055RmKPZvZQ9fciG1aJc=;
+  b=f8+3IGt5TO5ieDW+ZuCnnZ2s+mSaHm1ic//BS0/U4AJ2+DZx30imBmE8
+   eXxCQbAJeOKwpqtmE4KpCUMn19AKLccdD9MLf/nxMMKMsIjXVVgZOolmW
+   pEWSVkjttLMR13HBLiFQAvGLytKCAXzy4JO+kBi/OS9b9bQHeT6WCSivn
+   56s38w9t5ngb+9tfP6ZzqkSWqxcN0g0bq7WyvFFP/oPYeVPBUKr6HJjtL
+   UXp/MJhKGC3mUFX0aOOuqpccUhSpIyKzwyYGqmmYAQ99Ck0qH77FCMj3I
+   oqCxzEKEnK6sxBLWteg8SjyvgkrMTNhVZaVKawCerMHGNPXWYZ1oRvACu
+   g==;
+X-CSE-ConnectionGUID: lexb6VYjQW2guXXBayZ/uQ==
+X-CSE-MsgGUID: n2+fU5LrQpeEuFE5my6GDg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40091614"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40091614"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 00:35:53 -0700
+X-CSE-ConnectionGUID: NTez+8RWTUOxNMXAa5/9xw==
+X-CSE-MsgGUID: pFsvyB0XT5i66gPjWQKWBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,220,1725346800"; 
+   d="scan'208";a="79449131"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 21 Oct 2024 00:35:48 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t2mx7-000RKs-1N;
+	Mon, 21 Oct 2024 07:35:45 +0000
+Date: Mon, 21 Oct 2024 15:35:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Boqun Feng <boqun.feng@gmail.com>, Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dirk Behme <dirk.behme@gmail.com>, Lyude Paul <lyude@redhat.com>,
+	rust-for-linux@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>,
+	airlied@redhat.com, Ingo Molnar <mingo@redhat.com>, will@kernel.org,
+	Waiman Long <longman@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, wedsonaf@gmail.com,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>, aliceryhl@google.com,
+	Trevor Gross <tmgross@umich.edu>, Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [POC 1/6] irq & spin_lock: Add counted interrupt
+ disabling/enabling
+Message-ID: <202410211503.Ri6kGlzj-lkp@intel.com>
+References: <20241018055125.2784186-2-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241018055125.2784186-2-boqun.feng@gmail.com>
 
-Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org> wrote:
+Hi Boqun,
 
-> From: Koakuma koachan@protonmail.com
->
->
-> Remove all usage of -fcall-used* flags so that all flags used are
-> portable between GCC and clang.
->
-> The reasoning is as follows:
->
-> In the (normal) 32-bit ABI, %g5 and %g7 is normally reserved, and in
-> the 64-bit ABI, %g7 is the reserved one.
-> Linux turns them into volatile registers by the way of -fcall-used-*,
-> but on the other hand, omitting the flags shouldn't be harmful;
-> compilers will now simply refuse to touch them, and any assembly
-> code that happens to touch them would still work like usual (because
-> Linux' conventions already treats them as volatile anyway).
->
-> Signed-off-by: Koakuma koachan@protonmail.com
->
-> ---
-> arch/sparc/Makefile | 4 ++--
-> arch/sparc/vdso/Makefile | 2 +-
-> 2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
-> index 757451c3ea1d..7318a8b452c3 100644
-> --- a/arch/sparc/Makefile
-> +++ b/arch/sparc/Makefile
-> @@ -29,7 +29,7 @@ UTS_MACHINE :=3D sparc
-> # versions of gcc. Some gcc versions won't pass -Av8 to binutils when you
-> # give -mcpu=3Dv8. This silently worked with older bintutils versions but
-> # does not any more.
-> -KBUILD_CFLAGS +=3D -m32 -mcpu=3Dv8 -pipe -mno-fpu -fcall-used-g5 -fcall-=
-used-g7
-> +KBUILD_CFLAGS +=3D -m32 -mcpu=3Dv8 -pipe -mno-fpu
-> KBUILD_CFLAGS +=3D -Wa,-Av8
->
-> KBUILD_AFLAGS +=3D -m32 -Wa,-Av8
-> @@ -45,7 +45,7 @@ export BITS :=3D 64
-> UTS_MACHINE :=3D sparc64
->
-> KBUILD_CFLAGS +=3D -m64 -pipe -mno-fpu -mcpu=3Dultrasparc -mcmodel=3Dmedl=
-ow
-> -KBUILD_CFLAGS +=3D -ffixed-g4 -ffixed-g5 -fcall-used-g7 -Wno-sign-compar=
-e
-> +KBUILD_CFLAGS +=3D -ffixed-g4 -ffixed-g5 -Wno-sign-compare
-> KBUILD_CFLAGS +=3D -Wa,--undeclared-regs
-> KBUILD_CFLAGS +=3D $(call cc-option,-mtune=3Dultrasparc3)
-> KBUILD_AFLAGS +=3D -m64 -mcpu=3Dultrasparc -Wa,--undeclared-regs
-> diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-> index 243dbfc4609d..e009443145af 100644
-> --- a/arch/sparc/vdso/Makefile
-> +++ b/arch/sparc/vdso/Makefile
-> @@ -46,7 +46,7 @@ CFL :=3D $(PROFILING) -mcmodel=3Dmedlow -fPIC -O2 -fasy=
-nchronous-unwind-tables -m64
-> -fno-omit-frame-pointer -foptimize-sibling-calls \
-> -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
->
-> -SPARC_REG_CFLAGS =3D -ffixed-g4 -ffixed-g5 -fcall-used-g5 -fcall-used-g7
-> +SPARC_REG_CFLAGS =3D -ffixed-g4 -ffixed-g5
->
-> $(vobjs): KBUILD_CFLAGS :=3D $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUG=
-INS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
->
->
-> --
-> 2.45.2
+kernel test robot noticed the following build errors:
 
-Hmm, hello, is there anything else I should do for this patch
-(and the series as a whole)?
+[auto build test ERROR on tip/locking/core]
+[also build test ERROR on linus/master v6.12-rc4 next-20241018]
+[cannot apply to rust/rust-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Boqun-Feng/irq-spin_lock-Add-counted-interrupt-disabling-enabling/20241018-135435
+base:   tip/locking/core
+patch link:    https://lore.kernel.org/r/20241018055125.2784186-2-boqun.feng%40gmail.com
+patch subject: [POC 1/6] irq & spin_lock: Add counted interrupt disabling/enabling
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241021/202410211503.Ri6kGlzj-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241021/202410211503.Ri6kGlzj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410211503.Ri6kGlzj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/um/kernel/asm-offsets.c:1:
+   In file included from arch/x86/um/shared/sysdep/kernel-offsets.h:3:
+   In file included from include/linux/sched.h:2140:
+>> include/linux/spinlock.h:383:2: error: call to undeclared function '_raw_spin_lock_irq_disable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     383 |         raw_spin_lock_irq_disable(&lock->rlock);
+         |         ^
+   include/linux/spinlock.h:275:41: note: expanded from macro 'raw_spin_lock_irq_disable'
+     275 | #define raw_spin_lock_irq_disable(lock) _raw_spin_lock_irq_disable(lock)
+         |                                         ^
+   include/linux/spinlock.h:383:2: note: did you mean 'spin_lock_irq_disable'?
+   include/linux/spinlock.h:275:41: note: expanded from macro 'raw_spin_lock_irq_disable'
+     275 | #define raw_spin_lock_irq_disable(lock) _raw_spin_lock_irq_disable(lock)
+         |                                         ^
+   include/linux/spinlock.h:381:29: note: 'spin_lock_irq_disable' declared here
+     381 | static __always_inline void spin_lock_irq_disable(spinlock_t *lock)
+         |                             ^
+>> include/linux/spinlock.h:413:2: error: call to undeclared function '_raw_spin_unlock_irq_enable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     413 |         raw_spin_unlock_irq_enable(&lock->rlock);
+         |         ^
+   include/linux/spinlock.h:279:42: note: expanded from macro 'raw_spin_unlock_irq_enable'
+     279 | #define raw_spin_unlock_irq_enable(lock)        _raw_spin_unlock_irq_enable(lock)
+         |                                                 ^
+   include/linux/spinlock.h:413:2: note: did you mean 'spin_unlock_irq_enable'?
+   include/linux/spinlock.h:279:42: note: expanded from macro 'raw_spin_unlock_irq_enable'
+     279 | #define raw_spin_unlock_irq_enable(lock)        _raw_spin_unlock_irq_enable(lock)
+         |                                                 ^
+   include/linux/spinlock.h:411:29: note: 'spin_unlock_irq_enable' declared here
+     411 | static __always_inline void spin_unlock_irq_enable(spinlock_t *lock)
+         |                             ^
+   2 errors generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/um/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/_raw_spin_lock_irq_disable +383 include/linux/spinlock.h
+
+   380	
+   381	static __always_inline void spin_lock_irq_disable(spinlock_t *lock)
+   382	{
+ > 383		raw_spin_lock_irq_disable(&lock->rlock);
+   384	}
+   385	
+   386	#define spin_lock_irqsave(lock, flags)				\
+   387	do {								\
+   388		raw_spin_lock_irqsave(spinlock_check(lock), flags);	\
+   389	} while (0)
+   390	
+   391	#define spin_lock_irqsave_nested(lock, flags, subclass)			\
+   392	do {									\
+   393		raw_spin_lock_irqsave_nested(spinlock_check(lock), flags, subclass); \
+   394	} while (0)
+   395	
+   396	static __always_inline void spin_unlock(spinlock_t *lock)
+   397	{
+   398		raw_spin_unlock(&lock->rlock);
+   399	}
+   400	
+   401	static __always_inline void spin_unlock_bh(spinlock_t *lock)
+   402	{
+   403		raw_spin_unlock_bh(&lock->rlock);
+   404	}
+   405	
+   406	static __always_inline void spin_unlock_irq(spinlock_t *lock)
+   407	{
+   408		raw_spin_unlock_irq(&lock->rlock);
+   409	}
+   410	
+   411	static __always_inline void spin_unlock_irq_enable(spinlock_t *lock)
+   412	{
+ > 413		raw_spin_unlock_irq_enable(&lock->rlock);
+   414	}
+   415	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
