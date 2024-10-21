@@ -1,41 +1,39 @@
-Received: from relay.smtp-ext.broadcom.com (saphodev.broadcom.com [192.19.144.205])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C757D1F131C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE5B1F470A
 	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 17:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729532987; cv=none; b=gXFrdhWjrxFWYm6M5YbLDg3C6dtiHptuRMqE2KucE/ADAkSDmQ523X+Cmtc6Al6Kc6nompjucKMb9b0QZ4U7k+7sstrAjoOqvm+0gWjo8s3wNevS4kDkEHItIdbSBRV28kKI9pSawYEn0ru/qBnaBSrXo+K4pNcEpbseD+dLb+Y=
+	t=1729532987; cv=none; b=LGcowfWDSubIgEuA1dhxO3iWpM4fySc3Q/A+iUYfwtIKc/v3+SbdF6hXhzRijazsPGr0AjAGBSA77tALa6DPnC5kKgaDJN3mr6Ma3BOx0aI1i2dPmGlq7q1QltrdMxHXbsV7RgGTTX7gMvgu/TbrV+Eadt4LuyRjkKqdPD7WkX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729532987; c=relaxed/simple;
-	bh=wWqJweXrmpxu1ytmO1zT3vDpyOrJGE0phQ0vxF0cl/E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c5YGFOrHsQf58YbzZfJe6rJ0b2cZoemf9Mxc4AXT8EBHJzXzeyw6zYbvqnmaduLMmNs0RouSDDkp9RrU2OxgVhsXFqPM+qJtt2EQ1Cw8tDcfMJzq1dn4xPXY9k11R/aW48/i6lypNX8R7LMAktMOpBluaKlzkzKoRFzoUKXlAnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=db1PrNBl; arc=none smtp.client-ip=192.19.144.205
+	bh=mGBxfEo3fvwdyoCVC+cSHK0qhI2yCmOesExVfHIKSRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bAsEuEiI+KrZileK6WiChHVl/ND4eyfC6EO+f7IUE/s9T+s5z3svgd1MuBTfaaFcc+KnmsrhqcOD88bIZIdYz3+OwjUPsHGLfl248SoGbx8OZZvdlSmAo1HFB+PCGN3SBL7dmPdRt23DBZsnPEm8/US0i9J8MpQMPpuzgCcFTsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Wvef3+ZA; arc=none smtp.client-ip=192.19.144.208
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="db1PrNBl"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Wvef3+ZA"
 Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 8D522C0000F4;
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 75571C0005CF;
 	Mon, 21 Oct 2024 10:49:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 8D522C0000F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 75571C0005CF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
 	s=dkimrelay; t=1729532978;
-	bh=wWqJweXrmpxu1ytmO1zT3vDpyOrJGE0phQ0vxF0cl/E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=db1PrNBl6My9AGaPaALrN+gIk9+YOkaSnQ1/IaaDMBqX1W8TWY2nnM+QbpeqVYtiV
-	 a7CDXzPcS+gF5SHCYzQKWyEdj9gBuasqZTpZTd5hCTUBfBT1VwpYgxw0SB4UtpErbN
-	 5zN3RczhvlUJQOq+kdblwp0L9hbuF5QHIXx9P7jk=
+	bh=mGBxfEo3fvwdyoCVC+cSHK0qhI2yCmOesExVfHIKSRQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Wvef3+ZAAB76ANY940+j4fDlq+GAVTfj2+dQXbiQyzDTWMI0F5BM5kOEt+qWM6jfh
+	 sV8spCMYlOrN84ov5+Fmqz7ygBUdIkGIm+3Yj9CXW7DqaoewmQ9FKFsjrfS6WG4Q2g
+	 TDs9nKJudFomfxnfI8Poq2Ak4Jp/PyEJ44gTyACs=
 Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 2AF2018041CACA;
-	Mon, 21 Oct 2024 10:49:38 -0700 (PDT)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id E995918041CAC6;
+	Mon, 21 Oct 2024 10:49:37 -0700 (PDT)
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 To: netdev@vger.kernel.org
 Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -46,13 +44,12 @@ Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:)
-Subject: [PATCH net-next v2 1/2] net: systemport: Remove unused txchk accessors
-Date: Mon, 21 Oct 2024 10:49:34 -0700
-Message-ID: <20241021174935.57658-2-florian.fainelli@broadcom.com>
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:),
+	vladimir.oltean@nxp.com
+Subject: [PATCH net-next v2 0/2] net: systemport: Minor IO macros changes
+Date: Mon, 21 Oct 2024 10:49:33 -0700
+Message-ID: <20241021174935.57658-1-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241021174935.57658-1-florian.fainelli@broadcom.com>
-References: <20241021174935.57658-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,45 +58,26 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Vladimir reported the following warning with clang-16 and W=1:
+This patch series addresses the warning initially reported by Vladimir
+here:
 
-warning: unused function 'txchk_readl' [-Wunused-function]
-BCM_SYSPORT_IO_MACRO(txchk, SYS_PORT_TXCHK_OFFSET);
-note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
+https://lore.kernel.org/all/20241014150139.927423-1-vladimir.oltean@nxp.com/
 
-warning: unused function 'txchk_writel' [-Wunused-function]
-note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
+and follows on with proceeding with his suggestion the IO macros to the
+header file.
 
-warning: unused function 'tbuf_readl' [-Wunused-function]
-BCM_SYSPORT_IO_MACRO(tbuf, SYS_PORT_TBUF_OFFSET);
-note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
+Changes in v2:
 
-warning: unused function 'tbuf_writel' [-Wunused-function]
-note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
+- also removed the TBUF accessor
 
-The TXCHK and RBUF blocks are not being accessed, remove the IO macros
-used to access those blocks. No functional impact.
+Florian Fainelli (2):
+  net: systemport: Remove unused txchk accessors
+  net: systemport: Move IO macros to header file
 
-Reported-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- drivers/net/ethernet/broadcom/bcmsysport.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/ethernet/broadcom/bcmsysport.c | 24 ----------------------
+ drivers/net/ethernet/broadcom/bcmsysport.h | 23 +++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
-index 0b7088ca4822..9e42b5db721e 100644
---- a/drivers/net/ethernet/broadcom/bcmsysport.c
-+++ b/drivers/net/ethernet/broadcom/bcmsysport.c
-@@ -46,9 +46,7 @@ BCM_SYSPORT_IO_MACRO(umac, SYS_PORT_UMAC_OFFSET);
- BCM_SYSPORT_IO_MACRO(gib, SYS_PORT_GIB_OFFSET);
- BCM_SYSPORT_IO_MACRO(tdma, SYS_PORT_TDMA_OFFSET);
- BCM_SYSPORT_IO_MACRO(rxchk, SYS_PORT_RXCHK_OFFSET);
--BCM_SYSPORT_IO_MACRO(txchk, SYS_PORT_TXCHK_OFFSET);
- BCM_SYSPORT_IO_MACRO(rbuf, SYS_PORT_RBUF_OFFSET);
--BCM_SYSPORT_IO_MACRO(tbuf, SYS_PORT_TBUF_OFFSET);
- BCM_SYSPORT_IO_MACRO(topctrl, SYS_PORT_TOPCTRL_OFFSET);
- 
- /* On SYSTEMPORT Lite, any register after RDMA_STATUS has the exact
 -- 
 2.43.0
 
