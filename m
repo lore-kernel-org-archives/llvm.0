@@ -1,144 +1,141 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB129198A10
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 09:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14CE1E47C7
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 10:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729503120; cv=none; b=KsxFn2Mxvkjihzw8B0maeElsYzEodibxkiqaOtNXFvXnyG6djdVjATjtWPenYFlJsVThZMLdRnphREV1Ce+rWEjC5DrjDaKBe8nwlcGmeXTKcYsUsyFX0ewbqITglLQiSXmdFG2DqqYaVfKV26G4gABn22SfVPi6o7XY4yLv9fM=
+	t=1729504912; cv=none; b=mLFj/YwiOKOMkmTg0jXuWJI7RbbNtcRCMQORZ4Z6Cp61BaSMDE/QLv4O9teles6qH+nN5CpyqKWL8RgIgDqJZp7A1EraWqGZEV08fFowcN4m61y+sPOnlXL7tjV8Q5rprbdi+Mk+5xJGSQHXst/EbXY1a7+J/SXbD4nBma7/Ydg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729503120; c=relaxed/simple;
-	bh=wYgRHsuBQSWUfJfqlR5IM0BQzaOVzalKBFCEgNsKBCE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rXbqZ358Y2Mv2a15WiJA5skNfHFHbaPVLRVDZeG1UjtvuqB/kiI9c5MUPM7JhAgecLMzYA9IwlmhQHFeBR/lXDIvu1/NPThM0uZrmHChW96bxPXzIr1UC95JqX9VAUbtHAz2Is3nF9utY2Kqo0/y90YGcnoJ1VCxfNkk4ZTPUXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MTlb5O/W; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1729504912; c=relaxed/simple;
+	bh=MoTOl9y90sIoORVxCJbn2v1vz4mCgEMa1EHPh5uYnDk=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Z7Zdj6RPsLNyILp54basGQUHSbiCpK1aFeGyxsI6XIjNl8o2ut4vBTfcQW+RzOLS3DmXwDZsOmf70+2TNnATS+JRkMO5QZw/H1Xa9669EqYCgu8HE5F6v1Ga2U5mxSkMU2rLtMKrFMvU6KNOU2rCXMQDVU1MMImtKaeKWb0ZpYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fW8qPxjG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jABelndI; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MTlb5O/W"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49KNlJQe011419
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 09:31:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fPR/B/rHBV/Ak5XBTURloMnJHkGLWJU2nK6mB1/kVDY=; b=MTlb5O/WLCXNriOH
-	4+xgldwiFuNOtemJZKERsdJsW1uBfmh/gJ2tDJ4+soYYyUAnl5ynBt0ZC9qe4wsx
-	nVUpld6ricZY43xy2gcp/y/d8qSHsotBToHJ0L3OjJdKBIQUTtLtLfwrKptXg6cW
-	P0LbEABCk6iwQhxZttDYmZ8waXKlkDPBt10W+gw+rlRCNbGAp/tsHYcJ/Ay/WEc3
-	HNmwSUecRjs/dID2CgJBC+2XhSQ4wSHTId9Dfb477RxByCtB96UjlGDQ2SqKNlvy
-	OaA+PG1FsiTTdTPAhwGvmBlimuVM9GJzCAr8Nn+gqjW1Hfju9XzIwqJM4pjBDhcr
-	YakuDg==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6t943rx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 09:31:57 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7b156e4572dso40010585a.2
-        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 02:31:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729503116; x=1730107916;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fPR/B/rHBV/Ak5XBTURloMnJHkGLWJU2nK6mB1/kVDY=;
-        b=JA4vH45iD3rcsy0yUilr6yaKAKn6aNTvovp9B9z5gCGN5glUh9Nj49GZEjLtFYxUGe
-         I+mSwuRPrDFuwDMB265DOtDouEjpycEOKNIxzUuFuAhTxMmavEKGjNNztHUrLqW865Gy
-         +xDnBRZ3Fetcs5Hn/ZKOciucUzjissbo5cHz2tRuA0z1cyy3gsUVfdlVQnTgMVDVZenF
-         g4n+KxexoAME4DhWY/ryF/IyW02KTf4U5DDIcqVCa9+oIkXhQ2C83Re4aftbB98Obc5w
-         /s6o6AmXKRbKyVTihImee8fvGwchzBXqs/CRqYjTk6n9Bz9LaVRaSr3M8E80ISDA2bx7
-         NqJg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+JSlml0zVMaYXiw388JFf45rTzqZaEh3rf8E4q1n9/nKBqEbNF6r9Irc3xRHvL+tfihvv@lists.linux.dev
-X-Gm-Message-State: AOJu0YzczGyCtUrMR9t+0IWuIo0GqUThL4BV+PMV84hgXczWdjpZckxo
-	pt3VCb9orf8iLMwM2yizFDwrv0Td8AmqLGe+G/wcjKME1Ag7MsweM5/elek53tgHUPu2lMRIUhH
-	pULbPxQhPWZLz++myVHc2JCpeVmCCokwtMJVtUCniAcJwwxGDB/29
-X-Received: by 2002:a05:6214:dcf:b0:6cb:664e:38f4 with SMTP id 6a1803df08f44-6cde14b89f4mr72419866d6.1.1729503116634;
-        Mon, 21 Oct 2024 02:31:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH2O0KwDA6JcVjDVTyVWfeD78j3D/8uD+htQv91rhYe8+NiUDqHk/GOqcdLXeUcZIFh+xpOhw==
-X-Received: by 2002:a05:6214:dcf:b0:6cb:664e:38f4 with SMTP id 6a1803df08f44-6cde14b89f4mr72419786d6.1.1729503116321;
-        Mon, 21 Oct 2024 02:31:56 -0700 (PDT)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a913077basm180611366b.97.2024.10.21.02.31.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Oct 2024 02:31:55 -0700 (PDT)
-Message-ID: <c80309ad-52de-4998-ab0e-05db7cc5068b@oss.qualcomm.com>
-Date: Mon, 21 Oct 2024 11:31:52 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fW8qPxjG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jABelndI"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 16752114014E;
+	Mon, 21 Oct 2024 06:01:49 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Mon, 21 Oct 2024 06:01:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1729504909;
+	 x=1729591309; bh=PsU+reKmiMH+6dEqfODUv58RE75ILNro4ASwJ7hVYxU=; b=
+	fW8qPxjG7VpETcQZqSN8x7slQpdpGZSXj/1i0G+iYnzS65RSdZDu6nZKZPCwUA5D
+	ojXmy4onqcjAyxlTVJWvzsQlwrpSU2ec1WElDzalvD5hSrKR/FqaxWfmoa+FjFIn
+	8qHR8WUVFURK9guGsh+p/m8xI/jJhtpx4CndtTxPGbI1JP/93O+zMEWLiVuuKMXq
+	KT4PnTiqc/FHg3PTyXM4rNfgPAnyISRYqGIZkaHr12QwQFAM143HuiRU/sS7U1Pv
+	m/3/ucIdtZ930Tt8EplH01vxQIITKJQ4VQMsxSetNWPkzXl3dS2TwpsF2q2VZdPI
+	B1YWt/SPaAIF/LJoP+jidg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1729504909; x=
+	1729591309; bh=PsU+reKmiMH+6dEqfODUv58RE75ILNro4ASwJ7hVYxU=; b=j
+	ABelndIinU4Ip3zsU2JLWu9OK82+lIcLkoK5GjsL5/jsw1zKkhfVn87BBhhcQ0sY
+	YcSo0fbRVJ+zy0dv7SdcLIZ06MvtdZyaLXBXLPdCL5vLh8GCmnxwstvBHB/hZ076
+	veSSNj5kIpJdAMv5lAQLfcieGl8N8xmZ6f3drRv5X+ij2fjGyRovySrqe/gWazf2
+	tdAyMRPLsmAXMgOMBIhkoMj/cLZIww0lTO4sr8yLe/LQW6wJoDzQ51W+yC//+/5V
+	+DASU2O1z+aCWeUy7pcg8CV1qDymURDlSP8IyaaFKL/j5Rk9s7wLbCiRp9Wyg6gE
+	Ho/1rOjSmtDbZfNnGvSEw==
+X-ME-Sender: <xms:jCYWZyUjmgpQ2rFm9PI5WmhydfRMwhu9juI9XhP6D2OsvcwxWs82Ow>
+    <xme:jCYWZ-lQRsM5NJjNwLZ6fQUj_ZKsDF8ejCoV8ENmeVk7Eeo3xjeixatFiPkVVt-V6
+    OQy4SUeKpBMchwfMrc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdehledgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudel
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehsihhmohhnrgesfhhffihllhdrtg
+    hhpdhrtghpthhtoheprghirhhlihgvugesghhmrghilhdrtghomhdprhgtphhtthhopehr
+    ohgsuggtlhgrrhhksehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhushhtihhnshhtih
+    htthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhorhgsohesghhoohhglhgvrdgt
+    ohhmpdhrtghpthhtohepnhguvghsrghulhhnihgvrhhssehgohhoghhlvgdrtghomhdprh
+    gtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhonhhrrggu
+    higstghioheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnh
+    gvlhdrohhrgh
+X-ME-Proxy: <xmx:jCYWZ2Yhzu2akfZrZXSayTsw8WmZoV4vH5mcPhNJLxFvmlBalUAOIg>
+    <xmx:jCYWZ5VIsfWAmVcaWQKxstu8OQDdUJtPWNuBN-ZbW147Cqn0LKlIYA>
+    <xmx:jCYWZ8mJUT9n2g6iT5Vrxtvhy6sC4Z0m9JF6HpeMyAeerDFjgYSkqw>
+    <xmx:jCYWZ-fctAsd8clqYV3sdEV6qpUbmzALG6BHgPI5dZp61ACP49y5VQ>
+    <xmx:jSYWZ7cl9AYBzFKgb6f7YxD93SOgWHmFu6zwK5_rHqop8fDSx6LV_fYq>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2A3942220072; Mon, 21 Oct 2024 06:01:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Sean Paul <sean@poorly.run>, Konrad Dybcio <konradybcio@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling
- <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Mon, 21 Oct 2024 10:01:27 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Akhil P Oommen" <quic_akhilpo@quicinc.com>,
+ "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>
+Cc: "Arnd Bergmann" <arnd@kernel.org>, "Rob Clark" <robdclark@gmail.com>,
+ "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+ "Dave Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Sean Paul" <sean@poorly.run>,
+ "Konrad Dybcio" <konradybcio@kernel.org>,
+ "Marijn Suijten" <marijn.suijten@somainline.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <cb728358-ac32-4b37-a954-967f338385e2@app.fastmail.com>
+In-Reply-To: <20241021092509.tm4w3ufdgcd7of37@hu-akhilpo-hyd.qualcomm.com>
 References: <20241018151143.3543939-1-arnd@kernel.org>
  <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
  <k42wmgziqia6balqsrfualbg73giesjxxtyaldkxsrdxkro2li@6neybqsu27me>
  <20241021092509.tm4w3ufdgcd7of37@hu-akhilpo-hyd.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241021092509.tm4w3ufdgcd7of37@hu-akhilpo-hyd.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: AfA9u9PfFLa-gQCtwOIDdBvnriS61CFI
-X-Proofpoint-ORIG-GUID: AfA9u9PfFLa-gQCtwOIDdBvnriS61CFI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- spamscore=0 impostorscore=0 malwarescore=0 priorityscore=1501 adultscore=0
- clxscore=1011 mlxlogscore=999 lowpriorityscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410210068
 
-On 21.10.2024 11:25 AM, Akhil P Oommen wrote:
+On Mon, Oct 21, 2024, at 09:25, Akhil P Oommen wrote:
 > On Sat, Oct 19, 2024 at 04:14:13PM +0300, Dmitry Baryshkov wrote:
 >> On Sat, Oct 19, 2024 at 03:01:46PM +0530, Akhil P Oommen wrote:
->>> On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
->>>> From: Arnd Bergmann <arnd@arndb.de>
->>>>
->>>> Clang-19 and above sometimes end up with multiple copies of the large
->>>> a6xx_hfi_msg_bw_table structure on the stack. The problem is that
->>>> a6xx_hfi_send_bw_table() calls a number of device specific functions to
->>>> fill the structure, but these create another copy of the structure on
->>>> the stack which gets copied to the first.
->>>>
->>>> If the functions get inlined, that busts the warning limit:
->>>>
->>>> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
->>>
->>> Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
->>
+>> > On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
+>> > > From: Arnd Bergmann <arnd@arndb.de>
+>> > > 
+>> > > Clang-19 and above sometimes end up with multiple copies of the large
+>> > > a6xx_hfi_msg_bw_table structure on the stack. The problem is that
+>> > > a6xx_hfi_send_bw_table() calls a number of device specific functions to
+>> > > fill the structure, but these create another copy of the structure on
+>> > > the stack which gets copied to the first.
+>> > > 
+>> > > If the functions get inlined, that busts the warning limit:
+>> > > 
+>> > > drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
+>> > 
+>> > Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
+>> 
 >> Kernel stacks are expected to be space limited, so 1024 is a logical
 >> limit for a single function.
-> 
+>
 > Thanks for the clarification. I think it is better to move this table to
 > struct a6xx_gmu which is required anyway when we implement dynamic generation
 > of bw table. Also, we can skip initializing it in subsequent gpu wake ups.
-> 
+>
 > Arnd, do you think that would be sufficient? I can send that patch if you
 > want help.
 
-FWIW I implemented this at one point.. ended up only rebasing it for months
-as I kept delaying GMU voting until we get an in-tree dram frequency LUT
-retrieving driver..
+Yes, that should work. I actually tried first to turn the model
+specific data into static const structures but that ended up 
+not working because some of them have a couple of dynamically
+computed values. I think that would have been even nicer.
 
-https://github.com/SoMainline/linux/commits/konrad/longbois-next/drivers/gpu/drm/msm/adreno
-
-worth noting that this used to be my R&D branch so this is very much err..
-"provided as-is".. but it did work on 8250!
-
-Konrad
+      Arnd
