@@ -1,175 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D78224EA;
-	Mon, 21 Oct 2024 02:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A2C208DA
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 03:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729478925; cv=none; b=KVla20IVzwv7F/lvyy6Ehez7mdwOCAOoxJrPoxVFDBL1hK04WEqcJFnx8fBBFxU0K6fCGYoyEhiLLlsgNkuK8tA82oKIAj9cN2Eq/SFxirphrZFw6MMLIX3h1MCI3We7AvIoFxZk6NU5QXM0vIY4TGmPelLQRfjf76sEuP51rDI=
+	t=1729480735; cv=none; b=K9zr15xNQ6hGzORntIT6sbqIiUlW/4x+nfM3IHOuZiHApuhhuPEtqCZpWWJAIhnKf2r125e+1JLowGlvYq6mbkVlhRM1Df9znvFjhnEeh2OF2C5lNAqRitVn2OE3kP+/9yK1NDg2ndNoNRZCS5AS+etVLvt6UkQ3/AdPy6FSi/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729478925; c=relaxed/simple;
-	bh=Cr/IcJU+i0W4asDlN443uFwPMZgQlI6G+rafZwdkb3A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TVmMjQJGeG/C+uY1La+BbezV8lHIjaGHRvGjZvmMjp536aPoEgKniBSD/zUREOqsaJdDdkEZ8bjmlbKqzWxumfv+SAk6lp80t9ObfHFb9lv78He1V9q/WhPdZedxPi96GuuelipHnaZOdQ5auToaqAo9xPWjOehJda1VA7dpWVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdgXgu48; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729480735; c=relaxed/simple;
+	bh=Nie2AFcFSUfc/tFdc/pmxlhQ189rqt/EUrhnGQ9Geo8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XqqxkGsmnIyq0FbIEyUKscozZKby6CXX+SrAGX1I1LFM+V+KTKReoT7xtrJVISI2qaegIM76BLd61zrPPB7ezHbopRMc2hKB1Ak8rgeCnQqxYtUce5oP28wRCSeGIduPqWY0gbkfowRGj5yZdyws7FtU1Snu/29/xwgg9l4ooUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TABi75Fd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdgXgu48"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729478923; x=1761014923;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cr/IcJU+i0W4asDlN443uFwPMZgQlI6G+rafZwdkb3A=;
-  b=UdgXgu48OfHaqYRBhHsduNQCtC6ZsrFcD5a8LGKGgCaSeLmtoWxvq5jK
-   Fww8/SqSrR2/T+TWj+GPC+7qdp0/NJ0D8G8maltlofPHorbddW5vPuXMe
-   vY+7172/O27ALOMQisIg2wSwNIK3sG07wJcwIrXdyUj3TQgerqW1gnGrA
-   S/Mr7sZqoyV2tM/5S+4J+3VVXLDoQK0Vo+nC9ok/rdHZzIQCf3ISj0BXG
-   zZlG/G31djmNSpEHSLT3jcb185IxVWIYbBVu0heGloDDxsTVhbt/gGEKV
-   03AO4dL1RLnvAf4BPLEaCWLCeuorwpZFXb3tAWb6hvplYnLvzF+n+vvEs
-   g==;
-X-CSE-ConnectionGUID: JU3ia+maQ9GgFiZQ/rNmbw==
-X-CSE-MsgGUID: DwLFcmyVRVuq9uTEa5kQ7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11231"; a="29159684"
-X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
-   d="scan'208";a="29159684"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 19:48:38 -0700
-X-CSE-ConnectionGUID: E5c7vqo5QEyzjElefJQcRA==
-X-CSE-MsgGUID: /cIoSbYOR4mFZlKLjpnhsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,219,1725346800"; 
-   d="scan'208";a="79346293"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 20 Oct 2024 19:48:34 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t2iT9-000R4d-0t;
-	Mon, 21 Oct 2024 02:48:31 +0000
-Date: Mon, 21 Oct 2024 10:48:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prabhakar <prabhakar.csengg@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 6/7] pinctrl: pinmux: Introduce API to check if a pin is
- requested
-Message-ID: <202410211007.sFKERNFY-lkp@intel.com>
-References: <20241017113942.139712-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TABi75Fd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE32C4AF09
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 03:18:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729480734;
+	bh=Nie2AFcFSUfc/tFdc/pmxlhQ189rqt/EUrhnGQ9Geo8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TABi75FdBaoOqSod8UvE6rF34pp3dGkoSsLNDQ9gZvM1YQes8MFBtgQXofPpazonz
+	 gIyCXFFOWHPiXx3K6o4Yqau09U66BLNpx/GT+GBOcoscXIT6POPLLJkh976s65uw9v
+	 2gu0XIR75/D+2T8YESyGs4nfSb6KvlO0z5CTQjZR8ag8NjtoayTqt8TX6hM+vKUSdo
+	 9uAZ71bXTKUBUe5GjPj0F8dZd86uwtdL6lEk3UzAe7Rp4f9mT1Xpi+e/c8h/AmBEpP
+	 SKM4IXx+qMVJ+JU1cNWj1p2Br1+KexfXrKPhBUCAx1Y9U5s/+78eDdtLSZKEjiIMn4
+	 1fgbGMSbcAOdQ==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539e59dadebso5043981e87.0
+        for <llvm@lists.linux.dev>; Sun, 20 Oct 2024 20:18:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX+aG2ttlk+cuNzCdaikY+YmlgJWM2/Xdhob5inP0vv3K+uFfCqgzk9il1AlP25Cz8AhIUH@lists.linux.dev
+X-Gm-Message-State: AOJu0YyuP8+mvLIm2UlqE5uBdX2X1aLKEowZI7oJf3V5XG6UV7VxcDUW
+	OIJwKyP+ibe0N1dMZ0VOfAzX9SR09QAWquGgy7uFDbHlUv1Y5PGesqnodpPM3mjqvQARBlFtoAo
+	U+d0uSXaSHQ4oAAiPYgQmHt/C06s=
+X-Google-Smtp-Source: AGHT+IFF+6OY++aC6VgSvFOGFIPuUwbQy2uTC0O38gyEQAjFUkHkDmaIEUyBHfWpTEdN9+71dto4vZQ2X+vvT37eHI4=
+X-Received: by 2002:a05:6512:b19:b0:539:df2f:e115 with SMTP id
+ 2adb3069b0e04-53a1521993cmr4056473e87.23.1729480732824; Sun, 20 Oct 2024
+ 20:18:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241017113942.139712-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-6-xur@google.com>
+In-Reply-To: <20241014213342.1480681-6-xur@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 21 Oct 2024 12:18:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ0RwJYkCXHj8QMH3sqXgY2LBTiYV8HnKD8oANB8Bb+Yg@mail.gmail.com>
+Message-ID: <CAK7LNAQ0RwJYkCXHj8QMH3sqXgY2LBTiYV8HnKD8oANB8Bb+Yg@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] AutoFDO: Enable machine function split
+ optimization for AutoFDO
+To: Rong Xu <xur@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Prabhakar,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on geert-renesas-drivers/renesas-pinctrl]
-[also build test WARNING on linusw-pinctrl/devel linusw-pinctrl/for-next geert-renesas-devel/next linus/master v6.12-rc4 next-20241018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Prabhakar/arm64-dts-renesas-rzg3s-smarc-Drop-hogging-of-GPIO-pins/20241017-194200
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-pinctrl
-patch link:    https://lore.kernel.org/r/20241017113942.139712-7-prabhakar.mahadev-lad.rj%40bp.renesas.com
-patch subject: [PATCH 6/7] pinctrl: pinmux: Introduce API to check if a pin is requested
-config: hexagon-randconfig-001-20241021 (https://download.01.org/0day-ci/archive/20241021/202410211007.sFKERNFY-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241021/202410211007.sFKERNFY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410211007.sFKERNFY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/pinctrl/core.c:28:
-   In file included from include/linux/gpio/driver.h:8:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/pinctrl/core.c:28:
-   In file included from include/linux/gpio/driver.h:8:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/pinctrl/core.c:28:
-   In file included from include/linux/gpio/driver.h:8:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/pinctrl/core.c:38:
->> drivers/pinctrl/pinmux.h:104:6: warning: no previous prototype for function 'pin_requested' [-Wmissing-prototypes]
-     104 | bool pin_requested(struct pinctrl_dev *pctldev, int pin)
-         |      ^
-   drivers/pinctrl/pinmux.h:104:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     104 | bool pin_requested(struct pinctrl_dev *pctldev, int pin)
-         | ^
-         | static 
-   7 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> Enable the machine function split optimization for AutoFDO in Clang.
+>
+> Machine function split (MFS) is a pass in the Clang compiler that
+> splits a function into hot and cold parts. The linker groups all
+> cold blocks across functions together. This decreases hot code
+> fragmentation and improves iCache and iTLB utilization.
+>
+> MFS requires a profile so this is enabled only for the AutoFDO builds.
+>
+> Co-developed-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Rong Xu <xur@google.com>
+> Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 6 ++++++
+>  scripts/Makefile.autofdo          | 2 ++
+>  2 files changed, 8 insertions(+)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index ace617d1af9b..20e46c0917db 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -565,9 +565,14 @@ defined(CONFIG_AUTOFDO_CLANG)
+>                 __unlikely_text_start =3D .;                             =
+ \
+>                 *(.text.unlikely .text.unlikely.*)                      \
+>                 __unlikely_text_end =3D .;
+> +#define TEXT_SPLIT                                                     \
+> +               __split_text_start =3D .;                                =
+ \
+> +               *(.text.split .text.split.[0-9a-zA-Z_]*)                \
+> +               __split_text_end =3D .;
+>  #else
+>  #define TEXT_HOT *(.text.hot .text.hot.*)
+>  #define TEXT_UNLIKELY *(.text.unlikely .text.unlikely.*)
+> +#define TEXT_SPLIT
+>  #endif
 
 
-vim +/pin_requested +104 drivers/pinctrl/pinmux.h
+Why conditional?
 
-   103	
- > 104	bool pin_requested(struct pinctrl_dev *pctldev, int pin)
-   105	{
-   106		return false;
-   107	}
-   108	#endif
-   109	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Where are __unlikely_text_start and __unlikely_text_end used?
+
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
