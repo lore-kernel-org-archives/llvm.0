@@ -1,127 +1,105 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.smtp-ext.broadcom.com (saphodev.broadcom.com [192.19.144.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A651D0164
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 17:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C757D1F131C
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 17:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729531773; cv=none; b=FMva87NmIiE/Yh2JZSmTaEMQAo8NpHtzCOLuZyKQ2qS3m1RdHTnRA8FAz3P9R7Dd4F6AovIgzcx/THpaNMXxUCqy1xF6GC2thxuuGJqNjdJxQj6p0uaExkoTeE4ceOwqFUsVCD8ZytS26Xyi/wScZdnunInNN2922PZamlS5Z4s=
+	t=1729532987; cv=none; b=gXFrdhWjrxFWYm6M5YbLDg3C6dtiHptuRMqE2KucE/ADAkSDmQ523X+Cmtc6Al6Kc6nompjucKMb9b0QZ4U7k+7sstrAjoOqvm+0gWjo8s3wNevS4kDkEHItIdbSBRV28kKI9pSawYEn0ru/qBnaBSrXo+K4pNcEpbseD+dLb+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729531773; c=relaxed/simple;
-	bh=lec2tidZmup8h1DfBg1pmUD/aaxIOPcPqf2J0RzEw5k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iW9vyf974Y1g2HhyuH+h4qs9XAw2zHL38uA8GzlcI9/Np/mztd+s51zyrcrclDguD9arrkO43AQWxLEItttsagxHHKJhMECu3byfbHCjoY5ancpu4p33rYOLs1Z4YnwDMJxeiPbLNkfJU6FM6vEVi+rew3dzhOQyb/v+8Wup0Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5B7gyw6; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729532987; c=relaxed/simple;
+	bh=wWqJweXrmpxu1ytmO1zT3vDpyOrJGE0phQ0vxF0cl/E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=c5YGFOrHsQf58YbzZfJe6rJ0b2cZoemf9Mxc4AXT8EBHJzXzeyw6zYbvqnmaduLMmNs0RouSDDkp9RrU2OxgVhsXFqPM+qJtt2EQ1Cw8tDcfMJzq1dn4xPXY9k11R/aW48/i6lypNX8R7LMAktMOpBluaKlzkzKoRFzoUKXlAnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=db1PrNBl; arc=none smtp.client-ip=192.19.144.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5B7gyw6"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e953f4e7cso3108212b3a.3
-        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 10:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729531771; x=1730136571; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KBMMpOhM7o/sGaQ+IgPO+fXmm5Xj7pn8re9uxcPeOlc=;
-        b=h5B7gyw6UBk7lE6Xi0y2rhUGTyIfr1IgB1+ze+lP6yKFimaYMkPqcOA2vLRVuUPZM8
-         7u6fqtLv+8Sv0Q+a55dej3HAx4aYgKdY5M7b5dnYOUVKSF5hckQUXInqimz3zHQyjph5
-         iBaODtZLDeJkYOySyWy8DpFDOVqb8nx45BatLuv0Y7JDHapZmK+ViD8BNiLZ01L2nL+e
-         jV6VNzPHCHU7ayrQzgveCAw7s19oithGLG/1DQ8w7SPp51GscYQKeeVSY8yKmfe+EKf9
-         byYnydooiRwAf2BYArIzBzhXA6OeyU2NhttFt9xRwky23J29rTeDK31e3J8I1XmCagJi
-         IUKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729531771; x=1730136571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KBMMpOhM7o/sGaQ+IgPO+fXmm5Xj7pn8re9uxcPeOlc=;
-        b=rfkJxNI/f4Qh871L302C66DVYqmhjQTpiueM0V7BjM2HF4MTWKV+YBk3W/LbqyLN5O
-         jsgwuwG+PoMCvWw8oufzNu+Z0MBVIMeAFlmaPCS6PvGW6wxRDoXInnuclUBMnsxsknrW
-         T4Si4jvFShivKt3aAY/TWBbHu/mHiqMP+gcXFRmtzqhS2NDt2W4R49ErHM5DoUY6PPrJ
-         akR2uhavL9H88+5Nkk6hPEywiT9j548y3gBNvK+UHA/jhaRFSf5zqosLiWiytVBxAsEv
-         EqwY9LETtM0g82o620q+upJaITlUfDZaGlgWB4W2sPYXgbxwfqWDhdUYwMBJOgV83an6
-         YzUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXE97M6wpQ/jkiA1eHJIj2E4zzn09f/TUIskMXioHU/aWB4I9m0DLvLcliJzugNNXPm72X@lists.linux.dev
-X-Gm-Message-State: AOJu0YyUTv7w9Vde97KPKwsUrlqk5QzOs/c1yRYzIyNS6dq+ITfWh8y4
-	LJ4vNAFufajP+AaxwnVzBEoMKMC7ty+yxiAO57S+//p5Rju2ufTNe5rbfQG2yHvw2T01ugsk0y9
-	6FeXdCuFa6OeMVRGFbdth3ULsw9o=
-X-Google-Smtp-Source: AGHT+IHVW3rUf06tmEeKO+rmrJFBlUZBUoTVTxPBQTnYQLB2bqCxcMyKhBddR2jNjdOODAjhxcK4Jt0sluAEimugIUw=
-X-Received: by 2002:a05:6a21:118e:b0:1d2:f124:a1cb with SMTP id
- adf61e73a8af0-1d92c4a5373mr17184971637.9.1729531771096; Mon, 21 Oct 2024
- 10:29:31 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="db1PrNBl"
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 8D522C0000F4;
+	Mon, 21 Oct 2024 10:49:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 8D522C0000F4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1729532978;
+	bh=wWqJweXrmpxu1ytmO1zT3vDpyOrJGE0phQ0vxF0cl/E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=db1PrNBl6My9AGaPaALrN+gIk9+YOkaSnQ1/IaaDMBqX1W8TWY2nnM+QbpeqVYtiV
+	 a7CDXzPcS+gF5SHCYzQKWyEdj9gBuasqZTpZTd5hCTUBfBT1VwpYgxw0SB4UtpErbN
+	 5zN3RczhvlUJQOq+kdblwp0L9hbuF5QHIXx9P7jk=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 2AF2018041CACA;
+	Mon, 21 Oct 2024 10:49:38 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: netdev@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:)
+Subject: [PATCH net-next v2 1/2] net: systemport: Remove unused txchk accessors
+Date: Mon, 21 Oct 2024 10:49:34 -0700
+Message-ID: <20241021174935.57658-2-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241021174935.57658-1-florian.fainelli@broadcom.com>
+References: <20241021174935.57658-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241021120013.3209481-1-elver@google.com> <20241021172058.GB26179@willie-the-truck>
-In-Reply-To: <20241021172058.GB26179@willie-the-truck>
-From: Andrew Pinski <pinskia@gmail.com>
-Date: Mon, 21 Oct 2024 10:29:18 -0700
-Message-ID: <CA+=Sn1m7KYkJHL3gis6+7M2-o9fuuzDtyUmycKnHK9KKEr2LtA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kasan: Fix Software Tag-Based KASAN with GCC
-To: Will Deacon <will@kernel.org>
-Cc: Marco Elver <elver@google.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	syzbot+908886656a02769af987@syzkaller.appspotmail.com, 
-	"Andrew Pinski (QUIC)" <quic_apinski@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 21, 2024 at 10:21=E2=80=AFAM Will Deacon <will@kernel.org> wrot=
-e:
->
-> On Mon, Oct 21, 2024 at 02:00:10PM +0200, Marco Elver wrote:
-> > Per [1], -fsanitize=3Dkernel-hwaddress with GCC currently does not disa=
-ble
-> > instrumentation in functions with __attribute__((no_sanitize_address)).
-> >
-> > However, __attribute__((no_sanitize("hwaddress"))) does correctly
-> > disable instrumentation. Use it instead.
-> >
-> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D117196 [1]
-> > Link: https://lore.kernel.org/r/000000000000f362e80620e27859@google.com
-> > Link: https://lore.kernel.org/r/ZvFGwKfoC4yVjN_X@J2N7QTR9R3
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D218854
-> > Reported-by: syzbot+908886656a02769af987@syzkaller.appspotmail.com
-> > Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
-> > Cc: Andrew Pinski <pinskia@gmail.com>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > ---
-> >  include/linux/compiler-gcc.h | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.=
-h
-> > index f805adaa316e..cd6f9aae311f 100644
-> > --- a/include/linux/compiler-gcc.h
-> > +++ b/include/linux/compiler-gcc.h
-> > @@ -80,7 +80,11 @@
-> >  #define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
-> >  #endif
-> >
-> > +#ifdef __SANITIZE_HWADDRESS__
-> > +#define __no_sanitize_address __attribute__((__no_sanitize__("hwaddres=
-s")))
-> > +#else
-> >  #define __no_sanitize_address __attribute__((__no_sanitize_address__))
-> > +#endif
->
-> Does this work correctly for all versions of GCC that support
-> -fsanitize=3Dkernel-hwaddress?
+Vladimir reported the following warning with clang-16 and W=1:
 
-Yes, tested from GCC 11+, kernel-hwaddress was added in GCC 11.
-Also tested from clang 9.0+ and it works there too.
+warning: unused function 'txchk_readl' [-Wunused-function]
+BCM_SYSPORT_IO_MACRO(txchk, SYS_PORT_TXCHK_OFFSET);
+note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
 
-Thanks,
-Andrew Pinski
+warning: unused function 'txchk_writel' [-Wunused-function]
+note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
 
->
-> Will
+warning: unused function 'tbuf_readl' [-Wunused-function]
+BCM_SYSPORT_IO_MACRO(tbuf, SYS_PORT_TBUF_OFFSET);
+note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
+
+warning: unused function 'tbuf_writel' [-Wunused-function]
+note: expanded from macro 'BCM_SYSPORT_IO_MACRO'
+
+The TXCHK and RBUF blocks are not being accessed, remove the IO macros
+used to access those blocks. No functional impact.
+
+Reported-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ drivers/net/ethernet/broadcom/bcmsysport.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
+index 0b7088ca4822..9e42b5db721e 100644
+--- a/drivers/net/ethernet/broadcom/bcmsysport.c
++++ b/drivers/net/ethernet/broadcom/bcmsysport.c
+@@ -46,9 +46,7 @@ BCM_SYSPORT_IO_MACRO(umac, SYS_PORT_UMAC_OFFSET);
+ BCM_SYSPORT_IO_MACRO(gib, SYS_PORT_GIB_OFFSET);
+ BCM_SYSPORT_IO_MACRO(tdma, SYS_PORT_TDMA_OFFSET);
+ BCM_SYSPORT_IO_MACRO(rxchk, SYS_PORT_RXCHK_OFFSET);
+-BCM_SYSPORT_IO_MACRO(txchk, SYS_PORT_TXCHK_OFFSET);
+ BCM_SYSPORT_IO_MACRO(rbuf, SYS_PORT_RBUF_OFFSET);
+-BCM_SYSPORT_IO_MACRO(tbuf, SYS_PORT_TBUF_OFFSET);
+ BCM_SYSPORT_IO_MACRO(topctrl, SYS_PORT_TOPCTRL_OFFSET);
+ 
+ /* On SYSTEMPORT Lite, any register after RDMA_STATUS has the exact
+-- 
+2.43.0
+
