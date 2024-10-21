@@ -1,106 +1,184 @@
-Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BA29463
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 02:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7BC33F7
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 02:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729476869; cv=none; b=Ull41D4LygCjlKYAmuFcPn0iXiUT1+0RwyBa9DwSRQAuPlqPk3yOqEqoJqxZ5ZYjlJhOFsVe1iutrgY9cxULtPf013SrSIDv07D1aEYy8lx+97vAom0fcgo4/+1sjbzEdTMcxS5t0YA0H3yS7DDsZM0qD4yyKAFaWNE4mKjC+/Q=
+	t=1729476945; cv=none; b=UP2oIsnE3uAqqV6dKwK+1EkXTZTL1rgTdEFViLg4U8WcuxN82zO4HEFXHddn0t7aNR/TkoKqVkCY2EPSgKoMi+zkiKOXeIumVvM1YX7nYUKdYaM10Z1+Mo/PsegW/TDAvjAbMxsU7Mf7K4cmVqFJQjCFhhlhkgLvJEsUPsEdHow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729476869; c=relaxed/simple;
-	bh=S9wUw1bR68fNWrdtpet5nL+FwFJDkASwI4GTJxVjl20=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c3ffpMqt3mmwfJq4H3jsCt0F770AVBmt2orOYh2uZnGFWgU0p3Ezc1n0JLDODhCXKxE+Zw5LDg94SKkT468z4UopUKLuaDVHQ3/RrElk+3j5xyXCvDKde0OV0dJ+/SR7g1Lo8/NrOHb/0JDF1oDF/bw2A0VFxP51UcdCxDYZEwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.79.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app2 (Coremail) with SMTP id HwEQrACHjs7SuBVnw4wdAQ--.61951S2;
-	Mon, 21 Oct 2024 10:13:38 +0800 (CST)
-Received: from [10.12.173.122] (unknown [10.12.173.122])
-	by gateway (Coremail) with SMTP id _____wCnoMfQuBVngbVuAA--.37907S2;
-	Mon, 21 Oct 2024 10:13:37 +0800 (CST)
-Message-ID: <f38f12cd-2ea3-444c-8fbb-15ee0471a3cb@hust.edu.cn>
-Date: Mon, 21 Oct 2024 10:13:36 +0800
+	s=arc-20240116; t=1729476945; c=relaxed/simple;
+	bh=7yCrAsbcPnUs8QLX4xme6O9ayrQJh78Qk/A7EGSgZtY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uZQFHWShk5/rDPk5oEPOWq5vMxdKsUg7PK/ta3EQJO2xK6vs9Rfo8OqqgBMRYIuq1R0JA/BhZsp/eS9n9h18qw+5HZtyWPUOGBHjk6CIa3fcG08pE2pNFqiZD4KveUJJO/PQS+Dvmd7fwou6DVrPOEY8mnsZ1cAC2OlR5FshwHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d08KNrR0; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d08KNrR0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF59C4CEC7
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 02:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729476945;
+	bh=7yCrAsbcPnUs8QLX4xme6O9ayrQJh78Qk/A7EGSgZtY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=d08KNrR0EDdB5cZL1479IaZ60BD1V2vtCsS7R0jtnBAV4w+rISPncIzkr2lYtP761
+	 e/FVBP8Z+3v6ba4VnJsf1PJTUWvJj8Ryh5j08KR1o5WRLn0sjwqC3z6Nc8v67wdKiW
+	 9ZHjL0fdEqOOY1cxGZvwJsxl4z457YuI9setNk1QaTLQnXJ3/cYwiSVT3JDYH0eXS1
+	 VNLqNODc7A8HrsjvJpGj6GFyM6fynPTjAjymsLSGFxLRK4RoI//h915vj/B/gg0R18
+	 ptcqdj2UlOJZb0jv0rSGEiKkDqoe7VlU7B2Hb4lrNT+/1nxHN5ljadfMzfV7aC5sGb
+	 +WitOv0l8ullQ==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539fbbadf83so4860347e87.0
+        for <llvm@lists.linux.dev>; Sun, 20 Oct 2024 19:15:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX3VHYZd2RZmgJrG63qQYa4wcyA/mmX4+IbYMG6eNaMEnnGwRXEZNY5wnudz9Wj6gtjDdMZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxyhTXxaxg1EGmyu9yYtGzo85lhPqYOHCYzXC27EaBJtQyUowCc
+	+gGb4BJHrmOaeO7qK7W0z1N/zrZJ0AcGD5FOfctLMmTAQOW3XbUPu2rOt+uOg5+2rB9fzRi4/ph
+	BnqFPHxgmr2ezHhSOPuRK4t3dfA4=
+X-Google-Smtp-Source: AGHT+IH3ESdsYc+/+wUsglq6HOvcvexZoZqe+c/NsP73ESbFMnBfgYbBsi4+2Lp8sphgSZWamBJV5g/oTZN9ldIl0yc=
+X-Received: by 2002:a05:6512:280d:b0:53a:d8b:95c0 with SMTP id
+ 2adb3069b0e04-53a154a26ecmr4500158e87.30.1729476943821; Sun, 20 Oct 2024
+ 19:15:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Add the translation of documents in kbuild
-To: Alex Shi <seakeel@gmail.com>, si.yanteng@linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>
-Cc: hust-os-kernel-patches@googlegroups.com, llvm@lists.linux.dev
-References: <cover.1729259177.git.dzm91@hust.edu.cn>
- <8a882bc0-7125-4036-b939-fbd9e821c041@hust.edu.cn>
- <2bf8ba2e-9c5f-4f89-9399-f6320aa32a16@gmail.com>
-From: Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <2bf8ba2e-9c5f-4f89-9399-f6320aa32a16@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrACHjs7SuBVnw4wdAQ--.61951S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWfXryrtw17uFWxGrykZrb_yoW8Cr1Upa
-	18Ka4fCFnayr92yr1xKr4UAFy5JF97KwsrGw1xX3ZYqFsYvrW5Kr4Ut3s09FZ3Gr4xA3WY
-	9rZ8Kas8u34fAF7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQFb7Iv0xC_Ar1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	1Y6r17M2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
-	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
-	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
-	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04
-	k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Yz7v_
-	Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07Uj2NZUUUUU=
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-4-xur@google.com>
+In-Reply-To: <20241014213342.1480681-4-xur@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 21 Oct 2024 11:15:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARqnhZuDf75_juBtdK0GV8jL_aDjnuyU=-8zjdCZetF1g@mail.gmail.com>
+Message-ID: <CAK7LNARqnhZuDf75_juBtdK0GV8jL_aDjnuyU=-8zjdCZetF1g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] Change the symbols order when --ffuntion-sections
+ is enabled
+To: Rong Xu <xur@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 2024/10/21 09:29, Alex Shi wrote:
+On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
 >
-> On 10/19/24 14:19, Dongliang Mu wrote:
->> +to Jon and Alex.
->>
->> It seems that tocmd and cccmd does not work with cover letter. Any suggestions?
->>
->>      tocmd ="`pwd`/scripts/get_maintainer.pl --nogit --norolestats --nol"
->>      cccmd ="`pwd`/scripts/get_maintainer.pl --nogit --norolestats --nom"
->>
-> Do you mean that to or cc cmd should give a name list for cover-letter?
-> I don't know if it's common needs, since some of people don't like to get every patches, maybe only the related patch is enough for them. But in another side, full name list is may wanted for others.
+> When the -ffunction-sections compiler option is enabled, each function
+> is placed in a separate section named .text.function_name rather than
+> putting all functions in a single .text section.
 >
-> Another interfere like this, is the 'git am 00*.patch', it failed on 0000-cover-letter as cover-letter is empty patch. I'm also not sure it's common needs...
-
-Yes. I realized it yesterday. And cover letter is not a patch. It seems 
-there is no need to handle cover letter specially.
-
-Dongliang Mu
-
+> However, using -function-sections can cause problems with the
+> linker script. The comments included in include/asm-generic/vmlinux.lds.h
+> note these issues.:
+>   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if de=
+ad
+>    code elimination is enabled, so these sections should be converted
+>    to use ".." first.=E2=80=9D
 >
-> Thanks
-> Alex
->> Dongliang Mu
->>
->> On 2024/10/18 21:47, Dongliang Mu wrote:
->>> Since llvm refers to reproducible-builds.html, so I create this patchset
->>> and add the translation of these two documents
->>>
->>> Dongliang Mu (2):
->>>     docs/zh_CN: add the translation of kbuild/kbuild.rst
->>>     docs/zh_CN: add the translations of kbuild/reproducible-builds.rst
->>>
->>>    .../translations/zh_CN/kbuild/index.rst       |   4 +-
->>>    .../translations/zh_CN/kbuild/kbuild.rst      | 304 ++++++++++++++++++
->>>    .../zh_CN/kbuild/reproducible-builds.rst      | 114 +++++++
->>>    3 files changed, 420 insertions(+), 2 deletions(-)
->>>    create mode 100644 Documentation/translations/zh_CN/kbuild/kbuild.rst
->>>    create mode 100644 Documentation/translations/zh_CN/kbuild/reproducible-builds.rst
->>>
+> It is unclear whether there is a straightforward method for converting
+> a suffix to "..".
 
+
+
+Why not for ".text.fixup"?
+
+$ git grep --name-only '\.text\.fixup' | xargs sed -i
+'s/\.text\.fixup/.text..fixup/g'
+
+
+
+I do not know how to rename other sections that are generated by compilers.
+
+
+
+
+> This patch modifies the order of subsections within the
+> text output section when the -ffunction-sections flag is enabled.
+> Specifically, it repositions sections with certain fixed patterns (for
+> example .text.unlikely) before TEXT_MAIN, ensuring that they are grouped
+> and matched together.
+>
+> Note that the limitation arises because the linker script employs glob
+> patterns instead of regular expressions for string matching. While there
+> is a method to maintain the current order using complex patterns, this
+> significantly complicates the pattern and increases the likelihood of
+> errors.
+>
+> Co-developed-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Rong Xu <xur@google.com>
+> Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index eeadbaeccf88..5df589c60401 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -554,9 +554,21 @@
+>   * during second ld run in second ld pass when generating System.map
+>   *
+>   * TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
+> - * code elimination is enabled, so these sections should be converted
+> - * to use ".." first.
+> + * code elimination or function-section is enabled. Match these symbols
+> + * first when in these builds.
+>   */
+> +#if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_=
+CLANG)
+> +#define TEXT_TEXT                                                      \
+
+
+Why did you do this conditionally?
+
+You are making this even more unmaintainable.
+
+
+
+
+
+> +               ALIGN_FUNCTION();                                       \
+> +               *(.text.asan.* .text.tsan.*)                            \
+> +               *(.text.unknown .text.unknown.*)                        \
+> +               *(.text.unlikely .text.unlikely.*)                      \
+> +               . =3D ALIGN(PAGE_SIZE);                                  =
+ \
+> +               *(.text.hot .text.hot.*)                                \
+> +               *(TEXT_MAIN .text.fixup)                                \
+> +               NOINSTR_TEXT                                            \
+> +               *(.ref.text)
+> +#else
+>  #define TEXT_TEXT                                                      \
+>                 ALIGN_FUNCTION();                                       \
+>                 *(.text.hot .text.hot.*)                                \
+> @@ -566,6 +578,7 @@
+>                 NOINSTR_TEXT                                            \
+>                 *(.ref.text)                                            \
+>                 *(.text.asan.* .text.tsan.*)
+> +#endif
+>
+>
+>  /* sched.text is aling to function alignment to secure we have same
+> --
+> 2.47.0.rc1.288.g06298d1525-goog
+>
+>
+
+
+--
+Best Regards
+Masahiro Yamada
