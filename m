@@ -1,151 +1,257 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C500980C0C;
-	Mon, 21 Oct 2024 22:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C9F1E0DE9
+	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 22:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729549977; cv=none; b=qyMhj+L2R9KF9YJigXsuBEnwg1DyPvKTpaUw2v6zweekMFBLmmn/bVFW3qo6tfvXkeUsw9zYV+jC/S3ZPoib2UeQcc88YocTqVjjtAbrZlOiatBbpWpyqrZT3kX58lAogOvSkqwzrijFBWIF/H6WxlppLv2VXod/SAjM/g1oERo=
+	t=1729550617; cv=none; b=O0NXokLrvbRKGqoq2XquGi0PYxJyIqbAZvT33MTtawtou7biAOuoceyY5E5W77wJXIdZCx8hsBTSc3A2TaXhTB6MJQaTmh2JQu+onp5rVT22fPO2mEBRmQuTIJEV8nKf/rN+Ldb8U36ngJDvnHOkXiGAqn4w20RKIH9Q3thJElI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729549977; c=relaxed/simple;
-	bh=cSP3lLKozo3iu7d5diIKn1QcFF3riVCb5pA/E/aMkes=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ocAHwVPkppCSl9Lcai4VBdExqZzV5CWnTgZTHunJKSw8W890CNuKoeakbuLU4jXPdPJIGmqkNDD7ZNGxGD7+2EofIXQ9zQEShpv8kxt2+fJ/Ff5aJGWGsH8XS8aw/yRl7aSvQcMtDd9oqG6On5PsRljUHCPetlLV1jZ/3dLpRA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hOIlHYkl; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729550617; c=relaxed/simple;
+	bh=18SuxrItI+6f+tfrvR4g2u78bJrgXnBh0EqpwvVjrEg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OwrgvVSI7ovvyju8CfZdxPwyDTKprxQEh6QXIprlCzWkPLCE7vuAOSj7118qqLD5VXtqrXNls2zTdgf5lTJYbwujhfayktEa+5Em9R98b2//NE5ZWxOGYKNIAn3WFOo3ILS3USJA8JXF9AqmWo2ewHPV404DaV+FZZI/kKohUqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SHFTW1v8; arc=none smtp.client-ip=209.85.166.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hOIlHYkl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729549976; x=1761085976;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cSP3lLKozo3iu7d5diIKn1QcFF3riVCb5pA/E/aMkes=;
-  b=hOIlHYklXKhzz04k6YpyKJNL/BewMaIf4LDjP9SQtRtlaLhJv+yPDXqP
-   O/HlWIv1SS4Zr/5tK7STWmRVvy/I9jdFeDOWbdn8iuaImlNb+VaNii5Eo
-   6TQCmAs8O/e51MSHwVIR2pkpLy+qt8DGxxsFGXoBJi5Fe5iqhjSDPBQFU
-   332ypHkF9wPo23fBaEVRKOxzT8cC9pJy8M0SL2mWYWKj+txPGYeleLMwc
-   t7gbFtd4OYa6V5iOS9x/LGIO4h+oj+Zqxrs4CnRM7RJYI3Q8XrOyvJo+Z
-   L95U39Hx/NxyTI97Bqy5fjd8AP48EQmTYRUAWYIwTdnIibI+ymo6tZEEF
-   g==;
-X-CSE-ConnectionGUID: 6wc2NyugTRGeH6+NGFcLyg==
-X-CSE-MsgGUID: 9qJhUzcyT9upr+Rp5q9/qQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29170036"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29170036"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 15:32:55 -0700
-X-CSE-ConnectionGUID: caBgQqvgTr+dQEpMWPjTqg==
-X-CSE-MsgGUID: sP2g0mNWT6aGXYQ2Bh5ZOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,221,1725346800"; 
-   d="scan'208";a="79598357"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 21 Oct 2024 15:32:54 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t30xH-000Sgy-1e;
-	Mon, 21 Oct 2024 22:32:51 +0000
-Date: Tue, 22 Oct 2024 06:32:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:filef2zPFW 34/90]
- sound/soc/loongson/loongson_i2s_pci.c:157:1: error: type specifier missing,
- defaults to 'int'
-Message-ID: <202410220638.Xlkbqgi8-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SHFTW1v8"
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3a3b3f4b599so93125ab.0
+        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 15:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729550615; x=1730155415; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yovHp8/4KQS/SjRw8rzJ2RWtyZhJZCAGgSQbJZaDAus=;
+        b=SHFTW1v8f9Yzgi5rfwIetfo/IVwGv7DubYwwrBgGZ01XKu7PE2rwtu+5l1YfQCjS4Z
+         TJwStZoPFJu8dhE2k9AJ9ycfdsxWK82JRCbzXWDCYTPUDyXXHtOtY7AveUNcFzq75yib
+         1FuHsomdDaoIY5sJ2aYUv+pdnvFSXYfygZ92KF9JrjDK0c1P/OBiimhyZDKfSSiLVq4z
+         0mTIf0CQjxabxQgIs0oLwid00Q5jkZ/6EtsyiqWi1xbpiSSSbdecFvezby2EIJshDFFG
+         L2F3gG9A7+GekZ05EamQ8W647KSQZIyVxDQiqGHjQFis4N6Bmixu1GJfBEhuORcj5yFZ
+         LB9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729550615; x=1730155415;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yovHp8/4KQS/SjRw8rzJ2RWtyZhJZCAGgSQbJZaDAus=;
+        b=hrDF4EQqU1p65l7bGoO25QjT/gnrbkXsi0mLTbmSH4tWE+SMVxwhbfTOIq8dAEN7Lm
+         H2iEPrMMQjpTgvmBKpLPdSWZ6cET6FHRrgmcwHz2rk8vZeBeEVLEHWvzBlIpt3Qcbv+W
+         9a3F4S6wCuYSWgTPqMFD5OHezOu6vNa1csNyDW1vk809arOlcuXmKEtZvCRhvmDToVnm
+         6Pp2Soi9YaiYYx4thQgN4KzQUtBeXIvw66ozF9AaYIqLt7YkccUFIfl1tLSRDX/jcnTd
+         wzAt54EcP6KNO3b8rgr+2lvXMIADB0hXTQKhIKzt8C7BaB2fKAqnmty6aPZOIY99OYeT
+         91xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWNG32WxAV9fzD2tgi6xDbSRMH9hDI6BzmMPdhjkH8RO85Ap53QJ3d7At4OlGHVM7RFwuRf@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0ODC2LsJ8XUMrU1E8+qsbankhRhmvQVKoDNtwSBq7my10bJPy
+	hNhaeK9oHNbJT9GUyw72s86KGbOnrXSCqxoR+S4fNqJO70xhttjH4GzqpmYRDASIJY8yRBv6ego
+	d4V0zt8pOeZgt9M9v+Hu1IxFtac5MGt7ip9dr
+X-Google-Smtp-Source: AGHT+IH0HVg3fvyt1+QDr1YQLUpP3z4mO+u5A4ersGEMt75VHmDTieIO3qGEubKhoWD+zxsaZ/P7FpluFK6JQL6j+ro=
+X-Received: by 2002:a05:6e02:148d:b0:3a2:6d54:33f1 with SMTP id
+ e9e14a558f8ab-3a4cc972f72mr1555125ab.16.1729550614610; Mon, 21 Oct 2024
+ 15:43:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-2-xur@google.com>
+ <CAK7LNAQ5yNKvZDtJuvo9Lt4rZwLSv0UN4=Ff=WcCDy1CCEpQ7Q@mail.gmail.com>
+In-Reply-To: <CAK7LNAQ5yNKvZDtJuvo9Lt4rZwLSv0UN4=Ff=WcCDy1CCEpQ7Q@mail.gmail.com>
+From: Rong Xu <xur@google.com>
+Date: Mon, 21 Oct 2024 15:43:22 -0700
+Message-ID: <CAF1bQ=Syxi46xnGbpZWhYfqKhQZqrBPPh5FGaqzmJTg6MMDJSA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] Add AutoFDO support for Clang build
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git filef2zPFW
-head:   5337ff41d37d4171868bb7b34dade68e269743f0
-commit: ba4c5fad598c07492844e514add3ccda467063b2 [34/90] ASoC: loongson: Add I2S controller driver as platform device
-config: hexagon-randconfig-001-20241022 (https://download.01.org/0day-ci/archive/20241022/202410220638.Xlkbqgi8-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241022/202410220638.Xlkbqgi8-lkp@intel.com/reproduce)
+Thanks for the detailed suggestions! My comments are inlined below.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410220638.Xlkbqgi8-lkp@intel.com/
+Best regards,
 
-Note: the broonie-ci/filef2zPFW HEAD 5337ff41d37d4171868bb7b34dade68e269743f0 builds fine.
-      It only hurts bisectability.
+-Rong
 
-All errors (new ones prefixed by >>):
+On Sun, Oct 20, 2024 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+>
+> > +Customization
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +You can enable or disable AutoFDO build for individual file and direct=
+ories by
+> > +adding a line similar to the following to the respective kernel Makefi=
+le:
+>
+>
+> Perhaps, it might be worth mentioning that kernel space objects are
+> covered by default.
+>
+> Then, people would understand ':=3D y' will be less common than ':=3D n'.
+>
 
-   In file included from sound/soc/loongson/loongson_i2s_pci.c:12:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from sound/soc/loongson/loongson_i2s_pci.c:12:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from sound/soc/loongson/loongson_i2s_pci.c:12:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> sound/soc/loongson/loongson_i2s_pci.c:157:1: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-   module_pci_driver(loongson_i2s_driver);
-   ^
-   sound/soc/loongson/loongson_i2s_pci.c:157:19: error: a parameter list without types is only allowed in a function definition
-   module_pci_driver(loongson_i2s_driver);
-                     ^
-   6 warnings and 2 errors generated.
+Good point! How about I change to the following:
+"
+The default CONFIG_AUTOFDO_CLANG setting covers kernel space objects for
+AutoFDO builds. One can, however, enable or disable AutoFDO build for
+individual file and directories by adding a line similar to the following
+to the respective kernel Makefile ...
 
+>
+>
+>
+> > +
+> > +- For enabling a single file (e.g. foo.o) ::
+> > +
+> > +   AUTOFDO_PROFILE_foo.o :=3D y
+> > +
+> > +- For enabling all files in one directory ::
+> > +
+> > +   AUTOFDO_PROFILE :=3D y
+> > +
+> > +- For disabling one file ::
+> > +
+> > +   AUTOFDO_PROFILE_foo.o :=3D n
+> > +
+> > +- For disabling all files in one directory ::
+> > +
+> > +   AUTOFDO_PROFILE :=3D n
+> > +
+>
+>
+>
+>
+> > +3) Run the load tests. The '-c' option in perf specifies the sample
+> > +   event period. We suggest using a suitable prime number, like 500009=
+,
+> > +   for this purpose.
+> > +
+> > +   - For Intel platforms::
+> > +
+> > +      $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c <count=
+> -o <perf_file> -- <loadtest>
+> > +
+> > +   - For AMD platforms: For Intel platforms:
+>
+>
+> I guess this is a copy-paste mistake.
+>
+>
+> For AMD platforms: For Intel platforms:
+>
+>    ->
+>
+> For AMD platforms:
 
-vim +/int +157 sound/soc/loongson/loongson_i2s_pci.c
+Thanks for catching this! Will fix this.
 
-d84881e06836dc Yingkun Meng 2023-06-15  148  
-d84881e06836dc Yingkun Meng 2023-06-15  149  static struct pci_driver loongson_i2s_driver = {
-d84881e06836dc Yingkun Meng 2023-06-15  150  	.name = "loongson-i2s-pci",
-d84881e06836dc Yingkun Meng 2023-06-15  151  	.id_table = loongson_i2s_ids,
-d84881e06836dc Yingkun Meng 2023-06-15  152  	.probe = loongson_i2s_pci_probe,
-d84881e06836dc Yingkun Meng 2023-06-15  153  	.driver = {
-d84881e06836dc Yingkun Meng 2023-06-15  154  		.pm = pm_sleep_ptr(&loongson_i2s_pm),
-d84881e06836dc Yingkun Meng 2023-06-15  155  	},
-d84881e06836dc Yingkun Meng 2023-06-15  156  };
-d84881e06836dc Yingkun Meng 2023-06-15 @157  module_pci_driver(loongson_i2s_driver);
-d84881e06836dc Yingkun Meng 2023-06-15  158  
+>
+>
+>
+>
+>
+>
+> > +   (https://github.com/google/autofdo),  version v0.30.1 or later.
+>
+>
+> Please one space instead of two after the comma.
+>
 
-:::::: The code at line 157 was first introduced by commit
-:::::: d84881e06836dc1655777a592b4279be76ad7324 ASoC: Add support for Loongson I2S controller
+Will fix it.
 
-:::::: TO: Yingkun Meng <mengyingkun@loongson.cn>
-:::::: CC: Mark Brown <broonie@kernel.org>
+>
+>
+>
+>
+>
+>
+> > diff --git a/scripts/Makefile.autofdo b/scripts/Makefile.autofdo
+> > new file mode 100644
+> > index 000000000000..1c9f224bc221
+> > --- /dev/null
+> > +++ b/scripts/Makefile.autofdo
+> > @@ -0,0 +1,23 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +# Enable available and selected Clang AutoFDO features.
+> > +
+> > +CFLAGS_AUTOFDO_CLANG :=3D -fdebug-info-for-profiling -mllvm -enable-fs=
+-discriminator=3Dtrue -mllvm -improved-fs-discriminator=3Dtrue
+> > +
+> > +# If CONFIG_DEBUG_INFO is not enabled, set -gmlt option.
+>
+>
+> Meaningless comment. It explains too obvious code.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Will remove this line of comment.
+
+>
+>
+> > +ifndef CONFIG_DEBUG_INFO
+> > +  CFLAGS_AUTOFDO_CLANG +=3D -gmlt
+> > +endif
+>
+>
+>
+>
+> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> > index 01a9f567d5af..e85d6ac31bd9 100644
+> > --- a/scripts/Makefile.lib
+> > +++ b/scripts/Makefile.lib
+> > @@ -191,6 +191,16 @@ _c_flags +=3D $(if $(patsubst n%,, \
+> >         -D__KCSAN_INSTRUMENT_BARRIERS__)
+> >  endif
+> >
+> > +#
+> > +# Enable Clang's AutoFDO build flags for a file or directory depending=
+ on
+> > +# variables AUTOFDO_PROFILE_obj.o and AUTOFDO_PROFILE.
+> > +#
+>
+>
+> This comment would give the wrong understanding that this flag is opt-in.
+>
+>
+> The comment for KASAN correctly describes that it is enabled by default,
+> and can be opted out using KASAN_SANITIZE_*.
+>
+
+I can change to use KASAN's expression:
+"
+# Enable Clang's AutoFDO build flags for kernel except some files or direct=
+ories
+# we don't want to enable (depends on variables AUTOFDO_PROFILE_obj.o
+and AUTOFDO_PROFILE)
+"
+
+>
+>
+>
+>
+> --
+> Best Regards
+>
+>
+> Masahiro Yamada
