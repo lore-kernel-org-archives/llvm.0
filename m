@@ -1,112 +1,100 @@
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17801CBEB6
-	for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 15:59:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.114.0.240
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CBE1CB535;
+	Mon, 21 Oct 2024 16:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729526392; cv=none; b=hPZpL5Tf+loIX77CDpkHlUskVvK6Z4AlQ7wfEqvqCB5qJOwQYgK98XcyXsHnixvgOZ6jsF6YaeVb//sEhhIygbCjgf9ZBH6bZf0aYBMR+1TlnyneQxML00Ko/Rhe9QCzaWNOIIHtDZ+bIZVozeVUYTme5my7vZhxg/dEZTCyghA=
+	t=1729526662; cv=none; b=XTmiT6wRPdVUUhtlG69UfSN9wDLKyecCs2/lAKMLydQ06iqfM0TzsE/RTgyyIYz+7guAlW1mqorzt/lVEqvD7qy8gmZ1wgR8lwWN+sOfRML7c9wlo+TedU4oIv297E+vKDxgeUvNqvEMtr8TSY44H/wScrK+jROt23L1mUdrufU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729526392; c=relaxed/simple;
-	bh=NtU/4AB1lTAZ+pQ9nINBRSms9NiVC6gYsoyQPRpM65M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aIKloYjAHjNzFdL4mSzIVcWG5F9LL11tj8ntCRiI6Nl1rpxFv2dlDFkfV8GlvLjGJzXpXsXN6UNzSuZtrIrnZXk2PEcM4YyefbEcPqhqExmovQUrEqWtJhHzC90FhphOceuVvsmjBnIjM5p1h2T1GeKv0QcRDGqFVemDjO9yeeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=202.114.0.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.50])
-	by app1 (Coremail) with SMTP id HgEQrADn7ztyeBZneUBPCA--.41099S2;
-	Mon, 21 Oct 2024 23:51:14 +0800 (CST)
-Received: from [192.168.1.6] (unknown [183.94.68.188])
-	by gateway (Coremail) with SMTP id _____wB3cA9weBZn1MqEAA--.29580S2;
-	Mon, 21 Oct 2024 23:51:14 +0800 (CST)
-Message-ID: <bae3c59c-39a5-4daa-b37e-bbf077d57643@hust.edu.cn>
-Date: Mon, 21 Oct 2024 23:51:11 +0800
+	s=arc-20240116; t=1729526662; c=relaxed/simple;
+	bh=TJh/DD/sfJgskbjJKAccoygie3yLsjjKsgBPtkfXTus=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rduFHNqO18PR4yuUNDADkFPy8PyMm6Fd8/KY09nnYD0BbExvKPYQ4rjK3LMHMuYYF04Mpl43+BMKvchwXpuo1vZ+FikEwszdRFqUKh8swy3TOLjeEyCEvixCJPMC2aHZ30aSgh64GHnv8Lk/LFxxpgSUn+Zl7kSiYMAfF0lE6e0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1KtfWm4; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1KtfWm4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F13C4CECD;
+	Mon, 21 Oct 2024 16:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729526660;
+	bh=TJh/DD/sfJgskbjJKAccoygie3yLsjjKsgBPtkfXTus=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Q1KtfWm4+hf6dSHS8s6VVmODdTYta8dKUbMxhqfJvs/6iLyf6Yu4v87wHj9mv+Rgf
+	 d49geA3ugWnB6Wwu6bZpu69UZjTS2LAZ5fGrt2CMQNNT7HpmJwLhUeK3ryl9ndXf+N
+	 KacJTveyyl3YYRYf2N18J1KPOCkZQswnGUTr1lWjxA29yKqyZKoiOO9y8H42H18pjE
+	 ZUGJQ/5OrI+ihDaEBOwja7z7dbP+2POHTm3/BoN5p9ityxh0ijrsBhATf3Xv2byROr
+	 4Yf8qMp3ecpXPOosBhcqGSIb8BprdScRbJQwQg63R/dAGTAV1Pi67f8WfL4kRCTVZa
+	 xMIqLtu8AVkAA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 21 Oct 2024 09:04:15 -0700
+Subject: [PATCH] media: dvbdev: Avoid using uninitialized ret in
+ dvb_register_device()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] docs/zh_CN: update the translation of
- process/programming-language.rst
-To: Jonathan Corbet <corbet@lwn.net>, si.yanteng@linux.dev,
- Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20241018015226.3786020-1-dzm91@hust.edu.cn>
- <87ed49tqia.fsf@trenco.lwn.net>
-From: Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <87ed49tqia.fsf@trenco.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:HgEQrADn7ztyeBZneUBPCA--.41099S2
-Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF18XF1rWryDZr1DAw47Jwb_yoW8AryDpF
-	yUtFy7Ga1rAFn8C3yUtrWrWr1rJFs7GayDtr12q3Z5tws0k3s7XrWfKFs3u34UZry8Aa1U
-	XayUKF9Ygr4YvaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQFb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_JF
-	0_Jw1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
-	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
-	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
-	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw2
-	8IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwCFI7km07C267AKxVWrXVW3AwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jh189UUUUU=
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Message-Id: <20241021-dvbdev-fix-uninitialized-return-v1-1-a704945f20e5@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAH57FmcC/x2NwQrCMBAFf6Xs2YUmFC3+SvEQ3RddKGvZtEEs/
+ XeDx4FhZqcCVxS6djs5qhZ9W4Nw6ujxSvYEqzSm2Mch9DGw1LugctYPb6amq6ZZvxB2rJsbn5G
+ HMF4kp5yoVRZHc/+H6XYcP+05qgtxAAAA
+X-Change-ID: 20241021-dvbdev-fix-uninitialized-return-6ef4187dfafa
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ kernel test robot <lkp@intel.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1489; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=TJh/DD/sfJgskbjJKAccoygie3yLsjjKsgBPtkfXTus=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOli1S0/O2WXncv6+1yBjfNd0/TF3X9mCdfuZ9j5w1Di7
+ 6XLc4tnd5SyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJWD1nZFh1QLOxeaKigvyX
+ vffNfpx9xvPu0tMPLqorL8+7wbbL2NKY4X/QBlWjMAPlNyl3axOeRhXtON0Q8HHpOsOdcRVLT1/
+ JXssMAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
+When CONFIG_DVB_DYNAMIC_MINORS is not enabled, clang warns (or errors
+with CONFIG_WERROR=y):
 
-On 2024/10/21 23:38, Jonathan Corbet wrote:
-> Dongliang Mu <dzm91@hust.edu.cn> writes:
->
->> Update to commit 0b02076f9953 ("docs: programming-language: add Rust
->> programming language section")
->>
->> scripts/checktransupdate.py reports:
->>
->> Documentation/translations/zh_CN/process/programming-language.rst
->> commit 0b02076f9953 ("docs: programming-language: add Rust programming
->> language section")
->> commit 38484a1d0c50 ("docs: programming-language: remove mention of the
->> Intel compiler")
->> 2 commits needs resolving in total
->>
->> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
->> ---
->> v1->v2: revise the script name
->>   .../zh_CN/process/programming-language.rst    | 78 +++++++------------
->>   1 file changed, 30 insertions(+), 48 deletions(-)
-> This one adds some new build warnings:
->
-> Documentation/translations/zh_CN/process/programming-language.rst:44: WARNING: duplicate citation gcc, other instance in /stuff/k/git/kernel/Documentation/process/programming-language.rst
-> Documentation/translations/zh_CN/process/programming-language.rst:51: WARNING: duplicate citation rustc, other instance in /stuff/k/git/kernel/Documentation/process/programming-language.rst
->
-> *Please* be sure to do a docs build before submitting your patches.
+  drivers/media/dvb-core/dvbdev.c:554:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    554 |                 return ret;
+        |                        ^~~
 
-I am sorry. I am not sure why I miss this warning. I should strictly 
-follow the rule - make htmldocs and checkpatch do no trigger any errors 
-or warns.
+Use the return code -EINVAL directly, like the CONFIG_DVB_DYNAMIC_MINORS
+block does.
 
-A simple question: if you miss the warning in one `make htmldocs` 
-building``, you rerun `make htmldocs` and still trigger the warning or 
-just the warnnings do not appear until `make cleandocs` is done?
+Fixes: 972e63e895ab ("media: dvbdev: prevent the risk of out of memory access")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/r/202410201717.ULWWdJv8-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/media/dvb-core/dvbdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dongliang Mu
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 14f323fbada719f717fb7fe9f6f2a3ce81e609a3..5bb36be911f615afa1f3a7a13f974b67b3216edd 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -551,7 +551,7 @@ int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 		kfree(dvbdev);
+ 		*pdvbdev = NULL;
+ 		mutex_unlock(&dvbdev_register_lock);
+-		return ret;
++		return -EINVAL;
+ 	}
+ #endif
+ 	dvbdev->minor = minor;
 
->
-> jon
+---
+base-commit: ba9cf6b430433e57bfc8072364e944b7c0eca2a4
+change-id: 20241021-dvbdev-fix-uninitialized-return-6ef4187dfafa
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
