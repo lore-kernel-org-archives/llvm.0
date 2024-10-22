@@ -1,68 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1AB1870;
-	Tue, 22 Oct 2024 02:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4CED13A86A;
+	Tue, 22 Oct 2024 03:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729563552; cv=none; b=WgK+fggWWw7UFfcZcmj8Tjaze/9Rgta890SexOgh18gtarN3X/6nj0iVwi6fJortu7vOMNFTvd34d3Q6MUS0+iVLtj4i6KW7F6ihTBq+LNCtQd22ZstN+8MRKtx7UYVeqilQP3Wad5Qh3DF+9h97SiEjaR7gPR7OlEXg3uCFbJk=
+	t=1729566736; cv=none; b=uUzIzjfjuOi1RQnN3kvPd7iTAFhPivtmzyaI5iO5IpnvBSpbUC9M//vvVmRb/F/U4TmaVRvIwZTdcwUAPxm48PTiO5EjdkYCHP5eVeYlsUjOkhu34wY+sVvgOcP8CPPzCL2NxBoR8xw0WDqtjjTpj8f2K4CAd+izOeNASzjedZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729563552; c=relaxed/simple;
-	bh=kuiaS1pD3f/ZDS7KrE8bkSfwA54/4xI1cHqQYECjNaI=;
+	s=arc-20240116; t=1729566736; c=relaxed/simple;
+	bh=fP+1+JuHEGhY4qB7oegLo0qvYsovRFMW4i47QEYmDvc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VpDichY8sTknNXIvWETKF5YGdAG/7ZN4yhrPtp6NNvJZQDPB6dB/q0MO+vie0pwfLKw6U7yMrY11TFWPp1psHC4Mqlt2NjmBEcKsPlyv1SJekNtK1aIQ4WFaokk027L90oo7GN/Sw0sh8qaYYDIuQRVg44zgd/j5wrx/miw1DKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fp+WX3h3; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=qky3A5/ocKIytWjtPcqOZAMd5kIiiyVX0i6NLF4pD0c6EnDSCAt3cf66bcY0E9VbX2Yk29lNU8BQXD93GtSCYonrGmxsgrOG4ThV2G4lgdRPmly6AexE8HcKPuALJxcAKE+3ph0eYUEGUPjRgnF6WyV+7rr6IS67mWNRC7g2y9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mtgTCJAG; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fp+WX3h3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mtgTCJAG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729563550; x=1761099550;
+  t=1729566735; x=1761102735;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kuiaS1pD3f/ZDS7KrE8bkSfwA54/4xI1cHqQYECjNaI=;
-  b=fp+WX3h3pgAObOiRMFOYxdVVnhORmxwpRzS/e0SubjXtx51PlOKAddsu
-   GTpc2vx+xp0tPzMOc2EfRfsnvZd7CQ5yqpf5Hu25kvLSzD/t6otSb1MTf
-   AC3l7NHXw5YowzjtuR3T/+JIuXijIukP8hUUflPG1kvkDRDsn0/VvJFhU
-   /0xJsKJMoDomyOOA1lzV9NKfgHwZRbYoKS4qNUuqvHeb/+dLJ/ZNwz9bP
-   UyuJ+iQ4tzsM06nC9b+Ac2hz27jJye9LLi19mjcs7tFsGSmHpfGEJT9Y/
-   OH+FgcFTwi31QJSA1LqBGQwCMx7dkRIBslh3NZe3jVyP07/3DX4J8gWEd
-   A==;
-X-CSE-ConnectionGUID: XhnwqR5iREKhGUu0taUqXA==
-X-CSE-MsgGUID: O6SZbIjCQa6bUPS9yM9zUw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11232"; a="39660249"
+  bh=fP+1+JuHEGhY4qB7oegLo0qvYsovRFMW4i47QEYmDvc=;
+  b=mtgTCJAG6nRt0ETRky2PYuc5LmBoLRd8qMz3uV0fT2yhjVouleh6Su9B
+   5WTKjA6ipTYyEGY54WOVVSXVI9nlQNGsqgPkklqs1AjeBzLL0w3fMwDah
+   DYdfk+gCnY/jIsL6DKGtTRo7afkNguTIiwgxKA1lBXcqp4xHokguSj71W
+   3x9Uj+TkThsNpFjzc9m9phDd7TJlHkhYoDxeJBJr5hOwkT5VEN1oYkulj
+   KUCV8QBWWIZ+3p8vN2VVfwi1rmBTcCbgblOQd94ybRLemPiTTUTsiyQDN
+   QYEFmugGj4fEOSLqXPGNACVKo3R1lp1IGp0Y97/Zm+hKJkLtA7lScB7lK
+   g==;
+X-CSE-ConnectionGUID: ZX5SQQ2IQgKP5JLeKM5hrg==
+X-CSE-MsgGUID: BXK+5BNkSh+Z0nq1uNW8pw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11232"; a="40466018"
 X-IronPort-AV: E=Sophos;i="6.11,222,1725346800"; 
-   d="scan'208";a="39660249"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 19:19:10 -0700
-X-CSE-ConnectionGUID: bhC2JcuDTJiODinbPQkcOw==
-X-CSE-MsgGUID: BQ6ytSXfSH6ufQrG9CC42w==
+   d="scan'208";a="40466018"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2024 20:12:12 -0700
+X-CSE-ConnectionGUID: KFwW+s6jQH2W8/yRcCIrgw==
+X-CSE-MsgGUID: KzMNp8EORISIZhPPxB3MLQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,222,1725346800"; 
-   d="scan'208";a="84784626"
+   d="scan'208";a="80082481"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 21 Oct 2024 19:19:07 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 21 Oct 2024 20:12:08 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t34UC-000Svi-1Y;
-	Tue, 22 Oct 2024 02:19:04 +0000
-Date: Tue, 22 Oct 2024 10:18:35 +0800
+	id 1t35JW-000Syy-2l;
+	Tue, 22 Oct 2024 03:12:06 +0000
+Date: Tue, 22 Oct 2024 11:11:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pawel Dembicki <paweldembicki@gmail.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Pawel Dembicki <paweldembicki@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
+To: Matt Johnston <matt@codeconstruct.com.au>,
+	Jeremy Kerr <jk@codeconstruct.com.au>,
+	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] net: dsa: vsc73xx: implement packet
- reception via control interface
-Message-ID: <202410220908.uFiUPMGy-lkp@intel.com>
-References: <20241020205452.2660042-2-paweldembicki@gmail.com>
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Dung Cao <dung@os.amperecomputing.com>
+Subject: Re: [PATCH net v2] mctp i2c: handle NULL header address
+Message-ID: <202410221036.hs5xBVOp-lkp@intel.com>
+References: <20241021-mctp-i2c-null-dest-v2-1-4503e478517c@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,151 +70,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241020205452.2660042-2-paweldembicki@gmail.com>
+In-Reply-To: <20241021-mctp-i2c-null-dest-v2-1-4503e478517c@codeconstruct.com.au>
 
-Hi Pawel,
+Hi Matt,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net-next/main]
+[auto build test ERROR on cb560795c8c2ceca1d36a95f0d1b2eafc4074e37]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Dembicki/net-dsa-vsc73xx-implement-packet-reception-via-control-interface/20241021-050041
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241020205452.2660042-2-paweldembicki%40gmail.com
-patch subject: [PATCH net-next 2/3] net: dsa: vsc73xx: implement packet reception via control interface
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241022/202410220908.uFiUPMGy-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Johnston/mctp-i2c-handle-NULL-header-address/20241021-123741
+base:   cb560795c8c2ceca1d36a95f0d1b2eafc4074e37
+patch link:    https://lore.kernel.org/r/20241021-mctp-i2c-null-dest-v2-1-4503e478517c%40codeconstruct.com.au
+patch subject: [PATCH net v2] mctp i2c: handle NULL header address
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241022/202410221036.hs5xBVOp-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241022/202410220908.uFiUPMGy-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241022/202410221036.hs5xBVOp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410220908.uFiUPMGy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410221036.hs5xBVOp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/dsa/vitesse-vsc73xx-core.c:935:30: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-     935 |         skb = netdev_alloc_skb(dev, len);
-         |                                     ^~~
-   drivers/net/dsa/vitesse-vsc73xx-core.c:885:23: note: initialize the variable 'len' to silence this warning
-     885 |         int ret, buf_len, len, part;
-         |                              ^
-         |                               = 0
-   1 warning generated.
+>> drivers/net/mctp/mctp-i2c.c:599:9: error: incompatible pointer to integer conversion assigning to 'u8' (aka 'unsigned char') from 'const unsigned char *' [-Wint-conversion]
+     599 |                 llsrc = dev->dev_addr;
+         |                       ^ ~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/len +935 drivers/net/dsa/vitesse-vsc73xx-core.c
+vim +599 drivers/net/mctp/mctp-i2c.c
 
-   879	
-   880	static void vsc73xx_polled_rcv(struct kthread_work *work)
-   881	{
-   882		struct vsc73xx *vsc = container_of(work, struct vsc73xx, dwork.work);
-   883		u16 ptr = VSC73XX_CAPT_FRAME_DATA;
-   884		struct dsa_switch *ds = vsc->ds;
-   885		int ret, buf_len, len, part;
-   886		struct vsc73xx_ifh ifh;
-   887		struct net_device *dev;
-   888		struct dsa_port *dp;
-   889		struct sk_buff *skb;
-   890		u32 val, *buf;
-   891		u16 count;
-   892	
-   893		ret = vsc73xx_read(vsc, VSC73XX_BLOCK_SYSTEM, 0, VSC73XX_CAPCTRL, &val);
-   894		if (ret)
-   895			goto queue;
-   896	
-   897		if (!(val & VSC73XX_CAPCTRL_QUEUE0_READY))
-   898			/* No frame to read */
-   899			goto queue;
-   900	
-   901		/* Initialise reading */
-   902		ret = vsc73xx_read(vsc, VSC73XX_BLOCK_CAPTURE, VSC73XX_BLOCK_CAPT_Q0,
-   903				   VSC73XX_CAPT_CAPREADP, &val);
-   904		if (ret)
-   905			goto queue;
-   906	
-   907		/* Get internal frame header */
-   908		ret = vsc73xx_read(vsc, VSC73XX_BLOCK_CAPTURE,
-   909				   VSC73XX_BLOCK_CAPT_FRAME0, ptr++, &ifh.datah);
-   910		if (ret)
-   911			goto queue;
-   912	
-   913		ret = vsc73xx_read(vsc, VSC73XX_BLOCK_CAPTURE,
-   914				   VSC73XX_BLOCK_CAPT_FRAME0, ptr++, &ifh.datal);
-   915		if (ret)
-   916			goto queue;
-   917	
-   918		if (ifh.magic != VSC73XX_IFH_MAGIC) {
-   919			/* Something goes wrong with buffer. Reset capture block */
-   920			vsc73xx_write(vsc, VSC73XX_BLOCK_CAPTURE,
-   921				      VSC73XX_BLOCK_CAPT_RST, VSC73XX_CAPT_CAPRST, 1);
-   922			goto queue;
-   923		}
-   924	
-   925		if (!dsa_is_user_port(ds, ifh.port))
-   926			goto release_frame;
-   927	
-   928		dp = dsa_to_port(ds, ifh.port);
-   929		dev = dp->user;
-   930		if (!dev)
-   931			goto release_frame;
-   932	
-   933		count = (ifh.frame_length + 7 + VSC73XX_IFH_SIZE - ETH_FCS_LEN) >> 2;
-   934	
- > 935		skb = netdev_alloc_skb(dev, len);
-   936		if (unlikely(!skb)) {
-   937			netdev_err(dev, "Unable to allocate sk_buff\n");
-   938			goto release_frame;
-   939		}
-   940	
-   941		buf_len = ifh.frame_length - ETH_FCS_LEN;
-   942		buf = (u32 *)skb_put(skb, buf_len);
-   943		len = 0;
-   944		part = 0;
-   945	
-   946		while (ptr < count) {
-   947			ret = vsc73xx_read(vsc, VSC73XX_BLOCK_CAPTURE,
-   948					   VSC73XX_BLOCK_CAPT_FRAME0 + part, ptr++,
-   949					   buf + len);
-   950			if (ret)
-   951				goto free_skb;
-   952			len++;
-   953			if (ptr > VSC73XX_CAPT_FRAME_DATA_MAX &&
-   954			    count != VSC73XX_CAPT_FRAME_DATA_MAX) {
-   955				ptr = VSC73XX_CAPT_FRAME_DATA;
-   956				part++;
-   957				count -= VSC73XX_CAPT_FRAME_DATA_MAX;
-   958			}
-   959		}
-   960	
-   961		/* Get FCS */
-   962		ret = vsc73xx_read(vsc, VSC73XX_BLOCK_CAPTURE,
-   963				   VSC73XX_BLOCK_CAPT_FRAME0, ptr++, &val);
-   964		if (ret)
-   965			goto free_skb;
-   966	
-   967		/* Everything we see on an interface that is in the HW bridge
-   968		 * has already been forwarded.
-   969		 */
-   970		if (dp->bridge)
-   971			skb->offload_fwd_mark = 1;
-   972	
-   973		skb->protocol = eth_type_trans(skb, dev);
-   974	
-   975		netif_rx(skb);
-   976		goto release_frame;
-   977	
-   978	free_skb:
-   979		kfree_skb(skb);
-   980	release_frame:
-   981		/* Release the frame from internal buffer */
-   982		vsc73xx_write(vsc, VSC73XX_BLOCK_CAPTURE, VSC73XX_BLOCK_CAPT_Q0,
-   983			      VSC73XX_CAPT_CAPREADP, 0);
-   984	queue:
-   985		kthread_queue_delayed_work(vsc->rcv_worker, &vsc->dwork,
-   986					   msecs_to_jiffies(VSC73XX_RCV_POLL_INTERVAL));
-   987	}
-   988	
+   579	
+   580	static int mctp_i2c_header_create(struct sk_buff *skb, struct net_device *dev,
+   581					  unsigned short type, const void *daddr,
+   582					  const void *saddr, unsigned int len)
+   583	{
+   584		struct mctp_i2c_hdr *hdr;
+   585		struct mctp_hdr *mhdr;
+   586		u8 lldst, llsrc;
+   587	
+   588		if (len > MCTP_I2C_MAXMTU)
+   589			return -EMSGSIZE;
+   590	
+   591		if (daddr)
+   592			lldst = *((u8 *)daddr);
+   593		else
+   594			return -EINVAL;
+   595	
+   596		if (saddr)
+   597			llsrc = *((u8 *)saddr);
+   598		else
+ > 599			llsrc = dev->dev_addr;
+   600	
+   601		skb_push(skb, sizeof(struct mctp_i2c_hdr));
+   602		skb_reset_mac_header(skb);
+   603		hdr = (void *)skb_mac_header(skb);
+   604		mhdr = mctp_hdr(skb);
+   605		hdr->dest_slave = (lldst << 1) & 0xff;
+   606		hdr->command = MCTP_I2C_COMMANDCODE;
+   607		hdr->byte_count = len + 1;
+   608		hdr->source_slave = ((llsrc << 1) & 0xff) | 0x01;
+   609		mhdr->ver = 0x01;
+   610	
+   611		return sizeof(struct mctp_i2c_hdr);
+   612	}
+   613	
 
 -- 
 0-DAY CI Kernel Test Service
