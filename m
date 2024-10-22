@@ -1,153 +1,140 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736A61CC8B7
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 21:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FC114B97E;
+	Tue, 22 Oct 2024 23:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729633400; cv=none; b=ZGaD5YLWgwy5W3QrHAP/7niQTGdyBeB15t6LA1CiffqtF2G5pL5aHN97M9dlsN5hNTEyUoOYMJtCdyU1caEU+SuhTqtMc5D7VYgrbsP6Zm/sE1wve02SUFzXM4+kbWrcwcCezIbE+VdZ3MeuKSWjCKbpqNvxo651AU3Tq6XWqu8=
+	t=1729638614; cv=none; b=kIjQ9sKaEsPeZd0/osAMJeiQMXqnlWHsre87HsZSMbq24vsvFtqnjcVjKfLNt8GKJmgzg/e3t/4Nj7JMez9cqVzgC0ffFBtdx17XO8LzdhPV7UmxWQQeZBa2/a75AGOXqgHUo8ZJw5T+kYSOEeZYGc9WgS2gMXcgRFO+MMyf6L4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729633400; c=relaxed/simple;
-	bh=6CE9iMBC3y9cAYCu1l54VdZn1idKxLhum6UdhdsDFus=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f5LxfeN244/OTe9ljYKONptMKaxO3ErTvdM96gDi33ui8dAT9jbTdq1qXwcH4hqV0L4kf8wkH0beOsWc84EyLDZeNEINFk7DWzf+1k4KfB76+njH9/Wjnh4hbYU6gry5PO7uRpQ1vk1cFcStwZlA7Q2dJDXO494eUjOx+JEE7/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wH+tlI2i; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1729638614; c=relaxed/simple;
+	bh=/9YrD5LpHK5gnoTpGzdU9uKix+1nU1xm/igNCQo2fIU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YPgPP2VZiHncTYZD2UuCZXWRBoKekd2GdEshjjViYl4C73bhVYm7zcojbnyjjaP2aO0N0nWJ9e4VcbGJ2Ut2BeospT5n7nLP7XnzjxabB/TJRdaNEMCpLIENAmnvD+jg9BD1l4tbIV6/F1eYi4v3HYNAqYxAawX2LgLBZIq9SX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m0MRTff/; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wH+tlI2i"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c7edf2872so1870065ad.1
-        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 14:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729633399; x=1730238199; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9TRNlHgfETbV9PWZsrG5Dbl77hFjmMLfOcM3aLCB/1g=;
-        b=wH+tlI2iOzHxkx13diUwIshhbBnhKB+w8WLNsrBvQzIxb+xHiGIBdPeL7bnSetwlT+
-         PByDP8TVXQ+aZq8Kypf+zvCLokhH2x/mZTrS0X3KCJbsdzZb6vQBwwJEHtXoXLxbFOWv
-         7GgoXACEp5+qkQ/cyUs9Mq/BdNdqpri20wvGt9KJJXPgwFemMwsjqKYXB8jRWaBD096K
-         rSiS7q9wdcddCF1hK/myI7yY+0Ubp5aIcCFTCXFyNqjBVmLMTYj/J/UAKwn3XkVLanvh
-         YrFzmfN1K85XfLtOmZMFqpRuluMCaUPIwwK70xuSnYO1jlhUbljaDtu81efriV8DdwEX
-         6JCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729633399; x=1730238199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9TRNlHgfETbV9PWZsrG5Dbl77hFjmMLfOcM3aLCB/1g=;
-        b=q/N31Uzmu824+dOwFHqgYy9MP3K6HL9XgX/tb1xNiPs5B+k7cSat+IFYPV9gDQY+Md
-         pUd5PHVamossi2xEqSeljD1JoWS/roBY1pabZhze5suZEHKWjSXYp+vc+yVrxkexeLCW
-         QCD1u/ZJXh1u6vS/91VnTIhC57z6VcPz1XmWQ8SENpxHvmKcuPej6N/oXbQ22+kyxKGd
-         2zf/ZAJh4oU57eQvaYlsci9PfMqdPFjOxnxGRfkh7r7KtxfhWRPXUZD8ilaGxwVUfDQ1
-         vmaZUlwYwhOo/REmHYmcirxqG1bpHXarWbDC+g0Kb8GDDCZuhIf1OmcfliE7Yehx1Vrm
-         dLFg==
-X-Forwarded-Encrypted: i=1; AJvYcCXLTf2JygM0KtFUfvMbRppIE8GNUSrKKSn+EwRabtC7IpkmNQaN41FkFKnxesOcCXwu2WAt@lists.linux.dev
-X-Gm-Message-State: AOJu0YxvZeUD4YxVuPgMXyQhKNrQJsUx7voMYQDreuCJ/8f+fZ1wVPws
-	6JkJ6TZeuzBdLUOvbCWp2xu7qBcWJOzGEmLz/unpOJnAssjFZjEHQh22a0AzQJam0aZrgCh7Vab
-	Z/cobSoP7XCDo7GsVc6NK7tns/utewuhs9pNP
-X-Google-Smtp-Source: AGHT+IHA/ihaW8uIyp28j2yq18kymqL2kOT1y+soR0FtL2dQLmvnKXDLwCYe+yFSH9ZHxjgCJ2qkIig5+mCCWrbuZjg=
-X-Received: by 2002:a17:90a:448d:b0:2e0:89f2:f60c with SMTP id
- 98e67ed59e1d1-2e76a721744mr802998a91.11.1729633398336; Tue, 22 Oct 2024
- 14:43:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m0MRTff/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729638613; x=1761174613;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/9YrD5LpHK5gnoTpGzdU9uKix+1nU1xm/igNCQo2fIU=;
+  b=m0MRTff/ziAwnfpnwGu7ae2EsgLWcYtVhVyhZf5HgI3kBa0lFflLmrSp
+   lC3ZVE4n52kh33IxCMJPrd6AbARd43pp7aY7Ij0x0vF16bpNGc5vsYBFg
+   sP8JpAB/e6FHJC02h1LxAUXTzqKvMzJlmaost4cAX1RQhFCGOPyUJFTY3
+   IFq5da0C4Qr8FOjCcQ88WlazIaHuFqvxa7ddiRSZE0+EXFTV0yvdOUbD9
+   hIftyMABnZHi+SrXGx+FqUPHZx3liiN3U+Nd5VCXkjNH4tOHMJZa2UIf4
+   mfswjQEr+dGD6ZoF+0vAQPF/Tb2QSzOjbgXCD80mfdC7/35Xt01zslCnB
+   A==;
+X-CSE-ConnectionGUID: pJh/1ecLSv+nXyARKBrgjw==
+X-CSE-MsgGUID: Kc4wjQCMRNyfPha8YwKCcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29144125"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29144125"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 16:10:12 -0700
+X-CSE-ConnectionGUID: h7Oh7qSTTY29e+S+lslw2g==
+X-CSE-MsgGUID: u9lMVZ/1T3qh8XoBgRgybw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="84630016"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 22 Oct 2024 16:10:09 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3O0t-000UCo-10;
+	Tue, 22 Oct 2024 23:10:07 +0000
+Date: Wed, 23 Oct 2024 07:09:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Umang Jain <umang.jain@ideasonboard.com>, linux-media@vger.kernel.org,
+	Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Stefan Klug <stefan.klug@ideasonboard.com>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Umang Jain <umang.jain@ideasonboard.com>
+Subject: Re: [PATCH] media: dw100: Enable dynamic vertex map
+Message-ID: <202410230647.fPoPRh2O-lkp@intel.com>
+References: <20241022063155.506191-1-umang.jain@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241021120013.3209481-1-elver@google.com> <20241021172058.GB26179@willie-the-truck>
- <CA+=Sn1m7KYkJHL3gis6+7M2-o9fuuzDtyUmycKnHK9KKEr2LtA@mail.gmail.com>
-In-Reply-To: <CA+=Sn1m7KYkJHL3gis6+7M2-o9fuuzDtyUmycKnHK9KKEr2LtA@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Tue, 22 Oct 2024 23:42:40 +0200
-Message-ID: <CANpmjNOf94nQL8YVr94L=9qXA6eHcm-AxbS+vz+Sm1aHJT2iAQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kasan: Fix Software Tag-Based KASAN with GCC
-To: Andrew Pinski <pinskia@gmail.com>
-Cc: Will Deacon <will@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
-	syzbot+908886656a02769af987@syzkaller.appspotmail.com, 
-	"Andrew Pinski (QUIC)" <quic_apinski@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241022063155.506191-1-umang.jain@ideasonboard.com>
 
-On Mon, 21 Oct 2024 at 19:29, Andrew Pinski <pinskia@gmail.com> wrote:
->
-> On Mon, Oct 21, 2024 at 10:21=E2=80=AFAM Will Deacon <will@kernel.org> wr=
-ote:
-> >
-> > On Mon, Oct 21, 2024 at 02:00:10PM +0200, Marco Elver wrote:
-> > > Per [1], -fsanitize=3Dkernel-hwaddress with GCC currently does not di=
-sable
-> > > instrumentation in functions with __attribute__((no_sanitize_address)=
-).
-> > >
-> > > However, __attribute__((no_sanitize("hwaddress"))) does correctly
-> > > disable instrumentation. Use it instead.
-> > >
-> > > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D117196 [1]
-> > > Link: https://lore.kernel.org/r/000000000000f362e80620e27859@google.c=
-om
-> > > Link: https://lore.kernel.org/r/ZvFGwKfoC4yVjN_X@J2N7QTR9R3
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D218854
-> > > Reported-by: syzbot+908886656a02769af987@syzkaller.appspotmail.com
-> > > Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
-> > > Cc: Andrew Pinski <pinskia@gmail.com>
-> > > Cc: Mark Rutland <mark.rutland@arm.com>
-> > > Cc: Will Deacon <will@kernel.org>
-> > > Signed-off-by: Marco Elver <elver@google.com>
-> > > ---
-> > >  include/linux/compiler-gcc.h | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gc=
-c.h
-> > > index f805adaa316e..cd6f9aae311f 100644
-> > > --- a/include/linux/compiler-gcc.h
-> > > +++ b/include/linux/compiler-gcc.h
-> > > @@ -80,7 +80,11 @@
-> > >  #define __noscs __attribute__((__no_sanitize__("shadow-call-stack"))=
-)
-> > >  #endif
-> > >
-> > > +#ifdef __SANITIZE_HWADDRESS__
-> > > +#define __no_sanitize_address __attribute__((__no_sanitize__("hwaddr=
-ess")))
-> > > +#else
-> > >  #define __no_sanitize_address __attribute__((__no_sanitize_address__=
-))
-> > > +#endif
-> >
-> > Does this work correctly for all versions of GCC that support
-> > -fsanitize=3Dkernel-hwaddress?
->
-> Yes, tested from GCC 11+, kernel-hwaddress was added in GCC 11.
-> Also tested from clang 9.0+ and it works there too.
+Hi Umang,
 
-+1 yes. From what I can tell GCC always supported
-no_sanitize("hwaddress") for -fsanitize=3Dkernel-hwaddress.
+kernel test robot noticed the following build warnings:
 
-Even for Clang, we define __no_sanitize_address to include
-no_sanitize("hwaddress"):
-https://elixir.bootlin.com/linux/v6.11.4/source/include/linux/compiler-clan=
-g.h#L29
+[auto build test WARNING on linuxtv-media-stage/master]
+[also build test WARNING on media-tree/master sailus-media-tree/streams sailus-media-tree/master linus/master v6.12-rc4 next-20241022]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So this has just been an oversight when GCC support for KASAN_SW_TAGS
-was introduced.
+url:    https://github.com/intel-lab-lkp/linux/commits/Umang-Jain/media-dw100-Enable-dynamic-vertex-map/20241022-143315
+base:   https://git.linuxtv.org/media_stage.git master
+patch link:    https://lore.kernel.org/r/20241022063155.506191-1-umang.jain%40ideasonboard.com
+patch subject: [PATCH] media: dw100: Enable dynamic vertex map
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241023/202410230647.fPoPRh2O-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410230647.fPoPRh2O-lkp@intel.com/reproduce)
 
-Having a Fixes tag for this would be nice, but I don't think we
-explicitly added GCC support, and instead just relied on
-CC_HAS_KASAN_SW_TAGS with cc-option telling us if the flag is
-supported.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410230647.fPoPRh2O-lkp@intel.com/
 
-But maybe we can use this:
+All warnings (new ones prefixed by >>):
 
-Fixes: 7b861a53e46b ("kasan: Bump required compiler version")
+>> drivers/media/platform/nxp/dw100/dw100.c:369:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     369 |                 u32 *user_map = ctrl->p_new.p_u32;
+         |                 ^
+   1 warning generated.
 
-Because it's the first time we encountered issues with no_sanitize,
-and bumped the required GCC version as a result. Perhaps going along
-with that should have been fixing of compiler-gcc.h's definition of
-__no_sanitize_address.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+
+
+vim +369 drivers/media/platform/nxp/dw100/dw100.c
+
+   361	
+   362	static int dw100_s_ctrl(struct v4l2_ctrl *ctrl)
+   363	{
+   364		struct dw100_ctx *ctx =
+   365			container_of(ctrl->handler, struct dw100_ctx, hdl);
+   366	
+   367		switch (ctrl->id) {
+   368		case V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP:
+ > 369			u32 *user_map = ctrl->p_new.p_u32;
+   370			unsigned int id;
+   371	
+   372			mutex_lock(&ctx->maps_mutex);
+   373			id = ctx->applied_map_id ? 0 : 1;
+   374			memcpy(ctx->maps[id].map, user_map, ctx->map_size);
+   375			ctx->user_map_is_updated = true;
+   376			mutex_unlock(&ctx->maps_mutex);
+   377	
+   378			ctx->user_map_is_set = true;
+   379			break;
+   380		}
+   381	
+   382		return 0;
+   383	}
+   384	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
