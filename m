@@ -1,56 +1,56 @@
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A6F135A79
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 01:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E21813B58F
+	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 01:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729562369; cv=none; b=brd0wuMfkT6rk2Mw/6Qd3W3+nMWR48hQDtuBHbQO6hbzu2K8LtTyQO7ZKuNF2kiwoqzxzHcTaMamx1/QLsaYJ2XxwEWS8alvZMUMitnZXFMFjk+PxhDcwo0kiG+1hQkYFf4klKCNHeyR+XFKq/hwx584i900llUZ65iEzKeQCco=
+	t=1729562371; cv=none; b=VOPMP5gh5za/VhTCIXdPsORqnLTNcXVFWrcO9e85zC7cyar398sMxvEMvzQLE8pXFP44NHZqXMR0WIIfOPDaOm0pF1sh1W/h+FXs8nodbWIk2Z+1+hB00VXKfZim01s5GqgvoqbbRvxb4hGEbG3K6JibE3+FTI0WXLGER2Mdev4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729562369; c=relaxed/simple;
-	bh=es7nwt1Z8plGrwhcKNpUqYOJPExE/gGaHXH3HFNnqdo=;
+	s=arc-20240116; t=1729562371; c=relaxed/simple;
+	bh=O5lWqpDcFOKaIADUL30wY0OO26drBl/ty+OTgNOwqp0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ebkbCfimSS2YzSQXyk9k4tpoGfLhFO2mJVlqads3Y6rmr8MSpv99es1iTXTLRB0TiaA/EANDNEAblWqnAFJ7OVFp/Gpykofzg7UW1bcj86ychv3FXXRFHlXy5V8YRmBs5W0Orx8Np/Akb4A92LyDDDqZEixOU3049yyV21faPBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Y/SdcYpv; arc=none smtp.client-ip=209.85.161.52
+	 MIME-Version; b=TLKH/DilY3ZNjinUvXFKMTRT7IIOvClxrGG50GRRzTS85C/UP7OIV3kA+zSAyo8c+Eta6n46k1pKgb4l5hq9p1+t9E3y/JOTF4e77QgH6Rcr8E/ExKAuUCnWUDF717u7TzWAgJsALE8WKErvztb9KRZne7nn+Jm5MM8QeSYUfA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=DMsfgVNf; arc=none smtp.client-ip=209.85.160.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Y/SdcYpv"
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5ebc0e13d25so694091eaf.1
-        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 18:59:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="DMsfgVNf"
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-288b392b8daso1816893fac.2
+        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 18:59:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1729562367; x=1730167167; darn=lists.linux.dev;
+        d=sifive.com; s=google; t=1729562368; x=1730167168; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jOWNg37CI6wBNjlK3WTwIizp4MumcxiO1pDVtn3VcZ8=;
-        b=Y/SdcYpvmt0dO+/VDTc4ucclQSGr3qGCmCbfSZ2cVjTrPdsmZbLwRBzTaIvJ6Gtyr/
-         p4fqCLxZsgHt07SMGVsKW6dhckCUUSsS4hzcuRwnzzykruOMIAvMRmx7wRbrLZHDLp5B
-         Ct5ya+qJQMBEwydiCXsU7FPF9vkJFuaEj6K819U+RWMUi26aCrFzh7PTnChBgUx/5h+W
-         OArALuHLI295WdhNK8B7NPE7rvfuwCzyJQRZ5nXYcpkknoQpcvF95t2H93ioGJA16fvl
-         CsTz1dx0/Wj2l3TqudCJNhTZvtSopIGHw4v8uz99EyeVdeIxh1ifyqENNOosXQAZkIOS
-         zqCw==
+        bh=559wueV0PG6xFm1m5EmJll56/fKSQJhn2CptHQFJIX4=;
+        b=DMsfgVNfHvX4Y+RZC5jW0pwfu0Kml4eTM37JG7oelgr74LrTVS9bgeIqweGDuhRF7m
+         ELQCGRAndaJZSlZ1OIdae+CQNNUxIqQw/mHsoZ5YSfWiIizpsdMdvMVbBQ02jckanILV
+         eCbOzkbCb/OblBfAc933tlxVnmuMkIHEyr4uDWj+cfHsmHplRHF8VWj3YlDJurVntAYu
+         H2wWjetiGk784/6rpwNJYLpY4UZoVGKl+be4PZ+uj7nDATYaPWiMV+2TD/MK4YGfR686
+         c3Ti8W7BptgZgpYEkX+0oJtvMrTmffcr/IaRfMvAMhBkWBCWQ2KY2O7ZFAWDww4DRjWr
+         MICg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729562367; x=1730167167;
+        d=1e100.net; s=20230601; t=1729562368; x=1730167168;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jOWNg37CI6wBNjlK3WTwIizp4MumcxiO1pDVtn3VcZ8=;
-        b=l/xNr9iwxeAMtnB2NimwHHfVtNdkOjW9p6SbvStUM/huCq2MHQKc6Ui2prnCdn6LVL
-         o6VKsbFBSOOF0qXXOnbovKiLAdeKZhOULMO38gOrc0kR+vtEuAuxjfAwGss6gyzJgCh1
-         kIcgoq1eFAV6bM9ybdqKdwgUEuFP5abo3P1okIEfsNE4O8umIBTFQq8+RSoe0G9lo/cP
-         urwOQciBYPPQmc8IV/yrj89RRaBosqFFxpZozxyiiV6VYGCFaUqggZNZTuSSHiv8+d4/
-         UllfkCW+7ALrPduol5yF8XvPd6Dw7l9e/obIKe3eIldLsm1KKOmf+lHMOgTyWBDTcuQK
-         DDPw==
-X-Gm-Message-State: AOJu0YyVbNUuuqPeF8jeBNHs/PFdtwE+CQUCVwYDFSPXxZCpI8zb2SPy
-	0yVcl1a/0hD6bT0FRwH/RnjMrpnD9zcf9bMrMI2gkbkaIrVlC7FC/Y6vwQ1rlyw=
-X-Google-Smtp-Source: AGHT+IHErzREUGw6ROMLMvLXYHp4zadEF+Dwq950EYc2048lR/Pu3YsD3Bs92QVrt5aBEWQnl13Wpw==
-X-Received: by 2002:a05:6871:109:b0:288:b220:a57e with SMTP id 586e51a60fabf-28cb0184ff2mr946194fac.40.1729562366823;
-        Mon, 21 Oct 2024 18:59:26 -0700 (PDT)
+        bh=559wueV0PG6xFm1m5EmJll56/fKSQJhn2CptHQFJIX4=;
+        b=iKGalh4gRQ6nyqfqpstO6OPggDOE0sItTZLa0DwUkerS3f1T9YHs/axTr10nAeIolb
+         awt+NZPwclNZgUH5KrqQirt3WOCr/3pCxrhfTwHO1D19dFUMG9qHtuH+1i6iM0uvFjXO
+         V2GM1/CPSXK9v1y3Ib3g930k4EKfMTPTXCkGMkezx+ueoQrh/62mbJuj9Ahy6LrpWZqq
+         HfcNM7jmeWl6RdBruqQ6F1CLsNrPWZErepcu/V1M9Ux0jRpWbZrWI0cDX3SkSE2ZlXrl
+         MPE2GUtWv9bGWV6p6BHST+1AyzOcpOD6OCGqAruq4JjnoHoS1rkh//4r6U0AC3eLE2RL
+         ThQQ==
+X-Gm-Message-State: AOJu0YwoX8TIr1KFsbBeda1zn28yKRjCt3jfBu7Drv6WQye5G/TNF5Sd
+	oW1PfeNSlkbH5UEtZsslcYdQCcJ/80wOd4SaotBJYNYfX7gokupk91YB6fbkmfw=
+X-Google-Smtp-Source: AGHT+IEp2UA/bF+2FyY3t++ENshpm/xo2VESMIC3hEEwlJcPqi8vvi8Dyd6MCRyyBM+qcOZbinhyoQ==
+X-Received: by 2002:a05:6870:95aa:b0:277:a43a:dac2 with SMTP id 586e51a60fabf-2892c2df34amr10113787fac.17.1729562368580;
+        Mon, 21 Oct 2024 18:59:28 -0700 (PDT)
 Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm3600710b3a.46.2024.10.21.18.59.25
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm3600710b3a.46.2024.10.21.18.59.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 18:59:26 -0700 (PDT)
+        Mon, 21 Oct 2024 18:59:28 -0700 (PDT)
 From: Samuel Holland <samuel.holland@sifive.com>
 To: Palmer Dabbelt <palmer@dabbelt.com>,
 	linux-riscv@lists.infradead.org,
@@ -70,9 +70,9 @@ Cc: llvm@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	linux-arm-kernel@lists.infradead.org,
 	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v2 6/9] riscv: Do not rely on KASAN to define the memory layout
-Date: Mon, 21 Oct 2024 18:57:14 -0700
-Message-ID: <20241022015913.3524425-7-samuel.holland@sifive.com>
+Subject: [PATCH v2 7/9] riscv: Align the sv39 linear map to 16 GiB
+Date: Mon, 21 Oct 2024 18:57:15 -0700
+Message-ID: <20241022015913.3524425-8-samuel.holland@sifive.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20241022015913.3524425-1-samuel.holland@sifive.com>
 References: <20241022015913.3524425-1-samuel.holland@sifive.com>
@@ -84,78 +84,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 66673099f734 ("riscv: mm: Pre-allocate vmemmap/direct map/kasan
-PGD entries") used the start of the KASAN shadow memory region to
-represent the end of the linear map, since the two memory regions were
-immediately adjacent. This is no longer the case for Sv39; commit
-5c8405d763dc ("riscv: Extend sv39 linear mapping max size to 128G")
-introduced a 4 GiB hole between the regions. Introducing KASAN_SW_TAGS
-will cut the size of the shadow memory region in half, creating an even
-larger hole.
-
-Avoid wasting PGD entries on this hole by using the size of the linear
-map (KERN_VIRT_SIZE) to compute PAGE_END.
-
-Since KASAN_SHADOW_START/KASAN_SHADOW_END are used inside an IS_ENABLED
-block, it's not possible to completely hide the constants when KASAN is
-disabled, so provide dummy definitions for that case.
+The KASAN implementation on RISC-V requires the shadow memory for the
+vmemmap and linear map regions to be aligned to a PMD boundary (1 GiB).
+For KASAN_GENERIC (KASAN_SHADOW_SCALE_SHIFT == 3), this enforces 8 GiB
+alignment for the memory regions themselves. KASAN_SW_TAGS uses 16-byte
+granules (KASAN_SHADOW_SCALE_SHIFT == 4), so now the memory regions must
+be aligned to a 16 GiB boundary.
 
 Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 ---
 
 (no changes since v1)
 
- arch/riscv/include/asm/kasan.h | 11 +++++++++--
- arch/riscv/mm/init.c           |  2 +-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ Documentation/arch/riscv/vm-layout.rst | 10 +++++-----
+ arch/riscv/include/asm/page.h          |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
-index e6a0071bdb56..a4e92ce9fa31 100644
---- a/arch/riscv/include/asm/kasan.h
-+++ b/arch/riscv/include/asm/kasan.h
-@@ -6,6 +6,8 @@
- 
- #ifndef __ASSEMBLY__
- 
-+#ifdef CONFIG_KASAN
-+
- /*
-  * The following comment was copied from arm64:
-  * KASAN_SHADOW_START: beginning of the kernel virtual addresses.
-@@ -33,13 +35,18 @@
- #define KASAN_SHADOW_START	((KASAN_SHADOW_END - KASAN_SHADOW_SIZE) & PGDIR_MASK)
- #define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
- 
--#ifdef CONFIG_KASAN
- #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
- 
- void kasan_init(void);
- asmlinkage void kasan_early_init(void);
- void kasan_swapper_init(void);
- 
--#endif
-+#else /* CONFIG_KASAN */
-+
-+#define KASAN_SHADOW_START	MODULES_LOWEST_VADDR
-+#define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
-+
-+#endif /* CONFIG_KASAN */
-+
- #endif
- #endif /* __ASM_KASAN_H */
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 0e8c20adcd98..1f9bb95c2169 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -1494,7 +1494,7 @@ static void __init preallocate_pgd_pages_range(unsigned long start, unsigned lon
- 	panic("Failed to pre-allocate %s pages for %s area\n", lvl, area);
- }
- 
--#define PAGE_END KASAN_SHADOW_START
-+#define PAGE_END (PAGE_OFFSET + KERN_VIRT_SIZE)
- 
- void __init pgtable_cache_init(void)
- {
+diff --git a/Documentation/arch/riscv/vm-layout.rst b/Documentation/arch/riscv/vm-layout.rst
+index eabec99b5852..c0778c421b34 100644
+--- a/Documentation/arch/riscv/vm-layout.rst
++++ b/Documentation/arch/riscv/vm-layout.rst
+@@ -47,11 +47,11 @@ RISC-V Linux Kernel SV39
+                                                               | Kernel-space virtual memory, shared between all processes:
+   ____________________________________________________________|___________________________________________________________
+                     |            |                  |         |
+-   ffffffc4fea00000 | -236    GB | ffffffc4feffffff |    6 MB | fixmap
+-   ffffffc4ff000000 | -236    GB | ffffffc4ffffffff |   16 MB | PCI io
+-   ffffffc500000000 | -236    GB | ffffffc5ffffffff |    4 GB | vmemmap
+-   ffffffc600000000 | -232    GB | ffffffd5ffffffff |   64 GB | vmalloc/ioremap space
+-   ffffffd600000000 | -168    GB | fffffff5ffffffff |  128 GB | direct mapping of all physical memory
++   ffffffc2fea00000 | -244    GB | ffffffc2feffffff |    6 MB | fixmap
++   ffffffc2ff000000 | -244    GB | ffffffc2ffffffff |   16 MB | PCI io
++   ffffffc300000000 | -244    GB | ffffffc3ffffffff |    4 GB | vmemmap
++   ffffffc400000000 | -240    GB | ffffffd3ffffffff |   64 GB | vmalloc/ioremap space
++   ffffffd400000000 | -176    GB | fffffff3ffffffff |  128 GB | direct mapping of all physical memory
+                     |            |                  |         |
+    fffffff700000000 |  -36    GB | fffffffeffffffff |   32 GB | kasan
+   __________________|____________|__________________|_________|____________________________________________________________
+diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+index 32d308a3355f..6e2f79cf77c5 100644
+--- a/arch/riscv/include/asm/page.h
++++ b/arch/riscv/include/asm/page.h
+@@ -37,7 +37,7 @@
+  * define the PAGE_OFFSET value for SV48 and SV39.
+  */
+ #define PAGE_OFFSET_L4		_AC(0xffffaf8000000000, UL)
+-#define PAGE_OFFSET_L3		_AC(0xffffffd600000000, UL)
++#define PAGE_OFFSET_L3		_AC(0xffffffd400000000, UL)
+ #else
+ #define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
+ #endif /* CONFIG_64BIT */
 -- 
 2.45.1
 
