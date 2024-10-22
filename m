@@ -1,64 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F90154426;
-	Tue, 22 Oct 2024 10:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66808198838;
+	Tue, 22 Oct 2024 11:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729594476; cv=none; b=cHqtipCMtxTSmWgdfusvvmlXrwXhQ3l62Tb4/SbS+NiY7gywZzqJARChKPkAJY9osfyzNO3TYBKMjB1OlWSjmnUxGgp34SaGR0Ok/sHCTT6AMXr9NrfdTT1bZK1+X3HsDkHvAFXqY4SEN2ES8rv9uEhMRoBOs5aEJGwneXdz/gI=
+	t=1729595142; cv=none; b=N2sLkeubbitV4bwpM7eJ+DsjpnXvzU9p7fH6kkKJArcHa5NzsF2SWNJxJTPJIGpg8KLzWmGsRHKUIu4D2JqWLOOdBIjpn7mGt2i+BJZqoLIiRutGz50nZywNuhr7YBp8lauPdH/z4nye5dYnYKSoxYIIkSVDyTZPQ+bqYCPG1yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729594476; c=relaxed/simple;
-	bh=BfsXnKhdgJzMKG/7b6rB43K6MAL7dLyNXcY3ypxj5yE=;
+	s=arc-20240116; t=1729595142; c=relaxed/simple;
+	bh=lk6aSBgrBEc1NRKveTngB3JmIdfkK85pmGw8ldyXGEM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qf3djc9cOd1K9eiYyO8iG2Av804WbAij3dN2lNc6C8uhkfCs7/4trfIzQc/IIVYfw+3468eYprazDpLX5g+6aXOAVn2kHZwuOe/7M/TNMrVocRXd4i74pSZSR3eWEDzGvo8VEe7kpkhmWEyyGXBwa7SHqvhu4QwqIJ/Q3dXxsos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e+5C8gIS; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=aEKyCw+l+6bF+RJv8bUaCrmdvudo2rj+lDWVzm0Ki4pWkP2WsyKC5YQbK4IAu1ch4ORrL5gZGzXCHvh4icXaqdbTEEedLtkaNMFHIyS4WaN1NHfguKcz8u6Iv84PMxpwx3N9tGMBkamSa7Tw4nK6QZj3dTUULwoLiXvzwXKy66s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jDCkvX03; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e+5C8gIS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDCkvX03"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729594475; x=1761130475;
+  t=1729595140; x=1761131140;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BfsXnKhdgJzMKG/7b6rB43K6MAL7dLyNXcY3ypxj5yE=;
-  b=e+5C8gISesknWn6ZPUO0cNlYwzmVpyTlW7VqWJ+66NyYCwXrE4z7qk9I
-   ja89hDzB7EdVQeNfIIAZGe2Lj83SuJBZo52lfab+CA6oaR319h2NZuQDr
-   QCk6qdejGeNhF09vlDAUoDWBHDeLZPD1haCCd9ap3IgvRP9nt+u2zYFdJ
-   9ebVFDQQKbswo55Wu8EEWnzt63dcbbCaB6x2Rri2OTyDGv2hsn7Gouqa+
-   sEx7UbiDaeLYeRM9FCEoaDsVpupWF3esR9LIfhsz59PsIwIBf95oitIH5
-   YaMD10dRf7O8Uh5ukic9cBEBe93+JmPJEtDwR6XwVPClQoJK7x6R6WfYb
-   g==;
-X-CSE-ConnectionGUID: 37KX8sHvQfSFg/mdX8FYlw==
-X-CSE-MsgGUID: HE3gHss+TNSR4z+uopchRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11232"; a="28576113"
+  bh=lk6aSBgrBEc1NRKveTngB3JmIdfkK85pmGw8ldyXGEM=;
+  b=jDCkvX03/huqOv9OCFLUhyZNVFMGWBbyKTlgR/wnxJYazWZsDQPUCQM7
+   2T4IjQTJaQYGsdhVKQPavrenUyzaYXULy+b/3wY7QvynhCvCMu3+2IOjF
+   Q4u0o5lUYyDIRqtA58zSrEd0yTi3A0H2pW/qv4mgFa7mEclh6W2UtsoI/
+   HHCfCMR2wzNsTDDTh0aPvYeSVGOF4Cx+EPQmsmajZLy8Io8PX9KP7Yz7J
+   Pmoi8+cJUuxN2GKMHyNJSKbjSDlMQr9yWBJZ7slpdoDKv6SQhh225apvZ
+   Va3F4h6jdaeGOrGCsvI0Bk8Fi5VuSb1mqbtlmUzi9IiQhP0tvFe9UdYPK
+   w==;
+X-CSE-ConnectionGUID: n3AZpRW8QcGuh88Fjm7UGA==
+X-CSE-MsgGUID: oaDVxDQaSQ67NQZvyGWlog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11232"; a="29014468"
 X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="28576113"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 03:54:34 -0700
-X-CSE-ConnectionGUID: NdOLb1o0RbW1+aP4lKu0SA==
-X-CSE-MsgGUID: 9TAyYRUXTaGr2WKKDRezrA==
+   d="scan'208";a="29014468"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 04:05:40 -0700
+X-CSE-ConnectionGUID: M5Fes5M9R4qe3m5f1zbR5Q==
+X-CSE-MsgGUID: bsraSG9CSeiejIeei9+NFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="79392636"
+   d="scan'208";a="79778327"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 22 Oct 2024 03:54:32 -0700
+  by orviesa010.jf.intel.com with ESMTP; 22 Oct 2024 04:05:33 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t3CX0-000TSU-0B;
-	Tue, 22 Oct 2024 10:54:30 +0000
-Date: Tue, 22 Oct 2024 18:54:14 +0800
+	id 1t3Che-000TTS-2k;
+	Tue, 22 Oct 2024 11:05:30 +0000
+Date: Tue, 22 Oct 2024 19:04:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org
+To: Inochi Amaoto <inochiama@gmail.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
-Subject: Re: [PATCH v2 4/5] drm/xe/bo: Create new dma_addr array for dmabuf
- BOs associated with VFs
-Message-ID: <202410221832.R04DR21j-lkp@intel.com>
-References: <20241021052236.1820329-5-vivek.kasireddy@intel.com>
+	netdev@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 4/4] net: stmmac: Add glue layer for Sophgo SG2044 SoC
+Message-ID: <202410221853.0nt4WyvW-lkp@intel.com>
+References: <20241021103617.653386-5-inochiama@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,76 +84,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241021052236.1820329-5-vivek.kasireddy@intel.com>
+In-Reply-To: <20241021103617.653386-5-inochiama@gmail.com>
 
-Hi Vivek,
+Hi Inochi,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on drm-xe/drm-xe-next]
-[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.12-rc4 next-20241021]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on sophgo/for-next sophgo/fixes net-next/main net/main linus/master v6.12-rc4 next-20241021]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Kasireddy/PCI-P2PDMA-Don-t-enforce-ACS-check-for-functions-of-same-device/20241021-134804
-base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-patch link:    https://lore.kernel.org/r/20241021052236.1820329-5-vivek.kasireddy%40intel.com
-patch subject: [PATCH v2 4/5] drm/xe/bo: Create new dma_addr array for dmabuf BOs associated with VFs
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241022/202410221832.R04DR21j-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Inochi-Amaoto/dt-bindings-net-snps-dwmac-Add-dwmac-5-30a-version/20241021-184301
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20241021103617.653386-5-inochiama%40gmail.com
+patch subject: [PATCH 4/4] net: stmmac: Add glue layer for Sophgo SG2044 SoC
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241022/202410221853.0nt4WyvW-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241022/202410221832.R04DR21j-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241022/202410221853.0nt4WyvW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410221832.R04DR21j-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410221853.0nt4WyvW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/xe/xe_bo.c:591:15: error: subscript of pointer to incomplete type 'struct drm_pagemap_dma_addr'
-     591 |                 bo->dma_addr[i] = drm_pagemap_dma_addr_encode(addr,
-         |                 ~~~~~~~~~~~~^
-   drivers/gpu/drm/xe/xe_bo_types.h:78:9: note: forward declaration of 'struct drm_pagemap_dma_addr'
-      78 |         struct drm_pagemap_dma_addr *dma_addr;
-         |                ^
->> drivers/gpu/drm/xe/xe_bo.c:591:21: error: call to undeclared function 'drm_pagemap_dma_addr_encode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     591 |                 bo->dma_addr[i] = drm_pagemap_dma_addr_encode(addr,
-         |                                   ^
->> drivers/gpu/drm/xe/xe_bo.c:592:7: error: use of undeclared identifier 'DRM_INTERCONNECT_DRIVER'
-     592 |                                                 DRM_INTERCONNECT_DRIVER,
-         |                                                 ^
->> drivers/gpu/drm/xe/xe_bo.c:626:48: error: invalid application of 'sizeof' to an incomplete type 'struct drm_pagemap_dma_addr'
-     626 |         bo->dma_addr = kmalloc_array(sg->nents, sizeof(*bo->dma_addr),
-         |                                                       ^~~~~~~~~~~~~~~
-   include/linux/slab.h:925:63: note: expanded from macro 'kmalloc_array'
-     925 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
-         |                                                                                  ^~~~~~~~~~~
-   include/linux/alloc_tag.h:210:31: note: expanded from macro 'alloc_hooks'
-     210 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:202:9: note: expanded from macro 'alloc_hooks_tag'
-     202 |         typeof(_do_alloc) _res = _do_alloc;                             \
-         |                ^~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo_types.h:78:9: note: forward declaration of 'struct drm_pagemap_dma_addr'
-      78 |         struct drm_pagemap_dma_addr *dma_addr;
-         |                ^
->> drivers/gpu/drm/xe/xe_bo.c:626:48: error: invalid application of 'sizeof' to an incomplete type 'struct drm_pagemap_dma_addr'
-     626 |         bo->dma_addr = kmalloc_array(sg->nents, sizeof(*bo->dma_addr),
-         |                                                       ^~~~~~~~~~~~~~~
-   include/linux/slab.h:925:63: note: expanded from macro 'kmalloc_array'
-     925 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
-         |                                                                                  ^~~~~~~~~~~
-   include/linux/alloc_tag.h:210:31: note: expanded from macro 'alloc_hooks'
-     210 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:202:27: note: expanded from macro 'alloc_hooks_tag'
-     202 |         typeof(_do_alloc) _res = _do_alloc;                             \
-         |                                  ^~~~~~~~~
-   drivers/gpu/drm/xe/xe_bo_types.h:78:9: note: forward declaration of 'struct drm_pagemap_dma_addr'
-      78 |         struct drm_pagemap_dma_addr *dma_addr;
-         |                ^
-   5 errors generated.
+>> drivers/net/ethernet/stmicro/stmmac/dwmac-sophgo.c:41:2: warning: variable 'rate' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+      41 |         default:
+         |         ^~~~~~~
+   drivers/net/ethernet/stmicro/stmmac/dwmac-sophgo.c:46:36: note: uninitialized use occurs here
+      46 |         ret = clk_set_rate(dwmac->clk_tx, rate);
+         |                                           ^~~~
+   drivers/net/ethernet/stmicro/stmmac/dwmac-sophgo.c:28:20: note: initialize the variable 'rate' to silence this warning
+      28 |         unsigned long rate;
+         |                           ^
+         |                            = 0
+   1 warning generated.
 
 Kconfig warnings: (for reference only)
    WARNING: unmet direct dependencies detected for MODVERSIONS
@@ -145,76 +130,35 @@ Kconfig warnings: (for reference only)
    - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +591 drivers/gpu/drm/xe/xe_bo.c
+vim +/rate +41 drivers/net/ethernet/stmicro/stmmac/dwmac-sophgo.c
 
-   570	
-   571	
-   572	static void xe_bo_translate_iova_to_dpa(struct iommu_domain *domain,
-   573						struct xe_bo *bo, struct sg_table *sg,
-   574						resource_size_t io_start, int vfid)
-   575	{
-   576		struct xe_device *xe = xe_bo_device(bo);
-   577		struct xe_gt *gt = xe_root_mmio_gt(xe);
-   578		struct scatterlist *sgl;
-   579		struct xe_bo *lmem_bo;
-   580		phys_addr_t phys;
-   581		dma_addr_t addr;
-   582		u64 offset, i;
-   583	
-   584		lmem_bo = xe_gt_sriov_pf_config_get_lmem_obj(gt, ++vfid);
-   585	
-   586		for_each_sgtable_dma_sg(sg, sgl, i) {
-   587			phys = iommu_iova_to_phys(domain, sg_dma_address(sgl));
-   588			offset = phys - io_start;
-   589			addr = xe_bo_addr(lmem_bo, offset, sg_dma_len(sgl));
-   590	
- > 591			bo->dma_addr[i] = drm_pagemap_dma_addr_encode(addr,
- > 592							DRM_INTERCONNECT_DRIVER,
-   593							get_order(sg_dma_len(sgl)),
-   594							DMA_BIDIRECTIONAL);
-   595		}
-   596	}
-   597	
-   598	static int xe_bo_sg_to_dma_addr_array(struct sg_table *sg, struct xe_bo *bo)
-   599	{
-   600		struct xe_device *xe = xe_bo_device(bo);
-   601		struct iommu_domain *domain;
-   602		resource_size_t io_start;
-   603		struct pci_dev *pdev;
-   604		phys_addr_t phys;
-   605		int vfid;
-   606	
-   607		if (!IS_SRIOV_PF(xe))
-   608			return 0;
-   609	
-   610		domain = iommu_get_domain_for_dev(xe->drm.dev);
-   611		if (!domain)
-   612			return 0;
-   613	
-   614		phys = iommu_iova_to_phys(domain, sg_dma_address(sg->sgl));
-   615		if (page_is_ram(PFN_DOWN(phys)))
-   616			return 0;
-   617	
-   618		pdev = xe_find_vf_dev(xe, phys);
-   619		if (!pdev)
-   620			return 0;
-   621	
-   622		vfid = pci_iov_vf_id(pdev);
-   623		if (vfid < 0)
-   624			return 0;
-   625	
- > 626		bo->dma_addr = kmalloc_array(sg->nents, sizeof(*bo->dma_addr),
-   627					     GFP_KERNEL);
-   628		if (!bo->dma_addr)
-   629			return -ENOMEM;
-   630	
-   631		bo->is_devmem_external = true;
-   632		io_start = pci_resource_start(pdev, LMEM_BAR);
-   633		xe_bo_translate_iova_to_dpa(domain, bo, sg, io_start, vfid);
-   634	
-   635		return 0;
-   636	}
-   637	
+    24	
+    25	static void sophgo_dwmac_fix_mac_speed(void *priv, unsigned int speed, unsigned int mode)
+    26	{
+    27		struct sophgo_dwmac *dwmac = priv;
+    28		unsigned long rate;
+    29		int ret;
+    30	
+    31		switch (speed) {
+    32		case SPEED_1000:
+    33			rate = 125000000;
+    34			break;
+    35		case SPEED_100:
+    36			rate = 25000000;
+    37			break;
+    38		case SPEED_10:
+    39			rate = 2500000;
+    40			break;
+  > 41		default:
+    42			dev_err(dwmac->dev, "invalid speed %u\n", speed);
+    43			break;
+    44		}
+    45	
+    46		ret = clk_set_rate(dwmac->clk_tx, rate);
+    47		if (ret)
+    48			dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+    49	}
+    50	
 
 -- 
 0-DAY CI Kernel Test Service
