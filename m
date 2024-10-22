@@ -1,56 +1,56 @@
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1417F143871
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 01:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A6F135A79
+	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 01:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729562368; cv=none; b=Dy68uugSokEdu15JVxS7mVP7e0OrvNLfhILQWu9nVkTHkHH9wNX+hxZhfX16Yxo4sSYg4pbbSLhlUTmf5CjAwMYTZ5JagopL/TSBlPR7aNWEfK2+aOepEeXw8CuJcJ92GuYKxgivH+a/M0S9yFotD8X0igsTLUVmxwf4h6s2rGc=
+	t=1729562369; cv=none; b=brd0wuMfkT6rk2Mw/6Qd3W3+nMWR48hQDtuBHbQO6hbzu2K8LtTyQO7ZKuNF2kiwoqzxzHcTaMamx1/QLsaYJ2XxwEWS8alvZMUMitnZXFMFjk+PxhDcwo0kiG+1hQkYFf4klKCNHeyR+XFKq/hwx584i900llUZ65iEzKeQCco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729562368; c=relaxed/simple;
-	bh=81X2pPkAnK+T4NW+tJgsONRnsJlo9lmW5DNhEhbK3Pc=;
+	s=arc-20240116; t=1729562369; c=relaxed/simple;
+	bh=es7nwt1Z8plGrwhcKNpUqYOJPExE/gGaHXH3HFNnqdo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jfSNoMP8i7vsSqD0j4wKCq46k/rTVOaZ9St5R3oMMyAZUjjGhfVafFhGFNyjlUUo1vAMZvN6YNgVEWRLHWzJqSkl2dTNK9umoNn+SNIHjxzVoHKmgsFqtF87YjRWcgZijKc7LsApxWg5SOWsqLRsNGVtQWrdYecIMG0BRkvPdyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=TJ3SHR+z; arc=none smtp.client-ip=209.85.160.49
+	 MIME-Version; b=ebkbCfimSS2YzSQXyk9k4tpoGfLhFO2mJVlqads3Y6rmr8MSpv99es1iTXTLRB0TiaA/EANDNEAblWqnAFJ7OVFp/Gpykofzg7UW1bcj86ychv3FXXRFHlXy5V8YRmBs5W0Orx8Np/Akb4A92LyDDDqZEixOU3049yyV21faPBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Y/SdcYpv; arc=none smtp.client-ip=209.85.161.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="TJ3SHR+z"
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-287b8444ff3so2020160fac.1
-        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 18:59:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Y/SdcYpv"
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5ebc0e13d25so694091eaf.1
+        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 18:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1729562365; x=1730167165; darn=lists.linux.dev;
+        d=sifive.com; s=google; t=1729562367; x=1730167167; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FpfVj+cCklKKT0meu9E3X+82meKkLqCR+uZsOKWdYis=;
-        b=TJ3SHR+zL3Yfccj9Op5/7F0Sdohm2sYZLttbUkx+K0u/9m3xUrwPgfjobVUzqps9s+
-         3CAH4JQVjm+L+bOZ0fvErZpdpWyxss2MMfAqqu9caf5Fki7xoxzvMvgFyD7aKHMpfMG6
-         J/ePTtW5gissdJzMF2xAbAP0oeTqLQNjzxY418kxLr1ziH567ARvgyxNzo0+DoWU5uoO
-         L0ue+DDpiJ9IWTPKXleFUw2hQyYfMoko7cV8lYcIcP9gaZttvisPTXafNwHLohXKo191
-         Ol/TDXTtRaZB0aEY3vlLazzdAKEhN/UG0kElG8iQiuNTTzm3Tcysezq1PC+UwuFX6JuJ
-         FVkQ==
+        bh=jOWNg37CI6wBNjlK3WTwIizp4MumcxiO1pDVtn3VcZ8=;
+        b=Y/SdcYpvmt0dO+/VDTc4ucclQSGr3qGCmCbfSZ2cVjTrPdsmZbLwRBzTaIvJ6Gtyr/
+         p4fqCLxZsgHt07SMGVsKW6dhckCUUSsS4hzcuRwnzzykruOMIAvMRmx7wRbrLZHDLp5B
+         Ct5ya+qJQMBEwydiCXsU7FPF9vkJFuaEj6K819U+RWMUi26aCrFzh7PTnChBgUx/5h+W
+         OArALuHLI295WdhNK8B7NPE7rvfuwCzyJQRZ5nXYcpkknoQpcvF95t2H93ioGJA16fvl
+         CsTz1dx0/Wj2l3TqudCJNhTZvtSopIGHw4v8uz99EyeVdeIxh1ifyqENNOosXQAZkIOS
+         zqCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729562365; x=1730167165;
+        d=1e100.net; s=20230601; t=1729562367; x=1730167167;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FpfVj+cCklKKT0meu9E3X+82meKkLqCR+uZsOKWdYis=;
-        b=qFBN7FoXDSRk+ngIwMTUYiPVWJb0yCHsZ9tCzcaFJCWKdi5QU/A/Fh3N0YzI8tmHsm
-         TTnt3dGtRGFIr33zajhsnWcoOHcIfisU9augcakVZS8Lm22y1b9SMw2RYFOAQYpvUxQ7
-         0tn3xwUuwm+RBEqjtwOcW/JZHBBANY2oQh92A2r4ePA9FXXj1JD/oPGCNSEzf0VIBEuG
-         lWhsZOGhj3EVaZ3qzjxaAE8gtFcB8y+HcmpnQmyuIc17KPa8ZtvfEtFLjONQeJmtbfdP
-         uUseTayLiILRZUKUwtEf0cDbzk8X3b/1LRWWbed4b2Rq8/AAqVPw4vvOeB3keBlnEME5
-         68vA==
-X-Gm-Message-State: AOJu0Yw7ZPmkJ4/b3Ui0EveoP7b/y56tUPEeZJ9pNYyfxxrUvSfEgEK8
-	yxXmluA8whKHPViISpXGGbpPDDGkbxOp1e6Z1RjeQ7cR+T/SqisKK+ixBLCEPXY=
-X-Google-Smtp-Source: AGHT+IF8mODh9IAJs797PRe4iXy3b/dNIvInfpWpmRrPkiuy4gHecBRUAsqzv6T0/gnC7v7yNiNl4Q==
-X-Received: by 2002:a05:6870:148f:b0:27b:61df:2160 with SMTP id 586e51a60fabf-28cb010575fmr1017968fac.31.1729562365145;
-        Mon, 21 Oct 2024 18:59:25 -0700 (PDT)
+        bh=jOWNg37CI6wBNjlK3WTwIizp4MumcxiO1pDVtn3VcZ8=;
+        b=l/xNr9iwxeAMtnB2NimwHHfVtNdkOjW9p6SbvStUM/huCq2MHQKc6Ui2prnCdn6LVL
+         o6VKsbFBSOOF0qXXOnbovKiLAdeKZhOULMO38gOrc0kR+vtEuAuxjfAwGss6gyzJgCh1
+         kIcgoq1eFAV6bM9ybdqKdwgUEuFP5abo3P1okIEfsNE4O8umIBTFQq8+RSoe0G9lo/cP
+         urwOQciBYPPQmc8IV/yrj89RRaBosqFFxpZozxyiiV6VYGCFaUqggZNZTuSSHiv8+d4/
+         UllfkCW+7ALrPduol5yF8XvPd6Dw7l9e/obIKe3eIldLsm1KKOmf+lHMOgTyWBDTcuQK
+         DDPw==
+X-Gm-Message-State: AOJu0YyVbNUuuqPeF8jeBNHs/PFdtwE+CQUCVwYDFSPXxZCpI8zb2SPy
+	0yVcl1a/0hD6bT0FRwH/RnjMrpnD9zcf9bMrMI2gkbkaIrVlC7FC/Y6vwQ1rlyw=
+X-Google-Smtp-Source: AGHT+IHErzREUGw6ROMLMvLXYHp4zadEF+Dwq950EYc2048lR/Pu3YsD3Bs92QVrt5aBEWQnl13Wpw==
+X-Received: by 2002:a05:6871:109:b0:288:b220:a57e with SMTP id 586e51a60fabf-28cb0184ff2mr946194fac.40.1729562366823;
+        Mon, 21 Oct 2024 18:59:26 -0700 (PDT)
 Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm3600710b3a.46.2024.10.21.18.59.23
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm3600710b3a.46.2024.10.21.18.59.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 18:59:24 -0700 (PDT)
+        Mon, 21 Oct 2024 18:59:26 -0700 (PDT)
 From: Samuel Holland <samuel.holland@sifive.com>
 To: Palmer Dabbelt <palmer@dabbelt.com>,
 	linux-riscv@lists.infradead.org,
@@ -70,9 +70,9 @@ Cc: llvm@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	linux-arm-kernel@lists.infradead.org,
 	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v2 5/9] riscv: mm: Log potential KASAN shadow alias
-Date: Mon, 21 Oct 2024 18:57:13 -0700
-Message-ID: <20241022015913.3524425-6-samuel.holland@sifive.com>
+Subject: [PATCH v2 6/9] riscv: Do not rely on KASAN to define the memory layout
+Date: Mon, 21 Oct 2024 18:57:14 -0700
+Message-ID: <20241022015913.3524425-7-samuel.holland@sifive.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20241022015913.3524425-1-samuel.holland@sifive.com>
 References: <20241022015913.3524425-1-samuel.holland@sifive.com>
@@ -84,45 +84,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When KASAN is enabled, shadow memory is allocated and mapped for all
-legitimate kernel addresses, but not for the entire address space. As a
-result, the kernel can fault when accessing a shadow address computed
-from a bogus pointer. This can be confusing, because the shadow address
-computed for (e.g.) NULL looks nothing like a NULL pointer. To assist
-debugging, if the faulting address might be the result of a KASAN shadow
-memory address computation, report the range of original memory
-addresses that would map to the faulting address.
+Commit 66673099f734 ("riscv: mm: Pre-allocate vmemmap/direct map/kasan
+PGD entries") used the start of the KASAN shadow memory region to
+represent the end of the linear map, since the two memory regions were
+immediately adjacent. This is no longer the case for Sv39; commit
+5c8405d763dc ("riscv: Extend sv39 linear mapping max size to 128G")
+introduced a 4 GiB hole between the regions. Introducing KASAN_SW_TAGS
+will cut the size of the shadow memory region in half, creating an even
+larger hole.
+
+Avoid wasting PGD entries on this hole by using the size of the linear
+map (KERN_VIRT_SIZE) to compute PAGE_END.
+
+Since KASAN_SHADOW_START/KASAN_SHADOW_END are used inside an IS_ENABLED
+block, it's not possible to completely hide the constants when KASAN is
+disabled, so provide dummy definitions for that case.
 
 Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 ---
 
-Changes in v2:
- - New patch for v2
+(no changes since v1)
 
- arch/riscv/mm/fault.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/riscv/include/asm/kasan.h | 11 +++++++++--
+ arch/riscv/mm/init.c           |  2 +-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index a9f2b4af8f3f..dae1131221b7 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -8,6 +8,7 @@
+diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
+index e6a0071bdb56..a4e92ce9fa31 100644
+--- a/arch/riscv/include/asm/kasan.h
++++ b/arch/riscv/include/asm/kasan.h
+@@ -6,6 +6,8 @@
  
+ #ifndef __ASSEMBLY__
  
- #include <linux/mm.h>
-+#include <linux/kasan.h>
- #include <linux/kernel.h>
- #include <linux/interrupt.h>
- #include <linux/perf_event.h>
-@@ -30,6 +31,8 @@ static void die_kernel_fault(const char *msg, unsigned long addr,
- 	pr_alert("Unable to handle kernel %s at virtual address " REG_FMT "\n", msg,
- 		addr);
- 
-+	kasan_non_canonical_hook(addr);
++#ifdef CONFIG_KASAN
 +
- 	bust_spinlocks(0);
- 	die(regs, "Oops");
- 	make_task_dead(SIGKILL);
+ /*
+  * The following comment was copied from arm64:
+  * KASAN_SHADOW_START: beginning of the kernel virtual addresses.
+@@ -33,13 +35,18 @@
+ #define KASAN_SHADOW_START	((KASAN_SHADOW_END - KASAN_SHADOW_SIZE) & PGDIR_MASK)
+ #define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
+ 
+-#ifdef CONFIG_KASAN
+ #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+ 
+ void kasan_init(void);
+ asmlinkage void kasan_early_init(void);
+ void kasan_swapper_init(void);
+ 
+-#endif
++#else /* CONFIG_KASAN */
++
++#define KASAN_SHADOW_START	MODULES_LOWEST_VADDR
++#define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
++
++#endif /* CONFIG_KASAN */
++
+ #endif
+ #endif /* __ASM_KASAN_H */
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 0e8c20adcd98..1f9bb95c2169 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -1494,7 +1494,7 @@ static void __init preallocate_pgd_pages_range(unsigned long start, unsigned lon
+ 	panic("Failed to pre-allocate %s pages for %s area\n", lvl, area);
+ }
+ 
+-#define PAGE_END KASAN_SHADOW_START
++#define PAGE_END (PAGE_OFFSET + KERN_VIRT_SIZE)
+ 
+ void __init pgtable_cache_init(void)
+ {
 -- 
 2.45.1
 
