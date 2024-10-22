@@ -1,130 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 192041C9EDE
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 19:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEE91A2658;
+	Tue, 22 Oct 2024 19:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729624464; cv=none; b=cE+xGAtnYf1depKaFrF5WEfxYPQO860WT9AUQdf9jbPFe8NT8UAHdLR+q0OqmguOveW6R9PUgOH2BblcYUF8pt0DqjkcgEUOnrX3w5lY+OxsWANstrGTlwh1i3ZV7mkUXmPZc3/FN3AFglDICIXUkgqdRNm6FxORUitQwbT6IUg=
+	t=1729625467; cv=none; b=tHFbiLbtKbm3ptpLAmuXXiEDnppZ9mZhWBq9BELLF0/tUs1FrLdz4b4meqIxTBNZfgHsY/8rhuTbzaGPuKq7WIe73Pk1I49EdZM+U909svKWA0klLIzhgFza3SQ05xU28ojViMEaASUi9SR9GR+o1oKhScRCGABzNL8uWPhPeYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729624464; c=relaxed/simple;
-	bh=uHUamMLNZya/Dg5wH7xYKJbw/Ck5LzicPdJXaoU8low=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GUcmblApth9uv/twETTEVL9lKuc8l7q/x5TMfVBn+llHOGPca4IzJdB/3EzSIEGqfillaVi1R33lrQsS+KB4opwcjNDz+n/7ybINRt1mQemoRht5qq7O+qmSBfQqu7/zOHQjlUL/lviM/G8F+vWsve5aj2LkOqggXxA+0DUUmxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NsUgvTTC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729625467; c=relaxed/simple;
+	bh=5IQ/ppc7+JlLPx+hkAOzlEt+fDBk4swp5GV5ul9evFw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c7wT/mIGIuBORfaY8hhBOqFMXO42I6drniPGdp24FubjhLQ2Lum6SsQih7yKcksg1ZAlaauWE0gB0vp6sMXrVZZ8GMm18WyUi6V3t6zEm4Ya6iZewjap51ZvnzYrMJQUKAL3mOH2A4IhUER5/IFKCGBDPVB9dhCcT8d1wBCgesA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rl3E10eC; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NsUgvTTC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A5DC4CEE9
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 19:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729624463;
-	bh=uHUamMLNZya/Dg5wH7xYKJbw/Ck5LzicPdJXaoU8low=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NsUgvTTCHLbANbl+TT5iIgdKG1GIHJkja5034hLOhbs6BXQKCfY/rkBc+xptGU/MK
-	 C/NCk1PuS4BpO7eBg8rYxB/IcDNwqtSDqVXahGUt50HRalpkqpQe1MoRnfcxFQneVI
-	 lBbBQetDgbaj30vDd9qphqVKUh/3/zTHl9mvo2RBic121oo+L2Ut4B/CVc40Fud/nJ
-	 rvMud6q7Z/93qBBGogO6OTb+I+pZamDY9/6Qnt9C4ZrjIlbTPHFnUIYYZ99Xdm+boI
-	 Lh8gUVLBPXHXB9bhJ40Uied6K4mrNoXSMVMhWYF1iVDnJjsAwZG1vr4UCLbaf+ed1f
-	 c3qed+BxQJshA==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539983beb19so6789775e87.3
-        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 12:14:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX9S3pKFJpa6szuiMZRb0TWa/E5UqUxpk2x6kPDlwA8QDNygNgOmT/b2gkO3EwOmhOE92ci@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3o9QHGdP+z2VD9y/v8llPf1uWeCXeg1Z8VpetgJ0ho67fFw3o
-	4QJcbHJ7p0Q8oK9JkO3czr9uogecMkbKoapOiFemU7RCszIIHlHQsS46oDxDNBEiMB5oozGAXvS
-	UozfKIqhgmEoWUlKXpEXDHWwXwIc=
-X-Google-Smtp-Source: AGHT+IG8GFGPMnQ0zL12TLGQaMyKF6buZv4x4/vPq9J6jmYsFg+ueGY9PqEVyfuEQIGDLomCDJcErvFiJY70CZ1EL6E=
-X-Received: by 2002:a05:6512:b8f:b0:539:f4c1:71d3 with SMTP id
- 2adb3069b0e04-53b13a04029mr2197034e87.29.1729624462430; Tue, 22 Oct 2024
- 12:14:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rl3E10eC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729625465; x=1761161465;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5IQ/ppc7+JlLPx+hkAOzlEt+fDBk4swp5GV5ul9evFw=;
+  b=Rl3E10eCSE/nLyu/Yy8eOzyi8CfHymf6ixmVBA1FIsROIuwNqQ1GCmIF
+   f5dFwvdDexDYsSAiqVbq2tZTklDvLsl7Z4tHQJv8zsdVZs8aljRBDjMdl
+   MIbyD5YByyml0EXo7jm3zITJzkXf6bWhkYtZngJdyFucXrk68S4g1Dgjz
+   GkTttgQ7KNSkrNPR87/xTpU5Xd0PWp4ctbYsLImg2vA3IfJbGGvd4BO//
+   4JV33Ou323065+LtdpfInt/oPXdzSWUEyp9nERc6npO84UdwWJ8CF5LAk
+   hYm+KPrPY+Qekcsqzks93HfB9lUygqbEw1TtvDzOBcXM65TEKNCnOqz6h
+   g==;
+X-CSE-ConnectionGUID: xBx7U7aTTf68nbfiPwc5aw==
+X-CSE-MsgGUID: vRLigxo9Taq1dVBs6Pqg3A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="29077387"
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="29077387"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 12:31:04 -0700
+X-CSE-ConnectionGUID: Pwm7nuaRS+OM+Ao/bzXSFQ==
+X-CSE-MsgGUID: VwQ5hbwkRxu5oP8/NSHLAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
+   d="scan'208";a="84759782"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 22 Oct 2024 12:31:00 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3Kan-000U0d-2J;
+	Tue, 22 Oct 2024 19:30:57 +0000
+Date: Wed, 23 Oct 2024 03:30:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Samuel Holland <samuel.holland@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	linux-riscv@lists.infradead.org,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	kasan-dev@googlegroups.com
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Will Deacon <will@kernel.org>,
+	Evgenii Stepanov <eugenis@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Samuel Holland <samuel.holland@sifive.com>
+Subject: Re: [PATCH v2 4/9] kasan: sw_tags: Support tag widths less than 8
+ bits
+Message-ID: <202410230354.sjewoFxA-lkp@intel.com>
+References: <20241022015913.3524425-5-samuel.holland@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com> <20241021201657.GA898643@thelio-3990X>
-In-Reply-To: <20241021201657.GA898643@thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 23 Oct 2024 04:13:45 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASaCqbOXaw2AhEuXCwt8M9dwbX=GthHL8XzbenOhGpe8g@mail.gmail.com>
-Message-ID: <CAK7LNASaCqbOXaw2AhEuXCwt8M9dwbX=GthHL8XzbenOhGpe8g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Koakuma <koachan@protonmail.com>, Andreas Larsson <andreas@gaisler.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, 
-	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241022015913.3524425-5-samuel.holland@sifive.com>
 
-On Tue, Oct 22, 2024 at 5:17=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hi Andreas,
->
-> On Wed, Jul 17, 2024 at 11:10:14PM +0700, Koakuma wrote:
-> > This changes the CFLAGS for building the SPARC kernel so that it can be
-> > built with clang, as a follow up from the discussion in this thread:
-> >
-> > https://lore.kernel.org/lkml/JAYB7uS-EdLABTR4iWZdtFOVa5MvlKosIrD_cKTzge=
-ozCOGRM7lhxeLigFB1g3exX445I_W5VKB-tAzl2_G1zCVJRQjp67ODfsSqiZWOZ9o=3D@proton=
-mail.com/T/#u
-> ...
-> > Building with these changes still result in a working kernel,
-> > at least for Sun T5120, Oracle T4-1, and qemu virtual machines.
-> >
-> > On the LLVM side, the effort for building Linux/SPARC is tracked here:
-> > https://github.com/llvm/llvm-project/issues/40792
-> >
-> > Signed-off-by: Koakuma <koachan@protonmail.com>
-> > ---
-> > Changes in v2:
-> > - Remove the -mv8plus change; it will be handled on clang side:
-> >   https://github.com/llvm/llvm-project/pull/98713
-> > - Add CLANG_TARGET_FLAGS as suggested in v1 review.
-> > - Link to v1: https://lore.kernel.org/r/20240620-sparc-cflags-v1-1-bba7=
-d0ff7d42@protonmail.com
-> >
-> > ---
-> > Koakuma (2):
-> >       sparc/build: Remove all usage of -fcall-used* flags
-> >       sparc/build: Add SPARC target flags for compiling with clang
-> >
-> >  arch/sparc/Makefile      | 4 ++--
-> >  arch/sparc/vdso/Makefile | 2 +-
-> >  scripts/Makefile.clang   | 1 +
-> >  3 files changed, 4 insertions(+), 3 deletions(-)
->
-> Would you be able to help move this series [1] and its companion patch
-> for the vDSO [2] along to Linus for 6.13? If you are not able to for
-> whatever reason but the changes look reasonable to you, would you be
-> able to provide an Ack so it can be chauffeured by someone else, such as
-> Masahiro/Kbuild or Andrew/-mm?
->
-> For the record, I retested these three changes on top of 6.12-rc4, where
-> they still apply cleanly. Now that the LLVM PR linked above (98713) has
-> been merged into LLVM main, a clang built straight from llvm-project.git
-> can build the kernel with this series (I tested at dca43a1c82f1).
->
-> [1]: https://lore.kernel.org/all/20240717-sparc-cflags-v2-0-259407e6eb5f@=
-protonmail.com/
-> [2]: https://lore.kernel.org/all/20240808-sparc-shr64-v2-1-fd18f1b2cea9@p=
-rotonmail.com/
->
-> Cheers,
-> Nathan
+Hi Samuel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on arm64/for-next/core masahiroy-kbuild/for-next masahiroy-kbuild/fixes linus/master v6.12-rc4 next-20241022]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/kasan-sw_tags-Use-arithmetic-shift-for-shadow-computation/20241022-100129
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241022015913.3524425-5-samuel.holland%40sifive.com
+patch subject: [PATCH v2 4/9] kasan: sw_tags: Support tag widths less than 8 bits
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241023/202410230354.sjewoFxA-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410230354.sjewoFxA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410230354.sjewoFxA-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/kasan.h:7,
+                    from include/linux/mm.h:31,
+                    from arch/sh/kernel/asm-offsets.c:14:
+>> include/linux/kasan-tags.h:5:10: fatal error: asm/kasan.h: No such file or directory
+       5 | #include <asm/kasan.h>
+         |          ^~~~~~~~~~~~~
+   compilation terminated.
+   make[3]: *** [scripts/Makefile.build:102: arch/sh/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-2/2 should update the "Supported Architectures"
-of Documentation/kbuild/llvm.rst if this is adding a new architecture suppo=
-rt.
+vim +5 include/linux/kasan-tags.h
 
+     4	
+   > 5	#include <asm/kasan.h>
+     6	
 
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
