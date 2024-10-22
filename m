@@ -1,56 +1,56 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655EF13A256
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 01:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CCD13B2AF
+	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 01:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729562364; cv=none; b=C7DUnFM0yUzoUzcxI1Eta0g4gWR4eW3f+PJOqBrtmjfAz1exILa2qPAuuklmK37jaxQn5uItiBjyA4fmaGeOubL8tdVIwE9zVN9JdiH7lQWrLbLOII8wR5AWjx6CmYfEBiagK9+ucyP6nrN1SX9T/fGqjXP9J9CiBg7GqNtl2Ew=
+	t=1729562365; cv=none; b=E7Z2OMl2soHQsLeEFyT+C+2Ps5x9DHeG1eZ41kzO1XuRrQMhWQ/N+2//BaMNuRjK9XgnoEgc1JhWEmIULlrCMljB986OFibNDjmojaUItcu3ngFYEkfMEoC7+MYfFPN+3QiTelkVzI5rcBOBwUo8JtvxrbbV+VB0OymwRIQqlk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729562364; c=relaxed/simple;
-	bh=S3WW3tHhxyvl0epyEFgv/DG+AYg+CTrcC41pnvrmNh0=;
+	s=arc-20240116; t=1729562365; c=relaxed/simple;
+	bh=+Dz1zDTNnnZFiDnTHeWJveL/m1srA4iD5OZPoMtZUFA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h782YrzekubZrJ+dfNOFRjW2QmTFU0G7RVore6YVwnuWRtQdBEU0lq5a7V21ZJbUftxH3Cm6FNFS4e36PYnkQG3yEtHCx9r4DT8uk2jL+Ulw9YWk+iLfx+Vd1VYTXwb24zEmsiQWUeJ/3i+HN49Kfjw+/PaVLwXNmUdvBgtfw2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=MXZ5/feP; arc=none smtp.client-ip=209.85.215.180
+	 MIME-Version; b=IxlNWOsqxGFFAOvZw04x17U53YwhOYzeDOt4VbwZMT05+gLmNSx6pvKLzGU4piKM5kng6Yimsqx7Ne71DoGsovognZmhj27h1T6iDagP9esxqcBL3UdnSbRw87/q7wlsZxcY7XuyH4e3Ss0kGelvv5x6gy3h/pjVa0j/Rsx7/HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Xd8YpFhd; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="MXZ5/feP"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7eb0bc007edso25130a12.3
-        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 18:59:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Xd8YpFhd"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-71e52582cf8so3545718b3a.2
+        for <llvm@lists.linux.dev>; Mon, 21 Oct 2024 18:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1729562362; x=1730167162; darn=lists.linux.dev;
+        d=sifive.com; s=google; t=1729562363; x=1730167163; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9FnCjcC1/gsDOd6L8rx/6dcUkVYp18eK0+PNRkpMvb8=;
-        b=MXZ5/feP1bKhj0C8lnakrmr7Zbpo17/LGZzSP5tkSPb0AkIvtKU9PW6gbfMDXnyj9o
-         ZhWFsN/JCV9UhhSkABJNdbTjLhyR6TKHgpZsNVOo7xiGi4VkLOpHBU8ktw8gQA1OBEbs
-         957JVMTUkRLnuozfjbnRYznH7XeikdfbAWMRCpMid+QkWlnmJCRXtdxvESJ7hzvaWwjj
-         qbnponWfOsxwwNOn4JCMGVB5hkUiZ0TkiB9Fnilqr0TdvirEhsDPiEns1foH/dbMnZmk
-         sA9uLkXmidT26UYC/Q0VU5TBimDBKO05whiSsviEvEWfHNN+fvaa91ZzCBAaooZt7MbQ
-         h09Q==
+        bh=Y/iY9Y4RpcnWjc25xyItwxMbRygrVUaVLlWUhwxh2UQ=;
+        b=Xd8YpFhd9rKfN4el0HRZi/RkOhcLXdcDC57ZosYxO95ANUak9cPYEPlZ+PD4aZ40M6
+         HGYAKz7mUTmV5Y59KCQMdlORsGeqVaxCyrMoD61pRxLMWiKng6hP9WpjrV24jHirXwP+
+         3rGqDCEG2jvF6y+979V7gMHCF/TTSqtPob1f07FoobuAw/gd5jpalPlN2hKYG0luXlDV
+         DnRm2eIGGeje/5da4BltD6G0rHPE2JQMyYuI/MTuQ+yuPM+JceIYM5NK3LOk2Ahw580h
+         Uq6b1LpbmNG2eevnQnP6b0B2KydT0Xvzrb5cbh2ESw1xXVIus1FGlLjwi1H6tE4FYg4N
+         tvcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729562362; x=1730167162;
+        d=1e100.net; s=20230601; t=1729562363; x=1730167163;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9FnCjcC1/gsDOd6L8rx/6dcUkVYp18eK0+PNRkpMvb8=;
-        b=SzBjvfDPUfMdu5lNbZZ3Bud4jxGicYciEVc607QXRpVy8g+q0NCTM4j+Z6fk/iSIfN
-         sOYuktA1e+L/yNnAm2TSd6ZGSFc+Hgx2uUo3/rmKRQd+hQko7Q1TaeA0hfx247BFFQmI
-         qPWHyEZYl6cHxTrsPT8YLJX+mEUByRRqW4lVoA9PQ8vIitHfRgYiCn90ILC4JbhqGGFS
-         J1Li1CaWLY1snGP7MzGZhO78mRn073AzbWI47tsP6fs1PqBoRyeVMlqse8uiFObLIim1
-         z8b8PWxewK4ZYqrayzzeNNyWaYT1K/gT4Zi1//WE9V4dtMIit7tjRhcNYNdyD8Kl6NKX
-         UKSQ==
-X-Gm-Message-State: AOJu0YyFBYAHqn6gcP0wsS1XmT3Y5QknWn8PGp4MpbuwH+psR0j+eP9o
-	yv0NGIjpJ0YKrOTmkAWbzzKNQMdVouk5qRFUbPvEO/+T+rPu4YZOdUjkUf5UiqE=
-X-Google-Smtp-Source: AGHT+IFrGG6oMYUOck7CBYXToXMnxG+Lx4oLmbcg4j3FeL+zQkCHcoYgP+J0xW6HIU5j3POtBJfPHg==
-X-Received: by 2002:a05:6a20:43a4:b0:1cc:9f25:54d4 with SMTP id adf61e73a8af0-1d96df0ed05mr1060384637.38.1729562361689;
-        Mon, 21 Oct 2024 18:59:21 -0700 (PDT)
+        bh=Y/iY9Y4RpcnWjc25xyItwxMbRygrVUaVLlWUhwxh2UQ=;
+        b=CyVTk0DMZUO+KHO8UQnf1NqK6Op9U+1i/cqXuRkB0GkFMMFtTvzAFF6tv0eYfo6cJo
+         PnFzxnIg9cQ9FL45EKD4k5qv0p8NgeYqW3IWqISzJL9zYW99wwreg8jylg1ZaDpylgSe
+         U6Tcvf+iikksAJC02PdXI9KasZXuYTNA2rhIOcV+oy/eKYMpp95k6Ow4Sd3xYKqBhKZg
+         EnxLd1JmijHTr+X1VFNzGuZXcDUaYZ+6OG30fDYTsYTpP0XuAAMLOi1FonhoTFrUCQND
+         YifyzAMBloZbrC3M17x07BZmj2meTgoQKSmDql4Fi8R1D7SE93k/j90MqU7w4x44Dh6U
+         ZH5Q==
+X-Gm-Message-State: AOJu0YzzhZMxIR8+RL15cs8p7yW+NJmj5Myg4VnaBD396C1A1YK74D37
+	0SQvnYImhE3rcPKJMRRg5sN71qHzleH46jrvtFQwJkiYjxySgLjLo0s2bPHp110=
+X-Google-Smtp-Source: AGHT+IFB0AudxwQCUfX+B+Q1Nd/kKdWsIXk3CQ+Qmrq1W4iGhp3wWHffFzDvMvs7eDfgOIFmgokQfg==
+X-Received: by 2002:a05:6a00:9298:b0:71e:5de:ad6d with SMTP id d2e1a72fcca58-71ea323b91dmr19028480b3a.24.1729562363415;
+        Mon, 21 Oct 2024 18:59:23 -0700 (PDT)
 Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm3600710b3a.46.2024.10.21.18.59.20
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec132ffdcsm3600710b3a.46.2024.10.21.18.59.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 18:59:21 -0700 (PDT)
+        Mon, 21 Oct 2024 18:59:23 -0700 (PDT)
 From: Samuel Holland <samuel.holland@sifive.com>
 To: Palmer Dabbelt <palmer@dabbelt.com>,
 	linux-riscv@lists.infradead.org,
@@ -70,9 +70,9 @@ Cc: llvm@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	linux-arm-kernel@lists.infradead.org,
 	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v2 3/9] kasan: sw_tags: Support outline stack tag generation
-Date: Mon, 21 Oct 2024 18:57:11 -0700
-Message-ID: <20241022015913.3524425-4-samuel.holland@sifive.com>
+Subject: [PATCH v2 4/9] kasan: sw_tags: Support tag widths less than 8 bits
+Date: Mon, 21 Oct 2024 18:57:12 -0700
+Message-ID: <20241022015913.3524425-5-samuel.holland@sifive.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20241022015913.3524425-1-samuel.holland@sifive.com>
 References: <20241022015913.3524425-1-samuel.holland@sifive.com>
@@ -84,55 +84,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This allows stack tagging to be disabled at runtime by tagging all
-stack objects with the match-all tag. This is necessary on RISC-V,
-where a kernel with KASAN_SW_TAGS enabled is expected to boot on
-hardware without pointer masking support.
+Allow architectures to override KASAN_TAG_KERNEL in asm/kasan.h. This
+is needed on RISC-V, which supports 57-bit virtual addresses and 7-bit
+pointer tags. For consistency, move the arm64 MTE definition of
+KASAN_TAG_MIN to asm/kasan.h, since it is also architecture-dependent;
+RISC-V's equivalent extension is expected to support 7-bit hardware
+memory tags.
 
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 ---
 
-Changes in v2:
- - Split the generic and RISC-V parts of stack tag generation control
-   to avoid breaking bisectability
+(no changes since v1)
 
- mm/kasan/kasan.h   | 2 ++
- mm/kasan/sw_tags.c | 9 +++++++++
- 2 files changed, 11 insertions(+)
+ arch/arm64/include/asm/kasan.h   |  6 ++++--
+ arch/arm64/include/asm/uaccess.h |  1 +
+ include/linux/kasan-tags.h       | 13 ++++++++-----
+ 3 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index f438a6cdc964..72da5ddcceaa 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -636,6 +636,8 @@ void *__asan_memset(void *addr, int c, ssize_t len);
- void *__asan_memmove(void *dest, const void *src, ssize_t len);
- void *__asan_memcpy(void *dest, const void *src, ssize_t len);
+diff --git a/arch/arm64/include/asm/kasan.h b/arch/arm64/include/asm/kasan.h
+index e1b57c13f8a4..4ab419df8b93 100644
+--- a/arch/arm64/include/asm/kasan.h
++++ b/arch/arm64/include/asm/kasan.h
+@@ -6,8 +6,10 @@
  
-+u8 __hwasan_generate_tag(void);
+ #include <linux/linkage.h>
+ #include <asm/memory.h>
+-#include <asm/mte-kasan.h>
+-#include <asm/pgtable-types.h>
 +
- void __hwasan_load1_noabort(void *);
- void __hwasan_store1_noabort(void *);
- void __hwasan_load2_noabort(void *);
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index 220b5d4c6876..32435d33583a 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -70,6 +70,15 @@ u8 kasan_random_tag(void)
- 	return (u8)(state % (KASAN_TAG_MAX + 1));
- }
++#ifdef CONFIG_KASAN_HW_TAGS
++#define KASAN_TAG_MIN			0xF0 /* minimum value for random tags */
++#endif
  
-+u8 __hwasan_generate_tag(void)
-+{
-+	if (!kasan_enabled())
-+		return KASAN_TAG_KERNEL;
+ #define arch_kasan_set_tag(addr, tag)	__tag_set(addr, tag)
+ #define arch_kasan_reset_tag(addr)	__tag_reset(addr)
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index 1aa4ecb73429..8f700a7dd2cd 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -22,6 +22,7 @@
+ #include <asm/cpufeature.h>
+ #include <asm/mmu.h>
+ #include <asm/mte.h>
++#include <asm/mte-kasan.h>
+ #include <asm/ptrace.h>
+ #include <asm/memory.h>
+ #include <asm/extable.h>
+diff --git a/include/linux/kasan-tags.h b/include/linux/kasan-tags.h
+index 4f85f562512c..e07c896f95d3 100644
+--- a/include/linux/kasan-tags.h
++++ b/include/linux/kasan-tags.h
+@@ -2,13 +2,16 @@
+ #ifndef _LINUX_KASAN_TAGS_H
+ #define _LINUX_KASAN_TAGS_H
+ 
++#include <asm/kasan.h>
 +
-+	return kasan_random_tag();
-+}
-+EXPORT_SYMBOL(__hwasan_generate_tag);
++#ifndef KASAN_TAG_KERNEL
+ #define KASAN_TAG_KERNEL	0xFF /* native kernel pointers tag */
+-#define KASAN_TAG_INVALID	0xFE /* inaccessible memory tag */
+-#define KASAN_TAG_MAX		0xFD /* maximum value for random tags */
++#endif
 +
- bool kasan_check_range(const void *addr, size_t size, bool write,
- 			unsigned long ret_ip)
- {
++#define KASAN_TAG_INVALID	(KASAN_TAG_KERNEL - 1) /* inaccessible memory tag */
++#define KASAN_TAG_MAX		(KASAN_TAG_KERNEL - 2) /* maximum value for random tags */
+ 
+-#ifdef CONFIG_KASAN_HW_TAGS
+-#define KASAN_TAG_MIN		0xF0 /* minimum value for random tags */
+-#else
++#ifndef KASAN_TAG_MIN
+ #define KASAN_TAG_MIN		0x00 /* minimum value for random tags */
+ #endif
+ 
 -- 
 2.45.1
 
