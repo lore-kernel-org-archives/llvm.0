@@ -1,140 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FC114B97E;
-	Tue, 22 Oct 2024 23:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF1019CC28
+	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 23:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729638614; cv=none; b=kIjQ9sKaEsPeZd0/osAMJeiQMXqnlWHsre87HsZSMbq24vsvFtqnjcVjKfLNt8GKJmgzg/e3t/4Nj7JMez9cqVzgC0ffFBtdx17XO8LzdhPV7UmxWQQeZBa2/a75AGOXqgHUo8ZJw5T+kYSOEeZYGc9WgS2gMXcgRFO+MMyf6L4=
+	t=1729640180; cv=none; b=WbyDjQLtp79AWJPIb1cv3LGTBh7oGNPSXwdLGrUcRv0SbHnIHKUPGe7/SNbBrPqBPjkJMmLNYw2tIgJ0CpeG5VwL+khqqcdzBxElfZ8S9soIPYH4BacQae+J0RZjtjRRNjGVCv2Bf4iWCsJk+9oab+jjnqjkorWWeOS6ALdiKuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729638614; c=relaxed/simple;
-	bh=/9YrD5LpHK5gnoTpGzdU9uKix+1nU1xm/igNCQo2fIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPgPP2VZiHncTYZD2UuCZXWRBoKekd2GdEshjjViYl4C73bhVYm7zcojbnyjjaP2aO0N0nWJ9e4VcbGJ2Ut2BeospT5n7nLP7XnzjxabB/TJRdaNEMCpLIENAmnvD+jg9BD1l4tbIV6/F1eYi4v3HYNAqYxAawX2LgLBZIq9SX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m0MRTff/; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729640180; c=relaxed/simple;
+	bh=78Khv5juGgQH/Jy7dvVkLWEo852D6IKfW/q7DCFoFl8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=fu+tWQhLO2UIJ77td8JIKYAQWo5/8hq57yvCsNKT+wWMmESgxPtvY8kjNr20KnSx0qUf6fm1MMYcBrTVJ1dvKe9or/N5Mm5Z0+keObpNaA/Fr2AXt6BP9tv//Gzjr2Ou5y+NSqpS0m3LcJsfHMhEQPqRUoWeqqBsPqISZVaWNZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=q5GDxAjn; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m0MRTff/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729638613; x=1761174613;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/9YrD5LpHK5gnoTpGzdU9uKix+1nU1xm/igNCQo2fIU=;
-  b=m0MRTff/ziAwnfpnwGu7ae2EsgLWcYtVhVyhZf5HgI3kBa0lFflLmrSp
-   lC3ZVE4n52kh33IxCMJPrd6AbARd43pp7aY7Ij0x0vF16bpNGc5vsYBFg
-   sP8JpAB/e6FHJC02h1LxAUXTzqKvMzJlmaost4cAX1RQhFCGOPyUJFTY3
-   IFq5da0C4Qr8FOjCcQ88WlazIaHuFqvxa7ddiRSZE0+EXFTV0yvdOUbD9
-   hIftyMABnZHi+SrXGx+FqUPHZx3liiN3U+Nd5VCXkjNH4tOHMJZa2UIf4
-   mfswjQEr+dGD6ZoF+0vAQPF/Tb2QSzOjbgXCD80mfdC7/35Xt01zslCnB
-   A==;
-X-CSE-ConnectionGUID: pJh/1ecLSv+nXyARKBrgjw==
-X-CSE-MsgGUID: Kc4wjQCMRNyfPha8YwKCcA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29144125"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29144125"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 16:10:12 -0700
-X-CSE-ConnectionGUID: h7Oh7qSTTY29e+S+lslw2g==
-X-CSE-MsgGUID: u9lMVZ/1T3qh8XoBgRgybw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="84630016"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 22 Oct 2024 16:10:09 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t3O0t-000UCo-10;
-	Tue, 22 Oct 2024 23:10:07 +0000
-Date: Wed, 23 Oct 2024 07:09:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Umang Jain <umang.jain@ideasonboard.com>, linux-media@vger.kernel.org,
-	Xavier Roumegue <xavier.roumegue@oss.nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Stefan Klug <stefan.klug@ideasonboard.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Umang Jain <umang.jain@ideasonboard.com>
-Subject: Re: [PATCH] media: dw100: Enable dynamic vertex map
-Message-ID: <202410230647.fPoPRh2O-lkp@intel.com>
-References: <20241022063155.506191-1-umang.jain@ideasonboard.com>
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="q5GDxAjn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1729639462;
+	bh=78Khv5juGgQH/Jy7dvVkLWEo852D6IKfW/q7DCFoFl8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=q5GDxAjna6FBWfQDmtaBFPTjIwOoyueGOlWbgv86R29LmQubM2AP4+7+9WskTctIf
+	 gSh/GdV8I/FRAFKtZ2a/LYngiohwXo04TadoHEz7pWSTnC63do+KpCcTleCwkrXtiB
+	 NKEk2GIQGj3PP/d1xl8fm9RGvsH9PPG0YBiSBGiE=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id 0452040350; Tue, 22 Oct 2024 16:24:22 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id 0112B4022C;
+	Tue, 22 Oct 2024 16:24:21 -0700 (PDT)
+Date: Tue, 22 Oct 2024 16:24:21 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Dave Hansen <dave.hansen@intel.com>
+cc: Peter Zijlstra <peterz@infradead.org>, 
+    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+    Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>, 
+    linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+    Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when comparing
+ in percpu_add_op()
+In-Reply-To: <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
+Message-ID: <4b1a26b2-cccb-75d8-ee2f-f30ae211e598@gentwo.org>
+References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com> <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com> <20241016192011.GY17263@noisy.programming.kicks-ass.net> <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com> <20241017181859.GB17263@noisy.programming.kicks-ass.net>
+ <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241022063155.506191-1-umang.jain@ideasonboard.com>
+Content-Type: multipart/mixed; BOUNDARY=------------j7icfEkLOSMelbrpKGR8X0pv
+Content-ID: <03be023f-9e1d-18f8-9dd3-0eb3ab270b65@gentwo.org>
 
-Hi Umang,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-kernel test robot noticed the following build warnings:
+--------------j7icfEkLOSMelbrpKGR8X0pv
+Content-Type: text/plain; CHARSET=US-ASCII
+Content-ID: <5f92f215-6566-b2a4-c30c-23ba1b1cb31e@gentwo.org>
 
-[auto build test WARNING on linuxtv-media-stage/master]
-[also build test WARNING on media-tree/master sailus-media-tree/streams sailus-media-tree/master linus/master v6.12-rc4 next-20241022]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Tue, 22 Oct 2024, Dave Hansen wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Umang-Jain/media-dw100-Enable-dynamic-vertex-map/20241022-143315
-base:   https://git.linuxtv.org/media_stage.git master
-patch link:    https://lore.kernel.org/r/20241022063155.506191-1-umang.jain%40ideasonboard.com
-patch subject: [PATCH] media: dw100: Enable dynamic vertex map
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241023/202410230647.fPoPRh2O-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410230647.fPoPRh2O-lkp@intel.com/reproduce)
+> So I think Peter's version was the best.  It shuts up clang and also
+> preserves the existing (good) gcc 'sub' behavior.  I'll send it out for
+> real in a bit, but I'm thinking of something like the attached patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410230647.fPoPRh2O-lkp@intel.com/
+The desired behavior is a "dec". "sub" has a longer op code AFAICT.
 
-All warnings (new ones prefixed by >>):
+--------------j7icfEkLOSMelbrpKGR8X0pv
+Content-Type: text/x-patch; CHARSET=UTF-8; NAME=0001-x86-percpu-Avoid-comparing-unsigned-types-to-1.patch
+Content-Transfer-Encoding: BASE64
+Content-ID: <dbb55d79-d275-7170-487f-23f4a62f5905@gentwo.org>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME*0=0001-x86-percpu-Avoid-comparing-unsigned-types-to-1.patch
 
->> drivers/media/platform/nxp/dw100/dw100.c:369:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     369 |                 u32 *user_map = ctrl->p_new.p_u32;
-         |                 ^
-   1 warning generated.
+RnJvbSBkNjNiY2QzNTBlMWEzYmE2MTk2ZGFkYjI2Y2IyZjM2ZjBiYTFlMTgyIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXgu
+aW50ZWwuY29tPgpEYXRlOiBGcmksIDE4IE9jdCAyMDI0IDExOjA3OjQ3IC0wNzAwClN1Ympl
+Y3Q6IFtQQVRDSF0geDg2L3BlcmNwdTogQXZvaWQgY29tcGFyaW5nIHVuc2lnbmVkIHR5cGVz
+IHRvIC0xCgpjbGFuZyB3YXJucyB3aGVuIGNvbXBhcmluZyBhbiB1bnNpbmdlZCB0eXBlIHRv
+IC0xIHNpbmNlIHRoZSBjb21wYXJpc29uCmlzIGFsd2F5cyBmYWxzZS4KClRoaXMgY2FuIGJl
+IHF1aWNrbHkgcmVwcm9kdWNlZCBieSBzZXR0aW5nIENPTkZJR19XRVJST1I9eSBhbmQgcnVu
+bmluZzoKCgltYWtlIFc9MSBDQz1jbGFuZy0xNCBuZXQvaXB2NC90Y3Bfb3V0cHV0Lm8KCm5l
+dC9pcHY0L3RjcF9vdXRwdXQuYzoxODc6MzogZXJyb3I6IHJlc3VsdCBvZiBjb21wYXJpc29u
+IG9mIGNvbnN0YW50IC0xIHdpdGggZXhwcmVzc2lvbiBvZiB0eXBlICd1OCcgKGFrYSAndW5z
+aWduZWQgY2hhcicpIGlzIGFsd2F5cyBmYWxzZSBbLVdlcnJvciwtV3RhdXRvbG9naWNhbC1j
+b25zdGFudC1vdXQtb2YtcmFuZ2UtY29tcGFyZV0KICAxODcgfCAgICAgICAgICAgICAgICAg
+TkVUX0FERF9TVEFUUyhzb2NrX25ldChzayksIExJTlVYX01JQl9UQ1BBQ0tDT01QUkVTU0VE
+LAogICAgICB8ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+CiAgMTg4IHwgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgdHAtPmNvbXByZXNzZWRfYWNrKTsKICAgICAgfCAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICB+fn5+fn5+fn5+fn5+fn5+fn5+Ci4uLgphcmNoL3g4Ni9pbmNs
+dWRlL2FzbS9wZXJjcHUuaDoyMzg6MzE6IG5vdGU6IGV4cGFuZGVkIGZyb20gbWFjcm8gJ3Bl
+cmNwdV9hZGRfb3AnCiAgMjM4IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKCh2
+YWwpID09IDEgfHwgKHZhbCkgPT0gLTEpKSA/ICAgICAgICAgICAgXAogICAgICB8ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH5+fn5+IF4gIH5+CgpG
+aXggdGhpcyBieSBhdm9pZGluZyBhIGNvbXBhcmlzb24gb2YgYW4gdW5jYXN0IC0xIHRvICd2
+YWwnLgoKRG9pbmcgdGhpcyBpbiBhZGRpdGlvbiB0byB0aGUgZXhpc3RpbmcgJ3Bhb19JRF9f
+JyBjYWxjdWxhdGlvbiB3b3VsZCBtYWtlIGl0CmV2ZW4gbW9yZSB1bnJlYWRhYmxlLiBSZW1v
+dmUgJ3Bhb19JRF9fJyBhbmQgcmVwbGFjZSBpdCB3aXRoIHRoZSB0aHJlZQpjb21wb25lbnRz
+IG9mIGl0cyBjYWxjdWxhdGlvbi4KClRoaXMgcHJlc2VydmVzIHNvbWUgdW5pbnR1aXRpdmUg
+YnV0IHVzZWZ1bCBiZWhhdmlvci4gIEZvciBpbnN0YW5jZSwgZ2NjIHNlZXM6CgoJcGVyY3B1
+X2FkZF9vcCguLi4sIHZhciwgKHU4KS0xKTsKCmFuZCBjYW4gdHJhbnNmb3JtIHRoYXQgaW50
+byBhICJkZWMiLiAgQ2xhbmcsIG9uIHRoZSBvdGhlciBoYW5kLCBzZWVzIHRoZSAndTgnCnR5
+cGUgYW5kIGFzc3VtZXMgdGhhdCAiKHZhbCkgPT0gLTEiIGlzIGZhbHNlLCB3aGljaCB3YXMg
+dGhlIHJvb3Qgb2YgdGhlCndhcm5pbmcuCgpUaGlzIGlzIHVzZWZ1bCBnY2MgYmVoYXZpb3Ig
+YmVjYXVzZToKCgkjZGVmaW5lIHRoaXNfY3B1X3N1YihwY3AsIHZhbCkgIHRoaXNfY3B1X2Fk
+ZChwY3AsIC0odHlwZW9mKHBjcCkpKHZhbCkpCgpzbyBhbnkgY29kZSB0aGF0IGRvZXM6CgoJ
+dGhpc19jcHVfc3ViKEEsIDEpCgp3aGVyZSAnQScgaXMgYW4gdW5zaWduZWQgdHlwZSBnZW5l
+cmF0ZXMgYSAiZGVjIi4gIENsYW5nLCBvbiB0aGUgb3RoZXIKaGFuZCBnZW5lcmF0ZXMgYSBs
+ZXNzLWVmZmljaWVudCAiYWRkIi4KClJlcG9ydGVkLWJ5OiBBbmR5IFNoZXZjaGVua28gPGFu
+ZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNvbT4KU2lnbmVkLW9mZi1ieTogRGF2ZSBI
+YW5zZW4gPGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT4KLS0tCiBhcmNoL3g4Ni9pbmNs
+dWRlL2FzbS9wZXJjcHUuaCB8IDExICsrKysrKy0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNiBp
+bnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2FyY2gveDg2L2lu
+Y2x1ZGUvYXNtL3BlcmNwdS5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vcGVyY3B1LmgKaW5k
+ZXggYzU1YTc5ZDVmZWFlLi41N2Q5NzU5YzY5MmUgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2lu
+Y2x1ZGUvYXNtL3BlcmNwdS5oCisrKyBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL3BlcmNwdS5o
+CkBAIC0yMzQsMTggKzIzNCwxOSBAQCBkbyB7CQkJCQkJCQkJXAogICovCiAjZGVmaW5lIHBl
+cmNwdV9hZGRfb3Aoc2l6ZSwgcXVhbCwgdmFyLCB2YWwpCQkJCVwKIGRvIHsJCQkJCQkJCQlc
+Ci0JY29uc3QgaW50IHBhb19JRF9fID0gKF9fYnVpbHRpbl9jb25zdGFudF9wKHZhbCkgJiYJ
+CVwKLQkJCSAgICAgICgodmFsKSA9PSAxIHx8ICh2YWwpID09IC0xKSkgPwkJXAotCQkJCShp
+bnQpKHZhbCkgOiAwOwkJCQlcCisJY29uc3QgaW50IHBhb19jb25zdF9fID0gX19idWlsdGlu
+X2NvbnN0YW50X3AodmFsKTsJCVwKKwljb25zdCBpbnQgcGFvX2luY19fICAgPSAodmFsKSA9
+PSAxOwkJCQlcCisJY29uc3QgaW50IHBhb19kZWNfXyAgID0gKHR5cGVvZih2YXIpKSh2YWwp
+ID09CQkJXAorCQkJCSh0eXBlb2YodmFyKSktMTsJCQlcCiAJCQkJCQkJCQlcCiAJaWYgKDAp
+IHsJCQkJCQkJXAogCQl0eXBlb2YodmFyKSBwYW9fdG1wX187CQkJCQlcCiAJCXBhb190bXBf
+XyA9ICh2YWwpOwkJCQkJXAogCQkodm9pZClwYW9fdG1wX187CQkJCQlcCiAJfQkJCQkJCQkJ
+XAotCWlmIChwYW9fSURfXyA9PSAxKQkJCQkJCVwKKwlpZiAocGFvX2NvbnN0X18gJiYgcGFv
+X2luY19fKQkJCQkJXAogCQlwZXJjcHVfdW5hcnlfb3Aoc2l6ZSwgcXVhbCwgImluYyIsIHZh
+cik7CQlcCi0JZWxzZSBpZiAocGFvX0lEX18gPT0gLTEpCQkJCQlcCisJZWxzZSBpZiAocGFv
+X2NvbnN0X18gJiYgcGFvX2RlY19fKQkJCQlcCiAJCXBlcmNwdV91bmFyeV9vcChzaXplLCBx
+dWFsLCAiZGVjIiwgdmFyKTsJCVwKIAllbHNlCQkJCQkJCQlcCiAJCXBlcmNwdV9iaW5hcnlf
+b3Aoc2l6ZSwgcXVhbCwgImFkZCIsIHZhciwgdmFsKTsJCVwKLS0gCjIuMzQuMQoK
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-
-
-vim +369 drivers/media/platform/nxp/dw100/dw100.c
-
-   361	
-   362	static int dw100_s_ctrl(struct v4l2_ctrl *ctrl)
-   363	{
-   364		struct dw100_ctx *ctx =
-   365			container_of(ctrl->handler, struct dw100_ctx, hdl);
-   366	
-   367		switch (ctrl->id) {
-   368		case V4L2_CID_DW100_DEWARPING_16x16_VERTEX_MAP:
- > 369			u32 *user_map = ctrl->p_new.p_u32;
-   370			unsigned int id;
-   371	
-   372			mutex_lock(&ctx->maps_mutex);
-   373			id = ctx->applied_map_id ? 0 : 1;
-   374			memcpy(ctx->maps[id].map, user_map, ctx->map_size);
-   375			ctx->user_map_is_updated = true;
-   376			mutex_unlock(&ctx->maps_mutex);
-   377	
-   378			ctx->user_map_is_set = true;
-   379			break;
-   380		}
-   381	
-   382		return 0;
-   383	}
-   384	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--------------j7icfEkLOSMelbrpKGR8X0pv--
