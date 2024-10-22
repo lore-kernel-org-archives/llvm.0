@@ -1,196 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1A64438B;
-	Tue, 22 Oct 2024 17:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11BC1A3038;
+	Tue, 22 Oct 2024 17:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729616775; cv=none; b=lScmOqwXwmCat0B7lRJKT+WwMNUPF++E3ezHWMN5RYhXmWZb7JionBBKLEVIYZNrcKlJADAKIfulu0IPvBdNLo/AyDhF/S8Xo0zKgZwzDUQPxStqbJUd09iqLtDvJMVFFCgXms6XVBgviIetqvjJHtKZPU+0IW6ZziU41vgo9+g=
+	t=1729616814; cv=none; b=buXAO7oWOwiWYKjVNpOXqu+COuzoWZC/1YTCQTh+3DQ1ZJlDs1VnW+hzEbg9Qp+R6CORj0uxZ/NlY54FrE1edC7yoOdPUN8hJQHSB3AAPWRFdo3jZ6vlkzauSq/Up+xtgk/CvuWaUJjfkH4tvGxk5ywIRaFM0PqNGKV0Cd85b0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729616775; c=relaxed/simple;
-	bh=JSq1PbKICLPD3uEw/HtbkFlY48LXhzmHMpUzmbOu/KA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YBsu7AazZu6oRp6aso4UL822t+cloPS62THv+pXxkE9aj2AcLArdGNrt0K73NfCQt7sWwKxvIDAVGlmbb7k/m1a6ZqcjXmDYGVOueBoWjfOf04K1bEJ4pTFZtaMCDpBOi7Booht90ZUOB/w4LGcan+q508K3Fom++hVDoP2HxsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e18z5qEY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729616814; c=relaxed/simple;
+	bh=eZz3c8jyWFY02L7STapf35SqajK6ifYXf+OOiBQz2vo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GjDFxKLUNBfcnYt+pFgC0UmOBepdcZyuQ4uwFAw0xhMUa0VBBqmN6VCzaUqYPISKSCgV53DatJA4VCNHgmVHH1VmyWq0gN3NVbpzMHXGPzshf2ndHg18zXNYeUdfMqqXgnM0aeB3PGmewtOMyqz/liMZJqzhulNIt5W1dLhdrs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCHL/qY0; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e18z5qEY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C67C4CEC3;
-	Tue, 22 Oct 2024 17:06:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729616774;
-	bh=JSq1PbKICLPD3uEw/HtbkFlY48LXhzmHMpUzmbOu/KA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e18z5qEYerXbFSihhum4dQ7H0airCV1cW9LE38K9rLigMXBv12l088+WqureaXLyh
-	 aYqXSxqQ2+u1pfol71i/9g6o1XqJVsyhwao5E74YAnohCRoeaPaCaqSGryVvV05YWm
-	 BF+1qnJfY3E4qr0lY35uDwzQ9vRJO+Xsn/RBhqwjZXYxdEOvlNSlEe1MS4GbS6O+1K
-	 I1+a0ENIx8/BkE6D5h2DjkXfXrFlKUYeml0TOg6SN4eVmJZWlMmeJNkqlWwuGyK6jG
-	 T9edol+8M23G48/Qq2a+yP+RisXYzUPoCGIa6Mci5zV3bfhetFFuWmx+7JuKMFGOpH
-	 ZX/WRaKpgrWLw==
-Date: Tue, 22 Oct 2024 18:06:08 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Antoine Tenart <atenart@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Richard van Schagen <vschagen@icloud.com>,
-	linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v3 2/3] dt-bindings: crypto: Add Inside Secure
- SafeXcel EIP-93 crypto engine
-Message-ID: <20241022-most-politely-e85f571c05a3@spud>
-References: <20241021145642.16368-1-ansuelsmth@gmail.com>
- <20241021145642.16368-2-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCHL/qY0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729616812; x=1761152812;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eZz3c8jyWFY02L7STapf35SqajK6ifYXf+OOiBQz2vo=;
+  b=eCHL/qY0qdCJLnQk50gRaaU1eBqWTfJOertkhkaeOiMJGdV24YZmFz/k
+   Xh+VG17gNWveNHnun7w8H0W98crY+wLrun6DQeGdOw4VoIABtToviimwC
+   kB92GfBeCvWu8w3zyot8S6hdXKph246aUsrLOa2r2GIYgA3wuI7OwlFHa
+   oulfxeedGFBl8EzECQJaSMDGDYibn4IBDJt0/DSF2MWiT7NBxveDQuBJE
+   3vzKAxpSSK5hZtOiG3ptaRI5TYqa1lWF4n7dcsGHEoyAu+lPgCsbnEy0y
+   IKLbIqZjnLQSweHCg6W1+1c8A+yJVXjmYbX5ChE1UcOuPoJqG/NKqPIKe
+   w==;
+X-CSE-ConnectionGUID: edscFUiSQKm6xwjjW4Zt3g==
+X-CSE-MsgGUID: 4KgE+8qrQmq9iFWKqRQkmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39717919"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="39717919"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 10:06:51 -0700
+X-CSE-ConnectionGUID: Y8RDGjnlReCT0dQ/Bbr53w==
+X-CSE-MsgGUID: O/8fPeCdQou+T3L9uSeezg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="84745613"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 22 Oct 2024 10:06:50 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3ILH-000TqU-1W;
+	Tue, 22 Oct 2024 17:06:47 +0000
+Date: Wed, 23 Oct 2024 01:06:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tejun Heo <tj@kernel.org>
+Subject: [linux-next:master 5847/6080] kernel/sched/ext.c:6741:38: error: use
+ of undeclared identifier 'fmt'
+Message-ID: <202410230109.19U7hK4a-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="tBfP0HJf7nOgQAVw"
-Content-Disposition: inline
-In-Reply-To: <20241021145642.16368-2-ansuelsmth@gmail.com>
-
-
---tBfP0HJf7nOgQAVw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 21, 2024 at 04:56:38PM +0200, Christian Marangi wrote:
-> Add bindings for the Inside Secure SafeXcel EIP-93 crypto engine.
->=20
-> The IP is present on Airoha SoC and on various Mediatek devices and
-> other SoC under different names like mtk-eip93 or PKTE.
->=20
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> Changes v3:
-> - Add SoC compatible with generic one
-> Changes v2:
-> - Change to better compatible
-> - Add description for EIP93 models
->=20
->  .../crypto/inside-secure,safexcel-eip93.yaml  | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secur=
-e,safexcel-eip93.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safex=
-cel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,saf=
-excel-eip93.yaml
-> new file mode 100644
-> index 000000000000..13341710ee31
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip=
-93.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/crypto/inside-secure,safexcel-eip93.y=
-aml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Inside Secure SafeXcel EIP-93 cryptographic engine
-> +
-> +maintainers:
-> +  - Christian Marangi <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  The Inside Secure SafeXcel EIP-93 is a cryptographic engine IP block
-> +  integrated in varios devices with very different and generic name from
-> +  PKTE to simply vendor+EIP93. The real IP under the hood is actually
-> +  developed by Inside Secure and given to license to vendors.
-> +
-> +  The IP block is sold with different model based on what feature are
-> +  needed and are identified with the final letter. Each letter correspond
-> +  to a specific set of feature and multiple letter reflect the sum of the
-> +  feature set.
-> +
-> +  EIP-93 models:
-> +    - EIP-93i: (basic) DES/Triple DES, AES, PRNG, IPsec ESP, SRTP, SHA1
-> +    - EIP-93ie: i + SHA224/256, AES-192/256
-> +    - EIP-93is: i + SSL/DTLS/DTLS, MD5, ARC4
-> +    - EIP-93ies: i + e + s
-> +    - EIP-93iw: i + AES-XCB-MAC, AES-CCM
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7436324ebd147598f940dde1335b7979dbccc339
+commit: 3e99aee7ce48f504c4a7b0e3c46656c8c55731f4 [5847/6080] sched-ext: Use correct annotation for strings in kfuncs
+config: arm64-randconfig-004-20241022 (https://download.01.org/0day-ci/archive/20241023/202410230109.19U7hK4a-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bfe84f7085d82d06d61c632a7bad1e692fd159e4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410230109.19U7hK4a-lkp@intel.com/reproduce)
 
-This implies that you should have a non-trivial set of fallbacks, with
-the "i" model as the base for that. eg:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410230109.19U7hK4a-lkp@intel.com/
 
-"ie", "i"
-"is", "i"
-"iw", "i"
-"ies", "ie, "is", "i" (I dunno which would be a better order here)
+All errors (new ones prefixed by >>):
 
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: airoha,crypto-eip93
-> +      - enum:
-> +          - inside-secure,safexcel-eip93i
-> +          - inside-secure,safexcel-eip93ie
-> +          - inside-secure,safexcel-eip93is
-> +          - inside-secure,safexcel-eip93ies
-> +          - inside-secure,safexcel-eip93iw
+   In file included from kernel/sched/build_policy.c:19:
+   In file included from include/linux/sched/isolation.h:5:
+   In file included from include/linux/cpuset.h:17:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/sched/build_policy.c:63:
+   kernel/sched/ext.c:5329:35: warning: bitwise operation between different enumeration types ('enum bpf_type_flag' and 'enum bpf_reg_type') [-Wenum-enum-conversion]
+    5329 |                 info->reg_type = PTR_MAYBE_NULL | PTR_TO_BTF_ID | PTR_TRUSTED;
+         |                                  ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+   kernel/sched/ext.c:5825:31: warning: bitwise operation between different enumeration types ('enum scx_enq_flags' and 'enum scx_deq_flags') [-Wenum-enum-conversion]
+    5825 |         WRITE_ONCE(v, SCX_ENQ_WAKEUP | SCX_DEQ_SLEEP | SCX_KICK_PREEMPT |
+         |                       ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |                         ^~~
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^~~
+   In file included from kernel/sched/build_policy.c:63:
+>> kernel/sched/ext.c:6741:38: error: use of undeclared identifier 'fmt'
+    6741 |         if (bstr_format(&scx_exit_bstr_buf, fmt, data, data__sz) >= 0)
+         |                                             ^
+   kernel/sched/ext.c:6762:38: error: use of undeclared identifier 'fmt'
+    6762 |         if (bstr_format(&scx_exit_bstr_buf, fmt, data, data__sz) >= 0)
+         |                                             ^
+   kernel/sched/ext.c:6794:40: error: use of undeclared identifier 'fmt'
+    6794 |                             sizeof(buf->line) - dd->cursor, fmt, data, data__sz);
+         |                                                             ^
+   kernel/sched/ext.c:6797:18: error: use of undeclared identifier 'fmt'
+    6797 |                           dd->prefix, fmt, data, data__sz, ret);
+         |                                       ^
+   6 warnings and 4 errors generated.
 
-I don't really get what's going on here. Why is the first compatible the
-generic one? That seems suspect to me, as I doubt the crypto block on a
-particular SoC varies? I'd expect to see some soc-specific compatibles
-with a fallback to the inside-secure IP version that it integrates.
 
-Cheers,
-Conor.
+vim +/fmt +6741 kernel/sched/ext.c
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    crypto@1e004000 {
-> +      compatible =3D "airoha,crypto-eip93", "inside-secure,safexcel-eip9=
-3ies";
-> +      reg =3D <0x1fb70000 0x1000>;
-> +
-> +      interrupts =3D <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> --=20
-> 2.45.2
->=20
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6724  
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6725  /**
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6726   * scx_bpf_exit_bstr - Gracefully exit the BPF scheduler.
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6727   * @exit_code: Exit value to pass to user space via struct scx_exit_info.
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6728   * @fmt: error message format string
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6729   * @data: format string parameters packaged using ___bpf_fill() macro
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6730   * @data__sz: @data len, must end in '__sz' for the verifier
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6731   *
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6732   * Indicate that the BPF scheduler wants to exit gracefully, and initiate ops
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6733   * disabling.
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6734   */
+3e99aee7ce48f50 Kumar Kartikeya Dwivedi 2024-10-21  6735  __bpf_kfunc void scx_bpf_exit_bstr(s64 exit_code, char *fmt__str,
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6736  				   unsigned long long *data, u32 data__sz)
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6737  {
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6738  	unsigned long flags;
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6739  
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6740  	raw_spin_lock_irqsave(&scx_exit_bstr_buf_lock, flags);
+f0e1a0643a59bf1 Tejun Heo               2024-06-18 @6741  	if (bstr_format(&scx_exit_bstr_buf, fmt, data, data__sz) >= 0)
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6742  		scx_ops_exit_kind(SCX_EXIT_UNREG_BPF, exit_code, "%s",
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6743  				  scx_exit_bstr_buf.line);
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6744  	raw_spin_unlock_irqrestore(&scx_exit_bstr_buf_lock, flags);
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6745  }
+f0e1a0643a59bf1 Tejun Heo               2024-06-18  6746  
 
---tBfP0HJf7nOgQAVw
-Content-Type: application/pgp-signature; name="signature.asc"
+:::::: The code at line 6741 was first introduced by commit
+:::::: f0e1a0643a59bf1f922fa209cec86a170b784f3f sched_ext: Implement BPF extensible scheduler class
 
------BEGIN PGP SIGNATURE-----
+:::::: TO: Tejun Heo <tj@kernel.org>
+:::::: CC: Tejun Heo <tj@kernel.org>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZxfbgAAKCRB4tDGHoIJi
-0gWRAP9jiY6x9l9Ufpjhp/094FdBrAiNEO4VxSjzCIBxqQWXkAD/QLfnL6ZVzcbi
-dxCnGvhmIM1SsJP7gycqN6LPJsHwfQg=
-=p17h
------END PGP SIGNATURE-----
-
---tBfP0HJf7nOgQAVw--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
