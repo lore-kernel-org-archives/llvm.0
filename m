@@ -1,102 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E5B83CDA;
-	Wed, 23 Oct 2024 19:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AF913BC11
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 19:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729712270; cv=none; b=fUZfaxzjheUgxAVcIIvgogW9tCJBq4mEOGU7L6axWtyjq6iJ3yr68Qv6v+HvJQoExGNzrYvAXkgD9jd3vnz0NAZrvZ+2CmGS9dpC/YnVd1bEfpg4ECh3dgtIw5T5/a9mZfw04Axw5q4Z2Lket4bNbwVFT2yVEv7qucImLhGGVm8=
+	t=1729712544; cv=none; b=mMw7rUg0McvDlNQTM6BDSyTSwWrQFyHyEVCJQ3fV5v0wsrVPD3T1P5IsYyRrj4nJfvjbXLxY1e81UN7bJZzgue+rAMM+Q6AgBl8zY6R0xiGuKVmOQLWDtQlJx7fQfDk1B6cXrLTDUU2J4eYrOxZuXETRQWvTzoknRaQEqbAHHRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729712270; c=relaxed/simple;
-	bh=vk/FW0uRyjtg6oxehehOKzEOIARdwQsuFnOoLse/8iQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f9Px4MptLBC79aoyTdT4lJrROgaIiQ7DjKjegq5Eko9brinIpL1CH2U36JyHisuYoVsAEKkSiVHMxDJMwYmJdnaCqCfEPjjq58AwdCeNuyvs0FGr2uy0sF83xngRx2b2HP3MDg+8mBNcSGI1bedtoiz3k1j25qduKGwIcLQ2Q+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghIGXDhN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729712544; c=relaxed/simple;
+	bh=LVaFhLQapIc0ZkK/OTjneHOGSsk4mj8AVWq4oRfYt7w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gT+Jio9fn+b5jDT6UXZDQhBTiPqYdY6PW3RY4eez/cxS78UJTagcCikg6hG/92sdG8lBrgB8ipORFvcZeVgqa3o60zVvc5w3UlF0xxRQ59LWuUFbSQIwl5QmptRjSoi86+PC/k6z/hInaU7GYuBa8HVyOP+9otgMyW8a4s73qvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QlsNIYXv; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghIGXDhN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7DAC4CEC7;
-	Wed, 23 Oct 2024 19:37:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729712269;
-	bh=vk/FW0uRyjtg6oxehehOKzEOIARdwQsuFnOoLse/8iQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ghIGXDhNVew32ZD2gMYlCt9/Pt1neNoOGigXStw4tc/98IiT0GqedekdnXm9UH+WM
-	 cUATonbfsih9F6Snpj/d7OSeX4g23jygN8E08c1v7mVHOQNIIIFmqzrisbLpGn1cHj
-	 dppdmDZ1GfzUizbjehCAmcCDXrpUysl9vglyIwIk8tDEnENo9+9QB8zc7o9WCm7uMg
-	 Dz642l3sOhAFmALPJr17iNQX8NdEPgMAhdGgvqUce6ss30duPqF9HPsLbqxL4PrAEQ
-	 dP1cjlyuWZgOSoufbw7EFP86+JlqwGAMdWoyUguIdsQ0vf98lg785QExfeWMUwJysD
-	 jYxI/D2Tp9kYQ==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so136798e87.3;
-        Wed, 23 Oct 2024 12:37:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWUJiQ8+Rh6Ouv4Z0KwJXTEDwfdD2PZYsrH5d3AaYU+dofOqnTYfHYs3iNg8I0Em6lcAD9b@lists.linux.dev, AJvYcCXIn2hTRFNtj7n713JTe20FfI6fL4hqMedPj0BtgRd9eL1rOHGsX5Q9eaosm3oWgb3+I0lr2xD2r1UGzWo=@lists.linux.dev
-X-Gm-Message-State: AOJu0YxfpGIqhtqlf3HswAJQ8rgR++9LjHzNF1N7/HV6ygAWA3zlrWz0
-	phqvfjJgVQZVnqSeFcubY2tahRhFYRqOabvE+PBOT8y+pvJzKbhQ4Mh94af5HhDgHzHSm7idwZN
-	uKTS1zGA3bbwLYdiACwG+mXa1zKo=
-X-Google-Smtp-Source: AGHT+IFQGuMX2jeh0Jz5r6yINKID7eudPZRo77vcpztx/Pw+oCsd+qyagqPgVWuX6sGYES1W9s3KudctWdki1aWxFYg=
-X-Received: by 2002:a05:6512:280b:b0:539:f51e:17d3 with SMTP id
- 2adb3069b0e04-53b1a303093mr2066930e87.14.1729712268212; Wed, 23 Oct 2024
- 12:37:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QlsNIYXv"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49N9ZecR003624;
+	Wed, 23 Oct 2024 19:42:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4hOkkEPHh5v2lDBXE+5MmF++twajN54H112yfkX4INc=; b=QlsNIYXvEGf/qWjT
+	i9Df2SVU+omZm3kZMNBhslWjSJLt3vgDHaDOHMiXaQt1nXNNhcrULtYny8Z1Dr4v
+	kpZPhQQsCh+Mcws5STFv7C+O6mj+wFbM49IClba9ACaGiYHSmw+uXuB0ZXIqAMik
+	7/kIll72y235eH3OwDEu4dRrQuqF3wbNAdesosVKZShfWC4XuxarPwbSIFQ59Izq
+	sFC+3s9LmdlbP70Pj/zXzgZUDSY6oIyIX7qUa8LPQLnen+Rqrwg0N9nXgwXs5UBw
+	LWWakHaFGdAXix9WMf4D96PdwaFpWS2AwvfvihpgzOAyPAe6IONfHdqYoKQ3KY/W
+	Gj0CYw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em683anq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 23 Oct 2024 19:42:12 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49NJgBJB015174
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 23 Oct 2024 19:42:11 GMT
+Received: from [10.216.22.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 23 Oct
+ 2024 12:42:05 -0700
+Message-ID: <8219c6e7-18fe-4878-9cae-093898a7d129@quicinc.com>
+Date: Thu, 24 Oct 2024 01:12:02 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYuVefYJx9JsVx1Wz5pV1jKCp9eCPtwZD+FVhdk841q1Zw@mail.gmail.com>
- <b153383c-797c-42f6-801d-a6dcc7bfc4f7@stanley.mountain>
-In-Reply-To: <b153383c-797c-42f6-801d-a6dcc7bfc4f7@stanley.mountain>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 23 Oct 2024 21:37:36 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFXimHaGdeDBH3fOzuBiVcATA+JNpGqDs+m5h=8M_g+yA@mail.gmail.com>
-Message-ID: <CAMj1kXFXimHaGdeDBH3fOzuBiVcATA+JNpGqDs+m5h=8M_g+yA@mail.gmail.com>
-Subject: Re: drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned
- argument to 4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an
- unaligned pointer access [-Werror,-Walign-mismatch]
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, Anders Roxell <anders.roxell@linaro.org>, kobak@nvidia.com, 
-	"rafael.j.wysocki" <rafael.j.wysocki@intel.com>, rui.zhang@intel.com, mochs@nvidia.com, 
-	Nathan Chancellor <nathan@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>
+CC: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        "Abhinav
+ Kumar" <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Arnd
+ Bergmann" <arnd@arndb.de>, Sean Paul <sean@poorly.run>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20241018151143.3543939-1-arnd@kernel.org>
+ <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
+ <k42wmgziqia6balqsrfualbg73giesjxxtyaldkxsrdxkro2li@6neybqsu27me>
+ <20241021092509.tm4w3ufdgcd7of37@hu-akhilpo-hyd.qualcomm.com>
+ <c80309ad-52de-4998-ab0e-05db7cc5068b@oss.qualcomm.com>
+Content-Language: en-US
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <c80309ad-52de-4998-ab0e-05db7cc5068b@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: g2d5s-lP0vOEyDNwN54rHo14jvchke3f
+X-Proofpoint-GUID: g2d5s-lP0vOEyDNwN54rHo14jvchke3f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410230127
 
-On Wed, 23 Oct 2024 at 21:06, Dan Carpenter <dan.carpenter@linaro.org> wrote:
->
-> > Config: https://storage.tuxsuite.com/public/linaro/lkft/builds/2npIm4ZOkWenPJ71UOZG57R0jXE/config
->
-> > drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned argument to
-> > 4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an
-> > unaligned pointer access [-Werror,-Walign-mismatch]
-> >   156 |                         (void *)efi_pa_va_lookup(&th->guid,
-> > handler_info->handler_address);
-> >       |                                                  ^
->
-> The problem is that efi_guid_t is alighned but guid_t is not.  I would have
-> thought that Clang would say that even though the alignment in for &th->guid
-> isn't spelled out explicitly, it would still end up being aligned at 8 bytes.
->
+On 10/21/2024 3:01 PM, Konrad Dybcio wrote:
+> On 21.10.2024 11:25 AM, Akhil P Oommen wrote:
+>> On Sat, Oct 19, 2024 at 04:14:13PM +0300, Dmitry Baryshkov wrote:
+>>> On Sat, Oct 19, 2024 at 03:01:46PM +0530, Akhil P Oommen wrote:
+>>>> On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
+>>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>>
+>>>>> Clang-19 and above sometimes end up with multiple copies of the large
+>>>>> a6xx_hfi_msg_bw_table structure on the stack. The problem is that
+>>>>> a6xx_hfi_send_bw_table() calls a number of device specific functions to
+>>>>> fill the structure, but these create another copy of the structure on
+>>>>> the stack which gets copied to the first.
+>>>>>
+>>>>> If the functions get inlined, that busts the warning limit:
+>>>>>
+>>>>> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
+>>>>
+>>>> Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
+>>>
+>>> Kernel stacks are expected to be space limited, so 1024 is a logical
+>>> limit for a single function.
+>>
+>> Thanks for the clarification. I think it is better to move this table to
+>> struct a6xx_gmu which is required anyway when we implement dynamic generation
+>> of bw table. Also, we can skip initializing it in subsequent gpu wake ups.
+>>
+>> Arnd, do you think that would be sufficient? I can send that patch if you
+>> want help.
+> 
+> FWIW I implemented this at one point.. ended up only rebasing it for months
+> as I kept delaying GMU voting until we get an in-tree dram frequency LUT
+> retrieving driver..
+> 
+> https://github.com/SoMainline/linux/commits/konrad/longbois-next/drivers/gpu/drm/msm/adreno
+> 
+> worth noting that this used to be my R&D branch so this is very much err..
+> "provided as-is".. but it did work on 8250!
+> 
 
-Yeah this is bizarre tbh. The alignment of the type should be irrelevant here.
+Thanks, Konrad. "IB vote via GMU" support is there in my bucket list. I can help
+out if you want to clean this up and send out.
 
-> typedef guid_t efi_guid_t __aligned(__alignof__(u32));
->
-> The relevant code looks like this:
->
-> include/linux/uuid.h
->     13  #define UUID_SIZE 16
->     14
->     15  typedef struct {
->     16          __u8 b[UUID_SIZE];
->     17  } guid_t;
->
-> drivers/acpi/prmt.c
->     54  struct prm_handler_info {
->     55          guid_t guid;
+-Akhil
+ 
+> Konrad
 
-So this should be changed to efi_guid_t.
-
-Doing so makes the following pass:
-
-static_assert(__alignof__(((struct prm_handler_info*)0)->guid) > 1);
-
-(it fails with the original guid_t type)
