@@ -1,136 +1,388 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837441ABEB7
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 17:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A011A0AF0
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 18:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729703716; cv=none; b=fdr4wwZWokbBWlYVt3D/Tlo2vKKBMb7O4DDquetGlKiBhRs1SwJ2TEGKzz0erjVT2kPWZTKaYoTYCmXCDsiJhcGwiW3dauY9HNvy3dwqorCZuHv/FoNSx5HzKqf9bpPL3zketPlXbbnxAMTs51ldRGlguGXkUUOKW/3ycKJdjkQ=
+	t=1729708933; cv=none; b=RIGkCax5zCZ/1++grqGKPzuva4IfpM/XMZGVyBOTqruJTpL+jBVkW8yBpor2t/Ef0lX080RlYHDgLd9vsW2FmZyt9ZeTLesBvgw8qQDVenlHtrjvn8E5SR82/+2wSp56+CBeDUysaBBQwUek0EDKElu7KVvoUD4a+UDkW881zZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729703716; c=relaxed/simple;
-	bh=zuyNVckBZ4DNK/TY1WDnCB7cAukgyN/LVjx4ft0olEc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RztkQ0PscHFR3UD7rSBAy8JoNPisHgPaUPXxBslv1qIrIMgPUmStIPZwaqqkZsMKzduVZyuoa1h4V2iNvFygQZKVemGwy7Dtw9s5jal7uFVJ4MUlSIZxVpzgl+fFt+eivUpCnuiAWkKyV6geudErmeIY6yNNBcQfTIUdy4sNj8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c3OkFM19; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729708933; c=relaxed/simple;
+	bh=WLbdJgOrR1zIhVlKpiURLXtl/ud8TCDsGSsPBVapp40=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xz/A1LTNri2wzdnL8IlZ1bYgQjJg5crkWqzjn8QzmEA0udX6i6i1uFipVufF6R2n/e7NtJTvIzc8/2SYsRuUkTQ3/8otw6lMjUgE5AGazh7c2hvvEtYrH9mUHzLGA0Kl60l6PzQR4VCQ4lHCkZhZ7ZkfwCb9/jWdrGxgNogsEmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UK4ZStL4; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c3OkFM19"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729703714; x=1761239714;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zuyNVckBZ4DNK/TY1WDnCB7cAukgyN/LVjx4ft0olEc=;
-  b=c3OkFM19sQhW+ba1qfbGWX+371BLRjIZHdKVTJ832CCAClgEX0/LUSGK
-   i8CcTe+7dwji1zBXvxcVNtLTT1M/j6yHoEkgDRtij4PDfJB4XxLkNwzvh
-   NBAa9afjYDiOvl119MsHuTgGfeDAUBgad/04tlBbSIT8zkwu1+YPK8BVE
-   qrPhmh/mir9XxZRLMsbAEEdmYy+6cueX9U2Ga6nfwW3hiHOQOx6DcIQvS
-   +DpyG9KiU2LsnAWBU4bwCPinqh9ZTCPaotWExLvwQnWL4lpnzYCSqiNKG
-   N5KJrZPzhUFTU4aAeuz8OECWwchNR9oXESIQGdLlBXlkTkmy7KzIofpmU
-   A==;
-X-CSE-ConnectionGUID: e7SnKoXLRpKsaHrpXcaWlg==
-X-CSE-MsgGUID: pP+6YJccQpqkOm7281Oebg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29466572"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29466572"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 10:15:14 -0700
-X-CSE-ConnectionGUID: 2KVAZG3NR9uacRkQ07F3qQ==
-X-CSE-MsgGUID: xpIrf6a1QUqugTaWv4DAVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
-   d="scan'208";a="79874170"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.124.221.6]) ([10.124.221.6])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 10:15:13 -0700
-Message-ID: <bc707fc1-b5fe-4c2d-af88-c44737198876@intel.com>
-Date: Wed, 23 Oct 2024 10:15:12 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UK4ZStL4"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37ed3bd6114so10708f8f.2
+        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 11:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729708929; x=1730313729; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dnCz4Gz0DfA3iJQbcwkn7pdP+4IKH3HjV3Yhmz6VCSY=;
+        b=UK4ZStL4zpA9IaOGvVTBrVeAjXCK5OBhTg1lgaJVwKxBHpRaENC9iLfnTiBgdxSm94
+         ds8JEZgYxesYJg9oA9lx0D9dbz4XCp4oCDz6gMiJLAMGsSwktRWW1Qed7cxp9Faybzop
+         FE4tnA6sdeksrP0SLTXwNK8s6EnjERuiLf/4ieWmRe/ISG3hJ7tOWfbZzYrPPOwmqwWG
+         2sJBTDbxBaqsu8+RZXHIM9V9+m+AaXy9E36+Jsho9SkB0iajxGa1xoaztyX9aGDV+23t
+         AnHYIMfRsun4b3msy/VWcpU6Uz4U3HYCFK1rwgsizU2WV83hP/zHCQEsAT+ZdGamFSo9
+         OYug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729708929; x=1730313729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dnCz4Gz0DfA3iJQbcwkn7pdP+4IKH3HjV3Yhmz6VCSY=;
+        b=iDFmKSQyacytOy4kAvUlOyfTPtW4gu397uBsSLwviUCluyPvsTjpKEp99Ah83A9Dh2
+         uWh1UUjg1i1MCWgzWlAcf6CcN01J7d/RzH/1jF3vgukvBEErDPO6dsQR8GiEWPcdMDzY
+         IORME+k32DwCKLA9mcfw7s3UnvCONtcmnmDNxo+jPUT395INiqM81kM2YZR/5XVGtcW0
+         EW7yeVj5sBzoUdjGhCIXvJ9o0pL6uy6/jcC0BR8U2MHyIGH+zsaaf/1kMsV7ERsKTBMX
+         DtwqdP3TZLv6GQbn895sCEQtCRmTDUI7/oVYbXA1ie3dnX/xTm1T9QOpm/TV4QOsIWef
+         Q2mA==
+X-Forwarded-Encrypted: i=1; AJvYcCU65rvOStVTkjzBcjluz7sv+OlS0Osv6xAln8CvkpTRonqP4+74c2FHuERq582KjjJi2+J+@lists.linux.dev
+X-Gm-Message-State: AOJu0YxoL4McGs++PhKK/p58mZQDGBhj3lUi0XqpirNzbXxxLstAHOOY
+	DADZO7iUsuaq7C02ahSjzykFO0U+Zj50ZBq59giUUIZJaVGLGxqTOHw7eU7UuqgCoIQk0exHwMZ
+	3jxKbVjPE2xdweII0HduERYVkcFg=
+X-Google-Smtp-Source: AGHT+IGg7n7i3SyqRuIa/xhUMj1hN55mZB4j6qxgVsau7X+77BU2sb51xczx42QYuNHR1RsEnbwZOc1YeDhSyzlxoHQ=
+X-Received: by 2002:a5d:5257:0:b0:37d:614e:2bc5 with SMTP id
+ ffacd0b85a97d-37efcf1dbb3mr2066652f8f.29.1729708928528; Wed, 23 Oct 2024
+ 11:42:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
- comparing in percpu_add_op()
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
- <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
- <20241016192011.GY17263@noisy.programming.kicks-ass.net>
- <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
- <20241017181859.GB17263@noisy.programming.kicks-ass.net>
- <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
- <4b1a26b2-cccb-75d8-ee2f-f30ae211e598@gentwo.org>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <4b1a26b2-cccb-75d8-ee2f-f30ae211e598@gentwo.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241022015913.3524425-1-samuel.holland@sifive.com> <20241022015913.3524425-2-samuel.holland@sifive.com>
+In-Reply-To: <20241022015913.3524425-2-samuel.holland@sifive.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Wed, 23 Oct 2024 20:41:57 +0200
+Message-ID: <CA+fCnZeBEe3VWm=VfYvG-f4eh2jAFP-p4Xn4SLEeFCGTudVuEw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] kasan: sw_tags: Use arithmetic shift for shadow computation
+To: Samuel Holland <samuel.holland@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv@lists.infradead.org, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Will Deacon <will@kernel.org>, 
+	Evgenii Stepanov <eugenis@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/22/24 16:24, Christoph Lameter (Ampere) wrote:
-> On Tue, 22 Oct 2024, Dave Hansen wrote:
-> 
->> So I think Peter's version was the best.  It shuts up clang and also
->> preserves the existing (good) gcc 'sub' behavior.  I'll send it out for
->> real in a bit, but I'm thinking of something like the attached patch.
-> The desired behavior is a "dec". "sub" has a longer op code AFAICT.
+On Tue, Oct 22, 2024 at 3:59=E2=80=AFAM Samuel Holland
+<samuel.holland@sifive.com> wrote:
+>
+> Currently, kasan_mem_to_shadow() uses a logical right shift, which turns
+> canonical kernel addresses into non-canonical addresses by clearing the
+> high KASAN_SHADOW_SCALE_SHIFT bits. The value of KASAN_SHADOW_OFFSET is
+> then chosen so that the addition results in a canonical address for the
+> shadow memory.
+>
+> For KASAN_GENERIC, this shift/add combination is ABI with the compiler,
+> because KASAN_SHADOW_OFFSET is used in compiler-generated inline tag
+> checks[1], which must only attempt to dereference canonical addresses.
+>
+> However, for KASAN_SW_TAGS we have some freedom to change the algorithm
+> without breaking the ABI. Because TBI is enabled for kernel addresses,
+> the top bits of shadow memory addresses computed during tag checks are
+> irrelevant, and so likewise are the top bits of KASAN_SHADOW_OFFSET.
+> This is demonstrated by the fact that LLVM uses a logical right shift
+> in the tag check fast path[2] but a sbfx (signed bitfield extract)
+> instruction in the slow path[3] without causing any issues.
+>
+> Using an arithmetic shift in kasan_mem_to_shadow() provides a number of
+> benefits:
+>
+> 1) The memory layout is easier to understand. KASAN_SHADOW_OFFSET
+> becomes a canonical memory address, and the shifted pointer becomes a
+> negative offset, so KASAN_SHADOW_OFFSET =3D=3D KASAN_SHADOW_END regardles=
+s
+> of the shift amount or the size of the virtual address space.
+>
+> 2) KASAN_SHADOW_OFFSET becomes a simpler constant, requiring only one
+> instruction to load instead of two. Since it must be loaded in each
+> function with a tag check, this decreases kernel text size by 0.5%.
+>
+> 3) This shift and the sign extension from kasan_reset_tag() can be
+> combined into a single sbfx instruction. When this same algorithm change
+> is applied to the compiler, it removes an instruction from each inline
+> tag check, further reducing kernel text size by an additional 4.6%.
+>
+> These benefits extend to other architectures as well. On RISC-V, where
+> the baseline ISA does not shifted addition or have an equivalent to the
+> sbfx instruction, loading KASAN_SHADOW_OFFSET is reduced from 3 to 2
+> instructions, and kasan_mem_to_shadow(kasan_reset_tag(addr)) similarly
+> combines two consecutive right shifts.
+>
+> Link: https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/=
+Transforms/Instrumentation/AddressSanitizer.cpp#L1316 [1]
+> Link: https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/=
+Transforms/Instrumentation/HWAddressSanitizer.cpp#L895 [2]
+> Link: https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/=
+Target/AArch64/AArch64AsmPrinter.cpp#L669 [3]
+> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+> ---
+>
+> Changes in v2:
+>  - Improve the explanation for how KASAN_SHADOW_END is derived
+>  - Update the range check in kasan_non_canonical_hook()
+>
+>  arch/arm64/Kconfig              | 10 +++++-----
+>  arch/arm64/include/asm/memory.h | 17 +++++++++++++++--
+>  arch/arm64/mm/kasan_init.c      |  7 +++++--
+>  include/linux/kasan.h           | 10 ++++++++--
+>  mm/kasan/report.c               | 22 ++++++++++++++++++----
+>  scripts/gdb/linux/mm.py         |  5 +++--
+>  6 files changed, 54 insertions(+), 17 deletions(-)
+>
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index fd9df6dcc593..6a326908c941 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -418,11 +418,11 @@ config KASAN_SHADOW_OFFSET
+>         default 0xdffffe0000000000 if ARM64_VA_BITS_42 && !KASAN_SW_TAGS
+>         default 0xdfffffc000000000 if ARM64_VA_BITS_39 && !KASAN_SW_TAGS
+>         default 0xdffffff800000000 if ARM64_VA_BITS_36 && !KASAN_SW_TAGS
+> -       default 0xefff800000000000 if (ARM64_VA_BITS_48 || (ARM64_VA_BITS=
+_52 && !ARM64_16K_PAGES)) && KASAN_SW_TAGS
+> -       default 0xefffc00000000000 if (ARM64_VA_BITS_47 || ARM64_VA_BITS_=
+52) && ARM64_16K_PAGES && KASAN_SW_TAGS
+> -       default 0xeffffe0000000000 if ARM64_VA_BITS_42 && KASAN_SW_TAGS
+> -       default 0xefffffc000000000 if ARM64_VA_BITS_39 && KASAN_SW_TAGS
+> -       default 0xeffffff800000000 if ARM64_VA_BITS_36 && KASAN_SW_TAGS
+> +       default 0xffff800000000000 if (ARM64_VA_BITS_48 || (ARM64_VA_BITS=
+_52 && !ARM64_16K_PAGES)) && KASAN_SW_TAGS
+> +       default 0xffffc00000000000 if (ARM64_VA_BITS_47 || ARM64_VA_BITS_=
+52) && ARM64_16K_PAGES && KASAN_SW_TAGS
+> +       default 0xfffffe0000000000 if ARM64_VA_BITS_42 && KASAN_SW_TAGS
+> +       default 0xffffffc000000000 if ARM64_VA_BITS_39 && KASAN_SW_TAGS
+> +       default 0xfffffff800000000 if ARM64_VA_BITS_36 && KASAN_SW_TAGS
+>         default 0xffffffffffffffff
+>
+>  config UNWIND_TABLES
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/mem=
+ory.h
+> index 0480c61dbb4f..a93fc9dc16f3 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -80,7 +80,8 @@
+>   * where KASAN_SHADOW_SCALE_SHIFT is the order of the number of bits tha=
+t map
+>   * to a single shadow byte and KASAN_SHADOW_OFFSET is a constant that of=
+fsets
+>   * the mapping. Note that KASAN_SHADOW_OFFSET does not point to the star=
+t of
+> - * the shadow memory region.
+> + * the shadow memory region, since not all possible addresses have shado=
+w
+> + * memory allocated for them.
 
-Gah, yes, of course.  I misspoke.
+I'm not sure this addition makes sense: the original statement was to
+point out that KASAN_SHADOW_OFFSET and KASAN_SHADOW_START are
+different values. Even if we were to map shadow for userspace,
+KASAN_SHADOW_OFFSET would still be a weird offset value for Generic
+KASAN.
 
-We want "inc" and "dec" for +1 and -1.  "add" and "sub" are heftier and
-get used for everything else.
+>   *
+>   * Based on this mapping, we define two constants:
+>   *
+> @@ -89,7 +90,15 @@
+>   *
+>   * KASAN_SHADOW_END is defined first as the shadow address that correspo=
+nds to
+>   * the upper bound of possible virtual kernel memory addresses UL(1) << =
+64
+> - * according to the mapping formula.
+> + * according to the mapping formula. For Generic KASAN, the address in t=
+he
+> + * mapping formula is treated as unsigned (part of the compiler's ABI), =
+so the
+> + * end of the shadow memory region is at a large positive offset from
+> + * KASAN_SHADOW_OFFSET. For Software Tag-Based KASAN, the address in the
+> + * formula is treated as signed. Since all kernel addresses are negative=
+, they
+> + * map to shadow memory below KASAN_SHADOW_OFFSET, making KASAN_SHADOW_O=
+FFSET
+> + * itself the end of the shadow memory region. (User pointers are positi=
+ve and
+> + * would map to shadow memory above KASAN_SHADOW_OFFSET, but shadow memo=
+ry is
+> + * not allocated for them.)
+
+This looks good!
+
+>   *
+>   * KASAN_SHADOW_START is defined second based on KASAN_SHADOW_END. The s=
+hadow
+>   * memory start must map to the lowest possible kernel virtual memory ad=
+dress
+> @@ -100,7 +109,11 @@
+>   */
+>  #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+>  #define KASAN_SHADOW_OFFSET    _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+> +#ifdef CONFIG_KASAN_GENERIC
+>  #define KASAN_SHADOW_END       ((UL(1) << (64 - KASAN_SHADOW_SCALE_SHIFT=
+)) + KASAN_SHADOW_OFFSET)
+> +#else
+> +#define KASAN_SHADOW_END       KASAN_SHADOW_OFFSET
+> +#endif
+>  #define _KASAN_SHADOW_START(va)        (KASAN_SHADOW_END - (UL(1) << ((v=
+a) - KASAN_SHADOW_SCALE_SHIFT)))
+>  #define KASAN_SHADOW_START     _KASAN_SHADOW_START(vabits_actual)
+>  #define PAGE_END               KASAN_SHADOW_START
+> diff --git a/arch/arm64/mm/kasan_init.c b/arch/arm64/mm/kasan_init.c
+> index b65a29440a0c..6836e571555c 100644
+> --- a/arch/arm64/mm/kasan_init.c
+> +++ b/arch/arm64/mm/kasan_init.c
+> @@ -198,8 +198,11 @@ static bool __init root_level_aligned(u64 addr)
+>  /* The early shadow maps everything to a single page of zeroes */
+>  asmlinkage void __init kasan_early_init(void)
+>  {
+> -       BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=3D
+> -               KASAN_SHADOW_END - (1UL << (64 - KASAN_SHADOW_SCALE_SHIFT=
+)));
+> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC))
+> +               BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=3D
+> +                       KASAN_SHADOW_END - (1UL << (64 - KASAN_SHADOW_SCA=
+LE_SHIFT)));
+> +       else
+> +               BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=3D KASAN_SHADOW_END);
+>         BUILD_BUG_ON(!IS_ALIGNED(_KASAN_SHADOW_START(VA_BITS), SHADOW_ALI=
+GN));
+>         BUILD_BUG_ON(!IS_ALIGNED(_KASAN_SHADOW_START(VA_BITS_MIN), SHADOW=
+_ALIGN));
+>         BUILD_BUG_ON(!IS_ALIGNED(KASAN_SHADOW_END, SHADOW_ALIGN));
+> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> index 00a3bf7c0d8f..03b440658817 100644
+> --- a/include/linux/kasan.h
+> +++ b/include/linux/kasan.h
+> @@ -58,8 +58,14 @@ int kasan_populate_early_shadow(const void *shadow_sta=
+rt,
+>  #ifndef kasan_mem_to_shadow
+>  static inline void *kasan_mem_to_shadow(const void *addr)
+>  {
+> -       return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+> -               + KASAN_SHADOW_OFFSET;
+> +       void *scaled;
+> +
+> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC))
+> +               scaled =3D (void *)((unsigned long)addr >> KASAN_SHADOW_S=
+CALE_SHIFT);
+> +       else
+> +               scaled =3D (void *)((long)addr >> KASAN_SHADOW_SCALE_SHIF=
+T);
+> +
+> +       return KASAN_SHADOW_OFFSET + scaled;
+>  }
+>  #endif
+>
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index b48c768acc84..c08097715686 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -644,15 +644,29 @@ void kasan_report_async(void)
+>   */
+>  void kasan_non_canonical_hook(unsigned long addr)
+>  {
+> +       unsigned long max_shadow_size =3D BIT(BITS_PER_LONG - KASAN_SHADO=
+W_SCALE_SHIFT);
+>         unsigned long orig_addr;
+>         const char *bug_type;
+>
+>         /*
+> -        * All addresses that came as a result of the memory-to-shadow ma=
+pping
+> -        * (even for bogus pointers) must be >=3D KASAN_SHADOW_OFFSET.
+> +        * With the default kasan_mem_to_shadow() algorithm, all addresse=
+s
+> +        * returned by the memory-to-shadow mapping (even for bogus point=
+ers)
+> +        * must be within a certain displacement from KASAN_SHADOW_OFFSET=
+.
+> +        *
+> +        * For Generic KASAN, the displacement is unsigned, so
+> +        * KASAN_SHADOW_OFFSET is the smallest possible shadow address. F=
+or
+
+This part of the comment doesn't seem correct: KASAN_SHADOW_OFFSET is
+still a weird offset value for Generic KASAN, not the smallest
+possible shadow address.
+
+> +        * Software Tag-Based KASAN, the displacement is signed, so
+> +        * KASAN_SHADOW_OFFSET is the center of the range.
+>          */
+> -       if (addr < KASAN_SHADOW_OFFSET)
+> -               return;
+> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
+> +               if (addr < KASAN_SHADOW_OFFSET ||
+> +                   addr >=3D KASAN_SHADOW_OFFSET + max_shadow_size)
+> +                       return;
+> +       } else {
+> +               if (addr < KASAN_SHADOW_OFFSET - max_shadow_size / 2 ||
+> +                   addr >=3D KASAN_SHADOW_OFFSET + max_shadow_size / 2)
+> +                       return;
+
+Hm, I might be wrong, but I think this check does not work.
+
+Let's say we have non-canonical address 0x4242424242424242 and number
+of VA bits is 48.
+
+Then:
+
+KASAN_SHADOW_OFFSET =3D=3D 0xffff800000000000
+kasan_mem_to_shadow(0x4242424242424242) =3D=3D 0x0423a42424242424
+max_shadow_size =3D=3D 0x1000000000000000
+KASAN_SHADOW_OFFSET - max_shadow_size / 2 =3D=3D 0xf7ff800000000000
+KASAN_SHADOW_OFFSET + max_shadow_size / 2 =3D=3D 0x07ff800000000000 (overfl=
+ows)
+
+0x0423a42424242424 is < than 0xf7ff800000000000, so the function will
+wrongly return.
+
+> +       }
+>
+>         orig_addr =3D (unsigned long)kasan_shadow_to_mem((void *)addr);
+>
+
+Just to double-check: kasan_shadow_to_mem() and addr_has_metadata()
+don't need any changes, right?
+
+> diff --git a/scripts/gdb/linux/mm.py b/scripts/gdb/linux/mm.py
+> index 7571aebbe650..2e63f3dedd53 100644
+> --- a/scripts/gdb/linux/mm.py
+> +++ b/scripts/gdb/linux/mm.py
+> @@ -110,12 +110,13 @@ class aarch64_page_ops():
+>          self.KERNEL_END =3D gdb.parse_and_eval("_end")
+>
+>          if constants.LX_CONFIG_KASAN_GENERIC or constants.LX_CONFIG_KASA=
+N_SW_TAGS:
+> +            self.KASAN_SHADOW_OFFSET =3D constants.LX_CONFIG_KASAN_SHADO=
+W_OFFSET
+>              if constants.LX_CONFIG_KASAN_GENERIC:
+>                  self.KASAN_SHADOW_SCALE_SHIFT =3D 3
+> +                self.KASAN_SHADOW_END =3D (1 << (64 - self.KASAN_SHADOW_=
+SCALE_SHIFT)) + self.KASAN_SHADOW_OFFSET
+>              else:
+>                  self.KASAN_SHADOW_SCALE_SHIFT =3D 4
+> -            self.KASAN_SHADOW_OFFSET =3D constants.LX_CONFIG_KASAN_SHADO=
+W_OFFSET
+> -            self.KASAN_SHADOW_END =3D (1 << (64 - self.KASAN_SHADOW_SCAL=
+E_SHIFT)) + self.KASAN_SHADOW_OFFSET
+> +                self.KASAN_SHADOW_END =3D self.KASAN_SHADOW_OFFSET
+>              self.PAGE_END =3D self.KASAN_SHADOW_END - (1 << (self.vabits=
+_actual - self.KASAN_SHADOW_SCALE_SHIFT))
+>          else:
+>              self.PAGE_END =3D self._PAGE_END(self.VA_BITS_MIN)
+> --
+> 2.45.1
+>
+
+Could you also check that everything works when CONFIG_KASAN_SW_TAGS +
+CONFIG_KASAN_OUTLINE? I think it should, be makes sense to confirm.
+
+Thank you!
