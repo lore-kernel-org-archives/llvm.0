@@ -1,144 +1,83 @@
-Received: from e2i55.smtp2go.com (e2i55.smtp2go.com [103.2.140.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B041BD004
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 15:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.2.140.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4251CCECB;
+	Wed, 23 Oct 2024 16:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729697940; cv=none; b=q3M9NIBpZbDNidhYmLbALTMwkdS36rHWF9Mf9ePqnqqmDn3Fk3A+8Uwmhx7A6+t5dRTZI1LN+/PAPh9/FC2UGoWhfT+Kox1oSmbNsCfnmvi8JwHieyN9sW4Nwz6sh8w5A5LHbT6DFogT4qcPvb5BSP+TfabYakSIcZ7PsYMSTT0=
+	t=1729700492; cv=none; b=jGK7hwvgL5/vH7gA+622qfMAqqcUi70rCaz9clGs5eCoJciwiL5hcm15gqN7MFGvcprW/9+92KnK94Ezjgd9Yoq6Rf2cm6lZa110zOYOLTbJHWrLa/A0lNtxiODXSqw8Ge8RzZa+GWVktKZrcnhYwMq6VWCwawX4HSdBB/61I/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729697940; c=relaxed/simple;
-	bh=TArXztQb+MkM8RiEqijx7IT5RomzWnTWUWB7pS0l0KU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VZ6eKcsTsQ8FI6gksk/6GOl0xNS4bE0uqq43tzOvlMwrNJFg4fq8bxfTf9DIgQAzfcgkUsIDCGyvI4ldQJEPUN6r64nm3i9BbsOTvTbkfec1qg9t3clAiw7JC+JAtzHZfjfJ2TyaQnQ3zh5ZX3C8kOCGDumbrAZbqkpotwsgsxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu; spf=pass smtp.mailfrom=em1174286.fjasle.eu; dkim=fail (0-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b=ZdvyEUIJ reason="unknown key version"; dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b=QL+66uJz; dkim=pass (1024-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b=gEcH7T0T; arc=none smtp.client-ip=103.2.140.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em1174286.fjasle.eu
+	s=arc-20240116; t=1729700492; c=relaxed/simple;
+	bh=5KduzXwOb/XgpyNfRKXJyAE/X4V7KASZMU1Pyj7ApSE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mLsbTbB93BwyCeOwJsbY/UI5mSMGYvvTysV5XHl7PX+vI+R7bkoCqbhPhofWRRrrXDbqDatbJ+fJPXaBgp3zyfAaIaUYKGWp95ti7k+2c6k4bXa/zQ9OHq6b9bpql1KWzapsL+J4h4j76zWSUCng7unhsN30Yg6zS1RMT+zVv7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpf4Mu4k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="unknown key version" (0-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b="ZdvyEUIJ";
-	dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="QL+66uJz";
-	dkim=pass (1024-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="gEcH7T0T"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=smtpservice.net; s=mp6320.a1-4.dyn; x=1729698835; h=Feedback-ID:
-	X-Smtpcorp-Track:Message-ID:Subject:To:From:Date:Reply-To:Sender:
-	List-Unsubscribe:List-Unsubscribe-Post;
-	bh=PGordEIR45jrNlNrTNYlWgRJv5GwdV7ZsRzwl31sT1s=; b=ZdvyEUIJjKL4Y8JV58zbyPBiCg
-	ZDf6QCgVjTTIChh4bZVgzY3KUsMMFW6WiVy++rZG70rl4jhYqvBJ5TiJK40VIZQ558LmjBAkOl5js
-	1s6eVTlSlfTsaMciivK1khbnperZ+SRSbiuvnNd4c6ybhDOWN3LeMBDuG7UWoajN1sGu+sqjrVZx7
-	pb2uSZ4NuzAiQvs/SKGh0RKgFmT4VzHYed1UETWnXAGZQTkNiDxIMqLfLtTY1Uqc0M4lT4uetVy1H
-	gUU9jlRD5GySySTI/6UTGPDUEatV3Q6xxN3H7b2kp9ebnEQG8Kr4ScM1PSB5HSuyrgnFTvhwlEVQ2
-	T7REtbqg==;
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fjasle.eu;
- i=@fjasle.eu; q=dns/txt; s=s1174286; t=1729697935; h=from : subject :
- to : message-id : date;
- bh=PGordEIR45jrNlNrTNYlWgRJv5GwdV7ZsRzwl31sT1s=;
- b=QL+66uJzJbh2+q1wPEungrLnjnVSx0gWCEFmcaNhvyb/GW4LVqAxGEMbRE2ci/02BqRer
- aTlVSfZRCjqfMVe3JQ3BgOeonYLm5G3u0JMzy7KzZyyGo938qnHwuvEb1VlCWJkX4erSQVX
- 1MqlGrC7a35wHFto0RQyJI/XHnlUIB/Xia/XTSPFydkChpwYShaK3INR6gxzACTgeQn0ykt
- 7Cdv7b7Z6p9HKRonS98nkZbPLURejf9LPBWyy/If4K3nW0/umSlcT/AISD99YxL8lx/BER5
- 1oKGH4lFJdudA7G5bNCbiAIUbdn5FdaA4ztNyBMNgNezVkfvoKZmF+r7G2yg==
-Received: from [10.176.58.103] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
- (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
- (Exim 4.94.2-S2G) (envelope-from <nicolas@fjasle.eu>)
- id 1t3dR5-cp4XYB-N4; Wed, 23 Oct 2024 15:38:12 +0000
-Received: from [10.85.249.164] (helo=leknes.fjasle.eu)
- by smtpcorp.com with esmtpsa
- (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
- (Exim 4.97.1-S2G) (envelope-from <nicolas@fjasle.eu>)
- id 1t3dR4-4o5NDgrnm55-q8BV; Wed, 23 Oct 2024 15:38:11 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
- t=1729697888; bh=TArXztQb+MkM8RiEqijx7IT5RomzWnTWUWB7pS0l0KU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gEcH7T0TYi7Qysti88+ZUXIfIOMyb9BHFoq5nSXCUOKYI0uVGFhK2z48N8Pfy31W9
- QhIE/JrdSelmEz4hXq5mbBUvIziHeAzoKiXB8GqSEMdlKSW85YZnX17oZXxwHciQqY
- JCXEsIrtvGdCMGRG1Yq/uEn3ModBzfiSSV294JxQ=
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
- id 2EC8C3D2A2; Wed, 23 Oct 2024 17:38:08 +0200 (CEST)
-Date: Wed, 23 Oct 2024 17:38:08 +0200
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Ben Hutchings <benh@debian.org>,
- Ron Economos <re@w6rz.net>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/3] kbuild: deb-pkg: add
- pkg.linux-upstream.nokernelheaders build profile
-Message-ID: <ZxkYYLbiXZ3p59iu@fjasle.eu>
-References: <20241022181703.1710116-1-masahiroy@kernel.org>
- <20241022181703.1710116-2-masahiroy@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpf4Mu4k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29336C4CEE5;
+	Wed, 23 Oct 2024 16:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729700491;
+	bh=5KduzXwOb/XgpyNfRKXJyAE/X4V7KASZMU1Pyj7ApSE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bpf4Mu4ktxJS3qhtIbwji6/6XRFSkssL2rlt4yBgmropBU6AdZ6yV5QG539sWuvzV
+	 ddD/NmEz76FEtAvQFH+XdeIt9sqeMJmc/ucyFYxbXR/Sk4RM16gPO1fy9M4o3PaccD
+	 NfuvCBP2HnMi1pCCN4Av8ude2PELd+ksEnOoSFBaaFS/ME4viHznlgPo0sHboX8mfu
+	 uWsoIBL21KTuaBfI7e/1e9Y6zZYQXkX9TzdFA02vgFIy9NVa4rPJsun8ZLffu+eIM8
+	 iR5OVm8spT8gxQZXigShF0oZv3a4YOJvMbaaYPLkFcyXLqvqxGDi5kg5etgHWI1EWu
+	 vrit/SaaSjYnw==
+From: Will Deacon <will@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	llvm@lists.linux.dev,
+	syzbot+908886656a02769af987@syzkaller.appspotmail.com,
+	Andrew Pinski <pinskia@gmail.com>
+Subject: Re: [PATCH 1/2] kasan: Fix Software Tag-Based KASAN with GCC
+Date: Wed, 23 Oct 2024 17:21:21 +0100
+Message-Id: <172969587091.1722746.16856042092493192617.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20241021120013.3209481-1-elver@google.com>
+References: <20241021120013.3209481-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241022181703.1710116-2-masahiroy@kernel.org>
-X-Smtpcorp-Track: occRcLyzTVyx.plzMq-S6cPFX.utDMCg3bKPG
-Feedback-ID: 1174286m:1174286a9YXZ7r:1174286sX19qKHJLT
-X-Report-Abuse: Please forward a copy of this message, including all headers,
- to <abuse-report@smtp2go.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 23, 2024 at 03:16:58AM +0900 Masahiro Yamada wrote:
-> Since commit f1d87664b82a ("kbuild: cross-compile linux-headers package
-> when possible"), 'make bindeb-pkg' may attempt to cross-compile the
-> linux-headers package, but it fails under certain circumstances.
+On Mon, 21 Oct 2024 14:00:10 +0200, Marco Elver wrote:
+> Per [1], -fsanitize=kernel-hwaddress with GCC currently does not disable
+> instrumentation in functions with __attribute__((no_sanitize_address)).
 > 
-> For example, when CONFIG_MODULE_SIG_FORMAT is enabled on Debian, the
-> following command fails:
+> However, __attribute__((no_sanitize("hwaddress"))) does correctly
+> disable instrumentation. Use it instead.
 > 
->   $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bindeb-pkg
->       [ snip ]
->   Rebuilding host programs with aarch64-linux-gnu-gcc...
->     HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/kallsyms
->     HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sorttable
->     HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/asn1_compiler
->     HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sign-file
->   In file included from /usr/include/openssl/opensslv.h:109,
->                    from debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sign-file.c:25:
->   /usr/include/openssl/macros.h:14:10: fatal error: openssl/opensslconf.h: No such file or directory
->      14 | #include <openssl/opensslconf.h>
->         |          ^~~~~~~~~~~~~~~~~~~~~~~
->   compilation terminated.
 > 
-> This commit adds a new profile, pkg.linux-upstream.nokernelheaders, to
-> guard the linux-headers package.
-> 
-> There are two options to fix the above issue.
-> 
-> [option 1] Set the pkg.linux-upstream.nokernelheaders build profile
-> 
->   $ DEB_BUILD_PROFILES=pkg.linux-upstream.nokernelheaders \
->     make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bindeb-pkg
-> 
-> This skips the building of the linux-headers package.
-> 
-> [option 2] Install the necessary build dependencies
-> 
-> If you want to cross-compile the linux-headers package, you need to
-> install additional packages. This is a one-time installation step.
-> 
-> For example, on Debian, the packages necessary for cross-compiling it
-> to arm64 can be installed with the following commands:
-> 
->   # dpkg --add-architecture arm64
->   # apt update
->   # apt install gcc-aarch64-linux-gnu libssl-dev:arm64
-> 
-> Fixes: f1d87664b82a ("kbuild: cross-compile linux-headers package when possible")
-> Reported-by: Ron Economos <re@w6rz.net>
-> Closes: https://lore.kernel.org/all/b3d4f49e-7ddb-29ba-0967-689232329b53@w6rz.net/
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  scripts/package/builddeb             | 2 +-
->  scripts/package/install-extmod-build | 6 ++----
->  scripts/package/mkdebian             | 9 ++++++++-
->  3 files changed, 11 insertions(+), 6 deletions(-)
+> [...]
 
-Nice solution and thanks for also documenting option 2.
+Applied to arm64 (for-next/fixes), thanks!
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+[1/2] kasan: Fix Software Tag-Based KASAN with GCC
+      https://git.kernel.org/arm64/c/894b00a3350c
+[2/2] Revert "kasan: Disable Software Tag-Based KASAN with GCC"
+      https://git.kernel.org/arm64/c/237ab03e301d
+
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
