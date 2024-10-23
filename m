@@ -1,284 +1,202 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9E813EFF3;
-	Wed, 23 Oct 2024 05:23:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71DF1448C1
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729661015; cv=none; b=Fp2IlhkJkuh2oht4K0fXPuPDCHWI+koypbltjiZmnn8vdJ5ZjAjFafH0NMAYcQ+LlRCoU34THMvLvkzJr9t9JM9DAM+DP0IYYvpfbtHardnBXTWWCyRIpMdwAeOVQgXEN0nML7aczZ1njedIFios434q+n0Cit7UpLgLxze0yPw=
+	t=1729664956; cv=none; b=W86737p3cn94zdCdshg482FOaEuJKmlzPLGD44MMEcDY+A2Mk67dDxoEy1lYD7WVptcVqJFBDJdDpNDyva9PYjKeSoeIYNbNaZTu1h7YOvtfj5icW8CK5Bl7hf21yDr5NmVoOn+evjtsQ9qbw8eUGHxouHK3xY+tjVP957RN2mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729661015; c=relaxed/simple;
-	bh=07pVQr24RzgZEjSE9FGwNGUFHhb3lItrp/6o9WXdfac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KMgDzlZZ60XGBv8s84Fsvh8cbl94U/HUAWz6HsWaEUbIuZclhJV/ZBc6H1ZhN9JcYCFGXhFD5AJAEsTP+cSBRvO9EXaylxxRE3vwh5K0qQJBFzVmMe3zgGAjvbU3jYTT7eNpG/3KqbdRAAHvptJ6KrOIhifvTV1yYVF1Ive9GvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WTQEY3pI; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WTQEY3pI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729661014; x=1761197014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=07pVQr24RzgZEjSE9FGwNGUFHhb3lItrp/6o9WXdfac=;
-  b=WTQEY3pISMFeTCuRW1T2MjcA8FErJh+yOSCVwXF2W3UwViPczdF4+QgW
-   ZLcel4H2idb9npYoEOuF/6I2B2xhhOCFfjvvPL0BrN3ln/SMib6Qb5mDt
-   zinMZZS/MEdVu74ksRjk3gNJV0Od6+Sc397kJONEo3M7slR5G0YzjRRp3
-   mUUm5+nCgP59jz7rqSjfoMVwSEQANH+JRuOmTmgmN+A/0OP2RluYvKtC1
-   v8LlSnbZMiDCJbkswjAH6GkQcq4ucY3cgnYyAeTKHLL7vFvf5W2t5a0OT
-   lQlokqDN5OsT07+gnBtQX3V7r0BlER0o2cs1c87ZtGXGmHT7PP3JB4WUw
-   A==;
-X-CSE-ConnectionGUID: j8Zcbg3bREyvnGGz8J11bA==
-X-CSE-MsgGUID: xDxBVJVrSZKXVZmESGeYSg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39774825"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="39774825"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 22:23:28 -0700
-X-CSE-ConnectionGUID: uR/ZG5McRWWYeeZr0CDEGg==
-X-CSE-MsgGUID: OG4yxbiPRAmbZVrMWn2qVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
-   d="scan'208";a="110882531"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Oct 2024 22:23:26 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t3Tq7-000UTc-3A;
-	Wed, 23 Oct 2024 05:23:23 +0000
-Date: Wed, 23 Oct 2024 13:23:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sky Huang <SkyLake.Huang@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH nand/next 3/4] include: mtd: spinand: Add CASN page
- related macros and flags.
-Message-ID: <202410231353.YRTCHb8J-lkp@intel.com>
-References: <20241020132722.20565-4-SkyLake.Huang@mediatek.com>
+	s=arc-20240116; t=1729664956; c=relaxed/simple;
+	bh=dFSfjS4h9tPuzdzt1M5XnfRjvYg3CJK+vpEt2AYf+iE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gXG+WOfRuF8N4oP8/tipvLc2dEzKWFTIRZFdvcQ2zn3McJ3BYyXGlmD1XfCXWzvxHLEIEdPauBu/83QNf1WpHP4WxayawtiNWyYPbodJpoHsJ6J8JchTb/29inIrX0gHtD+y+hTNWYXB2RmwIu+vWuTqAaBJyq1VO7OkPiNbVxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app1 (Coremail) with SMTP id HgEQrADHzX1zlxhn_SN0CA--.3465S2;
+	Wed, 23 Oct 2024 14:28:03 +0800 (CST)
+Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
+	by gateway (Coremail) with SMTP id _____wDnEUBrlxhnRB6WAA--.64686S2;
+	Wed, 23 Oct 2024 14:27:57 +0800 (CST)
+From: Dongliang Mu <dzm91@hust.edu.cn>
+To: si.yanteng@linux.dev,
+	Alex Shi <alexs@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Dongliang Mu <dzm91@hust.edu.cn>
+Cc: hust-os-kernel-patches@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v3] docs/zh_CN: update the translation of process/programming-language.rst
+Date: Wed, 23 Oct 2024 14:27:43 +0800
+Message-ID: <20241023062750.849951-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241020132722.20565-4-SkyLake.Huang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HgEQrADHzX1zlxhn_SN0CA--.3465S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoW3WrW3Gw18WF1rCF4fZr43ZFb_yoW7tw13pF
+	W7Kr9rKa18J3WxCrZ7Kr12vr1FkFs5Ka48trWUt3WYyF40ya9IqFyxKr43J342vryxuFWD
+	Zw1fuFW0q3y3Aa7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHvb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
+	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
+	126r1DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
+	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
+	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8Zw
+	CF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Y
+	z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYY7kG6IIYr7AKxVW8JVW5
+	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUVW
+	lkUUUUU
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-Hi Sky,
+Update to commit 0b02076f9953 ("docs: programming-language: add Rust
+programming language section")
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+scripts/checktransupdate.py reports:
 
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v6.12-rc4 next-20241022]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Documentation/translations/zh_CN/process/programming-language.rst
+commit 0b02076f9953 ("docs: programming-language: add Rust programming
+language section")
+commit 38484a1d0c50 ("docs: programming-language: remove mention of the
+Intel compiler")
+2 commits needs resolving in total
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sky-Huang/mtd-nand-Create-param-c-to-do-CRC-check-and-bitwise-majority-for-Parameter-CASN-page/20241020-212938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20241020132722.20565-4-SkyLake.Huang%40mediatek.com
-patch subject: [RFC PATCH nand/next 3/4] include: mtd: spinand: Add CASN page related macros and flags.
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241023/202410231353.YRTCHb8J-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231353.YRTCHb8J-lkp@intel.com/reproduce)
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v2->v3: fix warnings in the make htmldocs
+v1->v2: revise the script name
+ .../zh_CN/process/programming-language.rst    | 78 +++++++------------
+ 1 file changed, 30 insertions(+), 48 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410231353.YRTCHb8J-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/mtd/nand/spi/core.c:411:23: error: use of undeclared identifier 'SPINAND_HAS_READ_PLANE_SELECT_BIT'
-     411 |         if (spinand->flags & SPINAND_HAS_READ_PLANE_SELECT_BIT)
-         |                              ^
->> drivers/mtd/nand/spi/core.c:495:23: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     495 |         if (spinand->flags & SPINAND_HAS_PROG_PLANE_SELECT_BIT)
-         |                              ^
-   2 errors generated.
---
->> drivers/mtd/nand/spi/macronix.c:158:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     158 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT |
-         |                      ^
->> drivers/mtd/nand/spi/macronix.c:159:8: error: use of undeclared identifier 'SPINAND_HAS_READ_PLANE_SELECT_BIT'
-     159 |                      SPINAND_HAS_READ_PLANE_SELECT_BIT,
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:200:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     200 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT,
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:219:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     219 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT,
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:259:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     259 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT |
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:260:8: error: use of undeclared identifier 'SPINAND_HAS_READ_PLANE_SELECT_BIT'
-     260 |                      SPINAND_HAS_READ_PLANE_SELECT_BIT,
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:271:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     271 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT,
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:303:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     303 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT |
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:304:8: error: use of undeclared identifier 'SPINAND_HAS_READ_PLANE_SELECT_BIT'
-     304 |                      SPINAND_HAS_READ_PLANE_SELECT_BIT,
-         |                      ^
-   drivers/mtd/nand/spi/macronix.c:315:8: error: use of undeclared identifier 'SPINAND_HAS_PROG_PLANE_SELECT_BIT'
-     315 |                      SPINAND_HAS_PROG_PLANE_SELECT_BIT,
-         |                      ^
->> drivers/mtd/nand/spi/macronix.c:441:12: error: invalid application of 'sizeof' to an incomplete type 'const struct spinand_info[]'
-     441 |         .nchips = ARRAY_SIZE(macronix_spinand_table),
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                ^~~~~
-   11 errors generated.
-
-
-vim +/SPINAND_HAS_READ_PLANE_SELECT_BIT +411 drivers/mtd/nand/spi/core.c
-
-7529df4652482c Peter Pan       2018-06-22  376  
-7529df4652482c Peter Pan       2018-06-22  377  static int spinand_read_from_cache_op(struct spinand_device *spinand,
-7529df4652482c Peter Pan       2018-06-22  378  				      const struct nand_page_io_req *req)
-7529df4652482c Peter Pan       2018-06-22  379  {
-7529df4652482c Peter Pan       2018-06-22  380  	struct nand_device *nand = spinand_to_nand(spinand);
-e708789c4a8798 Miquel Raynal   2021-01-07  381  	struct mtd_info *mtd = spinand_to_mtd(spinand);
-981d1aa0697ce1 Boris Brezillon 2019-01-24  382  	struct spi_mem_dirmap_desc *rdesc;
-7529df4652482c Peter Pan       2018-06-22  383  	unsigned int nbytes = 0;
-7529df4652482c Peter Pan       2018-06-22  384  	void *buf = NULL;
-7529df4652482c Peter Pan       2018-06-22  385  	u16 column = 0;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  386  	ssize_t ret;
-7529df4652482c Peter Pan       2018-06-22  387  
-7529df4652482c Peter Pan       2018-06-22  388  	if (req->datalen) {
-7529df4652482c Peter Pan       2018-06-22  389  		buf = spinand->databuf;
-631cfdd0520d19 Miquel Raynal   2024-08-26  390  		if (!req->continuous)
-981d1aa0697ce1 Boris Brezillon 2019-01-24  391  			nbytes = nanddev_page_size(nand);
-631cfdd0520d19 Miquel Raynal   2024-08-26  392  		else
-631cfdd0520d19 Miquel Raynal   2024-08-26  393  			nbytes = round_up(req->dataoffs + req->datalen,
-631cfdd0520d19 Miquel Raynal   2024-08-26  394  					  nanddev_page_size(nand));
-981d1aa0697ce1 Boris Brezillon 2019-01-24  395  		column = 0;
-7529df4652482c Peter Pan       2018-06-22  396  	}
-7529df4652482c Peter Pan       2018-06-22  397  
-7529df4652482c Peter Pan       2018-06-22  398  	if (req->ooblen) {
-7529df4652482c Peter Pan       2018-06-22  399  		nbytes += nanddev_per_page_oobsize(nand);
-7529df4652482c Peter Pan       2018-06-22  400  		if (!buf) {
-7529df4652482c Peter Pan       2018-06-22  401  			buf = spinand->oobbuf;
-7529df4652482c Peter Pan       2018-06-22  402  			column = nanddev_page_size(nand);
-7529df4652482c Peter Pan       2018-06-22  403  		}
-7529df4652482c Peter Pan       2018-06-22  404  	}
-7529df4652482c Peter Pan       2018-06-22  405  
-f9d7c7265bcff7 Miquel Raynal   2022-01-27  406  	if (req->mode == MTD_OPS_RAW)
-981d1aa0697ce1 Boris Brezillon 2019-01-24  407  		rdesc = spinand->dirmaps[req->pos.plane].rdesc;
-f9d7c7265bcff7 Miquel Raynal   2022-01-27  408  	else
-f9d7c7265bcff7 Miquel Raynal   2022-01-27  409  		rdesc = spinand->dirmaps[req->pos.plane].rdesc_ecc;
-7529df4652482c Peter Pan       2018-06-22  410  
-ca229bdbef29be Cheng Ming Lin  2024-09-09 @411  	if (spinand->flags & SPINAND_HAS_READ_PLANE_SELECT_BIT)
-ca229bdbef29be Cheng Ming Lin  2024-09-09  412  		column |= req->pos.plane << fls(nanddev_page_size(nand));
-ca229bdbef29be Cheng Ming Lin  2024-09-09  413  
-7529df4652482c Peter Pan       2018-06-22  414  	while (nbytes) {
-981d1aa0697ce1 Boris Brezillon 2019-01-24  415  		ret = spi_mem_dirmap_read(rdesc, column, nbytes, buf);
-981d1aa0697ce1 Boris Brezillon 2019-01-24  416  		if (ret < 0)
-7529df4652482c Peter Pan       2018-06-22  417  			return ret;
-7529df4652482c Peter Pan       2018-06-22  418  
-981d1aa0697ce1 Boris Brezillon 2019-01-24  419  		if (!ret || ret > nbytes)
-981d1aa0697ce1 Boris Brezillon 2019-01-24  420  			return -EIO;
-7529df4652482c Peter Pan       2018-06-22  421  
-981d1aa0697ce1 Boris Brezillon 2019-01-24  422  		nbytes -= ret;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  423  		column += ret;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  424  		buf += ret;
-631cfdd0520d19 Miquel Raynal   2024-08-26  425  
-631cfdd0520d19 Miquel Raynal   2024-08-26  426  		/*
-631cfdd0520d19 Miquel Raynal   2024-08-26  427  		 * Dirmap accesses are allowed to toggle the CS.
-631cfdd0520d19 Miquel Raynal   2024-08-26  428  		 * Toggling the CS during a continuous read is forbidden.
-631cfdd0520d19 Miquel Raynal   2024-08-26  429  		 */
-631cfdd0520d19 Miquel Raynal   2024-08-26  430  		if (nbytes && req->continuous)
-631cfdd0520d19 Miquel Raynal   2024-08-26  431  			return -EIO;
-7529df4652482c Peter Pan       2018-06-22  432  	}
-7529df4652482c Peter Pan       2018-06-22  433  
-7529df4652482c Peter Pan       2018-06-22  434  	if (req->datalen)
-7529df4652482c Peter Pan       2018-06-22  435  		memcpy(req->databuf.in, spinand->databuf + req->dataoffs,
-7529df4652482c Peter Pan       2018-06-22  436  		       req->datalen);
-7529df4652482c Peter Pan       2018-06-22  437  
-e708789c4a8798 Miquel Raynal   2021-01-07  438  	if (req->ooblen) {
-e708789c4a8798 Miquel Raynal   2021-01-07  439  		if (req->mode == MTD_OPS_AUTO_OOB)
-e708789c4a8798 Miquel Raynal   2021-01-07  440  			mtd_ooblayout_get_databytes(mtd, req->oobbuf.in,
-e708789c4a8798 Miquel Raynal   2021-01-07  441  						    spinand->oobbuf,
-e708789c4a8798 Miquel Raynal   2021-01-07  442  						    req->ooboffs,
-e708789c4a8798 Miquel Raynal   2021-01-07  443  						    req->ooblen);
-e708789c4a8798 Miquel Raynal   2021-01-07  444  		else
-868cbe2a6dcee4 Miquel Raynal   2020-10-01  445  			memcpy(req->oobbuf.in, spinand->oobbuf + req->ooboffs,
-868cbe2a6dcee4 Miquel Raynal   2020-10-01  446  			       req->ooblen);
-e708789c4a8798 Miquel Raynal   2021-01-07  447  	}
-868cbe2a6dcee4 Miquel Raynal   2020-10-01  448  
-7529df4652482c Peter Pan       2018-06-22  449  	return 0;
-7529df4652482c Peter Pan       2018-06-22  450  }
-7529df4652482c Peter Pan       2018-06-22  451  
-7529df4652482c Peter Pan       2018-06-22  452  static int spinand_write_to_cache_op(struct spinand_device *spinand,
-7529df4652482c Peter Pan       2018-06-22  453  				     const struct nand_page_io_req *req)
-7529df4652482c Peter Pan       2018-06-22  454  {
-7529df4652482c Peter Pan       2018-06-22  455  	struct nand_device *nand = spinand_to_nand(spinand);
-3d1f08b032dc4e Miquel Raynal   2020-10-01  456  	struct mtd_info *mtd = spinand_to_mtd(spinand);
-981d1aa0697ce1 Boris Brezillon 2019-01-24  457  	struct spi_mem_dirmap_desc *wdesc;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  458  	unsigned int nbytes, column = 0;
-13c15e07eedf26 Boris Brezillon 2019-01-24  459  	void *buf = spinand->databuf;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  460  	ssize_t ret;
-7529df4652482c Peter Pan       2018-06-22  461  
-13c15e07eedf26 Boris Brezillon 2019-01-24  462  	/*
-13c15e07eedf26 Boris Brezillon 2019-01-24  463  	 * Looks like PROGRAM LOAD (AKA write cache) does not necessarily reset
-13c15e07eedf26 Boris Brezillon 2019-01-24  464  	 * the cache content to 0xFF (depends on vendor implementation), so we
-13c15e07eedf26 Boris Brezillon 2019-01-24  465  	 * must fill the page cache entirely even if we only want to program
-13c15e07eedf26 Boris Brezillon 2019-01-24  466  	 * the data portion of the page, otherwise we might corrupt the BBM or
-13c15e07eedf26 Boris Brezillon 2019-01-24  467  	 * user data previously programmed in OOB area.
-3d1f08b032dc4e Miquel Raynal   2020-10-01  468  	 *
-3d1f08b032dc4e Miquel Raynal   2020-10-01  469  	 * Only reset the data buffer manually, the OOB buffer is prepared by
-3d1f08b032dc4e Miquel Raynal   2020-10-01  470  	 * ECC engines ->prepare_io_req() callback.
-13c15e07eedf26 Boris Brezillon 2019-01-24  471  	 */
-13c15e07eedf26 Boris Brezillon 2019-01-24  472  	nbytes = nanddev_page_size(nand) + nanddev_per_page_oobsize(nand);
-3d1f08b032dc4e Miquel Raynal   2020-10-01  473  	memset(spinand->databuf, 0xff, nanddev_page_size(nand));
-13c15e07eedf26 Boris Brezillon 2019-01-24  474  
-13c15e07eedf26 Boris Brezillon 2019-01-24  475  	if (req->datalen)
-13c15e07eedf26 Boris Brezillon 2019-01-24  476  		memcpy(spinand->databuf + req->dataoffs, req->databuf.out,
-13c15e07eedf26 Boris Brezillon 2019-01-24  477  		       req->datalen);
-7529df4652482c Peter Pan       2018-06-22  478  
-7529df4652482c Peter Pan       2018-06-22  479  	if (req->ooblen) {
-7529df4652482c Peter Pan       2018-06-22  480  		if (req->mode == MTD_OPS_AUTO_OOB)
-7529df4652482c Peter Pan       2018-06-22  481  			mtd_ooblayout_set_databytes(mtd, req->oobbuf.out,
-7529df4652482c Peter Pan       2018-06-22  482  						    spinand->oobbuf,
-7529df4652482c Peter Pan       2018-06-22  483  						    req->ooboffs,
-7529df4652482c Peter Pan       2018-06-22  484  						    req->ooblen);
-7529df4652482c Peter Pan       2018-06-22  485  		else
-7529df4652482c Peter Pan       2018-06-22  486  			memcpy(spinand->oobbuf + req->ooboffs, req->oobbuf.out,
-7529df4652482c Peter Pan       2018-06-22  487  			       req->ooblen);
-7529df4652482c Peter Pan       2018-06-22  488  	}
-7529df4652482c Peter Pan       2018-06-22  489  
-f9d7c7265bcff7 Miquel Raynal   2022-01-27  490  	if (req->mode == MTD_OPS_RAW)
-981d1aa0697ce1 Boris Brezillon 2019-01-24  491  		wdesc = spinand->dirmaps[req->pos.plane].wdesc;
-f9d7c7265bcff7 Miquel Raynal   2022-01-27  492  	else
-f9d7c7265bcff7 Miquel Raynal   2022-01-27  493  		wdesc = spinand->dirmaps[req->pos.plane].wdesc_ecc;
-7529df4652482c Peter Pan       2018-06-22  494  
-ca229bdbef29be Cheng Ming Lin  2024-09-09 @495  	if (spinand->flags & SPINAND_HAS_PROG_PLANE_SELECT_BIT)
-ca229bdbef29be Cheng Ming Lin  2024-09-09  496  		column |= req->pos.plane << fls(nanddev_page_size(nand));
-ca229bdbef29be Cheng Ming Lin  2024-09-09  497  
-7529df4652482c Peter Pan       2018-06-22  498  	while (nbytes) {
-981d1aa0697ce1 Boris Brezillon 2019-01-24  499  		ret = spi_mem_dirmap_write(wdesc, column, nbytes, buf);
-981d1aa0697ce1 Boris Brezillon 2019-01-24  500  		if (ret < 0)
-7529df4652482c Peter Pan       2018-06-22  501  			return ret;
-7529df4652482c Peter Pan       2018-06-22  502  
-981d1aa0697ce1 Boris Brezillon 2019-01-24  503  		if (!ret || ret > nbytes)
-981d1aa0697ce1 Boris Brezillon 2019-01-24  504  			return -EIO;
-7529df4652482c Peter Pan       2018-06-22  505  
-981d1aa0697ce1 Boris Brezillon 2019-01-24  506  		nbytes -= ret;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  507  		column += ret;
-981d1aa0697ce1 Boris Brezillon 2019-01-24  508  		buf += ret;
-7529df4652482c Peter Pan       2018-06-22  509  	}
-7529df4652482c Peter Pan       2018-06-22  510  
-7529df4652482c Peter Pan       2018-06-22  511  	return 0;
-7529df4652482c Peter Pan       2018-06-22  512  }
-7529df4652482c Peter Pan       2018-06-22  513  
-
+diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+index fabdc338dbfb..95aa4829d78f 100644
+--- a/Documentation/translations/zh_CN/process/programming-language.rst
++++ b/Documentation/translations/zh_CN/process/programming-language.rst
+@@ -3,25 +3,22 @@
+ :Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
+ :Translator: Alex Shi <alex.shi@linux.alibaba.com>
+ 
+-.. _cn_programming_language:
+-
+ 程序设计语言
+ ============
+ 
+-内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
+-在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
+-
+-这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
++内核是用 C 编程语言编写的 [zh_cn_c-language]_。更准确地说，内核通常使用 ``gcc`` [zh_cn_gcc]_ 编译，
++并且使用 ``-std=gnu11`` [zh_cn_gcc-c-dialect-options]_：这是 ISO C11 的 GNU 方言。
++``clang`` [zh_cn_clang]_ 也得到了支持，详见文档：
++:ref:`使用 Clang/LLVM 构建 Linux <kbuild_llvm>`。
+ 
+-对于一些体系结构，有一些使用 :ref:`clang <cn_clang>` 和 :ref:`icc <cn_icc>` 编译内核
+-的支持，尽管在编写此文档时还没有完成，仍需要第三方补丁。
++这种方言包含对 C 语言的许多扩展 [zh_cn_gnu-extensions]_，当然，它们许多都在内核中使用。
+ 
+ 属性
+ ----
+ 
+-在整个内核中使用的一个常见扩展是属性（attributes） :ref:`gcc-attribute-syntax <cn_gcc-attribute-syntax>`
++在整个内核中使用的一个常见扩展是属性（attributes） [zh_cn_gcc-attribute-syntax]_。
+ 属性允许将实现定义的语义引入语言实体（如变量、函数或类型），而无需对语言进行
+-重大的语法更改（例如添加新关键字） :ref:`n2049 <cn_n2049>`
++重大的语法更改（例如添加新关键字） [zh_cn_n2049]_。
+ 
+ 在某些情况下，属性是可选的（即不支持这些属性的编译器仍然应该生成正确的代码，
+ 即使其速度较慢或执行的编译时检查/诊断次数不够）
+@@ -30,42 +27,27 @@
+ ``__attribute__((__pure__))`` ），以检测可以使用哪些关键字和/或缩短代码, 具体
+ 请参阅 ``include/linux/compiler_attributes.h``
+ 
+-.. _cn_c-language:
+-
+-c-language
+-   http://www.open-std.org/jtc1/sc22/wg14/www/standards
+-
+-.. _cn_gcc:
+-
+-gcc
+-   https://gcc.gnu.org
+-
+-.. _cn_clang:
+-
+-clang
+-   https://clang.llvm.org
+-
+-.. _cn_icc:
+-
+-icc
+-   https://software.intel.com/en-us/c-compilers
+-
+-.. _cn_gcc-c-dialect-options:
+-
+-c-dialect-options
+-   https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
+-
+-.. _cn_gnu-extensions:
+-
+-gnu-extensions
+-   https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
+-
+-.. _cn_gcc-attribute-syntax:
+-
+-gcc-attribute-syntax
+-   https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
+-
+-.. _cn_n2049:
++Rust
++----
+ 
+-n2049
+-   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
++内核对 Rust 编程语言 [zh_cn_rust-language]_ 的支持是实验性的，并且可以通过配置选项
++``CONFIG_RUST`` 来启用。Rust 代码使用 ``rustc`` [zh_cn_rustc]_ 编译器在
++``--edition=2021`` [zh_cn_rust-editions]_ 选项下进行编译。版本（Editions）是一种
++在语言中引入非后向兼容的小型变更的方式。
++
++除此之外，内核中还使用了一些不稳定的特性 [zh_cn_rust-unstable-features]_。这些不稳定
++的特性将来可能会发生变化，因此，一个重要的目标是达到仅使用稳定特性的程度。
++
++具体请参阅 Documentation/rust/index.rst
++
++.. [zh_cn_c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
++.. [zh_cn_gcc] https://gcc.gnu.org
++.. [zh_cn_clang] https://clang.llvm.org
++.. [zh_cn_gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
++.. [zh_cn_gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
++.. [zh_cn_gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
++.. [zh_cn_n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
++.. [zh_cn_rust-language] https://www.rust-lang.org
++.. [zh_cn_rustc] https://doc.rust-lang.org/rustc/
++.. [zh_cn_rust-editions] https://doc.rust-lang.org/edition-guide/editions/
++.. [zh_cn_rust-unstable-features] https://github.com/Rust-for-Linux/linux/issues/2
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
