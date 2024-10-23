@@ -1,143 +1,195 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AF913BC11
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 19:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6301E0DFC;
+	Wed, 23 Oct 2024 20:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729712544; cv=none; b=mMw7rUg0McvDlNQTM6BDSyTSwWrQFyHyEVCJQ3fV5v0wsrVPD3T1P5IsYyRrj4nJfvjbXLxY1e81UN7bJZzgue+rAMM+Q6AgBl8zY6R0xiGuKVmOQLWDtQlJx7fQfDk1B6cXrLTDUU2J4eYrOxZuXETRQWvTzoknRaQEqbAHHRk=
+	t=1729716858; cv=none; b=jJ/88ZIzevxXEWF1g0GyKV0oJCQfkLlPxKnS5atOKbMmUz+9Vn1HxcT+5VRml8IoyBzxr4p7IdJpfHifPzkyR1AAjrXY68gQACtvMw+urGYpiB3TBiKul2jOfJDcmxO99rFYcCx+ZQI2BEkXaOCTEurgcjIebx5GxAtOHNXa+rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729712544; c=relaxed/simple;
-	bh=LVaFhLQapIc0ZkK/OTjneHOGSsk4mj8AVWq4oRfYt7w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gT+Jio9fn+b5jDT6UXZDQhBTiPqYdY6PW3RY4eez/cxS78UJTagcCikg6hG/92sdG8lBrgB8ipORFvcZeVgqa3o60zVvc5w3UlF0xxRQ59LWuUFbSQIwl5QmptRjSoi86+PC/k6z/hInaU7GYuBa8HVyOP+9otgMyW8a4s73qvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QlsNIYXv; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1729716858; c=relaxed/simple;
+	bh=m3UnnUKdf6fzNFecSL2p2T2iug/KLF3j1BmUffXIouE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oI2YjeNDv/AY44cTWOuvQ8mMO+OYVwT1UwEUB2oPKc4q+JtWBZPmGMGzWhVmMt+4RRB+ZoMtVEJyVikpBFDMCAW3Ay60p8HJk2synh5Qa1MgsRnU7+nIRm4dKdmd7AcYPYtqpz1I7N7CS2CqMEwzMroBq9x9IlLOqJc38JVWkX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AbGaLtG+; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QlsNIYXv"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49N9ZecR003624;
-	Wed, 23 Oct 2024 19:42:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	4hOkkEPHh5v2lDBXE+5MmF++twajN54H112yfkX4INc=; b=QlsNIYXvEGf/qWjT
-	i9Df2SVU+omZm3kZMNBhslWjSJLt3vgDHaDOHMiXaQt1nXNNhcrULtYny8Z1Dr4v
-	kpZPhQQsCh+Mcws5STFv7C+O6mj+wFbM49IClba9ACaGiYHSmw+uXuB0ZXIqAMik
-	7/kIll72y235eH3OwDEu4dRrQuqF3wbNAdesosVKZShfWC4XuxarPwbSIFQ59Izq
-	sFC+3s9LmdlbP70Pj/zXzgZUDSY6oIyIX7qUa8LPQLnen+Rqrwg0N9nXgwXs5UBw
-	LWWakHaFGdAXix9WMf4D96PdwaFpWS2AwvfvihpgzOAyPAe6IONfHdqYoKQ3KY/W
-	Gj0CYw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em683anq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 19:42:12 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49NJgBJB015174
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 19:42:11 GMT
-Received: from [10.216.22.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 23 Oct
- 2024 12:42:05 -0700
-Message-ID: <8219c6e7-18fe-4878-9cae-093898a7d129@quicinc.com>
-Date: Thu, 24 Oct 2024 01:12:02 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AbGaLtG+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729716856; x=1761252856;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m3UnnUKdf6fzNFecSL2p2T2iug/KLF3j1BmUffXIouE=;
+  b=AbGaLtG+smGJnauvn4knEBUPEB2C11QJaPI/rItZR4MKvDWxwWY1AeBz
+   t8oEXZzQRnbhqXLt6hr7rvDmPwElqEesjDDEDwxVLyWw7ACt8srLMr76F
+   2E4dTas9nV8e2LGcQ1aGUfP2s2cXnNs8hdVtR1uAZf7/D8+jA3ZkiykPY
+   ekHgD/sDP6ypGo9JNCoZrT2RkjHW6shDhgr1ajLEEUDULz3k9Fs011hTt
+   bP1vnQaRAB3DCIe1GGvtnryqTi/66cnYXGx5nynV5uZBRkvwE0zf2YPii
+   qoFQ1ThH36pUMzRUvZuAnWtEP6mqmx4Z7L2ounFQixOEXUXK6Nf0MlGup
+   Q==;
+X-CSE-ConnectionGUID: XFC9lLY9TUqr4q09l5+0Sg==
+X-CSE-MsgGUID: MGSwlaQ3QDqq/LzzsOVH/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="51869567"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="51869567"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 13:54:16 -0700
+X-CSE-ConnectionGUID: d6eaIDuAQx+zv2U03GF8fg==
+X-CSE-MsgGUID: wp2tU81vQAOTbbl4faEqSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,227,1725346800"; 
+   d="scan'208";a="80038288"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 23 Oct 2024 13:54:13 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3iMs-000VYS-35;
+	Wed, 23 Oct 2024 20:54:10 +0000
+Date: Thu, 24 Oct 2024 04:53:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joanne Koong <joannelkoong@gmail.com>, miklos@szeredi.hu,
+	linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	josef@toxicpanda.com, bernd.schubert@fastmail.fm,
+	willy@infradead.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 09/13] fuse: convert retrieves to use folios
+Message-ID: <202410240414.YVec3s6S-lkp@intel.com>
+References: <20241022185443.1891563-10-joannelkoong@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>
-CC: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        "Abhinav
- Kumar" <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@gmail.com>, "Simona
- Vetter" <simona@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Arnd
- Bergmann" <arnd@arndb.de>, Sean Paul <sean@poorly.run>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20241018151143.3543939-1-arnd@kernel.org>
- <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
- <k42wmgziqia6balqsrfualbg73giesjxxtyaldkxsrdxkro2li@6neybqsu27me>
- <20241021092509.tm4w3ufdgcd7of37@hu-akhilpo-hyd.qualcomm.com>
- <c80309ad-52de-4998-ab0e-05db7cc5068b@oss.qualcomm.com>
-Content-Language: en-US
-From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <c80309ad-52de-4998-ab0e-05db7cc5068b@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: g2d5s-lP0vOEyDNwN54rHo14jvchke3f
-X-Proofpoint-GUID: g2d5s-lP0vOEyDNwN54rHo14jvchke3f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 bulkscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410230127
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241022185443.1891563-10-joannelkoong@gmail.com>
 
-On 10/21/2024 3:01 PM, Konrad Dybcio wrote:
-> On 21.10.2024 11:25 AM, Akhil P Oommen wrote:
->> On Sat, Oct 19, 2024 at 04:14:13PM +0300, Dmitry Baryshkov wrote:
->>> On Sat, Oct 19, 2024 at 03:01:46PM +0530, Akhil P Oommen wrote:
->>>> On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
->>>>> From: Arnd Bergmann <arnd@arndb.de>
->>>>>
->>>>> Clang-19 and above sometimes end up with multiple copies of the large
->>>>> a6xx_hfi_msg_bw_table structure on the stack. The problem is that
->>>>> a6xx_hfi_send_bw_table() calls a number of device specific functions to
->>>>> fill the structure, but these create another copy of the structure on
->>>>> the stack which gets copied to the first.
->>>>>
->>>>> If the functions get inlined, that busts the warning limit:
->>>>>
->>>>> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
->>>>
->>>> Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
->>>
->>> Kernel stacks are expected to be space limited, so 1024 is a logical
->>> limit for a single function.
->>
->> Thanks for the clarification. I think it is better to move this table to
->> struct a6xx_gmu which is required anyway when we implement dynamic generation
->> of bw table. Also, we can skip initializing it in subsequent gpu wake ups.
->>
->> Arnd, do you think that would be sufficient? I can send that patch if you
->> want help.
-> 
-> FWIW I implemented this at one point.. ended up only rebasing it for months
-> as I kept delaying GMU voting until we get an in-tree dram frequency LUT
-> retrieving driver..
-> 
-> https://github.com/SoMainline/linux/commits/konrad/longbois-next/drivers/gpu/drm/msm/adreno
-> 
-> worth noting that this used to be my R&D branch so this is very much err..
-> "provided as-is".. but it did work on 8250!
-> 
+Hi Joanne,
 
-Thanks, Konrad. "IB vote via GMU" support is there in my bucket list. I can help
-out if you want to clean this up and send out.
+kernel test robot noticed the following build warnings:
 
--Akhil
- 
-> Konrad
+[auto build test WARNING on mszeredi-fuse/for-next]
+[also build test WARNING on next-20241023]
+[cannot apply to akpm-mm/mm-everything linus/master v6.12-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/fuse-support-folios-in-struct-fuse_args_pages-and-fuse_copy_pages/20241023-025923
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
+patch link:    https://lore.kernel.org/r/20241022185443.1891563-10-joannelkoong%40gmail.com
+patch subject: [PATCH v2 09/13] fuse: convert retrieves to use folios
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241024/202410240414.YVec3s6S-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241024/202410240414.YVec3s6S-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410240414.YVec3s6S-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/fuse/dev.c:1773:43: warning: variable 'num_folios' is uninitialized when used here [-Wuninitialized]
+    1773 |         ap->folio_descs = (void *) (ap->folios + num_folios);
+         |                                                  ^~~~~~~~~~
+   fs/fuse/dev.c:1745:25: note: initialize the variable 'num_folios' to silence this warning
+    1745 |         unsigned int num_folios;
+         |                                ^
+         |                                 = 0
+   1 warning generated.
+
+
+vim +/num_folios +1773 fs/fuse/dev.c
+
+  1734	
+  1735	static int fuse_retrieve(struct fuse_mount *fm, struct inode *inode,
+  1736				 struct fuse_notify_retrieve_out *outarg)
+  1737	{
+  1738		int err;
+  1739		struct address_space *mapping = inode->i_mapping;
+  1740		pgoff_t index;
+  1741		loff_t file_size;
+  1742		unsigned int num;
+  1743		unsigned int offset;
+  1744		size_t total_len = 0;
+  1745		unsigned int num_folios;
+  1746		unsigned int num_pages, cur_pages = 0;
+  1747		struct fuse_conn *fc = fm->fc;
+  1748		struct fuse_retrieve_args *ra;
+  1749		size_t args_size = sizeof(*ra);
+  1750		struct fuse_args_pages *ap;
+  1751		struct fuse_args *args;
+  1752	
+  1753		offset = outarg->offset & ~PAGE_MASK;
+  1754		file_size = i_size_read(inode);
+  1755	
+  1756		num = min(outarg->size, fc->max_write);
+  1757		if (outarg->offset > file_size)
+  1758			num = 0;
+  1759		else if (outarg->offset + num > file_size)
+  1760			num = file_size - outarg->offset;
+  1761	
+  1762		num_pages = (num + offset + PAGE_SIZE - 1) >> PAGE_SHIFT;
+  1763		num_pages = min(num_pages, fc->max_pages);
+  1764	
+  1765		args_size += num_pages * (sizeof(ap->folios[0]) + sizeof(ap->folio_descs[0]));
+  1766	
+  1767		ra = kzalloc(args_size, GFP_KERNEL);
+  1768		if (!ra)
+  1769			return -ENOMEM;
+  1770	
+  1771		ap = &ra->ap;
+  1772		ap->folios = (void *) (ra + 1);
+> 1773		ap->folio_descs = (void *) (ap->folios + num_folios);
+  1774		ap->uses_folios = true;
+  1775	
+  1776		args = &ap->args;
+  1777		args->nodeid = outarg->nodeid;
+  1778		args->opcode = FUSE_NOTIFY_REPLY;
+  1779		args->in_numargs = 2;
+  1780		args->in_pages = true;
+  1781		args->end = fuse_retrieve_end;
+  1782	
+  1783		index = outarg->offset >> PAGE_SHIFT;
+  1784	
+  1785		while (num && cur_pages < num_pages) {
+  1786			struct folio *folio;
+  1787			unsigned int this_num;
+  1788	
+  1789			folio = filemap_get_folio(mapping, index);
+  1790			if (IS_ERR(folio))
+  1791				break;
+  1792	
+  1793			this_num = min_t(unsigned, num, PAGE_SIZE - offset);
+  1794			ap->folios[ap->num_folios] = folio;
+  1795			ap->folio_descs[ap->num_folios].offset = offset;
+  1796			ap->folio_descs[ap->num_folios].length = this_num;
+  1797			ap->num_folios++;
+  1798			cur_pages++;
+  1799	
+  1800			offset = 0;
+  1801			num -= this_num;
+  1802			total_len += this_num;
+  1803			index++;
+  1804		}
+  1805		ra->inarg.offset = outarg->offset;
+  1806		ra->inarg.size = total_len;
+  1807		args->in_args[0].size = sizeof(ra->inarg);
+  1808		args->in_args[0].value = &ra->inarg;
+  1809		args->in_args[1].size = total_len;
+  1810	
+  1811		err = fuse_simple_notify_reply(fm, args, outarg->notify_unique);
+  1812		if (err)
+  1813			fuse_retrieve_end(fm, args, err);
+  1814	
+  1815		return err;
+  1816	}
+  1817	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
