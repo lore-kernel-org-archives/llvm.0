@@ -1,125 +1,180 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163723D97A;
-	Wed, 23 Oct 2024 02:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D4513213E
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 03:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729651642; cv=none; b=HnFnbFt6O52zGl26RNVbN5F9Hqe4O4OYuVX83TRcYIM6HiXPWwzEAJfPlIc5zrTeIJQzEaEtRBjNyxwjCf2Hf9PpjC4YSfY3G/IzEcLsQoYmULFVFE/vtRozGiL1ycKr+0FloJz8Xq8Q0BCCwZssgZ3IwgIJ8xEcABizObjBQlM=
+	t=1729654204; cv=none; b=QE+9KWPwuqsMoOcKI2M8M+fCgPTr/Mp7PH2F+M1LLqlxmgpILad1WmICWEDApAYeEtdvI1VnHitdHM6lJDqshA3XVvmJvVXJBZDdgZ1RVeykiT+hB2I2RXm0orCK0P9hcmsZjexM4yw5zM522TiZMx6ZMSpW9rqLSq4gBsJEr+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729651642; c=relaxed/simple;
-	bh=0jx7Wx/FoLIjWj+Tajn8bC0PCcGz7+nk72J7B6OIaKA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JAzKtMPVaIN8bWaQdw+NtDXCj1q1t0W1/TlXVivaCVZDYbg5lAS/4nHEKN8FEgCZDtK8frOv0z+aHdc2OtiK458fNkd7zT0eHi68G0dTCvyF5GqOiX5JDNAotmbj7I0zd7f7BE+FrRQEsppucYwUizU/8/oycfVTsCckFBm71Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RLBn64Us; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729654204; c=relaxed/simple;
+	bh=2QH7o/xnY5buqG6VSOOECvqeMUs3gXdxwVdicaQmOcM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ujxM6VRBX7SNEGvur44WI6bnlsC3Q5eSwCXCmrnfDlGfhDRqax70bt4dlmjU2bbfdgjlzJp0pjPdotVgO9efofKSYwl1O9mN03tgOJ3c1+ycpE9JcSUQoZREARXQET2FqXRb9ovyOYp4baDC5TYsKXc51GPNbaMLnotaTrhaNAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTR3CnIp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RLBn64Us"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729651641; x=1761187641;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0jx7Wx/FoLIjWj+Tajn8bC0PCcGz7+nk72J7B6OIaKA=;
-  b=RLBn64Us8gob0huyPuXG2pzwMUmM6Gm1Wyd4/uQnkSdMQIbtrVH8jtqw
-   ympF3UKdveaDm7RxXZov51ExVppsVyqtBNuKC0UILmyR7ydOdX/i7Mvmg
-   nDuK0r2XYH0URRvJFMDx6k7S3D6FQDo3Cqpnfym9SbK2oBjuMDt13P0Sk
-   metDzl6fNLB516vrGitJg/gNc0gBaW2+JSnVDrRJI+tQCD8d6rpCajyan
-   KYr2ne9liGuuodRLU1mHSHfJzPitarTx3cb9q4d6hMJ+lTjdtlQG4EwVE
-   OE3EX0HNRzKpmbJMy1RW3gvc2Wfv7lk8RYn9OtGqF1fISxhdeMfi/lSjE
-   g==;
-X-CSE-ConnectionGUID: IWFKjD4iS8OUbH88JSoFfg==
-X-CSE-MsgGUID: 0YWvOuDAQCSGHDyPpa7/oQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29381858"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29381858"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 19:47:21 -0700
-X-CSE-ConnectionGUID: zukgPvMZTz+0c9kB9sEVlA==
-X-CSE-MsgGUID: Hjv53XWgRguXi6ti0AcrvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,223,1725346800"; 
-   d="scan'208";a="80864126"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 22 Oct 2024 19:47:19 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t3RP3-000UNM-0J;
-	Wed, 23 Oct 2024 02:47:17 +0000
-Date: Wed, 23 Oct 2024 10:46:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] rseq: Validate read-only fields under DEBUG_RSEQ
- config
-Message-ID: <202410231007.2hFp5Cwl-lkp@intel.com>
-References: <20241018171219.256647-1-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTR3CnIp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB158C4CEC3
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 03:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729654204;
+	bh=2QH7o/xnY5buqG6VSOOECvqeMUs3gXdxwVdicaQmOcM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DTR3CnIp+vADatNfT9fxS0zkheAm72x0iEGSm1CVkE7/FQudeO5FHhHBUSvCEjlXG
+	 AIHRH0epkrbAsMe2Ng7lsVB4osuwdeeXOJX9EcXmoDwgKt02yHIgKsb5MzbUlXFJYq
+	 zWPwOQZ8r1CWXf1agCAC7jq3W7ypKHEIJBZHiPl7lnYnM6vnzWSTAlSUt8k9IbFE18
+	 M+7mODoaECfOTg2m2h7x5UeMW87Ra8y27F6nqR7wAZnKvXSZZeAKn8WpIr2zqTh0z6
+	 mUTa/7RyrRNqUMuoe/jimuyAD1Ur88xTlLwIAoJHWUqdjp7KYnAVmmREHWkK+I0yzd
+	 7op7MBQasgFgQ==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so5662819e87.3
+        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 20:30:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU9pvV6fzVnGssfSnfEHQb4ppMagDXe8mANX5QrSauvKrmNOJmA/nVGTvS2IfzJbHzPDIRw@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxyae/t03xBHb6MCg8A/Ace1Lnh+OltZtKyDrwtMXoqofnMTSDR
+	WDpzapo22coyvRtLjUvZ7q6+UNq0aRhDsChK2EYJQt2PXo9/bpsLH+O1ylYliyYyVGtZea0712c
+	vDxdWApKXId3W1cZt/zz3B1dFq4o=
+X-Google-Smtp-Source: AGHT+IGSDt3HCGiS1BKVgcnN2K4EIB+exWXAN5PUwzfBHg3n+S5DeAzMkeNnBhyWbAqMZS39gSwENkzAJDlXj5dcYv4=
+X-Received: by 2002:a05:6512:1312:b0:539:ea54:8d22 with SMTP id
+ 2adb3069b0e04-53b1a304bf6mr327527e87.18.1729654202655; Tue, 22 Oct 2024
+ 20:30:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241018171219.256647-1-mathieu.desnoyers@efficios.com>
+References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
+ <20241021201657.GA898643@thelio-3990X> <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com>
+ <20241022200732.GA487584@thelio-3990X>
+In-Reply-To: <20241022200732.GA487584@thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 23 Oct 2024 12:29:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARSHhKr=4jrAFUrnVwU6Yw3reybku3CEVxDnSKqBptRVQ@mail.gmail.com>
+Message-ID: <CAK7LNARSHhKr=4jrAFUrnVwU6Yw3reybku3CEVxDnSKqBptRVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Koakuma <koachan@protonmail.com>, Andreas Larsson <andreas@gaisler.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, 
+	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mathieu,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on akpm-mm/mm-everything linus/master v6.12-rc4 next-20241022]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mathieu-Desnoyers/rseq-Validate-read-only-fields-under-DEBUG_RSEQ-config/20241019-011655
-base:   tip/sched/core
-patch link:    https://lore.kernel.org/r/20241018171219.256647-1-mathieu.desnoyers%40efficios.com
-patch subject: [RFC PATCH] rseq: Validate read-only fields under DEBUG_RSEQ config
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241023/202410231007.2hFp5Cwl-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231007.2hFp5Cwl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410231007.2hFp5Cwl-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/s390/purgatory/purgatory.c:10:
-   In file included from include/linux/kexec.h:18:
-   In file included from include/linux/vmcore_info.h:6:
-   In file included from include/linux/elfcore.h:7:
-   In file included from include/linux/sched/task_stack.h:9:
->> include/linux/sched.h:1368:16: warning: field 'rseq_fields' with variable sized type 'struct rseq' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-    1368 |         struct rseq                     rseq_fields;
-         |                                         ^
-   1 warning generated.
+On Wed, Oct 23, 2024 at 5:07=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Wed, Oct 23, 2024 at 04:10:01AM +0900, Masahiro Yamada wrote:
+> > I applied this patch set, but I still observe a build error.
+> ...
+> > masahiro@zoe:~/workspace/linux-kbuild(kbuild)$ make
+> > LLVM=3D~/tools/llvm-latest/bin/  ARCH=3Dsparc sparc64_defconfig all
+> ...
+> > clang: error: unsupported argument '--undeclared-regs' to option '-Wa,'
+>
+> Koakuma might know more than I do but I did not test either the
+> integrated assembler or the rest of the LLVM tools; I only tested clang
+> for CC. As far as I am aware, that has been where most of the effort in
+> llvm-project has been going and I think there are probably other fixes
+> that will be needed for the other tools. The command I tested was:
+>
+>   $ make -skj"$(nproc)" \
+>          ARCH=3Dsparc64 \
+>          CC=3Dclang \
+>          CROSS_COMPILE=3Dsparc64-linux-gnu- \
+>          LLVM_IAS=3D0 \
+>          mrproper defconfig all
 
 
-vim +1368 include/linux/sched.h
+With running this command in Ubuntu 24.10, I got improvements,
+but I still got another build error.  (unknown argument: '-mv8plus')
 
-  1357	
-  1358	#ifdef CONFIG_RSEQ
-  1359		struct rseq __user *rseq;
-  1360		u32 rseq_len;
-  1361		u32 rseq_sig;
-  1362		/*
-  1363		 * RmW on rseq_event_mask must be performed atomically
-  1364		 * with respect to preemption.
-  1365		 */
-  1366		unsigned long rseq_event_mask;
-  1367	# ifdef CONFIG_DEBUG_RSEQ
-> 1368		struct rseq			rseq_fields;
-  1369	# endif
-  1370	#endif
-  1371	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+masahiro@3606c94ac88c:~/workspace/linux-kbuild$ make -skj"$(nproc)"
+ARCH=3Dsparc64 CC=3Dclang CROSS_COMPILE=3Dsparc64-linux-gnu- LLVM_IAS=3D0
+mrproper defconfig all
+<stdin>:1519:2: warning: syscall clone3 not implemented [-W#warnings]
+ 1519 | #warning syscall clone3 not implemented
+      |  ^
+1 warning generated.
+arch/sparc/vdso/vclock_gettime.c:274:1: warning: no previous prototype
+for function '__vdso_clock_gettime' [-Wmissing-prototypes]
+  274 | __vdso_clock_gettime(clockid_t clock, struct __kernel_old_timespec =
+*ts)
+      | ^
+arch/sparc/vdso/vclock_gettime.c:273:9: note: declare 'static' if the
+function is not intended to be used outside of this translation unit
+  273 | notrace int
+      |         ^
+      |         static
+arch/sparc/vdso/vclock_gettime.c:302:1: warning: no previous prototype
+for function '__vdso_clock_gettime_stick' [-Wmissing-prototypes]
+  302 | __vdso_clock_gettime_stick(clockid_t clock, struct
+__kernel_old_timespec *ts)
+      | ^
+arch/sparc/vdso/vclock_gettime.c:301:9: note: declare 'static' if the
+function is not intended to be used outside of this translation unit
+  301 | notrace int
+      |         ^
+      |         static
+arch/sparc/vdso/vclock_gettime.c:327:1: warning: no previous prototype
+for function '__vdso_gettimeofday' [-Wmissing-prototypes]
+  327 | __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct
+timezone *tz)
+      | ^
+arch/sparc/vdso/vclock_gettime.c:326:9: note: declare 'static' if the
+function is not intended to be used outside of this translation unit
+  326 | notrace int
+      |         ^
+      |         static
+arch/sparc/vdso/vclock_gettime.c:363:1: warning: no previous prototype
+for function '__vdso_gettimeofday_stick' [-Wmissing-prototypes]
+  363 | __vdso_gettimeofday_stick(struct __kernel_old_timeval *tv,
+struct timezone *tz)
+      | ^
+arch/sparc/vdso/vclock_gettime.c:362:9: note: declare 'static' if the
+function is not intended to be used outside of this translation unit
+  362 | notrace int
+      |         ^
+      |         static
+4 warnings generated.
+clang: error: unknown argument: '-mv8plus'
+make[5]: *** [scripts/Makefile.build:229:
+arch/sparc/vdso/vdso32/vclock_gettime.o] Error 1
+sparc64-linux-gnu-ld: warning: arch/sparc/vdso/vdso-note.o: missing
+.note.GNU-stack section implies executable stack
+sparc64-linux-gnu-ld: NOTE: This behaviour is deprecated and will be
+removed in a future version of the linker
+make[5]: Target 'arch/sparc/vdso/' not remade because of errors.
+make[4]: *** [scripts/Makefile.build:478: arch/sparc/vdso] Error 2
+
+
+
+masahiro@3606c94ac88c:~/workspace/linux-kbuild$ clang --version
+Ubuntu clang version 19.1.1 (1ubuntu1)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/lib/llvm-19/bin
+
+
+Is this version too old, or am I missing something?
+
+
+
+
+
+> I see this as more of a stepping stone series to make testing those
+> other components easier as time goes on, hence why I did not really
+> consider user facing documentation either like you brought up in the
+> other thread.
+>
+> Cheers,
+> Nathan
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
