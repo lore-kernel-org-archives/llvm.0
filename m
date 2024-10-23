@@ -1,114 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D511155303
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 07:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F52214D6ED;
+	Wed, 23 Oct 2024 07:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729668561; cv=none; b=sS6K3ew5zsrH55i+JnDZ7asOpqyna12Yg4hquq2R4urQKxJqLKF7PYflHSYJBmtgWErnjjic7/R0bWvOz2cig6Y0BeySV7YP6yDD7ijmFOh0ZA15roEC4gKv+77tn/YCdjDh+fSny15R8t/JLOzPCcW+C6VGAB8SvF8tHyS6jPg=
+	t=1729670258; cv=none; b=JXeHk1KYypuoIVW/op6s/a06SFte+ujL+UBD6V1h/8q+uKh0b7gVlQsPj6XD6FxXLPowJNeWLcu0JzQAnUKNHnyJ6e/HL+gytbfxCtCpB/LOFd5s4qgBatHGrMqAkMB1QicP+SsFTsG5CGIhGkqQDva/KNuIOICawip501DVhEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729668561; c=relaxed/simple;
-	bh=0cjxPN3gVvAN5DsaYQ7B4tJsV1CxyxDi0m1/lvLw0r8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LcI4qAPcFiXpu85MAr/LkFnErQd9mjQURdKgmfCZ+9QMGFK43zyPxeQThn/kNlrVeBr1lGz8tkweJslilShI8DSLoK1czPPD4+0F6HYWtsBf7tEKY0zSXeMixdvHtVcit1nyRK41LeT7Mg+5gYgHWTbA+2vAmsTMpoJMhjxhDQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gxw3CcUJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729670258; c=relaxed/simple;
+	bh=JimrSyTqFyT3tOoA/eNvkbLEiLP93KW72ZpHrRgu0Jc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JaADnBBZVoyr98fy0fuzxCuLCRkrXR83zYf588wgr3tkv5ekgvb4ao43FTXD8IRHG4FohMnZRxjT7GXT4Xasekc8crr/vsMX5cJbjGnuYnE+ThA4ge9uKD8w1SC9FGRPRuKURXM3b+cKKWxvCImgi/c8/6Yc25ChcPAFoDJuWGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z6EkDdEx; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gxw3CcUJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30E9C4CEC7
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 07:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729668560;
-	bh=0cjxPN3gVvAN5DsaYQ7B4tJsV1CxyxDi0m1/lvLw0r8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gxw3CcUJg5oP58z7MrQd8UIGeHCddRvn1YusmHPBAl+ImMbVUrsCml6oz8px54bek
-	 qXGvhlPnJjSdvGWYhKjxNComu9zaBxtL4XgiCQC5pnWk6hKSde6qbqtQRdaAA699tW
-	 Dlh/9FAkbWLGdEenSMra/dnJliOIUEhT+6ligXbWNvunr1iT9uSN+KVDyN74aD5uzD
-	 v0fXJQNPkDM7ri7gaID5ooPyDJ0uVFQrCkAoM7m+SUao7lNISM7fwNwoHTsCZPQJiB
-	 mgvH8WV0fYapQ5uloEQ0CieMa4T+pQT9OrXjP9MOWeZJGv/bJEYhs/Lub0xS6nlmms
-	 H8Yb6hZwNfeqw==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53b13ea6b78so2695517e87.2
-        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 00:29:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXXVarqYw+GI2svQS7+HWgIPEarXJVyIIVs4a2zeZtWOe+f2ChitEHaha2+/nf4ukIHgz7R@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxsjaa7UQPJ+UpTJG13zjnZJCNo3KNrmQFAzUkTx3jhZjxw+IwO
-	qZf7BmKdiVy6ijb49nvgA0nDkFIhBvuarRt9wRzNexVaYtKMp8QRsuOqXCV5VxdrXAr24OJeyqi
-	777lTnTksnOLcWqPIprG8X14xy+4=
-X-Google-Smtp-Source: AGHT+IFRea2Ijszif9VG8m68iTuteEaOPa/SvXFPAj+mSpGZe25TCijKQGifGZl6tE77eNXwEgasc4gRFeTgNxcsDso=
-X-Received: by 2002:a05:6512:3d09:b0:536:7377:7d23 with SMTP id
- 2adb3069b0e04-53b1a39b073mr1285874e87.40.1729668559599; Wed, 23 Oct 2024
- 00:29:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z6EkDdEx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729670257; x=1761206257;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JimrSyTqFyT3tOoA/eNvkbLEiLP93KW72ZpHrRgu0Jc=;
+  b=Z6EkDdExfK/hgpTqgg6XXpO80+0w18sK8b0Ewp4loJ61fSPd6fSO0nTG
+   avIJ0awo+ZbjZ4BUnuriXQKR+AvJchS7mvDgOddhZtCY0kVeXZMMAtDYq
+   UuAJl7cdxNx02hlkYh4nquKSpK4TPtCsVXkGc04X4N5HZphaavnVS6RkE
+   PNNc7DrEc0NmF6UhQN/UNk4kzbFxbhe/GmbMFF+KjLu+k8ZZD92BSnkAw
+   wpj58/5XbVtIVaQLtK87mxNYWdT9800gKv2MY5r37PX3ccEM6kSyV3k8b
+   N1TYxDRd+YE9KpVAxE+2jxWGgTFxYcWpFFvS9HOn5H0BR6hX9P5I5+vKn
+   w==;
+X-CSE-ConnectionGUID: 4q7C5xuFTZGGCvznt74Hfw==
+X-CSE-MsgGUID: 0RiD+7AeRFWZvnEFH4sahA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="39818020"
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="39818020"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 00:57:37 -0700
+X-CSE-ConnectionGUID: KV+Tm2KBTyuEjCZzb/+TNw==
+X-CSE-MsgGUID: aZm9yJqtTeytFF+IdMPfBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="79788618"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 23 Oct 2024 00:57:35 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3WFJ-000UdG-1l;
+	Wed, 23 Oct 2024 07:57:33 +0000
+Date: Wed, 23 Oct 2024 15:57:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [axboe-block:io_uring-reg-wait 6/7] ld.lld: error: undefined symbol:
+ __get_user_bad
+Message-ID: <202410231553.FJ6DF96q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-7-xur@google.com>
- <CAK7LNARfm7HBx-wLCak1w0sfH7LML1ErWO=2sLj4ovR38RsnTA@mail.gmail.com>
- <CAF1bQ=Qi9hyKbc5H3N36W=MukT3321rZMCas0ndpRf0YszAfOA@mail.gmail.com>
- <CAK7LNAQr_EusZyy-dPcV=5o9UckStaUfXLSCQh7APbYh15NC3w@mail.gmail.com> <a38a883e-d887-4d79-bb52-f28f5efc99a8@app.fastmail.com>
-In-Reply-To: <a38a883e-d887-4d79-bb52-f28f5efc99a8@app.fastmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 23 Oct 2024 16:28:43 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATfdxBvFxhAQhAuWhVfqfFptCXvjRS2xcWmFFqYo8Qp-w@mail.gmail.com>
-Message-ID: <CAK7LNATfdxBvFxhAQhAuWhVfqfFptCXvjRS2xcWmFFqYo8Qp-w@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] Add Propeller configuration for kernel build.
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Bill Wendling <morbo@google.com>, 
-	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, x86@kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Oct 23, 2024 at 4:25=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Wed, Oct 23, 2024, at 07:06, Masahiro Yamada wrote:
-> > On Tue, Oct 22, 2024 at 9:00=E2=80=AFAM Rong Xu <xur@google.com> wrote:
-> >
-> >> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >> > > +
-> >> > > +Configure the kernel with::
-> >> > > +
-> >> > > +   CONFIG_AUTOFDO_CLANG=3Dy
-> >> >
-> >> >
-> >> > This is automatically met due to "depends on AUTOFDO_CLANG".
-> >>
-> >> Agreed. But we will remove the dependency from PROPELlER_CLANG to AUTO=
-FDO_CLANG.
-> >> So we will keep the part.
-> >
-> >
-> > You can replace "depends on AUTOFDO_CLANG" with
-> > "imply AUTOFDO_CLANG" if it is sensible.
-> >
-> > Up to you.
->
-> I don't think we should ever encourage the use of 'imply'
-> because it is almost always used incorrectly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git io_uring-reg-wait
+head:   454727b3107832a226fbfee1d91a8b74670fc861
+commit: edfa7dbed73cb69f803d6cff1fd7e0632777bfa0 [6/7] io_uring: change io_get_ext_arg() to uaccess begin + end
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20241023/202410231553.FJ6DF96q-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231553.FJ6DF96q-lkp@intel.com/reproduce)
 
-If we are able to delete the 'imply' keyword, Kconfig would be a bit cleane=
-r.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410231553.FJ6DF96q-lkp@intel.com/
 
-In most cases, it can be replaced with 'default'.
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: __get_user_bad
+   >>> referenced by io_uring.c
+   >>>               io_uring/io_uring.o:(__se_sys_io_uring_enter) in archive vmlinux.a
+   >>> referenced by io_uring.c
+   >>>               io_uring/io_uring.o:(__se_sys_io_uring_enter) in archive vmlinux.a
 
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
