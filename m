@@ -1,202 +1,180 @@
-Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71DF1448C1
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11FD142623;
+	Wed, 23 Oct 2024 06:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729664956; cv=none; b=W86737p3cn94zdCdshg482FOaEuJKmlzPLGD44MMEcDY+A2Mk67dDxoEy1lYD7WVptcVqJFBDJdDpNDyva9PYjKeSoeIYNbNaZTu1h7YOvtfj5icW8CK5Bl7hf21yDr5NmVoOn+evjtsQ9qbw8eUGHxouHK3xY+tjVP957RN2mo=
+	t=1729665339; cv=none; b=ghQLBReTwo3DA43qInoVOZPcuIZVLA2zkPl+f0oOqj0VhsaffsHaVbtIwtzeFr7I4gj9Jq9FlEV1MsUVTIPnIFLMzl7VpAfzj+bfpKuUNfVYXdcz5YDUCucb/tC90vc4hYNE/CJU4wt/KdYXgsQydmdKBz88O83UgiL6uv9YQ44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729664956; c=relaxed/simple;
-	bh=dFSfjS4h9tPuzdzt1M5XnfRjvYg3CJK+vpEt2AYf+iE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gXG+WOfRuF8N4oP8/tipvLc2dEzKWFTIRZFdvcQ2zn3McJ3BYyXGlmD1XfCXWzvxHLEIEdPauBu/83QNf1WpHP4WxayawtiNWyYPbodJpoHsJ6J8JchTb/29inIrX0gHtD+y+hTNWYXB2RmwIu+vWuTqAaBJyq1VO7OkPiNbVxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.21.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.50])
-	by app1 (Coremail) with SMTP id HgEQrADHzX1zlxhn_SN0CA--.3465S2;
-	Wed, 23 Oct 2024 14:28:03 +0800 (CST)
-Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
-	by gateway (Coremail) with SMTP id _____wDnEUBrlxhnRB6WAA--.64686S2;
-	Wed, 23 Oct 2024 14:27:57 +0800 (CST)
-From: Dongliang Mu <dzm91@hust.edu.cn>
-To: si.yanteng@linux.dev,
-	Alex Shi <alexs@kernel.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3] docs/zh_CN: update the translation of process/programming-language.rst
-Date: Wed, 23 Oct 2024 14:27:43 +0800
-Message-ID: <20241023062750.849951-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1729665339; c=relaxed/simple;
+	bh=JCd5CSidKTxinXr/kmIB4aixmRXuKAiR+oKl2jOHSGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GtDxZOU/CUx3G2WNvxhKrQmXWrSmcPxOssBYD7SjCAujeYhaS74G+d3i1PUWdZeO4k8hoWfwAXh7FFfEpzZ/KfTeba/4PvorVsCZHU4UT7pZKO5MUCgr+3JsCh3ujpNnJvsrtHsJgPeJQ53N32MXuu0FMOWYZJJjgN4BWjI5eTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BaweMt1z; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BaweMt1z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729665337; x=1761201337;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JCd5CSidKTxinXr/kmIB4aixmRXuKAiR+oKl2jOHSGg=;
+  b=BaweMt1zaH2SZxgwBv7e1nr1WOaI4m1FSbq3qQwcVmGG4FKkUNMAnt3a
+   oG5VpgdEpGo6/WK3IQX3h3CS1w5iJGqbB5i6X+zGhIIl+YbkrdrX+NNxv
+   l/kciASmwQ/ovy5U5z3Prfkw6MqVrYM/OE/JRp1WUL97u8LKkCogWI7Fv
+   QN0zbU+Ghy/rQ4i09Mul8IecGlQYCaSxYnge4uen758pzqZH+Aa1e0xEE
+   XoTgVrxyDcJolXTd3EJOKCIYynu3PhGM00fMP9sSaaxLB2szqwRl7MwCz
+   0/Hb1Qfg7DsVMNuFroM1XWYF7vsbk1mCIA6F56kyGyES5XAkVVgNi+/18
+   g==;
+X-CSE-ConnectionGUID: W2vCJzQbRxOUSLUEPV3YEg==
+X-CSE-MsgGUID: KyJS4HHVQaOmLFKdVCBOdQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29394926"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29394926"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 23:35:34 -0700
+X-CSE-ConnectionGUID: guZbrTsTQhmxgJ/PuOjO7g==
+X-CSE-MsgGUID: nPuuhLPKRwazOHhgL0cEDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="80903242"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 22 Oct 2024 23:35:33 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3Uxu-000UZQ-1F;
+	Wed, 23 Oct 2024 06:35:30 +0000
+Date: Wed, 23 Oct 2024 14:34:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:trampoline_multi_10 9/21] kernel/trace/ftrace.c:6001:
+ warning: Function parameter or struct member 'hash' not described in
+ 'unregister_ftrace_direct_hash'
+Message-ID: <202410231448.tshoLbjZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HgEQrADHzX1zlxhn_SN0CA--.3465S2
-Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoW3WrW3Gw18WF1rCF4fZr43ZFb_yoW7tw13pF
-	W7Kr9rKa18J3WxCrZ7Kr12vr1FkFs5Ka48trWUt3WYyF40ya9IqFyxKr43J342vryxuFWD
-	Zw1fuFW0q3y3Aa7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHvb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	126r1DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
-	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
-	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
-	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8Zw
-	CF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Y
-	z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYY7kG6IIYr7AKxVW8JVW5
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUVW
-	lkUUUUU
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Update to commit 0b02076f9953 ("docs: programming-language: add Rust
-programming language section")
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git trampoline_multi_10
+head:   48132820c5a21b82d1a4507a86a67b3742fb110e
+commit: 122145c00eae844a9c5f48a3c5604554a8b9a377 [9/21] ftrace: Add unregister_ftrace_direct_hash function
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241023/202410231448.tshoLbjZ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231448.tshoLbjZ-lkp@intel.com/reproduce)
 
-scripts/checktransupdate.py reports:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410231448.tshoLbjZ-lkp@intel.com/
 
-Documentation/translations/zh_CN/process/programming-language.rst
-commit 0b02076f9953 ("docs: programming-language: add Rust programming
-language section")
-commit 38484a1d0c50 ("docs: programming-language: remove mention of the
-Intel compiler")
-2 commits needs resolving in total
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v2->v3: fix warnings in the make htmldocs
-v1->v2: revise the script name
- .../zh_CN/process/programming-language.rst    | 78 +++++++------------
- 1 file changed, 30 insertions(+), 48 deletions(-)
+   kernel/trace/ftrace.c:5887: warning: Function parameter or struct member 'hash' not described in 'register_ftrace_direct_hash'
+   kernel/trace/ftrace.c:5887: warning: expecting prototype for register_ftrace_direct(). Prototype was for register_ftrace_direct_hash() instead
+>> kernel/trace/ftrace.c:6001: warning: Function parameter or struct member 'hash' not described in 'unregister_ftrace_direct_hash'
+>> kernel/trace/ftrace.c:6001: warning: expecting prototype for unregister_ftrace_direct(). Prototype was for unregister_ftrace_direct_hash() instead
 
-diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
-index fabdc338dbfb..95aa4829d78f 100644
---- a/Documentation/translations/zh_CN/process/programming-language.rst
-+++ b/Documentation/translations/zh_CN/process/programming-language.rst
-@@ -3,25 +3,22 @@
- :Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
- :Translator: Alex Shi <alex.shi@linux.alibaba.com>
- 
--.. _cn_programming_language:
--
- 程序设计语言
- ============
- 
--内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
--在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
--
--这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
-+内核是用 C 编程语言编写的 [zh_cn_c-language]_。更准确地说，内核通常使用 ``gcc`` [zh_cn_gcc]_ 编译，
-+并且使用 ``-std=gnu11`` [zh_cn_gcc-c-dialect-options]_：这是 ISO C11 的 GNU 方言。
-+``clang`` [zh_cn_clang]_ 也得到了支持，详见文档：
-+:ref:`使用 Clang/LLVM 构建 Linux <kbuild_llvm>`。
- 
--对于一些体系结构，有一些使用 :ref:`clang <cn_clang>` 和 :ref:`icc <cn_icc>` 编译内核
--的支持，尽管在编写此文档时还没有完成，仍需要第三方补丁。
-+这种方言包含对 C 语言的许多扩展 [zh_cn_gnu-extensions]_，当然，它们许多都在内核中使用。
- 
- 属性
- ----
- 
--在整个内核中使用的一个常见扩展是属性（attributes） :ref:`gcc-attribute-syntax <cn_gcc-attribute-syntax>`
-+在整个内核中使用的一个常见扩展是属性（attributes） [zh_cn_gcc-attribute-syntax]_。
- 属性允许将实现定义的语义引入语言实体（如变量、函数或类型），而无需对语言进行
--重大的语法更改（例如添加新关键字） :ref:`n2049 <cn_n2049>`
-+重大的语法更改（例如添加新关键字） [zh_cn_n2049]_。
- 
- 在某些情况下，属性是可选的（即不支持这些属性的编译器仍然应该生成正确的代码，
- 即使其速度较慢或执行的编译时检查/诊断次数不够）
-@@ -30,42 +27,27 @@
- ``__attribute__((__pure__))`` ），以检测可以使用哪些关键字和/或缩短代码, 具体
- 请参阅 ``include/linux/compiler_attributes.h``
- 
--.. _cn_c-language:
--
--c-language
--   http://www.open-std.org/jtc1/sc22/wg14/www/standards
--
--.. _cn_gcc:
--
--gcc
--   https://gcc.gnu.org
--
--.. _cn_clang:
--
--clang
--   https://clang.llvm.org
--
--.. _cn_icc:
--
--icc
--   https://software.intel.com/en-us/c-compilers
--
--.. _cn_gcc-c-dialect-options:
--
--c-dialect-options
--   https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
--
--.. _cn_gnu-extensions:
--
--gnu-extensions
--   https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
--
--.. _cn_gcc-attribute-syntax:
--
--gcc-attribute-syntax
--   https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
--
--.. _cn_n2049:
-+Rust
-+----
- 
--n2049
--   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
-+内核对 Rust 编程语言 [zh_cn_rust-language]_ 的支持是实验性的，并且可以通过配置选项
-+``CONFIG_RUST`` 来启用。Rust 代码使用 ``rustc`` [zh_cn_rustc]_ 编译器在
-+``--edition=2021`` [zh_cn_rust-editions]_ 选项下进行编译。版本（Editions）是一种
-+在语言中引入非后向兼容的小型变更的方式。
-+
-+除此之外，内核中还使用了一些不稳定的特性 [zh_cn_rust-unstable-features]_。这些不稳定
-+的特性将来可能会发生变化，因此，一个重要的目标是达到仅使用稳定特性的程度。
-+
-+具体请参阅 Documentation/rust/index.rst
-+
-+.. [zh_cn_c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
-+.. [zh_cn_gcc] https://gcc.gnu.org
-+.. [zh_cn_clang] https://clang.llvm.org
-+.. [zh_cn_gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
-+.. [zh_cn_gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
-+.. [zh_cn_gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
-+.. [zh_cn_n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
-+.. [zh_cn_rust-language] https://www.rust-lang.org
-+.. [zh_cn_rustc] https://doc.rust-lang.org/rustc/
-+.. [zh_cn_rust-editions] https://doc.rust-lang.org/edition-guide/editions/
-+.. [zh_cn_rust-unstable-features] https://github.com/Rust-for-Linux/linux/issues/2
+
+vim +6001 kernel/trace/ftrace.c
+
+5081acd5f53163 Jiri Olsa         2024-10-14  5982  
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5983  /**
+da8bdfbd422333 Florent Revest    2023-03-21  5984   * unregister_ftrace_direct - Remove calls to custom trampoline
+da8bdfbd422333 Florent Revest    2023-03-21  5985   * previously registered by register_ftrace_direct for @ops object.
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5986   * @ops: The address of the struct ftrace_ops object
+c488fe4b50d896 Jiri Olsa         2024-09-30  5987   * @ip: The address of the function to attach
+9b5a45eb639c46 Marilene A Garcia 2024-06-06  5988   * @addr: The address of the direct function that is called by the @ops functions
+9b5a45eb639c46 Marilene A Garcia 2024-06-06  5989   * @free_filters: Set to true to remove all filters for the ftrace_ops, false otherwise
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5990   *
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5991   * This is used to remove a direct calls to @addr from the nop locations
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5992   * of the functions registered in @ops (with by ftrace_set_filter_ip
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5993   * function).
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5994   *
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5995   * Returns:
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5996   *  0 on success
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5997   *  -EINVAL - The @ops object was not properly registered.
+f64dd4627ec6ed Jiri Olsa         2021-10-08  5998   */
+122145c00eae84 Jiri Olsa         2024-10-14  5999  int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash,
+59495740f79524 Florent Revest    2023-03-21  6000  				  bool free_filters)
+f64dd4627ec6ed Jiri Olsa         2021-10-08 @6001  {
+122145c00eae84 Jiri Olsa         2024-10-14  6002  	struct ftrace_func_entry *del, *entry;
+c488fe4b50d896 Jiri Olsa         2024-09-30  6003  	struct ftrace_hash *new_hash = NULL;
+122145c00eae84 Jiri Olsa         2024-10-14  6004  	unsigned long size, i;
+c488fe4b50d896 Jiri Olsa         2024-09-30  6005  	int err = -EINVAL;
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6006  
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6007  	if (check_direct_multi(ops))
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6008  		return -EINVAL;
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6009  	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6010  		return -EINVAL;
+c488fe4b50d896 Jiri Olsa         2024-09-30  6011  	if (direct_functions == EMPTY_HASH)
+c488fe4b50d896 Jiri Olsa         2024-09-30  6012  		return -EINVAL;
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6013  
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6014  	mutex_lock(&direct_mutex);
+c488fe4b50d896 Jiri Olsa         2024-09-30  6015  
+122145c00eae84 Jiri Olsa         2024-10-14  6016  	/* Make sure requested entries are already registered.. */
+122145c00eae84 Jiri Olsa         2024-10-14  6017  	size = 1 << hash->size_bits;
+122145c00eae84 Jiri Olsa         2024-10-14  6018  	for (i = 0; i < size; i++) {
+122145c00eae84 Jiri Olsa         2024-10-14  6019  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+122145c00eae84 Jiri Olsa         2024-10-14  6020  			del = __ftrace_lookup_ip(direct_functions, entry->ip);
+122145c00eae84 Jiri Olsa         2024-10-14  6021  			if (!del || del->direct != entry->direct)
+c488fe4b50d896 Jiri Olsa         2024-09-30  6022  				goto out_unlock;
+122145c00eae84 Jiri Olsa         2024-10-14  6023  		}
+122145c00eae84 Jiri Olsa         2024-10-14  6024  	}
+c488fe4b50d896 Jiri Olsa         2024-09-30  6025  
+c488fe4b50d896 Jiri Olsa         2024-09-30  6026  	new_hash = alloc_and_copy_ftrace_hash(FTRACE_HASH_DEFAULT_BITS, direct_functions);
+c488fe4b50d896 Jiri Olsa         2024-09-30  6027  	if (!new_hash)
+c488fe4b50d896 Jiri Olsa         2024-09-30  6028  		goto out_unlock;
+c488fe4b50d896 Jiri Olsa         2024-09-30  6029  
+122145c00eae84 Jiri Olsa         2024-10-14  6030  	for (i = 0; i < size; i++) {
+122145c00eae84 Jiri Olsa         2024-10-14  6031  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+122145c00eae84 Jiri Olsa         2024-10-14  6032  			del = __ftrace_lookup_ip(new_hash, entry->ip);
+122145c00eae84 Jiri Olsa         2024-10-14  6033  			remove_hash_entry(new_hash, del);
+122145c00eae84 Jiri Olsa         2024-10-14  6034  			kfree(del);
+122145c00eae84 Jiri Olsa         2024-10-14  6035  		}
+122145c00eae84 Jiri Olsa         2024-10-14  6036  	}
+c488fe4b50d896 Jiri Olsa         2024-09-30  6037  
+c488fe4b50d896 Jiri Olsa         2024-09-30  6038  	if (ftrace_hash_empty(new_hash)) {
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6039  		err = unregister_ftrace_function(ops);
+c488fe4b50d896 Jiri Olsa         2024-09-30  6040  		ftrace_free_filter(ops);
+c488fe4b50d896 Jiri Olsa         2024-09-30  6041  	} else {
+c488fe4b50d896 Jiri Olsa         2024-09-30  6042  		err = ftrace_update_ops(ops, new_hash, EMPTY_HASH);
+c488fe4b50d896 Jiri Olsa         2024-09-30  6043  	}
+c488fe4b50d896 Jiri Olsa         2024-09-30  6044  
+c488fe4b50d896 Jiri Olsa         2024-09-30  6045  	free_ftrace_hash(new_hash);
+fea3ffa48c6d42 Jiri Olsa         2021-12-06  6046  
+c488fe4b50d896 Jiri Olsa         2024-09-30  6047  	if (!err) {
+122145c00eae84 Jiri Olsa         2024-10-14  6048  		for (i = 0; i < size; i++) {
+122145c00eae84 Jiri Olsa         2024-10-14  6049  			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+122145c00eae84 Jiri Olsa         2024-10-14  6050  				del = __ftrace_lookup_ip(direct_functions, entry->ip);
+122145c00eae84 Jiri Olsa         2024-10-14  6051  				remove_hash_entry(direct_functions, del);
+122145c00eae84 Jiri Olsa         2024-10-14  6052  				kfree(del);
+122145c00eae84 Jiri Olsa         2024-10-14  6053  			}
+122145c00eae84 Jiri Olsa         2024-10-14  6054  		}
+c488fe4b50d896 Jiri Olsa         2024-09-30  6055  	}
+59495740f79524 Florent Revest    2023-03-21  6056  
+c488fe4b50d896 Jiri Olsa         2024-09-30  6057   out_unlock:
+c488fe4b50d896 Jiri Olsa         2024-09-30  6058  	mutex_unlock(&direct_mutex);
+59495740f79524 Florent Revest    2023-03-21  6059  	if (free_filters)
+59495740f79524 Florent Revest    2023-03-21  6060  		ftrace_free_filter(ops);
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6061  	return err;
+f64dd4627ec6ed Jiri Olsa         2021-10-08  6062  }
+da8bdfbd422333 Florent Revest    2023-03-21  6063  EXPORT_SYMBOL_GPL(unregister_ftrace_direct);
+ccf5a89efd6f0a Jiri Olsa         2021-10-08  6064  
+
+:::::: The code at line 6001 was first introduced by commit
+:::::: f64dd4627ec6edc39bf1430fe6dbc923d2300a88 ftrace: Add multi direct register/unregister interface
+
+:::::: TO: Jiri Olsa <jolsa@redhat.com>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
