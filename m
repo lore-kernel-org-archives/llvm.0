@@ -1,98 +1,243 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA103FD4;
-	Wed, 23 Oct 2024 12:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C187156C72
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 13:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729685736; cv=none; b=Ohoe1lFMc27KARhyU9/G/h54O0qleHBpkd5VnfxV//RgnhqCksT4UY0FSnjgj1pr2UjI7PhGxDiCtSrrvmr3aful5kviT1N5jWACZ/bSnxWehuF0N4Sfvp2VL9JLsGEs4dJgPilnYKJUDpYBdVG2jSkrS1S6RWQGrHkOnuRLdc8=
+	t=1729688775; cv=none; b=U0OAsGvHBcc9Q56GPoatvtKH3HtRyRV/vH75r2GbkT662jLbRp29wzVwY+BEHFhlQu8wzQL/11sC7YDYnwUCkuwm6czplw+JtjEq34TqCdw6deIR5Z2thWFnbQ0N5GOjgCxAzrfvPiyfzQ4RFu+wJ5XoQgvFwxNupUiXkGU+eXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729685736; c=relaxed/simple;
-	bh=zmEV7kzYjK4FvefIs+qoE3S15A9ktltXHDxx9f+lFC4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CN0vgTyKh57swy+GLHZIICsCt9iyl+9zSOOzVFWuguut80r6/rQndRrucow0UnwYeGtEqc5LaOUdsCIr1D6k9PN5/xJHVXpPP8Pv9VG8/D6dsZujDjLYxajDQqWsrRgHWSvGMku6iBnUCUHoebuFPynmPP9Kp21LjRTpaSviUxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QODBdm+u; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729688775; c=relaxed/simple;
+	bh=flfO60TWeuxQF01508WOwBdKE/thtg0nWRNabeZ0mGY=;
+	h=Subject:To:Cc:References:In-Reply-To:From:Message-ID:Date:
+	 MIME-Version:Content-Type; b=uuxlyB0PQ0IuAu07wi9SK6YO2MABxSRhP0+rsL/oAy0g530yqS1CrjE34fxTq4EKzAGu69Hshn9+XslT6nUGfHlV1/mEMs5tlXGadi39VrNDvn3wJQEZRBk8tZY3zpEpccxj3b3W1k7gfIk2OYLZZf6CmqeOM5HxjXMOotKjFm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=w6rz.net; spf=pass smtp.mailfrom=w6rz.net; dkim=pass (2048-bit key) header.d=w6rz.net header.i=@w6rz.net header.b=LPNjDJDy; arc=none smtp.client-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=w6rz.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=w6rz.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QODBdm+u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC00AC4CEC6;
-	Wed, 23 Oct 2024 12:15:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729685735;
-	bh=zmEV7kzYjK4FvefIs+qoE3S15A9ktltXHDxx9f+lFC4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=QODBdm+uAODGHRZP2fHYKCDpUiFMbnIR8jUcCQmizxUAusYQc1tmjeYWYAsFzXOym
-	 ++m9Run639Zf6UKyq7evfoQ1MQauQWdwFpsjWDrFxMmcdxPvjg+gil/GPGJo74vhGW
-	 8gSIrdVkxxH04j6r79S823gNXDAC6md7VaJ6lAI/XN63szTW7SEbeALCdhppa/G4+9
-	 1WY4Fss7CwWgFG66jV7kM0MAPFHw0seW6Xhdknb4YdGaVVATMjhFPjz4WRrtYJlvq9
-	 q24NdUlH9vOaClg8cc5aWz8LEfZ6kp7cRj2r8KMofUsbsSWHsY1mrQyHIMDTU/Ptbi
-	 MfEgIYmVAWMcw==
-From: Simon Horman <horms@kernel.org>
-Date: Wed, 23 Oct 2024 13:15:28 +0100
-Subject: [PATCH net-next] wwan: core: Pass string literal as format
- argument of dev_set_name()
+	dkim=pass (2048-bit key) header.d=w6rz.net header.i=@w6rz.net header.b="LPNjDJDy"
+Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
+	by cmsmtp with ESMTPS
+	id 3T6tt8L8mumtX3b40tU0rq; Wed, 23 Oct 2024 13:06:12 +0000
+Received: from box5620.bluehost.com ([162.241.219.59])
+	by cmsmtp with ESMTPS
+	id 3b3ztZcxymNYj3b3ztvfIX; Wed, 23 Oct 2024 13:06:11 +0000
+X-Authority-Analysis: v=2.4 cv=fb9myFQF c=1 sm=1 tr=0 ts=6718f4c3
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=7vwVE5O1G3EA:10 a=HaFmDPmJAAAA:8
+ a=VwQbUJbxAAAA:8 a=fxJcL_dCAAAA:8 a=NEAV23lmAAAA:8 a=G7piZchHOouoqsGl2bUA:9
+ a=QEXdDO2ut3YA:10 a=nmWuMzfKamIsx3l42hEX:22 a=hTR6fmoedSdf3N0JiVF8:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+	s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+	Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WLBEG65iDfq4Oq3j0KXR8fkux6/NdKD8wZ6AX1HNr8k=; b=LPNjDJDyN1Va9HjdzSdw2kagT0
+	CRMzFAVwRROtcB8GcyKv047bGMCYHqedVdAv5spxHwHxh4toBVhAMM+06KaF6t9qalwgwzp6hnVFO
+	vpT0W9zFnzJtD4E3YdAPBcaqTxTVsaD3orLiAzBq7zCliR9oezMeiYFJ8ZVLkwUnb4SrhySfi/tWQ
+	XE6tuyLhzJtyVByPjOTdI3OlCHdBsnwdT3/JkawoKGJDnKGroqsHz2gdp0F0do72tHpBLvMASFOjl
+	JQONTDKFGFpQdqW/PrxryCuKrhVD88FyHEovlqBXKbcxLMGHb2l7gm0rrK6DfMXTWSS9KbSmbY4GY
+	yAXDJjBg==;
+Received: from c-73-223-253-157.hsd1.ca.comcast.net ([73.223.253.157]:49836 helo=[10.0.1.47])
+	by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <re@w6rz.net>)
+	id 1t3b3y-003lNZ-1z;
+	Wed, 23 Oct 2024 07:06:10 -0600
+Subject: Re: [PATCH 2/3] kbuild: deb-pkg: add
+ pkg.linux-upstream.nokernelheaders build profile
+To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
+Cc: Ben Hutchings <benh@debian.org>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20241022181703.1710116-1-masahiroy@kernel.org>
+ <20241022181703.1710116-2-masahiroy@kernel.org>
+In-Reply-To: <20241022181703.1710116-2-masahiroy@kernel.org>
+From: Ron Economos <re@w6rz.net>
+Message-ID: <6fca7450-95e0-1bc0-7556-8889a398d0b6@w6rz.net>
+Date: Wed, 23 Oct 2024 06:06:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241023-wwan-fmt-v1-1-521b39968639@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAN/oGGcC/x3MwQpAQBCA4VfRnE2ZReJV5CBmmIOh3Q0l725z/
- OrvfyCwVw7QZQ94PjXobgmUZzCtoy2MOieDK1xFhSvxukZD2SK2ROLKphahBlJ+eBa9/1UPxhG
- N7wjD+36j/2/XZAAAAA==
-To: Loic Poulain <loic.poulain@linaro.org>, 
- Sergey Ryazanov <ryazanov.s.a@gmail.com>, 
- Johannes Berg <johannes@sipsolutions.net>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- netdev@vger.kernel.org, llvm@lists.linux.dev
-X-Mailer: b4 0.14.0
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.223.253.157
+X-Source-L: No
+X-Exim-ID: 1t3b3y-003lNZ-1z
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-223-253-157.hsd1.ca.comcast.net ([10.0.1.47]) [73.223.253.157]:49836
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 10
+X-Org: HG=bhshared;ORG=bluehost;
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfB0ZXzTmWhDXn1/a8wdG8fgicvpPpzaYHR7vFtfD12mDFUdoYvfWoDPifCkv0taLDz+AJwNRE+ndwxQ8B2ezNim+pkgraFJ8a6ojhb8EDQ/4JOYodbwy
+ 1W6jtHXW1ftRYGBUPhDGa0ydd3mCHA6H8IWgbFg6yU1kvuycbmhEm7lYEwKCiGO5CEy06scgfwloGw==
 
-Both gcc-14 and clang-18 report that passing a non-string literal as the
-format argument of dev_set_name() is potentially insecure.
+On 10/22/24 11:16 AM, Masahiro Yamada wrote:
+> Since commit f1d87664b82a ("kbuild: cross-compile linux-headers package
+> when possible"), 'make bindeb-pkg' may attempt to cross-compile the
+> linux-headers package, but it fails under certain circumstances.
+>
+> For example, when CONFIG_MODULE_SIG_FORMAT is enabled on Debian, the
+> following command fails:
+>
+>    $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bindeb-pkg
+>        [ snip ]
+>    Rebuilding host programs with aarch64-linux-gnu-gcc...
+>      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/kallsyms
+>      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sorttable
+>      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/asn1_compiler
+>      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sign-file
+>    In file included from /usr/include/openssl/opensslv.h:109,
+>                     from debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sign-file.c:25:
+>    /usr/include/openssl/macros.h:14:10: fatal error: openssl/opensslconf.h: No such file or directory
+>       14 | #include <openssl/opensslconf.h>
+>          |          ^~~~~~~~~~~~~~~~~~~~~~~
+>    compilation terminated.
+>
+> This commit adds a new profile, pkg.linux-upstream.nokernelheaders, to
+> guard the linux-headers package.
+>
+> There are two options to fix the above issue.
+>
+> [option 1] Set the pkg.linux-upstream.nokernelheaders build profile
+>
+>    $ DEB_BUILD_PROFILES=pkg.linux-upstream.nokernelheaders \
+>      make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bindeb-pkg
+>
+> This skips the building of the linux-headers package.
+>
+> [option 2] Install the necessary build dependencies
+>
+> If you want to cross-compile the linux-headers package, you need to
+> install additional packages. This is a one-time installation step.
+>
+> For example, on Debian, the packages necessary for cross-compiling it
+> to arm64 can be installed with the following commands:
+>
+>    # dpkg --add-architecture arm64
+>    # apt update
+>    # apt install gcc-aarch64-linux-gnu libssl-dev:arm64
+>
+> Fixes: f1d87664b82a ("kbuild: cross-compile linux-headers package when possible")
+> Reported-by: Ron Economos <re@w6rz.net>
+> Closes: https://lore.kernel.org/all/b3d4f49e-7ddb-29ba-0967-689232329b53@w6rz.net/
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>   scripts/package/builddeb             | 2 +-
+>   scripts/package/install-extmod-build | 6 ++----
+>   scripts/package/mkdebian             | 9 ++++++++-
+>   3 files changed, 11 insertions(+), 6 deletions(-)
+>
+> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+> index 404587fc71fe..441b0bb66e0d 100755
+> --- a/scripts/package/builddeb
+> +++ b/scripts/package/builddeb
+> @@ -123,7 +123,7 @@ install_kernel_headers () {
+>   	pdir=debian/$1
+>   	version=${1#linux-headers-}
+>   
+> -	"${srctree}/scripts/package/install-extmod-build" "${pdir}/usr/src/linux-headers-${version}"
+> +	CC="${DEB_HOST_GNU_TYPE}-gcc" "${srctree}/scripts/package/install-extmod-build" "${pdir}/usr/src/linux-headers-${version}"
+>   
+>   	mkdir -p $pdir/lib/modules/$version/
+>   	ln -s /usr/src/linux-headers-$version $pdir/lib/modules/$version/build
+> diff --git a/scripts/package/install-extmod-build b/scripts/package/install-extmod-build
+> index d2c9cacecc0c..7ec1f061a519 100755
+> --- a/scripts/package/install-extmod-build
+> +++ b/scripts/package/install-extmod-build
+> @@ -44,13 +44,11 @@ mkdir -p "${destdir}"
+>   	fi
+>   } | tar -c -f - -T - | tar -xf - -C "${destdir}"
+>   
+> -# When ${CC} and ${HOSTCC} differ, we are likely cross-compiling. Rebuild host
+> -# programs using ${CC}. This assumes CC=${CROSS_COMPILE}gcc, which is usually
+> -# the case for package building. It does not cross-compile when CC=clang.
+> +# When ${CC} and ${HOSTCC} differ, rebuild host programs using ${CC}.
+>   #
+>   # This caters to host programs that participate in Kbuild. objtool and
+>   # resolve_btfids are out of scope.
+> -if [ "${CC}" != "${HOSTCC}" ] && is_enabled CONFIG_CC_CAN_LINK; then
+> +if [ "${CC}" != "${HOSTCC}" ]; then
+>   	echo "Rebuilding host programs with ${CC}..."
+>   
+>   	cat <<-'EOF' >  "${destdir}/Kbuild"
+> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> index 10637d403777..93eb50356ddb 100755
+> --- a/scripts/package/mkdebian
+> +++ b/scripts/package/mkdebian
+> @@ -179,6 +179,8 @@ fi
+>   
+>   echo $debarch > debian/arch
+>   
+> +host_gnu=$(dpkg-architecture -a "${debarch}" -q DEB_HOST_GNU_TYPE | sed 's/_/-/g')
+> +
+>   # Generate a simple changelog template
+>   cat <<EOF > debian/changelog
+>   $sourcename ($packageversion) $distribution; urgency=low
+> @@ -196,7 +198,11 @@ Priority: optional
+>   Maintainer: $maintainer
+>   Rules-Requires-Root: no
+>   Build-Depends: debhelper-compat (= 12)
+> -Build-Depends-Arch: bc, bison, cpio, flex, kmod, libelf-dev:native, libssl-dev:native, rsync
+> +Build-Depends-Arch: bc, bison, cpio, flex,
+> + gcc-${host_gnu} <!pkg.${sourcename}.nokernelheaders>,
+> + kmod, libelf-dev:native,
+> + libssl-dev:native, libssl-dev <!pkg.${sourcename}.nokernelheaders>,
+> + rsync
+>   Homepage: https://www.kernel.org/
+>   
+>   Package: $packagename-$version
+> @@ -224,6 +230,7 @@ cat <<EOF >> debian/control
+>   
+>   Package: linux-headers-$version
+>   Architecture: $debarch
+> +Build-Profiles: <!pkg.${sourcename}.nokernelheaders>
+>   Description: Linux kernel headers for $version on $debarch
+>    This package provides kernel header files for $version on $debarch
+>    .
 
-E.g. clang-18 says:
+Tested with option 2 for RISC-V. On Ubuntu 24.04, the following must be 
+added to the file /etc/apt/sources.list.d/ubuntu.sources for apt update 
+to fetch the correct repositories:
 
-drivers/net/wwan/wwan_core.c:442:34: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-  442 |         return dev_set_name(&port->dev, buf);
-      |                                         ^~~
-drivers/net/wwan/wwan_core.c:442:34: note: treat the string as an argument to avoid this
-  442 |         return dev_set_name(&port->dev, buf);
-      |                                         ^
-      |                                         "%s",
+Types: deb
+URIs: http://ports.ubuntu.com/ubuntu-ports
+Suites: noble noble-updates noble-backports
+Components: main universe restricted multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+Architectures: riscv64
 
-It is always the case where the contents of mod is safe to pass as the
-format argument. That is, in my understanding, it never contains any
-format escape sequences.
+Then:
 
-But, it seems better to be safe than sorry. And, as a bonus, compiler
-output becomes less verbose by addressing this issue as suggested by
-clang-18.
+sudo dpkg --add-architecture riscv64
+sudo apt-get update
+sudo apt-get install libssl-dev:riscv64
 
-Compile tested only.
-No functional change intended.
+The tool chain at https://github.com/riscv-collab/riscv-gnu-toolchain 
+can also be made to work. See:
 
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/net/wwan/wwan_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1590
 
-diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
-index 17431f1b1a0c..465e2a0d57a3 100644
---- a/drivers/net/wwan/wwan_core.c
-+++ b/drivers/net/wwan/wwan_core.c
-@@ -431,7 +431,7 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
- 		return -ENFILE;
- 	}
- 
--	return dev_set_name(&port->dev, buf);
-+	return dev_set_name(&port->dev, "%s", buf);
- }
- 
- struct wwan_port *wwan_create_port(struct device *parent,
+Tested-by: Ron Economos <re@w6rz.net>
+
 
