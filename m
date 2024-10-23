@@ -1,243 +1,130 @@
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C187156C72
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 13:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A701ABEB0;
+	Wed, 23 Oct 2024 13:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729688775; cv=none; b=U0OAsGvHBcc9Q56GPoatvtKH3HtRyRV/vH75r2GbkT662jLbRp29wzVwY+BEHFhlQu8wzQL/11sC7YDYnwUCkuwm6czplw+JtjEq34TqCdw6deIR5Z2thWFnbQ0N5GOjgCxAzrfvPiyfzQ4RFu+wJ5XoQgvFwxNupUiXkGU+eXc=
+	t=1729689158; cv=none; b=mXHadLaHPvQWKdLbTetQpwcrus3fbAma4Js/YoGY/H3S7csueTDXjBOjlag1JOiZfVRJKmS8UrvfvDjNuGy4BgrFxb6tZrwtiMnwOVqDGW19KS17F0DSr1wsSJAu4a6xlKfen3L7fjECEtPRYXH2qe/nRlxPxx4mQie6Zoe/Gok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729688775; c=relaxed/simple;
-	bh=flfO60TWeuxQF01508WOwBdKE/thtg0nWRNabeZ0mGY=;
-	h=Subject:To:Cc:References:In-Reply-To:From:Message-ID:Date:
-	 MIME-Version:Content-Type; b=uuxlyB0PQ0IuAu07wi9SK6YO2MABxSRhP0+rsL/oAy0g530yqS1CrjE34fxTq4EKzAGu69Hshn9+XslT6nUGfHlV1/mEMs5tlXGadi39VrNDvn3wJQEZRBk8tZY3zpEpccxj3b3W1k7gfIk2OYLZZf6CmqeOM5HxjXMOotKjFm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=w6rz.net; spf=pass smtp.mailfrom=w6rz.net; dkim=pass (2048-bit key) header.d=w6rz.net header.i=@w6rz.net header.b=LPNjDJDy; arc=none smtp.client-ip=35.89.44.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=w6rz.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=w6rz.net
+	s=arc-20240116; t=1729689158; c=relaxed/simple;
+	bh=EUwoUyj0Xna4b4RgHXPDoj0mvlZeeavc2EPYj5CaAqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FrM03UZiQo3wphNdw9fj3GUInU3eT64FTH1bSxrh9MaPiSIKtcQV9qb3e+fntFVwb0Apv7bv86ax4j3gKvywPdUw7YMxGUnD3y4DXnDq5K5UoPDWQEdHKMKHL7TPPerMgOg226wM/aZHe0qSCTTNSv94MU1JP3d1riFUnbi2T2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LIFdT6+R; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=w6rz.net header.i=@w6rz.net header.b="LPNjDJDy"
-Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
-	by cmsmtp with ESMTPS
-	id 3T6tt8L8mumtX3b40tU0rq; Wed, 23 Oct 2024 13:06:12 +0000
-Received: from box5620.bluehost.com ([162.241.219.59])
-	by cmsmtp with ESMTPS
-	id 3b3ztZcxymNYj3b3ztvfIX; Wed, 23 Oct 2024 13:06:11 +0000
-X-Authority-Analysis: v=2.4 cv=fb9myFQF c=1 sm=1 tr=0 ts=6718f4c3
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=7vwVE5O1G3EA:10 a=HaFmDPmJAAAA:8
- a=VwQbUJbxAAAA:8 a=fxJcL_dCAAAA:8 a=NEAV23lmAAAA:8 a=G7piZchHOouoqsGl2bUA:9
- a=QEXdDO2ut3YA:10 a=nmWuMzfKamIsx3l42hEX:22 a=hTR6fmoedSdf3N0JiVF8:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-	s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-	Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WLBEG65iDfq4Oq3j0KXR8fkux6/NdKD8wZ6AX1HNr8k=; b=LPNjDJDyN1Va9HjdzSdw2kagT0
-	CRMzFAVwRROtcB8GcyKv047bGMCYHqedVdAv5spxHwHxh4toBVhAMM+06KaF6t9qalwgwzp6hnVFO
-	vpT0W9zFnzJtD4E3YdAPBcaqTxTVsaD3orLiAzBq7zCliR9oezMeiYFJ8ZVLkwUnb4SrhySfi/tWQ
-	XE6tuyLhzJtyVByPjOTdI3OlCHdBsnwdT3/JkawoKGJDnKGroqsHz2gdp0F0do72tHpBLvMASFOjl
-	JQONTDKFGFpQdqW/PrxryCuKrhVD88FyHEovlqBXKbcxLMGHb2l7gm0rrK6DfMXTWSS9KbSmbY4GY
-	yAXDJjBg==;
-Received: from c-73-223-253-157.hsd1.ca.comcast.net ([73.223.253.157]:49836 helo=[10.0.1.47])
-	by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <re@w6rz.net>)
-	id 1t3b3y-003lNZ-1z;
-	Wed, 23 Oct 2024 07:06:10 -0600
-Subject: Re: [PATCH 2/3] kbuild: deb-pkg: add
- pkg.linux-upstream.nokernelheaders build profile
-To: Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: Ben Hutchings <benh@debian.org>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20241022181703.1710116-1-masahiroy@kernel.org>
- <20241022181703.1710116-2-masahiroy@kernel.org>
-In-Reply-To: <20241022181703.1710116-2-masahiroy@kernel.org>
-From: Ron Economos <re@w6rz.net>
-Message-ID: <6fca7450-95e0-1bc0-7556-8889a398d0b6@w6rz.net>
-Date: Wed, 23 Oct 2024 06:06:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LIFdT6+R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729689157; x=1761225157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=EUwoUyj0Xna4b4RgHXPDoj0mvlZeeavc2EPYj5CaAqk=;
+  b=LIFdT6+RlR7uzZyF2NnGsYWYeDBbzbhQpv0w2G+OJAkpxO6m+t/kfjkp
+   18ZW/Snh92j+NkctzGqcCa2CVg+anUa6t29w7sSl0zXYEMGLJoHXK20wD
+   skNGcRCAi0ZH/fY1Yy9KJ1miBnmrCHyNGceEfzRb83bxRGfiLo/Y4AFrR
+   pV5QM8Bl1s4xVi7hlWMLBXfqKjI+NxXrXon8k1VeHS0vnRs1zf+NvLg8g
+   /9NEy3g0ZJooVP/QXspJvY9hqSRvH07JFe5vR0zNUHQLhzXWiTai+2A6r
+   NlAYtpZz2a+4KpecE9UJNIOUzSWYOzB1eJyrYWzf+vMaEGx68i8b9dKGc
+   g==;
+X-CSE-ConnectionGUID: ukSkhpEZRuKZV/QbiXBNWg==
+X-CSE-MsgGUID: IES70mpyQ3uyMSQTVyQgSA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29211514"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29211514"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 06:12:36 -0700
+X-CSE-ConnectionGUID: sx2qER9RRO+cTF1bSDAT7g==
+X-CSE-MsgGUID: oY7btcvBQzSv7fjuGQxS9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
+   d="scan'208";a="84991353"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 23 Oct 2024 06:12:35 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3bA8-000Ux0-1D;
+	Wed, 23 Oct 2024 13:12:32 +0000
+Date: Wed, 23 Oct 2024 21:11:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH net-next 3/3] net: phylink: simplify how SFP PHYs are
+ attached
+Message-ID: <202410232116.IgRFPrAS-lkp@intel.com>
+References: <E1t3DSr-000Vxg-Qx@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.223.253.157
-X-Source-L: No
-X-Exim-ID: 1t3b3y-003lNZ-1z
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-223-253-157.hsd1.ca.comcast.net ([10.0.1.47]) [73.223.253.157]:49836
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 10
-X-Org: HG=bhshared;ORG=bluehost;
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfB0ZXzTmWhDXn1/a8wdG8fgicvpPpzaYHR7vFtfD12mDFUdoYvfWoDPifCkv0taLDz+AJwNRE+ndwxQ8B2ezNim+pkgraFJ8a6ojhb8EDQ/4JOYodbwy
- 1W6jtHXW1ftRYGBUPhDGa0ydd3mCHA6H8IWgbFg6yU1kvuycbmhEm7lYEwKCiGO5CEy06scgfwloGw==
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <E1t3DSr-000Vxg-Qx@rmk-PC.armlinux.org.uk>
 
-On 10/22/24 11:16 AM, Masahiro Yamada wrote:
-> Since commit f1d87664b82a ("kbuild: cross-compile linux-headers package
-> when possible"), 'make bindeb-pkg' may attempt to cross-compile the
-> linux-headers package, but it fails under certain circumstances.
->
-> For example, when CONFIG_MODULE_SIG_FORMAT is enabled on Debian, the
-> following command fails:
->
->    $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bindeb-pkg
->        [ snip ]
->    Rebuilding host programs with aarch64-linux-gnu-gcc...
->      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/kallsyms
->      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sorttable
->      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/asn1_compiler
->      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sign-file
->    In file included from /usr/include/openssl/opensslv.h:109,
->                     from debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12.0-rc4/scripts/sign-file.c:25:
->    /usr/include/openssl/macros.h:14:10: fatal error: openssl/opensslconf.h: No such file or directory
->       14 | #include <openssl/opensslconf.h>
->          |          ^~~~~~~~~~~~~~~~~~~~~~~
->    compilation terminated.
->
-> This commit adds a new profile, pkg.linux-upstream.nokernelheaders, to
-> guard the linux-headers package.
->
-> There are two options to fix the above issue.
->
-> [option 1] Set the pkg.linux-upstream.nokernelheaders build profile
->
->    $ DEB_BUILD_PROFILES=pkg.linux-upstream.nokernelheaders \
->      make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bindeb-pkg
->
-> This skips the building of the linux-headers package.
->
-> [option 2] Install the necessary build dependencies
->
-> If you want to cross-compile the linux-headers package, you need to
-> install additional packages. This is a one-time installation step.
->
-> For example, on Debian, the packages necessary for cross-compiling it
-> to arm64 can be installed with the following commands:
->
->    # dpkg --add-architecture arm64
->    # apt update
->    # apt install gcc-aarch64-linux-gnu libssl-dev:arm64
->
-> Fixes: f1d87664b82a ("kbuild: cross-compile linux-headers package when possible")
-> Reported-by: Ron Economos <re@w6rz.net>
-> Closes: https://lore.kernel.org/all/b3d4f49e-7ddb-29ba-0967-689232329b53@w6rz.net/
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->   scripts/package/builddeb             | 2 +-
->   scripts/package/install-extmod-build | 6 ++----
->   scripts/package/mkdebian             | 9 ++++++++-
->   3 files changed, 11 insertions(+), 6 deletions(-)
->
-> diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-> index 404587fc71fe..441b0bb66e0d 100755
-> --- a/scripts/package/builddeb
-> +++ b/scripts/package/builddeb
-> @@ -123,7 +123,7 @@ install_kernel_headers () {
->   	pdir=debian/$1
->   	version=${1#linux-headers-}
->   
-> -	"${srctree}/scripts/package/install-extmod-build" "${pdir}/usr/src/linux-headers-${version}"
-> +	CC="${DEB_HOST_GNU_TYPE}-gcc" "${srctree}/scripts/package/install-extmod-build" "${pdir}/usr/src/linux-headers-${version}"
->   
->   	mkdir -p $pdir/lib/modules/$version/
->   	ln -s /usr/src/linux-headers-$version $pdir/lib/modules/$version/build
-> diff --git a/scripts/package/install-extmod-build b/scripts/package/install-extmod-build
-> index d2c9cacecc0c..7ec1f061a519 100755
-> --- a/scripts/package/install-extmod-build
-> +++ b/scripts/package/install-extmod-build
-> @@ -44,13 +44,11 @@ mkdir -p "${destdir}"
->   	fi
->   } | tar -c -f - -T - | tar -xf - -C "${destdir}"
->   
-> -# When ${CC} and ${HOSTCC} differ, we are likely cross-compiling. Rebuild host
-> -# programs using ${CC}. This assumes CC=${CROSS_COMPILE}gcc, which is usually
-> -# the case for package building. It does not cross-compile when CC=clang.
-> +# When ${CC} and ${HOSTCC} differ, rebuild host programs using ${CC}.
->   #
->   # This caters to host programs that participate in Kbuild. objtool and
->   # resolve_btfids are out of scope.
-> -if [ "${CC}" != "${HOSTCC}" ] && is_enabled CONFIG_CC_CAN_LINK; then
-> +if [ "${CC}" != "${HOSTCC}" ]; then
->   	echo "Rebuilding host programs with ${CC}..."
->   
->   	cat <<-'EOF' >  "${destdir}/Kbuild"
-> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> index 10637d403777..93eb50356ddb 100755
-> --- a/scripts/package/mkdebian
-> +++ b/scripts/package/mkdebian
-> @@ -179,6 +179,8 @@ fi
->   
->   echo $debarch > debian/arch
->   
-> +host_gnu=$(dpkg-architecture -a "${debarch}" -q DEB_HOST_GNU_TYPE | sed 's/_/-/g')
-> +
->   # Generate a simple changelog template
->   cat <<EOF > debian/changelog
->   $sourcename ($packageversion) $distribution; urgency=low
-> @@ -196,7 +198,11 @@ Priority: optional
->   Maintainer: $maintainer
->   Rules-Requires-Root: no
->   Build-Depends: debhelper-compat (= 12)
-> -Build-Depends-Arch: bc, bison, cpio, flex, kmod, libelf-dev:native, libssl-dev:native, rsync
-> +Build-Depends-Arch: bc, bison, cpio, flex,
-> + gcc-${host_gnu} <!pkg.${sourcename}.nokernelheaders>,
-> + kmod, libelf-dev:native,
-> + libssl-dev:native, libssl-dev <!pkg.${sourcename}.nokernelheaders>,
-> + rsync
->   Homepage: https://www.kernel.org/
->   
->   Package: $packagename-$version
-> @@ -224,6 +230,7 @@ cat <<EOF >> debian/control
->   
->   Package: linux-headers-$version
->   Architecture: $debarch
-> +Build-Profiles: <!pkg.${sourcename}.nokernelheaders>
->   Description: Linux kernel headers for $version on $debarch
->    This package provides kernel header files for $version on $debarch
->    .
+Hi Russell,
 
-Tested with option 2 for RISC-V. On Ubuntu 24.04, the following must be 
-added to the file /etc/apt/sources.list.d/ubuntu.sources for apt update 
-to fetch the correct repositories:
+kernel test robot noticed the following build warnings:
 
-Types: deb
-URIs: http://ports.ubuntu.com/ubuntu-ports
-Suites: noble noble-updates noble-backports
-Components: main universe restricted multiverse
-Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-Architectures: riscv64
+[auto build test WARNING on net-next/main]
 
-Then:
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-phylink-add-common-validation-for-sfp_select_interface/20241022-234251
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1t3DSr-000Vxg-Qx%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH net-next 3/3] net: phylink: simplify how SFP PHYs are attached
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241023/202410232116.IgRFPrAS-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410232116.IgRFPrAS-lkp@intel.com/reproduce)
 
-sudo dpkg --add-architecture riscv64
-sudo apt-get update
-sudo apt-get install libssl-dev:riscv64
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410232116.IgRFPrAS-lkp@intel.com/
 
-The tool chain at https://github.com/riscv-collab/riscv-gnu-toolchain 
-can also be made to work. See:
+All warnings (new ones prefixed by >>):
 
-https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1590
-
-Tested-by: Ron Economos <re@w6rz.net>
+>> drivers/net/phy/phylink.c:3429:6: warning: unused variable 'ret' [-Wunused-variable]
+    3429 |         int ret;
+         |             ^~~
+   1 warning generated.
 
 
+vim +/ret +3429 drivers/net/phy/phylink.c
+
+7adb5b2126bc013 Russell King          2019-12-11  3424  
+ce0aa27ff3f68ed Russell King          2017-07-25  3425  static int phylink_sfp_connect_phy(void *upstream, struct phy_device *phy)
+ce0aa27ff3f68ed Russell King          2017-07-25  3426  {
+7e4183752735deb Baruch Siach          2018-10-03  3427  	struct phylink *pl = upstream;
+7adb5b2126bc013 Russell King          2019-12-11  3428  	u8 mode;
+938d44c2b502ba4 Russell King          2019-12-11 @3429  	int ret;
+7e4183752735deb Baruch Siach          2018-10-03  3430  
+52c956003a9d5bc Russell King          2019-12-11  3431  	/*
+52c956003a9d5bc Russell King          2019-12-11  3432  	 * This is the new way of dealing with flow control for PHYs,
+52c956003a9d5bc Russell King          2019-12-11  3433  	 * as described by Timur Tabi in commit 529ed1275263 ("net: phy:
+52c956003a9d5bc Russell King          2019-12-11  3434  	 * phy drivers should not set SUPPORTED_[Asym_]Pause") except
+52c956003a9d5bc Russell King          2019-12-11  3435  	 * using our validate call to the MAC, we rely upon the MAC
+52c956003a9d5bc Russell King          2019-12-11  3436  	 * clearing the bits from both supported and advertising fields.
+52c956003a9d5bc Russell King          2019-12-11  3437  	 */
+52c956003a9d5bc Russell King          2019-12-11  3438  	phy_support_asym_pause(phy);
+52c956003a9d5bc Russell King          2019-12-11  3439  
+7adb5b2126bc013 Russell King          2019-12-11  3440  	if (phylink_phy_no_inband(phy))
+7adb5b2126bc013 Russell King          2019-12-11  3441  		mode = MLO_AN_PHY;
+7adb5b2126bc013 Russell King          2019-12-11  3442  	else
+7adb5b2126bc013 Russell King          2019-12-11  3443  		mode = MLO_AN_INBAND;
+7adb5b2126bc013 Russell King          2019-12-11  3444  
+eca68a3c7d05b38 Marek Behún           2022-09-30  3445  	/* Set the PHY's host supported interfaces */
+eca68a3c7d05b38 Marek Behún           2022-09-30  3446  	phy_interface_and(phy->host_interfaces, phylink_sfp_interfaces,
+eca68a3c7d05b38 Marek Behún           2022-09-30  3447  			  pl->config->supported_interfaces);
+eca68a3c7d05b38 Marek Behún           2022-09-30  3448  
+52c956003a9d5bc Russell King          2019-12-11  3449  	/* Do the initial configuration */
+e48bc58d0fa1e08 Russell King (Oracle  2024-10-22  3450) 	return phylink_sfp_config_phy(pl, mode, phy);
+ce0aa27ff3f68ed Russell King          2017-07-25  3451  }
+ce0aa27ff3f68ed Russell King          2017-07-25  3452  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
