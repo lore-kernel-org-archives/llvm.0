@@ -1,168 +1,251 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4E61BBBC0
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 14:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E47F1AAE00
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 14:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729693502; cv=none; b=RuGuDi0Y0i2tvFKdMTDniHsSR2TqoUafycH5VTaJA2U0GU019e/jdWzrkFDwMAtGL6/h8SU37oXwspNZNFOZtIz5ERcPZ5g7OqW6E6bQPWb8R6BiNb0NSE8wWzpCKSCO+3fc2gac5TZqKq+S0LtraIWmnVAUyNW5P0dMksQS2j8=
+	t=1729693738; cv=none; b=thLHC7+3gN9rDJb6lSSGa0V5s6c2txqlbsYXnSc8Ni8SnK0CGGu8lE2BfE90+DnYBSOxmnVc5ysce7eKMeZjt4F/1xcXI8p6cZvdpnzKAUb4Yf/ML76PrpYbqgIjhZbzjFzutDYIVoGc+fdl1VlE45QYTK5Ur+CeoHrMjU1nZ4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729693502; c=relaxed/simple;
-	bh=SSzHZSLHISFuoqbjbDT/5aD+AUvvdJkkWZLs3kZ6uKQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=csgNoGBTw8VyKNe7csEcmP9zczSguzkkpNreMmSB/prvgmMmP3oiYsT65XdYwYXHJE2sN1oPg4sH8MbSKY3bMu5GCPZ4k5sERBNcKbnaOZN3TRZHG2E8KcAYfftFqISTAXE4knRDSkfTyCsgfdyZTcwPRX+jzUKh0AVWCAIEC1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CqyI0ShH; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1729693738; c=relaxed/simple;
+	bh=sOQusbb6i/faxmqa/sKu7YY9Rjw0MS3fEyQXXO0CK/0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iKtERILqN/rQAd4ylrXyOprz4gCQzoPAPD9V/ywEMsANsdsX5RaM9jW56THpVHlJopJCrE5LlGEHkPElEVcKuEY1yYtEKbHuO+46T8ZGy4FaXDZbOCYLcgGXGnjanYV6STtC8Xe2HVaIFkD5voZ1/7djGICRzHFP+9LfSOnkkVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSGteKuc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CqyI0ShH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729693501; x=1761229501;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SSzHZSLHISFuoqbjbDT/5aD+AUvvdJkkWZLs3kZ6uKQ=;
-  b=CqyI0ShHrD/JtA7MGeKR6H6wdm2S1mTb0fh54wA9Fn4ljkjmwbhSmVnK
-   EiSyBzHlhY20uuAIHN8SSOhjHd5bqp3XfpLeG/gTik61zalXildhMKndP
-   CfATcVGpx6Kd9k9Fv1AOCUYNz2d6RtgwWIXOsBh0ElP5+aoJ7nm3LP5Kw
-   +RyZ9gSbRCaMdmrEY+6gTFbMpBY3cGM2nGWtLTnTtr3A/bDROUUxdGNme
-   eW0wNr9AKbV829KWT+2b0nFItfTeradUixSIkJxDdUQqnv9sAwm5IvCHj
-   mpU+52ekH0wWXOF7m65Ip+7xdrZrow9WOtIGGPzORCeDTdTCFEp1XV3ws
-   w==;
-X-CSE-ConnectionGUID: KuaO1VCBTNyojVZg7py1eA==
-X-CSE-MsgGUID: 6ZRoQRqiQMOEKrZCkLlHFA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11234"; a="29505019"
-X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
-   d="scan'208";a="29505019"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 07:25:00 -0700
-X-CSE-ConnectionGUID: LnS8vSTAQfyiJw0jqwzVoQ==
-X-CSE-MsgGUID: wUeEaWojRf6UmnDhSNOvuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
-   d="scan'208";a="84802141"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 07:24:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t3cI8-00000006EZV-2aip;
-	Wed, 23 Oct 2024 17:24:52 +0300
-Date: Wed, 23 Oct 2024 17:24:52 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Uros Bizjak <ubizjak@gmail.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
- comparing in percpu_add_op()
-Message-ID: <ZxkHNDB6EcA7PouV@smile.fi.intel.com>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
- <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
- <20241016192011.GY17263@noisy.programming.kicks-ass.net>
- <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
- <20241017181859.GB17263@noisy.programming.kicks-ass.net>
- <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSGteKuc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CA1C4CECD
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 14:28:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729693737;
+	bh=sOQusbb6i/faxmqa/sKu7YY9Rjw0MS3fEyQXXO0CK/0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bSGteKucdVruNEYEAUzGKgoEGciQWORzoiunNu+88SytySD0vHnX4HyCRt2/TZ/K5
+	 WH1Y5iF+21kpbFyoMUbmPs4QIrvyIFyiW1i+aVDZtu8MoanrkK0ub4DVloNHPgbVhX
+	 pGQwzu3FcQc2AdAbDbrW59j/Dn1fgRvTeQWIot/Wc7sk0rj3Atw/KSmB3gwG1JMDyT
+	 iXf+Xsq24heJFDz8WuxJr6rT2VYexHLqFfWgOs0asgAc09rpWTh6XTeUP/7lTNSAR/
+	 zfrNzhLh6JAKAtRG2dV3JoYntFPrs9WUiScyyui0lRDj3vNQyv0e9PVPW2oKcH3gEU
+	 l5ZImvix85R0g==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-539f58c68c5so10948661e87.3
+        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 07:28:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVIrYsgSYFhqLcjScb/6X/8HKThJiE6uUDeKv8kp2seQqM7/amNVHK4uKI6k3mPbeUi+Nvc@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz/nNzQ2RscLa4xJcjCAw0I+S/bJ7tsQMvQBgjErZNBgWM0GLu0
+	eINy0berCm7fDQ+yEIf/woq4YZmwwddKZnaIntELNbnXZrEYlpnf8bThUHze/FhHDxC9XqoWnS/
+	ZkS21Hhq0FxGnIUVe38zRBIz/HTk=
+X-Google-Smtp-Source: AGHT+IErSv2TyfIO015D0XYR4nk5kT9g8cgaYUX3d8/dF01u4B3KxDE9vuwocD/eKJRX7AhMqGvpA5isqFU5n8WQ9oU=
+X-Received: by 2002:a05:6512:104b:b0:539:9ee4:baab with SMTP id
+ 2adb3069b0e04-53b1a34cf32mr2584579e87.30.1729693736062; Wed, 23 Oct 2024
+ 07:28:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20241022181703.1710116-1-masahiroy@kernel.org>
+ <20241022181703.1710116-2-masahiroy@kernel.org> <6fca7450-95e0-1bc0-7556-8889a398d0b6@w6rz.net>
+In-Reply-To: <6fca7450-95e0-1bc0-7556-8889a398d0b6@w6rz.net>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 23 Oct 2024 23:28:19 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATmKsHzpg2+vbMNBrq06UX5+giQN98XQOAxsMP=MqXMtQ@mail.gmail.com>
+Message-ID: <CAK7LNATmKsHzpg2+vbMNBrq06UX5+giQN98XQOAxsMP=MqXMtQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kbuild: deb-pkg: add pkg.linux-upstream.nokernelheaders
+ build profile
+To: Ron Economos <re@w6rz.net>
+Cc: linux-kbuild@vger.kernel.org, Ben Hutchings <benh@debian.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 22, 2024 at 12:53:01PM -0700, Dave Hansen wrote:
-> On 10/17/24 11:18, Peter Zijlstra wrote:
-> > On Wed, Oct 16, 2024 at 12:44:18PM -0700, Dave Hansen wrote:
+On Wed, Oct 23, 2024 at 10:06=E2=80=AFPM Ron Economos <re@w6rz.net> wrote:
+>
+> On 10/22/24 11:16 AM, Masahiro Yamada wrote:
+> > Since commit f1d87664b82a ("kbuild: cross-compile linux-headers package
+> > when possible"), 'make bindeb-pkg' may attempt to cross-compile the
+> > linux-headers package, but it fails under certain circumstances.
+> >
+> > For example, when CONFIG_MODULE_SIG_FORMAT is enabled on Debian, the
+> > following command fails:
+> >
+> >    $ make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- bindeb-pkg
+> >        [ snip ]
+> >    Rebuilding host programs with aarch64-linux-gnu-gcc...
+> >      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12=
+.0-rc4/scripts/kallsyms
+> >      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12=
+.0-rc4/scripts/sorttable
+> >      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12=
+.0-rc4/scripts/asn1_compiler
+> >      HOSTCC  debian/linux-headers-6.12.0-rc4/usr/src/linux-headers-6.12=
+.0-rc4/scripts/sign-file
+> >    In file included from /usr/include/openssl/opensslv.h:109,
+> >                     from debian/linux-headers-6.12.0-rc4/usr/src/linux-=
+headers-6.12.0-rc4/scripts/sign-file.c:25:
+> >    /usr/include/openssl/macros.h:14:10: fatal error: openssl/opensslcon=
+f.h: No such file or directory
+> >       14 | #include <openssl/opensslconf.h>
+> >          |          ^~~~~~~~~~~~~~~~~~~~~~~
+> >    compilation terminated.
+> >
+> > This commit adds a new profile, pkg.linux-upstream.nokernelheaders, to
+> > guard the linux-headers package.
+> >
+> > There are two options to fix the above issue.
+> >
+> > [option 1] Set the pkg.linux-upstream.nokernelheaders build profile
+> >
+> >    $ DEB_BUILD_PROFILES=3Dpkg.linux-upstream.nokernelheaders \
+> >      make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- bindeb-pkg
+> >
+> > This skips the building of the linux-headers package.
+> >
+> > [option 2] Install the necessary build dependencies
+> >
+> > If you want to cross-compile the linux-headers package, you need to
+> > install additional packages. This is a one-time installation step.
+> >
+> > For example, on Debian, the packages necessary for cross-compiling it
+> > to arm64 can be installed with the following commands:
+> >
+> >    # dpkg --add-architecture arm64
+> >    # apt update
+> >    # apt install gcc-aarch64-linux-gnu libssl-dev:arm64
+> >
+> > Fixes: f1d87664b82a ("kbuild: cross-compile linux-headers package when =
+possible")
+> > Reported-by: Ron Economos <re@w6rz.net>
+> > Closes: https://lore.kernel.org/all/b3d4f49e-7ddb-29ba-0967-689232329b5=
+3@w6rz.net/
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >   scripts/package/builddeb             | 2 +-
+> >   scripts/package/install-extmod-build | 6 ++----
+> >   scripts/package/mkdebian             | 9 ++++++++-
+> >   3 files changed, 11 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+> > index 404587fc71fe..441b0bb66e0d 100755
+> > --- a/scripts/package/builddeb
+> > +++ b/scripts/package/builddeb
+> > @@ -123,7 +123,7 @@ install_kernel_headers () {
+> >       pdir=3Ddebian/$1
+> >       version=3D${1#linux-headers-}
+> >
+> > -     "${srctree}/scripts/package/install-extmod-build" "${pdir}/usr/sr=
+c/linux-headers-${version}"
+> > +     CC=3D"${DEB_HOST_GNU_TYPE}-gcc" "${srctree}/scripts/package/insta=
+ll-extmod-build" "${pdir}/usr/src/linux-headers-${version}"
+> >
+> >       mkdir -p $pdir/lib/modules/$version/
+> >       ln -s /usr/src/linux-headers-$version $pdir/lib/modules/$version/=
+build
+> > diff --git a/scripts/package/install-extmod-build b/scripts/package/ins=
+tall-extmod-build
+> > index d2c9cacecc0c..7ec1f061a519 100755
+> > --- a/scripts/package/install-extmod-build
+> > +++ b/scripts/package/install-extmod-build
+> > @@ -44,13 +44,11 @@ mkdir -p "${destdir}"
+> >       fi
+> >   } | tar -c -f - -T - | tar -xf - -C "${destdir}"
+> >
+> > -# When ${CC} and ${HOSTCC} differ, we are likely cross-compiling. Rebu=
+ild host
+> > -# programs using ${CC}. This assumes CC=3D${CROSS_COMPILE}gcc, which i=
+s usually
+> > -# the case for package building. It does not cross-compile when CC=3Dc=
+lang.
+> > +# When ${CC} and ${HOSTCC} differ, rebuild host programs using ${CC}.
+> >   #
+> >   # This caters to host programs that participate in Kbuild. objtool an=
+d
+> >   # resolve_btfids are out of scope.
+> > -if [ "${CC}" !=3D "${HOSTCC}" ] && is_enabled CONFIG_CC_CAN_LINK; then
+> > +if [ "${CC}" !=3D "${HOSTCC}" ]; then
+> >       echo "Rebuilding host programs with ${CC}..."
+> >
+> >       cat <<-'EOF' >  "${destdir}/Kbuild"
+> > diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> > index 10637d403777..93eb50356ddb 100755
+> > --- a/scripts/package/mkdebian
+> > +++ b/scripts/package/mkdebian
+> > @@ -179,6 +179,8 @@ fi
+> >
+> >   echo $debarch > debian/arch
+> >
+> > +host_gnu=3D$(dpkg-architecture -a "${debarch}" -q DEB_HOST_GNU_TYPE | =
+sed 's/_/-/g')
+> > +
+> >   # Generate a simple changelog template
+> >   cat <<EOF > debian/changelog
+> >   $sourcename ($packageversion) $distribution; urgency=3Dlow
+> > @@ -196,7 +198,11 @@ Priority: optional
+> >   Maintainer: $maintainer
+> >   Rules-Requires-Root: no
+> >   Build-Depends: debhelper-compat (=3D 12)
+> > -Build-Depends-Arch: bc, bison, cpio, flex, kmod, libelf-dev:native, li=
+bssl-dev:native, rsync
+> > +Build-Depends-Arch: bc, bison, cpio, flex,
+> > + gcc-${host_gnu} <!pkg.${sourcename}.nokernelheaders>,
+> > + kmod, libelf-dev:native,
+> > + libssl-dev:native, libssl-dev <!pkg.${sourcename}.nokernelheaders>,
+> > + rsync
+> >   Homepage: https://www.kernel.org/
+> >
+> >   Package: $packagename-$version
+> > @@ -224,6 +230,7 @@ cat <<EOF >> debian/control
+> >
+> >   Package: linux-headers-$version
+> >   Architecture: $debarch
+> > +Build-Profiles: <!pkg.${sourcename}.nokernelheaders>
+> >   Description: Linux kernel headers for $version on $debarch
+> >    This package provides kernel header files for $version on $debarch
+> >    .
+>
+> Tested with option 2 for RISC-V. On Ubuntu 24.04, the following must be
+> added to the file /etc/apt/sources.list.d/ubuntu.sources for apt update
+> to fetch the correct repositories:
+>
+> Types: deb
+> URIs: http://ports.ubuntu.com/ubuntu-ports
+> Suites: noble noble-updates noble-backports
+> Components: main universe restricted multiverse
+> Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+> Architectures: riscv64
 
-...
+Right, this is an annoyance of Ubuntu.
 
-> >> Would anybody hate if we broke this up a bit, like:
-> >>
-> >>         const typeof(var) _val = val;
-> >>         const int paoconst = __builtin_constant_p(val);
-> >>         const int paoinc   = paoconst && ((_val) == 1);
-> >>         const int paodec   = paoconst && ((_val) == (typeof(var))-1);
-> >>
-> >> and then did
-> >>
-> >> 	if (paoinc)
-> >> 		percpu_unary_op(size, qual, "inc", var);
-> >> 	...
-> > I think that is an overall improvement. Proceed! 🙂
-> 
-> I poked at this a bit:
-
-Thanks for looking into this!
-
-> > https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/commit/?h=testme&id=30e0899c6ab7fe1134e4b96db963f0be89b1dd5a
-> 
-> I believe it functions fine.  But it surprised me with a few things.
-> Here's one.  I assumed that doing an add((unsigned)-1) would be rare.
-> It's not.  It's actually pretty common because this:
-> 
-> #define this_cpu_sub(pcp, val)  this_cpu_add(pcp, -(typeof(pcp))(val))
-> 
-> ends up causing problems when 'pcp' is an unsigned type.  For example,
-> in this chain:
-> 
-> 	mem_cgroup_exit ->
-> 	obj_cgroup_put ->
-> 	percpu_ref_put ->
-> 	percpu_ref_put_many(ref, 1) ->
-> 	this_cpu_sub
-> 
-> the compiler can see the '1' constant.  It effectively expands to:
-> 
-> 	this_cpu_add(pcp, -(unsigned long)(1))
-> 
-> With the old code, gcc manages to generate a 'dec'.  Clang generates an
-> 'add'.  With my hack above both compilers generate an 'add'.  This
-> actually matters in some code that seems potentially rather performance
-> sensitive:
-> 
-> add/remove: 0/0 grow/shrink: 219/9 up/down: 755/-141 (614)
-> Function                                     old     new   delta
-> flush_end_io                                 905    1070    +165
-> x86_pmu_cancel_txn                           242     338     +96
-> lru_add                                      554     594     +40
-> mlock_folio_batch                           3264    3300     +36
-> compaction_alloc                            3813    3838     +25
-> tcp_leave_memory_pressure                     86     110     +24
-> account_guest_time                           270     287     +17
-> ...
-> 
-> So I think Peter's version was the best.  It shuts up clang and also
-> preserves the existing (good) gcc 'sub' behavior.  I'll send it out for
-> real in a bit, but I'm thinking of something like the attached patch.
-
-I am fine as long as you keep the (added) test cases and maybe even extend
-them. I dunno how you will go with the fact that Andrew applied my version
-already.
-
-...
-
-> This can be quickly reproduced by setting CONFIG_WERROR=y and running:
-> 
-> 	make W=1 CC=clang-14 net/ipv4/tcp_output.o
-
-Hint: You can use LLVM=-14 instead of CC=clang-14.
-
--- 
-With Best Regards,
-Andy Shevchenko
+x86 and non-x86 architectures use different repositories.
 
 
+
+>
+> Then:
+>
+> sudo dpkg --add-architecture riscv64
+> sudo apt-get update
+> sudo apt-get install libssl-dev:riscv64
+>
+> The tool chain at https://github.com/riscv-collab/riscv-gnu-toolchain
+> can also be made to work. See:
+>
+> https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1590
+
+
+You can use any toolchain.
+
+The linux-headers package is rebuilt with riscv64-linux-gnu-gcc,
+not your own toolchain.
+
+
+
+> Tested-by: Ron Economos <re@w6rz.net>
+>
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
