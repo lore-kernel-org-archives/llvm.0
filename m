@@ -1,164 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B405A3398A
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 03:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31472135A53;
+	Wed, 23 Oct 2024 05:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729654777; cv=none; b=HvYySJ+miV9LipBvsD0ezLMu53qQKFjKqWHSt/V9oJegpK0jpgCxFch/XRTvJDIdsx/U6ow4rnusbQnybIfyqW8eqhY+BUyd+cIR+0GfJj/KgO8jKyR2iVu8DqlbBdzr57o1Zgjm7vLTKcb6+ypqOoEQ3Gni6SRP6Tc/6CrT4eQ=
+	t=1729659635; cv=none; b=eplq8r+vnMPX0IMcOgEO4SkHMF5fqegUXZPRLv89m9ABVTAaVg/6yjliNhOUSWWtMfcUwvIwAcDm/S8rA09nvhsRPIIKfxD8XWf2j30tKZYNreoVNaGTfc7am12FCzTHDnNFVXulEyyviu/1tpJuVIZJcQ6+nkxGvXcI/PNWRdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729654777; c=relaxed/simple;
-	bh=bWPXaO4wbrblRneGFGhxY6y52ljzyNu1a9lMENWtzF4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=adn2jb1Dp+Q5zqdg30Q20+mMSFq+aPgUsnD+9Eck9MyIXHP7W8Sr3Sa3/o/IIzRE3QXjYBI7yPcPTs4Vbr51DsNlkiYoFax0YhERjQIOzHJbwnHwTmZulHkYLNB4fyfWKqrgGN9CBWMEAxVWI/6kbYcqCdzeogkF3oAdbynuIsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMbGgl1r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729659635; c=relaxed/simple;
+	bh=Y5mwWTAZ0TcnndyxJ32dE/2GT8OcocJWnH2I/mGoCXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pBScDTY11vKMw3QbMQhYA4td3cuCYfJjjIM8KoYHErOIseg6V+eSWB5fzPUCtAPq1VjdMElR4kx/WE8RCmLwMrUGpZuElKkWGOdBRmIkmPUB8X44SccNUxcZuh8roLa5TJdxhzp2GLTINVntjl/fbs6xyCahoCah6DHhHXB3iw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yc0UcXfS; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMbGgl1r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ACA3C4CEE4
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 03:39:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729654777;
-	bh=bWPXaO4wbrblRneGFGhxY6y52ljzyNu1a9lMENWtzF4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NMbGgl1rC4inH6PxlOEXvcJmBAxCl6uUSUt3u440jrxNzRbIvipfTburDVG36qWIz
-	 dOH5tCe0jeeQu2qUtiucym/nNrH3mfKIRGqeBuHG03gWzecaumFM8VdW7iN1EjvHQB
-	 Zl0tJP3xE4E+zvJ9Ks/Hj5osIqFBP1XQqbc01oSOim7Ewx6SR3ss2WxOWBpjsXUDKV
-	 aUol+ev7DeDfi/8WnNC50TdnM8pinD7lvK1acWwLmTStFSsSpbXudvyo8wBkwRAPly
-	 eXdd21EgRGXmZ48oAJhS6x02md1QbRmGSPjPogPFdHsjc8FQ+ATnJOn+HijVBb0duA
-	 dvfEhR4RymRlg==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539fbbadf83so8319736e87.0
-        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 20:39:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXbUbly1rM45ydkf/wwkMd94WRUSBV3xD/ZsSpWtJ5GHh1fex06Sb8/VXUTYBz7mQWvBn0s@lists.linux.dev
-X-Gm-Message-State: AOJu0YyIPnUOWDHmtbmktQlFPIiFPuG5HTJnzqpqYLG8E7yblx4om6Uw
-	+YVeLvDQoVHJ3P1Z51XDPg1mXJvcq0Q7uNnfyWcZvZOGQaS5LeLRtK6Pq2O7/VlzDC7hK2fgf0N
-	4DD/LSNFYjiDAixsGTR9EeZn4RAY=
-X-Google-Smtp-Source: AGHT+IG1m1c8WF9Ifm54MlXWxXbh0iMTPKQYEttQXsWIzvLY4nWYZZl7/oT+dYwJAZTktYREhgohpTAT6LM7SU3MG0Q=
-X-Received: by 2002:a05:6512:2304:b0:536:54db:ddd0 with SMTP id
- 2adb3069b0e04-53b1a2405f9mr421331e87.0.1729654776050; Tue, 22 Oct 2024
- 20:39:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yc0UcXfS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729659630; x=1761195630;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y5mwWTAZ0TcnndyxJ32dE/2GT8OcocJWnH2I/mGoCXc=;
+  b=Yc0UcXfShlEYj6vgHj2VzfgPlJgDsCQTGpqYjcC5JkJtTVOZkOseKG7s
+   ZYeMFAWjxhjTBLgfKJOk5K4/yzQ4yO2qnT7eTBG4YmoRurAtKG0oBG87t
+   4nNrgz3tFVr2rF+hutOfvBQ2pUjw5nP9euADMVRv6qjripf8FlKbzfNT5
+   L8O/sK4D+wjHwMemD7p5yXBwpuqBO5zYcG43CzMZlN5TYs+Uz8Ffp4WUe
+   sH1Mt0AzThOoeFF11J4/9k+ifQKgmbd0+LW4Co1n4IES8c8J5pTv7LPYc
+   3o4F+aGNcXdG64SzNTlD67m4W9+jUPd7DcbYEY/T5Inr7M2S7pbMFKW9q
+   g==;
+X-CSE-ConnectionGUID: 8za6yRs5Ray/jL0+pTO2Qg==
+X-CSE-MsgGUID: AF99oQ+mTaq/w3C9RCINRA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11233"; a="39805644"
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="39805644"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 22:00:28 -0700
+X-CSE-ConnectionGUID: +lhXmCajT5use5rOnbIVdQ==
+X-CSE-MsgGUID: mI2SZyg1SJOUyY3YibGOkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
+   d="scan'208";a="85166612"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 22 Oct 2024 22:00:26 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3TTr-000USJ-1J;
+	Wed, 23 Oct 2024 05:00:23 +0000
+Date: Wed, 23 Oct 2024 13:00:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:trampoline_multi_10 8/21] kernel/trace/ftrace.c:5887:
+ warning: Function parameter or struct member 'hash' not described in
+ 'register_ftrace_direct_hash'
+Message-ID: <202410231204.FTyqu5nK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
- <20241021201657.GA898643@thelio-3990X> <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com>
- <20241022200732.GA487584@thelio-3990X> <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
-In-Reply-To: <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 23 Oct 2024 12:38:59 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
-Message-ID: <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
-To: Koakuma <koachan@protonmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Andreas Larsson <andreas@gaisler.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, 
-	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Oct 23, 2024 at 9:44=E2=80=AFAM Koakuma <koachan@protonmail.com> wr=
-ote:
->
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> > Koakuma might know more than I do but I did not test either the
-> > integrated assembler or the rest of the LLVM tools; I only tested clang
-> > for CC. As far as I am aware, that has been where most of the effort in
-> > llvm-project has been going and I think there are probably other fixes
-> > that will be needed for the other tools. The command I tested was:
-> >
-> > $ make -skj"$(nproc)" \
-> > ARCH=3Dsparc64 \
-> > CC=3Dclang \
-> > CROSS_COMPILE=3Dsparc64-linux-gnu- \
-> > LLVM_IAS=3D0 \
-> > mrproper defconfig all
-> >
-> > I see this as more of a stepping stone series to make testing those
-> > other components easier as time goes on, hence why I did not really
-> > consider user facing documentation either like you brought up in the
-> > other thread.
-> >
-> > Cheers,
-> > Nathan
->
-> Ah, pardon me for forgetting to say it in the cover letter.
-> But yeah. At the moment only clang as CC works, all other LLVM tools are =
-still
-> incomplete and need some work to be able to build the kernel, so these pa=
-tches
-> indeed are intended as stepping stones to make it easier to work on
-> the rest of the tools.
->
-> I'm not sure if I should update the documentation now given that LLVM sup=
-port
-> is nowhere near as complete as other architectures, but I'll do it if nee=
-ded...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git trampoline_multi_10
+head:   48132820c5a21b82d1a4507a86a67b3742fb110e
+commit: 5081acd5f53163da83a2b4d9fd7178c6c2f11a76 [8/21] ftrace: Add register_ftrace_direct_hash function
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241023/202410231204.FTyqu5nK-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231204.FTyqu5nK-lkp@intel.com/reproduce)
 
-Nathan said he was able to build the kernel.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410231204.FTyqu5nK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/ftrace.c:5887: warning: Function parameter or struct member 'hash' not described in 'register_ftrace_direct_hash'
+>> kernel/trace/ftrace.c:5887: warning: expecting prototype for register_ftrace_direct(). Prototype was for register_ftrace_direct_hash() instead
 
 
-If so, I think this should be documented (required LLVM version and
-the supported build command),
-otherwise people cannot test this patch.
+vim +5887 kernel/trace/ftrace.c
 
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5862  
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5863  /**
+da8bdfbd422333 Florent Revest          2023-03-21  5864   * register_ftrace_direct - Call a custom trampoline directly
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5865   * for multiple functions registered in @ops
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5866   * @ops: The address of the struct ftrace_ops object
+c488fe4b50d896 Jiri Olsa               2024-09-30  5867   * @ip: The address of the function to attach
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5868   * @addr: The address of the trampoline to call at @ops functions
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5869   *
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5870   * This is used to connect a direct calls to @addr from the nop locations
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5871   * of the functions registered in @ops (with by ftrace_set_filter_ip
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5872   * function).
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5873   *
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5874   * The location that it calls (@addr) must be able to handle a direct call,
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5875   * and save the parameters of the function being traced, and restore them
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5876   * (or inject new ones if needed), before returning.
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5877   *
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5878   * Returns:
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5879   *  0 on success
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5880   *  -EINVAL  - The @ops object was already registered with this call or
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5881   *             when there are no functions in @ops object.
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5882   *  -EBUSY   - Another direct function is already attached (there can be only one)
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5883   *  -ENODEV  - @ip does not point to a ftrace nop location (or not supported)
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5884   *  -ENOMEM  - There was an allocation failure.
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5885   */
+5081acd5f53163 Jiri Olsa               2024-10-14  5886  int register_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash)
+f64dd4627ec6ed Jiri Olsa               2021-10-08 @5887  {
+5081acd5f53163 Jiri Olsa               2024-10-14  5888  	struct ftrace_func_entry *new = NULL, *entry;
+c488fe4b50d896 Jiri Olsa               2024-09-30  5889  	struct ftrace_hash *new_hash = NULL;
+c488fe4b50d896 Jiri Olsa               2024-09-30  5890  	int err = -EBUSY, reg;
+5081acd5f53163 Jiri Olsa               2024-10-14  5891  	unsigned long size, i;
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5892  
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5893  	mutex_lock(&direct_mutex);
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5894  
+c488fe4b50d896 Jiri Olsa               2024-09-30  5895  	/* Make sure requested entry is not already registered.. */
+5081acd5f53163 Jiri Olsa               2024-10-14  5896  	size = 1 << hash->size_bits;
+5081acd5f53163 Jiri Olsa               2024-10-14  5897  	for (i = 0; i < size; i++) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5898  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5899  			if (__ftrace_lookup_ip(direct_functions, entry->ip))
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5900  				goto out_unlock;
+5081acd5f53163 Jiri Olsa               2024-10-14  5901  		}
+5081acd5f53163 Jiri Olsa               2024-10-14  5902  	}
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5903  
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5904  	err = -ENOMEM;
+c488fe4b50d896 Jiri Olsa               2024-09-30  5905  	if (direct_functions == EMPTY_HASH) {
+c488fe4b50d896 Jiri Olsa               2024-09-30  5906  		direct_functions = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5907  		if (!direct_functions)
+c488fe4b50d896 Jiri Olsa               2024-09-30  5908  			goto out_unlock;
+c488fe4b50d896 Jiri Olsa               2024-09-30  5909  	}
+d05cb470663a2a Steven Rostedt (Google  2023-12-29  5910) 
+c488fe4b50d896 Jiri Olsa               2024-09-30  5911  	new_hash = alloc_and_copy_ftrace_hash(FTRACE_HASH_DEFAULT_BITS, direct_functions);
+d05cb470663a2a Steven Rostedt (Google  2023-12-29  5912) 	if (!new_hash)
+d05cb470663a2a Steven Rostedt (Google  2023-12-29  5913) 		goto out_unlock;
+d05cb470663a2a Steven Rostedt (Google  2023-12-29  5914) 
+5081acd5f53163 Jiri Olsa               2024-10-14  5915  	for (i = 0; i < size; i++) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5916  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5917  			if (add_hash_entry_direct(new_hash, entry->ip, entry->direct) == NULL)
+5081acd5f53163 Jiri Olsa               2024-10-14  5918  				goto out_cleanup;
+5081acd5f53163 Jiri Olsa               2024-10-14  5919  		}
+5081acd5f53163 Jiri Olsa               2024-10-14  5920  	}
+d05cb470663a2a Steven Rostedt (Google  2023-12-29  5921) 
+c488fe4b50d896 Jiri Olsa               2024-09-30  5922  	reg = !direct_functions->count;
+c488fe4b50d896 Jiri Olsa               2024-09-30  5923  
+5081acd5f53163 Jiri Olsa               2024-10-14  5924  	for (i = 0; i < size; i++) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5925  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5926  			if (add_hash_entry_direct(direct_functions, entry->ip, entry->direct) == NULL)
+5081acd5f53163 Jiri Olsa               2024-10-14  5927  				goto out_cleanup;
+5081acd5f53163 Jiri Olsa               2024-10-14  5928  		}
+5081acd5f53163 Jiri Olsa               2024-10-14  5929  	}
+d05cb470663a2a Steven Rostedt (Google  2023-12-29  5930) 
+c488fe4b50d896 Jiri Olsa               2024-09-30  5931  	if (reg) {
+c488fe4b50d896 Jiri Olsa               2024-09-30  5932  		if (!(ops->flags & FTRACE_OPS_FL_INITIALIZED)) {
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5933  			ops->func = call_direct_funcs;
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5934  			ops->flags = MULTI_FLAGS;
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5935  			ops->trampoline = FTRACE_REGS_ADDR;
+c488fe4b50d896 Jiri Olsa               2024-09-30  5936  		}
+c488fe4b50d896 Jiri Olsa               2024-09-30  5937  		ops->local_hash.filter_hash = new_hash;
+53cd885bc5c3ea Song Liu                2022-07-19  5938  		err = register_ftrace_function_nolock(ops);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5939  		if (err)
+c488fe4b50d896 Jiri Olsa               2024-09-30  5940  			free_ftrace_hash(new_hash);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5941  	} else {
+c488fe4b50d896 Jiri Olsa               2024-09-30  5942  		err = ftrace_update_ops(ops, new_hash, EMPTY_HASH);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5943  		free_ftrace_hash(new_hash);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5944  	}
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5945  
+5081acd5f53163 Jiri Olsa               2024-10-14  5946   out_cleanup:
+5081acd5f53163 Jiri Olsa               2024-10-14  5947  	if (err) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5948  		for (i = 0; i < size; i++) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5949  			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
+5081acd5f53163 Jiri Olsa               2024-10-14  5950  				new = __ftrace_lookup_ip(direct_functions, entry->ip);
+5081acd5f53163 Jiri Olsa               2024-10-14  5951  				if (new)
+c488fe4b50d896 Jiri Olsa               2024-09-30  5952  					remove_hash_entry(direct_functions, new);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5953  				kfree(new);
+c488fe4b50d896 Jiri Olsa               2024-09-30  5954  			}
+5081acd5f53163 Jiri Olsa               2024-10-14  5955  		}
+5081acd5f53163 Jiri Olsa               2024-10-14  5956  	}
+5081acd5f53163 Jiri Olsa               2024-10-14  5957  
+5081acd5f53163 Jiri Olsa               2024-10-14  5958   out_unlock:
+5081acd5f53163 Jiri Olsa               2024-10-14  5959  	mutex_unlock(&direct_mutex);
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5960  	return err;
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5961  }
+da8bdfbd422333 Florent Revest          2023-03-21  5962  EXPORT_SYMBOL_GPL(register_ftrace_direct);
+f64dd4627ec6ed Jiri Olsa               2021-10-08  5963  
 
+:::::: The code at line 5887 was first introduced by commit
+:::::: f64dd4627ec6edc39bf1430fe6dbc923d2300a88 ftrace: Add multi direct register/unregister interface
 
+:::::: TO: Jiri Olsa <jolsa@redhat.com>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-Anyway, the sparc subsystem is maintained.
-I hope Andreas can take a look.
-
-
-
-commit eb5b0f9812fff72f82e6ecc9ad4dafaf4971a16a
-Merge: 4ffc45808373 d21dffe51baa
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed Sep 25 11:21:06 2024 -0700
-
-    Merge tag 'sparc-for-6.12-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/alarsson/linux-sparc
-
-    Pull sparc32 update from Andreas Larsson:
-
-     - Remove an unused variable for sparc32
-
-    * tag 'sparc-for-6.12-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/alarsson/linux-sparc:
-      arch/sparc: remove unused varible paddrbase in function leon_swprobe(=
-)
-
-commit 7dd894c1bf65a9591ba27f6175cf3238748deb47
-Merge: 1c7d0c3af5cc a3da15389112
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu Jul 18 15:48:41 2024 -0700
-
-    Merge tag 'sparc-for-6.11-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/alarsson/linux-sparc
-
-    Pull sparc updates from Andreas Larsson:
-
-     - Add MODULE_DESCRIPTION for a number of sbus drivers
-
-     - Fix linking error for large sparc32 kernels
-
-     - Fix incorrect functions signature and prototype warnings for sparc64
-
-    * tag 'sparc-for-6.11-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/alarsson/linux-sparc:
-      sparc64: Fix prototype warnings in hibernate.c
-      sparc64: Fix prototype warning for prom_get_mmu_ihandle
-      sparc64: Fix incorrect function signature and add prototype for
-prom_cif_init
-      sparc64: Fix prototype warnings for floppy_64.h
-      sparc32: Fix truncated relocation errors when linking large kernels
-      sbus: add missing MODULE_DESCRIPTION() macros
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
