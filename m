@@ -1,85 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8E562171;
-	Wed, 23 Oct 2024 16:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837441ABEB7
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 17:15:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729701938; cv=none; b=t2RFNRJtPXokReZSPT1rDMPGnWKFANfbSefBxXHnuncOgm+g0xNIVS75SvItKtYrSMnEkjCOLTT3LSuwKSVcldAU08IfM3+jOSdEFpdzGgKGdUr7o4SKncktcZkmuIqPBgUmgizRwRbpEf+8VAXjo4mEksKtVrGrDWiudXTlKBw=
+	t=1729703716; cv=none; b=fdr4wwZWokbBWlYVt3D/Tlo2vKKBMb7O4DDquetGlKiBhRs1SwJ2TEGKzz0erjVT2kPWZTKaYoTYCmXCDsiJhcGwiW3dauY9HNvy3dwqorCZuHv/FoNSx5HzKqf9bpPL3zketPlXbbnxAMTs51ldRGlguGXkUUOKW/3ycKJdjkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729701938; c=relaxed/simple;
-	bh=h2JGt3X85RKRDd+2EPZCOOa0tCWEzPOqh4KtmSrD0FQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K8uV8Qrm2VlDLxCSgywq7JPJD36s9sSN7qO0iINCEXGt6XLu+4EZMPECTfSfr8hxbDc5bWvZev7dKpewfUzNhVrPvco2xRRbvljbqxezGSJReg0bPKHxwhW0vLldq5s1B6jqNYwJhHv2fKCg8hXiFwTcnHuMyfcRAGdBQkKU8Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hV/r9/Yi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729703716; c=relaxed/simple;
+	bh=zuyNVckBZ4DNK/TY1WDnCB7cAukgyN/LVjx4ft0olEc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RztkQ0PscHFR3UD7rSBAy8JoNPisHgPaUPXxBslv1qIrIMgPUmStIPZwaqqkZsMKzduVZyuoa1h4V2iNvFygQZKVemGwy7Dtw9s5jal7uFVJ4MUlSIZxVpzgl+fFt+eivUpCnuiAWkKyV6geudErmeIY6yNNBcQfTIUdy4sNj8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c3OkFM19; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hV/r9/Yi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A7E1C4CEC6;
-	Wed, 23 Oct 2024 16:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729701938;
-	bh=h2JGt3X85RKRDd+2EPZCOOa0tCWEzPOqh4KtmSrD0FQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hV/r9/YiiI4qTILfEQ+C08Cj9/4fYvKdSDzs0Hdc5fBqdXA1XzQLSFQtrEpCi1u9m
-	 eewab48qnqN5DGhARrtUISJA728PQNwZeRqW3F0kTrWrpx945i3+1rDXcjl45HzPjE
-	 gQ+fP73bFIo/8qj9INjBnc3P+NrY1RNT8H2FKgYJy3/xOdPZe2C31JluXCpyP3vHac
-	 9UFJef1m41k+07dFmkZh+39JDW0T/W8F1Gh/TDb9LIQ/p01FSMnOSTZJ8xSnnNFpon
-	 zlN3SkTlc4QIzRSooNY/LQ7BHZKyiNBxkCw17l6J4kQ9cZhYVEeSjDFokl8zvTNjv0
-	 R0BNcitvJd1jA==
-Date: Wed, 23 Oct 2024 09:45:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Koakuma <koachan@protonmail.com>, Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
-	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
-Message-ID: <20241023164535.GB4081497@thelio-3990X>
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
- <20241021201657.GA898643@thelio-3990X>
- <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com>
- <20241022200732.GA487584@thelio-3990X>
- <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
- <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c3OkFM19"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729703714; x=1761239714;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zuyNVckBZ4DNK/TY1WDnCB7cAukgyN/LVjx4ft0olEc=;
+  b=c3OkFM19sQhW+ba1qfbGWX+371BLRjIZHdKVTJ832CCAClgEX0/LUSGK
+   i8CcTe+7dwji1zBXvxcVNtLTT1M/j6yHoEkgDRtij4PDfJB4XxLkNwzvh
+   NBAa9afjYDiOvl119MsHuTgGfeDAUBgad/04tlBbSIT8zkwu1+YPK8BVE
+   qrPhmh/mir9XxZRLMsbAEEdmYy+6cueX9U2Ga6nfwW3hiHOQOx6DcIQvS
+   +DpyG9KiU2LsnAWBU4bwCPinqh9ZTCPaotWExLvwQnWL4lpnzYCSqiNKG
+   N5KJrZPzhUFTU4aAeuz8OECWwchNR9oXESIQGdLlBXlkTkmy7KzIofpmU
+   A==;
+X-CSE-ConnectionGUID: e7SnKoXLRpKsaHrpXcaWlg==
+X-CSE-MsgGUID: pP+6YJccQpqkOm7281Oebg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29466572"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29466572"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 10:15:14 -0700
+X-CSE-ConnectionGUID: 2KVAZG3NR9uacRkQ07F3qQ==
+X-CSE-MsgGUID: xpIrf6a1QUqugTaWv4DAVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
+   d="scan'208";a="79874170"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO [10.124.221.6]) ([10.124.221.6])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 10:15:13 -0700
+Message-ID: <bc707fc1-b5fe-4c2d-af88-c44737198876@intel.com>
+Date: Wed, 23 Oct 2024 10:15:12 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when
+ comparing in percpu_add_op()
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com>
+ <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com>
+ <20241016192011.GY17263@noisy.programming.kicks-ass.net>
+ <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com>
+ <20241017181859.GB17263@noisy.programming.kicks-ass.net>
+ <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
+ <4b1a26b2-cccb-75d8-ee2f-f30ae211e598@gentwo.org>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <4b1a26b2-cccb-75d8-ee2f-f30ae211e598@gentwo.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 23, 2024 at 12:38:59PM +0900, Masahiro Yamada wrote:
-> On Wed, Oct 23, 2024 at 9:44 AM Koakuma <koachan@protonmail.com> wrote:
-> > I'm not sure if I should update the documentation now given that LLVM support
-> > is nowhere near as complete as other architectures, but I'll do it if needed...
+On 10/22/24 16:24, Christoph Lameter (Ampere) wrote:
+> On Tue, 22 Oct 2024, Dave Hansen wrote:
 > 
-> Nathan said he was able to build the kernel.
-> 
-> If so, I think this should be documented (required LLVM version and
-> the supported build command),
-> otherwise people cannot test this patch.
+>> So I think Peter's version was the best.  It shuts up clang and also
+>> preserves the existing (good) gcc 'sub' behavior.  I'll send it out for
+>> real in a bit, but I'm thinking of something like the attached patch.
+> The desired behavior is a "dec". "sub" has a longer op code AFAICT.
 
-I am not sure that there is a super concise way to describe for
-Documentation/kbuild/llvm.rst that sparc currently requires 'CC=clang
-LLVM_IAS=0' along with a build of clang from the main branch of
-llvm-project to work properly. I worry that adding any sort of mention
-of sparc in there will have people flooding to try older versions of
-clang like you did or LLVM=1 when there are obviously known issues that
-the upstream LLVM folks have not had a chance to tackle (but maybe it
-will be good to get issues on file for those).
+Gah, yes, of course.  I misspoke.
 
-If it would be useful, I could send a separate email documenting exactly
-what was tested and how it was tested as a reference in the face of
-future changes, until better support for the LLVM tools is enacted.
-
-Cheers,
-Nathan
+We want "inc" and "dec" for +1 and -1.  "add" and "sub" are heftier and
+get used for everything else.
