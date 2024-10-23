@@ -1,180 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11FD142623;
-	Wed, 23 Oct 2024 06:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0E14D70E
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729665339; cv=none; b=ghQLBReTwo3DA43qInoVOZPcuIZVLA2zkPl+f0oOqj0VhsaffsHaVbtIwtzeFr7I4gj9Jq9FlEV1MsUVTIPnIFLMzl7VpAfzj+bfpKuUNfVYXdcz5YDUCucb/tC90vc4hYNE/CJU4wt/KdYXgsQydmdKBz88O83UgiL6uv9YQ44=
+	t=1729665915; cv=none; b=opbT6rziSREOjDL71BNMibQ8Al3XVgOPa7D7r2HmWNLmVBX6G0hwvEZCIsOpZZkONvOY2ZBkvgbI/5G0TvbnAPozQrOdfVi1S6lXNvLwujgtSFEfG/01xjXuZTngtILtz3DXOmbign1YOfHkxgP49juC1Pz7JnuTo/w0Zpb4oVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729665339; c=relaxed/simple;
-	bh=JCd5CSidKTxinXr/kmIB4aixmRXuKAiR+oKl2jOHSGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GtDxZOU/CUx3G2WNvxhKrQmXWrSmcPxOssBYD7SjCAujeYhaS74G+d3i1PUWdZeO4k8hoWfwAXh7FFfEpzZ/KfTeba/4PvorVsCZHU4UT7pZKO5MUCgr+3JsCh3ujpNnJvsrtHsJgPeJQ53N32MXuu0FMOWYZJJjgN4BWjI5eTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BaweMt1z; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729665915; c=relaxed/simple;
+	bh=I7HURHb0jCDc0kIUBqb3ZlkZEa1kppE4AOFUaP/oNIQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c0NBCKugI27/eoKJ9NSa6afn/qUVNQf0cYEqTOARbkO82RfOV2E4CmMZPbEwY54hkPI3EGzavf+Rv5ZRDMQ9sAWFz/F2D4SphrMFR08bK+TqS/2kzfwUhYMnthEUlzHXyRBjQ2NyZeFWg3r1420ArY0B+XJLe9go26abyqwfPC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jR7m1RFy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BaweMt1z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729665337; x=1761201337;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JCd5CSidKTxinXr/kmIB4aixmRXuKAiR+oKl2jOHSGg=;
-  b=BaweMt1zaH2SZxgwBv7e1nr1WOaI4m1FSbq3qQwcVmGG4FKkUNMAnt3a
-   oG5VpgdEpGo6/WK3IQX3h3CS1w5iJGqbB5i6X+zGhIIl+YbkrdrX+NNxv
-   l/kciASmwQ/ovy5U5z3Prfkw6MqVrYM/OE/JRp1WUL97u8LKkCogWI7Fv
-   QN0zbU+Ghy/rQ4i09Mul8IecGlQYCaSxYnge4uen758pzqZH+Aa1e0xEE
-   XoTgVrxyDcJolXTd3EJOKCIYynu3PhGM00fMP9sSaaxLB2szqwRl7MwCz
-   0/Hb1Qfg7DsVMNuFroM1XWYF7vsbk1mCIA6F56kyGyES5XAkVVgNi+/18
-   g==;
-X-CSE-ConnectionGUID: W2vCJzQbRxOUSLUEPV3YEg==
-X-CSE-MsgGUID: KyJS4HHVQaOmLFKdVCBOdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29394926"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29394926"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2024 23:35:34 -0700
-X-CSE-ConnectionGUID: guZbrTsTQhmxgJ/PuOjO7g==
-X-CSE-MsgGUID: nPuuhLPKRwazOHhgL0cEDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,225,1725346800"; 
-   d="scan'208";a="80903242"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 22 Oct 2024 23:35:33 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t3Uxu-000UZQ-1F;
-	Wed, 23 Oct 2024 06:35:30 +0000
-Date: Wed, 23 Oct 2024 14:34:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:trampoline_multi_10 9/21] kernel/trace/ftrace.c:6001:
- warning: Function parameter or struct member 'hash' not described in
- 'unregister_ftrace_direct_hash'
-Message-ID: <202410231448.tshoLbjZ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jR7m1RFy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73627C4CEF2
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:45:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729665915;
+	bh=I7HURHb0jCDc0kIUBqb3ZlkZEa1kppE4AOFUaP/oNIQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jR7m1RFy3k/JtGEh47vE7LPzi2GeHCR5lkbbcDxiOZMX1zCz+OxgenXccdQZsZ5tc
+	 r/uS+tdYOx2bLeQMw+iM5xZTs/inq7CiOX7bL/1EZLnFvYg/ocJeaw5aNYCdLTxApN
+	 nPJ+PuGyUr2/+JwB4zdz9pLBHdMj+dTu8BnntI293Vp5Fxc8jWVNL5OZFci/9fxNDg
+	 SrO0ZIyi1iaN4sItRju6ZixkcrkPmQ+Q6DFTav76cSLg1LwrqmOou8FSl+0f3jg+ea
+	 q2uHDW1z/3WW3u0y1Yqf4dw0Tbu6AorpfCq8PqUxReGxMnOfrqdiKebZcfSQMfggis
+	 55KbZ2K9f60fw==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539ebb5a20aso6507858e87.2
+        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 23:45:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVgpjf1iaKnySethvG2eouKhqejILH9gPgJ8LzEtEP+FanQPwkFpB9YxBeMyKdqOwIYNBc@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx6vuiQBBmG5cF7hTzMI76T8OoKWmTu5pZtv/aR/3UKo8dAKXSJ
+	+2++pfq5H5E68UKdUAFiOE+exxyGnTy2pyM7eLy+KX6ewxTGtuZ1gKwxSAQIFv1xw0gKtTkA7DR
+	6LRhCbKwvtLWmeJ70aORn5SFg35U=
+X-Google-Smtp-Source: AGHT+IHEvYi+Z/VPXkv+py9OIcduE18rSIWRaBjdPYTUVd4Nwadxm+HeVibO9YguSrlAUzfHANBhouSoAElTMeiubJs=
+X-Received: by 2002:a05:6512:31d1:b0:539:8d2c:c01c with SMTP id
+ 2adb3069b0e04-53b1a36b785mr647872e87.41.1729665913964; Tue, 22 Oct 2024
+ 23:45:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-2-xur@google.com>
+ <CAK7LNAQ5yNKvZDtJuvo9Lt4rZwLSv0UN4=Ff=WcCDy1CCEpQ7Q@mail.gmail.com> <CAF1bQ=Syxi46xnGbpZWhYfqKhQZqrBPPh5FGaqzmJTg6MMDJSA@mail.gmail.com>
+In-Reply-To: <CAF1bQ=Syxi46xnGbpZWhYfqKhQZqrBPPh5FGaqzmJTg6MMDJSA@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 23 Oct 2024 15:44:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARD2HKhgLCxiY77usLhRsgTQ2L1aTSbNmXFbZz0-AxeYw@mail.gmail.com>
+Message-ID: <CAK7LNARD2HKhgLCxiY77usLhRsgTQ2L1aTSbNmXFbZz0-AxeYw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] Add AutoFDO support for Clang build
+To: Rong Xu <xur@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git trampoline_multi_10
-head:   48132820c5a21b82d1a4507a86a67b3742fb110e
-commit: 122145c00eae844a9c5f48a3c5604554a8b9a377 [9/21] ftrace: Add unregister_ftrace_direct_hash function
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241023/202410231448.tshoLbjZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231448.tshoLbjZ-lkp@intel.com/reproduce)
+On Tue, Oct 22, 2024 at 7:43=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> Thanks for the detailed suggestions! My comments are inlined below.
+>
+> Best regards,
+>
+> -Rong
+>
+> On Sun, Oct 20, 2024 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+> >
+> >
+> > > +Customization
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +You can enable or disable AutoFDO build for individual file and dire=
+ctories by
+> > > +adding a line similar to the following to the respective kernel Make=
+file:
+> >
+> >
+> > Perhaps, it might be worth mentioning that kernel space objects are
+> > covered by default.
+> >
+> > Then, people would understand ':=3D y' will be less common than ':=3D n=
+'.
+> >
+>
+> Good point! How about I change to the following:
+> "
+> The default CONFIG_AUTOFDO_CLANG setting covers kernel space objects for
+> AutoFDO builds. One can, however, enable or disable AutoFDO build for
+> individual file and directories by adding a line similar to the following
+> to the respective kernel Makefile ...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410231448.tshoLbjZ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
-
-   kernel/trace/ftrace.c:5887: warning: Function parameter or struct member 'hash' not described in 'register_ftrace_direct_hash'
-   kernel/trace/ftrace.c:5887: warning: expecting prototype for register_ftrace_direct(). Prototype was for register_ftrace_direct_hash() instead
->> kernel/trace/ftrace.c:6001: warning: Function parameter or struct member 'hash' not described in 'unregister_ftrace_direct_hash'
->> kernel/trace/ftrace.c:6001: warning: expecting prototype for unregister_ftrace_direct(). Prototype was for unregister_ftrace_direct_hash() instead
+Sounds ok to me.
 
 
-vim +6001 kernel/trace/ftrace.c
 
-5081acd5f53163 Jiri Olsa         2024-10-14  5982  
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5983  /**
-da8bdfbd422333 Florent Revest    2023-03-21  5984   * unregister_ftrace_direct - Remove calls to custom trampoline
-da8bdfbd422333 Florent Revest    2023-03-21  5985   * previously registered by register_ftrace_direct for @ops object.
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5986   * @ops: The address of the struct ftrace_ops object
-c488fe4b50d896 Jiri Olsa         2024-09-30  5987   * @ip: The address of the function to attach
-9b5a45eb639c46 Marilene A Garcia 2024-06-06  5988   * @addr: The address of the direct function that is called by the @ops functions
-9b5a45eb639c46 Marilene A Garcia 2024-06-06  5989   * @free_filters: Set to true to remove all filters for the ftrace_ops, false otherwise
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5990   *
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5991   * This is used to remove a direct calls to @addr from the nop locations
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5992   * of the functions registered in @ops (with by ftrace_set_filter_ip
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5993   * function).
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5994   *
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5995   * Returns:
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5996   *  0 on success
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5997   *  -EINVAL - The @ops object was not properly registered.
-f64dd4627ec6ed Jiri Olsa         2021-10-08  5998   */
-122145c00eae84 Jiri Olsa         2024-10-14  5999  int unregister_ftrace_direct_hash(struct ftrace_ops *ops, struct ftrace_hash *hash,
-59495740f79524 Florent Revest    2023-03-21  6000  				  bool free_filters)
-f64dd4627ec6ed Jiri Olsa         2021-10-08 @6001  {
-122145c00eae84 Jiri Olsa         2024-10-14  6002  	struct ftrace_func_entry *del, *entry;
-c488fe4b50d896 Jiri Olsa         2024-09-30  6003  	struct ftrace_hash *new_hash = NULL;
-122145c00eae84 Jiri Olsa         2024-10-14  6004  	unsigned long size, i;
-c488fe4b50d896 Jiri Olsa         2024-09-30  6005  	int err = -EINVAL;
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6006  
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6007  	if (check_direct_multi(ops))
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6008  		return -EINVAL;
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6009  	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6010  		return -EINVAL;
-c488fe4b50d896 Jiri Olsa         2024-09-30  6011  	if (direct_functions == EMPTY_HASH)
-c488fe4b50d896 Jiri Olsa         2024-09-30  6012  		return -EINVAL;
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6013  
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6014  	mutex_lock(&direct_mutex);
-c488fe4b50d896 Jiri Olsa         2024-09-30  6015  
-122145c00eae84 Jiri Olsa         2024-10-14  6016  	/* Make sure requested entries are already registered.. */
-122145c00eae84 Jiri Olsa         2024-10-14  6017  	size = 1 << hash->size_bits;
-122145c00eae84 Jiri Olsa         2024-10-14  6018  	for (i = 0; i < size; i++) {
-122145c00eae84 Jiri Olsa         2024-10-14  6019  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-122145c00eae84 Jiri Olsa         2024-10-14  6020  			del = __ftrace_lookup_ip(direct_functions, entry->ip);
-122145c00eae84 Jiri Olsa         2024-10-14  6021  			if (!del || del->direct != entry->direct)
-c488fe4b50d896 Jiri Olsa         2024-09-30  6022  				goto out_unlock;
-122145c00eae84 Jiri Olsa         2024-10-14  6023  		}
-122145c00eae84 Jiri Olsa         2024-10-14  6024  	}
-c488fe4b50d896 Jiri Olsa         2024-09-30  6025  
-c488fe4b50d896 Jiri Olsa         2024-09-30  6026  	new_hash = alloc_and_copy_ftrace_hash(FTRACE_HASH_DEFAULT_BITS, direct_functions);
-c488fe4b50d896 Jiri Olsa         2024-09-30  6027  	if (!new_hash)
-c488fe4b50d896 Jiri Olsa         2024-09-30  6028  		goto out_unlock;
-c488fe4b50d896 Jiri Olsa         2024-09-30  6029  
-122145c00eae84 Jiri Olsa         2024-10-14  6030  	for (i = 0; i < size; i++) {
-122145c00eae84 Jiri Olsa         2024-10-14  6031  		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-122145c00eae84 Jiri Olsa         2024-10-14  6032  			del = __ftrace_lookup_ip(new_hash, entry->ip);
-122145c00eae84 Jiri Olsa         2024-10-14  6033  			remove_hash_entry(new_hash, del);
-122145c00eae84 Jiri Olsa         2024-10-14  6034  			kfree(del);
-122145c00eae84 Jiri Olsa         2024-10-14  6035  		}
-122145c00eae84 Jiri Olsa         2024-10-14  6036  	}
-c488fe4b50d896 Jiri Olsa         2024-09-30  6037  
-c488fe4b50d896 Jiri Olsa         2024-09-30  6038  	if (ftrace_hash_empty(new_hash)) {
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6039  		err = unregister_ftrace_function(ops);
-c488fe4b50d896 Jiri Olsa         2024-09-30  6040  		ftrace_free_filter(ops);
-c488fe4b50d896 Jiri Olsa         2024-09-30  6041  	} else {
-c488fe4b50d896 Jiri Olsa         2024-09-30  6042  		err = ftrace_update_ops(ops, new_hash, EMPTY_HASH);
-c488fe4b50d896 Jiri Olsa         2024-09-30  6043  	}
-c488fe4b50d896 Jiri Olsa         2024-09-30  6044  
-c488fe4b50d896 Jiri Olsa         2024-09-30  6045  	free_ftrace_hash(new_hash);
-fea3ffa48c6d42 Jiri Olsa         2021-12-06  6046  
-c488fe4b50d896 Jiri Olsa         2024-09-30  6047  	if (!err) {
-122145c00eae84 Jiri Olsa         2024-10-14  6048  		for (i = 0; i < size; i++) {
-122145c00eae84 Jiri Olsa         2024-10-14  6049  			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-122145c00eae84 Jiri Olsa         2024-10-14  6050  				del = __ftrace_lookup_ip(direct_functions, entry->ip);
-122145c00eae84 Jiri Olsa         2024-10-14  6051  				remove_hash_entry(direct_functions, del);
-122145c00eae84 Jiri Olsa         2024-10-14  6052  				kfree(del);
-122145c00eae84 Jiri Olsa         2024-10-14  6053  			}
-122145c00eae84 Jiri Olsa         2024-10-14  6054  		}
-c488fe4b50d896 Jiri Olsa         2024-09-30  6055  	}
-59495740f79524 Florent Revest    2023-03-21  6056  
-c488fe4b50d896 Jiri Olsa         2024-09-30  6057   out_unlock:
-c488fe4b50d896 Jiri Olsa         2024-09-30  6058  	mutex_unlock(&direct_mutex);
-59495740f79524 Florent Revest    2023-03-21  6059  	if (free_filters)
-59495740f79524 Florent Revest    2023-03-21  6060  		ftrace_free_filter(ops);
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6061  	return err;
-f64dd4627ec6ed Jiri Olsa         2021-10-08  6062  }
-da8bdfbd422333 Florent Revest    2023-03-21  6063  EXPORT_SYMBOL_GPL(unregister_ftrace_direct);
-ccf5a89efd6f0a Jiri Olsa         2021-10-08  6064  
 
-:::::: The code at line 6001 was first introduced by commit
-:::::: f64dd4627ec6edc39bf1430fe6dbc923d2300a88 ftrace: Add multi direct register/unregister interface
 
-:::::: TO: Jiri Olsa <jolsa@redhat.com>
-:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Best Regards
+Masahiro Yamada
