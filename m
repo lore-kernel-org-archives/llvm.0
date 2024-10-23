@@ -1,56 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BCC14AD2E
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CD915624D
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 07:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729666222; cv=none; b=ulz++psiYWkp1DQvPVYPc09hG+UyoLe2B0TA/uWov1GzxzWBsSBeXtn+zpjdPmWbA0+Dr2a5IOeAmBKaO+c5BWkIjSO6qEY5YZCTWDbHHuVnf081hEKyv+09yra0AChop9h0A0NkN53otkKkmqfUZMmmatfPzgAQVfJuBO1sJ2g=
+	t=1729667200; cv=none; b=O3ywPD6RBjq7+pdNtMOH0KG5j4EqcE5PJ2bp3bgg1qGjKkc1TtBTqRiwQok3ymsmV67TEKhMtNvXTdrnAbgzlWkEvePsKGQMJopBVx+olicbW6pQri8WIu0pTm8wvk3r+N88ZoqN8tpGjgJ/hj2ANhlXvKi/KhGCIqGxH52DCsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729666222; c=relaxed/simple;
-	bh=HH7WcbLIrvr+Vr1jGnk3XAi1eUso/woDxRvL2rs3tjk=;
+	s=arc-20240116; t=1729667200; c=relaxed/simple;
+	bh=cUjvW1wTsKGH7I8VyS4QMqzWOtCeG2GqAEWy+jvkqjY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CVVhXrvAyRyau/1mQ2UhlBDD4cBFUAfGjGkHwSMLu8Scjry1yNgQTd3P4aJWG1PAlTezwfP8n1ufbUPZrdUSD0zf27yRXrpI6hGrUwQgkrHpmw0iDqGcAra/NmLk12/ROCYoZCqomsKmg5QHnwlyfq6SVUEY8pysHEEcBzduzYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jW0YakhI; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=BgLSSjrIbdPrjcxIiWKA3FjLR9cQ+YBY0MEkvToHO88kC0njDg9EdvA+FD0FKK/3wIkLuNb+b4RAOIN7kcU9gp9NU9LYBhyYrGz7fqtCNsexK2/SS+iHXPVIl/ZsZXOS4TPf4/ritVcGoWSRzjSGJIe03IUQE11+wr3TloYtLyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r6mu6TY+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jW0YakhI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954F4C4CEC7
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:50:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r6mu6TY+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6555C4CEE5
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 07:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729666221;
-	bh=HH7WcbLIrvr+Vr1jGnk3XAi1eUso/woDxRvL2rs3tjk=;
+	s=k20201202; t=1729667199;
+	bh=cUjvW1wTsKGH7I8VyS4QMqzWOtCeG2GqAEWy+jvkqjY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jW0YakhI6Qd4i1J0ygnv/xJf/auliPnU3yvHXVXsNCJT9dNAYAhN3xD5qHIHj9A/2
-	 0yyB/yVDTtf/jsLwmQK8/NlbVtD8csiAHE8HnyhDCS+aZGkG/zGWZqR4EMV4gYUBeL
-	 iQFgrCDBnSDtzaJJZ7Wj5Dj+DoaGhF+9nZqV2ZbrMn5oxnp0BKWXXqkfHkPEg52lI4
-	 jtgOfamusl2KY+Qt2a7hyXrkUe8itFLrb0VKaNSEzzk/znSEtAOZqjcbTP0clbp89+
-	 rj04Rmnx9m3nA2HLUPcQZ59KJG607ml1yg0nlbYryQF341qaLzKLIc/9DrdhNJF5Na
-	 eyxrVvJs5LEYw==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fb3110b964so57052001fa.1
-        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 23:50:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVoitfndYrJf9Hlb/zmFqDO0UlZjmyEL2i6GxwhG/dDc9et5eOTQEB6Qam8WyJ0pccv9ZxQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YxwgUqRZf4We/jwPv8fKPuOOLGFbRCeZ/YzsHrc+hzleiBtPjbe
-	KxYhYbqJ5CDiY3NojkNn508pB+nvah6enrozR7kQcT++JfX7q2udqvpMh6t6NWaEbZKDC5+BgPd
-	9NkF+0igYRBTdy6ZOZcu6W9iRmEk=
-X-Google-Smtp-Source: AGHT+IEhDTHOZcIy12Yxl/gZ0ozyocySmT4Gjk6UW3/+LEWXlTX6KY7iZ8xKJLxyZMnImR+iPFMLPSdhm4B4eaeSdzk=
-X-Received: by 2002:a05:6512:3989:b0:536:54fd:275b with SMTP id
- 2adb3069b0e04-53b1a37554emr625833e87.54.1729666220304; Tue, 22 Oct 2024
- 23:50:20 -0700 (PDT)
+	b=r6mu6TY+k/tA38zp47MTMaUVE6oCizdBoZvZEiKtO65vJF+Fe58GmMna6LMXMvWnZ
+	 JLLJel5kp+qxM+/inz3VBb7X4HfItgg3xN3Bfn2APhI1FxzhybFEjZ036jABotn2BS
+	 xnGg3Nvy8b3zRWM2/JqYkHamghNxbldg3EtxGBgiYv4AbY+G6Ln7/wJTZ3B8Po9z6g
+	 Z1i9hYsuxpzFqTOos1rsP/Edvmxbz0Z6/as5e8MmLjUx68R/EP0+oKbmI6z8gCWx16
+	 dnK7YYBy8+KfEihEvLVt4OxOVkD8zblrncWw/SugBJStTVkU0z1FdWjMi8ceSFD5fL
+	 bSrSAoezAATtg==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-539e8586b53so499945e87.1
+        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 00:06:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUf5h7HaAowQCUolV5qhzh3cSlZVWnog2m/DmXExjC423umByiwlZru9/e6YBn+beogtYSZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YwkRF2EratLVnE6I6Ri05L0uvh/s+4zV0BsVTV9wkTQXTFYorHY
+	ZQUMJYREB+9InbGcGuiMB5FtDd3cgcNrdZJ8iHqNATiV0nIie9u/AvpyJxwzWjbscXi0ekUNzZu
+	lIcH0aRYSwoaGFChdW5/W1L/UKzA=
+X-Google-Smtp-Source: AGHT+IHZZgwVgaRO2Hdyj/zbCtAei+RMhbCGrZN9DeetcAzH9eNLU1+5ofJFfDj8eJ/Gl5I1LCwT7/RZ/5W1ROK9gGg=
+X-Received: by 2002:a05:6512:2812:b0:539:f6b1:2d05 with SMTP id
+ 2adb3069b0e04-53b1317f334mr2048779e87.9.1729667198330; Wed, 23 Oct 2024
+ 00:06:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-6-xur@google.com>
- <CAK7LNAQ0RwJYkCXHj8QMH3sqXgY2LBTiYV8HnKD8oANB8Bb+Yg@mail.gmail.com> <CAF1bQ=RuLmO9S1W6ofmgVQZR7pBqR3iN7gCuUO2TkwGQwM76Kw@mail.gmail.com>
-In-Reply-To: <CAF1bQ=RuLmO9S1W6ofmgVQZR7pBqR3iN7gCuUO2TkwGQwM76Kw@mail.gmail.com>
+References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-7-xur@google.com>
+ <CAK7LNARfm7HBx-wLCak1w0sfH7LML1ErWO=2sLj4ovR38RsnTA@mail.gmail.com> <CAF1bQ=Qi9hyKbc5H3N36W=MukT3321rZMCas0ndpRf0YszAfOA@mail.gmail.com>
+In-Reply-To: <CAF1bQ=Qi9hyKbc5H3N36W=MukT3321rZMCas0ndpRf0YszAfOA@mail.gmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 23 Oct 2024 15:49:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASB8WZACuQyQQWvjfODTHTrPrbWBNrP0nsMQkQhDr+Pug@mail.gmail.com>
-Message-ID: <CAK7LNASB8WZACuQyQQWvjfODTHTrPrbWBNrP0nsMQkQhDr+Pug@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] AutoFDO: Enable machine function split
- optimization for AutoFDO
+Date: Wed, 23 Oct 2024 16:06:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQr_EusZyy-dPcV=5o9UckStaUfXLSCQh7APbYh15NC3w@mail.gmail.com>
+Message-ID: <CAK7LNAQr_EusZyy-dPcV=5o9UckStaUfXLSCQh7APbYh15NC3w@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] Add Propeller configuration for kernel build.
 To: Rong Xu <xur@google.com>
 Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
@@ -69,91 +68,30 @@ Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>
 	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 22, 2024 at 8:28=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+On Tue, Oct 22, 2024 at 9:00=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +Configure the kernel with::
+> > > +
+> > > +   CONFIG_AUTOFDO_CLANG=3Dy
+> >
+> >
+> > This is automatically met due to "depends on AUTOFDO_CLANG".
 >
-> On Sun, Oct 20, 2024 at 8:18=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
-> > >
-> > > Enable the machine function split optimization for AutoFDO in Clang.
-> > >
-> > > Machine function split (MFS) is a pass in the Clang compiler that
-> > > splits a function into hot and cold parts. The linker groups all
-> > > cold blocks across functions together. This decreases hot code
-> > > fragmentation and improves iCache and iTLB utilization.
-> > >
-> > > MFS requires a profile so this is enabled only for the AutoFDO builds=
-.
-> > >
-> > > Co-developed-by: Han Shen <shenhan@google.com>
-> > > Signed-off-by: Han Shen <shenhan@google.com>
-> > > Signed-off-by: Rong Xu <xur@google.com>
-> > > Suggested-by: Sriraman Tallam <tmsriram@google.com>
-> > > Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
-> > > ---
-> > >  include/asm-generic/vmlinux.lds.h | 6 ++++++
-> > >  scripts/Makefile.autofdo          | 2 ++
-> > >  2 files changed, 8 insertions(+)
-> > >
-> > > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/=
-vmlinux.lds.h
-> > > index ace617d1af9b..20e46c0917db 100644
-> > > --- a/include/asm-generic/vmlinux.lds.h
-> > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > @@ -565,9 +565,14 @@ defined(CONFIG_AUTOFDO_CLANG)
-> > >                 __unlikely_text_start =3D .;                         =
-     \
-> > >                 *(.text.unlikely .text.unlikely.*)                   =
-   \
-> > >                 __unlikely_text_end =3D .;
-> > > +#define TEXT_SPLIT                                                  =
-   \
-> > > +               __split_text_start =3D .;                            =
-     \
-> > > +               *(.text.split .text.split.[0-9a-zA-Z_]*)             =
-   \
-> > > +               __split_text_end =3D .;
-> > >  #else
-> > >  #define TEXT_HOT *(.text.hot .text.hot.*)
-> > >  #define TEXT_UNLIKELY *(.text.unlikely .text.unlikely.*)
-> > > +#define TEXT_SPLIT
-> > >  #endif
-> >
-> >
-> > Why conditional?
->
-> The condition is to ensure that we don't change the default kernel
-> build by any means.
-> The new code will introduce a few new symbols.
+> Agreed. But we will remove the dependency from PROPELlER_CLANG to AUTOFDO=
+_CLANG.
+> So we will keep the part.
 
 
-Same.
+You can replace "depends on AUTOFDO_CLANG" with
+"imply AUTOFDO_CLANG" if it is sensible.
 
-Adding two __split_text_start and __split_text_end markers
-do not affect anything. It just increases the kallsyms table slightly.
-
-You can do it unconditionally.
-
-
-
->
-> >
-> >
-> > Where are __unlikely_text_start and __unlikely_text_end used?
->
-> These new symbols are currently unreferenced within the kernel source tre=
-e.
-> However, they provide a valuable means of identifying hot and cold
-> sections of text,
-> and how large they are. I think they are useful information.
-
-
-Should be explained in the commit description.
+Up to you.
 
 
 
