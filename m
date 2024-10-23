@@ -1,124 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338731AB6F1;
-	Wed, 23 Oct 2024 12:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA103FD4;
+	Wed, 23 Oct 2024 12:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729685395; cv=none; b=KDwOGiM8Ue86ybLRP5QvT5rAem9OjlLXbi4pjhzyPwBBkIUPZfNFNBWG5mG1kNofVvfHRgM4priBAHvYL4Urcn2kZdqE23ftR0QPMkob701ToBiyrWWAKGh2gQ11Q/Pie0iu5pStChQfkQRumG3L4/rT+gXlqLrdgn4vPkc041o=
+	t=1729685736; cv=none; b=Ohoe1lFMc27KARhyU9/G/h54O0qleHBpkd5VnfxV//RgnhqCksT4UY0FSnjgj1pr2UjI7PhGxDiCtSrrvmr3aful5kviT1N5jWACZ/bSnxWehuF0N4Sfvp2VL9JLsGEs4dJgPilnYKJUDpYBdVG2jSkrS1S6RWQGrHkOnuRLdc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729685395; c=relaxed/simple;
-	bh=6kj6BGenSC46bCxZoBZ/KzUyflxUD6U1Ai0wmuCiTQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L3JzaTJ55sC7miUGkXywTqJQpSypTHe/6NVw4gdWsg+LmHqZhNDukbLhewpT3AxuB0Y+nGCjzayuiG17d6Ib+8XIh8Mv1qzQ85R3QMdBOcVNN/0Zqdsp3StBmzf4dc+zZXLY6K3rPzhB4ZkrsGLSq9ol5ggNbRKEtT2QCVDEpjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T4TrJn14; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729685736; c=relaxed/simple;
+	bh=zmEV7kzYjK4FvefIs+qoE3S15A9ktltXHDxx9f+lFC4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CN0vgTyKh57swy+GLHZIICsCt9iyl+9zSOOzVFWuguut80r6/rQndRrucow0UnwYeGtEqc5LaOUdsCIr1D6k9PN5/xJHVXpPP8Pv9VG8/D6dsZujDjLYxajDQqWsrRgHWSvGMku6iBnUCUHoebuFPynmPP9Kp21LjRTpaSviUxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QODBdm+u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T4TrJn14"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729685394; x=1761221394;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6kj6BGenSC46bCxZoBZ/KzUyflxUD6U1Ai0wmuCiTQ4=;
-  b=T4TrJn14j/NecK89FiwQmLnlUxP9aLB+xhIuB7fsx57qk7jMFDSu570/
-   /QbE08+bXeRGUtrzvW/i8R1xYM/S0xrkJGiTeJUipVoQFn8npnInUs36J
-   0/jz30dpAfH+GrK7502b6OY+P/HGAQKhGeb/BkotQqwV1e4SCip3Jhx+N
-   y8oOAvpJco4c1Zxv4gIg+ay+Phiq1EY8uW6KpZivgNKHfmGR5J85veFyS
-   GrfQZr/IEqk9pKfPWbinbfV5djmYvdC2Iq6dm7czMqYrBrdNnakXuEWzv
-   nr8BmIbzZYXGphbNQW0pagqkEgho1+hDcUJqpKcZ3pPlRgjLH6iClHMHR
-   A==;
-X-CSE-ConnectionGUID: HsnY2FXdSDSiY66UYOlCtg==
-X-CSE-MsgGUID: TcouzDi8TcGU5INBy5nP8w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11234"; a="29376756"
-X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
-   d="scan'208";a="29376756"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 05:09:54 -0700
-X-CSE-ConnectionGUID: OS2OaXAFR1OqMcN3P32kEg==
-X-CSE-MsgGUID: 9oVqrhNlQq2/IC1iIecNEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,226,1725346800"; 
-   d="scan'208";a="117651569"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 23 Oct 2024 05:09:51 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t3aBR-000Uso-0U;
-	Wed, 23 Oct 2024 12:09:49 +0000
-Date: Wed, 23 Oct 2024 20:09:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Antipov <dmantipov@yandex.ru>,
-	Jeff Johnson <jjohnson@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kalle Valo <kvalo@kernel.org>, Kees Cook <kees@kernel.org>,
-	linux-hardening@vger.kernel.org, linux-wireless@vger.kernel.org,
-	lvc-project@linuxtesting.org, Dmitry Antipov <dmantipov@yandex.ru>
-Subject: Re: [PATCH 2/2] wifi: ath12k: annotate channel of struct
- ath12k_wmi_scan_chan_list_arg with __counted_by
-Message-ID: <202410231916.Wjn5HeB6-lkp@intel.com>
-References: <20241021143419.587716-2-dmantipov@yandex.ru>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QODBdm+u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC00AC4CEC6;
+	Wed, 23 Oct 2024 12:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729685735;
+	bh=zmEV7kzYjK4FvefIs+qoE3S15A9ktltXHDxx9f+lFC4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=QODBdm+uAODGHRZP2fHYKCDpUiFMbnIR8jUcCQmizxUAusYQc1tmjeYWYAsFzXOym
+	 ++m9Run639Zf6UKyq7evfoQ1MQauQWdwFpsjWDrFxMmcdxPvjg+gil/GPGJo74vhGW
+	 8gSIrdVkxxH04j6r79S823gNXDAC6md7VaJ6lAI/XN63szTW7SEbeALCdhppa/G4+9
+	 1WY4Fss7CwWgFG66jV7kM0MAPFHw0seW6Xhdknb4YdGaVVATMjhFPjz4WRrtYJlvq9
+	 q24NdUlH9vOaClg8cc5aWz8LEfZ6kp7cRj2r8KMofUsbsSWHsY1mrQyHIMDTU/Ptbi
+	 MfEgIYmVAWMcw==
+From: Simon Horman <horms@kernel.org>
+Date: Wed, 23 Oct 2024 13:15:28 +0100
+Subject: [PATCH net-next] wwan: core: Pass string literal as format
+ argument of dev_set_name()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241021143419.587716-2-dmantipov@yandex.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241023-wwan-fmt-v1-1-521b39968639@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAN/oGGcC/x3MwQpAQBCA4VfRnE2ZReJV5CBmmIOh3Q0l725z/
+ OrvfyCwVw7QZQ94PjXobgmUZzCtoy2MOieDK1xFhSvxukZD2SK2ROLKphahBlJ+eBa9/1UPxhG
+ N7wjD+36j/2/XZAAAAA==
+To: Loic Poulain <loic.poulain@linaro.org>, 
+ Sergey Ryazanov <ryazanov.s.a@gmail.com>, 
+ Johannes Berg <johannes@sipsolutions.net>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+X-Mailer: b4 0.14.0
 
-Hi Dmitry,
+Both gcc-14 and clang-18 report that passing a non-string literal as the
+format argument of dev_set_name() is potentially insecure.
 
-kernel test robot noticed the following build errors:
+E.g. clang-18 says:
 
-[auto build test ERROR on ath/ath-next]
-[also build test ERROR on wireless-next/main wireless/main linus/master v6.12-rc4 next-20241022]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+drivers/net/wwan/wwan_core.c:442:34: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+  442 |         return dev_set_name(&port->dev, buf);
+      |                                         ^~~
+drivers/net/wwan/wwan_core.c:442:34: note: treat the string as an argument to avoid this
+  442 |         return dev_set_name(&port->dev, buf);
+      |                                         ^
+      |                                         "%s",
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Antipov/wifi-ath12k-annotate-channel-of-struct-ath12k_wmi_scan_chan_list_arg-with-__counted_by/20241021-223544
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/ath/ath.git ath-next
-patch link:    https://lore.kernel.org/r/20241021143419.587716-2-dmantipov%40yandex.ru
-patch subject: [PATCH 2/2] wifi: ath12k: annotate channel of struct ath12k_wmi_scan_chan_list_arg with __counted_by
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241023/202410231916.Wjn5HeB6-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241023/202410231916.Wjn5HeB6-lkp@intel.com/reproduce)
+It is always the case where the contents of mod is safe to pass as the
+format argument. That is, in my understanding, it never contains any
+format escape sequences.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410231916.Wjn5HeB6-lkp@intel.com/
+But, it seems better to be safe than sorry. And, as a bonus, compiler
+output becomes less verbose by addressing this issue as suggested by
+clang-18.
 
-All errors (new ones prefixed by >>):
+Compile tested only.
+No functional change intended.
 
-   In file included from drivers/net/wireless/ath/ath12k/core.c:12:
-   In file included from drivers/net/wireless/ath/ath12k/core.h:20:
->> drivers/net/wireless/ath/ath12k/wmi.h:3749:55: error: use of undeclared identifier 'nallchains'; did you mean 'nallchans'?
-    3749 |         struct ath12k_wmi_channel_arg channel[] __counted_by(nallchains);
-         |                                                              ^~~~~~~~~~
-         |                                                              nallchans
-   include/linux/compiler_attributes.h:105:62: note: expanded from macro '__counted_by'
-     105 | # define __counted_by(member)           __attribute__((__counted_by__(member)))
-         |                                                                       ^
-   drivers/net/wireless/ath/ath12k/wmi.h:3748:6: note: 'nallchans' declared here
-    3748 |         u16 nallchans;
-         |             ^
-   1 error generated.
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ drivers/net/wwan/wwan_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index 17431f1b1a0c..465e2a0d57a3 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -431,7 +431,7 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
+ 		return -ENFILE;
+ 	}
+ 
+-	return dev_set_name(&port->dev, buf);
++	return dev_set_name(&port->dev, "%s", buf);
+ }
+ 
+ struct wwan_port *wwan_create_port(struct device *parent,
 
-vim +3749 drivers/net/wireless/ath/ath12k/wmi.h
-
-  3745	
-  3746	struct ath12k_wmi_scan_chan_list_arg {
-  3747		u32 pdev_id;
-  3748		u16 nallchans;
-> 3749		struct ath12k_wmi_channel_arg channel[] __counted_by(nallchains);
-  3750	};
-  3751	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
