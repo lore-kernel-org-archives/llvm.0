@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402491D12FB;
-	Wed, 23 Oct 2024 14:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22291C304F;
+	Wed, 23 Oct 2024 14:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729693854; cv=none; b=pxtPpg0mzcVNO+fIn7m3iX2mIB5VrT2r7EAdPy+5mTJnXgcxp8CpAdilaIcKiQZtAe1MJrgBDakM1dw36uga2jOxtdQXzlEajTpuubTt+59Xx3B6hjI7gwmuG1BujVLnRfrAluo1L5ebYsfoNSykOej1nMeUwH4ouIrL5T5VZPY=
+	t=1729693905; cv=none; b=Nrt7E9CltxSJdMrZHHm0hYYvlhvP/HN2y/Ij/UvwOzaYpsuKCLTd5SGjTRUE1bh91r1RVSa7q+do1kcUrRWmDmrmOXkd584ZeCZMnlPwviqo2SPtz94NtNY+l+O0gCYGOQh4aKu4YPO8QmGT5cKJA24AbsaTIbwjodBL4p4eGKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729693854; c=relaxed/simple;
-	bh=+FFOEpdmFUZbvSRH30E604flBFgN1bwvW7CQlSFTqXo=;
+	s=arc-20240116; t=1729693905; c=relaxed/simple;
+	bh=R8ZD+IoFOM74LGHQ2waIN2l14/3ax35Bn4Pnovvn4Sw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KjcdkLkjf2bjWUh14FuLsHlVWPV9XFREHjSYXSVlakiilKYGNDNEcPasLUp6NK4nzLpMQfMnm5r0MjNbDJDjg3VfQ1Q9xJpFG2WsDaNLvd39RXHj7r0blkkoIMP273aNWfhc4cD0KmroPpk9w8ZnO+0rYvjMuU+QRVA8mVExH5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4CX1yg/; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=sGBFXyt1hbG4EUYbOKeWzLeONgmJ2AQhrs3woc3cAjteiQJPUwE8gNjhAMLM/9CmFxHkQqWqXesUrWLa/ang+6ym6zDBTIb7IHT18FtDsK2vP2vIBpmqH/Cctz8IFkq+DhAQSKaQ7GMil4pmDpsUe1SSJ9lXivlBu7fKuRGQAPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMOjG9LG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4CX1yg/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA69AC4CEC6;
-	Wed, 23 Oct 2024 14:30:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMOjG9LG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5904BC4CEC6;
+	Wed, 23 Oct 2024 14:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729693853;
-	bh=+FFOEpdmFUZbvSRH30E604flBFgN1bwvW7CQlSFTqXo=;
+	s=k20201202; t=1729693904;
+	bh=R8ZD+IoFOM74LGHQ2waIN2l14/3ax35Bn4Pnovvn4Sw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j4CX1yg/MoLK93ypA83p5Lrp+PXp9c7+8ygykWv1aDR5RMqD2JwAyvR+ZdRvCJ+CK
-	 gTmELgttTxAkLujuralKr57qeImqaNIFnaQeOW/t45HTt6Q3lP6ICMS/D7lEqY6n0g
-	 bGO1LAV+6DSO6Ww0ITTQ+bnE0+lW4Eqq9wJ2sq/Zd4NWQt1KkQr7UjL0K6ZEldqKz9
-	 X7J2g47l6XJL1zA0pB1MOTFfKo7a4fbcA3ucBmd7fj/nnKPJCD4wvp8AfZUXCLHnKZ
-	 Ab1tzyl/fAkm2prtHGc7WYWLWxrWsmKTojkls0g/y0/wyKgyHQd49Q+vWQM42ZAnBj
-	 MdNyyrMfu0G9w==
+	b=nMOjG9LG46RecECg8HYq5FMpTHC7GXPeourC8i43jOJqttRL5rmCIUNr1/mkHUqSo
+	 6uE1h2jO96iAMw6E5Jhi8q9x35C84r+alaXz1/Fo9BIlU3VavzqnE4coD3n0WFcg3D
+	 Gou4tQRbWqoVTzYfYhGYPGqOXNWQRldfOShiubHFnopke3tUP9xYxXAdQxLOT73PPq
+	 VuZM0Qa1LVy79QZmIh+21BWljRi9VD5Xyt5zLXxZouMiuG95kKCBcJwMBBMXVzbuCI
+	 GxUEYrpYLvu0STjfRvVy5ajmdFMZRSmL0W9bg3M+vKScEllcgOzlkyOY3MrPUzCNHa
+	 2Cgwb91Aj3vlA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -38,12 +38,12 @@ Cc: Will Deacon <will@kernel.org>,
 	nathan@kernel.org,
 	kasan-dev@googlegroups.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.11 23/30] kasan: Disable Software Tag-Based KASAN with GCC
-Date: Wed, 23 Oct 2024 10:29:48 -0400
-Message-ID: <20241023143012.2980728-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 17/23] kasan: Disable Software Tag-Based KASAN with GCC
+Date: Wed, 23 Oct 2024 10:31:01 -0400
+Message-ID: <20241023143116.2981369-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241023143012.2980728-1-sashal@kernel.org>
-References: <20241023143012.2980728-1-sashal@kernel.org>
+In-Reply-To: <20241023143116.2981369-1-sashal@kernel.org>
+References: <20241023143116.2981369-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.5
+X-stable-base: Linux 6.6.58
 Content-Transfer-Encoding: 8bit
 
 From: Will Deacon <will@kernel.org>
@@ -103,7 +103,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index 98016e137b7f0..233ab20969242 100644
+index fdca89c057452..275e6295fcd78 100644
 --- a/lib/Kconfig.kasan
 +++ b/lib/Kconfig.kasan
 @@ -22,8 +22,11 @@ config ARCH_DISABLE_KASAN_INLINE
@@ -119,7 +119,7 @@ index 98016e137b7f0..233ab20969242 100644
  
  # This option is only required for software KASAN modes.
  # Old GCC versions do not have proper support for no_sanitize_address.
-@@ -98,7 +101,7 @@ config KASAN_SW_TAGS
+@@ -100,7 +103,7 @@ config KASAN_SW_TAGS
  	help
  	  Enables Software Tag-Based KASAN.
  
