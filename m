@@ -1,55 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0E14D70E
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6FD14AD3F
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729665915; cv=none; b=opbT6rziSREOjDL71BNMibQ8Al3XVgOPa7D7r2HmWNLmVBX6G0hwvEZCIsOpZZkONvOY2ZBkvgbI/5G0TvbnAPozQrOdfVi1S6lXNvLwujgtSFEfG/01xjXuZTngtILtz3DXOmbign1YOfHkxgP49juC1Pz7JnuTo/w0Zpb4oVA=
+	t=1729666128; cv=none; b=me5I1nXSkzGwyvRThipiNgNpL46Nrbw3DuOjFthM+qHhWBvTAGsNr5RLjpJV6SU5hbXPLu5YkdCVVtcjK8V8k4Z71vZx33pNyfZLrLiMFJzfJvuErRw0cM5VNEyH3oibYiuXLR2OSa8h9DjZCkhQcVPzT2cSxmPxvPLu5G/rS7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729665915; c=relaxed/simple;
-	bh=I7HURHb0jCDc0kIUBqb3ZlkZEa1kppE4AOFUaP/oNIQ=;
+	s=arc-20240116; t=1729666128; c=relaxed/simple;
+	bh=kYoU1eS7DH5zpPgw6YnpnIh/xXKRa9ty0/rXTdqSfR4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c0NBCKugI27/eoKJ9NSa6afn/qUVNQf0cYEqTOARbkO82RfOV2E4CmMZPbEwY54hkPI3EGzavf+Rv5ZRDMQ9sAWFz/F2D4SphrMFR08bK+TqS/2kzfwUhYMnthEUlzHXyRBjQ2NyZeFWg3r1420ArY0B+XJLe9go26abyqwfPC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jR7m1RFy; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=CagcJAdxEwSmF+xJPBj9QyCvdo1ysO+nk/q9Ec4flhlod9hstWIHJmsV749IuSkoyaxDzNh6O/lPTlpXiRSb9OPAVL/mN+A5L5bV1cOUTvzvyea/eHt9KQ4Tc5YV2rRmwkLOinrYC9nREqaLpJ8feQ9w1DriAEh0Ck+KyfDuDOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sD5AhOPT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jR7m1RFy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73627C4CEF2
-	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:45:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sD5AhOPT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B703AC4CEED
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 06:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729665915;
-	bh=I7HURHb0jCDc0kIUBqb3ZlkZEa1kppE4AOFUaP/oNIQ=;
+	s=k20201202; t=1729666127;
+	bh=kYoU1eS7DH5zpPgw6YnpnIh/xXKRa9ty0/rXTdqSfR4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=jR7m1RFy3k/JtGEh47vE7LPzi2GeHCR5lkbbcDxiOZMX1zCz+OxgenXccdQZsZ5tc
-	 r/uS+tdYOx2bLeQMw+iM5xZTs/inq7CiOX7bL/1EZLnFvYg/ocJeaw5aNYCdLTxApN
-	 nPJ+PuGyUr2/+JwB4zdz9pLBHdMj+dTu8BnntI293Vp5Fxc8jWVNL5OZFci/9fxNDg
-	 SrO0ZIyi1iaN4sItRju6ZixkcrkPmQ+Q6DFTav76cSLg1LwrqmOou8FSl+0f3jg+ea
-	 q2uHDW1z/3WW3u0y1Yqf4dw0Tbu6AorpfCq8PqUxReGxMnOfrqdiKebZcfSQMfggis
-	 55KbZ2K9f60fw==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539ebb5a20aso6507858e87.2
-        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 23:45:15 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUVgpjf1iaKnySethvG2eouKhqejILH9gPgJ8LzEtEP+FanQPwkFpB9YxBeMyKdqOwIYNBc@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx6vuiQBBmG5cF7hTzMI76T8OoKWmTu5pZtv/aR/3UKo8dAKXSJ
-	+2++pfq5H5E68UKdUAFiOE+exxyGnTy2pyM7eLy+KX6ewxTGtuZ1gKwxSAQIFv1xw0gKtTkA7DR
-	6LRhCbKwvtLWmeJ70aORn5SFg35U=
-X-Google-Smtp-Source: AGHT+IHEvYi+Z/VPXkv+py9OIcduE18rSIWRaBjdPYTUVd4Nwadxm+HeVibO9YguSrlAUzfHANBhouSoAElTMeiubJs=
-X-Received: by 2002:a05:6512:31d1:b0:539:8d2c:c01c with SMTP id
- 2adb3069b0e04-53b1a36b785mr647872e87.41.1729665913964; Tue, 22 Oct 2024
- 23:45:13 -0700 (PDT)
+	b=sD5AhOPTNRwGoWZCK7a3K6NZlg7XmKTizThfvUnZkotQpjpP15ICyzwQjkK55+ejD
+	 P23o6ZX7S3AQFbndAu5P3lDmxBgNx2y7MoZ9BtN42f+1+KwOJc4oV7HBc+2VfYFfPX
+	 UxWNHWNF/6CinCOGke7UzAEkG1eaFHv78o1MgOIlKJZdBVwy6GYK+FleyPageTITM0
+	 Zw/yNAdjXvbdcAA+WtED6nQz/QLG7/l2p3WRnvNgUEl/4IiArqprJRbdg+NcCNYlqs
+	 LaZY7Ie5PqnqoOYzZgu+/J00/WMVY6Yya9uiJc8EFK5p6zsuCXUaqjgqdHBtCxR+sW
+	 ns8cp48MuUKLw==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539f4d8ef84so6951862e87.0
+        for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 23:48:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUcTdRfnjWGFyYNp1MZ9Z5aopwLRi+jnQvxwSARfdAU6Ac24FgUQBfUqSesnQaOxk8zX0Rr@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx9XyuLZ7IGtSFQznfLogjLCQXPDz8+a5YqhalOdNfrgg9fZO2p
+	XuGLk9xghJwGaTFv9LMPRMWvybrk/ppDMNL/7OTqJ4pUGA9pYSqn+Wu+T+HavY/0WZYULSANSRv
+	MnzfyoatjHJY84VuVaHAULTUwyng=
+X-Google-Smtp-Source: AGHT+IHdLm9VEq1+63pkrH8mvjYT/uIVSs925aHw/8k3D4K+tqs7TqGU6Kx3vXCa/TmQKTFwzjFzUPMcGvaKqm9PY2w=
+X-Received: by 2002:a05:6512:239d:b0:539:e873:6d7 with SMTP id
+ 2adb3069b0e04-53b1a30c2ecmr674708e87.1.1729666126389; Tue, 22 Oct 2024
+ 23:48:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-2-xur@google.com>
- <CAK7LNAQ5yNKvZDtJuvo9Lt4rZwLSv0UN4=Ff=WcCDy1CCEpQ7Q@mail.gmail.com> <CAF1bQ=Syxi46xnGbpZWhYfqKhQZqrBPPh5FGaqzmJTg6MMDJSA@mail.gmail.com>
-In-Reply-To: <CAF1bQ=Syxi46xnGbpZWhYfqKhQZqrBPPh5FGaqzmJTg6MMDJSA@mail.gmail.com>
+References: <20241014213342.1480681-1-xur@google.com> <20241014213342.1480681-4-xur@google.com>
+ <CAK7LNARqnhZuDf75_juBtdK0GV8jL_aDjnuyU=-8zjdCZetF1g@mail.gmail.com> <CAF1bQ=S1Hv=fJxk38dYkRTAXWQO_4W8QLTfbNRbihg8UvUKvGQ@mail.gmail.com>
+In-Reply-To: <CAF1bQ=S1Hv=fJxk38dYkRTAXWQO_4W8QLTfbNRbihg8UvUKvGQ@mail.gmail.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 23 Oct 2024 15:44:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARD2HKhgLCxiY77usLhRsgTQ2L1aTSbNmXFbZz0-AxeYw@mail.gmail.com>
-Message-ID: <CAK7LNARD2HKhgLCxiY77usLhRsgTQ2L1aTSbNmXFbZz0-AxeYw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] Add AutoFDO support for Clang build
+Date: Wed, 23 Oct 2024 15:48:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS9HtgL=sDn25BeCxSTz6Hg1x+cYbCe54oxy74S4y2Ogw@mail.gmail.com>
+Message-ID: <CAK7LNAS9HtgL=sDn25BeCxSTz6Hg1x+cYbCe54oxy74S4y2Ogw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] Change the symbols order when --ffuntion-sections
+ is enabled
 To: Rong Xu <xur@google.com>
 Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
@@ -68,50 +69,67 @@ Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>
 	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, Sriraman Tallam <tmsriram@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Stephane Eranian <eranian@google.com>
+	Krzysztof Pszeniczny <kpszeniczny@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 22, 2024 at 7:43=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+On Tue, Oct 22, 2024 at 8:43=E2=80=AFAM Rong Xu <xur@google.com> wrote:
 >
-> Thanks for the detailed suggestions! My comments are inlined below.
->
-> Best regards,
->
-> -Rong
->
-> On Sun, Oct 20, 2024 at 9:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+> On Sun, Oct 20, 2024 at 7:15=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
 .org> wrote:
 > >
 > > On Tue, Oct 15, 2024 at 6:33=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+> > >
+> > > When the -ffunction-sections compiler option is enabled, each functio=
+n
+> > > is placed in a separate section named .text.function_name rather than
+> > > putting all functions in a single .text section.
+> > >
+> > > However, using -function-sections can cause problems with the
+> > > linker script. The comments included in include/asm-generic/vmlinux.l=
+ds.h
+> > > note these issues.:
+> > >   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely i=
+f dead
+> > >    code elimination is enabled, so these sections should be converted
+> > >    to use ".." first.=E2=80=9D
+> > >
+> > > It is unclear whether there is a straightforward method for convertin=
+g
+> > > a suffix to "..".
 > >
 > >
-> > > +Customization
-> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > +
-> > > +You can enable or disable AutoFDO build for individual file and dire=
-ctories by
-> > > +adding a line similar to the following to the respective kernel Make=
-file:
 > >
+> > Why not for ".text.fixup"?
 > >
-> > Perhaps, it might be worth mentioning that kernel space objects are
-> > covered by default.
-> >
-> > Then, people would understand ':=3D y' will be less common than ':=3D n=
-'.
+> > $ git grep --name-only '\.text\.fixup' | xargs sed -i
+> > 's/\.text\.fixup/.text..fixup/g'
 > >
 >
-> Good point! How about I change to the following:
-> "
-> The default CONFIG_AUTOFDO_CLANG setting covers kernel space objects for
-> AutoFDO builds. One can, however, enable or disable AutoFDO build for
-> individual file and directories by adding a line similar to the following
-> to the respective kernel Makefile ...
+> I did not move .text.fixup because it currently groups together with TEXT=
+_MAIN.
+
+OK. Then, .text.fixup is not a problem.
 
 
-Sounds ok to me.
 
+> >
+> > Why did you do this conditionally?
+> >
+> > You are making this even more unmaintainable.
+>
+> Again, we don't want to change the default build.
+>
+> If you think the change can apply to the default build, we would be
+> happy to remove the condition.
+
+
+I believe this should be done unconditionally.
+
+If you are concerned about changing the default,
+I am concerned about changing it under any condition.
+
+We should avoid maintaining two section layouts.
 
 
 
