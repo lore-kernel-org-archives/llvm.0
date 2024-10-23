@@ -1,142 +1,83 @@
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from mail-4027.protonmail.ch (mail-4027.protonmail.ch [185.70.40.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AF1019CC28
-	for <llvm@lists.linux.dev>; Tue, 22 Oct 2024 23:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7D917C77
+	for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 00:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.27
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729640180; cv=none; b=WbyDjQLtp79AWJPIb1cv3LGTBh7oGNPSXwdLGrUcRv0SbHnIHKUPGe7/SNbBrPqBPjkJMmLNYw2tIgJ0CpeG5VwL+khqqcdzBxElfZ8S9soIPYH4BacQae+J0RZjtjRRNjGVCv2Bf4iWCsJk+9oab+jjnqjkorWWeOS6ALdiKuc=
+	t=1729644246; cv=none; b=YEVrFuifVjFsyaQVjs34kgECdR1LwgIB5caLrxegeWDsDjHBzcqkVZcAT7QPItkXun6opka3+QiNHEis5CpdFAPTTOYAzEgckXwhANC7uqlzw1xYVK+6frS7dtcKV9XYUPzWKGForg4ZRBYouaFhBS57NX6vrZ+KdWJ9rIglVwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729640180; c=relaxed/simple;
-	bh=78Khv5juGgQH/Jy7dvVkLWEo852D6IKfW/q7DCFoFl8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=fu+tWQhLO2UIJ77td8JIKYAQWo5/8hq57yvCsNKT+wWMmESgxPtvY8kjNr20KnSx0qUf6fm1MMYcBrTVJ1dvKe9or/N5Mm5Z0+keObpNaA/Fr2AXt6BP9tv//Gzjr2Ou5y+NSqpS0m3LcJsfHMhEQPqRUoWeqqBsPqISZVaWNZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=q5GDxAjn; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	s=arc-20240116; t=1729644246; c=relaxed/simple;
+	bh=yXgmq1BR3VIXZKYZe008gdI8Cfjzhsiou5L2Rb269o0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S6jwD2Vq+YEJ6r/7GbFu5JQDBtDczVdVmilI/sl3jt5IewIBN6Uk7DSs2o0no+NX9MY6Ljst+t+A67pMMnmpRXkPW0MgX8T1kS0BLrMQwlxJuMbQ/LG2pPop5qh4I2PTHhGcoyhgVOLEIQvrHw1MzYwk7/8KESq8b6ALXiwMdUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=gXmb9pwl; arc=none smtp.client-ip=185.70.40.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="q5GDxAjn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1729639462;
-	bh=78Khv5juGgQH/Jy7dvVkLWEo852D6IKfW/q7DCFoFl8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=q5GDxAjna6FBWfQDmtaBFPTjIwOoyueGOlWbgv86R29LmQubM2AP4+7+9WskTctIf
-	 gSh/GdV8I/FRAFKtZ2a/LYngiohwXo04TadoHEz7pWSTnC63do+KpCcTleCwkrXtiB
-	 NKEk2GIQGj3PP/d1xl8fm9RGvsH9PPG0YBiSBGiE=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 0452040350; Tue, 22 Oct 2024 16:24:22 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 0112B4022C;
-	Tue, 22 Oct 2024 16:24:21 -0700 (PDT)
-Date: Tue, 22 Oct 2024 16:24:21 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Dave Hansen <dave.hansen@intel.com>
-cc: Peter Zijlstra <peterz@infradead.org>, 
-    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-    Ingo Molnar <mingo@kernel.org>, Uros Bizjak <ubizjak@gmail.com>, 
-    linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-    Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] x86/percpu: Cast -1 to argument type when comparing
- in percpu_add_op()
-In-Reply-To: <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
-Message-ID: <4b1a26b2-cccb-75d8-ee2f-f30ae211e598@gentwo.org>
-References: <20240905170356.260300-1-andriy.shevchenko@linux.intel.com> <f02e0624-ad4f-473c-b172-6dadea37f600@intel.com> <20241016192011.GY17263@noisy.programming.kicks-ass.net> <de705cdf-ccce-460f-846e-dfc63c63af1a@intel.com> <20241017181859.GB17263@noisy.programming.kicks-ass.net>
- <c22fd9c5-6727-46c2-a811-784315edf7cb@intel.com>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="gXmb9pwl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1729644236; x=1729903436;
+	bh=yXgmq1BR3VIXZKYZe008gdI8Cfjzhsiou5L2Rb269o0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=gXmb9pwlvx0UwV2UeaD4SyZmwijc3TRSsEITqiF6pZMX3qf0YY94usiKLSRqzx9gY
+	 GnCxM+QcmlKPTJZX5G6qTasVM262/pClKcBUoDigMh1A8Vqvh+FKgjkgiDF6nmUxeF
+	 11rHUgaPv3Ai7wCRsMTAD6pcIZQBrNN/2f7V307zUBESlcFcbimsO0Y081+KgUvZlr
+	 coAF3VbEIvwFfWBQl+MPEb2K2IIZbtQz3MHx0lcnBtAJkjNOSX5FJIxp0mUSzQE8oT
+	 gYg+6+zX3zDPncvMHeBf//yYZiw04F1m14Nbmab7jbfADmmrBWhgwr7byK2YW9quGE
+	 poDOtBPoCBopg==
+Date: Wed, 23 Oct 2024 00:43:51 +0000
+To: Nathan Chancellor <nathan@kernel.org>
+From: Koakuma <koachan@protonmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
+Message-ID: <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
+In-Reply-To: <20241022200732.GA487584@thelio-3990X>
+References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com> <20241021201657.GA898643@thelio-3990X> <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com> <20241022200732.GA487584@thelio-3990X>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: b87481f0a5c05dc56ab15ff9c4c1b68a54acc11e
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY=------------j7icfEkLOSMelbrpKGR8X0pv
-Content-ID: <03be023f-9e1d-18f8-9dd3-0eb3ab270b65@gentwo.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Nathan Chancellor <nathan@kernel.org> wrote:=20
+> Koakuma might know more than I do but I did not test either the
+> integrated assembler or the rest of the LLVM tools; I only tested clang
+> for CC. As far as I am aware, that has been where most of the effort in
+> llvm-project has been going and I think there are probably other fixes
+> that will be needed for the other tools. The command I tested was:
+>=20
+> $ make -skj"$(nproc)" \
+> ARCH=3Dsparc64 \
+> CC=3Dclang \
+> CROSS_COMPILE=3Dsparc64-linux-gnu- \
+> LLVM_IAS=3D0 \
+> mrproper defconfig all
+>=20
+> I see this as more of a stepping stone series to make testing those
+> other components easier as time goes on, hence why I did not really
+> consider user facing documentation either like you brought up in the
+> other thread.
+>=20
+> Cheers,
+> Nathan
 
---------------j7icfEkLOSMelbrpKGR8X0pv
-Content-Type: text/plain; CHARSET=US-ASCII
-Content-ID: <5f92f215-6566-b2a4-c30c-23ba1b1cb31e@gentwo.org>
+Ah, pardon me for forgetting to say it in the cover letter.
+But yeah. At the moment only clang as CC works, all other LLVM tools are st=
+ill
+incomplete and need some work to be able to build the kernel, so these patc=
+hes
+indeed are intended as stepping stones to make it easier to work on
+the rest of the tools.
 
-On Tue, 22 Oct 2024, Dave Hansen wrote:
-
-> So I think Peter's version was the best.  It shuts up clang and also
-> preserves the existing (good) gcc 'sub' behavior.  I'll send it out for
-> real in a bit, but I'm thinking of something like the attached patch.
-
-The desired behavior is a "dec". "sub" has a longer op code AFAICT.
-
---------------j7icfEkLOSMelbrpKGR8X0pv
-Content-Type: text/x-patch; CHARSET=UTF-8; NAME=0001-x86-percpu-Avoid-comparing-unsigned-types-to-1.patch
-Content-Transfer-Encoding: BASE64
-Content-ID: <dbb55d79-d275-7170-487f-23f4a62f5905@gentwo.org>
-Content-Description: 
-Content-Disposition: ATTACHMENT; FILENAME*0=0001-x86-percpu-Avoid-comparing-unsigned-types-to-1.patch
-
-RnJvbSBkNjNiY2QzNTBlMWEzYmE2MTk2ZGFkYjI2Y2IyZjM2ZjBiYTFlMTgyIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXgu
-aW50ZWwuY29tPgpEYXRlOiBGcmksIDE4IE9jdCAyMDI0IDExOjA3OjQ3IC0wNzAwClN1Ympl
-Y3Q6IFtQQVRDSF0geDg2L3BlcmNwdTogQXZvaWQgY29tcGFyaW5nIHVuc2lnbmVkIHR5cGVz
-IHRvIC0xCgpjbGFuZyB3YXJucyB3aGVuIGNvbXBhcmluZyBhbiB1bnNpbmdlZCB0eXBlIHRv
-IC0xIHNpbmNlIHRoZSBjb21wYXJpc29uCmlzIGFsd2F5cyBmYWxzZS4KClRoaXMgY2FuIGJl
-IHF1aWNrbHkgcmVwcm9kdWNlZCBieSBzZXR0aW5nIENPTkZJR19XRVJST1I9eSBhbmQgcnVu
-bmluZzoKCgltYWtlIFc9MSBDQz1jbGFuZy0xNCBuZXQvaXB2NC90Y3Bfb3V0cHV0Lm8KCm5l
-dC9pcHY0L3RjcF9vdXRwdXQuYzoxODc6MzogZXJyb3I6IHJlc3VsdCBvZiBjb21wYXJpc29u
-IG9mIGNvbnN0YW50IC0xIHdpdGggZXhwcmVzc2lvbiBvZiB0eXBlICd1OCcgKGFrYSAndW5z
-aWduZWQgY2hhcicpIGlzIGFsd2F5cyBmYWxzZSBbLVdlcnJvciwtV3RhdXRvbG9naWNhbC1j
-b25zdGFudC1vdXQtb2YtcmFuZ2UtY29tcGFyZV0KICAxODcgfCAgICAgICAgICAgICAgICAg
-TkVUX0FERF9TVEFUUyhzb2NrX25ldChzayksIExJTlVYX01JQl9UQ1BBQ0tDT01QUkVTU0VE
-LAogICAgICB8ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+CiAgMTg4IHwgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgdHAtPmNvbXByZXNzZWRfYWNrKTsKICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICB+fn5+fn5+fn5+fn5+fn5+fn5+Ci4uLgphcmNoL3g4Ni9pbmNs
-dWRlL2FzbS9wZXJjcHUuaDoyMzg6MzE6IG5vdGU6IGV4cGFuZGVkIGZyb20gbWFjcm8gJ3Bl
-cmNwdV9hZGRfb3AnCiAgMjM4IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKCh2
-YWwpID09IDEgfHwgKHZhbCkgPT0gLTEpKSA/ICAgICAgICAgICAgXAogICAgICB8ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIH5+fn5+IF4gIH5+CgpG
-aXggdGhpcyBieSBhdm9pZGluZyBhIGNvbXBhcmlzb24gb2YgYW4gdW5jYXN0IC0xIHRvICd2
-YWwnLgoKRG9pbmcgdGhpcyBpbiBhZGRpdGlvbiB0byB0aGUgZXhpc3RpbmcgJ3Bhb19JRF9f
-JyBjYWxjdWxhdGlvbiB3b3VsZCBtYWtlIGl0CmV2ZW4gbW9yZSB1bnJlYWRhYmxlLiBSZW1v
-dmUgJ3Bhb19JRF9fJyBhbmQgcmVwbGFjZSBpdCB3aXRoIHRoZSB0aHJlZQpjb21wb25lbnRz
-IG9mIGl0cyBjYWxjdWxhdGlvbi4KClRoaXMgcHJlc2VydmVzIHNvbWUgdW5pbnR1aXRpdmUg
-YnV0IHVzZWZ1bCBiZWhhdmlvci4gIEZvciBpbnN0YW5jZSwgZ2NjIHNlZXM6CgoJcGVyY3B1
-X2FkZF9vcCguLi4sIHZhciwgKHU4KS0xKTsKCmFuZCBjYW4gdHJhbnNmb3JtIHRoYXQgaW50
-byBhICJkZWMiLiAgQ2xhbmcsIG9uIHRoZSBvdGhlciBoYW5kLCBzZWVzIHRoZSAndTgnCnR5
-cGUgYW5kIGFzc3VtZXMgdGhhdCAiKHZhbCkgPT0gLTEiIGlzIGZhbHNlLCB3aGljaCB3YXMg
-dGhlIHJvb3Qgb2YgdGhlCndhcm5pbmcuCgpUaGlzIGlzIHVzZWZ1bCBnY2MgYmVoYXZpb3Ig
-YmVjYXVzZToKCgkjZGVmaW5lIHRoaXNfY3B1X3N1YihwY3AsIHZhbCkgIHRoaXNfY3B1X2Fk
-ZChwY3AsIC0odHlwZW9mKHBjcCkpKHZhbCkpCgpzbyBhbnkgY29kZSB0aGF0IGRvZXM6CgoJ
-dGhpc19jcHVfc3ViKEEsIDEpCgp3aGVyZSAnQScgaXMgYW4gdW5zaWduZWQgdHlwZSBnZW5l
-cmF0ZXMgYSAiZGVjIi4gIENsYW5nLCBvbiB0aGUgb3RoZXIKaGFuZCBnZW5lcmF0ZXMgYSBs
-ZXNzLWVmZmljaWVudCAiYWRkIi4KClJlcG9ydGVkLWJ5OiBBbmR5IFNoZXZjaGVua28gPGFu
-ZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNvbT4KU2lnbmVkLW9mZi1ieTogRGF2ZSBI
-YW5zZW4gPGRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT4KLS0tCiBhcmNoL3g4Ni9pbmNs
-dWRlL2FzbS9wZXJjcHUuaCB8IDExICsrKysrKy0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNiBp
-bnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2FyY2gveDg2L2lu
-Y2x1ZGUvYXNtL3BlcmNwdS5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vcGVyY3B1LmgKaW5k
-ZXggYzU1YTc5ZDVmZWFlLi41N2Q5NzU5YzY5MmUgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2lu
-Y2x1ZGUvYXNtL3BlcmNwdS5oCisrKyBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL3BlcmNwdS5o
-CkBAIC0yMzQsMTggKzIzNCwxOSBAQCBkbyB7CQkJCQkJCQkJXAogICovCiAjZGVmaW5lIHBl
-cmNwdV9hZGRfb3Aoc2l6ZSwgcXVhbCwgdmFyLCB2YWwpCQkJCVwKIGRvIHsJCQkJCQkJCQlc
-Ci0JY29uc3QgaW50IHBhb19JRF9fID0gKF9fYnVpbHRpbl9jb25zdGFudF9wKHZhbCkgJiYJ
-CVwKLQkJCSAgICAgICgodmFsKSA9PSAxIHx8ICh2YWwpID09IC0xKSkgPwkJXAotCQkJCShp
-bnQpKHZhbCkgOiAwOwkJCQlcCisJY29uc3QgaW50IHBhb19jb25zdF9fID0gX19idWlsdGlu
-X2NvbnN0YW50X3AodmFsKTsJCVwKKwljb25zdCBpbnQgcGFvX2luY19fICAgPSAodmFsKSA9
-PSAxOwkJCQlcCisJY29uc3QgaW50IHBhb19kZWNfXyAgID0gKHR5cGVvZih2YXIpKSh2YWwp
-ID09CQkJXAorCQkJCSh0eXBlb2YodmFyKSktMTsJCQlcCiAJCQkJCQkJCQlcCiAJaWYgKDAp
-IHsJCQkJCQkJXAogCQl0eXBlb2YodmFyKSBwYW9fdG1wX187CQkJCQlcCiAJCXBhb190bXBf
-XyA9ICh2YWwpOwkJCQkJXAogCQkodm9pZClwYW9fdG1wX187CQkJCQlcCiAJfQkJCQkJCQkJ
-XAotCWlmIChwYW9fSURfXyA9PSAxKQkJCQkJCVwKKwlpZiAocGFvX2NvbnN0X18gJiYgcGFv
-X2luY19fKQkJCQkJXAogCQlwZXJjcHVfdW5hcnlfb3Aoc2l6ZSwgcXVhbCwgImluYyIsIHZh
-cik7CQlcCi0JZWxzZSBpZiAocGFvX0lEX18gPT0gLTEpCQkJCQlcCisJZWxzZSBpZiAocGFv
-X2NvbnN0X18gJiYgcGFvX2RlY19fKQkJCQlcCiAJCXBlcmNwdV91bmFyeV9vcChzaXplLCBx
-dWFsLCAiZGVjIiwgdmFyKTsJCVwKIAllbHNlCQkJCQkJCQlcCiAJCXBlcmNwdV9iaW5hcnlf
-b3Aoc2l6ZSwgcXVhbCwgImFkZCIsIHZhciwgdmFsKTsJCVwKLS0gCjIuMzQuMQoK
-
---------------j7icfEkLOSMelbrpKGR8X0pv--
+I'm not sure if I should update the documentation now given that LLVM suppo=
+rt
+is nowhere near as complete as other architectures, but I'll do it if neede=
+d...
