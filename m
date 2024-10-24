@@ -1,253 +1,217 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CFD46B8;
-	Thu, 24 Oct 2024 01:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AF513BACC
+	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 02:22:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729731755; cv=none; b=kwy+Th7sovvFr90H+MhltP9D78y5zFVrSaoLYGbHtZzbX29GbjaQDZp+QYc6+dHS9AuMAeS0fip0r1CLSOAnQiVYQQ7kL4umXP2lB3J7fpwh8zQfIn24+UoqV222fKSjWrqGqX9XlP+uEoZt+nmO5GlRTy8MV684KoJqmS7OUrk=
+	t=1729736525; cv=none; b=Gtdq1IJjdiFMiF+H3sIj3RJBYQpGuBSfkpPioWjfN0BewHrxEAYOcWW4oG5DbpUipfh8/hS4RFixMmb/HJgGeTCaDLbKGeydGPS6WgJp+PGbtcjEFDHwSjPMFL7Xnx/bMR2lwSP6tvgfeSpBEt5pd1E/FD4iG/b8OHURTRU7pYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729731755; c=relaxed/simple;
-	bh=xcSPOTKoVay8aJNmHQJfC5qPK9/bLslZxFeGjFTYSWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xzx0ckjNKIpFulPJgXA5kCwuocWVEDT0TzhP/n+DV+zhPXrv3J4JUGEXsebxYTbaq/NlWfEjYb4iF/IWUyxHGbH2DW7oggkj3SZ6Ww0jsumPLztPYcqhO0DF7rvpzFhVrlRjOFnOyNAUEAVkresqj8nLGaIk4HSaMI9WMVlQ2sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NykXAS29; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729736525; c=relaxed/simple;
+	bh=m3Ot8oYn8Og7JeN1WvTnV4Zbz1ZuV/05Kmvb05VqKsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QKBZHBYvPU9BPmopVbM2xsndbo7SDsuZIfd/kwKREUOKyDNvTXD88UZCX2T0bj/Lc5c5zVHloF+TycyF7Zq+/w5INt15gJgwW1Fq49XcciKDj9GIe70a/hFX+YiwVohbep0/IOAUVlqKIJkvVL6a7uF0jkwSWoHqdsnHdjVcJDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=evHOE2N+; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NykXAS29"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729731753; x=1761267753;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xcSPOTKoVay8aJNmHQJfC5qPK9/bLslZxFeGjFTYSWw=;
-  b=NykXAS29arpL62bpeWdPWuf64JjZ78UYirK0hA9NOuATVDjzNPck494O
-   YUTbuL8cXjhcfN4ikDpiT8ZvQG1sgUjv+dhtiZyaid0H0Fo1fhYJNEAIZ
-   X29pnUCG8n/yCk5TEWGyDa1XXRzmGs1Oo2m1gnxsala76i9w3yFm7jR3b
-   nOEU3hm4ju++iIrJw1JzJkzTc5++A6HdDBDa+Si5Yq8zWiuO2jss8Ey8u
-   Y9BfldPdCBhnP+r/CdWKb6vsl6gSUsU4j+xU1l9HhksoOJ3VaL8oEr28J
-   SBOrvmTF458/w2bAbLL7F+15JBVI/Pbeag1LAaopOkgbvP+b1xdycbRFU
-   g==;
-X-CSE-ConnectionGUID: tM5NchlGTYycq5+MgMkNfg==
-X-CSE-MsgGUID: MEnfBa3DS92ZwrYWYxTx7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11234"; a="39959191"
-X-IronPort-AV: E=Sophos;i="6.11,227,1725346800"; 
-   d="scan'208";a="39959191"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 18:02:29 -0700
-X-CSE-ConnectionGUID: 51KhsvtTTdmSgtJ3i7BjFQ==
-X-CSE-MsgGUID: B6S5sjRdS9+68/0bU9Kg3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,227,1725346800"; 
-   d="scan'208";a="80535783"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 23 Oct 2024 18:02:28 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t3mF7-000VmA-36;
-	Thu, 24 Oct 2024 01:02:25 +0000
-Date: Thu, 24 Oct 2024 09:01:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Lechner <dlechner@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:locking/test 3/3] drivers/iio/adc/ad7380.c:851:2:
- error: cannot jump from switch statement to this case label
-Message-ID: <202410240802.VMztsHsW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="evHOE2N+"
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e2974743675so442354276.1
+        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 19:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729736522; x=1730341322; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R0GrkmMosGLeeGUqJPb2uCqk18kplfVZimJ2iFrxCRw=;
+        b=evHOE2N+jvJodHE6UY5gQmVPt375CmaILtNBoHceHXSHhmpdXGHqhaeN8yllq1JaCO
+         ci/xK2jFzWZ/q8mwnBQpHRR4O0Fe8EuwqrApanTL/A3QcpBsVX8O+9/NZzD8B+OdKPui
+         bXTUlaF9mqXCHazBR+lJbhNhRcInNg/N/lpVbpG2Z+q166/BBi0FWM8ONkL5YR4y31Pm
+         kk0kO5EgiXgKiu7vLCGG4pqQh1bCudaeUu0unEmUNr7y6VTq16qNWqvEMk6sQP1GSudN
+         OL2gjfUDYo5yhJL90o2hmzqf/bCpvNIIdCOxdRT3HRRy1IdClG9FDmLXajNB0b2Xs0l8
+         OghA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729736522; x=1730341322;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R0GrkmMosGLeeGUqJPb2uCqk18kplfVZimJ2iFrxCRw=;
+        b=h2qcJqt4SbQbbGq7a4W8VoajGmIRnFbUloA2LvXdgPQ5psZnUoEmGBlKX3EfPOQEDq
+         lOcSqKfuC76KlXzSd8Q5UUbsBq4b9oJo3UVBioySZ8zLw42QLxmgZj4AQGuKmWfMPtQI
+         OYaglTiBeU7Yw/OzcrtX0gjYzBxhmiL1aMGy9Crfx9qjoPCAJ7lTY434Lt6SyaWJwVm5
+         cQYFDJ0JSjKHwlTYmzWnfBhyeb1KTqeS4EueSA6bo8rVmc3Iv8tD/Rqw1hQcnW6wWUhX
+         O8oU9is9SdgTYX3K5XA9SDhenBcMYyBsA3TOorRmqljwDFJDUPhGhO6V9QXV2uuH90fW
+         9mUg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwWpZwWp3yeXVTEr4sK+cUfPsVPZEsBEV5Tn5aQUfbvWHRP2PrhLE4qzviBfz/End/bPxP@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy0m5uUMuTruhrgLeDEMvRSDsoyXtbmzYeUJ6TTFuPWC/W/yqhW
+	M+zMTNavvm2/SsBMkpXEiQBD5AxI2fm4S3c44Em3c7cbJKcjlPFa
+X-Google-Smtp-Source: AGHT+IEUu7KXxZFkflqposC4YCLigCJ+qVgqi9aBnoX0dNZcQbmujiyi2eoO6po+vUlEAx1yw3ClKQ==
+X-Received: by 2002:a05:6902:1a41:b0:e2b:ddbb:1337 with SMTP id 3f1490d57ef6-e2e3a6e4de9mr5367390276.53.1729736522062;
+        Wed, 23 Oct 2024 19:22:02 -0700 (PDT)
+Received: from [192.168.2.226] ([107.175.133.150])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e2bdc974c47sm1794099276.4.2024.10.23.19.21.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Oct 2024 19:22:01 -0700 (PDT)
+Message-ID: <46e54088-ad96-4387-8a39-2e4686c842bd@gmail.com>
+Date: Thu, 24 Oct 2024 10:21:47 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] docs/zh_CN: update the translation of
+ process/programming-language.rst
+To: Dongliang Mu <dzm91@hust.edu.cn>, si.yanteng@linux.dev,
+ Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
+ Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20241023062750.849951-1-dzm91@hust.edu.cn>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <20241023062750.849951-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/test
-head:   800b10017d81d19743a95725b73d0026e1647bc9
-commit: 800b10017d81d19743a95725b73d0026e1647bc9 [3/3] iio: adc: ad7380: use if_not_guard for claim direct
-config: arm-randconfig-004-20241024 (https://download.01.org/0day-ci/archive/20241024/202410240802.VMztsHsW-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241024/202410240802.VMztsHsW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410240802.VMztsHsW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/iio/adc/ad7380.c:27:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/iio/adc/ad7380.c:851:2: error: cannot jump from switch statement to this case label
-     851 |         default:
-         |         ^
-   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     823 |                 if_not_guard(iio_claim_direct_try, indio_dev)
-         |                 ^
-   include/linux/cleanup.h:359:24: note: expanded from macro 'if_not_guard'
-     359 |         __if_not_guard(_name, __UNIQUE_ID(guard), args)
-         |                               ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:17:1: note: expanded from here
-      17 | __UNIQUE_ID_guard334
-         | ^
-   drivers/iio/adc/ad7380.c:847:2: error: cannot jump from switch statement to this case label
-     847 |         case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-         |         ^
-   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     823 |                 if_not_guard(iio_claim_direct_try, indio_dev)
-         |                 ^
-   include/linux/cleanup.h:359:24: note: expanded from macro 'if_not_guard'
-     359 |         __if_not_guard(_name, __UNIQUE_ID(guard), args)
-         |                               ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:17:1: note: expanded from here
-      17 | __UNIQUE_ID_guard334
-         | ^
-   drivers/iio/adc/ad7380.c:838:2: error: cannot jump from switch statement to this case label
-     838 |         case IIO_CHAN_INFO_OFFSET:
-         |         ^
-   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     823 |                 if_not_guard(iio_claim_direct_try, indio_dev)
-         |                 ^
-   include/linux/cleanup.h:359:24: note: expanded from macro 'if_not_guard'
-     359 |         __if_not_guard(_name, __UNIQUE_ID(guard), args)
-         |                               ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:17:1: note: expanded from here
-      17 | __UNIQUE_ID_guard334
-         | ^
-   drivers/iio/adc/ad7380.c:827:2: error: cannot jump from switch statement to this case label
-     827 |         case IIO_CHAN_INFO_SCALE:
-         |         ^
-   drivers/iio/adc/ad7380.c:823:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     823 |                 if_not_guard(iio_claim_direct_try, indio_dev)
-         |                 ^
-   include/linux/cleanup.h:359:24: note: expanded from macro 'if_not_guard'
-     359 |         __if_not_guard(_name, __UNIQUE_ID(guard), args)
-         |                               ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:17:1: note: expanded from here
-      17 | __UNIQUE_ID_guard334
-         | ^
-   drivers/iio/adc/ad7380.c:935:2: error: cannot jump from switch statement to this case label
-     935 |         default:
-         |         ^
-   drivers/iio/adc/ad7380.c:911:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     911 |                 if_not_guard(iio_claim_direct_try, indio_dev)
-         |                 ^
-   include/linux/cleanup.h:359:24: note: expanded from macro 'if_not_guard'
-     359 |         __if_not_guard(_name, __UNIQUE_ID(guard), args)
-         |                               ^
-   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
-     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
 
 
-vim +851 drivers/iio/adc/ad7380.c
+On 10/23/24 14:27, Dongliang Mu wrote:
+> Update to commit 0b02076f9953 ("docs: programming-language: add Rust
+> programming language section")
+> 
+> scripts/checktransupdate.py reports:
+> 
+> Documentation/translations/zh_CN/process/programming-language.rst
+> commit 0b02076f9953 ("docs: programming-language: add Rust programming
+> language section")
+> commit 38484a1d0c50 ("docs: programming-language: remove mention of the
+> Intel compiler")
+> 2 commits needs resolving in total
+> 
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+> v2->v3: fix warnings in the make htmldocs
+> v1->v2: revise the script name
+>  .../zh_CN/process/programming-language.rst    | 78 +++++++------------
+>  1 file changed, 30 insertions(+), 48 deletions(-)
+> 
+> diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
+> index fabdc338dbfb..95aa4829d78f 100644
+> --- a/Documentation/translations/zh_CN/process/programming-language.rst
+> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
+> @@ -3,25 +3,22 @@
+>  :Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
+>  :Translator: Alex Shi <alex.shi@linux.alibaba.com>
+>  
+> -.. _cn_programming_language:
+> -
+>  程序设计语言
+>  ============
+>  
+> -内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
+> -在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
+> -
+> -这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
+> +内核是用 C 编程语言编写的 [zh_cn_c-language]_。更准确地说，内核通常使用 ``gcc`` [zh_cn_gcc]_ 编译，
+> +并且使用 ``-std=gnu11`` [zh_cn_gcc-c-dialect-options]_：这是 ISO C11 的 GNU 方言。
+> +``clang`` [zh_cn_clang]_ 也得到了支持，详见文档：
+> +:ref:`使用 Clang/LLVM 构建 Linux <kbuild_llvm>`。
+>  
+> -对于一些体系结构，有一些使用 :ref:`clang <cn_clang>` 和 :ref:`icc <cn_icc>` 编译内核
+> -的支持，尽管在编写此文档时还没有完成，仍需要第三方补丁。
+> +这种方言包含对 C 语言的许多扩展 [zh_cn_gnu-extensions]_，当然，它们许多都在内核中使用。
+>  
+>  属性
+>  ----
+>  
+> -在整个内核中使用的一个常见扩展是属性（attributes） :ref:`gcc-attribute-syntax <cn_gcc-attribute-syntax>`
+> +在整个内核中使用的一个常见扩展是属性（attributes） [zh_cn_gcc-attribute-syntax]_。
+>  属性允许将实现定义的语义引入语言实体（如变量、函数或类型），而无需对语言进行
+> -重大的语法更改（例如添加新关键字） :ref:`n2049 <cn_n2049>`
+> +重大的语法更改（例如添加新关键字） [zh_cn_n2049]_。
+>  
+>  在某些情况下，属性是可选的（即不支持这些属性的编译器仍然应该生成正确的代码，
+>  即使其速度较慢或执行的编译时检查/诊断次数不够）
+> @@ -30,42 +27,27 @@
+>  ``__attribute__((__pure__))`` ），以检测可以使用哪些关键字和/或缩短代码, 具体
+>  请参阅 ``include/linux/compiler_attributes.h``
+>  
+> -.. _cn_c-language:
+> -
+> -c-language
+> -   http://www.open-std.org/jtc1/sc22/wg14/www/standards
+> -
+> -.. _cn_gcc:
+> -
+> -gcc
+> -   https://gcc.gnu.org
+> -
+> -.. _cn_clang:
+> -
+> -clang
+> -   https://clang.llvm.org
+> -
+> -.. _cn_icc:
+> -
+> -icc
+> -   https://software.intel.com/en-us/c-compilers
+> -
+> -.. _cn_gcc-c-dialect-options:
+> -
+> -c-dialect-options
+> -   https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
+> -
+> -.. _cn_gnu-extensions:
+> -
+> -gnu-extensions
+> -   https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
+> -
+> -.. _cn_gcc-attribute-syntax:
+> -
+> -gcc-attribute-syntax
+> -   https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
+> -
+> -.. _cn_n2049:
+> +Rust
+> +----
+>  
+> -n2049
+> -   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
+> +内核对 Rust 编程语言 [zh_cn_rust-language]_ 的支持是实验性的，并且可以通过配置选项
+> +``CONFIG_RUST`` 来启用。Rust 代码使用 ``rustc`` [zh_cn_rustc]_ 编译器在
+> +``--edition=2021`` [zh_cn_rust-editions]_ 选项下进行编译。版本（Editions）是一种
+> +在语言中引入非后向兼容的小型变更的方式。
+> +
+> +除此之外，内核中还使用了一些不稳定的特性 [zh_cn_rust-unstable-features]_。这些不稳定
+> +的特性将来可能会发生变化，因此，一个重要的目标是达到仅使用稳定特性的程度。
+> +
+> +具体请参阅 Documentation/rust/index.rst
+> +
+> +.. [zh_cn_c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
+> +.. [zh_cn_gcc] https://gcc.gnu.org
+> +.. [zh_cn_clang] https://clang.llvm.org
+> +.. [zh_cn_gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
+> +.. [zh_cn_gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
+> +.. [zh_cn_gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
+> +.. [zh_cn_n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
+> +.. [zh_cn_rust-language] https://www.rust-lang.org
+> +.. [zh_cn_rustc] https://doc.rust-lang.org/rustc/
+> +.. [zh_cn_rust-editions] https://doc.rust-lang.org/edition-guide/editions/
+> +.. [zh_cn_rust-unstable-features] https://github.com/Rust-for-Linux/linux/issues/2
 
-b095217c104bca David Lechner  2024-05-28  808  
-b095217c104bca David Lechner  2024-05-28  809  static int ad7380_read_raw(struct iio_dev *indio_dev,
-b095217c104bca David Lechner  2024-05-28  810  			   struct iio_chan_spec const *chan,
-b095217c104bca David Lechner  2024-05-28  811  			   int *val, int *val2, long info)
-b095217c104bca David Lechner  2024-05-28  812  {
-b095217c104bca David Lechner  2024-05-28  813  	struct ad7380_state *st = iio_priv(indio_dev);
-15b08012852f40 Julien Stephan 2024-05-30  814  	const struct iio_scan_type *scan_type;
-15b08012852f40 Julien Stephan 2024-05-30  815  
-15b08012852f40 Julien Stephan 2024-05-30  816  	scan_type = iio_get_current_scan_type(indio_dev, chan);
-15b08012852f40 Julien Stephan 2024-05-30  817  
-15b08012852f40 Julien Stephan 2024-05-30  818  	if (IS_ERR(scan_type))
-15b08012852f40 Julien Stephan 2024-05-30  819  		return PTR_ERR(scan_type);
-b095217c104bca David Lechner  2024-05-28  820  
-b095217c104bca David Lechner  2024-05-28  821  	switch (info) {
-b095217c104bca David Lechner  2024-05-28  822  	case IIO_CHAN_INFO_RAW:
-800b10017d81d1 David Lechner  2024-10-01  823  		if_not_guard(iio_claim_direct_try, indio_dev)
-800b10017d81d1 David Lechner  2024-10-01  824  			return -EBUSY;
-800b10017d81d1 David Lechner  2024-10-01  825  
-800b10017d81d1 David Lechner  2024-10-01  826  		return ad7380_read_direct(st, chan->scan_index, scan_type, val);
-b095217c104bca David Lechner  2024-05-28  827  	case IIO_CHAN_INFO_SCALE:
-b095217c104bca David Lechner  2024-05-28  828  		/*
-2920b6ee6d69ed David Lechner  2024-05-28  829  		 * According to the datasheet, the LSB size is:
-2920b6ee6d69ed David Lechner  2024-05-28  830  		 *    * (2 � VREF) / 2^N, for differential chips
-2920b6ee6d69ed David Lechner  2024-05-28  831  		 *    * VREF / 2^N, for pseudo-differential chips
-2920b6ee6d69ed David Lechner  2024-05-28  832  		 * where N is the ADC resolution (i.e realbits)
-b095217c104bca David Lechner  2024-05-28  833  		 */
-b095217c104bca David Lechner  2024-05-28  834  		*val = st->vref_mv;
-15b08012852f40 Julien Stephan 2024-05-30  835  		*val2 = scan_type->realbits - chan->differential;
-b095217c104bca David Lechner  2024-05-28  836  
-b095217c104bca David Lechner  2024-05-28  837  		return IIO_VAL_FRACTIONAL_LOG2;
-2920b6ee6d69ed David Lechner  2024-05-28  838  	case IIO_CHAN_INFO_OFFSET:
-2920b6ee6d69ed David Lechner  2024-05-28  839  		/*
-2920b6ee6d69ed David Lechner  2024-05-28  840  		 * According to IIO ABI, offset is applied before scale,
-2920b6ee6d69ed David Lechner  2024-05-28  841  		 * so offset is: vcm_mv / scale
-2920b6ee6d69ed David Lechner  2024-05-28  842  		 */
-15b08012852f40 Julien Stephan 2024-05-30  843  		*val = st->vcm_mv[chan->channel] * (1 << scan_type->realbits)
-2920b6ee6d69ed David Lechner  2024-05-28  844  			/ st->vref_mv;
-2920b6ee6d69ed David Lechner  2024-05-28  845  
-15b08012852f40 Julien Stephan 2024-05-30  846  		return IIO_VAL_INT;
-15b08012852f40 Julien Stephan 2024-05-30  847  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-15b08012852f40 Julien Stephan 2024-05-30  848  		*val = st->oversampling_ratio;
-15b08012852f40 Julien Stephan 2024-05-30  849  
-2920b6ee6d69ed David Lechner  2024-05-28  850  		return IIO_VAL_INT;
-b095217c104bca David Lechner  2024-05-28 @851  	default:
-b095217c104bca David Lechner  2024-05-28  852  		return -EINVAL;
-b095217c104bca David Lechner  2024-05-28  853  	}
-b095217c104bca David Lechner  2024-05-28  854  }
-b095217c104bca David Lechner  2024-05-28  855  
+Hi Dongliang,
 
-:::::: The code at line 851 was first introduced by commit
-:::::: b095217c104bca87d5e24c147b3e37cae921c441 iio: adc: ad7380: new driver for AD7380 ADCs
-
-:::::: TO: David Lechner <dlechner@baylibre.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Good job! Most of translation are good.
+Just the above doc seems still English version, give them a zh_cn name may cause misunderstand?
+ 
+Thanks
