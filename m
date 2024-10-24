@@ -1,61 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684401FC7F8;
-	Thu, 24 Oct 2024 17:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79F52003AA;
+	Thu, 24 Oct 2024 17:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729791497; cv=none; b=mra7JM2HH/mH2R/hJngEKEhFLlmR0T9JGdAF20Pkgv0lOYqjOLUtCNTx1+/U5aNjLsf+pGfKs7GuNrf8HMpG4MB4ZYlt7lam4EqH8LTjQcFM0Y5Dckc4eDkjsKvj8lxOFqwLyzwtHdl5eWvpNNOLtjlDxQzu/Ufpqv1DyIlyT50=
+	t=1729792759; cv=none; b=ae8Zdh1qaS8nsEBbfvMC+TfwvRcF1Xj0rScLRvxgm6o6V7Eq/RlYH2jvLCmwWiD8lJloKmbFaV/RMP8YhimqvOhFvo8RLDBlskoQFLGuvutwPBhBwfZnHCg0+pCHUYYECVHbTgSwQq1KpqxHrEhzaONgRejMdAWyJ7mi3/ohgR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729791497; c=relaxed/simple;
-	bh=Oan/SkH3IPRDX8e2NbsGfXCx3pLV3nmTT6WW6XybXlk=;
+	s=arc-20240116; t=1729792759; c=relaxed/simple;
+	bh=O9w3Rzjo7NYxEqBTRuRG1jmrpmTfVEMjygY8WcCSMuI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XNjBcYkd8Uu56vegrTVmX4T94TGtEdARIETRn+hY8GOOW0Sj6nOJNnargYa2qszbfsz9TL0oNzmYH4W0dGfqgCB7WOnF/wDX7sNcExklXOfD1qFV4iI6NDj3tUCxSUMZ3dd8b5eaKFJDyAR/kdWLok6P6Lngczhfd/lCn1cI/VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XlnVkQeK; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=AaZDt72tJrEtSPneRS/riN02OPBYqpkCrA4yGn8hs56O0oeBNuR4X5LigZG/HYOTaGmPAbpCkp/oR+8AvS5k1iT3iWTyYsi9V6AxAi1TJzdPAUgq0nEIS7dfQcXxjCBTInWDDaslUk2XBN5210vy/7QL7jldJ5TpMox2t+P6TNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TK7gzKOx; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XlnVkQeK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TK7gzKOx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729791493; x=1761327493;
+  t=1729792757; x=1761328757;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Oan/SkH3IPRDX8e2NbsGfXCx3pLV3nmTT6WW6XybXlk=;
-  b=XlnVkQeKDixvsO3knR3UQVUVAAUjRIJ1KF8DMfDhVZ9ry24pzISTkpx0
-   l4fMQfb7zl9g99MsOphjMXmqt7EP7PyRasCsq0jGtTSdDloi+nDI6OC0j
-   YaQqmKtxbr88zgXBYy6Nm7RARDOClbr5V0a5cn7nBA4dJxKuIX3hmQbaS
-   U4RKzaUgIhne0wqo40RjScP4syzrvta2c0OCWTRMUcwRhP8JqzcvWkwhs
-   SVOsN9RoyqtBpqws5TP+4+Nl+GzUdWHsNoA02YGr51pzTtdvxEUoIh0kg
-   H4B9RPRJFHLSrC3PZ5ngXeg8wktRVelco8dxmTHCF0oISwur0xAU9+kjL
-   A==;
-X-CSE-ConnectionGUID: ri6NWToHRaqko84pRaNH5Q==
-X-CSE-MsgGUID: CS5bO9+PTISTcnxDDIchYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="40028701"
+  bh=O9w3Rzjo7NYxEqBTRuRG1jmrpmTfVEMjygY8WcCSMuI=;
+  b=TK7gzKOxXnw7pYb7d1sIgFikmcoMGK8LyYO1uZoL/OIPA0ocwsICkmOT
+   TEbIHHxjXO/f8OANX+lUuDaV2dPumq/SRHtEaoJyQVvEBLbX/BFfMGV66
+   IMpcRSytWxA1yxlYUKp9VCtxgHqBnoTfhWmiSk2/RXQuRBNREFQgOJY5z
+   c2FFfV2sUV1oIRMislX7bImlcRMlfrQJeyPw+yV9gVuJk3Xkl6QNX1aRA
+   KXszzyTx01GBp1NGxaPk8b0hfHV1ya7igR592X5VWS/7eO9Lx+zVChqiE
+   fEU+5wjMOW4u8rp/uQcoTKvX+SvRyvi1RdBsLi0qvxy+bnSjDLyNvsaaz
+   w==;
+X-CSE-ConnectionGUID: BUo7SB2aRnmMP5jBtzOQEg==
+X-CSE-MsgGUID: y9cp2OPKSm2a8BUIGde5Ww==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="29345426"
 X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
-   d="scan'208";a="40028701"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 10:38:11 -0700
-X-CSE-ConnectionGUID: wvQjMbuvQg6WrDaYVu1O3Q==
-X-CSE-MsgGUID: uOsmB8MaTbKjlBNlGNDpSQ==
+   d="scan'208";a="29345426"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 10:59:12 -0700
+X-CSE-ConnectionGUID: itbWSTKIQKKgGLqETZRhVQ==
+X-CSE-MsgGUID: Zk47DwNAQR2Ozc5nyx4iVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
-   d="scan'208";a="80247299"
+   d="scan'208";a="111471520"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 24 Oct 2024 10:38:09 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 24 Oct 2024 10:59:10 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t41mh-000WnK-0a;
-	Thu, 24 Oct 2024 17:38:07 +0000
-Date: Fri, 25 Oct 2024 01:37:07 +0800
+	id 1t4271-000Wos-3B;
+	Thu, 24 Oct 2024 17:59:07 +0000
+Date: Fri, 25 Oct 2024 01:58:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tony Chung <tony467913@gmail.com>, johan@kernel.org
+To: Richard Guy Briggs <rgb@redhat.com>,
+	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tony Chung <tony467913@gmail.com>
-Subject: Re: [PATCH] usb: serial: mos7840: Fix coding style warnings
-Message-ID: <202410250138.OhF04o8W-lkp@intel.com>
-References: <20241023091414.18098-1-tony467913@gmail.com>
+	Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>
+Subject: Re: [PATCH v1] audit,module: restore audit logging in load failure
+ case
+Message-ID: <202410250152.vcJ5tyVZ-lkp@intel.com>
+References: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,175 +69,285 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241023091414.18098-1-tony467913@gmail.com>
+In-Reply-To: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
 
-Hi Tony,
+Hi Richard,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on johan-usb-serial/usb-next]
-[also build test ERROR on johan-usb-serial/usb-linus usb/usb-testing usb/usb-next usb/usb-linus tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.12-rc4 next-20241024]
+[auto build test ERROR on mcgrof/modules-next]
+[also build test ERROR on linus/master v6.12-rc4 next-20241024]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Chung/usb-serial-mos7840-Fix-coding-style-warnings/20241023-171615
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
-patch link:    https://lore.kernel.org/r/20241023091414.18098-1-tony467913%40gmail.com
-patch subject: [PATCH] usb: serial: mos7840: Fix coding style warnings
-config: i386-buildonly-randconfig-005-20241024 (https://download.01.org/0day-ci/archive/20241025/202410250138.OhF04o8W-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/audit-module-restore-audit-logging-in-load-failure-case/20241024-051515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+patch link:    https://lore.kernel.org/r/999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb%40redhat.com
+patch subject: [PATCH v1] audit,module: restore audit logging in load failure case
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241025/202410250152.vcJ5tyVZ-lkp@intel.com/config)
 compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410250138.OhF04o8W-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410250152.vcJ5tyVZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410250138.OhF04o8W-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410250152.vcJ5tyVZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/usb/serial/mos7840.c:15:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from kernel/module/main.c:14:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
    In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   drivers/usb/serial/mos7840.c:923:25: warning: missing terminating '"' character [-Winvalid-pp-token]
-     923 |                 dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-         |                                       ^
-   drivers/usb/serial/mos7840.c:924:22: warning: missing terminating '"' character [-Winvalid-pp-token]
-     924 |                         with status = %d\n", __func__, status);
-         |                                           ^
->> drivers/usb/serial/mos7840.c:923:3: error: unterminated function-like macro invocation
-     923 |                 dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-         |                 ^
-   include/linux/usb/serial.h:399:9: note: macro 'dev_err_console' defined here
-     399 | #define dev_err_console(usport, fmt, ...)                               \
-         |         ^
->> drivers/usb/serial/mos7840.c:1832:23: error: expected '}'
-    1832 | MODULE_LICENSE("GPL");
-         |                       ^
-   drivers/usb/serial/mos7840.c:921:14: note: to match this '{'
-     921 |         if (status) {
-         |                     ^
->> drivers/usb/serial/mos7840.c:1832:23: error: expected '}'
-    1832 | MODULE_LICENSE("GPL");
-         |                       ^
-   drivers/usb/serial/mos7840.c:851:1: note: to match this '{'
-     851 | {
-         | ^
->> drivers/usb/serial/mos7840.c:879:8: error: use of undeclared label 'exit'
-     879 |                 goto exit;
-         |                      ^
-   3 warnings and 4 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [y]:
-   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/module/main.c:3336:25: error: passing 'const char *' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+    3336 |                 audit_log_kern_module(info->name ? info->name : "(unavailable)");
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/audit.h:522:48: note: passing argument to parameter 'name' here
+     522 | static inline void audit_log_kern_module(char *name)
+         |                                                ^
+   4 warnings and 1 error generated.
 
 
-vim +923 drivers/usb/serial/mos7840.c
+vim +3336 kernel/module/main.c
 
-   840	
-   841	/*****************************************************************************
-   842	 * mos7840_write
-   843	 *	this function is called by the tty driver when data should be written to
-   844	 *	the port.
-   845	 *	If successful, we return the number of bytes written, otherwise we
-   846	 *      return a negative error number.
-   847	 *****************************************************************************/
-   848	
-   849	static int mos7840_write(struct tty_struct *tty, struct usb_serial_port *port,
-   850				 const unsigned char *data, int count)
-   851	{
-   852		struct moschip_port *mos7840_port = usb_get_serial_port_data(port);
-   853		struct usb_serial *serial = port->serial;
-   854		int status;
-   855		int i;
-   856		int bytes_sent = 0;
-   857		int transfer_size;
-   858		unsigned long flags;
-   859		struct urb *urb;
-   860		/* __u16 Data; */
-   861		const unsigned char *current_position = data;
-   862	
-   863		/* try to find a free urb in the list */
-   864		urb = NULL;
-   865	
-   866		spin_lock_irqsave(&mos7840_port->pool_lock, flags);
-   867		for (i = 0; i < NUM_URBS; ++i) {
-   868			if (!mos7840_port->busy[i]) {
-   869				mos7840_port->busy[i] = 1;
-   870				urb = mos7840_port->write_urb_pool[i];
-   871				dev_dbg(&port->dev, "URB:%d\n", i);
-   872				break;
-   873			}
-   874		}
-   875		spin_unlock_irqrestore(&mos7840_port->pool_lock, flags);
-   876	
-   877		if (urb == NULL) {
-   878			dev_dbg(&port->dev, "%s - no more free urbs\n", __func__);
- > 879			goto exit;
-   880		}
-   881	
-   882		if (urb->transfer_buffer == NULL) {
-   883			urb->transfer_buffer = kmalloc(URB_TRANSFER_BUFFER_SIZE,
-   884						       GFP_ATOMIC);
-   885			if (!urb->transfer_buffer) {
-   886				bytes_sent = -ENOMEM;
-   887				goto exit;
-   888			}
-   889		}
-   890		transfer_size = min(count, URB_TRANSFER_BUFFER_SIZE);
-   891	
-   892		memcpy(urb->transfer_buffer, current_position, transfer_size);
-   893	
-   894		/* fill urb with data and submit  */
-   895		if ((serial->num_ports == 2) && (((__u16)port->port_number % 2) != 0)) {
-   896			usb_fill_bulk_urb(urb,
-   897				serial->dev,
-   898				usb_sndbulkpipe(serial->dev,
-   899					(port->bulk_out_endpointAddress) + 2),
-   900				urb->transfer_buffer,
-   901				transfer_size,
-   902				mos7840_bulk_out_data_callback, mos7840_port);
-   903		} else {
-   904			usb_fill_bulk_urb(urb,
-   905				serial->dev,
-   906				usb_sndbulkpipe(serial->dev,
-   907					port->bulk_out_endpointAddress),
-   908				urb->transfer_buffer,
-   909				transfer_size,
-   910				mos7840_bulk_out_data_callback, mos7840_port);
-   911		}
-   912	
-   913		dev_dbg(&port->dev, "bulkout endpoint is %d\n", port->bulk_out_endpointAddress);
-   914	
-   915		if (mos7840_port->has_led)
-   916			mos7840_led_activity(port);
-   917	
-   918		/* send it down the pipe */
-   919		status = usb_submit_urb(urb, GFP_ATOMIC);
-   920	
-   921		if (status) {
-   922			mos7840_port->busy[i] = 0;
- > 923			dev_err_console(port, "%s - usb_submit_urb(write bulk) failed
-   924				with status = %d\n", __func__, status);
-   925			bytes_sent = status;
-   926			goto exit;
-   927		}
-   928		bytes_sent = transfer_size;
-   929		port->icount.tx += transfer_size;
-   930		dev_dbg(&port->dev, "icount.tx is %d:\n", port->icount.tx);
-   931	exit:
-   932		return bytes_sent;
-   933	
+  3124	
+  3125	/*
+  3126	 * Allocate and load the module: note that size of section 0 is always
+  3127	 * zero, and we rely on this for optional sections.
+  3128	 */
+  3129	static int load_module(struct load_info *info, const char __user *uargs,
+  3130			       int flags)
+  3131	{
+  3132		struct module *mod;
+  3133		bool module_allocated = false;
+  3134		long err = 0;
+  3135		char *after_dashes;
+  3136	
+  3137		/*
+  3138		 * Do the signature check (if any) first. All that
+  3139		 * the signature check needs is info->len, it does
+  3140		 * not need any of the section info. That can be
+  3141		 * set up later. This will minimize the chances
+  3142		 * of a corrupt module causing problems before
+  3143		 * we even get to the signature check.
+  3144		 *
+  3145		 * The check will also adjust info->len by stripping
+  3146		 * off the sig length at the end of the module, making
+  3147		 * checks against info->len more correct.
+  3148		 */
+  3149		err = module_sig_check(info, flags);
+  3150		if (err)
+  3151			goto free_copy;
+  3152	
+  3153		/*
+  3154		 * Do basic sanity checks against the ELF header and
+  3155		 * sections. Cache useful sections and set the
+  3156		 * info->mod to the userspace passed struct module.
+  3157		 */
+  3158		err = elf_validity_cache_copy(info, flags);
+  3159		if (err)
+  3160			goto free_copy;
+  3161	
+  3162		err = early_mod_check(info, flags);
+  3163		if (err)
+  3164			goto free_copy;
+  3165	
+  3166		/* Figure out module layout, and allocate all the memory. */
+  3167		mod = layout_and_allocate(info, flags);
+  3168		if (IS_ERR(mod)) {
+  3169			err = PTR_ERR(mod);
+  3170			goto free_copy;
+  3171		}
+  3172	
+  3173		module_allocated = true;
+  3174	
+  3175		audit_log_kern_module(mod->name);
+  3176	
+  3177		/* Reserve our place in the list. */
+  3178		err = add_unformed_module(mod);
+  3179		if (err)
+  3180			goto free_module;
+  3181	
+  3182		/*
+  3183		 * We are tainting your kernel if your module gets into
+  3184		 * the modules linked list somehow.
+  3185		 */
+  3186		module_augment_kernel_taints(mod, info);
+  3187	
+  3188		/* To avoid stressing percpu allocator, do this once we're unique. */
+  3189		err = percpu_modalloc(mod, info);
+  3190		if (err)
+  3191			goto unlink_mod;
+  3192	
+  3193		/* Now module is in final location, initialize linked lists, etc. */
+  3194		err = module_unload_init(mod);
+  3195		if (err)
+  3196			goto unlink_mod;
+  3197	
+  3198		init_param_lock(mod);
+  3199	
+  3200		/*
+  3201		 * Now we've got everything in the final locations, we can
+  3202		 * find optional sections.
+  3203		 */
+  3204		err = find_module_sections(mod, info);
+  3205		if (err)
+  3206			goto free_unload;
+  3207	
+  3208		err = check_export_symbol_versions(mod);
+  3209		if (err)
+  3210			goto free_unload;
+  3211	
+  3212		/* Set up MODINFO_ATTR fields */
+  3213		setup_modinfo(mod, info);
+  3214	
+  3215		/* Fix up syms, so that st_value is a pointer to location. */
+  3216		err = simplify_symbols(mod, info);
+  3217		if (err < 0)
+  3218			goto free_modinfo;
+  3219	
+  3220		err = apply_relocations(mod, info);
+  3221		if (err < 0)
+  3222			goto free_modinfo;
+  3223	
+  3224		err = post_relocation(mod, info);
+  3225		if (err < 0)
+  3226			goto free_modinfo;
+  3227	
+  3228		flush_module_icache(mod);
+  3229	
+  3230		/* Now copy in args */
+  3231		mod->args = strndup_user(uargs, ~0UL >> 1);
+  3232		if (IS_ERR(mod->args)) {
+  3233			err = PTR_ERR(mod->args);
+  3234			goto free_arch_cleanup;
+  3235		}
+  3236	
+  3237		init_build_id(mod, info);
+  3238	
+  3239		/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
+  3240		ftrace_module_init(mod);
+  3241	
+  3242		/* Finally it's fully formed, ready to start executing. */
+  3243		err = complete_formation(mod, info);
+  3244		if (err)
+  3245			goto ddebug_cleanup;
+  3246	
+  3247		err = prepare_coming_module(mod);
+  3248		if (err)
+  3249			goto bug_cleanup;
+  3250	
+  3251		mod->async_probe_requested = async_probe;
+  3252	
+  3253		/* Module is ready to execute: parsing args may do that. */
+  3254		after_dashes = parse_args(mod->name, mod->args, mod->kp, mod->num_kp,
+  3255					  -32768, 32767, mod,
+  3256					  unknown_module_param_cb);
+  3257		if (IS_ERR(after_dashes)) {
+  3258			err = PTR_ERR(after_dashes);
+  3259			goto coming_cleanup;
+  3260		} else if (after_dashes) {
+  3261			pr_warn("%s: parameters '%s' after `--' ignored\n",
+  3262			       mod->name, after_dashes);
+  3263		}
+  3264	
+  3265		/* Link in to sysfs. */
+  3266		err = mod_sysfs_setup(mod, info, mod->kp, mod->num_kp);
+  3267		if (err < 0)
+  3268			goto coming_cleanup;
+  3269	
+  3270		if (is_livepatch_module(mod)) {
+  3271			err = copy_module_elf(mod, info);
+  3272			if (err < 0)
+  3273				goto sysfs_cleanup;
+  3274		}
+  3275	
+  3276		/* Get rid of temporary copy. */
+  3277		free_copy(info, flags);
+  3278	
+  3279		codetag_load_module(mod);
+  3280	
+  3281		/* Done! */
+  3282		trace_module_load(mod);
+  3283	
+  3284		return do_init_module(mod);
+  3285	
+  3286	 sysfs_cleanup:
+  3287		mod_sysfs_teardown(mod);
+  3288	 coming_cleanup:
+  3289		mod->state = MODULE_STATE_GOING;
+  3290		destroy_params(mod->kp, mod->num_kp);
+  3291		blocking_notifier_call_chain(&module_notify_list,
+  3292					     MODULE_STATE_GOING, mod);
+  3293		klp_module_going(mod);
+  3294	 bug_cleanup:
+  3295		mod->state = MODULE_STATE_GOING;
+  3296		/* module_bug_cleanup needs module_mutex protection */
+  3297		mutex_lock(&module_mutex);
+  3298		module_bug_cleanup(mod);
+  3299		mutex_unlock(&module_mutex);
+  3300	
+  3301	 ddebug_cleanup:
+  3302		ftrace_release_mod(mod);
+  3303		synchronize_rcu();
+  3304		kfree(mod->args);
+  3305	 free_arch_cleanup:
+  3306		module_arch_cleanup(mod);
+  3307	 free_modinfo:
+  3308		free_modinfo(mod);
+  3309	 free_unload:
+  3310		module_unload_free(mod);
+  3311	 unlink_mod:
+  3312		mutex_lock(&module_mutex);
+  3313		/* Unlink carefully: kallsyms could be walking list. */
+  3314		list_del_rcu(&mod->list);
+  3315		mod_tree_remove(mod);
+  3316		wake_up_all(&module_wq);
+  3317		/* Wait for RCU-sched synchronizing before releasing mod->list. */
+  3318		synchronize_rcu();
+  3319		mutex_unlock(&module_mutex);
+  3320	 free_module:
+  3321		mod_stat_bump_invalid(info, flags);
+  3322		/* Free lock-classes; relies on the preceding sync_rcu() */
+  3323		for_class_mod_mem_type(type, core_data) {
+  3324			lockdep_free_key_range(mod->mem[type].base,
+  3325					       mod->mem[type].size);
+  3326		}
+  3327	
+  3328		module_deallocate(mod, info);
+  3329	 free_copy:
+  3330		/*
+  3331		 * The info->len is always set. We distinguish between
+  3332		 * failures once the proper module was allocated and
+  3333		 * before that.
+  3334		 */
+  3335		if (!module_allocated) {
+> 3336			audit_log_kern_module(info->name ? info->name : "(unavailable)");
+  3337			mod_stat_bump_becoming(info, flags);
+  3338		}
+  3339		free_copy(info, flags);
+  3340		return err;
+  3341	}
+  3342	
 
 -- 
 0-DAY CI Kernel Test Service
