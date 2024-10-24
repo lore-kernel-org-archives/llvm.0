@@ -1,116 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FBE1C4A33
-	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 10:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76301D0171;
+	Thu, 24 Oct 2024 12:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729766402; cv=none; b=MEuGijlXF5X4Zn5ShjKjPKUP4rapPj+GVTySfYTclF3UuetR4VyqBCHj6Kh1sNnRoYKF0PLqRqvokCze5WPDX18htktjrOVmMsXGzXH7Jf+Px/fBoHZOU1o4cBRmod5PUJBXEJGc8P0vG2IcRrhyFLfWHcDSCpFjNsw3G4IxZE8=
+	t=1729772577; cv=none; b=JDALBwxnaUr66JIo4dyjMaUcBQJM9uIaQuTi1R3RD5yAtSOYwW3tvpI9oBKfL418u8wDvyKBzfjsMQLVBWxC2QA+6mfvVa7sVupFZhnvllMBB9ZEngvykjxMl/NwbDnCC7CAM6HioezKYRvf4dg5YElBswhfbQaq1I8ul+rMRmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729766402; c=relaxed/simple;
-	bh=xpKzc+yti+VywMW+rD7x7G+PO/MU0Lu9i53Q4xsuIl0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r7YOOaxc7vTLY3RF3IT7iVNkvLDSzo0dO7B0FCWFJXQS8Y4V97eHzYNx6hftC0pJ3E/YizgeXOOVE0eVISx915nf46s5f9+q/p8+IVXysDxQNSmbNYxyyxxrPjV5GY3q3xsW25j/mdPR0qaiUoH4BuRbXwA/gBmOQYXB1W9OcxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ijZjmT05; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729772577; c=relaxed/simple;
+	bh=u0qeBrjunPpjPjWjVQqJqOwh1kAmoJK+Dg9zjRHT7L4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BhVt6E9aMTN2xBjxR86XLO41Qv4WqaLa8HdY5FeZ9PR3omnsAOgdnsvz7Q71BmgM96Yti+FJMdVhymhlDADfOOl85lKEfG2+BodBd/6ZrX0+BWvQJyq5QWkLxyTdE2VF/G48KAvut1xypAXvKSuTLKahr0aQyH5i1PG98i6fUZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i6wplX49; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ijZjmT05"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523CCC4CEE7
-	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 10:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729766402;
-	bh=xpKzc+yti+VywMW+rD7x7G+PO/MU0Lu9i53Q4xsuIl0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ijZjmT05WgTszLdqjOiFi7t7wHxWX4oaYB7o4b0YN3JYpYMbHNMCOmR1U8euf5Fgt
-	 IhgDaB1AApsRClVnWPyEXUHnSgPEatHIWpQPQxTbgSsq/09Q+8PWFqRsDadJ4gyawI
-	 cJB0ooX6RToroas1eSNHiI2OCfarROx9Y9iW3dkg5RI7u2uA/eRAPHXw30y+jibGA5
-	 DBMd1Fheu6Hp16DKCzvJaZTOeQG7Gx7q4mj4vU/QRpTg3Ii6yJJPM4aL0ERJJKRdkg
-	 P7h8FQCqKiSq1r77i5bd/bL4C1CEV1z/OijO7CjVmO+GLN1eQL6HLco3tPmdfAf/u3
-	 Z3F3GeS3ZetdQ==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539e63c8678so800057e87.0
-        for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 03:40:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXrxi9eLmypLgsEtCtmq9n0oOUqTAG632Fh1XyZiu3q4IGa8hl1hS+eF/+EkjX3k0MwmCqz@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzanhpr1JdrGGvVcuFnMSWEwiVHAEt625SCBbkdc3h1YGRc1HmB
-	UdnD+qVWE8Pj1IxZcVEvRMwLXopEkbRvF+SVU8XMcooA4VRgG6BNfU+nM6OB1XF+KOa8/OEHYJr
-	rnyOYX+ODQsGZsOlNC8hJXguu//I=
-X-Google-Smtp-Source: AGHT+IF4H6zTrna94vNlhEwFT8vm1ZoovqZTBEfuw+/mvfaWRMzzqJ4nAtwpbrDyFaY+Z2r9nr6H6301ydnonp7guLE=
-X-Received: by 2002:a05:6512:23a9:b0:52e:9b2f:c313 with SMTP id
- 2adb3069b0e04-53b1a313464mr3298161e87.22.1729766400515; Thu, 24 Oct 2024
- 03:40:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i6wplX49"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729772575; x=1761308575;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u0qeBrjunPpjPjWjVQqJqOwh1kAmoJK+Dg9zjRHT7L4=;
+  b=i6wplX49SJBhWy8K3Khzs2KWqOylJ5U3f4zJ+/RgWy1IpUazKtTzJ3ql
+   o1tMvvmFo68SMYOfjdCWGwaFUOviSNu/visVf7aiBbWi/X8xpOUA2XSn5
+   ryXdf0gaGAY4XCLQdbqYY37BiQLYeIEgFE4Kx9wzuXs8QeEVM3bKY77mR
+   zqiGIwY9S8HhOh6teX73bq0NN4GfnNOyL1X/QJumCdWsPtrbHSJP2P7/l
+   Y4m9iHsIAz0cYOpzG4KWEpOPo+7WzoD7fngjnC/Kt66+UOig3X+lQeKwc
+   UHS5APp09nxvAsxArAI8Q3juTARiQa+YmPsZ0vGSN/gs+x8sgCOlk7kb/
+   w==;
+X-CSE-ConnectionGUID: dhbdyJtuSXy4LlGlqS0aSg==
+X-CSE-MsgGUID: 0lESNFcEQYelwcVFN6QP0Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="33303084"
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="33303084"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 05:22:54 -0700
+X-CSE-ConnectionGUID: glurziePSfuiVFUNVLSsOQ==
+X-CSE-MsgGUID: HlGe346nRfminLWyPagaqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="84554608"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 24 Oct 2024 05:22:53 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3wra-000WP4-30;
+	Thu, 24 Oct 2024 12:22:50 +0000
+Date: Thu, 24 Oct 2024 20:22:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Philipp Stanner <pstanner@redhat.com>
+Subject: [rust:staging/rust-pci 9/13] error[E0425]: cannot find function
+ `ioremap` in crate `bindings`
+Message-ID: <202410242055.aHPu0LUJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <3777d71b-9e19-45f4-be4e-17bf4fa7a834@stanley.mountain>
-In-Reply-To: <3777d71b-9e19-45f4-be4e-17bf4fa7a834@stanley.mountain>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 24 Oct 2024 12:39:49 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFRUhkCyN0PjLrtw1uSCuy4m=9g=pwNO9tkxckj-koijg@mail.gmail.com>
-Message-ID: <CAMj1kXFRUhkCyN0PjLrtw1uSCuy4m=9g=pwNO9tkxckj-koijg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: PRM: Clean Up guid type in struct prm_handler_info
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Koba Ko <kobak@nvidia.com>, Len Brown <lenb@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-acpi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel-janitors@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 24 Oct 2024 at 10:07, Dan Carpenter <dan.carpenter@linaro.org> wrote:
->
-> Clang 19 prints a warning when we pass &th->guid to efi_pa_va_lookup():
->
-> drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned argument to
-> 4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an
-> unaligned pointer access [-Werror,-Walign-mismatch]
->   156 |                         (void *)efi_pa_va_lookup(&th->guid, handler_info->handler_address);
->       |                                                  ^
->
-> The problem is that efi_pa_va_lookup() takes a efi_guid_t and &th->guid
-> is a regular guid_t.  The difference between the two types is the
-> alignment.  efi_guid_t is a typedef.
->
->         typedef guid_t efi_guid_t __aligned(__alignof__(u32));
->
-> It's possible that this a bug in Clang 19.  Even though the alignment of
-> &th->guid is not explicitly specified, it will still end up being aligned
-> at 4 or 8 bytes.
->
-> Anyway, as Ard points out, it's cleaner to change guid to efi_guid_t type
-> and that also makes the warning go away.
->
-> Fixes: 088984c8d54c ("ACPI: PRM: Find EFI_MEMORY_RUNTIME block for PRM handler and context")
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Tested-by: Paul E. McKenney <paulmck@kernel.org>
+tree:   https://github.com/Rust-for-Linux/linux staging/rust-pci
+head:   c13795fe4557999937eba6854f92761cfba8446f
+commit: ec5f6bae35fa8db1243ff88be9565d717598beb5 [9/13] rust: add `io::Io` base type
+config: riscv-randconfig-001-20241024 (https://download.01.org/0day-ci/archive/20241024/202410242055.aHPu0LUJ-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241024/202410242055.aHPu0LUJ-lkp@intel.com/reproduce)
 
-In case this wasn't implied already,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410242055.aHPu0LUJ-lkp@intel.com/
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+All errors (new ones prefixed by >>):
 
-> ---
-> Sorry for the unfair Fixes tags since you obviously aren't to blame.  But it's
-> more practical if we avoid breaking the build in backports or etc.  Fixes tags
-> are quite often unfair in this way...
->
->  drivers/acpi/prmt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
-> index d59307a76ca3..747f83f7114d 100644
-> --- a/drivers/acpi/prmt.c
-> +++ b/drivers/acpi/prmt.c
-> @@ -52,7 +52,7 @@ struct prm_context_buffer {
->  static LIST_HEAD(prm_module_list);
->
->  struct prm_handler_info {
-> -       guid_t guid;
-> +       efi_guid_t guid;
->         efi_status_t (__efiapi *handler_addr)(u64, void *);
->         u64 static_data_buffer_addr;
->         u64 acpi_param_buffer_addr;
-> --
-> 2.45.2
->
+>> error[E0425]: cannot find function `ioremap` in crate `bindings`
+   --> rust/doctests_kernel_generated.rs:3322:39
+   |
+   3322  |         let addr = unsafe { bindings::ioremap(paddr as _, SIZE.try_into().unwrap()) };
+   |                                       ^^^^^^^ help: a function with a similar name exists: `iounmap`
+   |
+   ::: rust/bindings/bindings_generated.rs:40183:5
+   |
+   40183 |     pub fn iounmap(addr: *mut core::ffi::c_void);
+   |     -------------------------------------------- similarly named function `iounmap` defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
