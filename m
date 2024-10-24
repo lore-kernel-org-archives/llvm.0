@@ -1,118 +1,128 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1061E5731
-	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 15:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775731EB9F1
+	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 15:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729782326; cv=none; b=cSqW5pyIeeHlVO32zmQmrwaYGBcvzwencBKyyUwvkoJ+7rdwQ+7CMmKQQIRxQ6mTdV7anNPxftL/3Zs/Dz9XOLqJs7OI8lDz+Td6r6CHUFvTQnwI+lzPMwdeKebiSUSQcXz+4liA7t64+0AlZmMVPC+MUsKevECXdZdy5A9r8+Q=
+	t=1729783992; cv=none; b=fRFL2nAnoLpknzuKOqRz9N9xg8NN2Z14M5DAzzfmyV1V2PknONUzbXZlCSnHxITo7lxkw/DXbAaOGgl3BNi4u+mw/amxhZdcLmO2LFJh9DHaLD5otTlQCpvbGPAX06xCXWtDUfvu0bj0ZViM5Oav5NAIJNc2e1WtAANSsJYzMRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729782326; c=relaxed/simple;
-	bh=aqeeharMk17ixLZGkNgDLOJVAmDR4MwZ3UKW8XU+Tjw=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=JSHc/5vlxU8UG3w4Rkqi6dPCsl6vYTCkFt8Viw/PphCPYCXlu+IcIYA3AN72A2I6Q+Fe7ZcYA7A2nPMPfndwcXMmKvpCARA7sKGK+9+bZziS666Mpej4rhJt/xOsXf2cRAoRxuhz3hjkxQ1qQPwj56XNZpYBaT5iUzxI0QGVuxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D13b1IrZ; arc=none smtp.client-ip=209.85.210.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1729783992; c=relaxed/simple;
+	bh=AYpxmCYf4yOv//CjOmlSMozXI31Ms0jTW1lstb6nXqE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jHzJ8eik1uwPtVvP2vYLGa0DoJy2uytI02ZHDPzEWlhvtsVTvFqvud2JI5rFHZS39z9JDTiq19iHF3fPOVYYb9sqR15KTuiXmfNLNe6JbQ/SEWKiHkc5d4/FiU99b81rZ47SfiGiwqtRy6ZdykYr73n1MUVHeppnad6FDVuMIHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mnxYmXPM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D13b1IrZ"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7180dc76075so576666a34.3
-        for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 08:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729782323; x=1730387123; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jyarlQ6i7toXdr4KNns6qkdDvM4HB4Mkf28BveorRBE=;
-        b=D13b1IrZy0d7zliy4WyWckuHG0EKhCBOpDBC6iSG9/CtCYj4EwtEY3n3ZYq0xbIbtB
-         7yhjcto2XMXPbKS98gRnuSeqC476pK1CdKY5y+Q3M7B1r76JgL6SsPrpRwVkxiaXL1VK
-         OokBcT2+BFeYQjl72CHV+/JbQ4WY2hc55HNVWwXM1zOXKx31HWStjxG0jssKjASanQvL
-         UGLBK8zQOnnvy+BIc4J6xNlNXUY1oitdtfBl2lg/TdQJIz6osFOLIYCWpwnuU5wPcUy1
-         0EtnE71ub8ks/SGB5OhDNsCo4aq4KAOVmsaPUWtzEYtPQBqhcp2K2xmgt7J3hTR/zA4M
-         AxAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729782323; x=1730387123;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jyarlQ6i7toXdr4KNns6qkdDvM4HB4Mkf28BveorRBE=;
-        b=DoDrkISeH6cRuDXs2YbPiCSHcr2fO0hWam42uhwQJ+yRMJgq5Es1++qLuShJLgGa7M
-         4pfl3AtCriwbqDyfWCRGY2l1ZSs51Tk8cpk5JzCq6JGvI3iBHF1b3zrJ1yiMa9Vl5jV9
-         07+jmb04yi/sD+bsuGf2sk+Ro+Ffxgtyi6Df0afnGD2A7Kvre8nGOjjHDQzluBvLEdUb
-         1cMmdC4+aKXiPbDYgDgS3018XrJPqlFuwYhbTLLLJYb9IEylIAm6HCMN3oBv+JXpnvx5
-         4NzG2j2nPR+T1RDXl6GO1pISaofjxo3CyFu3E80rkOaGvmUSzBiPAi8hFWGEOkx02acU
-         dGMg==
-X-Gm-Message-State: AOJu0Yz8A8r7bqMJqZKNe+d7H4lLo+ICpuTJAiydyoZ8ZvzGz7ytlMEN
-	yDr8fKZzr53ACuwJlupqZcVuQBkPiprSStP5lylTCETHWu8od8USzwqFQTDcOyRuqGOBDG3knc/
-	LyEQYo14MlVyJZrPz2vQc+/Lshg6AYbdCMN2w+56j/TwdhSZ4xxI=
-X-Google-Smtp-Source: AGHT+IEnz1GyTZlftdGpHX3jgxo2wK87KPVx/FAo2DYee8GCdaaTRp24nxaWxYg0SRPKd77LClU0CJyCAJ3uZe9macc=
-X-Received: by 2002:a05:6808:180b:b0:3e6:769:b042 with SMTP id
- 5614622812f47-3e62cbe6ef9mr2185584b6e.29.1729782323029; Thu, 24 Oct 2024
- 08:05:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mnxYmXPM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59EACC4CEE9
+	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 15:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729783992;
+	bh=AYpxmCYf4yOv//CjOmlSMozXI31Ms0jTW1lstb6nXqE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mnxYmXPMxovdMM5V8rY1VOmlQ5f1j4D+O5UIjdBV92UryftCoY5CLm8MgnCWAqYp+
+	 ++Q+LZHq3sFHc0f2TebowjP/m2V28d/AIqPcsRwTygGIQ4LgiCGW18Q0rAAOO5VMZw
+	 q4qd/iM6ZMSkPscTsyFBC3IuiQmQnFeEjGbsxUiJhX5SyqREzoGeqSzMn/3hX8SbCJ
+	 5z0Nu1beCSWO1de1YjgpW2EcJaE5QreblxQFekcVhrNOP7Lbazs9RePwk2TMAEKuAo
+	 Xta3oYjxxsjQYqYbsQ1ExHMcMtnl6GSKSqZ+vb/ZhI19g/PU7IcRZ/FkkyRZkGxRZp
+	 weYp5pCnQRPOQ==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5ebc9bda8c8so508597eaf.0
+        for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 08:33:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWa5rNFg8r3E0lpi+rjkQMokAtmwzSe3e8dcLQM4aDMeKKKf0zKFBoZZQu0PXDFXoc/1IZp@lists.linux.dev
+X-Gm-Message-State: AOJu0YzuAkUkDCWUQ0T/T6/vmZEs4GM/EOTEsvEL18L5edzjxvraAVEQ
+	JII6rMsdS5zqu376C+PsCYlWg0FGvXaHlulRcNB/iqMUngLSeQ5COtS/MRstnqm4m1Z+pysZOr3
+	KDUSj8Eq13InMbq6ow1pwupug3uI=
+X-Google-Smtp-Source: AGHT+IH313pouYkwWOQ0XbO6cOPorbYtAPn3/0vID9VvN/xAHi1DE1RQQZjoKFUKDNXDkjG64OB1oPtQ9hYDSVIEkwQ=
+X-Received: by 2002:a05:6871:64e:b0:25e:940:e934 with SMTP id
+ 586e51a60fabf-28ccb9e51a2mr5302878fac.47.1729783991514; Thu, 24 Oct 2024
+ 08:33:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 24 Oct 2024 20:35:11 +0530
-Message-ID: <CA+G9fYs2G_4jyv-V7f85oE53rw5rX0Tnf2V8RQ=O9CuPcbfb2A@mail.gmail.com>
-Subject: powerpc: clang-nightly: fatal error: error in backend: Trying to
- obtain a reserved register "r2".
-To: clang-built-linux <llvm@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
-	lkft-triage@lists.linaro.org, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Anders Roxell <anders.roxell@linaro.org>
+References: <3777d71b-9e19-45f4-be4e-17bf4fa7a834@stanley.mountain> <CAMj1kXFRUhkCyN0PjLrtw1uSCuy4m=9g=pwNO9tkxckj-koijg@mail.gmail.com>
+In-Reply-To: <CAMj1kXFRUhkCyN0PjLrtw1uSCuy4m=9g=pwNO9tkxckj-koijg@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 24 Oct 2024 17:33:00 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0jhp8u8xz=GYF+ePzLjCtZ4KrUzNhA0HTdSPoFcE4q8Ug@mail.gmail.com>
+Message-ID: <CAJZ5v0jhp8u8xz=GYF+ePzLjCtZ4KrUzNhA0HTdSPoFcE4q8Ug@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: PRM: Clean Up guid type in struct prm_handler_info
+To: Ard Biesheuvel <ardb@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Koba Ko <kobak@nvidia.com>, Len Brown <lenb@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel-janitors@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The powerpc clang-nightly version 20.0.0 build warnings / errors noticed on
-the Today's Linux next-20241024 tag.
+On Thu, Oct 24, 2024 at 12:40=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> w=
+rote:
+>
+> On Thu, 24 Oct 2024 at 10:07, Dan Carpenter <dan.carpenter@linaro.org> wr=
+ote:
+> >
+> > Clang 19 prints a warning when we pass &th->guid to efi_pa_va_lookup():
+> >
+> > drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned argument to
+> > 4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an
+> > unaligned pointer access [-Werror,-Walign-mismatch]
+> >   156 |                         (void *)efi_pa_va_lookup(&th->guid, han=
+dler_info->handler_address);
+> >       |                                                  ^
+> >
+> > The problem is that efi_pa_va_lookup() takes a efi_guid_t and &th->guid
+> > is a regular guid_t.  The difference between the two types is the
+> > alignment.  efi_guid_t is a typedef.
+> >
+> >         typedef guid_t efi_guid_t __aligned(__alignof__(u32));
+> >
+> > It's possible that this a bug in Clang 19.  Even though the alignment o=
+f
+> > &th->guid is not explicitly specified, it will still end up being align=
+ed
+> > at 4 or 8 bytes.
+> >
+> > Anyway, as Ard points out, it's cleaner to change guid to efi_guid_t ty=
+pe
+> > and that also makes the warning go away.
+> >
+> > Fixes: 088984c8d54c ("ACPI: PRM: Find EFI_MEMORY_RUNTIME block for PRM =
+handler and context")
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > Tested-by: Paul E. McKenney <paulmck@kernel.org>
+>
+> In case this wasn't implied already,
+>
+> Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-powerpc:
-  build:
-    * clang-nightly-maple_defconfig
-    * clang-nightly-tinyconfig
-    * clang-nightly-tqm8xx_defconfig
-    * clang-nightly-mpc83xx_defconfig
-    * clang-nightly-defconfig
-    * clang-nightly-cell_defconfig
-    * clang-nightly-ppc64e_defconfig
-    * clang-nightly-allnoconfig
+Applied, thanks!
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build errors:
-----------
-fatal error: error in backend: Trying to obtain a reserved register "r2".
-clang: error: clang frontend command failed with exit code 70 (use -v
-to see invocation)
-Debian clang version 20.0.0
-(++20241023112211+699ce16b6284-1~exp1~20241023112229.1038)
-Target: powerpc-unknown-linux-gnu
-
-metadata:
-----------
-kernel: 6.12.0-rc4
-git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git_sha: fd21fa4a912ebbf8a6a341c31d8456f61e7d4170
-git_describe: next-20241024
-Test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241024
-config:  https://storage.tuxsuite.com/public/linaro/lkft/builds/2ns7sv9TltSifV46KaGs3BxlB85/config
-download_url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2ns7sv9TltSifV46KaGs3BxlB85/
-arch: powerpc
-toolchain: Clang-nightly (version 20.0.0)
-
-build log link:
-------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241024/testrun/25530243/suite/build/test/clang-nightly-defconfig/log
-  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2ns7sv9TltSifV46KaGs3BxlB85/
-
-steps to reproduce:
-------
-# tuxmake --runtime podman --target-arch powerpc --toolchain
-clang-nightly --kconfig defconfig LLVM=1 LLVM_IAS=0
-LD=powerpc64le-linux-gnu-ld
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> > ---
+> > Sorry for the unfair Fixes tags since you obviously aren't to blame.  B=
+ut it's
+> > more practical if we avoid breaking the build in backports or etc.  Fix=
+es tags
+> > are quite often unfair in this way...
+> >
+> >  drivers/acpi/prmt.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
+> > index d59307a76ca3..747f83f7114d 100644
+> > --- a/drivers/acpi/prmt.c
+> > +++ b/drivers/acpi/prmt.c
+> > @@ -52,7 +52,7 @@ struct prm_context_buffer {
+> >  static LIST_HEAD(prm_module_list);
+> >
+> >  struct prm_handler_info {
+> > -       guid_t guid;
+> > +       efi_guid_t guid;
+> >         efi_status_t (__efiapi *handler_addr)(u64, void *);
+> >         u64 static_data_buffer_addr;
+> >         u64 acpi_param_buffer_addr;
+> > --
