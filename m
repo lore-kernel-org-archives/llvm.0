@@ -1,65 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10211F76A9;
-	Thu, 24 Oct 2024 16:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018041591F0;
+	Thu, 24 Oct 2024 16:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729786451; cv=none; b=NWcp3/QQPRSH7GLj/qVuuE50OGRCg5X8rO6i1sArxgS6lHnqIGU/Kpu2sg/XJX/Leb7AfDPWJq+L/HdiWqTxNVpiojm5S/NPLs2nXofVvEY4/Opt5BFVX4Tr0h6pN38UXMZKqfZ2jUV5rBVORvzpp19FsDA0H2HdljqVH4RH5gM=
+	t=1729786508; cv=none; b=fs6rmPDhvEg68q8SMN/nE4Plc4hio6o+rkcK5YTGC2zVf5BwH8rVLF/4kXT2VI3GjvW7RJAxwI9B49ioWxwQoUfHuyIsYgu9YeFXrDDh6lgpWpvxGIjdh3dweUOPisgHKzZ4PYZw93Y8tJWXqY0AuQ6DiybqW/hC8DQ758uNv2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729786451; c=relaxed/simple;
-	bh=a4MM/5nou0YCi2Vim9bfmw1HMxf9hc6i55LNYdcuQNk=;
+	s=arc-20240116; t=1729786508; c=relaxed/simple;
+	bh=xb6g9iL+65YUyCDJg9AIZQdi/mQA0++/xQQ6T8nbkWk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nilUZ0jqmpvmnzH2izoch1H9K5sp+hgVbzJ5/apXteeXy1Y1ouYZnURoxQkfZ8FmA7aVM07Jg5QsDe0c0qd63hIHk1xFI2JXiF4WzhXa30kHYzok1KJcPjTHIZSW9RBjnyVDtYGj8vm9wfTHZnMQIyTiWMRNZOqWobRduyuOsX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LEtsT0hW; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=lxvifSUUXQy5qdon/ZOQn1IjLWZV6R3lUx6deyNSAzRYmt7PPUCmhMKSb1HT3pktART0qlqskctpIdlE0EvzQd8Vts+TGcGnO22fANsUcfPR64Zrn3gkNL/E2JUWVIciApMt3dj4VA9jZ9+FimHfq/U40XLWbluo6pUm6oqmKaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hA1Amfqf; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LEtsT0hW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hA1Amfqf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729786449; x=1761322449;
+  t=1729786506; x=1761322506;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=a4MM/5nou0YCi2Vim9bfmw1HMxf9hc6i55LNYdcuQNk=;
-  b=LEtsT0hWg27NABIDFccwxmUyBm9+yn74NNUi1pEN5GlNasVEVvXflxMR
-   T1IppAFqLuO1EkTBXcVnJtKCuVUBmS3UdFk876sFjJmEz7vHm+T2xkcGT
-   AXDhZKP1Rn/5GHox9dYuLhqD1Fq38T9f0M6A6HBv66Qsgo0LrA2aweHBA
-   WuQqm2D/Os/K//uVnuqyWIrgbT13AOSEoFHX3HrzSbpaKiyIVp8+7YO9x
-   0drgsDqoEkVLzZs+JZvn29SvAsJAQVk6KH+UiJc7Yzvva0RZyHIM9cwTh
-   ohn0xZy7c0vqC97d3TpbxXo8wfslTYL1yP4YQWMByZ/QAQjJpE2rbB0I8
-   g==;
-X-CSE-ConnectionGUID: nlaKo+faQYaIa1R5jDO2Uw==
-X-CSE-MsgGUID: V1+NsgJGTUW5M5LbyePeSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40541449"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40541449"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 09:14:07 -0700
-X-CSE-ConnectionGUID: 2pPKaNyaTvOCOQi4+eO1Vw==
-X-CSE-MsgGUID: zy7vjvMbR8yh2RiiDxOnLA==
+  bh=xb6g9iL+65YUyCDJg9AIZQdi/mQA0++/xQQ6T8nbkWk=;
+  b=hA1Amfqf86c3c05UWvcUp2MHW8BBAp+NGBj+e2xgXboqUlGOvWPUZc+1
+   kmebnUqfXoxYwJKffcecZpl4/mQ9rbgRca+85OLilg7am3Gr44bJbCKPh
+   Qjaesu3ZS8s5Y37XySe1ntIKq+ZMIZz954GQjzU5nAUH/k9VnGOGrCAIe
+   kBmXAvLfBlIYmXghxMJ66H95obUqdnQmMNm9NPTdaGBczWS33k0tYX279
+   VUZdQQ0fO3oftcIyf8cgmR8jiYTXEiY6vf8pfrrRNsjwil1RrTQv42MOl
+   K15E00udjwTmb4XyNTubJSm0Ifk3Z15pDjqGr5b06koIbNsZ4WanD3rPV
+   w==;
+X-CSE-ConnectionGUID: pD/X0HT1TpO+4uX+aashTg==
+X-CSE-MsgGUID: 7B1kc4DHRmC55Baga1Zqsg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="28873122"
+X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
+   d="scan'208";a="28873122"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 09:15:05 -0700
+X-CSE-ConnectionGUID: 9V+utqOwTGSLu1k7xCUTOQ==
+X-CSE-MsgGUID: 5qZ+yDQvQZyi7vbq4/90Dw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,229,1725346800"; 
-   d="scan'208";a="80941085"
+   d="scan'208";a="80747678"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 24 Oct 2024 09:14:04 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 24 Oct 2024 09:15:04 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t40TK-000Wfk-1H;
-	Thu, 24 Oct 2024 16:14:02 +0000
-Date: Fri, 25 Oct 2024 00:13:58 +0800
+	id 1t40UI-000Wfu-1Q;
+	Thu, 24 Oct 2024 16:15:02 +0000
+Date: Fri, 25 Oct 2024 00:14:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: add bpf_get_hw_counter kfunc
-Message-ID: <202410242317.RqcJ3H1k-lkp@intel.com>
-References: <20241023210437.2266063-1-vadfed@meta.com>
+To: Nemesa Garg <nemesa.garg@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 4/5] drm/i915/display: Add registers and compute the
+ strength
+Message-ID: <202410250018.H5RGjCHy-lkp@intel.com>
+References: <20241023161206.1113519-5-nemesa.garg@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,128 +63,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241023210437.2266063-1-vadfed@meta.com>
+In-Reply-To: <20241023161206.1113519-5-nemesa.garg@intel.com>
 
-Hi Vadim,
+Hi Nemesa,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/master]
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-exynos/exynos-drm-next]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-xe/drm-xe-next drm-misc/drm-misc-next linus/master v6.12-rc4 next-20241024]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/selftests-bpf-add-selftest-to-check-rdtsc-jit/20241024-050747
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20241023210437.2266063-1-vadfed%40meta.com
-patch subject: [PATCH bpf-next 1/2] bpf: add bpf_get_hw_counter kfunc
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20241024/202410242317.RqcJ3H1k-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241024/202410242317.RqcJ3H1k-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nemesa-Garg/drm-Introduce-sharpness-strength-property/20241024-001247
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+patch link:    https://lore.kernel.org/r/20241023161206.1113519-5-nemesa.garg%40intel.com
+patch subject: [PATCH 4/5] drm/i915/display: Add registers and compute the strength
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20241025/202410250018.H5RGjCHy-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410250018.H5RGjCHy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410242317.RqcJ3H1k-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410250018.H5RGjCHy-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/bpf/helpers.c:4:
-   In file included from include/linux/bpf.h:21:
+   In file included from drivers/gpu/drm/i915/display/intel_casf.c:7:
+   In file included from drivers/gpu/drm/i915/display/intel_de.h:9:
+   In file included from drivers/gpu/drm/i915/i915_drv.h:40:
+   In file included from drivers/gpu/drm/i915/display/intel_display_core.h:16:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
    In file included from include/linux/kallsyms.h:13:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/bpf/helpers.c:26:
->> arch/riscv/include/asm/vdso/gettimeofday.h:72:21: warning: declaration of 'struct vdso_data' will not be visible outside of this function [-Wvisibility]
-      72 |                                                  const struct vdso_data *vd)
-         |                                                               ^
->> arch/riscv/include/asm/vdso/gettimeofday.h:84:9: error: use of undeclared identifier '_vdso_data'
-      84 |         return _vdso_data;
-         |                ^
->> arch/riscv/include/asm/vdso/gettimeofday.h:91:9: error: use of undeclared identifier '_timens_data'
-      91 |         return _timens_data;
-         |                ^
-   kernel/bpf/helpers.c:115:36: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     115 |         .arg2_type      = ARG_PTR_TO_MAP_VALUE | MEM_UNINIT,
-         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:128:36: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     128 |         .arg2_type      = ARG_PTR_TO_MAP_VALUE | MEM_UNINIT,
-         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:539:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     539 |         .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:542:41: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     542 |         .arg4_type      = ARG_PTR_TO_FIXED_SIZE_MEM | MEM_UNINIT | MEM_ALIGNED,
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:567:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     567 |         .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:570:41: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     570 |         .arg4_type      = ARG_PTR_TO_FIXED_SIZE_MEM | MEM_UNINIT | MEM_ALIGNED,
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:583:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     583 |         .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:653:35: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     653 |         .arg4_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:725:39: warning: bitwise operation between different enumeration types ('enum bpf_return_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     725 |         .ret_type       = RET_PTR_TO_MEM_OR_BTF_ID | PTR_MAYBE_NULL | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/helpers.c:738:39: warning: bitwise operation between different enumeration types ('enum bpf_return_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-     738 |         .ret_type       = RET_PTR_TO_MEM_OR_BTF_ID | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:1080:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1080 |         .arg4_type      = ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-   kernel/bpf/helpers.c:1641:44: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1641 |         .arg2_type    = ARG_PTR_TO_BTF_ID_OR_NULL | OBJ_RELEASE,
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   kernel/bpf/helpers.c:1746:33: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1746 |         .arg4_type      = ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL | MEM_UNINIT,
-         |                           ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~
-   kernel/bpf/helpers.c:1789:33: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1789 |         .arg3_type      = ARG_PTR_TO_DYNPTR | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:1837:33: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1837 |         .arg1_type      = ARG_PTR_TO_DYNPTR | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:1839:30: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1839 |         .arg3_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   kernel/bpf/helpers.c:1879:33: warning: bitwise operation between different enumeration types ('enum bpf_arg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
-    1879 |         .arg1_type      = ARG_PTR_TO_DYNPTR | MEM_RDONLY,
-         |                           ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~
-   19 warnings and 2 errors generated.
+>> drivers/gpu/drm/i915/display/intel_casf.c:87:19: warning: result of comparison of constant 2073600 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+      87 |         if (total_pixels <= MAX_PIXELS_FOR_3_TAP_FILTER)
+         |             ~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_casf.c:89:24: warning: result of comparison of constant 8294400 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+      89 |         else if (total_pixels <= MAX_PIXELS_FOR_5_TAP_FILTER)
+         |                  ~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +/_vdso_data +84 arch/riscv/include/asm/vdso/gettimeofday.h
+vim +87 drivers/gpu/drm/i915/display/intel_casf.c
 
-aa5af0aa90bad3 Evan Green      2023-04-07  70  
-4c5a116ada953b Thomas Gleixner 2020-08-04  71  static __always_inline u64 __arch_get_hw_counter(s32 clock_mode,
-4c5a116ada953b Thomas Gleixner 2020-08-04 @72  						 const struct vdso_data *vd)
-ad5d1122b82fbd Vincent Chen    2020-06-09  73  {
-ad5d1122b82fbd Vincent Chen    2020-06-09  74  	/*
-ad5d1122b82fbd Vincent Chen    2020-06-09  75  	 * The purpose of csr_read(CSR_TIME) is to trap the system into
-ad5d1122b82fbd Vincent Chen    2020-06-09  76  	 * M-mode to obtain the value of CSR_TIME. Hence, unlike other
-ad5d1122b82fbd Vincent Chen    2020-06-09  77  	 * architecture, no fence instructions surround the csr_read()
-ad5d1122b82fbd Vincent Chen    2020-06-09  78  	 */
-ad5d1122b82fbd Vincent Chen    2020-06-09  79  	return csr_read(CSR_TIME);
-ad5d1122b82fbd Vincent Chen    2020-06-09  80  }
-ad5d1122b82fbd Vincent Chen    2020-06-09  81  
-ad5d1122b82fbd Vincent Chen    2020-06-09  82  static __always_inline const struct vdso_data *__arch_get_vdso_data(void)
-ad5d1122b82fbd Vincent Chen    2020-06-09  83  {
-ad5d1122b82fbd Vincent Chen    2020-06-09 @84  	return _vdso_data;
-ad5d1122b82fbd Vincent Chen    2020-06-09  85  }
-ad5d1122b82fbd Vincent Chen    2020-06-09  86  
-dffe11e280a42c Tong Tiangen    2021-09-01  87  #ifdef CONFIG_TIME_NS
-dffe11e280a42c Tong Tiangen    2021-09-01  88  static __always_inline
-dffe11e280a42c Tong Tiangen    2021-09-01  89  const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
-dffe11e280a42c Tong Tiangen    2021-09-01  90  {
-dffe11e280a42c Tong Tiangen    2021-09-01 @91  	return _timens_data;
-dffe11e280a42c Tong Tiangen    2021-09-01  92  }
-dffe11e280a42c Tong Tiangen    2021-09-01  93  #endif
-ad5d1122b82fbd Vincent Chen    2020-06-09  94  #endif /* !__ASSEMBLY__ */
-ad5d1122b82fbd Vincent Chen    2020-06-09  95  
+    81	
+    82	static void intel_casf_size_compute(struct intel_crtc_state *crtc_state)
+    83	{
+    84		const struct drm_display_mode *mode = &crtc_state->hw.adjusted_mode;
+    85		u16 total_pixels = mode->hdisplay * mode->vdisplay;
+    86	
+  > 87		if (total_pixels <= MAX_PIXELS_FOR_3_TAP_FILTER)
+    88			crtc_state->hw.casf_params.win_size = 0;
+    89		else if (total_pixels <= MAX_PIXELS_FOR_5_TAP_FILTER)
+    90			crtc_state->hw.casf_params.win_size = 1;
+    91		else
+    92			crtc_state->hw.casf_params.win_size = 2;
+    93	}
+    94	
 
 -- 
 0-DAY CI Kernel Test Service
