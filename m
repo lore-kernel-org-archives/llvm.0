@@ -1,47 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226571990C4;
-	Wed, 23 Oct 2024 23:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F82804;
+	Thu, 24 Oct 2024 00:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729724793; cv=none; b=q9NnNANoiWE3j6CmanmTntRJDxQZGAsQbA9lTksm7HBEcWHPSAKDwux2qj2EXtaPqh+eeoiRb3X342fBuHtBROYJuaqMFqpPRIsBcCqmz+IAychHuLcJXCFoQNWvDNMnkiW3SRZrz2vfoa87cYahXoh0Kgb/kmCjf83HAeng9Hc=
+	t=1729728568; cv=none; b=X5Z6YIwyP4nwnSx52Lh+cMZAs7je5nOyeUY/ywr7oWcyBAw+TWEcliCfto3DSxxdCzTdW26pohQW4u1mWjPRBwmVP55tfDWW8cN+s1gMow2OKNFDmWA6z0qTGyk5jkIdMzUvqCy6h638emt8W+QBgRxM3UXRq5TSnUShADn76mg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729724793; c=relaxed/simple;
-	bh=2l/ds5Bmv+D3lyjFYDV6EA8hVsC1rWEx9qxy5boJYJ8=;
+	s=arc-20240116; t=1729728568; c=relaxed/simple;
+	bh=QTMmNUpTt3FtGqjkLvo7MvH2smBkY99/jJIA+AaJrhI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pM+AMHkZgQkjDqEPYOidGEMfQor7t2T1N3rOxfrvYYVIh6vIZOIi4omZ6OCUtIGkiisSZDM1tvcPiW3eLJVd0O0BdivQ+ZaNCN2Rypxw27CzPm8bENXa93sLCR+3WZqzwb8EKMufgNlFHpwze8YKQxO2t00b3iIByf+9Dzzm7o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bUO/GL2e; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=bXBQF3OtxFmNzWpyVEcKqn01gp6KPrECxwL9byojD2iBOeMAFx+7aC39DFskDtfdimU3+/qRIHSpm+K7/dmFaDNl4K4Ao16o1r+qRLtPAAX9Zt2rpGYCd9ZhqvtkKD8wcX/FDecyPWWPbcm3pdZyO05bv1sIy5tx7nROELhrqY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GusoloeI; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bUO/GL2e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B63C4CEC6;
-	Wed, 23 Oct 2024 23:06:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729724792;
-	bh=2l/ds5Bmv+D3lyjFYDV6EA8hVsC1rWEx9qxy5boJYJ8=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=bUO/GL2eNM8X2YFhLJl524BJI/JdNhpsPkro5mYw/RyScggmmi6dftssLOQNlTCWP
-	 o/KUWLVGN7P6SBfot0frYdqkyH84+e0yjST08EZrTT3KSvxqJW+g0btkWpwkgL532Y
-	 i93c46AksfkLNssyLf9AtqmsHzNbWOUZR/pRWTmNwhO58OCH3gIg+cZSsbfbZHL4/1
-	 B+lhbUr3pLFzgOYRJVQJZsGicE7X/Fib5XxY0dU1u1DokRZDG4zC0SLMOd1vaI6Y+m
-	 rSiGd/5vFTRV2DnnGz5sxGnVETyD+dwtq3Sh8u40Eh7k9oL7M6OiZqH9MyJgw1jDIy
-	 lArIVHnY9DX/A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 46261CE10F5; Wed, 23 Oct 2024 16:06:32 -0700 (PDT)
-Date: Wed, 23 Oct 2024 16:06:32 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>, kobak@nvidia.com,
-	mochs@nvidia.com, rui.zhang@intel.com, rafael.j.wysocki@intel.com,
-	sfr@canb.auug.org.au, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, linux-toolchains@vger.kernel.org
-Subject: Re: [BUG] Argument-alignment build error with clang
-Message-ID: <2fc36fd9-6c7a-492a-b5f8-65cfd52aadf2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <38508cf1-7d44-4656-8060-973e820b2957@paulmck-laptop>
- <CAMj1kXFA2_LNpZcrGh0GJyE0_9BaRC_ypnP3eigVG=Vf4B+gqg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GusoloeI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729728567; x=1761264567;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QTMmNUpTt3FtGqjkLvo7MvH2smBkY99/jJIA+AaJrhI=;
+  b=GusoloeIoZ77K3mPkc5Ncg6An2uQJ9q9pTRQzy05HnGdPMRzoD5S8X3z
+   l9xkgKeWJja05y0UQBp/J/ib1ZDVCX3nkYFW7lfsdMvVMxdHK6qkWK6ZU
+   2z5rJRodef6HKBKsQq0Nx1HhCMkeRcOh+vDK0F7m5g5ZypH548oC/Aewg
+   4bS7kN7BHkdet1XQVVajHT7B7TnDIMna2MdF6B0CwFZomHrXctmwzPKQL
+   hz5muYQPGN5/KHyvgZ0V7mhMTYNc50Mjy8vTFmYGHREBX4K2wRzLA4OM4
+   dbFOfZry4QPYb8cYAGKoDb7H1Qo2plp4e7KJt6F6iAcWKqwWOfGtEtab+
+   A==;
+X-CSE-ConnectionGUID: mfGydlKJRX6bBBoyFl/Y1Q==
+X-CSE-MsgGUID: pqz2d0gfTDW6X9osHxS3HA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29273704"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29273704"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2024 17:09:25 -0700
+X-CSE-ConnectionGUID: Fd4hAXleTgWT1wk0rJb8AA==
+X-CSE-MsgGUID: l2R/yLqKT6uqGYLisbiwxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,227,1725346800"; 
+   d="scan'208";a="84980629"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 23 Oct 2024 17:09:23 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t3lPl-000VjO-0S;
+	Thu, 24 Oct 2024 00:09:21 +0000
+Date: Thu, 24 Oct 2024 08:08:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Petr Machata <petrm@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH net-next 2/8] ndo_fdb_add: Shift responsibility for
+ notifying to drivers
+Message-ID: <202410240831.djzzgAk3-lkp@intel.com>
+References: <00caa74f6dea128400472b5dec77f61b16d0f9d4.1729607879.git.petrm@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,78 +63,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXFA2_LNpZcrGh0GJyE0_9BaRC_ypnP3eigVG=Vf4B+gqg@mail.gmail.com>
+In-Reply-To: <00caa74f6dea128400472b5dec77f61b16d0f9d4.1729607879.git.petrm@nvidia.com>
 
-On Thu, Oct 24, 2024 at 12:37:50AM +0200, Ard Biesheuvel wrote:
-> (cc Dan, Nathan)
-> 
-> On Thu, 24 Oct 2024 at 00:26, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > Hello!
-> >
-> > Running rcutorture on next-20241023 got me lots of these:
-> >
-> > drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned argument to 4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an unaligned pointer access [-Werror,-Walign-mismatch]
-> >           156 |                         (void *)efi_pa_va_lookup(&th->guid, handler_info->handler_address);
-> >
-> > This is built with CC=clang.  I don't see this diagnostic with GCC.
-> > But we are supposed to be able to build with clang, so...
-> >
-> > The first argument is the address of one of these:
-> >
-> > typedef struct {
-> >         __u8 b[UUID_SIZE];
-> > } guid_t;
-> >
-> > Where UUID_SIZE is as follows:
-> >
-> > #define UUID_SIZE 16
-> >
-> > But this guid_t is a member of one of these:
-> >
-> > struct prm_handler_info {
-> >         guid_t guid;
-> >         efi_status_t (__efiapi *handler_addr)(u64, void *);
-> >         u64 static_data_buffer_addr;
-> >         u64 acpi_param_buffer_addr;
-> >
-> >         struct list_head handler_list;
-> > };
-> >
-> > One can argue that this structure must be 16-bit aligned on a
-> > 64-bit build.  So maybe this is a bug in clang's diagnostics, hence
-> > linux-toolchains on CC.
-> >
-> > Thoughts?
-> >
-> 
-> Also discussed here:
-> https://lore.kernel.org/all/CAMj1kXFXimHaGdeDBH3fOzuBiVcATA+JNpGqDs+m5h=8M_g+yA@mail.gmail.com/T/#u
-> 
-> I agree that this looks like a spurious warning. Even if the alignment
-> of the type is only 1 byte, the fact that it appears at the start of a
-> 8-byte aligned non-packed struct guarantees sufficient alignment for
-> this particular use of the type.
+Hi Petr,
 
-Thank you!  I tried your s/guid_t/efi_guid_t/ change, and it works
-fine here (see below in case I messed it up and got lucky).  So:
+kernel test robot noticed the following build errors:
 
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
+[auto build test ERROR on net-next/main]
 
-							Thanx, Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Petr-Machata/net-rtnetlink-Publish-rtnl_fdb_notify/20241022-225301
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/00caa74f6dea128400472b5dec77f61b16d0f9d4.1729607879.git.petrm%40nvidia.com
+patch subject: [PATCH net-next 2/8] ndo_fdb_add: Shift responsibility for notifying to drivers
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241024/202410240831.djzzgAk3-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241024/202410240831.djzzgAk3-lkp@intel.com/reproduce)
 
-------------------------------------------------------------------------
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410240831.djzzgAk3-lkp@intel.com/
 
-diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
-index d59307a76ca31..747f83f7114d2 100644
---- a/drivers/acpi/prmt.c
-+++ b/drivers/acpi/prmt.c
-@@ -52,7 +52,7 @@ struct prm_context_buffer {
- static LIST_HEAD(prm_module_list);
- 
- struct prm_handler_info {
--	guid_t guid;
-+	efi_guid_t guid;
- 	efi_status_t (__efiapi *handler_addr)(u64, void *);
- 	u64 static_data_buffer_addr;
- 	u64 acpi_param_buffer_addr;
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c:427:19: error: use of undeclared identifier 'dev'
+     427 |                 rtnl_fdb_notify(dev, addr, vid, RTM_NEWNEIGH, ndm->ndm_state);
+         |                                 ^
+   drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c:2440:46: warning: shift count >= width of type [-Wshift-count-overflow]
+    2440 |         err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 1 error generated.
+
+
+vim +/dev +427 drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c
+
+   393	
+   394	static int qlcnic_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
+   395				struct net_device *netdev,
+   396				const unsigned char *addr, u16 vid, u16 flags,
+   397				struct netlink_ext_ack *extack)
+   398	{
+   399		struct qlcnic_adapter *adapter = netdev_priv(netdev);
+   400		int err = 0;
+   401	
+   402		if (!adapter->fdb_mac_learn)
+   403			return ndo_dflt_fdb_add(ndm, tb, netdev, addr, vid, flags);
+   404	
+   405		if (!(adapter->flags & QLCNIC_ESWITCH_ENABLED) &&
+   406		    !qlcnic_sriov_check(adapter)) {
+   407			pr_info("%s: FDB e-switch is not enabled\n", __func__);
+   408			return -EOPNOTSUPP;
+   409		}
+   410	
+   411		if (ether_addr_equal(addr, adapter->mac_addr))
+   412			goto out;
+   413	
+   414		if (is_unicast_ether_addr(addr)) {
+   415			if (netdev_uc_count(netdev) < adapter->ahw->max_uc_count)
+   416				err = dev_uc_add_excl(netdev, addr);
+   417			else
+   418				err = -ENOMEM;
+   419		} else if (is_multicast_ether_addr(addr)) {
+   420			err = dev_mc_add_excl(netdev, addr);
+   421		} else {
+   422			err = -EINVAL;
+   423		}
+   424	
+   425	out:
+   426		if (!err)
+ > 427			rtnl_fdb_notify(dev, addr, vid, RTM_NEWNEIGH, ndm->ndm_state);
+   428	
+   429		return err;
+   430	}
+   431	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
