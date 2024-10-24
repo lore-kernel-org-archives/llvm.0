@@ -1,225 +1,205 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F6513665B
-	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 02:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0790A1494DF
+	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 02:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729737659; cv=none; b=ada/1+DhKgMFv/2JPWsR4yd2yFXUAvE3+HXnhwuhpdMl8KXB+WcPMZzMLMcFOTAoYNMchSkOfV8OBJho7VnA4ZczepVc4uySBRpWKtjMUpQ6oqbso9nD8qbOl4tJiG+7EHTZAwGAwMmyvT2cCUKyIsPJ/jGSYUXncmgPci8JA+I=
+	t=1729738302; cv=none; b=dmg1+ZqtUUy7TA6gCpRYVXRbeGQLKo58FpYVeJuVHKsbKGtmZojvAgJgizW8xnRt6KBC7QhJDfYvCymZ0nwJmdB9ti9iZ9+ntG+LW2FdbnEI2NjVRatTPceYnvJ1SsG4DVIQfth5qm2bp1UW+ecBDHpe0yd827JpeDueaJluECU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729737659; c=relaxed/simple;
-	bh=bys3ISKeLd08WWgCorxKWPccYot/hU5DGRV8BYhyRU4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FfpqcUmrz2CXnlQ4HfGY8idOZbdDVmRUNXf4rjbzGBiesBRjLA/nXEpPpaHOvoiUylISRewfqXj1VbH5W9xowj39uujwyuR0unn4j2/veoSdwW1xtw8BuPftu53NBKt41WOIvpjGLO2cW6TmvPAOdiz6qvmiw6tnbZhImfiak5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cHWN1ePu; arc=none smtp.client-ip=209.85.128.170
+	s=arc-20240116; t=1729738302; c=relaxed/simple;
+	bh=F6r4ekj9WEGBPC54DL3ej6ljaopkDZ+i9DqP6T3RCUM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HdQ5KSod1TVwI/hDgkwJh+5y7aKRcKQ4H8nhaqM+AqH1GAHLevQhaOLD5Bul3YG5mlrH00b+jDI4192/UQBt/SLrAAbqJVYfly/965+2x5fokEieRYFZ2KhoE/Nv197/ahoiiQgFjeT3H6XqEpAIhsoCXrKDe+UOafXy89Rll/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kURzP8ru; arc=none smtp.client-ip=209.85.160.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cHWN1ePu"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6e34339d41bso4421857b3.0
-        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 19:40:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kURzP8ru"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-288c7567f5dso271358fac.1
+        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 19:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729737655; x=1730342455; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sIxP96exfOoa5CX6fTPMX7bSuvLMk6J+pOAMwb8dHKk=;
-        b=cHWN1ePuGv5mDaBkaFDNxqRPoktkS/QFj94hkt3s/p/7o538nxl1E/Ix7PAIcs6RVP
-         DEr2zsaxWnhAIKB3GEx3DLpR4bFrJ0cQsmj3UAkeM3Kw5yvzNtm4kWKWntoBNAwK3VQ4
-         OsJbD0GPXrEjLM/V187NMCYrvMF/xwBHT0LuFZ5uPCTOabvdbQwMsnjybYQn0Yd8zxT1
-         pRaHfe/xA5y1N5p9WNRRASTn8fv7JXVBzH5Ad/Rq6lKXpCW/Wzm9d8/NtIzWHgvmtAiB
-         BFOms7VB3LoTUAf7jGqwy3o5RD85HiD2h9IdeFbSFmhEipZuQVhKkn5tJXEo9QO0c8qW
-         UD7A==
+        d=gmail.com; s=20230601; t=1729738299; x=1730343099; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F6r4ekj9WEGBPC54DL3ej6ljaopkDZ+i9DqP6T3RCUM=;
+        b=kURzP8runDuYPVJvT/PIvukk1CfZYx81QSfDKBHtn1wbUD9OFSlPy7BfrQbET0ZFHp
+         /ze1mFjcA2XKF+M1Oy6e8X8iRA9unxmrBYPmlFse12FxL1oxDSZ8Iycqk6xh+iEZx41x
+         qR1O+e4zK2020nza9DL4vINB0nF0tOgkB98t/mucyDbUa5r70vIuqXUn959nk/3kPEgs
+         Jimf4Y8m6a/zoia8du43iOsk0RKeMJ8XeFdsSRF9YKdxH2yjPOn0TqSnMry3JzPQC2RB
+         QWKqH6cQjPoumFJ6dI9VlzgXVUP4CN3EgMO376yOGzZf8MIz1a7WB/QbKyw3ztVw2Ajv
+         pHkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729737655; x=1730342455;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIxP96exfOoa5CX6fTPMX7bSuvLMk6J+pOAMwb8dHKk=;
-        b=fns6GPY01pEfrHVwOqJKGCjn5b759aM8ZCuoptvp5dvV+4dZrYNBm0YVxodEdJj9TI
-         KuORojgXNlhl/cWgnhZFgLLNw9j4pOzYqDoelj2if/qkhtmv7YtvbNVN0vvwepbwwWYx
-         0BCOfjL3lMYywUUNTcODEp+J/170yDltmw251+JiwhjTL+Lomoz9yYY0fhzDdPyMPZyt
-         vrqoCgZZtVTW3apq5nHVLDACCp0059PW8d+VWfhaNDrBWZjxo21vu4nhgxX44IyGq4al
-         gTxbsrzLlxagzJx3gX+nvYnZb3sMVATc6Fi2UBEQKAVnCy6l+R8A5IKDR95IHPsiKARV
-         0MkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqdq2KTjUvtvoj7h+I+vNlE2ceJQS3Yzf8IFt6oxnA11bX/O0Rpq2wLPpMY8xE2dcoT9qQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YyAgFsfF3RJAkJxl8ZxTRiZSEdj6qYWJT2paRp6NhNjPF295WxT
-	7BMtdunVXTn/PC9Olkthvz/lQ3z+y4qL/GjtIhmD04j8NkT+71oP
-X-Google-Smtp-Source: AGHT+IGH8NHWvZDdQphM1F4EUF4yjz11pGp4Slih3bjoBRhE+aogWpjkHaoDgzzI9J0pimZIRIZn4Q==
-X-Received: by 2002:a05:690c:dc3:b0:6e2:aceb:fb34 with SMTP id 00721157ae682-6e85814ad59mr5773367b3.1.1729737655457;
-        Wed, 23 Oct 2024 19:40:55 -0700 (PDT)
-Received: from [192.168.2.226] ([107.175.133.150])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e5f5ceecbbsm18146457b3.110.2024.10.23.19.40.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 19:40:54 -0700 (PDT)
-Message-ID: <e0c34a1b-6801-4ae3-b04f-56dbce5c76d8@gmail.com>
-Date: Thu, 24 Oct 2024 10:40:40 +0800
+        d=1e100.net; s=20230601; t=1729738299; x=1730343099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F6r4ekj9WEGBPC54DL3ej6ljaopkDZ+i9DqP6T3RCUM=;
+        b=BUmqeluMmWJKDaTBIoOHjpCDkxw/ylApx0InzN11Gfxa/45r01tRpD2z5pnSkvJhxz
+         71UuzROM4yL2iCNoW5mpOItS/fJTDw71j5nAClDRdpMp8sJE+K/3WoZhY/uBWdKKpa1p
+         biSkmu21w7z9GO80GtfGuhB/3mxrZlITbr8A856Nmq8wBdnwKJG4OEITZcCQ7kbgGA3l
+         4ge599bLIEMVQEB3Y1cPi3kiantZ9ftulKkxAuzo7Ujd3fWpGA/pYjPnSsndgrVi15GG
+         j+3pJ11zeP54ZnLPKhbjKJu5yJL+CrzFGyaWXmaFfVo309iDRyBG0cUiFtgHO3XPRSsM
+         Qouw==
+X-Forwarded-Encrypted: i=1; AJvYcCXgBLIe/3iM4Pj4iuNdTEBtDUBzBJBOblu4JQyQILx4VFTA1/uJMV6xIsCd9a7jgTmmkQ0u@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzguj5qswBIcEY9mMdOOO4hppaVwK+n9CYpToaLqm9o16a3IYhp
+	tcs33Nb7z+PpcOLEXhieSDLksjy+q0Thxos7YvYCskX+qc/4V1TXGoip0Vj3Z4UBxY6MfboDkN6
+	XiB/ilffdz1WpAFcJKw793Ks8ZkA=
+X-Google-Smtp-Source: AGHT+IG7M/k/D5ljnu9uNo3Z5NPF/D+iW4t4TGMui4Xyfw8PSUJ3REPCzWK7g1ATztJDES/iLOCL0JTV8FGdl3ffFDM=
+X-Received: by 2002:a05:6870:911f:b0:288:57fa:9624 with SMTP id
+ 586e51a60fabf-28ced283d86mr373787fac.18.1729738298942; Wed, 23 Oct 2024
+ 19:51:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] docs/zh_CN: update the translation of
- process/programming-language.rst
-To: Dongliang Mu <dzm91@hust.edu.cn>, si.yanteng@linux.dev,
- Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
- Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>,
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20241023062750.849951-1-dzm91@hust.edu.cn>
- <46e54088-ad96-4387-8a39-2e4686c842bd@gmail.com>
- <345e8f10-fe1a-4736-9468-7c92ac55d62e@hust.edu.cn>
-Content-Language: en-US
-From: Alex Shi <seakeel@gmail.com>
-In-Reply-To: <345e8f10-fe1a-4736-9468-7c92ac55d62e@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20241023062750.849951-1-dzm91@hust.edu.cn> <46e54088-ad96-4387-8a39-2e4686c842bd@gmail.com>
+ <345e8f10-fe1a-4736-9468-7c92ac55d62e@hust.edu.cn> <e0c34a1b-6801-4ae3-b04f-56dbce5c76d8@gmail.com>
+In-Reply-To: <e0c34a1b-6801-4ae3-b04f-56dbce5c76d8@gmail.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
+Date: Thu, 24 Oct 2024 10:51:11 +0800
+Message-ID: <CAD-N9QV-EBbSkrZ5TSUt7j3MhsAHMozY59gFOEnSQ1HB9cUsZg@mail.gmail.com>
+Subject: Re: [PATCH v3] docs/zh_CN: update the translation of process/programming-language.rst
+To: Alex Shi <seakeel@gmail.com>
+Cc: Dongliang Mu <dzm91@hust.edu.cn>, si.yanteng@linux.dev, Alex Shi <alexs@kernel.org>, 
+	Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-
-
-On 10/24/24 10:30, Dongliang Mu wrote:
-> 
-> On 2024/10/24 10:21, Alex Shi wrote:
->>
->> On 10/23/24 14:27, Dongliang Mu wrote:
->>> Update to commit 0b02076f9953 ("docs: programming-language: add Rust
->>> programming language section")
->>>
->>> scripts/checktransupdate.py reports:
->>>
->>> Documentation/translations/zh_CN/process/programming-language.rst
->>> commit 0b02076f9953 ("docs: programming-language: add Rust programming
->>> language section")
->>> commit 38484a1d0c50 ("docs: programming-language: remove mention of the
->>> Intel compiler")
->>> 2 commits needs resolving in total
->>>
->>> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
->>> ---
->>> v2->v3: fix warnings in the make htmldocs
->>> v1->v2: revise the script name
->>>   .../zh_CN/process/programming-language.rst    | 78 +++++++------------
->>>   1 file changed, 30 insertions(+), 48 deletions(-)
->>>
->>> diff --git a/Documentation/translations/zh_CN/process/programming-language.rst b/Documentation/translations/zh_CN/process/programming-language.rst
->>> index fabdc338dbfb..95aa4829d78f 100644
->>> --- a/Documentation/translations/zh_CN/process/programming-language.rst
->>> +++ b/Documentation/translations/zh_CN/process/programming-language.rst
->>> @@ -3,25 +3,22 @@
->>>   :Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
->>>   :Translator: Alex Shi <alex.shi@linux.alibaba.com>
->>>   -.. _cn_programming_language:
->>> -
->>>   程序设计语言
->>>   ============
->>>   -内核是用C语言 :ref:`c-language <cn_c-language>` 编写的。更准确地说，内核通常是用 :ref:`gcc <cn_gcc>`
->>> -在 ``-std=gnu11`` :ref:`gcc-c-dialect-options <cn_gcc-c-dialect-options>` 下编译的：ISO C11的 GNU 方言
->>> -
->>> -这种方言包含对语言 :ref:`gnu-extensions <cn_gnu-extensions>` 的许多扩展，当然，它们许多都在内核中使用。
->>> +内核是用 C 编程语言编写的 [zh_cn_c-language]_。更准确地说，内核通常使用 ``gcc`` [zh_cn_gcc]_ 编译，
->>> +并且使用 ``-std=gnu11`` [zh_cn_gcc-c-dialect-options]_：这是 ISO C11 的 GNU 方言。
->>> +``clang`` [zh_cn_clang]_ 也得到了支持，详见文档：
->>> +:ref:`使用 Clang/LLVM 构建 Linux <kbuild_llvm>`。
->>>   -对于一些体系结构，有一些使用 :ref:`clang <cn_clang>` 和 :ref:`icc <cn_icc>` 编译内核
->>> -的支持，尽管在编写此文档时还没有完成，仍需要第三方补丁。
->>> +这种方言包含对 C 语言的许多扩展 [zh_cn_gnu-extensions]_，当然，它们许多都在内核中使用。
->>>     属性
->>>   ----
->>>   -在整个内核中使用的一个常见扩展是属性（attributes） :ref:`gcc-attribute-syntax <cn_gcc-attribute-syntax>`
->>> +在整个内核中使用的一个常见扩展是属性（attributes） [zh_cn_gcc-attribute-syntax]_。
->>>   属性允许将实现定义的语义引入语言实体（如变量、函数或类型），而无需对语言进行
->>> -重大的语法更改（例如添加新关键字） :ref:`n2049 <cn_n2049>`
->>> +重大的语法更改（例如添加新关键字） [zh_cn_n2049]_。
->>>     在某些情况下，属性是可选的（即不支持这些属性的编译器仍然应该生成正确的代码，
->>>   即使其速度较慢或执行的编译时检查/诊断次数不够）
->>> @@ -30,42 +27,27 @@
->>>   ``__attribute__((__pure__))`` ），以检测可以使用哪些关键字和/或缩短代码, 具体
->>>   请参阅 ``include/linux/compiler_attributes.h``
->>>   -.. _cn_c-language:
->>> -
->>> -c-language
->>> -   http://www.open-std.org/jtc1/sc22/wg14/www/standards
->>> -
->>> -.. _cn_gcc:
->>> -
->>> -gcc
->>> -   https://gcc.gnu.org
->>> -
->>> -.. _cn_clang:
->>> -
->>> -clang
->>> -   https://clang.llvm.org
->>> -
->>> -.. _cn_icc:
->>> -
->>> -icc
->>> -   https://software.intel.com/en-us/c-compilers
->>> -
->>> -.. _cn_gcc-c-dialect-options:
->>> -
->>> -c-dialect-options
->>> -   https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
->>> -
->>> -.. _cn_gnu-extensions:
->>> -
->>> -gnu-extensions
->>> -   https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
->>> -
->>> -.. _cn_gcc-attribute-syntax:
->>> -
->>> -gcc-attribute-syntax
->>> -   https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
->>> -
->>> -.. _cn_n2049:
->>> +Rust
->>> +----
->>>   -n2049
->>> -   http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
->>> +内核对 Rust 编程语言 [zh_cn_rust-language]_ 的支持是实验性的，并且可以通过配置选项
->>> +``CONFIG_RUST`` 来启用。Rust 代码使用 ``rustc`` [zh_cn_rustc]_ 编译器在
->>> +``--edition=2021`` [zh_cn_rust-editions]_ 选项下进行编译。版本（Editions）是一种
->>> +在语言中引入非后向兼容的小型变更的方式。
->>> +
->>> +除此之外，内核中还使用了一些不稳定的特性 [zh_cn_rust-unstable-features]_。这些不稳定
->>> +的特性将来可能会发生变化，因此，一个重要的目标是达到仅使用稳定特性的程度。
->>> +
->>> +具体请参阅 Documentation/rust/index.rst
->>> +
->>> +.. [zh_cn_c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
->>> +.. [zh_cn_gcc] https://gcc.gnu.org
->>> +.. [zh_cn_clang] https://clang.llvm.org
->>> +.. [zh_cn_gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
->>> +.. [zh_cn_gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
->>> +.. [zh_cn_gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
->>> +.. [zh_cn_n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
->>> +.. [zh_cn_rust-language] https://www.rust-lang.org
->>> +.. [zh_cn_rustc] https://doc.rust-lang.org/rustc/
->>> +.. [zh_cn_rust-editions] https://doc.rust-lang.org/edition-guide/editions/
->>> +.. [zh_cn_rust-unstable-features] https://github.com/Rust-for-Linux/linux/issues/2
->> Hi Dongliang,
->>
->> Good job! Most of translation are good.
->> Just the above doc seems still English version, give them a zh_cn name may cause misunderstand?
-> 
-> Oh, I see. However, you cannot use gcc or rustc since it already exists in the English documents. We need another name to make sphinx happy. Therefore, why do not we directly use the final version of name? :)
-> 
-Uh, is it possible to use English version 'gcc' links in this doc? Otherwise,it make sense too. 
-
-Thanks
-
-> Correct me if I make any misunderstanding.
-> 
-> Dongliang Mu
-> 
->>   Thanks
-> 
+T24gVGh1LCBPY3QgMjQsIDIwMjQgYXQgMTA6NDHigK9BTSBBbGV4IFNoaSA8c2Vha2VlbEBnbWFp
+bC5jb20+IHdyb3RlOg0KPg0KPg0KPg0KPiBPbiAxMC8yNC8yNCAxMDozMCwgRG9uZ2xpYW5nIE11
+IHdyb3RlOg0KPiA+DQo+ID4gT24gMjAyNC8xMC8yNCAxMDoyMSwgQWxleCBTaGkgd3JvdGU6DQo+
+ID4+DQo+ID4+IE9uIDEwLzIzLzI0IDE0OjI3LCBEb25nbGlhbmcgTXUgd3JvdGU6DQo+ID4+PiBV
+cGRhdGUgdG8gY29tbWl0IDBiMDIwNzZmOTk1MyAoImRvY3M6IHByb2dyYW1taW5nLWxhbmd1YWdl
+OiBhZGQgUnVzdA0KPiA+Pj4gcHJvZ3JhbW1pbmcgbGFuZ3VhZ2Ugc2VjdGlvbiIpDQo+ID4+Pg0K
+PiA+Pj4gc2NyaXB0cy9jaGVja3RyYW5zdXBkYXRlLnB5IHJlcG9ydHM6DQo+ID4+Pg0KPiA+Pj4g
+RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vcHJvY2Vzcy9wcm9ncmFtbWluZy1sYW5n
+dWFnZS5yc3QNCj4gPj4+IGNvbW1pdCAwYjAyMDc2Zjk5NTMgKCJkb2NzOiBwcm9ncmFtbWluZy1s
+YW5ndWFnZTogYWRkIFJ1c3QgcHJvZ3JhbW1pbmcNCj4gPj4+IGxhbmd1YWdlIHNlY3Rpb24iKQ0K
+PiA+Pj4gY29tbWl0IDM4NDg0YTFkMGM1MCAoImRvY3M6IHByb2dyYW1taW5nLWxhbmd1YWdlOiBy
+ZW1vdmUgbWVudGlvbiBvZiB0aGUNCj4gPj4+IEludGVsIGNvbXBpbGVyIikNCj4gPj4+IDIgY29t
+bWl0cyBuZWVkcyByZXNvbHZpbmcgaW4gdG90YWwNCj4gPj4+DQo+ID4+PiBTaWduZWQtb2ZmLWJ5
+OiBEb25nbGlhbmcgTXUgPGR6bTkxQGh1c3QuZWR1LmNuPg0KPiA+Pj4gLS0tDQo+ID4+PiB2Mi0+
+djM6IGZpeCB3YXJuaW5ncyBpbiB0aGUgbWFrZSBodG1sZG9jcw0KPiA+Pj4gdjEtPnYyOiByZXZp
+c2UgdGhlIHNjcmlwdCBuYW1lDQo+ID4+PiAgIC4uLi96aF9DTi9wcm9jZXNzL3Byb2dyYW1taW5n
+LWxhbmd1YWdlLnJzdCAgICB8IDc4ICsrKysrKystLS0tLS0tLS0tLS0NCj4gPj4+ICAgMSBmaWxl
+IGNoYW5nZWQsIDMwIGluc2VydGlvbnMoKyksIDQ4IGRlbGV0aW9ucygtKQ0KPiA+Pj4NCj4gPj4+
+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9wcm9jZXNzL3By
+b2dyYW1taW5nLWxhbmd1YWdlLnJzdCBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NO
+L3Byb2Nlc3MvcHJvZ3JhbW1pbmctbGFuZ3VhZ2UucnN0DQo+ID4+PiBpbmRleCBmYWJkYzMzOGRi
+ZmIuLjk1YWE0ODI5ZDc4ZiAxMDA2NDQNCj4gPj4+IC0tLSBhL0RvY3VtZW50YXRpb24vdHJhbnNs
+YXRpb25zL3poX0NOL3Byb2Nlc3MvcHJvZ3JhbW1pbmctbGFuZ3VhZ2UucnN0DQo+ID4+PiArKysg
+Yi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9wcm9jZXNzL3Byb2dyYW1taW5nLWxh
+bmd1YWdlLnJzdA0KPiA+Pj4gQEAgLTMsMjUgKzMsMjIgQEANCj4gPj4+ICAgOk9yaWdpbmFsOiA6
+cmVmOmBEb2N1bWVudGF0aW9uL3Byb2Nlc3MvcHJvZ3JhbW1pbmctbGFuZ3VhZ2UucnN0IDxwcm9n
+cmFtbWluZ19sYW5ndWFnZT5gDQo+ID4+PiAgIDpUcmFuc2xhdG9yOiBBbGV4IFNoaSA8YWxleC5z
+aGlAbGludXguYWxpYmFiYS5jb20+DQo+ID4+PiAgIC0uLiBfY25fcHJvZ3JhbW1pbmdfbGFuZ3Vh
+Z2U6DQo+ID4+PiAtDQo+ID4+PiAgIOeoi+W6j+iuvuiuoeivreiogA0KPiA+Pj4gICA9PT09PT09
+PT09PT0NCj4gPj4+ICAgLeWGheaguOaYr+eUqEPor63oqIAgOnJlZjpgYy1sYW5ndWFnZSA8Y25f
+Yy1sYW5ndWFnZT5gIOe8luWGmeeahOOAguabtOWHhuehruWcsOivtO+8jOWGheaguOmAmuW4uOaY
+r+eUqCA6cmVmOmBnY2MgPGNuX2djYz5gDQo+ID4+PiAt5ZyoIGBgLXN0ZD1nbnUxMWBgIDpyZWY6
+YGdjYy1jLWRpYWxlY3Qtb3B0aW9ucyA8Y25fZ2NjLWMtZGlhbGVjdC1vcHRpb25zPmAg5LiL57yW
+6K+R55qE77yaSVNPIEMxMeeahCBHTlUg5pa56KiADQo+ID4+PiAtDQo+ID4+PiAt6L+Z56eN5pa5
+6KiA5YyF5ZCr5a+56K+t6KiAIDpyZWY6YGdudS1leHRlbnNpb25zIDxjbl9nbnUtZXh0ZW5zaW9u
+cz5gIOeahOiuuOWkmuaJqeWxle+8jOW9k+eEtu+8jOWug+S7rOiuuOWkmumDveWcqOWGheaguOS4
+reS9v+eUqOOAgg0KPiA+Pj4gK+WGheaguOaYr+eUqCBDIOe8lueoi+ivreiogOe8luWGmeeahCBb
+emhfY25fYy1sYW5ndWFnZV1f44CC5pu05YeG56Gu5Zyw6K+077yM5YaF5qC46YCa5bi45L2/55So
+IGBgZ2NjYGAgW3poX2NuX2djY11fIOe8luivke+8jA0KPiA+Pj4gK+W5tuS4lOS9v+eUqCBgYC1z
+dGQ9Z251MTFgYCBbemhfY25fZ2NjLWMtZGlhbGVjdC1vcHRpb25zXV/vvJrov5nmmK8gSVNPIEMx
+MSDnmoQgR05VIOaWueiogOOAgg0KPiA+Pj4gK2BgY2xhbmdgYCBbemhfY25fY2xhbmddXyDkuZ/l
+vpfliLDkuobmlK/mjIHvvIzor6bop4HmlofmoaPvvJoNCj4gPj4+ICs6cmVmOmDkvb/nlKggQ2xh
+bmcvTExWTSDmnoTlu7ogTGludXggPGtidWlsZF9sbHZtPmDjgIINCj4gPj4+ICAgLeWvueS6juS4
+gOS6m+S9k+ezu+e7k+aehO+8jOacieS4gOS6m+S9v+eUqCA6cmVmOmBjbGFuZyA8Y25fY2xhbmc+
+YCDlkowgOnJlZjpgaWNjIDxjbl9pY2M+YCDnvJbor5HlhoXmoLgNCj4gPj4+IC3nmoTmlK/mjIHv
+vIzlsL3nrqHlnKjnvJblhpnmraTmlofmoaPml7bov5jmsqHmnInlrozmiJDvvIzku43pnIDopoHn
+rKzkuInmlrnooaXkuIHjgIINCj4gPj4+ICvov5nnp43mlrnoqIDljIXlkKvlr7kgQyDor63oqIDn
+moTorrjlpJrmianlsZUgW3poX2NuX2dudS1leHRlbnNpb25zXV/vvIzlvZPnhLbvvIzlroPku6zo
+rrjlpJrpg73lnKjlhoXmoLjkuK3kvb/nlKjjgIINCj4gPj4+ICAgICDlsZ7mgKcNCj4gPj4+ICAg
+LS0tLQ0KPiA+Pj4gICAt5Zyo5pW05Liq5YaF5qC45Lit5L2/55So55qE5LiA5Liq5bi46KeB5omp
+5bGV5piv5bGe5oCn77yIYXR0cmlidXRlc++8iSA6cmVmOmBnY2MtYXR0cmlidXRlLXN5bnRheCA8
+Y25fZ2NjLWF0dHJpYnV0ZS1zeW50YXg+YA0KPiA+Pj4gK+WcqOaVtOS4quWGheaguOS4reS9v+eU
+qOeahOS4gOS4quW4uOingeaJqeWxleaYr+WxnuaAp++8iGF0dHJpYnV0ZXPvvIkgW3poX2NuX2dj
+Yy1hdHRyaWJ1dGUtc3ludGF4XV/jgIINCj4gPj4+ICAg5bGe5oCn5YWB6K645bCG5a6e546w5a6a
+5LmJ55qE6K+t5LmJ5byV5YWl6K+t6KiA5a6e5L2T77yI5aaC5Y+Y6YeP44CB5Ye95pWw5oiW57G7
+5Z6L77yJ77yM6ICM5peg6ZyA5a+56K+t6KiA6L+b6KGMDQo+ID4+PiAt6YeN5aSn55qE6K+t5rOV
+5pu05pS577yI5L6L5aaC5re75Yqg5paw5YWz6ZSu5a2X77yJIDpyZWY6YG4yMDQ5IDxjbl9uMjA0
+OT5gDQo+ID4+PiAr6YeN5aSn55qE6K+t5rOV5pu05pS577yI5L6L5aaC5re75Yqg5paw5YWz6ZSu
+5a2X77yJIFt6aF9jbl9uMjA0OV1f44CCDQo+ID4+PiAgICAg5Zyo5p+Q5Lqb5oOF5Ya15LiL77yM
+5bGe5oCn5piv5Y+v6YCJ55qE77yI5Y2z5LiN5pSv5oyB6L+Z5Lqb5bGe5oCn55qE57yW6K+R5Zmo
+5LuN54S25bqU6K+l55Sf5oiQ5q2j56Gu55qE5Luj56CB77yMDQo+ID4+PiAgIOWNs+S9v+WFtumA
+n+W6pui+g+aFouaIluaJp+ihjOeahOe8luivkeaXtuajgOafpS/or4rmlq3mrKHmlbDkuI3lpJ/v
+vIkNCj4gPj4+IEBAIC0zMCw0MiArMjcsMjcgQEANCj4gPj4+ICAgYGBfX2F0dHJpYnV0ZV9fKChf
+X3B1cmVfXykpYGAg77yJ77yM5Lul5qOA5rWL5Y+v5Lul5L2/55So5ZOq5Lqb5YWz6ZSu5a2X5ZKM
+L+aIlue8qeefreS7o+eggSwg5YW35L2TDQo+ID4+PiAgIOivt+WPgumYhSBgYGluY2x1ZGUvbGlu
+dXgvY29tcGlsZXJfYXR0cmlidXRlcy5oYGANCj4gPj4+ICAgLS4uIF9jbl9jLWxhbmd1YWdlOg0K
+PiA+Pj4gLQ0KPiA+Pj4gLWMtbGFuZ3VhZ2UNCj4gPj4+IC0gICBodHRwOi8vd3d3Lm9wZW4tc3Rk
+Lm9yZy9qdGMxL3NjMjIvd2cxNC93d3cvc3RhbmRhcmRzDQo+ID4+PiAtDQo+ID4+PiAtLi4gX2Nu
+X2djYzoNCj4gPj4+IC0NCj4gPj4+IC1nY2MNCj4gPj4+IC0gICBodHRwczovL2djYy5nbnUub3Jn
+DQo+ID4+PiAtDQo+ID4+PiAtLi4gX2NuX2NsYW5nOg0KPiA+Pj4gLQ0KPiA+Pj4gLWNsYW5nDQo+
+ID4+PiAtICAgaHR0cHM6Ly9jbGFuZy5sbHZtLm9yZw0KPiA+Pj4gLQ0KPiA+Pj4gLS4uIF9jbl9p
+Y2M6DQo+ID4+PiAtDQo+ID4+PiAtaWNjDQo+ID4+PiAtICAgaHR0cHM6Ly9zb2Z0d2FyZS5pbnRl
+bC5jb20vZW4tdXMvYy1jb21waWxlcnMNCj4gPj4+IC0NCj4gPj4+IC0uLiBfY25fZ2NjLWMtZGlh
+bGVjdC1vcHRpb25zOg0KPiA+Pj4gLQ0KPiA+Pj4gLWMtZGlhbGVjdC1vcHRpb25zDQo+ID4+PiAt
+ICAgaHR0cHM6Ly9nY2MuZ251Lm9yZy9vbmxpbmVkb2NzL2djYy9DLURpYWxlY3QtT3B0aW9ucy5o
+dG1sDQo+ID4+PiAtDQo+ID4+PiAtLi4gX2NuX2dudS1leHRlbnNpb25zOg0KPiA+Pj4gLQ0KPiA+
+Pj4gLWdudS1leHRlbnNpb25zDQo+ID4+PiAtICAgaHR0cHM6Ly9nY2MuZ251Lm9yZy9vbmxpbmVk
+b2NzL2djYy9DLUV4dGVuc2lvbnMuaHRtbA0KPiA+Pj4gLQ0KPiA+Pj4gLS4uIF9jbl9nY2MtYXR0
+cmlidXRlLXN5bnRheDoNCj4gPj4+IC0NCj4gPj4+IC1nY2MtYXR0cmlidXRlLXN5bnRheA0KPiA+
+Pj4gLSAgIGh0dHBzOi8vZ2NjLmdudS5vcmcvb25saW5lZG9jcy9nY2MvQXR0cmlidXRlLVN5bnRh
+eC5odG1sDQo+ID4+PiAtDQo+ID4+PiAtLi4gX2NuX24yMDQ5Og0KPiA+Pj4gK1J1c3QNCj4gPj4+
+ICstLS0tDQo+ID4+PiAgIC1uMjA0OQ0KPiA+Pj4gLSAgIGh0dHA6Ly93d3cub3Blbi1zdGQub3Jn
+L2p0YzEvc2MyMi93ZzE0L3d3dy9kb2NzL24yMDQ5LnBkZg0KPiA+Pj4gK+WGheaguOWvuSBSdXN0
+IOe8lueoi+ivreiogCBbemhfY25fcnVzdC1sYW5ndWFnZV1fIOeahOaUr+aMgeaYr+WunumqjOaA
+p+eahO+8jOW5tuS4lOWPr+S7pemAmui/h+mFjee9rumAiemhuQ0KPiA+Pj4gK2BgQ09ORklHX1JV
+U1RgYCDmnaXlkK/nlKjjgIJSdXN0IOS7o+eggeS9v+eUqCBgYHJ1c3RjYGAgW3poX2NuX3J1c3Rj
+XV8g57yW6K+R5Zmo5ZyoDQo+ID4+PiArYGAtLWVkaXRpb249MjAyMWBgIFt6aF9jbl9ydXN0LWVk
+aXRpb25zXV8g6YCJ6aG55LiL6L+b6KGM57yW6K+R44CC54mI5pys77yIRWRpdGlvbnPvvInmmK/k
+uIDnp40NCj4gPj4+ICvlnKjor63oqIDkuK3lvJXlhaXpnZ7lkI7lkJHlhbzlrrnnmoTlsI/lnovl
+j5jmm7TnmoTmlrnlvI/jgIINCj4gPj4+ICsNCj4gPj4+ICvpmaTmraTkuYvlpJbvvIzlhoXmoLjk
+uK3ov5jkvb/nlKjkuobkuIDkupvkuI3nqLPlrprnmoTnibnmgKcgW3poX2NuX3J1c3QtdW5zdGFi
+bGUtZmVhdHVyZXNdX+OAgui/meS6m+S4jeeos+Wumg0KPiA+Pj4gK+eahOeJueaAp+WwhuadpeWP
+r+iDveS8muWPkeeUn+WPmOWMlu+8jOWboOatpO+8jOS4gOS4qumHjeimgeeahOebruagh+aYr+i+
+vuWIsOS7heS9v+eUqOeos+WumueJueaAp+eahOeoi+W6puOAgg0KPiA+Pj4gKw0KPiA+Pj4gK+WF
+t+S9k+ivt+WPgumYhSBEb2N1bWVudGF0aW9uL3J1c3QvaW5kZXgucnN0DQo+ID4+PiArDQo+ID4+
+PiArLi4gW3poX2NuX2MtbGFuZ3VhZ2VdIGh0dHA6Ly93d3cub3Blbi1zdGQub3JnL2p0YzEvc2My
+Mi93ZzE0L3d3dy9zdGFuZGFyZHMNCj4gPj4+ICsuLiBbemhfY25fZ2NjXSBodHRwczovL2djYy5n
+bnUub3JnDQo+ID4+PiArLi4gW3poX2NuX2NsYW5nXSBodHRwczovL2NsYW5nLmxsdm0ub3JnDQo+
+ID4+PiArLi4gW3poX2NuX2djYy1jLWRpYWxlY3Qtb3B0aW9uc10gaHR0cHM6Ly9nY2MuZ251Lm9y
+Zy9vbmxpbmVkb2NzL2djYy9DLURpYWxlY3QtT3B0aW9ucy5odG1sDQo+ID4+PiArLi4gW3poX2Nu
+X2dudS1leHRlbnNpb25zXSBodHRwczovL2djYy5nbnUub3JnL29ubGluZWRvY3MvZ2NjL0MtRXh0
+ZW5zaW9ucy5odG1sDQo+ID4+PiArLi4gW3poX2NuX2djYy1hdHRyaWJ1dGUtc3ludGF4XSBodHRw
+czovL2djYy5nbnUub3JnL29ubGluZWRvY3MvZ2NjL0F0dHJpYnV0ZS1TeW50YXguaHRtbA0KPiA+
+Pj4gKy4uIFt6aF9jbl9uMjA0OV0gaHR0cDovL3d3dy5vcGVuLXN0ZC5vcmcvanRjMS9zYzIyL3dn
+MTQvd3d3L2RvY3MvbjIwNDkucGRmDQo+ID4+PiArLi4gW3poX2NuX3J1c3QtbGFuZ3VhZ2VdIGh0
+dHBzOi8vd3d3LnJ1c3QtbGFuZy5vcmcNCj4gPj4+ICsuLiBbemhfY25fcnVzdGNdIGh0dHBzOi8v
+ZG9jLnJ1c3QtbGFuZy5vcmcvcnVzdGMvDQo+ID4+PiArLi4gW3poX2NuX3J1c3QtZWRpdGlvbnNd
+IGh0dHBzOi8vZG9jLnJ1c3QtbGFuZy5vcmcvZWRpdGlvbi1ndWlkZS9lZGl0aW9ucy8NCj4gPj4+
+ICsuLiBbemhfY25fcnVzdC11bnN0YWJsZS1mZWF0dXJlc10gaHR0cHM6Ly9naXRodWIuY29tL1J1
+c3QtZm9yLUxpbnV4L2xpbnV4L2lzc3Vlcy8yDQo+ID4+IEhpIERvbmdsaWFuZywNCj4gPj4NCj4g
+Pj4gR29vZCBqb2IhIE1vc3Qgb2YgdHJhbnNsYXRpb24gYXJlIGdvb2QuDQo+ID4+IEp1c3QgdGhl
+IGFib3ZlIGRvYyBzZWVtcyBzdGlsbCBFbmdsaXNoIHZlcnNpb24sIGdpdmUgdGhlbSBhIHpoX2Nu
+IG5hbWUgbWF5IGNhdXNlIG1pc3VuZGVyc3RhbmQ/DQo+ID4NCj4gPiBPaCwgSSBzZWUuIEhvd2V2
+ZXIsIHlvdSBjYW5ub3QgdXNlIGdjYyBvciBydXN0YyBzaW5jZSBpdCBhbHJlYWR5IGV4aXN0cyBp
+biB0aGUgRW5nbGlzaCBkb2N1bWVudHMuIFdlIG5lZWQgYW5vdGhlciBuYW1lIHRvIG1ha2Ugc3Bo
+aW54IGhhcHB5LiBUaGVyZWZvcmUsIHdoeSBkbyBub3Qgd2UgZGlyZWN0bHkgdXNlIHRoZSBmaW5h
+bCB2ZXJzaW9uIG9mIG5hbWU/IDopDQo+ID4NCj4gVWgsIGlzIGl0IHBvc3NpYmxlIHRvIHVzZSBF
+bmdsaXNoIHZlcnNpb24gJ2djYycgbGlua3MgaW4gdGhpcyBkb2M/IE90aGVyd2lzZSxpdCBtYWtl
+IHNlbnNlIHRvby4NCj4NCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL2JhZTNjNTljLTM5
+YTUtNGRhYS1iMzdlLWJiZjA3N2Q1NzY0M0BodXN0LmVkdS5jbi9ULyNtOGE5NDhiMjQ0MDE0MDQ4
+MDZmNTNlMDg2ZjU3ODU2Y2YzYTU2YTQ5MA0KDQp2MiBwYXRjaCB0cmlnZ2VycyBhIHdhcm5pbmcg
+ZHVlIHRvIGR1cGxpY2F0ZSBsaW5rcy4gU28gSSBjcmFmdGVkIGEgdjMNCnZlcnNpb24gdG8gdXNl
+IHpoX2NuIHByZWZpeCBiZWZvcmUgZWFjaCBsaW5rDQoNCj4gVGhhbmtzDQo+DQo+ID4gQ29ycmVj
+dCBtZSBpZiBJIG1ha2UgYW55IG1pc3VuZGVyc3RhbmRpbmcuDQo+ID4NCj4gPiBEb25nbGlhbmcg
+TXUNCj4gPg0KPiA+PiAgIFRoYW5rcw0KPiA+DQo+DQo=
