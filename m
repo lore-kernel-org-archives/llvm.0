@@ -1,113 +1,126 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85DF482EB
-	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 03:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581DD1AF0A8
+	for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 08:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729739215; cv=none; b=MJCYN6w/Es1CGZzkQGAMKc+WWX1hCvyh9Hy0TJqe5kMJtovS4rYBWKwH/SpaOIGzMT52/8TzNNq/S0oouJzSKARRyiCuHHudZvibVP3X0GidyoXStY+SPsYkCrkKT/8FlkD5Bys8stG7NES7uJrUbucM+ZuinjrE2uzvhJUsS9A=
+	t=1729757243; cv=none; b=fLwfvYI34aNSELFGbHRwEfIKHhk4f5bW3Rc7IjcLHals6k0amH4/1fVMLLcr73aWy2F+DHSZF00PZrrjAMKA3TzQMJQAqhyAFH4BRIehEjKp7l45CjYW/PGhlKFLPxFmLJ09mANiPM2J+8C7vhcMNsPX9hid/j/LyOSs/t2PT1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729739215; c=relaxed/simple;
-	bh=CeS6D+1QUXlEuEpzlKrZVqshJgh+wIneCWMkJ3VrhIA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u1VevOnbwm8Vj7BlvLeRQbaxSU7zDoblguGUm7pG45Ol5VAApdktdLMNUC5bPEPMWrFY/mcyNgmEblEByltp6Pp5PtK7Wf0t/hVbuVZryTo9onBGYEsLRjHyivfMTvw6gcTucNCjWq9dLTlxTQ/d9RsXLAoOmPYnUVV92hfBqLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=esTMqDRX; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729757243; c=relaxed/simple;
+	bh=lKJz69FkZU5PsLniCJS6Kxeee5PW8bbqpC3sMQ+Zazw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ktOqVats5NFETP02/puK6tj0zC9exy7e+pECwk2KarjRMBPeKImA5V987AlIRtx6Xn4iYp94alBuNLQCGmriBLHRrFUwQa4o9bJQYY9juostiZU0DMl+dVoJ27swEl/7EhIx+CJBJVVBFCKObxggC2RFC+mlOrMsZtgYajItvhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zSNhQMcL; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="esTMqDRX"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5ebc0e13d25so152957eaf.1
-        for <llvm@lists.linux.dev>; Wed, 23 Oct 2024 20:06:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zSNhQMcL"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43159c9f617so5995085e9.2
+        for <llvm@lists.linux.dev>; Thu, 24 Oct 2024 01:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729739213; x=1730344013; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CeS6D+1QUXlEuEpzlKrZVqshJgh+wIneCWMkJ3VrhIA=;
-        b=esTMqDRXyEMuyGnEqi7BzEz8tnoa811Q/bBYovNtlaazWNBHgpelWkPAwjy5gZjuwC
-         VxcoA9y2AQroN6Pyyw4a9G9iBGG2BfKqBxyvhZX4q/2jdpiwsenryzQVwQjoZch7vFCR
-         fx++ePr1W7gqJ5aZCIljILcXRTZCgI0vinxREoYqdjSt44CAWOE/K9yjsAGA+jJAI8DT
-         B6OCvkifgTZdqbuF1pxXDkS32P2LiByZBNgoOM9895EvUbtdPxAiu+Zgfu++7zW9U+WA
-         yWCB85K/7gwYBXxRJr/sUkbbiga2kwhCwFKGhe7n3LjZl8h+ynoOCyKV/mfB45JlHqam
-         vSVw==
+        d=linaro.org; s=google; t=1729757240; x=1730362040; darn=lists.linux.dev;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EZy5UEggNFqbZ16nEcVpQryOaoa0SiPbjloEPBK8vjw=;
+        b=zSNhQMcLmk0/RdkQ/2fbfT7ruj5urNNwKoHdDuouNS3jlQXmwvIu2uM/i2E8Bmlz15
+         CvjrI++WgjY8Fpve0Wk0+Xfur98BvzxEI1BkdndgwjMfGs7nnEmyR8Odcg4lws5QzrxL
+         piwPLrBVi05WGOdNosDAeCmkNv/e/CMiUv4LPO9VWDWFI+6AWEkSLPdlXQbNo5LGv2dW
+         Zk1qc1d6pYKwfSu7ghJfHrTmtN+mMQtCXrfObtMDAEa/G5w6y7zT4eRl2pw8azCExTe/
+         FczSJ1l+Ql6knfHZdhFeb7UxDPzvzdlMdvpC67R+OASWFgHZqvVrX7Ww+lHSeCs8FE3r
+         WfEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729739213; x=1730344013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CeS6D+1QUXlEuEpzlKrZVqshJgh+wIneCWMkJ3VrhIA=;
-        b=Bbqft7Xtf5b1XJdJJlCiy/GUCKkSehhB0wPv24elFPTVK+SLZzawIcbyEMJflskXs8
-         xJollYjHyLCkGPiZJfr3dFOmKb7L7FWUQetsYHV+jjb02Q709g99afBkLBxdvGK7D2E1
-         bSoY/CGDZMedhEpvpQMxfLId4zVjJU3O5gKvAsYdvhA9C3k/33HgOYG6/p8EEurbqCKd
-         OGjKevSPHqc2O32ivdCPMFI8BiRe3Pk74UNTS2j4pez2R5+cvPi0gagIfKohC+9xl8uT
-         HOZrLVTG4EFOM/bzr/DvmujNulqvfzUy68nwCAk95xljgGW6cWSpQnso50mt7YF0BE2B
-         zBXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXCZxJfkJ8A6lFG9RptfQly2xjKjh6sD44H7aV3Ork3PrRGoBRD+tILu9WTUVw6BSZr29LW@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyhhp/12nOvwpGGifQxHbLgdUGnTD780+3qtiuru1I+IzdIrJcf
-	6kzNx/xmW5f/10vTO6sgzyfzAdWbMuMJIsMu05Y+ek5uhneBHyJ1RK9zCwcVqfA+CKkRMBs05ga
-	tgBEBj5zwSiuTC2SJTRkY0u25xbk=
-X-Google-Smtp-Source: AGHT+IF7Kh6NVN/AxY8rAa46rAxHbFpWSG21XNJdoakKmMbz7auztoXmMnfDI/WsA/BeePDLnogiyXrJZfyoAqBhLk4=
-X-Received: by 2002:a05:6870:a990:b0:288:b220:a57e with SMTP id
- 586e51a60fabf-28ccb68fa1cmr4788549fac.40.1729739212713; Wed, 23 Oct 2024
- 20:06:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729757240; x=1730362040;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EZy5UEggNFqbZ16nEcVpQryOaoa0SiPbjloEPBK8vjw=;
+        b=eGpIdsh7M7EPUrUisju6tzUeCWieiKVdYUmjL2VuvhkvmAb0T/LWpfUQxgNu9yRvSm
+         MmqqxeCYOPdOCG7EBTDTTd1bnV9JvL7qqTl/q6jkXHfMftZZQYgZnP011RwEEu/MBNja
+         sLUrVjhBdxwHS+2Ja3owmDrKMEmIGMY6RUGjwwn1Q93qkZ5haSOHv4RcEgxoAG79aLLE
+         c0oEvkTGe9Z7DIXNnieFQfGd3Y9J068OwdVIDGVK2aFxEmm5c/N607MjZpGIu84a4hyC
+         U4kf5p9KR8tahWSk4aT1rLm1TJ0V0U0GGKpZEZMPkYLBgUJD8+NthwxDWI6Dyf6Xv8xq
+         4TNA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGaeICQp0i6AAwCAcoNe4vHPGDGq1KZ9WHemtrLYsGb0jCx/OuP5yF5cYdJK/5NWbzs5+k@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx9wC+Z1ibiNGiOMkMt2pZiEycaqnqwhIBxdgfaimV0xEnYKnNg
+	FitVeBgAybyMp/H9cayyrojmOi75+yHg82RWEtmhhSjEnorPq7iu3Fcf+VfuL4k3fuIblaqoP5L
+	V
+X-Google-Smtp-Source: AGHT+IHj3dTiTdI/Cfg0wXRcMpCa/DQvbUN9eHqbQfyoSZ5v/QASIQRyjUyPWiqx5em0P01hF5B1ZQ==
+X-Received: by 2002:a05:600c:5011:b0:430:54a4:5b03 with SMTP id 5b1f17b1804b1-4318c6e0175mr8691295e9.6.1729757239721;
+        Thu, 24 Oct 2024 01:07:19 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43186c0e132sm38394125e9.34.2024.10.24.01.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 01:07:19 -0700 (PDT)
+Date: Thu, 24 Oct 2024 11:07:15 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Koba Ko <kobak@nvidia.com>
+Cc: Len Brown <lenb@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH] ACPI: PRM: Clean Up guid type in struct prm_handler_info
+Message-ID: <3777d71b-9e19-45f4-be4e-17bf4fa7a834@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241023062750.849951-1-dzm91@hust.edu.cn> <46e54088-ad96-4387-8a39-2e4686c842bd@gmail.com>
- <345e8f10-fe1a-4736-9468-7c92ac55d62e@hust.edu.cn> <e0c34a1b-6801-4ae3-b04f-56dbce5c76d8@gmail.com>
- <CAD-N9QV-EBbSkrZ5TSUt7j3MhsAHMozY59gFOEnSQ1HB9cUsZg@mail.gmail.com> <8a8fdd5a-44e6-42b9-a920-ff00ac7dc57d@gmail.com>
-In-Reply-To: <8a8fdd5a-44e6-42b9-a920-ff00ac7dc57d@gmail.com>
-From: Dongliang Mu <mudongliangabcd@gmail.com>
-Date: Thu, 24 Oct 2024 11:06:26 +0800
-Message-ID: <CAD-N9QVHxKUMu3AWvQ=GMA_YOMLVrz29-pNjWeVmn7eO=_DE5g@mail.gmail.com>
-Subject: Re: [PATCH v3] docs/zh_CN: update the translation of process/programming-language.rst
-To: Alex Shi <seakeel@gmail.com>
-Cc: Dongliang Mu <dzm91@hust.edu.cn>, si.yanteng@linux.dev, Alex Shi <alexs@kernel.org>, 
-	Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On Thu, Oct 24, 2024 at 11:02=E2=80=AFAM Alex Shi <seakeel@gmail.com> wrote=
-:
->
->
->
-> On 10/24/24 10:51, Dongliang Mu wrote:
-> >>>> Hi Dongliang,
-> >>>>
-> >>>> Good job! Most of translation are good.
-> >>>> Just the above doc seems still English version, give them a zh_cn na=
-me may cause misunderstand?
-> >>> Oh, I see. However, you cannot use gcc or rustc since it already exis=
-ts in the English documents. We need another name to make sphinx happy. The=
-refore, why do not we directly use the final version of name? :)
-> >>>
-> >> Uh, is it possible to use English version 'gcc' links in this doc? Oth=
-erwise,it make sense too.
-> >>
-> > https://lore.kernel.org/all/bae3c59c-39a5-4daa-b37e-bbf077d57643@hust.e=
-du.cn/T/#m8a948b24401404806f53e086f57856cf3a56a490
-> >
-> > v2 patch triggers a warning due to duplicate links. So I crafted a v3
-> > version to use zh_cn prefix before each link
->
-> OK. That's fine for this patch. But for long term view, it's better to fi=
-nd a way for duplicate links.
+Clang 19 prints a warning when we pass &th->guid to efi_pa_va_lookup():
 
-Yes, I would like to keep it the same with English for now. Then find
-the Chinese version or translate in our translation team.
+drivers/acpi/prmt.c:156:29: error: passing 1-byte aligned argument to
+4-byte aligned parameter 1 of 'efi_pa_va_lookup' may result in an
+unaligned pointer access [-Werror,-Walign-mismatch]
+  156 |                         (void *)efi_pa_va_lookup(&th->guid, handler_info->handler_address);
+      |                                                  ^
 
->
-> Reviewed-by: Alex Shi <alexs@kernel.org>
+The problem is that efi_pa_va_lookup() takes a efi_guid_t and &th->guid
+is a regular guid_t.  The difference between the two types is the
+alignment.  efi_guid_t is a typedef.
+
+	typedef guid_t efi_guid_t __aligned(__alignof__(u32));
+
+It's possible that this a bug in Clang 19.  Even though the alignment of
+&th->guid is not explicitly specified, it will still end up being aligned
+at 4 or 8 bytes.
+
+Anyway, as Ard points out, it's cleaner to change guid to efi_guid_t type
+and that also makes the warning go away.
+
+Fixes: 088984c8d54c ("ACPI: PRM: Find EFI_MEMORY_RUNTIME block for PRM handler and context")
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
+---
+Sorry for the unfair Fixes tags since you obviously aren't to blame.  But it's
+more practical if we avoid breaking the build in backports or etc.  Fixes tags
+are quite often unfair in this way...
+
+ drivers/acpi/prmt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/prmt.c b/drivers/acpi/prmt.c
+index d59307a76ca3..747f83f7114d 100644
+--- a/drivers/acpi/prmt.c
++++ b/drivers/acpi/prmt.c
+@@ -52,7 +52,7 @@ struct prm_context_buffer {
+ static LIST_HEAD(prm_module_list);
+ 
+ struct prm_handler_info {
+-	guid_t guid;
++	efi_guid_t guid;
+ 	efi_status_t (__efiapi *handler_addr)(u64, void *);
+ 	u64 static_data_buffer_addr;
+ 	u64 acpi_param_buffer_addr;
+-- 
+2.45.2
+
