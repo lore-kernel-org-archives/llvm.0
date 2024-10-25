@@ -1,110 +1,123 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8731957F9
-	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 23:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638001DD0C9;
+	Fri, 25 Oct 2024 23:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729899099; cv=none; b=k9rNlvEkPxQ+JUpvTUSSPjO9ObPVPXVW2PxM7DXxcgX/vEYcxOSbdG0XaHsF+pATFX97GPC35LqgVcDw8xIFopu/kX4izsdXazVVtCeA50EtkkQRaWFMXWNaVBqPnWOjxs8VhBzyKALZ4YM18U2FlGbqldrtTBXHYCLxF1Hb/kw=
+	t=1729899762; cv=none; b=jnsH7radV9jBBu1J3YA79WiTEo0J25RbVMz1AQyPxrmGQKSNYLQEWRbziSEEFWnlPlHHXHyJPsU1P+ytXAFwVzHRfNMyJVzaQyG7Z7lJVaKGs7JFH4NJyU+DdBkzRkVI2PSAwAnAj7tzOpRm0EPr8J1V02u7pvVye00PID7qjds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729899099; c=relaxed/simple;
-	bh=XgHFAGA1jfADoKVhZBRdfjMgfXMOSfjWYg4NrQbXBBY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SymsF7aXlNmiqz+sWSbDCcSZmcKF5JCehVugFMiKCISexzUeQ3raKT0IiVwETKQ3Poo4325Rh+zUmu//UoAocWY48BfXD5yodksvaWmx/1CneleVb1KB6EpbZQkY+qnCVadoo0NPAKzK4rnwKZg2vQsBfQBfmWxLAzEWiCymz9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SqJhh81V; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1729899762; c=relaxed/simple;
+	bh=9AUHJ52vhcnHhpIsDcydmIMZD0WvaKeVjZTBF2tdN1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jo2A9mISBBCm3LgkL8DHG1MxKALjqQeyDxG72uXy0bExc0DmbfjvRQL/wI1RJHPujw7n0jw8MJ7QAjwbjeIsocLtRthmkb79gdJfHVtB++6hNjUloAv5a2h06UeHOA8JG7FixpUPrek6NCr75zb1Cpls9nmglfJrWl9Ly1PqaO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ghqLW+EV; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SqJhh81V"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49PMAYrM029348;
-	Fri, 25 Oct 2024 23:31:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	85sjTZNqbYK8ah1GKkOClnCktTkUycIrVE5ofGg7hQo=; b=SqJhh81VZ4LurszY
-	doEpVOdOrJA1wBzAtZyiNCMfUqeKF4j7PbBXN8dZh8NIID4Ex4Z9vkl+WEjRVUGB
-	7k3cEKLivHq9dVo5uWG8H5kZZ6o2sJglvwGqhQNkYMU/EzK39jqaV2DvJCFpt/qe
-	5lrqXjQNT2J8hvlPhRqOHKDZUx4syJBHUfl7KydUm1/UX5CqrfhAjTWRbIWADLZS
-	LbEfGhfcXkZ3+YhAUVyB/6b1Vgz50d/wgOBVa/wKBOhUa32UsfD/dehz3v3q5dgs
-	DtrL4/4E0/GcaQTgQY6eR8knnda5nXKs6FTDZ+xiYM7cMtHGdWa0F3Uco4KcFig9
-	BgctlA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em3wahyh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 23:31:28 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49PNVSUX028214
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 23:31:28 GMT
-Received: from [10.48.242.80] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 25 Oct
- 2024 16:31:27 -0700
-Message-ID: <75aad8fe-f7a1-4789-9c3b-5086ddc2de9b@quicinc.com>
-Date: Fri, 25 Oct 2024 16:31:26 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ghqLW+EV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729899761; x=1761435761;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9AUHJ52vhcnHhpIsDcydmIMZD0WvaKeVjZTBF2tdN1w=;
+  b=ghqLW+EVezZ1eHfk+z7fnD7z5IaI9LmUDQr/oxnKMyQzMbf7qB9PqErj
+   fKC9oQq3L7eI+4NP5WwT5Fd3kWLpDbhAP95qz1lRSKhLxaMx5rRxBtWgy
+   0oqqGSBxJKfb9aNWmYx6l3X+8fn0HSxQX7vvxYAFBAfuAPwtcSn5b0fyr
+   Ks09bsP4WGjVJWUNqAKjMNn7dda5iEihSkbRlwkBS06ywvCEQ2bNkmTvv
+   2b/wC/65j7+Z3oU74kBsId5S1nVoseD3eu4oGAJLnVog+ta8kimBXCvZF
+   Elim5Crt56L3BY1FuCgIqvmpkYi5GFFvzYhkstlu35yb0MoRq7ZxbbyXK
+   A==;
+X-CSE-ConnectionGUID: CZhSZpo3Rie8N+ijdEHsYg==
+X-CSE-MsgGUID: lFx7JU+PS1mZUlVA6yeCug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="40199498"
+X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
+   d="scan'208";a="40199498"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 16:42:40 -0700
+X-CSE-ConnectionGUID: +TbfiPdVR+uv+a8H55sVeg==
+X-CSE-MsgGUID: GjZIWSRLSlOzrUCDDGJ/xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
+   d="scan'208";a="80992565"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 25 Oct 2024 16:42:38 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4Tww-000Z2j-2p;
+	Fri, 25 Oct 2024 23:42:34 +0000
+Date: Sat, 26 Oct 2024 07:41:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	brendan.higgins@linux.dev, davidgow@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org, ricardo@marliere.net,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	andriy.shevchenko@linux.intel.com
+Subject: Re: [PATCH v2] lib/math: Add int_sqrt test suite
+Message-ID: <202410260709.2XVfASBv-lkp@intel.com>
+References: <20241024195511.72674-1-luis.hernandez093@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Which LLVM options impact function stack size?
-To: Nathan Chancellor <nathan@kernel.org>
-CC: <llvm@lists.linux.dev>, Kalle Valo <kvalo@kernel.org>
-References: <bc214795-1c51-4cb7-922f-67d6ef98bff2@quicinc.com>
- <20241025223321.GA3647469@thelio-3990X>
-Content-Language: en-US
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20241025223321.GA3647469@thelio-3990X>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SIiwCxLyLcRpCj2U7xHtf4pClcmDJzOl
-X-Proofpoint-GUID: SIiwCxLyLcRpCj2U7xHtf4pClcmDJzOl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=888
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1011 suspectscore=0 spamscore=0 malwarescore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410250182
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024195511.72674-1-luis.hernandez093@gmail.com>
 
-On 10/25/2024 3:33 PM, Nathan Chancellor wrote:
-> Hi Jeff,
-> On Fri, Oct 25, 2024 at 02:31:47PM -0700, Jeff Johnson wrote:
->> With LLVM 18.1.7 I see:
->> drivers/net/wireless/ath/ath12k/qmi.c:3546:13: warning: stack frame size (2456) exceeds limit (1024) in 'ath12k_qmi_driver_event_work' [-Wframe-larger-than]
-...
-> I would expect CONFIG_UBSAN_ARRAY_BOUNDS to be the difference here. I am
-> not familiar enough with LLVM internals to say why exactly this occurs
-> but it has occasionally come up for some kernel code that is array
-> access heavy. I think it is often a combination of inlining plus
-> instrumentation that causes LLVM to be unable to reuse stack slots
-> effectively. Arnd has sent workarounds for some issues like this in the
-> past using 'noinline_for_stack' or rewriting code:
-> 
-> https://lore.kernel.org/all/?q=f:arnd@kernel.org+Wframe-larger-than
+Hi Luis,
 
-Thanks for that hint.
+kernel test robot noticed the following build errors:
 
-ath12k_qmi_driver_event_work() itself it lightweight, but it dispatches to a
-few static functions. Modifying one such function:
+[auto build test ERROR on v6.12-rc4]
+[also build test ERROR on linus/master]
+[cannot apply to akpm-mm/mm-nonmm-unstable next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--static int ath12k_qmi_host_cap_send(struct ath12k_base *ab)
-+/* clang stack usage explodes if this is inlined */
-+static noinline_for_stack
-+int ath12k_qmi_host_cap_send(struct ath12k_base *ab)
+url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Felipe-Hernandez/lib-math-Add-int_sqrt-test-suite/20241025-035643
+base:   v6.12-rc4
+patch link:    https://lore.kernel.org/r/20241024195511.72674-1-luis.hernandez093%40gmail.com
+patch subject: [PATCH v2] lib/math: Add int_sqrt test suite
+config: i386-buildonly-randconfig-001-20241026 (https://download.01.org/0day-ci/archive/20241026/202410260709.2XVfASBv-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260709.2XVfASBv-lkp@intel.com/reproduce)
 
-Gives an noticeable improvement:
-drivers/net/wireless/ath/ath12k/qmi.c:3548:13: warning: stack frame size (1720) exceeds limit (1024) in 'ath12k_qmi_driver_event_work' [-Wframe-larger-than]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410260709.2XVfASBv-lkp@intel.com/
 
-Now to repeat for a few more of those...
+All errors (new ones prefixed by >>):
 
-/jeff
+>> lib/math/tests/int_sqrt_kunit.c:7:10: fatal error: 'limits.h' file not found
+       7 | #include <limits.h>
+         |          ^~~~~~~~~~
+   1 error generated.
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+
+
+vim +7 lib/math/tests/int_sqrt_kunit.c
+
+     2	
+     3	#include <kunit/test.h>
+     4	#include <linux/math.h>
+     5	#include <linux/module.h>
+     6	#include <linux/string.h>
+   > 7	#include <limits.h>
+     8	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
