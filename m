@@ -1,182 +1,250 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9082170854;
-	Fri, 25 Oct 2024 16:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF52418D62D;
+	Fri, 25 Oct 2024 17:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729874686; cv=none; b=qbTP6NhlxO3gnDwJt1aGFIDrQdCSGdh8zZeAYuwU9fYLSODptOpaRGqqeKSrU2HCOYbGsbKyMwJKQmHJaq+T28Cnv+8DySbVHKQR2NXtpuiITc8k8sVGhGvV3lNK6Dsc0VFYvnT28c37fDEI/5617So5SCRQmNTvfiAncYjp+cM=
+	t=1729876227; cv=none; b=YaG1bCFtaefhnC2yKrpvVaVC/6EW+RuG6JkH8/zYkReYjuvLI/F5TLBivv3W3dXIfxxdzW2ih5LRssGlC+bhhrfOOzIzk6M32liv/R2smgWbcmrOaoJvb9W3Sv6iksOwsAnQ+8HQ5w3U9hYHrlAyWlvtbVyeqSW6qCFYQz/VWy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729874686; c=relaxed/simple;
-	bh=dm33zfR58Grs1+44I7WoAOjuTC5WjP5JD5nKra0ImTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g28SEwQeiZuT5lDEPbSWQ2GM6W7yMcUHduuCX/bPPbEvtq0DanEjOd+Sg3wfc55c1eRRNekzjMNF/mYtgtotKphBAheOctwN5Kwemhf60em9UM9R8emKY/tLe4dB2f7XuDfmP6IIYIoY7zj+jfq+dcLb/I0xLhxTMD0s58CMdk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hswP2hz3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729876227; c=relaxed/simple;
+	bh=UI6KLswU8yTEZqrQt5dKVxuItxMqRNb1h4hTxyu09RA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eCWxPoRa+Cl0dsrCFL+6odF+44qZFVdlCCnmMyP51DCW3yf59qY3cAay4/p9XXG46am3uedfaiiMhY4wcA/Oxc7wqbpyqIFsAAN3EUo/xaIk1pru6qg0lvF7V/4Nqo6dxQWCFlxi+bUlJN4SkBtwPEEEWPGjyER3U0noCNLTnKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CKmhJ/yC; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hswP2hz3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE18C4CEC3;
-	Fri, 25 Oct 2024 16:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729874685;
-	bh=dm33zfR58Grs1+44I7WoAOjuTC5WjP5JD5nKra0ImTg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hswP2hz3gcvFBqPW2ufUXWTcuBYuRsf0Rufswq+PTDT5102qv6Lf5pV/fGycTf2kV
-	 7+CE6GtPcMzlKKvg5aln5gtp4IFryAaxDf4Y9T9/zfa9Iz8Wf86WmtPHkhj+PrkXWo
-	 yRhLEjU1ahlRgd4D8cBDk6mXHnVbrv6lvuD9wCQ0p6bs3S7oMXrCSCVNVeCEc99ZMZ
-	 9mYIQ+FaNRwkQEfFEu6YIUq5M/1umKginTtqd46n9XLpJIjg5WeLK7//HBhUh08Sdt
-	 hX2ne6DcsZfhpd9OmA5f4xDXI/P9egVNlFbs8yxlEPLJvBGHjMQK25hkASimts2i+F
-	 4GQ2+LFjUAEHw==
-Date: Fri, 25 Oct 2024 17:44:39 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Antoine Tenart <atenart@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, upstream@airoha.com
-Subject: Re: [PATCH v4 2/3] dt-bindings: crypto: Add Inside Secure SafeXcel
- EIP-93 crypto engine
-Message-ID: <20241025-marmalade-constant-1c733ef5f3e8@spud>
-References: <20241025094734.1614-1-ansuelsmth@gmail.com>
- <20241025094734.1614-2-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CKmhJ/yC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729876224; x=1761412224;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UI6KLswU8yTEZqrQt5dKVxuItxMqRNb1h4hTxyu09RA=;
+  b=CKmhJ/yCEHaaKEkLjTSqabPffOGeNeVHc7oml0XWQmmGTuEwo9sA8a0e
+   9YkfBZSpKd3NBOAAIwvtZrRoCt8kD857JtDzT6eUBkbhSZ2bsbuWtXabX
+   MyHX499HnIIGhZ4T80G3uxwAZ+Oy7zCrnHO9qLTA7ZDZbfGxnk7tMsphI
+   X1XaZ/T3nhAIMwYGYMZlpp4KbLXzzOlCp2rHY0ljP5Hwvz+CxivvNlhJ9
+   JjmFHvHLfSqFK+ZJKWpYJaA3oEb7cD5UEOXCMj0K9ACavRp9QtxwQdm+e
+   aS9nqaL/za2sSzSxgqS+tWnV5onKKTO8JDLUraDucwB4L1ciANMhexgvB
+   Q==;
+X-CSE-ConnectionGUID: AdbZVEOSTCmbJs2NY5z8fA==
+X-CSE-MsgGUID: BtnvcHEORC+YtS1u2zrTMg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40656863"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40656863"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:10:21 -0700
+X-CSE-ConnectionGUID: wDSPgm2vQTSGEFFZjn1Aow==
+X-CSE-MsgGUID: 4hUSNlIZTmuF0crDe+x6FA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,232,1725346800"; 
+   d="scan'208";a="111800014"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 25 Oct 2024 10:10:20 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4NpJ-000Yeg-0z;
+	Fri, 25 Oct 2024 17:10:17 +0000
+Date: Sat, 26 Oct 2024 01:10:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:sframe 3/17] include/linux/sframe.h:33:47: warning:
+ declaration of 'struct sframe_file' will not be visible outside of this
+ function
+Message-ID: <202410260102.oQ0qYqqM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="QPZZZgLU1JrXIOAQ"
-Content-Disposition: inline
-In-Reply-To: <20241025094734.1614-2-ansuelsmth@gmail.com>
-
-
---QPZZZgLU1JrXIOAQ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 25, 2024 at 11:47:23AM +0200, Christian Marangi wrote:
-> Add bindings for the Inside Secure SafeXcel EIP-93 crypto engine.
->=20
-> The IP is present on Airoha SoC and on various Mediatek devices and
-> other SoC under different names like mtk-eip93 or PKTE.
->=20
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> Changes v4:
-> - Out of RFC
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git sframe
+head:   7f54f6a91246a746ba799c52c97effb41e28a88b
+commit: bb962386a097a3c05361d9d8c26cf778407a96b8 [3/17] unwind: Introduce sframe userspace unwinding
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241026/202410260102.oQ0qYqqM-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260102.oQ0qYqqM-lkp@intel.com/reproduce)
 
-I left comments on v3, that I do not see addressed here.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410260102.oQ0qYqqM-lkp@intel.com/
 
-> Changes v3:
-> - Add SoC compatible with generic one
-> Changes v2:
-> - Change to better compatible
-> - Add description for EIP93 models
->=20
->  .../crypto/inside-secure,safexcel-eip93.yaml  | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secur=
-e,safexcel-eip93.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safex=
-cel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,saf=
-excel-eip93.yaml
-> new file mode 100644
-> index 000000000000..13341710ee31
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip=
-93.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/crypto/inside-secure,safexcel-eip93.y=
-aml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Inside Secure SafeXcel EIP-93 cryptographic engine
-> +
-> +maintainers:
-> +  - Christian Marangi <ansuelsmth@gmail.com>
-> +
-> +description: |
-> +  The Inside Secure SafeXcel EIP-93 is a cryptographic engine IP block
-> +  integrated in varios devices with very different and generic name from
-> +  PKTE to simply vendor+EIP93. The real IP under the hood is actually
-> +  developed by Inside Secure and given to license to vendors.
-> +
-> +  The IP block is sold with different model based on what feature are
-> +  needed and are identified with the final letter. Each letter correspond
-> +  to a specific set of feature and multiple letter reflect the sum of the
-> +  feature set.
-> +
-> +  EIP-93 models:
-> +    - EIP-93i: (basic) DES/Triple DES, AES, PRNG, IPsec ESP, SRTP, SHA1
-> +    - EIP-93ie: i + SHA224/256, AES-192/256
-> +    - EIP-93is: i + SSL/DTLS/DTLS, MD5, ARC4
-> +    - EIP-93ies: i + e + s
-> +    - EIP-93iw: i + AES-XCB-MAC, AES-CCM
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: airoha,crypto-eip93
-> +      - enum:
-> +          - inside-secure,safexcel-eip93i
-> +          - inside-secure,safexcel-eip93ie
-> +          - inside-secure,safexcel-eip93is
-> +          - inside-secure,safexcel-eip93ies
-> +          - inside-secure,safexcel-eip93iw
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    crypto@1e004000 {
-> +      compatible =3D "airoha,crypto-eip93", "inside-secure,safexcel-eip9=
-3ies";
-> +      reg =3D <0x1fb70000 0x1000>;
-> +
-> +      interrupts =3D <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> --=20
-> 2.45.2
->=20
+All warnings (new ones prefixed by >>):
 
---QPZZZgLU1JrXIOAQ
-Content-Type: application/pgp-signature; name="signature.asc"
+   In file included from kernel/fork.c:30:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/fork.c:46:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/fork.c:47:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from kernel/fork.c:47:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from kernel/fork.c:47:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from kernel/fork.c:107:
+>> include/linux/sframe.h:33:47: warning: declaration of 'struct sframe_file' will not be visible outside of this function [-Wvisibility]
+      33 | static inline int __sframe_add_section(struct sframe_file *file) { return -EINVAL; }
+         |                                               ^
+   16 warnings generated.
+--
+   In file included from mm/init-mm.c:8:
+   In file included from include/linux/mman.h:5:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/init-mm.c:13:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from mm/init-mm.c:13:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from mm/init-mm.c:13:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from mm/init-mm.c:14:
+>> include/linux/sframe.h:33:47: warning: declaration of 'struct sframe_file' will not be visible outside of this function [-Wvisibility]
+      33 | static inline int __sframe_add_section(struct sframe_file *file) { return -EINVAL; }
+         |                                               ^
+   14 warnings generated.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZxvK9wAKCRB4tDGHoIJi
-0mEJAQCgD/LVRzqypI/lSQC01t+ffVDixoJVQ2D32YNL/OTG7gD+NbRCXvRr+A28
-6r21JafKUgARYLDPKd0eohYPLM10Qg4=
-=TYuD
------END PGP SIGNATURE-----
+vim +33 include/linux/sframe.h
 
---QPZZZgLU1JrXIOAQ--
+    32	
+  > 33	static inline int __sframe_add_section(struct sframe_file *file) { return -EINVAL; }
+    34	static inline int sframe_add_section(unsigned long sframe_addr, unsigned long text_start, unsigned long text_end) { return -EINVAL; }
+    35	static inline int sframe_remove_section(unsigned long sframe_addr) { return -EINVAL; }
+    36	static inline int sframe_find(unsigned long ip, struct unwind_user_frame *frame) { return -EINVAL; }
+    37	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
