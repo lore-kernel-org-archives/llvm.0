@@ -1,70 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D518616088F;
-	Fri, 25 Oct 2024 01:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987DF2AE84
+	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 01:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729819270; cv=none; b=dvEkFf+l3RMNxB5DFbFmuDwtSDq+sFWYKrNcRkLu82kV+XqfrxyN10jCZ6Cn4yiHJq09onv6bk4gAHcTTo4W9Q0iwxn8NHF4+xAQy5A3N2Z30FB2Ke20p0sC3S39/XZgNH5QKrQyCpUywhoosYRlQ2YyRIqkSEUqsHvWRYuyytw=
+	t=1729819332; cv=none; b=MFRckwf8t1aVn64T8ydg++0bDkgkrXMvFjStX1OfLdmiqAqQL0Ov13ZjawpPIdugNILax6Kb1X2NiQpc3rxrtGbJEVxOKiChtfgZvNGkFloif63elEoegydDljN+uwbQXSTyHJhdF+ydXg/rrAvLKLWpw48Osoyq8gaK7xmlaqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729819270; c=relaxed/simple;
-	bh=jVbNwVDXO0MbO9oMFqDUmXZFSDufQD1TXRTZ+jrvXfA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VVLsn3VEYCeSbA8fa+zdVHe/X+XeHrkV2PSlh5luTzFY/zZNuf5PVuWlixnIEWhXB2q/6qq7bAzLLOx/BPviTrmNQhkvAMkU772G/wxjJB+2C3ALXQW+LsBEDHG5UU/qwmhbXO50bRgfljOk/LKSfa4O9Vs81YC7XEEwte30Wt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7TR/Xtb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729819332; c=relaxed/simple;
+	bh=k8Uxueyg41OU4NS/Z9QWF/oAv1BvtgAuRrhnglMaDaI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Jye8mMqEGR+URhCakGf8Ggt/LQZ5nR5O9q0ghcPSHCLTTG/ocJse5jAXZnQeHBME4Wyjwx8xhAb/moW7JURdKFVDv+SGYrnB7lq+HGsZ29XK03AWr0VrKAjxHfPaCnecrLNv9cuNbPJn++lOVJifad3eiTpO6Tvxbjal1tQb5HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vs2fT4iX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7TR/Xtb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17276C4CEC7;
-	Fri, 25 Oct 2024 01:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729819270;
-	bh=jVbNwVDXO0MbO9oMFqDUmXZFSDufQD1TXRTZ+jrvXfA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c7TR/XtbRM9FQxPi8ULbsPC7wGQWo3iDi4xbe78K3ToqB0Yv7uokrLigldlmaw30r
-	 SQOt9tIOEfHh7tVMn4eMvtr3FUPL7AP4AalzHUrV8tRdNwfgYPf8k89yb5Vy2ZaXco
-	 AsCq61MWN2P5wgiba/1pbivRJWoREcIzV9l9DiK+rHrK3sfMjFkY4OupRSHJBrEVe4
-	 1EK8MsZVBGwKp0wSSDIvh31IJPmJgYL1hpRVelj72wpVkkSw05WFWSSmE2dps/wB9S
-	 qT9D75Nxo0hSHhBZtaLZ6TWyffYWwNh5M1x8OpsrRXJY66h32pZXG00f4DjP1P+0HA
-	 z1oc3i1tWTKfw==
-Date: Thu, 24 Oct 2024 18:21:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: Re: [uml:next 25/45] InstrProfilingUtil.c:(.text.lprofAtExit+0x1):
- undefined reference to `atexit'
-Message-ID: <20241025012108.GB740745@thelio-3990X>
-References: <202410242238.SXhs2kQ4-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vs2fT4iX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729819329;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9puYAXZiBeYezZZxEYnLXzXKsysRRpMblK4dGGQ/J6k=;
+	b=Vs2fT4iXLg9ayuN0nVzbjl0LQzaA/Tx0Ev81h9zQLtucJXY3V7GahxseHE8yUfAqf1XD83
+	QLI3NZmpq6vG70L0Yn9xlZC8/nRz4zz2iZW4ecwYaCLIjiE6JwGQhYubqElBPMyq+HdNxZ
+	xxOldUMh69WhuVhQEnejyprKSIlZl8A=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-593-Lc_ZiPcOMyOkqxUYAqwkVA-1; Thu,
+ 24 Oct 2024 21:22:07 -0400
+X-MC-Unique: Lc_ZiPcOMyOkqxUYAqwkVA-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2962A1955F45
+	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 01:22:06 +0000 (UTC)
+Received: from [172.64.4.42] (unknown [10.30.33.216])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ABD561956056;
+	Fri, 25 Oct 2024 01:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc4,
+ mainline.kernel.org-clang, ae90f6a6)
+Date: Fri, 25 Oct 2024 01:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202410242238.SXhs2kQ4-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <53087.124102421220700124@us-mta-593.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 24, 2024 at 11:00:22PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux next
-> head:   d61ac4a7496a7981947b8b894d40b0e35c316fa5
-> commit: 89350defd1f0eb5a58a7e1155d9e322080f0bf15 [25/45] um: Fix passing '-n' to linker for stub_exe
-> config: um-randconfig-001-20241024 (https://download.01.org/0day-ci/archive/20241024/202410242238.SXhs2kQ4-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241024/202410242238.SXhs2kQ4-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410242238.SXhs2kQ4-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
->    /usr/bin/ld: /opt/cross/clang-5886454669/lib/clang/20/lib/x86_64-unknown-linux-gnu/libclang_rt.profile.a(InstrProfilingFile.c.o): in function `__llvm_profile_set_file_object':
->    InstrProfilingFile.c:(.text.__llvm_profile_set_file_object+0x60): undefined reference to `free'
+Hi, we tested your kernel and here are the results:
 
-Without looking too hard, it seems like this is probably coming from the
-flags in GCOV_OPT in arch/um/Makefile-skas, so maybe they needs to be
-filtered from the stub_exe command, since it is a standalone binary.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Cheers,
-Nathan
+
+Kernel information:
+    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/bpf/bpf
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1511521817
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1511521817-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1511521817-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1511521817-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
