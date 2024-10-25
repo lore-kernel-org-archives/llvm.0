@@ -1,61 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FAF212161;
-	Fri, 25 Oct 2024 13:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790CA1E7660;
+	Fri, 25 Oct 2024 13:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729862651; cv=none; b=WU48SLvNOZurA63fut64Y5OLnghSpCgpMvtI7XzKFnY3IIj9mj0F19Tcx8TqrBrp5EmQuF6mMn0iIjzf58H9j+mr6tghqMOWhHXsJ360N+LNizhUDrsjoELs52QrPEumvZrGMxbmYHz7aBWcQUJGnUIkBVCIlB5H4fGumZX/Aws=
+	t=1729864514; cv=none; b=LbJK6giar8JhcJb7WNdJKtrSIrmfzfoh+C99coCOEKBA62GmGQw+EH8uJqWRk/BTX7jb3SOXO3WDg2J+4EfF+BBHBGo4tiSnNeKxRnRzuJpHK7xh5loGhqIRXNPeL9pmTAEj/JyLM5rRWMLVYND5lxKvNw62FJNSwSx56hiAOWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729862651; c=relaxed/simple;
-	bh=Hor68YZSrgtREs9BV4UZJPsDGWWfhfLQGQ5vSDwW8ws=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KYkqNtPuJkaYjixMHgGeaimR4nOYsHtOePtzROYm49KKdONETh7HSj4foO6dLmdv+ass+m5GDCC093XEzgrDIl4VuCe0RSThHTb/ArRTo8ky+Zq6WwCku8cYuN4U12ThBalknd54zZQ/49UZ1rxaY/qyrrl9s97TDlHAI3kYbOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C1d2zZ3R; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1729864514; c=relaxed/simple;
+	bh=7NqT3649F1dXeuQNWNY44V3yXWIYCEWHbVLE10r7iAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dia0vElGiGkjOXh2FSYPIO7C61kcfzOinkf3HZJc7jkLm2QjYHtjyl6+gsccdClKgzZutPlcAN2qsVglOZLJUCqanM+67a/o1yzLcpi80XL0Wg1TVq4NJRBVAq4zk2jT0GkLIsey8nQlHHEcUhCHhN2FG1YJQryGxSgD1ZQqs7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mcBA7oKU; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C1d2zZ3R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mcBA7oKU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729862648; x=1761398648;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hor68YZSrgtREs9BV4UZJPsDGWWfhfLQGQ5vSDwW8ws=;
-  b=C1d2zZ3RVXQ/c6mIXf488cRsOqUaj1i3VgCOT6Jn6W0SUN+/J4a86uJ+
-   BIYQcgQ7JesgvLJMZc5/F7/fDaR57DvnPj5uRSatxJ9C6dhjbNZc54hWw
-   L3n57oszbTa660vAI7EdEv4ly2a0DQkSzK0FE2Svgew38uI/CjsjGt3Eb
-   qERVqnaDskAlpF2PETMfQmY2ejHOWAzpPLBoBPO2e7cDIpWT7S44e6usW
-   /eh5ub0epE/q8PwIRNs3CLOGX9sGpTbCOLunQh5qtTnFetvhEp+aodT47
-   f0oOdRvrWmxyBT4v9NrGjfj+5OICOKgdHqs/xUIW3tWLM743BcZBGTJSN
-   A==;
-X-CSE-ConnectionGUID: Hp8/DIE2SYSARrMudoN9uQ==
-X-CSE-MsgGUID: FFPywN0yTGqzxMlDWoAMRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="29648934"
-X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="29648934"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:24:07 -0700
-X-CSE-ConnectionGUID: P8OW3Uv0TlGFUdkc1z6b2A==
-X-CSE-MsgGUID: wmxgfvbUSc63aX1H0DpZ5Q==
+  t=1729864510; x=1761400510;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7NqT3649F1dXeuQNWNY44V3yXWIYCEWHbVLE10r7iAE=;
+  b=mcBA7oKU0yGnldiSiv2oCxlJWhopjigMRv1oN1wpOap/Bjes6zzL99BQ
+   haO6eTRWcM+jsAM0kEOSfy48bOTvbvSA3PafY6iDMna4tQJIdnaL2qryD
+   Je0bCz3joJalvlGLOyit4Qm5RAnXKt6bhTXXiZgBEKhPnEwhCM7Wn8xNb
+   8o92LUKFOJAP8qNKMZWqOpFWWKE23lx5HNRRSzKFXOfIhe63OsDIE2MFC
+   eWMo2HilD9Y51nzPHQpbl5+ZRaVo+1mxZVYtO3GTSO1y3ISIgFYAcNRal
+   7SM6+bqMPmjx5TY++J8o4ablL0aJdXdJhzYvo5ZIT//DNCXi5x245UhwS
+   Q==;
+X-CSE-ConnectionGUID: 2AKTtIh3R8iQwUvK+07P7Q==
+X-CSE-MsgGUID: fbxnqqtFSfKmuDaZCttF+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="46997862"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="46997862"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:55:10 -0700
+X-CSE-ConnectionGUID: 6qxGZX07Trmb36yDd1F4OQ==
+X-CSE-MsgGUID: 4rqoCvHUTzWLQ6lBj85Wqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="104222774"
+   d="scan'208";a="85499018"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 25 Oct 2024 06:24:05 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 25 Oct 2024 06:55:06 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4KIN-000YIG-2s;
-	Fri, 25 Oct 2024 13:24:03 +0000
-Date: Fri, 25 Oct 2024 21:23:05 +0800
+	id 1t4KmO-000YK2-2V;
+	Fri, 25 Oct 2024 13:55:04 +0000
+Date: Fri, 25 Oct 2024 21:54:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Victor Shih <victor.shih@genesyslogic.com.tw>
+To: Daniel Almeida <daniel.almeida@collabora.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Ben Chuang <ben.chuang@genesyslogic.com.tw>,
-	AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: [linux-next:master 6772/7183] drivers/mmc/host/sdhci-uhs2.c:684:6:
- warning: variable 'flags' set but not used
-Message-ID: <202410252107.y9EgrTbA-lkp@intel.com>
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Subject: Re: [PATCH v2] rust: kernel: add support for bits/genmask macros
+Message-ID: <202410252126.lJKyvEk1-lkp@intel.com>
+References: <20241024-topic-panthor-rs-genmask-v2-1-85237c1f0cea@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,185 +71,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241024-topic-panthor-rs-genmask-v2-1-85237c1f0cea@collabora.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   a39230ecf6b3057f5897bc4744a790070cfbe7a8
-commit: 9cbb2358bb1f17b61bf75cbebc2c9746b3a29e32 [6772/7183] mmc: sdhci-uhs2: add request() and others
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241025/202410252107.y9EgrTbA-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252107.y9EgrTbA-lkp@intel.com/reproduce)
+Hi Daniel,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 91e21479c81dd4e9e22a78d7446f92f6b96a7284]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Almeida/rust-kernel-add-support-for-bits-genmask-macros/20241024-222614
+base:   91e21479c81dd4e9e22a78d7446f92f6b96a7284
+patch link:    https://lore.kernel.org/r/20241024-topic-panthor-rs-genmask-v2-1-85237c1f0cea%40collabora.com
+patch subject: [PATCH v2] rust: kernel: add support for bits/genmask macros
+config: x86_64-buildonly-randconfig-003-20241025 (https://download.01.org/0day-ci/archive/20241025/202410252126.lJKyvEk1-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252126.lJKyvEk1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410252107.y9EgrTbA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410252126.lJKyvEk1-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/mmc/host/sdhci-uhs2.c:14:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/mmc/host/sdhci-uhs2.c:15:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/mmc/host/sdhci-uhs2.c:15:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/mmc/host/sdhci-uhs2.c:15:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/mmc/host/sdhci-uhs2.c:684:6: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
-     684 |         int flags;
-         |             ^
-   17 warnings generated.
-
-
-vim +/flags +684 drivers/mmc/host/sdhci-uhs2.c
-
-   681	
-   682	static bool sdhci_uhs2_send_command(struct sdhci_host *host, struct mmc_command *cmd)
-   683	{
- > 684		int flags;
-   685		u32 mask;
-   686		unsigned long timeout;
-   687	
-   688		WARN_ON(host->cmd);
-   689	
-   690		/* Initially, a command has no error */
-   691		cmd->error = 0;
-   692	
-   693		if (cmd->opcode == MMC_STOP_TRANSMISSION)
-   694			cmd->flags |= MMC_RSP_BUSY;
-   695	
-   696		mask = SDHCI_CMD_INHIBIT;
-   697	
-   698		if (sdhci_readl(host, SDHCI_PRESENT_STATE) & mask)
-   699			return false;
-   700	
-   701		host->cmd = cmd;
-   702		host->data_timeout = 0;
-   703		if (sdhci_data_line_cmd(cmd)) {
-   704			WARN_ON(host->data_cmd);
-   705			host->data_cmd = cmd;
-   706			__sdhci_uhs2_set_timeout(host);
-   707		}
-   708	
-   709		if (cmd->data)
-   710			sdhci_uhs2_prepare_data(host, cmd);
-   711	
-   712		sdhci_uhs2_set_transfer_mode(host, cmd);
-   713	
-   714		if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
-   715			WARN_ONCE(1, "Unsupported response type!\n");
-   716			/*
-   717			 * This does not happen in practice because 136-bit response
-   718			 * commands never have busy waiting, so rather than complicate
-   719			 * the error path, just remove busy waiting and continue.
-   720			 */
-   721			cmd->flags &= ~MMC_RSP_BUSY;
-   722		}
-   723	
-   724		if (!(cmd->flags & MMC_RSP_PRESENT))
-   725			flags = SDHCI_CMD_RESP_NONE;
-   726		else if (cmd->flags & MMC_RSP_136)
-   727			flags = SDHCI_CMD_RESP_LONG;
-   728		else if (cmd->flags & MMC_RSP_BUSY)
-   729			flags = SDHCI_CMD_RESP_SHORT_BUSY;
-   730		else
-   731			flags = SDHCI_CMD_RESP_SHORT;
-   732	
-   733		if (cmd->flags & MMC_RSP_CRC)
-   734			flags |= SDHCI_CMD_CRC;
-   735		if (cmd->flags & MMC_RSP_OPCODE)
-   736			flags |= SDHCI_CMD_INDEX;
-   737	
-   738		timeout = jiffies;
-   739		if (host->data_timeout)
-   740			timeout += nsecs_to_jiffies(host->data_timeout);
-   741		else if (!cmd->data && cmd->busy_timeout > 9000)
-   742			timeout += DIV_ROUND_UP(cmd->busy_timeout, 1000) * HZ + HZ;
-   743		else
-   744			timeout += 10 * HZ;
-   745		sdhci_mod_timer(host, cmd->mrq, timeout);
-   746	
-   747		__sdhci_uhs2_send_command(host, cmd);
-   748	
-   749		return true;
-   750	}
-   751	
+>> error[E0015]: cannot call non-const fn `kunit_get_current_test` in constants
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: calls in constants are limited to constant functions, tuple structs and tuple variants
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error: `core::ptr::mut_ptr::<impl *mut T>::is_null` is not yet stable as a const fn
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = help: add `#![feature(const_ptr_is_null)]` to the crate attributes to enable
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0015]: cannot call non-const fn `Arguments::<'_>::new_v1` in constants
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: calls in constants are limited to constant functions, tuple structs and tuple variants
+   = note: this error originates in the macro `format_args` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0015]: cannot call non-const fn `err` in constants
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: calls in constants are limited to constant functions, tuple structs and tuple variants
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error: `Arguments::<'a>::new_const` is not yet stable as a const fn
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = help: add `#![feature(const_fmt_arguments_new)]` to the crate attributes to enable
+   = note: this error originates in the macro `format_args` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0658]: referencing statics in constants is unstable
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #119618 <https://github.com/rust-lang/rust/issues/119618> for more information
+   = help: add `#![feature(const_refs_to_static)]` to the crate attributes to enable
+   = note: this compiler was built on 2024-04-29; consider upgrading it if it is out of date
+   = note: `static` and `const` variables can refer to other `const` variables. A `const` variable, however, cannot refer to a `static` variable.
+   = help: to fix this, the value can be extracted to a `const` and then used.
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0015]: cannot call non-const fn `__kunit_do_failed_assertion` in constants
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: calls in constants are limited to constant functions, tuple structs and tuple variants
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0015]: cannot call non-const fn `__kunit_abort` in constants
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: calls in constants are limited to constant functions, tuple structs and tuple variants
+   = note: this error originates in the macro `kernel::kunit_assert` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0015]: cannot call non-const formatting macro in constants
+   --> rust/doctests_kernel_generated.rs:317:16
+   |
+   317 |     let mask = genmask!(39, 21);
+   |                ^^^^^^^^^^^^^^^^
+   |
+   = note: calls in constants are limited to constant functions, tuple structs and tuple variants
+   = note: this error originates in the macro `format_args` which comes from the expansion of the macro `genmask` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 -- 
 0-DAY CI Kernel Test Service
