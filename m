@@ -1,101 +1,71 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987DF2AE84
-	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 01:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492614500E;
+	Fri, 25 Oct 2024 01:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729819332; cv=none; b=MFRckwf8t1aVn64T8ydg++0bDkgkrXMvFjStX1OfLdmiqAqQL0Ov13ZjawpPIdugNILax6Kb1X2NiQpc3rxrtGbJEVxOKiChtfgZvNGkFloif63elEoegydDljN+uwbQXSTyHJhdF+ydXg/rrAvLKLWpw48Osoyq8gaK7xmlaqk=
+	t=1729819360; cv=none; b=HPtexDwmJt2P+Zwec6Nph93OKNTtkSosIcw7fB9x7/ln6B73Efe/dDbsGhe71lMYmYYs74qv/qRjSnV8+/Qvos20a1qVx/H6LsbmqIrx1SDwIsKpZLuAXtPLlqs0M4XoalrbEnO43WLGAPQMKt5hgEIAZFGb9vN2RfPN56mC8y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729819332; c=relaxed/simple;
-	bh=k8Uxueyg41OU4NS/Z9QWF/oAv1BvtgAuRrhnglMaDaI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Jye8mMqEGR+URhCakGf8Ggt/LQZ5nR5O9q0ghcPSHCLTTG/ocJse5jAXZnQeHBME4Wyjwx8xhAb/moW7JURdKFVDv+SGYrnB7lq+HGsZ29XK03AWr0VrKAjxHfPaCnecrLNv9cuNbPJn++lOVJifad3eiTpO6Tvxbjal1tQb5HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vs2fT4iX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1729819360; c=relaxed/simple;
+	bh=PHk+f02gxxCH78JZbRAia+WbVbQ0AJGC2OCKGNTcjio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uW71+Sca8fKZWF7SLf/zpDev8XkiySYXRbsXZthvy1HlcKD09/87q6wITgW0s1C8Q5o5JyL++/m2KtBddcUUnkcVjxuF6kv3fgBA29AoGwdAVwk7hpdg4slyU51ugsUISBo1bdfkmvden3OWRcpm6pBpURAJJCy//gvl9kNMt1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bc3a5qD4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vs2fT4iX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729819329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9puYAXZiBeYezZZxEYnLXzXKsysRRpMblK4dGGQ/J6k=;
-	b=Vs2fT4iXLg9ayuN0nVzbjl0LQzaA/Tx0Ev81h9zQLtucJXY3V7GahxseHE8yUfAqf1XD83
-	QLI3NZmpq6vG70L0Yn9xlZC8/nRz4zz2iZW4ecwYaCLIjiE6JwGQhYubqElBPMyq+HdNxZ
-	xxOldUMh69WhuVhQEnejyprKSIlZl8A=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-593-Lc_ZiPcOMyOkqxUYAqwkVA-1; Thu,
- 24 Oct 2024 21:22:07 -0400
-X-MC-Unique: Lc_ZiPcOMyOkqxUYAqwkVA-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2962A1955F45
-	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 01:22:06 +0000 (UTC)
-Received: from [172.64.4.42] (unknown [10.30.33.216])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ABD561956056;
-	Fri, 25 Oct 2024 01:22:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc4,
- mainline.kernel.org-clang, ae90f6a6)
-Date: Fri, 25 Oct 2024 01:22:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bc3a5qD4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E6DC4CEC7;
+	Fri, 25 Oct 2024 01:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729819359;
+	bh=PHk+f02gxxCH78JZbRAia+WbVbQ0AJGC2OCKGNTcjio=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bc3a5qD4OqjSXdFp0YC/YQR9lx762k8SHCwE/zwZhxpyXyv48dUIt717zB96aKR7+
+	 SbtSj8MwlVbEqKW6C26c2Gv6o2zrqmo5IcAdf9trqDWBrMN/JvUjo92s26V3q3ucWi
+	 SwVTMP6SfuQ2T5YNj8O3yup9tLtPg6g55ljJSSSjBxw7k6gXkQa7QfiMG9awCkDHQD
+	 4gwwY+qWszL0lQR6wpzSm5d2Y2wu3LFG30dKdvTnS3bFB7J/TTDGEYJ3awBZVLKiC5
+	 ccRmySNrAF1EkoMB+XET2jpjv2HIDPApBSDm1XnR6mUqYlDl43boiMQwrU+Fj4sUuh
+	 LLqYU6N14X0ow==
+Date: Thu, 24 Oct 2024 18:22:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: clang-built-linux <llvm@lists.linux.dev>,
+	open list <linux-kernel@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: powerpc: clang-nightly: fatal error: error in backend: Trying to
+ obtain a reserved register "r2".
+Message-ID: <20241025012237.GC740745@thelio-3990X>
+References: <CA+G9fYs2G_4jyv-V7f85oE53rw5rX0Tnf2V8RQ=O9CuPcbfb2A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <53087.124102421220700124@us-mta-593.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYs2G_4jyv-V7f85oE53rw5rX0Tnf2V8RQ=O9CuPcbfb2A@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Naresh,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+On Thu, Oct 24, 2024 at 08:35:11PM +0530, Naresh Kamboju wrote:
+> The powerpc clang-nightly version 20.0.0 build warnings / errors noticed on
+> the Today's Linux next-20241024 tag.
+...
+> Build errors:
+> ----------
+> fatal error: error in backend: Trying to obtain a reserved register "r2".
 
+Thanks for the report. I reported this upstream earlier, it should be
+resolved now but it will take a little bit for that to filter into
+clang-nightly from Debian.
 
-Kernel information:
-    Commit message: Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/bpf/bpf
+https://github.com/llvm/llvm-project/pull/112603#issuecomment-2430709704
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1511521817
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1511521817-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1511521817-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1511521817-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
