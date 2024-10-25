@@ -1,235 +1,101 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF67E20D507
-	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 18:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B72170A00
+	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 19:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729881068; cv=none; b=DIRxDSAievym7K6uTHe2zJ3Se40k9wiqppGCngRdMyhYEcse903QuTvRCWYorYYV4z4GDlP4pfdCgRT10O9gqqmVFes6rpRAl/jRCx4rfeWt0D8IS62oC6fMADU9eZhcXj8z3kM78nRFCETt49KtDKl/UFNa06Rj1twV4/wL8ew=
+	t=1729882934; cv=none; b=qiNYxCxBdH5oMlhz+Iu3Fkpdu17sUnwXZXC0xLZzpGiFpINt0vQGfZzI5a7dNrAiBvFysXOxQ1xJ2DtOviuvlHUcZzZtnpDBrsGsAQPSyq0hB8YUmcv4hgtnewDNW+uzJAkNVUyN7784xDhfLijB8m0SAKdxv/kv+C9Kkt6Q7CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729881068; c=relaxed/simple;
-	bh=TVGg5nfJZWmGZG8YgIdZNS4AeglqAlSNrt1zZwvBpiI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cBLJwmftgxCztnx/m+MABeos2nr8uvL44wtEsBBm/lVqz1HVup6t1DlVcjpo/yvZxd0Sd2yykdwvmUjQ4eVFnchse3IqMS5wnDilGHWaN1HHKMZg9A0PLLyi6mffCjmvq2x2YAS+3UtyOX19hLiXr87Rs7/Ydb6PheozhIJfQ8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=L4JBP6u5; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1729882934; c=relaxed/simple;
+	bh=PQhxqbtKSDjtl4ud/RAaP/2fhQtmErAkcLWLKkHiFZ8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kCW395+xOcreAzl3+gnVQz4qVei/Zq7wOiC+6NcyoStDK7HJ0F8fRXHkIDWaGqHLBYlj/fZABGKWYfBlIfWgvE2NAzaAmcfGloP5Du7BCpe1y4Snbnn1dMq03jAFlCsKu7qWvKNQv/anzNPe1JJR4vxi1YeMOF8KXzr/WnytxhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cIGooVDs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="L4JBP6u5"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49PEeSoi032573;
-	Fri, 25 Oct 2024 18:30:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=bCYg3WI36eTA+yA5LQzfw/1BaodCD9
-	Je+3uqP+670Ns=; b=L4JBP6u5Q6DXkamufc4+3XtZ1LIvxy7KA02HHWnMgLigt/
-	/1qWBo6o+qQAV5pkWUKkTjnMNLq5BwQR9zJJTw0HvD4lc37cPSqK0DaSymmYGIzf
-	Qmaxfl/bly8lNmJ2jumL1zxgEcKZ1nSRiAAjgrhy6jtJmxUylLwAmlgtNLB1uEYj
-	9VdlGAflHyXYQpGdwjD3SSEQBbW9DtBsKEF6JAMVVVZN7BZuluITJVG9GmA8KPu7
-	rzEy+lYmeYDpEgLsSfj/KrNZ15BrYOLKGm5MB6ySYTy2bB3k5CPlDBQOgaROibbv
-	BiR89l1QcwwsJF0/qaDMDUFkBR4sZClC0mpsKhkA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42g246v9ex-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 18:30:42 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49PIUfrt004272;
-	Fri, 25 Oct 2024 18:30:41 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42g246v9et-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 18:30:41 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49PHpv67008754;
-	Fri, 25 Oct 2024 18:30:40 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 42emkay4pw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 18:30:40 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49PIUcJ918743588
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 25 Oct 2024 18:30:38 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 909152004B;
-	Fri, 25 Oct 2024 18:30:38 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2DD0220040;
-	Fri, 25 Oct 2024 18:30:38 +0000 (GMT)
-Received: from localhost (unknown [9.43.62.211])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 25 Oct 2024 18:30:37 +0000 (GMT)
-Date: Sat, 26 Oct 2024 00:00:37 +0530
-From: "Nysal Jan K.A." <nysal@linux.ibm.com>
-To: Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: linuxppc-dev@lists.ozlabs.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] sched/membarrier: Fix redundant load of membarrier_state
-Message-ID: <nszn2c226bf6xslp7r5axmiov4fuhmwqqyzap7b2lysuch7fnl@uhgtmsaxttf3>
-References: <20241007053936.833392-1-nysal@linux.ibm.com>
- <87frolja8d.fsf@mail.lhotse>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cIGooVDs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729882930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4B58U5itIQ1fWvdFrcc1VHpKUPgLxN6olhVhE7STslQ=;
+	b=cIGooVDsfH71oV8hkyDXojOyV5DuZYkFAy/W6Nr2pg0P+YPvbu7Z1OgEp3i4tiHJ1+zVJl
+	bP5PWlrR4Gp6WYIy58lIprbiuiMtwii9bvPvUDv1vjVBMYgIM5L1vy//1bTvPeAqmCHHkN
+	eYvNuLXQGpciuyUkUdZXm3ujGnr1/tQ=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-I__ftJvgMMSvvKQZSkVy8w-1; Fri,
+ 25 Oct 2024 15:02:04 -0400
+X-MC-Unique: I__ftJvgMMSvvKQZSkVy8w-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 271A91955D48
+	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 19:02:03 +0000 (UTC)
+Received: from [172.64.2.86] (unknown [10.30.34.59])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B85A5196BB7D;
+	Fri, 25 Oct 2024 19:02:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc4,
+ mainline.kernel.org-clang, b423f5a9)
+Date: Fri, 25 Oct 2024 19:02:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87frolja8d.fsf@mail.lhotse>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: gQkqUtvd0_hSqnkwwp8fiBBQGQjBbqR7
-X-Proofpoint-GUID: SMcGweBVNA9QTr_rEIeG2qZ-BNAshwUZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 adultscore=0
- mlxlogscore=999 clxscore=1011 impostorscore=0 mlxscore=0 phishscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2410250140
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <72491.124102515020400850@us-mta-650.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 25, 2024 at 11:29:38AM +1100, Michael Ellerman wrote:
-> [To += Mathieu]
-> 
-> "Nysal Jan K.A." <nysal@linux.ibm.com> writes:
-> > From: "Nysal Jan K.A" <nysal@linux.ibm.com>
-> >
-> > On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-> > is not selected, sync_core_before_usermode() is a no-op.
-> > In membarrier_mm_sync_core_before_usermode() the compiler does not
-> > eliminate redundant branches and the load of mm->membarrier_state
-> > for this case as the atomic_read() cannot be optimized away.
-> 
-> I was wondering if this was caused by powerpc's arch_atomic_read() which
-> uses asm volatile.
-> 
+Hi, we tested your kernel and here are the results:
 
-Yes, that's my understanding as well
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-> But replacing arch_atomic_read() with READ_ONCE() makes no difference,
-> presumably because the compiler still can't see that the READ_ONCE() is
-> unnecessary (which is kind of by design).
-> 
 
-In READ_ONCE() we cast to a volatile pointer, I think the compiler cannot eliminate
-the code in that case.
+Kernel information:
+    Commit message: Merge tag 'acpi-6.12-rc5' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/rafael/linux-pm
 
-> > Here's a snippet of the code generated for finish_task_switch() on powerpc:
-> >
-> > 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
-> > .......
-> > 1b78c8:   cmpdi   cr7,r26,0
-> > 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
-> > 1b78d0:   ld      r9,2312(r13)    # current
-> > 1b78d4:   ld      r9,1888(r9)     # current->mm
-> > 1b78d8:   cmpd    cr7,r26,r9
-> > 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
-> > 1b78e0:   hwsync
-> > 1b78e4:   cmplwi  cr7,r27,128
-> > .......
-> > 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
-> > 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
-> >
-> > This was found while analyzing "perf c2c" reports on kernels prior
-> > to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
-> > where mm_count was false sharing with membarrier_state.
-> 
-> So it was causing a noticable performance blip? But isn't anymore?
-> 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1512891332
 
-It was noticeable in that it showed up amongst the top entries in perf c2c reports.
-There was similar false sharing with other fields that share the cache line with
-mm_count, so the gains were minimal with just this patch. c1753fd02a00 addresses
-these cases too.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1512891332-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1512891332-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1512891332-x86_64-kernel-debug
 
-> > There is a minor improvement in the size of finish_task_switch().
-> > The following are results from bloat-o-meter:
-> >
-> > GCC 7.5.0:
-> > ----------
-> > add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-> > Function                                     old     new   delta
-> > finish_task_switch                           884     852     -32
-> >
-> > GCC 12.2.1:
-> > -----------
-> > add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-> > Function                                     old     new   delta
-> > finish_task_switch.isra                      852     820     -32
-> 
-> GCC 12 is a couple of years old, I assume GCC 14 behaves similarly?
-> 
 
-I cross compiled for aarch64 with gcc 14.1.1 and see similar results:
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
-Function                                     old     new   delta
-get_nohz_timer_target                        352     356      +4
-e843419@0b02_0000d7e7_408                      8       -      -8
-e843419@01bb_000021d2_868                      8       -      -8
-finish_task_switch.isra                      592     548     -44
-Total: Before=31013792, After=31013736, chg -0.00%
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-> > LLVM 17.0.6:
-> > ------------
-> > add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
-> > Function                                     old     new   delta
-> > rt_mutex_schedule                            120     104     -16
-> > finish_task_switch                           792     772     -20
-> >
-> > Signed-off-by: Nysal Jan K.A <nysal@linux.ibm.com>
-> > ---
-> >  include/linux/sched/mm.h | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> > index 07bb8d4181d7..042e60ab853a 100644
-> > --- a/include/linux/sched/mm.h
-> > +++ b/include/linux/sched/mm.h
-> > @@ -540,6 +540,8 @@ enum {
-> >  
-> >  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
-> >  {
-> > +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
-> > +		return;
-> >  	if (current->mm != mm)
-> >  		return;
-> >  	if (likely(!(atomic_read(&mm->membarrier_state) &
-> 
-> The other option would be to have a completely separate stub, eg:
-> 
->   #ifdef CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
->   static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
->   {
->           if (current->mm != mm)
->                   return;
->           if (likely(!(atomic_read(&mm->membarrier_state) &
->                        MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
->                   return;
->           sync_core_before_usermode();
->   }
->   #else
->   static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm) { }
->   #endif
-> 
-> Not sure what folks prefer.
-> 
-> In either case I think it's probably worth a short comment explaining
-> why it's worth the trouble (ie. that the atomic_read() prevents the
-> compiler from doing DCE).
->
-
-I'll send a v2 with a comment added in there. Thanks for the review.
-
---Nysal
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
