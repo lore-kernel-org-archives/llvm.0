@@ -1,38 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB170217F31
-	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 22:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049CC1D270A;
+	Fri, 25 Oct 2024 22:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729895603; cv=none; b=VFgknpKkGULzZ5w7TFerUAyoGxU4xydzyOU7XtfCMgYiSdfAu1x7WowOI1XSLEcdipRsm7v8tgxWoF+I73wkZ0RweEbOpMrjk7/qmAEveyBEdGl0MdnQj4Foy+CnT7+ykMgy14/P7/ZLfwt+WM3qoa5OAHT6Yb3AEfUmRtQk/Ek=
+	t=1729896640; cv=none; b=gxYUGmW/Zv4FhysszMj+WPIJGs9bqrDWsbx1cCUCwKU9qemk1/HuUKPLkoyCuDiwCmRpBaFDUuRbvcpV+3r433KISH2Eb7JkYLMm3quat/Z3YaPGK99kY4bwoOM8oM8akhOohpnuv8MIj85nJwN9/VUk6EuT/H20URmdN6NYk5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729895603; c=relaxed/simple;
-	bh=SyQ8KjxFK8NhxQXCPghiE/MhZ4V/j5BotFRr3AMG02o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iwPpg7ON+UWl2yx93lQgkbSixP5NusK0TjdbfIngb/RfciXzKm6pRMdBbcjfqu0vcl7C/bEkUIkMz6Vuz144ugX/l8EShkGh2tNdNYED/ZBiHu0cPoKn7X2oPKVEIZbctwEiI7MtMnenPYW5e3kesNAxwMlBgaW4KnCHuwEQ6fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5K9k4TR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729896640; c=relaxed/simple;
+	bh=v1Nr7Ui+gunxcmzUPBoFZjrzUsWZqQC8r449d8LfYb0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cPAOHVUBQMZ4QSsgxxdr3UzBdrNvAGM2jZNXqWDLNxlAuY3wDxO2mSBYjb7mQmJvUJ95X2AUYI/OsmNitCET3FKtRvdAmQ6DPwbdQfXfZOJiSLrQkSIyKA3EC2E6FPTb4QxRHRvCJFeCgHN/eaXahiovZtGIL0MlFt0WI5YqcXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JvrvdrDB; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5K9k4TR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47724C4CEC3;
-	Fri, 25 Oct 2024 22:33:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729895603;
-	bh=SyQ8KjxFK8NhxQXCPghiE/MhZ4V/j5BotFRr3AMG02o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g5K9k4TRK3jWdpe36sQK0qlHNsRr2vVSOIlwrxMnRLq5yj8T4y1Eb8r+04l5a5Eok
-	 dmymmatnpb621u1ocutiZ9cRtawUhfur5MeIeSzxVGmVUrTmZtVa8Z74few65TUr0M
-	 mBuOWFz6K7eEHtQFVYUcdLAS+2sAXZtmY5Uaee890qefHxXcXd3z0HJl8/XnXFXVd7
-	 am7dGYmaSTvJ4p98u+eI2e7setf3QAA9hI4gltm8IO3D0B6dTEYtXK36NGZvH+9LU5
-	 1ru/jXylvP1qNeyRtaxOAb9iCyxwOUcFdUj3Lh1KtpysTx9bG9ESVzg5R21B2wYLPH
-	 YCim2KLxE4s9Q==
-Date: Fri, 25 Oct 2024 15:33:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: llvm@lists.linux.dev, Kalle Valo <kvalo@kernel.org>
-Subject: Re: Which LLVM options impact function stack size?
-Message-ID: <20241025223321.GA3647469@thelio-3990X>
-References: <bc214795-1c51-4cb7-922f-67d6ef98bff2@quicinc.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JvrvdrDB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729896638; x=1761432638;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v1Nr7Ui+gunxcmzUPBoFZjrzUsWZqQC8r449d8LfYb0=;
+  b=JvrvdrDBw7qsvVWnYUQnKTvkrtHDGGW0ad86EhhkFsyztucVMqq+sSZS
+   IlL8JooIb7Ktsh74uAzM9Kkpr0OgpklbXD8xrPsicGNHFEpDCEhrE4kFI
+   gLl37xq63892t758JO2W/cXGnEJvSEk7pcOvn1BDKFy0kwPGCESXl96Rp
+   4FNagBMD74Xy7L/OMoCbatUllCpCiiA9oOA9eM60ejun82+6r4LdgHkE/
+   0zUxxlebDQ0zz8S4RT0OYtvc+oKXhFhHbslEIFMW1KJQKpoRObVmy4UJM
+   I5OHk6Q/z6WvtYfhfwzSvcfFzVkVRquzGkxowCM8O0gjr/ImXqo6Q3+jv
+   A==;
+X-CSE-ConnectionGUID: euWDgbBMScyXNPuM5f7XyQ==
+X-CSE-MsgGUID: 0bQWtVKKQDSCO9uLXHzNOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29443337"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29443337"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 15:50:36 -0700
+X-CSE-ConnectionGUID: UkY/r7ulSx2/VHPDrBnC6Q==
+X-CSE-MsgGUID: ufl3Z9iLSF+KjSbKXzn4PQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
+   d="scan'208";a="80957509"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 25 Oct 2024 15:50:34 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4T8a-000Z0A-0A;
+	Fri, 25 Oct 2024 22:50:32 +0000
+Date: Sat, 26 Oct 2024 06:50:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6953:13:
+ warning: stack frame size (3160) exceeds limit (3072) in
+ 'dml_core_mode_support'
+Message-ID: <202410260648.Dnwzz67Y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,41 +64,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bc214795-1c51-4cb7-922f-67d6ef98bff2@quicinc.com>
 
-Hi Jeff,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c71f8fb4dc911022748a378b16aad1cc9b43aad8
+commit: a00e85713c372f19a81432e44f0bd5cb5102c644 drm/amd/display: Update DML2.1 generated code
+date:   5 months ago
+config: x86_64-randconfig-071-20241024 (https://download.01.org/0day-ci/archive/20241026/202410260648.Dnwzz67Y-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260648.Dnwzz67Y-lkp@intel.com/reproduce)
 
-On Fri, Oct 25, 2024 at 02:31:47PM -0700, Jeff Johnson wrote:
-> While doing Linux kernel builds with both GCC and LLVM I'm encountering some
-> very large function stack size usage using LLVM that I'm not seeing with GCC.
-> I suspect some nuances in debug or compiler options may be at play. Curious if
-> there are known options which can have a significant stack impact.
-...
-> +UBSAN_ARRAY_BOUNDS y
-> 
-> With GCC 14.2.0 I see a single stack size warning in the ath12k driver:
-> drivers/net/wireless/ath/ath12k/mac.c: In function 'ath12k_bss_assoc':
-> drivers/net/wireless/ath/ath12k/mac.c:3253:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> 
-> With LLVM 18.1.7 I see:
-> drivers/net/wireless/ath/ath12k/qmi.c:3546:13: warning: stack frame size (2456) exceeds limit (1024) in 'ath12k_qmi_driver_event_work' [-Wframe-larger-than]
-> drivers/net/wireless/ath/ath12k/mac.c:5601:12: warning: stack frame size (1176) exceeds limit (1024) in 'ath12k_mac_op_sta_state' [-Wframe-larger-than]
-> drivers/net/wireless/ath/ath12k/mac.c:10024:12: warning: stack frame size (1080) exceeds limit (1024) in 'ath12k_mac_op_remain_on_channel' [-Wframe-larger-than]
-> drivers/net/wireless/ath/ath12k/mac.c:3132:13: warning: stack frame size (1112) exceeds limit (1024) in 'ath12k_bss_assoc' [-Wframe-larger-than]
-> drivers/net/wireless/ath/ath12k/mac.c:4940:13: warning: stack frame size (1112) exceeds limit (1024) in 'ath12k_sta_rc_update_wk' [-Wframe-larger-than]
-> 
-> Especially concerning is that first LLVM one is which why I'm trying to
-> determine why there is a large stack size with LLVM when there isn't with GCC.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410260648.Dnwzz67Y-lkp@intel.com/
 
-I would expect CONFIG_UBSAN_ARRAY_BOUNDS to be the difference here. I am
-not familiar enough with LLVM internals to say why exactly this occurs
-but it has occasionally come up for some kernel code that is array
-access heavy. I think it is often a combination of inlining plus
-instrumentation that causes LLVM to be unable to reuse stack slots
-effectively. Arnd has sent workarounds for some issues like this in the
-past using 'noinline_for_stack' or rewriting code:
+All warnings (new ones prefixed by >>):
 
-https://lore.kernel.org/all/?q=f:arnd@kernel.org+Wframe-larger-than
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/inc/dml2_internal_shared_types.h:9:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/inc/dml2_external_lib_deps.h:8:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/os_types.h:31:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6953:13: warning: stack frame size (3160) exceeds limit (3072) in 'dml_core_mode_support' [-Wframe-larger-than]
+    6953 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
+         |             ^
+   2 warnings generated.
 
-Cheers,
-Nathan
+
+vim +/dml_core_mode_support +6953 drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
+
+a00e85713c372f Rodrigo Siqueira 2024-04-29  6952  
+70839da6360500 Aurabindo Pillai 2024-04-19 @6953  static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
+70839da6360500 Aurabindo Pillai 2024-04-19  6954  {
+70839da6360500 Aurabindo Pillai 2024-04-19  6955  	struct dml2_core_internal_display_mode_lib *mode_lib = in_out_params->mode_lib;
+70839da6360500 Aurabindo Pillai 2024-04-19  6956  	const struct dml2_display_cfg *display_cfg = in_out_params->in_display_cfg;
+70839da6360500 Aurabindo Pillai 2024-04-19  6957  	const struct dml2_mcg_min_clock_table *min_clk_table = in_out_params->min_clk_table;
+70839da6360500 Aurabindo Pillai 2024-04-19  6958  
+
+:::::: The code at line 6953 was first introduced by commit
+:::::: 70839da6360500a82e4d5f78499284474cbed7c1 drm/amd/display: Add new DCN401 sources
+
+:::::: TO: Aurabindo Pillai <aurabindo.pillai@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
