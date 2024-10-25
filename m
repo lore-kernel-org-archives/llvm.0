@@ -1,71 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4171C18C932;
-	Fri, 25 Oct 2024 06:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A981DB366;
+	Fri, 25 Oct 2024 09:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729837011; cv=none; b=dDbOBCzZjMvwBXg3V4gp2Bkw4hvrLwweT15Y5M9mjF6FP7q7JJTEC70rwqgjMUXqi9zF6VH0P4q4vrfclHWDtkVVMQqy+aYffejRNcF9+J2GLFXEmk40QIO44xdo3uJhmMM+WzVol/QUxHrF9TeqHWeKBbxh5UaVSSABZVEQrwU=
+	t=1729847708; cv=none; b=NYQ8G+kNhxwFprT3xeOA4ziU6y+mmJBWY6YOeEKYfP6alQsyTTySf2VlKDCg5k4YGkLtB+egAE9hXu7E9P0P0xUTB3xBBa7G/c/ZdwP7msMpyDnjqf/NA8yKIKFAupVmtMQfnz8L72yDepfpGGJ973mvu5Z1ujy/fXCLhs/R0EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729837011; c=relaxed/simple;
-	bh=c6V1Mv+taW3ICFO5XNnbFK4fCJZFIwQpzeF7YcNeRNs=;
+	s=arc-20240116; t=1729847708; c=relaxed/simple;
+	bh=4XMDoD+OeLfbg1UVKD38t5UItaObkTJ3EMHjIj5Uj94=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d437mfqQ8ICdS+1FYxYjifmaroBpCb0aGGxhoFSYU6uJc9xBI6OIu3rjHk1izynHSwlwptUnpVIkRKJOjbTXFEdEGjAuk0QTH6ANcLtLcGYGUWxhYH/M2pbcBBlfhdOsavDzlra6HzIvHWZVF/zQs0ztmoP5IPRki8xdpHjidJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IvdA1i9S; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=PDy3az4Rdp0KQgpSbg2rgGy0ktF06lKxeM//FG/aqIxqL3as9+PcUayKUK/kxz7GVdh945MnvEjulgZ5/8+/ZzAlxJTggSa2l+AQe3UVfr/9rKXLvlZsP3AZVEdRAJ8RNX1wPjV/mIacXpL6ECCd2kv69enWiB33zcE38v7hOio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EMX2wLbv; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IvdA1i9S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EMX2wLbv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729837010; x=1761373010;
+  t=1729847706; x=1761383706;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=c6V1Mv+taW3ICFO5XNnbFK4fCJZFIwQpzeF7YcNeRNs=;
-  b=IvdA1i9SI68cqw+Fsqfug1O5+DxmoILdMgfh8qsm14q6P8Y3MKqvDH1Z
-   MsjHg1ZxktlPl/1SQva3RrfJgkAThg99Cc954hIHsedyrkM4t5yJxTAWA
-   sX1BKA1PsEDZbtQExpAiUxrLjbTdKIaoQgfzh/mk28QnFJY1CR6Kg3ZNI
-   PREdFn5KQrzSuPxaMsv4a8dVaXDb72EqQw+P9n+8Sevi3tTWW78wqcoT2
-   J3phmuaaK68gdfZjmXlJpOOM20hf4OYUyBMD8Cg/249Ngb//5qFQCT0TX
-   h4TVWE+Ur3Bqt0KOch/Hdzi+HFBxhd1odwjcUja3sMFVoHf6n9/c5DKZ6
+  bh=4XMDoD+OeLfbg1UVKD38t5UItaObkTJ3EMHjIj5Uj94=;
+  b=EMX2wLbvBL+z++EU8aXIWmakBrS2W6+gSnZQAcAFZhn1cchMcslEfDJM
+   0gs8jStoRqSzyz+tYMTXqBFY1UvzjZrP/kmkKnR9GUrFStk+P7QAVnsY7
+   53+WNxBpJiVXjl9oq1TO5ndG0iX8uToUjaFCrn0qL8n/0HzhO8wVdfejP
+   yga/DJ2GACQqzrUkE6PFJPdZKcLaoty0HQkclhxHY0215mTs9bnh23noK
+   /2IgkSCgLIDozP8JrIQ3nKP4fsbQdsCCbP3UmWFKcpjso6oT5vOq8Vm2S
+   xUgR6ZeJ4NuLcm/e0Tlov9RV+2bs0feDui7W7Xd+jAz0/+PAslb+Xs+5E
    g==;
-X-CSE-ConnectionGUID: fsGfKbVVT2yIAbzo9kk+aQ==
-X-CSE-MsgGUID: upu2uhQFQ8eoB2/4ck7bGg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29274983"
+X-CSE-ConnectionGUID: NRWyuNTJStetrHXomzarxw==
+X-CSE-MsgGUID: OciJWkb+TCGgLg+rCWOecQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="52066582"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29274983"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 23:16:49 -0700
-X-CSE-ConnectionGUID: PKYOkV+QSeWAVUQvMAg3ZA==
-X-CSE-MsgGUID: q+TANJcEReWiNuhgN2CKuw==
+   d="scan'208";a="52066582"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 02:15:00 -0700
+X-CSE-ConnectionGUID: UyiVqf9YRASFXPSsA9mn2Q==
+X-CSE-MsgGUID: HLEMjEXGRF62b6hBGS5IGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
-   d="scan'208";a="118287858"
+   d="scan'208";a="85653620"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 24 Oct 2024 23:16:44 -0700
+  by orviesa005.jf.intel.com with ESMTP; 25 Oct 2024 02:14:54 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4Dcn-000Xg8-1z;
-	Fri, 25 Oct 2024 06:16:41 +0000
-Date: Fri, 25 Oct 2024 14:16:09 +0800
+	id 1t4GPD-000XyP-17;
+	Fri, 25 Oct 2024 09:14:51 +0000
+Date: Fri, 25 Oct 2024 17:14:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jani.nikula@intel.com, David Airlie <airlied@gmail.com>,
-	Hamza Mahfooz <hamza.mahfooz@amd.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
-	Simon Ser <contact@emersion.fr>, Simona Vetter <simona@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	amd-gfx@lists.freedesktop.org, linux-arm-kernel@lists.infradead.org,
-	nouveau@lists.freedesktop.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH 2/2] drm: remove driver date from struct drm_driver and
- all drivers
-Message-ID: <202410251345.nA1iHU0x-lkp@intel.com>
-References: <20241024162240.2398664-2-jani.nikula@intel.com>
+To: "D. Wythe" <alibuda@linux.alibaba.com>, kgraul@linux.ibm.com,
+	wenjia@linux.ibm.com, jaka@linux.ibm.com, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	pabeni@redhat.com, song@kernel.org, sdf@google.com,
+	haoluo@google.com, yhs@fb.com, edumazet@google.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+	guwen@linux.alibaba.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kuba@kernel.org,
+	davem@davemloft.net, netdev@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org, dtcccc@linux.alibaba.com
+Subject: Re: [PATCH bpf-next 2/4] bpf: allow to access bpf_prog during
+ bpf_struct_access
+Message-ID: <202410251600.4VOzw93J-lkp@intel.com>
+References: <1729737768-124596-3-git-send-email-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,38 +72,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024162240.2398664-2-jani.nikula@intel.com>
+In-Reply-To: <1729737768-124596-3-git-send-email-alibuda@linux.alibaba.com>
 
-Hi Jani,
+Hi Wythe,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on next-20241024]
-[cannot apply to drm-exynos/exynos-drm-next shawnguo/for-next drm-xe/drm-xe-next linus/master v6.12-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-remove-driver-date-from-struct-drm_driver-and-all-drivers/20241025-002344
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20241024162240.2398664-2-jani.nikula%40intel.com
-patch subject: [PATCH 2/2] drm: remove driver date from struct drm_driver and all drivers
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241025/202410251345.nA1iHU0x-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/D-Wythe/bpf-export-necessary-sympols-for-modules/20241024-104903
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/1729737768-124596-3-git-send-email-alibuda%40linux.alibaba.com
+patch subject: [PATCH bpf-next 2/4] bpf: allow to access bpf_prog during bpf_struct_access
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241025/202410251600.4VOzw93J-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410251345.nA1iHU0x-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410251600.4VOzw93J-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410251345.nA1iHU0x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410251600.4VOzw93J-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/accel/qaic/qaic_drv.c:7:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
+   In file included from drivers/hid/bpf/hid_bpf_struct_ops.c:10:
+   In file included from include/linux/bpf_verifier.h:7:
+   In file included from include/linux/bpf.h:20:
    In file included from include/linux/module.h:19:
    In file included from include/linux/elf.h:6:
    In file included from arch/s390/include/asm/elf.h:181:
@@ -130,7 +122,10 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/accel/qaic/qaic_drv.c:7:
+   In file included from drivers/hid/bpf/hid_bpf_struct_ops.c:10:
+   In file included from include/linux/bpf_verifier.h:9:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
    In file included from include/linux/dma-mapping.h:11:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:93:
@@ -146,7 +141,10 @@ All errors (new ones prefixed by >>):
    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
          |                                                      ^
-   In file included from drivers/accel/qaic/qaic_drv.c:7:
+   In file included from drivers/hid/bpf/hid_bpf_struct_ops.c:10:
+   In file included from include/linux/bpf_verifier.h:9:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
    In file included from include/linux/dma-mapping.h:11:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:93:
@@ -159,7 +157,10 @@ All errors (new ones prefixed by >>):
    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
          |                                                      ^
-   In file included from drivers/accel/qaic/qaic_drv.c:7:
+   In file included from drivers/hid/bpf/hid_bpf_struct_ops.c:10:
+   In file included from include/linux/bpf_verifier.h:9:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
    In file included from include/linux/dma-mapping.h:11:
    In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:93:
@@ -190,37 +191,27 @@ All errors (new ones prefixed by >>):
    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      736 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
->> drivers/accel/qaic/qaic_drv.c:211:3: error: field designator 'date' does not refer to any field in type 'const struct drm_driver'
-     211 |         .date                   = "20190618",
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/accel/qaic/qaic_drv.c:448:46: warning: shift count >= width of type [-Wshift-count-overflow]
-     448 |         ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-         |                                                     ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   17 warnings and 1 error generated.
+>> drivers/hid/bpf/hid_bpf_struct_ops.c:146:23: error: incompatible function pointer types initializing 'int (*)(struct bpf_verifier_log *, const struct bpf_reg_state *, const struct bpf_prog *, int, int)' with an expression of type 'int (struct bpf_verifier_log *, const struct bpf_reg_state *, int, int)' [-Wincompatible-function-pointer-types]
+     146 |         .btf_struct_access = hid_bpf_ops_btf_struct_access,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   16 warnings and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +211 drivers/accel/qaic/qaic_drv.c
+vim +146 drivers/hid/bpf/hid_bpf_struct_ops.c
 
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  205  
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  206  static const struct drm_driver qaic_accel_driver = {
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  207  	.driver_features	= DRIVER_GEM | DRIVER_COMPUTE_ACCEL,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  208  
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  209  	.name			= QAIC_NAME,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  210  	.desc			= QAIC_DESC,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27 @211  	.date			= "20190618",
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  212  
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  213  	.fops			= &qaic_accel_fops,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  214  	.open			= qaic_open,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  215  	.postclose		= qaic_postclose,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  216  
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  217  	.ioctls			= qaic_drm_ioctls,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  218  	.num_ioctls		= ARRAY_SIZE(qaic_drm_ioctls),
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  219  	.gem_prime_import	= qaic_gem_prime_import,
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  220  };
-c501ca23a6a306 Jeffrey Hugo 2023-03-27  221  
+ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  142  
+ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  143  static const struct bpf_verifier_ops hid_bpf_verifier_ops = {
+bd0747543b3d97 Benjamin Tissoires 2024-06-08  144  	.get_func_proto = bpf_base_func_proto,
+ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  145  	.is_valid_access = hid_bpf_ops_is_valid_access,
+ebc0d8093e8c97 Benjamin Tissoires 2024-06-08 @146  	.btf_struct_access = hid_bpf_ops_btf_struct_access,
+ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  147  };
+ebc0d8093e8c97 Benjamin Tissoires 2024-06-08  148  
 
 -- 
 0-DAY CI Kernel Test Service
