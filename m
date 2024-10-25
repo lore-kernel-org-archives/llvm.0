@@ -1,68 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F355914C5B5;
-	Fri, 25 Oct 2024 14:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424B92022E9;
+	Fri, 25 Oct 2024 15:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729868256; cv=none; b=E8WR4Tw4fwAZaWy20adCzpNpuf9m2M1WkJODmLWYTfrpkNhRIatf0lSXBomv2Ofw9GwZ9c/OaweT1kkSb5m+oS7GVdR9bb4GvnfMubqVSm/+DI4/INxaVlPpLvZwjQ4g9H/qKBpkzOIXdegOi7jzFI2ghQaE/r+JaXvgNSZTyFc=
+	t=1729868906; cv=none; b=KMKD6brb1T0syEKtsSJKErrSKMfk1CR1P8d1O/NNfRA/7hqVHFnUY3Hswsc7NLUYnmuBGlMtCUpMUb1wx+RUV4gGN+9krhNYFjzccgVt4/etMYS7NtX+LXdYJBMTtUV6GmkdJlq+eYi8x0kLrqqgSoyE1pGw5zF3i5CMptb6tfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729868256; c=relaxed/simple;
-	bh=ix2tXusYTmrFGAelw8kNSLKU2BJAsin2+gBsbel4FJs=;
+	s=arc-20240116; t=1729868906; c=relaxed/simple;
+	bh=17d/zXwR7DAxHpRRgX8HsRNtLWR+OYpu1cCPhv8+mMQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3zVjzyhnIKiaX+o0nlzOIQK1IEA+7V+NsVPdkoLir2RFRLNxjKXR10QcJS88liVboab7lYUdkQgvqWLcrd/NjjzUlW3810xCU+RVFR4uSv85czEmeiOMvXAuG5Ehp8DNMVbPTNUGth3eKP0EknSNA0aJVgdPgBx3QhGqrgeN6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RKTgQzWQ; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=KU9XudKXcdY/ssTkW0F9He/QBKYMO7mipUv6dytcZueKuHsFYMdU194BXxK6RAULpRZsYIl1lceO5Rg4RFu1N5PGjy+q8f3w2i2twiaKvIiH7Qkp9br13x1FxZuOFhJHcyriuEif7eS3f0LysOSxUOhsYRWCNy9HA0RtkMqIiE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bSKrE7zb; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RKTgQzWQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bSKrE7zb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729868255; x=1761404255;
+  t=1729868902; x=1761404902;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ix2tXusYTmrFGAelw8kNSLKU2BJAsin2+gBsbel4FJs=;
-  b=RKTgQzWQWBc6whyCDLZB81KjvGR8mS7pGJOT0PGRYSdoOQObijayD1DZ
-   etl80w6Qd5OsjOnGiWgUh/3TKZH1Rw6x7nTkcmistEeWRtxL3Uf3vDWWL
-   efPDwdpbn7Jf2KhtcRbW2ir15/x2wMXtELxE2CkjiJ9Y9grOU9ZCwBi4c
-   UsDIZMj/oiEW0lUFeSmPd1NkYWV1O/ArdJ3IoHL7S96wu+UYuKBBu+lYx
-   D7k9tbBgFKYUc4wXk/c0HyErOte8jWCKVyQ8w337pwbSZ1Xviei3QrYzb
-   7wlYCo8DBk1cSwcCY1PLfdhGGgFKyrSYfRq9LYuz8TDr/oapDxxGid6pB
-   A==;
-X-CSE-ConnectionGUID: w0H/t1UuTbO7MBsh35tFqA==
-X-CSE-MsgGUID: o8GV+6iOQg+yipiz52jsEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="40913194"
+  bh=17d/zXwR7DAxHpRRgX8HsRNtLWR+OYpu1cCPhv8+mMQ=;
+  b=bSKrE7zbPMPL7z+uNEfjnXPtE8CRjWKgW1CVK/S+r1RqvhnSM+QiuA6y
+   PS/T4qa2P/70tSq+xQY1UfGdW5DBjmgkxViTqOWfe0JMnpFHgt72me8zF
+   XCTIuGjIwXaGRlPE/E5dxQzsaf2zXPyu09kYX/Fo8OzHITTzR3ZbhQ3RC
+   ppCc1XoUUF41NT6rFndNCm/4TDCVOziEBTnXxgRVZqMxoreX8NuuHPXgz
+   a1a+2Du6hCu9x1W87YN4XhcxrMysKVblU+hnYYocpzM2VxbN81+fIn1qu
+   CQI8wXnRfPaeSKGtMx72jrs/cqAhMsA1nAtQ/toc7Fe9m8PP27uvMeYwL
+   Q==;
+X-CSE-ConnectionGUID: OVH/Eg04RCWkYEo1iYbi5g==
+X-CSE-MsgGUID: x0yLtSOgRcmASz9d+FS/1A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="54945785"
 X-IronPort-AV: E=Sophos;i="6.11,232,1725346800"; 
-   d="scan'208";a="40913194"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 07:57:14 -0700
-X-CSE-ConnectionGUID: 7BbwNPViT5KjA/RGTdYz1Q==
-X-CSE-MsgGUID: 9Kiu9YxlTRG39KkA2dLSrw==
+   d="scan'208";a="54945785"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 08:08:19 -0700
+X-CSE-ConnectionGUID: ZqwCPTRcRqOG6rXyT/I5Bg==
+X-CSE-MsgGUID: dHTBt65+RpWXf/EtSuMLkQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,232,1725346800"; 
-   d="scan'208";a="84894408"
+   d="scan'208";a="85725260"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 25 Oct 2024 07:57:08 -0700
+  by orviesa005.jf.intel.com with ESMTP; 25 Oct 2024 08:08:11 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4LkQ-000YNg-1r;
-	Fri, 25 Oct 2024 14:57:06 +0000
-Date: Fri, 25 Oct 2024 22:56:46 +0800
+	id 1t4Lv4-000YOG-38;
+	Fri, 25 Oct 2024 15:08:06 +0000
+Date: Fri, 25 Oct 2024 23:07:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>, netdev@vger.kernel.org
+To: Grant Peltier <grantpeltier93@gmail.com>, robh@kernel.org,
+	linux@roeck-us.net, geert+renesas@glider.be, magnus.damm@gmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Madalin Bucur <madalin.bucur@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Ioana Ciornei <ioana.ciornei@nxp.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Rosen Penev <rosenp@gmail.com>, linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH net-next] net: freescale: use ethtool string helpers
-Message-ID: <202410252249.mmE2EZPz-lkp@intel.com>
-References: <20241024205257.574836-1-rosenp@gmail.com>
+	grant.peltier.jg@renesas.com, brandon.howell.jg@renesas.com,
+	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] hwmon: (pmbus/isl68137) add support for voltage
+ divider on Vout
+Message-ID: <202410252248.fyNDg737-lkp@intel.com>
+References: <7138f3c551ce201ddc9b5e3889ce969d1cd0ac57.1729812789.git.grantpeltier93@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,149 +67,467 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024205257.574836-1-rosenp@gmail.com>
+In-Reply-To: <7138f3c551ce201ddc9b5e3889ce969d1cd0ac57.1729812789.git.grantpeltier93@gmail.com>
 
-Hi Rosen,
+Hi Grant,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net-next/main]
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/net-freescale-use-ethtool-string-helpers/20241025-045447
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241024205257.574836-1-rosenp%40gmail.com
-patch subject: [PATCH net-next] net: freescale: use ethtool string helpers
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241025/202410252249.mmE2EZPz-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252249.mmE2EZPz-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Grant-Peltier/hwmon-pmbus-isl68137-add-support-for-voltage-divider-on-Vout/20241025-084244
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/7138f3c551ce201ddc9b5e3889ce969d1cd0ac57.1729812789.git.grantpeltier93%40gmail.com
+patch subject: [PATCH v4 1/2] hwmon: (pmbus/isl68137) add support for voltage divider on Vout
+config: arm64-randconfig-002-20241025 (https://download.01.org/0day-ci/archive/20241025/202410252248.fyNDg737-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252248.fyNDg737-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410252249.mmE2EZPz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410252248.fyNDg737-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:11:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:13:
-   In file included from include/linux/fsl/ptp_qoriq.h:9:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:13:
-   In file included from include/linux/fsl/ptp_qoriq.h:9:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:13:
-   In file included from include/linux/fsl/ptp_qoriq.h:9:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:257:14: warning: variables 'j' and 'num_cpus' used in loop condition not modified in loop body [-Wfor-loop-analysis]
-     257 |         for (i = 0; j < num_cpus; i++)
-         |                     ^   ~~~~~~~~
-   17 warnings generated.
+>> drivers/hwmon/pmbus/isl68137.c:233:3: error: expected expression
+                   u64 temp = DIV_U64_ROUND_CLOSEST((u64)word *
+                   ^
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:53: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                       ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   include/linux/minmax.h:111:22: note: expanded from macro '__clamp_once'
+           __auto_type uval = (val);                                               \
+                               ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:53: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                       ^
+   include/linux/minmax.h:276:59: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                             ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   include/linux/minmax.h:111:22: note: expanded from macro '__clamp_once'
+           __auto_type uval = (val);                                               \
+                               ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:52: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:111:22: note: expanded from macro '__clamp_once'
+           __auto_type uval = (val);                                               \
+                               ^~~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:66: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                    ^
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                             ^
+   include/linux/minmax.h:112:21: note: expanded from macro '__clamp_once'
+           __auto_type ulo = (lo);                                                 \
+                              ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:65: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:112:21: note: expanded from macro '__clamp_once'
+           __auto_type ulo = (lo);                                                 \
+                              ^~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:78: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                                ^
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                                 ^
+   include/linux/minmax.h:113:21: note: expanded from macro '__clamp_once'
+           __auto_type uhi = (hi);                                                 \
+                              ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:77: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:113:21: note: expanded from macro '__clamp_once'
+           __auto_type uhi = (hi);                                                 \
+                              ^~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:66: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                    ^
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                             ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                                    ^
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:65: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:78: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                                ^
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                                 ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                                    ^
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:77: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/minmax.h:122:24: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+           (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+                                                         ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:53: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                       ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:53: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                       ^
+   include/linux/minmax.h:276:59: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                             ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:52: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ~~~~~~^~~~~~~~~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:53: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                       ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:53: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                       ^
+   include/linux/minmax.h:276:59: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                             ^
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                        ^
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+>> drivers/hwmon/pmbus/isl68137.c:236:9: error: used type 'typeof (bcmp)' (aka 'int (const void *, const void *, unsigned long)') where arithmetic or pointer type is required
+                   ret = clamp_val(temp, 0, 0xffff);
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:289:32: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:276:52: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                      ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:122:15: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+           ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                   ~~~~~~^~~~~~~~~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+>> drivers/hwmon/pmbus/isl68137.c:236:19: error: use of undeclared identifier 'temp'; did you mean 'bcmp'?
+                   ret = clamp_val(temp, 0, 0xffff);
+                                   ^~~~
+                                   bcmp
+   include/linux/minmax.h:289:47: note: expanded from macro 'clamp_val'
+   #define clamp_val(val, lo, hi) clamp_t(typeof(val), val, lo, hi)
+                                                 ^
+   include/linux/minmax.h:276:66: note: expanded from macro 'clamp_t'
+   #define clamp_t(type, val, lo, hi) __careful_clamp((type)(val), (type)(lo), (type)(hi))
+                                                                    ^
+   include/linux/minmax.h:122:20: note: expanded from macro '__careful_clamp'
+           __clamp_once(val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+                             ^
+   note: (skipping 9 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   include/linux/string.h:271:12: note: 'bcmp' declared here
+   extern int bcmp(const void *,const void *,__kernel_size_t);
+              ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +257 drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c
+vim +233 drivers/hwmon/pmbus/isl68137.c
 
-   242	
-   243	static void dpaa_get_strings(struct net_device *net_dev, u32 stringset,
-   244				     u8 *data)
-   245	{
-   246		unsigned int i, j, num_cpus;
-   247	
-   248		num_cpus = num_online_cpus();
-   249	
-   250		for (i = 0; i < DPAA_STATS_PERCPU_LEN; i++) {
-   251			for (j = 0; j < num_cpus; j++)
-   252				ethtool_sprintf(&data, "%s [CPU %d]",
-   253						dpaa_stats_percpu[i], j);
-   254	
-   255			ethtool_sprintf(&data, "%s [TOTAL]", dpaa_stats_percpu[i]);
-   256		}
- > 257		for (i = 0; j < num_cpus; i++)
-   258			ethtool_sprintf(&data, "bpool [CPU %d]", i);
-   259	
-   260		ethtool_puts(&data, "bpool [TOTAL]");
-   261	
-   262		for (i = 0; i < DPAA_STATS_GLOBAL_LEN; i++)
-   263			ethtool_puts(&data, dpaa_stats_global[i]);
-   264	}
-   265	
+   211	
+   212	static int raa_dmpvr2_write_word_data(struct i2c_client *client, int page,
+   213					      int reg, u16 word)
+   214	{
+   215		const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+   216		const struct isl68137_data *data = to_isl68137_data(info);
+   217		int ret;
+   218	
+   219		switch (reg) {
+   220		case PMBUS_VOUT_MAX:
+   221		case PMBUS_VOUT_MARGIN_HIGH:
+   222		case PMBUS_VOUT_MARGIN_LOW:
+   223		case PMBUS_VOUT_OV_FAULT_LIMIT:
+   224		case PMBUS_VOUT_UV_FAULT_LIMIT:
+   225		case PMBUS_VOUT_COMMAND:
+   226			/*
+   227			 * In cases where a voltage divider is attached to the target
+   228			 * rail between Vout and the Vsense pin, Vout related PMBus
+   229			 * commands should be scaled based on the expected voltage
+   230			 * at the Vsense pin.
+   231			 * I.e. Vsense = Vout * Rout / Rtotal
+   232			 */
+ > 233			u64 temp = DIV_U64_ROUND_CLOSEST((u64)word *
+   234					data->channel[page].vout_voltage_divider[0],
+   235					data->channel[page].vout_voltage_divider[1]);
+ > 236			ret = clamp_val(temp, 0, 0xffff);
+   237			break;
+   238		default:
+   239			ret = -ENODATA;
+   240			break;
+   241		}
+   242		return ret;
+   243	}
+   244	
 
 -- 
 0-DAY CI Kernel Test Service
