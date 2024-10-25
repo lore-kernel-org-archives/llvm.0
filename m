@@ -1,181 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518FC13D53D;
-	Fri, 25 Oct 2024 02:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E6F79C8;
+	Fri, 25 Oct 2024 02:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729822721; cv=none; b=IH8TuHXYu4pU4JpYfjdb5Kvu/T1vfmvR0GmBumLGerct8smmeMXsuaJrUd0Y/g9gzLe/ZNELd+E/6QIVlm5rtiP08nMlvbhW53ThmHjKPb7mYBEJ46ZdW3lnwcwesIA/BHGXz1PsX8oLDrfyXL/QmGjINPsnmLPBsUD3cgL0VmA=
+	t=1729822891; cv=none; b=LUL53vY6VWgWSzL2sdDa5zYRRhEA8DYiqt5Ow2OVs7+GkV4i7mhL2IongiiozesTGY8l1iqR3R1o2lcbCkQ2JqGloBLIm54iOY6cGyjjwIGYMMkFmeV6xVkFWrEj0sQc6O46JPQcNKUvPuO8AVUnAu3GSvAshMf8XCtGVNAaxt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729822721; c=relaxed/simple;
-	bh=azrymmLvhtuecaJkl4vkmJh88Vgz+F6cJb/5S7DEFMc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JaSg6bfPYcMiFlcbcOyhPTpZ216f/h1ws/l4Gps/sz6xXllsGHyTXg9NF7B3Hm70MmUtVxr0nQDTnNthbh01owPsbdU1fPekvQpV1B0n2QRHvA7NrOzeEtaDVc3Q3wY2nJYIzzLl7EOq6Kvpjdi48FpQRy2rM2U1hGCxvXY5JCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ejwfIm00; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729822891; c=relaxed/simple;
+	bh=jDFSmREG/q6rnIsZwW0bgYwSks1jRCfXiYw9NFA1yTg=;
+	h=From:To:CC:Subject:In-Reply-To:References:MIME-Version:
+	 Content-Type:Message-ID:Date; b=ufyOFjRtOVY+kmidwMdzuiR6aViAmTsxxcemZ3hoesmAL9TJHiNHfdkAzxuVaq5yICCMfElj16TtL4D82BT7OGN8xDpP/gE0J3rXmZUTXRxWyOtoRXmUhPI8mN4UvLNS0LnqIQPxO74Jw6uaBF4xfS/eanXktTCdG4SYpY+Vx4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=temperror (0-bit key) header.d=realtek.com header.i=@realtek.com header.b=H932T8uz; arc=none smtp.client-ip=211.75.126.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ejwfIm00"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729822719; x=1761358719;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=azrymmLvhtuecaJkl4vkmJh88Vgz+F6cJb/5S7DEFMc=;
-  b=ejwfIm00F15nDbUGs0N52XgmyERVugSlbyjlbLMIrmnH7T04KWiL4aCI
-   b/xdRcPouCHm8nlCNjmlBKVACf74hvfAbFd745yJPtWuLhDrKQU2VBb4J
-   d0blwBis3rbi9EzfY5Dl8hC69xe96rj2Bn1GylA7X1VLdQQPKZNwMmChl
-   8DoeRr/biuFGmnAqTzkDnSsUflBrlxM8p1nLkQPeTi7jo85MXHYsv09nR
-   SA+cww9pzOQvSiYCpFq+SlYzOVsIU8TZIl9NVEkx6xYYuRn4OEebCeYZL
-   diN5NyYFUyODDzGTMuRH+Yu9Hx7zDsn77kPT4N5eoqsh5VfCYO/vsQnRQ
-   w==;
-X-CSE-ConnectionGUID: aVS3dMunTiWYw4/OZ3oNdQ==
-X-CSE-MsgGUID: 5ya4x1fcSSWbOEFHZkKDrg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="54885884"
-X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="54885884"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 19:18:37 -0700
-X-CSE-ConnectionGUID: JdGZjimgRwC+oY7WlTVoIw==
-X-CSE-MsgGUID: j4Z/A1l8Qx2X/tnU2/n6TQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="81088912"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 24 Oct 2024 19:18:35 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t49uL-000XSO-0Q;
-	Fri, 25 Oct 2024 02:18:33 +0000
-Date: Fri, 25 Oct 2024 10:17:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [jarkko-tpmdd:lgp-v2 2/4] mm/madvise.c:1098:3: error: field
- designator 'install_pte' does not refer to any field in type 'const struct
- mm_walk_ops'
-Message-ID: <202410251055.UG8FVFhd-lkp@intel.com>
+	dkim=temperror (0-bit key) header.d=realtek.com header.i=@realtek.com header.b="H932T8uz"
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 49P2L9UK04095298, This message is accepted by code: ctloc85258
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=realtek.com; s=dkim;
+	t=1729822869; bh=jDFSmREG/q6rnIsZwW0bgYwSks1jRCfXiYw9NFA1yTg=;
+	h=From:To:CC:Subject:In-Reply-To:References:MIME-Version:
+	 Content-Type:Message-ID:Date;
+	b=H932T8uzNp/RkvTdyTx2Emp0adN0KJQIf9djNFDHzHRrv/LuvBtUBWDPisRXZbLFr
+	 1d9BSQRY/LpV33MXG0DFrLlJEuOVHEawQhiKpd17RYG27JhHwr0e0LXZ3gwJ6hBz8U
+	 QTnPu7UL5DeDpGeOwGWVHd2myF6knBYWJdkb2vUY0fXPftYqcYChDaoZpxFMJH5ch4
+	 gQ8hDi5TMQy2pWDpg+4aN3XZjT4OTJIUVAtwtNoO2HyIbHwtL5oALbgZf+Wdfqt9jo
+	 Nj6opZ0bXPrSByAQXA/5PZm8LAPLrOLB3V4qfA5bHeYy9m12roGn17HUr+eTZk2yr0
+	 iys+M7CGtKCqw==
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/3.06/5.92) with ESMTPS id 49P2L9UK04095298
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 25 Oct 2024 10:21:09 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Fri, 25 Oct 2024 10:21:09 +0800
+Received: from [127.0.1.1] (172.21.69.94) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 25 Oct
+ 2024 10:21:08 +0800
+From: Ping-Ke Shih <pkshih@realtek.com>
+To: Arnd Bergmann <arnd@kernel.org>, Ping-Ke Shih <pkshih@realtek.com>,
+        "Kalle
+ Valo" <kvalo@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+CC: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Zong-Zhe Yang <kevin_yang@realtek.com>,
+        Kuan-Chung Chen
+	<damon.chen@realtek.com>,
+        Chih-Kang Chang <gary.chang@realtek.com>,
+        <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+Subject: Re: [PATCH] rtw89: -Wenum-compare-conditional warnings
+In-Reply-To: <20241018152311.4023979-1-arnd@kernel.org>
+References: <20241018152311.4023979-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
+Message-ID: <6aab4077-90aa-42ef-9abd-fca315f1919e@RTEXMBS04.realtek.com.tw>
+Date: Fri, 25 Oct 2024 10:21:08 +0800
+X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git lgp-v2
-head:   7ed651841db9f18744191e575637d69239102a73
-commit: 94de21c76e54641539032105ccd3f36801fa9d85 [2/4] mm: madvise: implement lightweight guard page mechanism
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241025/202410251055.UG8FVFhd-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410251055.UG8FVFhd-lkp@intel.com/reproduce)
+Arnd Bergmann <arnd@kernel.org> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410251055.UG8FVFhd-lkp@intel.com/
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This is one of three drivers that trigger -Wenum-compare-conditional warnings
+> with clang:
+> 
+> drivers/net/wireless/realtek/rtw89/core.c:1806:14: error: conditional expression between different enumeration types ('enum nl80211_eht_gi' and 'enum nl80211_he_gi') [-Werror,-Wenum-compare-conditional]
+>  1806 |                 return eht ? NL80211_RATE_INFO_EHT_GI_0_8 :
+>       |                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  1807 |                              NL80211_RATE_INFO_HE_GI_0_8;
+>       |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/net/wireless/realtek/rtw89/core.c:1810:14: error: conditional expression between different enumeration types ('enum nl80211_eht_gi' and 'enum nl80211_he_gi') [-Werror,-Wenum-compare-conditional]
+>  1810 |                 return eht ? NL80211_RATE_INFO_EHT_GI_1_6 :
+>       |                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  1811 |                              NL80211_RATE_INFO_HE_GI_1_6;
+>       |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/net/wireless/realtek/rtw89/core.c:1813:14: error: conditional expression between different enumeration types ('enum nl80211_eht_gi' and 'enum nl80211_he_gi') [-Werror,-Wenum-compare-conditional]
+>  1813 |                 return eht ? NL80211_RATE_INFO_EHT_GI_3_2 :
+>       |                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  1814 |                              NL80211_RATE_INFO_HE_GI_3_2;
+>       |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/net/wireless/realtek/rtw89/core.c:1818:15: error: conditional expression between different enumeration types ('enum nl80211_eht_gi' and 'enum nl80211_he_gi') [-Werror,-Wenum-compare-conditional]
+>  1818 |                         return eht ? NL80211_RATE_INFO_EHT_GI_3_2 :
+>       |                                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  1819 |                                      NL80211_RATE_INFO_HE_GI_3_2;
+>       |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> In this case, all four warnings can be easily avoided by splitting the
+> function into two separate ones, in a way that helps readability as well,
+> at the expense of a few extra source lines.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-All errors (new ones prefixed by >>):
+1 patch(es) applied to rtw-next branch of rtw.git, thanks.
 
-   In file included from mm/madvise.c:9:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/madvise.c:21:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/madvise.c:1098:3: error: field designator 'install_pte' does not refer to any field in type 'const struct mm_walk_ops'
-    1098 |         .install_pte            = guard_poison_install_pte,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> mm/madvise.c:1130:9: error: call to undeclared function 'walk_page_range_mm'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1130 |                 err = walk_page_range_mm(vma->vm_mm, start, end,
-         |                       ^
-   mm/madvise.c:1130:9: note: did you mean 'walk_page_range_vma'?
-   include/linux/pagewalk.h:124:5: note: 'walk_page_range_vma' declared here
-     124 | int walk_page_range_vma(struct vm_area_struct *vma, unsigned long start,
-         |     ^
-   6 warnings and 2 errors generated.
+c67d7c7f4151 wifi: rtw89: fix -Wenum-compare-conditional warnings
 
+---
+https://github.com/pkshih/rtw.git
 
-vim +1098 mm/madvise.c
-
-  1093	
-  1094	static const struct mm_walk_ops guard_poison_walk_ops = {
-  1095		.pud_entry		= guard_poison_pud_entry,
-  1096		.pmd_entry		= guard_poison_pmd_entry,
-  1097		.pte_entry		= guard_poison_pte_entry,
-> 1098		.install_pte		= guard_poison_install_pte,
-  1099		.walk_lock		= PGWALK_RDLOCK,
-  1100	};
-  1101	
-  1102	static long madvise_guard_poison(struct vm_area_struct *vma,
-  1103					 struct vm_area_struct **prev,
-  1104					 unsigned long start, unsigned long end)
-  1105	{
-  1106		long err;
-  1107	
-  1108		*prev = vma;
-  1109		if (!is_valid_guard_vma(vma, /* allow_locked = */false))
-  1110			return -EINVAL;
-  1111	
-  1112		/*
-  1113		 * If we install poison markers, then the range is no longer
-  1114		 * empty from a page table perspective and therefore it's
-  1115		 * appropriate to have an anon_vma.
-  1116		 *
-  1117		 * This ensures that on fork, we copy page tables correctly.
-  1118		 */
-  1119		err = anon_vma_prepare(vma);
-  1120		if (err)
-  1121			return err;
-  1122	
-  1123		/*
-  1124		 * Optimistically try to install the guard poison pages first. If any
-  1125		 * non-guard pages are encountered, give up and zap the range before
-  1126		 * trying again.
-  1127		 */
-  1128		while (true) {
-  1129			/* Returns < 0 on error, == 0 if success, > 0 if zap needed. */
-> 1130			err = walk_page_range_mm(vma->vm_mm, start, end,
-  1131						 &guard_poison_walk_ops, NULL);
-  1132			if (err <= 0)
-  1133				return err;
-  1134	
-  1135			/*
-  1136			 * OK some of the range have non-guard pages mapped, zap
-  1137			 * them. This leaves existing guard pages in place.
-  1138			 */
-  1139			zap_page_range_single(vma, start, end - start, NULL);
-  1140	
-  1141			if (fatal_signal_pending(current))
-  1142				return -EINTR;
-  1143			cond_resched();
-  1144		}
-  1145	}
-  1146	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
