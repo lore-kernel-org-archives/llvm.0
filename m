@@ -1,197 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8171015A8;
-	Fri, 25 Oct 2024 00:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0770E6AAD
+	for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 00:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729815095; cv=none; b=KWvCYTWETj6s5X52+l4BM5CEoQLLNvCOTHslbtjgqDWmdUEz8QVmKDJaJD54wQYXMcn+d5Ljv+em2M16n1EJuNyQzBkG+7DozHkOgYikJ6UwfSXW14ze6hyVYEpFC7hKEIoeGYC8fEesePWZMt6lEZNLUcIseolfn+PctnwHlLY=
+	t=1729816186; cv=none; b=Ws0wqTfMnbgU8QcA1AL9GW+fQ2Gv1s94V1WteqCfxysmOR1DyDaWETwx9e1tZ1d0PaB8snDOPpZXPv9qMx6PsN53OIFdFrY8eTUMtuFh8hcvTtIlghD8WlitfT8p+0h1zfDA5c2rbwBL7nLQiDZhpxkh2Zk/7ltZHcd2t+otdoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729815095; c=relaxed/simple;
-	bh=USYJo6QAgIU+OcO7CNSnuj4I1wMoyUyaUIuZpwK3lwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bv1MCG4Z5s+emFB08xeaxi0ByAKrx3TpnEVMWevcU/dbF3gx2vUlIjbnZc5Iwht9aFDGF5+T+Os5MzOHLkkaZEGSHe3hAX1YZVdP+04prOMkhXT8h+s0HDuBGY0lWRRHAk1cL7iQ0/e8ruufnu71Ws9daD1e31y+6jPXCIlNQ8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F0kWvCZ1; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729816186; c=relaxed/simple;
+	bh=LB817QyFJvPBhuyk3cvh2gd2ab0x5mcnlPSDdXFAXhg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LQ1+AfY1IHKYtTJ8BZ2lZ6k81LxfX5o5AiuGn3K7Jk5BkjS/F/4h+L5akQ9tYPbRObpKCOj6VUw7V4oW7nw1CBeKTAW6blzy3p3Y1tGWxPVd0Is08BvBJl6B6Zp6A9xjumnYncIn3ArAjT94FTXz6The+cLEv/7b7gC0UMMLT2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=iabFei46; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F0kWvCZ1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729815094; x=1761351094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=USYJo6QAgIU+OcO7CNSnuj4I1wMoyUyaUIuZpwK3lwk=;
-  b=F0kWvCZ1vkzXYPHl2FVaJzFfPzvNpPSLhMZ2gSGD7fTsp91zEdKM3XcZ
-   SeJUnB4cNH4e4evNrUjSN9N1a8ujWkMJ74rHt8Wlb1xH7AoMU1oB2L2n4
-   2N/oRqTYUfEt5mFsDrMW6lMbp7+IoIs4XJHIkyreAnslvoCuhwrrycuvA
-   s507DPI3mAYLDzbMrbbCIZ+/Y+aX2sJuAdNiZn0z4reBkkXvqn9iLxc5h
-   EdtfYwaHWe28ZuEw3Dy7kuwNr20+PpVPcpba0CUcTAczg6s9RVJsoqRpC
-   nuVh/Oh+fjce5g5BzPycSkNxT3hS7Qx91nxwbb7seitw3mDFqMXp9+k/Y
-   w==;
-X-CSE-ConnectionGUID: d2KRnNpaSwy1mjC8MzYsMQ==
-X-CSE-MsgGUID: yu67CRmDSPOX9lj+4XueLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="54877313"
-X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="54877313"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 17:11:32 -0700
-X-CSE-ConnectionGUID: 04ancdkiQTGNyo5erMwanQ==
-X-CSE-MsgGUID: abV4XZMkRIGXHMPL4UPgqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="85523483"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Oct 2024 17:11:29 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t47vK-000XJ6-0S;
-	Fri, 25 Oct 2024 00:11:26 +0000
-Date: Fri, 25 Oct 2024 08:11:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joshua Hahn <joshua.hahnjy@gmail.com>, hannes@cmpxchg.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, nphamcs@gmail.com,
-	mhocko@kernel.org, roman.gushcin@linux.dev, shakeel.butt@linux.dev,
-	muchun.song@linux.dev, lnyng@meta.com, akpm@linux-foundation.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] memcg/hugetlb: Adding hugeTLB counters to memcg
-Message-ID: <202410250704.0LVzYMzi-lkp@intel.com>
-References: <20241023203433.1568323-1-joshua.hahnjy@gmail.com>
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="iabFei46"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1729816180;
+	bh=EnB2ce/rVYDY5AA6/sx9y4i1CZuXEVtDGbu8N7gt0+U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=iabFei46eTD/ZABVvZ6sJZ8FoaRnbZc0gsNTN7ITADjc8l4Isggqg8L8ZZm2BQw2G
+	 hZhVqbbbO5Abiy+EBJ8OLftUG7OYK7V57k0+qm20ipD+Xpiq88+l7NLLWKscAbZB/X
+	 3StMn1YeJGl0pvUG/KOHJViw0qbhWvdMD+GFq0NhRnCgk+uPNmxLD7HkDDJojf2PmU
+	 0Phdv4G2lFFeeDxZdPQk40AIutU5DJfklA8tnxUNaoKh17PNsRLT2SyK4kqfF2HYIk
+	 nK7/g1OT4qt4LJGqzdMi0/RK+HzwyV9C2QFv0vgSuQFBX92bnnmY+Yagksy+sGz1VA
+	 go5DInxlYiB9Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XZNvl59fLz4x2g;
+	Fri, 25 Oct 2024 11:29:39 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: "Nysal Jan K.A." <nysal@linux.ibm.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>
+Cc: linuxppc-dev@lists.ozlabs.org, "Nysal Jan K.A" <nysal@linux.ibm.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Vlastimil Babka <vbabka@suse.cz>, Kent
+ Overstreet <kent.overstreet@linux.dev>, Rick Edgecombe
+ <rick.p.edgecombe@intel.com>, Roman Gushchin <roman.gushchin@linux.dev>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] sched/membarrier: Fix redundant load of membarrier_state
+In-Reply-To: <20241007053936.833392-1-nysal@linux.ibm.com>
+References: <20241007053936.833392-1-nysal@linux.ibm.com>
+Date: Fri, 25 Oct 2024 11:29:38 +1100
+Message-ID: <87frolja8d.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241023203433.1568323-1-joshua.hahnjy@gmail.com>
+Content-Type: text/plain
 
-Hi Joshua,
+[To += Mathieu]
 
-kernel test robot noticed the following build errors:
+"Nysal Jan K.A." <nysal@linux.ibm.com> writes:
+> From: "Nysal Jan K.A" <nysal@linux.ibm.com>
+>
+> On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+> is not selected, sync_core_before_usermode() is a no-op.
+> In membarrier_mm_sync_core_before_usermode() the compiler does not
+> eliminate redundant branches and the load of mm->membarrier_state
+> for this case as the atomic_read() cannot be optimized away.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.12-rc4 next-20241024]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I was wondering if this was caused by powerpc's arch_atomic_read() which
+uses asm volatile.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Hahn/memcg-hugetlb-Adding-hugeTLB-counters-to-memcg/20241024-043559
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241023203433.1568323-1-joshua.hahnjy%40gmail.com
-patch subject: [PATCH v2 1/1] memcg/hugetlb: Adding hugeTLB counters to memcg
-config: i386-buildonly-randconfig-003-20241025 (https://download.01.org/0day-ci/archive/20241025/202410250704.0LVzYMzi-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410250704.0LVzYMzi-lkp@intel.com/reproduce)
+But replacing arch_atomic_read() with READ_ONCE() makes no difference,
+presumably because the compiler still can't see that the READ_ONCE() is
+unnecessary (which is kind of by design).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410250704.0LVzYMzi-lkp@intel.com/
+> Here's a snippet of the code generated for finish_task_switch() on powerpc:
+>
+> 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
+> .......
+> 1b78c8:   cmpdi   cr7,r26,0
+> 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
+> 1b78d0:   ld      r9,2312(r13)    # current
+> 1b78d4:   ld      r9,1888(r9)     # current->mm
+> 1b78d8:   cmpd    cr7,r26,r9
+> 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
+> 1b78e0:   hwsync
+> 1b78e4:   cmplwi  cr7,r27,128
+> .......
+> 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
+> 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
+>
+> This was found while analyzing "perf c2c" reports on kernels prior
+> to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
+> where mm_count was false sharing with membarrier_state.
 
-All errors (new ones prefixed by >>):
+So it was causing a noticable performance blip? But isn't anymore?
 
-   In file included from mm/hugetlb.c:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/hugetlb.c:37:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/hugetlb.c:1928:6: error: use of undeclared identifier 'cgrp_dfl_root'
-    1928 |         if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING)
-         |             ^
->> mm/hugetlb.c:1928:28: error: use of undeclared identifier 'CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING'
-    1928 |         if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING)
-         |                                   ^
-   mm/hugetlb.c:3099:6: error: use of undeclared identifier 'cgrp_dfl_root'
-    3099 |         if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING)
-         |             ^
-   mm/hugetlb.c:3099:28: error: use of undeclared identifier 'CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING'
-    3099 |         if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING)
-         |                                   ^
-   3 warnings and 4 errors generated.
+> There is a minor improvement in the size of finish_task_switch().
+> The following are results from bloat-o-meter:
+>
+> GCC 7.5.0:
+> ----------
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+> Function                                     old     new   delta
+> finish_task_switch                           884     852     -32
+>
+> GCC 12.2.1:
+> -----------
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+> Function                                     old     new   delta
+> finish_task_switch.isra                      852     820     -32
 
+GCC 12 is a couple of years old, I assume GCC 14 behaves similarly?
 
-vim +/cgrp_dfl_root +1928 mm/hugetlb.c
+> LLVM 17.0.6:
+> ------------
+> add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
+> Function                                     old     new   delta
+> rt_mutex_schedule                            120     104     -16
+> finish_task_switch                           792     772     -20
+>
+> Signed-off-by: Nysal Jan K.A <nysal@linux.ibm.com>
+> ---
+>  include/linux/sched/mm.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> index 07bb8d4181d7..042e60ab853a 100644
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -540,6 +540,8 @@ enum {
+>  
+>  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+>  {
+> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
+> +		return;
+>  	if (current->mm != mm)
+>  		return;
+>  	if (likely(!(atomic_read(&mm->membarrier_state) &
 
-  1880	
-  1881	void free_huge_folio(struct folio *folio)
-  1882	{
-  1883		/*
-  1884		 * Can't pass hstate in here because it is called from the
-  1885		 * generic mm code.
-  1886		 */
-  1887		struct hstate *h = folio_hstate(folio);
-  1888		int nid = folio_nid(folio);
-  1889		struct hugepage_subpool *spool = hugetlb_folio_subpool(folio);
-  1890		bool restore_reserve;
-  1891		unsigned long flags;
-  1892	
-  1893		VM_BUG_ON_FOLIO(folio_ref_count(folio), folio);
-  1894		VM_BUG_ON_FOLIO(folio_mapcount(folio), folio);
-  1895	
-  1896		hugetlb_set_folio_subpool(folio, NULL);
-  1897		if (folio_test_anon(folio))
-  1898			__ClearPageAnonExclusive(&folio->page);
-  1899		folio->mapping = NULL;
-  1900		restore_reserve = folio_test_hugetlb_restore_reserve(folio);
-  1901		folio_clear_hugetlb_restore_reserve(folio);
-  1902	
-  1903		/*
-  1904		 * If HPageRestoreReserve was set on page, page allocation consumed a
-  1905		 * reservation.  If the page was associated with a subpool, there
-  1906		 * would have been a page reserved in the subpool before allocation
-  1907		 * via hugepage_subpool_get_pages().  Since we are 'restoring' the
-  1908		 * reservation, do not call hugepage_subpool_put_pages() as this will
-  1909		 * remove the reserved page from the subpool.
-  1910		 */
-  1911		if (!restore_reserve) {
-  1912			/*
-  1913			 * A return code of zero implies that the subpool will be
-  1914			 * under its minimum size if the reservation is not restored
-  1915			 * after page is free.  Therefore, force restore_reserve
-  1916			 * operation.
-  1917			 */
-  1918			if (hugepage_subpool_put_pages(spool, 1) == 0)
-  1919				restore_reserve = true;
-  1920		}
-  1921	
-  1922		spin_lock_irqsave(&hugetlb_lock, flags);
-  1923		folio_clear_hugetlb_migratable(folio);
-  1924		hugetlb_cgroup_uncharge_folio(hstate_index(h),
-  1925					     pages_per_huge_page(h), folio);
-  1926		hugetlb_cgroup_uncharge_folio_rsvd(hstate_index(h),
-  1927						  pages_per_huge_page(h), folio);
-> 1928		if (cgrp_dfl_root.flags & CGRP_ROOT_MEMORY_HUGETLB_ACCOUNTING)
-  1929			lruvec_stat_mod_folio(folio, HUGETLB_B, -pages_per_huge_page(h));
-  1930		mem_cgroup_uncharge(folio);
-  1931		if (restore_reserve)
-  1932			h->resv_huge_pages++;
-  1933	
-  1934		if (folio_test_hugetlb_temporary(folio)) {
-  1935			remove_hugetlb_folio(h, folio, false);
-  1936			spin_unlock_irqrestore(&hugetlb_lock, flags);
-  1937			update_and_free_hugetlb_folio(h, folio, true);
-  1938		} else if (h->surplus_huge_pages_node[nid]) {
-  1939			/* remove the page from active list */
-  1940			remove_hugetlb_folio(h, folio, true);
-  1941			spin_unlock_irqrestore(&hugetlb_lock, flags);
-  1942			update_and_free_hugetlb_folio(h, folio, true);
-  1943		} else {
-  1944			arch_clear_hugetlb_flags(folio);
-  1945			enqueue_hugetlb_folio(h, folio);
-  1946			spin_unlock_irqrestore(&hugetlb_lock, flags);
-  1947		}
-  1948	}
-  1949	
+The other option would be to have a completely separate stub, eg:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  #ifdef CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+  {
+          if (current->mm != mm)
+                  return;
+          if (likely(!(atomic_read(&mm->membarrier_state) &
+                       MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
+                  return;
+          sync_core_before_usermode();
+  }
+  #else
+  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm) { }
+  #endif
+
+Not sure what folks prefer.
+
+In either case I think it's probably worth a short comment explaining
+why it's worth the trouble (ie. that the atomic_read() prevents the
+compiler from doing DCE).
+
+cheers
