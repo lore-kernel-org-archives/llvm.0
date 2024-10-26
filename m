@@ -1,68 +1,171 @@
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85FC1C32
-	for <llvm@lists.linux.dev>; Sat, 26 Oct 2024 14:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CD523A6;
+	Sat, 26 Oct 2024 17:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729954381; cv=none; b=k7qvFi5eGQ7ezJymHTRhvbGtZH6ucbZ54pZodNCa0DpNQx9kKW+4zEqCYcMmX17eHDD0jszeSUnRVBDxuzEwIW66FKfgygtHrrMx5C1uSZfLs61JdoemcJbyY6Ycv9yeg2yu0EZXI0DQyshmaELY/MuL2MK5ljQdmC6UHBWYjtg=
+	t=1729964724; cv=none; b=WkXe8yYZQLm08yuqY83B4Nqzvg6WtT3DmCH2Fq6IFckhGq6ywCbOeCI7TG9utXtoHMDi4EjSmlWn2/JTPSlIptA5pyyWsex+A6mnJ3XkAHJtTposFtx7Jl5X3nkkjZZ6ceSl9yihXvv/6jTpUmundBJ6ruDjUScfuHyGap64174=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729954381; c=relaxed/simple;
-	bh=RS8IrHOaqKxd3t6mKEtbkri6IpsmfydK9PDReOKODZQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=clh6ESYvtzv/FaWNu1B/WPzCAQi39gsG88qtmqTA9sIWG26ivNTQiq2jDVDt8gldjFFK9BofT98l+yAQBMepCz6GFvGh2bdeTAbNr0HfZFZ9c8aG7JKQC0PWELkrOFBRDh/Z0UmSZRRJrdBpHACfqPFJ+DYMRP3xC2UvSO8zvGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=YCuf0tI3; arc=none smtp.client-ip=185.70.43.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+	s=arc-20240116; t=1729964724; c=relaxed/simple;
+	bh=+xOr9a7QBmgzvXt4K8ogW7y/X97Fm+JIp1HzB4NWPHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cUX1vuRbFFqmYgLNn2suIqB0R1+enctiT41t1Bxb5ml3FZZmoUFGOcpTUAbeyD06jzOVjRfWSIX20Ci8WYTcw9BjJstKHV1q/b8qVY0Ne9QFwNcGl9TNELGklbYdiAxOQxfEJyKW1k6CDKTI2vAigU0WXZ/nwVaRiqajEp8WFeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jLRIoxno; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="YCuf0tI3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1729954377; x=1730213577;
-	bh=RS8IrHOaqKxd3t6mKEtbkri6IpsmfydK9PDReOKODZQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=YCuf0tI3wz82xbLuPiWm88bDP1dc9NrlUGH7igQhWJQwcqOSsDg85Cx9WkQJ/Qel1
-	 1oqTk7ImyuBInm/8Qkpyd4FGMZD1AF6NISIhKMHu+eGTj46oDEN6oAy6+y0hqzCMh8
-	 p1dzr2vpjf/D/mVvcSRi28neBU5jE6RoXN5zf4lwmTYLpjCFu4y78uIrOQAHywyfr8
-	 l6NyVEFhDWkozYHdwL6iNLc4v9fkSIbegsvWmdTBJmWas09nauNeKdzVG8pabJ61Mr
-	 8kdkju7DQ2G8FvNoubZxKbasaCJBnBTjEDg7iREMqOq1tE0Ycfgi/g38t8DtEzebc4
-	 zO/T67nGtWgQw==
-Date: Sat, 26 Oct 2024 14:52:52 +0000
-To: Nathan Chancellor <nathan@kernel.org>
-From: Koakuma <koachan@protonmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
-Message-ID: <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
-In-Reply-To: <20241023164535.GB4081497@thelio-3990X>
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com> <20241021201657.GA898643@thelio-3990X> <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com> <20241022200732.GA487584@thelio-3990X> <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com> <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com> <20241023164535.GB4081497@thelio-3990X>
-Feedback-ID: 6608610:user:proton
-X-Pm-Message-ID: 5461d90c73e394b15b2b073b85e3c9776ac98e91
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jLRIoxno"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729964721; x=1761500721;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+xOr9a7QBmgzvXt4K8ogW7y/X97Fm+JIp1HzB4NWPHM=;
+  b=jLRIoxnomumwx3vNugVLyedLWTuV0pXCO0daKtIQY8tkewVAeWkUbBS0
+   gDbgoSWuBDiH67sUwhD/ALHSCYZg5YYBKG4u6xfJ/SUxWZx7k1nDHpbYi
+   bEFiDf+sGsjucu0rWwTtgJtoE2nhVqSMhAt72YA2kIVu+rAGAxxbEg71B
+   0LHxTSXdlkskjvgU9hEx7dSEKE5enBbZ1qUdCfM1OVkXM6VE+4YVVewVc
+   vAlqlY7XRLQmxJuwgS4rfjYILOC1iVxk9NaFlWwCPiCHQHub5RBIJhN+E
+   PZtvuN3hiE3bwdlpwsxqvtesuC/Krd4CmTkHxq7YD7LdmikryPlnxPBj2
+   A==;
+X-CSE-ConnectionGUID: 8wju7mCaRNGgAhA+CT+Whg==
+X-CSE-MsgGUID: t8HOzIgCTx67mOpASwtY+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11237"; a="33524847"
+X-IronPort-AV: E=Sophos;i="6.11,235,1725346800"; 
+   d="scan'208";a="33524847"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 10:45:20 -0700
+X-CSE-ConnectionGUID: ta/ZbhOLQbufXi2FTdmBvg==
+X-CSE-MsgGUID: RgVkr9u8Ty6IAyzF3hBiyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="85974141"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2024 10:45:15 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4kqe-000Ztk-2L;
+	Sat, 26 Oct 2024 17:45:12 +0000
+Date: Sun, 27 Oct 2024 01:44:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Huan Tang <tanghuan@vivo.com>, alim.akhtar@samsung.com,
+	avri.altman@wdc.com, bvanassche@acm.org,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+	beanhuo@micron.com, luhongfei@vivo.com, quic_cang@quicinc.com,
+	keosung.park@samsung.com, viro@zeniv.linux.org.uk,
+	quic_mnaresh@quicinc.com, peter.wang@mediatek.com,
+	manivannan.sadhasivam@linaro.org, ahalaney@redhat.com,
+	quic_nguyenb@quicinc.com, linux@weissschuh.net, ebiggers@google.com,
+	minwoo.im@samsung.com, linux-kernel@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	opensource.kernel@vivo.com, Huan Tang <tanghuan@vivo.com>
+Subject: Re: [PATCH v2] ufs: core: Add WB buffer resize support
+Message-ID: <202410270108.zrM5GjRx-lkp@intel.com>
+References: <20241026004423.135-1-tanghuan@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241026004423.135-1-tanghuan@vivo.com>
 
-Masahiro Yamada <masahiroy@kernel.org> wrote:
-> I think this should be documented (required LLVM version and
-> the supported build command),
-> otherwise people cannot test this patch.
+Hi Huan,
 
-Nathan Chancellor <nathan@kernel.org> wrote:
-> I am not sure that there is a super concise way to describe for
-> Documentation/kbuild/llvm.rst that sparc currently requires 'CC=3Dclang
-> LLVM_IAS=3D0' along with a build of clang from the main branch of
-> llvm-project to work properly.
+kernel test robot noticed the following build errors:
 
-So about this, as a middle ground, would it be okay if I put
+[auto build test ERROR on jejb-scsi/for-next]
+[also build test ERROR on mkp-scsi/for-next linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-``CC=3Dclang LLVM_IAS=3D0`` (LLVM >=3D 20)
+url:    https://github.com/intel-lab-lkp/linux/commits/Huan-Tang/ufs-core-Add-WB-buffer-resize-support/20241026-084545
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20241026004423.135-1-tanghuan%40vivo.com
+patch subject: [PATCH v2] ufs: core: Add WB buffer resize support
+config: i386-buildonly-randconfig-001-20241026 (https://download.01.org/0day-ci/archive/20241027/202410270108.zrM5GjRx-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241027/202410270108.zrM5GjRx-lkp@intel.com/reproduce)
 
-In the documentation, in a similar manner to the s390x entry?
-I know that LLVM 20 is still a couple months away but those commits will
-likely be released with that version, and since it also tells people
-to not use a version that is too old, I think it should be okay (?)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410270108.zrM5GjRx-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/ufs/core/ufs-sysfs.c:12:
+   In file included from drivers/ufs/core/ufshcd-priv.h:7:
+   In file included from include/ufs/ufshcd.h:16:
+   In file included from include/linux/blk-crypto-profile.h:9:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/ufs/core/ufs-sysfs.c:441:2: error: use of undeclared identifier 'index'
+     441 |         index = ufshcd_wb_get_query_index(hba);
+         |         ^
+   1 warning and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+
+
+vim +/index +441 drivers/ufs/core/ufs-sysfs.c
+
+   413	
+   414	static ssize_t wb_toggle_buf_resize_store(struct device *dev,
+   415			struct device_attribute *attr, const char *buf, size_t count)
+   416	{
+   417		struct ufs_hba *hba = dev_get_drvdata(dev);
+   418		unsigned int wb_buf_resize_op;
+   419		ssize_t res;
+   420	
+   421		if (!ufshcd_is_wb_allowed(hba) || !hba->dev_info.wb_enabled ||
+   422			!hba->dev_info.b_presrv_uspc_en) {
+   423			dev_err(dev, "The WB buf resize is not allowed!\n");
+   424			return -EOPNOTSUPP;
+   425		}
+   426	
+   427		if (kstrtouint(buf, 0, &wb_buf_resize_op))
+   428			return -EINVAL;
+   429	
+   430		if (wb_buf_resize_op != 0x01 && wb_buf_resize_op != 0x02) {
+   431			dev_err(dev, "The operation %u is invalid!\n", wb_buf_resize_op);
+   432			return -EINVAL;
+   433		}
+   434	
+   435		down(&hba->host_sem);
+   436		if (!ufshcd_is_user_access_allowed(hba)) {
+   437			res = -EBUSY;
+   438			goto out;
+   439		}
+   440	
+ > 441		index = ufshcd_wb_get_query_index(hba);
+   442		ufshcd_rpm_get_sync(hba);
+   443		res = ufshcd_wb_toggle_buf_resize(hba, wb_buf_resize_op);
+   444		ufshcd_rpm_put_sync(hba);
+   445	
+   446	out:
+   447		up(&hba->host_sem);
+   448		return res < 0 ? res : count;
+   449	}
+   450	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
