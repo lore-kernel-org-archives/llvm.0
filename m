@@ -1,56 +1,54 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA39817B4EC
-	for <llvm@lists.linux.dev>; Sat, 26 Oct 2024 05:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D17017E016
+	for <llvm@lists.linux.dev>; Sat, 26 Oct 2024 05:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729919664; cv=none; b=TUgeqQaTWFIPENLsxG6QOAJ6MkgT7c2ywQBUZvTh48rXtkxjS8DlSG+tvepBSBnwum5Z++0ZFMxCW3Ckgqn8QdsJ9JFVlHd5vNT85CPI0QufN4e0QB3hSYFYHVlBQJkuuk0/Wkpojf4uIV3b5eWFWlU0YBYStKLluLNj1fwyPfo=
+	t=1729919666; cv=none; b=hy5SJ2QRnkBn0XjrYvXchIGmZ2zbKmlxwu8Ur/uEkCKKWgMyJFyaQSQTHvilzJ6cN39fFMz3EAfPdvzVNvh+z7HISMpiN1w3YW1C8A7Ydue/4/Pe6xXdFDVaxxTcFyl4eOxfDrytVZCC/lxxCMnEqcyVzEojOwdhSd7jioT2szA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729919664; c=relaxed/simple;
-	bh=1XrUOxm67YWKXJl5eYiSXjUO7TsxxJAwupJPPiPx+ik=;
+	s=arc-20240116; t=1729919666; c=relaxed/simple;
+	bh=tzMXMzN/wgMUOmEGyjDqmLEvBh2AhaCjj6RzEgw1Vr0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Y7xFbI8lLzTj7VZYQ1vSGpNbp/cul+QHQ/0Rg+UfkrR25LcEMAp3zDoEQ5GzA+O9ifJWBXPGQQb86N8XmjSYRLJHP08ZkEIjHuHQucTJyRLE0SiIPHVEg7bKyoW9ifPEcwr8jJ7JG7KHyGo92YrPuUQF5pfLwnxzw9uwSZQIUtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aMkJV4Mc; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=bOi50Mb5YGGLbipM82JXAQaKooKPESYT7CWVtbpgTdRS44FaAudVpRqJljp+N3aOjolLhveEqO+VcQ4K0KZPDn8RUjTUICuSkBl8rndrhbz/T+VZQ3ZFjyHJ2Zi9NI8SkCX3Zai87u+IO9qXpgQuvxrktBsa3P4GtLozIiwgFZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KMwUF13r; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aMkJV4Mc"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6dbbeee08f0so49257877b3.0
-        for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 22:14:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KMwUF13r"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e59dc7df64so33519437b3.1
+        for <llvm@lists.linux.dev>; Fri, 25 Oct 2024 22:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729919660; x=1730524460; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CwocKGHgUXdsFOwFTTEG/FtIpm0PRyvg4LHAdc+/Z6Y=;
-        b=aMkJV4McGKZTSIbKpuyOh6JFIAagg76R0A5CZdKvctg+lm4/+GeoDfKnH+I4jtVKMD
-         iAu+Oi++XfF5uk8SDekjB0PBRu0KANInVa6T/469bkuCTQ5o0j1tseFxNjpso0pvzAKg
-         rS8qa2pOwI31eaQ1vDTTvR39aJh704tJLXJHVr0XX3olAG+PqHrT/gipRpXseX6jqevZ
-         KRnWqPWSpymq1VvxHOJzCkWjbCSgSIe4wr+pUa+6GHlFgPtTwcMpRBTOcYYBAtyN0sgO
-         w48xaCecZtD8noW+W1vHQud5Skn7bp7WnAO1CcEL14BnzST1acKt6Ek8lLlahkgUTKPu
-         LC0w==
+        d=google.com; s=20230601; t=1729919661; x=1730524461; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u2CNgeIiMQMsQ3BQwy/JhDpCL0QGG7OlUJ2Ao2DLrpQ=;
+        b=KMwUF13r1VqpkITXfOLkN+VOmFMKsJOqOPSp5o9aMUQeLTyth4/tPX6HvsyPC8RF7R
+         DLfNNrbfP1l3+TBK3dwxywKPMBAthIyKwmxxQKpblr/6vG3QXp4zpvwFP+A6wLHdgblG
+         4yo6yR/DVAiwoZvWrSBgljCrZ4gS6E7QWhD8FBhFNXETuzbc+YUtMG1Qut+jM+aBcAH1
+         zdpQ847ikJMCpgcZBhGLaRnT9wrYvmcT90F2PowOKiA7XfYB7RXKs8ywecu+lsMYV4Xm
+         cJL0Pj0GhJLjt/q0wli2Pxe1w+jvJWqwkT1WtRWzQUq3qIQ8CcS+pPhuDYs8VSUG58y2
+         kPqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729919660; x=1730524460;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CwocKGHgUXdsFOwFTTEG/FtIpm0PRyvg4LHAdc+/Z6Y=;
-        b=fff6M5aBXdwU8bVQkd7S13EUaCc820B3UYthDlLkExBV+/J/TxufwrM1kraUUVK0/z
-         EubywzT9XyGVqMa5f+gAbhPVlaZzG0H8rFHSoNq1SdLqeAH9l/7pmvNzeWetwUnqwHn8
-         Gs4eRb8RovSA9L7Xc5V7/V7sNqcNOWwaZ/R8rbZA/gZWEuRraj4ioNjWWP2tj5daMiMa
-         e628RCArJaMU86Pvjd7SvpTPFCFxUXaE8QSzdMHvEnmpatlOuhOsZ1mqnx/krT/8YWfB
-         Js5Br8Ih+VUsHjwwYvALuTAuPzeBRSIOzAad4SeZJHZd7uftCozlAo/cSZyEQWzTqQyz
-         6vKA==
-X-Forwarded-Encrypted: i=1; AJvYcCWYfYAe7SJ0r8quLPO0jPUR0CpOrkIPWDZn8EW2AcCBFCu3+5g0ORVBlTlk8DfvagF7l8x1@lists.linux.dev
-X-Gm-Message-State: AOJu0YwWFO+DRBDhTNms+bWBU9D1d015XjgXkTPZiU5kdG2E9g+s4ZJ4
-	bX6DnFSq/QwWQCVPGVDPFOUNSEOsWtdOsyBwvWtPsShowWlBu3gEi53WlgWkJbo47w==
-X-Google-Smtp-Source: AGHT+IHOybZXxhNpcWagz27422zYFTJPt6BbXSY6n3vTTmRzykMssE9klEXOQCWXoubA4ZID9e6yGv8=
+        d=1e100.net; s=20230601; t=1729919661; x=1730524461;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u2CNgeIiMQMsQ3BQwy/JhDpCL0QGG7OlUJ2Ao2DLrpQ=;
+        b=eZkdiXu6xMo0YaLp5EjK7hB6xH0gplE2/raKpLmjuC2cRiDILKaC1xFMPrxsN/Wh7V
+         OrNAVS+wJ8a/lxnPV53uhNGp8YTTCE0K335MViGL/9pRIWS9j5LGn5y7w4ZdWHBY7Uyp
+         Uw72g4sXCFGw+lVMkXzU6hBFHPWTWn+EFTPEXwLn6wDRv6S55m5tkD7p6AvggMa0Eqqn
+         ISUa48oCvi0UBciPts3FBkMVdr3EOA5RdInfzqZ5et2hX80QMEW5IICsKxFJ2ULUP7W1
+         29AWuN98xM4WP8V+5CMIDdUOlpcOuso7APch5PNHDakloAPGgoSBZUxfsHEQf0TDkqzK
+         1/Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCXqk7yZ0LmHT9//MMQ3eDyXkKU5MfxVs4EB+FZFmfGvE/BMHQLupAMQ+pTZ+Zu/2zWPCKlG@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx4uwfxVFjpMfpRj/wcVT7t8JVQJ/LBtOU3peerH/Z5UYxpTSQa
+	aVMOhN8ohrqr+zwvURRImoILmpMd+THacoiqD+uu8TyzCzi6PDmA5li5AjngsHxluQ==
+X-Google-Smtp-Source: AGHT+IG4wzkxOGVXqJpc/NqCJl7J1Bo+g7i9iACOlnzSbC72EPPc9/I9m6FoCmV9xT7sOQL/GxBtQGI=
 X-Received: from xur.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:2330])
- (user=xur job=sendgmr) by 2002:a25:74c4:0:b0:e29:9c5:5fcb with SMTP id
- 3f1490d57ef6-e2eb86c806dmr64101276.4.1729919659655; Fri, 25 Oct 2024 22:14:19
- -0700 (PDT)
-Date: Fri, 25 Oct 2024 22:14:05 -0700
+ (user=xur job=sendgmr) by 2002:a05:690c:82c:b0:620:32ea:e1d4 with SMTP id
+ 00721157ae682-6e9d870c0e4mr333647b3.0.1729919661525; Fri, 25 Oct 2024
+ 22:14:21 -0700 (PDT)
+Date: Fri, 25 Oct 2024 22:14:06 -0700
 In-Reply-To: <20241026051410.2819338-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,8 +58,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20241026051410.2819338-1-xur@google.com>
 X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-Message-ID: <20241026051410.2819338-4-xur@google.com>
-Subject: [PATCH v6 3/7] Adjust symbol ordering in text output section
+Message-ID: <20241026051410.2819338-5-xur@google.com>
+Subject: [PATCH v6 4/7] Add markers for text_unlikely and text_hot sections
 From: Rong Xu <xur@google.com>
 To: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
 	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
@@ -86,104 +84,56 @@ Cc: x86@kernel.org, linux-arch@vger.kernel.org, sparclinux@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-When the -ffunction-sections compiler option is enabled, each function
-is placed in a separate section named .text.function_name rather than
-putting all functions in a single .text section.
-
-However, using -function-sections can cause problems with the
-linker script. The comments included in include/asm-generic/vmlinux.lds.h
-note these issues.:
-  =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if dead
-   code elimination is enabled, so these sections should be converted
-   to use ".." first.=E2=80=9D
-
-It is unclear whether there is a straightforward method for converting
-a suffix to "..".
-
-This patch modifies the order of subsections within the text output
-section. Specifically, it repositions sections with certain fixed patterns
-(for example .text.unlikely) before TEXT_MAIN, ensuring that they are
-grouped and matched together. It also places .text.hot section at the
-beginning of a page to help the TLB performance.
-
-Note that the limitation arises because the linker script employs glob
-patterns instead of regular expressions for string matching. While there
-is a method to maintain the current order using complex patterns, this
-significantly complicates the pattern and increases the likelihood of
-errors.
-
-This patch also changes vmlinux.lds.S for the sparc64 architecture to
-accommodate specific symbol placement requirements.
+Add markers like __hot_text_start, __hot_text_end, __unlikely_text_start,
+and __unlikely_text_end which will be included in System.map. These markers
+indicate how the compiler groups functions, providing valuable information
+to developers about the layout and optimization of the code.
 
 Co-developed-by: Han Shen <shenhan@google.com>
 Signed-off-by: Han Shen <shenhan@google.com>
 Signed-off-by: Rong Xu <xur@google.com>
 Suggested-by: Sriraman Tallam <tmsriram@google.com>
-Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
 Tested-by: Yonghong Song <yonghong.song@linux.dev>
 Tested-by: Yabin Cui <yabinc@google.com>
-Change-Id: I5202d40bc7e24f93c2bfb2f0d987e9dc57dec1b1
+Change-Id: Ie7688587adf89a14661ceca108680903b546d5d9
 ---
- arch/sparc/kernel/vmlinux.lds.S   |  5 +++++
- include/asm-generic/vmlinux.lds.h | 19 ++++++++++++-------
- 2 files changed, 17 insertions(+), 7 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/arch/sparc/kernel/vmlinux.lds.S b/arch/sparc/kernel/vmlinux.ld=
-s.S
-index d317a843f7ea9..f1b86eb303404 100644
---- a/arch/sparc/kernel/vmlinux.lds.S
-+++ b/arch/sparc/kernel/vmlinux.lds.S
-@@ -48,6 +48,11 @@ SECTIONS
- 	{
- 		_text =3D .;
- 		HEAD_TEXT
-+	        ALIGN_FUNCTION();
-+#ifdef CONFIG_SPARC64
-+	        /* Match text section symbols in head_64.S first */
-+	        *head_64.o(.text)
-+#endif
- 		TEXT_TEXT
- 		SCHED_TEXT
- 		LOCK_TEXT
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinu=
-x.lds.h
-index eeadbaeccf88b..fd901951549c0 100644
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index fd901951549c0..e02973f3b4189 100644
 --- a/include/asm-generic/vmlinux.lds.h
 +++ b/include/asm-generic/vmlinux.lds.h
-@@ -553,19 +553,24 @@
+@@ -549,6 +549,16 @@
+ 		__cpuidle_text_end = .;					\
+ 		__noinstr_text_end = .;
+ 
++#define TEXT_UNLIKELY							\
++		__unlikely_text_start = .;				\
++		*(.text.unlikely .text.unlikely.*)			\
++		__unlikely_text_end = .;
++
++#define TEXT_HOT							\
++		__hot_text_start = .;					\
++		*(.text.hot .text.hot.*)				\
++		__hot_text_end = .;
++
+ /*
   * .text section. Map to function alignment to avoid address changes
   * during second ld run in second ld pass when generating System.map
-  *
-- * TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
-- * code elimination is enabled, so these sections should be converted
-- * to use ".." first.
-+ * TEXT_MAIN here will match symbols with a fixed pattern (for example,
-+ * .text.hot or .text.unlikely) if dead code elimination or
-+ * function-section is enabled. Match these symbols first before
-+ * TEXT_MAIN to ensure they are grouped together.
-+ *
-+ * Also placing .text.hot section at the beginning of a page, this
-+ * would help the TLB performance.
-  */
- #define TEXT_TEXT							\
+@@ -565,9 +575,9 @@
  		ALIGN_FUNCTION();					\
-+		*(.text.asan.* .text.tsan.*)				\
-+		*(.text.unknown .text.unknown.*)			\
-+		*(.text.unlikely .text.unlikely.*)			\
-+		. =3D ALIGN(PAGE_SIZE);					\
- 		*(.text.hot .text.hot.*)				\
- 		*(TEXT_MAIN .text.fixup)				\
+ 		*(.text.asan.* .text.tsan.*)				\
+ 		*(.text.unknown .text.unknown.*)			\
 -		*(.text.unlikely .text.unlikely.*)			\
--		*(.text.unknown .text.unknown.*)			\
++		TEXT_UNLIKELY						\
+ 		. = ALIGN(PAGE_SIZE);					\
+-		*(.text.hot .text.hot.*)				\
++		TEXT_HOT						\
+ 		*(TEXT_MAIN .text.fixup)				\
  		NOINSTR_TEXT						\
--		*(.ref.text)						\
--		*(.text.asan.* .text.tsan.*)
-+		*(.ref.text)
-=20
-=20
- /* sched.text is aling to function alignment to secure we have same
---=20
+ 		*(.ref.text)
+-- 
 2.47.0.163.g1226f6d8fa-goog
 
