@@ -1,101 +1,156 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F61217F2E
-	for <llvm@lists.linux.dev>; Sat, 26 Oct 2024 01:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3298123A0;
+	Sat, 26 Oct 2024 01:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729905793; cv=none; b=Y17CnqHyC7FWHJ0QhuKz9YZrivNFFVEy0fZXx8RoIePvT31nqd1yIXzIMuSmcbmy9BqSQC1hYPvG8yefoj8uB5+hjTTgDETbT4c2/sOfKiVsiaUKmRPSFDjovTEnvDXt59H90sFHbtFLcobRvlkrCrnM6SO9p18FbQ0+W/xtHdI=
+	t=1729906490; cv=none; b=kzACvYf5UpKmPjYtFclCuhrXRR65Ff4r8uwEhElBivhHaPP9SBcBzdlvDr+LDU3R3Aojj4tM+U2Y+++6+seZQ0h5PJKqb3Q5Rs3zkjvvMxrZRPIHRtrPzflppaomJjjeHqj7Xq7042Nes1vpCjjp+9mTVNz8sQUCJmJVxIOjYzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729905793; c=relaxed/simple;
-	bh=atJ8cy6fTkosV5BgpMoD1cdNDwmocjgOMmkWUmknDZc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=m15B48GiG9jpizVKO96p85zyya5fQlv6JvZOOGT0nZzIlfGlFhtXtB+kcXmekFbECyGSHgxDGK8D3TxgMTwJ8rt8A1KOH2t4mTNquinr2+jaC1X9NEYPSAM9aiwFxexCwwyIs3oXeq9SRQYUe+zEikSKT8NTAzZxMBdGKGJu/CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I7vboWV5; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1729906490; c=relaxed/simple;
+	bh=AvdnhwNRiXKf7G4bRAt5xJWxJrdRaqp5+mhlW0iRbJo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XAL/sF/TSUyG2FkKJE3BI4pF38sHO+AcFss1GDTtyKpn1bZtOSuxv7Q7Yqi6TH2kfvq4DmqfOkBvo5EouzTB85H/DoqHC0uuDrQEYXFQlq8Bg/IYlRR5FH8oijieGsIIjomqOckVjILpC/Pa3j7gYJZwAFXxTyD4/w0o684RFeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wq7WzRrR; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I7vboWV5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729905789;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zm0x9mY1U7OmOXnfXY90LTHz1ykssQgCL+1Poa4Ks2Y=;
-	b=I7vboWV5CacY9H7wxTEwMmdt4GUn+ldedAbLim0RZojfwZGokbXlHqXo/q/IBMRnktzyTu
-	9Tgy4o+xoUjAi3yK63LT73m9Vo5qzJM+3F/2WQDGkciWlOHulAd9clE7yCUwPYja5lJC8S
-	QLqaQJX2gy+NbxIsPOIi0FPmhE81GTQ=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-257-bEZcK2-SNFiXijLoWcx4DA-1; Fri,
- 25 Oct 2024 21:23:08 -0400
-X-MC-Unique: bEZcK2-SNFiXijLoWcx4DA-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A94C195608C
-	for <llvm@lists.linux.dev>; Sat, 26 Oct 2024 01:23:07 +0000 (UTC)
-Received: from [172.64.2.86] (unknown [10.30.34.59])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E910619560A2;
-	Sat, 26 Oct 2024 01:23:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc4,
- mainline.kernel.org-clang, 850925a8)
-Date: Sat, 26 Oct 2024 01:23:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wq7WzRrR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729906487; x=1761442487;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AvdnhwNRiXKf7G4bRAt5xJWxJrdRaqp5+mhlW0iRbJo=;
+  b=Wq7WzRrRZOXME271vy48jIpUUW/IrhcI+rjbnGTGmnm4NnBJhZYkZCum
+   1RZlAGvZRCFn3MeLh9wjPWFXPQjSp9sQQXLHMmLOaxSGSkoBd/qyAD08a
+   fNnuwq0UTbDwimFLlCvk/16xXnbjd9ZLu6/BeARopus98t53DuBd6rO0R
+   TKAakvo319Hl6i6Qnvx5Mj8bcDEuk+LHaseyXhsoBcWaQq1do9rTe1AI6
+   AZtG0NjtbACdFlA84UVhq36pq7r2Mv67cs8UGsNWalUaNJekNEWmEt6OC
+   d0nnNRJZGbdynOAx9+auYYA0ID7sou98NZIhW/cqtj/RF0l80WJcnWVmd
+   Q==;
+X-CSE-ConnectionGUID: TP8m4ChvSrixf53g5lS1vA==
+X-CSE-MsgGUID: ytCTuTxhTUiwvpYNZRI8WQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29536589"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29536589"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 18:34:46 -0700
+X-CSE-ConnectionGUID: 70ikL1t/Sde4q68jIS/rvg==
+X-CSE-MsgGUID: SbfZrTSgSn69iYeE81rvuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
+   d="scan'208";a="111925452"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 25 Oct 2024 18:34:41 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4VhO-000Z8C-1i;
+	Sat, 26 Oct 2024 01:34:38 +0000
+Date: Sat, 26 Oct 2024 09:34:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wei Fang <wei.fang@nxp.com>, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, vladimir.oltean@nxp.com,
+	claudiu.manoil@nxp.com, xiaoning.wang@nxp.com, Frank.Li@nxp.com,
+	christophe.leroy@csgroup.eu, linux@armlinux.org.uk,
+	bhelgaas@google.com, horms@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	imx@lists.linux.dev, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, alexander.stein@ew.tq-group.com
+Subject: Re: [PATCH v5 net-next 05/13] net: enetc: extract common ENETC PF
+ parts for LS1028A and i.MX95 platforms
+Message-ID: <202410260911.fvWnX8cx-lkp@intel.com>
+References: <20241024065328.521518-6-wei.fang@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <09949.124102521230800239@us-mta-257.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024065328.521518-6-wei.fang@nxp.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Wei,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Fang/dt-bindings-net-add-compatible-string-for-i-MX95-EMDIO/20241024-151502
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241024065328.521518-6-wei.fang%40nxp.com
+patch subject: [PATCH v5 net-next 05/13] net: enetc: extract common ENETC PF parts for LS1028A and i.MX95 platforms
+config: x86_64-buildonly-randconfig-001-20241026 (https://download.01.org/0day-ci/archive/20241026/202410260911.fvWnX8cx-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260911.fvWnX8cx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410260911.fvWnX8cx-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf.c:7:
+   In file included from include/linux/of_net.h:9:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/net/ethernet/freescale/enetc/enetc_pf.c:906:14: error: call to undeclared function 'of_find_compatible_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     906 |         ierb_node = of_find_compatible_node(NULL, NULL,
+         |                     ^
+>> drivers/net/ethernet/freescale/enetc/enetc_pf.c:906:12: error: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+     906 |         ierb_node = of_find_compatible_node(NULL, NULL,
+         |                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     907 |                                             "fsl,ls1028a-enetc-ierb");
+         |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/freescale/enetc/enetc_pf.c:908:21: error: call to undeclared function 'of_device_is_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     908 |         if (!ierb_node || !of_device_is_available(ierb_node))
+         |                            ^
+>> drivers/net/ethernet/freescale/enetc/enetc_pf.c:912:2: error: call to undeclared function 'of_node_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     912 |         of_node_put(ierb_node);
+         |         ^
+   drivers/net/ethernet/freescale/enetc/enetc_pf.c:1115:14: error: call to undeclared function 'of_device_is_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1115 |         if (node && of_device_is_available(node))
+         |                     ^
+   1 warning and 5 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag '9p-for-6.12-rc5' of https://github.com/marti=
-netd/linux
+vim +/of_find_compatible_node +906 drivers/net/ethernet/freescale/enetc/enetc_pf.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1513191561
+07bf34a50e3279 Vladimir Oltean 2021-02-04  900  
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  901  static int enetc_pf_register_with_ierb(struct pci_dev *pdev)
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  902  {
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  903  	struct platform_device *ierb_pdev;
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  904  	struct device_node *ierb_node;
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  905  
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17 @906  	ierb_node = of_find_compatible_node(NULL, NULL,
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  907  					    "fsl,ls1028a-enetc-ierb");
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17 @908  	if (!ierb_node || !of_device_is_available(ierb_node))
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  909  		return -ENODEV;
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  910  
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  911  	ierb_pdev = of_find_device_by_node(ierb_node);
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17 @912  	of_node_put(ierb_node);
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  913  
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  914  	if (!ierb_pdev)
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  915  		return -EPROBE_DEFER;
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  916  
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  917  	return enetc_ierb_register_pf(ierb_pdev, pdev);
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  918  }
+e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  919  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1513191561-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1513191561-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1513191561-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
