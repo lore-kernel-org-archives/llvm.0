@@ -1,68 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3298123A0;
-	Sat, 26 Oct 2024 01:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D02F249EB;
+	Sat, 26 Oct 2024 01:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729906490; cv=none; b=kzACvYf5UpKmPjYtFclCuhrXRR65Ff4r8uwEhElBivhHaPP9SBcBzdlvDr+LDU3R3Aojj4tM+U2Y+++6+seZQ0h5PJKqb3Q5Rs3zkjvvMxrZRPIHRtrPzflppaomJjjeHqj7Xq7042Nes1vpCjjp+9mTVNz8sQUCJmJVxIOjYzY=
+	t=1729907807; cv=none; b=Y2mEIlC4A+UYC7dxfBWr8QtA9lXfSyo1Ol37Etl3ZMmRmD4i1poX5zs1C72gGY+0pNWGB/3KV3Ajv40W32lXv5XY2PGgqTnPHa8XtYevzZXQg2SQ1c36YO9LyhR3ohW5hGPRYltZ8qbdDWq1V57Erj1HukzWaDEUbDk1VEnHEsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729906490; c=relaxed/simple;
-	bh=AvdnhwNRiXKf7G4bRAt5xJWxJrdRaqp5+mhlW0iRbJo=;
+	s=arc-20240116; t=1729907807; c=relaxed/simple;
+	bh=Y84AS8AQPcjc3nRCoqcv1YhOeVsRduR6WIAYEw1f7wk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XAL/sF/TSUyG2FkKJE3BI4pF38sHO+AcFss1GDTtyKpn1bZtOSuxv7Q7Yqi6TH2kfvq4DmqfOkBvo5EouzTB85H/DoqHC0uuDrQEYXFQlq8Bg/IYlRR5FH8oijieGsIIjomqOckVjILpC/Pa3j7gYJZwAFXxTyD4/w0o684RFeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wq7WzRrR; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=uE4b8M+fLCHQOQafkJ/OqW5Hy6ed+9SgTySNCM6b2BnxXI5v6P7g36ZEUKSt3v+5s4yvZhZTK49qKRh5Er57zNkIINyhNo6FaPSYReV+A+ZJefoS9F1qWqahxN68c7KE7QWXVpz9ujthWnDFPcrK+7svFDadThgpjGtEqHW4Rzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EF2jWBqz; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wq7WzRrR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EF2jWBqz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729906487; x=1761442487;
+  t=1729907804; x=1761443804;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AvdnhwNRiXKf7G4bRAt5xJWxJrdRaqp5+mhlW0iRbJo=;
-  b=Wq7WzRrRZOXME271vy48jIpUUW/IrhcI+rjbnGTGmnm4NnBJhZYkZCum
-   1RZlAGvZRCFn3MeLh9wjPWFXPQjSp9sQQXLHMmLOaxSGSkoBd/qyAD08a
-   fNnuwq0UTbDwimFLlCvk/16xXnbjd9ZLu6/BeARopus98t53DuBd6rO0R
-   TKAakvo319Hl6i6Qnvx5Mj8bcDEuk+LHaseyXhsoBcWaQq1do9rTe1AI6
-   AZtG0NjtbACdFlA84UVhq36pq7r2Mv67cs8UGsNWalUaNJekNEWmEt6OC
-   d0nnNRJZGbdynOAx9+auYYA0ID7sou98NZIhW/cqtj/RF0l80WJcnWVmd
+  bh=Y84AS8AQPcjc3nRCoqcv1YhOeVsRduR6WIAYEw1f7wk=;
+  b=EF2jWBqzXr1PITmq9cr5MyJej/5agYuYeARf/zNewdWBfdc0E4mQgt7m
+   hIpZvC7+cjN617XIJ5+18HVYpspclRCMpqkQmHU81lFLqV5uK0vGaOcBg
+   Xswn0muDcce7qwuM4X2a2D6O3MEOe+O0ki2x3mDaNcvTF9YjpnyuVd0mG
+   34EK9DO/DbrevF8DH7vMghGPg3vZ1M74IDY6p4jgJj/wm5ARbTJeNdegB
+   +KmLjUvsIH7iL8TdxQIZbSnPceJV8hEH5X+SSzKWQbVtGHnjfwOyiIBVP
+   3UW4k3ryzAdhGzZU3CWH65TXZ6540qapE9quPrwFLTa6HpbLK3zXmHM2I
    Q==;
-X-CSE-ConnectionGUID: TP8m4ChvSrixf53g5lS1vA==
-X-CSE-MsgGUID: ytCTuTxhTUiwvpYNZRI8WQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29536589"
+X-CSE-ConnectionGUID: apE9WViiR4yEmWDgMB1Gtg==
+X-CSE-MsgGUID: MgU//4fkQRSP4Mj72QooPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29452091"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29536589"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 18:34:46 -0700
-X-CSE-ConnectionGUID: 70ikL1t/Sde4q68jIS/rvg==
-X-CSE-MsgGUID: SbfZrTSgSn69iYeE81rvuA==
+   d="scan'208";a="29452091"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 18:56:44 -0700
+X-CSE-ConnectionGUID: 5Ee8TF74Q+6Vb0+x0fQzpg==
+X-CSE-MsgGUID: t2Xvn7inQ42u9nzs8xb8Ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,233,1725346800"; 
-   d="scan'208";a="111925452"
+   d="scan'208";a="85050158"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 25 Oct 2024 18:34:41 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 25 Oct 2024 18:56:41 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4VhO-000Z8C-1i;
-	Sat, 26 Oct 2024 01:34:38 +0000
-Date: Sat, 26 Oct 2024 09:34:36 +0800
+	id 1t4W2h-000Z9T-1u;
+	Sat, 26 Oct 2024 01:56:39 +0000
+Date: Sat, 26 Oct 2024 09:55:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wei Fang <wei.fang@nxp.com>, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, vladimir.oltean@nxp.com,
-	claudiu.manoil@nxp.com, xiaoning.wang@nxp.com, Frank.Li@nxp.com,
-	christophe.leroy@csgroup.eu, linux@armlinux.org.uk,
-	bhelgaas@google.com, horms@kernel.org
+To: Muna Sinada <quic_msinada@quicinc.com>, johannes@sipsolutions.net
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	imx@lists.linux.dev, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, alexander.stein@ew.tq-group.com
-Subject: Re: [PATCH v5 net-next 05/13] net: enetc: extract common ENETC PF
- parts for LS1028A and i.MX95 platforms
-Message-ID: <202410260911.fvWnX8cx-lkp@intel.com>
-References: <20241024065328.521518-6-wei.fang@nxp.com>
+	linux-wireless@vger.kernel.org,
+	Rameshkumar Sundaram <quic_ramess@quicinc.com>,
+	Aloka Dixit <quic_alokad@quicinc.com>,
+	Muna Sinada <quic_msinada@quicinc.com>
+Subject: Re: [PATCH v2 1/2] wifi: nl80211: add link id of transmitted profile
+ for MLO MBSSID
+Message-ID: <202410260903.OviN4GZO-lkp@intel.com>
+References: <20241025013857.2793346-2-quic_msinada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,33 +67,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241024065328.521518-6-wei.fang@nxp.com>
+In-Reply-To: <20241025013857.2793346-2-quic_msinada@quicinc.com>
 
-Hi Wei,
+Hi Muna,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on net-next/main]
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on wireless/main ath/ath-next linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Fang/dt-bindings-net-add-compatible-string-for-i-MX95-EMDIO/20241024-151502
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241024065328.521518-6-wei.fang%40nxp.com
-patch subject: [PATCH v5 net-next 05/13] net: enetc: extract common ENETC PF parts for LS1028A and i.MX95 platforms
-config: x86_64-buildonly-randconfig-001-20241026 (https://download.01.org/0day-ci/archive/20241026/202410260911.fvWnX8cx-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Muna-Sinada/wifi-nl80211-add-link-id-of-transmitted-profile-for-MLO-MBSSID/20241025-094154
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20241025013857.2793346-2-quic_msinada%40quicinc.com
+patch subject: [PATCH v2 1/2] wifi: nl80211: add link id of transmitted profile for MLO MBSSID
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241026/202410260903.OviN4GZO-lkp@intel.com/config)
 compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260911.fvWnX8cx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410260903.OviN4GZO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410260911.fvWnX8cx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410260903.OviN4GZO-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/freescale/enetc/enetc_pf.c:7:
-   In file included from include/linux/of_net.h:9:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
+   In file included from net/wireless/nl80211.c:16:
    In file included from include/linux/if_ether.h:19:
    In file included from include/linux/skbuff.h:17:
    In file included from include/linux/bvec.h:10:
@@ -105,51 +102,140 @@ All errors (new ones prefixed by >>):
    In file included from include/linux/cacheflush.h:5:
    In file included from arch/x86/include/asm/cacheflush.h:5:
    In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/net/ethernet/freescale/enetc/enetc_pf.c:906:14: error: call to undeclared function 'of_find_compatible_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     906 |         ierb_node = of_find_compatible_node(NULL, NULL,
-         |                     ^
->> drivers/net/ethernet/freescale/enetc/enetc_pf.c:906:12: error: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
-     906 |         ierb_node = of_find_compatible_node(NULL, NULL,
-         |                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     907 |                                             "fsl,ls1028a-enetc-ierb");
-         |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/freescale/enetc/enetc_pf.c:908:21: error: call to undeclared function 'of_device_is_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     908 |         if (!ierb_node || !of_device_is_available(ierb_node))
-         |                            ^
->> drivers/net/ethernet/freescale/enetc/enetc_pf.c:912:2: error: call to undeclared function 'of_node_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     912 |         of_node_put(ierb_node);
-         |         ^
-   drivers/net/ethernet/freescale/enetc/enetc_pf.c:1115:14: error: call to undeclared function 'of_device_is_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1115 |         if (node && of_device_is_available(node))
-         |                     ^
-   1 warning and 5 errors generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> net/wireless/nl80211.c:5588:13: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    5588 |         } else if (tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID]) {
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/wireless/nl80211.c:5599:9: note: uninitialized use occurs here
+    5599 |         return err;
+         |                ^~~
+   net/wireless/nl80211.c:5588:9: note: remove the 'if' if its condition is always false
+    5588 |         } else if (tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID]) {
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    5589 |                 goto out;
+         |                 ~~~~~~~~~
+    5590 |         }
+         |         ~
+   net/wireless/nl80211.c:5579:7: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    5579 |                 if (!tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID])
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/wireless/nl80211.c:5599:9: note: uninitialized use occurs here
+    5599 |         return err;
+         |                ^~~
+   net/wireless/nl80211.c:5579:3: note: remove the 'if' if its condition is always false
+    5579 |                 if (!tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID])
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    5580 |                         goto out;
+         |                         ~~~~~~~~
+   net/wireless/nl80211.c:5527:9: note: initialize the variable 'err' to silence this warning
+    5527 |         int err;
+         |                ^
+         |                 = 0
+   6 warnings generated.
 
 
-vim +/of_find_compatible_node +906 drivers/net/ethernet/freescale/enetc/enetc_pf.c
+vim +5588 net/wireless/nl80211.c
 
-07bf34a50e3279 Vladimir Oltean 2021-02-04  900  
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  901  static int enetc_pf_register_with_ierb(struct pci_dev *pdev)
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  902  {
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  903  	struct platform_device *ierb_pdev;
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  904  	struct device_node *ierb_node;
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  905  
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17 @906  	ierb_node = of_find_compatible_node(NULL, NULL,
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  907  					    "fsl,ls1028a-enetc-ierb");
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17 @908  	if (!ierb_node || !of_device_is_available(ierb_node))
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  909  		return -ENODEV;
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  910  
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  911  	ierb_pdev = of_find_device_by_node(ierb_node);
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17 @912  	of_node_put(ierb_node);
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  913  
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  914  	if (!ierb_pdev)
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  915  		return -EPROBE_DEFER;
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  916  
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  917  	return enetc_ierb_register_pf(ierb_pdev, pdev);
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  918  }
-e7d48e5fbf30f8 Vladimir Oltean 2021-04-17  919  
+  5519	
+  5520	static int nl80211_parse_mbssid_config(struct wiphy *wiphy,
+  5521					       struct net_device *dev,
+  5522					       struct nlattr *attrs,
+  5523					       struct cfg80211_mbssid_config *config,
+  5524					       u8 num_elems)
+  5525	{
+  5526		struct nlattr *tb[NL80211_MBSSID_CONFIG_ATTR_MAX + 1];
+  5527		int err;
+  5528	
+  5529		if (!wiphy->mbssid_max_interfaces)
+  5530			return -EOPNOTSUPP;
+  5531	
+  5532		if (nla_parse_nested(tb, NL80211_MBSSID_CONFIG_ATTR_MAX, attrs, NULL,
+  5533				     NULL) ||
+  5534		    !tb[NL80211_MBSSID_CONFIG_ATTR_INDEX])
+  5535			return -EINVAL;
+  5536	
+  5537		config->ema = nla_get_flag(tb[NL80211_MBSSID_CONFIG_ATTR_EMA]);
+  5538		if (config->ema) {
+  5539			if (!wiphy->ema_max_profile_periodicity)
+  5540				return -EOPNOTSUPP;
+  5541	
+  5542			if (num_elems > wiphy->ema_max_profile_periodicity)
+  5543				return -EINVAL;
+  5544		}
+  5545	
+  5546		config->index = nla_get_u8(tb[NL80211_MBSSID_CONFIG_ATTR_INDEX]);
+  5547		if (config->index >= wiphy->mbssid_max_interfaces ||
+  5548		    (!config->index && !num_elems))
+  5549			return -EINVAL;
+  5550	
+  5551		if (tb[NL80211_MBSSID_CONFIG_ATTR_TX_IFINDEX]) {
+  5552			u32 tx_ifindex =
+  5553				nla_get_u32(tb[NL80211_MBSSID_CONFIG_ATTR_TX_IFINDEX]);
+  5554	
+  5555			if ((!config->index && tx_ifindex != dev->ifindex) ||
+  5556			    (config->index && tx_ifindex == dev->ifindex))
+  5557				return -EINVAL;
+  5558	
+  5559			if (tx_ifindex != dev->ifindex) {
+  5560				config->tx_wdev =
+  5561				 dev_get_by_index(wiphy_net(wiphy), tx_ifindex)->ieee80211_ptr;
+  5562				if (!config->tx_wdev ||
+  5563				    config->tx_wdev->wiphy != wiphy ||
+  5564				    config->tx_wdev->iftype != NL80211_IFTYPE_AP) {
+  5565					err = -EINVAL;
+  5566					goto out;
+  5567				}
+  5568			} else {
+  5569				config->tx_wdev = dev->ieee80211_ptr;
+  5570			}
+  5571		} else if (!config->index) {
+  5572			config->tx_wdev = dev->ieee80211_ptr;
+  5573		} else {
+  5574			return -EINVAL;
+  5575		}
+  5576	
+  5577		config->tx_link_id = 0;
+  5578		if (config->tx_wdev->valid_links) {
+  5579			if (!tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID])
+  5580				goto out;
+  5581	
+  5582			config->tx_link_id =
+  5583				  nla_get_u8(tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID]);
+  5584			if (!(config->tx_wdev->valid_links & BIT(config->tx_link_id))) {
+  5585				err = -ENOLINK;
+  5586				goto out;
+  5587			}
+> 5588		} else if (tb[NL80211_MBSSID_CONFIG_ATTR_TX_LINK_ID]) {
+  5589			goto out;
+  5590		}
+  5591	
+  5592		return 0;
+  5593	
+  5594	out:
+  5595		if (config->tx_wdev && config->tx_wdev->netdev &&
+  5596		    config->tx_wdev->netdev != dev)
+  5597			dev_put(config->tx_wdev->netdev);
+  5598	
+  5599		return err;
+  5600	}
+  5601	
 
 -- 
 0-DAY CI Kernel Test Service
