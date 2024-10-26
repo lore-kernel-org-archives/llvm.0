@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0694E18B484;
-	Sat, 26 Oct 2024 08:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9288217F4D;
+	Sat, 26 Oct 2024 10:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729933139; cv=none; b=Zo/L3zGMXSaQl2Llx32BtkBQ2DXy7jUqTCtzLg73G1Ycxk3ueb1mOToFYZKnDYk0K/oDJKBzlCbJZdq70Kj5f9hByIwPLHhq8HCzqQXyhMHQK8YqwCLkrLHQWHkWfEWmQhDT+gsHCs9AIEB1cUICkYXK6g20oqQz8Tjey2G9Qhs=
+	t=1729936862; cv=none; b=DMmVhOAAyLwvWZ2v+P1vB3u2PLLiz2cMqCc0JsrJ7wqpVIbmeaMBv+E3ZgVHFvFZJfqGJJGRYlpNID6/B3E/Q9PEoeka+L8hQ7C+mYrsLZLX2QEg88Asp51+oKUGz92sC2G17IzUkiMhYa+av2DeMMvgQbDz8BXuxYY2e8y1XW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729933139; c=relaxed/simple;
-	bh=J+ELgtFmzSshLRV2f9HM0tnB/bx/8I6tiy7m+oqGKfc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qqoWDNkcUoa6OeKzWRuq9HNYQzQXGlWb08TJ9Th9xEX0pegaSvjzK1FLRDMccDw2mBadNFDoPYK8XHu0wxFRkcrB2FRvFuGNGq/8JUf7TPcmsQX17HGTPj4oYYkeG+WnwIriyAclADt4VtocLSLdayZDRV2xQwXk7AIz8W5Zgus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G2PAcNQv; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1729936862; c=relaxed/simple;
+	bh=MBEUluzwNl+8pJbFyxJ5uvx7Dtm3uc4YLf+WUTqJ1Fw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aa4ozklKpMk5m/DEnV2EIBgI6uP78Z3+Yz3/O+j2ILQ/rv1sVPk4nQU6T95NDfVRTSVoqVYy/bef2V2fMIWx+5ZzYM1Hx9SMzesDxjx673JVxMgPBLGuiDDti1+4HjYaAQeLTN1Gt2EjEI7fKb2X8z5g7uGF/rojWj1x3a3Qqz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAsw+Fq+; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G2PAcNQv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAsw+Fq+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729933137; x=1761469137;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J+ELgtFmzSshLRV2f9HM0tnB/bx/8I6tiy7m+oqGKfc=;
-  b=G2PAcNQvGkRnUwPhpMhZ7ky4cFIJUeMSAJP5Ux/WZu31pMyHPhnHKuU6
-   I93xZ1MYy+TEHqKmp/M9QY+xaXlQuJ2qJ+S2H/1A6X006oPFEwaT+y6gr
-   Oc5K/dBjJomdrNTIHMP3YMNa3lMXPd/o0M03FoAVyP5TJi0flhg5tUoGR
-   zuPSWcpdGknOswv/G5R29UmWu98GDj4wfz+0qI507IrH1wF4rKUzzzfJz
-   aSKojBKgY1KQXNY6U0UUbEQbYR5znsI7HQymuJNdapFK0yGvOCShyBl8/
-   2marJK15qoJ4/DqT6MoTc7Wfka+f2Ky7hl3uoREpd/j5HfeeMNCpAeV/r
-   A==;
-X-CSE-ConnectionGUID: +tcEEhMlTEm5Js3WDUEzVw==
-X-CSE-MsgGUID: KPOrz20bS+GEbVDGiS1ZDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29788353"
+  t=1729936859; x=1761472859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MBEUluzwNl+8pJbFyxJ5uvx7Dtm3uc4YLf+WUTqJ1Fw=;
+  b=hAsw+Fq+BreraYOnQckkUCqUxwNcYBNvUZA6j8+BhAJ1DcN0YCtS/4zq
+   oZassY4pvforlBWd9doUnKajok7ozUdNo7EEhRSLoFaEY0ONIo00077ko
+   R4FKU/HR2tL4RWYcL75UOglNddiIHbNGo51fjJAtE8/gx6Slx17GBx57j
+   SGUu49C1p+zh4NHid6ZnqO7YDJbPvRWzp5ZzCXGQtie1xUc7jmOE4Xi+7
+   AVyOuXDSK72eEBiZnYCEJJUhQ5EQoWPpZGqQtc75X9iUMXbSN11aELDBH
+   KafxvC7D9PRnUpr/FuFxjnqfnkuQpxoq0B2eojN/QQbqyoSG6TQUXbRtM
+   w==;
+X-CSE-ConnectionGUID: fyT2dUGiSIetEESgM1dmwg==
+X-CSE-MsgGUID: Z6CMib/6SOKuQas4GhP3DQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40703395"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29788353"
+   d="scan'208";a="40703395"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 01:58:57 -0700
-X-CSE-ConnectionGUID: eZgeNzm5SUKJCnzFYA0sdQ==
-X-CSE-MsgGUID: sFu8TJmdRgWXHmvQdOyp7A==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 03:00:59 -0700
+X-CSE-ConnectionGUID: YdIs7TC+R7OJP5dJsfe0mw==
+X-CSE-MsgGUID: hIe7ERXcQPCIWP/niYjG7Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,234,1725346800"; 
-   d="scan'208";a="81295909"
+   d="scan'208";a="81314649"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 26 Oct 2024 01:58:54 -0700
+  by orviesa006.jf.intel.com with ESMTP; 26 Oct 2024 03:00:56 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4cdI-000ZS4-0d;
-	Sat, 26 Oct 2024 08:58:52 +0000
-Date: Sat, 26 Oct 2024 16:58:45 +0800
+	id 1t4dbJ-000ZUc-2q;
+	Sat, 26 Oct 2024 10:00:53 +0000
+Date: Sat, 26 Oct 2024 18:00:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wende Tan <twd2.me@gmail.com>
+To: Justin Iurman <justin.iurman@uliege.be>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: ld.lld: error: Function Import: link error: linking module flags
- 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)'
- and 'vmlinux.a(trace.o at 1385932)'
-Message-ID: <202410261627.2m4hohFx-lkp@intel.com>
+	davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+	linux-kernel@vger.kernel.org, justin.iurman@uliege.be
+Subject: Re: [PATCH net-next 2/3] net: ipv6: seg6_iptunnel: mitigate
+ 2-realloc issue
+Message-ID: <202410261713.GIaQEsJC-lkp@intel.com>
+References: <20241025133727.27742-3-justin.iurman@uliege.be>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,43 +66,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241025133727.27742-3-justin.iurman@uliege.be>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   850925a8133c73c4a2453c360b2c3beb3bab67c9
-commit: 021d23428bdbae032294e8f4a29cb53cb50ae71c RISC-V: build: Allow LTO to be selected
-date:   9 months ago
-config: riscv-randconfig-002-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261627.2m4hohFx-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261627.2m4hohFx-lkp@intel.com/reproduce)
+Hi Justin,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Justin-Iurman/net-ipv6-ioam6_iptunnel-mitigate-2-realloc-issue/20241025-214849
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241025133727.27742-3-justin.iurman%40uliege.be
+patch subject: [PATCH net-next 2/3] net: ipv6: seg6_iptunnel: mitigate 2-realloc issue
+config: i386-buildonly-randconfig-004-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261713.GIaQEsJC-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261713.GIaQEsJC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410261627.2m4hohFx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410261713.GIaQEsJC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(trace.o at 1385932)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(mballoc.o at 1403092)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(skbuff.o at 1611352)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(tcp.o at 1616452)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(ipr.o at 1522612)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(raid5.o at 1566652)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(filter.o at 1612432)'
-   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(io_uring.o at 1460452)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(segment.o at 1441492)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(super.o at 1441132)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(advansys.o at 1519012)'
-   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(super.o at 1435732)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(md.o at 1567792)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(file.o at 1440892)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(e1000_main.o at 1530892)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(inode.o at 1436332)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(mpt3sas_base.o at 1521592)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(volumes.o at 1436872)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(slub.o at 1390792)'
->> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(data.o at 1441372)'
-   ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
+   In file included from net/ipv6/seg6_iptunnel.c:10:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> net/ipv6/seg6_iptunnel.c:130:9: error: call to undeclared function '__seg6_do_srh_encap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |         return __seg6_do_srh_encap(skb, osrh, proto, NULL);
+         |                ^
+   net/ipv6/seg6_iptunnel.c:130:9: note: did you mean 'seg6_do_srh_encap'?
+   net/ipv6/seg6_iptunnel.c:128:5: note: 'seg6_do_srh_encap' declared here
+     128 | int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
+         |     ^
+     129 | {
+     130 |         return __seg6_do_srh_encap(skb, osrh, proto, NULL);
+         |                ~~~~~~~~~~~~~~~~~~~
+         |                seg6_do_srh_encap
+>> net/ipv6/seg6_iptunnel.c:134:5: warning: no previous prototype for function '__seg6_do_srh_encap' [-Wmissing-prototypes]
+     134 | int __seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
+         |     ^
+   net/ipv6/seg6_iptunnel.c:134:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     134 | int __seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
+         | ^
+         | static 
+>> net/ipv6/seg6_iptunnel.c:330:9: error: call to undeclared function '__seg6_do_srh_inline'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     330 |         return __seg6_do_srh_inline(skb, osrh, NULL);
+         |                ^
+   net/ipv6/seg6_iptunnel.c:330:9: note: did you mean 'seg6_do_srh_inline'?
+   net/ipv6/seg6_iptunnel.c:328:5: note: 'seg6_do_srh_inline' declared here
+     328 | int seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh)
+         |     ^
+     329 | {
+     330 |         return __seg6_do_srh_inline(skb, osrh, NULL);
+         |                ~~~~~~~~~~~~~~~~~~~~
+         |                seg6_do_srh_inline
+>> net/ipv6/seg6_iptunnel.c:334:5: warning: no previous prototype for function '__seg6_do_srh_inline' [-Wmissing-prototypes]
+     334 | int __seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
+         |     ^
+   net/ipv6/seg6_iptunnel.c:334:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     334 | int __seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
+         | ^
+         | static 
+   3 warnings and 2 errors generated.
+
+
+vim +/__seg6_do_srh_encap +130 net/ipv6/seg6_iptunnel.c
+
+   126	
+   127	/* encapsulate an IPv6 packet within an outer IPv6 header with a given SRH */
+   128	int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
+   129	{
+ > 130		return __seg6_do_srh_encap(skb, osrh, proto, NULL);
+   131	}
+   132	EXPORT_SYMBOL_GPL(seg6_do_srh_encap);
+   133	
+ > 134	int __seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
+   135				int proto, struct dst_entry *dst)
+   136	{
+   137		struct net *net = dev_net(skb_dst(skb)->dev);
+   138		struct ipv6hdr *hdr, *inner_hdr;
+   139		struct ipv6_sr_hdr *isrh;
+   140		int hdrlen, tot_len, err;
+   141		__be32 flowlabel;
+   142	
+   143		hdrlen = (osrh->hdrlen + 1) << 3;
+   144		tot_len = hdrlen + sizeof(*hdr);
+   145	
+   146		err = skb_cow_head(skb, tot_len + (!dst ? skb->mac_len
+   147							: LL_RESERVED_SPACE(dst->dev)));
+   148		if (unlikely(err))
+   149			return err;
+   150	
+   151		inner_hdr = ipv6_hdr(skb);
+   152		flowlabel = seg6_make_flowlabel(net, skb, inner_hdr);
+   153	
+   154		skb_push(skb, tot_len);
+   155		skb_reset_network_header(skb);
+   156		skb_mac_header_rebuild(skb);
+   157		hdr = ipv6_hdr(skb);
+   158	
+   159		/* inherit tc, flowlabel and hlim
+   160		 * hlim will be decremented in ip6_forward() afterwards and
+   161		 * decapsulation will overwrite inner hlim with outer hlim
+   162		 */
+   163	
+   164		if (skb->protocol == htons(ETH_P_IPV6)) {
+   165			ip6_flow_hdr(hdr, ip6_tclass(ip6_flowinfo(inner_hdr)),
+   166				     flowlabel);
+   167			hdr->hop_limit = inner_hdr->hop_limit;
+   168		} else {
+   169			ip6_flow_hdr(hdr, 0, flowlabel);
+   170			hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
+   171	
+   172			memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+   173	
+   174			/* the control block has been erased, so we have to set the
+   175			 * iif once again.
+   176			 * We read the receiving interface index directly from the
+   177			 * skb->skb_iif as it is done in the IPv4 receiving path (i.e.:
+   178			 * ip_rcv_core(...)).
+   179			 */
+   180			IP6CB(skb)->iif = skb->skb_iif;
+   181		}
+   182	
+   183		hdr->nexthdr = NEXTHDR_ROUTING;
+   184	
+   185		isrh = (void *)hdr + sizeof(*hdr);
+   186		memcpy(isrh, osrh, hdrlen);
+   187	
+   188		isrh->nexthdr = proto;
+   189	
+   190		hdr->daddr = isrh->segments[isrh->first_segment];
+   191		set_tun_src(net, skb_dst(skb)->dev, &hdr->daddr, &hdr->saddr);
+   192	
 
 -- 
 0-DAY CI Kernel Test Service
