@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5766270816;
-	Sat, 26 Oct 2024 07:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0694E18B484;
+	Sat, 26 Oct 2024 08:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729928877; cv=none; b=cdM29Brvlwqk9ojnYsczTn/4DriUEgDivjg7HPEzs/WohOfYH5B1eXdBHocKvtBGLr45ngRK1NhvcLtmJADR1XciPIZfUVYxNzMwIedyPApYqVTL2+FnQCJu9yZdi1LJ8N6nywa34IsZFdmzWDlE2p5T8hIi88eFA3pJk3a6ZtI=
+	t=1729933139; cv=none; b=Zo/L3zGMXSaQl2Llx32BtkBQ2DXy7jUqTCtzLg73G1Ycxk3ueb1mOToFYZKnDYk0K/oDJKBzlCbJZdq70Kj5f9hByIwPLHhq8HCzqQXyhMHQK8YqwCLkrLHQWHkWfEWmQhDT+gsHCs9AIEB1cUICkYXK6g20oqQz8Tjey2G9Qhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729928877; c=relaxed/simple;
-	bh=Nfa6c/0dFOh1MjW26Ru9LYvKZz9jbesyT02owl/pNb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TW1DLQcSy8fImeTjccM1uSlDTzz5JpBhn8uOs+pN5Xa4OMk+4LH8v/K43jtck2solsl+a4iKU14PtZWAxItGm/mFH+g6XgbTC7DETKEHJaLA7Ae27rihaC0JVLhPfa9VIHE5TB+GB5uQeHhsa2kS7i1svbG5r0vwBGSeJltNPqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gUYXYkF7; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1729933139; c=relaxed/simple;
+	bh=J+ELgtFmzSshLRV2f9HM0tnB/bx/8I6tiy7m+oqGKfc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qqoWDNkcUoa6OeKzWRuq9HNYQzQXGlWb08TJ9Th9xEX0pegaSvjzK1FLRDMccDw2mBadNFDoPYK8XHu0wxFRkcrB2FRvFuGNGq/8JUf7TPcmsQX17HGTPj4oYYkeG+WnwIriyAclADt4VtocLSLdayZDRV2xQwXk7AIz8W5Zgus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G2PAcNQv; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gUYXYkF7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G2PAcNQv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729928875; x=1761464875;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Nfa6c/0dFOh1MjW26Ru9LYvKZz9jbesyT02owl/pNb8=;
-  b=gUYXYkF73CwvTXrwyOPg7Y9a5QJIAw2qpPaoaZanEGvt4tU99X5B1u/y
-   aWjrN5Z8tOgJXZ8vl4+5K2aKnqsQcMiI8g5z6rTC4sMucu9M2wdCJSe+N
-   6I8LWxvDH3PTkpWMxDXhFKhqtsc1kRs0aHAt2kHEYIBveUbIrpIGUUGNC
-   v+hb4u03t/nMEYVo4Y9vee5NMbh6U+DLKwWUPKZXWMJmKIpqfpvjPTx5A
-   Lyjbqpn+y7eI9g8DaUM1yd8xabrd08TPMXD+rCsD5b317D4UT+iZ9eWKD
-   4g2E9BbD5j8CPIlQelpBND5rHhAjLuO5zIvRPx0zQaP5d0UjwWfsbGXcU
+  t=1729933137; x=1761469137;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J+ELgtFmzSshLRV2f9HM0tnB/bx/8I6tiy7m+oqGKfc=;
+  b=G2PAcNQvGkRnUwPhpMhZ7ky4cFIJUeMSAJP5Ux/WZu31pMyHPhnHKuU6
+   I93xZ1MYy+TEHqKmp/M9QY+xaXlQuJ2qJ+S2H/1A6X006oPFEwaT+y6gr
+   Oc5K/dBjJomdrNTIHMP3YMNa3lMXPd/o0M03FoAVyP5TJi0flhg5tUoGR
+   zuPSWcpdGknOswv/G5R29UmWu98GDj4wfz+0qI507IrH1wF4rKUzzzfJz
+   aSKojBKgY1KQXNY6U0UUbEQbYR5znsI7HQymuJNdapFK0yGvOCShyBl8/
+   2marJK15qoJ4/DqT6MoTc7Wfka+f2Ky7hl3uoREpd/j5HfeeMNCpAeV/r
    A==;
-X-CSE-ConnectionGUID: YAnYh2UoSkGz+NFVLFcAnA==
-X-CSE-MsgGUID: DZI87RDsQlKXudJSImItvw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29376233"
+X-CSE-ConnectionGUID: +tcEEhMlTEm5Js3WDUEzVw==
+X-CSE-MsgGUID: KPOrz20bS+GEbVDGiS1ZDw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29788353"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29376233"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 00:47:55 -0700
-X-CSE-ConnectionGUID: HcvK5A2uTZ2zxPBsI1C0CA==
-X-CSE-MsgGUID: 0wejxHNoQVSaZ7WHcbKk8g==
+   d="scan'208";a="29788353"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 01:58:57 -0700
+X-CSE-ConnectionGUID: eZgeNzm5SUKJCnzFYA0sdQ==
+X-CSE-MsgGUID: sFu8TJmdRgWXHmvQdOyp7A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="85902581"
+X-IronPort-AV: E=Sophos;i="6.11,234,1725346800"; 
+   d="scan'208";a="81295909"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 26 Oct 2024 00:47:53 -0700
+  by orviesa006.jf.intel.com with ESMTP; 26 Oct 2024 01:58:54 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4bWY-000ZPU-2Q;
-	Sat, 26 Oct 2024 07:47:50 +0000
-Date: Sat, 26 Oct 2024 15:47:00 +0800
+	id 1t4cdI-000ZS4-0d;
+	Sat, 26 Oct 2024 08:58:52 +0000
+Date: Sat, 26 Oct 2024 16:58:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org
+To: Wende Tan <twd2.me@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andersson@kernel.org, konradybcio@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Eugen Hristev <eugen.hristev@linaro.org>
-Subject: Re: [PATCH] soc: qcom: Rework BCM_TCS_CMD macro
-Message-ID: <202410261552.E8TiGYdV-lkp@intel.com>
-References: <20241025084823.475199-1-eugen.hristev@linaro.org>
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: ld.lld: error: Function Import: link error: linking module flags
+ 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)'
+ and 'vmlinux.a(trace.o at 1385932)'
+Message-ID: <202410261627.2m4hohFx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,85 +65,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241025084823.475199-1-eugen.hristev@linaro.org>
 
-Hi Eugen,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.12-rc4 next-20241025]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eugen-Hristev/soc-qcom-Rework-BCM_TCS_CMD-macro/20241025-165212
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241025084823.475199-1-eugen.hristev%40linaro.org
-patch subject: [PATCH] soc: qcom: Rework BCM_TCS_CMD macro
-config: x86_64-buildonly-randconfig-004-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261552.E8TiGYdV-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261552.E8TiGYdV-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   850925a8133c73c4a2453c360b2c3beb3bab67c9
+commit: 021d23428bdbae032294e8f4a29cb53cb50ae71c RISC-V: build: Allow LTO to be selected
+date:   9 months ago
+config: riscv-randconfig-002-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261627.2m4hohFx-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261627.2m4hohFx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410261552.E8TiGYdV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410261627.2m4hohFx-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/clk/qcom/clk-rpmh.c:270:14: error: call to undeclared function 'u32_encode_bits'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     270 |                 cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
-         |                            ^
-   include/soc/qcom/tcs.h:71:3: note: expanded from macro 'BCM_TCS_CMD'
-      71 |         (u32_encode_bits(commit, BCM_TCS_CMD_COMMIT_MASK) |     \
-         |          ^
-   1 error generated.
-
-
-vim +/u32_encode_bits +270 drivers/clk/qcom/clk-rpmh.c
-
-9c7e47025a6b9a Taniya Das    2018-05-09  250  
-04053f4d23a41b David Dai     2019-01-24  251  static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
-04053f4d23a41b David Dai     2019-01-24  252  {
-04053f4d23a41b David Dai     2019-01-24  253  	struct tcs_cmd cmd = { 0 };
-04053f4d23a41b David Dai     2019-01-24  254  	u32 cmd_state;
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  255  	int ret = 0;
-04053f4d23a41b David Dai     2019-01-24  256  
-04053f4d23a41b David Dai     2019-01-24  257  	mutex_lock(&rpmh_clk_lock);
-04053f4d23a41b David Dai     2019-01-24  258  	if (enable) {
-04053f4d23a41b David Dai     2019-01-24  259  		cmd_state = 1;
-04053f4d23a41b David Dai     2019-01-24  260  		if (c->aggr_state)
-04053f4d23a41b David Dai     2019-01-24  261  			cmd_state = c->aggr_state;
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  262  	} else {
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  263  		cmd_state = 0;
-04053f4d23a41b David Dai     2019-01-24  264  	}
-04053f4d23a41b David Dai     2019-01-24  265  
-a4e5af27e6f6a8 Mike Tipton   2024-08-09  266  	cmd_state = min(cmd_state, BCM_TCS_CMD_VOTE_MASK);
-a4e5af27e6f6a8 Mike Tipton   2024-08-09  267  
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  268  	if (c->last_sent_aggr_state != cmd_state) {
-04053f4d23a41b David Dai     2019-01-24  269  		cmd.addr = c->res_addr;
-6311b6521bcc80 Jordan Crouse 2019-08-05 @270  		cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
-04053f4d23a41b David Dai     2019-01-24  271  
-29f66b625281a3 Stephen Boyd  2022-05-17  272  		/*
-29f66b625281a3 Stephen Boyd  2022-05-17  273  		 * Send only an active only state request. RPMh continues to
-29f66b625281a3 Stephen Boyd  2022-05-17  274  		 * use the active state when we're in sleep/wake state as long
-29f66b625281a3 Stephen Boyd  2022-05-17  275  		 * as the sleep/wake state has never been set.
-29f66b625281a3 Stephen Boyd  2022-05-17  276  		 */
-dad4e7fda4bdc1 Mike Tipton   2020-02-14  277  		ret = clk_rpmh_send(c, RPMH_ACTIVE_ONLY_STATE, &cmd, enable);
-04053f4d23a41b David Dai     2019-01-24  278  		if (ret) {
-04053f4d23a41b David Dai     2019-01-24  279  			dev_err(c->dev, "set active state of %s failed: (%d)\n",
-04053f4d23a41b David Dai     2019-01-24  280  				c->res_name, ret);
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  281  		} else {
-04053f4d23a41b David Dai     2019-01-24  282  			c->last_sent_aggr_state = cmd_state;
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  283  		}
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  284  	}
-04053f4d23a41b David Dai     2019-01-24  285  
-04053f4d23a41b David Dai     2019-01-24  286  	mutex_unlock(&rpmh_clk_lock);
-04053f4d23a41b David Dai     2019-01-24  287  
-2cf7a4cbcb4e10 Stephen Boyd  2020-03-09  288  	return ret;
-04053f4d23a41b David Dai     2019-01-24  289  }
-04053f4d23a41b David Dai     2019-01-24  290  
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(trace.o at 1385932)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(mballoc.o at 1403092)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(skbuff.o at 1611352)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(tcp.o at 1616452)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(ipr.o at 1522612)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(raid5.o at 1566652)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(filter.o at 1612432)'
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(io_uring.o at 1460452)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(segment.o at 1441492)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(super.o at 1441132)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(advansys.o at 1519012)'
+   ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(super.o at 1435732)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(md.o at 1567792)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(file.o at 1440892)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(e1000_main.o at 1530892)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(inode.o at 1436332)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(mpt3sas_base.o at 1521592)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(volumes.o at 1436872)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(slub.o at 1390792)'
+>> ld.lld: error: Function Import: link error: linking module flags 'Code Model': IDs have conflicting values in 'vmlinux.a(init.o at 1376452)' and 'vmlinux.a(data.o at 1441372)'
+   ld.lld: error: too many errors emitted, stopping now (use --error-limit=0 to see all errors)
 
 -- 
 0-DAY CI Kernel Test Service
