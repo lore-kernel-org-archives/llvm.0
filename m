@@ -1,71 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0B61D1F76;
-	Sat, 26 Oct 2024 10:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2362815B0EF;
+	Sat, 26 Oct 2024 11:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729938126; cv=none; b=tebmQA5XtkrGHiGoy/BWt14ZtObcMSmadTFgI8omsNPmL228P2LcjX35eGbBuoRNqKsn13RevD9mX/srg9QMeEHqpR/l2K+dLGb4/6sLoDvwGQCQhga8ywD7b5C8nYwtP+tQG5RpndE6onWFvYrhS6vrvTaDhQ7e4M8YqcLL3vk=
+	t=1729940582; cv=none; b=rDxBzWFAzWW5bF1NtyzqGXyK3hIcmNKCKlM0dybvxqgk1NoncogMa+pitp2KPl6GKHY3N2CHeReje+91D+goTkyCYLA97yt1xQHWFx/nVwk3A4eHuehZyxqtfRenbeukDq0C+AcQpNfG3vqJagMvmXuXpOmq3n1Tl9U63ezYXNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729938126; c=relaxed/simple;
-	bh=guKMtpxx0qM0j1Dl4we/Mt9T6SoqQOQJbdp1lVRh8gY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ost64FVtkZC7aQ8GMmH7IZn+EtmqMVWe45fQMqnCjLjK4Ji+2/fNExl1B73M1/dVow75aePhIIWQXOCau+T50lvsyESJA64KMAoCXSAwWt+8sMOn1vAhVcxF9eHu37/f16J/TiFLHbpDUAgPvhTxMlD0mEmPuUny0e3TjsMkfcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BpA2cVhC; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1729940582; c=relaxed/simple;
+	bh=QroXTqmUVVrM9pWSIWm/D98/ObBuaq/ksL2nOB9NBms=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tpqgdMhAqqnFIWUdKnC/ax0rijv4ew2btvTXVlMEmavpeKowthuFra9zBtyE3aOGH/gjhAsMKTqpAd1hYNcHAvM7QyVGdbTXwIDKbA2sQvF8fB8n4Sc1IHRqM46JANFQAZUuQbwl3Vvax3IAm18F6iXyciTsuzc3KGEGbC2NXHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DTTGy3YJ; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BpA2cVhC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DTTGy3YJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729938125; x=1761474125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=guKMtpxx0qM0j1Dl4we/Mt9T6SoqQOQJbdp1lVRh8gY=;
-  b=BpA2cVhC6rrilDW/lk5ReUUdmrMuB+O7A6ixYsL9+mojzPFcjeh0xZ0L
-   y+Yp9SPLC7my57wPnYLdcktV6rfQdXdZ+z3bxs2/KK4VKjJtSxUxU0Z/s
-   5CzsTEJu3vI8j/nUXGtpKE4e8PRPs2skkb+Su9L80VLqmNf+qrMZdoV/k
-   WJ4DYBuejBSsoD13XdT8Abo8EFfKvK3x5yJ0iAJruNMEz0gWtktKLFIeB
-   MbX5drnz3rOhmHZDnBTrgMiYZaMKO199jM8girmuIrStI+0PItpjUgPjy
-   GC0l4UjVdB9IYLnSdQCYce9Xn3rACsr4t3OCeBO7Bg5vs1CHF7JjrkCCa
-   g==;
-X-CSE-ConnectionGUID: F/A7zUiVR1iLy+ZuPq2pDQ==
-X-CSE-MsgGUID: kaHnR1m1RISp1nqTEjJLVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29557749"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29557749"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 03:22:01 -0700
-X-CSE-ConnectionGUID: uh1SH1KMSAWR2mhw/qK58Q==
-X-CSE-MsgGUID: oCPlxs+WQKi5wUUrldX92A==
+  t=1729940580; x=1761476580;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QroXTqmUVVrM9pWSIWm/D98/ObBuaq/ksL2nOB9NBms=;
+  b=DTTGy3YJiLO8C1y8MzzCK+mLaM9FsrxDvrAfzJraTq8tB0b5V3pz5bYs
+   kFJX0zpsy44NkD+Pli9dSyQhnVftLZuuLXtTLlQDikJnO0ivW+qYi4f84
+   jgZKEzfv1TAHP67cK3eagooKFEJOgl13pnQIMjhJdOq9/wvK8usqocX8N
+   7mPN6AJYUkgaLCMUI1Eu3Gq0wx8scV8fPt5tYFpIPGgLvm6UjrUyn/Uym
+   NdG5W4emDML/d5WiSnECUQwsK1Xogp+dBUqPvXPTLSuFKCUQs3gIxPXfE
+   tW7nYBBxF5/q20RZYOCFeRw7zNGHqBmoVlSgv55WAmBN8UPymT2+zfWP/
+   A==;
+X-CSE-ConnectionGUID: 81PLnX2CS7+hahPfqoodVw==
+X-CSE-MsgGUID: nTvW0dmNRHWTGmDtYTz7Nw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11236"; a="55015010"
+X-IronPort-AV: E=Sophos;i="6.11,234,1725346800"; 
+   d="scan'208";a="55015010"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 04:02:59 -0700
+X-CSE-ConnectionGUID: ZkU7Shb4RLqyrl8vVN+2qQ==
+X-CSE-MsgGUID: VfL2r789S6m+w5k4kEkbjQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,234,1725346800"; 
-   d="scan'208";a="85720389"
+   d="scan'208";a="118647821"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Oct 2024 03:21:56 -0700
+  by orviesa001.jf.intel.com with ESMTP; 26 Oct 2024 04:02:57 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4dve-000ZVa-1a;
-	Sat, 26 Oct 2024 10:21:54 +0000
-Date: Sat, 26 Oct 2024 18:21:15 +0800
+	id 1t4eZL-000ZYA-2Q;
+	Sat, 26 Oct 2024 11:02:55 +0000
+Date: Sat, 26 Oct 2024 19:02:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Danilo Krummrich <dakr@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	op-tee@lists.trustedfirmware.org, devicetree@vger.kernel.org,
-	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: Re: [PATCH v12 7/7] remoteproc: stm32: Add support of an OP-TEE TA
- to load the firmware
-Message-ID: <202410261837.eRmJAHKZ-lkp@intel.com>
-References: <20241025205924.2087768-8-arnaud.pouliquen@foss.st.com>
+	Miguel Ojeda <ojeda@kernel.org>
+Subject: [rust:staging/dev 15/23] error[E0425]: cannot find function
+ `of_match_device` in crate `bindings`
+Message-ID: <202410261834.NqwmZNoR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,150 +62,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241025205924.2087768-8-arnaud.pouliquen@foss.st.com>
 
-Hi Arnaud,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 42f7652d3eb527d03665b09edac47f85fb600924]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnaud-Pouliquen/remoteproc-core-Introduce-rproc_pa_to_va-helper/20241026-050443
-base:   42f7652d3eb527d03665b09edac47f85fb600924
-patch link:    https://lore.kernel.org/r/20241025205924.2087768-8-arnaud.pouliquen%40foss.st.com
-patch subject: [PATCH v12 7/7] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-config: x86_64-buildonly-randconfig-004-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261837.eRmJAHKZ-lkp@intel.com/config)
+tree:   https://github.com/Rust-for-Linux/linux staging/dev
+head:   cfd66f531af29e0616c58b4cd4c72770a5ac4081
+commit: 34be703a679ed997fb5b7cc7531fd6c022f57f38 [15/23] rust: platform: add basic platform device / driver abstractions
+config: x86_64-randconfig-073-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261834.NqwmZNoR-lkp@intel.com/config)
 compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261837.eRmJAHKZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261834.NqwmZNoR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410261837.eRmJAHKZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410261834.NqwmZNoR-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/remoteproc/stm32_rproc.c:9:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
    In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/remoteproc/stm32_rproc.c:904:7: error: incompatible pointer to integer conversion assigning to 'int' from 'struct rproc_tee *' [-Wint-conversion]
-     904 |                 ret = rproc_tee_register(dev, rproc, proc_id);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/remoteproc/stm32_rproc.c:963:23: error: incompatible pointer types passing 'struct rproc *' to parameter of type 'struct rproc_tee *' [-Werror,-Wincompatible-pointer-types]
-     963 |         rproc_tee_unregister(rproc);
-         |                              ^~~~~
-   include/linux/remoteproc_tee.h:59:58: note: passing argument to parameter 'trproc' here
-      59 | static inline int rproc_tee_unregister(struct rproc_tee *trproc)
-         |                                                          ^
-   drivers/remoteproc/stm32_rproc.c:986:23: error: incompatible pointer types passing 'struct rproc *' to parameter of type 'struct rproc_tee *' [-Werror,-Wincompatible-pointer-types]
-     986 |         rproc_tee_unregister(rproc);
-         |                              ^~~~~
-   include/linux/remoteproc_tee.h:59:58: note: passing argument to parameter 'trproc' here
-      59 | static inline int rproc_tee_unregister(struct rproc_tee *trproc)
-         |                                                          ^
-   1 warning and 3 errors generated.
-
-
-vim +904 drivers/remoteproc/stm32_rproc.c
-
-   874	
-   875	static int stm32_rproc_probe(struct platform_device *pdev)
-   876	{
-   877		struct device *dev = &pdev->dev;
-   878		struct stm32_rproc *ddata;
-   879		struct device_node *np = dev->of_node;
-   880		struct rproc *rproc;
-   881		unsigned int state;
-   882		u32 proc_id;
-   883		int ret;
-   884	
-   885		ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
-   886		if (ret)
-   887			return ret;
-   888	
-   889		if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-   890			/*
-   891			 * Delegate the firmware management to the secure context.
-   892			 * The firmware loaded has to be signed.
-   893			 */
-   894			ret = of_property_read_u32(np, "st,proc-id", &proc_id);
-   895			if (ret) {
-   896				dev_err(dev, "failed to read st,rproc-id property\n");
-   897				return ret;
-   898			}
-   899	
-   900			rproc = devm_rproc_alloc(dev, np->name, &st_rproc_tee_ops, NULL, sizeof(*ddata));
-   901			if (!rproc)
-   902				return -ENOMEM;
-   903	
- > 904			ret = rproc_tee_register(dev, rproc, proc_id);
-   905			if (ret)
-   906				return dev_err_probe(dev, ret,  "signed firmware not supported by TEE\n");
-   907		} else {
-   908			rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-   909			if (!rproc)
-   910				return -ENOMEM;
-   911		}
-   912	
-   913		ddata = rproc->priv;
-   914	
-   915		rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
-   916	
-   917		ret = stm32_rproc_parse_dt(pdev, ddata, &rproc->auto_boot);
-   918		if (ret)
-   919			goto free_rproc;
-   920	
-   921		ret = stm32_rproc_of_memory_translations(pdev, ddata);
-   922		if (ret)
-   923			goto free_rproc;
-   924	
-   925		ret = stm32_rproc_get_m4_status(ddata, &state);
-   926		if (ret)
-   927			goto free_rproc;
-   928	
-   929		if (state == M4_STATE_CRUN)
-   930			rproc->state = RPROC_DETACHED;
-   931	
-   932		rproc->has_iommu = false;
-   933		ddata->workqueue = create_workqueue(dev_name(dev));
-   934		if (!ddata->workqueue) {
-   935			dev_err(dev, "cannot create workqueue\n");
-   936			ret = -ENOMEM;
-   937			goto free_resources;
-   938		}
-   939	
-   940		platform_set_drvdata(pdev, rproc);
-   941	
-   942		ret = stm32_rproc_request_mbox(rproc);
-   943		if (ret)
-   944			goto free_wkq;
-   945	
-   946		ret = rproc_add(rproc);
-   947		if (ret)
-   948			goto free_mb;
-   949	
-   950		return 0;
-   951	
-   952	free_mb:
-   953		stm32_rproc_free_mbox(rproc);
-   954	free_wkq:
-   955		destroy_workqueue(ddata->workqueue);
-   956	free_resources:
-   957		rproc_resource_cleanup(rproc);
-   958	free_rproc:
-   959		if (device_may_wakeup(dev)) {
-   960			dev_pm_clear_wake_irq(dev);
-   961			device_init_wakeup(dev, false);
-   962		}
- > 963		rproc_tee_unregister(rproc);
-   964	
-   965		return ret;
-   966	}
-   967	
+   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+   In file included from rust/helpers/helpers.c:10:
+   In file included from rust/helpers/blk.c:3:
+   In file included from include/linux/blk-mq.h:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   4 warnings generated.
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   rust/core.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
+   rust/core.o: warning: objtool: asan.module_dtor+0xd: call without frame pointer save/setup
+   rust/compiler_builtins.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
+   rust/compiler_builtins.o: warning: objtool: asan.module_dtor+0xd: call without frame pointer save/setup
+>> error[E0425]: cannot find function `of_match_device` in crate `bindings`
+   --> rust/kernel/platform.rs:167:41
+   |
+   167 |         let raw_id = unsafe { bindings::of_match_device(table.as_ptr(), pdev.as_dev().as_raw()) };
+   |                                         ^^^^^^^^^^^^^^^ not found in `bindings`
 
 -- 
 0-DAY CI Kernel Test Service
