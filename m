@@ -1,63 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9288217F4D;
-	Sat, 26 Oct 2024 10:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0971A217F3F;
+	Sat, 26 Oct 2024 10:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729936862; cv=none; b=DMmVhOAAyLwvWZ2v+P1vB3u2PLLiz2cMqCc0JsrJ7wqpVIbmeaMBv+E3ZgVHFvFZJfqGJJGRYlpNID6/B3E/Q9PEoeka+L8hQ7C+mYrsLZLX2QEg88Asp51+oKUGz92sC2G17IzUkiMhYa+av2DeMMvgQbDz8BXuxYY2e8y1XW0=
+	t=1729937464; cv=none; b=DqODFr05rts0/RkZuTT0ezWi8aR0OqUCZqxPSLWKR3Id3LQjB2DlrfaM2ygOkqAKEm/VWFIjZKsIDjJXo/0TyZDxg8q3fVJyn9cniHzi8kPfdWK6YZQMEFwaU6osR4U5F1rqEbuZzI2BMtAfVsO26nVx1Vxy7yzYDY4YK5fC9Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729936862; c=relaxed/simple;
-	bh=MBEUluzwNl+8pJbFyxJ5uvx7Dtm3uc4YLf+WUTqJ1Fw=;
+	s=arc-20240116; t=1729937464; c=relaxed/simple;
+	bh=8DU14E5D0lWg600MwJ4URtFuPIv26XFVrn6CO/yON44=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Aa4ozklKpMk5m/DEnV2EIBgI6uP78Z3+Yz3/O+j2ILQ/rv1sVPk4nQU6T95NDfVRTSVoqVYy/bef2V2fMIWx+5ZzYM1Hx9SMzesDxjx673JVxMgPBLGuiDDti1+4HjYaAQeLTN1Gt2EjEI7fKb2X8z5g7uGF/rojWj1x3a3Qqz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAsw+Fq+; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=bAyX/3T7BdrWWwOIpBYyLcQy+h0nQTfkqGCjYnICRp0nV2lKTMmKo8C3ZMzUMV6xykAaY956Nv03IeR1pSBrvFK/jfAF2uX4HC6bSgn/WuLYJqgbzqdZDGwoCrQSBAyvGnq1vFWlKwz9pwAMC++1NWuYX2bI1JJp8etg4lXn2bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cglk0D4Y; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAsw+Fq+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cglk0D4Y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729936859; x=1761472859;
+  t=1729937463; x=1761473463;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MBEUluzwNl+8pJbFyxJ5uvx7Dtm3uc4YLf+WUTqJ1Fw=;
-  b=hAsw+Fq+BreraYOnQckkUCqUxwNcYBNvUZA6j8+BhAJ1DcN0YCtS/4zq
-   oZassY4pvforlBWd9doUnKajok7ozUdNo7EEhRSLoFaEY0ONIo00077ko
-   R4FKU/HR2tL4RWYcL75UOglNddiIHbNGo51fjJAtE8/gx6Slx17GBx57j
-   SGUu49C1p+zh4NHid6ZnqO7YDJbPvRWzp5ZzCXGQtie1xUc7jmOE4Xi+7
-   AVyOuXDSK72eEBiZnYCEJJUhQ5EQoWPpZGqQtc75X9iUMXbSN11aELDBH
-   KafxvC7D9PRnUpr/FuFxjnqfnkuQpxoq0B2eojN/QQbqyoSG6TQUXbRtM
-   w==;
-X-CSE-ConnectionGUID: fyT2dUGiSIetEESgM1dmwg==
-X-CSE-MsgGUID: Z6CMib/6SOKuQas4GhP3DQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40703395"
+  bh=8DU14E5D0lWg600MwJ4URtFuPIv26XFVrn6CO/yON44=;
+  b=Cglk0D4YFaDrFLiLRKfkDl+9gcOl7EyVR3sM5FeHjppMTgm+PumqTuf4
+   qMcA2HNUVeWnZCEWf45XGilNAwGSWsYxZ59wUnXvPMErK6JKoMCrSxiXn
+   +RWvCLwcptLwuuq4zvZRd0Z+4IwPdsSYl6SNSkRNg59I3MAT4WETKbCE5
+   SpkBy6QV3qvd9Av91em0D60GtfDAc4POxRj/jaKapnQ1B73Stqdv5Twa9
+   QINa/2zYyv9m8tbtlS4GYvf8q6m6V2bSQ/lFlNS1B1tDowuZBsGBpAdjX
+   boeeIaTjth8VMbL8cGCdp5pbMj6wL2KKJIEjigku2ieQ0ebtqTA2msf/P
+   g==;
+X-CSE-ConnectionGUID: 16YGj2hWRNuESH/+nSDrhQ==
+X-CSE-MsgGUID: Sk6B2uKESu+1onqpI+r6rQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29464302"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40703395"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 03:00:59 -0700
-X-CSE-ConnectionGUID: YdIs7TC+R7OJP5dJsfe0mw==
-X-CSE-MsgGUID: hIe7ERXcQPCIWP/niYjG7Q==
+   d="scan'208";a="29464302"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 03:11:02 -0700
+X-CSE-ConnectionGUID: w7o/M5n7SL2VFBwPyocUFw==
+X-CSE-MsgGUID: r+fgvL8nRhaZ3YSCRxyh4Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,234,1725346800"; 
-   d="scan'208";a="81314649"
+   d="scan'208";a="81113883"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 26 Oct 2024 03:00:56 -0700
+  by orviesa009.jf.intel.com with ESMTP; 26 Oct 2024 03:10:56 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t4dbJ-000ZUc-2q;
-	Sat, 26 Oct 2024 10:00:53 +0000
-Date: Sat, 26 Oct 2024 18:00:12 +0800
+	id 1t4dkz-000ZUo-3D;
+	Sat, 26 Oct 2024 10:10:54 +0000
+Date: Sat, 26 Oct 2024 18:10:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Justin Iurman <justin.iurman@uliege.be>, netdev@vger.kernel.org
+To: Raag Jadav <raag.jadav@intel.com>, airlied@gmail.com, simona@ffwll.ch,
+	lucas.demarchi@intel.com, rodrigo.vivi@intel.com,
+	jani.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+	lina@asahilina.net, michal.wajdeczko@intel.com,
+	christian.koenig@amd.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	linux-kernel@vger.kernel.org, justin.iurman@uliege.be
-Subject: Re: [PATCH net-next 2/3] net: ipv6: seg6_iptunnel: mitigate
- 2-realloc issue
-Message-ID: <202410261713.GIaQEsJC-lkp@intel.com>
-References: <20241025133727.27742-3-justin.iurman@uliege.be>
+	intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, himal.prasad.ghimiray@intel.com,
+	aravind.iddamsetty@linux.intel.com, anshuman.gupta@intel.com,
+	alexander.deucher@amd.com, andrealmeid@igalia.com,
+	amd-gfx@lists.freedesktop.org, kernel-dev@igalia.com,
+	Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v8 1/4] drm: Introduce device wedged event
+Message-ID: <202410261754.enck8cc6-lkp@intel.com>
+References: <20241025084817.144621-2-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,147 +72,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241025133727.27742-3-justin.iurman@uliege.be>
+In-Reply-To: <20241025084817.144621-2-raag.jadav@intel.com>
 
-Hi Justin,
+Hi Raag,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on drm-xe/drm-xe-next]
+[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Justin-Iurman/net-ipv6-ioam6_iptunnel-mitigate-2-realloc-issue/20241025-214849
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241025133727.27742-3-justin.iurman%40uliege.be
-patch subject: [PATCH net-next 2/3] net: ipv6: seg6_iptunnel: mitigate 2-realloc issue
-config: i386-buildonly-randconfig-004-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261713.GIaQEsJC-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261713.GIaQEsJC-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/drm-Introduce-device-wedged-event/20241025-165119
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20241025084817.144621-2-raag.jadav%40intel.com
+patch subject: [PATCH v8 1/4] drm: Introduce device wedged event
+config: arm-randconfig-002-20241026 (https://download.01.org/0day-ci/archive/20241026/202410261754.enck8cc6-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410261754.enck8cc6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410261713.GIaQEsJC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410261754.enck8cc6-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/ipv6/seg6_iptunnel.c:10:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from drivers/gpu/drm/drm_drv.c:36:
+   In file included from include/linux/pseudo_fs.h:4:
+   In file included from include/linux/fs_context.h:14:
+   In file included from include/linux/security.h:33:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> net/ipv6/seg6_iptunnel.c:130:9: error: call to undeclared function '__seg6_do_srh_encap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     130 |         return __seg6_do_srh_encap(skb, osrh, proto, NULL);
+>> drivers/gpu/drm/drm_drv.c:81:3: error: expression is not an integer constant expression
+      81 |         [ffs(DRM_WEDGE_RECOVERY_REBIND) - 1]    = "rebind",
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/ffs.h:43:16: note: expanded from macro 'ffs'
+      43 | #define ffs(x) generic_ffs(x)
          |                ^
-   net/ipv6/seg6_iptunnel.c:130:9: note: did you mean 'seg6_do_srh_encap'?
-   net/ipv6/seg6_iptunnel.c:128:5: note: 'seg6_do_srh_encap' declared here
-     128 | int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
-         |     ^
-     129 | {
-     130 |         return __seg6_do_srh_encap(skb, osrh, proto, NULL);
-         |                ~~~~~~~~~~~~~~~~~~~
-         |                seg6_do_srh_encap
->> net/ipv6/seg6_iptunnel.c:134:5: warning: no previous prototype for function '__seg6_do_srh_encap' [-Wmissing-prototypes]
-     134 | int __seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
-         |     ^
-   net/ipv6/seg6_iptunnel.c:134:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     134 | int __seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
-         | ^
-         | static 
->> net/ipv6/seg6_iptunnel.c:330:9: error: call to undeclared function '__seg6_do_srh_inline'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     330 |         return __seg6_do_srh_inline(skb, osrh, NULL);
+   drivers/gpu/drm/drm_drv.c:82:3: error: expression is not an integer constant expression
+      82 |         [ffs(DRM_WEDGE_RECOVERY_BUS_RESET) - 1] = "bus-reset",
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/ffs.h:43:16: note: expanded from macro 'ffs'
+      43 | #define ffs(x) generic_ffs(x)
          |                ^
-   net/ipv6/seg6_iptunnel.c:330:9: note: did you mean 'seg6_do_srh_inline'?
-   net/ipv6/seg6_iptunnel.c:328:5: note: 'seg6_do_srh_inline' declared here
-     328 | int seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh)
-         |     ^
-     329 | {
-     330 |         return __seg6_do_srh_inline(skb, osrh, NULL);
-         |                ~~~~~~~~~~~~~~~~~~~~
-         |                seg6_do_srh_inline
->> net/ipv6/seg6_iptunnel.c:334:5: warning: no previous prototype for function '__seg6_do_srh_inline' [-Wmissing-prototypes]
-     334 | int __seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
-         |     ^
-   net/ipv6/seg6_iptunnel.c:334:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     334 | int __seg6_do_srh_inline(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
-         | ^
-         | static 
-   3 warnings and 2 errors generated.
+>> drivers/gpu/drm/drm_drv.c:84:15: error: invalid application of 'sizeof' to an incomplete type 'const char *const[]'
+      84 | static_assert(ARRAY_SIZE(drm_wedge_recovery_opts) == ffs(DRM_WEDGE_RECOVERY_BUS_RESET));
+         | ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   drivers/gpu/drm/drm_drv.c:528:32: error: invalid application of 'sizeof' to an incomplete type 'const char *const[]'
+     528 |         unsigned int len, opt, size = ARRAY_SIZE(drm_wedge_recovery_opts);
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   1 warning and 4 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +/__seg6_do_srh_encap +130 net/ipv6/seg6_iptunnel.c
+vim +81 drivers/gpu/drm/drm_drv.c
 
-   126	
-   127	/* encapsulate an IPv6 packet within an outer IPv6 header with a given SRH */
-   128	int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
-   129	{
- > 130		return __seg6_do_srh_encap(skb, osrh, proto, NULL);
-   131	}
-   132	EXPORT_SYMBOL_GPL(seg6_do_srh_encap);
-   133	
- > 134	int __seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh,
-   135				int proto, struct dst_entry *dst)
-   136	{
-   137		struct net *net = dev_net(skb_dst(skb)->dev);
-   138		struct ipv6hdr *hdr, *inner_hdr;
-   139		struct ipv6_sr_hdr *isrh;
-   140		int hdrlen, tot_len, err;
-   141		__be32 flowlabel;
-   142	
-   143		hdrlen = (osrh->hdrlen + 1) << 3;
-   144		tot_len = hdrlen + sizeof(*hdr);
-   145	
-   146		err = skb_cow_head(skb, tot_len + (!dst ? skb->mac_len
-   147							: LL_RESERVED_SPACE(dst->dev)));
-   148		if (unlikely(err))
-   149			return err;
-   150	
-   151		inner_hdr = ipv6_hdr(skb);
-   152		flowlabel = seg6_make_flowlabel(net, skb, inner_hdr);
-   153	
-   154		skb_push(skb, tot_len);
-   155		skb_reset_network_header(skb);
-   156		skb_mac_header_rebuild(skb);
-   157		hdr = ipv6_hdr(skb);
-   158	
-   159		/* inherit tc, flowlabel and hlim
-   160		 * hlim will be decremented in ip6_forward() afterwards and
-   161		 * decapsulation will overwrite inner hlim with outer hlim
-   162		 */
-   163	
-   164		if (skb->protocol == htons(ETH_P_IPV6)) {
-   165			ip6_flow_hdr(hdr, ip6_tclass(ip6_flowinfo(inner_hdr)),
-   166				     flowlabel);
-   167			hdr->hop_limit = inner_hdr->hop_limit;
-   168		} else {
-   169			ip6_flow_hdr(hdr, 0, flowlabel);
-   170			hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
-   171	
-   172			memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
-   173	
-   174			/* the control block has been erased, so we have to set the
-   175			 * iif once again.
-   176			 * We read the receiving interface index directly from the
-   177			 * skb->skb_iif as it is done in the IPv4 receiving path (i.e.:
-   178			 * ip_rcv_core(...)).
-   179			 */
-   180			IP6CB(skb)->iif = skb->skb_iif;
-   181		}
-   182	
-   183		hdr->nexthdr = NEXTHDR_ROUTING;
-   184	
-   185		isrh = (void *)hdr + sizeof(*hdr);
-   186		memcpy(isrh, osrh, hdrlen);
-   187	
-   188		isrh->nexthdr = proto;
-   189	
-   190		hdr->daddr = isrh->segments[isrh->first_segment];
-   191		set_tun_src(net, skb_dst(skb)->dev, &hdr->daddr, &hdr->saddr);
-   192	
+    75	
+    76	/*
+    77	 * Available recovery methods for wedged device. To be sent along with device
+    78	 * wedged uevent.
+    79	 */
+    80	static const char *const drm_wedge_recovery_opts[] = {
+  > 81		[ffs(DRM_WEDGE_RECOVERY_REBIND) - 1]	= "rebind",
+    82		[ffs(DRM_WEDGE_RECOVERY_BUS_RESET) - 1]	= "bus-reset",
+    83	};
+  > 84	static_assert(ARRAY_SIZE(drm_wedge_recovery_opts) == ffs(DRM_WEDGE_RECOVERY_BUS_RESET));
+    85	
 
 -- 
 0-DAY CI Kernel Test Service
