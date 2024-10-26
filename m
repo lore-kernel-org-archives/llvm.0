@@ -1,99 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C041D45FB;
-	Sat, 26 Oct 2024 12:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717FE182B4
+	for <llvm@lists.linux.dev>; Sat, 26 Oct 2024 14:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729945506; cv=none; b=E67bRtpFQW5txWyPfPSeozD2FSnk6B5Dv5QZNUGs4ryYTRGpnx8ul57icCJcNLT8Qpi5Ml7WkscEsZ+vh8bq5TVKVcVD0XviLUV+Wl7OQGYOUetnMqDgbK+iAxWqbcG36+rw3Npdcyb8CU3iilXzRtzX1QI7asNJgpw30tlljIc=
+	t=1729954249; cv=none; b=s2vwGRiP9pHJb5AwO49w9zsp0uyTQnRsJ/+Q49BIbJcgvuk05/M4jzcqosobdCWIiLmaZEMy91bHS4VS63PfuEhOdRbnqFC9n8IXdWTb0kHXVOxNLyzxFL41aiqir7IRIkPCBFpHiet4NcOsb34w8sfyBPhn0OYE/GIYox4eoXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729945506; c=relaxed/simple;
-	bh=qnmNKZ/FWWyN6qSwQvOP2dxddlyLO0EocdPri5cf4Yg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qvx4k5Cfc1vkR3vrgGS5iwpCGsCKZNl7E0wtGLCvwgXJX4VN7S1Eex9uBLYdSME5g4FgbgN53LyJrC1XLBIrF4/e4J8gSyqsuyfwT4spOHy2hTTE59b7l8lBMXVndOoUw+OB6atxuMxmP0Wc0geCJTD4Y7+6sGgzTJRUbaJ2/28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kEX/xDO4; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1729954249; c=relaxed/simple;
+	bh=/s2RP+BM1xGQVat361nWRiCVu5P0PD3Yqcl3IL7AO3A=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ff+pePKjIXwMiWDCocWLhDkjDYhG3uxOsdAmGv4uApnpGvCt1W4IMpQk/1lnfy4FEoaHCYxPawuxs9mAVd4dcBJ079iKqgYMJXwkRFGz7w6s7cSrbVCVWl7LWWY/ZPZdBMJG/klymFbjb3yLm+YNO6UnVfKTNNdYWhdnuJsl7h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=l+Ya5fTj; arc=none smtp.client-ip=185.70.40.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kEX/xDO4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729945504; x=1761481504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qnmNKZ/FWWyN6qSwQvOP2dxddlyLO0EocdPri5cf4Yg=;
-  b=kEX/xDO4zgus4q38hoxilxGrozYZfAsPV4/g50qd73Wg6ei6BMwQvtuU
-   Gb000E44Qxz16XwdburEmmYh4MDTUElikznY0VKElKtKpX52kTd6YZfok
-   k5xquimpk6XOeNC4SvL8NjfndxTpHAARZAkUUj2G3vqFySnrgsQEx+tc3
-   mjurRTitOHKY7L2y3IH6wFLn2FIqlzIRchvXuLsDxTFwXBOlk62e2e2KU
-   /sTEMPiNnyxxkTGjp+2AhBPaT1i8Kh7UyPl3LzYN/hZj/CQVWCh9Blji/
-   aYDdjq9Tu1Jb5jUbAasjnbc0FY0BWJTpziigVJDIEIr9kQ4PaocSFgwOz
-   w==;
-X-CSE-ConnectionGUID: Ajk2LNv6SZOBOsWOBtyR4g==
-X-CSE-MsgGUID: d6zovvy8T9CUc+l48n8XzQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11237"; a="40979086"
-X-IronPort-AV: E=Sophos;i="6.11,235,1725346800"; 
-   d="scan'208";a="40979086"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2024 05:25:03 -0700
-X-CSE-ConnectionGUID: rebcLCbdT6yISfABw1fTpA==
-X-CSE-MsgGUID: FIuAKFJGRfm51cvKssWBfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,235,1725346800"; 
-   d="scan'208";a="118656067"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 26 Oct 2024 05:25:02 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t4fql-000ZdU-2A;
-	Sat, 26 Oct 2024 12:24:59 +0000
-Date: Sat, 26 Oct 2024 20:24:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v9 5/5] asm-generic/io.h: Remove I/O port accessors for
- HAS_IOPORT=n
-Message-ID: <202410262023.Vw4meDWp-lkp@intel.com>
-References: <20241024-b4-has_ioport-v9-5-6a6668593f71@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="l+Ya5fTj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1729954245; x=1730213445;
+	bh=/s2RP+BM1xGQVat361nWRiCVu5P0PD3Yqcl3IL7AO3A=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=l+Ya5fTjVWNHVVKxsF4AfbgQuZ+0hsUlhyaz8UzBQgOw/7iaFq/E3vCplxhScqcIm
+	 pfCBOX8vyVEk/42ChAjFTPkGhj7ElSAZhQ4vm3O83Knv6lBTfKkfVK4G4AJfH0Nwzp
+	 5YL2E2gsPOwWjMxFm0CXXh2muNB+hzl7clq9G5+1rWbhgLzycROcBqJMi52siGYGBe
+	 MPn7ltBu099OoBSs7eaTlqriob4q5N5RaO0jY3l34aThTCxKVXARFqvNcO/EiFvy3p
+	 t1O7kW/lIfLGwwvFeOZkKs7nPHN6tGzf+7IVDMyujlrzK/HkLf3VKc7Ua4a4MP1cvw
+	 oVrj/CCBaxoBg==
+Date: Sat, 26 Oct 2024 14:50:41 +0000
+To: Andreas Larsson <andreas@gaisler.com>
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] sparc/build: Remove all usage of -fcall-used* flags
+Message-ID: <9ospa4bgpJsgr1ACc_GNsvDxFH-ErKkGTq8iUFDVUrvL2nRxDhZAzXReo33X8VEystz97nbjEq0GJIKISPURMHRYAxJaFXLzVXxqPnjGYes=@protonmail.com>
+In-Reply-To: <93d038de-3ba8-4d1e-9660-4c5e26ac055c@gaisler.com>
+References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com> <20240717-sparc-cflags-v2-1-259407e6eb5f@protonmail.com> <93d038de-3ba8-4d1e-9660-4c5e26ac055c@gaisler.com>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 010d36611b283debe17a6a9b2b52d3a37400f8c3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024-b4-has_ioport-v9-5-6a6668593f71@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Niklas,
+Andreas Larsson <andreas@gaisler.com> wrote:
+> Couldn't you use ifndef CONFIG_CC_IS_CLANG or perhaps better, use
+> $(call cc-option,-fcall-used-g5) and $(call cc-option,-fcall-used-g7) to
+> not remove the possibility for gcc to make use of these registers?
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 42f7652d3eb527d03665b09edac47f85fb600924]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Niklas-Schnelle/hexagon-Don-t-select-GENERIC_IOMAP-without-HAS_IOPORT-support/20241025-015802
-base:   42f7652d3eb527d03665b09edac47f85fb600924
-patch link:    https://lore.kernel.org/r/20241024-b4-has_ioport-v9-5-6a6668593f71%40linux.ibm.com
-patch subject: [PATCH v9 5/5] asm-generic/io.h: Remove I/O port accessors for HAS_IOPORT=n
-config: um-randconfig-002-20241026 (https://download.01.org/0day-ci/archive/20241026/202410262023.Vw4meDWp-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241026/202410262023.Vw4meDWp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410262023.Vw4meDWp-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
->> ld.lld: error: call to _outb marked "dontcall-error": outb() requires CONFIG_HAS_IOPORT
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sure sure! It works okay that way too.
+But before I send a v3, let me wait for clarification for the docs issue
+for the other patch.
