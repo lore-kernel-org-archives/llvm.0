@@ -1,61 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E60154BED;
-	Sun, 27 Oct 2024 15:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0847E110;
+	Sun, 27 Oct 2024 16:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730042114; cv=none; b=DI/Hn9WPis/Vaq2eq03qvmwpRyBnySE9iZErjiru4ywCAWLVNdl4oBPnxU4KUXNFgom/F7LmrUbJSNkjeecfO6mYpVUMI8j5z6A1n3ZGObjaKtJcLJELBU80TZicT6OmXg/c0QhXauaK6YQFeWLkghZ2tkhbaMurmhkdix7puTk=
+	t=1730045236; cv=none; b=KOfCpVPuDkImMG/bKu+41AAE7acMsTPWfo8vvG9rnCdBQOoPlo/nOiDkbjhs13+PDkb8RM2TEtCzbqtiB3rRvVWJa0WS6fDI2LO0WZ9AW2MGiPncVoIkWSpCFiLiVupih9waen4ONoHvWvJdiCcquHtrbehQwEWlLKM5R5kSvTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730042114; c=relaxed/simple;
-	bh=5u94Y7pa7BgsT3vqoEkK0FTH4Jud6+1xUFtegZSSdd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NlRDMIcuKUBiTGNF/EKZO+y5DHIkTNDRQGGv+cDD9up4p8VpOURUREowFz86WvjGkeniOMkp179TSOpJ+udzIGx/U95xhfk2wHxWEpJJWkXx2XBfQDEjRJkYQVlBTEcC1hPo8lW1KwI1vqC9HJ7x3R6c1iYxn0lKePXIwAclT0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fFO56Vpw; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1730045236; c=relaxed/simple;
+	bh=CYHkZfm8iwSSvr9V7w1CeY7lV93DYunt3X+q0M2jOc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mU0WoihqD5oUEg72NBsEHPgCqMJ1pqO02lqmsSrSFy3Hj8C1X0vizcCTzxIo685UmTwnOH/zuht32YK1MCqjbcpUsxJrhrYEtcVZJRca+Mn+zvbUXQFWZzNPLBJL8cXcZfD8Ek9bwQIKC4j9+eYNT3OxdfSX+wSTmTxGTfX8RMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KBq3PcTM; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fFO56Vpw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KBq3PcTM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730042112; x=1761578112;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5u94Y7pa7BgsT3vqoEkK0FTH4Jud6+1xUFtegZSSdd4=;
-  b=fFO56VpwwGAmvR5RczcM9t3ElgMT+h7QtogeF6zcY+yyKpWS1UPXHD0b
-   0aofagd38TRbo/H45FUKPl4x8VUpyvPsh77OCd91rRAGULuyvIcx056vf
-   8PCGNeu1FDAbNuSvrqogxOjhhBdCrihyu+Fn7c2hU1aVvYX1Df5k7Tos7
-   7nWcuLcSSQ+4Ty/q2lbezJsmN2xT698NpcASh/sJfmjd2cgPEifwtoApf
-   6qY5yuO6fUGFRJ4iPgqxohBhduIaX1uVB1oyJYQaosMXgM/XKqsc9WuAN
-   DYe5krJoxMapvobxq5XeJytiVu6NYpnWfOf1NLClJCMD9i1J84+ANi/mA
-   A==;
-X-CSE-ConnectionGUID: pwdCn/m4RRq80+AUXqhtBw==
-X-CSE-MsgGUID: w1rdEd4/T/qy772cTV9YTw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40188618"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40188618"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 08:15:11 -0700
-X-CSE-ConnectionGUID: mmVIbh3TSVWcWMgJ0F9Ydg==
-X-CSE-MsgGUID: wEho5RnrR1WwN5Mv73HKFA==
-X-ExtLoop1: 1
+  t=1730045234; x=1761581234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CYHkZfm8iwSSvr9V7w1CeY7lV93DYunt3X+q0M2jOc8=;
+  b=KBq3PcTMdQPzuRspE6E0tcsq5mATUdiKEBryfNMOE/Fp0RDlcQnMEcVO
+   NjUwNnv9tVt1EvA9kAtRijB5dtCLuBb7tWAnaJVqYwBuDmRZaqw7vboEo
+   o6VNRoOohCBzMTIjszu0dY+lkj8L9kJE87jh/CQVERFoLEj0Ga30j+9Wv
+   pdkS4QmzyzRzH4aqxk3KYFT+JwxPCvmDdvFsLfKbrsKgvnqppn+3IHzNh
+   wm1sRUE3IswB2qg6hNKn1ZRNIlbNOTsqogmCE+CR3GiH9FkXrHZh3eUZ7
+   UAxh5PXQ43yOE+VxJv2Ij2UMstzaZDcAAu4bMrDpf3Cm0XiVg6klbnEfQ
+   w==;
+X-CSE-ConnectionGUID: I1KdSY42S1a4snHJIcC9Iw==
+X-CSE-MsgGUID: 7zzJ1umuT5m8EiJBW0FI5g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11238"; a="40230033"
 X-IronPort-AV: E=Sophos;i="6.11,237,1725346800"; 
-   d="scan'208";a="81285453"
+   d="scan'208";a="40230033"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 09:07:13 -0700
+X-CSE-ConnectionGUID: dSVHPvDxTOquftTvy3tDpQ==
+X-CSE-MsgGUID: dmz4llJaRUCmfuS6sx5+vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="86140462"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 27 Oct 2024 08:15:09 -0700
+  by orviesa003.jf.intel.com with ESMTP; 27 Oct 2024 09:07:11 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t54yx-000amW-1g;
-	Sun, 27 Oct 2024 15:15:07 +0000
-Date: Sun, 27 Oct 2024 23:14:29 +0800
+	id 1t55nI-000ao4-2F;
+	Sun, 27 Oct 2024 16:07:08 +0000
+Date: Mon, 28 Oct 2024 00:06:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
+To: Edward Adam Davis <eadavis@qq.com>,
+	syzbot+0c99c3f90699936c1e77@syzkaller.appspotmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org
-Subject: [amd-pstate:superm1/multiple-platform-profile-handlers-v2 13/15]
- drivers/acpi/platform_profile.c:209:29: error: incompatible integer to
- pointer conversion passing 'unsigned long' to parameter of type 'const
- unsigned long *'; take the address with &
-Message-ID: <202410272314.4WjSxBUJ-lkp@intel.com>
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	tytso@mit.edu
+Subject: Re: [PATCH] ext4: Add a sanity check for next dentry when insert
+Message-ID: <202410272335.nwupXeQD-lkp@intel.com>
+References: <tencent_E4CFC65D09852ECE2EF28C83A7C3C6E41206@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,82 +66,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <tencent_E4CFC65D09852ECE2EF28C83A7C3C6E41206@qq.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/multiple-platform-profile-handlers-v2
-head:   cca7df72a75a655ad552ae621054784b4a41c9ac
-commit: e336433fe10fc421aeece46f2d67647e0c91931b [13/15] ACPI: platform_profile: Check all profile handler to calculate next
-config: x86_64-buildonly-randconfig-001-20241027 (https://download.01.org/0day-ci/archive/20241027/202410272314.4WjSxBUJ-lkp@intel.com/config)
+Hi Edward,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/ext4-Add-a-sanity-check-for-next-dentry-when-insert/20241027-191200
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/tencent_E4CFC65D09852ECE2EF28C83A7C3C6E41206%40qq.com
+patch subject: [PATCH] ext4: Add a sanity check for next dentry when insert
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241027/202410272335.nwupXeQD-lkp@intel.com/config)
 compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241027/202410272314.4WjSxBUJ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241027/202410272335.nwupXeQD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410272314.4WjSxBUJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410272335.nwupXeQD-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/acpi/platform_profile.c:59:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-      59 |         int err;
-         |             ^
-   drivers/acpi/platform_profile.c:115:35: warning: unused variable 'handler' [-Wunused-variable]
-     115 |         struct platform_profile_handler *handler;
-         |                                          ^~~~~~~
->> drivers/acpi/platform_profile.c:209:29: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const unsigned long *'; take the address with & [-Wint-conversion]
-     209 |                 next = find_next_bit_wrap(choices,
-         |                                           ^~~~~~~
-         |                                           &
-   include/linux/find.h:452:55: note: passing argument to parameter 'addr' here
-     452 | unsigned long find_next_bit_wrap(const unsigned long *addr,
-         |                                                       ^
-   2 warnings and 1 error generated.
+   In file included from fs/ext4/namei.c:29:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/ext4/namei.c:2087:5: warning: no previous prototype for function 'ext4_check_next_dentry' [-Wmissing-prototypes]
+    2087 | int ext4_check_next_dentry(struct inode *dir,
+         |     ^
+   fs/ext4/namei.c:2087:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2087 | int ext4_check_next_dentry(struct inode *dir,
+         | ^
+         | static 
+   5 warnings generated.
 
 
-vim +209 drivers/acpi/platform_profile.c
+vim +/ext4_check_next_dentry +2087 fs/ext4/namei.c
 
-   192	
-   193	
-   194	int platform_profile_cycle(void)
-   195	{
-   196		enum platform_profile_option next = PLATFORM_PROFILE_LAST;
-   197		struct platform_profile_handler *handler;
-   198		enum platform_profile_option profile;
-   199		unsigned long choices;
-   200		int err;
-   201	
-   202		scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &profile_lock) {
-   203			err = platform_profile_get_active(&profile);
-   204			if (err)
-   205				return err;
-   206	
-   207			choices = platform_profile_get_choices();
-   208	
- > 209			next = find_next_bit_wrap(choices,
-   210						  PLATFORM_PROFILE_LAST,
-   211						  profile + 1);
-   212	
-   213			list_for_each_entry(handler, &platform_profile_handler_list, list) {
-   214				err = handler->profile_set(handler, next);
-   215				if (err) {
-   216					pr_err("Failed to set profile for handler %s\n", handler->name);
-   217					break;
-   218				}
-   219			}
-   220			if (err) {
-   221				list_for_each_entry_continue_reverse(handler, &platform_profile_handler_list, list) {
-   222					err = handler->profile_set(handler, PLATFORM_PROFILE_BALANCED);
-   223					if (err)
-   224						pr_err("Failed to revert profile for handler %s\n", handler->name);
-   225				}
-   226			}
-   227		}
-   228	
-   229		sysfs_notify(acpi_kobj, NULL, "platform_profile");
-   230	
-   231		return 0;
-   232	}
-   233	EXPORT_SYMBOL_GPL(platform_profile_cycle);
-   234	
+  2086	
+> 2087	int ext4_check_next_dentry(struct inode *dir,
+  2088				struct inode *inode,
+  2089				struct ext4_dir_entry_2 *de,
+  2090				int buf_size,
+  2091				struct ext4_filename *fname)
+  2092	{
+  2093		int nlen, rlen;
+  2094	
+  2095		nlen = ext4_dir_rec_len(de->name_len, dir);
+  2096		rlen = ext4_rec_len_from_disk(de->rec_len, buf_size);
+  2097		if (de->inode) {
+  2098			struct ext4_dir_entry_2 *nde =
+  2099				(struct ext4_dir_entry_2 *)((char *)de + nlen);
+  2100			nde->rec_len = ext4_rec_len_to_disk(rlen - nlen, buf_size);
+  2101			de->rec_len = ext4_rec_len_to_disk(nlen, buf_size);
+  2102			de = nde;
+  2103			rlen = ext4_rec_len_from_disk(de->rec_len, buf_size);
+  2104			return fname_len(fname) > rlen - EXT4_BASE_DIR_LEN;
+  2105		}
+  2106	
+  2107		return 0;
+  2108	}
+  2109	
 
 -- 
 0-DAY CI Kernel Test Service
