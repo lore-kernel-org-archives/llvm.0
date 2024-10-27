@@ -1,86 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0E874059;
-	Sun, 27 Oct 2024 18:34:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB74E176AB7
+	for <llvm@lists.linux.dev>; Sun, 27 Oct 2024 18:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730054083; cv=none; b=VV+PPSoP71iOAvUPSnycCVJ4fgHdZ0KkAfl/5bUi4jGUKALI2bSsteqZIdMtWfs9SQS1NcJMmu4EAnYhIIeNTtO+/ZWu5ZzEfMZRjYfMyw6vTeGzlGEJVBhlTmGxptVSCs4SfsHhNfxoW1wk7zXkzysdFBRAlXpbrqZYhoVZQTc=
+	t=1730054654; cv=none; b=n3b87hwGGCE6Ep0pAJgMr+WfheXSQYK4q7+p3vntWfPWQG/L4NL3RqLogZtG8MpFLmB+mQgZ/j67JuHZDwUJOJ4X15hGR9xGrzrh6/FVIAYBNgvlINxxBMBuvKG9J/bFubOl2KoZfyOOmqQwxZrh5dqbUWQRbAdKqCHkqzwrOPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730054083; c=relaxed/simple;
-	bh=Ab1LD0YPRiCsaMpw6QmeIUY4TM1fzamI5B5sMH/HSGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fy2nRwBSpElHaklIAuH8sF8dilzJsD1KkROaKkBwn4LEnWBlEb5pjvfC10sKSIfQa1gPs/o2PGKo9n/SyajeodUPffg4O7HXaHoCOIceUlP0SkiPID+1qdq79yTRMWnRrv8v1UdWf3mD3ckVx7349q54VXpbQcwVyi0ARo/UZx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwIh+t+N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730054654; c=relaxed/simple;
+	bh=EIntNmE1Xkfl7FP0BbUtu1IEVn58qG+RPycF56flTO0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=LhEB/nj8Z2U3eS/Q5fWp1Fw2J9mJdHwUHfi6jOmmpwuD65LA5OHyAg9yGzCXdmiE6Nr1hxjIVS8pY/6DfhBrV5ad6/MXVxEG0U56LkH7AB6EbVoRSckx+k9LnIZRdQ9ejpI+IX8UDVlGuCtoGEptAgV2GG7JlNzkTsS3Hsmll1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lg705Zxs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwIh+t+N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DD3C4CEC3;
-	Sun, 27 Oct 2024 18:34:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lg705Zxs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7BEC4CEC7;
+	Sun, 27 Oct 2024 18:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730054082;
-	bh=Ab1LD0YPRiCsaMpw6QmeIUY4TM1fzamI5B5sMH/HSGw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IwIh+t+NmDWdzDo9uy+/UuRmYcIx6PygiXzpCNabpiNcsultp+7hqhXDxOLYFwPY3
-	 8LHcfYKNzx6EjyWPHp6mo2LQy57BSv85SwP1Y/pqzbOEJ1/WZ6chL88GjThxZJaWLi
-	 R2sqFZH1qHkuS3eHjSYJ9Efj4kSNY3q+vFww2BHTzw4JY0t7L4P8qIXXA3xC+ZrAyh
-	 DSfc1DOe50EvHstnoL5VU6AqZd0Lfn2ss7yMteMLrdWwbuTL7/FnfajNnmXM6GXgx8
-	 NpJSsDPbzlY8RvydVNLNwww3pYOOuEw1/pJQIGffaKrLub4zqp6vsQNBJELX89plf8
-	 n+GbgE3XGrWvA==
-Date: Sun, 27 Oct 2024 11:34:40 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Koakuma <koachan@protonmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
-	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
-Message-ID: <20241027183440.GA2755311@thelio-3990X>
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
- <20241021201657.GA898643@thelio-3990X>
- <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com>
- <20241022200732.GA487584@thelio-3990X>
- <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
- <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
- <20241023164535.GB4081497@thelio-3990X>
- <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
+	s=k20201202; t=1730054654;
+	bh=EIntNmE1Xkfl7FP0BbUtu1IEVn58qG+RPycF56flTO0=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=Lg705Zxs5x61zmL58KHai2XL2C6Z8BnOQSclWkVJzSMOefgre6ELgU7UjOMXAsJ1x
+	 S5OHO6xH3/MljPl8RhX89vOf9Cs+o8gfGhxhT8Bj6Uc2o1RxQ+Rp+mKK5iIq/AYXOp
+	 7PeSYUpuKNrNHkGuSn49BAJuyu2abF+pu6qFDN7e0hOHwoIsR1jqClO1YF0aA12XhC
+	 pKL7/NipMFzTzrOtp1Wy4gvZlHLMrr0h3dddyovP/n436CT2j4onUGsj2w6zVlmHiY
+	 +fgLc6w3QIjWvyG2+VTnmGxrV9SxlRI3yTKxj9PBhTdlJkCldV7yxYOFD3Mtl/otoM
+	 bcxaL4BaHGlEQ==
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id CB9A31200043;
+	Sun, 27 Oct 2024 14:44:12 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Sun, 27 Oct 2024 14:44:12 -0400
+X-ME-Sender: <xms:_IkeZ0bylqZd1EMgVICQKmolf733CRSuG7OFFNo41LBv2WrDujDxZQ>
+    <xme:_IkeZ_YnbuCbwegGSi5pWK66QQFGLIesbRCzLR3iKZYPXFElHSE8xTUTULhrlklH3
+    7jIKb--F41vWA8cOxs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdejiedgudduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvg
+    hlrdhorhhgqeenucggtffrrghtthgvrhhnpeejjeffteetfeetkeeijedugeeuvdfgfeef
+    iedtudeikeeggeefkefhudfhlefhveenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegrrhhnugdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
+    ihhthidquddvkeehudejtddvgedqvdekjedttddvieegqdgrrhhnugeppehkvghrnhgvlh
+    drohhrghesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedukedpmhhouggvpehsmhht
+    phhouhhtpdhrtghpthhtohepshhimhhonhgrsehffhiflhhlrdgthhdprhgtphhtthhope
+    grihhrlhhivggusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprhhosggutghlrghrkhes
+    ghhmrghilhdrtghomhdprhgtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvg
+    drtghomhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehnuggvshgruhhlnhhivghrshesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhonh
+    hrrgguhigstghioheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopegumhhithhrhidrsggrrhihshhhkhhovheslh
+    hinhgrrhhordhorhhg
+X-ME-Proxy: <xmx:_IkeZ-9f9qjMSEe-ueet4s1KHilrjY1nz9yePccb1KNtF2fiUO1BEA>
+    <xmx:_IkeZ-r-TkLzbCkivqWsrpAvWjVC1esvbL2mNyBhMxewljP5HskQnQ>
+    <xmx:_IkeZ_qJpFx9gWVfSl9m0g28gSiF-Q6-vJThUFWTxsoPuKIK4R5gDQ>
+    <xmx:_IkeZ8T3Y8WxMEd8mbgy9-3pyt0r8mACGzc7kPHUjbrCPgLxJdHCpA>
+    <xmx:_IkeZ_oneK8wy36x6Wrwn15_874iZBfWgOfNEM1t3QG-nKjI4cFi0Mcx>
+Feedback-ID: i36794607:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A11CC2220071; Sun, 27 Oct 2024 14:44:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
+Date: Sun, 27 Oct 2024 18:43:52 +0000
+From: "Arnd Bergmann" <arnd@kernel.org>
+To: "Akhil P Oommen" <quic_akhilpo@quicinc.com>,
+ "Rob Clark" <robdclark@gmail.com>, "Sean Paul" <sean@poorly.run>,
+ "Konrad Dybcio" <konradybcio@kernel.org>,
+ "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+ "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+ "Marijn Suijten" <marijn.suijten@somainline.org>,
+ "Dave Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>
+Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <3fb376b3-2db7-4730-a2e1-958f1ddd9f5c@app.fastmail.com>
+In-Reply-To: <20241027-stack-size-fix-v1-1-764e2e3566cb@quicinc.com>
+References: <20241027-stack-size-fix-v1-1-764e2e3566cb@quicinc.com>
+Subject: Re: [PATCH] drm/msm/a6xx: Fix excessive stack usage
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 26, 2024 at 02:52:52PM +0000, Koakuma wrote:
-> Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > I think this should be documented (required LLVM version and
-> > the supported build command),
-> > otherwise people cannot test this patch.
-> 
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> > I am not sure that there is a super concise way to describe for
-> > Documentation/kbuild/llvm.rst that sparc currently requires 'CC=clang
-> > LLVM_IAS=0' along with a build of clang from the main branch of
-> > llvm-project to work properly.
-> 
-> So about this, as a middle ground, would it be okay if I put
-> 
-> ``CC=clang LLVM_IAS=0`` (LLVM >= 20)
-> 
-> In the documentation, in a similar manner to the s390x entry?
-> I know that LLVM 20 is still a couple months away but those commits will
-> likely be released with that version, and since it also tells people
-> to not use a version that is too old, I think it should be okay (?)
+On Sun, Oct 27, 2024, at 18:05, Akhil P Oommen wrote:
+> Clang-19 and above sometimes end up with multiple copies of the large
+> a6xx_hfi_msg_bw_table structure on the stack. The problem is that
+> a6xx_hfi_send_bw_table() calls a number of device specific functions to
+> fill the structure, but these create another copy of the structure on
+> the stack which gets copied to the first.
+>
+> If the functions get inlined, that busts the warning limit:
+>
+> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size 
+> (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' 
+> [-Werror,-Wframe-larger-than]
+>
+> Fix this by kmalloc-ating struct a6xx_hfi_msg_bw_table instead of using
+> the stack. Also, use this opportunity to skip re-initializing this table
+> to optimize gpu wake up latency.
+>
+> Cc: Arnd Bergmann <arnd@kernel.org>
 
-Yes, I think that would be reasonable.
+Please change this to "Reported-by:"
 
-Cheers,
-Nathan
+The patch looks correct to me, just one idea for improvement.
+
+> b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> index 94b6c5cab6f4..b4a79f88ccf4 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> @@ -99,6 +99,7 @@ struct a6xx_gmu {
+>  	struct completion pd_gate;
+> 
+>  	struct qmp *qmp;
+> +	struct a6xx_hfi_msg_bw_table *bw_table;
+>  };
+
+I think the bw_table is better just embedded
+in here rather than referenced as a pointer:
+
+> +	if (gmu->bw_table)
+> +		goto send;
+> +
+> +	msg = devm_kzalloc(gmu->dev, sizeof(*msg), GFP_KERNEL);
+> +	if (!msg)
+> +		return -ENOMEM;
+
+It looked like it's always allocated here when the device
+is up, so you can avoid the extra overhead for keeping
+track of the allocation.
+
+      Arnd
