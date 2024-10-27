@@ -1,63 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC29018EBF;
-	Sun, 27 Oct 2024 22:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AD417C61;
+	Sun, 27 Oct 2024 22:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730067721; cv=none; b=em6MX9aoBc06p7wYw89sFlbusT0eOozbNl64bikAte8UK+qJT1IHPEGtcUhWylKxGf6j41YccM9YVFZhZ1tIfvJC2kBKVxYcLNf0s4nTZOr6KsjhTMXwg/2cTrxGNyiITYjC/k0rnp12q5+Dacs3RawShtlcCTKGMuIFkvAdBw0=
+	t=1730068273; cv=none; b=mR3e8yANDUOmTh3+SBbsweBiGg06vRMAoiYKbi/0hfCfhsR+omXK9rVFa72OEmdg/rlkHswBiLK1uTwSRvzFCFlvJU1P+J4X+fcux9LtjRfCivDjkj9pTvZuY0u4b2mqHgkEeUnV+ijALFktBCUBK2uOXcnEa7VBxJml1us5XSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730067721; c=relaxed/simple;
-	bh=sxgyCZvsGdDbokMrGqYRMsBz5Z+jS3XC8LLxod9zO7U=;
+	s=arc-20240116; t=1730068273; c=relaxed/simple;
+	bh=TZuysod91j8XGFVw5rUWxKcBjLEDID4bnPfMM69TS88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DiqPbtNm470F9cSRHa4teCnZEGy1+GOW2sX/Szp12WTA1Zdpt+ERhFZ8wZFRpK0iGvUf95QT+CcdZ7SrPNczgPpwrrOOUjqDcQWrvXSbspJSWcewr8VXd5l8/VFcHpRaeEKR5IgzUs+lRZdki+SaIYmh5S5vsVekDD6pDiBuP2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T/YKO3E0; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=mR6kbmmDIDd8rHGUqvU8HzvLzWtKANE/+O6mdFlLwILRCQVWQQkrqka7uOiQMRAg74nSZNSgcf37hmeHufmASb5Wg5QHpdsEgcgxhAUU/CjQVLhNl8LN5YVS2Z0suF6GM3PYTl90j33i776gHAoBUsLt8SH8iGkc8ewDS7bG5oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwW4OqLx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T/YKO3E0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730067718; x=1761603718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sxgyCZvsGdDbokMrGqYRMsBz5Z+jS3XC8LLxod9zO7U=;
-  b=T/YKO3E06TwR6BszNTEF+iLAz/hgEeK7qJeZ0U8SJkPTdfraf31WBQ6e
-   D+Z0hEA/6d/R1F+WIhQYgKgcI2JN97DHCVpkGnshLhmaCARm2pgSlmofY
-   QewlnLfk2boAKHbBbKlHpfTXeVJ/iFb3fSGe7ooPw6ttJG1RjhPyPt90g
-   AzGpokdKnsMEq8VECV1kLpZcyifPEudFkBgg4/H0gbjZp//HSRPCfV6yu
-   0jxgetWg1y9An4jyP8S62p0dipNih3q3zsRTY4IR2WWNLv79K5GEltNwu
-   MdII0MlX3F2WYQmt2ECMaTwxMsTHHMV4We0uTEpgbjmmtokBAb9dhpUS2
-   Q==;
-X-CSE-ConnectionGUID: ZWmn2Ks4QSOSoryx/GwsLg==
-X-CSE-MsgGUID: /V1+hCnAT0+pdQ4j9zeD7Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29621080"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="29621080"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 15:21:58 -0700
-X-CSE-ConnectionGUID: aqQQUgt+R6SMkbyDbnFpUQ==
-X-CSE-MsgGUID: eIXFp/HrQA+Fdeb+6Gj0lg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,237,1725346800"; 
-   d="scan'208";a="104760119"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 27 Oct 2024 15:21:54 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5Bdw-000b1v-2R;
-	Sun, 27 Oct 2024 22:21:52 +0000
-Date: Mon, 28 Oct 2024 06:21:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Kent Gibson <warthog618@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] gpio: sysfs: use cleanup guards for the
- sysfs_lock mutex
-Message-ID: <202410280514.EkyQpKfw-lkp@intel.com>
-References: <20241026-gpio-notify-sysfs-v3-2-ad8f127d12f5@linaro.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwW4OqLx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6996DC4CEC3;
+	Sun, 27 Oct 2024 22:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730068272;
+	bh=TZuysod91j8XGFVw5rUWxKcBjLEDID4bnPfMM69TS88=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XwW4OqLx/3KMbBODxKu4qIMHnrXkaK02gr1Bs1d3rAivraJAAf+wKAxSS+2g0LesH
+	 8uL7mRXyS0Lze+4AeP/K1gTRMvonUbmc+/Txm7E2N0rvVO9ZI/erQS65YPET5VbkLS
+	 goRN0/I52wjnhqWOIwu1NTf+rgOWKIFki1H2djxVTEefPyyql4q7IGq2NEbC1bt6Z+
+	 +E5n7uK7aJfM8y2+NAQ26qOi/f+9ebXnibIII4KT0X26OofNuKX9DJd7La30gEM+hR
+	 8lxuvxeD/knxPmqw9QNai2zLUmKvjDdcN+GANvggD5XdMRqV9XLIueJsPbFIB6shS8
+	 S6sIISm94wbpw==
+Date: Sun, 27 Oct 2024 17:31:11 -0500
+From: Rob Herring <robh@kernel.org>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Conor Dooley <conor@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com
+Subject: Re: [PATCH v4 2/3] dt-bindings: crypto: Add Inside Secure SafeXcel
+ EIP-93 crypto engine
+Message-ID: <20241027223111.GA151367-robh@kernel.org>
+References: <20241025094734.1614-1-ansuelsmth@gmail.com>
+ <20241025094734.1614-2-ansuelsmth@gmail.com>
+ <20241025-marmalade-constant-1c733ef5f3e8@spud>
+ <671bd796.df0a0220.216be3.8504@mx.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,136 +59,167 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241026-gpio-notify-sysfs-v3-2-ad8f127d12f5@linaro.org>
+In-Reply-To: <671bd796.df0a0220.216be3.8504@mx.google.com>
 
-Hi Bartosz,
+On Fri, Oct 25, 2024 at 07:38:26PM +0200, Christian Marangi wrote:
+> On Fri, Oct 25, 2024 at 05:44:39PM +0100, Conor Dooley wrote:
+> > On Fri, Oct 25, 2024 at 11:47:23AM +0200, Christian Marangi wrote:
+> > > Add bindings for the Inside Secure SafeXcel EIP-93 crypto engine.
+> > > 
+> > > The IP is present on Airoha SoC and on various Mediatek devices and
+> > > other SoC under different names like mtk-eip93 or PKTE.
+> > > 
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > ---
+> > > Changes v4:
+> > > - Out of RFC
+> > 
+> > I left comments on v3, that I do not see addressed here.
+> >
+> 
+> I missed them sorry, I was confused with the other reply about RFC not
+> asking for comments. Let me copy the comments here so we can continue
+> here.
+> 
+> > > Changes v3:
+> > > - Add SoC compatible with generic one
+> > > Changes v2:
+> > > - Change to better compatible
+> > > - Add description for EIP93 models
+> > > 
+> > >  .../crypto/inside-secure,safexcel-eip93.yaml  | 63 +++++++++++++++++++
+> > >  1 file changed, 63 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+> > > new file mode 100644
+> > > index 000000000000..13341710ee31
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+> > > @@ -0,0 +1,63 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/crypto/inside-secure,safexcel-eip93.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Inside Secure SafeXcel EIP-93 cryptographic engine
+> > > +
+> > > +maintainers:
+> > > +  - Christian Marangi <ansuelsmth@gmail.com>
+> > > +
+> > > +description: |
+> > > +  The Inside Secure SafeXcel EIP-93 is a cryptographic engine IP block
+> > > +  integrated in varios devices with very different and generic name from
+> > > +  PKTE to simply vendor+EIP93. The real IP under the hood is actually
+> > > +  developed by Inside Secure and given to license to vendors.
+> > > +
+> > > +  The IP block is sold with different model based on what feature are
+> > > +  needed and are identified with the final letter. Each letter correspond
+> > > +  to a specific set of feature and multiple letter reflect the sum of the
+> > > +  feature set.
+> > > +
+> > > +  EIP-93 models:
+> > > +    - EIP-93i: (basic) DES/Triple DES, AES, PRNG, IPsec ESP, SRTP, SHA1
+> > > +    - EIP-93ie: i + SHA224/256, AES-192/256
+> > > +    - EIP-93is: i + SSL/DTLS/DTLS, MD5, ARC4
+> > > +    - EIP-93ies: i + e + s
+> > > +    - EIP-93iw: i + AES-XCB-MAC, AES-CCM
+> > >
+> > This implies that you should have a non-trivial set of fallbacks, with
+> > the "i" model as the base for that. eg:
+> > 
+> > "ie", "i"
+> > "is", "i"
+> > "iw", "i"
+> > "ies", "ie, "is", "i" (I dunno which would be a better order here)
+> >
+> 
+> These info are what I found around since informations about models are very
+> scarce. The driver itself makes use of a bitmap in the IP to detect the
+> supported stuff so the meaning of this is really to comunicate the set
+> of feature mounted on the system.
+> 
+> Any hint on how to describe this better? I assume you refer to some kind
+> of yaml logic structure to put in the compatible?
 
-kernel test robot noticed the following build errors:
+I think the list is fine as-is. If we already had support for the 'i' 
+version and then added new 'iX' versions, then having the fallback makes 
+sense. But since this is all new and defined at one time, I don't think 
+defining all those combinations buys us anything. And an OS can still 
+choose to only support the 'i' features even if the h/w supports the e, 
+s, and/or w features.
 
-[auto build test ERROR on a39230ecf6b3057f5897bc4744a790070cfbe7a8]
+> 
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - const: airoha,crypto-eip93
+> > > +      - enum:
+> > > +          - inside-secure,safexcel-eip93i
+> > > +          - inside-secure,safexcel-eip93ie
+> > > +          - inside-secure,safexcel-eip93is
+> > > +          - inside-secure,safexcel-eip93ies
+> > > +          - inside-secure,safexcel-eip93iw
+> > > +
+> >
+> > I don't really get what's going on here. Why is the first compatible the
+> > generic one? That seems suspect to me, as I doubt the crypto block on a
+> > particular SoC varies? I'd expect to see some soc-specific compatibles
+> > with a fallback to the inside-secure IP version that it integrates.
+> >
+> 
+> This was already discussed and hoped this solution was accepted (I
+> didn't get any reply in the other revision, so I'm probably wrong)
+> 
+> Everything started with:
+> - airoha,mtk-eip93
+> 
+> Was wrong as the compatible wasn't clear on what mtk was and if the IP
+> was from airoha (it's not, it's licensed to...)
+> 
+> Then only the inside-secure ones, following how it's done for the newer
+> inside-secure eip197.
+> 
+> Krzysztof then suggested that, since it's licensed but OEM can make
+> modification, it should be sensible to put a compatible of the SoC where
+> the thing is mounted at the front of the other compatible. Eip197 should
+> have received the same treatement but for some reason it didn't.
+> 
+> So here in v3/v4 with this proposed solution.
+> 
+> First compatible is SoC name, useful if the Vendor made modification to
+> the IP. Then the generic model that describe the set of feature
+> supported.
+> 
+> I checked the register of 3 different device where EIP93 is implemented
+> and they ALL match them. ONLY additional register are added for debug
+> purpose and never conflicting bits are introduced.
+> 
+> Hence why IMHO it's OK to use the combo of Vendor + second compatible
+> for the generic implementation.
+> 
+> >From both comments I'm not really sure what do you mean about fallback,
+> anyway hope it's clear now.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpio-sysfs-use-cleanup-guards-for-gpiod_data-mutex/20241026-210033
-base:   a39230ecf6b3057f5897bc4744a790070cfbe7a8
-patch link:    https://lore.kernel.org/r/20241026-gpio-notify-sysfs-v3-2-ad8f127d12f5%40linaro.org
-patch subject: [PATCH v3 2/5] gpio: sysfs: use cleanup guards for the sysfs_lock mutex
-config: i386-buildonly-randconfig-004-20241028 (https://download.01.org/0day-ci/archive/20241028/202410280514.EkyQpKfw-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241028/202410280514.EkyQpKfw-lkp@intel.com/reproduce)
+The issue is that airoha only has 1 implementation of safexcel, not any 
+of them which is what you defined. Well, at least if that's an SoC 
+specific compatible which it doesn't look like either.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410280514.EkyQpKfw-lkp@intel.com/
+The issue is that you probably don't have an actual user for all the 
+variants. I would just list them commented out or like this:
 
-All errors (new ones prefixed by >>):
+items:
+  - false (tools might complain with this. "not: {}" may work instead)
+  - enum:
+      # IP versions without an SoC specific compatible defined yet
+      - inside-secure,safexcel-eip93i
+      - inside-secure,safexcel-eip93ie
+      - inside-secure,safexcel-eip93is
+      - inside-secure,safexcel-eip93ies
+      - inside-secure,safexcel-eip93iw
 
->> drivers/gpio/gpiolib-sysfs.c:588:3: error: cannot jump from this goto statement to its label
-     588 |                 goto err_clear_bit;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:591:21: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     591 |         struct gpiod_data *data __free(kfree) = kzalloc(sizeof(*data),
-         |                            ^
-   drivers/gpio/gpiolib-sysfs.c:582:3: error: cannot jump from this goto statement to its label
-     582 |                 goto err_clear_bit;
-         |                 ^
-   drivers/gpio/gpiolib-sysfs.c:591:21: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     591 |         struct gpiod_data *data __free(kfree) = kzalloc(sizeof(*data),
-         |                            ^
-   2 errors generated.
+(So remove the one you use in this list)
 
-
-vim +588 drivers/gpio/gpiolib-sysfs.c
-
-   534	
-   535	/**
-   536	 * gpiod_export - export a GPIO through sysfs
-   537	 * @desc: GPIO to make available, already requested
-   538	 * @direction_may_change: true if userspace may change GPIO direction
-   539	 * Context: arch_initcall or later
-   540	 *
-   541	 * When drivers want to make a GPIO accessible to userspace after they
-   542	 * have requested it -- perhaps while debugging, or as part of their
-   543	 * public interface -- they may use this routine.  If the GPIO can
-   544	 * change direction (some can't) and the caller allows it, userspace
-   545	 * will see "direction" sysfs attribute which may be used to change
-   546	 * the gpio's direction.  A "value" attribute will always be provided.
-   547	 *
-   548	 * Returns:
-   549	 * 0 on success, or negative errno on failure.
-   550	 */
-   551	int gpiod_export(struct gpio_desc *desc, bool direction_may_change)
-   552	{
-   553		struct gpio_device *gdev;
-   554		struct device *dev;
-   555		int status;
-   556	
-   557		/* can't export until sysfs is available ... */
-   558		if (!class_is_registered(&gpio_class)) {
-   559			pr_debug("%s: called too early!\n", __func__);
-   560			return -ENOENT;
-   561		}
-   562	
-   563		if (!desc) {
-   564			pr_debug("%s: invalid gpio descriptor\n", __func__);
-   565			return -EINVAL;
-   566		}
-   567	
-   568		CLASS(gpio_chip_guard, guard)(desc);
-   569		if (!guard.gc)
-   570			return -ENODEV;
-   571	
-   572		if (test_and_set_bit(FLAG_EXPORT, &desc->flags))
-   573			return -EPERM;
-   574	
-   575		gdev = desc->gdev;
-   576	
-   577		guard(mutex)(&sysfs_lock);
-   578	
-   579		/* check if chip is being removed */
-   580		if (!gdev->mockdev) {
-   581			status = -ENODEV;
-   582			goto err_clear_bit;
-   583		}
-   584	
-   585		if (!test_bit(FLAG_REQUESTED, &desc->flags)) {
-   586			gpiod_dbg(desc, "%s: unavailable (not requested)\n", __func__);
-   587			status = -EPERM;
- > 588			goto err_clear_bit;
-   589		}
-   590	
-   591		struct gpiod_data *data __free(kfree) = kzalloc(sizeof(*data),
-   592								GFP_KERNEL);
-   593		if (!data) {
-   594			status = -ENOMEM;
-   595			goto err_clear_bit;
-   596		}
-   597	
-   598		data->desc = desc;
-   599		mutex_init(&data->mutex);
-   600		if (guard.gc->direction_input && guard.gc->direction_output)
-   601			data->direction_can_change = direction_may_change;
-   602		else
-   603			data->direction_can_change = false;
-   604	
-   605		dev = device_create_with_groups(&gpio_class, &gdev->dev,
-   606						MKDEV(0, 0), data, gpio_groups,
-   607						"gpio%u", desc_to_gpio(desc));
-   608		if (IS_ERR(dev)) {
-   609			status = PTR_ERR(dev);
-   610			goto err_clear_bit;
-   611		}
-   612	
-   613		data = NULL;
-   614		return 0;
-   615	
-   616	err_clear_bit:
-   617		clear_bit(FLAG_EXPORT, &desc->flags);
-   618		gpiod_dbg(desc, "%s: status %d\n", __func__, status);
-   619		return status;
-   620	}
-   621	EXPORT_SYMBOL_GPL(gpiod_export);
-   622	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rob
