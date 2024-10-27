@@ -1,156 +1,201 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0847E110;
-	Sun, 27 Oct 2024 16:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25BF262A3
+	for <llvm@lists.linux.dev>; Sun, 27 Oct 2024 18:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730045236; cv=none; b=KOfCpVPuDkImMG/bKu+41AAE7acMsTPWfo8vvG9rnCdBQOoPlo/nOiDkbjhs13+PDkb8RM2TEtCzbqtiB3rRvVWJa0WS6fDI2LO0WZ9AW2MGiPncVoIkWSpCFiLiVupih9waen4ONoHvWvJdiCcquHtrbehQwEWlLKM5R5kSvTQ=
+	t=1730052397; cv=none; b=n7B2Yxb2+lVEFH9w8PHhkpdrxvuO9ghxL+rwpnE7GH5j7D96FMbmMhCuFFA4zHagWVelcRTkbrS2wiLGL6Y6OuUbZqP5wCnISMBkaKUCNyC9ZygRGpsuxvZ+4U1YArtnzux6Y3NgFdBE5P9JWDf1TWUF8RL7B3998rFbPJ0mGs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730045236; c=relaxed/simple;
-	bh=CYHkZfm8iwSSvr9V7w1CeY7lV93DYunt3X+q0M2jOc8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mU0WoihqD5oUEg72NBsEHPgCqMJ1pqO02lqmsSrSFy3Hj8C1X0vizcCTzxIo685UmTwnOH/zuht32YK1MCqjbcpUsxJrhrYEtcVZJRca+Mn+zvbUXQFWZzNPLBJL8cXcZfD8Ek9bwQIKC4j9+eYNT3OxdfSX+wSTmTxGTfX8RMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KBq3PcTM; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730052397; c=relaxed/simple;
+	bh=4+0NulD4EEQ5BTETeq/86MPXoadMca0AwCvmywI7SSY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=BfQX0FwfMZPV1x4674nh9AUJvSjVZMyvXv+ND0FYSZEmZipELMoQIiySvLjFK5ISsv1GM41GGwNhGjvmEHEJvacvqa8DUJKKn/SX15GDSz5Blah4IyidJacgacltfC40pzqlJzry1Mg2OvoVFafymUcCXSyNih1wVbvSdjWO5mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LPpfUFJV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KBq3PcTM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730045234; x=1761581234;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CYHkZfm8iwSSvr9V7w1CeY7lV93DYunt3X+q0M2jOc8=;
-  b=KBq3PcTMdQPzuRspE6E0tcsq5mATUdiKEBryfNMOE/Fp0RDlcQnMEcVO
-   NjUwNnv9tVt1EvA9kAtRijB5dtCLuBb7tWAnaJVqYwBuDmRZaqw7vboEo
-   o6VNRoOohCBzMTIjszu0dY+lkj8L9kJE87jh/CQVERFoLEj0Ga30j+9Wv
-   pdkS4QmzyzRzH4aqxk3KYFT+JwxPCvmDdvFsLfKbrsKgvnqppn+3IHzNh
-   wm1sRUE3IswB2qg6hNKn1ZRNIlbNOTsqogmCE+CR3GiH9FkXrHZh3eUZ7
-   UAxh5PXQ43yOE+VxJv2Ij2UMstzaZDcAAu4bMrDpf3Cm0XiVg6klbnEfQ
-   w==;
-X-CSE-ConnectionGUID: I1KdSY42S1a4snHJIcC9Iw==
-X-CSE-MsgGUID: 7zzJ1umuT5m8EiJBW0FI5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11238"; a="40230033"
-X-IronPort-AV: E=Sophos;i="6.11,237,1725346800"; 
-   d="scan'208";a="40230033"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 09:07:13 -0700
-X-CSE-ConnectionGUID: dSVHPvDxTOquftTvy3tDpQ==
-X-CSE-MsgGUID: dmz4llJaRUCmfuS6sx5+vg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="86140462"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 27 Oct 2024 09:07:11 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t55nI-000ao4-2F;
-	Sun, 27 Oct 2024 16:07:08 +0000
-Date: Mon, 28 Oct 2024 00:06:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Edward Adam Davis <eadavis@qq.com>,
-	syzbot+0c99c3f90699936c1e77@syzkaller.appspotmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-	tytso@mit.edu
-Subject: Re: [PATCH] ext4: Add a sanity check for next dentry when insert
-Message-ID: <202410272335.nwupXeQD-lkp@intel.com>
-References: <tencent_E4CFC65D09852ECE2EF28C83A7C3C6E41206@qq.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LPpfUFJV"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49RFo3l0012317;
+	Sun, 27 Oct 2024 18:06:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=5eLO2C1SYyEAk2YPDJc1FV
+	TLIAHKQlZLKgQt46vMoFQ=; b=LPpfUFJVv+S6IScpi1lQX3XnL+7s5tXrI68zhm
+	sROHoGVo+Y0cuYjTholK7OwguqX1lZqLCDZctFHognbFnvxt0DPKEIoDLoPX/WW+
+	fqHsddLeeDs1jSxQscSC0QhNxUcBcl3fnr51K2TbwbCTzi71XcCPUJsYh26fDTyB
+	jmWdd8W3ShoyvJDdsk6U2yauT9q3U6tQPCYFw6YNIz17IwzJ0NYXYe/OagEjPSBQ
+	Gbag3ttuDi7UtPLYC9ZB/wmDw1lta99hlH7MWjDVX1heTwDGGEHy8hzPyX9ZPedz
+	tgRxSs5agRflJpu2NvoUF8wc8V/7sxZiUNMus1DQfQtpe4pA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42grt6tq4a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 27 Oct 2024 18:06:26 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49RI6PKC030401
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 27 Oct 2024 18:06:25 GMT
+Received: from [10.213.111.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 27 Oct
+ 2024 11:06:19 -0700
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Date: Sun, 27 Oct 2024 23:35:47 +0530
+Subject: [PATCH] drm/msm/a6xx: Fix excessive stack usage
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_E4CFC65D09852ECE2EF28C83A7C3C6E41206@qq.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20241027-stack-size-fix-v1-1-764e2e3566cb@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAPqAHmcC/yWMwQ6DIBAFf4XsuSQICOivNB4Al3bTqBVs09T47
+ yX18A4zyZsdCmbCAj3bIeObCi1zhebCIN79fENOY2WQQuqmjpfNxwcv9EWe6MOl88n6MKrkA9T
+ TM2PV/+B1ODnj+qrd7ZQQfEEel2mirWdWR2W10Q5H4TAFiUmpzrQmSWt0lC4KbbrWwHAcPxT9J
+ cSsAAAA
+To: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick
+ Desaulniers" <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Arnd Bergmann <arnd@kernel.org>,
+        Akhil P Oommen
+	<quic_akhilpo@quicinc.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730052379; l=3569;
+ i=quic_akhilpo@quicinc.com; s=20240726; h=from:subject:message-id;
+ bh=4+0NulD4EEQ5BTETeq/86MPXoadMca0AwCvmywI7SSY=;
+ b=qJoax2Z2hTUQV4lstsski2oOlsORtBZY7vZ2fOfCUs/BduAPLP1/2H73fYix0YLuFj33ozm/G
+ cFTvuw0eZryA4UyFQf0K0O+7Awdno/9IvNOe8aDjOTumkGmAqnKzNuQ
+X-Developer-Key: i=quic_akhilpo@quicinc.com; a=ed25519;
+ pk=lmVtttSHmAUYFnJsQHX80IIRmYmXA4+CzpGcWOOsfKA=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VkbfgtwSZ3MAxdf5ovw3s8cmgryfRbg9
+X-Proofpoint-GUID: VkbfgtwSZ3MAxdf5ovw3s8cmgryfRbg9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ adultscore=0 clxscore=1015 impostorscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410270159
 
-Hi Edward,
+Clang-19 and above sometimes end up with multiple copies of the large
+a6xx_hfi_msg_bw_table structure on the stack. The problem is that
+a6xx_hfi_send_bw_table() calls a number of device specific functions to
+fill the structure, but these create another copy of the structure on
+the stack which gets copied to the first.
 
-kernel test robot noticed the following build warnings:
+If the functions get inlined, that busts the warning limit:
 
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master v6.12-rc4 next-20241025]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/ext4-Add-a-sanity-check-for-next-dentry-when-insert/20241027-191200
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/tencent_E4CFC65D09852ECE2EF28C83A7C3C6E41206%40qq.com
-patch subject: [PATCH] ext4: Add a sanity check for next dentry when insert
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241027/202410272335.nwupXeQD-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241027/202410272335.nwupXeQD-lkp@intel.com/reproduce)
+Fix this by kmalloc-ating struct a6xx_hfi_msg_bw_table instead of using
+the stack. Also, use this opportunity to skip re-initializing this table
+to optimize gpu wake up latency.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410272335.nwupXeQD-lkp@intel.com/
+Cc: Arnd Bergmann <arnd@kernel.org>
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 34 ++++++++++++++++++++++------------
+ 2 files changed, 23 insertions(+), 12 deletions(-)
 
-   In file included from fs/ext4/namei.c:29:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/ext4/namei.c:2087:5: warning: no previous prototype for function 'ext4_check_next_dentry' [-Wmissing-prototypes]
-    2087 | int ext4_check_next_dentry(struct inode *dir,
-         |     ^
-   fs/ext4/namei.c:2087:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2087 | int ext4_check_next_dentry(struct inode *dir,
-         | ^
-         | static 
-   5 warnings generated.
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+index 94b6c5cab6f4..b4a79f88ccf4 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+@@ -99,6 +99,7 @@ struct a6xx_gmu {
+ 	struct completion pd_gate;
+ 
+ 	struct qmp *qmp;
++	struct a6xx_hfi_msg_bw_table *bw_table;
+ };
+ 
+ static inline u32 gmu_read(struct a6xx_gmu *gmu, u32 offset)
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+index cdb3f6e74d3e..55e51c81be1f 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+@@ -630,32 +630,42 @@ static void a6xx_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
+ 
+ static int a6xx_hfi_send_bw_table(struct a6xx_gmu *gmu)
+ {
+-	struct a6xx_hfi_msg_bw_table msg = { 0 };
++	struct a6xx_hfi_msg_bw_table *msg;
+ 	struct a6xx_gpu *a6xx_gpu = container_of(gmu, struct a6xx_gpu, gmu);
+ 	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+ 
++	if (gmu->bw_table)
++		goto send;
++
++	msg = devm_kzalloc(gmu->dev, sizeof(*msg), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
++
+ 	if (adreno_is_a618(adreno_gpu))
+-		a618_build_bw_table(&msg);
++		a618_build_bw_table(msg);
+ 	else if (adreno_is_a619(adreno_gpu))
+-		a619_build_bw_table(&msg);
++		a619_build_bw_table(msg);
+ 	else if (adreno_is_a640_family(adreno_gpu))
+-		a640_build_bw_table(&msg);
++		a640_build_bw_table(msg);
+ 	else if (adreno_is_a650(adreno_gpu))
+-		a650_build_bw_table(&msg);
++		a650_build_bw_table(msg);
+ 	else if (adreno_is_7c3(adreno_gpu))
+-		adreno_7c3_build_bw_table(&msg);
++		adreno_7c3_build_bw_table(msg);
+ 	else if (adreno_is_a660(adreno_gpu))
+-		a660_build_bw_table(&msg);
++		a660_build_bw_table(msg);
+ 	else if (adreno_is_a690(adreno_gpu))
+-		a690_build_bw_table(&msg);
++		a690_build_bw_table(msg);
+ 	else if (adreno_is_a730(adreno_gpu))
+-		a730_build_bw_table(&msg);
++		a730_build_bw_table(msg);
+ 	else if (adreno_is_a740_family(adreno_gpu))
+-		a740_build_bw_table(&msg);
++		a740_build_bw_table(msg);
+ 	else
+-		a6xx_build_bw_table(&msg);
++		a6xx_build_bw_table(msg);
++
++	gmu->bw_table = msg;
+ 
+-	return a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_BW_TABLE, &msg, sizeof(msg),
++send:
++	return a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_BW_TABLE, gmu->bw_table, sizeof(*(gmu->bw_table)),
+ 		NULL, 0);
+ }
+ 
 
+---
+base-commit: 74c374648ed08efb2ef339656f2764c28c046956
+change-id: 20241024-stack-size-fix-28af7abd3fab
 
-vim +/ext4_check_next_dentry +2087 fs/ext4/namei.c
-
-  2086	
-> 2087	int ext4_check_next_dentry(struct inode *dir,
-  2088				struct inode *inode,
-  2089				struct ext4_dir_entry_2 *de,
-  2090				int buf_size,
-  2091				struct ext4_filename *fname)
-  2092	{
-  2093		int nlen, rlen;
-  2094	
-  2095		nlen = ext4_dir_rec_len(de->name_len, dir);
-  2096		rlen = ext4_rec_len_from_disk(de->rec_len, buf_size);
-  2097		if (de->inode) {
-  2098			struct ext4_dir_entry_2 *nde =
-  2099				(struct ext4_dir_entry_2 *)((char *)de + nlen);
-  2100			nde->rec_len = ext4_rec_len_to_disk(rlen - nlen, buf_size);
-  2101			de->rec_len = ext4_rec_len_to_disk(nlen, buf_size);
-  2102			de = nde;
-  2103			rlen = ext4_rec_len_from_disk(de->rec_len, buf_size);
-  2104			return fname_len(fname) > rlen - EXT4_BASE_DIR_LEN;
-  2105		}
-  2106	
-  2107		return 0;
-  2108	}
-  2109	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Akhil P Oommen <quic_akhilpo@quicinc.com>
+
