@@ -1,137 +1,86 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44661CFA9
-	for <llvm@lists.linux.dev>; Sun, 27 Oct 2024 18:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0E874059;
+	Sun, 27 Oct 2024 18:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730052912; cv=none; b=HYVgBj1/Ywj0uzTy+slrHJGQH0lBe2Dewoq3bUD8p2851NZMH03Xn/2+2usrj72jjsROPPnAPzmDV2vaGpxGq+ncu6U6BuNB1zgTYtZMTIykV9FNUxNTHFIW9MEeJP7vaKGG13Bcbr+dXQwS3Zx5BbuAAO2nKjojPmkLXUz/REk=
+	t=1730054083; cv=none; b=VV+PPSoP71iOAvUPSnycCVJ4fgHdZ0KkAfl/5bUi4jGUKALI2bSsteqZIdMtWfs9SQS1NcJMmu4EAnYhIIeNTtO+/ZWu5ZzEfMZRjYfMyw6vTeGzlGEJVBhlTmGxptVSCs4SfsHhNfxoW1wk7zXkzysdFBRAlXpbrqZYhoVZQTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730052912; c=relaxed/simple;
-	bh=qI0FQln2WNTO+W2mP8bmh7MmrUK/GDrK+N8xjimv6Mk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=aqtD9mM4ZRPD7f3bgEMuXbsdjkXDnZ1l49JfSKGJrGdXyC4uuKGqqHuCibz0uy8z14qJtbtJvSZnBySf0A4WJzCSYn0gut5g80y37tI1L3q3mSuI+nMzMwP9MNkxWMv+wW+6ICBHy+HGQhgXJ4G7jPaq2rjYtI9iMaOzaK/NpEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XEi4zs8u; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1730054083; c=relaxed/simple;
+	bh=Ab1LD0YPRiCsaMpw6QmeIUY4TM1fzamI5B5sMH/HSGw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fy2nRwBSpElHaklIAuH8sF8dilzJsD1KkROaKkBwn4LEnWBlEb5pjvfC10sKSIfQa1gPs/o2PGKo9n/SyajeodUPffg4O7HXaHoCOIceUlP0SkiPID+1qdq79yTRMWnRrv8v1UdWf3mD3ckVx7349q54VXpbQcwVyi0ARo/UZx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwIh+t+N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XEi4zs8u"
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49RGWAcX018030;
-	Sun, 27 Oct 2024 18:14:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ryLDfSY5+pfgufjaYOpd06CcYoxxkOqG1oO+4yReuYY=; b=XEi4zs8uLO20L+lQ
-	5/khr7SLDMRSaDTmqG+yHYyBTc2aWvyKvy+LlEcBRQJxX6fEvVZSuBaMP1a8RFsE
-	s070FuGWQ3l12FFlt2uozDZhxrPhS/8ouzmr2w2qsAVWMNAOz7O3aklk7Wh9oFbC
-	fiXN1WGU2+jp8I2KR4F3etuII8rMq9ziQXhSDAtFgRTsR/mq4JeRHkzZ9ADSd/M6
-	qJ+QhGkpfGmcGztcs/Nj5Fnm/WhdBGn3HEyAcRixBGiGSgLHP+hgLyuufN4Dv2s6
-	Le0O7iQCnyMs6xpKATtAxYaXdPfgfPuY0ljN4V2ekuxyL8Br1ZUKrhmWsGK90ypq
-	SUKWNg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gqcqjvf0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 27 Oct 2024 18:14:53 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49RIEqBD019859
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 27 Oct 2024 18:14:52 GMT
-Received: from [10.216.3.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 27 Oct
- 2024 11:14:45 -0700
-Message-ID: <bc1ba8bd-4433-4f83-8ce6-73bed5abd843@quicinc.com>
-Date: Sun, 27 Oct 2024 23:44:43 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwIh+t+N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DD3C4CEC3;
+	Sun, 27 Oct 2024 18:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730054082;
+	bh=Ab1LD0YPRiCsaMpw6QmeIUY4TM1fzamI5B5sMH/HSGw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IwIh+t+NmDWdzDo9uy+/UuRmYcIx6PygiXzpCNabpiNcsultp+7hqhXDxOLYFwPY3
+	 8LHcfYKNzx6EjyWPHp6mo2LQy57BSv85SwP1Y/pqzbOEJ1/WZ6chL88GjThxZJaWLi
+	 R2sqFZH1qHkuS3eHjSYJ9Efj4kSNY3q+vFww2BHTzw4JY0t7L4P8qIXXA3xC+ZrAyh
+	 DSfc1DOe50EvHstnoL5VU6AqZd0Lfn2ss7yMteMLrdWwbuTL7/FnfajNnmXM6GXgx8
+	 NpJSsDPbzlY8RvydVNLNwww3pYOOuEw1/pJQIGffaKrLub4zqp6vsQNBJELX89plf8
+	 n+GbgE3XGrWvA==
+Date: Sun, 27 Oct 2024 11:34:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Koakuma <koachan@protonmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
+	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
+Message-ID: <20241027183440.GA2755311@thelio-3990X>
+References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
+ <20241021201657.GA898643@thelio-3990X>
+ <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com>
+ <20241022200732.GA487584@thelio-3990X>
+ <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
+ <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
+ <20241023164535.GB4081497@thelio-3990X>
+ <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm: a6xx: avoid excessive stack usage
-To: Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>
-CC: Arnd Bergmann <arnd@kernel.org>, Rob Clark <robdclark@gmail.com>,
-        "Abhinav
- Kumar" <quic_abhinavk@quicinc.com>,
-        Dave Airlie <airlied@gmail.com>, "Simona
- Vetter" <simona@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>, Sean Paul
-	<sean@poorly.run>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Marijn Suijten
-	<marijn.suijten@somainline.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20241018151143.3543939-1-arnd@kernel.org>
- <20241019093146.kdp25pir5onjmg4g@hu-akhilpo-hyd.qualcomm.com>
- <k42wmgziqia6balqsrfualbg73giesjxxtyaldkxsrdxkro2li@6neybqsu27me>
- <20241021092509.tm4w3ufdgcd7of37@hu-akhilpo-hyd.qualcomm.com>
- <cb728358-ac32-4b37-a954-967f338385e2@app.fastmail.com>
-Content-Language: en-US
-From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <cb728358-ac32-4b37-a954-967f338385e2@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uCJRpz51yTRPHh7tnnEpDC96pKyVw-wS
-X-Proofpoint-GUID: uCJRpz51yTRPHh7tnnEpDC96pKyVw-wS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0 spamscore=0
- phishscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410270160
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
 
-On 10/21/2024 3:31 PM, Arnd Bergmann wrote:
-> On Mon, Oct 21, 2024, at 09:25, Akhil P Oommen wrote:
->> On Sat, Oct 19, 2024 at 04:14:13PM +0300, Dmitry Baryshkov wrote:
->>> On Sat, Oct 19, 2024 at 03:01:46PM +0530, Akhil P Oommen wrote:
->>>> On Fri, Oct 18, 2024 at 03:11:38PM +0000, Arnd Bergmann wrote:
->>>>> From: Arnd Bergmann <arnd@arndb.de>
->>>>>
->>>>> Clang-19 and above sometimes end up with multiple copies of the large
->>>>> a6xx_hfi_msg_bw_table structure on the stack. The problem is that
->>>>> a6xx_hfi_send_bw_table() calls a number of device specific functions to
->>>>> fill the structure, but these create another copy of the structure on
->>>>> the stack which gets copied to the first.
->>>>>
->>>>> If the functions get inlined, that busts the warning limit:
->>>>>
->>>>> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
->>>>
->>>> Why does this warning says that the limit is 1024? 1024 bytes is too small, isn't it?
->>>
->>> Kernel stacks are expected to be space limited, so 1024 is a logical
->>> limit for a single function.
->>
->> Thanks for the clarification. I think it is better to move this table to
->> struct a6xx_gmu which is required anyway when we implement dynamic generation
->> of bw table. Also, we can skip initializing it in subsequent gpu wake ups.
->>
->> Arnd, do you think that would be sufficient? I can send that patch if you
->> want help.
+On Sat, Oct 26, 2024 at 02:52:52PM +0000, Koakuma wrote:
+> Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > I think this should be documented (required LLVM version and
+> > the supported build command),
+> > otherwise people cannot test this patch.
 > 
-> Yes, that should work. I actually tried first to turn the model
-> specific data into static const structures but that ended up 
-> not working because some of them have a couple of dynamically
-> computed values. I think that would have been even nicer.
+> Nathan Chancellor <nathan@kernel.org> wrote:
+> > I am not sure that there is a super concise way to describe for
+> > Documentation/kbuild/llvm.rst that sparc currently requires 'CC=clang
+> > LLVM_IAS=0' along with a build of clang from the main branch of
+> > llvm-project to work properly.
 > 
->       Arnd
+> So about this, as a middle ground, would it be okay if I put
+> 
+> ``CC=clang LLVM_IAS=0`` (LLVM >= 20)
+> 
+> In the documentation, in a similar manner to the s390x entry?
+> I know that LLVM 20 is still a couple months away but those commits will
+> likely be released with that version, and since it also tells people
+> to not use a version that is too old, I think it should be okay (?)
 
-https://patchwork.freedesktop.org/patch/621814/
+Yes, I think that would be reasonable.
 
-Posted the fix. Btw, I have copied most of the commit text from this patch.
-
--Akhil.
+Cheers,
+Nathan
