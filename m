@@ -1,71 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E19188A15;
-	Sun, 27 Oct 2024 22:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC29018EBF;
+	Sun, 27 Oct 2024 22:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730067427; cv=none; b=LdSDgvfP9DDFF8N22A3PHlJGGtyncHeSJYfXD8L2VHQI3N4a/s15BwLtMu8FMBbYOxYfudl0MWlnb6NVTmg48osQxQDlAbAWxO3JJi7OvtNFf8Fg4H85Atdnqglw8b1bB5+mOS9nRoexaoDd261uDb6BADrMwM9iD7tjVmAyj8k=
+	t=1730067721; cv=none; b=em6MX9aoBc06p7wYw89sFlbusT0eOozbNl64bikAte8UK+qJT1IHPEGtcUhWylKxGf6j41YccM9YVFZhZ1tIfvJC2kBKVxYcLNf0s4nTZOr6KsjhTMXwg/2cTrxGNyiITYjC/k0rnp12q5+Dacs3RawShtlcCTKGMuIFkvAdBw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730067427; c=relaxed/simple;
-	bh=An0q1B1Vy5t3+lo7yESq7Pk4FRbEi09xmS9o/s3wurI=;
+	s=arc-20240116; t=1730067721; c=relaxed/simple;
+	bh=sxgyCZvsGdDbokMrGqYRMsBz5Z+jS3XC8LLxod9zO7U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VPt0UPGVZhzCsNUTSM/JIgHV268whJbJGQzrtEAnWpdV4YxAVVGsdiEQZL88s8LeICbGCejv26oq+YuzUcQmqwbMF0h9FbFt/TELd3+RJ6L7AtJ1yVpmGR5dO46rC1fYj1oJp4Kj6uwdUb5pzzS9757fFSOX5X0Hwjuk6/iRzMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eyjPVR9h; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=DiqPbtNm470F9cSRHa4teCnZEGy1+GOW2sX/Szp12WTA1Zdpt+ERhFZ8wZFRpK0iGvUf95QT+CcdZ7SrPNczgPpwrrOOUjqDcQWrvXSbspJSWcewr8VXd5l8/VFcHpRaeEKR5IgzUs+lRZdki+SaIYmh5S5vsVekDD6pDiBuP2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T/YKO3E0; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eyjPVR9h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AE3CC4CEC3;
-	Sun, 27 Oct 2024 22:17:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730067426;
-	bh=An0q1B1Vy5t3+lo7yESq7Pk4FRbEi09xmS9o/s3wurI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eyjPVR9hc8nObYdbxO+giY8LhlLmm6nS5/JBgfEyBXJeMrmd3+KWtt7qfaBKjwJDK
-	 8xQiNB+6BkkGNszcAE8j2FGtOjh9U2zUtZGpmsrKG7gzl4WqNGihjYMBTUHctf7oAA
-	 NL9fg2+fHaGRsFTOHvtChlFzqLSDjJ22GfcLq1hzoeif9lEjpMpdaBx5qdl0fK/6e9
-	 3JZJMU8xH2cTIo0siIc1qGm6CuT673DC9ooimzgNk2O3nyjaDCypmC4i8zfWJ9/CXU
-	 yk636+8ykOsPj4NFOL12SkfxOu8r1yPUEKFnGTqiPbbz3V+KZjq5TbwbLX8NkOr8kj
-	 ObFeWm4T+TNRg==
-Date: Sun, 27 Oct 2024 15:17:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rong Xu <xur@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
-	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Maksim Panchenko <max4bolt@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Yabin Cui <yabinc@google.com>,
-	Krzysztof Pszeniczny <kpszeniczny@google.com>,
-	Sriraman Tallam <tmsriram@google.com>,
-	Stephane Eranian <eranian@google.com>, x86@kernel.org,
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v6 0/7] Add AutoFDO and Propeller support for Clang build
-Message-ID: <20241027221702.GD2755311@thelio-3990X>
-References: <20241026051410.2819338-1-xur@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T/YKO3E0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730067718; x=1761603718;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sxgyCZvsGdDbokMrGqYRMsBz5Z+jS3XC8LLxod9zO7U=;
+  b=T/YKO3E06TwR6BszNTEF+iLAz/hgEeK7qJeZ0U8SJkPTdfraf31WBQ6e
+   D+Z0hEA/6d/R1F+WIhQYgKgcI2JN97DHCVpkGnshLhmaCARm2pgSlmofY
+   QewlnLfk2boAKHbBbKlHpfTXeVJ/iFb3fSGe7ooPw6ttJG1RjhPyPt90g
+   AzGpokdKnsMEq8VECV1kLpZcyifPEudFkBgg4/H0gbjZp//HSRPCfV6yu
+   0jxgetWg1y9An4jyP8S62p0dipNih3q3zsRTY4IR2WWNLv79K5GEltNwu
+   MdII0MlX3F2WYQmt2ECMaTwxMsTHHMV4We0uTEpgbjmmtokBAb9dhpUS2
+   Q==;
+X-CSE-ConnectionGUID: ZWmn2Ks4QSOSoryx/GwsLg==
+X-CSE-MsgGUID: /V1+hCnAT0+pdQ4j9zeD7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29621080"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29621080"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 15:21:58 -0700
+X-CSE-ConnectionGUID: aqQQUgt+R6SMkbyDbnFpUQ==
+X-CSE-MsgGUID: eIXFp/HrQA+Fdeb+6Gj0lg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,237,1725346800"; 
+   d="scan'208";a="104760119"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 27 Oct 2024 15:21:54 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5Bdw-000b1v-2R;
+	Sun, 27 Oct 2024 22:21:52 +0000
+Date: Mon, 28 Oct 2024 06:21:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Kent Gibson <warthog618@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] gpio: sysfs: use cleanup guards for the
+ sysfs_lock mutex
+Message-ID: <202410280514.EkyQpKfw-lkp@intel.com>
+References: <20241026-gpio-notify-sysfs-v3-2-ad8f127d12f5@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,29 +66,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241026051410.2819338-1-xur@google.com>
+In-Reply-To: <20241026-gpio-notify-sysfs-v3-2-ad8f127d12f5@linaro.org>
 
-Hi Rong,
+Hi Bartosz,
 
-I tested this series by following the documentation added in the series
-using Clang 19 and my standard distribution configuration on an Intel
-platform with the combinations of
+kernel test robot noticed the following build errors:
 
-  * AutoFDO
-  * AutoFDO + ThinLTO
-  * AutoFDO + Propeller
-  * AutoFDO + ThinLTO + Propeller
+[auto build test ERROR on a39230ecf6b3057f5897bc4744a790070cfbe7a8]
 
-and I noticed no issues (it would be great to see create_llvm_prof
-somewhere in LLVM upstream for ease of access but that's a small
-complaint).
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpio-sysfs-use-cleanup-guards-for-gpiod_data-mutex/20241026-210033
+base:   a39230ecf6b3057f5897bc4744a790070cfbe7a8
+patch link:    https://lore.kernel.org/r/20241026-gpio-notify-sysfs-v3-2-ad8f127d12f5%40linaro.org
+patch subject: [PATCH v3 2/5] gpio: sysfs: use cleanup guards for the sysfs_lock mutex
+config: i386-buildonly-randconfig-004-20241028 (https://download.01.org/0day-ci/archive/20241028/202410280514.EkyQpKfw-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241028/202410280514.EkyQpKfw-lkp@intel.com/reproduce)
 
-I did not do any real benchmarking to see if those combinations were
-actually quicker but I think it is pretty clear from the cover letter
-that any sort of gains are going to depend on the profiling and test
-case so for time's sake, I did not bother.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410280514.EkyQpKfw-lkp@intel.com/
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> drivers/gpio/gpiolib-sysfs.c:588:3: error: cannot jump from this goto statement to its label
+     588 |                 goto err_clear_bit;
+         |                 ^
+   drivers/gpio/gpiolib-sysfs.c:591:21: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     591 |         struct gpiod_data *data __free(kfree) = kzalloc(sizeof(*data),
+         |                            ^
+   drivers/gpio/gpiolib-sysfs.c:582:3: error: cannot jump from this goto statement to its label
+     582 |                 goto err_clear_bit;
+         |                 ^
+   drivers/gpio/gpiolib-sysfs.c:591:21: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     591 |         struct gpiod_data *data __free(kfree) = kzalloc(sizeof(*data),
+         |                            ^
+   2 errors generated.
+
+
+vim +588 drivers/gpio/gpiolib-sysfs.c
+
+   534	
+   535	/**
+   536	 * gpiod_export - export a GPIO through sysfs
+   537	 * @desc: GPIO to make available, already requested
+   538	 * @direction_may_change: true if userspace may change GPIO direction
+   539	 * Context: arch_initcall or later
+   540	 *
+   541	 * When drivers want to make a GPIO accessible to userspace after they
+   542	 * have requested it -- perhaps while debugging, or as part of their
+   543	 * public interface -- they may use this routine.  If the GPIO can
+   544	 * change direction (some can't) and the caller allows it, userspace
+   545	 * will see "direction" sysfs attribute which may be used to change
+   546	 * the gpio's direction.  A "value" attribute will always be provided.
+   547	 *
+   548	 * Returns:
+   549	 * 0 on success, or negative errno on failure.
+   550	 */
+   551	int gpiod_export(struct gpio_desc *desc, bool direction_may_change)
+   552	{
+   553		struct gpio_device *gdev;
+   554		struct device *dev;
+   555		int status;
+   556	
+   557		/* can't export until sysfs is available ... */
+   558		if (!class_is_registered(&gpio_class)) {
+   559			pr_debug("%s: called too early!\n", __func__);
+   560			return -ENOENT;
+   561		}
+   562	
+   563		if (!desc) {
+   564			pr_debug("%s: invalid gpio descriptor\n", __func__);
+   565			return -EINVAL;
+   566		}
+   567	
+   568		CLASS(gpio_chip_guard, guard)(desc);
+   569		if (!guard.gc)
+   570			return -ENODEV;
+   571	
+   572		if (test_and_set_bit(FLAG_EXPORT, &desc->flags))
+   573			return -EPERM;
+   574	
+   575		gdev = desc->gdev;
+   576	
+   577		guard(mutex)(&sysfs_lock);
+   578	
+   579		/* check if chip is being removed */
+   580		if (!gdev->mockdev) {
+   581			status = -ENODEV;
+   582			goto err_clear_bit;
+   583		}
+   584	
+   585		if (!test_bit(FLAG_REQUESTED, &desc->flags)) {
+   586			gpiod_dbg(desc, "%s: unavailable (not requested)\n", __func__);
+   587			status = -EPERM;
+ > 588			goto err_clear_bit;
+   589		}
+   590	
+   591		struct gpiod_data *data __free(kfree) = kzalloc(sizeof(*data),
+   592								GFP_KERNEL);
+   593		if (!data) {
+   594			status = -ENOMEM;
+   595			goto err_clear_bit;
+   596		}
+   597	
+   598		data->desc = desc;
+   599		mutex_init(&data->mutex);
+   600		if (guard.gc->direction_input && guard.gc->direction_output)
+   601			data->direction_can_change = direction_may_change;
+   602		else
+   603			data->direction_can_change = false;
+   604	
+   605		dev = device_create_with_groups(&gpio_class, &gdev->dev,
+   606						MKDEV(0, 0), data, gpio_groups,
+   607						"gpio%u", desc_to_gpio(desc));
+   608		if (IS_ERR(dev)) {
+   609			status = PTR_ERR(dev);
+   610			goto err_clear_bit;
+   611		}
+   612	
+   613		data = NULL;
+   614		return 0;
+   615	
+   616	err_clear_bit:
+   617		clear_bit(FLAG_EXPORT, &desc->flags);
+   618		gpiod_dbg(desc, "%s: status %d\n", __func__, status);
+   619		return status;
+   620	}
+   621	EXPORT_SYMBOL_GPL(gpiod_export);
+   622	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
