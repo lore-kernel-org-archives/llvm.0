@@ -1,100 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9306C14389F
-	for <llvm@lists.linux.dev>; Sun, 27 Oct 2024 11:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E60154BED;
+	Sun, 27 Oct 2024 15:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730026879; cv=none; b=HxmXDSoCIujuaiiBrICCrYS4wElTlTCHiqROqt0abZcsPPs6YKItTZe7uOUQXZQoINTDS+BS2JiBmtd5bI5cFYnMkavkp4iwsbWu+YH4RadV7rqQtDZxa7W6m9zUtPMYt05QSMJB09e9/ZPtiBMdnBzJYmHO5ptPAr/21Oz0svc=
+	t=1730042114; cv=none; b=DI/Hn9WPis/Vaq2eq03qvmwpRyBnySE9iZErjiru4ywCAWLVNdl4oBPnxU4KUXNFgom/F7LmrUbJSNkjeecfO6mYpVUMI8j5z6A1n3ZGObjaKtJcLJELBU80TZicT6OmXg/c0QhXauaK6YQFeWLkghZ2tkhbaMurmhkdix7puTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730026879; c=relaxed/simple;
-	bh=3quH9xYFiuttFZOs4ydoaTvF3jIBQchB3SK5V/gWpLc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NmnlC2U2MususTWaKfKswj58JZ7hp/Z9/J44JLne1yogVxkAMuWnBXczJLiZHCAwWpG17Kgd6tY054iboemxl/sWvSsie9JwYawLzOZNsknVpu32Xet9vUcfijajibzwfqLf+EvrYnQ9ZBDFbTKXgi6/eN5HGVXRvv4tEDhqfG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dJU57+HW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730042114; c=relaxed/simple;
+	bh=5u94Y7pa7BgsT3vqoEkK0FTH4Jud6+1xUFtegZSSdd4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NlRDMIcuKUBiTGNF/EKZO+y5DHIkTNDRQGGv+cDD9up4p8VpOURUREowFz86WvjGkeniOMkp179TSOpJ+udzIGx/U95xhfk2wHxWEpJJWkXx2XBfQDEjRJkYQVlBTEcC1hPo8lW1KwI1vqC9HJ7x3R6c1iYxn0lKePXIwAclT0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fFO56Vpw; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dJU57+HW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B25C4CEED
-	for <llvm@lists.linux.dev>; Sun, 27 Oct 2024 11:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730026878;
-	bh=3quH9xYFiuttFZOs4ydoaTvF3jIBQchB3SK5V/gWpLc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dJU57+HWLoo/xHKQWSyEHFA9AbQNGSOiahO8sx4O1X7IqWwg68FFL/Qi0NLXh0iY9
-	 dYoKwKJBB+/6DZ0Z5ty8pfF8+IhQs8vtc+hVEYkIjH+vqLOtCKHoo7YZkocCnjlpqQ
-	 y7EagpoQFVSbAdYs868A/VyTiuMz5wfIi3rfAflAghEhaxs5yca8XWE6k7xzD0kDkJ
-	 izYZ31OQfIIKtN1cWX9qaOm9salyxjKEWmlxk4oOkfelZ6hPDqpPeV7e114q3pEwqh
-	 UQ6x+AEQxL5arkHkM/EAQW2V4QfsKdns3ga++3+Nc0njQLGy5rwO686F+CZPNMwkhr
-	 61M6Qul7zrIVQ==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2fb5be4381dso32072791fa.2
-        for <llvm@lists.linux.dev>; Sun, 27 Oct 2024 04:01:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVHmB1URQGMvtcuqsmAqJCmVxb23JRWHfGUQFLO0Dv51XcQZaJeAy6hjzfjVb+Cy83poOJs@lists.linux.dev
-X-Gm-Message-State: AOJu0YyyNs0qBPY8Xy3ll+/9/6lLWrwchJv1amzN3jg+iO7sKDcFgAp/
-	iMXY9XCIh2M5EupktB5wZhY+8prK1D5OyvxTLkAoS/Ri1SuzUIZJ4+QU7V8XRH0CtkQTK9w04hn
-	a/gZxR3ljuDK08wC2iuj79+TUis0=
-X-Google-Smtp-Source: AGHT+IHUiu1/2RDrCFQjE08nvbf0pFjgub83W2LWpUswHIlLPbwuLbY8emFcknGoqBH2i1i47pTbngVhgD5dL/oCDdk=
-X-Received: by 2002:a2e:be84:0:b0:2fb:4f2e:5be7 with SMTP id
- 38308e7fff4ca-2fcbdfe4a77mr17515121fa.24.1730026876753; Sun, 27 Oct 2024
- 04:01:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fFO56Vpw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730042112; x=1761578112;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5u94Y7pa7BgsT3vqoEkK0FTH4Jud6+1xUFtegZSSdd4=;
+  b=fFO56VpwwGAmvR5RczcM9t3ElgMT+h7QtogeF6zcY+yyKpWS1UPXHD0b
+   0aofagd38TRbo/H45FUKPl4x8VUpyvPsh77OCd91rRAGULuyvIcx056vf
+   8PCGNeu1FDAbNuSvrqogxOjhhBdCrihyu+Fn7c2hU1aVvYX1Df5k7Tos7
+   7nWcuLcSSQ+4Ty/q2lbezJsmN2xT698NpcASh/sJfmjd2cgPEifwtoApf
+   6qY5yuO6fUGFRJ4iPgqxohBhduIaX1uVB1oyJYQaosMXgM/XKqsc9WuAN
+   DYe5krJoxMapvobxq5XeJytiVu6NYpnWfOf1NLClJCMD9i1J84+ANi/mA
+   A==;
+X-CSE-ConnectionGUID: pwdCn/m4RRq80+AUXqhtBw==
+X-CSE-MsgGUID: w1rdEd4/T/qy772cTV9YTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40188618"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40188618"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2024 08:15:11 -0700
+X-CSE-ConnectionGUID: mmVIbh3TSVWcWMgJ0F9Ydg==
+X-CSE-MsgGUID: wEho5RnrR1WwN5Mv73HKFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,237,1725346800"; 
+   d="scan'208";a="81285453"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 27 Oct 2024 08:15:09 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t54yx-000amW-1g;
+	Sun, 27 Oct 2024 15:15:07 +0000
+Date: Sun, 27 Oct 2024 23:14:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: [amd-pstate:superm1/multiple-platform-profile-handlers-v2 13/15]
+ drivers/acpi/platform_profile.c:209:29: error: incompatible integer to
+ pointer conversion passing 'unsigned long' to parameter of type 'const
+ unsigned long *'; take the address with &
+Message-ID: <202410272314.4WjSxBUJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
- <20241021201657.GA898643@thelio-3990X> <CAK7LNASTkUTK8JZCzySNh3BVKxauusVKRhjnchy6iZz4qLbq8w@mail.gmail.com>
- <20241022200732.GA487584@thelio-3990X> <etezvjy_HnDpgOTBrzap29if1ChFBhl1RawcNJK3UAsFk6i_g_cyHoz7hlqfYqASgJZ97W4HxnGA-nbCXL73pIRN9tUKUttAp1JefMRp8rs=@protonmail.com>
- <CAK7LNASbFeJc9Y=BFY85SwESUKNNDTRDunyLGveDusC--NVkCw@mail.gmail.com>
- <20241023164535.GB4081497@thelio-3990X> <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
-In-Reply-To: <InqlMfqWWeNw8Mh6y1y5oNb3EotVpA26gkX70xcVxt9ygCtb7DYfTB3Amg3SzZfs78q3osSW2BIEpgyhmOjSqBW7neH0Se2sQEpmdClVV3M=@protonmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 27 Oct 2024 12:00:39 +0100
-X-Gmail-Original-Message-ID: <CAK7LNATswFdLRO5YWvtogV+sVJ=SOPrP9frrYq_QNzgmugg8dA@mail.gmail.com>
-Message-ID: <CAK7LNATswFdLRO5YWvtogV+sVJ=SOPrP9frrYq_QNzgmugg8dA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] sparc/build: Rework CFLAGS for clang compatibility
-To: Koakuma <koachan@protonmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Andreas Larsson <andreas@gaisler.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, 
-	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Oct 26, 2024 at 4:53=E2=80=AFPM Koakuma <koachan@protonmail.com> wr=
-ote:
->
-> Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > I think this should be documented (required LLVM version and
-> > the supported build command),
-> > otherwise people cannot test this patch.
->
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> > I am not sure that there is a super concise way to describe for
-> > Documentation/kbuild/llvm.rst that sparc currently requires 'CC=3Dclang
-> > LLVM_IAS=3D0' along with a build of clang from the main branch of
-> > llvm-project to work properly.
->
-> So about this, as a middle ground, would it be okay if I put
->
-> ``CC=3Dclang LLVM_IAS=3D0`` (LLVM >=3D 20)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/multiple-platform-profile-handlers-v2
+head:   cca7df72a75a655ad552ae621054784b4a41c9ac
+commit: e336433fe10fc421aeece46f2d67647e0c91931b [13/15] ACPI: platform_profile: Check all profile handler to calculate next
+config: x86_64-buildonly-randconfig-001-20241027 (https://download.01.org/0day-ci/archive/20241027/202410272314.4WjSxBUJ-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241027/202410272314.4WjSxBUJ-lkp@intel.com/reproduce)
 
-I am OK with this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410272314.4WjSxBUJ-lkp@intel.com/
 
-Having this info is more helpful than nothing.
+All errors (new ones prefixed by >>):
+
+   drivers/acpi/platform_profile.c:59:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
+      59 |         int err;
+         |             ^
+   drivers/acpi/platform_profile.c:115:35: warning: unused variable 'handler' [-Wunused-variable]
+     115 |         struct platform_profile_handler *handler;
+         |                                          ^~~~~~~
+>> drivers/acpi/platform_profile.c:209:29: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const unsigned long *'; take the address with & [-Wint-conversion]
+     209 |                 next = find_next_bit_wrap(choices,
+         |                                           ^~~~~~~
+         |                                           &
+   include/linux/find.h:452:55: note: passing argument to parameter 'addr' here
+     452 | unsigned long find_next_bit_wrap(const unsigned long *addr,
+         |                                                       ^
+   2 warnings and 1 error generated.
 
 
+vim +209 drivers/acpi/platform_profile.c
 
-> In the documentation, in a similar manner to the s390x entry?
-> I know that LLVM 20 is still a couple months away but those commits will
-> likely be released with that version, and since it also tells people
-> to not use a version that is too old, I think it should be okay (?)
->
+   192	
+   193	
+   194	int platform_profile_cycle(void)
+   195	{
+   196		enum platform_profile_option next = PLATFORM_PROFILE_LAST;
+   197		struct platform_profile_handler *handler;
+   198		enum platform_profile_option profile;
+   199		unsigned long choices;
+   200		int err;
+   201	
+   202		scoped_cond_guard(mutex_intr, return -ERESTARTSYS, &profile_lock) {
+   203			err = platform_profile_get_active(&profile);
+   204			if (err)
+   205				return err;
+   206	
+   207			choices = platform_profile_get_choices();
+   208	
+ > 209			next = find_next_bit_wrap(choices,
+   210						  PLATFORM_PROFILE_LAST,
+   211						  profile + 1);
+   212	
+   213			list_for_each_entry(handler, &platform_profile_handler_list, list) {
+   214				err = handler->profile_set(handler, next);
+   215				if (err) {
+   216					pr_err("Failed to set profile for handler %s\n", handler->name);
+   217					break;
+   218				}
+   219			}
+   220			if (err) {
+   221				list_for_each_entry_continue_reverse(handler, &platform_profile_handler_list, list) {
+   222					err = handler->profile_set(handler, PLATFORM_PROFILE_BALANCED);
+   223					if (err)
+   224						pr_err("Failed to revert profile for handler %s\n", handler->name);
+   225				}
+   226			}
+   227		}
+   228	
+   229		sysfs_notify(acpi_kobj, NULL, "platform_profile");
+   230	
+   231		return 0;
+   232	}
+   233	EXPORT_SYMBOL_GPL(platform_profile_cycle);
+   234	
 
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
