@@ -1,81 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AB7200C99;
-	Mon, 28 Oct 2024 23:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A1A1DFDB9;
+	Mon, 28 Oct 2024 23:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730156435; cv=none; b=pgcX+m60Eb6ws0fdk4KXl6/M0kP1SuUQnHvVKXcql2TE8twKHsq4vFiRIAi0Ge3JzIdWdnPsecPJU4NLF2FMPNd6/6VvZK3rSAbzHRlLVTTnLo/UR9laXUaXfJIZ3XQLwtyqmCl6uCUOHmo2SnQri+b2sEV3HAlghxblI/GnuYA=
+	t=1730159813; cv=none; b=hIb30apFFglWuxvmQXjsNvNETUxrOe7blNfQh6kapAq/UO58A9JLciKLyQxtcxqa2I65zOkcY5FR1xdiTvzsW75+wYzShRW0xTX1u4SwqxmY6Fyf9YbS2kxW6+1eYKokQ4O9uWBs7oFfpnHbmMcYovtteZINvM1WylmnoVatzwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730156435; c=relaxed/simple;
-	bh=ENlzoJYfFx7FaBf0oThCRqau9ZFmBMcmjwk1wrLkgBE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kMUarNFanPJ22EhFoYsAR7EBzLcyC6neuG6G16lw0aU90lAWgQc9bH/3X9DHaIRv596sscboKKOXFJFzHfzOraYnJxRyciDaZquMz+liHJN6Zo5csdGibYikWFh6iYE29rSw3+YLIA8MU/a2VZDBinzgnX+Y/NgChr25zEzU560=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qAIacROg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730159813; c=relaxed/simple;
+	bh=JUHufYIdqmKXSfDlteSW20zJ1BG7mrAiwl8Jxg4y7ik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7oZeA0oemjaiQZqZhDmDJ/RScwRyXjQfd/XOW+D5YGxpyDB2qwsydp8BoaAdzFEHZtjj6TmUwbQwZknvbkTyU+bqTMEfKhd508RF8pri7bZlG1+dGkbGnvNddF2TdSm0kK8nXRU3zuEqCYb/MbuzHL/PTtyrgmnyEAbVp5qeYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9X2dsx/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qAIacROg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F7DC4CECD;
-	Mon, 28 Oct 2024 23:00:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9X2dsx/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D64CC4CEC3;
+	Mon, 28 Oct 2024 23:56:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730156434;
-	bh=ENlzoJYfFx7FaBf0oThCRqau9ZFmBMcmjwk1wrLkgBE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qAIacROg0Xoa2sXvk3Eso8bentd2zv7/xlp2viZFs7S5hhEXmkpIvz/5JLf0x+WAX
-	 +mfJ7xy8psBxRq40GJS4sqJfY9slYS13uP/mD2W7N2sG1ZPFKL+z04S0yzcN4e75Az
-	 9HaG1bGFc7ASP2vQ35FYriIxsdpTqpx5marAr5nwH2P2IyZAeegwhOQaX0fw0zWP5u
-	 Oi/b8p3iaow1BFKj8NQXe6el7SfZ3MoNioYIgCedInhrQpFZJAg3tisSZSJ+lLU6h7
-	 PRN/Bxd5m2UuzB6nR7YDfUjloYKBdfJ0G4TDAXjHbI+YhgbtOHS9pXmlMC7zXlS2k3
-	 mKszLSnqAgGbg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BD0380AC1C;
-	Mon, 28 Oct 2024 23:00:43 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1730159813;
+	bh=JUHufYIdqmKXSfDlteSW20zJ1BG7mrAiwl8Jxg4y7ik=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G9X2dsx/WYpU0XxlJqeLzjw0zCr9QzJRK5HuFPJyM7dSk5hyi7aawTA4vbgZaNv0F
+	 AsyBMVdxeXcdUsTNSnjUxHXjhAqkVrOvkUOuUku3uS1aI2ubXKvNfF8o9ALjmi7G7S
+	 WFOswp6TSosWO5exTTVSL05V2sCYUj3Xgk2hdXoet7p+5R5oHmLwTvmkyttUXzlaRU
+	 V3gjgFqybd0njHSVHNtHTHTVqMajCw7LWVWt3In/sE8G8Yuf6dcQStPNIIT41lWVSS
+	 +dk3sMa1oXSufeFef45CJwSDzJLHsCvwToSMNlk+5RGO5EHZykpYsHA4ARnzD+jMQi
+	 K0F5FD1ai5N7Q==
+Date: Mon, 28 Oct 2024 16:56:50 -0700
+From: Kees Cook <kees@kernel.org>
+To: Rong Xu <xur@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
+	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Maksim Panchenko <max4bolt@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Yabin Cui <yabinc@google.com>,
+	Krzysztof Pszeniczny <kpszeniczny@google.com>,
+	Sriraman Tallam <tmsriram@google.com>,
+	Stephane Eranian <eranian@google.com>, x86@kernel.org,
+	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 4/7] Add markers for text_unlikely and text_hot
+ sections
+Message-ID: <202410281656.6A598E64@keescook>
+References: <20241026051410.2819338-1-xur@google.com>
+ <20241026051410.2819338-5-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/2] net: systemport: Minor IO macros changes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173015644200.206744.11510242764690126577.git-patchwork-notify@kernel.org>
-Date: Mon, 28 Oct 2024 23:00:42 +0000
-References: <20241021174935.57658-1-florian.fainelli@broadcom.com>
-In-Reply-To: <20241021174935.57658-1-florian.fainelli@broadcom.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: netdev@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- vladimir.oltean@nxp.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241026051410.2819338-5-xur@google.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 21 Oct 2024 10:49:33 -0700 you wrote:
-> This patch series addresses the warning initially reported by Vladimir
-> here:
+On Fri, Oct 25, 2024 at 10:14:06PM -0700, Rong Xu wrote:
+> Add markers like __hot_text_start, __hot_text_end, __unlikely_text_start,
+> and __unlikely_text_end which will be included in System.map. These markers
+> indicate how the compiler groups functions, providing valuable information
+> to developers about the layout and optimization of the code.
 > 
-> https://lore.kernel.org/all/20241014150139.927423-1-vladimir.oltean@nxp.com/
-> 
-> and follows on with proceeding with his suggestion the IO macros to the
-> header file.
-> 
-> [...]
+> Co-developed-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Han Shen <shenhan@google.com>
 
-Here is the summary with links:
-  - [net-next,v2,1/2] net: systemport: Remove unused txchk accessors
-    https://git.kernel.org/netdev/net-next/c/890bde75a236
-  - [net-next,v2,2/2] net: systemport: Move IO macros to header file
-    https://git.kernel.org/netdev/net-next/c/e69fbd287d5a
+Yup, this is good.
 
-You are awesome, thank you!
+Reviewed-by: Kees Cook <kees@kernel.org>
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kees Cook
