@@ -1,64 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE5B175D25;
-	Mon, 28 Oct 2024 18:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5573118E35B;
+	Mon, 28 Oct 2024 19:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730140403; cv=none; b=VtT49yd2GDfQ0aGPwLqClq8+iWYtXvWZ5qGCrJUXRH0DV3Pl/HxtaKvWw6z60jIrf62+JAq5Hfsy6zIvwrNwfonUALwp+u+UmEcE0En6Bo9LXs7tgIw1ZFLg9a7HGSV6iDCw50VDJhqxyLcYMZUbLVVuOF3rK+9aXqqpjZewN/s=
+	t=1730143105; cv=none; b=j4QHzYIZ41TISkSLwrvplcVM2QNbDSQl8TuFEF740KZxNdy0ZFRZTgRJLhljHG/+WQWP5NCH9Bjg/ohjTbzk4B3IrmHcuimknc214SyPfF3+WMACq826M4X/IqkoDdKeVgMF7VNqxXTkltIi2D1NtTdAVFo9w2JtNP79YtyUYGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730140403; c=relaxed/simple;
-	bh=RtUxlckr7u4gCJmgfzIvJNSXpB/tzLCL+dbysnbd5fQ=;
+	s=arc-20240116; t=1730143105; c=relaxed/simple;
+	bh=G2BYRckaH6OfB9BgxU2lNZ/wbqKUWYzaYH4eq9h3nT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ixSYaemU+Oi+ERXl9+iACdEDBJ/W0QISuKQ2hwDzp8tXEYt1x60XNdxon7jolSD/O6/lQkLxwPQ1LVZCgcxC2O24+ZqQDTYquBhPDdFjqgvjbvZbgWChKhWj8kwV9gRviMOmLyyIgSvzkuazUgB+XlFkyHokzVb6XgX5wBJ1W4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BeFodYZk; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=XkTgxxcwYZcORyggcRhnHFrc5lXQURBabwdOGC0W/OOhhYd4MPHKEh2SygDCnu/lz1UijusXVkPAvoV5z7VGJJjhqOxJjAuerkHCcM+cSWDxKhS74PtM62zRCz0iYJI8+YOvNnZm32YzSaccBohXOU+Uu9UyyyvHYW/kQ/J6aR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AyxQogQr; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BeFodYZk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AyxQogQr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730140401; x=1761676401;
+  t=1730143103; x=1761679103;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RtUxlckr7u4gCJmgfzIvJNSXpB/tzLCL+dbysnbd5fQ=;
-  b=BeFodYZkfAxrNKuR4aC/u1GQuucEsQqdtzV5zvH/mAHyE9JPcuDypVP6
-   D8HsyLyqi/He3Dmm2OzUozq18NmRaRdtCtrXY+6O/0tvPz3JXIdNFuawo
-   Z4pqRbhGVBf5BDyAExZFqZK36HYEiqaviLq7OSd9mU7fylLznilJ6UwVO
-   QZuegigzfnwc82MSWmqsdHS40UZKl/aTENltPXAoHrBLDwtEpZ624Lyh2
-   1AuZvewa1hCdbTLBtyN4IQe4qsRvO9f9F4jthsp1JDM0jm9s/fTjSIbjG
-   aXf/olUqtMKYrY/o/60nebnE/dGp9TM0LW8wUo5rmZ98PFsXBZuWjfiEE
+  bh=G2BYRckaH6OfB9BgxU2lNZ/wbqKUWYzaYH4eq9h3nT8=;
+  b=AyxQogQr/DLsmheCmp03/3sUeDVWAk5BWgix/FSsJ8xAYX0V+IfCykc4
+   W0hkUDtVlcFiyxwVRx9j7Uaj+CkHB0npAXWNkTGmS7jXeJKEMWpNQMSAv
+   JFhMSjnDlKRLPMHbTYrJpFIxdDB/CaZVk7f3jle570skNmVrtk/jx5aCj
+   ylhSsqJAccFqeaKa2K33TnSXvoO67aMZYGXOkxLTclcefXCYRdG4+gMx7
+   S+671aqMFfeSznAvx6IMAb1KPGmwP31oygRNhjiPsv3pNldZ9yukfjho3
+   57B+ALuPfbE2y3BUQjtPFuIFqwZsmmEzO65XqucPh4XlaoNQTJ2nO1/3l
    A==;
-X-CSE-ConnectionGUID: oHPDk5dYTJiiw/BxtIlHWw==
-X-CSE-MsgGUID: Nj2zpFonRXaCVBayeZkA9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="29961071"
-X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
-   d="scan'208";a="29961071"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 11:33:20 -0700
-X-CSE-ConnectionGUID: lDCXmLHRQu2g+UIZpN/LIQ==
-X-CSE-MsgGUID: P8gHA8XbQiOZM5tj8p3DUA==
+X-CSE-ConnectionGUID: EEfmjb75RaGZPFSG+R9E6Q==
+X-CSE-MsgGUID: CwL9Q0W4SnONuhzrpgcVnQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40295610"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40295610"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 12:18:22 -0700
+X-CSE-ConnectionGUID: 4d/BscNDRhimKOfdpZuXKw==
+X-CSE-MsgGUID: ACYiNxGXQaCxUnN8/Bm6sA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
-   d="scan'208";a="81269452"
+   d="scan'208";a="85664044"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 28 Oct 2024 11:33:17 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 28 Oct 2024 12:18:19 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t5UYF-000ckW-0F;
-	Mon, 28 Oct 2024 18:33:15 +0000
-Date: Tue, 29 Oct 2024 02:32:42 +0800
+	id 1t5VFo-000cnA-2T;
+	Mon, 28 Oct 2024 19:18:16 +0000
+Date: Tue, 29 Oct 2024 03:17:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: ahaslam@baylibre.com, lars@metafoo.de, Michael.Hennerich@analog.com,
-	jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com
+To: Nam Cao <namcao@linutronix.de>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Axel Haslam <ahaslam@baylibre.com>
-Subject: Re: [PATCH 5/6] iio: dac: ad5791: Use
- devm_regulator_get_enable_read_voltage
-Message-ID: <202410290245.0RC0cDV4-lkp@intel.com>
-References: <20241028071118.699951-6-ahaslam@baylibre.com>
+	Nam Cao <namcao@linutronix.de>,
+	Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 04/31] KVM: x86: Switch to use hrtimer_setup()
+Message-ID: <202410290239.urBaNd5D-lkp@intel.com>
+References: <8774212e6c10c550743219e00738492eb379227c.1729864823.git.namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,143 +70,226 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241028071118.699951-6-ahaslam@baylibre.com>
+In-Reply-To: <8774212e6c10c550743219e00738492eb379227c.1729864823.git.namcao@linutronix.de>
 
-Hi,
+Hi Nam,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.12-rc5 next-20241028]
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on tip/sched/core perf-tools-next/perf-tools-next tip/perf/core perf-tools/perf-tools tip/timers/core axboe-block/for-next linus/master v6.12-rc5 next-20241028]
+[cannot apply to kvm/linux-next acme/perf/core]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ahaslam-baylibre-com/dt-bindings-iio-dac-ad5791-Add-optional-reset-clr-and-ldac-gpios/20241028-151319
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20241028071118.699951-6-ahaslam%40baylibre.com
-patch subject: [PATCH 5/6] iio: dac: ad5791: Use devm_regulator_get_enable_read_voltage
-config: x86_64-buildonly-randconfig-004-20241028 (https://download.01.org/0day-ci/archive/20241029/202410290245.0RC0cDV4-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Cao/KVM-MIPS-Switch-to-use-hrtimer_setup/20241028-154142
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/8774212e6c10c550743219e00738492eb379227c.1729864823.git.namcao%40linutronix.de
+patch subject: [PATCH 04/31] KVM: x86: Switch to use hrtimer_setup()
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241029/202410290239.urBaNd5D-lkp@intel.com/config)
 compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410290245.0RC0cDV4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410290239.urBaNd5D-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410290245.0RC0cDV4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410290239.urBaNd5D-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/iio/dac/ad5791.c:14:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from arch/x86/kvm/lapic.c:20:
+   In file included from include/linux/kvm_host.h:16:
    In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/iio/dac/ad5791.c:370:35: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     370 |                 return dev_err_probe(&spi->dev, ret, "failed to get vdd voltage\n");
-         |                                                 ^~~
-   drivers/iio/dac/ad5791.c:336:9: note: initialize the variable 'ret' to silence this warning
-     336 |         int ret, pos_voltage_uv = 0, neg_voltage_uv = 0;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/kvm/lapic.c:2878:2: error: call to undeclared function 'hrtimer_setup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2878 |         hrtimer_setup(&apic->lapic_timer.timer, apic_timer_fn, CLOCK_MONOTONIC,
+         |         ^
+   arch/x86/kvm/lapic.c:2878:2: note: did you mean 'hrtimer_start'?
+   include/linux/hrtimer.h:272:20: note: 'hrtimer_start' declared here
+     272 | static inline void hrtimer_start(struct hrtimer *timer, ktime_t tim,
+         |                    ^
+   4 warnings and 1 error generated.
+--
+   In file included from arch/x86/kvm/i8254.c:35:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/kvm/i8254.c:693:2: error: call to undeclared function 'hrtimer_setup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     693 |         hrtimer_setup(&pit_state->timer, pit_timer_fn, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
+         |         ^
+   arch/x86/kvm/i8254.c:693:2: note: did you mean 'hrtimer_start'?
+   include/linux/hrtimer.h:272:20: note: 'hrtimer_start' declared here
+     272 | static inline void hrtimer_start(struct hrtimer *timer, ktime_t tim,
+         |                    ^
+   4 warnings and 1 error generated.
+--
+   In file included from arch/x86/kvm/hyperv.c:22:
+   In file included from arch/x86/kvm/x86.h:5:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/kvm/hyperv.c:955:2: error: call to undeclared function 'hrtimer_setup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     955 |         hrtimer_setup(&stimer->timer, stimer_timer_callback, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
+         |         ^
+   arch/x86/kvm/hyperv.c:955:2: note: did you mean 'hrtimer_start'?
+   include/linux/hrtimer.h:272:20: note: 'hrtimer_start' declared here
+     272 | static inline void hrtimer_start(struct hrtimer *timer, ktime_t tim,
+         |                    ^
+   4 warnings and 1 error generated.
+--
+   In file included from arch/x86/kvm/vmx/nested.c:8:
+   In file included from arch/x86/include/asm/mmu_context.h:8:
+   In file included from include/linux/pkeys.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/kvm/vmx/nested.c:5278:2: error: call to undeclared function 'hrtimer_setup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    5278 |         hrtimer_setup(&vmx->nested.preemption_timer, vmx_preemption_timer_fn, CLOCK_MONOTONIC,
+         |         ^
+   arch/x86/kvm/vmx/nested.c:5278:2: note: did you mean 'hrtimer_start'?
+   include/linux/hrtimer.h:272:20: note: 'hrtimer_start' declared here
+     272 | static inline void hrtimer_start(struct hrtimer *timer, ktime_t tim,
+         |                    ^
+   4 warnings and 1 error generated.
 
 
-vim +/ret +370 drivers/iio/dac/ad5791.c
+vim +/hrtimer_setup +2878 arch/x86/kvm/lapic.c
 
-   330	
-   331	static int ad5791_probe(struct spi_device *spi)
-   332	{
-   333		const struct ad5791_platform_data *pdata = dev_get_platdata(&spi->dev);
-   334		struct iio_dev *indio_dev;
-   335		struct ad5791_state *st;
-   336		int ret, pos_voltage_uv = 0, neg_voltage_uv = 0;
-   337		bool use_rbuf_gain2;
-   338	
-   339		indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
-   340		if (!indio_dev)
-   341			return -ENOMEM;
-   342		st = iio_priv(indio_dev);
-   343	
-   344		st->gpio_reset = devm_gpiod_get_optional(&spi->dev, "reset",
-   345							 GPIOD_OUT_HIGH);
-   346		if (IS_ERR(st->gpio_reset))
-   347			return PTR_ERR(st->gpio_reset);
-   348	
-   349		st->gpio_clear = devm_gpiod_get_optional(&spi->dev, "clear",
-   350							 GPIOD_OUT_LOW);
-   351		if (IS_ERR(st->gpio_clear))
-   352			return PTR_ERR(st->gpio_clear);
-   353	
-   354		st->gpio_ldac = devm_gpiod_get_optional(&spi->dev, "ldac",
-   355							GPIOD_OUT_HIGH);
-   356		if (IS_ERR(st->gpio_ldac))
-   357			return PTR_ERR(st->gpio_ldac);
-   358	
-   359		st->pwr_down = true;
-   360		st->spi = spi;
-   361	
-   362		if (pdata)
-   363			use_rbuf_gain2 = pdata->use_rbuf_gain2;
-   364		else
-   365			use_rbuf_gain2 = device_property_read_bool(&spi->dev,
-   366								   "adi,rbuf-gain2-en");
-   367	
-   368		pos_voltage_uv = devm_regulator_get_enable_read_voltage(&spi->dev, "vdd");
-   369		if (pos_voltage_uv < 0 && pos_voltage_uv != -ENODEV)
- > 370			return dev_err_probe(&spi->dev, ret, "failed to get vdd voltage\n");
-   371	
-   372		neg_voltage_uv = devm_regulator_get_enable_read_voltage(&spi->dev, "vss");
-   373		if (neg_voltage_uv < 0 && neg_voltage_uv != -ENODEV)
-   374			return dev_err_probe(&spi->dev, ret, "failed to get vss voltage\n");
-   375	
-   376		if (neg_voltage_uv >= 0 && pos_voltage_uv >= 0) {
-   377			st->vref_mv = (pos_voltage_uv + neg_voltage_uv) / 1000;
-   378			st->vref_neg_mv = neg_voltage_uv / 1000;
-   379		} else if (pdata) {
-   380			st->vref_mv = pdata->vref_pos_mv + pdata->vref_neg_mv;
-   381			st->vref_neg_mv = pdata->vref_neg_mv;
-   382		} else {
-   383			dev_warn(&spi->dev, "reference voltage unspecified\n");
-   384		}
-   385	
-   386		if (st->gpio_reset) {
-   387			fsleep(20);
-   388			gpiod_set_value_cansleep(st->gpio_reset, 0);
-   389		} else {
-   390			ret = ad5791_spi_write(st, AD5791_ADDR_SW_CTRL, AD5791_SWCTRL_RESET);
-   391			if (ret)
-   392				return dev_err_probe(&spi->dev, ret, "fail to reset\n");
-   393		}
-   394	
-   395		st->chip_info = spi_get_device_match_data(spi);
-   396		if (!st->chip_info)
-   397			return dev_err_probe(&spi->dev, -EINVAL, "no chip info\n");
-   398	
-   399		st->ctrl = AD5761_CTRL_LINCOMP(st->chip_info->get_lin_comp(st->vref_mv))
-   400			  | (use_rbuf_gain2 ? 0 : AD5791_CTRL_RBUF) |
-   401			  AD5791_CTRL_BIN2SC;
-   402	
-   403		ret = ad5791_spi_write(st, AD5791_ADDR_CTRL, st->ctrl |
-   404			AD5791_CTRL_OPGND | AD5791_CTRL_DACTRI);
-   405		if (ret)
-   406			return dev_err_probe(&spi->dev, ret, "fail to write ctrl register\n");
-   407	
-   408		spi_set_drvdata(spi, indio_dev);
-   409		indio_dev->info = &ad5791_info;
-   410		indio_dev->modes = INDIO_DIRECT_MODE;
-   411		indio_dev->channels = &st->chip_info->channel;
-   412		indio_dev->num_channels = 1;
-   413		indio_dev->name = st->chip_info->name;
-   414		ret = iio_device_register(indio_dev);
-   415		if (ret)
-   416			return dev_err_probe(&spi->dev, ret, "unable to register iio device\n");
-   417	
-   418		return 0;
-   419	}
-   420	
+  2847	
+  2848	int kvm_create_lapic(struct kvm_vcpu *vcpu)
+  2849	{
+  2850		struct kvm_lapic *apic;
+  2851	
+  2852		ASSERT(vcpu != NULL);
+  2853	
+  2854		if (!irqchip_in_kernel(vcpu->kvm)) {
+  2855			static_branch_inc(&kvm_has_noapic_vcpu);
+  2856			return 0;
+  2857		}
+  2858	
+  2859		apic = kzalloc(sizeof(*apic), GFP_KERNEL_ACCOUNT);
+  2860		if (!apic)
+  2861			goto nomem;
+  2862	
+  2863		vcpu->arch.apic = apic;
+  2864	
+  2865		if (kvm_x86_ops.alloc_apic_backing_page)
+  2866			apic->regs = kvm_x86_call(alloc_apic_backing_page)(vcpu);
+  2867		else
+  2868			apic->regs = (void *)get_zeroed_page(GFP_KERNEL_ACCOUNT);
+  2869		if (!apic->regs) {
+  2870			printk(KERN_ERR "malloc apic regs error for vcpu %x\n",
+  2871			       vcpu->vcpu_id);
+  2872			goto nomem_free_apic;
+  2873		}
+  2874		apic->vcpu = vcpu;
+  2875	
+  2876		apic->nr_lvt_entries = kvm_apic_calc_nr_lvt_entries(vcpu);
+  2877	
+> 2878		hrtimer_setup(&apic->lapic_timer.timer, apic_timer_fn, CLOCK_MONOTONIC,
+  2879			      HRTIMER_MODE_ABS_HARD);
+  2880		if (lapic_timer_advance)
+  2881			apic->lapic_timer.timer_advance_ns = LAPIC_TIMER_ADVANCE_NS_INIT;
+  2882	
+  2883		/*
+  2884		 * Stuff the APIC ENABLE bit in lieu of temporarily incrementing
+  2885		 * apic_hw_disabled; the full RESET value is set by kvm_lapic_reset().
+  2886		 */
+  2887		vcpu->arch.apic_base = MSR_IA32_APICBASE_ENABLE;
+  2888		static_branch_inc(&apic_sw_disabled.key); /* sw disabled at reset */
+  2889		kvm_iodevice_init(&apic->dev, &apic_mmio_ops);
+  2890	
+  2891		/*
+  2892		 * Defer evaluating inhibits until the vCPU is first run, as this vCPU
+  2893		 * will not get notified of any changes until this vCPU is visible to
+  2894		 * other vCPUs (marked online and added to the set of vCPUs).
+  2895		 *
+  2896		 * Opportunistically mark APICv active as VMX in particularly is highly
+  2897		 * unlikely to have inhibits.  Ignore the current per-VM APICv state so
+  2898		 * that vCPU creation is guaranteed to run with a deterministic value,
+  2899		 * the request will ensure the vCPU gets the correct state before VM-Entry.
+  2900		 */
+  2901		if (enable_apicv) {
+  2902			apic->apicv_active = true;
+  2903			kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
+  2904		}
+  2905	
+  2906		return 0;
+  2907	nomem_free_apic:
+  2908		kfree(apic);
+  2909		vcpu->arch.apic = NULL;
+  2910	nomem:
+  2911		return -ENOMEM;
+  2912	}
+  2913	
 
 -- 
 0-DAY CI Kernel Test Service
