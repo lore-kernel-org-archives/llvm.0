@@ -1,80 +1,63 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26E333F3
-	for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 14:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C881DDC03;
+	Mon, 28 Oct 2024 14:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730126623; cv=none; b=iV+hKN+OxBvpuvGGO5+6GCSCHuiV4o/VTHBtNMnogHMFQSKYLbnKPlJ7njI5ffui9HQn5R0L4dupSHB5KGS/ERs5or2oHW3SmlSgIMqI75wBNulEOBzXARUHKm4G81VuXhsdaZNE+PhMd3uSRKFFbGswF3HYHbYOjGOA2GqiOjQ=
+	t=1730126773; cv=none; b=e5+F5icTQvp4K5ifRNr0zo2sllxJxOVqFPNvxI4FATUQaplILrD+TeX5QJTDIxCxzJgc7ZviqxgsBDPWtZCPIMJbKVPEN4sqrRpfNCylJ72oUcbJcqy+u12/P+6v7VYUKOD3meRxxaAxVY5PViLsQKa8ezZmmZwZqr7tBpi8cbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730126623; c=relaxed/simple;
-	bh=8dk3jQXqVNLtNBSBu8i0zu9YlvX2SJldVag1wY9K7lA=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CWDlLLsBwc4H5dID+E7ZLZ0LoyfkgZkUJnYQlezdQ87Qwy7mx+bQt1fG0UMd3LI2mU0bIPWHzHaMeyEMVaUqMamVRi4/rUFPCDgA0RHR+CIqIQ/1+5XLjrkpLg8KqFgWSQMDMOCxF5FdD4ZdNUAkdRKXxRRDVjqMKQB/H3C25fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I/NrIJ0x; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730126773; c=relaxed/simple;
+	bh=MoiwdW45feoPpBQLvCm4IU9TkcFcNVfiMx4oM7HEuDo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qVpaVoyVtduqGmk6aljz8CSAVmEZUudUnWniG6OgLV5I7iqj62JdOsVrCnnvd2tJD+2A3eaUqmFr/x/8a78E5Tp8FO9iYsIs6gpp9NmT82wKoC7+c+UHxIWkKFMlUV0UD+YSE+7b4hVE4TTcXquyk5bDijMlG0ZcX+cMFopf3ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I20fvKWU; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I/NrIJ0x"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d6ff1cbe1so3283976f8f.3
-        for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 07:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730126619; x=1730731419; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=0o9UR6/T9IDZWX4PfCYo7WA8X0C5Y7vXRC8iiUeqkNw=;
-        b=I/NrIJ0x5Bwu0rqCkZWckllH8S5pleB5IDYKc/FEjIqa7LxMuIKmWP8KWlTKZbEKJe
-         nzGlK/hOXifT+5Xtn09FmTMbACvbzflhVdH9FSXPFDzeKmd9tF02F/clZLDuWSbtMXoP
-         w6rDxt7RC9IIvYME+dWtb/Q5FldG0wcbmzf8tpp+k40dvMPXRuZ/T6rHNY4RpyOgmoh8
-         dDMLS19Y7oP3Y6lBZTRcUu8M83dhivcT+UH2LKPVs+2wk7fUZKtejqihqo1uFgGED8Om
-         6TTql4QlCyy11eivC4PbQA6/d2gcP717hyVWjwcJ6ca9TEBFjZ3EMpZ++aj+5Nu8i1Bc
-         mB0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730126619; x=1730731419;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0o9UR6/T9IDZWX4PfCYo7WA8X0C5Y7vXRC8iiUeqkNw=;
-        b=ZFaxjemg1o5Xu7NsBg4e7rXJeZKeerpQgTQuJ1nZRVD/tNw+ZdZM/yvZB5oFaBO8+Y
-         exGQXQBcw3Y30WlcHOJTQoJwhlF3ivCq8BDOrSLHzJiiAbggS51vXM+1eCbOCEK4241Z
-         P82w/wTLkmMtH5BJ1iw1jp8bI8a9oJZniPBGIziO2xA/XoxEFymdJIZtlsszVirWwhN4
-         YWgzDIrgrfCM1ak1KsqF/xn+Pw8uAj2QF/ckepD7U94quQcG99pFgPbsXuDHT3bM2lzf
-         KCI+S3RJk5Tes3FoFCdE8Be7+6XSi1kAlmGG/5vCKbw1X0fxgr6ic7g2I8GcEuJWYqLy
-         BW3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWkoqXFYz8gx1aS3KRruVWeOjvRonCTXa5QbSuCNGs7e9yV4NhHTV8PRWgiXDb3FYUXv4an@lists.linux.dev
-X-Gm-Message-State: AOJu0YxR0y4+UO/Z5Pt8AgLlgYUVMqtNygqB4MJ/7PEdHCxNV9wzqGlI
-	h1fY+YphRDcEFptrTCYBPnoqn2T6wv1rTTCYx/cQc4u5aklRJqmj
-X-Google-Smtp-Source: AGHT+IFVLEdQhrVQexeTh8VZ2u00+D168l91ubbaWPiPvFI6RdA1c1AyL40rbbrSIN3jQ/kPERYfEA==
-X-Received: by 2002:adf:efca:0:b0:37d:5103:e41d with SMTP id ffacd0b85a97d-380611eecddmr5702661f8f.39.1730126618689;
-        Mon, 28 Oct 2024 07:43:38 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b3bb62sm9699237f8f.29.2024.10.28.07.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 07:43:38 -0700 (PDT)
-Message-ID: <671fa31a.050a0220.12b1fe.157e@mx.google.com>
-X-Google-Original-Message-ID: <Zx-jFqvjwjZD91UR@Ansuel-XPS.>
-Date: Mon, 28 Oct 2024 15:43:34 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Antoine Tenart <atenart@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I20fvKWU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730126771; x=1761662771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MoiwdW45feoPpBQLvCm4IU9TkcFcNVfiMx4oM7HEuDo=;
+  b=I20fvKWUXobDaXFfnzJY/4iztLxkEAPZ7gyph34iII6v0tuyk6r+ooMx
+   UihnZp632r+mCiOSaAYgfVYfDSTvnwCg400SELYP43GRAjbUIErpM5SfA
+   CbLPineJ6lYkIF4Ws/mB5mwuaqunG2Mp5p2xS+B3GaSzknOR+npii39lU
+   //Tn5ESffusNVrtlzKUj9vuSF7Uj7LkXbUS6fC3hEFhQCm9+Fbyu1udvu
+   LFTh6W3A81UHt/nPs2PTbDOx3lcvLgqsmqDOTyFTzBAPM5x+1TUNQdcob
+   /NhusqgUyv/7Dc1ylIZYT3qLQVEEcW1ZPdSX2Mt1quEOOZz85fVKavWzo
+   g==;
+X-CSE-ConnectionGUID: 7+Ss9JUMQ1aipW9BxNxIRA==
+X-CSE-MsgGUID: fSVlWJfMT4OhmWD6eaoqew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11238"; a="29155847"
+X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
+   d="scan'208";a="29155847"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 07:46:11 -0700
+X-CSE-ConnectionGUID: ZLz1SwV9SY+/cvNcBPOTRg==
+X-CSE-MsgGUID: iSe3dLZWQcW3FLEJYu5IGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
+   d="scan'208";a="81535786"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 28 Oct 2024 07:46:07 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5R0P-000cXx-1V;
+	Mon, 28 Oct 2024 14:46:05 +0000
+Date: Mon, 28 Oct 2024 22:45:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Troy Mitchell <troymitchell988@gmail.com>, andi.shyti@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	troymitchell988@gmail.com, linux-i2c@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, upstream@airoha.com
-Subject: Re: [PATCH v5 2/3] dt-bindings: crypto: Add Inside Secure SafeXcel
- EIP-93 crypto engine
-References: <20241028124206.24321-1-ansuelsmth@gmail.com>
- <20241028124206.24321-2-ansuelsmth@gmail.com>
- <20241028143515.GA792452-robh@kernel.org>
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] i2c: spacemit: add support for SpacemiT K1 SoC
+Message-ID: <202410282220.vl7podpG-lkp@intel.com>
+References: <20241028053220.346283-3-TroyMitchell988@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,109 +66,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241028143515.GA792452-robh@kernel.org>
+In-Reply-To: <20241028053220.346283-3-TroyMitchell988@gmail.com>
 
-On Mon, Oct 28, 2024 at 09:35:15AM -0500, Rob Herring wrote:
-> On Mon, Oct 28, 2024 at 01:41:42PM +0100, Christian Marangi wrote:
-> > Add bindings for the Inside Secure SafeXcel EIP-93 crypto engine.
-> > 
-> > The IP is present on Airoha SoC and on various Mediatek devices and
-> > other SoC under different names like mtk-eip93 or PKTE.
-> > 
-> > All the compatible that currently doesn't have any user are left there
-> > commented for reference.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> > Changes v5:
-> > - Comment out compatible with no current user
-> > Changes v4:
-> > - Out of RFC
-> > Changes v3:
-> > - Add SoC compatible with generic one
-> > Changes v2:
-> > - Change to better compatible
-> > - Add description for EIP93 models
-> > 
-> >  .../crypto/inside-secure,safexcel-eip93.yaml  | 67 +++++++++++++++++++
-> >  1 file changed, 67 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
-> > new file mode 100644
-> > index 000000000000..188240b74110
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
-> > @@ -0,0 +1,67 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/crypto/inside-secure,safexcel-eip93.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Inside Secure SafeXcel EIP-93 cryptographic engine
-> > +
-> > +maintainers:
-> > +  - Christian Marangi <ansuelsmth@gmail.com>
-> > +
-> > +description: |
-> > +  The Inside Secure SafeXcel EIP-93 is a cryptographic engine IP block
-> > +  integrated in varios devices with very different and generic name from
-> > +  PKTE to simply vendor+EIP93. The real IP under the hood is actually
-> > +  developed by Inside Secure and given to license to vendors.
-> > +
-> > +  The IP block is sold with different model based on what feature are
-> > +  needed and are identified with the final letter. Each letter correspond
-> > +  to a specific set of feature and multiple letter reflect the sum of the
-> > +  feature set.
-> > +
-> > +  EIP-93 models:
-> > +    - EIP-93i: (basic) DES/Triple DES, AES, PRNG, IPsec ESP, SRTP, SHA1
-> > +    - EIP-93ie: i + SHA224/256, AES-192/256
-> > +    - EIP-93is: i + SSL/DTLS/DTLS, MD5, ARC4
-> > +    - EIP-93ies: i + e + s
-> > +    - EIP-93iw: i + AES-XCB-MAC, AES-CCM
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - const: airoha,crypto-eip93
-> 
-> Still doesn't look SoC specific...
->
+Hi Troy,
 
-Oh ok I didn't understand that I had to drop it.
+kernel test robot noticed the following build warnings:
 
-> > +          - const: inside-secure,safexcel-eip93ies
-> > +      # Compatible that doesn't have any current user.
-> > +      # - items:
-> > +      #     - const: SoC specific compatible
-> > +      #     - enum:
-> > +      #         - inside-secure,safexcel-eip93i
-> > +      #         - inside-secure,safexcel-eip93ie
-> > +      #         - inside-secure,safexcel-eip93is
-> > +      #         - inside-secure,safexcel-eip93iw
-> 
-> I should have looked at the driver before commenting before, but since 
-> you are using these compatibles, you should go with my other suggestion 
-> or these will be listed as undocumented.
->
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on robh/for-next linus/master v6.12-rc5 next-20241028]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The other suggestion you mean with the false or not: {} ? I tried that
-first with 
+url:    https://github.com/intel-lab-lkp/linux/commits/Troy-Mitchell/dt-bindings-i2c-spacemit-add-support-for-K1-SoC/20241028-133452
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20241028053220.346283-3-TroyMitchell988%40gmail.com
+patch subject: [PATCH v2 2/2] i2c: spacemit: add support for SpacemiT K1 SoC
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241028/202410282220.vl7podpG-lkp@intel.com/config)
+compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241028/202410282220.vl7podpG-lkp@intel.com/reproduce)
 
-- items:
-	- not: {}
-	- enum:
-		- ...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410282220.vl7podpG-lkp@intel.com/
 
-But make dt_binding_check always complained. and False had some problem
-is compiling the yaml schema.
+All warnings (new ones prefixed by >>):
 
-Sorry if I'm making this very confusing. We can also consider using SoC
-specific compatible in the driver directly and just declare the generic
-one here.
+   In file included from drivers/i2c/busses/i2c-k1.c:7:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/i2c/busses/i2c-k1.c:343:2: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+     343 |         else if (i2c->dir == DIR_WRITE)
+         |         ^
+   5 warnings generated.
+
+
+vim +343 drivers/i2c/busses/i2c-k1.c
+
+   337	
+   338	static int spacemit_i2c_is_last_msg(struct spacemit_i2c_dev *i2c)
+   339	{
+   340		if (i2c->dir == DIR_READ)
+   341			if (i2c->unprocessed == 1 && i2c->msg_idx == i2c->msg_num - 1)
+   342				return 1;
+ > 343		else if (i2c->dir == DIR_WRITE)
+   344			if (!i2c->unprocessed && i2c->msg_idx == i2c->msg_num - 1)
+   345				return 1;
+   346	
+   347		return 0;
+   348	}
+   349	
 
 -- 
-	Ansuel
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
