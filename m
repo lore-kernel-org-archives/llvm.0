@@ -1,130 +1,81 @@
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5A5185B54;
-	Mon, 28 Oct 2024 21:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AB7200C99;
+	Mon, 28 Oct 2024 23:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730152164; cv=none; b=IogheFSLe0i6UVLeV/L/yfWtSEJCU0uiU8BgbqSiomLVuID8hC5BAGWjoiU8HHNq/twibqKmKc0rep8zIJdLPwD4hYuo3Tg3uWviqzHzc45G8DzRvHcy4oxAEHbn9KHjxZTgKVn0iHlgfhIOEJBwLEJ6FTYTz8FfDO8Z3nfbEoI=
+	t=1730156435; cv=none; b=pgcX+m60Eb6ws0fdk4KXl6/M0kP1SuUQnHvVKXcql2TE8twKHsq4vFiRIAi0Ge3JzIdWdnPsecPJU4NLF2FMPNd6/6VvZK3rSAbzHRlLVTTnLo/UR9laXUaXfJIZ3XQLwtyqmCl6uCUOHmo2SnQri+b2sEV3HAlghxblI/GnuYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730152164; c=relaxed/simple;
-	bh=PCzfrCyAn1USlTYlC0D7NCX/Zih1P57LfgHFt/Wa2KA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=k6PKnD8g5PZ2iY6SJp1ONDXjWBHp7OOrd85hSNqXSTz6RaP/46ParX5xSXRYeGjI0JGMePfGLv2OUqIblnb3JtwYOar0fxnYtI4m0L952zGZo5TDPqlYNWmIVvqCZ1aC8nT6sVrXo35js3J6SGYfPxT/6VKXs8xbWa8ruUlri1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=FHfEQtgA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=oZ4N/NCk; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1730156435; c=relaxed/simple;
+	bh=ENlzoJYfFx7FaBf0oThCRqau9ZFmBMcmjwk1wrLkgBE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kMUarNFanPJ22EhFoYsAR7EBzLcyC6neuG6G16lw0aU90lAWgQc9bH/3X9DHaIRv596sscboKKOXFJFzHfzOraYnJxRyciDaZquMz+liHJN6Zo5csdGibYikWFh6iYE29rSw3+YLIA8MU/a2VZDBinzgnX+Y/NgChr25zEzU560=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qAIacROg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="FHfEQtgA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oZ4N/NCk"
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id F0B8B1140149;
-	Mon, 28 Oct 2024 17:49:20 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Mon, 28 Oct 2024 17:49:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1730152160;
-	 x=1730238560; bh=xLLPqQtJaYi7ueH0VqsE3g/+OJvjtkRFF3i/MFHsu9w=; b=
-	FHfEQtgAgM8tIk+Yj25BW6pYoj962TNd0MmNMuAC2H+xx0hZA+Nf7zL1NV+SAvgn
-	HvwW0ESFG6+B/nuzfAdgP8TKyHpE5ZdShrjji4UOeYo5ue+JKp78UFDw2cf0qKWc
-	lI235EJjRH5Uz8GdMN80taeEYGWTKDyGKaXyNaD+R+GTvWd4oYovJdusxxLPts0z
-	bsgKg3cFGy/isNrjnDgjj8KrzjWQplACi+2DPtk2eltdC94cnUIvlyysZVW6zGME
-	G6YHiZeVDHCjfrJGlei96Z/6WQZ7ZZ2ZhaIOM5PZYpZjt+4OPhsaxlbUOTO5XWM8
-	3TzZillXIbbZ05XpZNKpNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1730152160; x=
-	1730238560; bh=xLLPqQtJaYi7ueH0VqsE3g/+OJvjtkRFF3i/MFHsu9w=; b=o
-	Z4N/NCk1gzTHv72e4ojEFsXUyMGC/UWJC0SYAtFj4Tl2YRtkHhVqdq9HZA9lilQS
-	g6PVQ+SdGcr2xgePR1q+Sa9b/3PVZ4xy21Nt+ht96K0Hrfiv3gdoWRs3NF8iHx0A
-	CLuLF0+/SLc/D6ppkIR2w9sF9OZelBZzBfMIhvxNKlBPDOXsj3QsecJrbHcK9DN4
-	OnKBl7K01N4BYTc/Zeyqvr8GjvdYKNF2CHLDI7HzM2eDqaD3JONkZi1tvHgi78kb
-	WbPypd2ljC5SaUAAaKh4fPmeh2CO9teVQzxI4YcgAkBnRNpPIRlmbIB/LmLu/q0N
-	YxIupHuAG0zU2+ws89HWw==
-X-ME-Sender: <xms:4AYgZ3SE7GUvPLohUNmdrNtKjHGIlwcZ55sZe5R5l0jNIxOEwMtMdA>
-    <xme:4AYgZ4y5mt9yzQwiEKaOGQmfKh1Jiy-1dfgq87GYpCzW-7hkVwNjeygO5m13AF5EO
-    ac5OSedkwTTgYRi7ek>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdejledguddviecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpeehkedtueetuefgveduvddtieekffdtveektedu
-    leejffffieekveeffeeifefhgeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpddtud
-    drohhrghdpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtoh
-    epiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhkphesihhnthgvlhdrtgho
-    mhdprhgtphhtthhopehjvhgvthhtvghrsehkrghlrhgrhihinhgtrdgtohhmpdhrtghpth
-    htohephihsihhonhhnvggruheskhgrlhhrrgihihhntgdrtghomhdprhgtphhtthhopehl
-    lhhvmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilh
-    guqdgrlhhlsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidq
-    rghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:4AYgZ80gBaShwMU8DAn5SYLlBBezjTfv8UNb2NYwJ2V23_cPmJSMdg>
-    <xmx:4AYgZ3CRhrlwflb0sCItqQRivSM5VknVEk9ZBRHnFullErbS6fhGyg>
-    <xmx:4AYgZwhRelTbWGOfuS6Sht3sN3c6IE8Nd6lS8lr7i43jboNwhkuxAw>
-    <xmx:4AYgZ7pMKAETUnV7qh3juIRS90c8gMgQz02_335GoXdq4NzgP0nQdA>
-    <xmx:4AYgZ6ZHBCMvHrk-amXAG_tA4W-8huUab0Jym_ttSb_AENOYZK3Sc3Bc>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 66F2D2220072; Mon, 28 Oct 2024 17:49:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qAIacROg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F7DC4CECD;
+	Mon, 28 Oct 2024 23:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730156434;
+	bh=ENlzoJYfFx7FaBf0oThCRqau9ZFmBMcmjwk1wrLkgBE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=qAIacROg0Xoa2sXvk3Eso8bentd2zv7/xlp2viZFs7S5hhEXmkpIvz/5JLf0x+WAX
+	 +mfJ7xy8psBxRq40GJS4sqJfY9slYS13uP/mD2W7N2sG1ZPFKL+z04S0yzcN4e75Az
+	 9HaG1bGFc7ASP2vQ35FYriIxsdpTqpx5marAr5nwH2P2IyZAeegwhOQaX0fw0zWP5u
+	 Oi/b8p3iaow1BFKj8NQXe6el7SfZ3MoNioYIgCedInhrQpFZJAg3tisSZSJ+lLU6h7
+	 PRN/Bxd5m2UuzB6nR7YDfUjloYKBdfJ0G4TDAXjHbI+YhgbtOHS9pXmlMC7zXlS2k3
+	 mKszLSnqAgGbg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BD0380AC1C;
+	Mon, 28 Oct 2024 23:00:43 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Mon, 28 Oct 2024 21:48:58 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <lkp@intel.com>,
- "Julian Vetter" <jvetter@kalrayinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux-Arch <linux-arch@vger.kernel.org>,
- "Yann Sionneau" <ysionneau@kalrayinc.com>
-Message-Id: <52a1eda2-1daa-4f2f-b722-7dcc65c686b1@app.fastmail.com>
-In-Reply-To: <202410290137.rHycxdZj-lkp@intel.com>
-References: <202410290137.rHycxdZj-lkp@intel.com>
-Subject: Re: [arnd-asm-generic:master 14/17] lib/iomem_copy.c:10:10: fatal error:
- 'linux/unaligned.h' file not found
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/2] net: systemport: Minor IO macros changes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173015644200.206744.11510242764690126577.git-patchwork-notify@kernel.org>
+Date: Mon, 28 Oct 2024 23:00:42 +0000
+References: <20241021174935.57658-1-florian.fainelli@broadcom.com>
+In-Reply-To: <20241021174935.57658-1-florian.fainelli@broadcom.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: netdev@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ vladimir.oltean@nxp.com
 
-On Mon, Oct 28, 2024, at 17:20, kernel test robot wrote:
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git 
-> master
-> head:   e6a5255d009d8427b6609b25c729048f894e9d60
-> commit: 4030decf42ca0da176fc1d5c556fc3f0035df6c9 [14/17] New 
-> implementation for IO memcpy and IO memset
-> config: x86_64-kexec 
-> (https://download.01.org/0day-ci/archive/20241029/202410290137.rHycxdZj-lkp@intel.com/config)
-> compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 
-> 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-> reproduce (this is a W=1 build): 
-> (https://download.01.org/0day-ci/archive/20241029/202410290137.rHycxdZj-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new 
-> version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: 
-> https://lore.kernel.org/oe-kbuild-all/202410290137.rHycxdZj-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->>> lib/iomem_copy.c:10:10: fatal error: 'linux/unaligned.h' file not found
->       10 | #include <linux/unaligned.h>
->          |          ^~~~~~~~~~~~~~~~~~~
->    1 error generated.
->
+Hello:
 
-Thanks for the report, the header only became avaialable in 6.12-rc2,
-so I now rebased the entire tree on top of that to avoid any
-backmerges or conflicts.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-      Arnd
+On Mon, 21 Oct 2024 10:49:33 -0700 you wrote:
+> This patch series addresses the warning initially reported by Vladimir
+> here:
+> 
+> https://lore.kernel.org/all/20241014150139.927423-1-vladimir.oltean@nxp.com/
+> 
+> and follows on with proceeding with his suggestion the IO macros to the
+> header file.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2,1/2] net: systemport: Remove unused txchk accessors
+    https://git.kernel.org/netdev/net-next/c/890bde75a236
+  - [net-next,v2,2/2] net: systemport: Move IO macros to header file
+    https://git.kernel.org/netdev/net-next/c/e69fbd287d5a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
