@@ -1,217 +1,191 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177134C83;
-	Mon, 28 Oct 2024 11:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E364F8A0
+	for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 11:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730114339; cv=none; b=oaET+ktlXJVGZEsBZ/cv8xFKm5S8+JM0+TYsHpc8sCS3Q600aItASMt2o9EciN1CMJdsE0UNffukRnZUe+aABsOlKpuBCwaNwgJCv21rqD2R3WL0tp4g8BYoqJv39URu+iy3HoLdF4lM8wC1dZ5DDZR04AjIiPdAzgjySHVNGYA=
+	t=1730115119; cv=none; b=VVUkWL8kuY6cVNnq1Pk4eFV7kw9xQVLrqU7KMffGdGzQYEgBMgEHfasP0zjKc54lvphX5Ok9czRlsumxdUm+9Ub05cZysBkHkJqXe22dHUQ4CGBJfFzcUPljr4UQTy0ipcRhmN2sIbiqDT1BYeT8vkhmVquzSDy0NJQ4lnOghm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730114339; c=relaxed/simple;
-	bh=qFW5hjxLkY1oAZdU3CkzOrrO5DoeWM+vFdlF5H19+eA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DugFFUi1mRMt0WZtxvWcR/k12tA44Zk2Vm0TWDWE4mm1njJTM9M99YXR6nCAsNfBSutxepG8n8eucSAqi7kpWmWFa1mvggVEvLl80Ei4rEoFXdyknVHNKjWNWZz6Y8WQPcMNiO0LVsXoR0bxb3vUNgsaBZV+nusHtcvoAmTW5iQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iEyYhUse; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730115119; c=relaxed/simple;
+	bh=PDN9vXO/dZI0+lgwYlek32a4uiMHBlWo7Nb6O/Pgn7s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jpnonA6LnFVJlkjKxd4S0AdJTgjvf2fw3pivEOur2TO3MUBvIj3PzJqrTkhupraI+QpE0ucEYp2DWJR6+5RrGuXFuuITzvrqIcbZAdIz9aq8krUQy19cPOmjRZZmZaIdFJAQCjN0O+RlONAkgGDIRObwz6EtVEKrAID8TMBeeG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=O48pUA0f; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEyYhUse"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730114336; x=1761650336;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qFW5hjxLkY1oAZdU3CkzOrrO5DoeWM+vFdlF5H19+eA=;
-  b=iEyYhUsesmSv4DrtwRF1nTPOzPPfMssy0umjuDPiKQNPKHne8BJmhRL9
-   Nn/AIiWm6ldnTgEuq/7xQUvZYJqqBEiSQyGLaJeWr82sy1i4gKH1bsKvd
-   9ZqGvDlshVJKjaoGGPINsl7Sc5f6xIztfs4ozTU5tJswkk/OfcAUSCDQy
-   1O/mLw+Am740H/qoGkDhlubDvyehNMs7Fuf236z9J5v8c4yDO1NmMK6vY
-   kODhxhIuUmC47C8aotiGTYz5v98MkoWpNrE35q2sYjl192hum/6m8AUn+
-   06+AS+pDsO4DkNcNZwv8xDAvg1AHfTaY6o9xUwRARFMdSH62m9GEWZ1JQ
-   A==;
-X-CSE-ConnectionGUID: GeDBo3q8S+GlR1W+8XL9kw==
-X-CSE-MsgGUID: tcVOY8nGQ5a2HIUqKt8XLQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11238"; a="29138378"
-X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
-   d="scan'208";a="29138378"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 04:18:56 -0700
-X-CSE-ConnectionGUID: CW9d6HcARyWWExWR7kYhZQ==
-X-CSE-MsgGUID: 43pOFxo5T6WXb4n3ggXfbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
-   d="scan'208";a="82023320"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 28 Oct 2024 04:18:54 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5Nlr-000cLu-2l;
-	Mon, 28 Oct 2024 11:18:51 +0000
-Date: Mon, 28 Oct 2024 19:18:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [snitzer:nfs-localio-for-next 15/16] fs/nfs/fscache.c:178:19: error:
- no member named 'fh' in 'struct nfs_inode'
-Message-ID: <202410281921.j35HTKHl-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="O48pUA0f"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49SB3bBb014542
+	for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 11:31:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Fay1WfqSR5ZfNix8IeEA2i6PepY/ruW4Izlv+/bHV0A=; b=O48pUA0fHbAHs9On
+	A0j2qJbEO+quqEysLo8jMe9xmB1AaO39EC43zjrhqCmbo+KwkaN03bDuY/4kEHj5
+	0q56AdsX/T8s6epYeDPU/w1QshWLaoFh5Tj9XO1n1ExjjEjL/8kpNGXiq8GbR2HB
+	vdC/Vrm+fvtqSBU1Nw37m14wASTPpKznP2Gr+863Td8RFDg9e/nEmSzbbgxxJOWW
+	epA+v79Fl4OgWSfPr3h1HNAW8+qwLBV0gcEkCPqLVS/7gyZThC/Hhkd5F8HCs9fo
+	PyVuYOUu9lrL9w3gozkW61DQ8CmJTBRfkUFOGwVaIz5L5smg33kYxy23LyCLk0YE
+	fADK7A==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42gs6e4ng4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 11:31:56 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6cbf3f7273cso14512786d6.3
+        for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 04:31:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730115115; x=1730719915;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fay1WfqSR5ZfNix8IeEA2i6PepY/ruW4Izlv+/bHV0A=;
+        b=MVVDw7XvtNFscHO4iRKUBA2Uwynk4nNjBNje7h50dwl880ThEXsTrKjac7E8oGvl35
+         MrhBEJqEAb9R9ptHMqkZlEgUynRvbr32KFz3Blzp5LnLi1r/jPPMf9O1RPdpjX6t/vMs
+         gdIJN9x2QyQrlZ88aUe1Yoou39uYmhxzfK4ob2uGjbHnSfPMFYvVg3MUMZX8YIJNO/ho
+         5rze76sq9SLdIoqmqDnp8FcquwvLAh13MbCjyq5SUNH9LSYT7FN38okFvZ5CQbBxo/YS
+         MsGD2oU+fWOzW0apgxlxXtYOW4Yae5Ss1K6DBsqvhPnVkQ0Ai9JAoBphr0vGtYBAhmJg
+         Vn0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUUlRWHmwkkqGxQ8WpDEh9I1tE2wdnso4qqN5le4OyvY2SJuCrfUxHyFdmdp5Gq09FIcMOL@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywc2EGyvfLj0NmLOSOzC1QBE6j5FfxeKBkM4g+dItKFFVfNjY/f
+	RUEzBOjjfL06j0PKSuVMKzaUYt3soz8CQpVz1yfYNxiti6pDVWMJJjpy/n01lNPX9mjqgzWC8lI
+	qeIS4Uuuwjvpid5d0PLym+8n77phWl++zT2q5Tjz0DYz8aVeWPWxM
+X-Received: by 2002:a05:6214:2583:b0:6c5:3338:45d6 with SMTP id 6a1803df08f44-6d18583be81mr55405706d6.11.1730115114831;
+        Mon, 28 Oct 2024 04:31:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEkvgYqxpo2ACrB5DdSvsn7yzDd4MDBFRzTXO/ZPMds196WuLyzCIGXKaPWm/X4ux6U8JcyOw==
+X-Received: by 2002:a05:6214:2583:b0:6c5:3338:45d6 with SMTP id 6a1803df08f44-6d18583be81mr55405456d6.11.1730115114488;
+        Mon, 28 Oct 2024 04:31:54 -0700 (PDT)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b1e0b232dsm366494766b.26.2024.10.28.04.31.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2024 04:31:54 -0700 (PDT)
+Message-ID: <27bea27a-9aa3-42f5-9b0a-df5744276966@oss.qualcomm.com>
+Date: Mon, 28 Oct 2024 12:31:50 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/msm/a6xx: Fix excessive stack usage
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark
+ <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Arnd Bergmann <arnd@kernel.org>
+References: <20241027-stack-size-fix-v1-1-764e2e3566cb@quicinc.com>
+ <j2qapo66f64y7ddqlu63dqvog2fdbhnaq3t24wp2srvdt4v7xl@fyqu4ry4wmts>
+ <6fea85fc-ccdc-46ec-b612-3712e9431301@quicinc.com>
+ <CAA8EJpodjP3rY0Twe9sP37LWwk5ppP36dyLC9WKD6CTDOtmwzA@mail.gmail.com>
+ <b7f72f38-2758-405b-abc7-60b73448d8bb@oss.qualcomm.com>
+ <vtj3yahojkozge4bvq66ax2c2idbw27c3hs7l6cy3e7ucz4jqb@qge2nckj3mr4>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <vtj3yahojkozge4bvq66ax2c2idbw27c3hs7l6cy3e7ucz4jqb@qge2nckj3mr4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 9bFGy1hdl3drPBJi5e-BTuS0HNNuyVxl
+X-Proofpoint-GUID: 9bFGy1hdl3drPBJi5e-BTuS0HNNuyVxl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410280093
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/snitzer/linux.git nfs-localio-for-next
-head:   3cbc13ea704a0dfdaf3fc7e26eb251b50c416e5a
-commit: a35a309f28531455cb28a7df34885fb9bf0cd815 [15/16] nfs: cache open nfsd_file(s) in client
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241028/202410281921.j35HTKHl-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241028/202410281921.j35HTKHl-lkp@intel.com/reproduce)
+On 28.10.2024 11:52 AM, Dmitry Baryshkov wrote:
+> On Mon, Oct 28, 2024 at 11:36:15AM +0100, Konrad Dybcio wrote:
+>> On 28.10.2024 11:27 AM, Dmitry Baryshkov wrote:
+>>> On Mon, 28 Oct 2024 at 12:08, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>>>>
+>>>> On 10/28/2024 1:56 PM, Dmitry Baryshkov wrote:
+>>>>> On Sun, Oct 27, 2024 at 11:35:47PM +0530, Akhil P Oommen wrote:
+>>>>>> Clang-19 and above sometimes end up with multiple copies of the large
+>>>>>> a6xx_hfi_msg_bw_table structure on the stack. The problem is that
+>>>>>> a6xx_hfi_send_bw_table() calls a number of device specific functions to
+>>>>>> fill the structure, but these create another copy of the structure on
+>>>>>> the stack which gets copied to the first.
+>>>>>>
+>>>>>> If the functions get inlined, that busts the warning limit:
+>>>>>>
+>>>>>> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:631:12: error: stack frame size (1032) exceeds limit (1024) in 'a6xx_hfi_send_bw_table' [-Werror,-Wframe-larger-than]
+>>>>>>
+>>>>>> Fix this by kmalloc-ating struct a6xx_hfi_msg_bw_table instead of using
+>>>>>> the stack. Also, use this opportunity to skip re-initializing this table
+>>>>>> to optimize gpu wake up latency.
+>>>>>>
+>>>>>> Cc: Arnd Bergmann <arnd@kernel.org>
+>>>>>>
+>>>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>>>>> ---
+>>>>>>  drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
+>>>>>>  drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 34 ++++++++++++++++++++++------------
+>>>>>>  2 files changed, 23 insertions(+), 12 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+>>>>>> index 94b6c5cab6f4..b4a79f88ccf4 100644
+>>>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+>>>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+>>>>>> @@ -99,6 +99,7 @@ struct a6xx_gmu {
+>>>>>>      struct completion pd_gate;
+>>>>>>
+>>>>>>      struct qmp *qmp;
+>>>>>> +    struct a6xx_hfi_msg_bw_table *bw_table;
+>>>>>>  };
+>>>>>>
+>>>>>>  static inline u32 gmu_read(struct a6xx_gmu *gmu, u32 offset)
+>>>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+>>>>>> index cdb3f6e74d3e..55e51c81be1f 100644
+>>>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+>>>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+>>>>>> @@ -630,32 +630,42 @@ static void a6xx_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
+>>>>>>
+>>>>>>  static int a6xx_hfi_send_bw_table(struct a6xx_gmu *gmu)
+>>>>>>  {
+>>>>>> -    struct a6xx_hfi_msg_bw_table msg = { 0 };
+>>>>>> +    struct a6xx_hfi_msg_bw_table *msg;
+>>>>>>      struct a6xx_gpu *a6xx_gpu = container_of(gmu, struct a6xx_gpu, gmu);
+>>>>>>      struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+>>>>>>
+>>>>>> +    if (gmu->bw_table)
+>>>>>> +            goto send;
+>>>>>> +
+>>>>>> +    msg = devm_kzalloc(gmu->dev, sizeof(*msg), GFP_KERNEL);
+>>>>>
+>>>>> Is it necessary after being sent? Isn't it better to just kzalloc() it
+>>>>> and then kfree() it at the end of the function?
+>>>>
+>>>> Keeping it around will help to cut down unnecessary work during
+>>>> subsequent gpu wake ups.
+>>>
+>>> Then, I'd say, it is better to make it a part of the a6xx_gpu struct.
+>>
+>> I think a6xx_gmu makes more logical sense here.
+>>
+>> FWIW, the driver allocates both _gmu and _gpu for all GPUs regardless
+> 
+> Hmm, are we expected to handle / perform BW requests in case of GMU-less
+> devices?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410281921.j35HTKHl-lkp@intel.com/
+opp-table does that for us
 
-All errors (new ones prefixed by >>):
+In case of no gmu ("gmu wrapper"), Linux is the only entity that controls
+things
 
-   In file included from fs/nfs/fscache.c:11:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/nfs/fscache.c:12:
-   In file included from include/linux/nfs_fs.h:31:
-   In file included from include/linux/sunrpc/auth.h:13:
-   In file included from include/linux/sunrpc/sched.h:19:
-   In file included from include/linux/sunrpc/xdr.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from fs/nfs/fscache.c:12:
-   In file included from include/linux/nfs_fs.h:31:
-   In file included from include/linux/sunrpc/auth.h:13:
-   In file included from include/linux/sunrpc/sched.h:19:
-   In file included from include/linux/sunrpc/xdr.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from fs/nfs/fscache.c:12:
-   In file included from include/linux/nfs_fs.h:31:
-   In file included from include/linux/sunrpc/auth.h:13:
-   In file included from include/linux/sunrpc/sched.h:19:
-   In file included from include/linux/sunrpc/xdr.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> fs/nfs/fscache.c:178:19: error: no member named 'fh' in 'struct nfs_inode'
-     178 |                                                nfsi->fh.data, /* index_key */
-         |                                                ~~~~  ^
-   fs/nfs/fscache.c:179:19: error: no member named 'fh' in 'struct nfs_inode'
-     179 |                                                nfsi->fh.size,
-         |                                                ~~~~  ^
-   16 warnings and 2 errors generated.
-
-
-vim +178 fs/nfs/fscache.c
-
-50eaa652b54df1 Dave Wysochanski 2020-04-16  159  
-ef79c097bbe972 David Howells    2009-04-03  160  /*
-ef79c097bbe972 David Howells    2009-04-03  161   * Initialise the per-inode cache cookie pointer for an NFS inode.
-ef79c097bbe972 David Howells    2009-04-03  162   */
-f1fe29b4a02d08 David Howells    2013-09-27  163  void nfs_fscache_init_inode(struct inode *inode)
-ef79c097bbe972 David Howells    2009-04-03  164  {
-402cb8dda949d9 David Howells    2018-04-04  165  	struct nfs_fscache_inode_auxdata auxdata;
-dea1bb35c5f35e Trond Myklebust  2019-08-03  166  	struct nfs_server *nfss = NFS_SERVER(inode);
-ef79c097bbe972 David Howells    2009-04-03  167  	struct nfs_inode *nfsi = NFS_I(inode);
-ef79c097bbe972 David Howells    2009-04-03  168  
-88a4d7bdeec978 Dave Wysochanski 2023-02-20  169  	netfs_inode(inode)->cache = NULL;
-dea1bb35c5f35e Trond Myklebust  2019-08-03  170  	if (!(nfss->fscache && S_ISREG(inode->i_mode)))
-ef79c097bbe972 David Howells    2009-04-03  171  		return;
-402cb8dda949d9 David Howells    2018-04-04  172  
-45f3a70ba68e1f Dave Wysochanski 2022-03-01  173  	nfs_fscache_update_auxdata(&auxdata, inode);
-402cb8dda949d9 David Howells    2018-04-04  174  
-88a4d7bdeec978 Dave Wysochanski 2023-02-20  175  	netfs_inode(inode)->cache = fscache_acquire_cookie(
-88a4d7bdeec978 Dave Wysochanski 2023-02-20  176  					       nfss->fscache,
-a6b5a28eb56c3f Dave Wysochanski 2020-11-14  177  					       0,
-a6b5a28eb56c3f Dave Wysochanski 2020-11-14 @178  					       nfsi->fh.data, /* index_key */
-a6b5a28eb56c3f Dave Wysochanski 2020-11-14  179  					       nfsi->fh.size,
-a6b5a28eb56c3f Dave Wysochanski 2020-11-14  180  					       &auxdata,      /* aux_data */
-a6b5a28eb56c3f Dave Wysochanski 2020-11-14  181  					       sizeof(auxdata),
-45f3a70ba68e1f Dave Wysochanski 2022-03-01  182  					       i_size_read(inode));
-b4fa966f03b740 David Howells    2023-06-28  183  
-b4fa966f03b740 David Howells    2023-06-28  184  	if (netfs_inode(inode)->cache)
-b4fa966f03b740 David Howells    2023-06-28  185  		mapping_set_release_always(inode->i_mapping);
-ef79c097bbe972 David Howells    2009-04-03  186  }
-ef79c097bbe972 David Howells    2009-04-03  187  
-
-:::::: The code at line 178 was first introduced by commit
-:::::: a6b5a28eb56c3f4988f7ff5290b954ba296e309a nfs: Convert to new fscache volume/cookie API
-
-:::::: TO: Dave Wysochanski <dwysocha@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
