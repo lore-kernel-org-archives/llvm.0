@@ -1,128 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2C4D53F;
-	Tue, 29 Oct 2024 01:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41AD1FF5F8
+	for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 05:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730163944; cv=none; b=TE5j1XgAM92HynxeyjGxmfyXVaGWomP1U8YlHy+4UfAtk4X5V4OWm537FgrZ6XJCdjxICad2z6jdmgaxBnJRMyGhSe29R5WNFiZW4E30dz2TzPTjkbv7TRP7FO5mvkRchn3uA66AUoR2/namMknKUYxDrG7kXE7/ydrlxdhfDr8=
+	t=1730181097; cv=none; b=MC0JwSPx19HBrvTzvXWFYyoDGgqQYpOW+iRpKxSomSbsmnW7n+XlQoP9p3Rok+jtziKAlVuXC6+eCf60h6byhb+B7zBPlEw+76iamYSYYCruiwWk5VN2BcMwFf6QsqOVUjnPUPHn2NYi4l6KDhziqRCBIJ26ZvSKmv0Uq5KbvWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730163944; c=relaxed/simple;
-	bh=M+VRhdqMapP8KDDuQAlS4MNq/YBZkEIPR+/5g6NFM/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ESyrCd7gkxTn8ppe29OwpfCEcrCzPoVh3J1OhtZ/ZI7giGS63BLIKK+sdsVZxg3xNYHdA1PMg+dacEgjwDyHe0G2qfbCQVub4A+JXLaOGXuwB7Uj4sgcjHIpeaXZxYE9ciUjCiFmvIpSJTW7JuWZ/EbbWK99lQNdGBL4917M68Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QjMflzLL; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730181097; c=relaxed/simple;
+	bh=rkJGzaJiGDNyDHmrzD6Ukn0kvrLRqUNFw7rsJbF66DM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H7+hQ3080whenZEWLNDTHsIfXR+LRVx0aEMYc+aDmJRKD0vxSbZEvK6elTygEW5DrvOxMuW9uRRxfOSH0U9XX7XFxKkq9aYPJdL5L2pzJ9izk7SxJ+Z1Va6O3HPgi4XfFodd+DPOIscvk/vpKO3ZVKd7BIZjh5lPl3khL/GVM10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xqzdLMuG; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QjMflzLL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730163941; x=1761699941;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M+VRhdqMapP8KDDuQAlS4MNq/YBZkEIPR+/5g6NFM/Q=;
-  b=QjMflzLL3IHXSYlZpuepS8yp8tJ9T+z0HUk185PbN354OjeUJCVE52LK
-   5FgJQp64ReigZ7wTeNZQefpsfISQ0D9QdQY9CsUt2b4/VglZOiPOSZbb8
-   BQoZk1NV4Wx1LH2ku2h4hkuMKLExXvxYHvJuDgrptSayyLm8W2zgRnaEL
-   uXZTcjSHUMV3eGDJ2Zncawk8QqXq0bgwfRt72HcWxBvLxmJRCiXmUZ/SN
-   VetZB9Kk6cfk9P4XWTlgSDv8wrPvu1wmLbInjLctRwyrIYvIzR77F/br2
-   arxnw5AGh3HL8EClYbj913Y5xkb5mxZDyMzJRW//tk3qPzjq78VKCQVg4
-   w==;
-X-CSE-ConnectionGUID: dfXS3M3+TeCBXLO5WXF2Dg==
-X-CSE-MsgGUID: JEGq2V+BRimBlmKnfcLDwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="29216585"
-X-IronPort-AV: E=Sophos;i="6.11,240,1725346800"; 
-   d="scan'208";a="29216585"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 18:05:40 -0700
-X-CSE-ConnectionGUID: /5wNJOEqToGqpXAT0JYG6g==
-X-CSE-MsgGUID: 274QFWMzSGOViE8oo4LeyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,240,1725346800"; 
-   d="scan'208";a="119250597"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 28 Oct 2024 18:05:33 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5afr-000d5A-1o;
-	Tue, 29 Oct 2024 01:05:31 +0000
-Date: Tue, 29 Oct 2024 09:04:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	dsahern@kernel.org, willemdebruijn.kernel@gmail.com,
-	willemb@google.com, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, shuah@kernel.org, ykolal@fb.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next v3 04/14] net-timestamp: introduce
- TS_SCHED_OPT_CB to generate dev xmit timestamp
-Message-ID: <202410290852.PLcWZ1Yo-lkp@intel.com>
-References: <20241028110535.82999-5-kerneljasonxing@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xqzdLMuG"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-460969c49f2so146881cf.0
+        for <llvm@lists.linux.dev>; Mon, 28 Oct 2024 22:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730181095; x=1730785895; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yS+AWBnCO/J18Xc6TcuxqR5XEdAGr/Rpio3YV4nA0AE=;
+        b=xqzdLMuGkf2HZH/WDYl+RXKgaW1PDWKt95+cZ6UYw4yfvR4KENwPNdRzkBmjDY5SrO
+         cyi/7LjniF7Q3AdbR4QDizMsvv6PzWfZ62Aj9H8Fzt2pOQd1yIEM95a0aheHOGAKCkRk
+         Xlo2D1vegpEHB1G29Y7+nmZi2qFsCfITuN/ykcTxuzw7gHxd8WXv2789dDxUEawBWUAA
+         K/7cEn0Ahualgl4DDOl0s+TD1TAYxdlSaW5piTYm69EwZZMm9EbGY+LeFp1BguwS90Px
+         onr0VodTRqh8NVqmrxYjmqdh7A9snj49gvqgmwK9whg9IZBzgK6jh36DBeFuIsXSCovo
+         ij+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730181095; x=1730785895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yS+AWBnCO/J18Xc6TcuxqR5XEdAGr/Rpio3YV4nA0AE=;
+        b=Z615M/Ybww8jalmmPlec9D7UqUrwJvwGpoO+VJYcDxx0LCCSM7TkI5cvrpfCQyu5xt
+         ZORbCc7iuGK3om9stDp+VTD4MrY5ZHRp/Nvk+Ewj0OGXSJ7oX5+dSwBA/VgBCyTFf7SK
+         VwYGdLaFNsVtVR3xPseov9bAdVk9TTcwLBCI7iPIrprsQ0CfGeX7rX9IAYwBWUqCeKPS
+         c3NgzFzqaZM+NTa8vDTyxg1ahKe7aIz1xRsUEC/TJeCcN0WkLkHNL2Y8U+ELe8+vv/6e
+         7gKqymXTac/ws6dxEsAZfpaf1fMZ+3k44+4N96Glm/J4bhXJ8HwkdaKCiYk2W7/UL1ho
+         4vBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXhwNs9w0i4WoAkGh0xbXMjIGuhKWy8y2OiFnhTda3lQtnWqFKr2e128KGF49ArVC6xAWU@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywxj+ghy5UxYJxhJbgOoT43XK+t+9u4NLwYA71Rj5mqqLzYtxZh
+	2UbrLmcC5MK6s6u+DTTg/Txsw7gAuxXwoom59Z6zNjc6KvKW/V9ZYyzPAMCtbXDBWagf/Qsw7UX
+	FImAvFeSU4cTvziEx4SQuLZZv+0qjaToxssAk
+X-Gm-Gg: ASbGnctA9VrXdzMBcexBJW1xjeOHECHvA+TxK8Teboor86oJ3t1O5omdq8+/KXDJ+DL
+	blEm91kzZEomkV+b6uDf+vmTP3CduEgPrLd/U19BzoXjtqhWFo0TA5RpOxHI=
+X-Google-Smtp-Source: AGHT+IEVAXdFG3fNtFOsbcJBNRZwq6dZ7NPHf4Fl17QtrnIba/Ad0eOq8gq9bIFuScwN6QgnbyAorRomVIE9wKpqH3w=
+X-Received: by 2002:a05:622a:38b:b0:45f:6f3:5671 with SMTP id
+ d75a77b69052e-46164fa2de0mr2424301cf.20.1730181094473; Mon, 28 Oct 2024
+ 22:51:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241028110535.82999-5-kerneljasonxing@gmail.com>
+References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-3-xur@google.com>
+ <202410281716.0C8F383@keescook> <0605fa9c-0e48-48ec-b04d-c2ef1c48fdd9@zytor.com>
+In-Reply-To: <0605fa9c-0e48-48ec-b04d-c2ef1c48fdd9@zytor.com>
+From: Rong Xu <xur@google.com>
+Date: Mon, 28 Oct 2024 22:51:21 -0700
+Message-ID: <CAF1bQ=QDQ+ACsH2CchnRk2LDRpN_WYjJOAjr9FDspxiar+YbrQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/7] objtool: Fix unreachable instruction warnings for
+ weak functions
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Kees Cook <kees@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jason,
+I think the objtool works on individual object files (or vmlinux.o).
+The -Wl,--gc-sections flag, on the other hand, is a linker flag that
+acts on the final link -- it's applied after objtool invocations.
+Therefore, even with -Wl,--gc-sections, we'll still encounter those
+spurious warnings from objtool.
 
-kernel test robot noticed the following build errors:
+-Rong
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Xing/net-timestamp-reorganize-in-skb_tstamp_tx_output/20241028-192036
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241028110535.82999-5-kerneljasonxing%40gmail.com
-patch subject: [PATCH net-next v3 04/14] net-timestamp: introduce TS_SCHED_OPT_CB to generate dev xmit timestamp
-config: arm64-randconfig-001-20241029 (https://download.01.org/0day-ci/archive/20241029/202410290852.PLcWZ1Yo-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410290852.PLcWZ1Yo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410290852.PLcWZ1Yo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/core/skbuff.c:5640:2: error: call to undeclared function 'BPF_CGROUP_RUN_PROG_SOCK_OPS_SK'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5640 |         BPF_CGROUP_RUN_PROG_SOCK_OPS_SK(&sock_ops, sk);
-         |         ^
-   1 error generated.
-
-
-vim +/BPF_CGROUP_RUN_PROG_SOCK_OPS_SK +5640 net/core/skbuff.c
-
-  5624	
-  5625	static void timestamp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
-  5626	{
-  5627		struct bpf_sock_ops_kern sock_ops;
-  5628	
-  5629		memset(&sock_ops, 0, offsetof(struct bpf_sock_ops_kern, temp));
-  5630		if (sk_fullsock(sk)) {
-  5631			sock_ops.is_fullsock = 1;
-  5632			sock_owned_by_me(sk);
-  5633		}
-  5634	
-  5635		sock_ops.sk = sk;
-  5636		sock_ops.op = op;
-  5637		if (nargs > 0)
-  5638			memcpy(sock_ops.args, args, nargs * sizeof(*args));
-  5639	
-> 5640		BPF_CGROUP_RUN_PROG_SOCK_OPS_SK(&sock_ops, sk);
-  5641	}
-  5642	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Mon, Oct 28, 2024 at 5:19=E2=80=AFPM H. Peter Anvin <hpa@zytor.com> wrot=
+e:
+>
+> On 10/28/24 17:16, Kees Cook wrote:
+> > On Fri, Oct 25, 2024 at 10:14:04PM -0700, Rong Xu wrote:
+> >> In the presence of both weak and strong function definitions, the
+> >> linker drops the weak symbol in favor of a strong symbol, but
+> >> leaves the code in place. Code in ignore_unreachable_insn() has
+> >> some heuristics to suppress the warning, but it does not work when
+> >> -ffunction-sections is enabled.
+> >>
+> >> Suppose function foo has both strong and weak definitions.
+> >> Case 1: The strong definition has an annotated section name,
+> >> like .init.text. Only the weak definition will be placed into
+> >> .text.foo. But since the section has no symbols, there will be no
+> >> "hole" in the section.
+> >>
+> >> Case 2: Both sections are without an annotated section name.
+> >> Both will be placed into .text.foo section, but there will be only one
+> >> symbol (the strong one). If the weak code is before the strong code,
+> >> there is no "hole" as it fails to find the right-most symbol before
+> >> the offset.
+> >>
+> >> The fix is to use the first node to compute the hole if hole.sym
+> >> is empty. If there is no symbol in the section, the first node
+> >> will be NULL, in which case, -1 is returned to skip the whole
+> >> section.
+> >>
+> >> Co-developed-by: Han Shen <shenhan@google.com>
+> >> Signed-off-by: Han Shen <shenhan@google.com>
+> >
+> > This seems logically correct to me, but I'd love to see review from Jos=
+h
+> > and/or Peter Z on this change too.
+> >
+> > Reviewed-by: Kees Cook <kees@kernel.org>
+> >
+>
+> Does this happen even with -Wl,--gc-sections?
+>
+>         -hpa
+>
