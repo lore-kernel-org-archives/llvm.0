@@ -1,154 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3101FF5F0;
-	Tue, 29 Oct 2024 18:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3F7206E82;
+	Tue, 29 Oct 2024 18:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730227407; cv=none; b=bKmKIygT4baxvFUa2CuBwjRJB2ecLneeAUODZO6hmFttuWgYl7rBhh9q2z4CPpPR+9P11UO+IqbtNuDlrhi6xEZG14MnzqBhli078ENVlaSsevumro4vU53Y3DKdQDZzJnQLNI6kV8AqCivng50KCdcesgDPk0NzyGvpRW4/qr8=
+	t=1730227838; cv=none; b=HMh2m63pifpDO54qK5uzLjgsY8QhYLs3Bk1OdDwNsHj9wt6QyV2R24cfIfWinYkm5y7S3TPqBDQRVxubJ+91x9euScXgPASI5nNG7CDEIwxapW6ObUJSrxxByDb0ILUfQcJytOdePcYwcayTNh1H59RpFuUqolEbi65Zy5plalg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730227407; c=relaxed/simple;
-	bh=Mog5EHZwzJWObHAo/8dGnwOmguGy13F5/ZamcVvxXBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EPj8ba0CYyVY+C2eW0u6Wt5PO1dMwduMIDtzVICN8OSA8hYozb4SKU0U+93KVjb0TGmyKttXHFSruAukbM/kCLw1RBns4q5QvoVGtRuLqFfzdFuctsja4uFZQsUhy60M+hgebS3tG9rSzIehpXf6LsIfM6O3Nr8TagakbTte/1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nDWtq/fW; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730227838; c=relaxed/simple;
+	bh=lV81+lqraE6WdVVhlwTOO1Qi3SkG2SKwe5qZ1XrLC58=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=pvseNK/AOGF5SfleQVcGcgMy/NH7WUtPqHzgroN11AjiZciUGbnhyKu4wY3s5ygGYk9Vm8zDMXBDG9qIleNyF7e1J4RJgeT9m72ZEtiIiGn60t43ZheehRJkkJIyUGy11szPBuL3pnClnPF0nFC7qVgeo6nYXmXbU4Tt2koeoTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GmNWjyIv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nDWtq/fW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730227406; x=1761763406;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mog5EHZwzJWObHAo/8dGnwOmguGy13F5/ZamcVvxXBw=;
-  b=nDWtq/fWYsr30Fl62kaPTlRqCE/bRW+sVlkBYtAPKnV52N+4PSHlu2NV
-   HLx/7Y6f2GGHZmO4ycpwT3hxJKmcTUxVwtuwgzcGPwC4D1GyBMeplGSYl
-   YIOk9JneaF8/pXLSBWF0D7yS2e4Lwd5lyWsV8DNwcO/ZQ2RDDutVNarIs
-   4tj4Fel2XBRQxSL/zRlVxmu2V7hgiP0o7AOcfM6TdDDwmHPTTHPRaF97a
-   TwhLbAfLVuOSU51rdO+Z/EcCailOLjQhHwLf3ZLoTyZtAn2ZwRqIE2JiC
-   I/v8C0raxguGOiL87t7DyVhleK/c9fhttqU/VGY9yTPGZzXZJsduv5ZXm
-   A==;
-X-CSE-ConnectionGUID: rRyzBJ8DRC2Su6/wL887rA==
-X-CSE-MsgGUID: cNmAAA1yS/SovT8aPNWa5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="30005062"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="30005062"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:43:23 -0700
-X-CSE-ConnectionGUID: hKQ6fF6URmmtMITDZTx54A==
-X-CSE-MsgGUID: m3twcks4TUu7HehP/mhXFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="82206712"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Oct 2024 11:43:21 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5rBW-000e0D-2r;
-	Tue, 29 Oct 2024 18:43:18 +0000
-Date: Wed, 30 Oct 2024 02:42:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Joerg Roedel <jroedel@suse.de>, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [iommu:core 4/22] drivers/gpu/drm/msm/msm_iommu.c:110:2: error: call
- to undeclared function 'iommu_flush_iotlb_all'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202410300204.aNMc5Ykp-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GmNWjyIv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26790C4CEE4;
+	Tue, 29 Oct 2024 18:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730227838;
+	bh=lV81+lqraE6WdVVhlwTOO1Qi3SkG2SKwe5qZ1XrLC58=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=GmNWjyIv1UZ/iiuQlQYkUmglNQnPDcs9lCA/zix7CmpsCDHSuWSNGVCVfH4eKCF1G
+	 OlFlKffM/KBjOuqraKFfOsPiDutmYxNxuiv4sTD33TQcSipiZYAtnR/UQ+2Te3+7eS
+	 Dqp3ElE35P6tqgfOmuE3PT8L0uXZBOXVLYeW4h8rkDXeVqF1lcQxNBmgtAEo6LGMFG
+	 eQyul4CR2IpPRLkg9zYTW3nIZRFztVQCmpNs4WbzsMwph59RsB/vJ7pHR5RGeeTsfe
+	 W+zvUktLkdhpm79Hc7let2DJ95VvXBjF02+XnMqVNZ9ouhR5m7Vmc4nJWmmFVyorut
+	 ZNSPDI5zrfy3Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB44B380AC08;
+	Tue, 29 Oct 2024 18:50:46 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] wwan: core: Pass string literal as format
+ argument of dev_set_name()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173022784550.787364.9831173645509301356.git-patchwork-notify@kernel.org>
+Date: Tue, 29 Oct 2024 18:50:45 +0000
+References: <20241023-wwan-fmt-v1-1-521b39968639@kernel.org>
+In-Reply-To: <20241023-wwan-fmt-v1-1-521b39968639@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+ johannes@sipsolutions.net, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ netdev@vger.kernel.org, llvm@lists.linux.dev
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git core
-head:   a33bf8d8ce7e06bf0f033865b0cea5887cd2ac8c
-commit: 69e5a17511f654db0fe058d22719cef008c9faf1 [4/22] iommu: Remove useless flush from iommu_create_device_direct_mappings()
-config: arm64-randconfig-002-20241029 (https://download.01.org/0day-ci/archive/20241030/202410300204.aNMc5Ykp-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241030/202410300204.aNMc5Ykp-lkp@intel.com/reproduce)
+Hello:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410300204.aNMc5Ykp-lkp@intel.com/
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Note: the iommu/core HEAD a33bf8d8ce7e06bf0f033865b0cea5887cd2ac8c builds fine.
-      It only hurts bisectability.
+On Wed, 23 Oct 2024 13:15:28 +0100 you wrote:
+> Both gcc-14 and clang-18 report that passing a non-string literal as the
+> format argument of dev_set_name() is potentially insecure.
+> 
+> E.g. clang-18 says:
+> 
+> drivers/net/wwan/wwan_core.c:442:34: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+>   442 |         return dev_set_name(&port->dev, buf);
+>       |                                         ^~~
+> drivers/net/wwan/wwan_core.c:442:34: note: treat the string as an argument to avoid this
+>   442 |         return dev_set_name(&port->dev, buf);
+>       |                                         ^
+>       |                                         "%s",
+> 
+> [...]
 
-All errors (new ones prefixed by >>):
+Here is the summary with links:
+  - [net-next] wwan: core: Pass string literal as format argument of dev_set_name()
+    https://git.kernel.org/netdev/net-next/c/3f7f3ef44f4b
 
-   In file included from drivers/gpu/drm/msm/msm_iommu.c:7:
-   In file included from include/linux/adreno-smmu-priv.h:9:
-   In file included from include/linux/io-pgtable.h:6:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/msm/msm_iommu.c:110:2: error: call to undeclared function 'iommu_flush_iotlb_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     110 |         iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
-         |         ^
-   drivers/gpu/drm/msm/msm_iommu.c:110:2: note: did you mean 'local_flush_tlb_all'?
-   arch/arm64/include/asm/tlbflush.h:257:20: note: 'local_flush_tlb_all' declared here
-     257 | static inline void local_flush_tlb_all(void)
-         |                    ^
-   4 warnings and 1 error generated.
-
-
-vim +/iommu_flush_iotlb_all +110 drivers/gpu/drm/msm/msm_iommu.c
-
-70bccecfcaf6c5 Rob Clark      2022-08-23   90  
-b145c6e65eb05e Jordan Crouse  2020-08-17   91  static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu, u64 iova,
-b145c6e65eb05e Jordan Crouse  2020-08-17   92  		size_t size)
-b145c6e65eb05e Jordan Crouse  2020-08-17   93  {
-b145c6e65eb05e Jordan Crouse  2020-08-17   94  	struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
-b145c6e65eb05e Jordan Crouse  2020-08-17   95  	struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
-b145c6e65eb05e Jordan Crouse  2020-08-17   96  
-b145c6e65eb05e Jordan Crouse  2020-08-17   97  	while (size) {
-70bccecfcaf6c5 Rob Clark      2022-08-23   98  		size_t unmapped, pgsize, count;
-70bccecfcaf6c5 Rob Clark      2022-08-23   99  
-70bccecfcaf6c5 Rob Clark      2022-08-23  100  		pgsize = calc_pgsize(pagetable, iova, iova, size, &count);
-70bccecfcaf6c5 Rob Clark      2022-08-23  101  
-70bccecfcaf6c5 Rob Clark      2022-08-23  102  		unmapped = ops->unmap_pages(ops, iova, pgsize, count, NULL);
-70bccecfcaf6c5 Rob Clark      2022-08-23  103  		if (!unmapped)
-70bccecfcaf6c5 Rob Clark      2022-08-23  104  			break;
-70bccecfcaf6c5 Rob Clark      2022-08-23  105  
-70bccecfcaf6c5 Rob Clark      2022-08-23  106  		iova += unmapped;
-70bccecfcaf6c5 Rob Clark      2022-08-23  107  		size -= unmapped;
-b145c6e65eb05e Jordan Crouse  2020-08-17  108  	}
-b145c6e65eb05e Jordan Crouse  2020-08-17  109  
-93b694d096cc10 Linus Torvalds 2020-10-15 @110  	iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
-b145c6e65eb05e Jordan Crouse  2020-08-17  111  
-70bccecfcaf6c5 Rob Clark      2022-08-23  112  	return (size == 0) ? 0 : -EINVAL;
-b145c6e65eb05e Jordan Crouse  2020-08-17  113  }
-b145c6e65eb05e Jordan Crouse  2020-08-17  114  
-
-:::::: The code at line 110 was first introduced by commit
-:::::: 93b694d096cc10994c817730d4d50288f9ae3d66 Merge tag 'drm-next-2020-10-15' of git://anongit.freedesktop.org/drm/drm
-
-:::::: TO: Linus Torvalds <torvalds@linux-foundation.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
