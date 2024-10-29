@@ -1,61 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C27F205145;
-	Tue, 29 Oct 2024 18:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC5B20A5DB;
+	Tue, 29 Oct 2024 22:24:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730228066; cv=none; b=cTUHnqxP5eoyWGlmjItx3cDTdddpTvzEp0GjRBziIu4v8RHmBCxGBLvVVyTywcLVf3wiLcwwupaVQ7akmkJeJ8N+OFLgpNyx9QindtWEYA+TPfMU3NQK2+Q7WTxAhmF6hsYhUhK9C+qZgFAc8idTqUk3PximD6b7TPoLxy9bF64=
+	t=1730240664; cv=none; b=rD2JbjoEYY01XejYlzttmyTB2j4tqfXCMBTuzzfq3WID5mWPIgquHI96f98y72o/vrcqdCxvZkg+hAFv/JWrZyWvZwqA1Fpv4nTVrLZUdG10BM+vRLZveocileoeYCvIp/tJ8Vx+aDIRGb61u9e5q0KJ4wI38TFLVjalKfePflM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730228066; c=relaxed/simple;
-	bh=fgvge7uuCg4mpfWSgPVB9zbMkx0riSOsc1TEvBsEePw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=q+4RNjrO/0lQtY409giIklma9CijxOaqUnYykGFcQmy/HxT0rLny3/woqbd/xDDz/egNYPFsGGMO1b7jBwV4t74k040FO88hezjOqBfpRefmsnmHHDI4f1ZFsD7UQBR9VtN8nuePuREj1ne1zYBgTWkE4rrT+bjg+3B+XO2nQDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=exLB7qVq; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730240664; c=relaxed/simple;
+	bh=Y9KYwDKlXpJ9Sr+8AScw+9OZ+aqfWvOvXRPpRGxiCAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bzraTTqmBeMJldbkhP1FtvI2tt4MYCc2JQCr/X6hu383+Zvzd3CW1YtX+ptBG1UIhBJYVo0buZIovUFyRkhunMbwznWFg2Hv9+4JVSDQk08rrOt0VdejSg2jX4sWuLzhlJhezUzfiSfQHxHcX9fJaEpEzV9oS6n6w9H8EXprR0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvTKCeCZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="exLB7qVq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730228064; x=1761764064;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fgvge7uuCg4mpfWSgPVB9zbMkx0riSOsc1TEvBsEePw=;
-  b=exLB7qVq8tVaZJlSYHtLZoOi6FKoxPKbuvcSc7yjSLfK6Az5EQSakWev
-   hVQQ4XuB0RR4f6Z1N2XthBowC/yE3NzmdmRy6d+jQfC0M8tsswEPpbV1j
-   ZH5fV+kZ0H82ZkhqH9/WzCX3G/kPWnJH30gmmEvqqhFzuqSr1RTro8aLG
-   WTOPkq/bo9igrKJG9miAoVocqd54/sZGG8kyU4lwbPUNf4Cu7EoRbwjEe
-   Yj5XCWij2nA5QQ3X15sIGOdYWF/3tecnXc9MR15ThfQOyOLcm6tc5HOrH
-   h54jroGvKg/Vxv0uNIL/uBj8JkwpB7PR2PS1Ac7GyoO0Gl2K2kJUtqe/0
-   g==;
-X-CSE-ConnectionGUID: qLeaH5TtTcyacvBX2Qe1oQ==
-X-CSE-MsgGUID: CR+iV0npSOiB/kogA2wrBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="29319381"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="29319381"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:54:24 -0700
-X-CSE-ConnectionGUID: CuVUtOgJQpClkGmx7WOydg==
-X-CSE-MsgGUID: C2+Yx2niTsi96Ubo/+gfSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="82383931"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 29 Oct 2024 11:54:22 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5rMB-000e16-2Z;
-	Tue, 29 Oct 2024 18:54:19 +0000
-Date: Wed, 30 Oct 2024 02:54:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Joerg Roedel <jroedel@suse.de>, Vasant Hegde <vasant.hegde@amd.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>, Yi Liu <yi.l.liu@intel.com>,
-	Kevin Tian <kevin.tian@intel.com>
-Subject: [iommu:core 10/22] ld.lld: error: duplicate symbol:
- iommu_paging_domain_alloc_flags
-Message-ID: <202410300255.fmW8K0rj-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvTKCeCZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05137C4CECD;
+	Tue, 29 Oct 2024 22:24:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730240663;
+	bh=Y9KYwDKlXpJ9Sr+8AScw+9OZ+aqfWvOvXRPpRGxiCAw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LvTKCeCZ3OjY9xGlhTb4noZIjmk67EC4hw+DOoJp30qWT7c/q2kiCO65o0NrXPmKe
+	 SIMrmVnlXDDCFGAWVcvl1/0zC1EPOEtPvtnP4/xitobhNOJWi0QYffq4F2ZcDaSHP3
+	 KhiTk2P82S/wrox0M7MLVl+8hplQ6zlmUkZJwa6PaJ10xLy+C+2mbXKu0jKqEWBMFK
+	 djTzXjkbLixTpyLDWBtwYDavYeVCf5O59S+ftRMaeWX1p2wVPYD/bAxVMmATXDbzky
+	 2nBYuPTyQfc6rufLw+2a4aifyl7fM09I4x1EsBO1cbNHDXmMImdVyHEIuc42U2Y1wa
+	 mTCpwM2Hzn6wg==
+Date: Tue, 29 Oct 2024 15:24:21 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: koachan@protonmail.com
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Jonathan Corbet <corbet@lwn.net>, sparclinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] sparc/build: Put usage of -fcall-used* flags
+ behind cc-option
+Message-ID: <20241029222421.GA2632697@thelio-3990X>
+References: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com>
+ <20241029-sparc-cflags-v3-1-b28745a6bd71@protonmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,48 +52,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241029-sparc-cflags-v3-1-b28745a6bd71@protonmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git core
-head:   a33bf8d8ce7e06bf0f033865b0cea5887cd2ac8c
-commit: 20858d4ebb423826b7a978d54cde195f51d87e20 [10/22] iommu: Introduce iommu_paging_domain_alloc_flags()
-config: arm-footbridge_defconfig (https://download.01.org/0day-ci/archive/20241030/202410300255.fmW8K0rj-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241030/202410300255.fmW8K0rj-lkp@intel.com/reproduce)
+On Tue, Oct 29, 2024 at 09:49:07PM +0700, Koakuma via B4 Relay wrote:
+> From: Koakuma <koachan@protonmail.com>
+> 
+> Place -fcall-used* flags behind cc-option so that clang (which doesn't
+> support them) can still compile the kernel.
+> 
+> This is a safe change, the reasoning is as follows:
+> 
+> In the (normal) 32-bit ABI, %g5 and %g7 is normally reserved, and in
+> the 64-bit ABI, %g7 is the reserved one.
+> Linux turns them into volatile registers by the way of -fcall-used-*,
+> but on the other hand, omitting the flags shouldn't be harmful;
+> compilers will now simply refuse to touch them, and any assembly
+> code that happens to touch them would still work like usual (because
+> Linux' conventions already treats them as volatile anyway).
+> 
+> Signed-off-by: Koakuma <koachan@protonmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410300255.fmW8K0rj-lkp@intel.com/
+Clang builds now succeed with this series and builds with GCC 14.2.0
+continue to pass and boot successfully.
 
-Note: the iommu/core HEAD a33bf8d8ce7e06bf0f033865b0cea5887cd2ac8c builds fine.
-      It only hurts bisectability.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-All errors (new ones prefixed by >>):
+One comment below, please carry these tags forward if there are future
+revisions without substantial technical changes.
 
->> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
-   >>> defined at dma-mapping.c
-   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
-   >>> defined at platform.c
-   >>>            drivers/base/platform.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
-   >>> defined at dma-mapping.c
-   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
-   >>> defined at pci-driver.c
-   >>>            drivers/pci/pci-driver.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
-   >>> defined at dma-mapping.c
-   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
-   >>> defined at init-mm.c
-   >>>            mm/init-mm.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
-   >>> defined at dma-mapping.c
-   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
-   >>> defined at fork.c
-   >>>            kernel/fork.o:(.text+0x0) in archive vmlinux.a
+> ---
+>  arch/sparc/Makefile      | 4 ++--
+>  arch/sparc/vdso/Makefile | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+> index 757451c3ea1df63b948e68a45988c78f5974f9ea..0400078076e588be93a702d1c64eb9fd34466075 100644
+> --- a/arch/sparc/Makefile
+> +++ b/arch/sparc/Makefile
+> @@ -29,7 +29,7 @@ UTS_MACHINE    := sparc
+>  # versions of gcc.  Some gcc versions won't pass -Av8 to binutils when you
+>  # give -mcpu=v8.  This silently worked with older bintutils versions but
+>  # does not any more.
+> -KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu -fcall-used-g5 -fcall-used-g7
+> +KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu $(call cc-option,-fcall-used-g5) $(call cc-option,-fcall-used-g7)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Small nit, this (and the one in the vdso) could probably be one
+cc-option call? Is it likely that one flag would be implemented in the
+compiler without the other?
+
+  $(call cc-option,-fcall-used-g5 -fcall-used-g7)
+
+>  KBUILD_CFLAGS  += -Wa,-Av8
+>  
+>  KBUILD_AFLAGS  += -m32 -Wa,-Av8
+> @@ -45,7 +45,7 @@ export BITS   := 64
+>  UTS_MACHINE   := sparc64
+>  
+>  KBUILD_CFLAGS += -m64 -pipe -mno-fpu -mcpu=ultrasparc -mcmodel=medlow
+> -KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -fcall-used-g7 -Wno-sign-compare
+> +KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 $(call cc-option,-fcall-used-g7) -Wno-sign-compare
+>  KBUILD_CFLAGS += -Wa,--undeclared-regs
+>  KBUILD_CFLAGS += $(call cc-option,-mtune=ultrasparc3)
+>  KBUILD_AFLAGS += -m64 -mcpu=ultrasparc -Wa,--undeclared-regs
+> diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
+> index 243dbfc4609d804fc221c3591eebe891107ffdab..50ec2978cda5397841daad6ffdc9682811b9b38e 100644
+> --- a/arch/sparc/vdso/Makefile
+> +++ b/arch/sparc/vdso/Makefile
+> @@ -46,7 +46,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
+>         -fno-omit-frame-pointer -foptimize-sibling-calls \
+>         -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+>  
+> -SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 -fcall-used-g5 -fcall-used-g7
+> +SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 $(call cc-option,-fcall-used-g5) $(call cc-option,-fcall-used-g7)
+>  
+>  $(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+>  
+> 
+> -- 
+> 2.47.0
+> 
+> 
+> 
