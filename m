@@ -1,340 +1,302 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDA02040A2;
-	Tue, 29 Oct 2024 10:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C27E1DF960;
+	Tue, 29 Oct 2024 12:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730197500; cv=none; b=mumHKoc/Ke1XfMaEho7eLWz1CH3UOY6iYU+j842hKCdOw8uUDFeFLvhbC8wWGUJSmoJ2i2V91jOLEcbyESAY/ELp84U+OQ5J0Sc656xaX5Ctfrz+yf3D4ntpBNKgfNHnjw7H4ZZNKvIYT0a0vhtoSlX4OuorSv7wVsmbFWMIytU=
+	t=1730204338; cv=none; b=GYRoNIcLjaL3gNQwEMX6CigjDWwtMvsU6bNBbMRzqz7afG/mCkPNQG+KfF8Gid9RyC4ESmSJ/yKs6ONq6orxGJoZi7KQLnc3cNdeYFZIix94vZ4Yrety8On5ZZLKqQsTpYNKB7Ux6HjMiYJiFrKvUKeBibz/nnXTJ633wdTA0J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730197500; c=relaxed/simple;
-	bh=PjMN8UliST8cUxWYnYu6tMkq0bZKB9E+YnKhp/cEPNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HJZlWgaCsEIAbCZOgdNSgmY4Tspa7/DzwBgiImDtruZ73lAs9/iNfQk/DQ1F0eRZ9Sw6a5jZYerT6tZ1dyORPJ/PY8nWPA4GpP4cMucS/lKvcuF5ezAUf/ipz7IQu0XN4D50KWPitef/xv47PtMw1p/4WoXocYk6HZVHeRFYNpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K9qv/qiw; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1730204338; c=relaxed/simple;
+	bh=YAFq5KbQEvc0i8idmT2cyrH8vmmPmrlOpPkvS9VkTQs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C1aGd21Mn4tBgvj4ZCDA2LKwUIX86kY+Avs1uGxyBcSrNYiJLcydPpol1pO9NfvEn25yKn5+5oi7miphWUXu55wAfFDkhZtDtJSk/EU3b6t97uHzlgErSRjm8SFgsAVk7Q0nh+1Z0xgU9A80Pb39JiCDZgWZUM/oCCpI4hOuJyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZXUbYzc+; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K9qv/qiw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZXUbYzc+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730197498; x=1761733498;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PjMN8UliST8cUxWYnYu6tMkq0bZKB9E+YnKhp/cEPNQ=;
-  b=K9qv/qiwGT9PgeXzziQODBDMpZmh0Yg76mQOsjNJz0NikEGqwEuyKnQ0
-   2XCduEetDjGopN8xubNytRXUxaPDOrjYOojuTjoqmoqNYLGF88Tg+oAFP
-   Jm7B9ZbHwQbLFrRAlgEa7Rw9qzgNxYtz5kSuum6Cf8LR2Stxk0otAkQzi
-   f8QXm5+9TtKkeVZcH5rfpFIvDfMSxezVn5SAId0+CwL5SUatqTtyvPBvg
-   u8dwo2IIYCMoUE66pzvcwvtc0LRlS7mVP1Pq0RW0zUoeT32Ue9bzHerPs
-   aCiFXj+iLViJHqF22B/tFPXVXlvqNLEb4bqCE2XiF3qWxDaEJ1vNHu/PI
-   w==;
-X-CSE-ConnectionGUID: P3HO2z8oQi2pzeZwAJbZDQ==
-X-CSE-MsgGUID: He+zfsYgRuKGHI3vETVJAg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11239"; a="55235005"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="55235005"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 03:24:57 -0700
-X-CSE-ConnectionGUID: zOvFqdxtQWyzgAfG6eKYtw==
-X-CSE-MsgGUID: rmaqRUAPT4GR2XKBqvEiNg==
+  t=1730204336; x=1761740336;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YAFq5KbQEvc0i8idmT2cyrH8vmmPmrlOpPkvS9VkTQs=;
+  b=ZXUbYzc+8e7FGfmoxYNGchCqYos9toLWWa1KkI0tQnyzQXl5dKua7es9
+   DALUHBM0PLcnOUDnAp3CSgxMGjqQo2yhbS/9FlcJ0IhbloC/sdyzOlbKs
+   0FcFwkyWrOzuTbG0HtBGa3x9Ome1fkDegRPTiXiwRgzDPGT24WIT0J2jS
+   gVSnGRxFC069UElpQzpAhUk4FWg49QKUjaoARDxnnoJUpD1R8OAPBrGvq
+   ySYOzu593YtYG3tbcDfHodo9rT/SU8sp5CqWZo01pc9FnUvbAKz8v43cC
+   n/pFEodWgcCumNt9TUD+uubiCudYR48vGEfpIJ9+agg5uW3hTy4egpive
+   A==;
+X-CSE-ConnectionGUID: BEaReY2RTcuu+urtKClTEA==
+X-CSE-MsgGUID: tjGg9KRaTt2Xr2eNwxA0Pg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40939062"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40939062"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 05:18:55 -0700
+X-CSE-ConnectionGUID: l4joeGYqSWyzLJFW81xTvg==
+X-CSE-MsgGUID: 4K8XmlhyQ5mciTNuZDbaxw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="82243549"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 29 Oct 2024 03:24:53 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5jP9-000dX2-0C;
-	Tue, 29 Oct 2024 10:24:51 +0000
-Date: Tue, 29 Oct 2024 18:24:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Hugh Dickins <hughd@google.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	Yang Shi <yang@os.amperecomputing.com>,
-	Miaohe Lin <linmiaohe@huawei.com>,
-	Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Yu Zhao <yuzhao@google.com>, John Hubbard <jhubbard@nvidia.com>,
-	linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: Re: [PATCH v1 1/3] mm/huge_memory: buddy allocator like folio_split()
-Message-ID: <202410291853.lBOeTPTK-lkp@intel.com>
-References: <20241028180932.1319265-2-ziy@nvidia.com>
+   d="scan'208";a="82755859"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.0.178])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 05:18:53 -0700
+Message-ID: <dc8c9c5c-6645-4fe5-81d1-a2e8e4f1e10f@intel.com>
+Date: Tue, 29 Oct 2024 14:18:47 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241028180932.1319265-2-ziy@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linux-next:master 6772/7183]
+ drivers/mmc/host/sdhci-uhs2.c:684:6: warning: variable 'flags' set but not
+ used
+To: Victor Shih <victor.shih@genesyslogic.com.tw>,
+ Ben Chuang <ben.chuang@genesyslogic.com.tw>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ AKASHI Takahiro <takahiro.akashi@linaro.org>,
+ kernel test robot <lkp@intel.com>
+References: <202410252107.y9EgrTbA-lkp@intel.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <202410252107.y9EgrTbA-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Zi,
+On 25/10/24 16:23, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   a39230ecf6b3057f5897bc4744a790070cfbe7a8
+> commit: 9cbb2358bb1f17b61bf75cbebc2c9746b3a29e32 [6772/7183] mmc: sdhci-uhs2: add request() and others
+> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241025/202410252107.y9EgrTbA-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241025/202410252107.y9EgrTbA-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202410252107.y9EgrTbA-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from drivers/mmc/host/sdhci-uhs2.c:14:
+>    In file included from include/linux/module.h:19:
+>    In file included from include/linux/elf.h:6:
+>    In file included from arch/s390/include/asm/elf.h:181:
+>    In file included from arch/s390/include/asm/mmu_context.h:11:
+>    In file included from arch/s390/include/asm/pgalloc.h:18:
+>    In file included from include/linux/mm.h:2213:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    In file included from drivers/mmc/host/sdhci-uhs2.c:15:
+>    In file included from include/linux/iopoll.h:14:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/s390/include/asm/io.h:95:
+>    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      548 |         val = __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>          |                                                           ^
+>    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+>      102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+>          |                                                      ^
+>    In file included from drivers/mmc/host/sdhci-uhs2.c:15:
+>    In file included from include/linux/iopoll.h:14:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/s390/include/asm/io.h:95:
+>    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+>          |                                                           ^
+>    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+>      115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+>          |                                                      ^
+>    In file included from drivers/mmc/host/sdhci-uhs2.c:15:
+>    In file included from include/linux/iopoll.h:14:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/s390/include/asm/io.h:95:
+>    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      585 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      693 |         readsb(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      701 |         readsw(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      709 |         readsl(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      718 |         writesb(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      727 |         writesw(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      736 |         writesl(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>>> drivers/mmc/host/sdhci-uhs2.c:684:6: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+>      684 |         int flags;
+>          |             ^
+>    17 warnings generated.
+> 
+> 
+> vim +/flags +684 drivers/mmc/host/sdhci-uhs2.c
+> 
+>    681	
+>    682	static bool sdhci_uhs2_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+>    683	{
+>  > 684		int flags;
+>    685		u32 mask;
+>    686		unsigned long timeout;
+>    687	
+>    688		WARN_ON(host->cmd);
+>    689	
+>    690		/* Initially, a command has no error */
+>    691		cmd->error = 0;
+>    692	
+>    693		if (cmd->opcode == MMC_STOP_TRANSMISSION)
+>    694			cmd->flags |= MMC_RSP_BUSY;
+>    695	
+>    696		mask = SDHCI_CMD_INHIBIT;
+>    697	
+>    698		if (sdhci_readl(host, SDHCI_PRESENT_STATE) & mask)
+>    699			return false;
+>    700	
+>    701		host->cmd = cmd;
+>    702		host->data_timeout = 0;
+>    703		if (sdhci_data_line_cmd(cmd)) {
+>    704			WARN_ON(host->data_cmd);
+>    705			host->data_cmd = cmd;
+>    706			__sdhci_uhs2_set_timeout(host);
+>    707		}
+>    708	
+>    709		if (cmd->data)
+>    710			sdhci_uhs2_prepare_data(host, cmd);
+>    711	
+>    712		sdhci_uhs2_set_transfer_mode(host, cmd);
+>    713	
+>    714		if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
+>    715			WARN_ONCE(1, "Unsupported response type!\n");
+>    716			/*
+>    717			 * This does not happen in practice because 136-bit response
+>    718			 * commands never have busy waiting, so rather than complicate
+>    719			 * the error path, just remove busy waiting and continue.
+>    720			 */
+>    721			cmd->flags &= ~MMC_RSP_BUSY;
+>    722		}
+>    723	
+>    724		if (!(cmd->flags & MMC_RSP_PRESENT))
+>    725			flags = SDHCI_CMD_RESP_NONE;
+>    726		else if (cmd->flags & MMC_RSP_136)
+>    727			flags = SDHCI_CMD_RESP_LONG;
+>    728		else if (cmd->flags & MMC_RSP_BUSY)
+>    729			flags = SDHCI_CMD_RESP_SHORT_BUSY;
+>    730		else
+>    731			flags = SDHCI_CMD_RESP_SHORT;
+>    732	
+>    733		if (cmd->flags & MMC_RSP_CRC)
+>    734			flags |= SDHCI_CMD_CRC;
+>    735		if (cmd->flags & MMC_RSP_OPCODE)
+>    736			flags |= SDHCI_CMD_INDEX;
+>    737	
+>    738		timeout = jiffies;
+>    739		if (host->data_timeout)
+>    740			timeout += nsecs_to_jiffies(host->data_timeout);
+>    741		else if (!cmd->data && cmd->busy_timeout > 9000)
+>    742			timeout += DIV_ROUND_UP(cmd->busy_timeout, 1000) * HZ + HZ;
+>    743		else
+>    744			timeout += 10 * HZ;
+>    745		sdhci_mod_timer(host, cmd->mrq, timeout);
+>    746	
+>    747		__sdhci_uhs2_send_command(host, cmd);
+>    748	
+>    749		return true;
+>    750	}
+>    751	
+> 
 
-kernel test robot noticed the following build warnings:
+Looks like unneeded code duplicated from non-uhs2.  Presumably
+just remove it (incl. MMC_RSP_136 busy check) e.g.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20241029]
-[cannot apply to linus/master v6.12-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-huge_memory-buddy-allocator-like-folio_split/20241029-021200
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241028180932.1319265-2-ziy%40nvidia.com
-patch subject: [PATCH v1 1/3] mm/huge_memory: buddy allocator like folio_split()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241029/202410291853.lBOeTPTK-lkp@intel.com/config)
-compiler: clang version 19.1.2 (https://github.com/llvm/llvm-project 7ba7d8e2f7b6445b60679da826210cdde29eaf8b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410291853.lBOeTPTK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410291853.lBOeTPTK-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/huge_memory.c:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/huge_memory.c:18:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/huge_memory.c:3342:6: warning: variable 'nr_dropped' set but not used [-Wunused-but-set-variable]
-    3342 |         int nr_dropped = 0;
-         |             ^
-   mm/huge_memory.c:3806:12: warning: unused function 'folio_split' [-Wunused-function]
-    3806 | static int folio_split(struct folio *folio, unsigned int new_order,
-         |            ^~~~~~~~~~~
-   8 warnings generated.
+diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
+index c488c6d56015..43820eb5a7ea 100644
+--- a/drivers/mmc/host/sdhci-uhs2.c
++++ b/drivers/mmc/host/sdhci-uhs2.c
+@@ -684,7 +684,6 @@ static void __sdhci_uhs2_send_command(struct sdhci_host *host, struct mmc_comman
+ 
+ static bool sdhci_uhs2_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+ {
+-	int flags;
+ 	u32 mask;
+ 	unsigned long timeout;
+ 
+@@ -714,30 +713,6 @@ static bool sdhci_uhs2_send_command(struct sdhci_host *host, struct mmc_command
+ 
+ 	sdhci_uhs2_set_transfer_mode(host, cmd);
+ 
+-	if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
+-		WARN_ONCE(1, "Unsupported response type!\n");
+-		/*
+-		 * This does not happen in practice because 136-bit response
+-		 * commands never have busy waiting, so rather than complicate
+-		 * the error path, just remove busy waiting and continue.
+-		 */
+-		cmd->flags &= ~MMC_RSP_BUSY;
+-	}
+-
+-	if (!(cmd->flags & MMC_RSP_PRESENT))
+-		flags = SDHCI_CMD_RESP_NONE;
+-	else if (cmd->flags & MMC_RSP_136)
+-		flags = SDHCI_CMD_RESP_LONG;
+-	else if (cmd->flags & MMC_RSP_BUSY)
+-		flags = SDHCI_CMD_RESP_SHORT_BUSY;
+-	else
+-		flags = SDHCI_CMD_RESP_SHORT;
+-
+-	if (cmd->flags & MMC_RSP_CRC)
+-		flags |= SDHCI_CMD_CRC;
+-	if (cmd->flags & MMC_RSP_OPCODE)
+-		flags |= SDHCI_CMD_INDEX;
+-
+ 	timeout = jiffies;
+ 	if (host->data_timeout)
+ 		timeout += nsecs_to_jiffies(host->data_timeout);
 
 
-vim +/nr_dropped +3342 mm/huge_memory.c
 
-  3292	
-  3293	#define for_each_folio_until_end_safe(iter, iter2, start, end)	\
-  3294		for (iter = start, iter2 = folio_next(start);		\
-  3295		     iter != end;					\
-  3296		     iter = iter2, iter2 = folio_next(iter2))
-  3297	
-  3298	/*
-  3299	 * It splits a @folio (without mapping) to lower order smaller folios in two
-  3300	 * ways.
-  3301	 * 1. uniform split: the given @folio into multiple @new_order small folios,
-  3302	 *    where all small folios have the same order. This is done when
-  3303	 *    uniform_split is true.
-  3304	 * 2. buddy allocator like split: the given @folio is split into half and one
-  3305	 *    of the half (containing the given page) is split into half until the
-  3306	 *    given @page's order becomes @new_order. This is done when uniform_split is
-  3307	 *    false.
-  3308	 *
-  3309	 * The high level flow for these two methods are:
-  3310	 * 1. uniform split: a single __split_folio_to_order() is called to split the
-  3311	 *    @folio into @new_order, then we traverse all the resulting folios one by
-  3312	 *    one in PFN ascending order and perform stats, unfreeze, adding to list,
-  3313	 *    and file mapping index operations.
-  3314	 * 2. buddy allocator like split: in general, folio_order - @new_order calls to
-  3315	 *    __split_folio_to_order() are called in the for loop to split the @folio
-  3316	 *    to one lower order at a time. The resulting small folios are processed
-  3317	 *    like what is done during the traversal in 1, except the one containing
-  3318	 *    @page, which is split in next for loop.
-  3319	 *
-  3320	 * After splitting, the caller's folio reference will be transferred to the
-  3321	 * folio containing @page. The other folios may be freed if they are not mapped.
-  3322	 *
-  3323	 * In terms of locking, after splitting,
-  3324	 * 1. uniform split leaves @page (or the folio contains it) locked;
-  3325	 * 2. buddy allocator like split leaves @folio locked.
-  3326	 *
-  3327	 * If @list is null, tail pages will be added to LRU list, otherwise, to @list.
-  3328	 */
-  3329	static int __folio_split_without_mapping(struct folio *folio, int new_order,
-  3330			struct page *page, struct list_head *list, pgoff_t end,
-  3331			struct xa_state *xas, struct address_space *mapping,
-  3332			bool uniform_split)
-  3333	{
-  3334		struct lruvec *lruvec;
-  3335		struct address_space *swap_cache = NULL;
-  3336		struct folio *origin_folio = folio;
-  3337		struct folio *next_folio = folio_next(folio);
-  3338		struct folio *new_folio;
-  3339		struct folio *next;
-  3340		int order = folio_order(folio);
-  3341		int split_order = order - 1;
-> 3342		int nr_dropped = 0;
-  3343	
-  3344		if (folio_test_anon(folio) && folio_test_swapcache(folio)) {
-  3345			if (!uniform_split)
-  3346				return -EINVAL;
-  3347	
-  3348			swap_cache = swap_address_space(folio->swap);
-  3349			xa_lock(&swap_cache->i_pages);
-  3350		}
-  3351	
-  3352		if (folio_test_anon(folio))
-  3353			mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
-  3354	
-  3355		/* lock lru list/PageCompound, ref frozen by page_ref_freeze */
-  3356		lruvec = folio_lruvec_lock(folio);
-  3357	
-  3358		/*
-  3359		 * split to new_order one order at a time. For uniform split,
-  3360		 * intermediate orders are skipped
-  3361		 */
-  3362		for (split_order = order - 1; split_order >= new_order; split_order--) {
-  3363			int old_order = folio_order(folio);
-  3364			struct folio *release;
-  3365			struct folio *end_folio = folio_next(folio);
-  3366			int status;
-  3367	
-  3368			if (folio_test_anon(folio) && split_order == 1)
-  3369				continue;
-  3370			if (uniform_split && split_order != new_order)
-  3371				continue;
-  3372	
-  3373			if (mapping) {
-  3374				/*
-  3375				 * uniform split has xas_split_alloc() called before
-  3376				 * irq is disabled, since xas_nomem() might not be
-  3377				 * able to allocate enough memory.
-  3378				 */
-  3379				if (uniform_split)
-  3380					xas_split(xas, folio, old_order);
-  3381				else {
-  3382					xas_set_order(xas, folio->index, split_order);
-  3383					xas_set_err(xas, -ENOMEM);
-  3384					if (xas_nomem(xas, 0))
-  3385						xas_split(xas, folio, old_order);
-  3386					else
-  3387						return -ENOMEM;
-  3388				}
-  3389			}
-  3390	
-  3391			split_page_memcg(&folio->page, old_order, split_order);
-  3392			split_page_owner(&folio->page, old_order, split_order);
-  3393			pgalloc_tag_split(folio, old_order, split_order);
-  3394	
-  3395			status = __split_folio_to_order(folio, split_order);
-  3396	
-  3397			if (status < 0)
-  3398				return status;
-  3399	
-  3400			/*
-  3401			 * Iterate through after-split folios and perform related
-  3402			 * operations. But in buddy allocator like split, the folio
-  3403			 * containing the specified page is skipped until its order
-  3404			 * is new_order, since the folio will be worked on in next
-  3405			 * iteration.
-  3406			 */
-  3407			for_each_folio_until_end_safe(release, next, folio, end_folio) {
-  3408				if (page_in_folio_offset(page, release) >= 0) {
-  3409					folio = release;
-  3410					if (split_order != new_order)
-  3411						continue;
-  3412				}
-  3413				if (folio_test_anon(release))
-  3414					mod_mthp_stat(folio_order(release),
-  3415							MTHP_STAT_NR_ANON, 1);
-  3416	
-  3417				/*
-  3418				 * Unfreeze refcount first. Additional reference from
-  3419				 * page cache.
-  3420				 */
-  3421				folio_ref_unfreeze(release,
-  3422					1 + ((!folio_test_anon(origin_folio) ||
-  3423					     folio_test_swapcache(origin_folio)) ?
-  3424						     folio_nr_pages(release) : 0));
-  3425	
-  3426				if (release != origin_folio)
-  3427					lru_add_page_tail(origin_folio, &release->page,
-  3428							lruvec, list);
-  3429	
-  3430				/* Some pages can be beyond EOF: drop them from page cache */
-  3431				if (release->index >= end) {
-  3432					if (shmem_mapping(origin_folio->mapping))
-  3433						nr_dropped++;
-  3434					else if (folio_test_clear_dirty(release))
-  3435						folio_account_cleaned(release,
-  3436							inode_to_wb(origin_folio->mapping->host));
-  3437					__filemap_remove_folio(release, NULL);
-  3438					folio_put(release);
-  3439				} else if (!folio_test_anon(release)) {
-  3440					__xa_store(&origin_folio->mapping->i_pages,
-  3441							release->index, &release->page, 0);
-  3442				} else if (swap_cache) {
-  3443					__xa_store(&swap_cache->i_pages,
-  3444							swap_cache_index(release->swap),
-  3445							&release->page, 0);
-  3446				}
-  3447			}
-  3448		}
-  3449	
-  3450		unlock_page_lruvec(lruvec);
-  3451	
-  3452		if (folio_test_anon(origin_folio)) {
-  3453			if (folio_test_swapcache(origin_folio))
-  3454				xa_unlock(&swap_cache->i_pages);
-  3455		} else
-  3456			xa_unlock(&mapping->i_pages);
-  3457	
-  3458		/* Caller disabled irqs, so they are still disabled here */
-  3459		local_irq_enable();
-  3460	
-  3461		remap_page(origin_folio, 1 << order,
-  3462				folio_test_anon(origin_folio) ?
-  3463					RMP_USE_SHARED_ZEROPAGE : 0);
-  3464	
-  3465		/*
-  3466		 * At this point, folio should contain the specified page, so that it
-  3467		 * will be left to the caller to unlock it.
-  3468		 */
-  3469		for_each_folio_until_end_safe(new_folio, next, origin_folio, next_folio) {
-  3470			if (uniform_split && new_folio == folio)
-  3471				continue;
-  3472			if (!uniform_split && new_folio == origin_folio)
-  3473				continue;
-  3474	
-  3475			folio_unlock(new_folio);
-  3476			/*
-  3477			 * Subpages may be freed if there wasn't any mapping
-  3478			 * like if add_to_swap() is running on a lru page that
-  3479			 * had its mapping zapped. And freeing these pages
-  3480			 * requires taking the lru_lock so we do the put_page
-  3481			 * of the tail pages after the split is complete.
-  3482			 */
-  3483			free_page_and_swap_cache(&new_folio->page);
-  3484		}
-  3485		return 0;
-  3486	}
-  3487	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
