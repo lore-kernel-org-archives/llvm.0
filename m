@@ -1,194 +1,224 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F16201013
-	for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 05:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4594020127A;
+	Tue, 29 Oct 2024 07:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730181158; cv=none; b=eg2STc9kmVCVPS01ayuOZ+MjIzmoIvof3CKu/n/5kxxB58zHZR1b6wuwWotH252V86F11dBXv4D1l36KycnptZ+jOXKfmXV4bILrEqTJUrQijIil/aAD9eC2xEViHSm+/otMzqMQF0Ha8jf4MNLrqOQOZLe5+S6rdjki637L4Qo=
+	t=1730186334; cv=none; b=ju9sH7z4koO/yk+K5pt28NkZcGbq/WU07vZYpp1JWc4+LDzv6W8kYLnIPS5QnfFtlaXoB38151LTFOW/bY/qw/0eixY147hw72rzFU1WZMoiK0L/prblnIYfP0ykQtSJ8Uc8Pv3DJ9diLZ8qp+l9M/L+8mLYXIaA2BijntJsp0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730181158; c=relaxed/simple;
-	bh=JGj2koZUHxw45djmL8lMSWnTBsOczFR0kW83R/o6Gas=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E7VBJVia94tC60sraID4KBQ6YFPmhYuoXhP2XUdn7MjWtu57UJndZQ/szulJ8mW3u07uWAhoaxf5dsXyuIzBCdjT5AJTk14uUuu1zRtCT3zMoPbNKuOU7iD4KbYPmOh6AWyC8Gc8S+eI+QE0iUyh3vCKwpbvHBLGH4v3VixBp+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ASi8Gopg; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1730186334; c=relaxed/simple;
+	bh=BdYcTmAXb1SfXEeowtRZE7Rf2n06MdmrBquWG32nqao=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g1VI5BbmVJ3cKnNgv1IfjGzpoV6+MSe7eWWeY2Qoq7rejoiVa8mUPzS1fUUcmqSNp+sFhd/eQrq9UjPIRzHSIPgkQ6MRbombzUyo+R01zx6zI+80aWEbP5zFisO3yaMpzy31o0+PF8/FOzQy6K1G6RKfvePVXZ/tHOB+DMLK7rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XDD2zK2y; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ASi8Gopg"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49T4mqJ3029148;
-	Tue, 29 Oct 2024 05:51:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=6t54aD/32hX5Qw1Lx
-	0tqHuKvgXcgkOx84tdY0auHSZ0=; b=ASi8GopgDBKyvgT+pGszjfymZviBPYkmE
-	+Hg/A/V+0EXDXo4KhkKWXR9fbCZ3Eu8J0EuhEZ7/m7ABCOtbczbKEgW4z3E+ekZI
-	3HRXGJBWXBIY+0g2pYBoEE23EbbzQZfMAK2yOKf0bI5FNPK3ePEWyl83ewqMJ0n/
-	S4z866yUO2Nzf2lwSzwikUzYKCt/3g8j1NUWFR4F3BIsr4DwLbKLomeDyENeY5nw
-	4EVzwUpMMBOaqLEKN2omRcPvaivBfXHsyGHq34kfYDCuGBMAmaeZ1GVgHaUp8uYx
-	SjcwwsnkIsInUssGjuFSwQA3whJNk4QKU7KgeeN1UsYWJHqpvDA9Q==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42js0h08d4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Oct 2024 05:51:57 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49T5puiO025957;
-	Tue, 29 Oct 2024 05:51:56 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42js0h08d2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Oct 2024 05:51:56 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49T52xAK017353;
-	Tue, 29 Oct 2024 05:51:55 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 42hars9va2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Oct 2024 05:51:55 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49T5prjX41222510
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 29 Oct 2024 05:51:53 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 806A42004B;
-	Tue, 29 Oct 2024 05:51:53 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 699AD20040;
-	Tue, 29 Oct 2024 05:51:49 +0000 (GMT)
-Received: from li-80eaad4c-2afd-11b2-a85c-af8123d033e3.ibm.com (unknown [9.43.45.219])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 29 Oct 2024 05:51:49 +0000 (GMT)
-From: "Nysal Jan K.A." <nysal@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Segher Boessenkool <segher@kernel.crashing.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>, linuxppc-dev@lists.ozlabs.org,
-        "Nysal Jan K.A." <nysal@linux.ibm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2] sched/membarrier: Fix redundant load of membarrier_state
-Date: Tue, 29 Oct 2024 11:21:28 +0530
-Message-ID: <20241029055133.121418-1-nysal@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241007053936.833392-1-nysal@linux.ibm.com>
-References: <20241007053936.833392-1-nysal@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XDD2zK2y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730186333; x=1761722333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BdYcTmAXb1SfXEeowtRZE7Rf2n06MdmrBquWG32nqao=;
+  b=XDD2zK2y3X8oWGvs67rmpMvz0e4WxNU0+5inf4mNT79cFRA96fOsgmZa
+   M4e6ICC8m8Y/aj2VYR3FmDqTGGCBFFmwLPHlx5KPOFMq4w6s/QPw9tGQ0
+   Gss58xxPFYqg4qas2Cy1Z5td+CTKxrtsWAQ/xAeUDaShnBuubDfdJyuG/
+   0k45CQe7mQ4kNVh73YJTxdSGBqYEya0HmD6qgN6n2TTg0cOzDq7SbasPM
+   4rAOnyJYJOMSpAOx6ZQnZkbC80fQ7iGFJmKJ2tJ5EhdhYfhL2Yeo9QbKl
+   9ZuLan8m20vrLpexLGL3qy0qtcdB4g/yRdk7DdGs4k2zsGPZb4T3C4ZvR
+   g==;
+X-CSE-ConnectionGUID: HuqXKB67SoeXukozAa/0tQ==
+X-CSE-MsgGUID: TTdZNgNPRHifmpBX6d1CrA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29774261"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29774261"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 00:18:52 -0700
+X-CSE-ConnectionGUID: ifNbUCZ6QHay4UdqM/kgoQ==
+X-CSE-MsgGUID: qNn49BT5RyqWAcTYDzsScw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="81430699"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Oct 2024 00:18:46 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5gV2-000dN8-1u;
+	Tue, 29 Oct 2024 07:18:44 +0000
+Date: Tue, 29 Oct 2024 15:18:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Richard Zhu <hongxing.zhu@nxp.com>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>
+Subject: Re: [PATCH v6 2/7] PCI: dwc: Using parent_bus_addr in of_range to
+ eliminate cpu_addr_fixup()
+Message-ID: <202410291546.kvgEWJv7-lkp@intel.com>
+References: <20241028-pci_fixup_addr-v6-2-ebebcd8fd4ff@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: u3SpnuL4HkuRvdYn_IP68QVGMeDyWORP
-X-Proofpoint-ORIG-GUID: tx5WfK36He4FnRHCA8VkcfitRgnwHnOe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- phishscore=0 impostorscore=0 adultscore=0 clxscore=1011 mlxlogscore=999
- bulkscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410290042
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241028-pci_fixup_addr-v6-2-ebebcd8fd4ff@nxp.com>
 
-On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-is not selected, sync_core_before_usermode() is a no-op.
-In membarrier_mm_sync_core_before_usermode() the compiler does not
-eliminate redundant branches and load of mm->membarrier_state
-for this case as the atomic_read() cannot be optimized away.
+Hi Frank,
 
-Here's a snippet of the code generated for finish_task_switch() on powerpc
-prior to this change:
+kernel test robot noticed the following build errors:
 
-1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
-.......
-1b78c8:   cmpdi   cr7,r26,0
-1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
-1b78d0:   ld      r9,2312(r13)    # current
-1b78d4:   ld      r9,1888(r9)     # current->mm
-1b78d8:   cmpd    cr7,r26,r9
-1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
-1b78e0:   hwsync
-1b78e4:   cmplwi  cr7,r27,128
-.......
-1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
-1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
+[auto build test ERROR on 9852d85ec9d492ebef56dc5f229416c925758edc]
 
-This was found while analyzing "perf c2c" reports on kernels prior
-to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
-where mm_count was false sharing with membarrier_state.
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/of-address-Add-parent_bus_addr-to-struct-of_pci_range/20241029-030935
+base:   9852d85ec9d492ebef56dc5f229416c925758edc
+patch link:    https://lore.kernel.org/r/20241028-pci_fixup_addr-v6-2-ebebcd8fd4ff%40nxp.com
+patch subject: [PATCH v6 2/7] PCI: dwc: Using parent_bus_addr in of_range to eliminate cpu_addr_fixup()
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20241029/202410291546.kvgEWJv7-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410291546.kvgEWJv7-lkp@intel.com/reproduce)
 
-There is a minor improvement in the size of finish_task_switch().
-The following are results from bloat-o-meter for ppc64le:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410291546.kvgEWJv7-lkp@intel.com/
 
-GCC 7.5.0
----------
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-Function                                     old     new   delta
-finish_task_switch                           884     852     -32
+All errors (new ones prefixed by >>):
 
-GCC 12.2.1
-----------
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-Function                                     old     new   delta
-finish_task_switch.isra                      852     820     -32
+>> drivers/pci/controller/dwc/pcie-designware-host.c:782:55: error: incompatible pointer types passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'resource_size_t *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+                   if (dw_pcie_get_untranslate_addr(pci, atu.pci_addr, &atu.cpu_addr))
+                                                                       ^~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware-host.c:422:23: note: passing argument to parameter 'i_addr' here
+                                           resource_size_t *i_addr)
+                                                            ^
+   1 error generated.
 
-LLVM 17.0.6
------------
-add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
-Function                                     old     new   delta
-rt_mutex_schedule                            120     104     -16
-finish_task_switch                           792     772     -20
 
-Results on aarch64:
+vim +782 drivers/pci/controller/dwc/pcie-designware-host.c
 
-GCC 14.1.1
-----------
-add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
-Function                                     old     new   delta
-get_nohz_timer_target                        352     356      +4
-e843419@0b02_0000d7e7_408                      8       -      -8
-e843419@01bb_000021d2_868                      8       -      -8
-finish_task_switch.isra                      592     548     -44
+   745	
+   746	static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
+   747	{
+   748		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+   749		struct dw_pcie_ob_atu_cfg atu = { 0 };
+   750		struct resource_entry *entry;
+   751		int i, ret;
+   752	
+   753		/* Note the very first outbound ATU is used for CFG IOs */
+   754		if (!pci->num_ob_windows) {
+   755			dev_err(pci->dev, "No outbound iATU found\n");
+   756			return -EINVAL;
+   757		}
+   758	
+   759		/*
+   760		 * Ensure all out/inbound windows are disabled before proceeding with
+   761		 * the MEM/IO (dma-)ranges setups.
+   762		 */
+   763		for (i = 0; i < pci->num_ob_windows; i++)
+   764			dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
+   765	
+   766		for (i = 0; i < pci->num_ib_windows; i++)
+   767			dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
+   768	
+   769		i = 0;
+   770		resource_list_for_each_entry(entry, &pp->bridge->windows) {
+   771			if (resource_type(entry->res) != IORESOURCE_MEM)
+   772				continue;
+   773	
+   774			if (pci->num_ob_windows <= ++i)
+   775				break;
+   776	
+   777			atu.index = i;
+   778			atu.type = PCIE_ATU_TYPE_MEM;
+   779			atu.cpu_addr = entry->res->start;
+   780			atu.pci_addr = entry->res->start - entry->offset;
+   781	
+ > 782			if (dw_pcie_get_untranslate_addr(pci, atu.pci_addr, &atu.cpu_addr))
+   783				return -EINVAL;
+   784	
+   785			/* Adjust iATU size if MSG TLP region was allocated before */
+   786			if (pp->msg_res && pp->msg_res->parent == entry->res)
+   787				atu.size = resource_size(entry->res) -
+   788						resource_size(pp->msg_res);
+   789			else
+   790				atu.size = resource_size(entry->res);
+   791	
+   792			ret = dw_pcie_prog_outbound_atu(pci, &atu);
+   793			if (ret) {
+   794				dev_err(pci->dev, "Failed to set MEM range %pr\n",
+   795					entry->res);
+   796				return ret;
+   797			}
+   798		}
+   799	
+   800		if (pp->io_size) {
+   801			if (pci->num_ob_windows > ++i) {
+   802				atu.index = i;
+   803				atu.type = PCIE_ATU_TYPE_IO;
+   804				atu.cpu_addr = pp->io_base;
+   805				atu.pci_addr = pp->io_bus_addr;
+   806				atu.size = pp->io_size;
+   807	
+   808				ret = dw_pcie_prog_outbound_atu(pci, &atu);
+   809				if (ret) {
+   810					dev_err(pci->dev, "Failed to set IO range %pr\n",
+   811						entry->res);
+   812					return ret;
+   813				}
+   814			} else {
+   815				pp->cfg0_io_shared = true;
+   816			}
+   817		}
+   818	
+   819		if (pci->num_ob_windows <= i)
+   820			dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
+   821				 pci->num_ob_windows);
+   822	
+   823		pp->msg_atu_index = i;
+   824	
+   825		i = 0;
+   826		resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
+   827			if (resource_type(entry->res) != IORESOURCE_MEM)
+   828				continue;
+   829	
+   830			if (pci->num_ib_windows <= i)
+   831				break;
+   832	
+   833			ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
+   834						       entry->res->start,
+   835						       entry->res->start - entry->offset,
+   836						       resource_size(entry->res));
+   837			if (ret) {
+   838				dev_err(pci->dev, "Failed to set DMA range %pr\n",
+   839					entry->res);
+   840				return ret;
+   841			}
+   842		}
+   843	
+   844		if (pci->num_ib_windows <= i)
+   845			dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
+   846				 pci->num_ib_windows);
+   847	
+   848		return 0;
+   849	}
+   850	
 
-Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
----
-V1 -> V2:
-- Add results for aarch64
-- Add a comment describing the changes
----
- include/linux/sched/mm.h | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-index 928a626725e6..b13474825130 100644
---- a/include/linux/sched/mm.h
-+++ b/include/linux/sched/mm.h
-@@ -531,6 +531,13 @@ enum {
- 
- static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
- {
-+	/*
-+	 * The atomic_read() below prevents CSE. The following should
-+	 * help the compiler generate more efficient code on architectures
-+	 * where sync_core_before_usermode() is a no-op.
-+	 */
-+	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
-+		return;
- 	if (current->mm != mm)
- 		return;
- 	if (likely(!(atomic_read(&mm->membarrier_state) &
 -- 
-2.47.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
