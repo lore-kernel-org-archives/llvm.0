@@ -1,85 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3F7206E82;
-	Tue, 29 Oct 2024 18:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C27F205145;
+	Tue, 29 Oct 2024 18:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730227838; cv=none; b=HMh2m63pifpDO54qK5uzLjgsY8QhYLs3Bk1OdDwNsHj9wt6QyV2R24cfIfWinYkm5y7S3TPqBDQRVxubJ+91x9euScXgPASI5nNG7CDEIwxapW6ObUJSrxxByDb0ILUfQcJytOdePcYwcayTNh1H59RpFuUqolEbi65Zy5plalg=
+	t=1730228066; cv=none; b=cTUHnqxP5eoyWGlmjItx3cDTdddpTvzEp0GjRBziIu4v8RHmBCxGBLvVVyTywcLVf3wiLcwwupaVQ7akmkJeJ8N+OFLgpNyx9QindtWEYA+TPfMU3NQK2+Q7WTxAhmF6hsYhUhK9C+qZgFAc8idTqUk3PximD6b7TPoLxy9bF64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730227838; c=relaxed/simple;
-	bh=lV81+lqraE6WdVVhlwTOO1Qi3SkG2SKwe5qZ1XrLC58=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pvseNK/AOGF5SfleQVcGcgMy/NH7WUtPqHzgroN11AjiZciUGbnhyKu4wY3s5ygGYk9Vm8zDMXBDG9qIleNyF7e1J4RJgeT9m72ZEtiIiGn60t43ZheehRJkkJIyUGy11szPBuL3pnClnPF0nFC7qVgeo6nYXmXbU4Tt2koeoTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GmNWjyIv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730228066; c=relaxed/simple;
+	bh=fgvge7uuCg4mpfWSgPVB9zbMkx0riSOsc1TEvBsEePw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=q+4RNjrO/0lQtY409giIklma9CijxOaqUnYykGFcQmy/HxT0rLny3/woqbd/xDDz/egNYPFsGGMO1b7jBwV4t74k040FO88hezjOqBfpRefmsnmHHDI4f1ZFsD7UQBR9VtN8nuePuREj1ne1zYBgTWkE4rrT+bjg+3B+XO2nQDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=exLB7qVq; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GmNWjyIv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26790C4CEE4;
-	Tue, 29 Oct 2024 18:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730227838;
-	bh=lV81+lqraE6WdVVhlwTOO1Qi3SkG2SKwe5qZ1XrLC58=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GmNWjyIv1UZ/iiuQlQYkUmglNQnPDcs9lCA/zix7CmpsCDHSuWSNGVCVfH4eKCF1G
-	 OlFlKffM/KBjOuqraKFfOsPiDutmYxNxuiv4sTD33TQcSipiZYAtnR/UQ+2Te3+7eS
-	 Dqp3ElE35P6tqgfOmuE3PT8L0uXZBOXVLYeW4h8rkDXeVqF1lcQxNBmgtAEo6LGMFG
-	 eQyul4CR2IpPRLkg9zYTW3nIZRFztVQCmpNs4WbzsMwph59RsB/vJ7pHR5RGeeTsfe
-	 W+zvUktLkdhpm79Hc7let2DJ95VvXBjF02+XnMqVNZ9ouhR5m7Vmc4nJWmmFVyorut
-	 ZNSPDI5zrfy3Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB44B380AC08;
-	Tue, 29 Oct 2024 18:50:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="exLB7qVq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730228064; x=1761764064;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fgvge7uuCg4mpfWSgPVB9zbMkx0riSOsc1TEvBsEePw=;
+  b=exLB7qVq8tVaZJlSYHtLZoOi6FKoxPKbuvcSc7yjSLfK6Az5EQSakWev
+   hVQQ4XuB0RR4f6Z1N2XthBowC/yE3NzmdmRy6d+jQfC0M8tsswEPpbV1j
+   ZH5fV+kZ0H82ZkhqH9/WzCX3G/kPWnJH30gmmEvqqhFzuqSr1RTro8aLG
+   WTOPkq/bo9igrKJG9miAoVocqd54/sZGG8kyU4lwbPUNf4Cu7EoRbwjEe
+   Yj5XCWij2nA5QQ3X15sIGOdYWF/3tecnXc9MR15ThfQOyOLcm6tc5HOrH
+   h54jroGvKg/Vxv0uNIL/uBj8JkwpB7PR2PS1Ac7GyoO0Gl2K2kJUtqe/0
+   g==;
+X-CSE-ConnectionGUID: qLeaH5TtTcyacvBX2Qe1oQ==
+X-CSE-MsgGUID: CR+iV0npSOiB/kogA2wrBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="29319381"
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="29319381"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 11:54:24 -0700
+X-CSE-ConnectionGUID: CuVUtOgJQpClkGmx7WOydg==
+X-CSE-MsgGUID: C2+Yx2niTsi96Ubo/+gfSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
+   d="scan'208";a="82383931"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 29 Oct 2024 11:54:22 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5rMB-000e16-2Z;
+	Tue, 29 Oct 2024 18:54:19 +0000
+Date: Wed, 30 Oct 2024 02:54:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Joerg Roedel <jroedel@suse.de>, Vasant Hegde <vasant.hegde@amd.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>, Yi Liu <yi.l.liu@intel.com>,
+	Kevin Tian <kevin.tian@intel.com>
+Subject: [iommu:core 10/22] ld.lld: error: duplicate symbol:
+ iommu_paging_domain_alloc_flags
+Message-ID: <202410300255.fmW8K0rj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] wwan: core: Pass string literal as format
- argument of dev_set_name()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173022784550.787364.9831173645509301356.git-patchwork-notify@kernel.org>
-Date: Tue, 29 Oct 2024 18:50:45 +0000
-References: <20241023-wwan-fmt-v1-1-521b39968639@kernel.org>
-In-Reply-To: <20241023-wwan-fmt-v1-1-521b39968639@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
- johannes@sipsolutions.net, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git core
+head:   a33bf8d8ce7e06bf0f033865b0cea5887cd2ac8c
+commit: 20858d4ebb423826b7a978d54cde195f51d87e20 [10/22] iommu: Introduce iommu_paging_domain_alloc_flags()
+config: arm-footbridge_defconfig (https://download.01.org/0day-ci/archive/20241030/202410300255.fmW8K0rj-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241030/202410300255.fmW8K0rj-lkp@intel.com/reproduce)
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410300255.fmW8K0rj-lkp@intel.com/
 
-On Wed, 23 Oct 2024 13:15:28 +0100 you wrote:
-> Both gcc-14 and clang-18 report that passing a non-string literal as the
-> format argument of dev_set_name() is potentially insecure.
-> 
-> E.g. clang-18 says:
-> 
-> drivers/net/wwan/wwan_core.c:442:34: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
->   442 |         return dev_set_name(&port->dev, buf);
->       |                                         ^~~
-> drivers/net/wwan/wwan_core.c:442:34: note: treat the string as an argument to avoid this
->   442 |         return dev_set_name(&port->dev, buf);
->       |                                         ^
->       |                                         "%s",
-> 
-> [...]
+Note: the iommu/core HEAD a33bf8d8ce7e06bf0f033865b0cea5887cd2ac8c builds fine.
+      It only hurts bisectability.
 
-Here is the summary with links:
-  - [net-next] wwan: core: Pass string literal as format argument of dev_set_name()
-    https://git.kernel.org/netdev/net-next/c/3f7f3ef44f4b
+All errors (new ones prefixed by >>):
 
-You are awesome, thank you!
+>> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
+   >>> defined at dma-mapping.c
+   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
+   >>> defined at platform.c
+   >>>            drivers/base/platform.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
+   >>> defined at dma-mapping.c
+   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
+   >>> defined at pci-driver.c
+   >>>            drivers/pci/pci-driver.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
+   >>> defined at dma-mapping.c
+   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
+   >>> defined at init-mm.c
+   >>>            mm/init-mm.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: iommu_paging_domain_alloc_flags
+   >>> defined at dma-mapping.c
+   >>>            arch/arm/mm/dma-mapping.o:(iommu_paging_domain_alloc_flags) in archive vmlinux.a
+   >>> defined at fork.c
+   >>>            kernel/fork.o:(.text+0x0) in archive vmlinux.a
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
