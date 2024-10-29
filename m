@@ -1,104 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689FB20A5DB;
-	Tue, 29 Oct 2024 22:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B4B20ADFF
+	for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 23:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730240689; cv=none; b=clrfPqLmF+62/B7lq/b6jXccmxIJQEioR7D/bqo8SE4gtUe4QB8inW4hzfMcSwycQrwQsz5IJ5CDDl4OLS5ocZfQ08va/jwaGSdB1+8BiQfK6iSUn59gO0iXfi4FcdSeP5AmZUzAmkrtdXI6V4HzNYos4k+jqO+ikSB7nEoIkyw=
+	t=1730244566; cv=none; b=K0ThRf7b1WtlyytIFI3oz9UgP0DFEbZC96jAIc+tmQu5yXbX6zFbBchSdP6B3YOSyIFnWgyplxtBIECGwOCmE167fPKva4DOwL9pRD/JceprcZQCYO0yv+oSQ5KXs7ha7SCetFmWgJ0bAfJMB4iiIBpwoqZZV8Eql9rle8rQ4nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730240689; c=relaxed/simple;
-	bh=DaBqTA3A7xl7Kvfy6PSQ6meDmsp/mY+pO3DkEcw1UKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=STXH5Yqwo4BnD5ydEQTj59dJmWX1H0aJgorbxSHPz2NHvM+zSBW5P0DT7MW5mInpB0Z2Fqx/vl/WhYi8p05kiB3KaRvDWIU+jFw7hS0c5z9z9z9KWQ6b1mjXdjpgI9CSxrWpl6UY4bUOrSOnzYHkv/0zjhwPkxJIjewyQFccMqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dX12qOAv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730244566; c=relaxed/simple;
+	bh=l+CHx6Zt5Gtjhle42s10fH2cZjd4sQSWMIXNVifI/E4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=moGPJpUcFrxea8qwwlIC2WnF242y7bGJo7enOIxUV252GIqgyONGoJq8b496Y5EWejuWzbrgvHDdxIKx2/BJtZivz8XMBm1Gzm7ul1UFrobNWmVpZZnnO0MwS1mRAAzcotVD0B+cTp/QotvsklsSEM8pyI60Ze3edbxgko/w7Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=ernYnpst; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dX12qOAv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D6EC4CECD;
-	Tue, 29 Oct 2024 22:24:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730240689;
-	bh=DaBqTA3A7xl7Kvfy6PSQ6meDmsp/mY+pO3DkEcw1UKE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dX12qOAvnAJxkAgkZjTdRWtA7qyqDL6ou6eSRhOnt8OJ/8nUWZvhcfWN2lKZhegPk
-	 YUquYoFDgLfB1HL/6VZnY5tbIZpqunyp6hcWSI4gP5NbsBzcj8kyAqvp8jjD6u079F
-	 mKENJ/+uSPUdJ1LIViq0iK/XAcTYKXlB9RZX9wU8BlHOZTdj/hkJ5uDvoOlHMXFbrQ
-	 JOteQ0lL8y1tsnd9CuDai+bFR7IOAKS9qFxl59lR11Uaeq/TwrJe25dr6vH8hJNZva
-	 WdU2KcbWkSRszJ3L/bsFlZ+rg8CH5V/Sb+CCvdEfUr3NY9QgEECP5hNQ2fJrt3/96t
-	 XInqxxc4sYM3w==
-Date: Tue, 29 Oct 2024 15:24:46 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: koachan@protonmail.com
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Jonathan Corbet <corbet@lwn.net>, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] sparc/build: Add SPARC target flags for compiling
- with clang
-Message-ID: <20241029222446.GB2632697@thelio-3990X>
-References: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com>
- <20241029-sparc-cflags-v3-2-b28745a6bd71@protonmail.com>
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="ernYnpst"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1730244554;
+	bh=KNeYgmMAGPIyHDJl3QbZDwIGpEYDsMZZ+DjYHgkmPyo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=ernYnpstgOY9FLJSuqniQzAK5V9UK8eyHKkWmNM4PA0t1dXeQPGjlTfwrDZyFezT6
+	 iWLk7Uzn33TOfEKmxjdQLqISv24MCjpXIGy2CpU1pth39D9hnEAzGOR1gAdsl6rP/K
+	 zfVpxz5QZOskQls+r7skNA9V5l4p2Gv5wBp0mvqWANGsMluS/LAP5XojKbgbXF4aOb
+	 Q3amzWjyJMHnLbjz0bxLDWaNzBwtFXJifVzYyo8thrdKZoeWAumsu4z0RGhHObz615
+	 M+KLPFUVKK99SbzPqtWEQ96785m4MMf33J465wGEiVwzPkpht0lGYnXXrop/PAJYlC
+	 BlDqr1AK0lwvQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XdRKc4hCzz4wbR;
+	Wed, 30 Oct 2024 10:29:08 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: "Nysal Jan K.A." <nysal@linux.ibm.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>
+Cc: Segher Boessenkool <segher@kernel.crashing.org>, Stephen Rothwell
+ <sfr@canb.auug.org.au>, Peter Zijlstra <peterz@infradead.org>,
+ linuxppc-dev@lists.ozlabs.org, "Nysal Jan K.A." <nysal@linux.ibm.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Vlastimil Babka <vbabka@suse.cz>, "Liam R.
+ Howlett" <Liam.Howlett@Oracle.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Kent Overstreet
+ <kent.overstreet@linux.dev>, Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of
+ membarrier_state
+In-Reply-To: <20241029055133.121418-1-nysal@linux.ibm.com>
+References: <20241007053936.833392-1-nysal@linux.ibm.com>
+ <20241029055133.121418-1-nysal@linux.ibm.com>
+Date: Wed, 30 Oct 2024 10:29:09 +1100
+Message-ID: <87ed3yebei.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241029-sparc-cflags-v3-2-b28745a6bd71@protonmail.com>
+Content-Type: text/plain
 
-On Tue, Oct 29, 2024 at 09:49:08PM +0700, Koakuma via B4 Relay wrote:
-> From: Koakuma <koachan@protonmail.com>
-> 
-> clang only supports building 64-bit kernel, so we use the
-> sparc64-linux-gnu target.
-> 
-> See also: https://lore.kernel.org/lkml/e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com/T/#m068e010dcf8b99d3510a90d7532bcdb70e2e2c6b
-> 
-> Signed-off-by: Koakuma <koachan@protonmail.com>
+"Nysal Jan K.A." <nysal@linux.ibm.com> writes:
+> On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+> is not selected, sync_core_before_usermode() is a no-op.
+> In membarrier_mm_sync_core_before_usermode() the compiler does not
+> eliminate redundant branches and load of mm->membarrier_state
+> for this case as the atomic_read() cannot be optimized away.
+>
+> Here's a snippet of the code generated for finish_task_switch() on powerpc
+> prior to this change:
+>
+> 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
+> .......
+> 1b78c8:   cmpdi   cr7,r26,0
+> 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
+> 1b78d0:   ld      r9,2312(r13)    # current
+> 1b78d4:   ld      r9,1888(r9)     # current->mm
+> 1b78d8:   cmpd    cr7,r26,r9
+> 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
+> 1b78e0:   hwsync
+> 1b78e4:   cmplwi  cr7,r27,128
+> .......
+> 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
+> 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Michael Ellerman <mpe@ellerman.id.au>
 
-> ---
->  Documentation/kbuild/llvm.rst | 3 +++
->  scripts/Makefile.clang        | 1 +
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
-> index 6dc66b4f31a7bb62ba5bb6174730dc0a69ee0bba..bc8a283bc44bbfa9948ad3c9fe8031269ce10be4 100644
-> --- a/Documentation/kbuild/llvm.rst
-> +++ b/Documentation/kbuild/llvm.rst
-> @@ -179,6 +179,9 @@ yet. Bug reports are always welcome at the issue tracker below!
->     * - s390
->       - Maintained
->       - ``LLVM=1`` (LLVM >= 18.1.0), ``CC=clang`` (LLVM < 18.1.0)
-> +   * - sparc (sparc64 only)
-> +     - Maintained
-> +     - ``CC=clang LLVM_IAS=0`` (LLVM >= 20)
->     * - um (User Mode)
->       - Maintained
->       - ``LLVM=1``
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 6c23c6af797fb016232914589c948208345417ad..2435efae67f53a26d55a1c0f1bf254a49d9fc731 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_mips		:= mipsel-linux-gnu
->  CLANG_TARGET_FLAGS_powerpc	:= powerpc64le-linux-gnu
->  CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
->  CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
-> +CLANG_TARGET_FLAGS_sparc	:= sparc64-linux-gnu
->  CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
->  CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
->  CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
-> 
-> -- 
-> 2.47.0
-> 
-> 
+cheers
