@@ -1,134 +1,163 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427E7621
-	for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 15:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB9E19882F
+	for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 17:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730214648; cv=none; b=UzY7TvSJSMq5624ew+BPVEx3FRlAOWn9KENbgQ90Xm0J10zkdFhpUzE9cgUIzgULfRAzYVIe71wq2pLkCzf/rLJGBMuzPg+hrki4IkFOH6RwS1nO7eiJZAzWTUIW+lsCMq+h6xWfqEiZQj/HF5W8NVz2A75Z7eG05NQ39hwQZPA=
+	t=1730224365; cv=none; b=cYJRvTCOc8+ir043hHyb1oY8kOS55effOlO0f0DJJSjWQyWEtTQr2lBqljRpbF4r7Z09N0h5hxQcJc7Bz2klXG5WNASCA53Rj0lwfpRQ9KH4WIonFrDrzmimU1fp6eI1V0c+G96kBLdnJ2xU0rn2bVsqiUqqiTLiOp0zyRN+gvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730214648; c=relaxed/simple;
-	bh=pClzO/h/JROTqlyb6Hk2ZQp5fgFIM9FnfxbvzImRHqc=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=ryt5g++I8VcMGWA4BmQPWJkAw8C4AdqFp42p0i9bBADcE36PP7nl02El1H/ppV+VsP7j8Qae5HAD7fcQaW8czYC8EptRNnzRjCoWJC9Z/JnTR3noPoO9UtubngrYlyZbJNAM6uTFIjtbRQBaYxLRk3YLOPQqhs/dzcdzP6wmiQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com; spf=none smtp.mailfrom=toblux.com; dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b=rQGLa+wF; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toblux.com
+	s=arc-20240116; t=1730224365; c=relaxed/simple;
+	bh=ckhCM+oqjtXOYCi/PgBB1sMyi0XnHiioDpF/gdoLapo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hi+/bLl2EoocccbADvG9b8RXoQOuRM6xRgGZkKhFkWSfK2VQCWBBQ0KAGmrHP92HQI9vtSprws2I1GZd0+mwLlgd0XHNLmWMdKVRFjw8lhVAvvNett7akygYfGIadg+f18oNAWDCYPVQxzSHjq+Q8SUGyvCWZIGysx+tSK/B+Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=I7Zy7hH3; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b="rQGLa+wF"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-37d4eac48d8so506906f8f.0
-        for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 08:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toblux-com.20230601.gappssmtp.com; s=20230601; t=1730214645; x=1730819445; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pClzO/h/JROTqlyb6Hk2ZQp5fgFIM9FnfxbvzImRHqc=;
-        b=rQGLa+wFYZDEIt1Y/FXF0ZovfCHtwHX6p8HLpjSUiCa/zIBg7Pu5d6UUbvhJS6cxAA
-         D20X3abetcT5XShRUTcvTyn5aUJlYY/QxinwmPJOleJ+VV9Gu29pamdS5mYdOWeyc5I0
-         yZxFfndYRm4DZaht2MkDS0wA8n6/CIDHOfskY2CKJn8t2AN22n7vj9TUksxq+PNFv/D7
-         feNcgX0oHYvFcFPH6ZKPp1XzRVH0QFeumTO0ND4IUx/JbUItBG+rXtFRj5mKh+xXQNx6
-         jAUgzDI0/30CMLYLNGJDAWFNlqSLcb7Zpiayvvd5GipgoffFFReMuCN8scEnM6W4N1QM
-         cjYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730214645; x=1730819445;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pClzO/h/JROTqlyb6Hk2ZQp5fgFIM9FnfxbvzImRHqc=;
-        b=OS24/e7WIp4Xr1CQMDDqDDkyjDPyOFSQMnc8PLBBJBGJG6Ql8EP+aD1qBOTI/gGFOs
-         qEuHsoUKETLbuO2r2OuAtUXXVLInaYXETSRMII5kHpbYlKSShzolO5I5lPAvo2pHmVBW
-         /ZyCSUqSE/n6c9RuHRV/wRygR3kCUXyYjeAxipiWuAJt1N7DeIUK463tdDuHT44mxiaV
-         ps7mzxE9KzlvA4Oo0CIPx2SNtR8BT/HwIz9PtYF0f4huvpV4aN9lEPL3vql3fsKAUAXF
-         V8oKRXB1fBoftQz9Tkrui1I8ArE/63EBcvOgtnpuX+VMN7/VzfHC7BFDm1skD477hzWu
-         XkJg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9Ti1vO1Fz0hfqTHh8r3iXSirETz+IPl9XPsRAP16mBGWVateEq0UfN8PhWM5UbN0h3CU/@lists.linux.dev
-X-Gm-Message-State: AOJu0YxjAFNX6tjtIEs+AP+liAWmV3LuwWJq4QwJOhw13yQy3/A2NFQY
-	5XNCdE/sKVeagDGqUH7cT21PuoRvAwAjq64bP4KVvdok8pWM8Q67tK0kDuyJQ5U=
-X-Google-Smtp-Source: AGHT+IHpB0gsXiLgIYq0IllOpj0RLaS+RFkgWPXNM/xk1DTGgHY978z6z+pWhDKYuiUIrS2oulAcag==
-X-Received: by 2002:a5d:6d86:0:b0:374:cd01:8b72 with SMTP id ffacd0b85a97d-380611fe6dcmr4253149f8f.9.1730214644521;
-        Tue, 29 Oct 2024 08:10:44 -0700 (PDT)
-Received: from smtpclient.apple ([2001:a61:a4f:301:c1bf:2b25:a6db:6ae3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b713fbsm12813482f8f.88.2024.10.29.08.10.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 29 Oct 2024 08:10:44 -0700 (PDT)
-Content-Type: text/plain;
-	charset=us-ascii
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="I7Zy7hH3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1730224361;
+	bh=ckhCM+oqjtXOYCi/PgBB1sMyi0XnHiioDpF/gdoLapo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=I7Zy7hH3FCMNOgCYw8IRpx4H60VVYnk/nLxKPA/RTMeO4ATJ/LMo6HSxoh90SK6cd
+	 X/fX0sFZfRUwApEY9r5NQICnyxMuUNeR/ivkIGyv0ZZCTN4YOKHDO25qTdDfYPA5kD
+	 2bvGClZkgpcjH41laajsctsOPs8Oddb7+MrurbDmS0G63pfNNG3GGtoJaAgC9iDIlk
+	 bYDoCQCBQCHI/kxtlLLtvwpI/aoiDUfnFmNn5e108XZHKtqJYtDBP1jvjblvo7G2eH
+	 cU1O86iX2lGY79zddBehVOlhVWXsOyDjjYekM5WKV/SXjrfTO59Oxz7+9cXA4q4wNp
+	 DfgjYGkD7bphA==
+Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XdHsN6kJcz166Y;
+	Tue, 29 Oct 2024 13:52:40 -0400 (EDT)
+Message-ID: <6f394b76-3db4-4a7b-9fdd-737c6812e7ef@efficios.com>
+Date: Tue, 29 Oct 2024 13:51:02 -0400
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
-Subject: Re: [PATCH 1/1] Compiler Attributes: disable __counted_by for clang <
- 19.1.3
-From: Thorsten Blum <thorsten.blum@toblux.com>
-In-Reply-To: <20241029140036.577804-2-kernel@jfarr.cc>
-Date: Tue, 29 Oct 2024 16:10:32 +0100
-Cc: kees@kernel.org,
- nathan@kernel.org,
- ojeda@kernel.org,
- ndesaulniers@google.com,
- morbo@google.com,
- justinstitt@google.com,
- ardb@kernel.org,
- oliver.sang@intel.com,
- gustavoars@kernel.org,
- kent.overstreet@linux.dev,
- arnd@arndb.de,
- gregkh@linuxfoundation.org,
- akpm@linux-foundation.org,
- tavianator@tavianator.com,
- linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3ADD56B1-9BBF-48CD-81C7-53E10675F566@toblux.com>
-References: <20241029140036.577804-1-kernel@jfarr.cc>
- <20241029140036.577804-2-kernel@jfarr.cc>
-To: Jan Hendrik Farr <kernel@jfarr.cc>
-X-Mailer: Apple Mail (2.3776.700.51.11.1)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of
+ membarrier_state
+To: "Nysal Jan K.A." <nysal@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Michael Ellerman <mpe@ellerman.id.au>
+Cc: Segher Boessenkool <segher@kernel.crashing.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Peter Zijlstra <peterz@infradead.org>, linuxppc-dev@lists.ozlabs.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Vlastimil Babka <vbabka@suse.cz>, "Liam R. Howlett"
+ <Liam.Howlett@Oracle.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Kent Overstreet <kent.overstreet@linux.dev>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20241007053936.833392-1-nysal@linux.ibm.com>
+ <20241029055133.121418-1-nysal@linux.ibm.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20241029055133.121418-1-nysal@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 29. Oct 2024, at 15:00, Jan Hendrik Farr wrote:
->=20
-> This patch disables __counted_by for clang versions < 19.1.3 because
-> of the two issues listed below. It does this by introducing
-> CONFIG_CC_HAS_COUNTED_BY.
->=20
-> 1. clang < 19.1.2 has a bug that can lead to __bdos returning 0:
-> https://github.com/llvm/llvm-project/pull/110497
->=20
-> 2. clang < 19.1.3 has a bug that can lead to __bdos being off by 4:
-> https://github.com/llvm/llvm-project/pull/112636
->=20
-> Fixes: c8248faf3ca2 ("Compiler Attributes: counted_by: Adjust name and =
-identifier expansion")
-> Cc: stable@vger.kernel.org # 6.6.x: 16c31dd7fdf6: Compiler Attributes: =
-counted_by: bump min gcc version
-> Cc: stable@vger.kernel.org # 6.6.x: 2993eb7a8d34: Compiler Attributes: =
-counted_by: fixup clang URL
-> Cc: stable@vger.kernel.org # 6.6.x: 231dc3f0c936: lkdtm/bugs: Improve =
-warning message for compilers without counted_by support
-> Cc: stable@vger.kernel.org # 6.6.x
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Closes: =
-https://lore.kernel.org/all/20240913164630.GA4091534@thelio-3990X/
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: =
-https://lore.kernel.org/oe-lkp/202409260949.a1254989-oliver.sang@intel.com=
+On 2024-10-29 01:51, Nysal Jan K.A. wrote:
+> On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+> is not selected, sync_core_before_usermode() is a no-op.
+> In membarrier_mm_sync_core_before_usermode() the compiler does not
+> eliminate redundant branches and load of mm->membarrier_state
+> for this case as the atomic_read() cannot be optimized away.
+> 
+> Here's a snippet of the code generated for finish_task_switch() on powerpc
+> prior to this change:
+> 
+> 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
+> .......
+> 1b78c8:   cmpdi   cr7,r26,0
+> 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
+> 1b78d0:   ld      r9,2312(r13)    # current
+> 1b78d4:   ld      r9,1888(r9)     # current->mm
+> 1b78d8:   cmpd    cr7,r26,r9
+> 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
+> 1b78e0:   hwsync
+> 1b78e4:   cmplwi  cr7,r27,128
+> .......
+> 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
+> 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
+> 
+> This was found while analyzing "perf c2c" reports on kernels prior
+> to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
+> where mm_count was false sharing with membarrier_state.
+> 
+> There is a minor improvement in the size of finish_task_switch().
+> The following are results from bloat-o-meter for ppc64le:
+> 
+> GCC 7.5.0
+> ---------
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+> Function                                     old     new   delta
+> finish_task_switch                           884     852     -32
+> 
+> GCC 12.2.1
+> ----------
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+> Function                                     old     new   delta
+> finish_task_switch.isra                      852     820     -32
+> 
+> LLVM 17.0.6
+> -----------
+> add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
+> Function                                     old     new   delta
+> rt_mutex_schedule                            120     104     -16
+> finish_task_switch                           792     772     -20
+> 
+> Results on aarch64:
+> 
+> GCC 14.1.1
+> ----------
+> add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
+> Function                                     old     new   delta
+> get_nohz_timer_target                        352     356      +4
+> e843419@0b02_0000d7e7_408                      8       -      -8
+> e843419@01bb_000021d2_868                      8       -      -8
+> finish_task_switch.isra                      592     548     -44
+> 
+> Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
 
-> Link: =
-https://lore.kernel.org/all/Zw8iawAF5W2uzGuh@archlinux/T/#m204c09f63c07658=
-6a02d194b87dffc7e81b8de7b
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Jan Hendrik Farr <kernel@jfarr.cc>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Thanks!
 
-Thanks for fixing this and your work on the Clang issues. Feel free to =
-add:
+Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-Reviewed-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+> V1 -> V2:
+> - Add results for aarch64
+> - Add a comment describing the changes
+> ---
+>   include/linux/sched/mm.h | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> index 928a626725e6..b13474825130 100644
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -531,6 +531,13 @@ enum {
+>   
+>   static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+>   {
+> +	/*
+> +	 * The atomic_read() below prevents CSE. The following should
+> +	 * help the compiler generate more efficient code on architectures
+> +	 * where sync_core_before_usermode() is a no-op.
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
+> +		return;
+>   	if (current->mm != mm)
+>   		return;
+>   	if (likely(!(atomic_read(&mm->membarrier_state) &
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
