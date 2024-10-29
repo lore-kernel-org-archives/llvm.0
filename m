@@ -1,219 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482EE205143;
-	Tue, 29 Oct 2024 13:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BDA4C8F
+	for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 14:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730209206; cv=none; b=DqtRWUDA4D4uazJniOZZN1zIV0KcaPAN8giK4p3tie3NG01vl/HIIu+7z7GDqXfGLpNeIzlV67ypicZuRCbr5C1O/rdP72oQO5vhFvW98JuHqfnAV06/KrJgqylch7GQnsmvfAFteqPuL6odvK5k/ta8wcfpXO60lnDVVhFHjJU=
+	t=1730210501; cv=none; b=GwNAsqE4OnppntEZoti66LNpa4BuQhqw4i5rXejgF+B2/F9vpZL6LmBUufqBXdw7NqcsbjQGvxE7JEClYgeMxDO9wMYmjGmg2FX7utyf9mMwJWJF+EYjgQafwmisTCDG8iu5BuhcZq0Wo4kWmoaqNlYfVPI9m3qkrCvgL5bo+Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730209206; c=relaxed/simple;
-	bh=RLccjtGN6LQZ2jfU2IbKJ1CDWSv+GSrEh8oSn1igHtA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eC/Er2pzyMijrFWZEuocsyVRhsbsZ4n+/6mk2vKBe49seLepQVLp8YBNY50cADiojUBtTFPo6Z/Jo8EbS2ij2QqbCLyMb2G1zQhJ7/A0c7J90mr1azIoYDgIdAWUMvdsN+O+EaoGQrLYHqGvpNAqAxZf4NakIxxSIQVfub5rMZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sgcg8p29; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730210501; c=relaxed/simple;
+	bh=lrEcALA54EnYbsUNXZKeqw58RzvlXHhpQO01rUMxDn8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Amx881xjfILjSZQ7uCJQj6w0omq+TY6moESNIZ5UnpR4nzxax2D8hiv8ZCmaCrutOLr/3bR0ATRPJwvJrh+4/y2BZrnwczSFNbYw9uFBnErE1y93EaFhbx2aLsfKL/EPqUyo1EmBtAek8x49zQqqil3mWdgdBJEPXZg2n6gBno8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jfarr.cc; spf=pass smtp.mailfrom=jfarr.cc; dkim=pass (2048-bit key) header.d=jfarr.cc header.i=@jfarr.cc header.b=l1igGmFB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NGoSjQLb; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jfarr.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jfarr.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sgcg8p29"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730209203; x=1761745203;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RLccjtGN6LQZ2jfU2IbKJ1CDWSv+GSrEh8oSn1igHtA=;
-  b=Sgcg8p29Cj0DlnsCQZQ4t/u0tEG5HYRLgYeDXQSJj9S9ndHUI/Vps24r
-   9DUEmavGd++JMG5mf9U8C/t9G+BEvdEfgRqJfpXc4h3PpDH8XU/LMO7A2
-   /zbFUSVUwJLOm5ZZRgdciXAtvcMpe0VlIPm3i0Ft8+OAQEtuzXm6w2oaP
-   llPiA0WE+fdzlMmN0VHTX53Q+p+Dj9CsmVFZghwlPMRagl9eUuCkee1A/
-   1iKDk9V4LEnyDkyJuy9wL4GijFnHmOzCvp/lKcI+PoPqs9cWYZyKqsWFy
-   8E1CXqkruB5zt8bfX0dOoQjTjcftJF2yIvkympbujNAtAuMSC98b0KEtr
-   A==;
-X-CSE-ConnectionGUID: uMR2xikZSx6nSOexlVV9Xg==
-X-CSE-MsgGUID: itaqFQIjT4eZ3Yi7V1mCkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="30058406"
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="30058406"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:40:02 -0700
-X-CSE-ConnectionGUID: 4fjVn0pnRjWCyQDNU3q9lw==
-X-CSE-MsgGUID: aP17PQGYSp+s4wzmIg7r1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="86577909"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 29 Oct 2024 06:40:01 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5mRz-000di8-0H;
-	Tue, 29 Oct 2024 13:39:59 +0000
-Date: Tue, 29 Oct 2024 21:39:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [paulmckrcu:dev.2024.10.27b 30/35]
- include/linux/rcupdate_wait.h:73:31: error: no member named 'rcu_node_entry'
- in 'struct task_struct'
-Message-ID: <202410292150.GUBegikc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=jfarr.cc header.i=@jfarr.cc header.b="l1igGmFB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NGoSjQLb"
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A096C11400FE;
+	Tue, 29 Oct 2024 10:01:38 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Tue, 29 Oct 2024 10:01:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jfarr.cc; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm2; t=1730210498; x=1730296898; bh=p4jsg3LM+d9z1ul1hzPOU
+	tHu1EHhd/xb0I4yaFVNKtI=; b=l1igGmFBYfP+rqdbAOk/oAjd+FpPgcJp7aYtx
+	FkhN7w/ste9oPDLfVkhLmW3MetFKSfSOCLI8o5CQw6Vt7U/OYk2YbMJm/VH7WoKU
+	LS74TjW7zSUcKsfzW0vfH9KWQ/ene7eIA9ijobdr0EyeU1tzFVK/SAV3YgjLRQ59
+	/PLftZ0HEebWv/7/aRpaJr7iA6LGUyQFRPemIIod+kv/p3xvNn9+UV4W4GI27JwO
+	d6zJ6SA2rINMlHMp3CiNphb7xvtnOI4ih5dqyGE+KoR7AraxYpguw6GODtZ6iddf
+	08M+eKJAVGpiNbXURf9kcb8aFPwyIv5kHTsrklpa+P8imr5Qg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730210498; x=1730296898; bh=p4jsg3LM+d9z1ul1hzPOUtHu1EHhd/xb0I4
+	yaFVNKtI=; b=NGoSjQLbkYEqNFzwq/YrHsW1c2tdnR7KSbG1YCn/fSr8eEK+FcH
+	zTT3icvAUzVt5k3HfYfRovDpFEukd+qwbel9VIBPaROHhciq1RH6nnXxBMoF5RAV
+	gzD4lXGkZc9wNJNyNx2ZS5kCUrxwm+Twx4Cufy1L0G3db8as5Ro7fmzlOD1iyApc
+	d4fpr54l5CtOif8s6EJ++h+NHcCg2YMIA8etSvRATKQ5gdRBpsTxIS1s3XZd90lE
+	uGAgVQnzL2KIOBjM9P6u+7jH0WDiRMF0mO1swICpUXXukBcJASaX1veqhvb8a6UX
+	V1pUMpsSHTvjGSUwOQ3oKrKjRdCI13JeSkQ==
+X-ME-Sender: <xms:weogZ7E8p7NBxuD3kPFzIkAmIRS7BZNMCKkP8wzRN0yMnPyvie9eVw>
+    <xme:weogZ4X53XcWE1kA4vrKEMt_zCeneApyfQMv5zPXmdA9kkho5EvQMc3qnUUmG85HV
+    qKbrm1HJh1qZMF8xNo>
+X-ME-Received: <xmr:weogZ9ITrctCXhR1ptzuL_6VkKEnFMmYCHSIVAzlPXVo_voY39DUqP8jz1TkH69zw-MvHWqDS8_YsoW-d7TaBmgIM51KIGM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekuddgheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlud
+    dtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflrghn
+    ucfjvghnughrihhkucfhrghrrhcuoehkvghrnhgvlhesjhhfrghrrhdrtggtqeenucggtf
+    frrghtthgvrhhnpeeluddtuedtieeguefhleefkefhieefkeetheehvdetieevhfethfet
+    uedtffegffenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkvghr
+    nhgvlhesjhhfrghrrhdrtggtpdhnsggprhgtphhtthhopedvtddpmhhouggvpehsmhhtph
+    houhhtpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehn
+    rghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepnhguvghsrghulhhnihgvrhhssehgohhoghhlvgdrtgho
+    mhdprhgtphhtthhopehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehjuh
+    hsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehthhhorhhsthgv
+    nhdrsghluhhmsehtohgslhhugidrtghomhdprhgtphhtthhopegrrhgusgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepohhlihhvvghrrdhsrghnghesihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:wuogZ5GI-95yAf4Kgun4ov5k7PqiQKHJOZXxuP90MF_8fhGIGjokVg>
+    <xmx:wuogZxUwu83Z9xKXf77HwVEG_-PC8JoBkeshapa23xitA8D8Fz3etA>
+    <xmx:wuogZ0PzKNBzklIe40wkwWlknpN6Ollo31QoEg6kEhIBiqLHhlwuRg>
+    <xmx:wuogZw1XXzoqbqnn_BatEnlyma0jZ2rGx10Cxw7Hm7dqKBFzp-Zgtw>
+    <xmx:wuogZ-2Rf-8fLb3RpDYIFujIuX9-fpK5utLlCzg7uN___qX4ifPObDTM>
+Feedback-ID: i01d149f8:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 29 Oct 2024 10:01:35 -0400 (EDT)
+From: Jan Hendrik Farr <kernel@jfarr.cc>
+To: kees@kernel.org
+Cc: nathan@kernel.org,
+	ojeda@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	thorsten.blum@toblux.com,
+	ardb@kernel.org,
+	oliver.sang@intel.com,
+	gustavoars@kernel.org,
+	kent.overstreet@linux.dev,
+	arnd@arndb.de,
+	gregkh@linuxfoundation.org,
+	akpm@linux-foundation.org,
+	tavianator@tavianator.com,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	kernel@jfarr.cc
+Subject: [PATCH 0/1] disable __counted_by for clang < 19.1.3
+Date: Tue, 29 Oct 2024 15:00:35 +0100
+Message-ID: <20241029140036.577804-1-kernel@jfarr.cc>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/paulmckrcu/linux dev.2024.10.27b
-head:   452a4107123b99087cd0bed226f61436ca9fdd24
-commit: 0074845ef7cfbfe41a72bf5561edc18b90b67504 [30/35] rcutorture: Check preemption for failing reader
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20241029/202410292150.GUBegikc-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 5886454669c3c9026f7f27eab13509dd0241f2d6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241029/202410292150.GUBegikc-lkp@intel.com/reproduce)
+Hi Kees,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410292150.GUBegikc-lkp@intel.com/
+Bill's PR to disable __counted_by for "whole struct" __bdos cases has now
+been merged into 19.1.3 [1], so here's the patch to disable __counted_by
+for clang versions < 19.1.3 in the kernel.
 
-All errors (new ones prefixed by >>):
+Hopefully in the near future __counted_by for whole struct __bdos can be
+enabled once again in coordination between the kernel, gcc, and clang.
+There has been recent progress on this in [2] thanks to Tavian.
 
-   In file included from kernel/rcu/update.c:41:
->> include/linux/rcupdate_wait.h:73:31: error: no member named 'rcu_node_entry' in 'struct task_struct'
-      73 |                 return list_empty(&current->rcu_node_entry);
-         |                                    ~~~~~~~  ^
-   In file included from kernel/rcu/update.c:42:
-   In file included from include/linux/sched/isolation.h:5:
-   In file included from include/linux/cpuset.h:17:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning and 1 error generated.
---
-   In file included from kernel/rcu/srcutiny.c:14:
->> include/linux/rcupdate_wait.h:73:31: error: no member named 'rcu_node_entry' in 'struct task_struct'
-      73 |                 return list_empty(&current->rcu_node_entry);
-         |                                    ~~~~~~~  ^
-   1 error generated.
---
-   In file included from kernel/rcu/tiny.c:15:
->> include/linux/rcupdate_wait.h:73:31: error: no member named 'rcu_node_entry' in 'struct task_struct'
-      73 |                 return list_empty(&current->rcu_node_entry);
-         |                                    ~~~~~~~  ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/rcu/tiny.c:26:
-   In file included from include/linux/mm.h:1120:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
+Also see previous discussion on the mailing list [3]
+
+Thanks to everyone for moving this issue along. In particular, Bill for
+his PR to clang/llvm, Kees and Thorsten for reproducers of the two issues,
+Nathan for Kconfig-ifying this patch, and Miguel for reviewing.
 
 
-vim +73 include/linux/rcupdate_wait.h
+Info for the stable team:
 
-    67	
-    68	// Has the current task blocked within its current RCU read-side
-    69	// critical section?
-    70	static inline bool has_rcu_reader_blocked(void)
-    71	{
-    72		if (IS_ENABLED(CONFIG_PREEMPT_RCU))
-  > 73			return list_empty(&current->rcu_node_entry);
-    74		else
-    75			return false;
-    76	}
-    77	
+This patch should be backported to kernels >= 6.6 to make sure that those
+build correctly with the effected clang versions. This patch cherry-picks
+cleanly onto linux-6.11.y. For linux-6.6.y three prerequiste commits are
+neded:
+
+16c31dd7fdf6: Compiler Attributes: counted_by: bump min gcc version
+2993eb7a8d34: Compiler Attributes: counted_by: fixup clang URL
+231dc3f0c936: lkdtm/bugs: Improve warning message for compilers without counted_by support
+
+There are still two merge conflicts even with those prerequistes.
+Here's the correct resolution:
+
+1. include/linux/compiler_types.h:
+	use the incoming change until before (but not including) the
+        "Apply __counted_by() when the Endianness matches to increase test coverage."
+        comment
+
+2. lib/overflow_kunit.c: 
+	HEAD is correct
+
+[1] https://github.com/llvm/llvm-project/pull/112786
+[2] https://github.com/llvm/llvm-project/pull/112636
+[3] https://lore.kernel.org/lkml/3E304FB2-799D-478F-889A-CDFC1A52DCD8@toblux.com/T/#m204c09f63c076586a02d194b87dffc7e81b8de7b
+
+Best Regards
+Jan
+
+Jan Hendrik Farr (1):
+  Compiler Attributes: disable __counted_by for clang < 19.1.3
+
+ drivers/misc/lkdtm/bugs.c           |  2 +-
+ include/linux/compiler_attributes.h | 13 -------------
+ include/linux/compiler_types.h      | 19 +++++++++++++++++++
+ init/Kconfig                        |  9 +++++++++
+ lib/overflow_kunit.c                |  2 +-
+ 5 files changed, 30 insertions(+), 15 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.0
+
