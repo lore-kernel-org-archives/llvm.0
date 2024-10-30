@@ -1,155 +1,153 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E06B1EB9EE
-	for <llvm@lists.linux.dev>; Wed, 30 Oct 2024 13:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB791E47DE
+	for <llvm@lists.linux.dev>; Wed, 30 Oct 2024 14:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730295953; cv=none; b=psZioTflmMX2BGIiZjsccHKOccDN+eh+MX/IJr2LiFxLIekRJGGCNaI1ZmrQxefX0PBk90kvkJqPuBvJv7yuwY5vIvM8smDhbC806jVSUpwLT5bVc3npUoEqaKg6JErqmc28LvRja9DQHbLwTNvhjOSW/VvHgzCO5px7JQiPONc=
+	t=1730297661; cv=none; b=thhnwAVMWRB7OAVMxrbJaWIQghkjWUvCyINzHLqLZc06FzV0FFyceYH6W1RYn8plDCZAcBMrpK1e+p/ysiX8TPdfWmxrNbNhDheF1ZDh8Edd0uZ/hbVcEGFEn+H52l772D4G7lLKz3QJ7qHrei1ReuEVtlEviVONiA+RSw7bFfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730295953; c=relaxed/simple;
-	bh=d/UhrnxIRgcd8zLd+YLCrItWJ/wc2ffutL+HOEFfCso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ga72nE2TGAj4zMVd+F8ma1dlw1z12Yva46kf4kGburIKofMqY0Ww2kykNWLpFhLOCtqpWgrqyHuYy4nF+JmUiNe+9G8qIV/zOtViVzZWHm3bOHZoAgECClmmVJxDmnA42CP6SkFSqhzwK/ziybVvJu7KeLs1uU0DomoR3yMi6oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 49UDXklJ032424;
-	Wed, 30 Oct 2024 08:33:46 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 49UDXe5O032403;
-	Wed, 30 Oct 2024 08:33:40 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Wed, 30 Oct 2024 08:33:39 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: "Nysal Jan K.A." <nysal@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>, linuxppc-dev@lists.ozlabs.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of membarrier_state
-Message-ID: <20241030133339.GQ29862@gate.crashing.org>
-References: <20241007053936.833392-1-nysal@linux.ibm.com> <20241029055133.121418-1-nysal@linux.ibm.com>
+	s=arc-20240116; t=1730297661; c=relaxed/simple;
+	bh=lm82dG4gEMFUUwjiq5PdNc9pfTbs1IPJ2CYyR+z76lY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C8SBs6xuWC3MapGzk5WZCA+ir0rRCZCIFNRvyVBZuDGMNfLU/Vi8nVkRi/dGQxFoGNYpZatzTHKOORu6lqqnNzmeLIKNzo6/aTXMNDpuBTKM7tE0WrEVfsRQ/Wi27WnqiVqOMz8MgDdsYnxx0tgWvkfmfZVf+9Hlm04zgoDmpXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YAwywhLr; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YAwywhLr"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2fb3110b964so53589001fa.1
+        for <llvm@lists.linux.dev>; Wed, 30 Oct 2024 07:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730297657; x=1730902457; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NjEYIiKosyIkwaGCSTQKyunT1Lv7dxar/a+ft9/60k0=;
+        b=YAwywhLrDmyJZ5L91jidtPgW9TsfbglymwWfa3S56ktI/H1VlZsuOz0/W+USA16Mp2
+         TNDcPTFr8DUaoHs8UEkLnMDapq6IvYTW3VASXhEcni5BfSuBHv8mKthEuO/Rc5S+6+tC
+         dudY4otOay8bYUdSaPI9VP26gljVAFRP09IZC/yDFjhW6l9EKmu820/m7P6dm2vQtkuh
+         uAekBEaHQ4um6r+WvDaEvAFIWFend2X9O+Zewl6bTxYCzP+Xjkc7iqhrkKambRBjljT0
+         0B66gT/5rVpPCoFVRIJtuj2zmwu5C5+MpBU06+3Y6Bcje1+ZDmq2bOvAVMVm1K0+D0eQ
+         xjpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730297657; x=1730902457;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NjEYIiKosyIkwaGCSTQKyunT1Lv7dxar/a+ft9/60k0=;
+        b=K/GwkxzFE4adkA9jNll8DFAUHELbk3m13aSZhSRwd579wAqvMcJPodcq6NNRDsEY4t
+         suDUozru58ju9/u7H+/oCACEvvsGvPLpXY55ktbI0y0q9UPfASrty9MwwmqNqciDVwbu
+         Vzn9NUzJP5s7FpWfDs9WKEGjdWVmFBvk8fVKUiWlNXoWHDWVeho7MYpJc+JIXdz5gWOD
+         I1gaqxhpMIH/Vcwf1WCg680iVD6oVVNYdKpN0L2oxMj6unO5w3cGimy1b3Qp+Y15OcMy
+         ZAuwcPgN8vt5G464fQ5v0+I1ALnUPOaDfQqnd8mkp4NYiwP2+l2siVIVz6rma5K/O3ak
+         i5eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXedDsDc0URvJjr5rRNw9a8EBXvqQu0SnHEGPCACeVHwnmoQIbBVnLxRDWiR9CJ/pVtnHFS@lists.linux.dev
+X-Gm-Message-State: AOJu0YzwV90VARLZRCOe1i5V8cTE+xMVEvl9166hi08UQAQuvGbc/SNr
+	bgK/eporY0xJEeOUSnBgZ2e7FT+AF5nyCR6ezwzvn1SeAyC9gw12R47HcrOPCtFE2BwoWgQjZ5R
+	voiBvyAL9UGtNX2YLvlIMcRp5ZBs=
+X-Google-Smtp-Source: AGHT+IGdMnV/z71AQCWEOuBcJ9BI2pfv9dIvw2BJ2X9O2ZlhjIti22LPzo+oXDns9q2mEY122Yj6P6Hohr1Ta1EbEzs=
+X-Received: by 2002:a2e:a543:0:b0:2fb:61c0:103 with SMTP id
+ 38308e7fff4ca-2fcbdf63825mr81608301fa.4.1730297656743; Wed, 30 Oct 2024
+ 07:14:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241029055133.121418-1-nysal@linux.ibm.com>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+References: <20241030-bindgen-libclang-warn-v1-1-3a7ba9fedcfe@google.com>
+In-Reply-To: <20241030-bindgen-libclang-warn-v1-1-3a7ba9fedcfe@google.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Wed, 30 Oct 2024 10:13:40 -0400
+Message-ID: <CAJ-ks9=8Bo94Fg_By956ce8X0r-6xBWGO_Ka+rCQ2h3tF2nkRA@mail.gmail.com>
+Subject: Re: [PATCH] rust: warn when using libclang >=19.1 with bindgen <0.70
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
-On Tue, Oct 29, 2024 at 11:21:28AM +0530, Nysal Jan K.A. wrote:
-> On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-> is not selected, sync_core_before_usermode() is a no-op.
-> In membarrier_mm_sync_core_before_usermode() the compiler does not
-> eliminate redundant branches and load of mm->membarrier_state
-> for this case as the atomic_read() cannot be optimized away.
-> 
-> Here's a snippet of the code generated for finish_task_switch() on powerpc
-> prior to this change:
-> 
-> 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
-> .......
-> 1b78c8:   cmpdi   cr7,r26,0
-> 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
-> 1b78d0:   ld      r9,2312(r13)    # current
-> 1b78d4:   ld      r9,1888(r9)     # current->mm
-> 1b78d8:   cmpd    cr7,r26,r9
-> 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
-> 1b78e0:   hwsync
-> 1b78e4:   cmplwi  cr7,r27,128
-> .......
-> 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
-> 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
-> 
-> This was found while analyzing "perf c2c" reports on kernels prior
-> to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
-> where mm_count was false sharing with membarrier_state.
-> 
-> There is a minor improvement in the size of finish_task_switch().
-> The following are results from bloat-o-meter for ppc64le:
-> 
-> GCC 7.5.0
-> ---------
-> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-> Function                                     old     new   delta
-> finish_task_switch                           884     852     -32
-> 
-> GCC 12.2.1
-> ----------
-> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-> Function                                     old     new   delta
-> finish_task_switch.isra                      852     820     -32
-> 
-> LLVM 17.0.6
-> -----------
-> add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
-> Function                                     old     new   delta
-> rt_mutex_schedule                            120     104     -16
-> finish_task_switch                           792     772     -20
-> 
-> Results on aarch64:
-> 
-> GCC 14.1.1
-> ----------
-> add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
-> Function                                     old     new   delta
-> get_nohz_timer_target                        352     356      +4
-> e843419@0b02_0000d7e7_408                      8       -      -8
-> e843419@01bb_000021d2_868                      8       -      -8
-> finish_task_switch.isra                      592     548     -44
-> 
-> Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
+On Wed, Oct 30, 2024 at 9:41=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> When testing a clang upgrade with Rust Binder, I encountered a build
+> failure caused by bindgen not translating some symbols related to
+> tracepoints. This was caused by commit 2e770edd8ce1 ("[libclang] Compute
+> the right spelling location") changing the behavior of a function
+> exposed by libclang. Bindgen fixed the regression in commit 600f63895f73
+> ("Use clang_getFileLocation instead of clang_getSpellingLocation").
+>
+> However, the regression fix is only available in bindgen versions 0.70.0
+> or later. This means that when older bindgen versions are used with new
+> versions of libclang, bindgen may do the wrong thing, which could lead
+> to a build failure.
+>
+> I encountered the bug with some header files related to tracepoints, but
+> it could also cause build failures in other circumstances. Thus, always
+> emit a warning when using an old bindgen with a new libclang so that
+> other people do not have to spend time chasing down the same bug as me.
+>
+> If you encounter this warning, it is recommended that you upgrade
+> bindgen to 0.70 or later.
+>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 > ---
-> V1 -> V2:
-> - Add results for aarch64
-> - Add a comment describing the changes
+>  scripts/rust_is_available.sh | 12 ++++++++++++
+
+Might be time to rename this script - in another patch of course.
+
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> index 5262c56dd674..30695612a0d7 100755
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -225,6 +225,18 @@ if [ "$bindgen_libclang_cversion" -lt "$bindgen_libc=
+lang_min_cversion" ]; then
+>         exit 1
+>  fi
+>
+> +if [ "$bindgen_libclang_cversion" -ge 190100 ] && [ "$rust_bindings_gene=
+rator_cversion" -lt 7000 ]; then
+> +       echo >&2 "***"
+> +       echo >&2 "*** You're using libclang version 19.1+ together with a=
+ version of the"
+> +       echo >&2 "*** Rust bindings generator '$BINDGEN' from before vers=
+ion 0.70. This"
+
+Maybe `version >=3D 19.1` and `version < 0.70` would be clearer than
+`version 19.1+` and `before version 0.70` respectively.
+
+> +       echo >&2 "*** combination has a known bug that may lead to build =
+failures."
+> +       echo >&2 "*** (https://github.com/rust-lang/rust-bindgen/pull/282=
+4)"
+> +       echo >&2 "***   Your bindgen version:  $rust_bindings_generator_v=
+ersion"
+> +       echo >&2 "***   Your libclang version: $bindgen_libclang_version"
+> +       echo >&2 "***"
+> +       warning=3D1
+> +fi
+> +
+>  # If the C compiler is Clang, then we can also check whether its version
+>  # matches the `libclang` version used by the Rust bindings generator.
+>  #
+>
 > ---
->  include/linux/sched/mm.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> index 928a626725e6..b13474825130 100644
-> --- a/include/linux/sched/mm.h
-> +++ b/include/linux/sched/mm.h
-> @@ -531,6 +531,13 @@ enum {
->  
->  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
->  {
-> +	/*
-> +	 * The atomic_read() below prevents CSE. The following should
-> +	 * help the compiler generate more efficient code on architectures
-> +	 * where sync_core_before_usermode() is a no-op.
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
-> +		return;
->  	if (current->mm != mm)
->  		return;
->  	if (likely(!(atomic_read(&mm->membarrier_state) &
+> base-commit: 81983758430957d9a5cb3333fe324fd70cf63e7e
+> change-id: 20241030-bindgen-libclang-warn-cebf97ea3506
+>
+> Best regards,
+> --
+> Alice Ryhl <aliceryhl@google.com>
+>
+>
 
-I'd say "CSE and similar transformations", but yeah, in this case CSE.
-The point is that any access to a volatile object is a necessary side-
-effect, so it has to be performed on the actual machine just as on the
-abstract machine (on all the same paths, and as often).  It might be
-nice to have an atomic_read (for PowerPC) that can generate better
-machine code.  Not a trivial task though!
-
-Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
-
-
-Segher
+Reviewed-by: Tamir Duberstein <tamird@gmail.com>
