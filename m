@@ -1,44 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8726C1E573B;
-	Wed, 30 Oct 2024 16:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AB42141DB
+	for <llvm@lists.linux.dev>; Wed, 30 Oct 2024 16:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730305524; cv=none; b=arcphDg0oiSybmNjLeB7J2LzeHWEHOjYHPLjI1rBCGgwyGPhuOPWtBjRFOoEo8fwVKiRx0ZFrtgZ1Rd8Sg3SAQDZ+YaE0Gy11vqNCSFck5afLrraMdqWNenjV3pJ+VsgGioNVHQLcQUGz9+tZ2ABtDocMFkL/yuBanBqxhpHQog=
+	t=1730305595; cv=none; b=pH4Xd0vaKxBFLMERGh9JW6dNiIdjDK4ddNRZbssMgyDQXu/rR6S5fn3O2Z71pxjJnAOKpCdZOEaacbz8iAF4UKcss5gm2tcU9c5Hry7TnhXgr+MT9j0QIgZltghPzXfiKy/FKUEnQzx6iL18Arj102J/4MqtW4qkU537/MZfE0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730305524; c=relaxed/simple;
-	bh=QWIeTXul61kcR00izmmjwcnmv/TndCE/YkT1ZlRXlWA=;
+	s=arc-20240116; t=1730305595; c=relaxed/simple;
+	bh=7BkJTqkjKokIlGCgi8x1LN9fZqNdMWvwk4aa5kdkGdM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E0RDiFp6pwxQGm+O1j9Tm2f3wNwo9mjKZgLHMxNLdp86cXs6EBbYE9InbiXNL8034dQv8Or9AgGZ065ZjO6uxvN0AAE5LC5+E4ECnc7BVRF1R2XjPZjWEOOjLUU11Q7Clio9guiTnSTu8PRBUy1Fb+uGw4mF4LCaozdUzwt7G6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HpNxpQKM; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=oEe7fPspu0e3yvn9+sJQ6LVwvdw1LSCw++KuXqZ8uy++VwbK8mOWRzVleE81yzn7NNBH6a0wSeJbQ926eyAMXrDc4Sqd635nNW8IL/ToGaMztgRvAdMbkFqCkwQBeLNqcuMkGuG6QhF1ua1bAeDwKKCEFVJWu7Cj6a8UBZQUtmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ff5Jkaoo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HpNxpQKM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A690EC4CECE;
-	Wed, 30 Oct 2024 16:25:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ff5Jkaoo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588D6C4CECE;
+	Wed, 30 Oct 2024 16:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730305524;
-	bh=QWIeTXul61kcR00izmmjwcnmv/TndCE/YkT1ZlRXlWA=;
+	s=k20201202; t=1730305594;
+	bh=7BkJTqkjKokIlGCgi8x1LN9fZqNdMWvwk4aa5kdkGdM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HpNxpQKMij5LZffVRkSLrfSVrnrcR3bj2W59qrFetZzwxsHbymOVJCLohgihZeCIA
-	 4nHfOXx3J9V226TqA+vMyTfJY+MwQehQKuMZ6kOp21faKmeOJ0A0WX0O4ReNTd7wvQ
-	 Qpl37I1ssFcjgShWzN3hIWs8wPcGwogVXReIgHe52N7hma66YnvkYM72Uyi2XLEEFv
-	 qTraDY+oWPDZ7C3O8+K4fe9/p+l2zs9c6S1e/XfZmHuj0auXbtv8ag3L+PgIWpZf5l
-	 pT5AaELmfkPXf0OoYqZpVay3Mb5PkExM3tE+sa+3I1tEYplBUjf8IPlAiG1JOzxYRl
-	 BaWvP3NKprUag==
-Date: Wed, 30 Oct 2024 09:25:22 -0700
+	b=ff5JkaoozsvTlHqGSfncvRXd3YApXYZ0aiwfcsiR4kws58zZSzkHxxQ62J4Iz+ZcG
+	 Yw7nCQ2Wyz2cptdU3a/ag/Hh2UwVv5ASosFqJgZE91TXTc2PEsJnWPzKd6UZdzmD3A
+	 tX+i1fn1p1ZMQeJQhQmiDAtc74HkirxrhX3Phe2QPohxuTgu7/P23rEy/R/qkraYv1
+	 YxY+P7Bp7He6POsiquoIeiZ4A4g7wxfDB7D56cd+eMRaLL2ICmwaXDVN1o/Ujx8IPC
+	 BtFn3VNnOVMP6ORL+OuHnfYxF90i6snCmI9FP7SiJBdddiNAHV9RDJG9XA0g40miuZ
+	 jHEC30QD+k+iw==
+Date: Wed, 30 Oct 2024 09:26:32 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: "Jiang, Dave" <dave.jiang@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Navneet Singh <navneet.singh@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, kees@kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [weiny2:dcd-v4-2024-10-29 9/28] drivers/cxl/cxlmem.h:755:35:
- error: use of undeclared identifier 'regions_retunred'
-Message-ID: <20241030162522.GA2228266@thelio-3990X>
-References: <202410302001.MMV7mxpl-lkp@intel.com>
- <672247c28d533_3ab9829427@iweiny-mobl.notmuch>
+To: linaro-toolchain@lists.linaro.org
+Cc: llvm@lists.linux.dev
+Subject: Re: [Linaro-TCWG-CI] llvmorg-20-init-10266-g71315698c91d: Failure on
+ aarch64
+Message-ID: <20241030162632.GB2228266@thelio-3990X>
+References: <272034616.43155.1730268368701@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,47 +42,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <672247c28d533_3ab9829427@iweiny-mobl.notmuch>
+In-Reply-To: <272034616.43155.1730268368701@jenkins.jenkins>
 
-On Wed, Oct 30, 2024 at 09:50:42AM -0500, Ira Weiny wrote:
-> [snip]
+On Wed, Oct 30, 2024 at 06:06:06AM +0000, ci_notify@linaro.org wrote:
+> In CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig after:
 > 
-> > >> drivers/cxl/cxlmem.h:755:35: error: use of undeclared identifier 'regions_retunred'
-> >      755 |         } __packed region[] __counted_by(regions_retunred);
-> >          |                                          ^
-> >    16 warnings and 1 error generated.
-> > 
-> > 
-> > vim +/regions_retunred +755 drivers/cxl/cxlmem.h
-> > 
-> >    740	
-> >    741	/* See CXL 3.1 Table 8-164 get dynamic capacity config Output Payload */
-> >    742	struct cxl_mbox_get_dc_config_out {
-> >    743		u8 avail_region_count;
-> >    744		u8 regions_returned;
-> >    745		u8 rsvd[6];
-> >    746		/* See CXL 3.1 Table 8-165 */
-> >    747		struct cxl_dc_region_config {
-> >    748			__le64 region_base;
-> >    749			__le64 region_decode_length;
-> >    750			__le64 region_length;
-> >    751			__le64 region_block_size;
-> >    752			__le32 region_dsmad_handle;
-> >    753			u8 flags;
-> >    754			u8 rsvd[3];
-> >  > 755		} __packed region[] __counted_by(regions_retunred);
-> 
-> I'm not sure why my config/compiler did not catch this typo.  I'm looking
-> into it.
+>   | commit llvmorg-20-init-10266-g71315698c91d
+>   | Author: serge-sans-paille <sguelton@mozilla.com>
+>   | Date:   Mon Oct 28 20:40:52 2024 +0000
+>   | 
+>   |     [clang] Warn about memset/memcpy to NonTriviallyCopyable types (#111434)
+>   |     
+>   |     This implements a warning that's similar to what GCC does in that
+>   |     context: both memcpy and memset require their first and second operand
+>   |     to be trivially copyable, let's warn if that's not the case.
 
-You are likely not using a compiler that supports __counted_by, which is
-currently clang 18 (although soon to be 19.1.3 [1]) and GCC 15 (tip of
-tree), in which case, the macro just evaluates to nothing, so there is
-no validation of the value to the macro. It would be nice if there could
-be but nothing immediately comes to mind because of where this macro is
-being placed.
+Thanks for the report, this should be fixed in tip of tree now:
 
-[1]: https://lore.kernel.org/20241029140036.577804-2-kernel@jfarr.cc/
+https://github.com/llvm/llvm-project/commit/dc56a86b96d77a93f761995d50f7b2f112856311
 
 Cheers,
 Nathan
