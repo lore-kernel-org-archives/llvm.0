@@ -1,201 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077D618EFDE;
-	Wed, 30 Oct 2024 02:34:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136D03398E
+	for <llvm@lists.linux.dev>; Wed, 30 Oct 2024 06:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730255690; cv=none; b=jyfpzySUv/is7ECR8eRDkK3qKFselashrSEAO9FRgdrdgwy6QK+AGeDS6pGIUJBumJIETsE/7sy1JJ5rEn4mhuMqvUSt8Iqx9tsxrgkLOpaTA6LUZsjRtPJnCVpFcpua8F4bGdH47Qc8HpxN4khxr0YbgsqN225qqtzctJ8/vwc=
+	t=1730268373; cv=none; b=rll9i5DT3cSL+ZagyZx5DQE0Tm21nn2huN2kCpWuJzfyTHESf0bEij4lt23cWq69Yyxg6Um5huwGXMsiJAeIuXeEKCbxlc6Li1zZWfyUBB45t+3zbYXSSPvOzMfaXqlty+rsdxp2ZGR+MVzFvA3cUv2R9JolUAwu/AyzAHNSsqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730255690; c=relaxed/simple;
-	bh=M6eGC86Zbs1h8bQmgHpwKbbBUBw/HHIkyDtI3CdhGnw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=q4UVJ64Wo1SqrLNme+fkhtYvjW+RJ0T9YxKbTr2zZYtWwB0INV5SCrsYuANJfuWj/Sz8UWxLMD/PmsbcJ2jRiTfSCxLPUiKF7Abrkfq2BXoWwU7tbvhjapr9Gr5EwvyoixtGQ84/PZwAEBFhR/raNG29pFOWIjac34aa9+01iT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W77YiVFI; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730268373; c=relaxed/simple;
+	bh=qrLyUHZBYTiR8qESxs4hW4VXrOwYIEk7QGL3JhZiMzQ=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=dVr4knoB0fdLDm/Zfb9wGn4V6gVfNdp+x10QNmtEEROVdosw1h4ZcFNRCC/73vg8pCZ6jv8WAW91XRfliwkBXYcXKQVU9eU9CHjwnv5otnEX0Kevd5naEiV+kFqiCeffIsnOEll0T16vEHUEzg8auI4Y5whYHGdhgyf/Z6As4Gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BPqoQqln; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W77YiVFI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730255688; x=1761791688;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M6eGC86Zbs1h8bQmgHpwKbbBUBw/HHIkyDtI3CdhGnw=;
-  b=W77YiVFIvFIgl3b26Ugi0XY1T9ZTu5z0NYoQcwglQcZwLnRUTophjFCM
-   PsNNvRo28N4agRlelW1X6wjUu1ThJpC+Uc3qrQIZMikm1Oguh/0IUhZ+D
-   WBGEuWy9XkmdSnd1c8vh8jyp7by0Vvm6tPD7sV86gtxYu6FyKtT9AOynE
-   GwJQRrG34c5H19UFzrY6/DqxVvJ0J9oMopyEy7DsILrn8Fx0y+NxKE/Yj
-   Tdvd/ruiuyIcQ/wlJSpxWiV+5URMKHfol51cmTScv5R9+YW8FOJXjpxSi
-   0zKHmQAViM9ky81SMMdC0rbuH9t3q1nE6eG8UBpyMO0IcazfR3i7poJyx
-   w==;
-X-CSE-ConnectionGUID: 4Gga+akkSuC6Ya8M6zHImg==
-X-CSE-MsgGUID: d9qdhLkCTD6XQSbNUvKtqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47399984"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="47399984"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 19:34:44 -0700
-X-CSE-ConnectionGUID: lM7rB+uXTl62UVeUGCB3DA==
-X-CSE-MsgGUID: 2WxLPSOCSF6A2NvfSJOJ9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
-   d="scan'208";a="119646038"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 29 Oct 2024 19:34:43 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5yXh-000eQ8-0g;
-	Wed, 30 Oct 2024 02:34:41 +0000
-Date: Wed, 30 Oct 2024 10:34:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Roger Quadros <rogerq@kernel.org>
-Subject: [rogerq:b4/am65-cpsw-multi-rx-j7-fix 2/2]
- drivers/net/ethernet/ti/am65-cpsw-nuss.c:775:28: warning: variable 'flow'
- set but not used
-Message-ID: <202410301024.ZPqlEacO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BPqoQqln"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a7aa086b077so788242466b.0
+        for <llvm@lists.linux.dev>; Tue, 29 Oct 2024 23:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730268369; x=1730873169; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QTzNAyhIQj0EeH4wIHAkAW3vftirfaRORumSHr6UJ2M=;
+        b=BPqoQqln16QLItrAI0XHPNf6vu0iXvNBqaUxNNIvfWoR5ViX+CjmKuf5y418Gl8USB
+         MxQghmrBmp/8HpjtTFsDt6soICoeFAqcXC89Ehn0Joqzb9DQuQ7cnL+F7Zvoe7N/ZNBw
+         8dk1BouBq32yH9TVMQGf1HjtOJO+e5aHPX0/n4ApeA2LfeHhPn7Lst7TQOmDTmyClOIZ
+         BcIYBBKrlcurzCivUe/B6GAzyPzeuClPS5RsSGpqtB6em+9B8+5uY+qkKMlkzPmHbztZ
+         O3uunSxd7Rwq0EqgWYyuoZzD7qshZLrmBjRe/KAhxlXNZMNayIzJOcNKKuc89TAmEKK5
+         zl8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730268369; x=1730873169;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QTzNAyhIQj0EeH4wIHAkAW3vftirfaRORumSHr6UJ2M=;
+        b=SVBuyRCR1PanKNZ5VyOSn6CLS/tO0TxFQ+F9TjiFj/Uf0MHc2thgnOy+jpOqr4z2dT
+         8QL5GgLQ18fhOsgaZfKOOfH3vJ4HUzB5F2JFpt/EE6BwY6fyH0whdqmSOcJHFuq6WXVM
+         W6j2IhcEYRHKI4IvSP6wstSchWcUbf05ctkNhEYvcFfVo9k/iqsvln2GUtQmpkVZdYE0
+         mkhhO/JluIfHN9Kh4UfqqmR0ha7wX6Y8h37nHHvIWO4/wQ208SB8qwOJcTFfWja4KLfx
+         Gg4iTLvqwyTk+I9e6DR/0pIQJ0gUJRakAuaiVpwaIWDAurBWF+iYLXBpgG6he+XGROqy
+         3bwA==
+X-Gm-Message-State: AOJu0YxApwIxh7GL/Z/EV/txRSFxLV8mHzSjYfdxvm5asXKUEUGfp7SF
+	4o5zEjdY8LQux8Tum7ahB/uWBlemGagRLL/LeLm16TQpq7S29zSksFFXTwlSCb5NgChcqu5Lgw6
+	Z
+X-Google-Smtp-Source: AGHT+IGe4JnNRYITs5hvVDklDbNImNUmsz/0Og5K2wS2X/UqFM4Up99tyDCsAaDZC5GPHzLsXIWghg==
+X-Received: by 2002:a17:907:7b9e:b0:a9a:80cc:d7b0 with SMTP id a640c23a62f3a-a9e3a6c915amr195846066b.44.1730268369170;
+        Tue, 29 Oct 2024 23:06:09 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b3a084ae4sm533714066b.197.2024.10.29.23.06.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 23:06:08 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Wed, 30 Oct 2024 06:06:06 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <272034616.43155.1730268368701@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-20-init-10266-g71315698c91d: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_43154_808567969.1730268367095"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+X-Jenkins-Result: SUCCESS
 
-tree:   https://github.com/rogerq/linux b4/am65-cpsw-multi-rx-j7-fix
-head:   b0c1f576f96f0081c0e2a0ccbd8ae3c7e6c02a88
-commit: b0c1f576f96f0081c0e2a0ccbd8ae3c7e6c02a88 [2/2] net: ethernet: ti: am65-cpsw: Fix multi RX flows on J7
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241030/202410301024.ZPqlEacO-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241030/202410301024.ZPqlEacO-lkp@intel.com/reproduce)
+------=_Part_43154_808567969.1730268367095
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410301024.ZPqlEacO-lkp@intel.com/
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-All warnings (new ones prefixed by >>):
+We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
 
-   In file included from drivers/net/ethernet/ti/am65-cpsw-nuss.c:8:
-   In file included from include/linux/bpf_trace.h:5:
-   In file included from include/trace/events/xdp.h:8:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:517:9: warning: cast to smaller integer type 'enum am65_cpsw_tx_buf_type' from 'void *' [-Wvoid-pointer-to-enum-cast]
-     517 |         return (enum am65_cpsw_tx_buf_type)k3_cppi_desc_pool_desc_info(tx_chn->desc_pool,
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     518 |                                                                        desc_idx);
-         |                                                                        ~~~~~~~~~
->> drivers/net/ethernet/ti/am65-cpsw-nuss.c:775:28: warning: variable 'flow' set but not used [-Wunused-but-set-variable]
-     775 |         struct am65_cpsw_rx_flow *flow;
-         |                                   ^
->> drivers/net/ethernet/ti/am65-cpsw-nuss.c:1154:16: warning: variable 'desc_idx' set but not used [-Wunused-but-set-variable]
-    1154 |         int headroom, desc_idx, ret;
-         |                       ^
-   7 warnings generated.
+We track this report status in https://linaro.atlassian.net/browse/LLVM-1418 , please let us know if you are looking at the problem and/or when you have a fix.
 
+In CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig after:
 
-vim +/flow +775 drivers/net/ethernet/ti/am65-cpsw-nuss.c
+  | commit llvmorg-20-init-10266-g71315698c91d
+  | Author: serge-sans-paille <sguelton@mozilla.com>
+  | Date:   Mon Oct 28 20:40:52 2024 +0000
+  | 
+  |     [clang] Warn about memset/memcpy to NonTriviallyCopyable types (#111434)
+  |     
+  |     This implements a warning that's similar to what GCC does in that
+  |     context: both memcpy and memset require their first and second operand
+  |     to be trivially copyable, let's warn if that's not the case.
 
-   769	
-   770	static int am65_cpsw_nuss_common_stop(struct am65_cpsw_common *common)
-   771	{
-   772		struct am65_cpsw_rx_chn *rx_chn = &common->rx_chns;
-   773		struct am65_cpsw_tx_chn *tx_chn = common->tx_chns;
-   774		int i;
- > 775		struct am65_cpsw_rx_flow *flow;
-   776	
-   777		if (common->usage_count != 1)
-   778			return 0;
-   779	
-   780		cpsw_ale_control_set(common->ale, HOST_PORT_NUM,
-   781				     ALE_PORT_STATE, ALE_PORT_STATE_DISABLE);
-   782	
-   783		/* shutdown tx channels */
-   784		atomic_set(&common->tdown_cnt, common->tx_ch_num);
-   785		/* ensure new tdown_cnt value is visible */
-   786		smp_mb__after_atomic();
-   787		reinit_completion(&common->tdown_complete);
-   788	
-   789		for (i = 0; i < common->tx_ch_num; i++)
-   790			k3_udma_glue_tdown_tx_chn(tx_chn[i].tx_chn, false);
-   791	
-   792		i = wait_for_completion_timeout(&common->tdown_complete,
-   793						msecs_to_jiffies(1000));
-   794		if (!i)
-   795			dev_err(common->dev, "tx timeout\n");
-   796		for (i = 0; i < common->tx_ch_num; i++) {
-   797			napi_disable(&tx_chn[i].napi_tx);
-   798			hrtimer_cancel(&tx_chn[i].tx_hrtimer);
-   799		}
-   800	
-   801		for (i = 0; i < common->tx_ch_num; i++) {
-   802			k3_udma_glue_reset_tx_chn(tx_chn[i].tx_chn, &tx_chn[i],
-   803						  am65_cpsw_nuss_tx_cleanup);
-   804			k3_udma_glue_disable_tx_chn(tx_chn[i].tx_chn);
-   805		}
-   806	
-   807		reinit_completion(&common->tdown_complete);
-   808		k3_udma_glue_tdown_rx_chn(rx_chn->rx_chn, true);
-   809	
-   810		if (common->pdata.quirks & AM64_CPSW_QUIRK_DMA_RX_TDOWN_IRQ) {
-   811			i = wait_for_completion_timeout(&common->tdown_complete, msecs_to_jiffies(1000));
-   812			if (!i)
-   813				dev_err(common->dev, "rx teardown timeout\n");
-   814		}
-   815	
-   816		for (i = common->rx_ch_num_flows - 1; i >= 0; i--) {
-   817			flow = &rx_chn->flows[i];
-   818			napi_disable(&rx_chn->flows[i].napi_rx);
-   819			hrtimer_cancel(&rx_chn->flows[i].rx_hrtimer);
-   820			k3_udma_glue_reset_rx_chn(rx_chn->rx_chn, i, rx_chn,
-   821						  am65_cpsw_nuss_rx_cleanup, !!i);
-   822		}
-   823	
-   824		k3_udma_glue_disable_rx_chn(rx_chn->rx_chn);
-   825	
-   826		cpsw_ale_stop(common->ale);
-   827	
-   828		writel(0, common->cpsw_base + AM65_CPSW_REG_CTL);
-   829		writel(0, common->cpsw_base + AM65_CPSW_REG_STAT_PORT_EN);
-   830	
-   831		am65_cpsw_destroy_xdp_rxqs(common);
-   832	
-   833		dev_dbg(common->dev, "cpsw_nuss stopped\n");
-   834		return 0;
-   835	}
-   836	
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+23330
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+23331
+
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/241/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/240/artifact/artifacts
+
+Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/71315698c91d0cda054b903da0594ca6f072c350/tcwg_kernel/llvm-master-aarch64-stable-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/71315698c91d0cda054b903da0594ca6f072c350
+------=_Part_43154_808567969.1730268367095--
