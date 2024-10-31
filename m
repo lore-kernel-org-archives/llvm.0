@@ -1,90 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B446A84A3F;
-	Thu, 31 Oct 2024 14:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2A019538D;
+	Thu, 31 Oct 2024 14:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730383498; cv=none; b=CdvE1C2N6xrwuuqFLblzY0giVf6KcGfwey/uqJHXzTSlsxFEzO0nt0fIXTG/YqqEyi30FgNDRinQQzymwlXv/i9URgELP4HZiAOuE7Cp9GUpqQUg/khQ1Bt7xWQyiIlyURmnFYpBi3IPNE2V2drlBcjG0ENSEKssayoTKLh91PI=
+	t=1730383955; cv=none; b=UQRZfTYcYqQf3vYtY2fjcyF1bH5ihqPChuaQnUY/H62jwIqY28r9Qgngzy2uYIosK2EcDMv9NJTbLlr0X//6IW8/VNcHyqmrIjuuQCIaPsENIHZQ4KC0zb13FHY0t5E5BMtUugf89lQdb50S4jgx9iQHugOaUH3jdF6PJo4WV8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730383498; c=relaxed/simple;
-	bh=HVdeTGq8tw85YSsGdDSi8A8rnS3fMC4tuFjU7oRUbCE=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=LvLbTubyHqetNPaxzHRRKEvNCdZGz72iEuGnKx9EJtT9rbfs1jd3adp/ICuCgCeL5/Pjfcs2ur2sAEv7A3t9BKLwSza04gIvbnoSS3D2HwHhNF15ZbyN5VfTqBBui5IWyaL8U3e7Vyxd3Ycmze6yCDomnVPRDqNYMEZqz38CmA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KR2h0gI7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730383955; c=relaxed/simple;
+	bh=mQzdoA6HITBooHuI8ytc1oMFxWv2X/pE16EJqC+j+h8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTsQXOHuf0pxRQDprEfbsnTv4IuXs/9cFulrYAWwvBrOtntlCr7+eUAT4btfghQ8Hmzvx7qe0EYAFvZIC404MduEMcBBWRwV6bju+IWssdswzW8Y+BXQB2aJAsjaQwLdj8sQyLQsHEsosZDI+ExpZKacC/RxnPfXhCkOogEZbnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLp1GjMv; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KR2h0gI7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA4F3C4FE0E;
-	Thu, 31 Oct 2024 14:04:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730383498;
-	bh=HVdeTGq8tw85YSsGdDSi8A8rnS3fMC4tuFjU7oRUbCE=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=KR2h0gI7A/NUGYNKfPWgTn9tf/w10eoK/Joft+nluD7JFlW1HMjj3sRTe0LHHZJ3f
-	 Z1bAZW628FLFBnmBF5WI131W9+MKm+dd0atNbFZ1UWgmugJBEax7W+eOR34q2GGEQN
-	 c4x5uLp49Z9qhWFVQFHFAs1cMrFbdUWVDat1F7BG8QI8Yhk5Whs8tF2uN9dm26OxBQ
-	 cldGX7CbtH/s227j2bhjuAUbg/v2llPtimvIqUBpFiPSeIGj0iC1Vi9DGMNwSX39oO
-	 6cgTW4bOBWGbw2ne7LZHiQLPrWgW3bso+6+RKacs52gqPANAOEmL63jJsdO2kyxt4f
-	 H9yG+LOifqhPQ==
-From: Kalle Valo <kvalo@kernel.org>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: <ath12k-devel-internal@qti.qualcomm.com>,  Jeff Johnson
- <jjohnson@kernel.org>,  Nathan Chancellor <nathan@kernel.org>,  Nick
- Desaulniers <ndesaulniers@google.com>,  Bill Wendling <morbo@google.com>,
-  Justin Stitt <justinstitt@google.com>,  Arnd Bergmann <arnd@kernel.org>,
-  <linux-wireless@vger.kernel.org>,  <ath12k@lists.infradead.org>,
-  <linux-kernel@vger.kernel.org>,  <llvm@lists.linux.dev>
-Subject: Re: [PATCH] wifi: ath12k: mark QMI driver event helpers as noinline
-References: <20241028-ath12k_qmi_driver_event_work-v1-1-0d532eb593fa@quicinc.com>
-Date: Thu, 31 Oct 2024 16:04:53 +0200
-In-Reply-To: <20241028-ath12k_qmi_driver_event_work-v1-1-0d532eb593fa@quicinc.com>
-	(Jeff Johnson's message of "Mon, 28 Oct 2024 07:08:40 -0700")
-Message-ID: <87bjz0fjwa.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLp1GjMv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730383954; x=1761919954;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mQzdoA6HITBooHuI8ytc1oMFxWv2X/pE16EJqC+j+h8=;
+  b=cLp1GjMvUizaZKjwuZanZej3a64zJ2UJ9afFquM/idM+4t1Hj6/9GAXT
+   EC/jsMJazN7k/3R1SwXI0gM6+h0Iz8OprgHZ5w1QP2hzw4JqjMtC6ngsS
+   tqM5pqAjKvt3TMZRzsFy6ScgtvoGRMgDYnXB0aqqhc5KqOjEjjfKJBAyY
+   oS0BgX8mSKkmB17MH7qcalHTMuwzlKEpJa44FYAdHQI3CnNl66D5pjDBF
+   lJ5sR9umvFIdW62QnmKBhUB4xgJquDCOwGpXmXoCO+LAge6oTXxBCYldt
+   f/fEZ1mqLEJJOes+dkkNuGA4Y1k6FgvRkoACq3zb44IijYxUxWP3hv/1w
+   w==;
+X-CSE-ConnectionGUID: 8i8H4hNISXiadhPmQXqIsQ==
+X-CSE-MsgGUID: l7jxs5SXRnuUfSQpUDcEwA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47580730"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="47580730"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 07:12:33 -0700
+X-CSE-ConnectionGUID: t79serrzTHyW7k5Cors6Bw==
+X-CSE-MsgGUID: XiH28u6WRhanW3J1sEup0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
+   d="scan'208";a="87232153"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 31 Oct 2024 07:12:25 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t6VuR-000gH9-16;
+	Thu, 31 Oct 2024 14:12:23 +0000
+Date: Thu, 31 Oct 2024 22:12:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: qiang4.zhang@linux.intel.com, "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Gonglei <arei.gonglei@huawei.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Chen, Jian Jun" <jian.jun.chen@intel.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	David Hildenbrand <david@redhat.com>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Anton Yakovlev <anton.yakovlev@opensynergy.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Qiang Zhang <qiang4.zhang@intel.com>
+Subject: Re: [PATCH] virtio: only reset device and restore status if needed
+ in device resume
+Message-ID: <202410312128.7ymyjL4j-lkp@intel.com>
+References: <20241031030847.3253873-1-qiang4.zhang@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241031030847.3253873-1-qiang4.zhang@linux.intel.com>
 
-Jeff Johnson <quic_jjohnson@quicinc.com> writes:
+Hi,
 
-> As described in [1], compiling the ath12k driver using clang with
-> KASAN enabled warns about some functions with excessive stack usage,
-> with the worst case being:
->
-> drivers/net/wireless/ath/ath12k/qmi.c:3546:13: warning: stack frame size (2456) exceeds limit (1024) in 'ath12k_qmi_driver_event_work' [-Wframe-larger-than]
->
-> Nathan [2] highlighted work done by Arnd [3] to address similar
-> issues in other portions of the kernel.
->
-> ath12k_qmi_driver_event_work() itself is a pretty lightweight
-> function, but it dispatches to several other functions which do the
-> real work:
-> ath12k_qmi_driver_event_work()
-> 	ath12k_qmi_event_server_arrive()
-> 		ath12k_qmi_host_cap_send()
-> 	ath12k_qmi_event_mem_request()
-> 		ath12k_qmi_respond_fw_mem_request()
-> 	ath12k_qmi_event_load_bdf()
-> 		ath12k_qmi_request_target_cap()
-> 		ath12k_qmi_load_bdf_qmi()
-> 		ath12k_qmi_wlanfw_m3_info_send()
->
-> Mark all of those underlying functions as 'noinline_for_stack' to
-> prevent them from being inlined in ath12k_qmi_driver_event_work(),
-> thereby eliminating the excessive stack usage.
->
-> Link: https://msgid.link/bc214795-1c51-4cb7-922f-67d6ef98bff2@quicinc.com # [1]
-> Link: https://msgid.link/20241025223321.GA3647469@thelio-3990X # [2]
-> Link: https://lore.kernel.org/all/?q=f:arnd@kernel.org+Wframe-larger-than # [3]
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+kernel test robot noticed the following build errors:
 
-Acked-by: Kalle Valo <kvalo@kernel.org>
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus mst-vhost/linux-next axboe-block/for-next herbert-cryptodev-2.6/master andi-shyti/i2c/i2c-host mkp-scsi/for-next jejb-scsi/for-next tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.12-rc5 next-20241031]
+[cannot apply to herbert-crypto-2.6/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/qiang4-zhang-linux-intel-com/virtio-only-reset-device-and-restore-status-if-needed-in-device-resume/20241031-111315
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20241031030847.3253873-1-qiang4.zhang%40linux.intel.com
+patch subject: [PATCH] virtio: only reset device and restore status if needed in device resume
+config: x86_64-buildonly-randconfig-003-20241031 (https://download.01.org/0day-ci/archive/20241031/202410312128.7ymyjL4j-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241031/202410312128.7ymyjL4j-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410312128.7ymyjL4j-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/i2c/busses/i2c-virtio.c:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/i2c/busses/i2c-virtio.c:256:8: error: call to undeclared function 'virtio_device_reset_and_restore_status'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     256 |         ret = virtio_device_reset_and_restore_status(vdev);
+         |               ^
+   1 warning and 1 error generated.
+
+
+vim +/virtio_device_reset_and_restore_status +256 drivers/i2c/busses/i2c-virtio.c
+
+   251	
+   252	static int virtio_i2c_restore(struct virtio_device *vdev)
+   253	{
+   254		int ret;
+   255	
+ > 256		ret = virtio_device_reset_and_restore_status(vdev);
+   257		if (ret)
+   258			return ret;
+   259	
+   260		return virtio_i2c_setup_vqs(vdev->priv);
+   261	}
+   262	
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
