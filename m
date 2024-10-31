@@ -1,84 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2A019538D;
-	Thu, 31 Oct 2024 14:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8691BD027;
+	Thu, 31 Oct 2024 17:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730383955; cv=none; b=UQRZfTYcYqQf3vYtY2fjcyF1bH5ihqPChuaQnUY/H62jwIqY28r9Qgngzy2uYIosK2EcDMv9NJTbLlr0X//6IW8/VNcHyqmrIjuuQCIaPsENIHZQ4KC0zb13FHY0t5E5BMtUugf89lQdb50S4jgx9iQHugOaUH3jdF6PJo4WV8U=
+	t=1730394463; cv=none; b=OrA1K4PwA91K+zeD2PfoNByMZUfFZzL2YmDvt+JyWSbbRjqdcb0rBvRXCHoUab2C0q7OPQiwY38hXQtL0uYCxztXKIeCVDEhkD5jqXTsyLFdJhsgUhLI2XZlv84IO8NOk6Jxpd7NVIOF+ToU52sjIpJ/S2+1b3yR6i4EkjpGppA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730383955; c=relaxed/simple;
-	bh=mQzdoA6HITBooHuI8ytc1oMFxWv2X/pE16EJqC+j+h8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eTsQXOHuf0pxRQDprEfbsnTv4IuXs/9cFulrYAWwvBrOtntlCr7+eUAT4btfghQ8Hmzvx7qe0EYAFvZIC404MduEMcBBWRwV6bju+IWssdswzW8Y+BXQB2aJAsjaQwLdj8sQyLQsHEsosZDI+ExpZKacC/RxnPfXhCkOogEZbnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLp1GjMv; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1730394463; c=relaxed/simple;
+	bh=DcnC6JXPAglQBQtZrEuqYjdyVGl/zg7nJfmo23aGIkU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ih28tYndd5Hwyrd5aN+tl52npdPMI7Jq4OnpCliwg8ZNoPZedUYCUe1tU8izC+/QO9nuB3iPgEdEwlel2zWpkHSipA0Jvk3tqEY8W+WKi9JxocJGjskJem1xMxro9eqtB+pHX8kAEBOhL5ltXcvPjgmWtInw9bhtvT1716uGWmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xc6/xL9D; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLp1GjMv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xc6/xL9D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730383954; x=1761919954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mQzdoA6HITBooHuI8ytc1oMFxWv2X/pE16EJqC+j+h8=;
-  b=cLp1GjMvUizaZKjwuZanZej3a64zJ2UJ9afFquM/idM+4t1Hj6/9GAXT
-   EC/jsMJazN7k/3R1SwXI0gM6+h0Iz8OprgHZ5w1QP2hzw4JqjMtC6ngsS
-   tqM5pqAjKvt3TMZRzsFy6ScgtvoGRMgDYnXB0aqqhc5KqOjEjjfKJBAyY
-   oS0BgX8mSKkmB17MH7qcalHTMuwzlKEpJa44FYAdHQI3CnNl66D5pjDBF
-   lJ5sR9umvFIdW62QnmKBhUB4xgJquDCOwGpXmXoCO+LAge6oTXxBCYldt
-   f/fEZ1mqLEJJOes+dkkNuGA4Y1k6FgvRkoACq3zb44IijYxUxWP3hv/1w
-   w==;
-X-CSE-ConnectionGUID: 8i8H4hNISXiadhPmQXqIsQ==
-X-CSE-MsgGUID: l7jxs5SXRnuUfSQpUDcEwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47580730"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="47580730"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 07:12:33 -0700
-X-CSE-ConnectionGUID: t79serrzTHyW7k5Cors6Bw==
-X-CSE-MsgGUID: XiH28u6WRhanW3J1sEup0Q==
+  t=1730394461; x=1761930461;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DcnC6JXPAglQBQtZrEuqYjdyVGl/zg7nJfmo23aGIkU=;
+  b=Xc6/xL9DWU96VtQlJdzVKBtdXnnN3BNL9lZbnIIXCGxMojkST0m2Svv5
+   uDXRAo2AN5pDU8AJW+HWlGc76QJ8TiqT2CFRGL/MIOcmNGcx9OwqBpX0B
+   qz5KN9+2agawLcK2Ay08MnC/lUFU+LnxQWTrvEFW5c94CAZ7Nfx8O5XUd
+   4IVhAMlJncO1NQ4aiiUSimjZFFGYOyQy/Fitix6zZndlSOZS0ggWQFyeo
+   xvPaFomLfIOjFBsuJbvRb2/xVuz/HBqdRD9TlCzwVSLdqRBDL4m1v5PwQ
+   F9j9pVNCuC36xwScidqJhmHTX1hoQ5EliOKh1EPfr0T35bsjEzFT/Jef+
+   Q==;
+X-CSE-ConnectionGUID: mqq41Tt6SoGgXYvYP55PVw==
+X-CSE-MsgGUID: XcbfUuO5Ro+nORapzkf5AQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="17787463"
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
+   d="scan'208";a="17787463"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 10:07:41 -0700
+X-CSE-ConnectionGUID: O910B8opT4mDU8pNGyhgYA==
+X-CSE-MsgGUID: 9dBSr+KpSw6zkR9J4QOYuA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="87232153"
+   d="scan'208";a="106014402"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 31 Oct 2024 07:12:25 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 31 Oct 2024 10:07:40 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t6VuR-000gH9-16;
-	Thu, 31 Oct 2024 14:12:23 +0000
-Date: Thu, 31 Oct 2024 22:12:19 +0800
+	id 1t6Ye1-000gYE-19;
+	Thu, 31 Oct 2024 17:07:37 +0000
+Date: Fri, 1 Nov 2024 01:07:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: qiang4.zhang@linux.intel.com, "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Gonglei <arei.gonglei@huawei.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	"Chen, Jian Jun" <jian.jun.chen@intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	David Hildenbrand <david@redhat.com>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Anton Yakovlev <anton.yakovlev@opensynergy.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Qiang Zhang <qiang4.zhang@intel.com>
-Subject: Re: [PATCH] virtio: only reset device and restore status if needed
- in device resume
-Message-ID: <202410312128.7ymyjL4j-lkp@intel.com>
-References: <20241031030847.3253873-1-qiang4.zhang@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:sched/cleanup 20/22] kernel/sched/rt.c:2643:20: error:
+ use of undeclared identifier 'switched_from_rt'; did you mean
+ 'switched_to_rt'?
+Message-ID: <202411010109.9mDLbdzx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -87,64 +62,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241031030847.3253873-1-qiang4.zhang@linux.intel.com>
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus mst-vhost/linux-next axboe-block/for-next herbert-cryptodev-2.6/master andi-shyti/i2c/i2c-host mkp-scsi/for-next jejb-scsi/for-next tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.12-rc5 next-20241031]
-[cannot apply to herbert-crypto-2.6/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/qiang4-zhang-linux-intel-com/virtio-only-reset-device-and-restore-status-if-needed-in-device-resume/20241031-111315
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20241031030847.3253873-1-qiang4.zhang%40linux.intel.com
-patch subject: [PATCH] virtio: only reset device and restore status if needed in device resume
-config: x86_64-buildonly-randconfig-003-20241031 (https://download.01.org/0day-ci/archive/20241031/202410312128.7ymyjL4j-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241031/202410312128.7ymyjL4j-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/cleanup
+head:   4e3feca600aeb6b6cee07822faf7d1a8aa0564b2
+commit: 879c968b9feafb703c9b352fae0091b1c5b71bcc [20/22] sched: Fold sched_class::switch{ing,ed}_{to,from}() into the change pattern
+config: arm-randconfig-001-20241031 (https://download.01.org/0day-ci/archive/20241101/202411010109.9mDLbdzx-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411010109.9mDLbdzx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410312128.7ymyjL4j-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411010109.9mDLbdzx-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/i2c/busses/i2c-virtio.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/i2c/busses/i2c-virtio.c:256:8: error: call to undeclared function 'virtio_device_reset_and_restore_status'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     256 |         ret = virtio_device_reset_and_restore_status(vdev);
-         |               ^
-   1 warning and 1 error generated.
+   In file included from kernel/sched/build_policy.c:52:
+>> kernel/sched/rt.c:2643:20: error: use of undeclared identifier 'switched_from_rt'; did you mean 'switched_to_rt'?
+    2643 |         .switched_from          = switched_from_rt,
+         |                                   ^~~~~~~~~~~~~~~~
+         |                                   switched_to_rt
+   kernel/sched/rt.c:2454:13: note: 'switched_to_rt' declared here
+    2454 | static void switched_to_rt(struct rq *rq, struct task_struct *p)
+         |             ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
 
 
-vim +/virtio_device_reset_and_restore_status +256 drivers/i2c/busses/i2c-virtio.c
+vim +2643 kernel/sched/rt.c
 
-   251	
-   252	static int virtio_i2c_restore(struct virtio_device *vdev)
-   253	{
-   254		int ret;
-   255	
- > 256		ret = virtio_device_reset_and_restore_status(vdev);
-   257		if (ret)
-   258			return ret;
-   259	
-   260		return virtio_i2c_setup_vqs(vdev->priv);
-   261	}
-   262	
+  2638	
+  2639		.task_tick		= task_tick_rt,
+  2640	
+  2641		.get_rr_interval	= get_rr_interval_rt,
+  2642	
+> 2643		.switched_from		= switched_from_rt,
+  2644		.switched_to		= switched_to_rt,
+  2645		.prio_changed		= prio_changed_rt,
+  2646	
+  2647		.update_curr		= update_curr_rt,
+  2648	
 
 -- 
 0-DAY CI Kernel Test Service
