@@ -1,120 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BF718EFED;
-	Thu, 31 Oct 2024 09:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFD819C55F;
+	Thu, 31 Oct 2024 12:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730365333; cv=none; b=FMMlgAX2n7Y+TfiL8qNrXdOUJed78E8+BNGZUjWzIHv8HlNSQO3r2bo73K/Y5vJggRFb5C7uMV3gvMuypZwSJx94gUjTYhYCdSO5M6kGZmTVH8LyFspvHDCkQh0EPBl4CHOElbFZvP4AC4zHknMlPpEshUThMkiFxHIHFR9NBcE=
+	t=1730376502; cv=none; b=uVOpSIQpKJFnDDeU6yvGoFM8mkgGe1aWJgEOMi3UoQa2j7y3jp+/1FfnZiXCzraJ7WiA3YAbLirzWdpPS28LesJqvg2+vLtwq85wl2DOoNZZHo+fKmOWF6xojrLo5YBu4QkBJSUwGeG21rIXqU21YenSxsp8e2DyTrCQUAmR+W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730365333; c=relaxed/simple;
-	bh=7wg0X9kZZS7PBL5jMc02efri3UqXq/hrwkpInqVrfxI=;
+	s=arc-20240116; t=1730376502; c=relaxed/simple;
+	bh=st32/tjoOhB5WNijLGkW3cQwbLhc+YaR9nyy9TiLHbU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B3aB8nXgwpN40EyZZ131k/tSVI1vYmAzTaVLV9JGA7LDmbVLyPCfZZ6Qs+KXt1CgSZJkIYxKxPzJSrWkyuVv4DepZEv+de5KK1tLNGaEiFjbOGnEameto1eq3aaoRcJg2aql29ZHaS957eueREdJKh0iOBLyzbZZJB3yvhoWNYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lY+YTLhI; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q1LTJNWXE0PKkSfr0Xk4+yxuWzKTy9eloOgHbYpTabXvFPJZKLai/5kytNYPvEDoJF2KenKPNt2F8AQ+1on1BUAlm9nfGdPftJWyaWvBgx0273IaL4oESWSNd9SeIHvLGYpbmEXXBBN0Zes0V0Fwr/Kz9AUmrmaCHV9k2l5TGPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bCXEaBca; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lY+YTLhI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bCXEaBca"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730365331; x=1761901331;
+  t=1730376500; x=1761912500;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7wg0X9kZZS7PBL5jMc02efri3UqXq/hrwkpInqVrfxI=;
-  b=lY+YTLhIWk9yTTuUDUV5/mDawAb+PHZaCzoGCS6BYJ6Kfk1KsCoAsvIm
-   SmwwiADHuNDkqnA1DSgracaLxFyZgcsmFlr/ZeHUOJHvSU1PHYb696D4Y
-   jrjmyKdTAefpshaBpz3KTFYE88/Dm+zdHIYkv2QGUrZl//M+o7/4HN1a3
-   W7enG+j+p9UontoBPxr6zZ5/C+iWNEONIFgGzjqj5qQDAtoyWRoQn8UUT
-   x/WzPmSRHKR0fG2znTtmZZsKW9EJrab/iTE50bEYcxPXqRuAX34N6KTg3
-   n6Xo52AVv5mu70Ah81NxC2XfEnBJag64VLAoa36sS3KVOVperm6VSqwMd
-   A==;
-X-CSE-ConnectionGUID: /aYX1YwmT6+zjExCmcnoxg==
-X-CSE-MsgGUID: dV3uoyo7RKuwo8lh5BqS5Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="40668915"
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="40668915"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 02:02:11 -0700
-X-CSE-ConnectionGUID: t/ukF9+VTSeT169OFp800A==
-X-CSE-MsgGUID: yGJx0jYmROePN3OiTnGSwA==
+   mime-version:in-reply-to;
+  bh=st32/tjoOhB5WNijLGkW3cQwbLhc+YaR9nyy9TiLHbU=;
+  b=bCXEaBcaFSvs9PQdk8a1d/gRg4RnucOxyezGSgNf+MvxeMySiNoYBOVo
+   4boi/Q4KbkoRbKm7nHlAx83ujo326BYF/ZyqKVGLLLmlLCE5fnPn1E/fQ
+   3GicACe9FP3YDHOmhRDvXPh8gksE7+JZu3h4znrhPMKY9iT1trCYDeP7S
+   tvYEsCyPGfIYvleXwsZNWJvXEyuuuFOInyZEzGB/NbwE0M3V3Rh78ujq8
+   nBcBrTIO1Vw7EfBpWpVbdubFkfh6+6gLyrZel2q9vamgLhe4qQ+2w+6/2
+   dy+yxcXUusG05uuyBWH9ep/H8jCsyfgHmynJXz1GnrbCmkxb53r9NVtY7
+   g==;
+X-CSE-ConnectionGUID: jCs3jhEMT5+DxdnVgrEqVA==
+X-CSE-MsgGUID: Nb7TiYRMSFWKKnbmzSI5NA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47567784"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="47567784"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 05:08:19 -0700
+X-CSE-ConnectionGUID: RZe9ggH8TCKGC/FJuUPJTw==
+X-CSE-MsgGUID: V5U/KF1lRJ+N+VszZwyVjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="120028737"
+   d="scan'208";a="82926409"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 31 Oct 2024 02:02:06 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 31 Oct 2024 05:08:12 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t6R47-000ftZ-1H;
-	Thu, 31 Oct 2024 09:02:03 +0000
-Date: Thu, 31 Oct 2024 17:01:27 +0800
+	id 1t6TyD-000g4C-1P;
+	Thu, 31 Oct 2024 12:08:09 +0000
+Date: Thu, 31 Oct 2024 20:07:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-	Lee Jones <lee@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-	Gregory CLEMENT <gregory.clement@bootlin.com>, arm@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
+To: Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH leds v4 02/12] leds: turris-omnia: Use command execution
- functions from the MCU driver
-Message-ID: <202410311612.0OkxKVgC-lkp@intel.com>
-References: <20241029135621.12546-3-kabel@kernel.org>
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof Wilczynski <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Saravana Kannan <saravanak@google.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Stefan Wahren <wahrenst@gmx.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 07/12] clk: rp1: Add support for clocks provided by RP1
+Message-ID: <202410311923.jL6Guqrr-lkp@intel.com>
+References: <c20e3d6d87c71691b149cdeeafc94009953346b2.1730123575.git.andrea.porta@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241029135621.12546-3-kabel@kernel.org>
+In-Reply-To: <c20e3d6d87c71691b149cdeeafc94009953346b2.1730123575.git.andrea.porta@suse.com>
 
-Hi Marek,
+Hi Andrea,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.12-rc5]
-[cannot apply to lee-leds/for-leds-next robh/for-next next-20241030]
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus robh/for-next linus/master v6.12-rc5]
+[cannot apply to next-20241031]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Beh-n/turris-omnia-mcu-interface-h-Move-command-execution-function-to-global-header/20241029-215858
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241029135621.12546-3-kabel%40kernel.org
-patch subject: [PATCH leds v4 02/12] leds: turris-omnia: Use command execution functions from the MCU driver
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20241031/202410311612.0OkxKVgC-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrea-della-Porta/dt-bindings-clock-Add-RaspberryPi-RP1-clock-bindings/20241028-221122
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/c20e3d6d87c71691b149cdeeafc94009953346b2.1730123575.git.andrea.porta%40suse.com
+patch subject: [PATCH v3 07/12] clk: rp1: Add support for clocks provided by RP1
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241031/202410311923.jL6Guqrr-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241031/202410311612.0OkxKVgC-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241031/202410311923.jL6Guqrr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410311612.0OkxKVgC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410311923.jL6Guqrr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/leds/leds-turris-omnia.c:8:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:22:
-   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from drivers/clk/clk-rp1.c:9:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/clk/clk-rp1.c:9:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/clk/clk-rp1.c:9:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from drivers/clk/clk-rp1.c:11:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -134,74 +201,139 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/leds/leds-turris-omnia.c:409:12: warning: stack frame size (2064) exceeds limit (2048) in 'omnia_leds_probe' [-Wframe-larger-than]
-     409 | static int omnia_leds_probe(struct i2c_client *client)
-         |            ^
-   5 warnings generated.
+>> drivers/clk/clk-rp1.c:621:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     621 |         FIELD_SET(prim, PLL_PRIM_DIV1_MASK, prim_div1);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-rp1.c:399:12: note: expanded from macro 'FIELD_SET'
+     399 |         (_reg) |= FIELD_PREP(mask, (_val));     \
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/clk/clk-rp1.c:622:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     622 |         FIELD_SET(prim, PLL_PRIM_DIV2_MASK, prim_div2);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-rp1.c:399:12: note: expanded from macro 'FIELD_SET'
+     399 |         (_reg) |= FIELD_PREP(mask, (_val));     \
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/clk/clk-rp1.c:767:2: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     767 |         FIELD_SET(sec, PLL_SEC_DIV_MASK, div);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-rp1.c:399:12: note: expanded from macro 'FIELD_SET'
+     399 |         (_reg) |= FIELD_PREP(mask, (_val));     \
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/clk/clk-rp1.c:948:3: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     948 |                 FIELD_SET(ctrl, CLK_CTRL_AUXSRC_MASK, index - data->num_std_parents);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-rp1.c:399:12: note: expanded from macro 'FIELD_SET'
+     399 |         (_reg) |= FIELD_PREP(mask, (_val));     \
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +/omnia_leds_probe +409 drivers/leds/leds-turris-omnia.c
+vim +621 drivers/clk/clk-rp1.c
 
-43e9082fbccc7d Marek Behún         2023-09-18  408  
-4934630409cb60 Uwe Kleine-König    2022-11-18 @409  static int omnia_leds_probe(struct i2c_client *client)
-089381b27abe28 Marek Behún         2020-07-23  410  {
-089381b27abe28 Marek Behún         2020-07-23  411  	struct device *dev = &client->dev;
-122d57e2960c81 Krzysztof Kozlowski 2024-08-16  412  	struct device_node *np = dev_of_node(dev);
-089381b27abe28 Marek Behún         2020-07-23  413  	struct omnia_leds *leds;
-089381b27abe28 Marek Behún         2020-07-23  414  	struct omnia_led *led;
-089381b27abe28 Marek Behún         2020-07-23  415  	int ret, count;
-089381b27abe28 Marek Behún         2020-07-23  416  
-089381b27abe28 Marek Behún         2020-07-23  417  	count = of_get_available_child_count(np);
-089381b27abe28 Marek Behún         2020-07-23  418  	if (!count) {
-089381b27abe28 Marek Behún         2020-07-23  419  		dev_err(dev, "LEDs are not defined in device tree!\n");
-089381b27abe28 Marek Behún         2020-07-23  420  		return -ENODEV;
-089381b27abe28 Marek Behún         2020-07-23  421  	} else if (count > OMNIA_BOARD_LEDS) {
-089381b27abe28 Marek Behún         2020-07-23  422  		dev_err(dev, "Too many LEDs defined in device tree!\n");
-089381b27abe28 Marek Behún         2020-07-23  423  		return -EINVAL;
-089381b27abe28 Marek Behún         2020-07-23  424  	}
-089381b27abe28 Marek Behún         2020-07-23  425  
-089381b27abe28 Marek Behún         2020-07-23  426  	leds = devm_kzalloc(dev, struct_size(leds, leds, count), GFP_KERNEL);
-089381b27abe28 Marek Behún         2020-07-23  427  	if (!leds)
-089381b27abe28 Marek Behún         2020-07-23  428  		return -ENOMEM;
-089381b27abe28 Marek Behún         2020-07-23  429  
-089381b27abe28 Marek Behún         2020-07-23  430  	leds->client = client;
-089381b27abe28 Marek Behún         2020-07-23  431  	i2c_set_clientdata(client, leds);
-089381b27abe28 Marek Behún         2020-07-23  432  
-43e9082fbccc7d Marek Behún         2023-09-18  433  	ret = omnia_mcu_get_features(client);
-43e9082fbccc7d Marek Behún         2023-09-18  434  	if (ret < 0) {
-43e9082fbccc7d Marek Behún         2023-09-18  435  		dev_err(dev, "Cannot determine MCU supported features: %d\n",
-43e9082fbccc7d Marek Behún         2023-09-18  436  			ret);
-43e9082fbccc7d Marek Behún         2023-09-18  437  		return ret;
-43e9082fbccc7d Marek Behún         2023-09-18  438  	}
-43e9082fbccc7d Marek Behún         2023-09-18  439  
-43e9082fbccc7d Marek Behún         2023-09-18  440  	leds->has_gamma_correction = ret & FEAT_LED_GAMMA_CORRECTION;
-43e9082fbccc7d Marek Behún         2023-09-18  441  	if (!leds->has_gamma_correction) {
-43e9082fbccc7d Marek Behún         2023-09-18  442  		dev_info(dev,
-43e9082fbccc7d Marek Behún         2023-09-18  443  			 "Your board's MCU firmware does not support the LED gamma correction feature.\n");
-43e9082fbccc7d Marek Behún         2023-09-18  444  		dev_info(dev,
-43e9082fbccc7d Marek Behún         2023-09-18  445  			 "Consider upgrading MCU firmware with the omnia-mcutool utility.\n");
-43e9082fbccc7d Marek Behún         2023-09-18  446  	}
-43e9082fbccc7d Marek Behún         2023-09-18  447  
-089381b27abe28 Marek Behún         2020-07-23  448  	mutex_init(&leds->lock);
-089381b27abe28 Marek Behún         2020-07-23  449  
-cbd6954fecbeb8 Marek Behún         2023-09-18  450  	ret = devm_led_trigger_register(dev, &omnia_hw_trigger);
-cbd6954fecbeb8 Marek Behún         2023-09-18  451  	if (ret < 0) {
-cbd6954fecbeb8 Marek Behún         2023-09-18  452  		dev_err(dev, "Cannot register private LED trigger: %d\n", ret);
-cbd6954fecbeb8 Marek Behún         2023-09-18  453  		return ret;
-cbd6954fecbeb8 Marek Behún         2023-09-18  454  	}
-cbd6954fecbeb8 Marek Behún         2023-09-18  455  
-089381b27abe28 Marek Behún         2020-07-23  456  	led = &leds->leds[0];
-122d57e2960c81 Krzysztof Kozlowski 2024-08-16  457  	for_each_available_child_of_node_scoped(np, child) {
-089381b27abe28 Marek Behún         2020-07-23  458  		ret = omnia_led_register(client, led, child);
-122d57e2960c81 Krzysztof Kozlowski 2024-08-16  459  		if (ret < 0)
-089381b27abe28 Marek Behún         2020-07-23  460  			return ret;
-089381b27abe28 Marek Behún         2020-07-23  461  
-089381b27abe28 Marek Behún         2020-07-23  462  		led += ret;
-089381b27abe28 Marek Behún         2020-07-23  463  	}
-089381b27abe28 Marek Behún         2020-07-23  464  
-089381b27abe28 Marek Behún         2020-07-23  465  	return 0;
-089381b27abe28 Marek Behún         2020-07-23  466  }
-089381b27abe28 Marek Behún         2020-07-23  467  
+   607	
+   608	static int rp1_pll_set_rate(struct clk_hw *hw,
+   609				    unsigned long rate, unsigned long parent_rate)
+   610	{
+   611		struct rp1_clk_desc *pll = container_of(hw, struct rp1_clk_desc, hw);
+   612		struct rp1_clockman *clockman = pll->clockman;
+   613		const struct rp1_pll_data *data = pll->data;
+   614	
+   615		u32 prim, prim_div1, prim_div2;
+   616	
+   617		get_pll_prim_dividers(rate, parent_rate, &prim_div1, &prim_div2);
+   618	
+   619		spin_lock(&clockman->regs_lock);
+   620		prim = clockman_read(clockman, data->ctrl_reg);
+ > 621		FIELD_SET(prim, PLL_PRIM_DIV1_MASK, prim_div1);
+   622		FIELD_SET(prim, PLL_PRIM_DIV2_MASK, prim_div2);
+   623		clockman_write(clockman, data->ctrl_reg, prim);
+   624		spin_unlock(&clockman->regs_lock);
+   625	
+   626		return 0;
+   627	}
+   628	
 
 -- 
 0-DAY CI Kernel Test Service
