@@ -1,200 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BAE61FDF;
-	Fri,  1 Nov 2024 14:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FAB1531C5;
+	Fri,  1 Nov 2024 14:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730471034; cv=none; b=TYeOaeEIFetpSqzvncG7GrkTmobttq+/vsPa4/JQcBggmrUxDLf3liI2bP27xMOL37BZRgozx28h2Es1+TkK0W9XIc3nOccIXwtieiDpX0FVivnGs1Q8WZt/vJVEARtPcdrJ8nhh2bUJpOrCJVDzFABy5HAfwi5hSqtfzBDT9Zc=
+	t=1730471417; cv=none; b=kZo3+dWprTLYjNBeHZzn8GHdxim3hVlRMsiDrLjiCnOtu+BzHSHtT145eu2o5Q3tcCrZ/eXQn068y4Fvs1mxYwjD1L3ec/Bhkg9pRGfnDQkDj74G4odBbbugRxujfg1FF8o/UMIHN88ldriNAH2/t8VIAu+CsyrwLiErHivv9w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730471034; c=relaxed/simple;
-	bh=OXDMAqh2nLfuHgCU8Sscde62QdU4PrQcAwb72r1rD80=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BfFWZ48wpjh4Ia3rNgxJg6e5CwirroQQfaxFbsLzZ4uTyF3RpGev31xkrUXf5g+pJhqA9/sAmCa1CmqNJZe7jvCI6xfS5iYguzQ+DREAoEDEajAF5rnebsH2EOD5fFF9brQntOUca4POXpvRQsJ1r+mOwHzXEggabH9vN2T2AN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cpOXUkvZ; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730471417; c=relaxed/simple;
+	bh=TKAtd4Xz8cLFFFmnHPins+tJ+Mfne7qr3bvUedak18U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K1gxU53O3VUYP0mhJMXkine4vbIOasN3AUuPe4h41dkZZxQlhMri3qZSby7bUjkPrcVcH58KBnrcmW8muuIoW8cgZ24Ralb//Gkc43m/4blRSuMsYfKHfF90YW1EjZ8ZV+vipF8Is2USw/QaWHG9y/h/UckUFKRP1fj8VxeFzTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUVda1jd; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cpOXUkvZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730471031; x=1762007031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OXDMAqh2nLfuHgCU8Sscde62QdU4PrQcAwb72r1rD80=;
-  b=cpOXUkvZpAUuXnp8eAxltHh0uNZfmroaWQ/NJmEUWUzMIm8ysT8d0IRh
-   cRGzvCAje1yhzmf9nvo3LwA440Xoj+fmBPwc8nVqQjclQZlgAy6uA8wTN
-   cqNEhhs7ColF8sLahAItLk3fKwE3zcxsgQ7WdEMerT3INC9Fc/dGbeL6Q
-   Ftrnloe6SFI+GZhO3YbjhWS8MrzEBqQ1UOwfGwRrS1ljZOGA4KofpH74+
-   6OXXu42Y8VCeopRDZeb+5TKxiCU01HJfcN+0MDw+yYEt9EV2t4cY1ollu
-   jZ502BG3kBw0PFPRkeE6Vxzxq+FdeoO/X7xFIIRw0bpjV9kjk8tSuSaig
-   w==;
-X-CSE-ConnectionGUID: tg7LcmBdQ2CyULhi5l3WWw==
-X-CSE-MsgGUID: qvPQsKlRQRSdfjCh1P68Kw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41337040"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="41337040"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 07:23:50 -0700
-X-CSE-ConnectionGUID: imwns5Y0QGea1ZlKb1YZtA==
-X-CSE-MsgGUID: WV7WXGAMRJiX01/aCBZLeA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,250,1725346800"; 
-   d="scan'208";a="87516207"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 01 Nov 2024 07:23:42 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6sYt-000hdV-1s;
-	Fri, 01 Nov 2024 14:23:39 +0000
-Date: Fri, 1 Nov 2024 22:22:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Lee Chun-Yi <jlee@suse.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Corentin Chary <corentin.chary@gmail.com>,
-	"Luke D . Jones" <luke@ljones.dev>,
-	Ike Panhc <ike.pan@canonical.com>,
-	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-	Alexis Belmonte <alexbelm48@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Ai Chao <aichao@kylinos.cn>, Gergo Koteles <soyer@irl.hu>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	"open list:MICROSOFT SURFACE PLATFORM PROFILE DRIVER" <platform-driver-x86@vger.kernel.org>,
-	"open list:THINKPAD ACPI EXTRAS DRIVER" <ibm-acpi-devel@lists.sourceforge.net>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Matthew Schwartz <matthew.schwartz@linux.dev>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v3 20/22] ACPI: platform_profile: Register class device
- for platform profile handlers
-Message-ID: <202411012227.46a4WcxB-lkp@intel.com>
-References: <20241031040952.109057-21-mario.limonciello@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUVda1jd"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20c804409b0so1581625ad.2;
+        Fri, 01 Nov 2024 07:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730471414; x=1731076214; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TKAtd4Xz8cLFFFmnHPins+tJ+Mfne7qr3bvUedak18U=;
+        b=CUVda1jdOcxbWVDIOZJ/jaFBWypmvREDAqmxqdOk2+lViybZy81DFnO3F6q+OOjs06
+         Al9RNvE2+v36OqZffhDEDg22betQjIY7wKHz7B1Apw0Lz/PI2IhXcwZ1moj1yiBYJMMi
+         fnNWbuN7oKs5QLyvN3AudVixVzrwic36RodcLS8T7vCXDVi8ttGenylHmsXzO0jZTgN7
+         narh1BjJ63dOwSaXg1PAJ39Cf61BXIDrLF3JWI+M79RvtMqC4konX1RL/S8t6LMPIxCZ
+         Vr/jtIF2LlCRLm2dNAJBhAubMq8W1Fb80lAcVL2IrK0RcHVueDzy4QCGEyapTSTBncMG
+         Lecw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730471414; x=1731076214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TKAtd4Xz8cLFFFmnHPins+tJ+Mfne7qr3bvUedak18U=;
+        b=SXQVv//vQ/lWgxLtmCov+1UHFxxTPtZsNdb4dzwtr02NpANgcKwUgXpUk+Zl2AO5VY
+         xZ2Y2PcpuwGq2ZbFs+5Ea7PcUN7V6Z/ydzwftjtf4+/jJV7o7uyYVNZAFm8wJgYBBnVi
+         n3zRvxq+k2afw9dT2/R9OPiy/63au/IG+leB6UVnEY0N2Uvtk76o7p/fb6EpjFERRMEb
+         ZiVeFw7J6OFazlFHUsNh985tm8tFoDkDhEHHmf5TxcVNPmIsKkb5y3Cb9DKZHh6wtW3k
+         PiU2dYBKGF25JDg6DEIrIXvq4KJB/2UvydTJiPR6pshuAEvs/28j3jHn4ogWvRj5TNY2
+         BEcw==
+X-Forwarded-Encrypted: i=1; AJvYcCWF9DLFFI92ye3zBJnb7fhuSgPUo69vhNtL/n2B00TrbhpGYIlIL70yOBDB8iC+WeWUMci4@lists.linux.dev, AJvYcCWxBl0z/QEtRHyuabsPOc+6HHKUqtg2na7lFQyOXNf/Gi0fvxHodbA9SJK1Et2ZPi/kWgoWzA==@lists.linux.dev
+X-Gm-Message-State: AOJu0YwYKpWLBjGJZxZc9XiK6Fnko4/wl6TlpUSE+/vJ4F0T0px6NvOu
+	kyP91Q03Bgv3MaiyJE6nXR+O0vXDwL6geMpLyisTYA2JP6dMxgnxt4P+ZzUxAPkblyP+qUIlXOi
+	hAgNqQpN2FOrtoybwNCDZ7rxWIK4=
+X-Google-Smtp-Source: AGHT+IGOQhefEp7FLZkdniAIiiIsTLBIszMwpP4/Ctt+MCmEaSNoKLq4eMcSMtSjAgS5QbXUeuU5N7LkDLjPkosOQVw=
+X-Received: by 2002:a17:902:d50c:b0:20c:5da8:47b8 with SMTP id
+ d9443c01a7336-210c689759amr141323595ad.5.1730471414470; Fri, 01 Nov 2024
+ 07:30:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241031040952.109057-21-mario.limonciello@amd.com>
+References: <20241101060237.1185533-1-boqun.feng@gmail.com>
+In-Reply-To: <20241101060237.1185533-1-boqun.feng@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 1 Nov 2024 15:30:01 +0100
+Message-ID: <CANiq72ndWJtzSQSFYuVkRPhdan_PvNpvGEhQXKAZKESnt7JVAA@mail.gmail.com>
+Subject: Re: [RFC v2 00/13] LKMM *generic* atomics in Rust
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, lkmm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
+	Trevor Gross <tmgross@umich.edu>, dakr@redhat.com, 
+	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+On Fri, Nov 1, 2024 at 7:03=E2=80=AFAM Boqun Feng <boqun.feng@gmail.com> wr=
+ote:
+>
+> This time, I try implementing a generic atomic type `Atomic<T>`, since
+> Benno and Gary suggested last time, and also Rust standard library is
+> also going to that direction [1].
 
-kernel test robot noticed the following build errors:
+I would like to thank Boqun for trying out this approach, even when he
+wasn't (and maybe still isn't) convinced.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-platform-profile-Add-a-name-member-to-handlers/20241031-121650
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20241031040952.109057-21-mario.limonciello%40amd.com
-patch subject: [PATCH v3 20/22] ACPI: platform_profile: Register class device for platform profile handlers
-config: i386-buildonly-randconfig-005-20241101 (https://download.01.org/0day-ci/archive/20241101/202411012227.46a4WcxB-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411012227.46a4WcxB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411012227.46a4WcxB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/acpi/platform_profile.c:303:7: error: call to undeclared function 'MKDEV'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     303 |                                          MKDEV(0, pprof->minor), NULL, "platform-profile-%s",
-         |                                          ^
-   drivers/acpi/platform_profile.c:344:42: error: call to undeclared function 'MKDEV'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     344 |         device_destroy(&platform_profile_class, MKDEV(0, pprof->minor));
-         |                                                 ^
-   2 errors generated.
-
-
-vim +/MKDEV +303 drivers/acpi/platform_profile.c
-
-   261	
-   262	int platform_profile_register(struct platform_profile_handler *pprof)
-   263	{
-   264		bool registered;
-   265		int err;
-   266	
-   267		/* Sanity check the profile handler */
-   268		if (!pprof || bitmap_empty(pprof->choices, PLATFORM_PROFILE_LAST) ||
-   269		    !pprof->profile_set || !pprof->profile_get) {
-   270			pr_err("platform_profile: handler is invalid\n");
-   271			return -EINVAL;
-   272		}
-   273		if (!test_bit(PLATFORM_PROFILE_BALANCED, pprof->choices)) {
-   274			pr_err("platform_profile: handler does not support balanced profile\n");
-   275			return -EINVAL;
-   276		}
-   277		if (!pprof->dev) {
-   278			pr_err("platform_profile: handler device is not set\n");
-   279			return -EINVAL;
-   280		}
-   281	
-   282		guard(mutex)(&profile_lock);
-   283		/* We can only have one active profile */
-   284		if (cur_profile)
-   285			return -EEXIST;
-   286	
-   287		registered = platform_profile_is_registered();
-   288		if (!registered) {
-   289			/* class for individual handlers */
-   290			err = class_register(&platform_profile_class);
-   291			if (err)
-   292				return err;
-   293			/* legacy sysfs files */
-   294			err = sysfs_create_group(acpi_kobj, &platform_profile_group);
-   295			if (err)
-   296				goto cleanup_class;
-   297	
-   298		}
-   299	
-   300		/* create class interface for individual handler */
-   301		pprof->minor = idr_alloc(&platform_profile_minor_idr, pprof, 0, 0, GFP_KERNEL);
-   302		pprof->class_dev = device_create(&platform_profile_class, pprof->dev,
- > 303						 MKDEV(0, pprof->minor), NULL, "platform-profile-%s",
-   304						 pprof->name);
-   305		if (IS_ERR(pprof->class_dev)) {
-   306			err = PTR_ERR(pprof->class_dev);
-   307			goto cleanup_legacy;
-   308		}
-   309		err = sysfs_create_group(&pprof->class_dev->kobj, &platform_profile_group);
-   310		if (err)
-   311			goto cleanup_device;
-   312	
-   313		list_add_tail(&pprof->list, &platform_profile_handler_list);
-   314		sysfs_notify(acpi_kobj, NULL, "platform_profile");
-   315	
-   316		cur_profile = pprof;
-   317		return 0;
-   318	
-   319	cleanup_device:
-   320		device_destroy(&platform_profile_class, MKDEV(0, pprof->minor));
-   321	
-   322	cleanup_legacy:
-   323		if (!registered)
-   324			sysfs_remove_group(acpi_kobj, &platform_profile_group);
-   325	cleanup_class:
-   326		if (!registered)
-   327			class_unregister(&platform_profile_class);
-   328	
-   329		return err;
-   330	}
-   331	EXPORT_SYMBOL_GPL(platform_profile_register);
-   332	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
