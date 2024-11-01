@@ -1,66 +1,66 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A3E15CD42;
-	Fri,  1 Nov 2024 06:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C292C175D2D;
+	Fri,  1 Nov 2024 06:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730441052; cv=none; b=G/Qiyuh2hFJrAc5/xs2+uy+ZBk3Fel1X1vmOH/cMwuZpLI9RV6V1OqtksNF8/PzPdaW60MR69xQs/CZG9JeO/fkKE5rjBh6GXzs3kEMbGFcCGJ/eLFBmUyvwjAjqhGSwFBTn/fhFcJuEBhYFaG4TjFMhXO1zQudIfqhgnrEx4w8=
+	t=1730441055; cv=none; b=f/1Hnp3c3ur6cSdahsXgciCqak0MxuVbd/JLZv4Z7PSXHGjF0I4idp6tgsQPyRmpzRRN6dMrtfDxbqdlOk0KQRsuwEB7HvP7uqh/qm0wUUhN3sMc9VKCuH0EXd5frFyCaRu92ScGhzs6tTbtM8XiPHolvykVvWGz3mmt1pDpiLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730441052; c=relaxed/simple;
-	bh=MqvhIZAaNo5iiQDL9gtZVIFQYPreKtujEAZe4htAogM=;
+	s=arc-20240116; t=1730441055; c=relaxed/simple;
+	bh=7KJrgyvO8isbBIeGWfPNx8sxKs/K9PK96xszrTZ36RU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UFwmwM/paOZF4agz8mGVL8cPXY3G6q9YibjV9HNALQeQQuT3b1XfIGFUIhjrfWM9QGIYS8UN8yG8RNsH6l/I6hvz6eLLYz6mKnTs3TNGTFxNOH5Uio7R68wJvaaEyDL1uHmb68nK4P/mvYhAzusSX2DC7VtlUpLhA1d0TabddF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GG8AWFFF; arc=none smtp.client-ip=209.85.128.176
+	 MIME-Version; b=hxsZHDcn5pSD0DkppqPyGpxZy1OG5Y+Lm69xmCzKPUir45sVsRiNLRH2LZsGDCXR9CcfJRCvApU567/z1cWOLcQOi4kJCeALe4XpKh6tPe2RoYJQKwQrXW8ifXQHKdyjh4Tbiy9dgeJC32262eW03jyN5ORNaAwiUfUQw3FuJnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIytaLtB; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GG8AWFFF"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ea053b5929so13844887b3.0;
-        Thu, 31 Oct 2024 23:04:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIytaLtB"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4609c9b39d0so10868511cf.1;
+        Thu, 31 Oct 2024 23:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730441049; x=1731045849; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1730441051; x=1731045851; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ONyAMI/uecNup1a5yaiABvXQUHETtGYA3BLm9LR8ufQ=;
-        b=GG8AWFFFA4gsLokqx34bX5/mMuq6ereHb9QLae1KisnGkBbcvn+Sq3Q9dHV7fDblbn
-         YSCWTJW2/p3GNAjkL/uEXbnX+AQhW2GBOdXxhZGaaxQAfxatOgZjvBWya4Hky8pZzzA5
-         AFpICDca0td2HT895rGGJwzfweTLjGbt/sEPmLQBPzl6UTy3ktN/UbKsJ3PIk+T7OVG8
-         9C0INg25nUiT5/UUhZ4BD7jqBHmAU59XHboQ6sFXOk4RcLem5lIgSkKvVdQzA+NfJoWn
-         Df/lSXQWldBhbt0Lz5FYagUNjbxIEsQKiqfN6XgH4Y7ucxozbGsCrNUkCguJ1f7dUzeB
-         JzuA==
+        bh=Qb/auzzRSYdGnLFU8kbv5LWllGUHO0oSi9IMia1ivTQ=;
+        b=YIytaLtB4VKcRRgwjtNibKZCmdRNIJOOG6VEp49m0F+G185FUQm2mua0/gcmnmBiNO
+         SwcyxO7zkx4UwZewTSm8jIReAqyr9/FC6KzsqioBWjfJCr7PPW1RQsjhcbl+TYktrIk7
+         gG6ySUTyNUtDNKdzSAyaM0jzfNJugYRvI6Z+TdTG6N+hdomAQMlaF0tv+aTo/jgZe7E8
+         WHC/9d8x6INgcoEHksxNeIUZPMLXIeuehkmPf3x1Ea7RHcehbxUyGkezS9bJzV9AaJLm
+         7ZxV5rnMFycF/axKsLUNYp3hcECC2E+Fis+dsvaQSxfZKBvGBEoNdROpXXPg2egz4ftt
+         hkvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730441049; x=1731045849;
+        d=1e100.net; s=20230601; t=1730441051; x=1731045851;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ONyAMI/uecNup1a5yaiABvXQUHETtGYA3BLm9LR8ufQ=;
-        b=wiNqaL5XyvIWCkSS8T6eswcqC2q7+jBrRItV2oP4v1sjqCZx0aHXVv9+nzgSS6UGsp
-         Qxzv3qv+MDnOu4T8FevUyL4Pgetg+8Pf7xWwsre+wTbPpegttUFXXr64zkKpUD+DlnWu
-         dEedE9byxVkfuI8YISVy1HWWrUDpxSUaBI3QeudeAQ5D1MIaTV3Qa3zrqFLRbCV0Wvet
-         25FetoPDWW243VVH+ocJ6DZw8etE/SeBNcTbMAGAmgklg6T2fyc1FSRIZqqXCcomtH+o
-         kkQHtu4JtwinKVpaqZBeCcaUvGNAqpaGQ242KORIDPbIpJYooPpc7Up/dtMkrv4rW5sb
-         oDfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ/8FPxeDqG07JLCRSZTIet10p+ei0Fe1NKI0NZ2UA+mb3FS34/GrYTAwF+IYicuDYnhut@lists.linux.dev, AJvYcCW8hIZZ3a5UzVDmp8eyxJ+luoyEbYAjY0RNEz01zT0RgZpxs2vcELPgcTFSOLXyflKvYr8ZBQ==@lists.linux.dev
-X-Gm-Message-State: AOJu0YwB1SeLTn4TNJk6igFY/MZmwQk4HtJtmSIKR8PJLhnsljFUtg9n
-	oZQRWo0Nj5wsV5XuZqWR8qejs6NTRjzlQlsRKj9CtIq6WLEYQE9h
-X-Google-Smtp-Source: AGHT+IE2BIxtmwEusy18ql7cbtMQdFNwpczdaXcpq/PlQSZ5f3hVe6pqbH5Cwf8zGRtuTIUFjOhEVQ==
-X-Received: by 2002:a05:690c:6901:b0:6ea:24e2:4408 with SMTP id 00721157ae682-6ea64a9f55cmr29902627b3.2.1730441049120;
-        Thu, 31 Oct 2024 23:04:09 -0700 (PDT)
+        bh=Qb/auzzRSYdGnLFU8kbv5LWllGUHO0oSi9IMia1ivTQ=;
+        b=cWRlQ8tUdPwGz27QC3vZy6jIfW4rVgMsc+V5zcbUiVbTFILZ219gtqGP9V9y8Ll4kh
+         gPq31wywuvE+qRtBeNQwMDNVTIfCAwnxYyBKrLn3+imtdvAtuDePJARRvbHL4yzaQxAD
+         UcpK5NsNKEicn/sU3WDwskp6ACAk/ILDT15w0oqmJatIrqOFc0e3b/C56rhyUWkEsdJi
+         WnrxbGR0bDTPyIs+akmJiAoqL6rECywGSchJsOi16vz2o+Tqa5dQ9DwGPpBCOItmGPcK
+         /o10CKLQRTQgX1ITwJx3vm/oqpf4fJYcATPTf9PsXNbStpLTqcx5hVdJSjKqmAS1SuQZ
+         xj9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVPJ10eddXFmo37zzy8Lv6+n8SdGsr0MQs1yzPJJ2/9DnuiBp7B1TCfI8KUILeFC+o4EmEwDg==@lists.linux.dev, AJvYcCVsScoLbW7oJ0JU/i9BvZ1gzij2SrSayXLTDagSuMZPgRIGEwpKqcWt3UO9Z2bRaV13YXqA@lists.linux.dev
+X-Gm-Message-State: AOJu0YwFa8Il7VQVtRpgjfFLXQHKCQezub6DNVNxSlvbqI7EQ+FoNqQC
+	Gp6UnRtpS3T8oW0ePT3WgzgwZTetrybHE/oFLrMcwYhDyxDnakhd
+X-Google-Smtp-Source: AGHT+IHS6b6//DorDylLbtgJ5bxng2h5LRkBucc4foDz3VRtnJmrGN2L8AFAqOvdv2cV+zLm68lbuQ==
+X-Received: by 2002:a05:622a:1444:b0:461:22f1:dd17 with SMTP id d75a77b69052e-462ab2ea97dmr71679421cf.41.1730441050686;
+        Thu, 31 Oct 2024 23:04:10 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d35417a3afsm15822656d6.126.2024.10.31.23.04.08
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ad0c72efsm15253151cf.50.2024.10.31.23.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 23:04:09 -0700 (PDT)
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 0560C1200043;
-	Fri,  1 Nov 2024 02:04:08 -0400 (EDT)
+        Thu, 31 Oct 2024 23:04:10 -0700 (PDT)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 7765D1200043;
+	Fri,  1 Nov 2024 02:04:09 -0400 (EDT)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 01 Nov 2024 02:04:08 -0400
-X-ME-Sender: <xms:V28kZx03w7FfDJyTAjGQCB5cimhO5UgH0CnNwSs_u-GifCQ16axUWA>
-    <xme:V28kZ4GhVFDNFLEHsSGZkkMXCIV2KJJvFc28ZfVCIWYeufdv1J5PR505hNrXGB3Sp
-    FrcVTzWvpuxLabXyw>
-X-ME-Received: <xmr:V28kZx4Cb_Wrz7cjKMnfwYBQqCuRrKRcMsPZw-vVp8yqGLh-XJP80piQp0E>
+  by phl-compute-04.internal (MEProxy); Fri, 01 Nov 2024 02:04:09 -0400
+X-ME-Sender: <xms:WW8kZx0yl-DRTkHXgY5jQzLrSNLLDkudwnu3ix9eYqdnkqUvZ2vaFQ>
+    <xme:WW8kZ4GAGBgNAFrGfSe_PmlOpNQS083UDL__1doSYVQt8I7x_mlbfkwoSAgmiOm7U
+    f7mPUFIaSg6LD7WVA>
+X-ME-Received: <xmr:WW8kZx71LpKc2GUqMRy7CHTRuN8FLMJnTGleLLenuwxnBiBXKus9KcGDA5A>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
@@ -70,7 +70,7 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggod
     ieeujefhueeigfegueehgeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
     epmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhi
     thihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmh
-    grihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepheejpdhmohgu
+    grihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepheekpdhmohgu
     vgepshhmthhpohhuthdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhgvg
     hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvghl
     rdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvg
@@ -79,14 +79,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggod
     hpthhtoheplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohhj
     vggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesgh
     hmrghilhdrtghomhdprhgtphhtthhopeifvggushhonhgrfhesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:V28kZ-1GtnjM0UwZWeC5HFPwOCKR7afvqrMVVUIDiZahHaVdOxld_g>
-    <xmx:V28kZ0HlFE62k8XBBgkORjw2p0YjQKNtcmqvBayh4lnK8vqL53OqOA>
-    <xmx:V28kZ_-esDtzxvfelyBaQ6OuO6wWlVyxFiZNbZ30sR_94AX6z1Rrzw>
-    <xmx:V28kZxlevkAoV5hCW_qetZFjU6n99_7nziQtg7YxjuwvqKJqv82J0g>
-    <xmx:WG8kZ4FTVQ8XmQSFlrEVqJSVjj1T6gX32dq41ydmG5yAHVje1tVHu4I2>
+X-ME-Proxy: <xmx:WW8kZ-29wq7-RXn3oPRa3Y1O9DboG82y8qrZ4Nu_564zR-VGr9Je9w>
+    <xmx:WW8kZ0GQTTjyggH4cJg4Kav483-SKdWycoefukMQLMkjdNu8_8xqLA>
+    <xmx:WW8kZ_9tc4N_PFWXmN3eG7Mgh6RDJkpm5HMIl7ULoIc2rMMwFm2T9g>
+    <xmx:WW8kZxmBqqgJhcI1oZvJD2FHr29b8lEUC-0xrNxQI8LK_ZcZbCb1mg>
+    <xmx:WW8kZ4E6Urq48alTAcEzXU4Kswskc70SKXQV7Gr_3kb4bg0jhLSpFv4_>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 02:04:07 -0400 (EDT)
+ 1 Nov 2024 02:04:08 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rust-for-linux@vger.kernel.org,
 	rcu@vger.kernel.org,
@@ -130,10 +130,10 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
 	Zqiang <qiang.zhang1211@gmail.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
-	linux-riscv@lists.infradead.org
-Subject: [RFC v2 11/13] rust: sync: Add memory barriers
-Date: Thu, 31 Oct 2024 23:02:34 -0700
-Message-ID: <20241101060237.1185533-12-boqun.feng@gmail.com>
+	linux-riscv@lists.infradead.org,	Danilo Krummrich <dakr@kernel.org>
+Subject: [RFC v2 12/13] rust: add rcu abstraction
+Date: Thu, 31 Oct 2024 23:02:35 -0700
+Message-ID: <20241101060237.1185533-13-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241101060237.1185533-1-boqun.feng@gmail.com>
 References: <20241101060237.1185533-1-boqun.feng@gmail.com>
@@ -145,118 +145,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Memory barriers are building blocks for concurrent code, hence provide
-a minimal set of them.
+From: Wedson Almeida Filho <wedsonaf@gmail.com>
 
-The compiler barrier, barrier(), is implemented in inline asm instead of
-using core::sync::atomic::compiler_fence() because memory models are
-different: kernel's atomics are implemented in inline asm therefore the
-compiler barrier should be implemented in inline asm as well.
+Add a simple abstraction to guard critical code sections with an rcu
+read lock.
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+Signed-off-by: Danilo Krummrich <dakr@kernel.org>
 ---
- rust/helpers/helpers.c      |  1 +
- rust/kernel/sync.rs         |  1 +
- rust/kernel/sync/barrier.rs | 67 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 69 insertions(+)
- create mode 100644 rust/kernel/sync/barrier.rs
+ rust/helpers/helpers.c  |  1 +
+ rust/helpers/rcu.c      | 13 +++++++++++
+ rust/kernel/sync.rs     |  1 +
+ rust/kernel/sync/rcu.rs | 52 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 67 insertions(+)
+ create mode 100644 rust/helpers/rcu.c
+ create mode 100644 rust/kernel/sync/rcu.rs
 
 diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-index ab5a3f1be241..f4a94833b29d 100644
+index f4a94833b29d..65951245879f 100644
 --- a/rust/helpers/helpers.c
 +++ b/rust/helpers/helpers.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include "atomic.c"
-+#include "barrier.c"
- #include "blk.c"
- #include "bug.c"
- #include "build_assert.c"
+@@ -18,6 +18,7 @@
+ #include "mutex.c"
+ #include "page.c"
+ #include "rbtree.c"
++#include "rcu.c"
+ #include "refcount.c"
+ #include "signal.c"
+ #include "slab.c"
+diff --git a/rust/helpers/rcu.c b/rust/helpers/rcu.c
+new file mode 100644
+index 000000000000..f1cec6583513
+--- /dev/null
++++ b/rust/helpers/rcu.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/rcupdate.h>
++
++void rust_helper_rcu_read_lock(void)
++{
++	rcu_read_lock();
++}
++
++void rust_helper_rcu_read_unlock(void)
++{
++	rcu_read_unlock();
++}
 diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index 66ac3752ca71..0d0b19441ae8 100644
+index 0d0b19441ae8..f5a413e1ce30 100644
 --- a/rust/kernel/sync.rs
 +++ b/rust/kernel/sync.rs
-@@ -9,6 +9,7 @@
- 
- mod arc;
- pub mod atomic;
-+pub mod barrier;
+@@ -13,6 +13,7 @@
  mod condvar;
  pub mod lock;
  mod locked_by;
-diff --git a/rust/kernel/sync/barrier.rs b/rust/kernel/sync/barrier.rs
++pub mod rcu;
+ 
+ pub use arc::{Arc, ArcBorrow, UniqueArc};
+ pub use condvar::{new_condvar, CondVar, CondVarTimeoutResult};
+diff --git a/rust/kernel/sync/rcu.rs b/rust/kernel/sync/rcu.rs
 new file mode 100644
-index 000000000000..277aa09747bf
+index 000000000000..5a35495f69a4
 --- /dev/null
-+++ b/rust/kernel/sync/barrier.rs
-@@ -0,0 +1,67 @@
++++ b/rust/kernel/sync/rcu.rs
+@@ -0,0 +1,52 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Memory barriers.
++//! RCU support.
 +//!
-+//! These primitives have the same semantics as their C counterparts: and the precise definitions of
-+//! semantics can be found at [`LKMM`].
-+//!
-+//! [`LKMM`]: srctree/tools/memory-mode/
++//! C header: [`include/linux/rcupdate.h`](srctree/include/linux/rcupdate.h)
 +
-+/// A compiler barrier.
++use crate::bindings;
++use core::marker::PhantomData;
++
++/// Evidence that the RCU read side lock is held on the current thread/CPU.
 +///
-+/// An explicic compiler barrier function that prevents the compiler from moving the memory
-+/// accesses either side of it to the other side.
-+pub fn barrier() {
-+    // By default, Rust inline asms are treated as being able to access any memory or flags, hence
-+    // it suffices as a compiler barrier.
-+    //
-+    // SAFETY: An empty asm block should be safe.
-+    unsafe {
-+        core::arch::asm!("");
++/// The type is explicitly not `Send` because this property is per-thread/CPU.
++///
++/// # Invariants
++///
++/// The RCU read side lock is actually held while instances of this guard exist.
++pub struct Guard {
++    _not_send: PhantomData<*mut ()>,
++}
++
++impl Guard {
++    /// Acquires the RCU read side lock and returns a guard.
++    pub fn new() -> Self {
++        // SAFETY: An FFI call with no additional requirements.
++        unsafe { bindings::rcu_read_lock() };
++        // INVARIANT: The RCU read side lock was just acquired above.
++        Self {
++            _not_send: PhantomData,
++        }
++    }
++
++    /// Explicitly releases the RCU read side lock.
++    pub fn unlock(self) {}
++}
++
++impl Default for Guard {
++    fn default() -> Self {
++        Self::new()
 +    }
 +}
 +
-+/// A full memory barrier.
-+///
-+/// A barrier function that prevents both the compiler and the CPU from moving the memory accesses
-+/// either side of it to the other side.
-+pub fn smp_mb() {
-+    if cfg!(CONFIG_SMP) {
-+        // SAFETY: `smp_mb()` is safe to call.
-+        unsafe {
-+            bindings::smp_mb();
-+        }
-+    } else {
-+        barrier();
++impl Drop for Guard {
++    fn drop(&mut self) {
++        // SAFETY: By the type invariants, the rcu read side is locked, so it is ok to unlock it.
++        unsafe { bindings::rcu_read_unlock() };
 +    }
 +}
 +
-+/// A write-write memory barrier.
-+///
-+/// A barrier function that prevents both the compiler and the CPU from moving the memory write
-+/// accesses either side of it to the other side.
-+pub fn smp_wmb() {
-+    if cfg!(CONFIG_SMP) {
-+        // SAFETY: `smp_wmb()` is safe to call.
-+        unsafe {
-+            bindings::smp_wmb();
-+        }
-+    } else {
-+        barrier();
-+    }
-+}
-+
-+/// A read-read memory barrier.
-+///
-+/// A barrier function that prevents both the compiler and the CPU from moving the memory read
-+/// accesses either side of it to the other side.
-+pub fn smp_rmb() {
-+    if cfg!(CONFIG_SMP) {
-+        // SAFETY: `smp_rmb()` is safe to call.
-+        unsafe {
-+            bindings::smp_rmb();
-+        }
-+    } else {
-+        barrier();
-+    }
++/// Acquires the RCU read side lock.
++pub fn read_lock() -> Guard {
++    Guard::new()
 +}
 -- 
 2.45.2
