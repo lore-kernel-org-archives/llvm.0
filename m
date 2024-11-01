@@ -1,177 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815A01CEEA8;
-	Fri,  1 Nov 2024 19:12:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FF51CEE84
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 19:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730488351; cv=none; b=gZph1tYw3FwIbPZeG165k1/2hCdPg4DHqAIQ7RdQPIvZauRXdxGm6DM10bVLMbuN8ZMcZb3DjPd2vQpdyLtazYcAb5aPWwBF+h9uWrhN6bb39/3mT1IC+CtlQFTAw2K7Luvs5GNHtqnFICnr0bCSjbFKZi6cHRoePfd0CKTQd08=
+	t=1730488390; cv=none; b=bGnhRGR+L3nl2OE1/fjIoT0MIYoO5E1mhh083+43eYxsboXHgZK+4NDM/e4luRTvEyz/5OK5dJnbwGw2gXDXGv4iF4Y8yUPooSNb/EAVFsAXlj5piaaLZ1QCA5uwOCwap+kSMLDj0f8ySG/TzWArQB8Opwx8RqTNangSmUkeN4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730488351; c=relaxed/simple;
-	bh=uDz0+rrdKUxN7l++C1yclZv0bkKrRBTyhR8EgMvYQjU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HBUE48tS84gLNj2FO2AvlN4PfIMmiaggVkJxfcAmlvyE/wPrwqzm1uMoKWII8pZBM/VZp0A/ktRegkf0i1n0cK5o/t0IJieK+3PvayEK2U8V8AA5JPLhFM69/GX59P7JKVGqnSs2pe2mFOZVKxOlasse0lePl0Jn0BatKW3QBTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pt06Jk4r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730488390; c=relaxed/simple;
+	bh=/uTkeFwSj7EBLzybp8x9WmAjtK2hI1ZTblDNXkAR6tE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=NkzyIL8ajSv0vs6hfBT8KR7QvfAwdwRYp9Po/Zm2XUdtAl9uHrBuOMwn6mdnAeql8CnKrIPi1xoxNxBSdD/mzW9W2K4WMdbmzRbbPORv9zZ2A6hQ/ya5FFQbVu8CJT5XdFB1UE9PmKmTFaCHIZ+4CJ3Vcw0RoJUY11p6RWJ2c+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aSvASStp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pt06Jk4r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD346C4CECD;
-	Fri,  1 Nov 2024 19:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730488351;
-	bh=uDz0+rrdKUxN7l++C1yclZv0bkKrRBTyhR8EgMvYQjU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pt06Jk4rqrpDY2wKmy2XXXWpChHkcnIP34Tf+iNO478aLXDzfFWI//ErszeF/c6lq
-	 1qbP/oU84hIaMZjgbVpAe4HNWD8bIonlTgeXgFIrFqV3kCoKFIdhVPInzSI/bPG9ED
-	 9heSn3m9KAh+gQGQeJYefeWAS/IUrDV+PJ6pArU5h1azfEqoiAmVga1CYaizBdU18v
-	 g3ivDW59fS6KjfYNMqlAnMLBt5a6z/lNnnuptV2DBlzBJnOR94ozJyGszryTZb37Ge
-	 U7hQxYute3bZR4b6UYLj3ILL2tmZSAkHpJ3ZzR5NeXDcNVC/7yM8aZ+Er3CH0K/HEH
-	 pWgUB7i/Ke7Gg==
-Date: Fri, 1 Nov 2024 14:12:29 -0500
-From: Rob Herring <robh@kernel.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Antoine Tenart <atenart@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, upstream@airoha.com
-Subject: Re: [PATCH v5 2/3] dt-bindings: crypto: Add Inside Secure SafeXcel
- EIP-93 crypto engine
-Message-ID: <20241101191229.GA3841377-robh@kernel.org>
-References: <20241028124206.24321-1-ansuelsmth@gmail.com>
- <20241028124206.24321-2-ansuelsmth@gmail.com>
- <20241028143515.GA792452-robh@kernel.org>
- <671fa31a.050a0220.12b1fe.157e@mx.google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aSvASStp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730488387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BSnaA9e4lOfTk/AJomzhnipwVX7aWYQXIU5E05oAXNc=;
+	b=aSvASStpz4131+wle2KiGsWsOEIzUcBgm6a+phgFpSjkC4m496dA94BQjv84DpR7DbEd14
+	6we0G6TeHODlGqnZ8popqo7ZBZpwmIjj8qHklhkGxmcMkExxlY2Jq4wpMyVfkck0f7YnG3
+	qlIRIHlUxWPn2+9odye7bG8E7d9I2e0=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-281--vXcwcLXOp-dl1SWqkOuUw-1; Fri,
+ 01 Nov 2024 15:13:06 -0400
+X-MC-Unique: -vXcwcLXOp-dl1SWqkOuUw-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 71E2919560AF
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 19:13:05 +0000 (UTC)
+Received: from [172.64.2.75] (unknown [10.30.34.59])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 001AE19560A2;
+	Fri,  1 Nov 2024 19:13:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc5,
+ upstream-mainline, 17fa6a5f)
+Date: Fri, 01 Nov 2024 19:13:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <671fa31a.050a0220.12b1fe.157e@mx.google.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <81876.124110115130600861@us-mta-281.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 28, 2024 at 03:43:34PM +0100, Christian Marangi wrote:
-> On Mon, Oct 28, 2024 at 09:35:15AM -0500, Rob Herring wrote:
-> > On Mon, Oct 28, 2024 at 01:41:42PM +0100, Christian Marangi wrote:
-> > > Add bindings for the Inside Secure SafeXcel EIP-93 crypto engine.
-> > > 
-> > > The IP is present on Airoha SoC and on various Mediatek devices and
-> > > other SoC under different names like mtk-eip93 or PKTE.
-> > > 
-> > > All the compatible that currently doesn't have any user are left there
-> > > commented for reference.
-> > > 
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > > Changes v5:
-> > > - Comment out compatible with no current user
-> > > Changes v4:
-> > > - Out of RFC
-> > > Changes v3:
-> > > - Add SoC compatible with generic one
-> > > Changes v2:
-> > > - Change to better compatible
-> > > - Add description for EIP93 models
-> > > 
-> > >  .../crypto/inside-secure,safexcel-eip93.yaml  | 67 +++++++++++++++++++
-> > >  1 file changed, 67 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
-> > > new file mode 100644
-> > > index 000000000000..188240b74110
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
-> > > @@ -0,0 +1,67 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/crypto/inside-secure,safexcel-eip93.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Inside Secure SafeXcel EIP-93 cryptographic engine
-> > > +
-> > > +maintainers:
-> > > +  - Christian Marangi <ansuelsmth@gmail.com>
-> > > +
-> > > +description: |
-> > > +  The Inside Secure SafeXcel EIP-93 is a cryptographic engine IP block
-> > > +  integrated in varios devices with very different and generic name from
-> > > +  PKTE to simply vendor+EIP93. The real IP under the hood is actually
-> > > +  developed by Inside Secure and given to license to vendors.
-> > > +
-> > > +  The IP block is sold with different model based on what feature are
-> > > +  needed and are identified with the final letter. Each letter correspond
-> > > +  to a specific set of feature and multiple letter reflect the sum of the
-> > > +  feature set.
-> > > +
-> > > +  EIP-93 models:
-> > > +    - EIP-93i: (basic) DES/Triple DES, AES, PRNG, IPsec ESP, SRTP, SHA1
-> > > +    - EIP-93ie: i + SHA224/256, AES-192/256
-> > > +    - EIP-93is: i + SSL/DTLS/DTLS, MD5, ARC4
-> > > +    - EIP-93ies: i + e + s
-> > > +    - EIP-93iw: i + AES-XCB-MAC, AES-CCM
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - items:
-> > > +          - const: airoha,crypto-eip93
-> > 
-> > Still doesn't look SoC specific...
-> >
-> 
-> Oh ok I didn't understand that I had to drop it.
+Hi, we tested your kernel and here are the results:
 
-Not drop, but something with the SoC name in it. What's the SoC you are 
-using?
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-> 
-> > > +          - const: inside-secure,safexcel-eip93ies
-> > > +      # Compatible that doesn't have any current user.
-> > > +      # - items:
-> > > +      #     - const: SoC specific compatible
-> > > +      #     - enum:
-> > > +      #         - inside-secure,safexcel-eip93i
-> > > +      #         - inside-secure,safexcel-eip93ie
-> > > +      #         - inside-secure,safexcel-eip93is
-> > > +      #         - inside-secure,safexcel-eip93iw
-> > 
-> > I should have looked at the driver before commenting before, but since 
-> > you are using these compatibles, you should go with my other suggestion 
-> > or these will be listed as undocumented.
-> >
-> 
-> The other suggestion you mean with the false or not: {} ? I tried that
-> first with 
-> 
-> - items:
-> 	- not: {}
-> 	- enum:
-> 		- ...
-> 
-> But make dt_binding_check always complained. and False had some problem
-> is compiling the yaml schema.
 
-Either way should work with main branch now.
+Kernel information:
+    Commit message: Merge tag 'vfs-6.12-rc6.iomap' of gitolite.kernel.org:p=
+ub/scm/linux/kernel/git/vfs/vfs
 
-> Sorry if I'm making this very confusing. We can also consider using SoC
-> specific compatible in the driver directly and just declare the generic
-> one here.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1523638278
 
-How would that work for the cases without an SoC specific compatible 
-yet? Of course, if you can't test the i, ie, is or iw variants, how do 
-you know they work. Just relying on them being a subset of functionality 
-I guess.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1523638278-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1523638278-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1523638278-x86_64-kernel-debug
 
-Rob
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
