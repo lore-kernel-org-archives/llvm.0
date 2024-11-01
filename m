@@ -1,174 +1,177 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2A11CEAAD
-	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 18:37:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815A01CEEA8;
+	Fri,  1 Nov 2024 19:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730486250; cv=none; b=kPBgSfk6HO7AiYy7jeXXqTaai+/O9KCzX6DrYUWcNq5lPM59YUvZhGGdoUQdmKva+UDISwWLEqUg08BA1my/ifq4dppjEE28nJro2u1cR206LoFnqcdrxq8itZb/zZz8HBqdVt5ho3tMh0Ty9KNSoHzobvNSbjMUCh8ZvbDvqhA=
+	t=1730488351; cv=none; b=gZph1tYw3FwIbPZeG165k1/2hCdPg4DHqAIQ7RdQPIvZauRXdxGm6DM10bVLMbuN8ZMcZb3DjPd2vQpdyLtazYcAb5aPWwBF+h9uWrhN6bb39/3mT1IC+CtlQFTAw2K7Luvs5GNHtqnFICnr0bCSjbFKZi6cHRoePfd0CKTQd08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730486250; c=relaxed/simple;
-	bh=jKoboGztv7bSsKkIlP79WvPeyrvZcZXc4ISTP2ydXJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=stFVJulqBsIeaT0IqGTaA309nm8lsucr1fLm4nHRHXCs058V3VrsK+vtMzr2Tgx6r5v6rOMytW7yGkX12Hfm3Bc9MgYH/+vv3xc1OV2s7HEJKMDpFPiopgBIPlTOuuv+1+yHhaDvEuhycTrIbI2h8eRdBmGHyKTsd1lB7rAfLP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tM0rVFZy; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1730488351; c=relaxed/simple;
+	bh=uDz0+rrdKUxN7l++C1yclZv0bkKrRBTyhR8EgMvYQjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HBUE48tS84gLNj2FO2AvlN4PfIMmiaggVkJxfcAmlvyE/wPrwqzm1uMoKWII8pZBM/VZp0A/ktRegkf0i1n0cK5o/t0IJieK+3PvayEK2U8V8AA5JPLhFM69/GX59P7JKVGqnSs2pe2mFOZVKxOlasse0lePl0Jn0BatKW3QBTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pt06Jk4r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tM0rVFZy"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-460969c49f2so48951cf.0
-        for <llvm@lists.linux.dev>; Fri, 01 Nov 2024 11:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730486247; x=1731091047; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ra0xT/SkPUuyvhZ+lS69adyS93PRUWclgK8p/jLJodM=;
-        b=tM0rVFZyqyz5TR9YvDX4OeDWokIHo/V83ylf0p0v0SfzqXQuFaJN86PHrajXZJ9Ipk
-         pnp4wB6n12IHC5q9OE1ahiCMDGkzMqJTsxWWkfwH1ivv3obxfzOe5sQLWtnX1bJnXKtE
-         ZZFAzGj2XwlQ/bMIt1Ow2inXOy37s4bZMtOSeCL/Bbj3BVa9GuLqxMQgPZre8H/0fAAm
-         raEAasOKH/KFugAp+VfwwcS4PkwBn42R16RpeD4+i5j0QWU+qcgVBLcQXNDiv7ls6+RV
-         l9i8JjwMm5teXt4q3F3IqvXSJuacEcylBd59oOkBkGQOLQc+SP0cf9c5dJHf1QHQyQwK
-         qDqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730486247; x=1731091047;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ra0xT/SkPUuyvhZ+lS69adyS93PRUWclgK8p/jLJodM=;
-        b=SN9xFB5Pwwm5H71vWegf0wLPJc0EcMlU2Ue4ovT0n8MmotsTSfVicgqjKcS1ytSWRO
-         SaBjH+GIfBbOfGW8YU5BqiPXUEUlfDLLFb+pnmvSG3KqU9kKN6zKFBkfENclF7/zY3sa
-         IZ8A+6FbQkHpOafxixSCksbAl0GDta8C4+Gyby+vedFXAXjcYQDTN6qpqYEPoNNIQbwE
-         hWrQ6opNWl0ccMM9kb3sjVgOy9HvDT9BdiZFtdF3hvquOuhBtxPTTPnxGj3fw2MquiXQ
-         A7uoua4q0X+KLYq49Of68jSy62yd12OV0KDL6EHuxGPZTyKFQWlt8wC7vAD3PZAySkre
-         tGXw==
-X-Forwarded-Encrypted: i=1; AJvYcCV5JwUHM+ZZZVXDj+yqCl+2hqQ9xFbiBrj8x+WHe4T04p3aMXJq7x6i5/URPAkuOm5yI9Aa@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw0RqMs7m9FpOT4Pt80ZezwPHAClGiBEyf+mKtvvCXELBSml1rh
-	FoWIrypiEz0+0HPrPuKEtWPWK2jfhsLCBoVCEWrGmh6loR/8sL6w3BPKBHGJgVtf31jzLiTnQ6+
-	I3neAKkCBaMsPD0SU4wGUT5/peVSKG6lfaE8q
-X-Gm-Gg: ASbGncul/I7qnVYL3Xmtc44ZbAsEMASd6YeQsN39L294KKFt+gLYy0xuMRsYznIemWb
-	+xNwZzJUNm2/RJEMwuZsHU80WGNHy9l2Lr76vtgyPVxtxCqckfJtcEAcS+DXA
-X-Google-Smtp-Source: AGHT+IFXHlNZolCtvQqrkR9hwhUI8RViuIj2smBYH8pafbRsbRshQf8L/zWcjJGkwIIhtoJd28KJvaEPAg+jH8b1gU0=
-X-Received: by 2002:a05:622a:1350:b0:462:b6c6:8246 with SMTP id
- d75a77b69052e-462c5f02ebamr346081cf.14.1730486247209; Fri, 01 Nov 2024
- 11:37:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pt06Jk4r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD346C4CECD;
+	Fri,  1 Nov 2024 19:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730488351;
+	bh=uDz0+rrdKUxN7l++C1yclZv0bkKrRBTyhR8EgMvYQjU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pt06Jk4rqrpDY2wKmy2XXXWpChHkcnIP34Tf+iNO478aLXDzfFWI//ErszeF/c6lq
+	 1qbP/oU84hIaMZjgbVpAe4HNWD8bIonlTgeXgFIrFqV3kCoKFIdhVPInzSI/bPG9ED
+	 9heSn3m9KAh+gQGQeJYefeWAS/IUrDV+PJ6pArU5h1azfEqoiAmVga1CYaizBdU18v
+	 g3ivDW59fS6KjfYNMqlAnMLBt5a6z/lNnnuptV2DBlzBJnOR94ozJyGszryTZb37Ge
+	 U7hQxYute3bZR4b6UYLj3ILL2tmZSAkHpJ3ZzR5NeXDcNVC/7yM8aZ+Er3CH0K/HEH
+	 pWgUB7i/Ke7Gg==
+Date: Fri, 1 Nov 2024 14:12:29 -0500
+From: Rob Herring <robh@kernel.org>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com
+Subject: Re: [PATCH v5 2/3] dt-bindings: crypto: Add Inside Secure SafeXcel
+ EIP-93 crypto engine
+Message-ID: <20241101191229.GA3841377-robh@kernel.org>
+References: <20241028124206.24321-1-ansuelsmth@gmail.com>
+ <20241028124206.24321-2-ansuelsmth@gmail.com>
+ <20241028143515.GA792452-robh@kernel.org>
+ <671fa31a.050a0220.12b1fe.157e@mx.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-4-xur@google.com>
- <CAK7LNAR6Ni5FZJBK_FZXWZpMZG2ppvZFCtwjx9Z=o8L1e-CyjA@mail.gmail.com>
-In-Reply-To: <CAK7LNAR6Ni5FZJBK_FZXWZpMZG2ppvZFCtwjx9Z=o8L1e-CyjA@mail.gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Fri, 1 Nov 2024 11:37:13 -0700
-Message-ID: <CAF1bQ=TjpUrEgiqepyaGAiDoFM8jzozzxW=0YvTXpFY64YoTzw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
-	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <671fa31a.050a0220.12b1fe.157e@mx.google.com>
 
-Current order is:
-.text.hot, .text, .text_unlikely, .text.unknown, .text.asan
-
-The patch reorders them to:
-.text.asan, .text.unknown, .text_unlikely, .text.hot, .text
-
-The majority of the code resides in three sections: .text.hot, .text, and
- .text.unlikely, with .text.unknown containing a negligible amount.
-.text.asan is only generated in ASAN builds.
-
-Our primary goal is to group code segments based on their execution
-frequency (hotness).
-
-First, we want to place .text.hot adjacent to .text. Since we cannot put
-.text.hot after .text (Due to constraints with -ffunction-sections,
-placing .text.hot after .text is problematic), we need to put
-.text.hot before .text.
-
-Then it comes to .text.unlikely, we cannot put it after .text
-(same -ffunction-sections issue) . Therefore, we'll position .text.unlikely
-before .text.hot.
-
-.text.unknown and .tex.asan follow the same logic.
-
-This revised ordering effectively reverses the original arrangement (for
-.text.unlikely, .text.unknown, and .tex.asan), maintaining a similar level =
-of
-affinity between sections.
-
-I hope this explains the reason for the new ordering.
-
--Rong
-
-On Fri, Nov 1, 2024 at 11:06=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> On Sat, Oct 26, 2024 at 7:14=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+On Mon, Oct 28, 2024 at 03:43:34PM +0100, Christian Marangi wrote:
+> On Mon, Oct 28, 2024 at 09:35:15AM -0500, Rob Herring wrote:
+> > On Mon, Oct 28, 2024 at 01:41:42PM +0100, Christian Marangi wrote:
+> > > Add bindings for the Inside Secure SafeXcel EIP-93 crypto engine.
+> > > 
+> > > The IP is present on Airoha SoC and on various Mediatek devices and
+> > > other SoC under different names like mtk-eip93 or PKTE.
+> > > 
+> > > All the compatible that currently doesn't have any user are left there
+> > > commented for reference.
+> > > 
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > ---
+> > > Changes v5:
+> > > - Comment out compatible with no current user
+> > > Changes v4:
+> > > - Out of RFC
+> > > Changes v3:
+> > > - Add SoC compatible with generic one
+> > > Changes v2:
+> > > - Change to better compatible
+> > > - Add description for EIP93 models
+> > > 
+> > >  .../crypto/inside-secure,safexcel-eip93.yaml  | 67 +++++++++++++++++++
+> > >  1 file changed, 67 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+> > > new file mode 100644
+> > > index 000000000000..188240b74110
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+> > > @@ -0,0 +1,67 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/crypto/inside-secure,safexcel-eip93.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Inside Secure SafeXcel EIP-93 cryptographic engine
+> > > +
+> > > +maintainers:
+> > > +  - Christian Marangi <ansuelsmth@gmail.com>
+> > > +
+> > > +description: |
+> > > +  The Inside Secure SafeXcel EIP-93 is a cryptographic engine IP block
+> > > +  integrated in varios devices with very different and generic name from
+> > > +  PKTE to simply vendor+EIP93. The real IP under the hood is actually
+> > > +  developed by Inside Secure and given to license to vendors.
+> > > +
+> > > +  The IP block is sold with different model based on what feature are
+> > > +  needed and are identified with the final letter. Each letter correspond
+> > > +  to a specific set of feature and multiple letter reflect the sum of the
+> > > +  feature set.
+> > > +
+> > > +  EIP-93 models:
+> > > +    - EIP-93i: (basic) DES/Triple DES, AES, PRNG, IPsec ESP, SRTP, SHA1
+> > > +    - EIP-93ie: i + SHA224/256, AES-192/256
+> > > +    - EIP-93is: i + SSL/DTLS/DTLS, MD5, ARC4
+> > > +    - EIP-93ies: i + e + s
+> > > +    - EIP-93iw: i + AES-XCB-MAC, AES-CCM
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - const: airoha,crypto-eip93
+> > 
+> > Still doesn't look SoC specific...
 > >
-> > When the -ffunction-sections compiler option is enabled, each function
-> > is placed in a separate section named .text.function_name rather than
-> > putting all functions in a single .text section.
+> 
+> Oh ok I didn't understand that I had to drop it.
+
+Not drop, but something with the SoC name in it. What's the SoC you are 
+using?
+
+> 
+> > > +          - const: inside-secure,safexcel-eip93ies
+> > > +      # Compatible that doesn't have any current user.
+> > > +      # - items:
+> > > +      #     - const: SoC specific compatible
+> > > +      #     - enum:
+> > > +      #         - inside-secure,safexcel-eip93i
+> > > +      #         - inside-secure,safexcel-eip93ie
+> > > +      #         - inside-secure,safexcel-eip93is
+> > > +      #         - inside-secure,safexcel-eip93iw
+> > 
+> > I should have looked at the driver before commenting before, but since 
+> > you are using these compatibles, you should go with my other suggestion 
+> > or these will be listed as undocumented.
 > >
-> > However, using -function-sections can cause problems with the
-> > linker script. The comments included in include/asm-generic/vmlinux.lds=
-.h
-> > note these issues.:
-> >   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if =
-dead
-> >    code elimination is enabled, so these sections should be converted
-> >    to use ".." first.=E2=80=9D
-> >
-> > It is unclear whether there is a straightforward method for converting
-> > a suffix to "..".
-> >
-> > This patch modifies the order of subsections within the text output
-> > section. Specifically, it repositions sections with certain fixed patte=
-rns
-> > (for example .text.unlikely) before TEXT_MAIN, ensuring that they are
-> > grouped and matched together. It also places .text.hot section at the
-> > beginning of a page to help the TLB performance.
->
->
-> The fixed patterns are currently listed in this order:
->
->   .text.hot, .text_unlikely, .text.unknown, .text.asan.
->
-> You reorder them to:
->
->   .text.asan, .text.unknown, .text.unlikely, .text.hot
->
->
-> I believe it is better to describe your thoughts
-> about the reshuffling among the fixed pattern sections.
->
-> Otherwise, It is unclear to me.
->
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+> 
+> The other suggestion you mean with the false or not: {} ? I tried that
+> first with 
+> 
+> - items:
+> 	- not: {}
+> 	- enum:
+> 		- ...
+> 
+> But make dt_binding_check always complained. and False had some problem
+> is compiling the yaml schema.
+
+Either way should work with main branch now.
+
+> Sorry if I'm making this very confusing. We can also consider using SoC
+> specific compatible in the driver directly and just declare the generic
+> one here.
+
+How would that work for the cases without an SoC specific compatible 
+yet? Of course, if you can't test the i, ie, is or iw variants, how do 
+you know they work. Just relying on them being a subset of functionality 
+I guess.
+
+Rob
