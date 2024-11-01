@@ -1,66 +1,66 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80432155A5D;
-	Fri,  1 Nov 2024 06:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C39156C69;
+	Fri,  1 Nov 2024 06:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730441047; cv=none; b=NpRP3X63IJqH/iO2oT15G1Ugebf2BaMi/8p1fSOTcfEL2ZpzWwjae9a7HbNe1HpV4lp8mcUV7NO2lC7386cWH4htQ182ZRxUtY4xp28TsR7y4hO/aWkGFrfgjNvyMpn/21/X8nLKTgLTr8R/ok6ykYXr+pXI+BrynFPZDA4qx/Q=
+	t=1730441048; cv=none; b=nFMx+1yjh94QYwQp4/oA14cG9zUCMNNiisERi3puvJdRoKsgNfXZvQkJJ6frs4cT0Fgywq1XfCVPNQfRdAynzkbBJdCa5lCrql7if0shueaTCjmOLIESMoYTcHjmzcrxkBKN7ubZkc4slZV+8bcLk+dhYQEOW/uUd3XqDIan6X0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730441047; c=relaxed/simple;
-	bh=b6SXwnbsu/RlNkPBThbz53fj6R3sDIHRgIrxZgJqXoc=;
+	s=arc-20240116; t=1730441048; c=relaxed/simple;
+	bh=p9btVVa2+xSWu4bOPpbx4eV63bulX64vxQ6AaKLpk8E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mq96d8UcFiyeIkfYKUBpiyqu6hVjwPrFd0Z7XSd3liFPsRXdam3fO60ckd11KxLXq553Pi0lzuy0Cpe5VP8cFzTOd2EBnaAoEXRITLQvx2zkIDtf9RfWRuZ29Za9R/5xS3sXCq+OB8QzBzBQjBH8a8bzExA9BwefVs8kim3osk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hLdF4J2V; arc=none smtp.client-ip=209.85.222.181
+	 MIME-Version; b=Gjn4hrvVN73HpVn1c3pwPOG1/Ka/B3FFGBEPmRR2Xe3tI1ZKUWurSCnbYMfRZlCuEw/C9qfd9/lsb7cYDBleos8lsgMxqP/oWHjGXoS43lZYBk1tdk/+W5VYMVSn1634fgEu51LniYm2pCKCjQqF5LEIkeHJlmnUjlQisxgs7oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INI95CZU; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hLdF4J2V"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b14554468fso111095185a.1;
-        Thu, 31 Oct 2024 23:04:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INI95CZU"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7b153047b29so112344185a.3;
+        Thu, 31 Oct 2024 23:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730441043; x=1731045843; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1730441045; x=1731045845; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=6aL27TUodcAdd+uJ8RiXbRTkzdjD0lB6w2v/luzePnk=;
-        b=hLdF4J2VcCn8ihKPyKaZ5YCO6Upo5wS+ZHVLI4UIj8bvDYPlUBlGuy0c1xFMW59tD+
-         A0g5H35GfQSaXQq1wly77blfKJNg7W5l0oaUNrwKOhI3xONZP6lpUBJntDnp5YCz/tNk
-         0a4J+KRZARMChFm0aIT2KY2CQDV19q7agklSityHkSJBZpTmCQjtXn2u+bSKbPg/TZ2l
-         FSFFkbDsVAdqm8JFyFfk2O1B9eNJAUD3F5waTEtYSpHgAQV/sDW+/NIKDfdxE7DvF18M
-         2ZInB8m3TcGBC5q22hrR2EVwTTywsGhDjP1Km1dqayo+T/3o+nQWqqUDdBIn8SlG4kCy
-         /WpQ==
+        bh=A6tG39HqwvxlfRrBPWElR6isULD+PRgdHmRoN4FVkag=;
+        b=INI95CZUf5r9EY0sXB1VyZGJU5H5f1Y99TtWfFlb77e2sb/kBZBSSOlNv64+2h8P8z
+         7OtSYVGec2tnygt6/C+705JrUR++97/Z95hBSm9kr9EWqpOi3RvMObIYEv2DvOa8r9pK
+         3qa11/hgCjlutRGTjfZQmvTC6GYGy8VmZd+RFH+ZSwslyHCFgKCvwmOEZIncmPnwdjCP
+         0xwL5sJ88InKtmMofqgMkuW0e2bpk4YYbJWd2ImONboRhwKvmyyLt0ZjrvnfG9Hyi+aO
+         nRWNjQINXS5LNtLCXF8hXP6FUG+hgEjiJmjaCwM/N/Jz8eAf8B0DTjhFJqHYGhfmJ1xD
+         Pq9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730441043; x=1731045843;
+        d=1e100.net; s=20230601; t=1730441045; x=1731045845;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6aL27TUodcAdd+uJ8RiXbRTkzdjD0lB6w2v/luzePnk=;
-        b=ZpKCvARe0ILCMI9GBMMKS9fADhjr+QpyJsHaTehGYnA7h9L1C5/Xa5rxAVRBzZMvVm
-         KIWgAaNtYTiuDwhqVPaDixaXg+VeILh0x3gKVavYNP8eiHAHZ3metymmNYZwChNmrTgh
-         7nAR3mtxaUCW3Zc8N3eDR3mzzXbW/r0U0s+zg5G9MpP3fxEwwkikMfbH0zA6hhgrC6/Q
-         Trnj2VZEYHmQ/8ukq/MezPzngDOoN7VGhWvEgWaoCcInJ5fRF/U4wtRh6ppdvexFc/mV
-         Qp9kpExsxjphwOOJIyRSSnhr/KCvc2TLszvC6+4U0UNOjnMA5C6YWZmAvgz5e/RWRWmf
-         S9Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCV73r+89Vj7ollxvUOnZ/5hH4c4CfX2U1AoWWNpj7At0QWLIHOhabYOF9ga+eF/Eqim8k/g@lists.linux.dev, AJvYcCV8xu5YKcj97yt5T4N0PI3X010ieyig/rmcmZyvVgX2IF5nl6o4fXbhJ2sAhzjUjfhzuRAuUg==@lists.linux.dev
-X-Gm-Message-State: AOJu0YyNeXoHyl7kjEu+ZfGxR2Vz72h9m1rC+6/HmAQg9foe8pIQRvQH
-	x4xY8lq7uRgrTbFhkQrkOmWfUNsYVB6RDl2/LIjpNdjqnN/G6Vb+
-X-Google-Smtp-Source: AGHT+IEBsIeTKPMFVd18zq3m0TbNuXedTa+kxiUVC1B4NUnt+dZIvvMRhm1ETl2jJ5UPhxkWU8o/Gg==
-X-Received: by 2002:a05:620a:4554:b0:7b1:7d5c:8f9a with SMTP id af79cd13be357-7b193efe4c8mr2648481885a.28.1730441043401;
-        Thu, 31 Oct 2024 23:04:03 -0700 (PDT)
+        bh=A6tG39HqwvxlfRrBPWElR6isULD+PRgdHmRoN4FVkag=;
+        b=kOnsbFwpJePmlWkIIq0G99pDs+E2XFIyvCW+K4fxvPmYEeO4g4QcoO2SjshftXxhRj
+         V2Y+EumXnNSNIZ0pcqI77oCkLJyb/h4kPBukb/fbPTlubg466k604V5P6KZSE6jQqM+7
+         dE3/FFxAN3gv6s/8d02cWGBbY4U8y3iorYderryhXgQ8T8Mvvzwncl/BQoVjIndWAdF1
+         5k1+4j3sRoU+2BthiwEo6m46ufgw/8FOgEbh8Sudq/foF0GczR1PJjcrMXi2w++2RXwf
+         pngcadLm4EHV4NEmLKDmKEU0mt5jITQS5nu4CIq6B+OSAgI32r/oYhV0y/yM+omsg9bx
+         0guw==
+X-Forwarded-Encrypted: i=1; AJvYcCVuvGwzeJo7ZW2Yv2nqBJZio2hBWev8Iym0X66GJsMhrt1YcEbqJEZ4QQQbxbcGWk2DZP1lnA==@lists.linux.dev, AJvYcCWBuwNIJiCHaA27G+e3dfgzPrL+hIkK9knDe2DW4hSllmZjf9lZgV63Vw7ezP0nSM9QwqF7@lists.linux.dev
+X-Gm-Message-State: AOJu0YzAr9b89sRqaPpH3mS5XPrb6q+KLwIr6VxQsa70XQNETavVto/y
+	zjJpu4LM9BXoge6FZYwtWwUq2SG17nHDZyroqcsF2FxeRB90KbQp
+X-Google-Smtp-Source: AGHT+IFtPDQpnEfGDYf1MmQMy0Ftb/LAJarvVqvfSwx3qBw/GVNSOA1uCeVT60t5HopFhvrmJymKdw==
+X-Received: by 2002:a05:6214:5348:b0:6d3:4992:f585 with SMTP id 6a1803df08f44-6d34992f616mr104514016d6.49.1730441044801;
+        Thu, 31 Oct 2024 23:04:04 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f39e9b54sm141659585a.5.2024.10.31.23.04.02
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a7045bsm140747785a.73.2024.10.31.23.04.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 23:04:03 -0700 (PDT)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 36BE21200043;
-	Fri,  1 Nov 2024 02:04:02 -0400 (EDT)
+        Thu, 31 Oct 2024 23:04:04 -0700 (PDT)
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A2B0D1200043;
+	Fri,  1 Nov 2024 02:04:03 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Fri, 01 Nov 2024 02:04:02 -0400
-X-ME-Sender: <xms:Um8kZ78rYvgtGQNRIz9FXaznnWxEMTH4ZNoK7rFf0t4SGfyaRBeZsg>
-    <xme:Um8kZ3tWJDPoAFZEDjR38L_nnGPIGx0ZONWcJ9i7iL4mZTjbVgScBgLyzeveDj-bk
-    GCl_07T8Q1A6RRugQ>
-X-ME-Received: <xmr:Um8kZ5Cs78brre0AKFYvtLROzAI8e9BLMy-EAU4fXeFV6SSqvD6ReRNmSVKg3A>
+  by phl-compute-12.internal (MEProxy); Fri, 01 Nov 2024 02:04:03 -0400
+X-ME-Sender: <xms:U28kZ4ja5LWAoU3yfdto9YffBnntil7uUTgczdBRrUYZKEv2btRd8g>
+    <xme:U28kZxBYHbxlZdQi9ryR9nVcf3Dt1GVAl3wOeehcX1LNRUuyoQ09TQMXk_ZjoSHfg
+    mEmu5J42uBN4wHzQg>
+X-ME-Received: <xmr:U28kZwE3vXuFtU6mK7fc1-Lvj8OilcmMDSlV9ABGW3CfHcTMX1TEKiPgpt-UzQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
@@ -79,14 +79,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggod
     hpthhtoheplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohhj
     vggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesgh
     hmrghilhdrtghomhdprhgtphhtthhopeifvggushhonhgrfhesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:Um8kZ3dFuUJ_LsZ43tDz_a34qYVrx_8alQQ1-aKyCdVHRdUCWbnRPw>
-    <xmx:Um8kZwNCQ1W14NHd5xyHAkMP0uthoHYmNCC9vaIyRNBp5V8kCq7xcA>
-    <xmx:Um8kZ5lpnLCjUS9S7xcMG-Y_jMn6ecNBqoFExHiOLbIE6_wPRVtK2g>
-    <xmx:Um8kZ6v9ITMPGv2iDAegTY1OREf7shkA9Pg02bs0kYkFBx_PHCCv0g>
-    <xmx:Um8kZ6twtXsgjI5mkQE7RNkDKDO1HpSi4RmwBl5t23RkZxBAkq7iBTsk>
+X-ME-Proxy: <xmx:U28kZ5S9yoZIs7IW9AC7EnrOMNOqs8HEN3ixerhOZkN5FxVuQwmcLA>
+    <xmx:U28kZ1x0WeOFpLKtfjJf3QxURbgBdAQD-QZzqlYqUc4c9UxD8aDGIA>
+    <xmx:U28kZ37PV7nEHBhCjP5is95pa1QT1aCTegkWgEoSyzwvIT4fJKVsqg>
+    <xmx:U28kZywelM1bn0bGZrshBPINCbhspnqfODCvXGwpbjTGAK-ZyI1TYA>
+    <xmx:U28kZ5gtbZyUKsexuxYAueAlEkJOtr4eKxBDt8MK-SSvoYd1I4pADr7w>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 02:04:01 -0400 (EDT)
+ 1 Nov 2024 02:04:03 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rust-for-linux@vger.kernel.org,
 	rcu@vger.kernel.org,
@@ -131,9 +131,9 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
 	linux-riscv@lists.infradead.org
-Subject: [RFC v2 07/13] rust: sync: atomic: Add Atomic<u{32,64}>
-Date: Thu, 31 Oct 2024 23:02:30 -0700
-Message-ID: <20241101060237.1185533-8-boqun.feng@gmail.com>
+Subject: [RFC v2 08/13] rust: sync: atomic: Add Atomic<{usize,isize}>
+Date: Thu, 31 Oct 2024 23:02:31 -0700
+Message-ID: <20241101060237.1185533-9-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241101060237.1185533-1-boqun.feng@gmail.com>
 References: <20241101060237.1185533-1-boqun.feng@gmail.com>
@@ -145,72 +145,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add generic atomic support for basic unsigned types that have an
-`AtomicIpml` with the same size and alignment.
+Add generic atomic support for `usize` and `isize`. Note that instead of
+mapping directly to `atomic_long_t`, the represention type
+(`AllowAtomic::Repr`) is selected based on CONFIG_64BIT. This reduces
+the necessarity of creating `atomic_long_*` helpers, which could save
+the binary size of kernel if inline helpers are not available.
 
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- rust/kernel/sync/atomic.rs | 80 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ rust/kernel/sync/atomic.rs | 71 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
 diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-index b791abc59b61..b2e81e22c105 100644
+index b2e81e22c105..4166ad48604f 100644
 --- a/rust/kernel/sync/atomic.rs
 +++ b/rust/kernel/sync/atomic.rs
-@@ -22,3 +22,83 @@
- 
- pub use generic::Atomic;
- pub use ordering::{Acquire, Full, Relaxed, Release};
+@@ -102,3 +102,74 @@ fn delta_into_repr(d: Self::Delta) -> Self::Repr {
+         d as _
+     }
+ }
 +
-+/// ```rust
-+/// use kernel::sync::atomic::{Atomic, Relaxed};
-+///
-+/// let x = Atomic::new(42u64);
-+///
-+/// assert_eq!(42, x.load(Relaxed));
-+/// ```
-+// SAFETY: `u64` and `i64` has the same size and alignment.
-+unsafe impl generic::AllowAtomic for u64 {
++// SAFETY: `usize` has the same size and the alignment as `i64` for 64bit and the same as `i32` for
++// 32bit.
++unsafe impl generic::AllowAtomic for usize {
++    #[cfg(CONFIG_64BIT)]
 +    type Repr = i64;
-+
-+    fn into_repr(self) -> Self::Repr {
-+        self as _
-+    }
-+
-+    fn from_repr(repr: Self::Repr) -> Self {
-+        repr as _
-+    }
-+}
-+
-+/// ```rust
-+/// use kernel::sync::atomic::{Atomic, Full, Relaxed};
-+///
-+/// let x = Atomic::new(42u64);
-+///
-+/// assert_eq!(42, x.fetch_add(12, Full));
-+/// assert_eq!(54, x.load(Relaxed));
-+///
-+/// x.add(13, Relaxed);
-+///
-+/// assert_eq!(67, x.load(Relaxed));
-+/// ```
-+impl generic::AllowAtomicArithmetic for u64 {
-+    type Delta = u64;
-+
-+    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-+        d as _
-+    }
-+}
-+
-+/// ```rust
-+/// use kernel::sync::atomic::{Atomic, Relaxed};
-+///
-+/// let x = Atomic::new(42u32);
-+///
-+/// assert_eq!(42, x.load(Relaxed));
-+/// ```
-+// SAFETY: `u32` and `i32` has the same size and alignment.
-+unsafe impl generic::AllowAtomic for u32 {
++    #[cfg(not(CONFIG_64BIT))]
 +    type Repr = i32;
 +
 +    fn into_repr(self) -> Self::Repr {
@@ -225,7 +185,7 @@ index b791abc59b61..b2e81e22c105 100644
 +/// ```rust
 +/// use kernel::sync::atomic::{Atomic, Full, Relaxed};
 +///
-+/// let x = Atomic::new(42u32);
++/// let x = Atomic::new(42usize);
 +///
 +/// assert_eq!(42, x.fetch_add(12, Full));
 +/// assert_eq!(54, x.load(Relaxed));
@@ -234,8 +194,42 @@ index b791abc59b61..b2e81e22c105 100644
 +///
 +/// assert_eq!(67, x.load(Relaxed));
 +/// ```
-+impl generic::AllowAtomicArithmetic for u32 {
-+    type Delta = u32;
++impl generic::AllowAtomicArithmetic for usize {
++    type Delta = usize;
++
++    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
++        d as _
++    }
++}
++
++// SAFETY: `isize` has the same size and the alignment as `i64` for 64bit and the same as `i32` for
++// 32bit.
++unsafe impl generic::AllowAtomic for isize {
++    type Repr = i64;
++
++    fn into_repr(self) -> Self::Repr {
++        self as _
++    }
++
++    fn from_repr(repr: Self::Repr) -> Self {
++        repr as _
++    }
++}
++
++/// ```rust
++/// use kernel::sync::atomic::{Atomic, Full, Relaxed};
++///
++/// let x = Atomic::new(42isize);
++///
++/// assert_eq!(42, x.fetch_add(12, Full));
++/// assert_eq!(54, x.load(Relaxed));
++///
++/// x.add(13, Relaxed);
++///
++/// assert_eq!(67, x.load(Relaxed));
++/// ```
++impl generic::AllowAtomicArithmetic for isize {
++    type Delta = isize;
 +
 +    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
 +        d as _
