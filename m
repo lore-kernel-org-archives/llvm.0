@@ -1,65 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E644F1CEAD7;
-	Fri,  1 Nov 2024 20:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE1F19B3E3;
+	Fri,  1 Nov 2024 21:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730492703; cv=none; b=GQnFEs1Rp7qE1V5w9V0aLYdgHA962Ki3UOSZ3ikcBDSXJIyZC53nKRtQBCAo4C5wGhTVvPRjvD9aNKV5HIVQTkmYWL55YhALRsUmzke1c14FO6U5oP6EeVpie8UIrQ3oxtFV37GEk0E4TcwbBuHfU6JWqSvwFCHodC01AJnqQEg=
+	t=1730497689; cv=none; b=bgZZ9JUX9topRuHNGyPDTOi57Yw/IqFKVHJBCFikUWg+f8dVcXv/7/kJeUkxeRKDf23yQVy43pSNwAv4lEDqJkt6ebmLRPaRGwONFuPpbsZW7+sfCdaToCAbYhmy5ahK3/AFWa42M3H64wusVm9XQps0gCoeRCHrivz1fo1u6h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730492703; c=relaxed/simple;
-	bh=bjW/NCoam4Vnhany8p1O01mp0aqm+EOKnkh+sbXImR4=;
+	s=arc-20240116; t=1730497689; c=relaxed/simple;
+	bh=Dwdq9rHIpOh+78kD6lWNmELuBrWSfYZSR/MPnUOKJUA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PhWKrnXdftCfD44hH5QPFy2cNJuafpnuJpSnBJuIAxqRFDTG1KeK9skVXdfPOTNGEHMmht2gB34kAS+zp6FueEemfxL+DCHk1/LbLFJyx25ZjC+Z9mAzQOZ8VzudzZx5z5Kf6iOJNDkfBzdtT0dq/2BMOjV9c8CvcFL6/RGiePE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nFr5gNK3; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=NFDhQAfnembHhzhqhBFdWJdnj5cE6C2Y76VybbrHogko2NPd/kIrv2rLNl2dq89MWPtLCcW+bR6q9pztsD8v5VwG3zAoQzTu0ot+kSkumSwdElXXMDjuiJDSJtn11JhkB5FcKdmPbLEY1NFDHrzjV12lV4wj/SWObV8yxNmw8JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YVjOECtG; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nFr5gNK3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVjOECtG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730492703; x=1762028703;
+  t=1730497688; x=1762033688;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bjW/NCoam4Vnhany8p1O01mp0aqm+EOKnkh+sbXImR4=;
-  b=nFr5gNK3qwUE75vyYt/oO9uqnhORSUFUeO0B0Ol1XFKVM/r9KRd7c6nP
-   oTnE1kM8tlYPjqqA7lcIYS0g1e0vRfmEuCSdW2OH7E7h3/YCigLC3nk0Z
-   OYs8kwHFVsXGPOJHBq9qU5d+KnG+D/+YSamXxBTWDoOTiC7Jc3u7QrAzL
-   vOOpescNbE6wXyIHVcuJv/UZMFTKjuOf5kcE3esO7a/Ax+pqnOfqDorPu
-   F1+p+R8sEDngbKJ40FnJUor/4TAXolzPxXUmavPORDaom63bLpICmWz1z
-   RZ7qcQnOlDrGTZvTS8ypNEf5KMANler5g25UdAXPcW/F1WOUdrjaosSmw
-   A==;
-X-CSE-ConnectionGUID: fvnodD31SyeO3OxffbG7eQ==
-X-CSE-MsgGUID: FHyyY1bRTe+GTac4LyCaqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47720862"
+  bh=Dwdq9rHIpOh+78kD6lWNmELuBrWSfYZSR/MPnUOKJUA=;
+  b=YVjOECtGaaiXmxZJkkCRA2bKy++UCudc4u1YiEjD7dA49LdPRKLrGP5c
+   KQKw+c/dgTeVjqh9Ynhc6GPJdqMHEvObgiEF/xgGyml1X90vtEwQTk4nj
+   Mpln/hXGU1q0NZIWRBiOrhRSOVddRnm5JS4pIiJpC599fWJvhy9Uk9VHw
+   3ZdephmLCoivghRBrhRKzC/xkus3lX8yThGzAWF/lz/a9DaQV9lv0/SVk
+   4Ayz1f6kBMx3A/tCR30gefTH6KH0vP8ju7ZlfeArxLF2UFAYJBfq3Py08
+   V8mqhth1X3Uy6n8aKv3GpNw9bEIOoGigItJDa5gnFVDJuZPSu2v5wX/W1
+   Q==;
+X-CSE-ConnectionGUID: xsDz7OaWQr6KqxRkWblufw==
+X-CSE-MsgGUID: rIFTu9KPQk2PQhIDN/rr0Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30229826"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="47720862"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 13:25:02 -0700
-X-CSE-ConnectionGUID: X5qYRDRrQ1uEsmAEOs6W1g==
-X-CSE-MsgGUID: 5vrLubZPSsG4Mh/qtxgQuA==
+   d="scan'208";a="30229826"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 14:48:07 -0700
+X-CSE-ConnectionGUID: 9w/56nX/RnCHrAdIl5pDBA==
+X-CSE-MsgGUID: yEtcosP4Tc+1RCMNMWkXcA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="87841658"
+X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
+   d="scan'208";a="82613540"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 01 Nov 2024 13:24:59 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 01 Nov 2024 14:48:01 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t6yCW-000i0Y-2D;
-	Fri, 01 Nov 2024 20:24:56 +0000
-Date: Sat, 2 Nov 2024 04:24:01 +0800
+	id 1t6zUt-000i55-08;
+	Fri, 01 Nov 2024 21:47:59 +0000
+Date: Sat, 2 Nov 2024 05:47:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Lechner <dlechner@baylibre.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Guillaume Stols <gstols@baylibre.com>
+To: Andrei Stefanescu <andrei.stefanescu@oss.nxp.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chester Lin <chester62515@gmail.com>,
+	Matthias Brugger <mbrugger@suse.com>,
+	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
+	Larisa Grigore <larisa.grigore@nxp.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, Lee Jones <lee@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>, Jacky Bai <ping.bai@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH v2 2/2] iio: adc: ad7606: finish pwm_get_state_hw() TODO
-Message-ID: <202411020416.BsBZy5XU-lkp@intel.com>
-References: <20241029-pwm-export-pwm_get_state_hw-v2-2-03ba063a3230@baylibre.com>
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Christophe Lizzi <clizzi@redhat.com>,
+	Alberto Ruiz <aruizrui@redhat.com>,
+	Enric Balletbo <eballetb@redhat.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	imx@lists.linux.dev
+Subject: Re: [PATCH v5 4/7] pinctrl: s32: convert the driver into an mfd cell
+Message-ID: <202411020514.qOUrieWa-lkp@intel.com>
+References: <20241101080614.1070819-5-andrei.stefanescu@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,91 +84,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241029-pwm-export-pwm_get_state_hw-v2-2-03ba063a3230@baylibre.com>
+In-Reply-To: <20241101080614.1070819-5-andrei.stefanescu@oss.nxp.com>
 
-Hi David,
+Hi Andrei,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 6fb2fa9805c501d9ade047fc511961f3273cdcb5]
+[auto build test WARNING on linusw-pinctrl/devel]
+[also build test WARNING on linusw-pinctrl/for-next lee-mfd/for-mfd-next shawnguo/for-next linus/master v6.12-rc5 next-20241101]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/pwm-core-export-pwm_get_state_hw/20241030-052134
-base:   6fb2fa9805c501d9ade047fc511961f3273cdcb5
-patch link:    https://lore.kernel.org/r/20241029-pwm-export-pwm_get_state_hw-v2-2-03ba063a3230%40baylibre.com
-patch subject: [PATCH v2 2/2] iio: adc: ad7606: finish pwm_get_state_hw() TODO
-config: i386-buildonly-randconfig-004-20241102 (https://download.01.org/0day-ci/archive/20241102/202411020416.BsBZy5XU-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020416.BsBZy5XU-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Stefanescu/dt-bindings-mfd-add-support-for-the-NXP-SIUL2-module/20241101-160940
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20241101080614.1070819-5-andrei.stefanescu%40oss.nxp.com
+patch subject: [PATCH v5 4/7] pinctrl: s32: convert the driver into an mfd cell
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241102/202411020514.qOUrieWa-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020514.qOUrieWa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411020416.BsBZy5XU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411020514.qOUrieWa-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/iio/adc/ad7606.c:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2225:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/iio/adc/ad7606.c:765:9: error: call to undeclared function 'pwm_get_state_hw'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     765 |                 ret = pwm_get_state_hw(st->cnvst_pwm, &cnvst_pwm_state);
-         |                       ^
-   drivers/iio/adc/ad7606.c:765:9: note: did you mean 'pwm_get_state'?
-   include/linux/pwm.h:127:20: note: 'pwm_get_state' declared here
-     127 | static inline void pwm_get_state(const struct pwm_device *pwm,
-         |                    ^
-   1 warning and 1 error generated.
+>> drivers/pinctrl/nxp/pinctrl-s32cc.c:103: warning: Function parameter or struct member 'gpio_configs_lock' not described in 's32_pinctrl'
+>> drivers/pinctrl/nxp/pinctrl-s32cc.c:103: warning: Excess struct member 'gpiop_configs_lock' description in 's32_pinctrl'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +/pwm_get_state_hw +765 drivers/iio/adc/ad7606.c
+vim +103 drivers/pinctrl/nxp/pinctrl-s32cc.c
 
-   733	
-   734	static int ad7606_read_raw(struct iio_dev *indio_dev,
-   735				   struct iio_chan_spec const *chan,
-   736				   int *val,
-   737				   int *val2,
-   738				   long m)
-   739	{
-   740		int ret, ch = 0;
-   741		struct ad7606_state *st = iio_priv(indio_dev);
-   742		struct ad7606_chan_scale *cs;
-   743		struct pwm_state cnvst_pwm_state;
-   744	
-   745		switch (m) {
-   746		case IIO_CHAN_INFO_RAW:
-   747			iio_device_claim_direct_scoped(return -EBUSY, indio_dev) {
-   748				ret = ad7606_scan_direct(indio_dev, chan->address, val);
-   749				if (ret < 0)
-   750					return ret;
-   751				return IIO_VAL_INT;
-   752			}
-   753			unreachable();
-   754		case IIO_CHAN_INFO_SCALE:
-   755			if (st->sw_mode_en)
-   756				ch = chan->address;
-   757			cs = &st->chan_scales[ch];
-   758			*val = cs->scale_avail[cs->range][0];
-   759			*val2 = cs->scale_avail[cs->range][1];
-   760			return IIO_VAL_INT_PLUS_MICRO;
-   761		case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-   762			*val = st->oversampling;
-   763			return IIO_VAL_INT;
-   764		case IIO_CHAN_INFO_SAMP_FREQ:
- > 765			ret = pwm_get_state_hw(st->cnvst_pwm, &cnvst_pwm_state);
-   766			if (ret < 0)
-   767				return ret;
-   768			*val = DIV_ROUND_CLOSEST_ULL(NSEC_PER_SEC, cnvst_pwm_state.period);
-   769			return IIO_VAL_INT;
-   770		}
-   771		return -EINVAL;
-   772	}
-   773	
+fd84aaa8173d3f Chester Lin       2023-02-20   82  
+157a51f7e5e81e Andrei Stefanescu 2024-11-01   83  /**
+157a51f7e5e81e Andrei Stefanescu 2024-11-01   84   * struct s32_pinctrl - private driver data
+fd84aaa8173d3f Chester Lin       2023-02-20   85   * @dev: a pointer back to containing device
+fd84aaa8173d3f Chester Lin       2023-02-20   86   * @pctl: a pointer to the pinctrl device structure
+fd84aaa8173d3f Chester Lin       2023-02-20   87   * @regions: reserved memory regions with start/end pin
+fd84aaa8173d3f Chester Lin       2023-02-20   88   * @info: structure containing information about the pin
+fd84aaa8173d3f Chester Lin       2023-02-20   89   * @gpio_configs: Saved configurations for GPIO pins
+fd84aaa8173d3f Chester Lin       2023-02-20   90   * @gpiop_configs_lock: lock for the `gpio_configs` list
+157a51f7e5e81e Andrei Stefanescu 2024-11-01   91   * @saved_context: Configuration saved over system sleep
+fd84aaa8173d3f Chester Lin       2023-02-20   92   */
+fd84aaa8173d3f Chester Lin       2023-02-20   93  struct s32_pinctrl {
+fd84aaa8173d3f Chester Lin       2023-02-20   94  	struct device *dev;
+fd84aaa8173d3f Chester Lin       2023-02-20   95  	struct pinctrl_dev *pctl;
+fd84aaa8173d3f Chester Lin       2023-02-20   96  	struct s32_pinctrl_mem_region *regions;
+fd84aaa8173d3f Chester Lin       2023-02-20   97  	struct s32_pinctrl_soc_info *info;
+fd84aaa8173d3f Chester Lin       2023-02-20   98  	struct list_head gpio_configs;
+fd84aaa8173d3f Chester Lin       2023-02-20   99  	spinlock_t gpio_configs_lock;
+fd84aaa8173d3f Chester Lin       2023-02-20  100  #ifdef CONFIG_PM_SLEEP
+fd84aaa8173d3f Chester Lin       2023-02-20  101  	struct s32_pinctrl_context saved_context;
+fd84aaa8173d3f Chester Lin       2023-02-20  102  #endif
+fd84aaa8173d3f Chester Lin       2023-02-20 @103  };
+fd84aaa8173d3f Chester Lin       2023-02-20  104  
 
 -- 
 0-DAY CI Kernel Test Service
