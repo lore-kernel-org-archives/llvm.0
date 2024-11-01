@@ -1,221 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57DA1CDFC5;
-	Fri,  1 Nov 2024 18:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2A11CEAAD
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 18:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730485378; cv=none; b=Uj9QuQ23RwOIkqbSfIAmw57PHx8HlP4dmQne3UOOdcJESGdb1L22L56Sh0pH0PicRHd7IcE2BAd/SGezd8FlD+hveWQsVEUVw9p41a0ODw7q64E4QjFaMHQjGNy1lc4gBhfyrOwoKH6mwGrWGuCFmEaHlTJmQGhOm+O9YEKHNHg=
+	t=1730486250; cv=none; b=kPBgSfk6HO7AiYy7jeXXqTaai+/O9KCzX6DrYUWcNq5lPM59YUvZhGGdoUQdmKva+UDISwWLEqUg08BA1my/ifq4dppjEE28nJro2u1cR206LoFnqcdrxq8itZb/zZz8HBqdVt5ho3tMh0Ty9KNSoHzobvNSbjMUCh8ZvbDvqhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730485378; c=relaxed/simple;
-	bh=2u420hLBt+iAZWsevacsMaooa6yJ5dkWq6pbYF7QYJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H49vBSGw3Wlepq5KQfWVvXYTF8QvDBHAw4KngwgwLTv857six88zoabNIEnLNuvFUkDIbBavBES0xEKIsypX07TQN+wBq97Db7aeu9g9q/DoCeFlcFKag0IsBUu2I9CXiWw1XNquBmYKYQTuJeb8Oj1dVnqUMLckzXVq0g5SJL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LI8bqEmL; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730486250; c=relaxed/simple;
+	bh=jKoboGztv7bSsKkIlP79WvPeyrvZcZXc4ISTP2ydXJc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=stFVJulqBsIeaT0IqGTaA309nm8lsucr1fLm4nHRHXCs058V3VrsK+vtMzr2Tgx6r5v6rOMytW7yGkX12Hfm3Bc9MgYH/+vv3xc1OV2s7HEJKMDpFPiopgBIPlTOuuv+1+yHhaDvEuhycTrIbI2h8eRdBmGHyKTsd1lB7rAfLP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tM0rVFZy; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LI8bqEmL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730485376; x=1762021376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2u420hLBt+iAZWsevacsMaooa6yJ5dkWq6pbYF7QYJI=;
-  b=LI8bqEmLwFr0lSOxiD9CVsiT+wFWsqEb4ZmY4JKx1RabgSsBVQyFsiVZ
-   gzej6cfy9ateey50ToNINHl6HfrE9G5q3fehBuYmFnBQbvrMksz0PW5yC
-   IAyaDdahoaukDrvRNslpy1r9mdJpjFRSD1bfT302xyFdpjK8MQPYWPAkS
-   tnJbMNMZmMmZE1fNTrWTiaSQxaqIbpVcEEIWEPYvjs3i3c1BIgMMMwvpa
-   RPdhRqOpX5ACxjlII5rBZTSrj0EXUoqzpAqchFjTLTFng7uYfjfLM0I7n
-   650rZH0tBLm4NXa7Uc0iabRcOHL6fQpVTSdaWB+w7SYDX25DRKP8g2sLV
-   A==;
-X-CSE-ConnectionGUID: ZD1fiUtKR6abD8z6g9PyHw==
-X-CSE-MsgGUID: lrLcBAPVSEWtwdNnglbPOg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="41621049"
-X-IronPort-AV: E=Sophos;i="6.11,250,1725346800"; 
-   d="scan'208";a="41621049"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 11:22:55 -0700
-X-CSE-ConnectionGUID: MgzT1atKTHuzxXyZpL2S5g==
-X-CSE-MsgGUID: NnO6t/eaTL+P0ldpDzL7Gg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,250,1725346800"; 
-   d="scan'208";a="83141278"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Nov 2024 11:22:53 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6wIN-000hsP-0D;
-	Fri, 01 Nov 2024 18:22:51 +0000
-Date: Sat, 2 Nov 2024 02:22:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Colin Ian King <colin.i.king@gmail.com>,
-	Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] wifi: rtw89: 8852a: remove redundant else statement
-Message-ID: <202411020209.qamp5h6r-lkp@intel.com>
-References: <20241030131416.3091954-1-colin.i.king@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tM0rVFZy"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-460969c49f2so48951cf.0
+        for <llvm@lists.linux.dev>; Fri, 01 Nov 2024 11:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730486247; x=1731091047; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ra0xT/SkPUuyvhZ+lS69adyS93PRUWclgK8p/jLJodM=;
+        b=tM0rVFZyqyz5TR9YvDX4OeDWokIHo/V83ylf0p0v0SfzqXQuFaJN86PHrajXZJ9Ipk
+         pnp4wB6n12IHC5q9OE1ahiCMDGkzMqJTsxWWkfwH1ivv3obxfzOe5sQLWtnX1bJnXKtE
+         ZZFAzGj2XwlQ/bMIt1Ow2inXOy37s4bZMtOSeCL/Bbj3BVa9GuLqxMQgPZre8H/0fAAm
+         raEAasOKH/KFugAp+VfwwcS4PkwBn42R16RpeD4+i5j0QWU+qcgVBLcQXNDiv7ls6+RV
+         l9i8JjwMm5teXt4q3F3IqvXSJuacEcylBd59oOkBkGQOLQc+SP0cf9c5dJHf1QHQyQwK
+         qDqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730486247; x=1731091047;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ra0xT/SkPUuyvhZ+lS69adyS93PRUWclgK8p/jLJodM=;
+        b=SN9xFB5Pwwm5H71vWegf0wLPJc0EcMlU2Ue4ovT0n8MmotsTSfVicgqjKcS1ytSWRO
+         SaBjH+GIfBbOfGW8YU5BqiPXUEUlfDLLFb+pnmvSG3KqU9kKN6zKFBkfENclF7/zY3sa
+         IZ8A+6FbQkHpOafxixSCksbAl0GDta8C4+Gyby+vedFXAXjcYQDTN6qpqYEPoNNIQbwE
+         hWrQ6opNWl0ccMM9kb3sjVgOy9HvDT9BdiZFtdF3hvquOuhBtxPTTPnxGj3fw2MquiXQ
+         A7uoua4q0X+KLYq49Of68jSy62yd12OV0KDL6EHuxGPZTyKFQWlt8wC7vAD3PZAySkre
+         tGXw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5JwUHM+ZZZVXDj+yqCl+2hqQ9xFbiBrj8x+WHe4T04p3aMXJq7x6i5/URPAkuOm5yI9Aa@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw0RqMs7m9FpOT4Pt80ZezwPHAClGiBEyf+mKtvvCXELBSml1rh
+	FoWIrypiEz0+0HPrPuKEtWPWK2jfhsLCBoVCEWrGmh6loR/8sL6w3BPKBHGJgVtf31jzLiTnQ6+
+	I3neAKkCBaMsPD0SU4wGUT5/peVSKG6lfaE8q
+X-Gm-Gg: ASbGncul/I7qnVYL3Xmtc44ZbAsEMASd6YeQsN39L294KKFt+gLYy0xuMRsYznIemWb
+	+xNwZzJUNm2/RJEMwuZsHU80WGNHy9l2Lr76vtgyPVxtxCqckfJtcEAcS+DXA
+X-Google-Smtp-Source: AGHT+IFXHlNZolCtvQqrkR9hwhUI8RViuIj2smBYH8pafbRsbRshQf8L/zWcjJGkwIIhtoJd28KJvaEPAg+jH8b1gU0=
+X-Received: by 2002:a05:622a:1350:b0:462:b6c6:8246 with SMTP id
+ d75a77b69052e-462c5f02ebamr346081cf.14.1730486247209; Fri, 01 Nov 2024
+ 11:37:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241030131416.3091954-1-colin.i.king@gmail.com>
+References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-4-xur@google.com>
+ <CAK7LNAR6Ni5FZJBK_FZXWZpMZG2ppvZFCtwjx9Z=o8L1e-CyjA@mail.gmail.com>
+In-Reply-To: <CAK7LNAR6Ni5FZJBK_FZXWZpMZG2ppvZFCtwjx9Z=o8L1e-CyjA@mail.gmail.com>
+From: Rong Xu <xur@google.com>
+Date: Fri, 1 Nov 2024 11:37:13 -0700
+Message-ID: <CAF1bQ=TjpUrEgiqepyaGAiDoFM8jzozzxW=0YvTXpFY64YoTzw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Colin,
+Current order is:
+.text.hot, .text, .text_unlikely, .text.unknown, .text.asan
 
-kernel test robot noticed the following build warnings:
+The patch reorders them to:
+.text.asan, .text.unknown, .text_unlikely, .text.hot, .text
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The majority of the code resides in three sections: .text.hot, .text, and
+ .text.unlikely, with .text.unknown containing a negligible amount.
+.text.asan is only generated in ASAN builds.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Colin-Ian-King/wifi-rtw89-8852a-remove-redundant-else-statement/20241030-211507
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20241030131416.3091954-1-colin.i.king%40gmail.com
-patch subject: [PATCH][next] wifi: rtw89: 8852a: remove redundant else statement
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241102/202411020209.qamp5h6r-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020209.qamp5h6r-lkp@intel.com/reproduce)
+Our primary goal is to group code segments based on their execution
+frequency (hotness).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411020209.qamp5h6r-lkp@intel.com/
+First, we want to place .text.hot adjacent to .text. Since we cannot put
+.text.hot after .text (Due to constraints with -ffunction-sections,
+placing .text.hot after .text is problematic), we need to put
+.text.hot before .text.
 
-All warnings (new ones prefixed by >>):
+Then it comes to .text.unlikely, we cannot put it after .text
+(same -ffunction-sections issue) . Therefore, we'll position .text.unlikely
+before .text.hot.
 
-   In file included from drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:5:
-   In file included from drivers/net/wireless/realtek/rtw89/coex.h:8:
-   In file included from drivers/net/wireless/realtek/rtw89/core.h:12:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:5:
-   In file included from drivers/net/wireless/realtek/rtw89/coex.h:8:
-   In file included from drivers/net/wireless/realtek/rtw89/core.h:12:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:5:
-   In file included from drivers/net/wireless/realtek/rtw89/coex.h:8:
-   In file included from drivers/net/wireless/realtek/rtw89/core.h:12:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:5:
-   In file included from drivers/net/wireless/realtek/rtw89/coex.h:8:
-   In file included from drivers/net/wireless/realtek/rtw89/core.h:14:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/um/include/asm/cacheflush.h:4:
-   In file included from arch/um/include/asm/tlbflush.h:9:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:2249:11: warning: variable 'offset' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2249 |         else if (dgain <= 0x155)
-         |                  ^~~~~~~~~~~~~~
-   drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:2252:9: note: uninitialized use occurs here
-    2252 |         return offset;
-         |                ^~~~~~
-   drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:2249:7: note: remove the 'if' if its condition is always true
-    2249 |         else if (dgain <= 0x155)
-         |              ^~~~~~~~~~~~~~~~~~~
-    2250 |                 offset = -12;
-   drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c:2235:11: note: initialize the variable 'offset' to silence this warning
-    2235 |         s8 offset;
-         |                  ^
-         |                   = '\0'
-   14 warnings generated.
+.text.unknown and .tex.asan follow the same logic.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+This revised ordering effectively reverses the original arrangement (for
+.text.unlikely, .text.unknown, and .tex.asan), maintaining a similar level =
+of
+affinity between sections.
 
+I hope this explains the reason for the new ordering.
 
-vim +2249 drivers/net/wireless/realtek/rtw89/rtw8852a_rfk.c
+-Rong
 
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2232  
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2233  static s8 _dpk_dgain_mapping(struct rtw89_dev *rtwdev, u16 dgain)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2234  {
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2235  	s8 offset;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2236  
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2237  	if (dgain >= 0x783)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2238  		offset = 0x6;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2239  	else if (dgain <= 0x782 && dgain >= 0x551)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2240  		offset = 0x3;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2241  	else if (dgain <= 0x550 && dgain >= 0x3c4)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2242  		offset = 0x0;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2243  	else if (dgain <= 0x3c3 && dgain >= 0x2aa)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2244  		offset = -3;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2245  	else if (dgain <= 0x2a9 && dgain >= 0x1e3)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2246  		offset = -6;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2247  	else if (dgain <= 0x1e2 && dgain >= 0x156)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2248  		offset = -9;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11 @2249  	else if (dgain <= 0x155)
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2250  		offset = -12;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2251  
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2252  	return offset;
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2253  }
-e3ec7017f6a20d Ping-Ke Shih 2021-10-11  2254  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Fri, Nov 1, 2024 at 11:06=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Sat, Oct 26, 2024 at 7:14=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+> >
+> > When the -ffunction-sections compiler option is enabled, each function
+> > is placed in a separate section named .text.function_name rather than
+> > putting all functions in a single .text section.
+> >
+> > However, using -function-sections can cause problems with the
+> > linker script. The comments included in include/asm-generic/vmlinux.lds=
+.h
+> > note these issues.:
+> >   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if =
+dead
+> >    code elimination is enabled, so these sections should be converted
+> >    to use ".." first.=E2=80=9D
+> >
+> > It is unclear whether there is a straightforward method for converting
+> > a suffix to "..".
+> >
+> > This patch modifies the order of subsections within the text output
+> > section. Specifically, it repositions sections with certain fixed patte=
+rns
+> > (for example .text.unlikely) before TEXT_MAIN, ensuring that they are
+> > grouped and matched together. It also places .text.hot section at the
+> > beginning of a page to help the TLB performance.
+>
+>
+> The fixed patterns are currently listed in this order:
+>
+>   .text.hot, .text_unlikely, .text.unknown, .text.asan.
+>
+> You reorder them to:
+>
+>   .text.asan, .text.unknown, .text.unlikely, .text.hot
+>
+>
+> I believe it is better to describe your thoughts
+> about the reshuffling among the fixed pattern sections.
+>
+> Otherwise, It is unclear to me.
+>
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
