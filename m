@@ -1,59 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1563168DA;
-	Fri,  1 Nov 2024 13:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BAE61FDF;
+	Fri,  1 Nov 2024 14:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730468507; cv=none; b=BH/PIRtpB5rfVyndz+kU9sYsYojvWKRoyK/vTM3LBJXl+HcrdSrn1wvTxtVXttdFvK9cEpv+L6p1044ioGiN6Ydzz2MbqxWbKX+seEYgWmo1u2w103WgGojbZf5ARz23oQxjx/pEwU85Vae4/iQNKsCj/PeqlcngisxFKB6OMsQ=
+	t=1730471034; cv=none; b=TYeOaeEIFetpSqzvncG7GrkTmobttq+/vsPa4/JQcBggmrUxDLf3liI2bP27xMOL37BZRgozx28h2Es1+TkK0W9XIc3nOccIXwtieiDpX0FVivnGs1Q8WZt/vJVEARtPcdrJ8nhh2bUJpOrCJVDzFABy5HAfwi5hSqtfzBDT9Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730468507; c=relaxed/simple;
-	bh=DbrHzucDQTNLfVs72rLTmrnYfWOEPD0hPsBwPPQ7inA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RFIjP17vhe3bNrLP8htq8vh8IJynABGLWZQU+sNTHngFy2W5sFw+kFgH9V6/D77+tzyuhfsgj7yKpY54V7KQCbmg7tyip8KJriTxKXVZGdR+0uQ+ms7ovskUR4JwIr3zHdASaG8xVKy2VxWNRAiI9gAoXi7hOLjIJ7aZpo7RWkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DvqBSx9a; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1730471034; c=relaxed/simple;
+	bh=OXDMAqh2nLfuHgCU8Sscde62QdU4PrQcAwb72r1rD80=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BfFWZ48wpjh4Ia3rNgxJg6e5CwirroQQfaxFbsLzZ4uTyF3RpGev31xkrUXf5g+pJhqA9/sAmCa1CmqNJZe7jvCI6xfS5iYguzQ+DREAoEDEajAF5rnebsH2EOD5fFF9brQntOUca4POXpvRQsJ1r+mOwHzXEggabH9vN2T2AN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cpOXUkvZ; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DvqBSx9a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cpOXUkvZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730468505; x=1762004505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DbrHzucDQTNLfVs72rLTmrnYfWOEPD0hPsBwPPQ7inA=;
-  b=DvqBSx9atvjfYMMgq7JRxSsfCAHGIMhgsygDmZSXKlzuQvLqy6Q1G6Dx
-   HkV5hzkFZNnzZEebd0vond2fMrQbI49WVtHTDBQyQ/jZvOGJM6x/rXBfE
-   lUY0ak9BIppb01300w6pykafzZqOJv4eNu/p8t5eDnKivH5KzcxT3chUO
-   JnAct7BVlCkRTsmLk2+qto2jyu+a4c4g0F4Eo8ohNVKk+OsvnTVUvrbh0
-   U7SzqwF9GIwmuJ0kpXfUMfkttFf1XwEjFRT7e7RlG+/Jw9YbAHx3IQYAA
-   AReVJESKkqOo+p8Chyy5008L+6fkMvZmscaiCtUw/xzAfc9sVGWoJhGDi
+  t=1730471031; x=1762007031;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OXDMAqh2nLfuHgCU8Sscde62QdU4PrQcAwb72r1rD80=;
+  b=cpOXUkvZpAUuXnp8eAxltHh0uNZfmroaWQ/NJmEUWUzMIm8ysT8d0IRh
+   cRGzvCAje1yhzmf9nvo3LwA440Xoj+fmBPwc8nVqQjclQZlgAy6uA8wTN
+   cqNEhhs7ColF8sLahAItLk3fKwE3zcxsgQ7WdEMerT3INC9Fc/dGbeL6Q
+   Ftrnloe6SFI+GZhO3YbjhWS8MrzEBqQ1UOwfGwRrS1ljZOGA4KofpH74+
+   6OXXu42Y8VCeopRDZeb+5TKxiCU01HJfcN+0MDw+yYEt9EV2t4cY1ollu
+   jZ502BG3kBw0PFPRkeE6Vxzxq+FdeoO/X7xFIIRw0bpjV9kjk8tSuSaig
    w==;
-X-CSE-ConnectionGUID: rIplhGK4SJOCeNqw06enpA==
-X-CSE-MsgGUID: ByPMfshVRLCu81vOQ96Ayw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="47717866"
-X-IronPort-AV: E=Sophos;i="6.11,249,1725346800"; 
-   d="scan'208";a="47717866"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 06:41:41 -0700
-X-CSE-ConnectionGUID: Zka9ghB+SP26Arbn8yGlSA==
-X-CSE-MsgGUID: LVYKbddfReS3LngXkFRpCw==
+X-CSE-ConnectionGUID: tg7LcmBdQ2CyULhi5l3WWw==
+X-CSE-MsgGUID: qvPQsKlRQRSdfjCh1P68Kw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41337040"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41337040"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 07:23:50 -0700
+X-CSE-ConnectionGUID: imwns5Y0QGea1ZlKb1YZtA==
+X-CSE-MsgGUID: WV7WXGAMRJiX01/aCBZLeA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,249,1725346800"; 
-   d="scan'208";a="106309024"
+X-IronPort-AV: E=Sophos;i="6.11,250,1725346800"; 
+   d="scan'208";a="87516207"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 01 Nov 2024 06:41:39 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 01 Nov 2024 07:23:42 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t6ruD-000har-0b;
-	Fri, 01 Nov 2024 13:41:37 +0000
-Date: Fri, 1 Nov 2024 21:40:37 +0800
+	id 1t6sYt-000hdV-1s;
+	Fri, 01 Nov 2024 14:23:39 +0000
+Date: Fri, 1 Nov 2024 22:22:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/must_check-devm_mutex_init 2/2]
- drivers/iio/adc/pac1921.c:1174:2: warning: ignoring return value of function
- declared with 'warn_unused_result' attribute
-Message-ID: <202411012150.KynHQ3Ht-lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Lee Chun-Yi <jlee@suse.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Corentin Chary <corentin.chary@gmail.com>,
+	"Luke D . Jones" <luke@ljones.dev>,
+	Ike Panhc <ike.pan@canonical.com>,
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+	Alexis Belmonte <alexbelm48@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Ai Chao <aichao@kylinos.cn>, Gergo Koteles <soyer@irl.hu>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:MICROSOFT SURFACE PLATFORM PROFILE DRIVER" <platform-driver-x86@vger.kernel.org>,
+	"open list:THINKPAD ACPI EXTRAS DRIVER" <ibm-acpi-devel@lists.sourceforge.net>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Matthew Schwartz <matthew.schwartz@linux.dev>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 20/22] ACPI: platform_profile: Register class device
+ for platform profile handlers
+Message-ID: <202411012227.46a4WcxB-lkp@intel.com>
+References: <20241031040952.109057-21-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,145 +84,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241031040952.109057-21-mario.limonciello@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/must_check-devm_mutex_init
-head:   1806244ad4c894932db80d79aceae7a9fb262153
-commit: 1806244ad4c894932db80d79aceae7a9fb262153 [2/2] locking/mutex: Mark devm_mutex_init() as __must_check
-config: x86_64-buildonly-randconfig-004-20241101 (https://download.01.org/0day-ci/archive/20241101/202411012150.KynHQ3Ht-lkp@intel.com/config)
+Hi Mario,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.12-rc5 next-20241101]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-platform-profile-Add-a-name-member-to-handlers/20241031-121650
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20241031040952.109057-21-mario.limonciello%40amd.com
+patch subject: [PATCH v3 20/22] ACPI: platform_profile: Register class device for platform profile handlers
+config: i386-buildonly-randconfig-005-20241101 (https://download.01.org/0day-ci/archive/20241101/202411012227.46a4WcxB-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411012150.KynHQ3Ht-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411012227.46a4WcxB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411012150.KynHQ3Ht-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411012227.46a4WcxB-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/iio/adc/pac1921.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iio/adc/pac1921.c:1174:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-    1174 |         devm_mutex_init(dev, &priv->lock);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mutex.h:152:37: note: expanded from macro 'devm_mutex_init'
-     152 | #define devm_mutex_init(dev, mutex) __devm_mutex_init(dev, ___devm_mutex_init(mutex))
-         |                                     ^~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
+>> drivers/acpi/platform_profile.c:303:7: error: call to undeclared function 'MKDEV'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     303 |                                          MKDEV(0, pprof->minor), NULL, "platform-profile-%s",
+         |                                          ^
+   drivers/acpi/platform_profile.c:344:42: error: call to undeclared function 'MKDEV'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     344 |         device_destroy(&platform_profile_class, MKDEV(0, pprof->minor));
+         |                                                 ^
+   2 errors generated.
 
 
-vim +/warn_unused_result +1174 drivers/iio/adc/pac1921.c
+vim +/MKDEV +303 drivers/acpi/platform_profile.c
 
-371f778b83cd94 Matteo Martelli 2024-07-24  1153  
-371f778b83cd94 Matteo Martelli 2024-07-24  1154  static int pac1921_probe(struct i2c_client *client)
-371f778b83cd94 Matteo Martelli 2024-07-24  1155  {
-371f778b83cd94 Matteo Martelli 2024-07-24  1156  	struct device *dev = &client->dev;
-371f778b83cd94 Matteo Martelli 2024-07-24  1157  	struct pac1921_priv *priv;
-371f778b83cd94 Matteo Martelli 2024-07-24  1158  	struct iio_dev *indio_dev;
-371f778b83cd94 Matteo Martelli 2024-07-24  1159  	int ret;
-371f778b83cd94 Matteo Martelli 2024-07-24  1160  
-371f778b83cd94 Matteo Martelli 2024-07-24  1161  	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-371f778b83cd94 Matteo Martelli 2024-07-24  1162  	if (!indio_dev)
-371f778b83cd94 Matteo Martelli 2024-07-24  1163  		return -ENOMEM;
-371f778b83cd94 Matteo Martelli 2024-07-24  1164  
-371f778b83cd94 Matteo Martelli 2024-07-24  1165  	priv = iio_priv(indio_dev);
-371f778b83cd94 Matteo Martelli 2024-07-24  1166  	priv->client = client;
-371f778b83cd94 Matteo Martelli 2024-07-24  1167  	i2c_set_clientdata(client, indio_dev);
-371f778b83cd94 Matteo Martelli 2024-07-24  1168  
-371f778b83cd94 Matteo Martelli 2024-07-24  1169  	priv->regmap = devm_regmap_init_i2c(client, &pac1921_regmap_config);
-371f778b83cd94 Matteo Martelli 2024-07-24  1170  	if (IS_ERR(priv->regmap))
-c5d2291a3086f4 Dan Carpenter   2024-08-08  1171  		return dev_err_probe(dev, (int)PTR_ERR(priv->regmap),
-371f778b83cd94 Matteo Martelli 2024-07-24  1172  				     "Cannot initialize register map\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1173  
-371f778b83cd94 Matteo Martelli 2024-07-24 @1174  	devm_mutex_init(dev, &priv->lock);
-371f778b83cd94 Matteo Martelli 2024-07-24  1175  
-371f778b83cd94 Matteo Martelli 2024-07-24  1176  	priv->dv_gain = PAC1921_DEFAULT_DV_GAIN;
-371f778b83cd94 Matteo Martelli 2024-07-24  1177  	priv->di_gain = PAC1921_DEFAULT_DI_GAIN;
-371f778b83cd94 Matteo Martelli 2024-07-24  1178  	priv->n_samples = PAC1921_DEFAULT_NUM_SAMPLES;
-371f778b83cd94 Matteo Martelli 2024-07-24  1179  
-371f778b83cd94 Matteo Martelli 2024-07-24  1180  	ret = device_property_read_u32(dev, "shunt-resistor-micro-ohms",
-371f778b83cd94 Matteo Martelli 2024-07-24  1181  				       &priv->rshunt_uohm);
-371f778b83cd94 Matteo Martelli 2024-07-24  1182  	if (ret)
-371f778b83cd94 Matteo Martelli 2024-07-24  1183  		return dev_err_probe(dev, ret,
-371f778b83cd94 Matteo Martelli 2024-07-24  1184  				     "Cannot read shunt resistor property\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1185  	if (priv->rshunt_uohm == 0 || priv->rshunt_uohm > INT_MAX)
-371f778b83cd94 Matteo Martelli 2024-07-24  1186  		return dev_err_probe(dev, -EINVAL,
-371f778b83cd94 Matteo Martelli 2024-07-24  1187  				     "Invalid shunt resistor: %u\n",
-371f778b83cd94 Matteo Martelli 2024-07-24  1188  				     priv->rshunt_uohm);
-371f778b83cd94 Matteo Martelli 2024-07-24  1189  
-371f778b83cd94 Matteo Martelli 2024-07-24  1190  	pac1921_calc_current_scales(priv);
-371f778b83cd94 Matteo Martelli 2024-07-24  1191  
-371f778b83cd94 Matteo Martelli 2024-07-24  1192  	priv->vdd = devm_regulator_get(dev, "vdd");
-371f778b83cd94 Matteo Martelli 2024-07-24  1193  	if (IS_ERR(priv->vdd))
-371f778b83cd94 Matteo Martelli 2024-07-24  1194  		return dev_err_probe(dev, (int)PTR_ERR(priv->vdd),
-371f778b83cd94 Matteo Martelli 2024-07-24  1195  				     "Cannot get vdd regulator\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1196  
-371f778b83cd94 Matteo Martelli 2024-07-24  1197  	ret = regulator_enable(priv->vdd);
-371f778b83cd94 Matteo Martelli 2024-07-24  1198  	if (ret)
-371f778b83cd94 Matteo Martelli 2024-07-24  1199  		return dev_err_probe(dev, ret, "Cannot enable vdd regulator\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1200  
-371f778b83cd94 Matteo Martelli 2024-07-24  1201  	ret = devm_add_action_or_reset(dev, pac1921_regulator_disable,
-371f778b83cd94 Matteo Martelli 2024-07-24  1202  				       priv->vdd);
-371f778b83cd94 Matteo Martelli 2024-07-24  1203  	if (ret)
-371f778b83cd94 Matteo Martelli 2024-07-24  1204  		return dev_err_probe(dev, ret,
-371f778b83cd94 Matteo Martelli 2024-07-24  1205  			"Cannot add action for vdd regulator disposal\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1206  
-371f778b83cd94 Matteo Martelli 2024-07-24  1207  	msleep(PAC1921_POWERUP_TIME_MS);
-371f778b83cd94 Matteo Martelli 2024-07-24  1208  
-371f778b83cd94 Matteo Martelli 2024-07-24  1209  	ret = pac1921_init(priv);
-371f778b83cd94 Matteo Martelli 2024-07-24  1210  	if (ret)
-371f778b83cd94 Matteo Martelli 2024-07-24  1211  		return dev_err_probe(dev, ret, "Cannot initialize device\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1212  
-371f778b83cd94 Matteo Martelli 2024-07-24  1213  	priv->iio_info = pac1921_iio;
-371f778b83cd94 Matteo Martelli 2024-07-24  1214  
-371f778b83cd94 Matteo Martelli 2024-07-24  1215  	indio_dev->name = "pac1921";
-371f778b83cd94 Matteo Martelli 2024-07-24  1216  	indio_dev->info = &priv->iio_info;
-371f778b83cd94 Matteo Martelli 2024-07-24  1217  	indio_dev->modes = INDIO_DIRECT_MODE;
-371f778b83cd94 Matteo Martelli 2024-07-24  1218  	indio_dev->channels = pac1921_channels;
-371f778b83cd94 Matteo Martelli 2024-07-24  1219  	indio_dev->num_channels = ARRAY_SIZE(pac1921_channels);
-371f778b83cd94 Matteo Martelli 2024-07-24  1220  
-371f778b83cd94 Matteo Martelli 2024-07-24  1221  	ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
-371f778b83cd94 Matteo Martelli 2024-07-24  1222  					      &iio_pollfunc_store_time,
-371f778b83cd94 Matteo Martelli 2024-07-24  1223  					      &pac1921_trigger_handler, NULL);
-371f778b83cd94 Matteo Martelli 2024-07-24  1224  	if (ret)
-371f778b83cd94 Matteo Martelli 2024-07-24  1225  		return dev_err_probe(dev, ret,
-371f778b83cd94 Matteo Martelli 2024-07-24  1226  				     "Cannot setup IIO triggered buffer\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1227  
-371f778b83cd94 Matteo Martelli 2024-07-24  1228  	ret = devm_iio_device_register(dev, indio_dev);
-371f778b83cd94 Matteo Martelli 2024-07-24  1229  	if (ret)
-371f778b83cd94 Matteo Martelli 2024-07-24  1230  		return dev_err_probe(dev, ret, "Cannot register IIO device\n");
-371f778b83cd94 Matteo Martelli 2024-07-24  1231  
-371f778b83cd94 Matteo Martelli 2024-07-24  1232  	return 0;
-371f778b83cd94 Matteo Martelli 2024-07-24  1233  }
-371f778b83cd94 Matteo Martelli 2024-07-24  1234  
-
-:::::: The code at line 1174 was first introduced by commit
-:::::: 371f778b83cd94467852efb466d74dc84eddd11e iio: adc: add support for pac1921
-
-:::::: TO: Matteo Martelli <matteomartelli3@gmail.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+   261	
+   262	int platform_profile_register(struct platform_profile_handler *pprof)
+   263	{
+   264		bool registered;
+   265		int err;
+   266	
+   267		/* Sanity check the profile handler */
+   268		if (!pprof || bitmap_empty(pprof->choices, PLATFORM_PROFILE_LAST) ||
+   269		    !pprof->profile_set || !pprof->profile_get) {
+   270			pr_err("platform_profile: handler is invalid\n");
+   271			return -EINVAL;
+   272		}
+   273		if (!test_bit(PLATFORM_PROFILE_BALANCED, pprof->choices)) {
+   274			pr_err("platform_profile: handler does not support balanced profile\n");
+   275			return -EINVAL;
+   276		}
+   277		if (!pprof->dev) {
+   278			pr_err("platform_profile: handler device is not set\n");
+   279			return -EINVAL;
+   280		}
+   281	
+   282		guard(mutex)(&profile_lock);
+   283		/* We can only have one active profile */
+   284		if (cur_profile)
+   285			return -EEXIST;
+   286	
+   287		registered = platform_profile_is_registered();
+   288		if (!registered) {
+   289			/* class for individual handlers */
+   290			err = class_register(&platform_profile_class);
+   291			if (err)
+   292				return err;
+   293			/* legacy sysfs files */
+   294			err = sysfs_create_group(acpi_kobj, &platform_profile_group);
+   295			if (err)
+   296				goto cleanup_class;
+   297	
+   298		}
+   299	
+   300		/* create class interface for individual handler */
+   301		pprof->minor = idr_alloc(&platform_profile_minor_idr, pprof, 0, 0, GFP_KERNEL);
+   302		pprof->class_dev = device_create(&platform_profile_class, pprof->dev,
+ > 303						 MKDEV(0, pprof->minor), NULL, "platform-profile-%s",
+   304						 pprof->name);
+   305		if (IS_ERR(pprof->class_dev)) {
+   306			err = PTR_ERR(pprof->class_dev);
+   307			goto cleanup_legacy;
+   308		}
+   309		err = sysfs_create_group(&pprof->class_dev->kobj, &platform_profile_group);
+   310		if (err)
+   311			goto cleanup_device;
+   312	
+   313		list_add_tail(&pprof->list, &platform_profile_handler_list);
+   314		sysfs_notify(acpi_kobj, NULL, "platform_profile");
+   315	
+   316		cur_profile = pprof;
+   317		return 0;
+   318	
+   319	cleanup_device:
+   320		device_destroy(&platform_profile_class, MKDEV(0, pprof->minor));
+   321	
+   322	cleanup_legacy:
+   323		if (!registered)
+   324			sysfs_remove_group(acpi_kobj, &platform_profile_group);
+   325	cleanup_class:
+   326		if (!registered)
+   327			class_unregister(&platform_profile_class);
+   328	
+   329		return err;
+   330	}
+   331	EXPORT_SYMBOL_GPL(platform_profile_register);
+   332	
 
 -- 
 0-DAY CI Kernel Test Service
