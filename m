@@ -1,153 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE1F19B3E3;
-	Fri,  1 Nov 2024 21:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE70A1DEFD8
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 22:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730497689; cv=none; b=bgZZ9JUX9topRuHNGyPDTOi57Yw/IqFKVHJBCFikUWg+f8dVcXv/7/kJeUkxeRKDf23yQVy43pSNwAv4lEDqJkt6ebmLRPaRGwONFuPpbsZW7+sfCdaToCAbYhmy5ahK3/AFWa42M3H64wusVm9XQps0gCoeRCHrivz1fo1u6h0=
+	t=1730498673; cv=none; b=W3gtpwe3FvxMwLM0/0zjs72+ZGW3YbUIplLQEIdqTMPhg6XsUsu07FrdYalm/h8gnQSg/gJZ/xo+Hoj7uTZpTHpAAg+iLMOD8uIbQyhWRLuMPAyLR6wCTFg9RXI/axWH2Q1NWzrDyNiQR0yJCWfazkb5bsLFG9AH/5htUOWAel0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730497689; c=relaxed/simple;
-	bh=Dwdq9rHIpOh+78kD6lWNmELuBrWSfYZSR/MPnUOKJUA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NFDhQAfnembHhzhqhBFdWJdnj5cE6C2Y76VybbrHogko2NPd/kIrv2rLNl2dq89MWPtLCcW+bR6q9pztsD8v5VwG3zAoQzTu0ot+kSkumSwdElXXMDjuiJDSJtn11JhkB5FcKdmPbLEY1NFDHrzjV12lV4wj/SWObV8yxNmw8JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YVjOECtG; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730498673; c=relaxed/simple;
+	bh=rcoTiHAzGNigzhjuUOf3w29Wr+BpteeHJQCW1ztY21k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nkWrBq+1Q4C1IA0tFc+tqykDs2OPPv0qFz9ZICbtCqD1H0YeyJWWt0NRdXmwod7LvIOLiiLSmUY8wM/FhIRVulndsDzjfr3y9EJK8xcpnk6NX7ztU167tFyy7gn54/xNZmIUqZwP75kna/00lS+xAMZUq4ZwqroflCNp8QJqaxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zcuv7wXS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVjOECtG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730497688; x=1762033688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dwdq9rHIpOh+78kD6lWNmELuBrWSfYZSR/MPnUOKJUA=;
-  b=YVjOECtGaaiXmxZJkkCRA2bKy++UCudc4u1YiEjD7dA49LdPRKLrGP5c
-   KQKw+c/dgTeVjqh9Ynhc6GPJdqMHEvObgiEF/xgGyml1X90vtEwQTk4nj
-   Mpln/hXGU1q0NZIWRBiOrhRSOVddRnm5JS4pIiJpC599fWJvhy9Uk9VHw
-   3ZdephmLCoivghRBrhRKzC/xkus3lX8yThGzAWF/lz/a9DaQV9lv0/SVk
-   4Ayz1f6kBMx3A/tCR30gefTH6KH0vP8ju7ZlfeArxLF2UFAYJBfq3Py08
-   V8mqhth1X3Uy6n8aKv3GpNw9bEIOoGigItJDa5gnFVDJuZPSu2v5wX/W1
-   Q==;
-X-CSE-ConnectionGUID: xsDz7OaWQr6KqxRkWblufw==
-X-CSE-MsgGUID: rIFTu9KPQk2PQhIDN/rr0Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30229826"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30229826"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 14:48:07 -0700
-X-CSE-ConnectionGUID: 9w/56nX/RnCHrAdIl5pDBA==
-X-CSE-MsgGUID: yEtcosP4Tc+1RCMNMWkXcA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
-   d="scan'208";a="82613540"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 01 Nov 2024 14:48:01 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6zUt-000i55-08;
-	Fri, 01 Nov 2024 21:47:59 +0000
-Date: Sat, 2 Nov 2024 05:47:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrei Stefanescu <andrei.stefanescu@oss.nxp.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chester Lin <chester62515@gmail.com>,
-	Matthias Brugger <mbrugger@suse.com>,
-	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
-	Larisa Grigore <larisa.grigore@nxp.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, Lee Jones <lee@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>, Jacky Bai <ping.bai@nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Christophe Lizzi <clizzi@redhat.com>,
-	Alberto Ruiz <aruizrui@redhat.com>,
-	Enric Balletbo <eballetb@redhat.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	imx@lists.linux.dev
-Subject: Re: [PATCH v5 4/7] pinctrl: s32: convert the driver into an mfd cell
-Message-ID: <202411020514.qOUrieWa-lkp@intel.com>
-References: <20241101080614.1070819-5-andrei.stefanescu@oss.nxp.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zcuv7wXS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DB9C4CED9
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 22:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730498672;
+	bh=rcoTiHAzGNigzhjuUOf3w29Wr+BpteeHJQCW1ztY21k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Zcuv7wXSl6E/pJLqvocrlSymBS4scHtLKXTcP+fMrvmrGXVIea9jn0+QGHOGLUeAb
+	 wlAl5cSK7kQC9XO8ADw2A6KRBq4llF28tgj0eOWKf0AbKSqTsAi4pGwWTWGQQ9yRCX
+	 O0i1Zhd3DSnnFl7TqKgTIu5Nz14o2T20gXExsyDXPxZkN2V+iTczHy9eJ3q9Knn2bz
+	 WkzDhS5SjZvKetf7D8DVj7pjXqP96hzR+TZVEnuQVe2etQrYXdwc8PxPFCvFHylNPK
+	 atzuVdx0OpfYKNyGWoorkpwN1u3F27QjDoKhTeiXkNHapW3YeVKj0ysavnK+ZEDD1Y
+	 Csd9H4hjVaQ8g==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2fb49510250so25464601fa.0
+        for <llvm@lists.linux.dev>; Fri, 01 Nov 2024 15:04:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW/2JSGeiNytk/fYi/aNg8HtIbHp5XeMc11WHHoh+6VQuUptn8BUJWBhtLqVBKuPvrW1WyY@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz+nkwk7+XJCc0/hX3PN2Czps8HPKuMvoTTdc+5Ss6VMX9mXhT2
+	5UhAsrBkk+S0YG1SBJr5xtZXhCIVJHlk1D49vuPOYcCNlyqIztUwY+O/zskiXeT6u6CDvXTCTQN
+	8KzCLArYI0J5bTXxrPJi1bAdlkxM=
+X-Google-Smtp-Source: AGHT+IGVMAgeS0V2k3gbBjmJnFp43Rbmnq4wT0SbRNO4NZeNLFW4f4vONEJ7HO2aD/gqiSPW9yN22T197mAQWhrZFyU=
+X-Received: by 2002:a2e:819:0:b0:2f7:a5fe:adbe with SMTP id
+ 38308e7fff4ca-2fdec72f2bemr34602561fa.18.1730498670823; Fri, 01 Nov 2024
+ 15:04:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241101080614.1070819-5-andrei.stefanescu@oss.nxp.com>
+References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-4-xur@google.com>
+ <CAK7LNAR6Ni5FZJBK_FZXWZpMZG2ppvZFCtwjx9Z=o8L1e-CyjA@mail.gmail.com> <CAF1bQ=TjpUrEgiqepyaGAiDoFM8jzozzxW=0YvTXpFY64YoTzw@mail.gmail.com>
+In-Reply-To: <CAF1bQ=TjpUrEgiqepyaGAiDoFM8jzozzxW=0YvTXpFY64YoTzw@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 2 Nov 2024 07:03:54 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARZ3Hw-OuMe39eOHR=H1BSpyaGQf4xUFW9tuOWFnEzXqw@mail.gmail.com>
+Message-ID: <CAK7LNARZ3Hw-OuMe39eOHR=H1BSpyaGQf4xUFW9tuOWFnEzXqw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
+To: Rong Xu <xur@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrei,
+On Sat, Nov 2, 2024 at 3:37=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> Current order is:
+> .text.hot, .text, .text_unlikely, .text.unknown, .text.asan
+>
+> The patch reorders them to:
+> .text.asan, .text.unknown, .text_unlikely, .text.hot, .text
+>
+> The majority of the code resides in three sections: .text.hot, .text, and
+>  .text.unlikely, with .text.unknown containing a negligible amount.
+> .text.asan is only generated in ASAN builds.
+>
+> Our primary goal is to group code segments based on their execution
+> frequency (hotness).
+>
+> First, we want to place .text.hot adjacent to .text. Since we cannot put
+> .text.hot after .text (Due to constraints with -ffunction-sections,
+> placing .text.hot after .text is problematic), we need to put
+> .text.hot before .text.
+>
+> Then it comes to .text.unlikely, we cannot put it after .text
+> (same -ffunction-sections issue) . Therefore, we'll position .text.unlike=
+ly
+> before .text.hot.
+>
+> .text.unknown and .tex.asan follow the same logic.
+>
+> This revised ordering effectively reverses the original arrangement (for
+> .text.unlikely, .text.unknown, and .tex.asan), maintaining a similar leve=
+l of
+> affinity between sections.
+>
+> I hope this explains the reason for the new ordering.
 
-kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linusw-pinctrl/for-next lee-mfd/for-mfd-next shawnguo/for-next linus/master v6.12-rc5 next-20241101]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Make sense.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Stefanescu/dt-bindings-mfd-add-support-for-the-NXP-SIUL2-module/20241101-160940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20241101080614.1070819-5-andrei.stefanescu%40oss.nxp.com
-patch subject: [PATCH v5 4/7] pinctrl: s32: convert the driver into an mfd cell
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241102/202411020514.qOUrieWa-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020514.qOUrieWa-lkp@intel.com/reproduce)
+Please describe the above in the commit description.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411020514.qOUrieWa-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pinctrl/nxp/pinctrl-s32cc.c:103: warning: Function parameter or struct member 'gpio_configs_lock' not described in 's32_pinctrl'
->> drivers/pinctrl/nxp/pinctrl-s32cc.c:103: warning: Excess struct member 'gpiop_configs_lock' description in 's32_pinctrl'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+Then, it will be clearer why you not only moved up fixed patterns
+but also reversed the order.
 
 
-vim +103 drivers/pinctrl/nxp/pinctrl-s32cc.c
 
-fd84aaa8173d3f Chester Lin       2023-02-20   82  
-157a51f7e5e81e Andrei Stefanescu 2024-11-01   83  /**
-157a51f7e5e81e Andrei Stefanescu 2024-11-01   84   * struct s32_pinctrl - private driver data
-fd84aaa8173d3f Chester Lin       2023-02-20   85   * @dev: a pointer back to containing device
-fd84aaa8173d3f Chester Lin       2023-02-20   86   * @pctl: a pointer to the pinctrl device structure
-fd84aaa8173d3f Chester Lin       2023-02-20   87   * @regions: reserved memory regions with start/end pin
-fd84aaa8173d3f Chester Lin       2023-02-20   88   * @info: structure containing information about the pin
-fd84aaa8173d3f Chester Lin       2023-02-20   89   * @gpio_configs: Saved configurations for GPIO pins
-fd84aaa8173d3f Chester Lin       2023-02-20   90   * @gpiop_configs_lock: lock for the `gpio_configs` list
-157a51f7e5e81e Andrei Stefanescu 2024-11-01   91   * @saved_context: Configuration saved over system sleep
-fd84aaa8173d3f Chester Lin       2023-02-20   92   */
-fd84aaa8173d3f Chester Lin       2023-02-20   93  struct s32_pinctrl {
-fd84aaa8173d3f Chester Lin       2023-02-20   94  	struct device *dev;
-fd84aaa8173d3f Chester Lin       2023-02-20   95  	struct pinctrl_dev *pctl;
-fd84aaa8173d3f Chester Lin       2023-02-20   96  	struct s32_pinctrl_mem_region *regions;
-fd84aaa8173d3f Chester Lin       2023-02-20   97  	struct s32_pinctrl_soc_info *info;
-fd84aaa8173d3f Chester Lin       2023-02-20   98  	struct list_head gpio_configs;
-fd84aaa8173d3f Chester Lin       2023-02-20   99  	spinlock_t gpio_configs_lock;
-fd84aaa8173d3f Chester Lin       2023-02-20  100  #ifdef CONFIG_PM_SLEEP
-fd84aaa8173d3f Chester Lin       2023-02-20  101  	struct s32_pinctrl_context saved_context;
-fd84aaa8173d3f Chester Lin       2023-02-20  102  #endif
-fd84aaa8173d3f Chester Lin       2023-02-20 @103  };
-fd84aaa8173d3f Chester Lin       2023-02-20  104  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
