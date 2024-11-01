@@ -1,192 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56AF1991C1;
-	Thu, 31 Oct 2024 22:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B201EA65
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 02:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730414462; cv=none; b=IUIKnknBEim/Rr8tyxfMWKyBzWzuogvVhQU4vJwbzU4XiSu5rhRmiQ5Sr5dE0VttSbO+RprbKKwd8awPF6Ki7yATvYkVwf3ArALMILO5e9sfbOnlSBMV0h4apNcqnzezIrEps2Vn8+quQcwFT/Nk+DFIVYzxhOizIxVRO1gCjkQ=
+	t=1730426596; cv=none; b=CZTMcXVxuHpO9BVsU4U73Lm4mrmdEmo4HxsqXv+sUrurPs3JABBuV4/A0tybEKBvKLvBCUkjtSm5m2h+VV1TASxM99mMB/hrb4+jIg2566a2BWt3p57NWiEPAy48kHQDL2Kd3eJoFWoGrWokqaPgb8f8IvT8t9ToUzjicWt6ytc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730414462; c=relaxed/simple;
-	bh=TtX246/7V9tXd0BN+YUjyWwj/a3VQ2j7RYCFTjdfKgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vCR2cQlAqwZTcOzhHn/vNMYuSiKGDoAb2kuKnyRUX6HvHwBkOzXvjl6fXbi6BL7RAK3vay/zBa6mrKoDqzxznhWsQegdq8qtwu6KVD8Crcy794Ynbi55IGP2G0oalm8rHn6WUjStihXhdxPhp+wp73d5iuJpW1Qg6BN/d3kGdq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PZmsAdfT; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730426596; c=relaxed/simple;
+	bh=OS4K7MaZLc6w/g8YOiGwnJ5/wZ1pcE5p70jEvC4g8D4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=FP7u/z6GooLBsDZ3P0IUpXw/+1eQsRCSk8a/UBruRITZ1TeF/ducuTgq51mvvox2dZBaJdSvBONrZhW18rHvkbpPcnROLRvNm9HEfk7pGecoqB25fw3WwIC2CFWhaTZzr4sJGDkxMkHBVHmYRJIRWLEqM52d528qNiEpFXVtU4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hhbBxmzy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PZmsAdfT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730414457; x=1761950457;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TtX246/7V9tXd0BN+YUjyWwj/a3VQ2j7RYCFTjdfKgs=;
-  b=PZmsAdfT3v2IINtcA2aZWBGiFceBZXQkuvFMmxQvSGFwxoxZc87RNNDK
-   MqkbBsA6/tLt8NKRpaOwphm5ykHju2lNCo9IqotjwyjfdYCr+SDdClv0a
-   kxoQtUzGV/3IA/wqBjP3q++Kg3Q1iujFVBHc6NEb/HerjkqTwF7xq1tiq
-   DqoCWr0fU3ho0t0Iv454dp3UTGCFwsaiGAF2KYjO5o8ZZGQNxvQUzaCS9
-   Sy5A35iLrvVaRc0PjWMZK7gzDdnpVfGtLKn+r5BVzGcGxEvjnhgXmxgxd
-   ePTkFpS3LVPbeEH+8bK9vXoVXjCTwBbO+2fUCjvW4v31VaCMQlOy4ZByc
-   w==;
-X-CSE-ConnectionGUID: aHK5ZPl4QoKRU036DdfsJQ==
-X-CSE-MsgGUID: a8KB3fjLTiW+JMKNHi9f9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="30294387"
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="30294387"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 15:40:56 -0700
-X-CSE-ConnectionGUID: wD6CisJHQ06wuSZ12h/+6A==
-X-CSE-MsgGUID: NsMJpRFKSGW57UVHodjKJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="120231292"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 31 Oct 2024 15:40:50 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6dqR-000gnK-1T;
-	Thu, 31 Oct 2024 22:40:47 +0000
-Date: Fri, 1 Nov 2024 06:39:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard Zhu <hongxing.zhu@nxp.com>, l.stach@pengutronix.de,
-	bhelgaas@google.com, lpieralisi@kernel.org, kw@linux.com,
-	manivannan.sadhasivam@linaro.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
-	frank.li@nxp.com, s.hauer@pengutronix.de, festevam@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	imx@lists.linux.dev, kernel@pengutronix.de,
-	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Richard Zhu <hongxing.zhu@nxp.com>, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v5 02/10] PCI: imx6: Add ref clock for i.MX95 PCIe
-Message-ID: <202411010605.6YPlxVeu-lkp@intel.com>
-References: <20241031080655.3879139-3-hongxing.zhu@nxp.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hhbBxmzy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730426589;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dw+2G5RgwV72l0wto1M/hwCucpbpswqVEiXwKPJrV8A=;
+	b=hhbBxmzyJpeJP0pM20iPQyvpxzhs1sPcVrq9xqMLoPDIMldfCmChEQDwEXjDluGOsF09Ok
+	A6ywmkOfq0vo/Q2cbAEUzGK7RTs7MjRDnXYhvpXDopM1CboS/kY6Vr8XbGRukaMYJIEwWd
+	4g39BERWEqF8lfYW5PZLdMuoQFneTaM=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-675-Dt44yNbSOre-ojVMVNKwzQ-1; Thu,
+ 31 Oct 2024 22:03:06 -0400
+X-MC-Unique: Dt44yNbSOre-ojVMVNKwzQ-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 72ED619560AE
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 02:03:05 +0000 (UTC)
+Received: from [172.64.2.84] (unknown [10.30.34.59])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 006361956052;
+	Fri,  1 Nov 2024 02:03:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc5,
+ upstream-mainline, 90602c25)
+Date: Fri, 01 Nov 2024 02:03:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241031080655.3879139-3-hongxing.zhu@nxp.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <98271.124103122030600386@us-mta-675.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Richard,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus shawnguo/for-next mani-mhi/mhi-next linus/master v6.12-rc5 next-20241031]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Zhu/dt-bindings-imx6q-pcie-Add-ref-clock-for-i-MX95-PCIe-RC/20241031-160000
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20241031080655.3879139-3-hongxing.zhu%40nxp.com
-patch subject: [PATCH v5 02/10] PCI: imx6: Add ref clock for i.MX95 PCIe
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241101/202411010605.6YPlxVeu-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411010605.6YPlxVeu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411010605.6YPlxVeu-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/pci/controller/dwc/pci-imx6.c:21:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/pci/controller/dwc/pci-imx6.c:21:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/pci/controller/dwc/pci-imx6.c:21:
-   In file included from include/linux/of_address.h:7:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pci-imx6.c:22:
-   In file included from include/linux/pci.h:1645:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/pci/controller/dwc/pci-imx6.c:1490:27: warning: unused variable 'imx95_ext_osc_clks' [-Wunused-const-variable]
-    1490 | static const char * const imx95_ext_osc_clks[] = {"pcie_bus", "pcie", "pcie_phy", "pcie_aux"};
-         |                           ^~~~~~~~~~~~~~~~~~
-   14 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/imx95_ext_osc_clks +1490 drivers/pci/controller/dwc/pci-imx6.c
+Kernel information:
+    Commit message: Merge tag 'net-6.12-rc6' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-  1483	
-  1484	static const char * const imx6q_clks[] = {"pcie_bus", "pcie", "pcie_phy"};
-  1485	static const char * const imx8mm_clks[] = {"pcie_bus", "pcie", "pcie_aux"};
-  1486	static const char * const imx8mq_clks[] = {"pcie_bus", "pcie", "pcie_phy", "pcie_aux"};
-  1487	static const char * const imx6sx_clks[] = {"pcie_bus", "pcie", "pcie_phy", "pcie_inbound_axi"};
-  1488	static const char * const imx8q_clks[] = {"mstr", "slv", "dbi"};
-  1489	static const char * const imx95_clks[] = {"pcie_bus", "pcie", "pcie_phy", "pcie_aux", "ref"};
-> 1490	static const char * const imx95_ext_osc_clks[] = {"pcie_bus", "pcie", "pcie_phy", "pcie_aux"};
-  1491	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1522596696
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1522596696-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1522596696-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1522596696-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
