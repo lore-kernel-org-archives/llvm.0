@@ -1,73 +1,73 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E12814D2A2;
-	Fri,  1 Nov 2024 06:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278C91509A0;
+	Fri,  1 Nov 2024 06:03:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730441040; cv=none; b=QlYm7G9zxlsEOO7muNY6GEZgyGDwSFXvGCsmTgpQ/Oen00UczHfLT2q7Xd9jJb0KmwFWKXP1CpsUZaAA/WyXTnK3nHmDLEjhjCrwGw4eEct47a8HPy7wPiCOWi+dggWwNJDo2E/rs2Wr0AKRAZupmWB7YrMxOeDDsaXoAIQ3peQ=
+	t=1730441043; cv=none; b=HXS0srbDhSJFV5FWLDhPakYDrWQOUbLCGJTo/MvvzyuU45z5SqUTtVRuL+H2bXoqg+aNNuYkO63cSVTgaSUBEkIoJ9lJrqlVzRDn3d4TAiptwcU+/pILVXpuW+3VdVmC8oJjWSpG8ou8AXJVd+kI6yFYjQfusISPTejyS6yiDt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730441040; c=relaxed/simple;
-	bh=kYBrr4vz56GoKSXeexgf9jNKkLgOPVYmear0fnBchqo=;
+	s=arc-20240116; t=1730441043; c=relaxed/simple;
+	bh=OpSA2EKjuTJFsKfFeDiLJco+R1AXhNhVS1oLsxyzDcE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=utt+OGKZA+EgYzrXZGkPW/aVUrL7kz/MtiBcLwu6CxjRWtV3LAQwRDpP4wA3o7SB/Fk4yDsfb9EcT/gRXEZGp14/eKgXXufKQYHRo3sZKz+CqU7KowWVFX4MAVzaYh7+sizrzmkVm+ZWEIVC4KTwNWF+bxrz1c+I0gnhhnEsYLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efFi1vNd; arc=none smtp.client-ip=209.85.128.182
+	 MIME-Version; b=raJSiPWaVKEqDKTKmaraqvckg7rHfjmY06ea2UXYIemMURB62+Zj1LYp4xwotn7YE3tdAwWjEqBwvtVGqVUrQfVa877r3+bnK9+QBj1nu/37phDCloj8i0s4CBtNgOxwCMEVD/qwToDPjc2GsLb/YRLKXw0peQvCEW1FTCknawU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m0ziv23X; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efFi1vNd"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6e5e5c43497so13975857b3.3;
-        Thu, 31 Oct 2024 23:03:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m0ziv23X"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7b1457ba751so118558385a.3;
+        Thu, 31 Oct 2024 23:03:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730441037; x=1731045837; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1730441039; x=1731045839; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=O88Ws5ttINxBzT//7+/cLza6DlDBrpbiV/WWX/jyzJU=;
-        b=efFi1vNdKpoGrE2RYr2j7m5s//Tedwkfh0lp6wSkg3G2EFQGEuzrkkJC0jjc4jSrvy
-         ez2LdMfGScQj6bYWMRcTNnOiKl6mLPZDGIgi9KXrt9kuDDheDnsNm8Gozu72jhkazQv8
-         nr5shpdFRbm2aRYeV6tVdMk3P3G137CMgsZXPe88eC+xijoA/yYRVOZISYaiTdbhCabO
-         l1W0lFITBc6WzlixKU9btBoUppA9qiXVy2rQX6YWQh5YP8HY9uZ4HuIZMdBDss0678V7
-         w2TuLdr3SuSvyJzHPQcoGCrJMenXaVxLjXA1kXZKQBf/TJmTesoqX0utDWpNFMVd+9EW
-         KukA==
+        bh=YIkDBqs1Qg0O/PRjCDXbFtqVlNEc14v8sJMt4WTa4Dc=;
+        b=m0ziv23XoAlOYuUAAu59RSHOLycuN/MtI24Q5zvWi8JPT7DMghVW64fUUbU8QNAQSF
+         53XOMUMYzH4t1K+2TyD57/s3i5WNdHWsoRFhAI8orV/xm0v5j/hF+E/epDvyM13b47rE
+         AY9cMk8fh5kORZTwQUn3wUD7iDQ6yvhhB5eee4xkxuAJ2JxtgfQiB7mY6tFxmU1YRTcU
+         5XKuNjooRPRYvZkb/1KMHD/safYOsf32w6pG6/jAHdSSBBShFtM64Trac3qxZvhkWsQM
+         Hyin/fHXbCuCO1PqM4Rf5ueMeoaFKYBSyyFPhe2O4W75NtOb4KHuKHFh5IjWr0YKY8Qh
+         BgpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730441037; x=1731045837;
+        d=1e100.net; s=20230601; t=1730441039; x=1731045839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=O88Ws5ttINxBzT//7+/cLza6DlDBrpbiV/WWX/jyzJU=;
-        b=jJk+4s3egGm1tCYz7oGJVLSBc4QRW1BWRQ8M7g2BmuoHgyWfyTVgvZRbJgOqu/aEGG
-         N9lf6cxpDvY8UhYlhINKiiW+YbDovZz0h5klh47v56kQt+dc3dQPOaASP7Nv0JaBGjA1
-         LT78if+gCFQUd2a7N209ruhyLSJU9KY6kt6SMssbt+4ojM03+AM9b2uilDBvEdU6NEN8
-         UC+gqBy7AFtLCm5z6okBmZPdcYhXL1/AK3j1hseB4ZYvHbiogvxJNhYjvJOItqwL43p4
-         hdb74UnhpauFFfBO4OQlrOYHCR5p7Zv2GX2xzx75kvR7BabGB9aPQ6W8rPclXP5idA9C
-         SmTg==
-X-Forwarded-Encrypted: i=1; AJvYcCWHPMwW0A3hTvKtDUy/vO3EpGLekcUb17qa8YoMb1kWAhHdRLGScp+jQ2fTpwBzEu59hKBO@lists.linux.dev, AJvYcCWcPZmU0W4+HgKp9mQIEgi3WHnpOBY3KzQ11GnTahi1/98BrYb0rKjGDbmQsCwI8qyIm2QPtw==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzer9uSCtrUyQri43oboVsod4sPo7CoTMHID185yOuJbLAwXOrw
-	zKM2RaKlW+ApfUgUImXL9N6SZOGHccI/ydl0T+5Rh4tK9GJyjPlh
-X-Google-Smtp-Source: AGHT+IE0faQIGAO8gno+xp81cCbZqSCBMr/1UvkfX38xkfdk+AOPQSLC5vyHLNEsDlMPiKHF+hy5Ag==
-X-Received: by 2002:a05:690c:3803:b0:6e5:625c:5ad8 with SMTP id 00721157ae682-6ea52542f0dmr68563927b3.37.1730441037417;
-        Thu, 31 Oct 2024 23:03:57 -0700 (PDT)
+        bh=YIkDBqs1Qg0O/PRjCDXbFtqVlNEc14v8sJMt4WTa4Dc=;
+        b=s3k9eMc76kCHdDddv/q0MRBMWQnkEZhMshqJcSkYOvm28s5boUq5WCRPKx5vbA55fw
+         mCnNzl/W8rctYG1OLqBYHKFULOyDQmJ/xLjAlEHaafs1KTNttF3Zt0t8LiE24LmK94Ac
+         uXtGrFJoAfr649dHCEjdLgp/72ykzLivB2S2FQq89AFruYgiTatfBPvcO3r7VFH8yWve
+         to80y/NRwzeuNDUD6gPVQw/a9I8bdMF/zbw1A3IpwfX7oSnFB6LH5a6S3AzMv4AnSFcc
+         qPu0vcADzk+/t1KhT08ACjdtUvHkyKC7ogivYwFGKSWVCjtactAhYFV61n+ZxRAq9q8C
+         G60g==
+X-Forwarded-Encrypted: i=1; AJvYcCUKTgmduf6nTmyN3GorsI5rl/ek0Ea+4Oa7x9sVbp71oEthL59IvTnjAqUFqPSXedgZfjTkPw==@lists.linux.dev, AJvYcCWZj5ILUYT7kM78iEz9qT0oV+rZjXZPZMi768iIQMZl9Cwj30WNGWVopXduy6H+PMyA1VvP@lists.linux.dev
+X-Gm-Message-State: AOJu0YwNGUtv0kt/+1xcsjB0rvZI61+3lU38sCjHverhmQbfYExe59zd
+	L8wrXhHi8IWSvtZqpHmO0freOxWXZZb6tIpyRYVn5TcGQWCppbXS
+X-Google-Smtp-Source: AGHT+IFlXQ7YmvemmkOW7/d6KfdFxcWho9tJcjU7IIT8nZP7aEzzDRPSTnvXfAnX3Qx5MYwFxJ8rTg==
+X-Received: by 2002:a05:620a:44c1:b0:7ac:e879:1a20 with SMTP id af79cd13be357-7b193ee1612mr2829002485a.1.1730441038906;
+        Thu, 31 Oct 2024 23:03:58 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f39e9b54sm141653185a.5.2024.10.31.23.03.56
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a6fd46sm141484385a.95.2024.10.31.23.03.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 23:03:57 -0700 (PDT)
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 455E01200043;
-	Fri,  1 Nov 2024 02:03:56 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Fri, 01 Nov 2024 02:03:56 -0400
-X-ME-Sender: <xms:TG8kZ7DV99VfAXnZpe0O2TnrnnFYrn82NOCEsSY-JUywLOKb-U0ViA>
-    <xme:TG8kZxg4uKoiQ_yxD1hPOmQlesBNGi51aGtenaOnMLZIo_foqc-69JbxHrVB2r1Zy
-    Mb0vwb1YDHhCGdRSA>
-X-ME-Received: <xmr:TG8kZ2nKVbCqkBMT4z8FqgayOwQk8AS9oN4HLNFM5AyU5CmvhMbq7awdaCkDtg>
+        Thu, 31 Oct 2024 23:03:58 -0700 (PDT)
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id B039A1200043;
+	Fri,  1 Nov 2024 02:03:57 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Fri, 01 Nov 2024 02:03:57 -0400
+X-ME-Sender: <xms:TW8kZziHevBKOBGEdB7kqkucUtEKbhDMw6xmo5l50BB_IYw0yvPxYw>
+    <xme:TW8kZwD_PflrtvGxv3BCpT5u1HYOFSSwZ5ldY-BYEjmhHB0qh_gDeN_vzItGZBcuD
+    a6O0uFhzWbC4PyLBg>
+X-ME-Received: <xmr:TW8kZzHr39358aaNL2kX1_kJ_U35dUMQKT_lilH88je7O2Q-lFAwei5EjEc>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttden
     ucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrd
     gtohhmqeenucggtffrrghtthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveff
-    ieeujefhueeigfegueehgeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    ieeujefhueeigfegueehgeeggfenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmh
     epmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhi
     thihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmh
     grihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepheejpdhmohgu
@@ -79,14 +79,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggod
     hpthhtoheplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohhj
     vggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesgh
     hmrghilhdrtghomhdprhgtphhtthhopeifvggushhonhgrfhesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:TG8kZ9zwEBTEN2HUsxNgP3jSW3ziL1ON6HHZZ-UjysBSElsWKmy4Xw>
-    <xmx:TG8kZwT6r9LcD8B4gdrV6dGfff6KWV-_j1IIsgIx10XzlvwG-sISFA>
-    <xmx:TG8kZwaoI0QBHpKyfTkDWSNPjoMvRgXkfFf-_mcqFwTgA2PXUwLkbw>
-    <xmx:TG8kZxSASZg5cH1HOJ-5ITjl6xxjRvn5L1KZw-QeoqVqAgIDZMUtUw>
-    <xmx:TG8kZ2BNflOUXyAwQ6IBN6U345WcUllIZiOGWOSQtZ3ZwHR2l8MZOfLa>
+X-ME-Proxy: <xmx:TW8kZwSWtDnum2QlZzDT0Xsj3Csqeg83XbBnAO8lTsTNQHbuo2gPiA>
+    <xmx:TW8kZww8n9Bo7PHFxV8N-eDDYIygoNDdfFlH30RZHMdgJcEESosRsA>
+    <xmx:TW8kZ271tSddGd_Mcje7H4M9pRshLuFYZIyPNAdWXz-o9nDTQ173rw>
+    <xmx:TW8kZ1zl_3oFxTakT09n5jh4Y7uRCIq2PrSXxL09ilO-qu4j7ppT8g>
+    <xmx:TW8kZwgdhogrsBb0HXxS8zlXDyV57K719fAFyRFfeT8DH7qIDCwn_59t>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 02:03:55 -0400 (EDT)
+ 1 Nov 2024 02:03:57 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: rust-for-linux@vger.kernel.org,
 	rcu@vger.kernel.org,
@@ -131,9 +131,9 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
 	linux-riscv@lists.infradead.org
-Subject: [RFC v2 03/13] rust: sync: atomic: Add ordering annotation types
-Date: Thu, 31 Oct 2024 23:02:26 -0700
-Message-ID: <20241101060237.1185533-4-boqun.feng@gmail.com>
+Subject: [RFC v2 04/13] rust: sync: atomic: Add generic atomics
+Date: Thu, 31 Oct 2024 23:02:27 -0700
+Message-ID: <20241101060237.1185533-5-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241101060237.1185533-1-boqun.feng@gmail.com>
 References: <20241101060237.1185533-1-boqun.feng@gmail.com>
@@ -145,152 +145,295 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Preparation for atomic primitives. Instead of a suffix like _acquire, a
-method parameter along with the corresponding generic parameter will be
-used to specify the ordering of an atomic operations. For example,
-atomic load() can be defined as:
+To provide using LKMM atomics for Rust code, a generic `Atomic<T>` is
+added, currently `T` needs to be Send + Copy because these are the
+straightforward usages and all basic types support this. The trait
+`AllowAtomic` should be only ipmlemented inside atomic mod until the
+generic atomic framework is mature enough (unless the ipmlementer is a
+`#[repr(transparent)]` new type).
 
-	impl<T: ...> Atomic<T> {
-	    pub fn load<O: AcquireOrRelaxed>(&self, _o: O) -> T { ... }
-	}
-
-and acquire users would do:
-
-	let r = x.load(Acquire);
-
-relaxed users:
-
-	let r = x.load(Relaxed);
-
-doing the following:
-
-	let r = x.load(Release);
-
-will cause a compiler error.
-
-Compared to suffixes, it's easier to tell what ordering variants an
-operation has, and it also make it easier to unify the implementation of
-all ordering variants in one method via generic. The `IS_RELAXED` and
-`ORDER` associate consts are for generic function to pick up the
-particular implementation specified by an ordering annotation.
+`AtomicIpml` types are automatically `AllowAtomic`, and so far only
+basic operations load() and store() are introduced.
 
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- rust/kernel/sync/atomic.rs          |  3 +
- rust/kernel/sync/atomic/ordering.rs | 94 +++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 rust/kernel/sync/atomic/ordering.rs
+ rust/kernel/sync/atomic.rs         |   2 +
+ rust/kernel/sync/atomic/generic.rs | 253 +++++++++++++++++++++++++++++
+ 2 files changed, 255 insertions(+)
+ create mode 100644 rust/kernel/sync/atomic/generic.rs
 
 diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-index 21b87563667e..be2e8583595f 100644
+index be2e8583595f..b791abc59b61 100644
 --- a/rust/kernel/sync/atomic.rs
 +++ b/rust/kernel/sync/atomic.rs
-@@ -17,3 +17,6 @@
+@@ -16,7 +16,9 @@
+ //!
  //! [`LKMM`]: srctree/tools/memory-mode/
  
++pub mod generic;
  pub mod ops;
-+pub mod ordering;
-+
-+pub use ordering::{Acquire, Full, Relaxed, Release};
-diff --git a/rust/kernel/sync/atomic/ordering.rs b/rust/kernel/sync/atomic/ordering.rs
+ pub mod ordering;
+ 
++pub use generic::Atomic;
+ pub use ordering::{Acquire, Full, Relaxed, Release};
+diff --git a/rust/kernel/sync/atomic/generic.rs b/rust/kernel/sync/atomic/generic.rs
 new file mode 100644
-index 000000000000..6cf01cd276c6
+index 000000000000..204da38e2691
 --- /dev/null
-+++ b/rust/kernel/sync/atomic/ordering.rs
-@@ -0,0 +1,94 @@
++++ b/rust/kernel/sync/atomic/generic.rs
+@@ -0,0 +1,253 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Memory orderings.
-+//!
-+//! The semantics of these orderings follows the [`LKMM`] definitions and rules.
-+//!
-+//! - [`Acquire`] and [`Release`] are similar to their counterpart in Rust memory model.
-+//! - [`Full`] means "fully-ordered", that is:
-+//!   - It provides ordering between all the preceding memory accesses and the annotated operation.
-+//!   - It provides ordering between the annotated operation and all the following memory accesses.
-+//!   - It provides ordering between all the preceding memory accesses and all the fllowing memory
-+//!     accesses.
-+//!   - All the orderings are the same strong as a full memory barrier (i.e. `smp_mb()`).
-+//! - [`Relaxed`] is similar to the counterpart in Rust memory model, except that dependency
-+//!   orderings are also honored in [`LKMM`]. Dependency orderings are described in "DEPENDENCY
-+//!   RELATIONS" in [`LKMM`]'s [`explanation`].
-+//!
-+//! [`LKMM`]: srctree/tools/memory-model/
-+//! [`explanation`]: srctree/tools/memory-model/Documentation/explanation.txt
++//! Generic atomic primitives.
 +
-+/// The annotation type for relaxed memory ordering.
-+pub struct Relaxed;
++use super::ops::*;
++use super::ordering::*;
++use crate::types::Opaque;
 +
-+/// The annotation type for acquire memory ordering.
-+pub struct Acquire;
++/// A generic atomic variable.
++///
++/// `T` must impl [`AllowAtomic`], that is, an [`AtomicImpl`] has to be chosen.
++///
++/// # Invariants
++///
++/// Doing an atomic operation while holding a reference of [`Self`] won't cause a data race, this
++/// is guaranteed by the safety requirement of [`Self::from_ptr`] and the extra safety requirement
++/// of the usage on pointers returned by [`Self::as_ptr`].
++#[repr(transparent)]
++pub struct Atomic<T: AllowAtomic>(Opaque<T>);
 +
-+/// The annotation type for release memory ordering.
-+pub struct Release;
++// SAFETY: `Atomic<T>` is safe to share among execution contexts because all accesses are atomic.
++unsafe impl<T: AllowAtomic> Sync for Atomic<T> {}
 +
-+/// The annotation type for fully-order memory ordering.
-+pub struct Full;
++/// Atomics that support basic atomic operations.
++///
++/// TODO: Unless the `impl` is a `#[repr(transparet)]` new type of an existing [`AllowAtomic`], the
++/// impl block should be only done in atomic mod. And currently only basic integer types can
++/// implement this trait in atomic mod.
++///
++/// # Safety
++///
++/// [`Self`] must have the same size and alignment as [`Self::Repr`].
++pub unsafe trait AllowAtomic: Sized + Send + Copy {
++    /// The backing atomic implementation type.
++    type Repr: AtomicImpl;
 +
-+/// The trait bound for operations that only support relaxed ordering.
-+pub trait RelaxedOnly {}
++    /// Converts into a [`Self::Repr`].
++    fn into_repr(self) -> Self::Repr;
 +
-+impl RelaxedOnly for Relaxed {}
-+
-+/// The trait bound for operations that only support acquire or relaxed ordering.
-+pub trait AcquireOrRelaxed {
-+    /// Describes whether an ordering is relaxed or not.
-+    const IS_RELAXED: bool = false;
++    /// Converts from a [`Self::Repr`].
++    fn from_repr(repr: Self::Repr) -> Self;
 +}
 +
-+impl AcquireOrRelaxed for Acquire {}
++// SAFETY: `T::Repr` is `Self` (i.e. `T`), so they have the same size and alignment.
++unsafe impl<T: AtomicImpl> AllowAtomic for T {
++    type Repr = Self;
 +
-+impl AcquireOrRelaxed for Relaxed {
-+    const IS_RELAXED: bool = true;
++    fn into_repr(self) -> Self::Repr {
++        self
++    }
++
++    fn from_repr(repr: Self::Repr) -> Self {
++        repr
++    }
 +}
 +
-+/// The trait bound for operations that only support release or relaxed ordering.
-+pub trait ReleaseOrRelaxed {
-+    /// Describes whether an ordering is relaxed or not.
-+    const IS_RELAXED: bool = false;
++impl<T: AllowAtomic> Atomic<T> {
++    /// Creates a new atomic.
++    pub const fn new(v: T) -> Self {
++        Self(Opaque::new(v))
++    }
++
++    /// Creates a reference to [`Self`] from a pointer.
++    ///
++    /// # Safety
++    ///
++    /// - `ptr` has to be a valid pointer.
++    /// - `ptr` has to be valid for both reads and writes for the whole lifetime `'a`.
++    /// - For the whole lifetime of '`a`, other accesses to the object cannot cause data races
++    ///   (defined by [`LKMM`]) against atomic operations on the returned reference.
++    ///
++    /// [`LKMM`]: srctree/tools/memory-model
++    ///
++    /// # Examples
++    ///
++    /// Using [`Atomic::from_ptr()`] combined with [`Atomic::load()`] or [`Atomic::store()`] can
++    /// achieve the same functionality as `READ_ONCE()`/`smp_load_acquire()` or
++    /// `WRITE_ONCE()`/`smp_store_release()` in C side:
++    ///
++    /// ```rust
++    /// # use kernel::types::Opaque;
++    /// use kernel::sync::atomic::{Atomic, Relaxed, Release};
++    ///
++    /// // Assume there is a C struct `Foo`.
++    /// mod cbindings {
++    ///     #[repr(C)]
++    ///     pub(crate) struct foo { pub(crate) a: i32, pub(crate) b: i32 }
++    /// }
++    ///
++    /// let tmp = Opaque::new(cbindings::foo { a: 1, b: 2});
++    ///
++    /// // struct foo *foo_ptr = ..;
++    /// let foo_ptr = tmp.get();
++    ///
++    /// // SAFETY: `foo_ptr` is a valid pointer, and `.a` is inbound.
++    /// let foo_a_ptr = unsafe { core::ptr::addr_of_mut!((*foo_ptr).a) };
++    ///
++    /// // a = READ_ONCE(foo_ptr->a);
++    /// //
++    /// // SAFETY: `foo_a_ptr` is a valid pointer for read, and all accesses on it is atomic, so no
++    /// // data race.
++    /// let a = unsafe { Atomic::from_ptr(foo_a_ptr) }.load(Relaxed);
++    /// # assert_eq!(a, 1);
++    ///
++    /// // smp_store_release(&foo_ptr->a, 2);
++    /// //
++    /// // SAFETY: `foo_a_ptr` is a valid pointer for write, and all accesses on it is atomic, so no
++    /// // data race.
++    /// unsafe { Atomic::from_ptr(foo_a_ptr) }.store(2, Release);
++    /// ```
++    ///
++    /// However, this should be only used when communicating with C side or manipulating a C struct.
++    pub unsafe fn from_ptr<'a>(ptr: *mut T) -> &'a Self
++    where
++        T: Sync,
++    {
++        // CAST: `T` is transparent to `Atomic<T>`.
++        // SAFETY: Per function safety requirement, `ptr` is a valid pointer and the object will
++        // live long enough. It's safe to return a `&Atomic<T>` because function safety requirement
++        // guarantees other accesses won't cause data races.
++        unsafe { &*ptr.cast::<Self>() }
++    }
++
++    /// Returns a pointer to the underlying atomic variable.
++    ///
++    /// Extra safety requirement on using the return pointer: the operations done via the pointer
++    /// cannot cause data races defined by [`LKMM`].
++    ///
++    /// [`LKMM`]: srctree/tools/memory-model
++    pub const fn as_ptr(&self) -> *mut T {
++        self.0.get()
++    }
++
++    /// Returns a mutable reference to the underlying atomic variable.
++    ///
++    /// This is safe because the mutable reference of the atomic variable guarantees the exclusive
++    /// access.
++    pub fn get_mut(&mut self) -> &mut T {
++        // SAFETY: `self.as_ptr()` is a valid pointer to `T`, and the object has already been
++        // initialized. `&mut self` guarantees the exclusive access, so it's safe to reborrow
++        // mutably.
++        unsafe { &mut *self.as_ptr() }
++    }
 +}
 +
-+impl ReleaseOrRelaxed for Release {}
++impl<T: AllowAtomic> Atomic<T>
++where
++    T::Repr: AtomicHasBasicOps,
++{
++    /// Loads the value from the atomic variable.
++    ///
++    /// # Examples
++    ///
++    /// Simple usages:
++    ///
++    /// ```rust
++    /// use kernel::sync::atomic::{Atomic, Relaxed};
++    ///
++    /// let x = Atomic::new(42i32);
++    ///
++    /// assert_eq!(42, x.load(Relaxed));
++    ///
++    /// let x = Atomic::new(42i64);
++    ///
++    /// assert_eq!(42, x.load(Relaxed));
++    /// ```
++    ///
++    /// Customized new types in [`Atomic`]:
++    ///
++    /// ```rust
++    /// use kernel::sync::atomic::{generic::AllowAtomic, Atomic, Relaxed};
++    ///
++    /// #[derive(Clone, Copy)]
++    /// #[repr(transparent)]
++    /// struct NewType(u32);
++    ///
++    /// // SAFETY: `NewType` is transparent to `u32`, which has the same size and alignment as
++    /// // `i32`.
++    /// unsafe impl AllowAtomic for NewType {
++    ///     type Repr = i32;
++    ///
++    ///     fn into_repr(self) -> Self::Repr {
++    ///         self.0 as i32
++    ///     }
++    ///
++    ///     fn from_repr(repr: Self::Repr) -> Self {
++    ///         NewType(repr as u32)
++    ///     }
++    /// }
++    ///
++    /// let n = Atomic::new(NewType(0));
++    ///
++    /// assert_eq!(0, n.load(Relaxed).0);
++    /// ```
++    #[inline(always)]
++    pub fn load<Ordering: AcquireOrRelaxed>(&self, _: Ordering) -> T {
++        let a = self.as_ptr().cast::<T::Repr>();
 +
-+impl ReleaseOrRelaxed for Relaxed {
-+    const IS_RELAXED: bool = true;
-+}
++        // SAFETY:
++        // - For calling the atomic_read*() function:
++        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
++        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a valid pointer,
++        //   - per the type invariants, the following atomic operation won't cause data races.
++        // - For extra safety requirement of usage on pointers returned by `self.as_ptr():
++        //   - atomic operations are used here.
++        let v = unsafe {
++            if Ordering::IS_RELAXED {
++                T::Repr::atomic_read(a)
++            } else {
++                T::Repr::atomic_read_acquire(a)
++            }
++        };
 +
-+/// Describes the exact memory ordering of an `impl` [`All`].
-+pub enum OrderingDesc {
-+    /// Relaxed ordering.
-+    Relaxed,
-+    /// Acquire ordering.
-+    Acquire,
-+    /// Release ordering.
-+    Release,
-+    /// Fully-ordered.
-+    Full,
-+}
++        T::from_repr(v)
++    }
 +
-+/// The trait bound for annotating operations that should support all orderings.
-+pub trait All {
-+    /// Describes the exact memory ordering.
-+    const ORDER: OrderingDesc;
-+}
++    /// Stores a value to the atomic variable.
++    ///
++    /// # Examples
++    ///
++    /// ```rust
++    /// use kernel::sync::atomic::{Atomic, Relaxed};
++    ///
++    /// let x = Atomic::new(42i32);
++    ///
++    /// assert_eq!(42, x.load(Relaxed));
++    ///
++    /// x.store(43, Relaxed);
++    ///
++    /// assert_eq!(43, x.load(Relaxed));
++    /// ```
++    ///
++    #[inline(always)]
++    pub fn store<Ordering: ReleaseOrRelaxed>(&self, v: T, _: Ordering) {
++        let v = T::into_repr(v);
++        let a = self.as_ptr().cast::<T::Repr>();
 +
-+impl All for Relaxed {
-+    const ORDER: OrderingDesc = OrderingDesc::Relaxed;
-+}
-+
-+impl All for Acquire {
-+    const ORDER: OrderingDesc = OrderingDesc::Acquire;
-+}
-+
-+impl All for Release {
-+    const ORDER: OrderingDesc = OrderingDesc::Release;
-+}
-+
-+impl All for Full {
-+    const ORDER: OrderingDesc = OrderingDesc::Full;
++        // SAFETY:
++        // - For calling the atomic_set*() function:
++        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
++        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a valid pointer,
++        //   - per the type invariants, the following atomic operation won't cause data races.
++        // - For extra safety requirement of usage on pointers returned by `self.as_ptr():
++        //   - atomic operations are used here.
++        unsafe {
++            if Ordering::IS_RELAXED {
++                T::Repr::atomic_set(a, v)
++            } else {
++                T::Repr::atomic_set_release(a, v)
++            }
++        };
++    }
 +}
 -- 
 2.45.2
