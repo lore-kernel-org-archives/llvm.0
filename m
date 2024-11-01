@@ -1,158 +1,231 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB16143C7E;
-	Fri,  1 Nov 2024 06:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2C11487DF
+	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 06:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730442619; cv=none; b=A0dnkOeX5GQYbGl1Ce8GgJGuQQJOJSqBLkxJzCFulu61uTCPvV3MvKnDIzqKrEHrIutbaoNS9NuArLgoqDrS2BWn/2zzeIVxp8Dijoqx8HQqRmYQVrkpV5kO75On3gnxRzLWRjLe+t9MRQtOUbtSjwDA64JYYEl9YYzm/73zm6A=
+	t=1730444138; cv=none; b=pJ9tvBHrt+fGb1JFOOdknE+FsWYxY8RHvrW0sZXzBZ47o8mQoVfLFp6VJNqYQQiIGsgnhBVetvD56UjjGnU6m7F5Tinlg4KZOISVlmylV/CaGLdcMdZSB8E5H5oK/EseSU4GLIgAkwPK3Ybm6fqOTLu1Pwyfb29LxkOHGiiQs1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730442619; c=relaxed/simple;
-	bh=KuYa/8PRXOVFBFQTEIySjZ4SyCDmLcX1fAyctT/KcqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AaowNRD+xdpUlciukxDk5HqXS2o54Apu1JMXmAxCag7k3jtHFSCXY1Fd79A+hod3ek4CBz3SdkgKn2JW66tlMGwSHblpvxK8wxvJUfuc3Fa3MaadDe79w3x75ZQHfIQr+dyxFcXsQ1eAGti+uZLJO0qOpZcG7Ccf8r+l1VcpmPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UFVbQHAu; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730444138; c=relaxed/simple;
+	bh=ncn56jXKV/HwT0HOd0pnIdjpIHBDBUD+4zPrr0ZsN+I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UXz/3jOr1Y0Pg/K8VPsxLIZobwF8BYhBPrZ5sIAF4qjBb90bFY2IjyQeIADYfFVv3nEbOGo1WmYSARTRBsQXP5lU+YdESjEu5BD/yCxG1tm5fNyHkDUrHgvNHz/DaJKrgzSdRY0VsOyaA6QfqVEEXjMZZYIbZit/yzs1HwoVsZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PwJPt/Jk; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UFVbQHAu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730442614; x=1761978614;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KuYa/8PRXOVFBFQTEIySjZ4SyCDmLcX1fAyctT/KcqU=;
-  b=UFVbQHAu7N1DGllU4AV1YzXhKzFuSuquyPjeUeYqGXcncF68nvdkp22F
-   szE1LqiDcoqsGnayLh6K0sJGIYZporSpimZqAHeIzfpQ2sIJHmvy9IcoZ
-   60dyiE7E+J6j6sV+miIpgOzyKEqIm0iE64VEeficsRqL/hIwnw67yjD2L
-   G45YZqi8IwfLT1Z/bmbazH0r1WBD/D+2VA28k4PcZAJPf1QBSdcW1MRz0
-   MZdhksp1JJv05WHWFQLEF4EfqPPqL+gnEfZHoiWi6yCw3jg/U6k6f8qJv
-   iYRn2AkMDnR0FSrKnADcUjx8bpfHMUst1AeYtzZ8WN5oZmWlFmnKdkvu0
-   Q==;
-X-CSE-ConnectionGUID: UN1VZ/CyRyGOijbadv8kFg==
-X-CSE-MsgGUID: m8WgAa4iSaK7Xb8JA/c5mA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="17839798"
-X-IronPort-AV: E=Sophos;i="6.11,249,1725346800"; 
-   d="scan'208";a="17839798"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 23:30:11 -0700
-X-CSE-ConnectionGUID: xEgji2rCQmiBoNmriYIxLA==
-X-CSE-MsgGUID: uvZcfqGNSUiMOmckZGGo/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,249,1725346800"; 
-   d="scan'208";a="87470468"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 31 Oct 2024 23:30:10 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6lAe-000hDu-05;
-	Fri, 01 Nov 2024 06:30:08 +0000
-Date: Fri, 1 Nov 2024 14:30:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [snitzer:nfs-localio-for-next 22/23] fs/nfsd/filecache.c:842:3:
- error: call to undeclared function 'nfs_localio_invalidate_clients'; ISO C99
- and later do not support implicit function declarations
-Message-ID: <202411011441.s36Lqszr-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PwJPt/Jk"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-46094b68e30so11244431cf.0
+        for <llvm@lists.linux.dev>; Thu, 31 Oct 2024 23:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730444135; x=1731048935; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6qsxzdkKPYu84jV5PkYvhwuH2xwE1I/FkWHkW3akHcQ=;
+        b=PwJPt/JkPVozpisR1CaGgDANOKsxCXQOOcMn0hR/5yKNIdYoXVMxRQLzDuDeZxwlN6
+         MVJlXxgqMeRXmeZlSUgfpDLo3/9Nj4O8P5rtzo+m95S0JJi+9J2q3WSjOX1vomHOok0q
+         eJNO8XzqoBPvPXBpyJdR+DaefAEVAkU9yXZYVLXiEsOYtEEbgbOvWYmSjMmS20gGfBDe
+         T59AoeZ78h9UnuHbOQaq4RDfGjP3vYSpaUMzAieydjsqZKVzRTv3lF2cbfe6m9FrgRfv
+         7gejk1DoAbnJWSYuae8/m0mf6DaAE0mukqaWgbH0TXHvSm060AaWPV3VWoc2MhPPD6X1
+         9bpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730444135; x=1731048935;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6qsxzdkKPYu84jV5PkYvhwuH2xwE1I/FkWHkW3akHcQ=;
+        b=cM/Jx2WhcUsZksq8HsEUPirl8uFSztvFbNuKFykAD2TH81lmCZXBwpREcu37TeEhbg
+         me6IWsAqSxeWVbDKMEqq5hr5eYRiOfzTyyFRR8LgstqI8zOJhggdaWGpadCyxaIBVsq8
+         wULgyv7CaB4fQMgX4/pE9YbzRlIw91UXeQ1r7ooQ2/r2POCtPKIMOxfIfi+TBJ6bH13o
+         dT9o1HWVAVGThddr8Moi6JtWoK3gb1jm6OmUUUZGBDAUNx037BPgHpEUitocRh7WF8za
+         m7cr16Zp2AfkAYIGCCIRN3kLb5nlHY8vqifJcsElm2AtvgMcrjg1m5tOJx96T6EGc+8Z
+         jqXA==
+X-Forwarded-Encrypted: i=1; AJvYcCW3VM0KiA7M2WukJYYUpdlM1OaLkUmet9f8W3Ol8PAnlIzOfK7EAFSBQh0XVCLDa5e3bqYk@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx15cnsl9JptGCLN3NmPwT9TfzeQhA5HP64eD56mfuUQHFp+s7z
+	kxdivjrpPnwwqE3o6KISCyqR/y6QIeIoCKQUx5D1R16iWoH1T3W1qUGTr3VkDC/LxdnjJDqg3dX
+	ANYlpf8Bkqz1tSoPrR/jgyAdzaE6J+c8XN0r+
+X-Google-Smtp-Source: AGHT+IE4S7Q0h8OJ2H3g3I/XFhR9utnXmELEKEYRR2BzZ8Cx10/IIjWI/q+ZZ+LLbQu427yMJ/JljGi2TFBj5lE9ZAM=
+X-Received: by 2002:a05:6214:5b02:b0:6cb:5605:ffb2 with SMTP id
+ 6a1803df08f44-6d35c14e001mr31591696d6.24.1730444134988; Thu, 31 Oct 2024
+ 23:55:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241101060237.1185533-1-boqun.feng@gmail.com> <20241101060237.1185533-12-boqun.feng@gmail.com>
+In-Reply-To: <20241101060237.1185533-12-boqun.feng@gmail.com>
+From: David Gow <davidgow@google.com>
+Date: Fri, 1 Nov 2024 14:55:23 +0800
+Message-ID: <CABVgOSn1eeZo7HggJYNEzzuGGpKABF=NbyMZLQbNjRwCAKXY-w@mail.gmail.com>
+Subject: Re: [RFC v2 11/13] rust: sync: Add memory barriers
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, lkmm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
+	Trevor Gross <tmgross@umich.edu>, dakr@redhat.com, 
+	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000fff6670625d46bae"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/snitzer/linux.git nfs-localio-for-next
-head:   cdfa872ee25377e6ceb6e73f695e19c903b38608
-commit: 27f81c6a85b36d6948b768cc1ec584b92fe7ee30 [22/23] nfs_common: track all open nfsd_files per nfs_client
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241101/202411011441.s36Lqszr-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411011441.s36Lqszr-lkp@intel.com/reproduce)
+--000000000000fff6670625d46bae
+Content-Type: text/plain; charset="UTF-8"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411011441.s36Lqszr-lkp@intel.com/
+On Fri, 1 Nov 2024 at 14:07, Boqun Feng <boqun.feng@gmail.com> wrote:
+>
+> Memory barriers are building blocks for concurrent code, hence provide
+> a minimal set of them.
+>
+> The compiler barrier, barrier(), is implemented in inline asm instead of
+> using core::sync::atomic::compiler_fence() because memory models are
+> different: kernel's atomics are implemented in inline asm therefore the
+> compiler barrier should be implemented in inline asm as well.
+>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>  rust/helpers/helpers.c      |  1 +
+>  rust/kernel/sync.rs         |  1 +
+>  rust/kernel/sync/barrier.rs | 67 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 69 insertions(+)
+>  create mode 100644 rust/kernel/sync/barrier.rs
+>
+> diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
+> index ab5a3f1be241..f4a94833b29d 100644
+> --- a/rust/helpers/helpers.c
+> +++ b/rust/helpers/helpers.c
+> @@ -8,6 +8,7 @@
+>   */
+>
+>  #include "atomic.c"
+> +#include "barrier.c"
 
-All error/warnings (new ones prefixed by >>):
+It looks like "barrier.c" is missing, so this isn't compiling for me.
+I assume it was meant to be added in this patch...?
 
-   In file included from fs/nfsd/filecache.c:35:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/nfsd/filecache.c:42:
->> include/linux/nfslocalio.h:89:46: warning: declaration of 'struct nfs_fh' will not be visible outside of this function [-Wvisibility]
-      89 | static inline void nfs_close_local_fh(struct nfs_fh *fh)
-         |                                              ^
->> fs/nfsd/filecache.c:842:3: error: call to undeclared function 'nfs_localio_invalidate_clients'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     842 |                 nfs_localio_invalidate_clients(&nn->local_clients);
-         |                 ^
->> fs/nfsd/filecache.c:842:39: error: no member named 'local_clients' in 'struct nfsd_net'
-     842 |                 nfs_localio_invalidate_clients(&nn->local_clients);
-         |                                                 ~~  ^
-   5 warnings and 2 errors generated.
+Thanks,
+-- David
 
+--000000000000fff6670625d46bae
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-vim +/nfs_localio_invalidate_clients +842 fs/nfsd/filecache.c
-
-   824	
-   825	/**
-   826	 * __nfsd_file_cache_purge: clean out the cache for shutdown
-   827	 * @net: net-namespace to shut down the cache (may be NULL)
-   828	 *
-   829	 * Walk the nfsd_file cache and close out any that match @net. If @net is NULL,
-   830	 * then close out everything. Called when an nfsd instance is being shut down,
-   831	 * and when the exports table is flushed.
-   832	 */
-   833	static void
-   834	__nfsd_file_cache_purge(struct net *net)
-   835	{
-   836		struct rhashtable_iter iter;
-   837		struct nfsd_file *nf;
-   838		LIST_HEAD(dispose);
-   839	
-   840		if (net) {
-   841			struct nfsd_net *nn = net_generic(net, nfsd_net_id);
- > 842			nfs_localio_invalidate_clients(&nn->local_clients);
-   843		}
-   844	
-   845		rhltable_walk_enter(&nfsd_file_rhltable, &iter);
-   846		do {
-   847			rhashtable_walk_start(&iter);
-   848	
-   849			nf = rhashtable_walk_next(&iter);
-   850			while (!IS_ERR_OR_NULL(nf)) {
-   851				if (!net || nf->nf_net == net)
-   852					nfsd_file_cond_queue(nf, &dispose);
-   853				nf = rhashtable_walk_next(&iter);
-   854			}
-   855	
-   856			rhashtable_walk_stop(&iter);
-   857		} while (nf == ERR_PTR(-EAGAIN));
-   858		rhashtable_walk_exit(&iter);
-   859	
-   860		nfsd_file_dispose_list(&dispose);
-   861	}
-   862	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
+cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
+nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
+hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
+XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
+h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
+ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
+hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
+BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
+0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
+hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgnAZSTbUKSVwXFX+K1mtOMX8DKU2j
+RJnF4AfAllZWGlMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTAxMDY1NTM1WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAK12YcHU7tsM0oQvmjsFpbUkdCoOs8KrOx0ZIGQb1QQOj+Fz
+RsULjZEVJfCzBZz0IVMaxTNzrGErk7rtE4BX42UPfBtQe8zppg19OTNG2+t1AClH8XN4ltTV+rgT
+gfj0XWYBzMvopFa2mTe8vpge4kJhZ+ztidvj33oerdCcDbP5fbVxcHNC35y/sOv3nGaff334isXm
+Ozp5Qghkv5rX/0qq7w/Qtnumwi4gd8i8sLrACEAt/d8zf/3AJS/wT53cpJmYNojpiSonSwrDGtU7
+6XzNihCYQeM/yW9cM+QYDSYKNZHGTTZgsWaxr6lfYMERgK6VPnAcD+MI1tdVz840b80=
+--000000000000fff6670625d46bae--
