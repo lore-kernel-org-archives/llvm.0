@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A4013C67C;
-	Fri,  1 Nov 2024 02:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C619B11CA0;
+	Fri,  1 Nov 2024 04:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730428939; cv=none; b=ngB39xs7fum0Dm3g8EVKcBdtBSYPwM9aPTjz6i3Xj1Z/hbNFQ3cuk3xiwEBCLRR6B3DFVqzsufikRamG0Rq9EAIcwPQ41oDQ+p8pnv314AEZ28fWIZ0qiuoJlQDjd59RRVmzowTLY3SfJy6IepwJrJq/QHmqSLmEE9JD2PidYkk=
+	t=1730434511; cv=none; b=AXuZErPFrCH11WdO6ULRC7GWWbLrdxeYWBn43tGdmyo3d4mJfsjDU+VVTDlNLArL/PYLucLP0M//OnSloOjs9hSNtSQd9amz11NbgarhpUK94GKJuhxc/v28p/uP4c+PoGyptbWmsQMswh3Wcot/cpCnrpSsQB4XgSrSMNnpLPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730428939; c=relaxed/simple;
-	bh=NWvtRPPypRkjOn9lgHhIxrLyJ1hgJvd8zENcQLONLyg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=l7DIrqjyVXC18j95w3inxWBYjstS+OLFjbp7ELEWJjvTJSK9chwv1u30RnmS2MqPhf5679pku8J/WdbSbcs5XZwdh0rsrG8K3vYB6eR7aUMLKvZDiOL95yQpdQMaKj0IsUDEpQg8h1wC23T9wd8nvdVdHTKR8Y79LT0KXbkloyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+fk6atq; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1730434511; c=relaxed/simple;
+	bh=9xDzoBwjMDIEAdLz66R9HUoiCdP6e1xPTsjspSdCIUs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C7LoK01CN02i9JpelHt9L/YKtcPxPC+jyQ/tiW7FXr4iuwBj3YyKwr03r0I1NPIsDw5CiYWTZuzqtM+GWLaJz4vAc1j2KwfDy6Jy6HF21AVE4JUExaM7RZVOJs0HZtRLL5IJ0ul/vz4hkB3yj6rNUtO7oKyipOs5TLzKmzKXR1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SyjMKO7p; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+fk6atq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SyjMKO7p"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730428933; x=1761964933;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NWvtRPPypRkjOn9lgHhIxrLyJ1hgJvd8zENcQLONLyg=;
-  b=m+fk6atqR4I8TczLGQYaFURbPX8he8FlmhZ/J6+0uf9K6JFD31Ckvk4N
-   npU6Cn0nNEA2NvIc5gIZvEVMB6QeNvaoXFWcbwNSUabCPf0G3V9VFqazO
-   mPoDy+R6vTz/na5t5G/MsVOVZ0cDOVGgtrJjVfS2VpDrdsPcoYqbTouGU
-   DcgmHRjNrVI7eaMJQfOB+ukLGUTKwN0g5WwZ8d7nSM5v7K5QchzAKaB+B
-   NHMB8gcYE9lJC/oqukLOuG1qP6Q2CYvKkTbcoQwRN8lDpaDshOb8czLtn
-   a3D4JYAbwsxIt4CAqxtrKWnDUAgX938rPAUQBwGT9DEzhgrzLVdUem98W
-   Q==;
-X-CSE-ConnectionGUID: ACh1/VPWSDigGaKrbjHjeA==
-X-CSE-MsgGUID: CA7vVS1iTgeO5ROxZcKeQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="33880828"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="33880828"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 19:42:05 -0700
-X-CSE-ConnectionGUID: xNo2GMFtT5CurpjzSQFK2A==
-X-CSE-MsgGUID: sBwAVZx8Ty2VYgOLo7ObBQ==
-X-ExtLoop1: 1
+  t=1730434509; x=1761970509;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9xDzoBwjMDIEAdLz66R9HUoiCdP6e1xPTsjspSdCIUs=;
+  b=SyjMKO7pF0sGkA7A/119mNfdwIS5tD0wkOxoMdF3PFQaCom3CvwtGj0h
+   XeGOCck4Ae8BoWtVSgCHlv/1kdt3qocI2eg5cz+3z6c3stpv6oLkUxUQ5
+   wnagvADJh27Teedsd2c7gMPdolIuuKxyUZI22aTuoBs9R0ZK+XdZX0tAe
+   rTtbOSmCJZnzwKHBsuqIjshx6Wt/SXlMWnymb4XeRGGkEdFYIkK4r6XRy
+   q8OqTBVlsAYOk0Y6mI5shuTq6r2c/HRfvy6st3nXCCv3+Tq/nttBsnk5J
+   mGbOArsHPU/p2CRGnAjkrNy7Gtp0HUg4+lRT9xbK1OZcU4SKtqOpaptjV
+   g==;
+X-CSE-ConnectionGUID: njeE5iO3Rg+HEItvwnjOkg==
+X-CSE-MsgGUID: Iqc//SA6Su+1m86/k22eoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="47680051"
 X-IronPort-AV: E=Sophos;i="6.11,248,1725346800"; 
-   d="scan'208";a="113671412"
+   d="scan'208";a="47680051"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 21:15:08 -0700
+X-CSE-ConnectionGUID: N7vj03srRQquG7fIq26Hmg==
+X-CSE-MsgGUID: ChZqBy5NTzu8jDUN4hdhXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="87623375"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 31 Oct 2024 19:42:04 -0700
+  by orviesa003.jf.intel.com with ESMTP; 31 Oct 2024 21:15:07 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t6hbt-000h3M-2Y;
-	Fri, 01 Nov 2024 02:42:01 +0000
-Date: Fri, 1 Nov 2024 10:41:32 +0800
+	id 1t6j3w-000h7b-1P;
+	Fri, 01 Nov 2024 04:15:04 +0000
+Date: Fri, 1 Nov 2024 12:14:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
+To: Nava kishore Manne <nava.kishore.manne@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl/extended-linear 5/5] drivers/cxl/core/mce.c:23:20:
- error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
-Message-ID: <202411011004.o1eX0Z5P-lkp@intel.com>
+Subject: Re: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for
+ runtime FPGA programming
+Message-ID: <202411011107.t2xWpqrr-lkp@intel.com>
+References: <20241029091734.3288005-2-nava.kishore.manne@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,216 +63,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241029091734.3288005-2-nava.kishore.manne@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/extended-linear
-head:   82adadebb1e8f20174c708e13571db27b13c64c7
-commit: 82adadebb1e8f20174c708e13571db27b13c64c7 [5/5] cxl: Add mce notifier to emit aliased address for extended linear cache
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241101/202411011004.o1eX0Z5P-lkp@intel.com/config)
+Hi Nava,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.12-rc5 next-20241031]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Nava-kishore-Manne/fpga-region-Add-generic-IOCTL-interface-for-runtime-FPGA-programming/20241029-181743
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241029091734.3288005-2-nava.kishore.manne%40amd.com
+patch subject: [RFC v2 1/1] fpga-region: Add generic IOCTL interface for runtime FPGA programming
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241101/202411011107.t2xWpqrr-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411011004.o1eX0Z5P-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411011107.t2xWpqrr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411011004.o1eX0Z5P-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411011107.t2xWpqrr-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-         |                                                  ^
-   arch/x86/include/asm/mce.h:241:51: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
-     241 | static inline void mce_intel_feature_clear(struct cpuinfo_x86 *c) { }
-         |                                                   ^
-   arch/x86/include/asm/mce.h:248:26: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
-     248 | int mce_available(struct cpuinfo_x86 *c);
-         |                          ^
-   arch/x86/include/asm/mce.h:355:48: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
-     355 | static inline void mce_amd_feature_init(struct cpuinfo_x86 *c)          { }
-         |                                                ^
-   arch/x86/include/asm/mce.h:358:50: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
-     358 | static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)        { return mce_amd_feature_init(c); }
-         |                                                  ^
-   arch/x86/include/asm/mce.h:358:96: error: incompatible pointer types passing 'struct cpuinfo_x86 *' to parameter of type 'struct cpuinfo_x86 *' [-Werror,-Wincompatible-pointer-types]
-     358 | static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)        { return mce_amd_feature_init(c); }
-         |                                                                                                       ^
-   arch/x86/include/asm/mce.h:355:61: note: passing argument to parameter 'c' here
-     355 | static inline void mce_amd_feature_init(struct cpuinfo_x86 *c)          { }
-         |                                                             ^
-   In file included from drivers/cxl/core/mce.c:6:
-   In file included from drivers/cxl/cxlmem.h:6:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/cxl/core/mce.c:6:
-   In file included from drivers/cxl/cxlmem.h:6:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/cxl/core/mce.c:6:
-   In file included from drivers/cxl/cxlmem.h:6:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/cxl/core/mce.c:6:
-   In file included from drivers/cxl/cxlmem.h:6:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from drivers/fpga/fpga-region.c:8:
+   In file included from include/linux/fpga/fpga-bridge.h:6:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/cxl/core/mce.c:23:20: error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
-      23 |         spa = mce->addr & MCI_ADDR_PHYSADDR;
-         |                           ^~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/mce.h:94:53: note: expanded from macro 'MCI_ADDR_PHYSADDR'
-      94 | #define MCI_ADDR_PHYSADDR       GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
-         |                                             ~~~~~~~~~~~~~ ^
-   include/linux/bits.h:37:23: note: expanded from macro 'GENMASK_ULL'
-      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
-         |                              ^
-   include/linux/bits.h:25:25: note: expanded from macro 'GENMASK_INPUT_CHECK'
-      25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
-         |                                       ^
-   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
-     293 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-         |                                                       ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                              ^
->> drivers/cxl/core/mce.c:23:20: error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
-      23 |         spa = mce->addr & MCI_ADDR_PHYSADDR;
-         |                           ^~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/mce.h:94:53: note: expanded from macro 'MCI_ADDR_PHYSADDR'
-      94 | #define MCI_ADDR_PHYSADDR       GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
-         |                                             ~~~~~~~~~~~~~ ^
-   include/linux/bits.h:37:23: note: expanded from macro 'GENMASK_ULL'
-      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
-         |                              ^
-   include/linux/bits.h:25:37: note: expanded from macro 'GENMASK_INPUT_CHECK'
-      25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
-         |                                                   ^
-   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
-      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
-         |                                                              ^
->> drivers/cxl/core/mce.c:23:20: error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
-      23 |         spa = mce->addr & MCI_ADDR_PHYSADDR;
-         |                           ^~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/mce.h:94:53: note: expanded from macro 'MCI_ADDR_PHYSADDR'
-      94 | #define MCI_ADDR_PHYSADDR       GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
-         |                                             ~~~~~~~~~~~~~ ^
-   include/linux/bits.h:37:45: note: expanded from macro 'GENMASK_ULL'
-      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
-         |                                                    ^
-   include/uapi/linux/bits.h:13:52: note: expanded from macro '__GENMASK_ULL'
-      13 |          (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
-         |                                                    ^
-   20 warnings and 4 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/fpga/fpga-region.c:223:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     223 |                 unsigned int status;
+         |                 ^
+>> drivers/fpga/fpga-region.c:227:7: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     227 |                 if (copy_to_user((void __user *)arg, &status, sizeof(status)))
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/fpga/fpga-region.c:234:9: note: uninitialized use occurs here
+     234 |         return err;
+         |                ^~~
+   drivers/fpga/fpga-region.c:227:3: note: remove the 'if' if its condition is always true
+     227 |                 if (copy_to_user((void __user *)arg, &status, sizeof(status)))
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     228 |                         err = -EFAULT;
+   drivers/fpga/fpga-region.c:202:9: note: initialize the variable 'err' to silence this warning
+     202 |         int err;
+         |                ^
+         |                 = 0
+   6 warnings generated.
 
 
-vim +23 drivers/cxl/core/mce.c
+vim +223 drivers/fpga/fpga-region.c
 
-     8	
-     9	static int cxl_handle_mce(struct notifier_block *nb, unsigned long val,
-    10				  void *data)
-    11	{
-    12		struct cxl_memdev_state *mds = container_of(nb, struct cxl_memdev_state,
-    13							    mce_notifier);
-    14		struct cxl_memdev *cxlmd = mds->cxlds.cxlmd;
-    15		struct cxl_port *endpoint = cxlmd->endpoint;
-    16		struct mce *mce = (struct mce *)data;
-    17		u64 spa, spa_alias;
-    18		unsigned long pfn;
-    19	
-    20		if (!mce || !mce_usable_address(mce))
-    21			return NOTIFY_DONE;
-    22	
-  > 23		spa = mce->addr & MCI_ADDR_PHYSADDR;
-    24	
-    25		pfn = spa >> PAGE_SHIFT;
-    26		if (!pfn_valid(pfn))
-    27			return NOTIFY_DONE;
-    28	
-    29		spa_alias = cxl_port_get_spa_cache_alias(endpoint, spa);
-    30		if (!spa_alias)
-    31			return NOTIFY_DONE;
-    32	
-    33		pfn = spa_alias >> PAGE_SHIFT;
-    34	
-    35		/*
-    36		 * Take down the aliased memory page. The original memory page flagged
-    37		 * by the MCE will be taken cared of by the standard MCE handler.
-    38		 */
-    39		dev_emerg(mds->cxlds.dev, "Offlining aliased SPA address: %#llx\n",
-    40			  spa_alias);
-    41		if (!memory_failure(pfn, 0))
-    42			set_mce_nospec(pfn);
-    43	
-    44		return NOTIFY_OK;
-    45	}
-    46	
+   198	
+   199	static long fpga_region_device_ioctl(struct file *file, unsigned int cmd,
+   200					     unsigned long arg)
+   201	{
+   202		int err;
+   203		void __user *argp = (void __user *)arg;
+   204		struct fpga_region_config_info config_info;
+   205		struct fpga_region *region =  (struct fpga_region *)(file->private_data);
+   206	
+   207		switch (cmd) {
+   208		case FPGA_REGION_IOCTL_LOAD:
+   209			if (copy_from_user(&config_info, argp, sizeof(struct fpga_region_config_info)))
+   210				return -EFAULT;
+   211	
+   212			err = region->region_ops->region_config_enumeration(region, &config_info);
+   213	
+   214			break;
+   215		case FPGA_REGION_IOCTL_REMOVE:
+   216			if (copy_from_user(&config_info, argp, sizeof(struct fpga_region_config_info)))
+   217				return -EFAULT;
+   218	
+   219			err = region->region_ops->region_remove(region, &config_info);
+   220	
+   221			break;
+   222		case FPGA_REGION_IOCTL_STATUS:
+ > 223			unsigned int status;
+   224	
+   225			status = region->region_ops->region_status(region);
+   226	
+ > 227			if (copy_to_user((void __user *)arg, &status, sizeof(status)))
+   228				err = -EFAULT;
+   229			break;
+   230		default:
+   231			err = -ENOTTY;
+   232		}
+   233	
+   234		return err;
+   235	}
+   236	
 
 -- 
 0-DAY CI Kernel Test Service
