@@ -1,140 +1,58 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE41814A4E9;
-	Fri,  1 Nov 2024 07:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A7F155382;
+	Fri,  1 Nov 2024 07:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730444724; cv=none; b=kqMZbt+G6d4TPQeO0YP5vij2IXPwEKwY9WGN91AhP+HvK7MMw7K9jDV1cPlhlG7+lVnSeYYrLLS6XEaRKpuDtFGX1D5UtfOuJbD+iXTcEKysj39j7lPD8Bhgw9rrsHgoq9gSZLaULHrLV9v2peCGtB4ZeZEuN3HdBX64BSqin6Q=
+	t=1730445075; cv=none; b=d0tTFwyfFYUMM62y0Xu/p558uafVOVTayuEhyY1Ra2ZOQSkbUuVl81n5T4tgvAaO9W5KB7Ym2Bf73PQA6BMSXoNnpIPS90WwQak2YX2e35j90wBDvofr8df+IROj882tHse/l9kO52SLP20mnB2WC1UXXRMKgTLzOIwv40qMznc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730444724; c=relaxed/simple;
-	bh=ThxAaKztzBi0/cRlZPNliYJwvg/hi15Q8xMYGl3W3fA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nj070xdla1VMfY2rT6xVD72pPZG+n/9u1cLVoRMiDWfWZSNF5vBi96+bluGDWfSwe9MDyLidf8rWuR7ZwdiFMAwITqFi0KawwSb5ES/4KoxdJfA5L9SqRk8LqA0J1LnVCzI+H92ak+3vZnk0Nvoc1tCAiQTi3BSofv7w8IqbN4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJdWNcHl; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730445075; c=relaxed/simple;
+	bh=LrXM8j4JXygvUS/V8UtdLf/1bnE60Pt/FNCjXxO/sk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i9KmLtteJ39O6iWKgk1rNsqGOqluHVWUBmzoiVUSvibK/WkJxqPQ1JdFtuFBuPw5aPm/dAFEEYKNxf+9zj69p2Kh6PZFPLbrDO3G5Ziwo/AsLVEaCJpWnoOWOXs/bshMDZUxUhoKbrd/ZIL4XUxOFUL5e9NrKxvHf7j+AXS6bJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gledPX3O; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJdWNcHl"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6cbcc2bd800so15181616d6.0;
-        Fri, 01 Nov 2024 00:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730444721; x=1731049521; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CeRtSAMS9mSdK5Z3YnzN1Gk/iNcxNQ7vtANptzs5s5s=;
-        b=nJdWNcHlOpLZi6jaW46oGxkrNbnhDQtGlUY2tZ1jT/IZkqfgkuhPPqp9qj+QyghPL4
-         4K6laEHOyNcUcJwaF4S37jaRRgyD4bdXe2+jwGyVi/aP49vvbirSPPzJNZ3qEyYKs+yw
-         q3bV4VaR6wrmWnID3v9zwEa56jNzJqVIKbcgd7jdai/BhWdMhFqajEY/zs/Imo7cHQGv
-         OfpHBBR1nXfQ757O22xnpbR6yXWGY7sKJRRasbBtec7KJUZl0MOqrdO19BkT2Tm6JqJc
-         ApfvD0SYH0XhrRbORfTnueETtU/Zlwa6YDrRYIrvy5Vs5hCVBSZXncNjY+KhEVlgM0fK
-         VrZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730444721; x=1731049521;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CeRtSAMS9mSdK5Z3YnzN1Gk/iNcxNQ7vtANptzs5s5s=;
-        b=EyQL+9hiAv50ZqpzdwMO3rvYYQR5iHcHsKJCE07uVzlZosyR3x9JxUn7w5C9zL9u2c
-         LBhfFkUdxf158ROfV227k0GBW25ODDRoUAR7vOTIZXpTfD8b82iRWN3xF/Lb92d1ve/7
-         qbr8esjlrAVw76wM9PptDHVbhCuRAzQptkX12omJL7B+hM4S+Fr/3ToKAlfUvS06Pr17
-         87tnebyBHZSxLr+E7fjGkYOgJhQO/HC8PbWfiIVdLVzh3/QkVoowdBPTAKCNHV1cYaG+
-         X6OQMtTeUnsxnRM+65cR4/Ou/p60WRojGn736psL/io58LEk8xjOfPQ65CFlhPcETddF
-         N0dg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQXT54q0XVLA185EM46u26WEjT6qkcD4PiwtwNwQ5mlpFUgV7wZJoZcNu8A3QkxeFGgsZU@lists.linux.dev, AJvYcCXiFK3FW3h6y6m3RdJT4PnYo18Ry6Upyzy3DzP6Aur4sfjXqzeoALYLwEZy2Cso7x8eqrI9Yg==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzn03skenw4U4ntXP4TL+ciee/WSuoEj3fjSzN388xmO7MiKyRQ
-	iaa034wa76Z2hENqX0Om1DJBr28E99MovhYoc4MG/ZinK4zp0kk1
-X-Google-Smtp-Source: AGHT+IFp7PFcA9Yv18ZEzkJXz4nXgYi4dBXhMW8cGjnyABXDu+HDq6u6pDyh6cUOwHEOB5KNw4VoqA==
-X-Received: by 2002:a05:6214:5d0d:b0:6cb:e9da:bd4 with SMTP id 6a1803df08f44-6d35424a1b4mr91380006d6.5.1730444721519;
-        Fri, 01 Nov 2024 00:05:21 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d353f9f1f6sm16124086d6.27.2024.11.01.00.05.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 00:05:21 -0700 (PDT)
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 4AB8A1200043;
-	Fri,  1 Nov 2024 03:05:20 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Fri, 01 Nov 2024 03:05:20 -0400
-X-ME-Sender: <xms:sH0kZ08A3ouC4fowzy8CSGkVPjbjWmcH-KuAODKOAsrCLPXJl3Z70A>
-    <xme:sH0kZ8s3lxTPyi2hDzujZuvrhYp-WVf8-Sf965vl8Mk3R2lql72y6v2VufyoFEwaz
-    oOXSs2tRAG9rZPtcw>
-X-ME-Received: <xmr:sH0kZ6B7BxHG5qIwZWa1yZDfbd6nweSSBw-d-22bBr5sYk5gUgAUybdtWTM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
-    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
-    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
-    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeehkedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhk
-    mhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohhjvggurgeskhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtgho
-    mh
-X-ME-Proxy: <xmx:sH0kZ0fPpPWT-ZMfAxLmoGiEJHvS0eh430pWhKA5tKb98M7sCRzotQ>
-    <xmx:sH0kZ5PPHY1qYd6c1_1iUjnQTJ0cl6EE16KaUf7P8wfTPdmLjVqmlg>
-    <xmx:sH0kZ-kPmjSKwJbiG5nyq4rQA1UfTXHPU9ulFdJ5SBKWQExnooNYpg>
-    <xmx:sH0kZ7utTfsVwCtwWjp_A8pra2-EkoBQjbUGOpgE0RhPKsLrU44XVQ>
-    <xmx:sH0kZ3vHPSUXZMOXlCAjhtq15r6J38ifscptCou0h_BaMU1BRYJYHLol>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 03:05:19 -0400 (EDT)
-Date: Fri, 1 Nov 2024 00:04:09 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: David Gow <davidgow@google.com>
-Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, lkmm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com,
- Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
- linux-riscv@lists.infradead.org
-Subject: Re: [RFC v2 11/13] rust: sync: Add memory barriers
-Message-ID: <ZyR9aTAhtCdpdC-h@boqun-archlinux>
-References: <20241101060237.1185533-1-boqun.feng@gmail.com>
- <20241101060237.1185533-12-boqun.feng@gmail.com>
- <CABVgOSn1eeZo7HggJYNEzzuGGpKABF=NbyMZLQbNjRwCAKXY-w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gledPX3O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730445073; x=1761981073;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LrXM8j4JXygvUS/V8UtdLf/1bnE60Pt/FNCjXxO/sk0=;
+  b=gledPX3Oam+XntSVejcGwwSEbTRziONXq4LOTJn2WImfjI2lWh1gqYl/
+   pjMhIq5XGCCvTANzGeKKztsb7Nt14Zi2oPT+3Wb7iC1vVUq304DhYIYUP
+   visokN7lE8T/f6oTtrhfkanTBRCz1BMFc+0dmBjK+sEuBgaDbHiRjbwRB
+   8jFHYz+MYaq8LP1Owj3XJEXPuXSn/OfL+Lj/Sa42NJOEPUGdGxg6U+OyE
+   ggth/12dHg3c6j1YiH1/qksP7KYCQ1qhRGLE850QMD9foSV7lkItYJy3E
+   lJMLtx0JDxXMoPpaW/VXWQEXIku5LyeWjck46ZZ5jBb89FL1vU+xtRBte
+   A==;
+X-CSE-ConnectionGUID: g+1EeJ5QT7K7z4CLL6dTaQ==
+X-CSE-MsgGUID: 51/IWCqITWGCVqvy1rlAmA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40752776"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="40752776"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 00:11:12 -0700
+X-CSE-ConnectionGUID: 2v7wJwyaRRWdiBXKL3teRg==
+X-CSE-MsgGUID: mPC820krTNCU4TKaF3VrKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,249,1725346800"; 
+   d="scan'208";a="106218062"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 01 Nov 2024 00:11:10 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t6loK-000hFl-2y;
+	Fri, 01 Nov 2024 07:11:08 +0000
+Date: Fri, 1 Nov 2024 15:10:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ast-bpf:drm_mm 3/4] lib/drm_mm.c:614:20: warning: function
+ 'drm_mm_node_scanned_block' is not needed and will not be emitted
+Message-ID: <202411011528.dsCnUbV2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -143,49 +61,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABVgOSn1eeZo7HggJYNEzzuGGpKABF=NbyMZLQbNjRwCAKXY-w@mail.gmail.com>
 
-On Fri, Nov 01, 2024 at 02:55:23PM +0800, David Gow wrote:
-> On Fri, 1 Nov 2024 at 14:07, Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Memory barriers are building blocks for concurrent code, hence provide
-> > a minimal set of them.
-> >
-> > The compiler barrier, barrier(), is implemented in inline asm instead of
-> > using core::sync::atomic::compiler_fence() because memory models are
-> > different: kernel's atomics are implemented in inline asm therefore the
-> > compiler barrier should be implemented in inline asm as well.
-> >
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > ---
-> >  rust/helpers/helpers.c      |  1 +
-> >  rust/kernel/sync.rs         |  1 +
-> >  rust/kernel/sync/barrier.rs | 67 +++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 69 insertions(+)
-> >  create mode 100644 rust/kernel/sync/barrier.rs
-> >
-> > diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-> > index ab5a3f1be241..f4a94833b29d 100644
-> > --- a/rust/helpers/helpers.c
-> > +++ b/rust/helpers/helpers.c
-> > @@ -8,6 +8,7 @@
-> >   */
-> >
-> >  #include "atomic.c"
-> > +#include "barrier.c"
-> 
-> It looks like "barrier.c" is missing, so this isn't compiling for me.
-> I assume it was meant to be added in this patch...?
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ast/bpf.git drm_mm
+head:   c8004f35f9de5c195a8cab95bbdd62b7fbb1563d
+commit: 3e790b7ac9876de0d4461c5219a29c674b5ecb12 [3/4] bpf, drm: move drm_mm to lib to be used by bpf arena
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241101/202411011528.dsCnUbV2-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411011528.dsCnUbV2-lkp@intel.com/reproduce)
 
-Yes, I just send an updated one.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411011528.dsCnUbV2-lkp@intel.com/
 
-Glad being "checking missing files" buddies with you ;-) Thanks!
+All warnings (new ones prefixed by >>):
 
-Regards,
-Boqun
+   lib/drm_mm.c:152:1: warning: unused function 'drm_mm_interval_tree_insert' [-Wunused-function]
+     152 | INTERVAL_TREE_DEFINE(struct drm_mm_node, rb,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     153 |                      u64, __subtree_last,
+         |                      ~~~~~~~~~~~~~~~~~~~~
+     154 |                      START, LAST, static inline, drm_mm_interval_tree)
+         |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/interval_tree_generic.h:38:15: note: expanded from macro 'INTERVAL_TREE_DEFINE'
+      38 | ITSTATIC void ITPREFIX ## _insert(ITSTRUCT *node,                             \
+         |               ^~~~~~~~~~~~~~~~~~~
+   <scratch space>:13:1: note: expanded from here
+      13 | drm_mm_interval_tree_insert
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/drm_mm.c:152:1: warning: unused function 'drm_mm_interval_tree_iter_next' [-Wunused-function]
+     152 | INTERVAL_TREE_DEFINE(struct drm_mm_node, rb,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     153 |                      u64, __subtree_last,
+         |                      ~~~~~~~~~~~~~~~~~~~~
+     154 |                      START, LAST, static inline, drm_mm_interval_tree)
+         |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/interval_tree_generic.h:151:33: note: expanded from macro 'INTERVAL_TREE_DEFINE'
+     151 | ITSTATIC ITSTRUCT *                                                           \
+         |                                                                               ^
+     152 | ITPREFIX ## _iter_next(ITSTRUCT *node, ITTYPE start, ITTYPE last)             \
+         | ~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:25:1: note: expanded from here
+      25 | drm_mm_interval_tree_iter_next
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> lib/drm_mm.c:614:20: warning: function 'drm_mm_node_scanned_block' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+     614 | static inline bool drm_mm_node_scanned_block(const struct drm_mm_node *node)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
 
-> Thanks,
-> -- David
 
+vim +/drm_mm_node_scanned_block +614 lib/drm_mm.c
 
+6b9d89b4365ab5 drivers/gpu/drm/drm_mm.c Chris Wilson 2012-07-10  613  
+71724f70899759 drivers/gpu/drm/drm_mm.c Chris Wilson 2019-10-03 @614  static inline bool drm_mm_node_scanned_block(const struct drm_mm_node *node)
+71724f70899759 drivers/gpu/drm/drm_mm.c Chris Wilson 2019-10-03  615  {
+4ee92c7149da9c drivers/gpu/drm/drm_mm.c Chris Wilson 2019-10-03  616  	return test_bit(DRM_MM_NODE_SCANNED_BIT, &node->flags);
+71724f70899759 drivers/gpu/drm/drm_mm.c Chris Wilson 2019-10-03  617  }
+71724f70899759 drivers/gpu/drm/drm_mm.c Chris Wilson 2019-10-03  618  
+
+:::::: The code at line 614 was first introduced by commit
+:::::: 71724f708997595919cb1e75c5e48916c8846d2e drm/mm: Use helpers for drm_mm_node booleans
+
+:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
+:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
