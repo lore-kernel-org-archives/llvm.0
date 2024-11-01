@@ -1,101 +1,277 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B201EA65
-	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 02:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A4013C67C;
+	Fri,  1 Nov 2024 02:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730426596; cv=none; b=CZTMcXVxuHpO9BVsU4U73Lm4mrmdEmo4HxsqXv+sUrurPs3JABBuV4/A0tybEKBvKLvBCUkjtSm5m2h+VV1TASxM99mMB/hrb4+jIg2566a2BWt3p57NWiEPAy48kHQDL2Kd3eJoFWoGrWokqaPgb8f8IvT8t9ToUzjicWt6ytc=
+	t=1730428939; cv=none; b=ngB39xs7fum0Dm3g8EVKcBdtBSYPwM9aPTjz6i3Xj1Z/hbNFQ3cuk3xiwEBCLRR6B3DFVqzsufikRamG0Rq9EAIcwPQ41oDQ+p8pnv314AEZ28fWIZ0qiuoJlQDjd59RRVmzowTLY3SfJy6IepwJrJq/QHmqSLmEE9JD2PidYkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730426596; c=relaxed/simple;
-	bh=OS4K7MaZLc6w/g8YOiGwnJ5/wZ1pcE5p70jEvC4g8D4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=FP7u/z6GooLBsDZ3P0IUpXw/+1eQsRCSk8a/UBruRITZ1TeF/ducuTgq51mvvox2dZBaJdSvBONrZhW18rHvkbpPcnROLRvNm9HEfk7pGecoqB25fw3WwIC2CFWhaTZzr4sJGDkxMkHBVHmYRJIRWLEqM52d528qNiEpFXVtU4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hhbBxmzy; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1730428939; c=relaxed/simple;
+	bh=NWvtRPPypRkjOn9lgHhIxrLyJ1hgJvd8zENcQLONLyg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l7DIrqjyVXC18j95w3inxWBYjstS+OLFjbp7ELEWJjvTJSK9chwv1u30RnmS2MqPhf5679pku8J/WdbSbcs5XZwdh0rsrG8K3vYB6eR7aUMLKvZDiOL95yQpdQMaKj0IsUDEpQg8h1wC23T9wd8nvdVdHTKR8Y79LT0KXbkloyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+fk6atq; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hhbBxmzy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730426589;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dw+2G5RgwV72l0wto1M/hwCucpbpswqVEiXwKPJrV8A=;
-	b=hhbBxmzyJpeJP0pM20iPQyvpxzhs1sPcVrq9xqMLoPDIMldfCmChEQDwEXjDluGOsF09Ok
-	A6ywmkOfq0vo/Q2cbAEUzGK7RTs7MjRDnXYhvpXDopM1CboS/kY6Vr8XbGRukaMYJIEwWd
-	4g39BERWEqF8lfYW5PZLdMuoQFneTaM=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-675-Dt44yNbSOre-ojVMVNKwzQ-1; Thu,
- 31 Oct 2024 22:03:06 -0400
-X-MC-Unique: Dt44yNbSOre-ojVMVNKwzQ-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 72ED619560AE
-	for <llvm@lists.linux.dev>; Fri,  1 Nov 2024 02:03:05 +0000 (UTC)
-Received: from [172.64.2.84] (unknown [10.30.34.59])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 006361956052;
-	Fri,  1 Nov 2024 02:03:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc5,
- upstream-mainline, 90602c25)
-Date: Fri, 01 Nov 2024 02:03:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+fk6atq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730428933; x=1761964933;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NWvtRPPypRkjOn9lgHhIxrLyJ1hgJvd8zENcQLONLyg=;
+  b=m+fk6atqR4I8TczLGQYaFURbPX8he8FlmhZ/J6+0uf9K6JFD31Ckvk4N
+   npU6Cn0nNEA2NvIc5gIZvEVMB6QeNvaoXFWcbwNSUabCPf0G3V9VFqazO
+   mPoDy+R6vTz/na5t5G/MsVOVZ0cDOVGgtrJjVfS2VpDrdsPcoYqbTouGU
+   DcgmHRjNrVI7eaMJQfOB+ukLGUTKwN0g5WwZ8d7nSM5v7K5QchzAKaB+B
+   NHMB8gcYE9lJC/oqukLOuG1qP6Q2CYvKkTbcoQwRN8lDpaDshOb8czLtn
+   a3D4JYAbwsxIt4CAqxtrKWnDUAgX938rPAUQBwGT9DEzhgrzLVdUem98W
+   Q==;
+X-CSE-ConnectionGUID: ACh1/VPWSDigGaKrbjHjeA==
+X-CSE-MsgGUID: CA7vVS1iTgeO5ROxZcKeQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="33880828"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="33880828"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 19:42:05 -0700
+X-CSE-ConnectionGUID: xNo2GMFtT5CurpjzSQFK2A==
+X-CSE-MsgGUID: sBwAVZx8Ty2VYgOLo7ObBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,248,1725346800"; 
+   d="scan'208";a="113671412"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 31 Oct 2024 19:42:04 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t6hbt-000h3M-2Y;
+	Fri, 01 Nov 2024 02:42:01 +0000
+Date: Fri, 1 Nov 2024 10:41:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [djiang:cxl/extended-linear 5/5] drivers/cxl/core/mce.c:23:20:
+ error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
+Message-ID: <202411011004.o1eX0Z5P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <98271.124103122030600386@us-mta-675.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/extended-linear
+head:   82adadebb1e8f20174c708e13571db27b13c64c7
+commit: 82adadebb1e8f20174c708e13571db27b13c64c7 [5/5] cxl: Add mce notifier to emit aliased address for extended linear cache
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241101/202411011004.o1eX0Z5P-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411011004.o1eX0Z5P-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411011004.o1eX0Z5P-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+         |                                                  ^
+   arch/x86/include/asm/mce.h:241:51: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
+     241 | static inline void mce_intel_feature_clear(struct cpuinfo_x86 *c) { }
+         |                                                   ^
+   arch/x86/include/asm/mce.h:248:26: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
+     248 | int mce_available(struct cpuinfo_x86 *c);
+         |                          ^
+   arch/x86/include/asm/mce.h:355:48: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
+     355 | static inline void mce_amd_feature_init(struct cpuinfo_x86 *c)          { }
+         |                                                ^
+   arch/x86/include/asm/mce.h:358:50: warning: declaration of 'struct cpuinfo_x86' will not be visible outside of this function [-Wvisibility]
+     358 | static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)        { return mce_amd_feature_init(c); }
+         |                                                  ^
+   arch/x86/include/asm/mce.h:358:96: error: incompatible pointer types passing 'struct cpuinfo_x86 *' to parameter of type 'struct cpuinfo_x86 *' [-Werror,-Wincompatible-pointer-types]
+     358 | static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)        { return mce_amd_feature_init(c); }
+         |                                                                                                       ^
+   arch/x86/include/asm/mce.h:355:61: note: passing argument to parameter 'c' here
+     355 | static inline void mce_amd_feature_init(struct cpuinfo_x86 *c)          { }
+         |                                                             ^
+   In file included from drivers/cxl/core/mce.c:6:
+   In file included from drivers/cxl/cxlmem.h:6:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/cxl/core/mce.c:6:
+   In file included from drivers/cxl/cxlmem.h:6:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/cxl/core/mce.c:6:
+   In file included from drivers/cxl/cxlmem.h:6:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from drivers/cxl/core/mce.c:6:
+   In file included from drivers/cxl/cxlmem.h:6:
+   In file included from include/linux/pci.h:1650:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/cxl/core/mce.c:23:20: error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
+      23 |         spa = mce->addr & MCI_ADDR_PHYSADDR;
+         |                           ^~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/mce.h:94:53: note: expanded from macro 'MCI_ADDR_PHYSADDR'
+      94 | #define MCI_ADDR_PHYSADDR       GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
+         |                                             ~~~~~~~~~~~~~ ^
+   include/linux/bits.h:37:23: note: expanded from macro 'GENMASK_ULL'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
+         |                              ^
+   include/linux/bits.h:25:25: note: expanded from macro 'GENMASK_INPUT_CHECK'
+      25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+         |                                       ^
+   include/linux/compiler.h:293:48: note: expanded from macro '__is_constexpr'
+     293 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+         |                                                       ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                              ^
+>> drivers/cxl/core/mce.c:23:20: error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
+      23 |         spa = mce->addr & MCI_ADDR_PHYSADDR;
+         |                           ^~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/mce.h:94:53: note: expanded from macro 'MCI_ADDR_PHYSADDR'
+      94 | #define MCI_ADDR_PHYSADDR       GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
+         |                                             ~~~~~~~~~~~~~ ^
+   include/linux/bits.h:37:23: note: expanded from macro 'GENMASK_ULL'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
+         |                              ^
+   include/linux/bits.h:25:37: note: expanded from macro 'GENMASK_INPUT_CHECK'
+      25 |                 __is_constexpr((l) > (h)), (l) > (h), 0)))
+         |                                                   ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                              ^
+>> drivers/cxl/core/mce.c:23:20: error: no member named 'x86_phys_bits' in 'struct cpuinfo_um'
+      23 |         spa = mce->addr & MCI_ADDR_PHYSADDR;
+         |                           ^~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/mce.h:94:53: note: expanded from macro 'MCI_ADDR_PHYSADDR'
+      94 | #define MCI_ADDR_PHYSADDR       GENMASK_ULL(boot_cpu_data.x86_phys_bits - 1, 0)
+         |                                             ~~~~~~~~~~~~~ ^
+   include/linux/bits.h:37:45: note: expanded from macro 'GENMASK_ULL'
+      37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
+         |                                                    ^
+   include/uapi/linux/bits.h:13:52: note: expanded from macro '__GENMASK_ULL'
+      13 |          (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
+         |                                                    ^
+   20 warnings and 4 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [m]:
+   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
 
 
-Kernel information:
-    Commit message: Merge tag 'net-6.12-rc6' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net
+vim +23 drivers/cxl/core/mce.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1522596696
+     8	
+     9	static int cxl_handle_mce(struct notifier_block *nb, unsigned long val,
+    10				  void *data)
+    11	{
+    12		struct cxl_memdev_state *mds = container_of(nb, struct cxl_memdev_state,
+    13							    mce_notifier);
+    14		struct cxl_memdev *cxlmd = mds->cxlds.cxlmd;
+    15		struct cxl_port *endpoint = cxlmd->endpoint;
+    16		struct mce *mce = (struct mce *)data;
+    17		u64 spa, spa_alias;
+    18		unsigned long pfn;
+    19	
+    20		if (!mce || !mce_usable_address(mce))
+    21			return NOTIFY_DONE;
+    22	
+  > 23		spa = mce->addr & MCI_ADDR_PHYSADDR;
+    24	
+    25		pfn = spa >> PAGE_SHIFT;
+    26		if (!pfn_valid(pfn))
+    27			return NOTIFY_DONE;
+    28	
+    29		spa_alias = cxl_port_get_spa_cache_alias(endpoint, spa);
+    30		if (!spa_alias)
+    31			return NOTIFY_DONE;
+    32	
+    33		pfn = spa_alias >> PAGE_SHIFT;
+    34	
+    35		/*
+    36		 * Take down the aliased memory page. The original memory page flagged
+    37		 * by the MCE will be taken cared of by the standard MCE handler.
+    38		 */
+    39		dev_emerg(mds->cxlds.dev, "Offlining aliased SPA address: %#llx\n",
+    40			  spa_alias);
+    41		if (!memory_failure(pfn, 0))
+    42			set_mce_nospec(pfn);
+    43	
+    44		return NOTIFY_OK;
+    45	}
+    46	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1522596696-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1522596696-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1522596696-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
