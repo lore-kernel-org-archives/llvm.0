@@ -1,181 +1,247 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F2829CA;
-	Fri,  1 Nov 2024 05:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9542146A7A;
+	Fri,  1 Nov 2024 06:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730438294; cv=none; b=HhPpsyhlUOEXyZ+6Q/tyzK0YAXcY07x5GErrgssvbzLz7NSsId10AbJO/tpcQMYyPZXinHNm3DxmhZGqF8qbFNcscwEQmojoH6/5kfPUl3F17j+yiMFf1a2bcZXq5MHTCfHDCPOVUhPBYVgRFK2vwLq6P3JeYMaWawPy5628M1I=
+	t=1730441036; cv=none; b=HGQ14TjPQ1I+EwXuTVoHdE3/W5H6yDjOreNF1G+2XX8mNoAf78xPxcmPhbuIcs2WIydIfWjuBQPCjHgqbXpX9S5C8v++CtgKt7tshmAV1h6VxM4DSQSnk8KOApVKTYtsiT43I2oSq81gWWMe+W57ROvuAqMe4de3IZgFud7svbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730438294; c=relaxed/simple;
-	bh=RQA+ZNexGcrhPRn77SkPHwN8hTOt4LsQt3KUN1PJvpY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o3fDO3pdY867OFNeyb1WpoC5kRi8q9EWD8TWWPsFqfHqoaUpggKmJfe6y8gGJcBpKcfOyNRALTtJGdjTJxD/sB1O0hY+K8khsKSxMe/UBrhQYJak3gk14J49MAykmu7PuRnm3GFdzpaDo/TWVIlJeNYmH/lrNkFNB29WhKwfr0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ky5HnFz1; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730441036; c=relaxed/simple;
+	bh=w4U7eyn5TzHvTCGOpY/GYCJLAOOa7mB/OK5nM83Wc7Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XPC1wOJdTyUCN62YvHc0DnQwVf6HdjyjXtdrUoW4M40F0/7QIbT5FNEsnXCzJsERzHvJJFX01OYieBWWAD8Beg5qrz/Ak/C36CotAKtmocika1oFi31YLRsSFy8rFPKtce3LaZmUDkfit6YLG/ejMV8hRxhhHU/yzeHd/mORR+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mhi67A0f; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ky5HnFz1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730438291; x=1761974291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=RQA+ZNexGcrhPRn77SkPHwN8hTOt4LsQt3KUN1PJvpY=;
-  b=ky5HnFz1zFutCWgkdh6P+IJNY8K6q6iuL97T07dN0rTcj70+ZSIWo3DS
-   0VNJmwoiYWF8VA/vRABMIy9dJy4T7OOxEzWsAarkKSBangWZNvN+qOnDJ
-   uazZlu7kMzhKm0YeIjahdEE4clK6VcintzMv3U8wdhinx/KRp6kxc+dZR
-   JOdeROM5pt51w64RAdjdYSXHtvPp5hIUVEyu1h9WC/R/IBGyMZOMG+ect
-   6u966RB1IHc87T43PVEqiryqEl9Z0pzIql9DRxDrn6J+9snQmjVRaFn4d
-   /1m8xrNedZprAUlECDCMqtPna0m5GvuwGQ3+GQ+OJEj3G+mqdlk87edQE
-   g==;
-X-CSE-ConnectionGUID: oTV4kmxyQPqlI/cR6qGK3g==
-X-CSE-MsgGUID: s6btmnNKT+ahnQOlNtT9JA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47664501"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="47664501"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 22:18:10 -0700
-X-CSE-ConnectionGUID: UAuUVEa1RKar3n/jPYulbw==
-X-CSE-MsgGUID: dgIMuI/gSt2t1N5VLX6eJw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,248,1725346800"; 
-   d="scan'208";a="87403233"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 31 Oct 2024 22:18:08 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6k2w-000hAf-0n;
-	Fri, 01 Nov 2024 05:18:06 +0000
-Date: Fri, 1 Nov 2024 13:17:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 07/10] sysfs: drop callback bin_attribute::llseek
-Message-ID: <202411011352.bJ3MT1ra-lkp@intel.com>
-References: <20241031-sysfs-const-bin_attr-v1-7-2281afa7f055@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mhi67A0f"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7b15eadee87so114904485a.2;
+        Thu, 31 Oct 2024 23:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730441033; x=1731045833; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+2bTlN8noZ5lv/9FDkrA2vDRY8BOyZCwzPzl7RAkqKk=;
+        b=mhi67A0fB9a3G7nMF2JygI7J7282smkaIk/i2h0e207bjfvAmJknqYMErMqsm4tdIj
+         DqOHhZ8o6QM+7vDMqeqmA9JyxwIsW9Xnp14WWFbPQjlfcAD0uVCPrvv+ddAjbdM9bUUX
+         3resXS0otTUszygd6jlMPw6WlfY7SrWRJAIb7HhUMKRE+s26jmWUDSruNc/S65de5WvK
+         QVoBq5pVh+jbgYOc7zMgreTa2qJR+n5wG6ZueB7foS4FcGiUOmqZBMjAtM7VmhI1SbMl
+         hR6BLNBU8k5GUAJGF0eZFcCGLZecMBUGfQHFWe2RKWmHqoYdA1KatAalvEryz62i9xl7
+         fCXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730441033; x=1731045833;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+2bTlN8noZ5lv/9FDkrA2vDRY8BOyZCwzPzl7RAkqKk=;
+        b=HNSLgYFEW+UT3E2EitbHVWPaRehzElXArP4YQ6D2qLVw9lKWLLH3HH3zpkmULfF9Wi
+         A9JVT+IwFReJIrHcmg8BmX/UFqB5p9cDy9f1mSzp6CPtJceyZyzXgrmbtYuKPoCd6f4m
+         JIHb0O12dJtzdow2mycBJYxZTtIspEhPfUo0xOJ1d23CLy4eyQZaKzYPrHWnNj8eOO4C
+         afTfqYOWfTzz+fJ/kZ9KdXtzENDvl3KVxNGdYi5Ced2uwktPVctAKHhJCYaaEPp68LF1
+         EG4ec04xieoI1Y91mRAr2tIE0gLtzIRcEFHiU77SNhJwP7zWArGKwQZKhQ6stYocEf7i
+         Z5+w==
+X-Forwarded-Encrypted: i=1; AJvYcCW9BtIt0eqIY0hglqGX105baykmh00eH2m8580rWVEKR1idhgMXXdCxGNJqr3hWBgBRT/+Z@lists.linux.dev, AJvYcCX0FCh9odxAV/ns2jqa8o544u24dEZc9YEXmAlBpDhH9w1oRbgtjrQC8Kw097iYEIv1yW7e5Q==@lists.linux.dev
+X-Gm-Message-State: AOJu0YygiFOj/uVjbXVN4M9lt/rEv4aZjNER/ZTt+BnYakxpXqqY8yio
+	M7OXxV7Y67hSmLuovXGRWvtZrDQPufCyGDRC0wedofB2RGwbp86r
+X-Google-Smtp-Source: AGHT+IE8dH3BMdlvbypwg4VmYirLppGtFcZ5cwJKd05k9wHF2J90IIvTu1h69hU5sjknpTNd+rMr+A==
+X-Received: by 2002:a05:620a:4608:b0:7b1:4d3b:d618 with SMTP id af79cd13be357-7b2f25529e5mr678702585a.57.1730441033290;
+        Thu, 31 Oct 2024 23:03:53 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b2f3a11765sm141084285a.69.2024.10.31.23.03.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2024 23:03:52 -0700 (PDT)
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A3CA61200043;
+	Fri,  1 Nov 2024 02:03:51 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Fri, 01 Nov 2024 02:03:51 -0400
+X-ME-Sender: <xms:R28kZ4bb_Sk9J7zt3qFeaT1qzW6GSFona-Ra0vzADvi51JvP6gzrQQ>
+    <xme:R28kZzb4zs_rSb-O8-rH8VXmtXSrpKNxo7HIHRx2zWFOWZ3pXa68xln8EoyBgBAMD
+    PArbQDyATWXi5hP_A>
+X-ME-Received: <xmr:R28kZy-LSAufwW1a7ygeoPoU8ypYEhDJatfOJM4Th7Lng_ghYTxruzelpVo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekkedgkeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfh
+    rhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeuieehffeijeelkeevheegleeifeevfeetkeehhfei
+    ieevfeegvdelleekvdejleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhlfihnrd
+    hnvghtpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlh
+    hithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehg
+    mhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepheejpdhmoh
+    guvgepshhmthhpohhuthdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhg
+    vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrtghusehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhr
+    tghpthhtoheplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepoh
+    hjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhes
+    ghhmrghilhdrtghomhdprhgtphhtthhopeifvggushhonhgrfhesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:R28kZyrpJlHIvsTTJ-WuleSP96_mG-FkZdVedW5NiQjlaAFO600eMA>
+    <xmx:R28kZzrHCB4ir-wAjZX332RHKJMwzKCinWtCmTJyWN4LWycSAWm01A>
+    <xmx:R28kZwSMGSNzLcJp6OHMEq-daBCDG1v6e6QenIan8b8GxF-TNgRoLg>
+    <xmx:R28kZzrH-eNwVcajJdcHii_fV9T-A03iQvTXjfsIV6uAIxC4E0YxjQ>
+    <xmx:R28kZ468gHgU7LKmhLnh3uBi9E8DEdQyIqYPQ4y0FNHt4kMBxSX6Xsq9>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Nov 2024 02:03:51 -0400 (EDT)
+From: Boqun Feng <boqun.feng@gmail.com>
+To: rust-for-linux@vger.kernel.org,
+	rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev,
+	lkmm@lists.linux.dev
+Cc: Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,	elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+	linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+	Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
+	linux-riscv@lists.infradead.org
+Subject: [RFC v2 00/13] LKMM *generic* atomics in Rust
+Date: Thu, 31 Oct 2024 23:02:23 -0700
+Message-ID: <20241101060237.1185533-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241031-sysfs-const-bin_attr-v1-7-2281afa7f055@weissschuh.net>
 
-Hi Thomas,
+Hi,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+This is another RFC version of LKMM atomics in Rust, you can find the
+previous versions:
 
-[auto build test ERROR on e42b1a9a2557aa94fee47f078633677198386a52]
+v1: https://lore.kernel.org/rust-for-linux/20240612223025.1158537-1-boqun.feng@gmail.com/
+wip: https://lore.kernel.org/rust-for-linux/20240322233838.868874-1-boqun.feng@gmail.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/sysfs-explicitly-pass-size-to-sysfs_add_bin_file_mode_ns/20241031-104710
-base:   e42b1a9a2557aa94fee47f078633677198386a52
-patch link:    https://lore.kernel.org/r/20241031-sysfs-const-bin_attr-v1-7-2281afa7f055%40weissschuh.net
-patch subject: [PATCH RFC 07/10] sysfs: drop callback bin_attribute::llseek
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241101/202411011352.bJ3MT1ra-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241101/202411011352.bJ3MT1ra-lkp@intel.com/reproduce)
+I add a few more people Cced this time, so if you're curious about why
+we choose to implement LKMM atomics instead of using the Rust ones, you
+can find some explanation:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411011352.bJ3MT1ra-lkp@intel.com/
+* In my Kangrejos talk: https://lwn.net/Articles/993785/
+* In Linus' email: https://lore.kernel.org/rust-for-linux/CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com/
 
-All errors (new ones prefixed by >>):
+This time, I try implementing a generic atomic type `Atomic<T>`, since
+Benno and Gary suggested last time, and also Rust standard library is
+also going to that direction [1].
 
-   In file included from drivers/pci/pci-sysfs.c:18:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/pci/pci-sysfs.c:1202:13: error: no member named 'llseek' in 'struct bin_attribute'
-    1202 |                 res_attr->llseek = pci_llseek_resource;
-         |                 ~~~~~~~~  ^
-   4 warnings and 1 error generated.
+Honestly, a generic atomic type is still not quite necessary for myself,
+but here are a few reasons that it's useful:
 
+*	It's useful for type alias, for example, if you have:
 
-vim +1202 drivers/pci/pci-sysfs.c
+	type c_long = isize;
 
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1165  
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1166  static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1167  {
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1168  	/* allocate attribute structure, piggyback attribute name */
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1169  	int name_len = write_combine ? 13 : 10;
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1170  	struct bin_attribute *res_attr;
-bd5174dfb6f171 Bjorn Helgaas                 2016-03-10  1171  	char *res_attr_name;
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1172  	int retval;
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1173  
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1174  	res_attr = kzalloc(sizeof(*res_attr) + name_len, GFP_ATOMIC);
-bd5174dfb6f171 Bjorn Helgaas                 2016-03-10  1175  	if (!res_attr)
-bd5174dfb6f171 Bjorn Helgaas                 2016-03-10  1176  		return -ENOMEM;
-bd5174dfb6f171 Bjorn Helgaas                 2016-03-10  1177  
-bd5174dfb6f171 Bjorn Helgaas                 2016-03-10  1178  	res_attr_name = (char *)(res_attr + 1);
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1179  
-a07e4156a2ee63 Eric W. Biederman             2010-02-11  1180  	sysfs_bin_attr_init(res_attr);
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1181  	if (write_combine) {
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1182  		sprintf(res_attr_name, "resource%d_wc", num);
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1183  		res_attr->mmap = pci_mmap_resource_wc;
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1184  	} else {
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1185  		sprintf(res_attr_name, "resource%d", num);
-8633328be24267 Alex Williamson               2010-07-19  1186  		if (pci_resource_flags(pdev, num) & IORESOURCE_IO) {
-8633328be24267 Alex Williamson               2010-07-19  1187  			res_attr->read = pci_read_resource_io;
-8633328be24267 Alex Williamson               2010-07-19  1188  			res_attr->write = pci_write_resource_io;
-e854d8b2a82ef7 David Woodhouse               2017-04-12  1189  			if (arch_can_pci_mmap_io())
-e854d8b2a82ef7 David Woodhouse               2017-04-12  1190  				res_attr->mmap = pci_mmap_resource_uc;
-e854d8b2a82ef7 David Woodhouse               2017-04-12  1191  		} else {
-e854d8b2a82ef7 David Woodhouse               2017-04-12  1192  			res_attr->mmap = pci_mmap_resource_uc;
-e854d8b2a82ef7 David Woodhouse               2017-04-12  1193  		}
-8633328be24267 Alex Williamson               2010-07-19  1194  	}
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1195  	if (res_attr->mmap) {
-f06aff924f9758 Krzysztof Wilczyński          2021-07-29  1196  		res_attr->f_mapping = iomem_get_mapping;
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1197  		/*
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1198  		 * generic_file_llseek() consults f_mapping->host to determine
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1199  		 * the file size. As iomem_inode knows nothing about the
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1200  		 * attribute, it's not going to work, so override it as well.
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1201  		 */
-24de09c16f974d Valentine Sinitsyn            2023-09-25 @1202  		res_attr->llseek = pci_llseek_resource;
-24de09c16f974d Valentine Sinitsyn            2023-09-25  1203  	}
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1204  	res_attr->attr.name = res_attr_name;
-e2154044dd4168 Kelsey Skunberg               2019-08-13  1205  	res_attr->attr.mode = 0600;
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1206  	res_attr->size = pci_resource_len(pdev, num);
-dca40b186b757c David Woodhouse               2017-04-12  1207  	res_attr->private = (void *)(unsigned long)num;
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1208  	retval = sysfs_create_bin_file(&pdev->dev.kobj, res_attr);
-aa382ffa705bea Sascha Hauer                  2022-11-08  1209  	if (retval) {
-b562ec8f74e4ed Bjorn Helgaas                 2016-03-10  1210  		kfree(res_attr);
-45aec1ae72fc59 venkatesh.pallipadi@intel.com 2008-03-18  1211  		return retval;
-b19441af185559 Greg Kroah-Hartman            2006-08-28  1212  	}
-b19441af185559 Greg Kroah-Hartman            2006-08-28  1213  
-aa382ffa705bea Sascha Hauer                  2022-11-08  1214  	if (write_combine)
-aa382ffa705bea Sascha Hauer                  2022-11-08  1215  		pdev->res_attr_wc[num] = res_attr;
-aa382ffa705bea Sascha Hauer                  2022-11-08  1216  	else
-aa382ffa705bea Sascha Hauer                  2022-11-08  1217  		pdev->res_attr[num] = res_attr;
-aa382ffa705bea Sascha Hauer                  2022-11-08  1218  
-aa382ffa705bea Sascha Hauer                  2022-11-08  1219  	return 0;
-aa382ffa705bea Sascha Hauer                  2022-11-08  1220  }
-aa382ffa705bea Sascha Hauer                  2022-11-08  1221  
+	Then `Atomic<c_clong>` and `Atomic<isize>` is the same type,
+	this may make FFI code (mapping a C type to a Rust type or vice
+	versa) more readable.
+
+*	In kernel, we sometimes switch atomic to percpu for better
+	scalabity, percpu is naturally a generic type, because it can
+	have data that is larger than machine word size. Making atomic
+	generic ease the potential switching/refactoring.
+
+*	Generic atomics provide all the functionalities that non-generic
+	atomics could have.
+
+That said, currently "generic" is limited to a few types: the type must
+be the same size as atomic_t or atomic64_t, other than basic types, only
+#[repr(<basic types>)] struct can be used in a `Atomic<T>`.
+
+Also this is not a full feature set patchset, things like different
+arithmetic operations and bit operations are still missing, they can be
+either future work or for future versions.
+
+I included an RCU pointer implementation as one example of the usage, so
+a patch from Danilo is added, but I will drop it once his patch merged.
+
+This is based on today's rust-next, and I've run all kunit tests from
+the doc test on x86, arm64 and riscv.
+
+Feedbacks and comments are welcome! Thanks.
+
+Regards,
+Boqun
+
+[1]: https://github.com/rust-lang/rust/issues/130539
+
+Boqun Feng (12):
+  rust: Introduce atomic API helpers
+  rust: sync: Add basic atomic operation mapping framework
+  rust: sync: atomic: Add ordering annotation types
+  rust: sync: atomic: Add generic atomics
+  rust: sync: atomic: Add atomic {cmp,}xchg operations
+  rust: sync: atomic: Add the framework of arithmetic operations
+  rust: sync: atomic: Add Atomic<u{32,64}>
+  rust: sync: atomic: Add Atomic<{usize,isize}>
+  rust: sync: atomic: Add Atomic<*mut T>
+  rust: sync: atomic: Add arithmetic ops for Atomic<*mut T>
+  rust: sync: Add memory barriers
+  rust: sync: rcu: Add RCU protected pointer
+
+Wedson Almeida Filho (1):
+  rust: add rcu abstraction
+
+ MAINTAINERS                               |    4 +-
+ rust/helpers/atomic.c                     | 1038 +++++++++++++++++++++
+ rust/helpers/helpers.c                    |    3 +
+ rust/helpers/rcu.c                        |   13 +
+ rust/kernel/sync.rs                       |    3 +
+ rust/kernel/sync/atomic.rs                |  228 +++++
+ rust/kernel/sync/atomic/generic.rs        |  516 ++++++++++
+ rust/kernel/sync/atomic/ops.rs            |  199 ++++
+ rust/kernel/sync/atomic/ordering.rs       |   94 ++
+ rust/kernel/sync/barrier.rs               |   67 ++
+ rust/kernel/sync/rcu.rs                   |  319 +++++++
+ scripts/atomic/gen-atomics.sh             |    1 +
+ scripts/atomic/gen-rust-atomic-helpers.sh |   65 ++
+ 13 files changed, 2549 insertions(+), 1 deletion(-)
+ create mode 100644 rust/helpers/atomic.c
+ create mode 100644 rust/helpers/rcu.c
+ create mode 100644 rust/kernel/sync/atomic.rs
+ create mode 100644 rust/kernel/sync/atomic/generic.rs
+ create mode 100644 rust/kernel/sync/atomic/ops.rs
+ create mode 100644 rust/kernel/sync/atomic/ordering.rs
+ create mode 100644 rust/kernel/sync/barrier.rs
+ create mode 100644 rust/kernel/sync/rcu.rs
+ create mode 100755 scripts/atomic/gen-rust-atomic-helpers.sh
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
