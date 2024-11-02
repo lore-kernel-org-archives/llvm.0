@@ -1,292 +1,412 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB916380;
-	Sat,  2 Nov 2024 06:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B031494B3
+	for <llvm@lists.linux.dev>; Sat,  2 Nov 2024 07:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730530044; cv=none; b=DVP6rqcJdjdrMED/ZieyGaWYMHZkOMfne9qRUveVyoYuOSnkMblXGmUuPnWbFIuXOjl73twtyINnWO5XThKVqGYiHofyTz0MMxX1XbQGTYWOrj8aSKFbvvlgsG35wa24Fwg76tSI3kATBDhw9WCv1lfIojuOHJvtVDtEpAz/SqI=
+	t=1730532954; cv=none; b=mNm6u/8GjaWlmTS4PbGjr3R7KqeLYZr+ohTUAFpq6mYPLPIs/XxWJ4S7uwT/mGp5s7Fb/dxVgv220sOsSZPKsVIdnkPWgj2cJ63J9oEe4ZZ2rIydlv3EpxhjnwASnVe07Ux0KXbx546Jk6bRn7v8Y95U0QFFx3XohlT4WqPAVrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730530044; c=relaxed/simple;
-	bh=9SAroHH+E6d7lCW/NNocjjqu5JQ0xjmXf2Uwm5zvKrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQK9f7V2MR7BvAmlnTG2lC92X9ia0uHaWh4+krxJLeMtvFNGYsx/pftglX7uYxcTJgN62V5lHWxRN+dX/B/xDR9S5s54lGJtVvbg47vVrYfU8n07mW+h2cKw5rQc5odQcsfoxGBfGC2PWmlwSwVwGRWBbfvK+yPNV6eT3e0TqD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FD9tn56a; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730532954; c=relaxed/simple;
+	bh=4RdRAGfLWVGQTHycL6nhyQVA190AP3zk73Y6qGkM2io=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ncnNXkqA5BXvsj+XcAj8PIeqc8V2hy2xiGcU+6xjTNmHWiD8GZqR91YlKRg68EBG6/B9YQICdjMVZ4MtwjCDk3JRzi3SsG+BcwxKkGMIpDgfNefpz24klQMPcTJcbt59aytkau1P5PuPtKvriKdYHvgaWWWpxykIv8uZ3wGxX8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TUtCMd7Y; arc=none smtp.client-ip=209.85.222.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FD9tn56a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730530043; x=1762066043;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9SAroHH+E6d7lCW/NNocjjqu5JQ0xjmXf2Uwm5zvKrI=;
-  b=FD9tn56anugQPcmzSq+GNZJziOev1bwwTUKRwpFGHFT5pHoJUAJaIbQ/
-   3WL1HST/lNeaJf6ydukHiT2iWSr4iImV2swtYwaeD+oyUHlDfcSR07GjO
-   HVLQyCx3wKIgvZLIQ5jVhO4MockPORNnEb8+Nn+Hm+STfj+iwbmO+6eWH
-   KrGyQ6w3cEvLVZCWn7e7WdE9Fq0LQURF7HlY0RRQtFp9/kVMsJFJaoLlh
-   S90I1HD7JwZB7kaqvYIJH1QzTYn//qCJWxo9YhcrzMrfe0J8choFCUt5i
-   JmkDjKhYyjkzp4ejtKMG0fybLUt81OFy5nz7rGPLG79w7tXy8YGo6/3O9
-   A==;
-X-CSE-ConnectionGUID: 9MRrwmxDSp2V7xHSJ3ffMA==
-X-CSE-MsgGUID: ooHjnq/SS9CjH4zlQbC26A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="30398283"
-X-IronPort-AV: E=Sophos;i="6.11,252,1725346800"; 
-   d="scan'208";a="30398283"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 23:47:22 -0700
-X-CSE-ConnectionGUID: No7rwFkJRAq4/DvM+bLr/g==
-X-CSE-MsgGUID: jSnHAX0RSjukUhSfpdklVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,252,1725346800"; 
-   d="scan'208";a="83513186"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 01 Nov 2024 23:47:19 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t77un-000iWj-0E;
-	Sat, 02 Nov 2024 06:47:17 +0000
-Date: Sat, 2 Nov 2024 14:47:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hao-ran Zheng <zhenghaoran@buaa.edu.cn>, clm@fb.com,
-	josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	baijiaju1990@gmail.com, zhenghaoran@buaa.edu.cn,
-	21371365@buaa.edu.cn
-Subject: Re: [PATCH] btrfs: Fix data race in log_conflicting_inodes
-Message-ID: <202411021448.6pjzV4h1-lkp@intel.com>
-References: <20241101035133.925251-1-zhenghaoran@buaa.edu.cn>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TUtCMd7Y"
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7b15467f383so193813585a.3
+        for <llvm@lists.linux.dev>; Sat, 02 Nov 2024 00:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730532950; x=1731137750; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p2mTcgLvajPt3fumsyFfHrjvhYUrcOP5XC5nTu2RKSQ=;
+        b=TUtCMd7Y+qWTQlPZAhZcEpcMmZItkkfM7hQCjg6dTrbUkhlbulScumtBM7AG2XgrCh
+         +NlxCoUubhSLSrhGPgo42YK09bYefwi/URdRpc8j2Ao2vjI9xcKkFgGcceNH0DWdigKn
+         yRUoxSNw+5lZjs/PFIA0hAEiP9IY5u9klaIcVmA794Vx59HWtnMmEr+z/xM+V2ir/dQc
+         j4UTboDWrQ75YcF5oRoermG89Unf1ccrR9TJxl6iauQRBbZ4FW0Cos62iyXeZQ9IT5y/
+         xQF9KfxEdlYrwAz+MANlZAQweM+iz4srGx1pyjmtjHUDbjUTPRthyWcysOUWorxboyBX
+         2OdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730532950; x=1731137750;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p2mTcgLvajPt3fumsyFfHrjvhYUrcOP5XC5nTu2RKSQ=;
+        b=WOBpjqrmdQ7gXSjae5fb8WAOsJ88qTlB6xzspOCRj3C3X42TSw1rtJB1m68eZCWf5W
+         9o87qVjDkOd+xrY3HhpPH3414alZsngX4CzP6vhbOr1nE/YqmmZvccy2ZY7+s4kMaaH6
+         68GyuCxlJsmPp9qV+Zq5jhgDSlXiIFiLPitmCe33uH1iE5nTEXHG9j9OwgR/gSGoSzVl
+         Oiw3NaXBO4Wz81xrYQpyWHUcd4P/9S9OrUaKjJ5MMLDXzt3Rk8fvRjxouzp/8mBncHel
+         FTYcLS9jPA11t1vwkVljchwmLx/xTo/TcsQsnSHeG7ddTxJ62CKWO/g6xBpUtjz7sPXZ
+         B+nw==
+X-Forwarded-Encrypted: i=1; AJvYcCVtIbTpXiH5OWfbfq0vPzIQeV0zqsvPJNEPii6FbSf1AyfqN/fLiyO2C13H4EsWuYzyxr+8@lists.linux.dev
+X-Gm-Message-State: AOJu0YxFzNEsbcp6Km5sstZEr6Tt5vNtb/kkjaLNEhY41ASRGRqqaKcD
+	jxkFZs8Owx3IviN7/aR5Hf6NfwU2hDyaXEdL2YfAXO3DCeztu4x4OnOoe5Ay6Oqg9GCoGIX+p62
+	mNHQG1/NymMu0GamyyG6ztdmiL0bfjAnlU6+e
+X-Google-Smtp-Source: AGHT+IHUz45ItoR1nmaHd4gznB/gNgPKf4eAB6aqlka0kPvR/qumLPH9XGK3LKrtvFLqiVEn/M7d745AV4yWWS8sDrc=
+X-Received: by 2002:a05:6214:3c9b:b0:6ce:1f00:ffcc with SMTP id
+ 6a1803df08f44-6d351b06955mr141171956d6.42.1730532949743; Sat, 02 Nov 2024
+ 00:35:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241101035133.925251-1-zhenghaoran@buaa.edu.cn>
+References: <20241101060237.1185533-1-boqun.feng@gmail.com>
+In-Reply-To: <20241101060237.1185533-1-boqun.feng@gmail.com>
+From: David Gow <davidgow@google.com>
+Date: Sat, 2 Nov 2024 15:35:36 +0800
+Message-ID: <CABVgOSm1cDcrsgYutooRG-ZLuzMypAO+ndNFyPy2w3_5B84TSQ@mail.gmail.com>
+Subject: Re: [RFC v2 00/13] LKMM *generic* atomics in Rust
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, lkmm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
+	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
+	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
+	Trevor Gross <tmgross@umich.edu>, dakr@redhat.com, 
+	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000c805540625e919f5"
 
-Hi Hao-ran,
+--000000000000c805540625e919f5
+Content-Type: text/plain; charset="UTF-8"
 
-kernel test robot noticed the following build errors:
+On Fri, 1 Nov 2024 at 14:04, Boqun Feng <boqun.feng@gmail.com> wrote:
+>
+> Hi,
+>
+> This is another RFC version of LKMM atomics in Rust, you can find the
+> previous versions:
+>
+> v1: https://lore.kernel.org/rust-for-linux/20240612223025.1158537-1-boqun.feng@gmail.com/
+> wip: https://lore.kernel.org/rust-for-linux/20240322233838.868874-1-boqun.feng@gmail.com/
+>
+> I add a few more people Cced this time, so if you're curious about why
+> we choose to implement LKMM atomics instead of using the Rust ones, you
+> can find some explanation:
+>
+> * In my Kangrejos talk: https://lwn.net/Articles/993785/
+> * In Linus' email: https://lore.kernel.org/rust-for-linux/CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com/
+>
+> This time, I try implementing a generic atomic type `Atomic<T>`, since
+> Benno and Gary suggested last time, and also Rust standard library is
+> also going to that direction [1].
+>
+> Honestly, a generic atomic type is still not quite necessary for myself,
+> but here are a few reasons that it's useful:
+>
+> *       It's useful for type alias, for example, if you have:
+>
+>         type c_long = isize;
+>
+>         Then `Atomic<c_clong>` and `Atomic<isize>` is the same type,
+>         this may make FFI code (mapping a C type to a Rust type or vice
+>         versa) more readable.
+>
+> *       In kernel, we sometimes switch atomic to percpu for better
+>         scalabity, percpu is naturally a generic type, because it can
+>         have data that is larger than machine word size. Making atomic
+>         generic ease the potential switching/refactoring.
+>
+> *       Generic atomics provide all the functionalities that non-generic
+>         atomics could have.
+>
+> That said, currently "generic" is limited to a few types: the type must
+> be the same size as atomic_t or atomic64_t, other than basic types, only
+> #[repr(<basic types>)] struct can be used in a `Atomic<T>`.
+>
+> Also this is not a full feature set patchset, things like different
+> arithmetic operations and bit operations are still missing, they can be
+> either future work or for future versions.
+>
+> I included an RCU pointer implementation as one example of the usage, so
+> a patch from Danilo is added, but I will drop it once his patch merged.
+>
+> This is based on today's rust-next, and I've run all kunit tests from
+> the doc test on x86, arm64 and riscv.
+>
+> Feedbacks and comments are welcome! Thanks.
+>
+> Regards,
+> Boqun
+>
+> [1]: https://github.com/rust-lang/rust/issues/130539
+>
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks, Boqun.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hao-ran-Zheng/btrfs-Fix-data-race-in-log_conflicting_inodes/20241101-115429
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/20241101035133.925251-1-zhenghaoran%40buaa.edu.cn
-patch subject: [PATCH] btrfs: Fix data race in log_conflicting_inodes
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241102/202411021448.6pjzV4h1-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411021448.6pjzV4h1-lkp@intel.com/reproduce)
+I played around a bit with porting the blk-mq atomic code to this. As
+neither an expert in Rust nor an expert in atomics, this is probably
+both non-idiomatic and wrong, but unlike the `core` atomics, it
+provides an Atomic::<u64> on 32-bit systems, which gets UML's 32-bit
+build working again.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411021448.6pjzV4h1-lkp@intel.com/
+Diff below -- I'm not likely to have much time to work on this again
+soon, so feel free to pick it up/fix it if it suits.
 
-All error/warnings (new ones prefixed by >>):
+Thanks,
+-- David
 
-   In file included from fs/btrfs/tree-log.c:8:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/btrfs/tree-log.c:5790:26: error: no member named 'conflict_inodes_lock' in 'struct btrfs_log_ctx'; did you mean 'conflict_inodes'?
-    5790 |         spin_lock_irqsave(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-         |                                 ^~~~~~~~~~~~~~~~~~~~
-         |                                 conflict_inodes
-   include/linux/spinlock.h:381:39: note: expanded from macro 'spin_lock_irqsave'
-     381 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |                                              ^
-   include/linux/spinlock.h:244:34: note: expanded from macro 'raw_spin_lock_irqsave'
-     244 |                 flags = _raw_spin_lock_irqsave(lock);   \
-         |                                                ^
-   fs/btrfs/tree-log.h:44:19: note: 'conflict_inodes' declared here
-      44 |         struct list_head conflict_inodes;
-         |                          ^
-   fs/btrfs/tree-log.c:5792:32: error: no member named 'conflict_inodes_lock' in 'struct btrfs_log_ctx'; did you mean 'conflict_inodes'?
-    5792 |                 spin_unlock_irqrestore(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-         |                                              ^~~~~~~~~~~~~~~~~~~~
-         |                                              conflict_inodes
-   fs/btrfs/tree-log.h:44:19: note: 'conflict_inodes' declared here
-      44 |         struct list_head conflict_inodes;
-         |                          ^
->> fs/btrfs/tree-log.c:5793:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-    5793 |                 return 0;
-         |                 ^
-   fs/btrfs/tree-log.c:5791:2: note: previous statement is here
-    5791 |         if (ctx->logging_conflict_inodes)
-         |         ^
-   fs/btrfs/tree-log.c:5796:31: error: no member named 'conflict_inodes_lock' in 'struct btrfs_log_ctx'; did you mean 'conflict_inodes'?
-    5796 |         spin_unlock_irqrestore(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-         |                                      ^~~~~~~~~~~~~~~~~~~~
-         |                                      conflict_inodes
-   fs/btrfs/tree-log.h:44:19: note: 'conflict_inodes' declared here
-      44 |         struct list_head conflict_inodes;
-         |                          ^
-   fs/btrfs/tree-log.c:5877:26: error: no member named 'conflict_inodes_lock' in 'struct btrfs_log_ctx'; did you mean 'conflict_inodes'?
-    5877 |         spin_lock_irqsave(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-         |                                 ^~~~~~~~~~~~~~~~~~~~
-         |                                 conflict_inodes
-   include/linux/spinlock.h:381:39: note: expanded from macro 'spin_lock_irqsave'
-     381 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |                                              ^
-   include/linux/spinlock.h:244:34: note: expanded from macro 'raw_spin_lock_irqsave'
-     244 |                 flags = _raw_spin_lock_irqsave(lock);   \
-         |                                                ^
-   fs/btrfs/tree-log.h:44:19: note: 'conflict_inodes' declared here
-      44 |         struct list_head conflict_inodes;
-         |                          ^
-   fs/btrfs/tree-log.c:5879:31: error: no member named 'conflict_inodes_lock' in 'struct btrfs_log_ctx'; did you mean 'conflict_inodes'?
-    5879 |         spin_unlock_irqrestore(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-         |                                      ^~~~~~~~~~~~~~~~~~~~
-         |                                      conflict_inodes
-   fs/btrfs/tree-log.h:44:19: note: 'conflict_inodes' declared here
-      44 |         struct list_head conflict_inodes;
-         |                          ^
-   5 warnings and 5 errors generated.
+---
+diff --git a/rust/kernel/block/mq/operations.rs
+b/rust/kernel/block/mq/operations.rs
+index 9ba7fdfeb4b2..822d64230e11 100644
+--- a/rust/kernel/block/mq/operations.rs
++++ b/rust/kernel/block/mq/operations.rs
+@@ -11,7 +11,8 @@
+     error::{from_result, Result},
+     types::ARef,
+ };
+-use core::{marker::PhantomData, sync::atomic::AtomicU64,
+sync::atomic::Ordering};
++use core::marker::PhantomData;
++use kernel::sync::atomic::{Atomic, Relaxed};
 
+ /// Implement this trait to interface blk-mq as block devices.
+ ///
+@@ -77,7 +78,7 @@ impl<T: Operations> OperationsVTable<T> {
+         let request = unsafe { &*(*bd).rq.cast::<Request<T>>() };
 
-vim +5790 fs/btrfs/tree-log.c
+         // One refcount for the ARef, one for being in flight
+-        request.wrapper_ref().refcount().store(2, Ordering::Relaxed);
++        request.wrapper_ref().refcount().store(2, Relaxed);
 
-  5777	
-  5778	static int log_conflicting_inodes(struct btrfs_trans_handle *trans,
-  5779					  struct btrfs_root *root,
-  5780					  struct btrfs_log_ctx *ctx)
-  5781	{
-  5782		int ret = 0;
-  5783		unsigned long logging_conflict_inodes_flags;
-  5784	
-  5785		/*
-  5786		 * Conflicting inodes are logged by the first call to btrfs_log_inode(),
-  5787		 * otherwise we could have unbounded recursion of btrfs_log_inode()
-  5788		 * calls. This check guarantees we can have only 1 level of recursion.
-  5789		 */
-> 5790		spin_lock_irqsave(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-  5791		if (ctx->logging_conflict_inodes)
-  5792			spin_unlock_irqrestore(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-> 5793			return 0;
-  5794	
-  5795		ctx->logging_conflict_inodes = true;
-  5796		spin_unlock_irqrestore(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-  5797	
-  5798		/*
-  5799		 * New conflicting inodes may be found and added to the list while we
-  5800		 * are logging a conflicting inode, so keep iterating while the list is
-  5801		 * not empty.
-  5802		 */
-  5803		while (!list_empty(&ctx->conflict_inodes)) {
-  5804			struct btrfs_ino_list *curr;
-  5805			struct inode *inode;
-  5806			u64 ino;
-  5807			u64 parent;
-  5808	
-  5809			curr = list_first_entry(&ctx->conflict_inodes,
-  5810						struct btrfs_ino_list, list);
-  5811			ino = curr->ino;
-  5812			parent = curr->parent;
-  5813			list_del(&curr->list);
-  5814			kfree(curr);
-  5815	
-  5816			inode = btrfs_iget_logging(ino, root);
-  5817			/*
-  5818			 * If the other inode that had a conflicting dir entry was
-  5819			 * deleted in the current transaction, we need to log its parent
-  5820			 * directory. See the comment at add_conflicting_inode().
-  5821			 */
-  5822			if (IS_ERR(inode)) {
-  5823				ret = PTR_ERR(inode);
-  5824				if (ret != -ENOENT)
-  5825					break;
-  5826	
-  5827				inode = btrfs_iget_logging(parent, root);
-  5828				if (IS_ERR(inode)) {
-  5829					ret = PTR_ERR(inode);
-  5830					break;
-  5831				}
-  5832	
-  5833				/*
-  5834				 * Always log the directory, we cannot make this
-  5835				 * conditional on need_log_inode() because the directory
-  5836				 * might have been logged in LOG_INODE_EXISTS mode or
-  5837				 * the dir index of the conflicting inode is not in a
-  5838				 * dir index key range logged for the directory. So we
-  5839				 * must make sure the deletion is recorded.
-  5840				 */
-  5841				ret = btrfs_log_inode(trans, BTRFS_I(inode),
-  5842						      LOG_INODE_ALL, ctx);
-  5843				btrfs_add_delayed_iput(BTRFS_I(inode));
-  5844				if (ret)
-  5845					break;
-  5846				continue;
-  5847			}
-  5848	
-  5849			/*
-  5850			 * Here we can use need_log_inode() because we only need to log
-  5851			 * the inode in LOG_INODE_EXISTS mode and rename operations
-  5852			 * update the log, so that the log ends up with the new name and
-  5853			 * without the old name.
-  5854			 *
-  5855			 * We did this check at add_conflicting_inode(), but here we do
-  5856			 * it again because if some other task logged the inode after
-  5857			 * that, we can avoid doing it again.
-  5858			 */
-  5859			if (!need_log_inode(trans, BTRFS_I(inode))) {
-  5860				btrfs_add_delayed_iput(BTRFS_I(inode));
-  5861				continue;
-  5862			}
-  5863	
-  5864			/*
-  5865			 * We are safe logging the other inode without acquiring its
-  5866			 * lock as long as we log with the LOG_INODE_EXISTS mode. We
-  5867			 * are safe against concurrent renames of the other inode as
-  5868			 * well because during a rename we pin the log and update the
-  5869			 * log with the new name before we unpin it.
-  5870			 */
-  5871			ret = btrfs_log_inode(trans, BTRFS_I(inode), LOG_INODE_EXISTS, ctx);
-  5872			btrfs_add_delayed_iput(BTRFS_I(inode));
-  5873			if (ret)
-  5874				break;
-  5875		}
-  5876	
-  5877		spin_lock_irqsave(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-  5878		ctx->logging_conflict_inodes = false;
-  5879		spin_unlock_irqrestore(&ctx->conflict_inodes_lock, logging_conflict_inodes_flags);
-  5880		if (ret)
-  5881			free_conflicting_inodes(ctx);
-  5882	
-  5883		return ret;
-  5884	}
-  5885	
+         // SAFETY:
+         //  - We own a refcount that we took above. We pass that to `ARef`.
+@@ -186,7 +187,7 @@ impl<T: Operations> OperationsVTable<T> {
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+             // SAFETY: The refcount field is allocated but not initialized, so
+             // it is valid for writes.
+-            unsafe {
+RequestDataWrapper::refcount_ptr(pdu.as_ptr()).write(AtomicU64::new(0))
+};
++            unsafe {
+RequestDataWrapper::refcount_ptr(pdu.as_ptr()).write(Atomic::<u64>::new(0))
+};
+
+             Ok(0)
+         })
+diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/request.rs
+index 7943f43b9575..8d4060d65159 100644
+--- a/rust/kernel/block/mq/request.rs
++++ b/rust/kernel/block/mq/request.rs
+@@ -13,8 +13,8 @@
+ use core::{
+     marker::PhantomData,
+     ptr::{addr_of_mut, NonNull},
+-    sync::atomic::{AtomicU64, Ordering},
+ };
++use kernel::sync::atomic::{Atomic, Relaxed};
+
+ /// A wrapper around a blk-mq [`struct request`]. This represents an
+IO request.
+ ///
+@@ -102,8 +102,7 @@ fn try_set_end(this: ARef<Self>) -> Result<*mut
+bindings::request, ARef<Self>> {
+         if let Err(_old) = this.wrapper_ref().refcount().compare_exchange(
+             2,
+             0,
+-            Ordering::Relaxed,
+-            Ordering::Relaxed,
++            Relaxed
+         ) {
+             return Err(this);
+         }
+@@ -168,13 +167,13 @@ pub(crate) struct RequestDataWrapper {
+     /// - 0: The request is owned by C block layer.
+     /// - 1: The request is owned by Rust abstractions but there are
+no [`ARef`] references to it.
+     /// - 2+: There are [`ARef`] references to the request.
+-    refcount: AtomicU64,
++    refcount: Atomic::<u64>,
+ }
+
+ impl RequestDataWrapper {
+     /// Return a reference to the refcount of the request that is embedding
+     /// `self`.
+-    pub(crate) fn refcount(&self) -> &AtomicU64 {
++    pub(crate) fn refcount(&self) -> &Atomic::<u64> {
+         &self.refcount
+     }
+
+@@ -184,7 +183,7 @@ pub(crate) fn refcount(&self) -> &AtomicU64 {
+     /// # Safety
+     ///
+     /// - `this` must point to a live allocation of at least the size
+of `Self`.
+-    pub(crate) unsafe fn refcount_ptr(this: *mut Self) -> *mut AtomicU64 {
++    pub(crate) unsafe fn refcount_ptr(this: *mut Self) -> *mut Atomic::<u64> {
+         // SAFETY: Because of the safety requirements of this function, the
+         // field projection is safe.
+         unsafe { addr_of_mut!((*this).refcount) }
+@@ -202,28 +201,22 @@ unsafe impl<T: Operations> Sync for Request<T> {}
+
+ /// Store the result of `op(target.load())` in target, returning new value of
+ /// target.
+-fn atomic_relaxed_op_return(target: &AtomicU64, op: impl Fn(u64) ->
+u64) -> u64 {
+-    let old = target.fetch_update(Ordering::Relaxed,
+Ordering::Relaxed, |x| Some(op(x)));
+-
+-    // SAFETY: Because the operation passed to `fetch_update` above always
+-    // return `Some`, `old` will always be `Ok`.
+-    let old = unsafe { old.unwrap_unchecked() };
+-
+-    op(old)
++fn atomic_relaxed_op_return(target: &Atomic::<u64>, op: impl Fn(u64)
+-> u64) -> u64 {
++    let old = target.load(Relaxed);
++    let new_val = op(old);
++    target.compare_exchange(old, new_val, Relaxed);
++    old
+ }
+
+ /// Store the result of `op(target.load)` in `target` if `target.load() !=
+ /// pred`, returning [`true`] if the target was updated.
+-fn atomic_relaxed_op_unless(target: &AtomicU64, op: impl Fn(u64) ->
+u64, pred: u64) -> bool {
+-    target
+-        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |x| {
+-            if x == pred {
+-                None
+-            } else {
+-                Some(op(x))
+-            }
+-        })
+-        .is_ok()
++fn atomic_relaxed_op_unless(target: &Atomic::<u64>, op: impl Fn(u64)
+-> u64, pred: u64) -> bool {
++    let old = target.load(Relaxed);
++    if old == pred {
++        false
++    } else {
++        target.compare_exchange(old, op(old), Relaxed).is_ok()
++    }
+ }
+
+ // SAFETY: All instances of `Request<T>` are reference counted. This
+
+--000000000000c805540625e919f5
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
+cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
+nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
+hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
+XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
+h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
+ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
+hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
+BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
+0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
+hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgF0vqo1HVFT/bQ7EkNDs2Hus8IOJB
+l7ayh+mRl5TWm7kwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTAyMDczNTUwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAKaR1ftvw40UB8q5VJnefq54/RCk1WTZ6iZ7N63ow3udHZuU
+q8PXVid4CoTVbuyli8a9eYjBoNKkBZATNlXdZXu70UW0pL7ZT/szUD/ifDyYp0pG8L88xOorTU9/
+/2OsBqCz7XqHuDXxNvISdtZGhS54eFTQOqpRDWJHL2SyKZYhKSfxJqK9aXFlM8NCigEEjREczx2w
+cKGZOuV8BMwr+ASTA3re3nICdbGJ/9ZZdgjJx9e5Zuis/XNYgfioHfQmD+O1DuyDd5UAiWWmw+UL
+Rrt/X/IJHkKWtelCwF83G1tCsLQbtsvvrshx3WycCCnILrjI7esiXDmQzsxzmLho1og=
+--000000000000c805540625e919f5--
