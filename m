@@ -1,82 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5B22595;
-	Sat,  2 Nov 2024 00:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AD38493;
+	Sat,  2 Nov 2024 01:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730506335; cv=none; b=EZsmsVZanwfV7cyciLMgKSbl2nmQ+JyDA58cFlrvv+sBae7rgF4o4gOe6a431b06ahoKhTlPkxQdOs4Cv9A54NmngV+NYQIOO6QABr2roXzcLB+hDpiiml1069JaiN7hIuMt/8qeRmZ1YyxrRkpg7AmRr2rq7+d4RkP9CxMHZFc=
+	t=1730511914; cv=none; b=NC/jpaCNCNbARK3ee8luCQLqNUF9HH5YJ4FHq6lOoZClTwsRAHPguBy+6bTvbHtp/h6IU5hKcDD1DO0JIlxv4NV9vKB31pyFLwMqA3EZ4xWvep/5D5j1wWc0Qf8SqGMH85gXxt7wyf5nkxJLlnQbUxsxUOvak/rH5Bkp5Ile/iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730506335; c=relaxed/simple;
-	bh=xv+nykGXHVSjOSmJkCXOvxnP2m+hqI1dTS+fBxn4gvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=paJlOWXHlIwkV+wQGI1xc7SEWRhUrVHCnSeFKQRVOJY9JXVYX8Op4yH9X5iZecRJxCbjNybEr+nnl9hhJdPcQqaFjB3QyG1tZy3eNzvW376I7TCa5+dyLnhcRTIik/v3Ll++GvaMb0mj+cp8ZZaR/NNhTVD8egAApBnaW7EFUCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oCk66Rwj; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1730511914; c=relaxed/simple;
+	bh=nUMllTxK0UgmH0SJUAbRJFz6VOomGNn5DvsK6bxb+6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=g7YOqr/ukCohvd99Q/UaUp1Z+lsGv8Egeur83w9tRKQFhsoJJFHGiQURK0UdaDIcICLu1utPhvkgJCxeaO2hT7I6ca6i/eI1MBU5qbikNu8X1vr6tRVJC/T85hnO1qM+GcnMcN3mnjzlHb3o3OKaqP46JgTGr2CeLCWMWzvGfbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DfFhmGhh; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oCk66Rwj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DfFhmGhh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730506333; x=1762042333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xv+nykGXHVSjOSmJkCXOvxnP2m+hqI1dTS+fBxn4gvc=;
-  b=oCk66RwjBNH4UpDfY9DN3J/PuaOfGhV86qLvPvSzlG17jYq0KQgDbLCy
-   8VUMzSM2gUmjhLSVXy8eQX7wnGKWG4xja2OZa5fiHJnZe78qTn0SK0Ue/
-   Q4Qn+C8IpPMwc8xQ5/CqMBPdz3dkWSRxBa1DGRD9nLNBplsCmXetuPNHx
-   PKjcYBF2g5TOv4yMeOao2iJicpry1C8SM8y4g/Ut8XveXkw/wTE+/ZA9t
-   ZuEOTBmH/u1gKNOQJs5lj50C40+bl8cAk7Co+px415hrBOxkZlEl6RdfU
-   6njEifGWjM7Vep4GSgNiHjFFB2+Hu1Rh8U9XvyxKzoz1GUjrTSGUikcXJ
+  t=1730511912; x=1762047912;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nUMllTxK0UgmH0SJUAbRJFz6VOomGNn5DvsK6bxb+6c=;
+  b=DfFhmGhhkdbxZsHiYTkD9dlNjUh/ZV2E++h6dqXlfTXDzi97GlZEUkC7
+   JJFFXVWIk8QKnW8FjC2DAMS1T41hZF9HyFkf64n4sqcbMjT6T8IYGkUfY
+   cl+cAonE/PcgaWKRcSrQaTeeh4pOmo6Oz7eZ0Wl+0FV25lX0XPTmvns4j
+   qc3Ctk7Gljm2dyJK99N6EPO4nnXHkKkSkIKuT8KDQS3OnZgVtZHVCViSJ
+   EDFNtgKUl4VWTGIHnkMpK10uFNvwAAG0b3gWpmM+RGiQAy22uD9N9wIU2
+   lXzoWHbNelS2PaYKsVzvGpm7kftDUq7Q/56q5QXgGtcGB2rcVzlcryJ7y
    w==;
-X-CSE-ConnectionGUID: cc3irFwNQ6uQXT+nK/g3eA==
-X-CSE-MsgGUID: LGkki9aHR1qnb+qhHZyZwg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="29708497"
+X-CSE-ConnectionGUID: ATYJ6lCMRFSKkWezqJ0X2w==
+X-CSE-MsgGUID: GkJrFw4RR1igOqJKCxdMKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="29702879"
 X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
-   d="scan'208";a="29708497"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 17:12:12 -0700
-X-CSE-ConnectionGUID: SYcSZUb8SY2zz3VY3iFssg==
-X-CSE-MsgGUID: B71jvY/mS+aLgDu8y++ckg==
+   d="scan'208";a="29702879"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 18:45:11 -0700
+X-CSE-ConnectionGUID: GEUrA6tQS5GtHH+hFaIvvQ==
+X-CSE-MsgGUID: M+rrvovpQ+e5SfDKVEEZHg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
-   d="scan'208";a="83559994"
+   d="scan'208";a="82801861"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 01 Nov 2024 17:12:06 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 01 Nov 2024 18:45:10 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t71kJ-000iCJ-1u;
-	Sat, 02 Nov 2024 00:12:03 +0000
-Date: Sat, 2 Nov 2024 08:11:54 +0800
+	id 1t73CN-000iI1-22;
+	Sat, 02 Nov 2024 01:45:07 +0000
+Date: Sat, 2 Nov 2024 09:44:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Arinzon <darinzon@amazon.com>, David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, David Arinzon <darinzon@amazon.com>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	"Woodhouse, David" <dwmw@amazon.com>,
-	"Machulsky, Zorik" <zorik@amazon.com>,
-	"Matushevsky, Alexander" <matua@amazon.com>,
-	Saeed Bshara <saeedb@amazon.com>, "Wilson, Matt" <msw@amazon.com>,
-	"Liguori, Anthony" <aliguori@amazon.com>,
-	"Bshara, Nafea" <nafea@amazon.com>,
-	"Schmeilin, Evgeny" <evgenys@amazon.com>,
-	"Belgazal, Netanel" <netanel@amazon.com>,
-	"Saidi, Ali" <alisaidi@amazon.com>,
-	"Herrenschmidt, Benjamin" <benh@amazon.com>,
-	"Kiyanovski, Arthur" <akiyano@amazon.com>,
-	"Dagan, Noam" <ndagan@amazon.com>,
-	"Bernstein, Amit" <amitbern@amazon.com>,
-	"Agroskin, Shay" <shayagr@amazon.com>,
-	"Abboud, Osama" <osamaabb@amazon.com>,
-	"Ostrovsky, Evgeny" <evostrov@amazon.com>,
-	"Tabachnik, Ofir" <ofirt@amazon.com>,
-	"Machnikowski, Maciek" <maciek@machnikowski.net>
-Subject: Re: [PATCH v2 net-next 1/3] net: ena: Add PHC support in the ENA
- driver
-Message-ID: <202411020715.L7KdiUt4-lkp@intel.com>
-References: <20241031085245.18146-2-darinzon@amazon.com>
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	Gary Guo <gary@garyguo.net>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: clang diag: arch/riscv/include/asm/io.h:104:53: warning: performing
+ pointer arithmetic on a null pointer has undefined behavior
+Message-ID: <202411020900.QxTldlkI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,148 +64,157 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241031085245.18146-2-darinzon@amazon.com>
 
-Hi David,
+Hi Miguel,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Arinzon/net-ena-Add-PHC-support-in-the-ENA-driver/20241031-165503
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241031085245.18146-2-darinzon%40amazon.com
-patch subject: [PATCH v2 net-next 1/3] net: ena: Add PHC support in the ENA driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241102/202411020715.L7KdiUt4-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c426456857fa0957d4ef62cb1410b5e91a08aca4
+commit: 70a57b247251aabadd67795c3097c0fcc616e533 RISC-V: enable building 64-bit kernels with rust support
+date:   6 months ago
+config: riscv-randconfig-002-20241102 (https://download.01.org/0day-ci/archive/20241102/202411020900.QxTldlkI-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020715.L7KdiUt4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020900.QxTldlkI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411020715.L7KdiUt4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411020900.QxTldlkI-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/amazon/ena/ena_com.c:6:
-   In file included from drivers/net/ethernet/amazon/ena/ena_com.h:11:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/amazon/ena/ena_com.c:1703:7: error: expected ')'
-    1703 |                                   ENA_ADMIN_PHC_CONFIG,
-         |                                   ^
-   drivers/net/ethernet/amazon/ena/ena_com.c:1701:27: note: to match this '('
-    1701 |         ret = ena_com_get_feature(ena_dev,
-         |                                  ^
-   4 warnings and 1 error generated.
-
-
-vim +1703 drivers/net/ethernet/amazon/ena/ena_com.c
-
-  1691	
-  1692	int ena_com_phc_config(struct ena_com_dev *ena_dev)
-  1693	{
-  1694		struct ena_com_phc_info *phc = &ena_dev->phc;
-  1695		struct ena_admin_get_feat_resp get_feat_resp;
-  1696		struct ena_admin_set_feat_resp set_feat_resp;
-  1697		struct ena_admin_set_feat_cmd set_feat_cmd;
-  1698		int ret = 0;
-  1699	
-  1700		/* Get device PHC default configuration */
-  1701		ret = ena_com_get_feature(ena_dev,
-  1702					  &get_feat_resp
-> 1703					  ENA_ADMIN_PHC_CONFIG,
-  1704					  0);
-  1705		if (unlikely(ret)) {
-  1706			netdev_err(ena_dev->net_device,
-  1707				   "Failed to get PHC feature configuration, error: %d\n",
-  1708				   ret);
-  1709			return ret;
-  1710		}
-  1711	
-  1712		/* Supporting only readless PHC retrieval */
-  1713		if (get_feat_resp.u.phc.type != ENA_ADMIN_PHC_TYPE_READLESS) {
-  1714			netdev_err(ena_dev->net_device, "Unsupported PHC type, error: %d\n",
-  1715				   -EOPNOTSUPP);
-  1716			return -EOPNOTSUPP;
-  1717		}
-  1718	
-  1719		/* Update PHC doorbell offset according to device value,
-  1720		 * used to write req_id to PHC bar
-  1721		 */
-  1722		phc->doorbell_offset = get_feat_resp.u.phc.doorbell_offset;
-  1723	
-  1724		/* Update PHC expire timeout according to device
-  1725		 * or default driver value
-  1726		 */
-  1727		phc->expire_timeout_usec = (get_feat_resp.u.phc.expire_timeout_usec) ?
-  1728					    get_feat_resp.u.phc.expire_timeout_usec :
-  1729					    ENA_PHC_DEFAULT_EXPIRE_TIMEOUT_USEC;
-  1730	
-  1731		/* Update PHC block timeout according to device
-  1732		 * or default driver value
-  1733		 */
-  1734		phc->block_timeout_usec = (get_feat_resp.u.phc.block_timeout_usec) ?
-  1735					   get_feat_resp.u.phc.block_timeout_usec :
-  1736					   ENA_PHC_DEFAULT_BLOCK_TIMEOUT_USEC;
-  1737	
-  1738		/* Sanity check - expire timeout must not be above skip timeout */
-  1739		if (phc->expire_timeout_usec > phc->block_timeout_usec)
-  1740			phc->expire_timeout_usec = phc->block_timeout_usec;
-  1741	
-  1742		/* Prepare PHC config feature command */
-  1743		memset(&set_feat_cmd, 0x0, sizeof(set_feat_cmd));
-  1744		set_feat_cmd.aq_common_descriptor.opcode = ENA_ADMIN_SET_FEATURE;
-  1745		set_feat_cmd.feat_common.feature_id = ENA_ADMIN_PHC_CONFIG;
-  1746		set_feat_cmd.u.phc.output_length = sizeof(*phc->virt_addr);
-  1747		ret = ena_com_mem_addr_set(ena_dev,
-  1748					   &set_feat_cmd.u.phc.output_address,
-  1749					   phc->phys_addr);
-  1750		if (unlikely(ret)) {
-  1751			netdev_err(ena_dev->net_device, "Failed setting PHC output address, error: %d\n",
-  1752				   ret);
-  1753			return ret;
-  1754		}
-  1755	
-  1756		/* Send PHC feature command to the device */
-  1757		ret = ena_com_execute_admin_command(&ena_dev->admin_queue,
-  1758						    (struct ena_admin_aq_entry *)&set_feat_cmd,
-  1759						    sizeof(set_feat_cmd),
-  1760						    (struct ena_admin_acq_entry *)&set_feat_resp,
-  1761						    sizeof(set_feat_resp));
-  1762	
-  1763		if (unlikely(ret)) {
-  1764			netdev_err(ena_dev->net_device,
-  1765				   "Failed to enable PHC, error: %d\n",
-  1766				   ret);
-  1767			return ret;
-  1768		}
-  1769	
-  1770		phc->active = true;
-  1771		netdev_dbg(ena_dev->net_device, "PHC is active in the device\n");
-  1772	
-  1773		return ret;
-  1774	}
-  1775	
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   759 |         insl(addr, buffer, count);
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+   |                                          ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   768 |         outsb(addr, buffer, count);
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+   |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   777 |         outsw(addr, buffer, count);
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+   |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   786 |         outsl(addr, buffer, count);
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+   |                                            ~~~~~~~~~~ ^
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1115:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   1115 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+   |                                                   ~~~~~~~~~~ ^
+   14 warnings generated.
+   clang diag: include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>> clang diag: arch/riscv/include/asm/io.h:104:53: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:105:53: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:106:53: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:118:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:119:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:120:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:1115:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>> clang diag: arch/riscv/include/asm/io.h:104:53: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:105:53: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:106:53: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:118:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:119:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: arch/riscv/include/asm/io.h:120:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   clang diag: include/asm-generic/io.h:1115:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   error[E0428]: the name `ARCH_SLAB_MINALIGN` is defined multiple times
+   --> rust/bindings/bindings_generated.rs:65466:1
+   |
+   2768  | pub const ARCH_SLAB_MINALIGN: u32 = 16;
+   | --------------------------------------- previous definition of the value `ARCH_SLAB_MINALIGN` here
+   ...
+   65466 | pub const ARCH_SLAB_MINALIGN: usize = 16;
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `ARCH_SLAB_MINALIGN` redefined here
+   |
+   = note: `ARCH_SLAB_MINALIGN` must be defined only once in the value namespace of this module
 
 -- 
 0-DAY CI Kernel Test Service
