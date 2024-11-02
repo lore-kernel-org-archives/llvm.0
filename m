@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D221607AA;
-	Sat,  2 Nov 2024 13:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52C24F9FE;
+	Sat,  2 Nov 2024 14:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730555623; cv=none; b=uRHVrJbAfWnUvKnCyHLPwpYkIQgi1bFFPouK5uzr3E3D84tfP7eY+5lfFQRVyvHGjQ7uNh3sc1u2DG0EyLiapnTZAAgTMQMxF8IKC01DZXrwSiDfXaQknqfzwhcmG+i0D0I4T25xPlpqRYW9FhSXEGPec+75X39EyrGJntOf1Tw=
+	t=1730556943; cv=none; b=ViNdURe7w17mFyg+fCtfCthoCnrOS5CFODn64ZlR/htzRQYNb/7amTE+nFzcSzqu54VSBDhPVovC3U2rYFRxnU/F6wpYUVZyNnCmPcTCA5TXB50H4G9M5XirCdc/fQ6GfeVo/UkzjRh2R94Rxfu38DvJKzfRIS9L0VFEiJWsjb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730555623; c=relaxed/simple;
-	bh=PCJU3Hhf4qqMWg1P5DqMlKhJk1+68gubtERPbc0fCUI=;
+	s=arc-20240116; t=1730556943; c=relaxed/simple;
+	bh=+vcw9TPFnVyVrMHj636ZLQi3c0KIDHN/MFC+/Xxx7ZA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OleybDGX4nc8pmbPMHBf0lrs8VokpGUhGMHbttehfoOXMj+4ue11J8OzFn+6Ckl8BsvJFonvMHJSpUZtBLc1TUWSAzAw04Y5m8oueikcnXZXDFc/tH1vXthiNHHu04Lr6PHs3cYNWBZ8KZLY9Fzr/NdqyT+SxmNAFxASxY4mMMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AyVj1yQI; arc=none smtp.client-ip=198.175.65.11
+	 Content-Disposition; b=EsW/vq4ej2+Ie6LTxunwfkxAtqBzUA7UKdpz+FZQTY5Yg/FNs2beDLADXaEOWgHKTMl331Jub/ifGxuw+ID9AxB0MoDxnzXcED1/EFXh/4UTVMSY11FtYsRfSLYDslwpfhwSxO4Cz6+tVEV3ezqYsRmGN3EncmFBMFp3ui1NAzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aYrda0Wx; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AyVj1yQI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aYrda0Wx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730555621; x=1762091621;
+  t=1730556941; x=1762092941;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PCJU3Hhf4qqMWg1P5DqMlKhJk1+68gubtERPbc0fCUI=;
-  b=AyVj1yQIGHSCUVfxqqMl8Fx9RKHtQNJfOIpNQQNICMPhzDnd37M330+l
-   nRJTjYvLkJgdeI2nEuSDXbjNaeSba7gw9m+nXP8WPRLX6h/JDaf2IY/9i
-   SkuULEqM87n5lG7DrKqc6HdRfzz8ooSsG3na8OEg+msBhqEmLzXLr4Krp
-   8IAokXGIqEZuWctj3wYMAq1mzNdk4Ifpg9ACgVvss41dAK6xEDKe50zTC
-   TfL4yMFg6XfchBSCXGRPQhPSuKElp/8u5IBQ+ltGeK7OB5yoSs+s4cxM2
-   yt8XqV0clBTK5kMOTLNYZP+xAVEar3y/z5Xawi+tQ3LqpDzsQez7vZfAW
-   A==;
-X-CSE-ConnectionGUID: kfkG9xXBQe69DPgX0BJ69g==
-X-CSE-MsgGUID: cUbPpSxXSZC4Qg0wkX8rQw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40847579"
+  bh=+vcw9TPFnVyVrMHj636ZLQi3c0KIDHN/MFC+/Xxx7ZA=;
+  b=aYrda0WxXHKjuUwP68XJq0lMqisltmkT3L9rCgAL46mtBsdvSOBM4h/1
+   Sjba+m1RVfAnegmVJKTFgffEJYSvJTRUFyIIUmXDMdnhxCNWonhjV6pYO
+   JJBhbKqeo8YvAl17CDRlI7XFgq+d9kQSDFoCPrhwN2SYHRX4ywVQuMtYU
+   KucViD23AwSa26x0LN9OsmNCCt1CznJGM/HfAZ+SUYsz7Vv+LNfTR9Av1
+   wUgQOPbyIOJWgxp6XSbqxHWHcFoQgyMgrUU95YqhpwjH3GuCeZZvf9dZC
+   ZthAM/Vk59kis+yzo1Baw/NvM3kNy8GMRmVJErpfrqRG2v+mZ3xFCGN4o
+   Q==;
+X-CSE-ConnectionGUID: BwQVbPD5QQq/VtHP9uGyCg==
+X-CSE-MsgGUID: TPm0ndQNQfmCtYgLABaoLg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30485190"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40847579"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 06:53:41 -0700
-X-CSE-ConnectionGUID: 8qFh7d9LR7aM3LMXH5FGCg==
-X-CSE-MsgGUID: DVgtg/h4QHC3stvtnbOJvQ==
+   d="scan'208";a="30485190"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 07:15:40 -0700
+X-CSE-ConnectionGUID: nKvfGQyATwupdpdSDhO6VA==
+X-CSE-MsgGUID: BCd93tVqSJuZhVYov2OC2g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="87981139"
+X-IronPort-AV: E=Sophos;i="6.11,253,1725346800"; 
+   d="scan'208";a="114037551"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 02 Nov 2024 06:53:39 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 02 Nov 2024 07:15:39 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t7EZM-000j2V-2r;
-	Sat, 02 Nov 2024 13:53:36 +0000
-Date: Sat, 2 Nov 2024 21:53:29 +0800
+	id 1t7Euf-000j3J-1n;
+	Sat, 02 Nov 2024 14:15:37 +0000
+Date: Sat, 2 Nov 2024 22:14:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [tip:timers/vdso 33/41] arch/x86/include/asm/vdso/vsyscall.h:16:10:
- fatal error: 'asm/vvar.h' file not found
-Message-ID: <202411022159.vUVrHGcm-lkp@intel.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:for-arm-ci 1/19] drivers/of/property.c:53:27: error:
+ extraneous ')' after condition, expected a statement
+Message-ID: <202411022220.DrBPdaj5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,60 +62,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
-head:   3bf96deae5ad9664bdf2db95599e52221f9ddc33
-commit: 915c1d9df1f757b0979283b6e50da9b3ccc4d826 [33/41] x86/vdso: Split virtual clock pages into dedicated mapping
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241102/202411022159.vUVrHGcm-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411022159.vUVrHGcm-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-arm-ci
+head:   507503e336db5bc3e47ee6a4d79e9d883f3fc824
+commit: 09adca1c46b0c6e6ee7b3a5041326060bb29af09 [1/19] properties: Split property reading bool and present test
+config: arm-multi_v4t_defconfig (https://download.01.org/0day-ci/archive/20241102/202411022220.DrBPdaj5-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411022220.DrBPdaj5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411022159.vUVrHGcm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411022220.DrBPdaj5-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/entry/vdso/vma.c:7:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/x86/entry/vdso/vma.c:27:
->> arch/x86/include/asm/vdso/vsyscall.h:16:10: fatal error: 'asm/vvar.h' file not found
-      16 | #include <asm/vvar.h>
-         |          ^~~~~~~~~~~~
-   4 warnings and 1 error generated.
+>> drivers/of/property.c:53:27: error: extraneous ')' after condition, expected a statement
+      53 |         if (prop && prop->length))
+         |                                  ^
+   1 error generated.
 
 
-vim +16 arch/x86/include/asm/vdso/vsyscall.h
+vim +53 drivers/of/property.c
 
-7ac8707479886c Vincenzo Frascino 2019-06-21  13  
-7ac8707479886c Vincenzo Frascino 2019-06-21  14  #include <vdso/datapage.h>
-7ac8707479886c Vincenzo Frascino 2019-06-21  15  #include <asm/vgtod.h>
-7ac8707479886c Vincenzo Frascino 2019-06-21 @16  #include <asm/vvar.h>
-7ac8707479886c Vincenzo Frascino 2019-06-21  17  
-
-:::::: The code at line 16 was first introduced by commit
-:::::: 7ac8707479886c75f353bfb6a8273f423cfccb23 x86/vdso: Switch to generic vDSO implementation
-
-:::::: TO: Vincenzo Frascino <vincenzo.frascino@arm.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+    33	
+    34	/**
+    35	 * of_property_read_bool - Find a property
+    36	 * @np:		device node from which the property value is to be read.
+    37	 * @propname:	name of the property to be searched.
+    38	 *
+    39	 * Search for a boolean property in a device node. Usage on non-boolean
+    40	 * property types is deprecated.
+    41	 *
+    42	 * Return: true if the property exists false otherwise.
+    43	 */
+    44	bool of_property_read_bool(const struct device_node *np, const char *propname)
+    45	{
+    46		struct property *prop = of_find_property(np, propname, NULL);
+    47	
+    48		/*
+    49		 * Boolean properties should not have a value. Testing for property
+    50		 * presence should either use of_property_present() or just read the
+    51		 * property value and check the returned error code.
+    52		 */
+  > 53		if (prop && prop->length))
+    54			pr_warn("%pOF: Read of boolean property '%s' with a value.\n", np, propname);
+    55	
+    56		return prop ? true : false;
+    57	}
+    58	EXPORT_SYMBOL(of_property_read_bool);
+    59	
 
 -- 
 0-DAY CI Kernel Test Service
