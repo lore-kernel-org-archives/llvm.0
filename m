@@ -1,412 +1,353 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B031494B3
-	for <llvm@lists.linux.dev>; Sat,  2 Nov 2024 07:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B772B9A4;
+	Sat,  2 Nov 2024 08:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730532954; cv=none; b=mNm6u/8GjaWlmTS4PbGjr3R7KqeLYZr+ohTUAFpq6mYPLPIs/XxWJ4S7uwT/mGp5s7Fb/dxVgv220sOsSZPKsVIdnkPWgj2cJ63J9oEe4ZZ2rIydlv3EpxhjnwASnVe07Ux0KXbx546Jk6bRn7v8Y95U0QFFx3XohlT4WqPAVrI=
+	t=1730534426; cv=none; b=iNsl31kuDcDY1amcMWzL+xmdgWrumv0yKGt4ga4ouidPb8kebEqHPnuL1UiuA9gcl8G8hZNff4p16faOshid7mkjZ5iDi3z57oalCjsRKSTkkGqc6/3PJ3djRqSN0xQiLp/LnpMiqzgs3ohD7mloozR03iLQkq9mDEx9HB7gk7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730532954; c=relaxed/simple;
-	bh=4RdRAGfLWVGQTHycL6nhyQVA190AP3zk73Y6qGkM2io=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ncnNXkqA5BXvsj+XcAj8PIeqc8V2hy2xiGcU+6xjTNmHWiD8GZqR91YlKRg68EBG6/B9YQICdjMVZ4MtwjCDk3JRzi3SsG+BcwxKkGMIpDgfNefpz24klQMPcTJcbt59aytkau1P5PuPtKvriKdYHvgaWWWpxykIv8uZ3wGxX8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TUtCMd7Y; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1730534426; c=relaxed/simple;
+	bh=SgpwgeefS5In1ATkBa1Lh4KO5m5ReCoBK8h9KQUVCFQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ofeof8sgjXFeMAetdnqrHOa7QXELrQ8qw8AvoLg4Z+omlcWanM52iBxNdnd1MRF5wF+QD3LsarvOP7ch0ivp98JAiRGzOf4o5hzOJZhkCTCxHU7LeDs5LSdTtuMjGOWBWgqk0ykV7A2PiuCvRpnd3RQTVaa/wuZ6nx8QqAKEJIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OQ2AtLNZ; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TUtCMd7Y"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7b15467f383so193813585a.3
-        for <llvm@lists.linux.dev>; Sat, 02 Nov 2024 00:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730532950; x=1731137750; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p2mTcgLvajPt3fumsyFfHrjvhYUrcOP5XC5nTu2RKSQ=;
-        b=TUtCMd7Y+qWTQlPZAhZcEpcMmZItkkfM7hQCjg6dTrbUkhlbulScumtBM7AG2XgrCh
-         +NlxCoUubhSLSrhGPgo42YK09bYefwi/URdRpc8j2Ao2vjI9xcKkFgGcceNH0DWdigKn
-         yRUoxSNw+5lZjs/PFIA0hAEiP9IY5u9klaIcVmA794Vx59HWtnMmEr+z/xM+V2ir/dQc
-         j4UTboDWrQ75YcF5oRoermG89Unf1ccrR9TJxl6iauQRBbZ4FW0Cos62iyXeZQ9IT5y/
-         xQF9KfxEdlYrwAz+MANlZAQweM+iz4srGx1pyjmtjHUDbjUTPRthyWcysOUWorxboyBX
-         2OdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730532950; x=1731137750;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p2mTcgLvajPt3fumsyFfHrjvhYUrcOP5XC5nTu2RKSQ=;
-        b=WOBpjqrmdQ7gXSjae5fb8WAOsJ88qTlB6xzspOCRj3C3X42TSw1rtJB1m68eZCWf5W
-         9o87qVjDkOd+xrY3HhpPH3414alZsngX4CzP6vhbOr1nE/YqmmZvccy2ZY7+s4kMaaH6
-         68GyuCxlJsmPp9qV+Zq5jhgDSlXiIFiLPitmCe33uH1iE5nTEXHG9j9OwgR/gSGoSzVl
-         Oiw3NaXBO4Wz81xrYQpyWHUcd4P/9S9OrUaKjJ5MMLDXzt3Rk8fvRjxouzp/8mBncHel
-         FTYcLS9jPA11t1vwkVljchwmLx/xTo/TcsQsnSHeG7ddTxJ62CKWO/g6xBpUtjz7sPXZ
-         B+nw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtIbTpXiH5OWfbfq0vPzIQeV0zqsvPJNEPii6FbSf1AyfqN/fLiyO2C13H4EsWuYzyxr+8@lists.linux.dev
-X-Gm-Message-State: AOJu0YxFzNEsbcp6Km5sstZEr6Tt5vNtb/kkjaLNEhY41ASRGRqqaKcD
-	jxkFZs8Owx3IviN7/aR5Hf6NfwU2hDyaXEdL2YfAXO3DCeztu4x4OnOoe5Ay6Oqg9GCoGIX+p62
-	mNHQG1/NymMu0GamyyG6ztdmiL0bfjAnlU6+e
-X-Google-Smtp-Source: AGHT+IHUz45ItoR1nmaHd4gznB/gNgPKf4eAB6aqlka0kPvR/qumLPH9XGK3LKrtvFLqiVEn/M7d745AV4yWWS8sDrc=
-X-Received: by 2002:a05:6214:3c9b:b0:6ce:1f00:ffcc with SMTP id
- 6a1803df08f44-6d351b06955mr141171956d6.42.1730532949743; Sat, 02 Nov 2024
- 00:35:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OQ2AtLNZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730534425; x=1762070425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SgpwgeefS5In1ATkBa1Lh4KO5m5ReCoBK8h9KQUVCFQ=;
+  b=OQ2AtLNZBD4RmVTJDDcKVpavOk/Zji2hRdmXEm/KHQgZhTPXeoIlfup/
+   e1JXXX5mfMI+3yCfdCuRts2+R5PV2+x/JhH0Poif8UXsC+UK2hnRYFD8l
+   qg1pO7Ood+2fmdW5jVHFn5fNYS1pCWmP7s/XPl7au0Wh3/BxXMIU5V/xr
+   etj2vnuBmXKUHsw5uO6H8v3nTBQsjrUqWK7wwK79E/GOJnk+C2GeQ7DsA
+   QNXGhcsb6WgH7Ui8zxP6I6M/JVH1dg+wcvy9sn+aLFENaZYYSNvdl2enk
+   1SEWEM998NVgGBCeEEXDxmOLbfyBDW2aEddQPVO54GxM4Z/2Kqr/S8buO
+   Q==;
+X-CSE-ConnectionGUID: zQTg2wkURTC400PxIwFcmA==
+X-CSE-MsgGUID: s/AHXqyKRESn27KJMOkQIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30477394"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30477394"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 01:00:24 -0700
+X-CSE-ConnectionGUID: E+uAfSHgQN6E7olP8dHAkA==
+X-CSE-MsgGUID: yT24UExQRMCEoxewjsKo4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,252,1725346800"; 
+   d="scan'208";a="106515178"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 02 Nov 2024 01:00:22 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t793U-000iaP-1I;
+	Sat, 02 Nov 2024 08:00:20 +0000
+Date: Sat, 2 Nov 2024 16:00:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gur Stavi <gur.stavi@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC net-next v01 1/1] net: hinic3: Add a driver for Huawei 3rd
+ gen NIC
+Message-ID: <202411021531.9fJh9AcY-lkp@intel.com>
+References: <ebb0fefe47c29ffed5af21d6bd39d19c2bcddd9c.1730290527.git.gur.stavi@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241101060237.1185533-1-boqun.feng@gmail.com>
-In-Reply-To: <20241101060237.1185533-1-boqun.feng@gmail.com>
-From: David Gow <davidgow@google.com>
-Date: Sat, 2 Nov 2024 15:35:36 +0800
-Message-ID: <CABVgOSm1cDcrsgYutooRG-ZLuzMypAO+ndNFyPy2w3_5B84TSQ@mail.gmail.com>
-Subject: Re: [RFC v2 00/13] LKMM *generic* atomics in Rust
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev, lkmm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
-	Trevor Gross <tmgross@umich.edu>, dakr@redhat.com, 
-	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c805540625e919f5"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ebb0fefe47c29ffed5af21d6bd39d19c2bcddd9c.1730290527.git.gur.stavi@huawei.com>
 
---000000000000c805540625e919f5
-Content-Type: text/plain; charset="UTF-8"
+Hi Gur,
 
-On Fri, 1 Nov 2024 at 14:04, Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> Hi,
->
-> This is another RFC version of LKMM atomics in Rust, you can find the
-> previous versions:
->
-> v1: https://lore.kernel.org/rust-for-linux/20240612223025.1158537-1-boqun.feng@gmail.com/
-> wip: https://lore.kernel.org/rust-for-linux/20240322233838.868874-1-boqun.feng@gmail.com/
->
-> I add a few more people Cced this time, so if you're curious about why
-> we choose to implement LKMM atomics instead of using the Rust ones, you
-> can find some explanation:
->
-> * In my Kangrejos talk: https://lwn.net/Articles/993785/
-> * In Linus' email: https://lore.kernel.org/rust-for-linux/CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com/
->
-> This time, I try implementing a generic atomic type `Atomic<T>`, since
-> Benno and Gary suggested last time, and also Rust standard library is
-> also going to that direction [1].
->
-> Honestly, a generic atomic type is still not quite necessary for myself,
-> but here are a few reasons that it's useful:
->
-> *       It's useful for type alias, for example, if you have:
->
->         type c_long = isize;
->
->         Then `Atomic<c_clong>` and `Atomic<isize>` is the same type,
->         this may make FFI code (mapping a C type to a Rust type or vice
->         versa) more readable.
->
-> *       In kernel, we sometimes switch atomic to percpu for better
->         scalabity, percpu is naturally a generic type, because it can
->         have data that is larger than machine word size. Making atomic
->         generic ease the potential switching/refactoring.
->
-> *       Generic atomics provide all the functionalities that non-generic
->         atomics could have.
->
-> That said, currently "generic" is limited to a few types: the type must
-> be the same size as atomic_t or atomic64_t, other than basic types, only
-> #[repr(<basic types>)] struct can be used in a `Atomic<T>`.
->
-> Also this is not a full feature set patchset, things like different
-> arithmetic operations and bit operations are still missing, they can be
-> either future work or for future versions.
->
-> I included an RCU pointer implementation as one example of the usage, so
-> a patch from Danilo is added, but I will drop it once his patch merged.
->
-> This is based on today's rust-next, and I've run all kunit tests from
-> the doc test on x86, arm64 and riscv.
->
-> Feedbacks and comments are welcome! Thanks.
->
-> Regards,
-> Boqun
->
-> [1]: https://github.com/rust-lang/rust/issues/130539
->
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Thanks, Boqun.
+[auto build test WARNING on b8ee7a11c75436b85fa1641aa5f970de0f8a575c]
 
-I played around a bit with porting the blk-mq atomic code to this. As
-neither an expert in Rust nor an expert in atomics, this is probably
-both non-idiomatic and wrong, but unlike the `core` atomics, it
-provides an Atomic::<u64> on 32-bit systems, which gets UML's 32-bit
-build working again.
+url:    https://github.com/intel-lab-lkp/linux/commits/Gur-Stavi/net-hinic3-Add-a-driver-for-Huawei-3rd-gen-NIC/20241030-201518
+base:   b8ee7a11c75436b85fa1641aa5f970de0f8a575c
+patch link:    https://lore.kernel.org/r/ebb0fefe47c29ffed5af21d6bd39d19c2bcddd9c.1730290527.git.gur.stavi%40huawei.com
+patch subject: [RFC net-next v01 1/1] net: hinic3: Add a driver for Huawei 3rd gen NIC
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241102/202411021531.9fJh9AcY-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411021531.9fJh9AcY-lkp@intel.com/reproduce)
 
-Diff below -- I'm not likely to have much time to work on this again
-soon, so feel free to pick it up/fix it if it suits.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411021531.9fJh9AcY-lkp@intel.com/
 
-Thanks,
--- David
+All warnings (new ones prefixed by >>):
 
----
-diff --git a/rust/kernel/block/mq/operations.rs
-b/rust/kernel/block/mq/operations.rs
-index 9ba7fdfeb4b2..822d64230e11 100644
---- a/rust/kernel/block/mq/operations.rs
-+++ b/rust/kernel/block/mq/operations.rs
-@@ -11,7 +11,8 @@
-     error::{from_result, Result},
-     types::ARef,
- };
--use core::{marker::PhantomData, sync::atomic::AtomicU64,
-sync::atomic::Ordering};
-+use core::marker::PhantomData;
-+use kernel::sync::atomic::{Atomic, Relaxed};
+   In file included from drivers/net/ethernet/huawei/hinic3/hinic3_rx.c:7:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/huawei/hinic3/hinic3_rx.c:146:6: warning: variable 'cqe_len' set but not used [-Wunused-but-set-variable]
+     146 |         int cqe_len;
+         |             ^
+>> drivers/net/ethernet/huawei/hinic3/hinic3_rx.c:333:5: warning: variable 'frag_num' set but not used [-Wunused-but-set-variable]
+     333 |         u8 frag_num = 0;
+         |            ^
+   drivers/net/ethernet/huawei/hinic3/hinic3_rx.c:493:25: warning: variable 'nic_dev' set but not used [-Wunused-but-set-variable]
+     493 |         struct hinic3_nic_dev *nic_dev;
+         |                                ^
+   7 warnings generated.
 
- /// Implement this trait to interface blk-mq as block devices.
- ///
-@@ -77,7 +78,7 @@ impl<T: Operations> OperationsVTable<T> {
-         let request = unsafe { &*(*bd).rq.cast::<Request<T>>() };
 
-         // One refcount for the ARef, one for being in flight
--        request.wrapper_ref().refcount().store(2, Ordering::Relaxed);
-+        request.wrapper_ref().refcount().store(2, Relaxed);
+vim +/frag_num +333 drivers/net/ethernet/huawei/hinic3/hinic3_rx.c
 
-         // SAFETY:
-         //  - We own a refcount that we took above. We pass that to `ARef`.
-@@ -186,7 +187,7 @@ impl<T: Operations> OperationsVTable<T> {
+   137	
+   138	/* Associate fixed completion element to every wqe in the rq. Every rq wqe will
+   139	 * always post completion to the same place.
+   140	 */
+   141	static void rq_associate_cqes(struct hinic3_rxq *rxq)
+   142	{
+   143		struct hinic3_queue_pages *qpages;
+   144		struct hinic3_rq_wqe *rq_wqe;
+   145		dma_addr_t cqe_dma;
+ > 146		int cqe_len;
+   147		u32 i;
+   148	
+   149		/* unit of cqe length is 16B */
+   150		cqe_len = sizeof(struct hinic3_rq_cqe) >> HINIC3_CQE_SIZE_SHIFT;
+   151		qpages = &rxq->rq->wq.qpages;
+   152	
+   153		for (i = 0; i < rxq->q_depth; i++) {
+   154			rq_wqe = get_q_element(qpages, i, NULL);
+   155			cqe_dma = rxq->cqe_start_paddr + i * sizeof(struct hinic3_rq_cqe);
+   156			rq_wqe->cqe_hi_addr = upper_32_bits(cqe_dma);
+   157			rq_wqe->cqe_lo_addr = lower_32_bits(cqe_dma);
+   158		}
+   159	}
+   160	
+   161	static void rq_wqe_buff_set(struct hinic3_io_queue *rq, uint32_t wqe_idx,
+   162				    dma_addr_t dma_addr, u16 len)
+   163	{
+   164		struct hinic3_rq_wqe *rq_wqe;
+   165	
+   166		rq_wqe = get_q_element(&rq->wq.qpages, wqe_idx, NULL);
+   167		rq_wqe->buf_hi_addr = upper_32_bits(dma_addr);
+   168		rq_wqe->buf_lo_addr = lower_32_bits(dma_addr);
+   169	}
+   170	
+   171	static u32 hinic3_rx_fill_buffers(struct hinic3_rxq *rxq)
+   172	{
+   173		struct net_device *netdev = rxq->netdev;
+   174		u32 i, free_wqebbs = rxq->delta - 1;
+   175		struct hinic3_nic_dev *nic_dev;
+   176		struct hinic3_rx_info *rx_info;
+   177		dma_addr_t dma_addr;
+   178		int err;
+   179	
+   180		nic_dev = netdev_priv(netdev);
+   181		for (i = 0; i < free_wqebbs; i++) {
+   182			rx_info = &rxq->rx_info[rxq->next_to_update];
+   183	
+   184			err = rx_alloc_mapped_page(netdev, rx_info);
+   185			if (unlikely(err)) {
+   186				RXQ_STATS_INC(rxq, alloc_rx_buf_err);
+   187				break;
+   188			}
+   189	
+   190			dma_addr = rx_info->buf_dma_addr + rx_info->page_offset;
+   191			rq_wqe_buff_set(rxq->rq, rxq->next_to_update, dma_addr,
+   192					nic_dev->rx_buff_len);
+   193			rxq->next_to_update = (u16)((rxq->next_to_update + 1) & rxq->q_mask);
+   194		}
+   195	
+   196		if (likely(i)) {
+   197			hinic3_write_db(rxq->rq, rxq->q_id & 3, RQ_CFLAG_DP,
+   198					rxq->next_to_update << HINIC3_NORMAL_RQ_WQE);
+   199			rxq->delta -= i;
+   200			rxq->next_to_alloc = rxq->next_to_update;
+   201		} else if (free_wqebbs == rxq->q_depth - 1) {
+   202			RXQ_STATS_INC(rxq, rx_buf_empty);
+   203		}
+   204	
+   205		return i;
+   206	}
+   207	
+   208	static u32 hinic3_rx_alloc_buffers(struct net_device *netdev, u32 rq_depth,
+   209					   struct hinic3_rx_info *rx_info_arr)
+   210	{
+   211		u32 free_wqebbs = rq_depth - 1;
+   212		u32 idx;
+   213		int err;
+   214	
+   215		for (idx = 0; idx < free_wqebbs; idx++) {
+   216			err = rx_alloc_mapped_page(netdev, &rx_info_arr[idx]);
+   217			if (err)
+   218				break;
+   219		}
+   220	
+   221		return idx;
+   222	}
+   223	
+   224	static void hinic3_rx_free_buffers(struct net_device *netdev, u32 q_depth,
+   225					   struct hinic3_rx_info *rx_info_arr)
+   226	{
+   227		struct hinic3_nic_dev *nic_dev = netdev_priv(netdev);
+   228		struct hinic3_rx_info *rx_info;
+   229		u32 i;
+   230	
+   231		/* Free all the Rx ring sk_buffs */
+   232		for (i = 0; i < q_depth; i++) {
+   233			rx_info = &rx_info_arr[i];
+   234	
+   235			if (rx_info->buf_dma_addr) {
+   236				dma_unmap_page(&nic_dev->pdev->dev,
+   237					       rx_info->buf_dma_addr,
+   238					       nic_dev->dma_rx_buff_size,
+   239					       DMA_FROM_DEVICE);
+   240				rx_info->buf_dma_addr = 0;
+   241			}
+   242	
+   243			if (rx_info->page) {
+   244				__free_pages(rx_info->page, nic_dev->page_order);
+   245				rx_info->page = NULL;
+   246			}
+   247		}
+   248	}
+   249	
+   250	static void hinic3_reuse_rx_page(struct hinic3_rxq *rxq,
+   251					 struct hinic3_rx_info *old_rx_info)
+   252	{
+   253		struct hinic3_rx_info *new_rx_info;
+   254		u16 nta = rxq->next_to_alloc;
+   255	
+   256		new_rx_info = &rxq->rx_info[nta];
+   257	
+   258		/* update, and store next to alloc */
+   259		nta++;
+   260		rxq->next_to_alloc = (nta < rxq->q_depth) ? nta : 0;
+   261	
+   262		new_rx_info->page = old_rx_info->page;
+   263		new_rx_info->page_offset = old_rx_info->page_offset;
+   264		new_rx_info->buf_dma_addr = old_rx_info->buf_dma_addr;
+   265	
+   266		/* sync the buffer for use by the device */
+   267		dma_sync_single_range_for_device(rxq->dev, new_rx_info->buf_dma_addr,
+   268						 new_rx_info->page_offset,
+   269						 rxq->buf_len,
+   270						 DMA_FROM_DEVICE);
+   271	}
+   272	
+   273	static void hinic3_add_rx_frag(struct hinic3_rxq *rxq,
+   274				       struct hinic3_rx_info *rx_info,
+   275				       struct sk_buff *skb, u32 size)
+   276	{
+   277		struct page *page;
+   278		u8 *va;
+   279	
+   280		page = rx_info->page;
+   281		va = (u8 *)page_address(page) + rx_info->page_offset;
+   282		prefetch(va);
+   283	
+   284		dma_sync_single_range_for_cpu(rxq->dev,
+   285					      rx_info->buf_dma_addr,
+   286					      rx_info->page_offset,
+   287					      rxq->buf_len,
+   288					      DMA_FROM_DEVICE);
+   289	
+   290		if (size <= HINIC3_RX_HDR_SIZE && !skb_is_nonlinear(skb)) {
+   291			memcpy(__skb_put(skb, size), va,
+   292			       ALIGN(size, sizeof(long)));
+   293	
+   294			/* page is not reserved, we can reuse buffer as-is */
+   295			if (likely(page_to_nid(page) == numa_node_id()))
+   296				goto reuse_rx_page;
+   297	
+   298			/* this page cannot be reused so discard it */
+   299			put_page(page);
+   300			goto err_reuse_buffer;
+   301		}
+   302	
+   303		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
+   304				rx_info->page_offset, size, rxq->buf_len);
+   305	
+   306		/* avoid re-using remote pages */
+   307		if (unlikely(page_to_nid(page) != numa_node_id()))
+   308			goto err_reuse_buffer;
+   309	
+   310		/* if we are the only owner of the page we can reuse it */
+   311		if (unlikely(page_count(page) != 1))
+   312			goto err_reuse_buffer;
+   313	
+   314		/* flip page offset to other buffer */
+   315		rx_info->page_offset ^= rxq->buf_len;
+   316		get_page(page);
+   317	
+   318	reuse_rx_page:
+   319		hinic3_reuse_rx_page(rxq, rx_info);
+   320		return;
+   321	
+   322	err_reuse_buffer:
+   323		/* we are not reusing the buffer so unmap it */
+   324		dma_unmap_page(rxq->dev, rx_info->buf_dma_addr, rxq->dma_rx_buff_size, DMA_FROM_DEVICE);
+   325	}
+   326	
+   327	static void packaging_skb(struct hinic3_rxq *rxq, struct sk_buff *skb,
+   328				  u32 sge_num, u32 pkt_len)
+   329	{
+   330		struct hinic3_rx_info *rx_info;
+   331		u32 temp_pkt_len = pkt_len;
+   332		u32 temp_sge_num = sge_num;
+ > 333		u8 frag_num = 0;
+   334		u32 sw_ci;
+   335		u32 size;
+   336	
+   337		sw_ci = rxq->cons_idx & rxq->q_mask;
+   338		while (temp_sge_num) {
+   339			rx_info = &rxq->rx_info[sw_ci];
+   340			sw_ci = (sw_ci + 1) & rxq->q_mask;
+   341			if (unlikely(temp_pkt_len > rxq->buf_len)) {
+   342				size = rxq->buf_len;
+   343				temp_pkt_len -= rxq->buf_len;
+   344			} else {
+   345				size = temp_pkt_len;
+   346			}
+   347	
+   348			hinic3_add_rx_frag(rxq, rx_info, skb, size);
+   349	
+   350			/* clear contents of buffer_info */
+   351			rx_info->buf_dma_addr = 0;
+   352			rx_info->page = NULL;
+   353			temp_sge_num--;
+   354			frag_num++;
+   355		}
+   356	}
+   357	
 
-             // SAFETY: The refcount field is allocated but not initialized, so
-             // it is valid for writes.
--            unsafe {
-RequestDataWrapper::refcount_ptr(pdu.as_ptr()).write(AtomicU64::new(0))
-};
-+            unsafe {
-RequestDataWrapper::refcount_ptr(pdu.as_ptr()).write(Atomic::<u64>::new(0))
-};
-
-             Ok(0)
-         })
-diff --git a/rust/kernel/block/mq/request.rs b/rust/kernel/block/mq/request.rs
-index 7943f43b9575..8d4060d65159 100644
---- a/rust/kernel/block/mq/request.rs
-+++ b/rust/kernel/block/mq/request.rs
-@@ -13,8 +13,8 @@
- use core::{
-     marker::PhantomData,
-     ptr::{addr_of_mut, NonNull},
--    sync::atomic::{AtomicU64, Ordering},
- };
-+use kernel::sync::atomic::{Atomic, Relaxed};
-
- /// A wrapper around a blk-mq [`struct request`]. This represents an
-IO request.
- ///
-@@ -102,8 +102,7 @@ fn try_set_end(this: ARef<Self>) -> Result<*mut
-bindings::request, ARef<Self>> {
-         if let Err(_old) = this.wrapper_ref().refcount().compare_exchange(
-             2,
-             0,
--            Ordering::Relaxed,
--            Ordering::Relaxed,
-+            Relaxed
-         ) {
-             return Err(this);
-         }
-@@ -168,13 +167,13 @@ pub(crate) struct RequestDataWrapper {
-     /// - 0: The request is owned by C block layer.
-     /// - 1: The request is owned by Rust abstractions but there are
-no [`ARef`] references to it.
-     /// - 2+: There are [`ARef`] references to the request.
--    refcount: AtomicU64,
-+    refcount: Atomic::<u64>,
- }
-
- impl RequestDataWrapper {
-     /// Return a reference to the refcount of the request that is embedding
-     /// `self`.
--    pub(crate) fn refcount(&self) -> &AtomicU64 {
-+    pub(crate) fn refcount(&self) -> &Atomic::<u64> {
-         &self.refcount
-     }
-
-@@ -184,7 +183,7 @@ pub(crate) fn refcount(&self) -> &AtomicU64 {
-     /// # Safety
-     ///
-     /// - `this` must point to a live allocation of at least the size
-of `Self`.
--    pub(crate) unsafe fn refcount_ptr(this: *mut Self) -> *mut AtomicU64 {
-+    pub(crate) unsafe fn refcount_ptr(this: *mut Self) -> *mut Atomic::<u64> {
-         // SAFETY: Because of the safety requirements of this function, the
-         // field projection is safe.
-         unsafe { addr_of_mut!((*this).refcount) }
-@@ -202,28 +201,22 @@ unsafe impl<T: Operations> Sync for Request<T> {}
-
- /// Store the result of `op(target.load())` in target, returning new value of
- /// target.
--fn atomic_relaxed_op_return(target: &AtomicU64, op: impl Fn(u64) ->
-u64) -> u64 {
--    let old = target.fetch_update(Ordering::Relaxed,
-Ordering::Relaxed, |x| Some(op(x)));
--
--    // SAFETY: Because the operation passed to `fetch_update` above always
--    // return `Some`, `old` will always be `Ok`.
--    let old = unsafe { old.unwrap_unchecked() };
--
--    op(old)
-+fn atomic_relaxed_op_return(target: &Atomic::<u64>, op: impl Fn(u64)
--> u64) -> u64 {
-+    let old = target.load(Relaxed);
-+    let new_val = op(old);
-+    target.compare_exchange(old, new_val, Relaxed);
-+    old
- }
-
- /// Store the result of `op(target.load)` in `target` if `target.load() !=
- /// pred`, returning [`true`] if the target was updated.
--fn atomic_relaxed_op_unless(target: &AtomicU64, op: impl Fn(u64) ->
-u64, pred: u64) -> bool {
--    target
--        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |x| {
--            if x == pred {
--                None
--            } else {
--                Some(op(x))
--            }
--        })
--        .is_ok()
-+fn atomic_relaxed_op_unless(target: &Atomic::<u64>, op: impl Fn(u64)
--> u64, pred: u64) -> bool {
-+    let old = target.load(Relaxed);
-+    if old == pred {
-+        false
-+    } else {
-+        target.compare_exchange(old, op(old), Relaxed).is_ok()
-+    }
- }
-
- // SAFETY: All instances of `Request<T>` are reference counted. This
-
---000000000000c805540625e919f5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
-cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
-nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
-hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
-XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
-h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
-ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
-hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
-BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
-0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
-hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
-AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgF0vqo1HVFT/bQ7EkNDs2Hus8IOJB
-l7ayh+mRl5TWm7kwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MTAyMDczNTUwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAKaR1ftvw40UB8q5VJnefq54/RCk1WTZ6iZ7N63ow3udHZuU
-q8PXVid4CoTVbuyli8a9eYjBoNKkBZATNlXdZXu70UW0pL7ZT/szUD/ifDyYp0pG8L88xOorTU9/
-/2OsBqCz7XqHuDXxNvISdtZGhS54eFTQOqpRDWJHL2SyKZYhKSfxJqK9aXFlM8NCigEEjREczx2w
-cKGZOuV8BMwr+ASTA3re3nICdbGJ/9ZZdgjJx9e5Zuis/XNYgfioHfQmD+O1DuyDd5UAiWWmw+UL
-Rrt/X/IJHkKWtelCwF83G1tCsLQbtsvvrshx3WycCCnILrjI7esiXDmQzsxzmLho1og=
---000000000000c805540625e919f5--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
