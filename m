@@ -1,83 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E43414F117
-	for <llvm@lists.linux.dev>; Sat,  2 Nov 2024 08:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC62A1448C7;
+	Sat,  2 Nov 2024 08:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730534819; cv=none; b=WJYmS5D/GHWYSl0AbN7FxdkrSz8klUCIM9aS75lKyAev7cbkwdKxX30IGcvJ56Y2CXBbrwmdsKLvqxRnfJeLj4HAk44ECXqyGH00duE17DGkCksweQu3D09Liv8Nz5uOwmTmU/Ev1FEP/oR2YTgAkJcttKOKrnGSzcyDR7JJnSo=
+	t=1730536949; cv=none; b=Md4XUSxKWcEaMosqbnJyuZatSiuFagQnZyssNDHJLjcGOOo01rt7I5bRqG7NV9glsm5EsUUAXzuIks05YUTx+99TcO8xyEAWTGV4XduSQSPx+CVzMulZpF7TMkA8DlKvmiykfuU6oxWZy825ubtDiiQ/nXZ8kfxHFujEO0zMzDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730534819; c=relaxed/simple;
-	bh=EQSWD7lvEpQpbs2qoliMb65fhqZz0rznKwHKh5bu/aI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FYh/Jk+gkjrKGFRuZ0yS40KVo8pRrgk46XMM6CyZ8m8bhLHQTHGkNyrCgCjal7ykEf4DD/YZQOqmEz9leKrOH2RvcOXwvmVxn5oJC5gAuS35vLjfN989CX5OCm+VSb1JFWTBPtUiFlfAHIOdoEeKTuejZJdyV5vOjy3O1QAZOkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1E6LhoQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730536949; c=relaxed/simple;
+	bh=0JNDAs8d6UUOpTiIJQm0ettaGCIyVGp+Wfdzprg/x8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=E0dkeHU1DxAEDgigsdg1ZoTrMbQ6FE/KYUGHbPtCXd5rR90QVzN8CT1TPm6dWi3PUi/uofhuIFwwg3ZFX4BGLVXdbIozlVUD96o+Jp14O479oK/jYvBsG4/6QM7lLXjXEn2qdeLX5/SKfVYxC29K2yZB0gENeHeb6ZOoTIq+Lio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OSkebuFK; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1E6LhoQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8142C4CED7
-	for <llvm@lists.linux.dev>; Sat,  2 Nov 2024 08:06:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730534818;
-	bh=EQSWD7lvEpQpbs2qoliMb65fhqZz0rznKwHKh5bu/aI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S1E6LhoQHzSJTvuGfNN9Rl7g23H8Jt1+uPqd1Gkogk4EBSBgPV0u2DV9s4tfWTPa9
-	 J2EE3r1wpvSJf+ydKtE70T9Me2hfgZZymWhegDo+u5L+rCm7HCWNaE3fC2VsZbc3UJ
-	 5DqsjMB55lzmyvuZeFHHYGj4o35bAXKtn8PUnsUobGTFXke4Jj1nM5YrQnTk9/dO1v
-	 DuVZwje6rOdt6R10i3VujReOIt/HeU4jPaPppIFWHJjwjX4opMAEn7nkNeiz47kafQ
-	 pnH46cIahM3SFu489pu49KAPkGbQh0zMkNLGTmFfuq+aErxoXidQ6g2pFQQzY+/gaa
-	 S3tJCTVl/TwDw==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb5638dd57so25350751fa.0
-        for <llvm@lists.linux.dev>; Sat, 02 Nov 2024 01:06:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUgSz+VNF3GKXnNe27raqbtztREGSghkUPJpP47DkUcTyQPb6xGALfRNUhg3HqPZi1Pjk5P@lists.linux.dev
-X-Gm-Message-State: AOJu0YyVRCm0594oYuIGZ+Le9dXrDW48F3Z+GdaJ+epnugu8yZhcMhib
-	TrbDTqSLB/dgJUI9qIVxsWW6xsDLDQiHDOO8ylw/QLXRVJpkc1e/ymcwoZzWKQnH6XJRJJDE2s7
-	xEHaLd6ud8vVhxJPAJlYIijh+Z6I=
-X-Google-Smtp-Source: AGHT+IH6q5K9/EJNsgxEJPWWk35nqde3J7zA5O8Ap/dpF8tEbWkRkE9xz+WKM92SMTQn+tvXWer2w/ywIL/kTxAvlR8=
-X-Received: by 2002:a05:651c:210f:b0:2fb:5038:3eb4 with SMTP id
- 38308e7fff4ca-2fcbe078dbcmr130312911fa.29.1730534817303; Sat, 02 Nov 2024
- 01:06:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OSkebuFK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730536947; x=1762072947;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0JNDAs8d6UUOpTiIJQm0ettaGCIyVGp+Wfdzprg/x8c=;
+  b=OSkebuFKHczcIpPJoIDCeyYwP2YW+UlptXkxsgImcFB7sjNQAV3zMETD
+   V3QkY4eiH5260T4kB06cSXab08Jr3PmLcu/bvLow7NN0EmmfG6/j0tEyE
+   11pyeOQIwqqOd0hJbbnI8TPiigrrXEVsM16yYe6IPokoVmluU5zHmaxhz
+   fot7St2HnQ2RIuNwprJcRiE9NxdsxQwm2Fq/0/vrF/o+xp/yr3NrLP78n
+   mPsfQkqGa5PhduIp30EBG9TMK8sawPIjfJwu+I1KImFkYm/tra5NmSjkp
+   nv2xikFUnT8Ep7esE4fhKrcWSxU/VwMhZ3J1v/HZi9vIi2jePB90xU+cL
+   A==;
+X-CSE-ConnectionGUID: jfY6qyIiS/uIyj+FT6h6rg==
+X-CSE-MsgGUID: IHpLBEiGRQW86YQccj3Lgg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="33138797"
+X-IronPort-AV: E=Sophos;i="6.11,252,1725346800"; 
+   d="scan'208";a="33138797"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 01:42:26 -0700
+X-CSE-ConnectionGUID: 2lcIXnEoTjO1yXZ9SM+jCg==
+X-CSE-MsgGUID: BmW5hlZ8SMCK+HPst2niyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="87943875"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 02 Nov 2024 01:42:25 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t79iA-000icP-0r;
+	Sat, 02 Nov 2024 08:42:22 +0000
+Date: Sat, 2 Nov 2024 16:42:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jirislaby:devel 21/28] drivers/char/aaa.c:90:23: error: array has
+ incomplete element type 'struct scatterlist'
+Message-ID: <202411021639.DWTXE30H-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com> <20241029-sparc-cflags-v3-2-b28745a6bd71@protonmail.com>
-In-Reply-To: <20241029-sparc-cflags-v3-2-b28745a6bd71@protonmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 2 Nov 2024 17:06:19 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARrn8xQnCYX7aRqGqh+yVvyg4FLS0qJU07k5qjYHbSCFA@mail.gmail.com>
-Message-ID: <CAK7LNARrn8xQnCYX7aRqGqh+yVvyg4FLS0qJU07k5qjYHbSCFA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] sparc/build: Add SPARC target flags for compiling
- with clang
-To: koachan@protonmail.com
-Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, 
-	Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, sparclinux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Oct 29, 2024 at 11:49=E2=80=AFPM Koakuma via B4 Relay
-<devnull+koachan.protonmail.com@kernel.org> wrote:
->
-> From: Koakuma <koachan@protonmail.com>
->
-> clang only supports building 64-bit kernel, so we use the
-> sparc64-linux-gnu target.
->
-> See also: https://lore.kernel.org/lkml/e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFw=
-dB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=
-=3D@protonmail.com/T/#m068e010dcf8b99d3510a90d7532bcdb70e2e2c6b
->
-> Signed-off-by: Koakuma <koachan@protonmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   8a4f2c71acf243e19ca2de60aab89a6bdf7cf66c
+commit: b1eb0844bab3ef8e30c18b6b4469089070c713aa [21/28] kfifo tester
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241102/202411021639.DWTXE30H-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411021639.DWTXE30H-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411021639.DWTXE30H-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/char/aaa.c:90:23: error: array has incomplete element type 'struct scatterlist'
+      90 |         struct scatterlist sg[4] = {};
+         |                              ^
+   include/linux/kfifo.h:47:8: note: forward declaration of 'struct scatterlist'
+      47 | struct scatterlist;
+         |        ^
+>> drivers/char/aaa.c:104:3: error: call to undeclared function 'page_address'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     104 |                 page_address(virt_to_page(fifo.kfifo.data)) +
+         |                 ^
+>> drivers/char/aaa.c:105:3: error: call to undeclared function 'offset_in_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     105 |                 offset_in_page(fifo.kfifo.data),
+         |                 ^
+>> drivers/char/aaa.c:104:3: warning: format specifies type 'void *' but the argument has type 'int' [-Wformat]
+     100 |         pr_info("%s: in=%4u out=%4u len=%4u avail=%4u sgs=%u data=0x%px(0x%px) dma=%pad\n",
+         |                                                                           ~~
+         |                                                                           %d
+     101 |                 __func__,
+     102 |                 ms(fifo.kfifo.in), ms(fifo.kfifo.out),
+     103 |                 kfifo_len(&fifo), kfifo_avail(&fifo), n, fifo.kfifo.data,
+     104 |                 page_address(virt_to_page(fifo.kfifo.data)) +
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     105 |                 offset_in_page(fifo.kfifo.data),
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:563:34: note: expanded from macro 'pr_info'
+     563 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                 ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:490:60: note: expanded from macro 'printk'
+     490 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:462:19: note: expanded from macro 'printk_index_wrap'
+     462 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+>> drivers/char/aaa.c:111:7: error: call to undeclared function 'sg_virt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     111 |                         i, sg_virt(&sg[i]),// - fifo.kfifo.data,
+         |                            ^
+>> drivers/char/aaa.c:112:27: error: call to undeclared function 'sg_dma_address'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     112 |                         i, (unsigned long long)sg_dma_address(&sg[i]),
+         |                                                ^
+>> drivers/char/aaa.c:113:7: error: call to undeclared function 'sg_dma_len'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     113 |                         i, sg_dma_len(&sg[i]));
+         |                            ^
+   1 warning and 6 errors generated.
 
 
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+vim +90 drivers/char/aaa.c
 
+    87	
+    88	static void dump_fifo(void)
+    89	{
+  > 90		struct scatterlist sg[4] = {};
+    91		dma_addr_t dma = 0xffUL << (32 - 8);
+    92		unsigned int n;
+    93	
+    94		if (mutex_lock_interruptible(&my_mutex))
+    95			return;
+    96	
+    97		n = kfifo_dma_out_prepare_mapped(&fifo, sg, ARRAY_SIZE(sg), FIFO_SIZE,
+    98						 dma);
+    99	
+   100		pr_info("%s: in=%4u out=%4u len=%4u avail=%4u sgs=%u data=0x%px(0x%px) dma=%pad\n",
+   101			__func__,
+   102			ms(fifo.kfifo.in), ms(fifo.kfifo.out),
+   103			kfifo_len(&fifo), kfifo_avail(&fifo), n, fifo.kfifo.data,
+ > 104			page_address(virt_to_page(fifo.kfifo.data)) +
+ > 105			offset_in_page(fifo.kfifo.data),
+   106			&dma);
+   107	
+   108		pr_info("\t");
+   109		for (unsigned i = 0; i < n; i++) {
+   110			pr_cont(" %u.v=%px %u.d=%.16llx %u.l=%u",
+ > 111				i, sg_virt(&sg[i]),// - fifo.kfifo.data,
+ > 112				i, (unsigned long long)sg_dma_address(&sg[i]),
+ > 113				i, sg_dma_len(&sg[i]));
+   114		}
+   115		pr_cont("\n");
+   116	
+   117		mutex_unlock(&my_mutex);
+   118	}
+   119	
 
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
