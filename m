@@ -1,63 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC3F1D555;
-	Fri,  1 Nov 2024 23:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5B22595;
+	Sat,  2 Nov 2024 00:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730503870; cv=none; b=EXDsHhwtvf3SBFuMhZ8u+ZEKE3TJQke6Vk+RVwfc6qkrExN3G4KEPOkeLlCysMmDTKz1FcBDrU9O98t8sdewCqnQIiEuAYI2Qs+ZWB17XuocGDf1g/SdhAYAwGtz1mfwLrY5osvQYvfLooI2gQnVcYLmzm0SLNwANS7PMTiAMW8=
+	t=1730506335; cv=none; b=EZsmsVZanwfV7cyciLMgKSbl2nmQ+JyDA58cFlrvv+sBae7rgF4o4gOe6a431b06ahoKhTlPkxQdOs4Cv9A54NmngV+NYQIOO6QABr2roXzcLB+hDpiiml1069JaiN7hIuMt/8qeRmZ1YyxrRkpg7AmRr2rq7+d4RkP9CxMHZFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730503870; c=relaxed/simple;
-	bh=l/tdhdtTnTBRkObfxhCm6XD+bqowq88ldevKsMKagcc=;
+	s=arc-20240116; t=1730506335; c=relaxed/simple;
+	bh=xv+nykGXHVSjOSmJkCXOvxnP2m+hqI1dTS+fBxn4gvc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JDQdXXg9gmb/jIFKxt78yVHaI6uMEc8omVzHqLJ4jxRs0Za5neMnfbUJExjsg1/f7NbM3B5iddBbJh2nQBrLn2Qu/anKNGL+GphnJjYYVfATJbka7S9WJ8fpEZsveCD81lZEelAcEx0WkOEHG3cXTdUYgwUkTGVt0k0NBuqqBhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dwH3P0Sk; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=paJlOWXHlIwkV+wQGI1xc7SEWRhUrVHCnSeFKQRVOJY9JXVYX8Op4yH9X5iZecRJxCbjNybEr+nnl9hhJdPcQqaFjB3QyG1tZy3eNzvW376I7TCa5+dyLnhcRTIik/v3Ll++GvaMb0mj+cp8ZZaR/NNhTVD8egAApBnaW7EFUCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oCk66Rwj; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dwH3P0Sk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oCk66Rwj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730503867; x=1762039867;
+  t=1730506333; x=1762042333;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=l/tdhdtTnTBRkObfxhCm6XD+bqowq88ldevKsMKagcc=;
-  b=dwH3P0Sk3jTj5KdqyFGcbUAtDy2p6Fa2pmlXLfcc0CzZ0jAk+3BpFnoc
-   CJYDVkhK/4cCwqEkbqgljuPRnbH512k8JzRKXqXsi5vyfPFGM27Gcxio5
-   NlE26kA8LEef2MOfS33NvfNs7epB24K33s+u2ciYucj8sWObgjEgxMmel
-   Iukno0GOA153PRMm0/Qmrn3WLZvXmii+lB2Nb2HDZ21Q4WCQoMWiwB/Ke
-   ZgRCaAsszcZlIU5HflnTD+VucHxAlAP5muc064+Jun+L21EFNR/mcF/Sx
-   hbr35bA3bZ3hlrID/WPeXLMdWQuKjfF+FzMXHR4nEtf6O4Z6culdGHhps
-   A==;
-X-CSE-ConnectionGUID: f2d/sENQRmyRrj15JWq6+w==
-X-CSE-MsgGUID: 9WbOBmenRBmyOhSdx1xjtA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="34208629"
+  bh=xv+nykGXHVSjOSmJkCXOvxnP2m+hqI1dTS+fBxn4gvc=;
+  b=oCk66RwjBNH4UpDfY9DN3J/PuaOfGhV86qLvPvSzlG17jYq0KQgDbLCy
+   8VUMzSM2gUmjhLSVXy8eQX7wnGKWG4xja2OZa5fiHJnZe78qTn0SK0Ue/
+   Q4Qn+C8IpPMwc8xQ5/CqMBPdz3dkWSRxBa1DGRD9nLNBplsCmXetuPNHx
+   PKjcYBF2g5TOv4yMeOao2iJicpry1C8SM8y4g/Ut8XveXkw/wTE+/ZA9t
+   ZuEOTBmH/u1gKNOQJs5lj50C40+bl8cAk7Co+px415hrBOxkZlEl6RdfU
+   6njEifGWjM7Vep4GSgNiHjFFB2+Hu1Rh8U9XvyxKzoz1GUjrTSGUikcXJ
+   w==;
+X-CSE-ConnectionGUID: cc3irFwNQ6uQXT+nK/g3eA==
+X-CSE-MsgGUID: LGkki9aHR1qnb+qhHZyZwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11243"; a="29708497"
 X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
-   d="scan'208";a="34208629"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 16:31:06 -0700
-X-CSE-ConnectionGUID: n+C75ALoRwmDJHypci1Avg==
-X-CSE-MsgGUID: WJANiBL1TpCJEEJJ/FRM0g==
+   d="scan'208";a="29708497"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 17:12:12 -0700
+X-CSE-ConnectionGUID: SYcSZUb8SY2zz3VY3iFssg==
+X-CSE-MsgGUID: B71jvY/mS+aLgDu8y++ckg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,251,1725346800"; 
-   d="scan'208";a="87041935"
+   d="scan'208";a="83559994"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 01 Nov 2024 16:31:04 -0700
+  by orviesa007.jf.intel.com with ESMTP; 01 Nov 2024 17:12:06 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t716c-000iAP-1E;
-	Fri, 01 Nov 2024 23:31:02 +0000
-Date: Sat, 2 Nov 2024 07:30:04 +0800
+	id 1t71kJ-000iCJ-1u;
+	Sat, 02 Nov 2024 00:12:03 +0000
+Date: Sat, 2 Nov 2024 08:11:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: David Arinzon <darinzon@amazon.com>, David Miller <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] i2c: busses: Use *-y instead of *-objs in Makefile
-Message-ID: <202411020714.mhatOhhd-lkp@intel.com>
-References: <20241101131103.3679560-1-andriy.shevchenko@linux.intel.com>
+	netdev@vger.kernel.org, David Arinzon <darinzon@amazon.com>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	"Woodhouse, David" <dwmw@amazon.com>,
+	"Machulsky, Zorik" <zorik@amazon.com>,
+	"Matushevsky, Alexander" <matua@amazon.com>,
+	Saeed Bshara <saeedb@amazon.com>, "Wilson, Matt" <msw@amazon.com>,
+	"Liguori, Anthony" <aliguori@amazon.com>,
+	"Bshara, Nafea" <nafea@amazon.com>,
+	"Schmeilin, Evgeny" <evgenys@amazon.com>,
+	"Belgazal, Netanel" <netanel@amazon.com>,
+	"Saidi, Ali" <alisaidi@amazon.com>,
+	"Herrenschmidt, Benjamin" <benh@amazon.com>,
+	"Kiyanovski, Arthur" <akiyano@amazon.com>,
+	"Dagan, Noam" <ndagan@amazon.com>,
+	"Bernstein, Amit" <amitbern@amazon.com>,
+	"Agroskin, Shay" <shayagr@amazon.com>,
+	"Abboud, Osama" <osamaabb@amazon.com>,
+	"Ostrovsky, Evgeny" <evostrov@amazon.com>,
+	"Tabachnik, Ofir" <ofirt@amazon.com>,
+	"Machnikowski, Maciek" <maciek@machnikowski.net>
+Subject: Re: [PATCH v2 net-next 1/3] net: ena: Add PHC support in the ENA
+ driver
+Message-ID: <202411020715.L7KdiUt4-lkp@intel.com>
+References: <20241031085245.18146-2-darinzon@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,199 +85,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241101131103.3679560-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20241031085245.18146-2-darinzon@amazon.com>
 
-Hi Andy,
+Hi David,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-busses-Use-y-instead-of-objs-in-Makefile/20241101-211148
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241101131103.3679560-1-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/1] i2c: busses: Use *-y instead of *-objs in Makefile
-config: arm-randconfig-001-20241102 (https://download.01.org/0day-ci/archive/20241102/202411020714.mhatOhhd-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Arinzon/net-ena-Add-PHC-support-in-the-ENA-driver/20241031-165503
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241031085245.18146-2-darinzon%40amazon.com
+patch subject: [PATCH v2 net-next 1/3] net: ena: Add PHC support in the ENA driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241102/202411020715.L7KdiUt4-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020714.mhatOhhd-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411020715.L7KdiUt4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411020714.mhatOhhd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411020715.L7KdiUt4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/i2c/busses/i2c-at91-slave.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
+   In file included from drivers/net/ethernet/amazon/ena/ena_com.c:6:
+   In file included from drivers/net/ethernet/amazon/ena/ena_com.h:11:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
    In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/i2c/busses/i2c-at91-slave.c:28:25: error: no member named 'slave' in 'struct at91_twi_dev'
-      28 |                         i2c_slave_event(dev->slave,
-         |                                         ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:34:25: error: no member named 'slave' in 'struct at91_twi_dev'
-      34 |                         i2c_slave_event(dev->slave,
-         |                                         ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:44:24: error: no member named 'slave' in 'struct at91_twi_dev'
-      44 |                 i2c_slave_event(dev->slave, I2C_SLAVE_READ_PROCESSED, &value);
-         |                                 ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:51:24: error: no member named 'slave' in 'struct at91_twi_dev'
-      51 |                 i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED, &value);
-         |                                 ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:59:24: error: no member named 'slave' in 'struct at91_twi_dev'
-      59 |                 i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &value);
-         |                                 ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:69:11: error: no member named 'slave' in 'struct at91_twi_dev'
-      69 |         if (dev->slave)
-         |             ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:78:7: error: no member named 'slave' in 'struct at91_twi_dev'
-      78 |         dev->slave = slave;
-         |         ~~~  ^
->> drivers/i2c/busses/i2c-at91-slave.c:79:7: error: no member named 'smr' in 'struct at91_twi_dev'; did you mean 'imr'?
-      79 |         dev->smr = AT91_TWI_SMR_SADR(slave->addr);
-         |              ^~~
-         |              imr
-   drivers/i2c/busses/i2c-at91.h:146:11: note: 'imr' declared here
-     146 |         unsigned imr;
-         |                  ^
-   drivers/i2c/busses/i2c-at91-slave.c:93:16: error: no member named 'slave' in 'struct at91_twi_dev'
-      93 |         WARN_ON(!dev->slave);
-         |                  ~~~  ^
-   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
-     123 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   drivers/i2c/busses/i2c-at91-slave.c:97:7: error: no member named 'slave' in 'struct at91_twi_dev'
-      97 |         dev->slave = NULL;
-         |         ~~~  ^
-   drivers/i2c/busses/i2c-at91-slave.c:98:7: error: no member named 'smr' in 'struct at91_twi_dev'; did you mean 'imr'?
-      98 |         dev->smr = 0;
-         |              ^~~
-         |              imr
-   drivers/i2c/busses/i2c-at91.h:146:11: note: 'imr' declared here
-     146 |         unsigned imr;
-         |                  ^
-   drivers/i2c/busses/i2c-at91-slave.c:118:5: error: redefinition of 'at91_twi_probe_slave'
-     118 | int at91_twi_probe_slave(struct platform_device *pdev,
-         |     ^
-   drivers/i2c/busses/i2c-at91.h:185:19: note: previous definition is here
-     185 | static inline int at91_twi_probe_slave(struct platform_device *pdev,
-         |                   ^
-   drivers/i2c/busses/i2c-at91-slave.c:135:6: error: redefinition of 'at91_init_twi_bus_slave'
-     135 | void at91_init_twi_bus_slave(struct at91_twi_dev *dev)
-         |      ^
-   drivers/i2c/busses/i2c-at91.h:184:20: note: previous definition is here
-     184 | static inline void at91_init_twi_bus_slave(struct at91_twi_dev *dev) {}
-         |                    ^
-   drivers/i2c/busses/i2c-at91-slave.c:138:34: error: no member named 'smr' in 'struct at91_twi_dev'; did you mean 'imr'?
-     138 |         if (dev->slave_detected && dev->smr) {
-         |                                         ^~~
-         |                                         imr
-   drivers/i2c/busses/i2c-at91.h:146:11: note: 'imr' declared here
-     146 |         unsigned imr;
-         |                  ^
-   drivers/i2c/busses/i2c-at91-slave.c:139:42: error: no member named 'smr' in 'struct at91_twi_dev'; did you mean 'imr'?
-     139 |                 at91_twi_write(dev, AT91_TWI_SMR, dev->smr);
-         |                                                        ^~~
-         |                                                        imr
-   drivers/i2c/busses/i2c-at91.h:146:11: note: 'imr' declared here
-     146 |         unsigned imr;
-         |                  ^
-   1 warning and 15 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/amazon/ena/ena_com.c:1703:7: error: expected ')'
+    1703 |                                   ENA_ADMIN_PHC_CONFIG,
+         |                                   ^
+   drivers/net/ethernet/amazon/ena/ena_com.c:1701:27: note: to match this '('
+    1701 |         ret = ena_com_get_feature(ena_dev,
+         |                                  ^
+   4 warnings and 1 error generated.
 
 
-vim +28 drivers/i2c/busses/i2c-at91-slave.c
+vim +1703 drivers/net/ethernet/amazon/ena/ena_com.c
 
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  14  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  15  static irqreturn_t atmel_twi_interrupt_slave(int irq, void *dev_id)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  16  {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  17  	struct at91_twi_dev *dev = dev_id;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  18  	const unsigned status = at91_twi_read(dev, AT91_TWI_SR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  19  	const unsigned irqstatus = status & at91_twi_read(dev, AT91_TWI_IMR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  20  	u8 value;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  21  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  22  	if (!irqstatus)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  23  		return IRQ_NONE;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  24  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  25  	/* slave address has been detected on I2C bus */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  26  	if (irqstatus & AT91_TWI_SVACC) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  27  		if (status & AT91_TWI_SVREAD) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22 @28  			i2c_slave_event(dev->slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  29  					I2C_SLAVE_READ_REQUESTED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  30  			writeb_relaxed(value, dev->base + AT91_TWI_THR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  31  			at91_twi_write(dev, AT91_TWI_IER,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  32  				       AT91_TWI_TXRDY | AT91_TWI_EOSACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  33  		} else {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  34  			i2c_slave_event(dev->slave,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  35  					I2C_SLAVE_WRITE_REQUESTED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  36  			at91_twi_write(dev, AT91_TWI_IER,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  37  				       AT91_TWI_RXRDY | AT91_TWI_EOSACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  38  		}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  39  		at91_twi_write(dev, AT91_TWI_IDR, AT91_TWI_SVACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  40  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  41  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  42  	/* byte transmitted to remote master */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  43  	if (irqstatus & AT91_TWI_TXRDY) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  44  		i2c_slave_event(dev->slave, I2C_SLAVE_READ_PROCESSED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  45  		writeb_relaxed(value, dev->base + AT91_TWI_THR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  46  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  47  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  48  	/* byte received from remote master */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  49  	if (irqstatus & AT91_TWI_RXRDY) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  50  		value = readb_relaxed(dev->base + AT91_TWI_RHR);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  51  		i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  52  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  53  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  54  	/* master sent stop */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  55  	if (irqstatus & AT91_TWI_EOSACC) {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  56  		at91_twi_write(dev, AT91_TWI_IDR,
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  57  			       AT91_TWI_TXRDY | AT91_TWI_RXRDY | AT91_TWI_EOSACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  58  		at91_twi_write(dev, AT91_TWI_IER, AT91_TWI_SVACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22 @59  		i2c_slave_event(dev->slave, I2C_SLAVE_STOP, &value);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  60  	}
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  61  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  62  	return IRQ_HANDLED;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  63  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  64  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  65  static int at91_reg_slave(struct i2c_client *slave)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  66  {
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  67  	struct at91_twi_dev *dev = i2c_get_adapdata(slave->adapter);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  68  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  69  	if (dev->slave)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  70  		return -EBUSY;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  71  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  72  	if (slave->flags & I2C_CLIENT_TEN)
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  73  		return -EAFNOSUPPORT;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  74  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  75  	/* Make sure twi_clk doesn't get turned off! */
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  76  	pm_runtime_get_sync(dev->dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  77  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  78  	dev->slave = slave;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22 @79  	dev->smr = AT91_TWI_SMR_SADR(slave->addr);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  80  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  81  	at91_init_twi_bus(dev);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  82  	at91_twi_write(dev, AT91_TWI_IER, AT91_TWI_SVACC);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  83  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  84  	dev_info(dev->dev, "entered slave mode (ADR=%d)\n", slave->addr);
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  85  
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  86  	return 0;
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  87  }
-9d3ca54b550ca0 Juergen Fitschen 2019-02-22  88  
+  1691	
+  1692	int ena_com_phc_config(struct ena_com_dev *ena_dev)
+  1693	{
+  1694		struct ena_com_phc_info *phc = &ena_dev->phc;
+  1695		struct ena_admin_get_feat_resp get_feat_resp;
+  1696		struct ena_admin_set_feat_resp set_feat_resp;
+  1697		struct ena_admin_set_feat_cmd set_feat_cmd;
+  1698		int ret = 0;
+  1699	
+  1700		/* Get device PHC default configuration */
+  1701		ret = ena_com_get_feature(ena_dev,
+  1702					  &get_feat_resp
+> 1703					  ENA_ADMIN_PHC_CONFIG,
+  1704					  0);
+  1705		if (unlikely(ret)) {
+  1706			netdev_err(ena_dev->net_device,
+  1707				   "Failed to get PHC feature configuration, error: %d\n",
+  1708				   ret);
+  1709			return ret;
+  1710		}
+  1711	
+  1712		/* Supporting only readless PHC retrieval */
+  1713		if (get_feat_resp.u.phc.type != ENA_ADMIN_PHC_TYPE_READLESS) {
+  1714			netdev_err(ena_dev->net_device, "Unsupported PHC type, error: %d\n",
+  1715				   -EOPNOTSUPP);
+  1716			return -EOPNOTSUPP;
+  1717		}
+  1718	
+  1719		/* Update PHC doorbell offset according to device value,
+  1720		 * used to write req_id to PHC bar
+  1721		 */
+  1722		phc->doorbell_offset = get_feat_resp.u.phc.doorbell_offset;
+  1723	
+  1724		/* Update PHC expire timeout according to device
+  1725		 * or default driver value
+  1726		 */
+  1727		phc->expire_timeout_usec = (get_feat_resp.u.phc.expire_timeout_usec) ?
+  1728					    get_feat_resp.u.phc.expire_timeout_usec :
+  1729					    ENA_PHC_DEFAULT_EXPIRE_TIMEOUT_USEC;
+  1730	
+  1731		/* Update PHC block timeout according to device
+  1732		 * or default driver value
+  1733		 */
+  1734		phc->block_timeout_usec = (get_feat_resp.u.phc.block_timeout_usec) ?
+  1735					   get_feat_resp.u.phc.block_timeout_usec :
+  1736					   ENA_PHC_DEFAULT_BLOCK_TIMEOUT_USEC;
+  1737	
+  1738		/* Sanity check - expire timeout must not be above skip timeout */
+  1739		if (phc->expire_timeout_usec > phc->block_timeout_usec)
+  1740			phc->expire_timeout_usec = phc->block_timeout_usec;
+  1741	
+  1742		/* Prepare PHC config feature command */
+  1743		memset(&set_feat_cmd, 0x0, sizeof(set_feat_cmd));
+  1744		set_feat_cmd.aq_common_descriptor.opcode = ENA_ADMIN_SET_FEATURE;
+  1745		set_feat_cmd.feat_common.feature_id = ENA_ADMIN_PHC_CONFIG;
+  1746		set_feat_cmd.u.phc.output_length = sizeof(*phc->virt_addr);
+  1747		ret = ena_com_mem_addr_set(ena_dev,
+  1748					   &set_feat_cmd.u.phc.output_address,
+  1749					   phc->phys_addr);
+  1750		if (unlikely(ret)) {
+  1751			netdev_err(ena_dev->net_device, "Failed setting PHC output address, error: %d\n",
+  1752				   ret);
+  1753			return ret;
+  1754		}
+  1755	
+  1756		/* Send PHC feature command to the device */
+  1757		ret = ena_com_execute_admin_command(&ena_dev->admin_queue,
+  1758						    (struct ena_admin_aq_entry *)&set_feat_cmd,
+  1759						    sizeof(set_feat_cmd),
+  1760						    (struct ena_admin_acq_entry *)&set_feat_resp,
+  1761						    sizeof(set_feat_resp));
+  1762	
+  1763		if (unlikely(ret)) {
+  1764			netdev_err(ena_dev->net_device,
+  1765				   "Failed to enable PHC, error: %d\n",
+  1766				   ret);
+  1767			return ret;
+  1768		}
+  1769	
+  1770		phc->active = true;
+  1771		netdev_dbg(ena_dev->net_device, "PHC is active in the device\n");
+  1772	
+  1773		return ret;
+  1774	}
+  1775	
 
 -- 
 0-DAY CI Kernel Test Service
