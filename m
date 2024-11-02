@@ -1,196 +1,125 @@
-Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC981A4E9E
-	for <llvm@lists.linux.dev>; Sat,  2 Nov 2024 19:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.224.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E341A76B0;
+	Sat,  2 Nov 2024 19:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730577232; cv=none; b=t1zJ9Nco7V3pFPVYEK354nX33kssBpVW59rImWBOfpYBrmQhGznwNN7+P3ZtmKYPN4xcaN7jb1rX/lQGXVMeFGud66QIq9fuI2nccdjSLo7rJBjl4b0cTp9xAEv0MBBs0k2eeisHcZPQvfSkNCCGI1a78/VWyJWb79SVM3Gzscc=
+	t=1730577357; cv=none; b=AnodPmkPim2vM4Y8jtRag972V/x+UmETXutWcxSmBnE8QD6qP1YsHxtD19qc3E9d/I19otFgiB6r8Z0mqweGdabbR6LDaRAjxrO/zlfFSLvrDiypuLeH5zgQaUlYA2xRqLGTp72hicaD+oI14FpoSCoZnksY4S6yv8yC295gsR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730577232; c=relaxed/simple;
-	bh=JdArpWA9vFt1hkUkWUm005K/eH4T5f2zOfSeWwDv19Q=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KDxqgDp1s9hSymwmUwx5hHFeW1d1Ta/zq9mqZIu5RV+DL93PCQf/vYZWpmPF7CUhY34SxccMlX3+Ua54WNKLicNnDMGdliJ6dWsF838oXz7F48fFInqTcAuazHtLhPi6NspmXdaKi4ev3t+A0RlwOOfCUEbBVFmDAspZiqSaxiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org; spf=pass smtp.mailfrom=cachyos.org; dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b=cdf9yJhC; arc=none smtp.client-ip=202.61.224.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cachyos.org
+	s=arc-20240116; t=1730577357; c=relaxed/simple;
+	bh=I4C8qnFbgkbJMLpVH/O6dUyaP6cZ4bKm2rAYeFS4+LI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oWmMsdIG/QdL9IDSkZOJnsT3ehl6a4AT2vX43qihRFbqgmPsaPUHwTxGJOOgAh5a0gstUPAUsWpk8/GSbG38dSb5rbNhUnWiozkZco7yr6Te+KCTiBswYRvL3u0K3jWujFcOJ5aaJt92VvNKztNFmdDiOMgxDAOcRXIi8t4qjPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7pU1/fY; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b="cdf9yJhC"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2FB082805B4;
-	Sat,  2 Nov 2024 20:53:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
-	t=1730577227; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=iBgrUxzme4W2cd1/xJd7CFK8K4SzsQKvQfKry0TV6As=;
-	b=cdf9yJhCJo9REzvuK5pxQZIJ52OQDqKVDZRFO4hDKxrhXK6LFkUQ8n0iToBucy6M47lXGU
-	3QD98eIW/8gRb8m5yPBOyaj7C6Eyroi7aCMp1LJuM0PM0vwkna9K+C1AjYGlEXz/kDQ4md
-	7SukJUauJe0xVSdhjeSdLGo2r4DOlYc7xMx5nzLYhjGcYVFt3QFOEuxOHyO1eV8jtbHr1E
-	FxbAbA1RQba+JA93Bu9kgr2JYWm/BxT3kWT9Deaq/Kz1Snt1IPCOO2ORyMf6BzSyswUn5X
-	h/6DwKQbZpipNrQYsXtu0sFSu3GbZT9z42S57mieVG0z4sKUiAlCt2+PXlCw6w==
-Message-ID: <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
-Date: Sat, 2 Nov 2024 20:53:43 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7pU1/fY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730577354; x=1762113354;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I4C8qnFbgkbJMLpVH/O6dUyaP6cZ4bKm2rAYeFS4+LI=;
+  b=J7pU1/fYvWgvusNPePjO2lzT6augy0SghJ4Z3xdZi16sgXz3Ah6jJfeI
+   D0+Yw/Xk++Xbd+ICwoa2J+D3+b6mgqxYJUbrQqsOIe5pGH3tkMQY+k1dc
+   /dSVjxm6ZTe8hKrrqrE9E4GQ/BoOxvgKsGYrXr5xeMWYNw4Jhtm7+D9rG
+   vS994eRzw9F9gXx7l+4PoLzb6oFVTdg8jSvqPdbAYUDBHAnKlA55s++Yy
+   J3bTqxwwTops7ABK/Vq2eGhIxgAllgBZGskhO9EjanYsyaJ5ckZhsKT+T
+   sU0FJJ7hBsI4FqUrnEfcQPeStlikLMEmGGbKcOsf+n7g6DmMp5eir4FxU
+   Q==;
+X-CSE-ConnectionGUID: qBCtGFRAQ1OFG/XYUhRvvg==
+X-CSE-MsgGUID: nMfuZ2dZScinYDUuUBzzjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30270378"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30270378"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 12:55:53 -0700
+X-CSE-ConnectionGUID: kmaQynIrScWaXArVbB0BFQ==
+X-CSE-MsgGUID: anPNX85ISeq1PZLmEtcHbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="88024913"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 02 Nov 2024 12:55:52 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t7KDt-000jI7-0V;
+	Sat, 02 Nov 2024 19:55:49 +0000
+Date: Sun, 3 Nov 2024 03:55:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [pci:bwctrl 2/5] drivers/pci/msi/../pci.h:834:1: error: expected
+ identifier or '('
+Message-ID: <202411030348.K5M6Sbow-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
-From: Peter Jung <ptr1337@cachyos.org>
-To: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
- Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>,
- Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
- Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>,
- Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>,
- workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
- Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>,
- Krzysztof Pszeniczny <kpszeniczny@google.com>,
- Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>
-Cc: x86@kernel.org, linux-arch@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20241102175115.1769468-1-xur@google.com>
- <20241102175115.1769468-2-xur@google.com>
- <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org>
-Content-Language: en-US
-Organization: CachyOS
-In-Reply-To: <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git bwctrl
+head:   5ccc52fd1e5a9a7602b6e20ce931a7fd4f3be87b
+commit: 5f2710a4c2754c3c63bbe751fe1c54eb7f5c8441 [2/5] PCI/pwrctl: Create pwrctl devices only if at least one power supply is present
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241103/202411030348.K5M6Sbow-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241103/202411030348.K5M6Sbow-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411030348.K5M6Sbow-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/pci/msi/pcidev_msi.c:5:
+   In file included from drivers/pci/msi/../pci.h:5:
+   In file included from include/linux/pci.h:1662:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/pci/msi/pcidev_msi.c:5:
+>> drivers/pci/msi/../pci.h:834:1: error: expected identifier or '('
+     834 | {
+         | ^
+   4 warnings and 1 error generated.
 
 
+vim +834 drivers/pci/msi/../pci.h
 
-On 02.11.24 20:46, Peter Jung wrote:
-> 
-> 
-> On 02.11.24 18:51, Rong Xu wrote:
->> Add the build support for using Clang's AutoFDO. Building the kernel
->> with AutoFDO does not reduce the optimization level from the
->> compiler. AutoFDO uses hardware sampling to gather information about
->> the frequency of execution of different code paths within a binary.
->> This information is then used to guide the compiler's optimization
->> decisions, resulting in a more efficient binary. Experiments
->> showed that the kernel can improve up to 10% in latency.
->>
->> The support requires a Clang compiler after LLVM 17. This submission
->> is limited to x86 platforms that support PMU features like LBR on
->> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
->>   and BRBE on ARM 1 is part of planned future work.
->>
->> Here is an example workflow for AutoFDO kernel:
->>
->> 1) Build the kernel on the host machine with LLVM enabled, for example,
->>         $ make menuconfig LLVM=1
->>      Turn on AutoFDO build config:
->>        CONFIG_AUTOFDO_CLANG=y
->>      With a configuration that has LLVM enabled, use the following
->>      command:
->>         scripts/config -e AUTOFDO_CLANG
->>      After getting the config, build with
->>        $ make LLVM=1
->>
->> 2) Install the kernel on the test machine.
->>
->> 3) Run the load tests. The '-c' option in perf specifies the sample
->>     event period. We suggest     using a suitable prime number,
->>     like 500009, for this purpose.
->>     For Intel platforms:
->>        $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c 
->> <count> \
->>          -o <perf_file> -- <loadtest>
->>     For AMD platforms:
->>        The supported system are: Zen3 with BRS, or Zen4 with amd_lbr_v2
->>       For Zen3:
->>        $ cat proc/cpuinfo | grep " brs"
->>        For Zen4:
->>        $ cat proc/cpuinfo | grep amd_lbr_v2
->>        $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k 
->> -a \
->>          -N -b -c <count> -o <perf_file> -- <loadtest>
->>
->> 4) (Optional) Download the raw perf file to the host machine.
->>
->> 5) To generate an AutoFDO profile, two offline tools are available:
->>     create_llvm_prof and llvm_profgen. The create_llvm_prof tool is part
->>     of the AutoFDO project and can be found on GitHub
->>     (https://github.com/google/autofdo), version v0.30.1 or later. The
->>     llvm_profgen tool is included in the LLVM compiler itself. It's
->>     important to note that the version of llvm_profgen doesn't need to
->>     match the version of Clang. It needs to be the LLVM 19 release or
->>     later, or from the LLVM trunk.
->>        $ llvm-profgen --kernel --binary=<vmlinux> -- 
->> perfdata=<perf_file> \
->>          -o <profile_file>
->>     or
->>        $ create_llvm_prof --binary=<vmlinux> --profile=<perf_file> \
->>          --format=extbinary --out=<profile_file>
->>
->>     Note that multiple AutoFDO profile files can be merged into one via:
->>        $ llvm-profdata merge -o <profile_file>  <profile_1> ... 
->> <profile_n>
->>
->> 6) Rebuild the kernel using the AutoFDO profile file with the same config
->>     as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
->>        $ make LLVM=1 CLANG_AUTOFDO_PROFILE=<profile_file>
->>
->> Co-developed-by: Han Shen<shenhan@google.com>
->> Signed-off-by: Han Shen<shenhan@google.com>
->> Signed-off-by: Rong Xu<xur@google.com>
->> Suggested-by: Sriraman Tallam<tmsriram@google.com>
->> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
->> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
->> Suggested-by: Stephane Eranian<eranian@google.com>
->> Tested-by: Yonghong Song<yonghong.song@linux.dev>
->> Tested-by: Yabin Cui<yabinc@google.com>
->> Tested-by: Nathan Chancellor<nathan@kernel.org>
->> Reviewed-by: Kees Cook<kees@kernel.org>
-> 
-> Tested-by: Peter Jung <ptr1337@cachyos.org>
-> 
+   832	
+   833	static inline bool of_pci_is_supply_present(struct device_node *np);
+ > 834	{
+   835		return false;
+   836	}
+   837	#endif /* CONFIG_OF */
+   838	
 
-The compilations and testing with the "make pacman-pkg" function from 
-the kernel worked fine.
-
-One problem I do face:
-When I apply a AutoFDO profile together with the PKGBUILD [1] from 
-archlinux im running into issues at "module_install" at the packaging.
-
-See following log:
-```
-make[2]: *** [scripts/Makefile.modinst:125: 
-/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko] 
-Error 1
-make[2]: *** Deleting file 
-'/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko'
-   INSTALL 
-/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/crypto/cryptd.ko
-make[2]: *** Waiting for unfinished jobs....
-```
-
-
-This can be fixed with removed "INSTALL_MOD_STRIP=1" to the passed 
-parameters of module_install.
-
-This explicitly only happens, if a profile is passed - otherwise the 
-packaging works without problems.
-
-Regards,
-
-Peter Jung
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
