@@ -1,69 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EF71A01D8;
-	Sat,  2 Nov 2024 15:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E091A0BE0;
+	Sat,  2 Nov 2024 15:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730561327; cv=none; b=ll3vPPC7JEs8PG3EFZrN9prxYFG5IfLjRLAaYU/rbup2eKiwawmYNK5GKgLi22z5UBCxJQQqY/PyjVlG/RE6Z0EoWichS+sPrmo9mRxWFCgGf6BzlYUaoXRnoH3viQMlVA1vTkge7FKJ6URm0Qw7WeOM+hNDKFkZo1D77VvNym4=
+	t=1730561988; cv=none; b=i5uFb85m3bXcjFeC5ZwMuzoTQ2Uhe0BF1V7AxU8wVoSOOlujPbZCen9zGBPjU3irYpprG6Rc9P+dsV/ejP+izviE/8FKZP5r6ITE672fL0/k4RD9WfAN2WdCH64xGPDvppzeHazrqX6h65X31kvsnmFo2DyXi8ygCyYR/ECAa80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730561327; c=relaxed/simple;
-	bh=zAUFqbRnx3QrIZL0lXYiEoGKtF5VPcXttxczM7SZY6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c0GTRFsOsVZiU8s8ZDwrJk9rX3tH57yEDoVRH8ysLH1+Bp+fXbxL6xZ+ixeB3A+S4XXT+lOhrrRzT6miDHL4vN9ynfyxlYQ5/OyKN7dRfRWy6KuxFb3GDRU9+Qg7TqMalD+SkjGUlIYCss3rbjn6qAyGhr/76c+JkMNB/y1aPSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=USG+6xhO; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1730561988; c=relaxed/simple;
+	bh=mRaCTm5rSkwc4AB6hWx/xeooe3mrvvh3KxWrRQGYVmw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lBRPq/i8OUP7rKPsBS98bXyxizshIXmdnFUUr5JnTYEWFhUSsqg6RS6UljUZ2ETdiiZ/y0WBjmPBLcErxfcC5GKRa98Twe2TZJGMnPkL+gv0yU1QEXyGif1RLGt2KzCILdwDHyYnMUMEQtyCljbNyfxiXrd/YtkeSN5Lpy21UbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UFOcJTht; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="USG+6xhO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UFOcJTht"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730561325; x=1762097325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zAUFqbRnx3QrIZL0lXYiEoGKtF5VPcXttxczM7SZY6c=;
-  b=USG+6xhO3bNumqh7xUYJoV4HD5stEe+mGJbVHV/6jNOc/HzR1hFOJf4W
-   n032K2Jp6YXLMS0pVZZSnqB9QRRfrUyu3UmF1w322xyS0nGEbLVBRTfYG
-   WWNLGR+DmW1TxZWSaIgSR5+GosHSmSVmeZNtB1qqvKZesMJgCLUN8c0V1
-   IqERh5RzmU9qQIhC/v1UGcfI/0oilAyt81C6c5/UHx61oJ7it1iF9IM/k
-   hFAUy5992ek6xSC5pzzpiYckcRPVexqERBat8ZW0bBjb5aN4QHMH6Uds/
-   0PK7SDWYoxCe7FatHkOor/DIN5GqXE9sdsfHgMDuynKw2lYuWnsc+3GX7
-   Q==;
-X-CSE-ConnectionGUID: +0Jf7gjzT4eDLjF3QWHPzA==
-X-CSE-MsgGUID: 6sA7swfoSVqa7/IfZb42xw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11244"; a="30411886"
+  t=1730561986; x=1762097986;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mRaCTm5rSkwc4AB6hWx/xeooe3mrvvh3KxWrRQGYVmw=;
+  b=UFOcJTht3NUbjw03r6GIP4Xhym8J7Z2yMREV3wNe5ERqeftMEsvT8sOR
+   lLToQoFAOXZax/roVgu0Qqq8T8Ma9knuz2fe/MfZsxWNvwNE1c1MYywPx
+   3BAnUs4deNoYUIrliKgNREspXgTu7MkB106cas2OdPCHyRKiww5zKX3h8
+   7jLtvd8loR7wQz/uMftFH4ozpVA9ptjpcHIEv2RVaPK46pJRGeMIH6vAf
+   S4rM89fWEcTL4+vLzLLga7fn5Fiu401yjDFMk20tDl2iFTf7/LzdrK2c3
+   JLXqOG1mfE3W6lYKw3ssrmd4CnDxoLU7AoszLY1w93EHKIm0ie1z2GQdf
+   A==;
+X-CSE-ConnectionGUID: aBee0hl8Ql2g/ASlmIEiJQ==
+X-CSE-MsgGUID: nF47C6BzRl2T+PskIjXfmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11244"; a="30188252"
 X-IronPort-AV: E=Sophos;i="6.11,253,1725346800"; 
-   d="scan'208";a="30411886"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 08:28:45 -0700
-X-CSE-ConnectionGUID: B6v/LPEhTo64evpmnST69g==
-X-CSE-MsgGUID: jRQcgbeoT7+OwZQGIUT5vA==
+   d="scan'208";a="30188252"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 08:39:44 -0700
+X-CSE-ConnectionGUID: tiR5NsnGTGWQ1dOEkXCGDA==
+X-CSE-MsgGUID: jasOPJ6ERfSnbNJdfy3oGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,253,1725346800"; 
-   d="scan'208";a="83685863"
+   d="scan'208";a="84058113"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 02 Nov 2024 08:28:42 -0700
+  by orviesa008.jf.intel.com with ESMTP; 02 Nov 2024 08:39:43 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t7G3L-000j6H-1q;
-	Sat, 02 Nov 2024 15:28:39 +0000
-Date: Sat, 2 Nov 2024 23:28:33 +0800
+	id 1t7GE0-000j7t-14;
+	Sat, 02 Nov 2024 15:39:40 +0000
+Date: Sat, 2 Nov 2024 23:39:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Samuel Holland <samuel.holland@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: Re: [PATCH 10/11] riscv: mm: Use physical memory aliases to apply
- PMAs
-Message-ID: <202411022337.JHozQieV-lkp@intel.com>
-References: <20241102000843.1301099-11-samuel.holland@sifive.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:timers/vdso 33/41] arch/x86/entry/vdso/vma.c:199:3: warning:
+ label followed by a declaration is a C23 extension
+Message-ID: <202411022359.fBPFTg2T-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,34 +63,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241102000843.1301099-11-samuel.holland@sifive.com>
 
-Hi Samuel,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.12-rc5 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/dt-bindings-riscv-Describe-physical-memory-regions/20241102-081311
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20241102000843.1301099-11-samuel.holland%40sifive.com
-patch subject: [PATCH 10/11] riscv: mm: Use physical memory aliases to apply PMAs
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20241102/202411022337.JHozQieV-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411022337.JHozQieV-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
+head:   a812eee0b68645e2916d4a4399280fe5471cac67
+commit: e93d2521b27f0439872dfa4e4b92a9be6d73496f [33/41] x86/vdso: Split virtual clock pages into dedicated mapping
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241102/202411022359.fBPFTg2T-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241102/202411022359.fBPFTg2T-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411022337.JHozQieV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411022359.fBPFTg2T-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "riscv_fixup_memory_alias" [arch/riscv/kvm/kvm.ko] undefined!
+   In file included from arch/x86/entry/vdso/vma.c:7:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/entry/vdso/vma.c:199:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     199 |                 struct pvclock_vsyscall_time_info *pvti =
+         |                 ^
+   arch/x86/entry/vdso/vma.c:209:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     209 |                 unsigned long pfn = hv_get_tsc_pfn();
+         |                 ^
+   6 warnings generated.
+
+
+vim +199 arch/x86/entry/vdso/vma.c
+
+   192	
+   193	static vm_fault_t vvar_vclock_fault(const struct vm_special_mapping *sm,
+   194					    struct vm_area_struct *vma, struct vm_fault *vmf)
+   195	{
+   196		switch (vmf->pgoff) {
+   197	#ifdef CONFIG_PARAVIRT_CLOCK
+   198		case VDSO_PAGE_PVCLOCK_OFFSET:
+ > 199			struct pvclock_vsyscall_time_info *pvti =
+   200				pvclock_get_pvti_cpu0_va();
+   201			if (pvti && vclock_was_used(VDSO_CLOCKMODE_PVCLOCK))
+   202				return vmf_insert_pfn_prot(vma, vmf->address,
+   203						__pa(pvti) >> PAGE_SHIFT,
+   204						pgprot_decrypted(vma->vm_page_prot));
+   205			break;
+   206	#endif /* CONFIG_PARAVIRT_CLOCK */
+   207	#ifdef CONFIG_HYPERV_TIMER
+   208		case VDSO_PAGE_HVCLOCK_OFFSET:
+   209			unsigned long pfn = hv_get_tsc_pfn();
+   210	
+   211			if (pfn && vclock_was_used(VDSO_CLOCKMODE_HVCLOCK))
+   212				return vmf_insert_pfn(vma, vmf->address, pfn);
+   213			break;
+   214	#endif /* CONFIG_HYPERV_TIMER */
+   215		}
+   216	
+   217		return VM_FAULT_SIGBUS;
+   218	}
+   219	
 
 -- 
 0-DAY CI Kernel Test Service
