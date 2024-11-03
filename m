@@ -1,61 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D4418E05E;
-	Sun,  3 Nov 2024 22:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E93D7082A;
+	Sun,  3 Nov 2024 23:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730673541; cv=none; b=i+YE8xdVLcKC8yKhRe3iD1C9CDdlOUgJ/xW93OKseta5cQV83FvQi4pmQ5p4yQnMXHGWTNg4/0+R5EBurwAXyFm51QuAOVCkMiXi7KHtbc1B8zSuv5h6mZj6oBzRSpK6h2e5lfKmGoqGFlgRyM8fCumOvHae978OB5IlC/F1glA=
+	t=1730675341; cv=none; b=VKtm0zThIp5jkPTH3Ad6FwYfu7wK1uDB36+p1TnuvlGgR17rqWyBeBOm3brWd/zqVvOww9cvfO2wplWSFygrARRayIo4c6EIu+5BmDP9ytFHVAdvt9SB80kry5SHhKn9zDcvJa8mimbm641qR54Hawcy0uT7SCZVMCx1X0zn3b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730673541; c=relaxed/simple;
-	bh=it8UkeeGYxov80ao0WQ3wAVvVQIFqvTlyZMe1Pwb404=;
+	s=arc-20240116; t=1730675341; c=relaxed/simple;
+	bh=crm/QIDyI3SOwwf2rxiPmdFgzY2cX7ykwgcqLsbgRfs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GM080y+uyuSD3ABYztGOmlTAoGkcYjdQjx35Y8IXAK3a7xnh6U55fPeHAhNeUDj1bmDq/VIGOuqKpchR0Gqzhf9p54tj5HPRXt0+PBH1HF9Th6vHiZMvHc5FxdZYzdKG74XdNaO5gBKRqgS5RahhNAM3I3nSqN4fN+v3+cpMrnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+K4l9tQ; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=IjLlEmmnOwRNfbPDH10SZrKx2YYCZVaBQN997CCPDpZbR2dP7PzYtGFFy9jWELJkIMXnrKhaK0ByJ5S8renalP7RmxSg4Tnp0LNBKw0R1EJB2HPWzKx4k4mkWPRemqAe/zcQOPPUjw51FDaD2c9f+8LQFsysyGmzfmnMkfNg0go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ONa31SDW; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+K4l9tQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ONa31SDW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730673539; x=1762209539;
+  t=1730675339; x=1762211339;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=it8UkeeGYxov80ao0WQ3wAVvVQIFqvTlyZMe1Pwb404=;
-  b=L+K4l9tQpvlZjDZuRAEi2i8bV9zx/4mZAc9wPmpsWMKGJ1vMLiX49pZn
-   /ZV5uUwzHeJOkiguaTm+fJ4LNDlmNkdHH+l/Cbvec04rDaS4xsdUcy1Ky
-   AasvdD8Q09vJQBrRD7c5ecoPu/sUE8oE71E8xX7JUJrcQKPIN8uKP+3+3
-   w4gIFfYWnD4KwrQfWYz3FdQzf8KFy5ER8eRLkcTjEpykiZgugJvCY4B7x
-   ZCDRaY0qZHJlYULuPhXCgNbKsr0xQ6aaR6+h5WMwoincIRvFBdH4hKlTn
-   lwqQBEFKFeWomicA24suoRHiNFVhM5IZ31gz9JhOILaTPdpa+TZmX+q5+
-   w==;
-X-CSE-ConnectionGUID: 3uzzSdq9TPWMIREQe6et9g==
-X-CSE-MsgGUID: LN9RA9i8Q4Gk9WiWi62cAw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47824748"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="47824748"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 14:38:54 -0800
-X-CSE-ConnectionGUID: AzxyHmoAQJ2RNlpaDUYW9Q==
-X-CSE-MsgGUID: mabvL4PLTuaOuF5KpJ9YYw==
+  bh=crm/QIDyI3SOwwf2rxiPmdFgzY2cX7ykwgcqLsbgRfs=;
+  b=ONa31SDWX8M5oDK0OTRPJZAKlPCQujmgEd2yOCZ0+sdhfZ6BgJyti47X
+   kX73eHu9kgqMeKSa7lfauRa3flnS/34ClqAQ3m8r8Z/NV4/EDI3ZTWw15
+   JYnpxIHn8YUlr5graRcgvzQ0XYMd8PF/FX5fGyT8wL5lSMphwrMzb372t
+   FGAaTpdgY11lli5nZK0C5M2u5reLL3HUn3xrFPmUWECSQKXryhiSvZ5fk
+   F8Fj4JpOzHPdxZEZTAhaA83PPAKNS7qnP4fvLctDrq5rVg7O1mPTintUV
+   sbZI/yOg9ijIEWEfTINomeUXMXGaZwOemLeZcV9WHuqSLKXNhEL1CfeBS
+   g==;
+X-CSE-ConnectionGUID: RCZpwI7WQ26qEIkfoDJkLg==
+X-CSE-MsgGUID: IrMR2Ax7R1GYXIRtabRmEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="47863232"
+X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
+   d="scan'208";a="47863232"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 15:08:58 -0800
+X-CSE-ConnectionGUID: Ur1Zp7IiSZeQkQDtGg/KuQ==
+X-CSE-MsgGUID: pLydNDSKRRKZujw9P5yU6A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="83369401"
+   d="scan'208";a="88302210"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 03 Nov 2024 14:38:54 -0800
+  by orviesa005.jf.intel.com with ESMTP; 03 Nov 2024 15:08:57 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t7jFC-000kGH-2h;
-	Sun, 03 Nov 2024 22:38:50 +0000
-Date: Mon, 4 Nov 2024 06:38:18 +0800
+	id 1t7jiJ-000kH3-00;
+	Sun, 03 Nov 2024 23:08:55 +0000
+Date: Mon, 4 Nov 2024 07:08:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6211:13:
- warning: stack frame size (3288) exceeds limit (2048) in
- 'dml_prefetch_check'
-Message-ID: <202411040601.DGJciccG-lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 32/42] fs/namei.c:3279:31: error: use of
+ undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+Message-ID: <202411040722.7Y57ubXt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,168 +62,145 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a8cc7432728d019a10cb412401ebc15ed7504289
-commit: b141fa036c901303ca5659cc22e9c08f8b097892 drm/amd/display: Reduce stack size by splitting function
-date:   1 year ago
-config: x86_64-buildonly-randconfig-002-20241104 (https://download.01.org/0day-ci/archive/20241104/202411040601.DGJciccG-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   7c5f52902153bdf6d59451262c63a5dc54c66f01
+commit: 9a34820ca26623411877c1af5a4d81f5c00c0ed5 [32/42] fs: add a "reason" parameter to try_break_deleg
+config: i386-buildonly-randconfig-001-20241104 (https://download.01.org/0day-ci/archive/20241104/202411040722.7Y57ubXt-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411040601.DGJciccG-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411040722.7Y57ubXt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411040601.DGJciccG-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411040722.7Y57ubXt-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:25:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.h:29:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core_structs.h:28:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_lib_defines.h:43:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml_depedencies.h:30:
-   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/os_types.h:31:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2168:
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   In file included from fs/namei.c:25:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6699:12: warning: stack frame size (2904) exceeds limit (2048) in 'dml_core_mode_support' [-Wframe-larger-than]
-    6699 | dml_bool_t dml_core_mode_support(struct display_mode_lib_st *mode_lib)
-         |            ^
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6211:13: warning: stack frame size (3288) exceeds limit (2048) in 'dml_prefetch_check' [-Wframe-larger-than]
-    6211 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
-         |             ^
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8268:6: warning: stack frame size (2616) exceeds limit (2048) in 'dml_core_mode_programming' [-Wframe-larger-than]
-    8268 | void dml_core_mode_programming(struct display_mode_lib_st *mode_lib, const struct dml_clk_cfg_st *clk_cfg)
-         |      ^
-   4 warnings generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/namei.c:3279:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3279 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:3599:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3599 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                    ^
+   fs/namei.c:3666:25: error: variable has incomplete type 'struct delegated_inode'
+    3666 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4144:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4144 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4202:25: error: variable has incomplete type 'struct delegated_inode'
+    4202 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4287:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4287 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4325:25: error: variable has incomplete type 'struct delegated_inode'
+    4325 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:4386:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4386 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4436:25: error: variable has incomplete type 'struct delegated_inode'
+    4436 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4543:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4543 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                                      ^
+   fs/namei.c:4585:25: error: variable has incomplete type 'struct delegated_inode'
+    4585 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4817:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4817 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                              ^
+   fs/namei.c:4851:25: error: variable has incomplete type 'struct delegated_inode'
+    4851 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:5086:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
+    5086 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
+         |                                                      ^
+   fs/namei.c:5087:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5087 |                                                      LEASE_BREAK_DIR_DELETE,
+         |                                                      ^
+   fs/namei.c:5092:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5092 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                  ^
+   fs/namei.c:5154:25: error: variable has incomplete type 'struct delegated_inode'
+    5154 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   4 warnings and 17 errors generated.
 
 
-vim +/dml_prefetch_check +6211 drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c
+vim +/LEASE_BREAK_DIR_CREATE +3279 fs/namei.c
 
-  6210	
-> 6211	static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
-  6212	{
-  6213		struct dml_core_mode_support_locals_st *s = &mode_lib->scratch.dml_core_mode_support_locals;
-  6214		struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params = &mode_lib->scratch.CalculatePrefetchSchedule_params;
-  6215		struct CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport_params_st *CalculateWatermarks_params = &mode_lib->scratch.CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport_params;
-  6216		struct DmlPipe *myPipe;
-  6217		dml_uint_t j, k;
-  6218	
-  6219		for (j = 0; j < 2; ++j) {
-  6220			mode_lib->ms.TimeCalc = 24 / mode_lib->ms.ProjectedDCFCLKDeepSleep[j];
-  6221	
-  6222			for (k = 0; k < mode_lib->ms.num_active_planes; ++k) {
-  6223				mode_lib->ms.NoOfDPPThisState[k] = mode_lib->ms.NoOfDPP[j][k];
-  6224				mode_lib->ms.swath_width_luma_ub_this_state[k] = mode_lib->ms.swath_width_luma_ub_all_states[j][k];
-  6225				mode_lib->ms.swath_width_chroma_ub_this_state[k] = mode_lib->ms.swath_width_chroma_ub_all_states[j][k];
-  6226				mode_lib->ms.SwathWidthYThisState[k] = mode_lib->ms.SwathWidthYAllStates[j][k];
-  6227				mode_lib->ms.SwathWidthCThisState[k] = mode_lib->ms.SwathWidthCAllStates[j][k];
-  6228				mode_lib->ms.SwathHeightYThisState[k] = mode_lib->ms.SwathHeightYAllStates[j][k];
-  6229				mode_lib->ms.SwathHeightCThisState[k] = mode_lib->ms.SwathHeightCAllStates[j][k];
-  6230				mode_lib->ms.UnboundedRequestEnabledThisState = mode_lib->ms.UnboundedRequestEnabledAllStates[j];
-  6231				mode_lib->ms.CompressedBufferSizeInkByteThisState = mode_lib->ms.CompressedBufferSizeInkByteAllStates[j];
-  6232				mode_lib->ms.DETBufferSizeInKByteThisState[k] = mode_lib->ms.DETBufferSizeInKByteAllStates[j][k];
-  6233				mode_lib->ms.DETBufferSizeYThisState[k] = mode_lib->ms.DETBufferSizeYAllStates[j][k];
-  6234				mode_lib->ms.DETBufferSizeCThisState[k] = mode_lib->ms.DETBufferSizeCAllStates[j][k];
-  6235			}
-  6236	
-  6237			mode_lib->ms.support.VActiveBandwithSupport[j] = CalculateVActiveBandwithSupport(
-  6238				mode_lib->ms.num_active_planes,
-  6239				mode_lib->ms.ReturnBWPerState[j],
-  6240				mode_lib->ms.NotUrgentLatencyHiding,
-  6241				mode_lib->ms.ReadBandwidthLuma,
-  6242				mode_lib->ms.ReadBandwidthChroma,
-  6243				mode_lib->ms.cursor_bw,
-  6244				mode_lib->ms.meta_row_bandwidth_this_state,
-  6245				mode_lib->ms.dpte_row_bandwidth_this_state,
-  6246				mode_lib->ms.NoOfDPPThisState,
-  6247				mode_lib->ms.UrgentBurstFactorLuma,
-  6248				mode_lib->ms.UrgentBurstFactorChroma,
-  6249				mode_lib->ms.UrgentBurstFactorCursor);
-  6250	
-  6251			s->VMDataOnlyReturnBWPerState = dml_get_return_bw_mbps_vm_only(
-  6252																		&mode_lib->ms.soc,
-  6253																		mode_lib->ms.state.use_ideal_dram_bw_strobe,
-  6254																		mode_lib->ms.cache_display_cfg.plane.HostVMEnable,
-  6255																		mode_lib->ms.DCFCLKState[j],
-  6256																		mode_lib->ms.state.fabricclk_mhz,
-  6257																		mode_lib->ms.state.dram_speed_mts);
-  6258	
-  6259			s->HostVMInefficiencyFactor = 1;
-  6260			if (mode_lib->ms.cache_display_cfg.plane.GPUVMEnable && mode_lib->ms.cache_display_cfg.plane.HostVMEnable)
-  6261				s->HostVMInefficiencyFactor = mode_lib->ms.ReturnBWPerState[j] / s->VMDataOnlyReturnBWPerState;
-  6262	
-  6263			mode_lib->ms.ExtraLatency = CalculateExtraLatency(
-  6264					mode_lib->ms.soc.round_trip_ping_latency_dcfclk_cycles,
-  6265					s->ReorderingBytes,
-  6266					mode_lib->ms.DCFCLKState[j],
-  6267					mode_lib->ms.TotalNumberOfActiveDPP[j],
-  6268					mode_lib->ms.ip.pixel_chunk_size_kbytes,
-  6269					mode_lib->ms.TotalNumberOfDCCActiveDPP[j],
-  6270					mode_lib->ms.ip.meta_chunk_size_kbytes,
-  6271					mode_lib->ms.ReturnBWPerState[j],
-  6272					mode_lib->ms.cache_display_cfg.plane.GPUVMEnable,
-  6273					mode_lib->ms.cache_display_cfg.plane.HostVMEnable,
-  6274					mode_lib->ms.num_active_planes,
-  6275					mode_lib->ms.NoOfDPPThisState,
-  6276					mode_lib->ms.dpte_group_bytes,
-  6277					s->HostVMInefficiencyFactor,
-  6278					mode_lib->ms.soc.hostvm_min_page_size_kbytes,
-  6279					mode_lib->ms.cache_display_cfg.plane.HostVMMaxPageTableLevels);
-  6280	
-  6281			s->NextMaxVStartup = s->MaxVStartupAllPlanes[j];
-  6282			s->MaxVStartup = 0;
-  6283			s->AllPrefetchModeTested = true;
-  6284			for (k = 0; k <= mode_lib->ms.num_active_planes - 1; k++) {
-  6285				CalculatePrefetchMode(mode_lib->ms.policy.AllowForPStateChangeOrStutterInVBlank[k], &s->MinPrefetchMode[k], &s->MaxPrefetchMode[k]);
-  6286				s->NextPrefetchMode[k] = s->MinPrefetchMode[k];
-  6287			}
-  6288	
-  6289			do {
-  6290				s->MaxVStartup = s->NextMaxVStartup;
-  6291				s->AllPrefetchModeTested = true;
-  6292	
-  6293				for (k = 0; k <= mode_lib->ms.num_active_planes - 1; k++) {
-  6294					mode_lib->ms.PrefetchMode[k] = s->NextPrefetchMode[k];
-  6295					mode_lib->ms.TWait = CalculateTWait(
-  6296									mode_lib->ms.PrefetchMode[k],
-  6297									mode_lib->ms.cache_display_cfg.plane.UseMALLForPStateChange[k],
-  6298									mode_lib->ms.policy.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
-  6299									mode_lib->ms.cache_display_cfg.timing.DRRDisplay[k],
-  6300									mode_lib->ms.state.dram_clock_change_latency_us,
-  6301									mode_lib->ms.state.fclk_change_latency_us,
-  6302									mode_lib->ms.UrgLatency,
-  6303									mode_lib->ms.state.sr_enter_plus_exit_time_us);
-  6304	
-  6305					myPipe = &s->myPipe;
-  6306					myPipe->Dppclk = mode_lib->ms.RequiredDPPCLKPerSurface[j][k];
-  6307					myPipe->Dispclk = mode_lib->ms.RequiredDISPCLK[j];
-  6308					myPipe->PixelClock = mode_lib->ms.cache_display_cfg.timing.PixelClock[k];
-  6309					myPipe->DCFClkDeepSleep = mode_lib->ms.ProjectedDCFCLKDeepSleep[j];
-  6310					myPipe->DPPPerSurface = mode_lib->ms.NoOfDPP[j][k];
-  6311					myPipe->ScalerEnabled = mode_lib->ms.cache_display_cfg.plane.ScalerEnabled[k];
-  6312					myPipe->SourceScan = mode_lib->ms.cache_display_cfg.plane.SourceScan[k];
-  6313					myPipe->BlockWidth256BytesY = mode_lib->ms.Read256BlockWidthY[k];
-  6314					myPipe->BlockHeight256BytesY = mode_lib->ms.Read256BlockHeightY[k];
-  6315					myPipe->BlockWidth256BytesC = mode_lib->ms.Read256BlockWidthC[k];
-  6316					myPipe->BlockHeight256BytesC = mode_lib->ms.Read256BlockHeightC[k];
-  6317					myPipe->InterlaceEnable = mode_lib->ms.cache_display_cfg.timing.Interlace[k];
-  6318					myPipe->NumberOfCursors = mode_lib->ms.cache_display_cfg.plane.NumberOfCursors[k];
-  6319					myPipe->VBlank = mode_lib->ms.cache_display_cfg.timing.VTotal[k] - mode_lib->ms.cache_display_cfg.timing.VActive[k];
-  6320					myPipe->HTotal = mode_lib->ms.cache_display_cfg.timing.HTotal[k];
-  6321					myPipe->HActive = mode_lib->ms.cache_display_cfg.timing.HActive[k];
-  6322					myPipe->DCCEnable = mode_lib->ms.cache_display_cfg.surface.DCCEnable[k];
-  6323					myPipe->ODMMode = mode_lib->ms.ODMModePerState[k];
-  6324					myPipe->SourcePixelFormat = mode_lib->ms.cache_display_cfg.surface.SourcePixelFormat[k];
-  6325					myPipe->BytePerPixelY = mode_lib->ms.BytePerPixelY[k];
-  6326					myPipe->BytePerPixelC = mode_lib->ms.BytePerPixelC[k];
-  6327					myPipe->ProgressiveToInterlaceUnitInOPP = mode_lib->ms.ip.ptoi_supported;
-  6328	
+  3261	
+  3262	static int __vfs_create(struct mnt_idmap *idmap, struct inode *dir,
+  3263				struct dentry *dentry, umode_t mode, bool want_excl,
+  3264				struct delegated_inode *delegated_inode)
+  3265	{
+  3266		int error;
+  3267	
+  3268		error = may_create(idmap, dir, dentry);
+  3269		if (error)
+  3270			return error;
+  3271	
+  3272		if (!dir->i_op->create)
+  3273			return -EACCES;	/* shouldn't it be ENOSYS? */
+  3274	
+  3275		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
+  3276		error = security_inode_create(dir, dentry, mode);
+  3277		if (error)
+  3278			return error;
+> 3279		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+  3280		if (error)
+  3281			return error;
+  3282		error = dir->i_op->create(idmap, dir, dentry, mode, want_excl);
+  3283		if (!error)
+  3284			fsnotify_create(dir, dentry);
+  3285		return error;
+  3286	}
+  3287	
 
 -- 
 0-DAY CI Kernel Test Service
