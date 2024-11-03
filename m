@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FF6AD2C;
-	Sun,  3 Nov 2024 00:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3C979F2;
+	Sun,  3 Nov 2024 00:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730593507; cv=none; b=lZNQs2XK7FF4/PcOcNWROE3NwSI6ujXmJIerDfelsllSE4UuNHVjAaApbT4UA9W3W652o4cAuIxyN+6F/KjE6xyIKH7oCAuVuaSv6QS0TOQwhp3nvtLY7Sflz55OncKBkFI+yNYNgmt88JRhmeR6m9mNcNRXTbML/coKVOjiJzM=
+	t=1730595428; cv=none; b=tksdpP+rYult401Y97rra3KA8L2ofFjadkSVaavvlf0prbUXsqwqezLRBsDAeH8Tq+doUMjrh1LZadxj3g5khxSAaxeeNrZVveeSPZrdJT+gX4erAlqrrpjBYpr6rbSOAB0uW+z03e/q4e3wcBkvBeuHq1xZD1WMjaN87kNvnfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730593507; c=relaxed/simple;
-	bh=tSbsH5LYyg1jfX5AJ6am4mxThB6pMyDr/XwDAPC4oWM=;
+	s=arc-20240116; t=1730595428; c=relaxed/simple;
+	bh=m3czOQamkfWtBqcSINNWA4L2k1BneVoUt3ks3i+MJH4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=e+Ywh+QyKTP9PklHTpjt7JwaHW7gHV+TxQHT0s7c5AlIUIwolRUYpXBFxXxKDF9qdMd1TYi+bZ5+YftsOhrBqa8xvNrGPx3gFrQbssb0kuHZs7aMTRRLMhbb/758f8YDxV7MSdAz+171zUXaqx46B91SfaAre5iDv6m2ysxH3Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kGKaOq0e; arc=none smtp.client-ip=192.198.163.18
+	 Content-Disposition; b=X+SHNQj5PoHDrIGGoNc9EJ7QqyQ8Hta5ZQyF9T+3zWG+faBhN3sZHI8Ij6WFCyABHl+x119esT3jc+XedIKyr3RnSBtI6yfCr9fQ0iqz2EgUjp1LUaRsQM/YvipVQ4ucDgayBbXLjDOZS3LDAjiXDg7SQqdxgdJzzMgwbiObCps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNp4QNpz; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kGKaOq0e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNp4QNpz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730593506; x=1762129506;
+  t=1730595427; x=1762131427;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tSbsH5LYyg1jfX5AJ6am4mxThB6pMyDr/XwDAPC4oWM=;
-  b=kGKaOq0eujMsb0wJxkn3Ihys6ueDQGMUGk44D/xftfX8M521CX6SudE+
-   UITi1yWQq9cw5GH8KwT2IiO2fVgyhdxdNnsd+upj/zkB6CbHTieGVzHwm
-   HsxRE7pBaQxhbev7A3xVhOXw1h0B7fMsXKux3rEy6F0izSOHIuwgXhFog
-   ovICJuEwi1mtZOQ5m0S00VlfHEkTdRYQn4sjBVAj2fmLYT1zj6CXYo4ir
-   9TqAlt4/5/nwNtMvnSB417Ws4lt2F2OWOY95AT/BNEeljRA3fewkqFaR6
-   Dw8mvcFK+UB/9bIPFOyrfqP8aW5N9r6e6U21qQE1uDDzCkJ3VBM/nIwQo
-   Q==;
-X-CSE-ConnectionGUID: uvnJI72LS2aGHA3BjknSSA==
-X-CSE-MsgGUID: yaOTjGvpRfC8IuYhxN7d0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11244"; a="29745740"
-X-IronPort-AV: E=Sophos;i="6.11,253,1725346800"; 
-   d="scan'208";a="29745740"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 17:25:04 -0700
-X-CSE-ConnectionGUID: XxIcKVGMRgetUP/yrIckyg==
-X-CSE-MsgGUID: fyE8mLqdS3GT5W2vYxhvfA==
+  bh=m3czOQamkfWtBqcSINNWA4L2k1BneVoUt3ks3i+MJH4=;
+  b=GNp4QNpzbEGfB64EaAp9bNu6tsyIngwUAui8yQOZn0Oarnn21iB21aCh
+   5mmwxOA5UCgysigSX+XvOyCpyKrSsXjC2BBaqLBnOKXfdq3UEFYMlBiKb
+   PF7CyeS3VkZlTxY96tbef+YGuBeDXmchH0emtcJY8ExbY8a1k+CJola6+
+   ke9ZH1RJXjUjkWXQqzdslsVAUyC8ehuB3ghVPdvkFIyirIH3lU4XXXpR3
+   u/hVhK5BmhS0vKmERvP2Gc8ouFxbpX8cfruSdQP3Y4qrxtCwlDlfdp2LE
+   Frg9kIEriLsRRYrT+j8QwsvIkrxs1xV2NqhIs9c6h1J99Joo9gooNdN2W
+   g==;
+X-CSE-ConnectionGUID: CfWrU4HmQ9i5RFq2+qx2rA==
+X-CSE-MsgGUID: JrL1p7U9R3Oj4yn0GH/LBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11244"; a="30434665"
+X-IronPort-AV: E=Sophos;i="6.11,254,1725346800"; 
+   d="scan'208";a="30434665"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2024 17:57:06 -0700
+X-CSE-ConnectionGUID: OOgjJW02Tg+bN94NwPlMYw==
+X-CSE-MsgGUID: oNOqWdNpSX6QrmVn2Vt8MA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,253,1725346800"; 
-   d="scan'208";a="83209912"
+X-IronPort-AV: E=Sophos;i="6.11,254,1725346800"; 
+   d="scan'208";a="83411876"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 02 Nov 2024 17:25:03 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 02 Nov 2024 17:57:04 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t7OQO-000jUv-2n;
-	Sun, 03 Nov 2024 00:25:00 +0000
-Date: Sun, 3 Nov 2024 08:24:43 +0800
+	id 1t7OvO-000jWT-0y;
+	Sun, 03 Nov 2024 00:57:02 +0000
+Date: Sun, 3 Nov 2024 08:56:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:timers/posix 104/107] kernel/signal.c:2002:25: error:
- use of undeclared identifier 'POSIX_TIMER_REQUEUE_PENDING'
-Message-ID: <202411030853.CoxrLb6x-lkp@intel.com>
+To: Angelo Dureghello <adureghello@baylibre.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Nuno Sa <nuno.sa@analog.com>, David Lechner <dlechner@baylibre.com>
+Subject: [jic23-iio:testing 104/148] ad3552r-hs.c:undefined reference to
+ `devm_iio_backend_get'
+Message-ID: <202411030816.f1p0T0j0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,138 +64,45 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git timers/posix
-head:   7dff83f0eba841872222db257facf9efac85dd2e
-commit: a4329b49227494eab8b0dc4220b65c9c341ef3f9 [104/107] signal: Queue ignored posixtimers on ignore list
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241103/202411030853.CoxrLb6x-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241103/202411030853.CoxrLb6x-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   861c99a3cdaf02d836648c896a9db63cf9e93f8c
+commit: 4d5792b6681845344d7c1194312895c1a6135f4d [104/148] iio: dac: ad3552r: add high-speed platform driver
+config: um-randconfig-001-20241103 (https://download.01.org/0day-ci/archive/20241103/202411030816.f1p0T0j0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241103/202411030816.f1p0T0j0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411030853.CoxrLb6x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411030816.f1p0T0j0-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/signal.c:25:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> kernel/signal.c:2002:25: error: use of undeclared identifier 'POSIX_TIMER_REQUEUE_PENDING'
-    2002 |                 if (tmr->it_status == POSIX_TIMER_REQUEUE_PENDING) {
-         |                                       ^
->> kernel/signal.c:2014:30: error: incompatible pointer types passing 'struct k_itimer *' to parameter of type 'struct sigqueue *' [-Werror,-Wincompatible-pointer-types]
-    2014 |                                 posixtimer_sig_ignore(t, tmr);
-         |                                                          ^~~
-   kernel/signal.c:734:84: note: passing argument to parameter 'q' here
-     734 | static inline void posixtimer_sig_ignore(struct task_struct *tsk, struct sigqueue *q);
-         |                                                                                    ^
-   kernel/signal.c:2059:24: error: use of undeclared identifier 'POSIX_TIMER_REQUEUE_PENDING'
-    2059 |         if (tmr->it_status == POSIX_TIMER_REQUEUE_PENDING)
-         |                               ^
-   4 warnings and 3 errors generated.
+   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: drivers/iio/dac/ad3552r-hs.o: in function `ad3552r_hs_probe':
+>> ad3552r-hs.c:(.text+0x43): undefined reference to `devm_iio_backend_get'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0x8b): undefined reference to `devm_iio_backend_enable'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0x10b): undefined reference to `devm_iio_backend_request_buffer'
+   /usr/bin/ld: drivers/iio/dac/ad3552r-hs.o: in function `ad3552r_hs_setup':
+>> ad3552r-hs.c:(.text+0x1fa): undefined reference to `iio_backend_ddr_disable'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0x4ab): undefined reference to `iio_backend_data_source_set'
+   /usr/bin/ld: ad3552r-hs.c:(.text+0x4fb): undefined reference to `iio_backend_data_source_set'
+   /usr/bin/ld: drivers/iio/dac/ad3552r-hs.o: in function `ad3552r_hs_buffer_postenable':
+>> ad3552r-hs.c:(.text+0x935): undefined reference to `iio_backend_ddr_enable'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0x962): undefined reference to `iio_backend_data_transfer_addr'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0x994): undefined reference to `iio_backend_data_format_set'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0x9c0): undefined reference to `iio_backend_data_stream_enable'
+>> /usr/bin/ld: ad3552r-hs.c:(.text+0xa16): undefined reference to `iio_backend_ddr_disable'
+   /usr/bin/ld: drivers/iio/dac/ad3552r-hs.o: in function `ad3552r_hs_buffer_predisable':
+>> ad3552r-hs.c:(.text+0xa4c): undefined reference to `iio_backend_data_stream_disable'
+   /usr/bin/ld: ad3552r-hs.c:(.text+0xaab): undefined reference to `iio_backend_ddr_disable'
+   clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
 
-
-vim +/POSIX_TIMER_REQUEUE_PENDING +2002 kernel/signal.c
-
-  1970	
-  1971	int posixtimer_send_sigqueue(struct k_itimer *tmr)
-  1972	{
-  1973		struct sigqueue *q = &tmr->sigq;
-  1974		int sig = q->info.si_signo;
-  1975		struct task_struct *t;
-  1976		unsigned long flags;
-  1977		int result;
-  1978	
-  1979		guard(rcu)();
-  1980	
-  1981		t = posixtimer_get_target(tmr);
-  1982		if (!t)
-  1983			return -1;
-  1984	
-  1985		if (!likely(lock_task_sighand(t, &flags)))
-  1986			return -1;
-  1987	
-  1988		/*
-  1989		 * Update @tmr::sigqueue_seq for posix timer signals with sighand
-  1990		 * locked to prevent a race against dequeue_signal().
-  1991		 */
-  1992		tmr->it_sigqueue_seq = tmr->it_signal_seq;
-  1993	
-  1994		if (!prepare_signal(sig, t, false)) {
-  1995			result = TRACE_SIGNAL_IGNORED;
-  1996	
-  1997			/* Paranoia check. Try to survive. */
-  1998			if (WARN_ON_ONCE(!list_empty(&q->list)))
-  1999				goto out;
-  2000	
-  2001			/* Periodic timers with SIG_IGN are queued on the ignored list */
-> 2002			if (tmr->it_status == POSIX_TIMER_REQUEUE_PENDING) {
-  2003				/*
-  2004				 * Already queued means the timer was rearmed after
-  2005				 * the previous expiry got it on the ignore list.
-  2006				 * Nothing to do for that case.
-  2007				 */
-  2008				if (hlist_unhashed(&tmr->ignored_list)) {
-  2009					/*
-  2010					 * Take a signal reference and queue it on
-  2011					 * the ignored list.
-  2012					 */
-  2013					posixtimer_sigqueue_getref(q);
-> 2014					posixtimer_sig_ignore(t, tmr);
-  2015				}
-  2016			} else if (!hlist_unhashed(&tmr->ignored_list)) {
-  2017				/*
-  2018				 * Covers the case where a timer was periodic and
-  2019				 * then signal was ignored. Then it was rearmed as
-  2020				 * oneshot timer. The previous signal is invalid
-  2021				 * now, and the oneshot signal has to be dropped.
-  2022				 * Remove it from the ignored list and drop the
-  2023				 * reference count as the signal is not longer
-  2024				 * queued.
-  2025				 */
-  2026				hlist_del_init(&tmr->ignored_list);
-  2027				posixtimer_putref(tmr);
-  2028			}
-  2029			goto out;
-  2030		}
-  2031	
-  2032		/* This should never happen and leaks a reference count */
-  2033		if (WARN_ON_ONCE(!hlist_unhashed(&tmr->ignored_list)))
-  2034			hlist_del_init(&tmr->ignored_list);
-  2035	
-  2036		if (unlikely(!list_empty(&q->list))) {
-  2037			/* This holds a reference count already */
-  2038			result = TRACE_SIGNAL_ALREADY_PENDING;
-  2039			goto out;
-  2040		}
-  2041	
-  2042		posixtimer_sigqueue_getref(q);
-  2043		posixtimer_queue_sigqueue(q, t, tmr->it_pid_type);
-  2044		result = TRACE_SIGNAL_DELIVERED;
-  2045	out:
-  2046		trace_signal_generate(sig, &q->info, t, tmr->it_pid_type != PIDTYPE_PID, result);
-  2047		unlock_task_sighand(t, &flags);
-  2048		return 0;
-  2049	}
-  2050	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
 
 -- 
 0-DAY CI Kernel Test Service
