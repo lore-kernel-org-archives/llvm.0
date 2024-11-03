@@ -1,96 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA89EAD8;
-	Sun,  3 Nov 2024 13:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25AC140E5F
+	for <llvm@lists.linux.dev>; Sun,  3 Nov 2024 19:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730641351; cv=none; b=GQFP//8oX+7W8BIW3BPErtG4uJ+M/cCmDpZsbxfqyBDNgJLaVQBs/R3Cj/ehKWnFjIgOE1b7n8OWK8CTl0t9oobfiPk0i1ehJwIZ/7DdKcSi7M2mGn7QD4AniuiXi1KIc9oHKjfB/JTu8Tk4pLCdvU6IKA6nmvO9+Ilc3vpb8e8=
+	t=1730663588; cv=none; b=ZJPAGjBtQeReO7PGErcNxvewM0TUOE08cbpKxBiNv3I8khGLpi3pa8DMehZRORYxEzLHUJ+ClDHZu3NkhBmGZWGDfKNV3PpntQUprDPWBdGFhRlLEi5EC1Ic9Frre8UTuvaSzQB6wAJOlRImeUImKOjd6PXwvnVh6DzrfSS1qIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730641351; c=relaxed/simple;
-	bh=tJ7tJX1hCX5vgqyd4uA84/xO02M06ad5DOorPfKO43Y=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hqx6W3sF0ZXVVO+2QraG/KmZ0b2LZMEhBjEo+B8bDC7Epv+BoZ9fzJdEv7pUvQEAiKmr6asOf+3fGWyiNe/nkUfYaGFWu2YkFo1oQ1g3xxS7dJ/95VDk5sugmabEhQzolFt3jf3XErRp13UshYEf3HzmrSUMzgaUgVzkw3lh6cY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gfH0i/qk; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730663588; c=relaxed/simple;
+	bh=tyolftkF6D4o79OItN0de7F1MpcdAGRut7NAQ33totU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=mR9bVrehYgUBjs7HxJ8QEU2ciionIEys5YF7fP32EvslMILhynGFz11/xMLnx1cBO3v4fFp9x0kGj8UWp5Ai/N8jZyMC8G2zKx6imi9NOGGQ1k/jr/kbFQx8R9/lIwJG3w+DxwChiT86ZNdO7sbJ0wpeoRPxL8oIMXVb5j7Sci0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bP3ncg17; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gfH0i/qk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730641349; x=1762177349;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=tJ7tJX1hCX5vgqyd4uA84/xO02M06ad5DOorPfKO43Y=;
-  b=gfH0i/qkXbTKLa/xnaJOM2h52pKOizc2oVFI4z8PempDTvTET4ubOLzg
-   LCoCmOFnB9IyP02c0K8WyNY9NvuY/yimSWSDZq/CggaNIYvccT3S1qwg9
-   bK7miNWuYrg9GHXlxiuuICMhCi9s4Zb37yTAom1VV03cI8SvHpsTZwjBw
-   CDBJZkuXpuwnT8bKs8/BIvNQ7LiIogRzJV0Oe55fZCllUnz4navKAhpMb
-   WleQ+sEz1QGLWosrLVdSqpAjvTTqJcdz1A+XxYrM2PXb5xXFupYXrbPz1
-   icH1nempnZ9AuAa6P3hkjcjXNwz5QHGmvUtvqZUFz5/+Dr/eBwzZFzFEd
-   g==;
-X-CSE-ConnectionGUID: gfDitEMYRP6/M7F6Gjr/2Q==
-X-CSE-MsgGUID: FLkWQDgmQiKVutc2QwwYgw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="29764974"
-X-IronPort-AV: E=Sophos;i="6.11,255,1725346800"; 
-   d="scan'208";a="29764974"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 05:42:28 -0800
-X-CSE-ConnectionGUID: aoDWrpwZRySl5EjHhjuQug==
-X-CSE-MsgGUID: VEr63UCGSOyuULu6mITohw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,255,1725346800"; 
-   d="scan'208";a="83330419"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 03 Nov 2024 05:42:28 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t7as5-000jyP-0o;
-	Sun, 03 Nov 2024 13:42:25 +0000
-Date: Sun, 3 Nov 2024 21:41:38 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [dwmw2:kexec-debug 7/7] arch/x86/kernel/relocate_kernel_64.o:
- warning: objtool: relocate_range+0x2f9: unreachable instruction
-Message-ID: <202411032106.qYUkz2pQ-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bP3ncg17"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730663585;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qyyBzTj9a5tIGAnLb9N2nhHn/oaXRFZJ6lc1ewHBPfA=;
+	b=bP3ncg17hhVB64xYkWSHBTrSGZ8YAO1RUI2tNe4GU0PV88ZnEBAmlSskawlfqUI7q2MTnM
+	uiPzO6pM5IQKYpJPn/i1gtrcuU/NmypNXCX8LZ0MoIhj5xErE915W+GdrHeSRyEbAiqESW
+	p5IKp7RPP9Usom+9rmPz4b4nhmrxh5o=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-622-2ZkLEjfmP-eL4YAViLfkXA-1; Sun,
+ 03 Nov 2024 14:53:04 -0500
+X-MC-Unique: 2ZkLEjfmP-eL4YAViLfkXA-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 356001956088
+	for <llvm@lists.linux.dev>; Sun,  3 Nov 2024 19:53:03 +0000 (UTC)
+Received: from [172.64.2.75] (unknown [10.30.34.59])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A3CAB1956089;
+	Sun,  3 Nov 2024 19:53:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc5,
+ upstream-mainline, a33ab3f9)
+Date: Sun, 03 Nov 2024 19:53:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <71529.124110314530400176@us-mta-622.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-TO: David Woodhouse <dwmw@amazon.co.uk>
+Hi, we tested your kernel and here are the results:
 
-tree:   git://git.infradead.org/users/dwmw2/linux kexec-debug
-head:   323ac978117ad1c540de0414282f8aad6c1f10a5
-commit: 323ac978117ad1c540de0414282f8aad6c1f10a5 [7/7] [DO NOT MERGE] x86/kexec: enable DEBUG
-config: x86_64-buildonly-randconfig-003-20241103 (https://download.01.org/0day-ci/archive/20241103/202411032106.qYUkz2pQ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241103/202411032106.qYUkz2pQ-lkp@intel.com/reproduce)
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411032106.qYUkz2pQ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'kbuild-fixes-v6.12-2' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
 
->> arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x2f9: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x308: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x50f: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x510: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x512: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x514: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x516: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x518: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x51a: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x51c: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x523: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x529: unreachable instruction
-   arch/x86/kernel/relocate_kernel_64.o: warning: objtool: relocate_range+0x52b: unreachable instruction
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1525092327
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1525092327-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1525092327-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1525092327-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
