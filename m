@@ -1,101 +1,233 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D317189BA3
-	for <llvm@lists.linux.dev>; Sun,  3 Nov 2024 21:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D4418E05E;
+	Sun,  3 Nov 2024 22:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730670130; cv=none; b=XdY0QNVl1DAWY/kWnSRHfmmGuwdIHOgVsPkCCCi2zfLCDUHnD/D8YnQm+jdptfW6qr0znKQsaujI6/oxjrc5gKkiNlLv2DbEigvnv0Wf5vYCz6ohK54gZnKFsWsXovPahUyngGus7KmYAYJR8pkgl/6lnRYab89f92Ix+HbDWJo=
+	t=1730673541; cv=none; b=i+YE8xdVLcKC8yKhRe3iD1C9CDdlOUgJ/xW93OKseta5cQV83FvQi4pmQ5p4yQnMXHGWTNg4/0+R5EBurwAXyFm51QuAOVCkMiXi7KHtbc1B8zSuv5h6mZj6oBzRSpK6h2e5lfKmGoqGFlgRyM8fCumOvHae978OB5IlC/F1glA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730670130; c=relaxed/simple;
-	bh=ek6ZOqbbN+3qwtXz/eMXkyZuk8lMqA7YyOtFi5fsAGI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=U1TaT2kvFP9YI98LdtwIH6NJE3svqD1EiQGr7KVa+/LL1zQhigq3BnKRzCCn/UEFBQ8U+Ia2bPztZzntqv7b4JZ8r+Hvjo/Xe1TkHFn1i/Pll6C+/kkAukreW7W0/lStRCDF0Sd7nOQFsWHzoCur5qNVLLpcUk1X7/QomEHh6DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NBzjsdzv; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1730673541; c=relaxed/simple;
+	bh=it8UkeeGYxov80ao0WQ3wAVvVQIFqvTlyZMe1Pwb404=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GM080y+uyuSD3ABYztGOmlTAoGkcYjdQjx35Y8IXAK3a7xnh6U55fPeHAhNeUDj1bmDq/VIGOuqKpchR0Gqzhf9p54tj5HPRXt0+PBH1HF9Th6vHiZMvHc5FxdZYzdKG74XdNaO5gBKRqgS5RahhNAM3I3nSqN4fN+v3+cpMrnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L+K4l9tQ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NBzjsdzv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730670127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=N+DdHdc+q3cYPEuDdpKWBhs9lD+wQqhB26VosABqJcg=;
-	b=NBzjsdzvA17sFFa241vDOSLS6ld1larXpDQuLhtJPO5zQ95yD1UfJIxK101RbmEwnPqaXF
-	xFeNIiUi6mGA4g3AtrfDOqSMX/aikiLICGb3mIhGE2XzBNGGgZhk0Yra5GaWYSjD+x77XX
-	k7c19irk+gCJgVnqJHG1hfFg32Q4Tbk=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-558-X_NjMAt-MNihjAlEtuRWAw-1; Sun,
- 03 Nov 2024 16:42:06 -0500
-X-MC-Unique: X_NjMAt-MNihjAlEtuRWAw-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2CEBD1956083
-	for <llvm@lists.linux.dev>; Sun,  3 Nov 2024 21:42:05 +0000 (UTC)
-Received: from [172.64.2.75] (unknown [10.30.34.59])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CAD221956086;
-	Sun,  3 Nov 2024 21:42:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc5,
- upstream-mainline, d5aaa0bc)
-Date: Sun, 03 Nov 2024 21:42:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L+K4l9tQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730673539; x=1762209539;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=it8UkeeGYxov80ao0WQ3wAVvVQIFqvTlyZMe1Pwb404=;
+  b=L+K4l9tQpvlZjDZuRAEi2i8bV9zx/4mZAc9wPmpsWMKGJ1vMLiX49pZn
+   /ZV5uUwzHeJOkiguaTm+fJ4LNDlmNkdHH+l/Cbvec04rDaS4xsdUcy1Ky
+   AasvdD8Q09vJQBrRD7c5ecoPu/sUE8oE71E8xX7JUJrcQKPIN8uKP+3+3
+   w4gIFfYWnD4KwrQfWYz3FdQzf8KFy5ER8eRLkcTjEpykiZgugJvCY4B7x
+   ZCDRaY0qZHJlYULuPhXCgNbKsr0xQ6aaR6+h5WMwoincIRvFBdH4hKlTn
+   lwqQBEFKFeWomicA24suoRHiNFVhM5IZ31gz9JhOILaTPdpa+TZmX+q5+
+   w==;
+X-CSE-ConnectionGUID: 3uzzSdq9TPWMIREQe6et9g==
+X-CSE-MsgGUID: LN9RA9i8Q4Gk9WiWi62cAw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47824748"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="47824748"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 14:38:54 -0800
+X-CSE-ConnectionGUID: AzxyHmoAQJ2RNlpaDUYW9Q==
+X-CSE-MsgGUID: mabvL4PLTuaOuF5KpJ9YYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
+   d="scan'208";a="83369401"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 03 Nov 2024 14:38:54 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t7jFC-000kGH-2h;
+	Sun, 03 Nov 2024 22:38:50 +0000
+Date: Mon, 4 Nov 2024 06:38:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6211:13:
+ warning: stack frame size (3288) exceeds limit (2048) in
+ 'dml_prefetch_check'
+Message-ID: <202411040601.DGJciccG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <38526.124110316420600283@us-mta-558.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a8cc7432728d019a10cb412401ebc15ed7504289
+commit: b141fa036c901303ca5659cc22e9c08f8b097892 drm/amd/display: Reduce stack size by splitting function
+date:   1 year ago
+config: x86_64-buildonly-randconfig-002-20241104 (https://download.01.org/0day-ci/archive/20241104/202411040601.DGJciccG-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411040601.DGJciccG-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411040601.DGJciccG-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:25:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.h:29:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core_structs.h:28:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_lib_defines.h:43:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml_depedencies.h:30:
+   In file included from drivers/gpu/drm/amd/amdgpu/../display/dc/os_types.h:31:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6699:12: warning: stack frame size (2904) exceeds limit (2048) in 'dml_core_mode_support' [-Wframe-larger-than]
+    6699 | dml_bool_t dml_core_mode_support(struct display_mode_lib_st *mode_lib)
+         |            ^
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6211:13: warning: stack frame size (3288) exceeds limit (2048) in 'dml_prefetch_check' [-Wframe-larger-than]
+    6211 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+         |             ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8268:6: warning: stack frame size (2616) exceeds limit (2048) in 'dml_core_mode_programming' [-Wframe-larger-than]
+    8268 | void dml_core_mode_programming(struct display_mode_lib_st *mode_lib, const struct dml_clk_cfg_st *clk_cfg)
+         |      ^
+   4 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'phy-fixes-6.12' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/phy/linux-phy
+vim +/dml_prefetch_check +6211 drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1525137479
+  6210	
+> 6211	static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+  6212	{
+  6213		struct dml_core_mode_support_locals_st *s = &mode_lib->scratch.dml_core_mode_support_locals;
+  6214		struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params = &mode_lib->scratch.CalculatePrefetchSchedule_params;
+  6215		struct CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport_params_st *CalculateWatermarks_params = &mode_lib->scratch.CalculateWatermarksMALLUseAndDRAMSpeedChangeSupport_params;
+  6216		struct DmlPipe *myPipe;
+  6217		dml_uint_t j, k;
+  6218	
+  6219		for (j = 0; j < 2; ++j) {
+  6220			mode_lib->ms.TimeCalc = 24 / mode_lib->ms.ProjectedDCFCLKDeepSleep[j];
+  6221	
+  6222			for (k = 0; k < mode_lib->ms.num_active_planes; ++k) {
+  6223				mode_lib->ms.NoOfDPPThisState[k] = mode_lib->ms.NoOfDPP[j][k];
+  6224				mode_lib->ms.swath_width_luma_ub_this_state[k] = mode_lib->ms.swath_width_luma_ub_all_states[j][k];
+  6225				mode_lib->ms.swath_width_chroma_ub_this_state[k] = mode_lib->ms.swath_width_chroma_ub_all_states[j][k];
+  6226				mode_lib->ms.SwathWidthYThisState[k] = mode_lib->ms.SwathWidthYAllStates[j][k];
+  6227				mode_lib->ms.SwathWidthCThisState[k] = mode_lib->ms.SwathWidthCAllStates[j][k];
+  6228				mode_lib->ms.SwathHeightYThisState[k] = mode_lib->ms.SwathHeightYAllStates[j][k];
+  6229				mode_lib->ms.SwathHeightCThisState[k] = mode_lib->ms.SwathHeightCAllStates[j][k];
+  6230				mode_lib->ms.UnboundedRequestEnabledThisState = mode_lib->ms.UnboundedRequestEnabledAllStates[j];
+  6231				mode_lib->ms.CompressedBufferSizeInkByteThisState = mode_lib->ms.CompressedBufferSizeInkByteAllStates[j];
+  6232				mode_lib->ms.DETBufferSizeInKByteThisState[k] = mode_lib->ms.DETBufferSizeInKByteAllStates[j][k];
+  6233				mode_lib->ms.DETBufferSizeYThisState[k] = mode_lib->ms.DETBufferSizeYAllStates[j][k];
+  6234				mode_lib->ms.DETBufferSizeCThisState[k] = mode_lib->ms.DETBufferSizeCAllStates[j][k];
+  6235			}
+  6236	
+  6237			mode_lib->ms.support.VActiveBandwithSupport[j] = CalculateVActiveBandwithSupport(
+  6238				mode_lib->ms.num_active_planes,
+  6239				mode_lib->ms.ReturnBWPerState[j],
+  6240				mode_lib->ms.NotUrgentLatencyHiding,
+  6241				mode_lib->ms.ReadBandwidthLuma,
+  6242				mode_lib->ms.ReadBandwidthChroma,
+  6243				mode_lib->ms.cursor_bw,
+  6244				mode_lib->ms.meta_row_bandwidth_this_state,
+  6245				mode_lib->ms.dpte_row_bandwidth_this_state,
+  6246				mode_lib->ms.NoOfDPPThisState,
+  6247				mode_lib->ms.UrgentBurstFactorLuma,
+  6248				mode_lib->ms.UrgentBurstFactorChroma,
+  6249				mode_lib->ms.UrgentBurstFactorCursor);
+  6250	
+  6251			s->VMDataOnlyReturnBWPerState = dml_get_return_bw_mbps_vm_only(
+  6252																		&mode_lib->ms.soc,
+  6253																		mode_lib->ms.state.use_ideal_dram_bw_strobe,
+  6254																		mode_lib->ms.cache_display_cfg.plane.HostVMEnable,
+  6255																		mode_lib->ms.DCFCLKState[j],
+  6256																		mode_lib->ms.state.fabricclk_mhz,
+  6257																		mode_lib->ms.state.dram_speed_mts);
+  6258	
+  6259			s->HostVMInefficiencyFactor = 1;
+  6260			if (mode_lib->ms.cache_display_cfg.plane.GPUVMEnable && mode_lib->ms.cache_display_cfg.plane.HostVMEnable)
+  6261				s->HostVMInefficiencyFactor = mode_lib->ms.ReturnBWPerState[j] / s->VMDataOnlyReturnBWPerState;
+  6262	
+  6263			mode_lib->ms.ExtraLatency = CalculateExtraLatency(
+  6264					mode_lib->ms.soc.round_trip_ping_latency_dcfclk_cycles,
+  6265					s->ReorderingBytes,
+  6266					mode_lib->ms.DCFCLKState[j],
+  6267					mode_lib->ms.TotalNumberOfActiveDPP[j],
+  6268					mode_lib->ms.ip.pixel_chunk_size_kbytes,
+  6269					mode_lib->ms.TotalNumberOfDCCActiveDPP[j],
+  6270					mode_lib->ms.ip.meta_chunk_size_kbytes,
+  6271					mode_lib->ms.ReturnBWPerState[j],
+  6272					mode_lib->ms.cache_display_cfg.plane.GPUVMEnable,
+  6273					mode_lib->ms.cache_display_cfg.plane.HostVMEnable,
+  6274					mode_lib->ms.num_active_planes,
+  6275					mode_lib->ms.NoOfDPPThisState,
+  6276					mode_lib->ms.dpte_group_bytes,
+  6277					s->HostVMInefficiencyFactor,
+  6278					mode_lib->ms.soc.hostvm_min_page_size_kbytes,
+  6279					mode_lib->ms.cache_display_cfg.plane.HostVMMaxPageTableLevels);
+  6280	
+  6281			s->NextMaxVStartup = s->MaxVStartupAllPlanes[j];
+  6282			s->MaxVStartup = 0;
+  6283			s->AllPrefetchModeTested = true;
+  6284			for (k = 0; k <= mode_lib->ms.num_active_planes - 1; k++) {
+  6285				CalculatePrefetchMode(mode_lib->ms.policy.AllowForPStateChangeOrStutterInVBlank[k], &s->MinPrefetchMode[k], &s->MaxPrefetchMode[k]);
+  6286				s->NextPrefetchMode[k] = s->MinPrefetchMode[k];
+  6287			}
+  6288	
+  6289			do {
+  6290				s->MaxVStartup = s->NextMaxVStartup;
+  6291				s->AllPrefetchModeTested = true;
+  6292	
+  6293				for (k = 0; k <= mode_lib->ms.num_active_planes - 1; k++) {
+  6294					mode_lib->ms.PrefetchMode[k] = s->NextPrefetchMode[k];
+  6295					mode_lib->ms.TWait = CalculateTWait(
+  6296									mode_lib->ms.PrefetchMode[k],
+  6297									mode_lib->ms.cache_display_cfg.plane.UseMALLForPStateChange[k],
+  6298									mode_lib->ms.policy.SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
+  6299									mode_lib->ms.cache_display_cfg.timing.DRRDisplay[k],
+  6300									mode_lib->ms.state.dram_clock_change_latency_us,
+  6301									mode_lib->ms.state.fclk_change_latency_us,
+  6302									mode_lib->ms.UrgLatency,
+  6303									mode_lib->ms.state.sr_enter_plus_exit_time_us);
+  6304	
+  6305					myPipe = &s->myPipe;
+  6306					myPipe->Dppclk = mode_lib->ms.RequiredDPPCLKPerSurface[j][k];
+  6307					myPipe->Dispclk = mode_lib->ms.RequiredDISPCLK[j];
+  6308					myPipe->PixelClock = mode_lib->ms.cache_display_cfg.timing.PixelClock[k];
+  6309					myPipe->DCFClkDeepSleep = mode_lib->ms.ProjectedDCFCLKDeepSleep[j];
+  6310					myPipe->DPPPerSurface = mode_lib->ms.NoOfDPP[j][k];
+  6311					myPipe->ScalerEnabled = mode_lib->ms.cache_display_cfg.plane.ScalerEnabled[k];
+  6312					myPipe->SourceScan = mode_lib->ms.cache_display_cfg.plane.SourceScan[k];
+  6313					myPipe->BlockWidth256BytesY = mode_lib->ms.Read256BlockWidthY[k];
+  6314					myPipe->BlockHeight256BytesY = mode_lib->ms.Read256BlockHeightY[k];
+  6315					myPipe->BlockWidth256BytesC = mode_lib->ms.Read256BlockWidthC[k];
+  6316					myPipe->BlockHeight256BytesC = mode_lib->ms.Read256BlockHeightC[k];
+  6317					myPipe->InterlaceEnable = mode_lib->ms.cache_display_cfg.timing.Interlace[k];
+  6318					myPipe->NumberOfCursors = mode_lib->ms.cache_display_cfg.plane.NumberOfCursors[k];
+  6319					myPipe->VBlank = mode_lib->ms.cache_display_cfg.timing.VTotal[k] - mode_lib->ms.cache_display_cfg.timing.VActive[k];
+  6320					myPipe->HTotal = mode_lib->ms.cache_display_cfg.timing.HTotal[k];
+  6321					myPipe->HActive = mode_lib->ms.cache_display_cfg.timing.HActive[k];
+  6322					myPipe->DCCEnable = mode_lib->ms.cache_display_cfg.surface.DCCEnable[k];
+  6323					myPipe->ODMMode = mode_lib->ms.ODMModePerState[k];
+  6324					myPipe->SourcePixelFormat = mode_lib->ms.cache_display_cfg.surface.SourcePixelFormat[k];
+  6325					myPipe->BytePerPixelY = mode_lib->ms.BytePerPixelY[k];
+  6326					myPipe->BytePerPixelC = mode_lib->ms.BytePerPixelC[k];
+  6327					myPipe->ProgressiveToInterlaceUnitInOPP = mode_lib->ms.ip.ptoi_supported;
+  6328	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1525137479-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1525137479-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1525137479-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
