@@ -1,90 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60213469D;
-	Mon,  4 Nov 2024 14:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF791C07D7;
+	Mon,  4 Nov 2024 15:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730731521; cv=none; b=IrZZNBg75r5NqhPOZc/V6SiPwCTdmi4PgDBARatUiN444RyJCTqSFUehQoERVbig5oYgd9ci6MSjx8KeUZwI5v5rXwbe32qFgM5fYmJvcA15c8VXn7iqR/NXZyKgyllpcsE4M9iyF6rVEmyGSEmUCqthJadifLhT1cr4L4iK4qQ=
+	t=1730734993; cv=none; b=KNksEqZ9K0ouoZjWylxhJpN0eeQ1jqc88Qzow4Mz2ipIq6lnvJyJ5uXA9b6oNjXZQSB0p7Iepg5vB4kT35r5kdKyAU77Uf8IGQBnIapR9cvO73jSx6to/uIwx6OtL0hyZOs4LLrY2QWSfxN0XfDIYnhqcOSgf4lEWPwOYKzy9+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730731521; c=relaxed/simple;
-	bh=p4nDr7PCCaezB3lXkyzM0JFRhrFfZDjknyyrOk2yt3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cngSvDoTnYa2zUCL6amaxj1Tb6UCKkWR+buOWbg344qdom+zYjxDdvFON5f80M1VHx5Qn9WprBJFo9u2VWRk31xLfeUcCaqSNyeGrLZjwN10aTPsaCywFvq83X1PUzBb1ftE7l6iyRvW4BsXkkDWdRWgJsyEMKilGmP8UFVlS98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WBEuyDoz; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730734993; c=relaxed/simple;
+	bh=Se1F6MgZpmXOAauCRrSlWdimqdGEP7AiETjcgYOBfHQ=;
+	h=From:To:CC:In-Reply-To:References:Subject:Message-ID:Date:
+	 MIME-Version:Content-Type; b=kD4EM3xfnXS6JWiAkrp8RWm8MQAGWbWwDkjvHe4jBU4oMgsVOnEuIFVmHt8JUAUSfW78Buq/FcruAtWV9eceWyXEUeapbhF1PFgoafyqJSsRexxamc62ER2hu1w0FDi+01YRMo0TzkgFBPd6ns9q8z7B1Njf61NvP6h/R7JFZ5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=B48UBxn8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WBEuyDoz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730731519; x=1762267519;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p4nDr7PCCaezB3lXkyzM0JFRhrFfZDjknyyrOk2yt3Y=;
-  b=WBEuyDozpuafFYdDC6ThGR2VF0RWR1sg0zGh65K0UGL5shWxCBMo550F
-   fYH8QuKLkp44NPCutHXLPMOttTcg06JBRzxMp2yB8Km0L9imhsJZiSWm+
-   Xd0eM/rSc9s6T1DmHr+p/n9zh17sPq+iRjcV3ducVjlV/da3/cea7FKNk
-   M/fuhbToInZN3xDykINFc4mFajeesI5GSoSKBsuUqUOE6h0FJxbENTqN1
-   QTvNfWOweIC0f3JpxU90XQ0Z7gLngJzziIbNrduHuarC6fTRGhAyXC+Wp
-   3VkjZ2BleRdAkFLeNSHAnGP/SPuHg9xFY5lGik/QhUuWhSDZC57yWHtER
-   w==;
-X-CSE-ConnectionGUID: DRGwk46+SsKx8R9q9/H+eg==
-X-CSE-MsgGUID: q3pVR3ivRtmGIonm10pxNg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30376962"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30376962"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 06:45:18 -0800
-X-CSE-ConnectionGUID: XwnqWETbQLWVQihl58dbKg==
-X-CSE-MsgGUID: aRyt+8azTgWmgh3gZFTlbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
-   d="scan'208";a="87605399"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Nov 2024 06:45:16 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t7yKQ-000kvt-1Y;
-	Mon, 04 Nov 2024 14:45:14 +0000
-Date: Mon, 4 Nov 2024 22:45:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [ebiggers:crc32-lib-v3 20/33] ld.lld: error: undefined symbol:
- __kcfi_typeid_crc32_armv8_le
-Message-ID: <202411042253.lLk5G8jo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B48UBxn8"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Bu4sG028042;
+	Mon, 4 Nov 2024 15:43:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	9gzKW2w6+lRVDrV6jRlI+WcrN4vRWHQhDRGxfD3GANQ=; b=B48UBxn8aIn6lTv6
+	43V170guUdvTYyE0xoHReFldTwMQzEaH2eJGsL8e7kiSbDpG90CDpnpJQ29SLdnv
+	RftV6PbwWApiSqJlH4HAqGPE4qv419F1OvcuoMjVDyiHtt6em6mEQFP/19tR51ft
+	kU8eNODOwzpgaKD9oKO0foqr2xtSBvzEsB81C0Stu89d5YPgDIMMj9pXHIkGRZll
+	8FDX/Zb6ZRqyvjUi8bWo1mWTwsFrS62LpzuUM50ANQRLD10Og0OVVNg6pA72+mh9
+	xJ1NYHJ9ShNLo9Y5EoNXylZ9PFTy1sjFEumSU9UPEwzQNxvcINV7aHIIVkIT2NlW
+	W4yYTQ==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42p5ye2tmj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Nov 2024 15:43:05 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4A4Fh4sH011730
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 4 Nov 2024 15:43:04 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 4 Nov 2024
+ 07:43:03 -0800
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+To: <ath12k-devel-internal@qti.qualcomm.com>, Kalle Valo <kvalo@kernel.org>,
+        Jeff Johnson <jjohnson@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, Arnd Bergmann <arnd@kernel.org>,
+        "Jeff
+ Johnson" <quic_jjohnson@quicinc.com>
+CC: <linux-wireless@vger.kernel.org>, <ath12k@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+In-Reply-To: <20241028-ath12k_qmi_driver_event_work-v1-1-0d532eb593fa@quicinc.com>
+References: <20241028-ath12k_qmi_driver_event_work-v1-1-0d532eb593fa@quicinc.com>
+Subject: Re: [PATCH] wifi: ath12k: mark QMI driver event helpers as
+ noinline
+Message-ID: <173073498362.2435998.11227075604686826531.b4-ty@quicinc.com>
+Date: Mon, 4 Nov 2024 07:43:03 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.0
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Dx6AFyszWS8nBwhUKUyivxqrNZZ1WWdv
+X-Proofpoint-GUID: Dx6AFyszWS8nBwhUKUyivxqrNZZ1WWdv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ mlxscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411040135
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v3
-head:   5df8633ed44a9b50f2221cff13d4a5a7077b58e4
-commit: 749d57402c02f66464634de978484195090da195 [20/33] arm/crc32: expose CRC32 functions through lib
-config: arm-randconfig-001-20241104 (https://download.01.org/0day-ci/archive/20241104/202411042253.lLk5G8jo-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411042253.lLk5G8jo-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411042253.lLk5G8jo-lkp@intel.com/
+On Mon, 28 Oct 2024 07:08:40 -0700, Jeff Johnson wrote:
+> As described in [1], compiling the ath12k driver using clang with
+> KASAN enabled warns about some functions with excessive stack usage,
+> with the worst case being:
+> 
+> drivers/net/wireless/ath/ath12k/qmi.c:3546:13: warning: stack frame size (2456) exceeds limit (1024) in 'ath12k_qmi_driver_event_work' [-Wframe-larger-than]
+> 
+> Nathan [2] highlighted work done by Arnd [3] to address similar
+> issues in other portions of the kernel.
+> 
+> [...]
 
-All errors (new ones prefixed by >>):
+Applied, thanks!
 
->> ld.lld: error: undefined symbol: __kcfi_typeid_crc32_armv8_le
-   >>> referenced by crc32-core.S:231 (arch/arm/lib/crc32-core.S:231)
-   >>>               arch/arm/lib/crc32-core.o:(.text+0x1C0) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_crc32c_armv8_le
-   >>> referenced by crc32-core.S:292 (arch/arm/lib/crc32-core.S:292)
-   >>>               arch/arm/lib/crc32-core.o:(.text+0x260) in archive vmlinux.a
+[1/1] wifi: ath12k: mark QMI driver event helpers as noinline
+      commit: 07826419700d4e7429523bbb4e936df6bca19c5e
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jeff Johnson <quic_jjohnson@quicinc.com>
+
