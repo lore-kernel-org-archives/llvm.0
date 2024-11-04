@@ -1,63 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B988192D9D;
-	Mon,  4 Nov 2024 08:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A5D189F47;
+	Mon,  4 Nov 2024 09:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730709842; cv=none; b=t7vMxZOGuWFh7c1zCttFxBn/0Upszg81ee2ZRCKSl4HKfNdgOIHdbKX155X9YlpZxFm8pCnaMaBBm6AUwwnH7S9aIMqge/R1eQ0xcYnF7NXSxJHqb2u/52zbE3mWSq0Ihr6dCeqtOw1GAmDajI3b22Dgo234zk49k0TFXIuPiFk=
+	t=1730711103; cv=none; b=pURTEkIBvmeCgtzOGXpmzL6UQ6WTL2UJ/ZUZERm6yp0O933B3hlf//edOEkNgrGY8z0R+u8bWuCmeLMuUqlJ9rEe4HyZs9CD1BD+pkoXKGlem3dLyMaImARORCldvF2y+n7wIephRrdvF5aeQ4U31sTTWkhMUsbwhdFNULV/H3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730709842; c=relaxed/simple;
-	bh=Z36C3WTXpYMy3EFZswByqUUZarqTpiVruIO3P+hzhYY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mtso6TkqIU7X9c8JvEUpYw+qRFg5p2URzGCjhu6xxcxfUc0vE2gFkYe0yN3eelRoZARah/42wT2sd0ZPHMiS/gO9Zu9AgchpzmHsjIFKgiscfLBd6kztTpqloPiORQXeVzojdKfeZ7KpmFn8+KYmSCiTvhwtgI85baaGqmp9SNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bExmiiHs; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1730711103; c=relaxed/simple;
+	bh=e3+aseUTrwh9xazULRXaVJomMZbtJ7XHX9eWoKDhgR0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=efNGRYa3kAoSy8IQAg2kHnrI9oFmKq/WtvTNClHmnUrUgM2gcw4TBCjQP/8RPhFr317r0PJ9vDDdq/JPFCNfHw2bUuFzmZjHFldNsb+lLSgowN+RL/vMtRtUFFXnEdki3WNYh8IiSb7MfiaKmI4FLrtd4ro83edBCFmlvrJoSDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SFBG946F; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bExmiiHs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SFBG946F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730709840; x=1762245840;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z36C3WTXpYMy3EFZswByqUUZarqTpiVruIO3P+hzhYY=;
-  b=bExmiiHsXZvNKV7utAVOGhHC04HoUXpBoHdE9lF2Nho3NB6tHFQleyE2
-   WpLYMAtyqAsMa+n1R8J211npozKc01jNNKt4ZqcvUOdGnMyCMkozecrOk
-   QwUVLLklhalN6thhiYy4zcYg37f4/SoZPSO+uK71JUs2Dn/W7SKnk1st/
-   UecaywX2c1ixI5cbc7ZElVUf+u1T4GKsFHZ7lo6YFTwEIIOKlHRJktjf0
-   I+uQU1fAc1cEBAr+3gmPIFXQABf8gGNB5za11VCuN8mv/zQjWOAR88BZu
-   yTIV7SyJLj4oynu5tgTK4W6nvcr0eDTwUrTYWFeWF4+UEj17IBrKxNd3G
-   g==;
-X-CSE-ConnectionGUID: z1uvGGgYSA+H7oSJtkvWgA==
-X-CSE-MsgGUID: cxelQhnmT8G5hyi6c9oWrA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="29811398"
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="29811398"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 00:43:59 -0800
-X-CSE-ConnectionGUID: b8gprbCkTNOb/EYBJlkg2g==
-X-CSE-MsgGUID: f3Lz6BIGQey6rgkyp4cjkA==
+  t=1730711101; x=1762247101;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e3+aseUTrwh9xazULRXaVJomMZbtJ7XHX9eWoKDhgR0=;
+  b=SFBG946FG6ndcJ/YwfX/o2/ejq68JHJLBiCryiAbZPSZ50RghSjintjp
+   hwZXUnzp6Y5VzSTC4CrRk8ryjXAc7PmpLAiYZEq4ZG86Xj1sRQaWKKioN
+   NtaRdrgihfZ2ZBI6566CemP2h8rii73ypK0nKunCBgJK4i/CyodkW7yjt
+   LmC58NAvasht2Otqstkm53oZCzBoRb2j0YB3w9pHDtA/OD0/WL528ZBsr
+   7R9SQnxPr2wCPjc+4WkTphI9q3Mg7fGgB9m9AhZaVS16hq5FqnZUxfRUK
+   9nEDSHAyoOFHMYm4kjuX9c1sJ2DKxIRet3Nbu2OjoSJmG1pqrIr7ZGMzG
+   w==;
+X-CSE-ConnectionGUID: UCU/WKuoToGDLFRhh16aTQ==
+X-CSE-MsgGUID: BL+CDbKqQfSvSEs3MO2oXA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30250603"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30250603"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 01:05:01 -0800
+X-CSE-ConnectionGUID: s2l0tw1nSS2Th2aUq3LHRg==
+X-CSE-MsgGUID: g7gA9q34TR6jVV7PBm/vjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="114388033"
+   d="scan'208";a="121053884"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 04 Nov 2024 00:43:58 -0800
+  by orviesa001.jf.intel.com with ESMTP; 04 Nov 2024 01:04:56 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t7sgl-000keZ-2E;
-	Mon, 04 Nov 2024 08:43:55 +0000
-Date: Mon, 4 Nov 2024 16:43:37 +0800
+	id 1t7t16-000kfl-0m;
+	Mon, 04 Nov 2024 09:04:56 +0000
+Date: Mon, 4 Nov 2024 17:04:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: chenchangcheng <ccc194101@163.com>, laurent.pinchart@ideasonboard.com,
-	mchehab@kernel.org
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, chenchangcheng <ccc194101@163.com>
-Subject: Re: [PATCH] media: uvcvideo:Create input device for all uvc devices
- with status endpoints.
-Message-ID: <202411041600.0u4Yj3kT-lkp@intel.com>
-References: <20241104023947.826707-1-ccc194101@163.com>
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20241028-sa-with-flex 26/26]
+ net/ipv4/arp.c:1188:34: error: invalid application of 'sizeof' to an
+ incomplete type 'char[]'
+Message-ID: <202411041638.igTDF2vU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,86 +64,246 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241104023947.826707-1-ccc194101@163.com>
 
-Hi chenchangcheng,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linuxtv-media-stage/master]
-[also build test ERROR on linus/master media-tree/master v6.12-rc6 next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/chenchangcheng/media-uvcvideo-Create-input-device-for-all-uvc-devices-with-status-endpoints/20241104-104225
-base:   https://git.linuxtv.org/media_stage.git master
-patch link:    https://lore.kernel.org/r/20241104023947.826707-1-ccc194101%40163.com
-patch subject: [PATCH] media: uvcvideo:Create input device for all uvc devices with status endpoints.
-config: i386-buildonly-randconfig-003-20241104 (https://download.01.org/0day-ci/archive/20241104/202411041600.0u4Yj3kT-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20241028-sa-with-flex
+head:   0e7c24c783de39e1f965e8c23e96a7de29dfbfca
+commit: db9bcb6db903744311cc25148aa4a5f88fd5a9d4 [26/26] uapi: socket: Introduce struct sockaddr_legacy
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241104/202411041638.igTDF2vU-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411041600.0u4Yj3kT-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411041638.igTDF2vU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411041600.0u4Yj3kT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411041638.igTDF2vU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/media/usb/uvc/uvc_status.c:16:
-   In file included from drivers/media/usb/uvc/uvcvideo.h:17:
-   In file included from include/media/media-device.h:16:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
+   In file included from net/ipv4/arp.c:83:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/media/usb/uvc/uvc_status.c:110:7: error: call to undeclared function 'uvc_input_has_button'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     110 |                 if (uvc_input_has_button(dev)) {
-         |                     ^
-   1 warning and 1 error generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> net/ipv4/arp.c:1188:34: error: invalid application of 'sizeof' to an incomplete type 'char[]'
+    1188 |                min(dev->addr_len, sizeof(r->arp_ha.sa_data)));
+         |                                         ^~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:129:41: note: expanded from macro 'min'
+     129 | #define min(x, y)       __careful_cmp(min, x, y)
+         |                                               ^
+   include/linux/minmax.h:105:28: note: expanded from macro '__careful_cmp'
+     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                   ^
+   include/linux/minmax.h:99:42: note: expanded from macro '__careful_cmp_once'
+      99 |         __auto_type ux = (x); __auto_type uy = (y);     \
+         |                                                 ^
+   include/linux/fortify-string.h:678:53: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                                                     ^
+   include/linux/fortify-string.h:621:41: note: expanded from macro '__fortify_memcpy_chk'
+     621 |         const size_t __fortify_size = (size_t)(size);                   \
+         |                                                ^~~~
+>> net/ipv4/arp.c:1188:34: error: invalid application of 'sizeof' to an incomplete type 'char[]'
+    1188 |                min(dev->addr_len, sizeof(r->arp_ha.sa_data)));
+         |                                         ^~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:129:41: note: expanded from macro 'min'
+     129 | #define min(x, y)       __careful_cmp(min, x, y)
+         |                                               ^
+   include/linux/minmax.h:105:28: note: expanded from macro '__careful_cmp'
+     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                   ^
+   include/linux/minmax.h:100:33: note: expanded from macro '__careful_cmp_once'
+     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
+         |                                        ^
+   note: (skipping 8 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/fortify-string.h:678:53: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                                                     ^
+   include/linux/fortify-string.h:621:41: note: expanded from macro '__fortify_memcpy_chk'
+     621 |         const size_t __fortify_size = (size_t)(size);                   \
+         |                                                ^~~~
+>> net/ipv4/arp.c:1188:34: error: invalid application of 'sizeof' to an incomplete type 'char[]'
+    1188 |                min(dev->addr_len, sizeof(r->arp_ha.sa_data)));
+         |                                         ^~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:129:41: note: expanded from macro 'min'
+     129 | #define min(x, y)       __careful_cmp(min, x, y)
+         |                                               ^
+   include/linux/minmax.h:105:28: note: expanded from macro '__careful_cmp'
+     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                   ^
+   include/linux/minmax.h:100:33: note: expanded from macro '__careful_cmp_once'
+     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
+         |                                        ^
+   note: (skipping 8 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/fortify-string.h:678:53: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                                                     ^
+   include/linux/fortify-string.h:621:41: note: expanded from macro '__fortify_memcpy_chk'
+     621 |         const size_t __fortify_size = (size_t)(size);                   \
+         |                                                ^~~~
+   4 warnings and 3 errors generated.
+--
+   In file included from net/packet/af_packet.c:51:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> net/packet/af_packet.c:3653:34: error: invalid application of 'sizeof' to an incomplete type 'char[]'
+    3653 |         memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data));
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/fortify-string.h:512:52: note: expanded from macro 'memset'
+     512 | #define memset(p, c, s) __fortify_memset_chk(p, c, s,                   \
+         |                                                    ^
+   include/linux/fortify-string.h:502:35: note: expanded from macro '__fortify_memset_chk'
+     502 |         size_t __fortify_size = (size_t)(size);                         \
+         |                                          ^~~~
+   net/packet/af_packet.c:3657:44: error: invalid application of 'sizeof' to an incomplete type 'char[]'
+    3657 |                 strscpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data));
+         |                                                          ^~~~~~~~~~~~~~~~
+   include/linux/string.h:113:60: note: expanded from macro 'strscpy'
+     113 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |                                                                   ^~~~~~~~~~~
+   include/linux/string.h:82:26: note: expanded from macro '__strscpy1'
+      82 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                 ^~~~
+>> net/packet/af_packet.c:4702:11: error: incompatible function pointer types initializing 'int (*)(struct socket *, struct sockaddr *, int)' with an expression of type 'int (struct socket *, struct sockaddr_legacy *, int)' [-Wincompatible-function-pointer-types]
+    4702 |         .bind =         packet_bind_spkt,
+         |                         ^~~~~~~~~~~~~~~~
+   4 warnings and 3 errors generated.
+--
+   In file included from drivers/net/ethernet/marvell/sky2.c:18:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/marvell/sky2.c:4680:3: warning: 'memcpy' will always overflow; destination buffer has size 0, but size argument is 6 [-Wfortify-source]
+    4680 |                 memcpy(sa.sa_data, dev->dev_addr, ETH_ALEN);
+         |                 ^
+   include/linux/fortify-string.h:678:26: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                          ^
+   include/linux/fortify-string.h:633:2: note: expanded from macro '__fortify_memcpy_chk'
+     633 |         __underlying_##op(p, q, __fortify_size);                        \
+         |         ^
+   <scratch space>:148:1: note: expanded from here
+     148 | __underlying_memcpy
+         | ^
+   include/linux/fortify-string.h:114:29: note: expanded from macro '__underlying_memcpy'
+     114 | #define __underlying_memcpy     __builtin_memcpy
+         |                                 ^
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     571 |                         __write_overflow_field(p_size_field, size);
+         |                         ^
+   6 warnings generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
+vim +1188 net/ipv4/arp.c
 
-vim +/uvc_input_has_button +110 drivers/media/usb/uvc/uvc_status.c
-
-    93	
-    94	/* --------------------------------------------------------------------------
-    95	 * Status interrupt endpoint
-    96	 */
-    97	static void uvc_event_streaming(struct uvc_device *dev,
-    98					struct uvc_status *status, int len)
-    99	{
-   100		if (len <= offsetof(struct uvc_status, bEvent)) {
-   101			uvc_dbg(dev, STATUS,
-   102				"Invalid streaming status event received\n");
-   103			return;
-   104		}
-   105	
-   106		if (status->bEvent == 0) {
-   107			if (len <= offsetof(struct uvc_status, streaming))
-   108				return;
-   109	
- > 110			if (uvc_input_has_button(dev)) {
-   111				uvc_dbg(dev, STATUS, "Button (intf %u) %s len %d\n",
-   112					status->bOriginator,
-   113					status->streaming.button ? "pressed" : "released", len);
-   114				uvc_input_report_key(dev, KEY_CAMERA, status->streaming.button);
-   115			}
-   116		} else {
-   117			uvc_dbg(dev, STATUS, "Stream %u error event %02x len %d\n",
-   118				status->bOriginator, status->bEvent, len);
-   119		}
-   120	}
-   121	
+  1159	
+  1160	/*
+  1161	 *	Get an ARP cache entry.
+  1162	 */
+  1163	
+  1164	static int arp_req_get(struct net *net, struct arpreq *r)
+  1165	{
+  1166		__be32 ip = ((struct sockaddr_in *) &r->arp_pa)->sin_addr.s_addr;
+  1167		struct neighbour *neigh;
+  1168		struct net_device *dev;
+  1169	
+  1170		if (!r->arp_dev[0])
+  1171			return -ENODEV;
+  1172	
+  1173		dev = arp_req_dev_by_name(net, r, true);
+  1174		if (IS_ERR(dev))
+  1175			return PTR_ERR(dev);
+  1176	
+  1177		neigh = neigh_lookup(&arp_tbl, &ip, dev);
+  1178		if (!neigh)
+  1179			return -ENXIO;
+  1180	
+  1181		if (READ_ONCE(neigh->nud_state) & NUD_NOARP) {
+  1182			neigh_release(neigh);
+  1183			return -ENXIO;
+  1184		}
+  1185	
+  1186		read_lock_bh(&neigh->lock);
+  1187		memcpy(r->arp_ha.sa_data, neigh->ha,
+> 1188		       min(dev->addr_len, sizeof(r->arp_ha.sa_data)));
+  1189		r->arp_flags = arp_state_to_flags(neigh);
+  1190		read_unlock_bh(&neigh->lock);
+  1191	
+  1192		neigh_release(neigh);
+  1193	
+  1194		r->arp_ha.sa_family = dev->type;
+  1195		netdev_copy_name(dev, r->arp_dev);
+  1196	
+  1197		return 0;
+  1198	}
+  1199	
 
 -- 
 0-DAY CI Kernel Test Service
