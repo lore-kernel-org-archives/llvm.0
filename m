@@ -1,199 +1,242 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF9F4C6C;
-	Mon,  4 Nov 2024 04:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7B5183CBE
+	for <llvm@lists.linux.dev>; Mon,  4 Nov 2024 04:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730695063; cv=none; b=ub31eWUtaWocbonugqzb7SAPUojR6Jy2U9m7wX6wSYRaYHpHfVFv7Fwb5aH0JwnPoyWHeCuDH+17/vNWEkau9FQmsNk0+r/yrYEdBOoJhGE3/tEGq8N1OBhM6Ir2uGI9DD/5zsNoSq2AQvBf7ldlo/ObpQD1Bv9y6VjAc4Lx6jo=
+	t=1730695825; cv=none; b=QymcCYHK++OFIMAPDt9CvGjSxpTKIY2O70VT8QVqPXH5SnzBBrbWAno66KV1EJMm3AmB28L5wPZxV32dtMxF66DDqoSCKhuhrYGJFVohz+2koUoqseHy2sINoLGFlsxWKb1SdKQ1Kl2QEz3CA39azGYkuw937uj5o7Fj/JIvoHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730695063; c=relaxed/simple;
-	bh=2Gc9lIhSWjtAKvZ/LeEZ0KWffLa+kWDbApLGli6gJVw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c9xsSbG0jQExdZTgy5TMk3zDywSpBYRCG1RrhhkvW6LJBwSW101uU1cOODHWL98fT/RQj/NXE+YNEQ1OTY+ubE8vPRjfVL8xws5JcvFdjgn76QdzE9/XS5Jd8wacvxrplk5KN9rAIukc5CiwNWmk/ID31LPnrfmamQ8v8CYWBH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ifbehhQL; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730695825; c=relaxed/simple;
+	bh=yHLwBvRcDmvZBD3Q2o8biW6+ZyYq54VMM35NculsqtI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fkcos7xAc6KpwFnwQ3wgTUEV9lOYDUAAuBqGwAY/YKJw9/qczsIDe0GfLQ54D/0nKCP2cFrV70shj0CRQ+BH98HAgKh9J0xZ0uswxGC2H/ckQWOTGG9lfHfRp6XaLfBZl0otpUjEWJe9Qm1cUYiOK6D37HEk9zJyDbDW+iTTSUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AjdiktbY; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ifbehhQL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730695062; x=1762231062;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2Gc9lIhSWjtAKvZ/LeEZ0KWffLa+kWDbApLGli6gJVw=;
-  b=ifbehhQLaGW9cuuxfUR3mwW/NjoznixApeyF0Gff7lvr45aWUuGydCH/
-   +PVPy0tW307rmT0nnHjVsu7wOEQusz8Zv6tHVSsmlcvCOZeAMwHn1OyMl
-   6HSD3uiYtruJkLRSSsnuatMMmvjVrAX9JUNobAJ5RjYdowOPLbCUmeYne
-   vFXzNzU8BmYFiB/xjuvdbfwDLDUS6AxOCjWXG/gLrQi5r2ovGs1l6C4s7
-   Z3dZoCYg6bwmba58d6Sts/mBrHv5nQfpaRfnr153JXJ0raQDC3wDCkhyP
-   ouX0o3Hcq4ujetVVyQLzkzaQsUwucfX8wrVE32KIls4yMjsSd7RvOa03X
-   Q==;
-X-CSE-ConnectionGUID: gz8zpoQnQc2PET9Tl5LQZA==
-X-CSE-MsgGUID: ahzmKenvTsW6mGkpBWpW+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="30489047"
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="30489047"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 20:37:41 -0800
-X-CSE-ConnectionGUID: 21BNG7BCSJ2/N4gKqKnE+Q==
-X-CSE-MsgGUID: ep04dIoiRFi9weTdx0a9nQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="88050418"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Nov 2024 20:37:41 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t7oqQ-000kT3-0p;
-	Mon, 04 Nov 2024 04:37:38 +0000
-Date: Mon, 4 Nov 2024 12:37:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stas Sergeev <stsp2@yandex.ru>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [POC, RFC] scheme for transferring group_list between processes
-Message-ID: <202411041232.3FkRU2FO-lkp@intel.com>
-References: <20241101202657.468595-1-stsp2@yandex.ru>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AjdiktbY"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6cbe68f787dso25970896d6.2
+        for <llvm@lists.linux.dev>; Sun, 03 Nov 2024 20:50:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730695821; x=1731300621; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xelsbw4CYPm0pAy0Wg832CMC7u06eSjN58hX3diMwfk=;
+        b=AjdiktbY1QS4hbgBYFZ7mIzYQBuQxT664Lxu9slX9DPhAnioRNUvBX8m+xZzY5TTEq
+         3uRgEh15Zs1hQk0dQMHtpcEm45YvyUclQdy7eiYn9Ac0IlgBc7Rc0zKlyiMOlg2uR+m5
+         5YJEaVIK6/kgGr+eYSOvF36+zyQqGZXBfV9TI2iamcWLZwu0P1VpgBDGv+pChYMXp6Be
+         RE1OgLa8vSbH5Y2GTgFq8c52Ksz3igAQHvm17B15gRRRFO0fzHrGziFpg4m+qL4NtSUz
+         ejtKmSEh7pUTAUqtVVW0jC7f+aCNTSnHdMjPJJ8OxNT2XY/WtLDH7xvPteq1IwYuw3xt
+         gANg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730695821; x=1731300621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xelsbw4CYPm0pAy0Wg832CMC7u06eSjN58hX3diMwfk=;
+        b=pAC8vegh/NQI4n4qcuHelCoq1HJIzuzXGaeILWgrEccfOHTT22pTof/1TuTnmYhTQ7
+         NeoZ0oc9Cth/1PrWj6Z3aa4wH8LfGwKX+0TbJudNOZDnKj8aMAX4F7u/FPgGYVVxDyWN
+         aKqt6P62mLvJek0G9svY5WvYDevDTbxAgHVzWcK3tUMlIUazJOBAL6wOLIvD3p22Jz3c
+         AZmJSBEBc0VwAfA+VGqSB5ke7mm4lywQfUaxfMKCRswzIh47mUd0gym2bc8NhmS0xzZS
+         eSObprCf6sOG5NATp0ZaQCGeWrLQbHnA2LVkb2E4TQYVPragjGfVBokGcSu+MdncFCQx
+         xlHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVuDPAC5p4jfGTfJdFcruQd7Gnu5P+rh6lysUTdeNTKqX89P6NmDKtlmD0EdW+pFn8Eqw8x@lists.linux.dev
+X-Gm-Message-State: AOJu0YzJ5/yGSlbSgfHIzSJpfURwv4uI1H3Uj6Uzo0cAkGv7ynGMtq07
+	mzWQH3N4+oPt2NtpoiqWkZgxecgE6EcTN0Xsr8EOOzy+SK1UDeUrantze0WDJhyqJ06bridSenT
+	lpFul2Z/3c4Ur1ENTS6KrHOYPKVWdZSrx3tBd
+X-Google-Smtp-Source: AGHT+IF2tDFS5vlJFQGEA8PSXd+4TNc7lauPgQRDf2fcZBAWgQ+PxfptvywKq5K3S+F5pPhyHSNjQzY8mD3d0dhW7vA=
+X-Received: by 2002:a05:6214:5508:b0:6ce:2519:5dd7 with SMTP id
+ 6a1803df08f44-6d351af4ccdmr195294736d6.35.1730695820784; Sun, 03 Nov 2024
+ 20:50:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241101202657.468595-1-stsp2@yandex.ru>
+References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-2-xur@google.com>
+ <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org> <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
+In-Reply-To: <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
+From: Han Shen <shenhan@google.com>
+Date: Sun, 3 Nov 2024 20:50:07 -0800
+Message-ID: <CACkGtrgOw8inYCD96ot_w9VwzoFvvgCReAx0P-=Rxxqj2FT4_A@mail.gmail.com>
+Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
+To: Peter Jung <ptr1337@cachyos.org>
+Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Li <davidxl@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
+	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
+	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stas,
+Hi Peter, thanks for reporting the issue. I am trying to reproduce it
+in the up-to-date archlinux environment. Below is what I have:
+  0. pacman -Syu
+  1. cloned archlinux build files from
+https://aur.archlinux.org/linux-mainline.git the newest mainline
+version is 6.12rc5-1.
+  2. changed the PKGBUILD file to include the patches series
+  3. changed the "config" to turn on clang autofdo
+  4. collected afdo profiles
+  5. MAKEFLAGS=3D"-j48 V=3D1 LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D$(pwd)/perf.a=
+fdo" \
+        makepkg -s --skipinteg --skippgp
+  6. install and reboot
+The above steps succeeded.
+You mentioned the error happens at "module_install", can you instruct
+me how to execute the "module_install" step?
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Thanks,
+Han
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.12-rc6]
-[cannot apply to brauner-vfs/vfs.all next-20241101]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stas-Sergeev/scheme-for-transferring-group_list-between-processes/20241102-043615
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241101202657.468595-1-stsp2%40yandex.ru
-patch subject: [POC, RFC] scheme for transferring group_list between processes
-config: arm-randconfig-004-20241104 (https://download.01.org/0day-ci/archive/20241104/202411041232.3FkRU2FO-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411041232.3FkRU2FO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411041232.3FkRU2FO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/pidfs.c:9:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/pidfs.c:241:3: error: call to undeclared function 'set_current_groups'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     241 |                 set_current_groups(file->f_cred->group_info);
-         |                 ^
-   fs/pidfs.c:241:3: note: did you mean 'set_current_blocked'?
-   include/linux/signal.h:289:13: note: 'set_current_blocked' declared here
-     289 | extern void set_current_blocked(sigset_t *);
-         |             ^
-   1 warning and 1 error generated.
-
-
-vim +/set_current_groups +241 fs/pidfs.c
-
-   170	
-   171		switch (cmd) {
-   172		/* Namespaces that hang of nsproxy. */
-   173		case PIDFD_GET_CGROUP_NAMESPACE:
-   174			if (IS_ENABLED(CONFIG_CGROUPS)) {
-   175				get_cgroup_ns(nsp->cgroup_ns);
-   176				ns_common = to_ns_common(nsp->cgroup_ns);
-   177			}
-   178			break;
-   179		case PIDFD_GET_IPC_NAMESPACE:
-   180			if (IS_ENABLED(CONFIG_IPC_NS)) {
-   181				get_ipc_ns(nsp->ipc_ns);
-   182				ns_common = to_ns_common(nsp->ipc_ns);
-   183			}
-   184			break;
-   185		case PIDFD_GET_MNT_NAMESPACE:
-   186			get_mnt_ns(nsp->mnt_ns);
-   187			ns_common = to_ns_common(nsp->mnt_ns);
-   188			break;
-   189		case PIDFD_GET_NET_NAMESPACE:
-   190			if (IS_ENABLED(CONFIG_NET_NS)) {
-   191				ns_common = to_ns_common(nsp->net_ns);
-   192				get_net_ns(ns_common);
-   193			}
-   194			break;
-   195		case PIDFD_GET_PID_FOR_CHILDREN_NAMESPACE:
-   196			if (IS_ENABLED(CONFIG_PID_NS)) {
-   197				get_pid_ns(nsp->pid_ns_for_children);
-   198				ns_common = to_ns_common(nsp->pid_ns_for_children);
-   199			}
-   200			break;
-   201		case PIDFD_GET_TIME_NAMESPACE:
-   202			if (IS_ENABLED(CONFIG_TIME_NS)) {
-   203				get_time_ns(nsp->time_ns);
-   204				ns_common = to_ns_common(nsp->time_ns);
-   205			}
-   206			break;
-   207		case PIDFD_GET_TIME_FOR_CHILDREN_NAMESPACE:
-   208			if (IS_ENABLED(CONFIG_TIME_NS)) {
-   209				get_time_ns(nsp->time_ns_for_children);
-   210				ns_common = to_ns_common(nsp->time_ns_for_children);
-   211			}
-   212			break;
-   213		case PIDFD_GET_UTS_NAMESPACE:
-   214			if (IS_ENABLED(CONFIG_UTS_NS)) {
-   215				get_uts_ns(nsp->uts_ns);
-   216				ns_common = to_ns_common(nsp->uts_ns);
-   217			}
-   218			break;
-   219		/* Namespaces that don't hang of nsproxy. */
-   220		case PIDFD_GET_USER_NAMESPACE:
-   221			if (IS_ENABLED(CONFIG_USER_NS)) {
-   222				rcu_read_lock();
-   223				ns_common = to_ns_common(get_user_ns(task_cred_xxx(task, user_ns)));
-   224				rcu_read_unlock();
-   225			}
-   226			break;
-   227		case PIDFD_GET_PID_NAMESPACE:
-   228			if (IS_ENABLED(CONFIG_PID_NS)) {
-   229				rcu_read_lock();
-   230				pid_ns = task_active_pid_ns(task);
-   231				if (pid_ns)
-   232					ns_common = to_ns_common(get_pid_ns(pid_ns));
-   233				rcu_read_unlock();
-   234			}
-   235			break;
-   236		case PIDFD_BORROW_GROUPS:
-   237			if (task == current)
-   238				return 0;
-   239			if (!can_borrow_groups(file->f_cred))
-   240				return -EPERM;
- > 241			set_current_groups(file->f_cred->group_info);
-   242			return 0;
-   243		default:
-   244			return -ENOIOCTLCMD;
-   245		}
-   246	
-   247		if (!ns_common)
-   248			return -EOPNOTSUPP;
-   249	
-   250		/* open_namespace() unconditionally consumes the reference */
-   251		return open_namespace(ns_common);
-   252	}
-   253	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Sat, Nov 2, 2024 at 12:53=E2=80=AFPM Peter Jung <ptr1337@cachyos.org> wr=
+ote:
+>
+>
+>
+> On 02.11.24 20:46, Peter Jung wrote:
+> >
+> >
+> > On 02.11.24 18:51, Rong Xu wrote:
+> >> Add the build support for using Clang's AutoFDO. Building the kernel
+> >> with AutoFDO does not reduce the optimization level from the
+> >> compiler. AutoFDO uses hardware sampling to gather information about
+> >> the frequency of execution of different code paths within a binary.
+> >> This information is then used to guide the compiler's optimization
+> >> decisions, resulting in a more efficient binary. Experiments
+> >> showed that the kernel can improve up to 10% in latency.
+> >>
+> >> The support requires a Clang compiler after LLVM 17. This submission
+> >> is limited to x86 platforms that support PMU features like LBR on
+> >> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
+> >>   and BRBE on ARM 1 is part of planned future work.
+> >>
+> >> Here is an example workflow for AutoFDO kernel:
+> >>
+> >> 1) Build the kernel on the host machine with LLVM enabled, for example=
+,
+> >>         $ make menuconfig LLVM=3D1
+> >>      Turn on AutoFDO build config:
+> >>        CONFIG_AUTOFDO_CLANG=3Dy
+> >>      With a configuration that has LLVM enabled, use the following
+> >>      command:
+> >>         scripts/config -e AUTOFDO_CLANG
+> >>      After getting the config, build with
+> >>        $ make LLVM=3D1
+> >>
+> >> 2) Install the kernel on the test machine.
+> >>
+> >> 3) Run the load tests. The '-c' option in perf specifies the sample
+> >>     event period. We suggest     using a suitable prime number,
+> >>     like 500009, for this purpose.
+> >>     For Intel platforms:
+> >>        $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c
+> >> <count> \
+> >>          -o <perf_file> -- <loadtest>
+> >>     For AMD platforms:
+> >>        The supported system are: Zen3 with BRS, or Zen4 with amd_lbr_v=
+2
+> >>       For Zen3:
+> >>        $ cat proc/cpuinfo | grep " brs"
+> >>        For Zen4:
+> >>        $ cat proc/cpuinfo | grep amd_lbr_v2
+> >>        $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k
+> >> -a \
+> >>          -N -b -c <count> -o <perf_file> -- <loadtest>
+> >>
+> >> 4) (Optional) Download the raw perf file to the host machine.
+> >>
+> >> 5) To generate an AutoFDO profile, two offline tools are available:
+> >>     create_llvm_prof and llvm_profgen. The create_llvm_prof tool is pa=
+rt
+> >>     of the AutoFDO project and can be found on GitHub
+> >>     (https://github.com/google/autofdo), version v0.30.1 or later. The
+> >>     llvm_profgen tool is included in the LLVM compiler itself. It's
+> >>     important to note that the version of llvm_profgen doesn't need to
+> >>     match the version of Clang. It needs to be the LLVM 19 release or
+> >>     later, or from the LLVM trunk.
+> >>        $ llvm-profgen --kernel --binary=3D<vmlinux> --
+> >> perfdata=3D<perf_file> \
+> >>          -o <profile_file>
+> >>     or
+> >>        $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_file>=
+ \
+> >>          --format=3Dextbinary --out=3D<profile_file>
+> >>
+> >>     Note that multiple AutoFDO profile files can be merged into one vi=
+a:
+> >>        $ llvm-profdata merge -o <profile_file>  <profile_1> ...
+> >> <profile_n>
+> >>
+> >> 6) Rebuild the kernel using the AutoFDO profile file with the same con=
+fig
+> >>     as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
+> >>        $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<profile_file>
+> >>
+> >> Co-developed-by: Han Shen<shenhan@google.com>
+> >> Signed-off-by: Han Shen<shenhan@google.com>
+> >> Signed-off-by: Rong Xu<xur@google.com>
+> >> Suggested-by: Sriraman Tallam<tmsriram@google.com>
+> >> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
+> >> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
+> >> Suggested-by: Stephane Eranian<eranian@google.com>
+> >> Tested-by: Yonghong Song<yonghong.song@linux.dev>
+> >> Tested-by: Yabin Cui<yabinc@google.com>
+> >> Tested-by: Nathan Chancellor<nathan@kernel.org>
+> >> Reviewed-by: Kees Cook<kees@kernel.org>
+> >
+> > Tested-by: Peter Jung <ptr1337@cachyos.org>
+> >
+>
+> The compilations and testing with the "make pacman-pkg" function from
+> the kernel worked fine.
+>
+> One problem I do face:
+> When I apply a AutoFDO profile together with the PKGBUILD [1] from
+> archlinux im running into issues at "module_install" at the packaging.
+>
+> See following log:
+> ```
+> make[2]: *** [scripts/Makefile.modinst:125:
+> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/li=
+b/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko]
+> Error 1
+> make[2]: *** Deleting file
+> '/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/l=
+ib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko'
+>    INSTALL
+> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/li=
+b/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/crypto/cryptd.ko
+> make[2]: *** Waiting for unfinished jobs....
+> ```
+>
+>
+> This can be fixed with removed "INSTALL_MOD_STRIP=3D1" to the passed
+> parameters of module_install.
+>
+> This explicitly only happens, if a profile is passed - otherwise the
+> packaging works without problems.
+>
+> Regards,
+>
+> Peter Jung
+>
