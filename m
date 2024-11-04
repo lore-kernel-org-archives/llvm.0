@@ -1,242 +1,297 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7B5183CBE
-	for <llvm@lists.linux.dev>; Mon,  4 Nov 2024 04:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB2F10F1;
+	Mon,  4 Nov 2024 05:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730695825; cv=none; b=QymcCYHK++OFIMAPDt9CvGjSxpTKIY2O70VT8QVqPXH5SnzBBrbWAno66KV1EJMm3AmB28L5wPZxV32dtMxF66DDqoSCKhuhrYGJFVohz+2koUoqseHy2sINoLGFlsxWKb1SdKQ1Kl2QEz3CA39azGYkuw937uj5o7Fj/JIvoHY=
+	t=1730697526; cv=none; b=kqkMlcrdOdlrJJxVG3aN2z51sICKq/3+RMnN4q21PkaOy4fw52KiqUxn7SZvMCAbO0OSKuX/eTFatmADSAOVVWZrObx06a7exQ/Edmvx/HZvrluDD9hTA+7+KZmobxxOfaaMHGTHIK/Nn1wtZbtLvNdHMNedr9sLYqDwz2fW5u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730695825; c=relaxed/simple;
-	bh=yHLwBvRcDmvZBD3Q2o8biW6+ZyYq54VMM35NculsqtI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fkcos7xAc6KpwFnwQ3wgTUEV9lOYDUAAuBqGwAY/YKJw9/qczsIDe0GfLQ54D/0nKCP2cFrV70shj0CRQ+BH98HAgKh9J0xZ0uswxGC2H/ckQWOTGG9lfHfRp6XaLfBZl0otpUjEWJe9Qm1cUYiOK6D37HEk9zJyDbDW+iTTSUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AjdiktbY; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1730697526; c=relaxed/simple;
+	bh=CSSD5xLWTwwJjtnZ2lvwmNyKn4kxZKte3Mtk8l63q1U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CBkE83buWBJI6hY6fmCeyCqQ40ykSZCH9/T9ADebcTNtJdG/KKYrdquUBMR8aYNC4Of+dmNfVYtcVEZbR4hNyw/D+oUL6o5X8TESoFRjgK+ZiNn/pu13tLSDZFOu48jcDxc/b3vpno5Z9eN4bz4Z1MSTk77TcwVMrGiDGAqFWXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h/tIxQWk; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AjdiktbY"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6cbe68f787dso25970896d6.2
-        for <llvm@lists.linux.dev>; Sun, 03 Nov 2024 20:50:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730695821; x=1731300621; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xelsbw4CYPm0pAy0Wg832CMC7u06eSjN58hX3diMwfk=;
-        b=AjdiktbY1QS4hbgBYFZ7mIzYQBuQxT664Lxu9slX9DPhAnioRNUvBX8m+xZzY5TTEq
-         3uRgEh15Zs1hQk0dQMHtpcEm45YvyUclQdy7eiYn9Ac0IlgBc7Rc0zKlyiMOlg2uR+m5
-         5YJEaVIK6/kgGr+eYSOvF36+zyQqGZXBfV9TI2iamcWLZwu0P1VpgBDGv+pChYMXp6Be
-         RE1OgLa8vSbH5Y2GTgFq8c52Ksz3igAQHvm17B15gRRRFO0fzHrGziFpg4m+qL4NtSUz
-         ejtKmSEh7pUTAUqtVVW0jC7f+aCNTSnHdMjPJJ8OxNT2XY/WtLDH7xvPteq1IwYuw3xt
-         gANg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730695821; x=1731300621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xelsbw4CYPm0pAy0Wg832CMC7u06eSjN58hX3diMwfk=;
-        b=pAC8vegh/NQI4n4qcuHelCoq1HJIzuzXGaeILWgrEccfOHTT22pTof/1TuTnmYhTQ7
-         NeoZ0oc9Cth/1PrWj6Z3aa4wH8LfGwKX+0TbJudNOZDnKj8aMAX4F7u/FPgGYVVxDyWN
-         aKqt6P62mLvJek0G9svY5WvYDevDTbxAgHVzWcK3tUMlIUazJOBAL6wOLIvD3p22Jz3c
-         AZmJSBEBc0VwAfA+VGqSB5ke7mm4lywQfUaxfMKCRswzIh47mUd0gym2bc8NhmS0xzZS
-         eSObprCf6sOG5NATp0ZaQCGeWrLQbHnA2LVkb2E4TQYVPragjGfVBokGcSu+MdncFCQx
-         xlHA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuDPAC5p4jfGTfJdFcruQd7Gnu5P+rh6lysUTdeNTKqX89P6NmDKtlmD0EdW+pFn8Eqw8x@lists.linux.dev
-X-Gm-Message-State: AOJu0YzJ5/yGSlbSgfHIzSJpfURwv4uI1H3Uj6Uzo0cAkGv7ynGMtq07
-	mzWQH3N4+oPt2NtpoiqWkZgxecgE6EcTN0Xsr8EOOzy+SK1UDeUrantze0WDJhyqJ06bridSenT
-	lpFul2Z/3c4Ur1ENTS6KrHOYPKVWdZSrx3tBd
-X-Google-Smtp-Source: AGHT+IF2tDFS5vlJFQGEA8PSXd+4TNc7lauPgQRDf2fcZBAWgQ+PxfptvywKq5K3S+F5pPhyHSNjQzY8mD3d0dhW7vA=
-X-Received: by 2002:a05:6214:5508:b0:6ce:2519:5dd7 with SMTP id
- 6a1803df08f44-6d351af4ccdmr195294736d6.35.1730695820784; Sun, 03 Nov 2024
- 20:50:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h/tIxQWk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730697524; x=1762233524;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CSSD5xLWTwwJjtnZ2lvwmNyKn4kxZKte3Mtk8l63q1U=;
+  b=h/tIxQWkOedo5NaCijvy9FwTRJiyiNR6OiqOMngCtvpF3Vd45rpzEwPT
+   re0/T0dijHE2vkiVW7Ff3eI8nC3OLnGxg078LYEGsIY3EUMMHCWEwqUBI
+   L1CiH7ideub9qqgQGAoZAXThYaKS4sc9xYNgn8HBTJipWk6WSSYLiPNWO
+   +SpaJVWvhWjZqtsZ41Sa1JMbuIHFYXqXq3tF9cuStvajuQUGkqqQB15HW
+   3Bch+3nXfbdra97tuT+QnHvfyinN1SIdnmbc7gtN/OrRwhrgGVR3ExemA
+   g+N4JyOZUxSD8yotjpAHRaQ4sf9W/rrMX0TCw496B7aZMGzgcOobBGYUD
+   g==;
+X-CSE-ConnectionGUID: FQPY/U+4SZGB/zgVzSE+HA==
+X-CSE-MsgGUID: //7Kmg5FT3204sRHlPbIvA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="33218310"
+X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
+   d="scan'208";a="33218310"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 21:18:43 -0800
+X-CSE-ConnectionGUID: u1AVUCJ6QNq6qWmuDgoZeg==
+X-CSE-MsgGUID: Soa/Jwx0SmKmk/sktE1EEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
+   d="scan'208";a="88131171"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 03 Nov 2024 21:18:42 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t7pU7-000kU7-2W;
+	Mon, 04 Nov 2024 05:18:39 +0000
+Date: Mon, 4 Nov 2024 13:18:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20241028-sa-with-flex 26/26]
+ net/ncsi/ncsi-rsp.c:649:2: warning: 'memcpy' will always overflow;
+ destination buffer has size 0, but size argument is 6
+Message-ID: <202411041346.VYUgLq9I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-2-xur@google.com>
- <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org> <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
-In-Reply-To: <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
-From: Han Shen <shenhan@google.com>
-Date: Sun, 3 Nov 2024 20:50:07 -0800
-Message-ID: <CACkGtrgOw8inYCD96ot_w9VwzoFvvgCReAx0P-=Rxxqj2FT4_A@mail.gmail.com>
-Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
-To: Peter Jung <ptr1337@cachyos.org>
-Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Li <davidxl@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
-	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Peter, thanks for reporting the issue. I am trying to reproduce it
-in the up-to-date archlinux environment. Below is what I have:
-  0. pacman -Syu
-  1. cloned archlinux build files from
-https://aur.archlinux.org/linux-mainline.git the newest mainline
-version is 6.12rc5-1.
-  2. changed the PKGBUILD file to include the patches series
-  3. changed the "config" to turn on clang autofdo
-  4. collected afdo profiles
-  5. MAKEFLAGS=3D"-j48 V=3D1 LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D$(pwd)/perf.a=
-fdo" \
-        makepkg -s --skipinteg --skippgp
-  6. install and reboot
-The above steps succeeded.
-You mentioned the error happens at "module_install", can you instruct
-me how to execute the "module_install" step?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20241028-sa-with-flex
+head:   0e7c24c783de39e1f965e8c23e96a7de29dfbfca
+commit: 0e7c24c783de39e1f965e8c23e96a7de29dfbfca [26/26] uapi: socket: Introduce struct sockaddr_legacy
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241104/202411041346.VYUgLq9I-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241104/202411041346.VYUgLq9I-lkp@intel.com/reproduce)
 
-Thanks,
-Han
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411041346.VYUgLq9I-lkp@intel.com/
 
-On Sat, Nov 2, 2024 at 12:53=E2=80=AFPM Peter Jung <ptr1337@cachyos.org> wr=
-ote:
->
->
->
-> On 02.11.24 20:46, Peter Jung wrote:
-> >
-> >
-> > On 02.11.24 18:51, Rong Xu wrote:
-> >> Add the build support for using Clang's AutoFDO. Building the kernel
-> >> with AutoFDO does not reduce the optimization level from the
-> >> compiler. AutoFDO uses hardware sampling to gather information about
-> >> the frequency of execution of different code paths within a binary.
-> >> This information is then used to guide the compiler's optimization
-> >> decisions, resulting in a more efficient binary. Experiments
-> >> showed that the kernel can improve up to 10% in latency.
-> >>
-> >> The support requires a Clang compiler after LLVM 17. This submission
-> >> is limited to x86 platforms that support PMU features like LBR on
-> >> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
-> >>   and BRBE on ARM 1 is part of planned future work.
-> >>
-> >> Here is an example workflow for AutoFDO kernel:
-> >>
-> >> 1) Build the kernel on the host machine with LLVM enabled, for example=
-,
-> >>         $ make menuconfig LLVM=3D1
-> >>      Turn on AutoFDO build config:
-> >>        CONFIG_AUTOFDO_CLANG=3Dy
-> >>      With a configuration that has LLVM enabled, use the following
-> >>      command:
-> >>         scripts/config -e AUTOFDO_CLANG
-> >>      After getting the config, build with
-> >>        $ make LLVM=3D1
-> >>
-> >> 2) Install the kernel on the test machine.
-> >>
-> >> 3) Run the load tests. The '-c' option in perf specifies the sample
-> >>     event period. We suggest     using a suitable prime number,
-> >>     like 500009, for this purpose.
-> >>     For Intel platforms:
-> >>        $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c
-> >> <count> \
-> >>          -o <perf_file> -- <loadtest>
-> >>     For AMD platforms:
-> >>        The supported system are: Zen3 with BRS, or Zen4 with amd_lbr_v=
-2
-> >>       For Zen3:
-> >>        $ cat proc/cpuinfo | grep " brs"
-> >>        For Zen4:
-> >>        $ cat proc/cpuinfo | grep amd_lbr_v2
-> >>        $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k
-> >> -a \
-> >>          -N -b -c <count> -o <perf_file> -- <loadtest>
-> >>
-> >> 4) (Optional) Download the raw perf file to the host machine.
-> >>
-> >> 5) To generate an AutoFDO profile, two offline tools are available:
-> >>     create_llvm_prof and llvm_profgen. The create_llvm_prof tool is pa=
-rt
-> >>     of the AutoFDO project and can be found on GitHub
-> >>     (https://github.com/google/autofdo), version v0.30.1 or later. The
-> >>     llvm_profgen tool is included in the LLVM compiler itself. It's
-> >>     important to note that the version of llvm_profgen doesn't need to
-> >>     match the version of Clang. It needs to be the LLVM 19 release or
-> >>     later, or from the LLVM trunk.
-> >>        $ llvm-profgen --kernel --binary=3D<vmlinux> --
-> >> perfdata=3D<perf_file> \
-> >>          -o <profile_file>
-> >>     or
-> >>        $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_file>=
- \
-> >>          --format=3Dextbinary --out=3D<profile_file>
-> >>
-> >>     Note that multiple AutoFDO profile files can be merged into one vi=
-a:
-> >>        $ llvm-profdata merge -o <profile_file>  <profile_1> ...
-> >> <profile_n>
-> >>
-> >> 6) Rebuild the kernel using the AutoFDO profile file with the same con=
-fig
-> >>     as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
-> >>        $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<profile_file>
-> >>
-> >> Co-developed-by: Han Shen<shenhan@google.com>
-> >> Signed-off-by: Han Shen<shenhan@google.com>
-> >> Signed-off-by: Rong Xu<xur@google.com>
-> >> Suggested-by: Sriraman Tallam<tmsriram@google.com>
-> >> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
-> >> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
-> >> Suggested-by: Stephane Eranian<eranian@google.com>
-> >> Tested-by: Yonghong Song<yonghong.song@linux.dev>
-> >> Tested-by: Yabin Cui<yabinc@google.com>
-> >> Tested-by: Nathan Chancellor<nathan@kernel.org>
-> >> Reviewed-by: Kees Cook<kees@kernel.org>
-> >
-> > Tested-by: Peter Jung <ptr1337@cachyos.org>
-> >
->
-> The compilations and testing with the "make pacman-pkg" function from
-> the kernel worked fine.
->
-> One problem I do face:
-> When I apply a AutoFDO profile together with the PKGBUILD [1] from
-> archlinux im running into issues at "module_install" at the packaging.
->
-> See following log:
-> ```
-> make[2]: *** [scripts/Makefile.modinst:125:
-> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/li=
-b/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko]
-> Error 1
-> make[2]: *** Deleting file
-> '/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/l=
-ib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko'
->    INSTALL
-> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr/li=
-b/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/crypto/cryptd.ko
-> make[2]: *** Waiting for unfinished jobs....
-> ```
->
->
-> This can be fixed with removed "INSTALL_MOD_STRIP=3D1" to the passed
-> parameters of module_install.
->
-> This explicitly only happens, if a profile is passed - otherwise the
-> packaging works without problems.
->
-> Regards,
->
-> Peter Jung
->
+All warnings (new ones prefixed by >>):
+
+   In file included from net/ncsi/ncsi-rsp.c:9:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> net/ncsi/ncsi-rsp.c:649:2: warning: 'memcpy' will always overflow; destination buffer has size 0, but size argument is 6 [-Wfortify-source]
+     649 |         memcpy(saddr.sa_data, &rsp->data[mac_addr_off], ETH_ALEN);
+         |         ^
+   include/linux/fortify-string.h:678:26: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                          ^
+   include/linux/fortify-string.h:633:2: note: expanded from macro '__fortify_memcpy_chk'
+     633 |         __underlying_##op(p, q, __fortify_size);                        \
+         |         ^
+   <scratch space>:23:1: note: expanded from here
+      23 | __underlying_memcpy
+         | ^
+   include/linux/fortify-string.h:114:29: note: expanded from macro '__underlying_memcpy'
+     114 | #define __underlying_memcpy     __builtin_memcpy
+         |                                 ^
+   net/ncsi/ncsi-rsp.c:1119:3: warning: 'memcpy' will always overflow; destination buffer has size 0, but size argument is 6 [-Wfortify-source]
+    1119 |                 memcpy(saddr.sa_data, &rsp->addresses[i], ETH_ALEN);
+         |                 ^
+   include/linux/fortify-string.h:678:26: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                          ^
+   include/linux/fortify-string.h:633:2: note: expanded from macro '__fortify_memcpy_chk'
+     633 |         __underlying_##op(p, q, __fortify_size);                        \
+         |         ^
+   <scratch space>:120:1: note: expanded from here
+     120 | __underlying_memcpy
+         | ^
+   include/linux/fortify-string.h:114:29: note: expanded from macro '__underlying_memcpy'
+     114 | #define __underlying_memcpy     __builtin_memcpy
+         |                                 ^
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     571 |                         __write_overflow_field(p_size_field, size);
+         |                         ^
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+   10 warnings generated.
+--
+   In file included from drivers/infiniband/ulp/opa_vnic/opa_vnic_netdev.c:53:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/infiniband/ulp/opa_vnic/opa_vnic_netdev.c:148:3: warning: 'memcpy' will always overflow; destination buffer has size 0, but size argument is 6 [-Wfortify-source]
+     148 |                 memcpy(saddr.sa_data, info->vport.base_mac_addr,
+         |                 ^
+   include/linux/fortify-string.h:678:26: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                          ^
+   include/linux/fortify-string.h:633:2: note: expanded from macro '__fortify_memcpy_chk'
+     633 |         __underlying_##op(p, q, __fortify_size);                        \
+         |         ^
+   <scratch space>:34:1: note: expanded from here
+      34 | __underlying_memcpy
+         | ^
+   include/linux/fortify-string.h:114:29: note: expanded from macro '__underlying_memcpy'
+     114 | #define __underlying_memcpy     __builtin_memcpy
+         |                                 ^
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     571 |                         __write_overflow_field(p_size_field, size);
+         |                         ^
+   6 warnings generated.
+--
+   In file included from drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:12:
+   In file included from include/linux/of_mdio.h:12:
+   In file included from include/linux/phy.h:16:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:442:2: warning: 'memcpy' will always overflow; destination buffer has size 0, but size argument is 6 [-Wfortify-source]
+     442 |         memcpy(old_addr.sa_data, net_dev->dev_addr,  ETH_ALEN);
+         |         ^
+   include/linux/fortify-string.h:678:26: note: expanded from macro 'memcpy'
+     678 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+         |                          ^
+   include/linux/fortify-string.h:633:2: note: expanded from macro '__fortify_memcpy_chk'
+     633 |         __underlying_##op(p, q, __fortify_size);                        \
+         |         ^
+   <scratch space>:219:1: note: expanded from here
+     219 | __underlying_memcpy
+         | ^
+   include/linux/fortify-string.h:114:29: note: expanded from macro '__underlying_memcpy'
+     114 | #define __underlying_memcpy     __builtin_memcpy
+         |                                 ^
+   include/linux/fortify-string.h:571:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     571 |                         __write_overflow_field(p_size_field, size);
+         |                         ^
+   6 warnings generated.
+
+
+vim +/memcpy +649 net/ncsi/ncsi-rsp.c
+
+138635cc27c973 Gavin Shan     2016-07-19  626  
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  627  /* Response handler for Get Mac Address command */
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  628  static int ncsi_rsp_handler_oem_gma(struct ncsi_request *nr, int mfr_id)
+16e8c4ca21a238 Vijay Khemka   2018-11-26  629  {
+16e8c4ca21a238 Vijay Khemka   2018-11-26  630  	struct ncsi_dev_priv *ndp = nr->ndp;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  631  	struct net_device *ndev = ndp->ndev.dev;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  632  	struct ncsi_rsp_oem_pkt *rsp;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  633  	struct sockaddr saddr;
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  634  	u32 mac_addr_off = 0;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  635  	int ret = 0;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  636  
+16e8c4ca21a238 Vijay Khemka   2018-11-26  637  	/* Get the response header */
+16e8c4ca21a238 Vijay Khemka   2018-11-26  638  	rsp = (struct ncsi_rsp_oem_pkt *)skb_network_header(nr->rsp);
+16e8c4ca21a238 Vijay Khemka   2018-11-26  639  
+16e8c4ca21a238 Vijay Khemka   2018-11-26  640  	saddr.sa_family = ndev->type;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  641  	ndev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  642  	if (mfr_id == NCSI_OEM_MFR_BCM_ID)
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  643  		mac_addr_off = BCM_MAC_ADDR_OFFSET;
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  644  	else if (mfr_id == NCSI_OEM_MFR_MLX_ID)
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  645  		mac_addr_off = MLX_MAC_ADDR_OFFSET;
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  646  	else if (mfr_id == NCSI_OEM_MFR_INTEL_ID)
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  647  		mac_addr_off = INTEL_MAC_ADDR_OFFSET;
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  648  
+74b449b98dccdf Ivan Mikhaylov 2023-06-07 @649  	memcpy(saddr.sa_data, &rsp->data[mac_addr_off], ETH_ALEN);
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  650  	if (mfr_id == NCSI_OEM_MFR_BCM_ID || mfr_id == NCSI_OEM_MFR_INTEL_ID)
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  651  		eth_addr_inc((u8 *)saddr.sa_data);
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  652  	if (!is_valid_ether_addr((const u8 *)saddr.sa_data))
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  653  		return -ENXIO;
+74b449b98dccdf Ivan Mikhaylov 2023-06-07  654  
+9e860947d8d7a1 Vijay Khemka   2019-12-27  655  	/* Set the flag for GMA command which should only be called once */
+9e860947d8d7a1 Vijay Khemka   2019-12-27  656  	ndp->gma_flag = 1;
+9e860947d8d7a1 Vijay Khemka   2019-12-27  657  
+790071347a0a1a Ivan Mikhaylov 2023-06-07  658  	rtnl_lock();
+790071347a0a1a Ivan Mikhaylov 2023-06-07  659  	ret = dev_set_mac_address(ndev, &saddr, NULL);
+790071347a0a1a Ivan Mikhaylov 2023-06-07  660  	rtnl_unlock();
+16e8c4ca21a238 Vijay Khemka   2018-11-26  661  	if (ret < 0)
+16e8c4ca21a238 Vijay Khemka   2018-11-26  662  		netdev_warn(ndev, "NCSI: 'Writing mac address to device failed\n");
+16e8c4ca21a238 Vijay Khemka   2018-11-26  663  
+16e8c4ca21a238 Vijay Khemka   2018-11-26  664  	return ret;
+16e8c4ca21a238 Vijay Khemka   2018-11-26  665  }
+16e8c4ca21a238 Vijay Khemka   2018-11-26  666  
+
+:::::: The code at line 649 was first introduced by commit
+:::::: 74b449b98dccdf24288d562f9d207fa066da793d net/ncsi: make one oem_gma function for all mfr id
+
+:::::: TO: Ivan Mikhaylov <fr0st61te@gmail.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
