@@ -1,75 +1,231 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF3E192D7D
-	for <llvm@lists.linux.dev>; Mon,  4 Nov 2024 19:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF03D1DD0F1;
+	Mon,  4 Nov 2024 20:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730749290; cv=none; b=J0dN6k9wcT1+FmCItCgzToooc/9CHFbtpOH+2RFt31seeazdRDgEsZC+Uy4i7bUO2Jv9mKdSKrcTxn2gINCNjyzA4hokaEFQd6m0Abd7RIHsy11vvf3OJfkqJ8WuewIRg9TZDOo9SOzfk2zkvGHt1QIBpPwASux9QkgxxzHFdF8=
+	t=1730751462; cv=none; b=aKaXqLuDM0lh2q6+8V7axyoCPuZp60Uaj7sNy+6vFJrhTD/c2c1J0ARN/puSQOrQOFfvi14ezGIIL/c3FTEFWc8hNDsm9uirz4jFv4dBtQhbfY+9uWS2G+8CJQ6WFLu/wRffB7Q3C2R6M9gJF+qOmaqLanC4rDg10YGdcda1Qg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730749290; c=relaxed/simple;
-	bh=TlfnKi73QV/9wCkfGcRyEygU9J9eNazH15v8tXAdF3o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=bB5CqjQKq0rDrjttBtpEYChQ+pUq8009dR92Qm2PMdbZtPo0lGjJvtT2I4L3fdtRKRsYJahWm9Rvg0dyPVVJ04edxJ2kS87s42vuRBPtAQjnB8bCl3673Us69gh6Nz1mUK9ZRwqwO89cnNF2RkRoSc7z55G3ZAoy6z8sdNpxqFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=n8PZ+lvd; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1730751462; c=relaxed/simple;
+	bh=5MWgbh4aOjwoJiLBWxpgay+wgAMi+P1rkEAd6ZT8gdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ntQZqKPgMp/ZtFjkLRssRe+tar17hCzBi4lXBE59hfziQB+67/GD5mzDbXClLPRXqJ7aN3MSIgcRaKOU8DOkqSzPVHJWMqArvaTpccJ7iKmfOyq0COO0QwMC7y/WXGw3jVVK2e1G8vj8jLBigeKWPL/AyuSYwi1wyJ2QsoKpytc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8Hkxr0m; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="n8PZ+lvd"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 479A142C30
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1730749286; bh=/IFed8QuxmGzZBbHkfBNbEfyJ1RoaIBovaPG1f0VPG8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=n8PZ+lvdV9S8DRrV5uughGMOtaA9H3oWENpGvlYt/sC2JQoufU1tcxY54Ptc9v2tC
-	 GZtZM7inLdMb3Yg6hJr21LWAY5u/TYR1V1M6N1BZY2JeX9pA5Rh22sWTTP11xVydlV
-	 L7aqqZFthR/iVCvg+akLG1EMYJDr6AW0o1X4BsrOEOZkeVwA3GsWdm8ywJvgXzrxTr
-	 8KUmLUeJrUFWIT5li55End9O/KFWWamMROt8jQEW913d5F3fFqJ4B0dhJS6qa0namB
-	 gziO8YJDsdCDAuzVKp0LxwQQMp79ykXyEG6y1/rg0UiUVae33IF2xZ8VT1JDZUuraP
-	 XHhzFLoqK0O/A==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 479A142C30;
-	Mon,  4 Nov 2024 19:41:26 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Dongliang Mu <dzm91@hust.edu.cn>, si.yanteng@linux.dev, Alex Shi
- <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] docs/zh_CN: add the translation of kbuild/llvm.rst
-In-Reply-To: <20241023153235.1291567-1-dzm91@hust.edu.cn>
-References: <20241023153235.1291567-1-dzm91@hust.edu.cn>
-Date: Mon, 04 Nov 2024 12:41:25 -0700
-Message-ID: <87wmhi7pne.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8Hkxr0m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730751461; x=1762287461;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5MWgbh4aOjwoJiLBWxpgay+wgAMi+P1rkEAd6ZT8gdE=;
+  b=I8Hkxr0mAsYglyYe+QacWMJmLhZ084uE5wTVlsO9tTg7ie3DqseUzDLq
+   q89yvyH4YNIwsGnRxv3cOJ5bAVRBtlBGMIA0ddQiwAXN+Ji9MO5xF98Fj
+   NpNrhWdcVjphR9HehYt2W3jwXzYrD0pOo4HEyVhUUzCfaiuX+/uQUgRyM
+   Obeb9/U9DG6I4KfqHntYALXwA2ulv2p7ElLO5MEkuQUV8dfTpOk9SyEF9
+   ZH18S4mGT2FDgGMly7xq4OpvElgwtsSXUzTDNDv89DhsstbrFD+6K9OKw
+   SUBa1G8aCYytZHDKJXygxWAAn+faDs6y/BV6U7lTlxqkrqncbzEbWpYAe
+   g==;
+X-CSE-ConnectionGUID: j28cWm2SShKQSF2owNeT2Q==
+X-CSE-MsgGUID: 2Y9CSk/DSJKQAwh1yKk+0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="41858040"
+X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
+   d="scan'208";a="41858040"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 12:17:40 -0800
+X-CSE-ConnectionGUID: DjDAKnVUQtS4/c7pKUkeQg==
+X-CSE-MsgGUID: a15UI2hBS9yREI5ghSgxJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
+   d="scan'208";a="83286325"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 04 Nov 2024 12:17:35 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t83W1-000lFV-1X;
+	Mon, 04 Nov 2024 20:17:33 +0000
+Date: Tue, 5 Nov 2024 04:17:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 4/7] pmdomain: core: Introduce
+ dev_pm_genpd_rpm_always_on()
+Message-ID: <202411050317.abJatSkD-lkp@intel.com>
+References: <1730705521-23081-5-git-send-email-shawn.lin@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1730705521-23081-5-git-send-email-shawn.lin@rock-chips.com>
 
-Dongliang Mu <dzm91@hust.edu.cn> writes:
+Hi Shawn,
 
-> Finish the translation of kbuild/llvm.rst and move llvm from TODO
-> to the main body.
->
-> Update to commit 145082ebfcf0 ("Documentation/llvm: turn make command
-> for ccache into code block")
->
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
->  .../translations/zh_CN/kbuild/index.rst       |   3 +-
->  .../translations/zh_CN/kbuild/llvm.rst        | 203 ++++++++++++++++++
->  2 files changed, 205 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/translations/zh_CN/kbuild/llvm.rst
+kernel test robot noticed the following build warnings:
 
-Applied, thanks.
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on robh/for-next linus/master v6.12-rc6]
+[cannot apply to mkp-scsi/for-next next-20241104]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-jon
+url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/dt-bindings-ufs-Document-Rockchip-UFS-host-controller/20241104-191810
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/1730705521-23081-5-git-send-email-shawn.lin%40rock-chips.com
+patch subject: [PATCH v4 4/7] pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+config: x86_64-buildonly-randconfig-002-20241104 (https://download.01.org/0day-ci/archive/20241105/202411050317.abJatSkD-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411050317.abJatSkD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411050317.abJatSkD-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/pmdomain/core.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/pmdomain/core.c:898:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+     898 |                         if (to_gpd_data(pdd)->rpm_always_on)
+         |                         ^
+   drivers/pmdomain/core.c:893:3: note: previous statement is here
+     893 |                 if (!pm_runtime_suspended(pdd->dev) ||
+         |                 ^
+   2 warnings generated.
+
+
+vim +/if +898 drivers/pmdomain/core.c
+
+   837	
+   838	/**
+   839	 * genpd_power_off - Remove power from a given PM domain.
+   840	 * @genpd: PM domain to power down.
+   841	 * @one_dev_on: If invoked from genpd's ->runtime_suspend|resume() callback, the
+   842	 * RPM status of the releated device is in an intermediate state, not yet turned
+   843	 * into RPM_SUSPENDED. This means genpd_power_off() must allow one device to not
+   844	 * be RPM_SUSPENDED, while it tries to power off the PM domain.
+   845	 * @depth: nesting count for lockdep.
+   846	 *
+   847	 * If all of the @genpd's devices have been suspended and all of its subdomains
+   848	 * have been powered down, remove power from @genpd.
+   849	 */
+   850	static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+   851				   unsigned int depth)
+   852	{
+   853		struct pm_domain_data *pdd;
+   854		struct gpd_link *link;
+   855		unsigned int not_suspended = 0;
+   856		int ret;
+   857	
+   858		/*
+   859		 * Do not try to power off the domain in the following situations:
+   860		 * (1) The domain is already in the "power off" state.
+   861		 * (2) System suspend is in progress.
+   862		 */
+   863		if (!genpd_status_on(genpd) || genpd->prepared_count > 0)
+   864			return 0;
+   865	
+   866		/*
+   867		 * Abort power off for the PM domain in the following situations:
+   868		 * (1) The domain is configured as always on.
+   869		 * (2) When the domain has a subdomain being powered on.
+   870		 */
+   871		if (genpd_is_always_on(genpd) ||
+   872				genpd_is_rpm_always_on(genpd) ||
+   873				atomic_read(&genpd->sd_count) > 0)
+   874			return -EBUSY;
+   875	
+   876		/*
+   877		 * The children must be in their deepest (powered-off) states to allow
+   878		 * the parent to be powered off. Note that, there's no need for
+   879		 * additional locking, as powering on a child, requires the parent's
+   880		 * lock to be acquired first.
+   881		 */
+   882		list_for_each_entry(link, &genpd->parent_links, parent_node) {
+   883			struct generic_pm_domain *child = link->child;
+   884			if (child->state_idx < child->state_count - 1)
+   885				return -EBUSY;
+   886		}
+   887	
+   888		list_for_each_entry(pdd, &genpd->dev_list, list_node) {
+   889			/*
+   890			 * Do not allow PM domain to be powered off, when an IRQ safe
+   891			 * device is part of a non-IRQ safe domain.
+   892			 */
+   893			if (!pm_runtime_suspended(pdd->dev) ||
+   894				irq_safe_dev_in_sleep_domain(pdd->dev, genpd))
+   895				not_suspended++;
+   896	
+   897				/* The device may need its PM domain to stay powered on. */
+ > 898				if (to_gpd_data(pdd)->rpm_always_on)
+   899					return -EBUSY;
+   900		}
+   901	
+   902		if (not_suspended > 1 || (not_suspended == 1 && !one_dev_on))
+   903			return -EBUSY;
+   904	
+   905		if (genpd->gov && genpd->gov->power_down_ok) {
+   906			if (!genpd->gov->power_down_ok(&genpd->domain))
+   907				return -EAGAIN;
+   908		}
+   909	
+   910		/* Default to shallowest state. */
+   911		if (!genpd->gov)
+   912			genpd->state_idx = 0;
+   913	
+   914		/* Don't power off, if a child domain is waiting to power on. */
+   915		if (atomic_read(&genpd->sd_count) > 0)
+   916			return -EBUSY;
+   917	
+   918		ret = _genpd_power_off(genpd, true);
+   919		if (ret) {
+   920			genpd->states[genpd->state_idx].rejected++;
+   921			return ret;
+   922		}
+   923	
+   924		genpd->status = GENPD_STATE_OFF;
+   925		genpd_update_accounting(genpd);
+   926		genpd->states[genpd->state_idx].usage++;
+   927	
+   928		list_for_each_entry(link, &genpd->child_links, child_node) {
+   929			genpd_sd_counter_dec(link->parent);
+   930			genpd_lock_nested(link->parent, depth + 1);
+   931			genpd_power_off(link->parent, false, depth + 1);
+   932			genpd_unlock(link->parent);
+   933		}
+   934	
+   935		return 0;
+   936	}
+   937	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
