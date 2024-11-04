@@ -1,231 +1,287 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF03D1DD0F1;
-	Mon,  4 Nov 2024 20:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DC11E491B
+	for <llvm@lists.linux.dev>; Mon,  4 Nov 2024 20:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730751462; cv=none; b=aKaXqLuDM0lh2q6+8V7axyoCPuZp60Uaj7sNy+6vFJrhTD/c2c1J0ARN/puSQOrQOFfvi14ezGIIL/c3FTEFWc8hNDsm9uirz4jFv4dBtQhbfY+9uWS2G+8CJQ6WFLu/wRffB7Q3C2R6M9gJF+qOmaqLanC4rDg10YGdcda1Qg0=
+	t=1730751888; cv=none; b=RWeew+MlhuCEozQu6tILqah3iQmOPvJTtTPAj8ZjF7RQNTjS5WWm3Tj+LHPZ41spXrgyc5eIEE48DiFiZ8eRkwtGZUUn0DNiiksCHsrZoeJOYj8/n8bSraPtt3i3NKeAp6ITOJ7Gc0JEZIVI3gt3sW0oiM6x0yqnV32JS9UuKoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730751462; c=relaxed/simple;
-	bh=5MWgbh4aOjwoJiLBWxpgay+wgAMi+P1rkEAd6ZT8gdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ntQZqKPgMp/ZtFjkLRssRe+tar17hCzBi4lXBE59hfziQB+67/GD5mzDbXClLPRXqJ7aN3MSIgcRaKOU8DOkqSzPVHJWMqArvaTpccJ7iKmfOyq0COO0QwMC7y/WXGw3jVVK2e1G8vj8jLBigeKWPL/AyuSYwi1wyJ2QsoKpytc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8Hkxr0m; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730751888; c=relaxed/simple;
+	bh=67y70xaii5XM8g7k6nlqO2Sz7xsbmRTKi3nk9lApgZg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MVcfxGwxN/m249M5k5hzM7H9ym4Nu4jYZzpegMBcsoAKSj1KqItLt3j9ZFClbTCgSI/frQIrnVKmS2bQVLpybXIKzWnvAjcUPbKtODTo/dFq2euFxvBeG2hgnnJ4/sEBoFYhzbFQyKW7q//ZXa1sngXbQ2WyUyn1DC4n02ReMTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jF4hB1JW; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8Hkxr0m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730751461; x=1762287461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5MWgbh4aOjwoJiLBWxpgay+wgAMi+P1rkEAd6ZT8gdE=;
-  b=I8Hkxr0mAsYglyYe+QacWMJmLhZ084uE5wTVlsO9tTg7ie3DqseUzDLq
-   q89yvyH4YNIwsGnRxv3cOJ5bAVRBtlBGMIA0ddQiwAXN+Ji9MO5xF98Fj
-   NpNrhWdcVjphR9HehYt2W3jwXzYrD0pOo4HEyVhUUzCfaiuX+/uQUgRyM
-   Obeb9/U9DG6I4KfqHntYALXwA2ulv2p7ElLO5MEkuQUV8dfTpOk9SyEF9
-   ZH18S4mGT2FDgGMly7xq4OpvElgwtsSXUzTDNDv89DhsstbrFD+6K9OKw
-   SUBa1G8aCYytZHDKJXygxWAAn+faDs6y/BV6U7lTlxqkrqncbzEbWpYAe
-   g==;
-X-CSE-ConnectionGUID: j28cWm2SShKQSF2owNeT2Q==
-X-CSE-MsgGUID: 2Y9CSk/DSJKQAwh1yKk+0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="41858040"
-X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
-   d="scan'208";a="41858040"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 12:17:40 -0800
-X-CSE-ConnectionGUID: DjDAKnVUQtS4/c7pKUkeQg==
-X-CSE-MsgGUID: a15UI2hBS9yREI5ghSgxJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
-   d="scan'208";a="83286325"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 04 Nov 2024 12:17:35 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t83W1-000lFV-1X;
-	Mon, 04 Nov 2024 20:17:33 +0000
-Date: Tue, 5 Nov 2024 04:17:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org, linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] pmdomain: core: Introduce
- dev_pm_genpd_rpm_always_on()
-Message-ID: <202411050317.abJatSkD-lkp@intel.com>
-References: <1730705521-23081-5-git-send-email-shawn.lin@rock-chips.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jF4hB1JW"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b15eadee87so341728285a.2
+        for <llvm@lists.linux.dev>; Mon, 04 Nov 2024 12:24:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730751885; x=1731356685; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pMAD4dMvrggttxV8M69ZLvHtnrpB33PuIkwveI53NKI=;
+        b=jF4hB1JWBimyQJqqDezFzEQ2Phj3gn0fyu8OSpWZTRerB1dEtaUogdPLHVheyz5cIw
+         yI76nWvDbVO78k64egnYcAeZ+nPHGaWjAMssNnkqtR1pl2ZbJbmqYe3q7u7FYuXLdGEE
+         G3mr3zV5Xptkjv90jzuzN6JnmGqA1Gxlu0RvtN+1bNitoAll+Zho31S/+nEK4Av5GWkk
+         1l/qKeTx7pJ5fkh0FjZgfu58XQ3OPhSDd6CpldGLqr6dl3SWHONGqXAlipOyKGaGfrSC
+         d+CcLJZ5xavaLUG/J5bxW6VQHVbiaeekV74T6RJWRkK5NngZgu7AYKVpaWazPARjYuEF
+         tnVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730751885; x=1731356685;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pMAD4dMvrggttxV8M69ZLvHtnrpB33PuIkwveI53NKI=;
+        b=p6k9QDMb0nzI37uu7bxorpS0BDik2IxfAGcxYqvAZ/M0t0KFHKtzGrYf6BgBb0boBi
+         fZcXWaBLwHoMrplqWHj5U/2R2n9RuWeAJTry5dSF9Euc9e8QJbVqZVFBxup4fB32fl8c
+         oNJoLjonkPX74wfPsmIx9NaJh4h7jVhlYWQM53UvFxK6AI50J67tKWtleCkPn3LeYC07
+         iwVYHf4yrFqqxAEGxgCt++z2V6QjFY0bYpQ4Thdr1H1Ih9Mdi1914lnzwTI9cwu5QMbR
+         IXJ3XzUqyQ6glwlgAw+rbo1d2QNJT7zVD+RaWhTAMALv2zx5+8N2ZuqroF7ZRtSo4A3k
+         V/vA==
+X-Forwarded-Encrypted: i=1; AJvYcCXK+3OYwXZb7K8oLPOlLkr9Ik0bI59IH91YEhow8o1WIGgmST0UH0GyJ8BAdoZeNhMgRgUe@lists.linux.dev
+X-Gm-Message-State: AOJu0YzyKDN1AOaTpwRKv3E5BNHHZo3l2mYbHT3ukG/385FLiucMvbT9
+	WYWPwPeRULKkBll8YU0UGCo3LSAdfwKddcICtvsm/L44F1J1S/Fyyplk2CIdBfC2vQd5QIaqhL1
+	l72a4chicWK5LCVE0hTNzloBNFAmWGReLb4gDW+PKOQ1DXWBV86HqVvw=
+X-Google-Smtp-Source: AGHT+IHYwEpMyGlK9DOHyJMnwe42enHazr4mglbcxXxObxPF+Ii3w3TsZ72VmrnN6P90z6NOVOpNUA9yHGlz3tNrg7Q=
+X-Received: by 2002:a05:6214:390c:b0:6cb:aa7b:b8cc with SMTP id
+ 6a1803df08f44-6d351aa3f45mr211213366d6.16.1730751884546; Mon, 04 Nov 2024
+ 12:24:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1730705521-23081-5-git-send-email-shawn.lin@rock-chips.com>
+References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-2-xur@google.com>
+ <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org> <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
+ <CACkGtrgOw8inYCD96ot_w9VwzoFvvgCReAx0P-=Rxxqj2FT4_A@mail.gmail.com> <67c07d2f-fb1f-4b7d-96e2-fb5ceb8fc692@cachyos.org>
+In-Reply-To: <67c07d2f-fb1f-4b7d-96e2-fb5ceb8fc692@cachyos.org>
+From: Han Shen <shenhan@google.com>
+Date: Mon, 4 Nov 2024 12:24:29 -0800
+Message-ID: <CACkGtrgJHtG5pXR1z=6G4XR6ffT5jEi3jZQo=UhYj091naBhsA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
+To: Peter Jung <ptr1337@cachyos.org>
+Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Li <davidxl@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
+	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
+	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Shawn,
+Hi Peter,
+Thanks for providing the detailed reproduce.
+Now I can see the error (after I synced to 6.12.0-rc6, I was using rc5).
+I'll look into that and report back.
 
-kernel test robot noticed the following build warnings:
+> I have tested your provided method, but the AutoFDO profile (lld does
+not get lto-sample-profile=3D$pathtoprofile passed)
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on robh/for-next linus/master v6.12-rc6]
-[cannot apply to mkp-scsi/for-next next-20241104]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I see. You also turned on ThinLTO, which I didn't, so the profile was
+only used during compilation, not passed to lld.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shawn-Lin/dt-bindings-ufs-Document-Rockchip-UFS-host-controller/20241104-191810
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/1730705521-23081-5-git-send-email-shawn.lin%40rock-chips.com
-patch subject: [PATCH v4 4/7] pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
-config: x86_64-buildonly-randconfig-002-20241104 (https://download.01.org/0day-ci/archive/20241105/202411050317.abJatSkD-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411050317.abJatSkD-lkp@intel.com/reproduce)
+Thanks,
+Han
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411050317.abJatSkD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/pmdomain/core.c:21:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/pmdomain/core.c:898:4: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     898 |                         if (to_gpd_data(pdd)->rpm_always_on)
-         |                         ^
-   drivers/pmdomain/core.c:893:3: note: previous statement is here
-     893 |                 if (!pm_runtime_suspended(pdd->dev) ||
-         |                 ^
-   2 warnings generated.
-
-
-vim +/if +898 drivers/pmdomain/core.c
-
-   837	
-   838	/**
-   839	 * genpd_power_off - Remove power from a given PM domain.
-   840	 * @genpd: PM domain to power down.
-   841	 * @one_dev_on: If invoked from genpd's ->runtime_suspend|resume() callback, the
-   842	 * RPM status of the releated device is in an intermediate state, not yet turned
-   843	 * into RPM_SUSPENDED. This means genpd_power_off() must allow one device to not
-   844	 * be RPM_SUSPENDED, while it tries to power off the PM domain.
-   845	 * @depth: nesting count for lockdep.
-   846	 *
-   847	 * If all of the @genpd's devices have been suspended and all of its subdomains
-   848	 * have been powered down, remove power from @genpd.
-   849	 */
-   850	static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
-   851				   unsigned int depth)
-   852	{
-   853		struct pm_domain_data *pdd;
-   854		struct gpd_link *link;
-   855		unsigned int not_suspended = 0;
-   856		int ret;
-   857	
-   858		/*
-   859		 * Do not try to power off the domain in the following situations:
-   860		 * (1) The domain is already in the "power off" state.
-   861		 * (2) System suspend is in progress.
-   862		 */
-   863		if (!genpd_status_on(genpd) || genpd->prepared_count > 0)
-   864			return 0;
-   865	
-   866		/*
-   867		 * Abort power off for the PM domain in the following situations:
-   868		 * (1) The domain is configured as always on.
-   869		 * (2) When the domain has a subdomain being powered on.
-   870		 */
-   871		if (genpd_is_always_on(genpd) ||
-   872				genpd_is_rpm_always_on(genpd) ||
-   873				atomic_read(&genpd->sd_count) > 0)
-   874			return -EBUSY;
-   875	
-   876		/*
-   877		 * The children must be in their deepest (powered-off) states to allow
-   878		 * the parent to be powered off. Note that, there's no need for
-   879		 * additional locking, as powering on a child, requires the parent's
-   880		 * lock to be acquired first.
-   881		 */
-   882		list_for_each_entry(link, &genpd->parent_links, parent_node) {
-   883			struct generic_pm_domain *child = link->child;
-   884			if (child->state_idx < child->state_count - 1)
-   885				return -EBUSY;
-   886		}
-   887	
-   888		list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-   889			/*
-   890			 * Do not allow PM domain to be powered off, when an IRQ safe
-   891			 * device is part of a non-IRQ safe domain.
-   892			 */
-   893			if (!pm_runtime_suspended(pdd->dev) ||
-   894				irq_safe_dev_in_sleep_domain(pdd->dev, genpd))
-   895				not_suspended++;
-   896	
-   897				/* The device may need its PM domain to stay powered on. */
- > 898				if (to_gpd_data(pdd)->rpm_always_on)
-   899					return -EBUSY;
-   900		}
-   901	
-   902		if (not_suspended > 1 || (not_suspended == 1 && !one_dev_on))
-   903			return -EBUSY;
-   904	
-   905		if (genpd->gov && genpd->gov->power_down_ok) {
-   906			if (!genpd->gov->power_down_ok(&genpd->domain))
-   907				return -EAGAIN;
-   908		}
-   909	
-   910		/* Default to shallowest state. */
-   911		if (!genpd->gov)
-   912			genpd->state_idx = 0;
-   913	
-   914		/* Don't power off, if a child domain is waiting to power on. */
-   915		if (atomic_read(&genpd->sd_count) > 0)
-   916			return -EBUSY;
-   917	
-   918		ret = _genpd_power_off(genpd, true);
-   919		if (ret) {
-   920			genpd->states[genpd->state_idx].rejected++;
-   921			return ret;
-   922		}
-   923	
-   924		genpd->status = GENPD_STATE_OFF;
-   925		genpd_update_accounting(genpd);
-   926		genpd->states[genpd->state_idx].usage++;
-   927	
-   928		list_for_each_entry(link, &genpd->child_links, child_node) {
-   929			genpd_sd_counter_dec(link->parent);
-   930			genpd_lock_nested(link->parent, depth + 1);
-   931			genpd_power_off(link->parent, false, depth + 1);
-   932			genpd_unlock(link->parent);
-   933		}
-   934	
-   935		return 0;
-   936	}
-   937	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Mon, Nov 4, 2024 at 9:31=E2=80=AFAM Peter Jung <ptr1337@cachyos.org> wro=
+te:
+>
+> Hi Han,
+>
+> I have tested your provided method, but the AutoFDO profile (lld does
+> not get lto-sample-profile=3D$pathtoprofile passed)  nor Clang as compile=
+r
+> gets used.
+> Please replace following PKGBUILD and config from linux-mainline with
+> the provided one in the gist. The patch is also included there.
+>
+> https://gist.github.com/ptr1337/c92728bb273f7dbc2817db75eedec9ed
+>
+> The main change I am doing here, is passing following to the build array
+> and replacing "make all":
+>
+> make LLVM=3D1 LLVM_IAS=3D1 CLANG_AUTOFDO_PROFILE=3D${srcdir}/perf.afdo al=
+l
+>
+> When compiling the kernel with makepkg, this results at the packaging to
+> following issue and can be reliable reproduced.
+>
+> Regards,
+>
+> Peter
+>
+>
+> On 04.11.24 05:50, Han Shen wrote:
+> > Hi Peter, thanks for reporting the issue. I am trying to reproduce it
+> > in the up-to-date archlinux environment. Below is what I have:
+> >    0. pacman -Syu
+> >    1. cloned archlinux build files from
+> > https://aur.archlinux.org/linux-mainline.git the newest mainline
+> > version is 6.12rc5-1.
+> >    2. changed the PKGBUILD file to include the patches series
+> >    3. changed the "config" to turn on clang autofdo
+> >    4. collected afdo profiles
+> >    5. MAKEFLAGS=3D"-j48 V=3D1 LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D$(pwd)/p=
+erf.afdo" \
+> >          makepkg -s --skipinteg --skippgp
+> >    6. install and reboot
+> > The above steps succeeded.
+> > You mentioned the error happens at "module_install", can you instruct
+> > me how to execute the "module_install" step?
+> >
+> > Thanks,
+> > Han
+> >
+> > On Sat, Nov 2, 2024 at 12:53=E2=80=AFPM Peter Jung<ptr1337@cachyos.org>=
+ wrote:
+> >>
+> >>
+> >> On 02.11.24 20:46, Peter Jung wrote:
+> >>>
+> >>> On 02.11.24 18:51, Rong Xu wrote:
+> >>>> Add the build support for using Clang's AutoFDO. Building the kernel
+> >>>> with AutoFDO does not reduce the optimization level from the
+> >>>> compiler. AutoFDO uses hardware sampling to gather information about
+> >>>> the frequency of execution of different code paths within a binary.
+> >>>> This information is then used to guide the compiler's optimization
+> >>>> decisions, resulting in a more efficient binary. Experiments
+> >>>> showed that the kernel can improve up to 10% in latency.
+> >>>>
+> >>>> The support requires a Clang compiler after LLVM 17. This submission
+> >>>> is limited to x86 platforms that support PMU features like LBR on
+> >>>> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
+> >>>>    and BRBE on ARM 1 is part of planned future work.
+> >>>>
+> >>>> Here is an example workflow for AutoFDO kernel:
+> >>>>
+> >>>> 1) Build the kernel on the host machine with LLVM enabled, for examp=
+le,
+> >>>>          $ make menuconfig LLVM=3D1
+> >>>>       Turn on AutoFDO build config:
+> >>>>         CONFIG_AUTOFDO_CLANG=3Dy
+> >>>>       With a configuration that has LLVM enabled, use the following
+> >>>>       command:
+> >>>>          scripts/config -e AUTOFDO_CLANG
+> >>>>       After getting the config, build with
+> >>>>         $ make LLVM=3D1
+> >>>>
+> >>>> 2) Install the kernel on the test machine.
+> >>>>
+> >>>> 3) Run the load tests. The '-c' option in perf specifies the sample
+> >>>>      event period. We suggest     using a suitable prime number,
+> >>>>      like 500009, for this purpose.
+> >>>>      For Intel platforms:
+> >>>>         $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c
+> >>>> <count> \
+> >>>>           -o <perf_file> -- <loadtest>
+> >>>>      For AMD platforms:
+> >>>>         The supported system are: Zen3 with BRS, or Zen4 with amd_lb=
+r_v2
+> >>>>        For Zen3:
+> >>>>         $ cat proc/cpuinfo | grep " brs"
+> >>>>         For Zen4:
+> >>>>         $ cat proc/cpuinfo | grep amd_lbr_v2
+> >>>>         $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS=
+:k
+> >>>> -a \
+> >>>>           -N -b -c <count> -o <perf_file> -- <loadtest>
+> >>>>
+> >>>> 4) (Optional) Download the raw perf file to the host machine.
+> >>>>
+> >>>> 5) To generate an AutoFDO profile, two offline tools are available:
+> >>>>      create_llvm_prof and llvm_profgen. The create_llvm_prof tool is=
+ part
+> >>>>      of the AutoFDO project and can be found on GitHub
+> >>>>      (https://github.com/google/autofdo), version v0.30.1 or later. =
+The
+> >>>>      llvm_profgen tool is included in the LLVM compiler itself. It's
+> >>>>      important to note that the version of llvm_profgen doesn't need=
+ to
+> >>>>      match the version of Clang. It needs to be the LLVM 19 release =
+or
+> >>>>      later, or from the LLVM trunk.
+> >>>>         $ llvm-profgen --kernel --binary=3D<vmlinux> --
+> >>>> perfdata=3D<perf_file> \
+> >>>>           -o <profile_file>
+> >>>>      or
+> >>>>         $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_fi=
+le> \
+> >>>>           --format=3Dextbinary --out=3D<profile_file>
+> >>>>
+> >>>>      Note that multiple AutoFDO profile files can be merged into one=
+ via:
+> >>>>         $ llvm-profdata merge -o <profile_file>  <profile_1> ...
+> >>>> <profile_n>
+> >>>>
+> >>>> 6) Rebuild the kernel using the AutoFDO profile file with the same c=
+onfig
+> >>>>      as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
+> >>>>         $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<profile_file>
+> >>>>
+> >>>> Co-developed-by: Han Shen<shenhan@google.com>
+> >>>> Signed-off-by: Han Shen<shenhan@google.com>
+> >>>> Signed-off-by: Rong Xu<xur@google.com>
+> >>>> Suggested-by: Sriraman Tallam<tmsriram@google.com>
+> >>>> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
+> >>>> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
+> >>>> Suggested-by: Stephane Eranian<eranian@google.com>
+> >>>> Tested-by: Yonghong Song<yonghong.song@linux.dev>
+> >>>> Tested-by: Yabin Cui<yabinc@google.com>
+> >>>> Tested-by: Nathan Chancellor<nathan@kernel.org>
+> >>>> Reviewed-by: Kees Cook<kees@kernel.org>
+> >>> Tested-by: Peter Jung<ptr1337@cachyos.org>
+> >>>
+> >> The compilations and testing with the "make pacman-pkg" function from
+> >> the kernel worked fine.
+> >>
+> >> One problem I do face:
+> >> When I apply a AutoFDO profile together with the PKGBUILD [1] from
+> >> archlinux im running into issues at "module_install" at the packaging.
+> >>
+> >> See following log:
+> >> ```
+> >> make[2]: *** [scripts/Makefile.modinst:125:
+> >> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr=
+/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko]
+> >> Error 1
+> >> make[2]: *** Deleting file
+> >> '/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/us=
+r/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko'
+> >>     INSTALL
+> >> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr=
+/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/crypto/cryptd.ko
+> >> make[2]: *** Waiting for unfinished jobs....
+> >> ```
+> >>
+> >>
+> >> This can be fixed with removed "INSTALL_MOD_STRIP=3D1" to the passed
+> >> parameters of module_install.
+> >>
+> >> This explicitly only happens, if a profile is passed - otherwise the
+> >> packaging works without problems.
+> >>
+> >> Regards,
+> >>
+> >> Peter Jung
+> >>
+>
