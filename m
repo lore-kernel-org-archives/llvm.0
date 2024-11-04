@@ -1,287 +1,427 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DC11E491B
-	for <llvm@lists.linux.dev>; Mon,  4 Nov 2024 20:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7C01AE016;
+	Mon,  4 Nov 2024 22:32:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730751888; cv=none; b=RWeew+MlhuCEozQu6tILqah3iQmOPvJTtTPAj8ZjF7RQNTjS5WWm3Tj+LHPZ41spXrgyc5eIEE48DiFiZ8eRkwtGZUUn0DNiiksCHsrZoeJOYj8/n8bSraPtt3i3NKeAp6ITOJ7Gc0JEZIVI3gt3sW0oiM6x0yqnV32JS9UuKoI=
+	t=1730759569; cv=none; b=GAm0hPcnjaUDmXE6kekBLpw6Xsk/W7F4Yw8EFJFVpTtl7rtb3zImWou2K9ygDYPJr63Jl5BRa8Dw+uWyeeg5ZWvH4pq3xqfFrOZ3QTKQOY+luswxv0uqgA8zgsvGrJRY7egyZTpf9N4GvqhWpVjLxGxap54FiiI1YtKMWgtW3Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730751888; c=relaxed/simple;
-	bh=67y70xaii5XM8g7k6nlqO2Sz7xsbmRTKi3nk9lApgZg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MVcfxGwxN/m249M5k5hzM7H9ym4Nu4jYZzpegMBcsoAKSj1KqItLt3j9ZFClbTCgSI/frQIrnVKmS2bQVLpybXIKzWnvAjcUPbKtODTo/dFq2euFxvBeG2hgnnJ4/sEBoFYhzbFQyKW7q//ZXa1sngXbQ2WyUyn1DC4n02ReMTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jF4hB1JW; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1730759569; c=relaxed/simple;
+	bh=5ng9VZRaDleLH++jqBRWlKLES8uRaQcFcHFAQksupIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tymd1dAGUzFd7GTfXuqvxcMngO6ukkHzygZ5kAAxaIQDTkzY+KJ8dagKxsdua6hdPq2m9dw9iR2XsJl0rU6atYf1l2XZVfMRXwprVffj3lqyQT8BDRiekSD6xHHI3KbOKkHvUbmybWgnCz9jydZQV2/a/HqlISMMh61CFWx79Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIKhubB2; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jF4hB1JW"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b15eadee87so341728285a.2
-        for <llvm@lists.linux.dev>; Mon, 04 Nov 2024 12:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730751885; x=1731356685; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pMAD4dMvrggttxV8M69ZLvHtnrpB33PuIkwveI53NKI=;
-        b=jF4hB1JWBimyQJqqDezFzEQ2Phj3gn0fyu8OSpWZTRerB1dEtaUogdPLHVheyz5cIw
-         yI76nWvDbVO78k64egnYcAeZ+nPHGaWjAMssNnkqtR1pl2ZbJbmqYe3q7u7FYuXLdGEE
-         G3mr3zV5Xptkjv90jzuzN6JnmGqA1Gxlu0RvtN+1bNitoAll+Zho31S/+nEK4Av5GWkk
-         1l/qKeTx7pJ5fkh0FjZgfu58XQ3OPhSDd6CpldGLqr6dl3SWHONGqXAlipOyKGaGfrSC
-         d+CcLJZ5xavaLUG/J5bxW6VQHVbiaeekV74T6RJWRkK5NngZgu7AYKVpaWazPARjYuEF
-         tnVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730751885; x=1731356685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pMAD4dMvrggttxV8M69ZLvHtnrpB33PuIkwveI53NKI=;
-        b=p6k9QDMb0nzI37uu7bxorpS0BDik2IxfAGcxYqvAZ/M0t0KFHKtzGrYf6BgBb0boBi
-         fZcXWaBLwHoMrplqWHj5U/2R2n9RuWeAJTry5dSF9Euc9e8QJbVqZVFBxup4fB32fl8c
-         oNJoLjonkPX74wfPsmIx9NaJh4h7jVhlYWQM53UvFxK6AI50J67tKWtleCkPn3LeYC07
-         iwVYHf4yrFqqxAEGxgCt++z2V6QjFY0bYpQ4Thdr1H1Ih9Mdi1914lnzwTI9cwu5QMbR
-         IXJ3XzUqyQ6glwlgAw+rbo1d2QNJT7zVD+RaWhTAMALv2zx5+8N2ZuqroF7ZRtSo4A3k
-         V/vA==
-X-Forwarded-Encrypted: i=1; AJvYcCXK+3OYwXZb7K8oLPOlLkr9Ik0bI59IH91YEhow8o1WIGgmST0UH0GyJ8BAdoZeNhMgRgUe@lists.linux.dev
-X-Gm-Message-State: AOJu0YzyKDN1AOaTpwRKv3E5BNHHZo3l2mYbHT3ukG/385FLiucMvbT9
-	WYWPwPeRULKkBll8YU0UGCo3LSAdfwKddcICtvsm/L44F1J1S/Fyyplk2CIdBfC2vQd5QIaqhL1
-	l72a4chicWK5LCVE0hTNzloBNFAmWGReLb4gDW+PKOQ1DXWBV86HqVvw=
-X-Google-Smtp-Source: AGHT+IHYwEpMyGlK9DOHyJMnwe42enHazr4mglbcxXxObxPF+Ii3w3TsZ72VmrnN6P90z6NOVOpNUA9yHGlz3tNrg7Q=
-X-Received: by 2002:a05:6214:390c:b0:6cb:aa7b:b8cc with SMTP id
- 6a1803df08f44-6d351aa3f45mr211213366d6.16.1730751884546; Mon, 04 Nov 2024
- 12:24:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIKhubB2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730759567; x=1762295567;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5ng9VZRaDleLH++jqBRWlKLES8uRaQcFcHFAQksupIY=;
+  b=GIKhubB2KpyDa0Ari3Ng2zmkorg020IdJQf7VcrfnXpw1l4HzXKmQyRO
+   U7HkiYYL6ZLwNHwcdXJrUyB8IllfrMWPeysgqRNIetDxmVy7+2Js3IDOU
+   WlkdS5F2BXvWlOLCBW7UaeHyswyp2SYWpzX2sublTFHV7tBha9Wxnojyp
+   GF3lwHIo83466K+GSBDIRjgnJhC1mgcMffldaQrnta6HRd8bY4PzqSEmY
+   LexSW3Acf2F/ErMAxh036BOmgAMdKEO09oAEEeAM/6GAMB+5ryj3pnpnF
+   Pv3lCenR1K+BgFWs4SK1mY59q7h7ZaRog4eueT3bN3hnVYMyc5pbUcQwL
+   w==;
+X-CSE-ConnectionGUID: nAxy4a8JSc6WikRD3j7R7w==
+X-CSE-MsgGUID: 3v5BWGjDQXqR7nUOzRiAug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="41870958"
+X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
+   d="scan'208";a="41870958"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 14:32:47 -0800
+X-CSE-ConnectionGUID: L3iee7zqRTOJrEsMkbZV3A==
+X-CSE-MsgGUID: 3QO7wbczQFGbNIxvmyWz3g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
+   d="scan'208";a="87727285"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 04 Nov 2024 14:32:44 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t85cn-000lLh-2m;
+	Mon, 04 Nov 2024 22:32:41 +0000
+Date: Tue, 5 Nov 2024 06:31:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alistair Francis <alistair23@gmail.com>, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
+	alistair23@gmail.com, Alistair Francis <alistair.francis@wdc.com>
+Subject: Re: [PATCH] include: mdio: Guard inline function with CONFIG_MDIO
+Message-ID: <202411050638.SOJYVz2a-lkp@intel.com>
+References: <20241104070950.502719-1-alistair.francis@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-2-xur@google.com>
- <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org> <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
- <CACkGtrgOw8inYCD96ot_w9VwzoFvvgCReAx0P-=Rxxqj2FT4_A@mail.gmail.com> <67c07d2f-fb1f-4b7d-96e2-fb5ceb8fc692@cachyos.org>
-In-Reply-To: <67c07d2f-fb1f-4b7d-96e2-fb5ceb8fc692@cachyos.org>
-From: Han Shen <shenhan@google.com>
-Date: Mon, 4 Nov 2024 12:24:29 -0800
-Message-ID: <CACkGtrgJHtG5pXR1z=6G4XR6ffT5jEi3jZQo=UhYj091naBhsA@mail.gmail.com>
-Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
-To: Peter Jung <ptr1337@cachyos.org>
-Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Li <davidxl@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
-	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104070950.502719-1-alistair.francis@wdc.com>
 
-Hi Peter,
-Thanks for providing the detailed reproduce.
-Now I can see the error (after I synced to 6.12.0-rc6, I was using rc5).
-I'll look into that and report back.
+Hi Alistair,
 
-> I have tested your provided method, but the AutoFDO profile (lld does
-not get lto-sample-profile=3D$pathtoprofile passed)
+kernel test robot noticed the following build errors:
 
-I see. You also turned on ThinLTO, which I didn't, so the profile was
-only used during compilation, not passed to lld.
+[auto build test ERROR on linus/master]
+[also build test ERROR on horms-ipvs/master v6.12-rc6 next-20241104]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Han
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Francis/include-mdio-Guard-inline-function-with-CONFIG_MDIO/20241104-151211
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241104070950.502719-1-alistair.francis%40wdc.com
+patch subject: [PATCH] include: mdio: Guard inline function with CONFIG_MDIO
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241105/202411050638.SOJYVz2a-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411050638.SOJYVz2a-lkp@intel.com/reproduce)
 
-On Mon, Nov 4, 2024 at 9:31=E2=80=AFAM Peter Jung <ptr1337@cachyos.org> wro=
-te:
->
-> Hi Han,
->
-> I have tested your provided method, but the AutoFDO profile (lld does
-> not get lto-sample-profile=3D$pathtoprofile passed)  nor Clang as compile=
-r
-> gets used.
-> Please replace following PKGBUILD and config from linux-mainline with
-> the provided one in the gist. The patch is also included there.
->
-> https://gist.github.com/ptr1337/c92728bb273f7dbc2817db75eedec9ed
->
-> The main change I am doing here, is passing following to the build array
-> and replacing "make all":
->
-> make LLVM=3D1 LLVM_IAS=3D1 CLANG_AUTOFDO_PROFILE=3D${srcdir}/perf.afdo al=
-l
->
-> When compiling the kernel with makepkg, this results at the packaging to
-> following issue and can be reliable reproduced.
->
-> Regards,
->
-> Peter
->
->
-> On 04.11.24 05:50, Han Shen wrote:
-> > Hi Peter, thanks for reporting the issue. I am trying to reproduce it
-> > in the up-to-date archlinux environment. Below is what I have:
-> >    0. pacman -Syu
-> >    1. cloned archlinux build files from
-> > https://aur.archlinux.org/linux-mainline.git the newest mainline
-> > version is 6.12rc5-1.
-> >    2. changed the PKGBUILD file to include the patches series
-> >    3. changed the "config" to turn on clang autofdo
-> >    4. collected afdo profiles
-> >    5. MAKEFLAGS=3D"-j48 V=3D1 LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D$(pwd)/p=
-erf.afdo" \
-> >          makepkg -s --skipinteg --skippgp
-> >    6. install and reboot
-> > The above steps succeeded.
-> > You mentioned the error happens at "module_install", can you instruct
-> > me how to execute the "module_install" step?
-> >
-> > Thanks,
-> > Han
-> >
-> > On Sat, Nov 2, 2024 at 12:53=E2=80=AFPM Peter Jung<ptr1337@cachyos.org>=
- wrote:
-> >>
-> >>
-> >> On 02.11.24 20:46, Peter Jung wrote:
-> >>>
-> >>> On 02.11.24 18:51, Rong Xu wrote:
-> >>>> Add the build support for using Clang's AutoFDO. Building the kernel
-> >>>> with AutoFDO does not reduce the optimization level from the
-> >>>> compiler. AutoFDO uses hardware sampling to gather information about
-> >>>> the frequency of execution of different code paths within a binary.
-> >>>> This information is then used to guide the compiler's optimization
-> >>>> decisions, resulting in a more efficient binary. Experiments
-> >>>> showed that the kernel can improve up to 10% in latency.
-> >>>>
-> >>>> The support requires a Clang compiler after LLVM 17. This submission
-> >>>> is limited to x86 platforms that support PMU features like LBR on
-> >>>> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
-> >>>>    and BRBE on ARM 1 is part of planned future work.
-> >>>>
-> >>>> Here is an example workflow for AutoFDO kernel:
-> >>>>
-> >>>> 1) Build the kernel on the host machine with LLVM enabled, for examp=
-le,
-> >>>>          $ make menuconfig LLVM=3D1
-> >>>>       Turn on AutoFDO build config:
-> >>>>         CONFIG_AUTOFDO_CLANG=3Dy
-> >>>>       With a configuration that has LLVM enabled, use the following
-> >>>>       command:
-> >>>>          scripts/config -e AUTOFDO_CLANG
-> >>>>       After getting the config, build with
-> >>>>         $ make LLVM=3D1
-> >>>>
-> >>>> 2) Install the kernel on the test machine.
-> >>>>
-> >>>> 3) Run the load tests. The '-c' option in perf specifies the sample
-> >>>>      event period. We suggest     using a suitable prime number,
-> >>>>      like 500009, for this purpose.
-> >>>>      For Intel platforms:
-> >>>>         $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c
-> >>>> <count> \
-> >>>>           -o <perf_file> -- <loadtest>
-> >>>>      For AMD platforms:
-> >>>>         The supported system are: Zen3 with BRS, or Zen4 with amd_lb=
-r_v2
-> >>>>        For Zen3:
-> >>>>         $ cat proc/cpuinfo | grep " brs"
-> >>>>         For Zen4:
-> >>>>         $ cat proc/cpuinfo | grep amd_lbr_v2
-> >>>>         $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS=
-:k
-> >>>> -a \
-> >>>>           -N -b -c <count> -o <perf_file> -- <loadtest>
-> >>>>
-> >>>> 4) (Optional) Download the raw perf file to the host machine.
-> >>>>
-> >>>> 5) To generate an AutoFDO profile, two offline tools are available:
-> >>>>      create_llvm_prof and llvm_profgen. The create_llvm_prof tool is=
- part
-> >>>>      of the AutoFDO project and can be found on GitHub
-> >>>>      (https://github.com/google/autofdo), version v0.30.1 or later. =
-The
-> >>>>      llvm_profgen tool is included in the LLVM compiler itself. It's
-> >>>>      important to note that the version of llvm_profgen doesn't need=
- to
-> >>>>      match the version of Clang. It needs to be the LLVM 19 release =
-or
-> >>>>      later, or from the LLVM trunk.
-> >>>>         $ llvm-profgen --kernel --binary=3D<vmlinux> --
-> >>>> perfdata=3D<perf_file> \
-> >>>>           -o <profile_file>
-> >>>>      or
-> >>>>         $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_fi=
-le> \
-> >>>>           --format=3Dextbinary --out=3D<profile_file>
-> >>>>
-> >>>>      Note that multiple AutoFDO profile files can be merged into one=
- via:
-> >>>>         $ llvm-profdata merge -o <profile_file>  <profile_1> ...
-> >>>> <profile_n>
-> >>>>
-> >>>> 6) Rebuild the kernel using the AutoFDO profile file with the same c=
-onfig
-> >>>>      as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
-> >>>>         $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<profile_file>
-> >>>>
-> >>>> Co-developed-by: Han Shen<shenhan@google.com>
-> >>>> Signed-off-by: Han Shen<shenhan@google.com>
-> >>>> Signed-off-by: Rong Xu<xur@google.com>
-> >>>> Suggested-by: Sriraman Tallam<tmsriram@google.com>
-> >>>> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
-> >>>> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
-> >>>> Suggested-by: Stephane Eranian<eranian@google.com>
-> >>>> Tested-by: Yonghong Song<yonghong.song@linux.dev>
-> >>>> Tested-by: Yabin Cui<yabinc@google.com>
-> >>>> Tested-by: Nathan Chancellor<nathan@kernel.org>
-> >>>> Reviewed-by: Kees Cook<kees@kernel.org>
-> >>> Tested-by: Peter Jung<ptr1337@cachyos.org>
-> >>>
-> >> The compilations and testing with the "make pacman-pkg" function from
-> >> the kernel worked fine.
-> >>
-> >> One problem I do face:
-> >> When I apply a AutoFDO profile together with the PKGBUILD [1] from
-> >> archlinux im running into issues at "module_install" at the packaging.
-> >>
-> >> See following log:
-> >> ```
-> >> make[2]: *** [scripts/Makefile.modinst:125:
-> >> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr=
-/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko]
-> >> Error 1
-> >> make[2]: *** Deleting file
-> >> '/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/us=
-r/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko'
-> >>     INSTALL
-> >> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/usr=
-/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/crypto/cryptd.ko
-> >> make[2]: *** Waiting for unfinished jobs....
-> >> ```
-> >>
-> >>
-> >> This can be fixed with removed "INSTALL_MOD_STRIP=3D1" to the passed
-> >> parameters of module_install.
-> >>
-> >> This explicitly only happens, if a profile is passed - otherwise the
-> >> packaging works without problems.
-> >>
-> >> Regards,
-> >>
-> >> Peter Jung
-> >>
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411050638.SOJYVz2a-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/mdio.c:10:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/mdio.c:10:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/net/mdio.c:10:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/net/mdio.c:10:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/mdio.c:183:6: warning: no previous prototype for function 'mdio45_ethtool_gset_npage' [-Wmissing-prototypes]
+     183 | void mdio45_ethtool_gset_npage(const struct mdio_if_info *mdio,
+         |      ^
+   drivers/net/mdio.c:183:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     183 | void mdio45_ethtool_gset_npage(const struct mdio_if_info *mdio,
+         | ^
+         | static 
+>> drivers/net/mdio.c:355:6: warning: no previous prototype for function 'mdio45_ethtool_ksettings_get_npage' [-Wmissing-prototypes]
+     355 | void mdio45_ethtool_ksettings_get_npage(const struct mdio_if_info *mdio,
+         |      ^
+   drivers/net/mdio.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     355 | void mdio45_ethtool_ksettings_get_npage(const struct mdio_if_info *mdio,
+         | ^
+         | static 
+   18 warnings generated.
+--
+   In file included from drivers/net/ethernet/sfc/falcon/net_driver.h:13:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/ethernet/sfc/falcon/qt202x_phy.c:13:
+   In file included from drivers/net/ethernet/sfc/falcon/efx.h:11:
+   In file included from drivers/net/ethernet/sfc/falcon/net_driver.h:13:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/net/ethernet/sfc/falcon/qt202x_phy.c:13:
+   In file included from drivers/net/ethernet/sfc/falcon/efx.h:11:
+   In file included from drivers/net/ethernet/sfc/falcon/net_driver.h:13:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/net/ethernet/sfc/falcon/qt202x_phy.c:13:
+   In file included from drivers/net/ethernet/sfc/falcon/efx.h:11:
+   In file included from drivers/net/ethernet/sfc/falcon/net_driver.h:13:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/ethernet/sfc/falcon/qt202x_phy.c:440:2: error: call to undeclared function 'mdio45_ethtool_ksettings_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     440 |         mdio45_ethtool_ksettings_get(&efx->mdio, cmd);
+         |         ^
+   16 warnings and 1 error generated.
+--
+   In file included from drivers/net/ethernet/sfc/falcon/tenxpress.c:8:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/ethernet/sfc/falcon/tenxpress.c:8:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/net/ethernet/sfc/falcon/tenxpress.c:8:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/net/ethernet/sfc/falcon/tenxpress.c:8:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/ethernet/sfc/falcon/tenxpress.c:453:2: error: call to undeclared function 'mdio45_ethtool_ksettings_get_npage'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     453 |         mdio45_ethtool_ksettings_get_npage(&efx->mdio, cmd, adv, lpa);
+         |         ^
+   16 warnings and 1 error generated.
+..
+
+
+vim +/mdio45_ethtool_ksettings_get +440 drivers/net/ethernet/sfc/falcon/qt202x_phy.c
+
+8ceee660aacb29 drivers/net/sfc/xfp_phy.c                    Ben Hutchings   2008-04-27  436  
+e938ed150f1ed9 drivers/net/ethernet/sfc/falcon/qt202x_phy.c Philippe Reynes 2017-01-01  437  static void qt202x_phy_get_link_ksettings(struct ef4_nic *efx,
+e938ed150f1ed9 drivers/net/ethernet/sfc/falcon/qt202x_phy.c Philippe Reynes 2017-01-01  438  					  struct ethtool_link_ksettings *cmd)
+68e7f45e118f98 drivers/net/sfc/xfp_phy.c                    Ben Hutchings   2009-04-29  439  {
+e938ed150f1ed9 drivers/net/ethernet/sfc/falcon/qt202x_phy.c Philippe Reynes 2017-01-01 @440  	mdio45_ethtool_ksettings_get(&efx->mdio, cmd);
+68e7f45e118f98 drivers/net/sfc/xfp_phy.c                    Ben Hutchings   2009-04-29  441  }
+8ceee660aacb29 drivers/net/sfc/xfp_phy.c                    Ben Hutchings   2008-04-27  442  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
