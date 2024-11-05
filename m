@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C40EB667;
-	Tue,  5 Nov 2024 12:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF53F2A1CA;
+	Tue,  5 Nov 2024 13:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730809230; cv=none; b=ETkdsDwIXKMFoLzOghkMvTVFwzc41VSHC80Fvphxpk8d3Y7Xuk1WO2jIGDNLcVbF1VEiiiWy/FNyWK4syXIWHfLN4BEsEsYXaiGU9cX70YQs+ru3F85oQgYRvIMMhw3dfnkLMLt8igOKGQsUNVdJ1UjBzkcEpiSS6ZRbBsOZaAU=
+	t=1730812953; cv=none; b=KMqjuAx76DO5JUTaHD7Iw8UCW49oMwA+UuIqBJLJx/N/51g4PsryRAmMx0QQRx5vdcKcl9/NkWK+m4ByrdKWiSEfafz0yMnqAbSVBH05CROeixNl7rt69JM+9DzDGBi1HNLQt7ezxxH3zuC8JEx7pJWkNgDYZhNty/tllIR6S5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730809230; c=relaxed/simple;
-	bh=OkyMVrub7CO2OsJIoTInqu3RrHECFKCe0mL/dJBEQBQ=;
+	s=arc-20240116; t=1730812953; c=relaxed/simple;
+	bh=Rl2BdQd4VeKv/WVzNjNrixfTnglCDHJ0qmXNSu1Eo0Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QucyrCxd52wvsAFxOavFv72fkceW/VGZEew95Rv2+bJoiCEUKfLHtZAMn0e8VhcKaXl5rQRcS/KCRum3u7P6UCXHVE/reYJ7dgG2aSnKoeb0BU7pn/wXHNz8Q5Pu3jTCdyu3v13nfyQbekn0xCdRTbTKjyrRmUFAhRxuUPRVYE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lUgnqgpC; arc=none smtp.client-ip=192.198.163.18
+	 Content-Disposition; b=nQ9rJdy5putRadoCixegLb5wBLr1BUIDRuQfeGR6OvHVrieRiH+eYinN/Q+7Q82cj0OcI7FbPRBQPftU6dBC19atWQ52QvxaL1Olk62HXbUo3CgeXjtLLm/60+PbXYbE5hbnAceZq33lp9WB9A/4wQqV+zunXn400QDSvntvsfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mnq2XuJX; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lUgnqgpC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mnq2XuJX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730809229; x=1762345229;
+  t=1730812951; x=1762348951;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OkyMVrub7CO2OsJIoTInqu3RrHECFKCe0mL/dJBEQBQ=;
-  b=lUgnqgpClZRL0gZi3JlzTXCcGa3wXPmIxyaPmbwIMsMdumbXaAT7UDLq
-   FDrzbcf9uLYKhDt597QGDfwHaDsMDV9diFoPF5DWnwaYLMuUmKgIS9xVR
-   mmkRc5hw7ThbfK+tuBwHgriTfARxPP9EWJdw2WvQ3ZW6JgK2RmXM1P2xO
-   MEymEv0UYAHzLe3YfC15D7krzOvQSSSb8G4jpITyKNEH1CV1ZBZK1ymbg
-   4kdBeLrWNBqOxD28Qo8SSmr32iuRB+VZ2i5N5jq5wLRc9JtZWxljzJQMy
-   y1KPbM8mh+AHzxTjdVTS8sOG33YuF0y0/0cfTYZfhO8IFe9Ip4xRrcan8
-   g==;
-X-CSE-ConnectionGUID: uYTx+fi4R9+2ISfkoIAQ0g==
-X-CSE-MsgGUID: eJ/9J2nYRH6o/5HgftvHCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="29974794"
+  bh=Rl2BdQd4VeKv/WVzNjNrixfTnglCDHJ0qmXNSu1Eo0Y=;
+  b=Mnq2XuJXtic6Q8uACjLUQ0Wj0E1uhliUkqE4/gFJRHECo74xrv6tCLpD
+   V8WXXNYnhPb7i8DJ5FJKCVGAkpXYEqKrJS1BfCb8gwEx+2Gy0vGjzX8BO
+   ydeBF6v0nV8U2xsCN3qibbDZY1NO/WeA4fULjMfPqG1Op5zf622Du5eYg
+   mM/K5Dd/pfxKxoq0uwvijhf22QGZOR64lt2L2xdI54KnnLYrnMOEWZ8pA
+   3fZqVSiIT8hm4mNGUpnFMFA1wFeymctbwCrNXUTLu2hly7FdvW+aA8L6o
+   aWjmitoBQtqNWQxIQXvjPsv/OjHh9XcJLC3TWPWs0FuDBWJC06/Rm8q5e
+   Q==;
+X-CSE-ConnectionGUID: QBXi6GAuRJG/apT2jKzMrA==
+X-CSE-MsgGUID: k8uGEOFBQtuoJvrTy8yRSA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="30781626"
 X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
-   d="scan'208";a="29974794"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 04:20:28 -0800
-X-CSE-ConnectionGUID: W60+Z2hKSK6NPX4EELgZaw==
-X-CSE-MsgGUID: cdNw6qwSTjCATOiXWsmkTg==
+   d="scan'208";a="30781626"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 05:22:31 -0800
+X-CSE-ConnectionGUID: 60Efj1CBRyWYuszSKZdpYQ==
+X-CSE-MsgGUID: 84Y1uhMIRkeJ5oOTjdxhzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
-   d="scan'208";a="83889340"
+   d="scan'208";a="114809964"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 05 Nov 2024 04:20:27 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 05 Nov 2024 05:22:29 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8IXo-000m27-1e;
-	Tue, 05 Nov 2024 12:20:24 +0000
-Date: Tue, 5 Nov 2024 20:19:58 +0800
+	id 1t8JVr-000m5D-2v;
+	Tue, 05 Nov 2024 13:22:27 +0000
+Date: Tue, 5 Nov 2024 21:21:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [snitzer:nfs-localio-for-next 18/25]
- fs/nfs/flexfilelayout/flexfilelayout.c:1820:28: warning: variable 'localio'
- is uninitialized when used here
-Message-ID: <202411052024.sfvv6H5T-lkp@intel.com>
+To: Ed Tsai <ed.tsai@mediatek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [linux-next:master 7954/9328]
+ drivers/ufs/host/ufs-mediatek.c:1789:51: error: no member named
+ 'reqeust_queue' in 'struct scsi_device'; did you mean 'request_queue'?
+Message-ID: <202411052104.cBFin611-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,22 +64,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/snitzer/linux.git nfs-localio-for-next
-head:   60327faea8241afe7f5f767875c53d24b3f18898
-commit: b3cb8507b0e49dad538a558b09a2896b808f91ea [18/25] nfs: cache all open LOCALIO nfsd_file(s) in client
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241105/202411052024.sfvv6H5T-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411052024.sfvv6H5T-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   850f22c42f4b0a14a015aecc26f46f9948ded6dd
+commit: 1b55fc24d50fc5c752b8d6b594998c6f96445d2c [7954/9328] scsi: ufs: ufs-mediatek: Configure individual LU queue flags
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241105/202411052104.cBFin611-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411052104.cBFin611-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411052024.sfvv6H5T-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411052104.cBFin611-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/nfs/flexfilelayout/flexfilelayout.c:10:
-   In file included from include/linux/nfs_fs.h:23:
+   In file included from drivers/ufs/host/ufs-mediatek.c:18:
+   In file included from include/linux/phy/phy.h:17:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -98,59 +103,34 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/flexfilelayout/flexfilelayout.c:1223:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-    1223 |         int err;
-         |             ^
->> fs/nfs/flexfilelayout/flexfilelayout.c:1820:28: warning: variable 'localio' is uninitialized when used here [-Wuninitialized]
-    1820 |                           0, RPC_TASK_SOFTCONN, localio);
-         |                                                 ^~~~~~~
-   fs/nfs/flexfilelayout/flexfilelayout.c:1760:27: note: initialize the variable 'localio' to silence this warning
-    1760 |         struct nfsd_file *localio;
-         |                                  ^
-         |                                   = NULL
-   fs/nfs/flexfilelayout/flexfilelayout.c:1899:31: warning: variable 'localio' is uninitialized when used here [-Wuninitialized]
-    1899 |                           sync, RPC_TASK_SOFTCONN, localio);
-         |                                                    ^~~~~~~
-   fs/nfs/flexfilelayout/flexfilelayout.c:1840:27: note: initialize the variable 'localio' to silence this warning
-    1840 |         struct nfsd_file *localio;
-         |                                  ^
-         |                                   = NULL
-   fs/nfs/flexfilelayout/flexfilelayout.c:1985:32: warning: variable 'localio' is uninitialized when used here [-Wuninitialized]
-    1985 |                                    how, RPC_TASK_SOFTCONN, localio);
-         |                                                            ^~~~~~~
-   fs/nfs/flexfilelayout/flexfilelayout.c:1933:27: note: initialize the variable 'localio' to silence this warning
-    1933 |         struct nfsd_file *localio;
-         |                                  ^
-         |                                   = NULL
-   8 warnings generated.
+>> drivers/ufs/host/ufs-mediatek.c:1789:51: error: no member named 'reqeust_queue' in 'struct scsi_device'; did you mean 'request_queue'?
+    1789 |                 blk_queue_flag_set(QUEUE_FLAG_SAME_FORCE, sdev->reqeust_queue);
+         |                                                                 ^~~~~~~~~~~~~
+         |                                                                 request_queue
+   include/scsi/scsi_device.h:105:24: note: 'request_queue' declared here
+     105 |         struct request_queue *request_queue;
+         |                               ^
+   4 warnings and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +/localio +1820 fs/nfs/flexfilelayout/flexfilelayout.c
+vim +1789 drivers/ufs/host/ufs-mediatek.c
 
-d488b9d01fbc2f Trond Myklebust 2024-09-05  1815  
-d67ae825a59d63 Tom Haynes      2014-12-11  1816  	/* Perform an asynchronous read to ds */
-d67ae825a59d63 Tom Haynes      2014-12-11  1817  	nfs_initiate_pgio(ds_clnt, hdr, ds_cred, ds->ds_clp->rpc_ops,
-d67ae825a59d63 Tom Haynes      2014-12-11  1818  			  vers == 3 ? &ff_layout_read_call_ops_v3 :
-d67ae825a59d63 Tom Haynes      2014-12-11  1819  				      &ff_layout_read_call_ops_v4,
-d488b9d01fbc2f Trond Myklebust 2024-09-05 @1820  			  0, RPC_TASK_SOFTCONN, localio);
-a52458b48af142 NeilBrown       2018-12-03  1821  	put_cred(ds_cred);
-d67ae825a59d63 Tom Haynes      2014-12-11  1822  	return PNFS_ATTEMPTED;
-d67ae825a59d63 Tom Haynes      2014-12-11  1823  
-d67ae825a59d63 Tom Haynes      2014-12-11  1824  out_failed:
-3b13b4b311a508 Tom Haynes      2016-05-17  1825  	if (ff_layout_avoid_mds_available_ds(lseg))
-d67ae825a59d63 Tom Haynes      2014-12-11  1826  		return PNFS_TRY_AGAIN;
-d5b9216fd5114b Trond Myklebust 2019-07-18  1827  	trace_pnfs_mds_fallback_read_pagelist(hdr->inode,
-d5b9216fd5114b Trond Myklebust 2019-07-18  1828  			hdr->args.offset, hdr->args.count,
-d5b9216fd5114b Trond Myklebust 2019-07-18  1829  			IOMODE_READ, NFS_I(hdr->inode)->layout, lseg);
-d67ae825a59d63 Tom Haynes      2014-12-11  1830  	return PNFS_NOT_ATTEMPTED;
-d67ae825a59d63 Tom Haynes      2014-12-11  1831  }
-d67ae825a59d63 Tom Haynes      2014-12-11  1832  
-
-:::::: The code at line 1820 was first introduced by commit
-:::::: d488b9d01fbc2ff5ccf15bcd47422eb156726c0d pnfs/flexfiles: enable localio support
-
-:::::: TO: Trond Myklebust <trond.myklebust@hammerspace.com>
-:::::: CC: Anna Schumaker <anna.schumaker@oracle.com>
+  1782	
+  1783	static void ufs_mtk_config_scsi_dev(struct scsi_device *sdev)
+  1784	{
+  1785		struct ufs_hba *hba = shost_priv(sdev->host);
+  1786	
+  1787		dev_dbg(hba->dev, "lu %llu scsi device configured", sdev->lun);
+  1788		if (sdev->lun == 2)
+> 1789			blk_queue_flag_set(QUEUE_FLAG_SAME_FORCE, sdev->reqeust_queue);
+  1790	}
+  1791	
 
 -- 
 0-DAY CI Kernel Test Service
