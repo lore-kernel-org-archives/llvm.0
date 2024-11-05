@@ -1,375 +1,194 @@
-Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FEB21DA2F1
-	for <llvm@lists.linux.dev>; Tue,  5 Nov 2024 14:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.61.224.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4F838DD6;
+	Tue,  5 Nov 2024 15:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730818628; cv=none; b=NUmLkQdUbii+jmjMs4oFoCIvKYdsFI5UJsMBCveml2qK3/fd3a5eJR8dpNAy+HXkkg9kC61q5decY/1ojYBk4Vjz5ew3Lh5F3zsWCjAhc+xwFOaj0+F9zyMtWQW+3yeFbA/uuyB8HfqN3+N+seC3uSfLCZRz57Omfw9JhaKxrF0=
+	t=1730821659; cv=none; b=F8d76bRwerRFe96pYxHm9aoeXewcEvBUISajRKOIeFo8J51hLIJ8r3xDaGHp0UMGDnFM27hmIaoI/MC0nyQ4qgmw9TCyv5GGgf/uNHjcDbeTUiWZwsY45/43gagshDsUAjI5oyAFzvSmSe0nLAl8pP/v493/1IG9gKoBcJxyBEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730818628; c=relaxed/simple;
-	bh=PxqwVVcYGVdItCi+GbxYmGsYLaqI1+qVjoBZ5+jwOPA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hRVVpO0tWCkgBdTVqRQy0c/+49ZW/Zj/AwwCFCGS/jdmcUmD/cZYdFQ04vcKDHwiSdG27YmrjLEkSUI+dOYAsCzPSy4UgW9PO/oNSpACsqVRC95+hfzYCNf+uc5TsmZguZYPNuBkJRj/Ohs4R9tuSx1xa9IUlqzJ7Rb0AiutWz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org; spf=pass smtp.mailfrom=cachyos.org; dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b=YWjP+Q2L; arc=none smtp.client-ip=202.61.224.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cachyos.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cachyos.org
+	s=arc-20240116; t=1730821659; c=relaxed/simple;
+	bh=RK+a6A7OJhSliI+dc93vxIpqpxPUysrYNTsq6eGPkbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W/+7SoJ/gA15565/y0TtKzFhKaB2hIcoSyxTckCgK7r2qrR9Z30HWTy9ZOD2B5wHXnlbR336oR0djnYXkfZTSMRmaNmzcvzOKDDQSLJYc3HTvDl3CmwMILIKKgA+003iJXLBzZkleoV0UgMnlY0BKFDsIFw4Mi6BrLY6/e2Qu0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UZ0Es/nR; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cachyos.org header.i=@cachyos.org header.b="YWjP+Q2L"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3D0112805A2;
-	Tue,  5 Nov 2024 15:56:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
-	t=1730818617; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=0YTgtBqW+0YW1QX49rj8Vs5Pdkwg9by73TTIC3Ltc3g=;
-	b=YWjP+Q2LUuViWIN9YEFqY6pzzJ+x2KOjIxg8Dq/wzbLcXQOMRfbAdys9z4irK6jTXan8BU
-	+haVU74KkzlGO7AWiMLDHBfAaLMnEGTldr8e9ITY6zFTGBld1svpqVa6QJCboAiMdj0AHB
-	hsGZfq7nKotgssZDNc636aTdo3pzgQbeF5v4fryDaQmpwdqEcaiNCm0GYVqwc7PEi4XcgQ
-	5h7OZdxIN03SNpwDnWMSibgTaLJbm+a41H3fDulJyVuzLOEWCEsPmjMtpe4E2WX+zaitPq
-	l8AqgUqhY9lcZSl2j7C9xBZ6SYX8SzvrWOkxjgyGDnIOvKSAxqoxxiN0F4AzYQ==
-Message-ID: <e4dad58c-e329-4e9a-aa6f-8b08bdf8f350@cachyos.org>
-Date: Tue, 5 Nov 2024 15:56:51 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UZ0Es/nR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730821657; x=1762357657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RK+a6A7OJhSliI+dc93vxIpqpxPUysrYNTsq6eGPkbE=;
+  b=UZ0Es/nR37Roqu4OfEHUvnptkmZkgxndVPZZ39MmmQfdVZ8m3Z99v1Mb
+   qmXW+CmGbhakdIqIcmD3yMeLtTar3+sruokBo5Fw38SjmsG4ayJzPGivf
+   MGjSwviJgeDlOpyH+z/5lSCDtx/1Qb+HdVChoiChZ3MzPtljCB/Kx1alu
+   vFA/VNAfotkqDIr0I9MyPuBg/VkgLvLc59DkJBS+Pnn0/yQvYc/J38KF9
+   HXQLcD7tZaLh3WBQZUpWtizjwWPgJAZIxW4HvQeDnShUeHIT3W4eAi278
+   DuoRJyg8fhGaqVtPsomGdHYqsOncWexM/4OLnhbsg5q3PqUSyprYQPmxC
+   g==;
+X-CSE-ConnectionGUID: N7ffgGtoTc64/LV7MAg5Vg==
+X-CSE-MsgGUID: FKxhKuvASi2Ow7qzsLsGng==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="48038417"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="48038417"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 07:47:37 -0800
+X-CSE-ConnectionGUID: 1dCb6F6AQSqGZZ/Mf7P6HQ==
+X-CSE-MsgGUID: U1Q2YT6kQbShsx2zs9E8vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
+   d="scan'208";a="84460427"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 05 Nov 2024 07:47:34 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t8LmG-000mBr-12;
+	Tue, 05 Nov 2024 15:47:32 +0000
+Date: Tue, 5 Nov 2024 23:47:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frank Li <Frank.Li@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	"open list:NXP i.MX 7D/6SX/6UL/93 AND VF610 ADC DRIVER" <linux-iio@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] iio: adc: vf610_adc: limit i.MX6SX's channel number
+ to 4
+Message-ID: <202411052345.gyJaM3h4-lkp@intel.com>
+References: <20241104231200.2745342-2-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
-From: Peter Jung <ptr1337@cachyos.org>
-To: Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
- Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>,
- Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>,
- Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Juergen Gross <jgross@suse.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
- "Mike Rapoport (IBM)" <rppt@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>,
- workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
- Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>,
- Krzysztof Pszeniczny <kpszeniczny@google.com>,
- Sriraman Tallam <tmsriram@google.com>, Stephane Eranian
- <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20241102175115.1769468-1-xur@google.com>
- <20241102175115.1769468-2-xur@google.com>
- <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org>
- <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
- <CACkGtrgOw8inYCD96ot_w9VwzoFvvgCReAx0P-=Rxxqj2FT4_A@mail.gmail.com>
- <67c07d2f-fb1f-4b7d-96e2-fb5ceb8fc692@cachyos.org>
- <CACkGtrgJHtG5pXR1z=6G4XR6ffT5jEi3jZQo=UhYj091naBhsA@mail.gmail.com>
- <CAF1bQ=SbeR3XhFc7JYGOh69JZfAwQV8nupAQM+ZxpzNEFUFxJw@mail.gmail.com>
- <449fddd2-342f-48cc-9a11-8a34814f1284@cachyos.org>
-Content-Language: en-US
-Organization: CachyOS
-In-Reply-To: <449fddd2-342f-48cc-9a11-8a34814f1284@cachyos.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104231200.2745342-2-Frank.Li@nxp.com>
 
-You were right - reverting commit:
-https://github.com/bminor/binutils-gdb/commit/b20ab53f81db7eefa0db00d14f06c04527ac324c 
-from the 2.43 branch does fix the packaging.
+Hi Frank,
 
-I will forward this to an issue at their bugzilla.
+kernel test robot noticed the following build warnings:
 
-On 05.11.24 15:33, Peter Jung wrote:
-> Hi Rong,
-> 
-> Glad that you were able to reproduce the issue!
-> Thanks for finding the root cause as well as the part of the code. This 
-> really helps.
-> 
-> I was able to do a successful packaging with binutils 2.42.
-> Lets forward this to the binutils tracker and hope this will be soon 
-> solved. 🙂
-> 
-> I have tested this also on the latest commit 
-> (e1e4078ac59740a79cd709d61872abe15aba0087) and the issue is also 
-> reproducible there.
-> 
-> Thanks for your time! I dont see this as blocker. 🙂
-> It gets time to get this series merged :P
-> 
-> Best regards,
-> 
-> Peter
-> 
-> 
-> 
-> On 05.11.24 08:25, Rong Xu wrote:
->> We debugged this issue and we found the failure seems to only happen
->> with strip (version 2.43) in binutil.
->>
->> For a profile-use compilation, either with -fprofile-use (PGO or
->> iFDO), or -fprofile-sample-use (AutoFDO),
->> an ELF section of .llvm.call-graph-profile is created for the object.
->> For some reasons (like to save space?),
->> the relocations in this section are of type "rel', rather the more
->> common "rela" type.
->>
->> In this case,
->> $ readelf -r kvm.ko |grep llvm.call-graph-profile
->> Relocation section '.rel.llvm.call-graph-profile' at offset 0xf62a00
->> contains 4 entries:
->>
->> strip (v2.43.0) has difficulty handling the relocations in
->> .rel.llvm.call-graph-profile -- it silently failed with --strip-debug.
->> But strip (v.2.42) has no issue with kvm.ko. The strip in llvm (i.e.
->> llvm-strip) also passes with kvm.ko
->>
->> I compared binutil/strip source code for version v2.43.0 and v2.42.
->> The different is around here:
->> In v2.42 of bfd/elfcode.h
->>     1618       if ((entsize == sizeof (Elf_External_Rela)
->>     1619            && ebd->elf_info_to_howto != NULL)
->>     1620           || ebd->elf_info_to_howto_rel == NULL)
->>     1621         res = ebd->elf_info_to_howto (abfd, relent, &rela);
->>     1622       else
->>     1623         res = ebd->elf_info_to_howto_rel (abfd, relent, &rela);
->>
->> In v2.43.0 of bfd/elfcode.h
->>     1618       if (entsize == sizeof (Elf_External_Rela)
->>     1619           && ebd->elf_info_to_howto != NULL)
->>     1620         res = ebd->elf_info_to_howto (abfd, relent, &rela);
->>     1621       else if (ebd->elf_info_to_howto_rel != NULL)
->>     1622         res = ebd->elf_info_to_howto_rel (abfd, relent, &rela);
->>
->> In the 2.43 strip, line 1618 is false and line 1621 is also false.
->> "res" is returned as false and the program exits with -1.
->>
->> While in 2.42, line 1620 is true and we get "res" from line 1621 and
->> program functions correctly.
->>
->> I'm not familiar with binutil code base and don't know the reason for
->> removing line 1620.
->> I can file a bug for binutil for people to further investigate this.
->>
->> It seems to me that this issue should not be a blocker for our patch.
->>
->> Regards,
->>
->> -Rong
->>
->>
->>
->>
->>
->> On Mon, Nov 4, 2024 at 12:24 PM Han Shen<shenhan@google.com> wrote:
->>> Hi Peter,
->>> Thanks for providing the detailed reproduce.
->>> Now I can see the error (after I synced to 6.12.0-rc6, I was using rc5).
->>> I'll look into that and report back.
->>>
->>>> I have tested your provided method, but the AutoFDO profile (lld does
->>> not get lto-sample-profile=$pathtoprofile passed)
->>>
->>> I see. You also turned on ThinLTO, which I didn't, so the profile was
->>> only used during compilation, not passed to lld.
->>>
->>> Thanks,
->>> Han
->>>
->>> On Mon, Nov 4, 2024 at 9:31 AM Peter Jung<ptr1337@cachyos.org> wrote:
->>>> Hi Han,
->>>>
->>>> I have tested your provided method, but the AutoFDO profile (lld does
->>>> not get lto-sample-profile=$pathtoprofile passed)  nor Clang as 
->>>> compiler
->>>> gets used.
->>>> Please replace following PKGBUILD and config from linux-mainline with
->>>> the provided one in the gist. The patch is also included there.
->>>>
->>>> https://gist.github.com/ptr1337/c92728bb273f7dbc2817db75eedec9ed
->>>>
->>>> The main change I am doing here, is passing following to the build 
->>>> array
->>>> and replacing "make all":
->>>>
->>>> make LLVM=1 LLVM_IAS=1 CLANG_AUTOFDO_PROFILE=${srcdir}/perf.afdo all
->>>>
->>>> When compiling the kernel with makepkg, this results at the 
->>>> packaging to
->>>> following issue and can be reliable reproduced.
->>>>
->>>> Regards,
->>>>
->>>> Peter
->>>>
->>>>
->>>> On 04.11.24 05:50, Han Shen wrote:
->>>>> Hi Peter, thanks for reporting the issue. I am trying to reproduce it
->>>>> in the up-to-date archlinux environment. Below is what I have:
->>>>>     0. pacman -Syu
->>>>>     1. cloned archlinux build files from
->>>>> https://aur.archlinux.org/linux-mainline.git the newest mainline
->>>>> version is 6.12rc5-1.
->>>>>     2. changed the PKGBUILD file to include the patches series
->>>>>     3. changed the "config" to turn on clang autofdo
->>>>>     4. collected afdo profiles
->>>>>     5. MAKEFLAGS="-j48 V=1 LLVM=1 CLANG_AUTOFDO_PROFILE=$(pwd)/ 
->>>>> perf.afdo" \
->>>>>           makepkg -s --skipinteg --skippgp
->>>>>     6. install and reboot
->>>>> The above steps succeeded.
->>>>> You mentioned the error happens at "module_install", can you instruct
->>>>> me how to execute the "module_install" step?
->>>>>
->>>>> Thanks,
->>>>> Han
->>>>>
->>>>> On Sat, Nov 2, 2024 at 12:53 PM Peter Jung<ptr1337@cachyos.org> wrote:
->>>>>>
->>>>>> On 02.11.24 20:46, Peter Jung wrote:
->>>>>>> On 02.11.24 18:51, Rong Xu wrote:
->>>>>>>> Add the build support for using Clang's AutoFDO. Building the 
->>>>>>>> kernel
->>>>>>>> with AutoFDO does not reduce the optimization level from the
->>>>>>>> compiler. AutoFDO uses hardware sampling to gather information 
->>>>>>>> about
->>>>>>>> the frequency of execution of different code paths within a binary.
->>>>>>>> This information is then used to guide the compiler's optimization
->>>>>>>> decisions, resulting in a more efficient binary. Experiments
->>>>>>>> showed that the kernel can improve up to 10% in latency.
->>>>>>>>
->>>>>>>> The support requires a Clang compiler after LLVM 17. This 
->>>>>>>> submission
->>>>>>>> is limited to x86 platforms that support PMU features like LBR on
->>>>>>>> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
->>>>>>>>     and BRBE on ARM 1 is part of planned future work.
->>>>>>>>
->>>>>>>> Here is an example workflow for AutoFDO kernel:
->>>>>>>>
->>>>>>>> 1) Build the kernel on the host machine with LLVM enabled, for 
->>>>>>>> example,
->>>>>>>>           $ make menuconfig LLVM=1
->>>>>>>>        Turn on AutoFDO build config:
->>>>>>>>          CONFIG_AUTOFDO_CLANG=y
->>>>>>>>        With a configuration that has LLVM enabled, use the 
->>>>>>>> following
->>>>>>>>        command:
->>>>>>>>           scripts/config -e AUTOFDO_CLANG
->>>>>>>>        After getting the config, build with
->>>>>>>>          $ make LLVM=1
->>>>>>>>
->>>>>>>> 2) Install the kernel on the test machine.
->>>>>>>>
->>>>>>>> 3) Run the load tests. The '-c' option in perf specifies the sample
->>>>>>>>       event period. We suggest     using a suitable prime number,
->>>>>>>>       like 500009, for this purpose.
->>>>>>>>       For Intel platforms:
->>>>>>>>          $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c
->>>>>>>> <count> \
->>>>>>>>            -o <perf_file> -- <loadtest>
->>>>>>>>       For AMD platforms:
->>>>>>>>          The supported system are: Zen3 with BRS, or Zen4 with 
->>>>>>>> amd_lbr_v2
->>>>>>>>         For Zen3:
->>>>>>>>          $ cat proc/cpuinfo | grep " brs"
->>>>>>>>          For Zen4:
->>>>>>>>          $ cat proc/cpuinfo | grep amd_lbr_v2
->>>>>>>>          $ perf record --pfm-events 
->>>>>>>> RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k
->>>>>>>> -a \
->>>>>>>>            -N -b -c <count> -o <perf_file> -- <loadtest>
->>>>>>>>
->>>>>>>> 4) (Optional) Download the raw perf file to the host machine.
->>>>>>>>
->>>>>>>> 5) To generate an AutoFDO profile, two offline tools are available:
->>>>>>>>       create_llvm_prof and llvm_profgen. The create_llvm_prof 
->>>>>>>> tool is part
->>>>>>>>       of the AutoFDO project and can be found on GitHub
->>>>>>>>       (https://github.com/google/autofdo), version v0.30.1 or 
->>>>>>>> later. The
->>>>>>>>       llvm_profgen tool is included in the LLVM compiler itself. 
->>>>>>>> It's
->>>>>>>>       important to note that the version of llvm_profgen doesn't 
->>>>>>>> need to
->>>>>>>>       match the version of Clang. It needs to be the LLVM 19 
->>>>>>>> release or
->>>>>>>>       later, or from the LLVM trunk.
->>>>>>>>          $ llvm-profgen --kernel --binary=<vmlinux> --
->>>>>>>> perfdata=<perf_file> \
->>>>>>>>            -o <profile_file>
->>>>>>>>       or
->>>>>>>>          $ create_llvm_prof --binary=<vmlinux> -- 
->>>>>>>> profile=<perf_file> \
->>>>>>>>            --format=extbinary --out=<profile_file>
->>>>>>>>
->>>>>>>>       Note that multiple AutoFDO profile files can be merged 
->>>>>>>> into one via:
->>>>>>>>          $ llvm-profdata merge -o <profile_file>  <profile_1> ...
->>>>>>>> <profile_n>
->>>>>>>>
->>>>>>>> 6) Rebuild the kernel using the AutoFDO profile file with the 
->>>>>>>> same config
->>>>>>>>       as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
->>>>>>>>          $ make LLVM=1 CLANG_AUTOFDO_PROFILE=<profile_file>
->>>>>>>>
->>>>>>>> Co-developed-by: Han Shen<shenhan@google.com>
->>>>>>>> Signed-off-by: Han Shen<shenhan@google.com>
->>>>>>>> Signed-off-by: Rong Xu<xur@google.com>
->>>>>>>> Suggested-by: Sriraman Tallam<tmsriram@google.com>
->>>>>>>> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
->>>>>>>> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
->>>>>>>> Suggested-by: Stephane Eranian<eranian@google.com>
->>>>>>>> Tested-by: Yonghong Song<yonghong.song@linux.dev>
->>>>>>>> Tested-by: Yabin Cui<yabinc@google.com>
->>>>>>>> Tested-by: Nathan Chancellor<nathan@kernel.org>
->>>>>>>> Reviewed-by: Kees Cook<kees@kernel.org>
->>>>>>> Tested-by: Peter Jung<ptr1337@cachyos.org>
->>>>>>>
->>>>>> The compilations and testing with the "make pacman-pkg" function from
->>>>>> the kernel worked fine.
->>>>>>
->>>>>> One problem I do face:
->>>>>> When I apply a AutoFDO profile together with the PKGBUILD [1] from
->>>>>> archlinux im running into issues at "module_install" at the 
->>>>>> packaging.
->>>>>>
->>>>>> See following log:
->>>>>> ```
->>>>>> make[2]: *** [scripts/Makefile.modinst:125:
->>>>>> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc- 
->>>>>> autofdo/usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/ 
->>>>>> arch/x86/kvm/kvm.ko]
->>>>>> Error 1
->>>>>> make[2]: *** Deleting file
->>>>>> '/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc- 
->>>>>> autofdo/usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/ 
->>>>>> arch/x86/kvm/kvm.ko'
->>>>>>      INSTALL
->>>>>> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc- 
->>>>>> autofdo/usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/ 
->>>>>> crypto/cryptd.ko
->>>>>> make[2]: *** Waiting for unfinished jobs....
->>>>>> ```
->>>>>>
->>>>>>
->>>>>> This can be fixed with removed "INSTALL_MOD_STRIP=1" to the passed
->>>>>> parameters of module_install.
->>>>>>
->>>>>> This explicitly only happens, if a profile is passed - otherwise the
->>>>>> packaging works without problems.
->>>>>>
->>>>>> Regards,
->>>>>>
->>>>>> Peter Jung
->>>>>>
-> 
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on next-20241105]
+[cannot apply to linus/master v6.12-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/iio-adc-vf610_adc-limit-i-MX6SX-s-channel-number-to-4/20241105-071339
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20241104231200.2745342-2-Frank.Li%40nxp.com
+patch subject: [PATCH 2/2] iio: adc: vf610_adc: limit i.MX6SX's channel number to 4
+config: x86_64-buildonly-randconfig-005-20241105 (https://download.01.org/0day-ci/archive/20241105/202411052345.gyJaM3h4-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241105/202411052345.gyJaM3h4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411052345.gyJaM3h4-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/iio/adc/vf610_adc.c:20:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/iio/adc/vf610_adc.c:874:28: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'const void *' [-Wvoid-pointer-to-int-cast]
+     874 |         indio_dev->num_channels = (u32)device_get_match_data(dev);
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +874 drivers/iio/adc/vf610_adc.c
+
+   817	
+   818	static int vf610_adc_probe(struct platform_device *pdev)
+   819	{
+   820		struct device *dev = &pdev->dev;
+   821		struct vf610_adc *info;
+   822		struct iio_dev *indio_dev;
+   823		int irq;
+   824		int ret;
+   825	
+   826		indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(struct vf610_adc));
+   827		if (!indio_dev)
+   828			return dev_err_probe(&pdev->dev, -ENOMEM, "Failed allocating iio device\n");
+   829	
+   830		info = iio_priv(indio_dev);
+   831		info->dev = &pdev->dev;
+   832	
+   833		info->regs = devm_platform_ioremap_resource(pdev, 0);
+   834		if (IS_ERR(info->regs))
+   835			return PTR_ERR(info->regs);
+   836	
+   837		irq = platform_get_irq(pdev, 0);
+   838		if (irq < 0)
+   839			return irq;
+   840	
+   841		ret = devm_request_irq(info->dev, irq,
+   842					vf610_adc_isr, 0,
+   843					dev_name(&pdev->dev), indio_dev);
+   844		if (ret < 0)
+   845			dev_err_probe(&pdev->dev, ret, "failed requesting irq, irq = %d\n", irq);
+   846	
+   847		info->clk = devm_clk_get_enabled(&pdev->dev, "adc");
+   848		if (IS_ERR(info->clk))
+   849			return dev_err_probe(&pdev->dev, PTR_ERR(info->clk),
+   850					     "failed getting clock, err = %ld\n",
+   851					     PTR_ERR(info->clk));
+   852	
+   853		info->vref = devm_regulator_get(&pdev->dev, "vref");
+   854		if (IS_ERR(info->vref))
+   855			return PTR_ERR(info->vref);
+   856	
+   857		info->vref_uv = devm_regulator_get_enable_read_voltage(&pdev->dev, "vref");
+   858		if (info->vref_uv < 0)
+   859			return info->vref_uv;
+   860	
+   861		device_property_read_u32_array(dev, "fsl,adck-max-frequency", info->max_adck_rate, 3);
+   862	
+   863		info->adc_feature.default_sample_time = DEFAULT_SAMPLE_TIME;
+   864		device_property_read_u32(dev, "min-sample-time", &info->adc_feature.default_sample_time);
+   865	
+   866		platform_set_drvdata(pdev, indio_dev);
+   867	
+   868		init_completion(&info->completion);
+   869	
+   870		indio_dev->name = dev_name(&pdev->dev);
+   871		indio_dev->info = &vf610_adc_iio_info;
+   872		indio_dev->modes = INDIO_DIRECT_MODE;
+   873		indio_dev->channels = vf610_adc_iio_channels;
+ > 874		indio_dev->num_channels = (u32)device_get_match_data(dev);
+   875	
+   876		vf610_adc_cfg_init(info);
+   877		vf610_adc_hw_init(info);
+   878	
+   879		ret = devm_iio_triggered_buffer_setup(&pdev->dev, indio_dev, &iio_pollfunc_store_time,
+   880						      NULL, &iio_triggered_buffer_setup_ops);
+   881		if (ret < 0)
+   882			return dev_err_probe(&pdev->dev, ret, "Couldn't initialise the buffer\n");
+   883	
+   884		mutex_init(&info->lock);
+   885	
+   886		ret = devm_iio_device_register(&pdev->dev, indio_dev);
+   887		if (ret)
+   888			return dev_err_probe(&pdev->dev, ret, "Couldn't register the device.\n");
+   889	
+   890		return 0;
+   891	}
+   892	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
