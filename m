@@ -1,184 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15F920408D;
-	Wed,  6 Nov 2024 17:54:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0880D207A0D;
+	Wed,  6 Nov 2024 18:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730915676; cv=none; b=vCMBd22KHPlFgky2Lg2RFalrzUbsZkNb1nsbAP80ciuII7yng3sB6wAoimEMv8N2Q2FrUEXYpABOtxrr3/is8q9RDgiHHZNMsSTgtoY3DAA2cTtyavJyEUs4vKddwvgWt/sR89AHTbVseIpfyjVz/Ti606nLaBvv0COjrbgYkjw=
+	t=1730917852; cv=none; b=KztjpV9oFONbPb8CbAvG996iRYcSItve6+ubRCdlWNAc0xkNp3g13rEmUHQMVPlU9jpv8AYi7kDhJR0mtSugOeQtY9Qpr52pjRWZUjvDeDVfyU9VjiI+ywAwpTbtMDcQIHrf529k2v1W4Fc+/kXq7mTa597zl+L7NxS4tnQGEEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730915676; c=relaxed/simple;
-	bh=cDz3GbfOlnxsDFkNUWxFouzEfiwqYtJwJJki0uFIs1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KUMqFwdgZYxLWrns0JaeSNaS/lwRimw/ri8FNwPCTGciqeFXRwZqyQFeJ9+7LwncYe6ZV81paqa/o5p+2GIZMzVzsqkDMbv/T/rctR/jDxnKc39FQz7pAlsVR/tZg7uEUi3h0RfQnnEvVJYHj+a7ASZ6LILqYED/P08D4+BHlFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VilI7UWP; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VilI7UWP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730915673; x=1762451673;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cDz3GbfOlnxsDFkNUWxFouzEfiwqYtJwJJki0uFIs1k=;
-  b=VilI7UWPfQV9sT+1bGw2MeVyjJTXL/869c7spv7SQemJZ3NYfBw2vMQB
-   +jnLWmG9aEy9M8zlsl8K35BOcatjckFPUN71Hk1fRqDzWqOStvUyt8SwR
-   QSSWo4Zioe1fM45MUfUn+qCNN7h+tRPn6geIz6nutivkFCu+vRYtcVYkQ
-   zdBGNnZnYEk+GzrRJwTTsf2D5rftv2XLF8MBPgMK70rltd7hmrrqti41U
-   DINruTCkKGBOcl68RPlBd/XxhhAVb6Zuc7OTY403mVtWEY7vdRIgACwxX
-   AvROC2RIyeKVnGpB4fkWiyShyLBJlbYhVw+X9Hfc/xezz/9uCYF64C85X
-   A==;
-X-CSE-ConnectionGUID: eRCGYGMwTZSzzIsW6lROVg==
-X-CSE-MsgGUID: Vk7fF9EXQdq7J3fu2MGEvg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="48246428"
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="48246428"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 09:54:33 -0800
-X-CSE-ConnectionGUID: YZVQo7FOSumGqTal8BzSCQ==
-X-CSE-MsgGUID: 7nCFTiLDSaaGVdNjepMI+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="115516600"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 06 Nov 2024 09:54:30 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8kEd-000pFe-0h;
-	Wed, 06 Nov 2024 17:54:27 +0000
-Date: Thu, 7 Nov 2024 01:53:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liviu Dudau <liviu.dudau@arm.com>,
-	Boris Brezillon <bbrezillon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steven Price <steven.price@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Jann Horn <jannh@google.com>
-Subject: Re: [PATCH] drm/panthor: Lock XArray when getting entries for heap
- and VM
-Message-ID: <202411070115.YPuBa5QX-lkp@intel.com>
-References: <20241106120748.290697-1-liviu.dudau@arm.com>
+	s=arc-20240116; t=1730917852; c=relaxed/simple;
+	bh=3UKvbNKM++MFOTeqBmPjKQZJQ3wWqu7GOsv8HpfD4xk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z/xPvGFIb0fygUm0CUuh1T8Bu32Lccz42LEBen3TE8KsHMD7LUNK1p6jpBAcLQumAT3gsU5tI2aJKA/a3o9A0rqrAzwSgX/P/c6OLKJ8FVCY7z6rRDcLjvYl7JYQ7TWHKP2HajA8C8IUxt9zTA6p/+UEhdALlrGDU8mbApRS3fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 4A6ITW0E024009;
+	Wed, 6 Nov 2024 12:29:32 -0600
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 4A6ITVEL024004;
+	Wed, 6 Nov 2024 12:29:31 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Wed, 6 Nov 2024 12:29:31 -0600
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] powerpc/vdso: Drop -mstack-protector-guard flags in 32-bit files with clang
+Message-ID: <20241106182931.GI29862@gate.crashing.org>
+References: <20241030-powerpc-vdso-drop-stackp-flags-clang-v1-1-d95e7376d29c@kernel.org> <884cf694-09c7-4082-a6b1-6de987025bf8@csgroup.eu> <20241106133752.GG29862@gate.crashing.org> <20241106152114.GA2738371@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106120748.290697-1-liviu.dudau@arm.com>
+In-Reply-To: <20241106152114.GA2738371@thelio-3990X>
+User-Agent: Mutt/1.4.2.3i
 
-Hi Liviu,
+Hi!
 
-kernel test robot noticed the following build errors:
+On Wed, Nov 06, 2024 at 08:21:14AM -0700, Nathan Chancellor wrote:
+> > (r2 is the default for -m32, r13 is the default for -m64, it appears
+> > that clang does not implement this option at all, it simply checks if
+> > you set the default, and explodes if not).
+> 
+> Not sure that I would say it has not been implemented correctly, more
+> that it has not been implemented in the same manner as GCC. Keith chose
+> not to open up support for arbitrary registers to keep the
+> implementation of this option in LLVM simple:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.12-rc6 next-20241106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+LLVM claims to be compatible to GCC.  It is not.  This is a bug.  As it
+is, LLVM can not be used to compile the PowerPC kernel.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Liviu-Dudau/drm-panthor-Lock-XArray-when-getting-entries-for-heap-and-VM/20241106-200841
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20241106120748.290697-1-liviu.dudau%40arm.com
-patch subject: [PATCH] drm/panthor: Lock XArray when getting entries for heap and VM
-config: x86_64-buildonly-randconfig-002-20241106 (https://download.01.org/0day-ci/archive/20241107/202411070115.YPuBa5QX-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411070115.YPuBa5QX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411070115.YPuBa5QX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/panthor/panthor_heap.c:9:
-   In file included from drivers/gpu/drm/panthor/panthor_device.h:10:
-   In file included from include/linux/io-pgtable.h:6:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/panthor/panthor_heap.c:354:57: error: declaration of 'struct pathor_heap_pool' will not be visible outside of this function [-Werror,-Wvisibility]
-     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-         |                                                         ^
-   drivers/gpu/drm/panthor/panthor_heap.c:358:15: error: incomplete definition of type 'struct pathor_heap_pool'
-     358 |         xa_lock(&pool->xa);
-         |                  ~~~~^
-   include/linux/xarray.h:536:34: note: expanded from macro 'xa_lock'
-     536 | #define xa_lock(xa)             spin_lock(&(xa)->xa_lock)
-         |                                             ^~
-   drivers/gpu/drm/panthor/panthor_heap.c:354:57: note: forward declaration of 'struct pathor_heap_pool'
-     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-         |                                                         ^
-   drivers/gpu/drm/panthor/panthor_heap.c:359:22: error: incomplete definition of type 'struct pathor_heap_pool'
-     359 |         heap = xa_load(&pool->xa, id);
-         |                         ~~~~^
-   drivers/gpu/drm/panthor/panthor_heap.c:354:57: note: forward declaration of 'struct pathor_heap_pool'
-     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-         |                                                         ^
-   drivers/gpu/drm/panthor/panthor_heap.c:360:17: error: incomplete definition of type 'struct pathor_heap_pool'
-     360 |         xa_unlock(&pool->va);
-         |                    ~~~~^
-   include/linux/xarray.h:537:38: note: expanded from macro 'xa_unlock'
-     537 | #define xa_unlock(xa)           spin_unlock(&(xa)->xa_lock)
-         |                                               ^~
-   drivers/gpu/drm/panthor/panthor_heap.c:354:57: note: forward declaration of 'struct pathor_heap_pool'
-     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-         |                                                         ^
-   drivers/gpu/drm/panthor/panthor_heap.c:389:30: error: incompatible pointer types passing 'struct panthor_heap_pool *' to parameter of type 'struct pathor_heap_pool *' [-Werror,-Wincompatible-pointer-types]
-     389 |         heap = panthor_heap_from_id(pool, heap_id);
-         |                                     ^~~~
-   drivers/gpu/drm/panthor/panthor_heap.c:354:75: note: passing argument to parameter 'pool' here
-     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-         |                                                                           ^
-   drivers/gpu/drm/panthor/panthor_heap.c:452:30: error: incompatible pointer types passing 'struct panthor_heap_pool *' to parameter of type 'struct pathor_heap_pool *' [-Werror,-Wincompatible-pointer-types]
-     452 |         heap = panthor_heap_from_id(pool, heap_id);
-         |                                     ^~~~
-   drivers/gpu/drm/panthor/panthor_heap.c:354:75: note: passing argument to parameter 'pool' here
-     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-         |                                                                           ^
-   10 errors generated.
+These flags (-mstack-protector-guard-{reg,offset}=) are there
+*specifically* so that the user can choose to use something different
+from the default.  I added this (back in 2017) because the kernel needed
+it.  Some other GCC ports (aarch64, arm, riscv, x86) have followed suit
+since then, btw.
 
 
-vim +354 drivers/gpu/drm/panthor/panthor_heap.c
-
-   353	
- > 354	static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
-   355	{
-   356		struct panthor_heap *heap;
-   357	
-   358		xa_lock(&pool->xa);
-   359		heap = xa_load(&pool->xa, id);
-   360		xa_unlock(&pool->va);
-   361	
-   362		return heap;
-   363	}
-   364	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Segher
