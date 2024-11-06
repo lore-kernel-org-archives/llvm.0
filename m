@@ -1,59 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1606524B26;
-	Wed,  6 Nov 2024 03:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F65618D63A;
+	Wed,  6 Nov 2024 04:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730865250; cv=none; b=IM+DQPK3bUZL+qO+CdUfEJb7pNrIM1EKfalcZ1+lSoTn5jERhXe/hk6/RKiU0dOQp+eNyrA8lkH5JQJq/qwT/EooG5aRBbQMEVZushW/2b4tWntEQ44iUONF0JCi6PxFYqoQYfBYTCbhztU2bcIsiKUrZXBZ8JdE3EjI/Neoa+M=
+	t=1730867113; cv=none; b=QeJqRVmrdgXZFTMumMjLxU1lWUHUezkkVEgYbRsUHzXINUa16JmP5ohyh7AaLwiPdGIobXefTAoH0HaBcAyp/jcRr5ZQGp/KkCjNOIO+EVrNOzruFGFDnp5J7CEb4Apv2sOxw3HR+tj2/CDwMhCr/FjAcuKHg39LDG9xbrAQjcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730865250; c=relaxed/simple;
-	bh=Lg+VSJ/ITkfZnNhW216TMLxZH060ib+rzW1/iKEr43U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dxhyZM8CUSVPV67x8wuQdeDgpPDZoQuNdLLZmiHSW3luDoLI9p4JI6+BCXyR7TjK2hkm2Fsrp63zInnlkvWwMN/L8T5ubdi+FR0EtotahI4z2bDhYuvc6yEdoYehESo/Uqg0GA2EyYBI+HrTB8FFq03jsC/tU6th+YSIfKK27L8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZObMgjZc; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1730867113; c=relaxed/simple;
+	bh=pWEctjQQTanA6z2UebLDRCkSZZqkGUMhJSZM7dfrgjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uvjrw1aX4FHIeF8vJNYP5ElhjlFQrnAC+fgxn1nrMerqaNvH+BVzzNu5+w3EuArs9Q1PltLBvr1wBS+QQWTHA6Ci/NufKnQONl+HoihJPvAOJAg+QMabwUYrUtidtL/JJWIpe4QAV2ym0cCIMG3VAjRMs2lCkab7sFQuJzzbucA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNHLMJNH; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZObMgjZc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNHLMJNH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730865248; x=1762401248;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Lg+VSJ/ITkfZnNhW216TMLxZH060ib+rzW1/iKEr43U=;
-  b=ZObMgjZcErw0EJJv4VbVMgxjS1PeSD9MagcU4D+fQFsta4zhgnkxY2mX
-   b6YesF297EAY8QdQHRE/CxxfpwYEvsOUwYV85Jlvl4crOwV4l+qPcWcRp
-   t2FDXnEhaPcTU0mm9K62kC1B+Z62spS6B1qJAzYgus/qu1fKFDgq+vzDy
-   c8ZmnMR0sFnIDjzIVFoYzEwZoNdbw9/j9EM6AkxzTN6sDQBGyW92oWXLf
-   AIsSMc/FW47zS7DahSCFOq8udmBJwVFNktNXYIhiCDtD1VKr54XkHrxJJ
-   EIgTXvcUU6cr55LeEZ2adEn9f3cIrAUGv1gQinsUcY0ZOQpw7Ds/YE5Fk
-   w==;
-X-CSE-ConnectionGUID: 3FfF+eG4QtOjiYSPZYCKTw==
-X-CSE-MsgGUID: K/gkxNaASNqTNJxc1Fb0zA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="33491126"
-X-IronPort-AV: E=Sophos;i="6.11,261,1725346800"; 
-   d="scan'208";a="33491126"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 19:54:07 -0800
-X-CSE-ConnectionGUID: QgUqtY+aQy+ZFajXfryGEA==
-X-CSE-MsgGUID: zNe8Rz2zRV6w6/qfUwfUMg==
+  t=1730867110; x=1762403110;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pWEctjQQTanA6z2UebLDRCkSZZqkGUMhJSZM7dfrgjo=;
+  b=GNHLMJNHsTQjLtxX89bt1Wdsz8oHJ9S5HSC573qeSHRICrRfGL8aztEf
+   +XtZNTivrJsoYYjnVlbIZaUAr2xi2sXABc87p6CgXonSa2ahHPOjHF6Ej
+   eWPzwZVU0cj0eyw4n9KizXSxkTnIwOPskZZ3HWVfNTWip5kZc7Lnbl5V+
+   h4bDhkqri1qdcoi+ZbYYJqiPeOQ+QgNdO4EC+Jsnl+Luwg79lCmkMTJ0G
+   ZHUO2t7qh4sjJ0Mq17MGbH1Hh+ZzlwNYxika7hqlbcMI9Vs8saRRwBigd
+   m480+iaw4ycFfyCDa9iy95DUw+8d0f1hWxyLSEFXs6Ol6FdaYJ7veyCdz
+   g==;
+X-CSE-ConnectionGUID: 7Tv989YwQBeRgPDCujy7XA==
+X-CSE-MsgGUID: Q8NTtS1fRfeg2BM+Qqitig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41751164"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41751164"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 20:25:09 -0800
+X-CSE-ConnectionGUID: q+F05lRDQZC32BJiyyHpPA==
+X-CSE-MsgGUID: 2Szh5VWpTsuALS2GF2zUlQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,261,1725346800"; 
-   d="scan'208";a="121818535"
+X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
+   d="scan'208";a="88869414"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 Nov 2024 19:54:06 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 05 Nov 2024 20:25:07 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8X7L-000muo-2q;
-	Wed, 06 Nov 2024 03:54:03 +0000
-Date: Wed, 6 Nov 2024 11:53:08 +0800
+	id 1t8XbM-000mvh-2G;
+	Wed, 06 Nov 2024 04:25:04 +0000
+Date: Wed, 6 Nov 2024 12:24:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:timers/tick-sched 1/2] kernel/time/timer_list.c:157:8: error:
- no member named 'last_tick' in 'struct tick_sched'; did you mean
- 'next_tick'?
-Message-ID: <202411061145.k78ALFti-lkp@intel.com>
+To: Calvin Owens <calvin@wbinvd.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rodolfo Giometti <giometti@enneenne.com>,
+	George Spelvin <linux@horizon.com>, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] pps: Fix a use-after-free
+Message-ID: <202411061205.AZijSWPc-lkp@intel.com>
+References: <abc43b18f21379c21a4d2c63372a04b2746be665.1730792731.git.calvin@wbinvd.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,101 +66,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <abc43b18f21379c21a4d2c63372a04b2746be665.1730792731.git.calvin@wbinvd.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git timers/tick-sched
-head:   d67df7dbb69ed36e14b2a422701f94c99b326759
-commit: 23222c256db9ba9f5fea170e21083cb7afb78509 [1/2] tick-sched: Remove last_tick and calculate next tick from now
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241106/202411061145.k78ALFti-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411061145.k78ALFti-lkp@intel.com/reproduce)
+Hi Calvin,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.12-rc6 next-20241105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Calvin-Owens/pps-Fix-a-use-after-free/20241105-155819
+base:   linus/master
+patch link:    https://lore.kernel.org/r/abc43b18f21379c21a4d2c63372a04b2746be665.1730792731.git.calvin%40wbinvd.org
+patch subject: [PATCH v3] pps: Fix a use-after-free
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241106/202411061205.AZijSWPc-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 639a7ac648f1e50ccd2556e17d401c04f9cce625)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411061205.AZijSWPc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411061145.k78ALFti-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411061205.AZijSWPc-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/time/timer_list.c:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   In file included from drivers/ptp/ptp_ocp.c:10:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/ptp/ptp_ocp.c:10:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/ptp/ptp_ocp.c:10:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from drivers/ptp/ptp_ocp.c:10:
+   In file included from include/linux/pci.h:1650:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> kernel/time/timer_list.c:157:8: error: no member named 'last_tick' in 'struct tick_sched'; did you mean 'next_tick'?
-     157 |                 P_ns(last_tick);
-         |                      ^~~~~~~~~
-         |                      next_tick
-   kernel/time/timer_list.c:149:43: note: expanded from macro 'P_ns'
-     149 |                    (unsigned long long)(ktime_to_ns(ts->x)))
-         |                                                         ^
-   kernel/time/tick-sched.h:74:13: note: 'next_tick' declared here
-      74 |         ktime_t                         next_tick;
-         |                                         ^
-   5 warnings and 1 error generated.
+>> drivers/ptp/ptp_ocp.c:4423:23: error: passing 'struct device' to parameter of incompatible type 'struct device *'; take the address with &
+    4423 |                 ptp_ocp_symlink(bp, pps->dev, "pps");
+         |                                     ^~~~~~~~
+         |                                     &
+   drivers/ptp/ptp_ocp.c:4387:52: note: passing argument to parameter 'child' here
+    4387 | ptp_ocp_symlink(struct ptp_ocp *bp, struct device *child, const char *link)
+         |                                                    ^
+   13 warnings and 1 error generated.
 
 
-vim +157 kernel/time/timer_list.c
+vim +4423 drivers/ptp/ptp_ocp.c
 
-289f480af87e45 Ingo Molnar         2007-02-16  142  
-289f480af87e45 Ingo Molnar         2007-02-16  143  #ifdef CONFIG_TICK_ONESHOT
-289f480af87e45 Ingo Molnar         2007-02-16  144  # define P(x) \
-9b04bd27564cfd David Miller        2007-05-09  145  	SEQ_printf(m, "  .%-15s: %Lu\n", #x, \
-9b04bd27564cfd David Miller        2007-05-09  146  		   (unsigned long long)(ts->x))
-289f480af87e45 Ingo Molnar         2007-02-16  147  # define P_ns(x) \
-9b04bd27564cfd David Miller        2007-05-09  148  	SEQ_printf(m, "  .%-15s: %Lu nsecs\n", #x, \
-9b04bd27564cfd David Miller        2007-05-09  149  		   (unsigned long long)(ktime_to_ns(ts->x)))
-a478ffb2ae234e Frederic Weisbecker 2024-02-25  150  # define P_flag(x, f)			    \
-a478ffb2ae234e Frederic Weisbecker 2024-02-25  151  	SEQ_printf(m, "  .%-15s: %d\n", #x, !!(ts->flags & (f)))
-a478ffb2ae234e Frederic Weisbecker 2024-02-25  152  
-289f480af87e45 Ingo Molnar         2007-02-16  153  	{
-289f480af87e45 Ingo Molnar         2007-02-16  154  		struct tick_sched *ts = tick_get_tick_sched(cpu);
-7988e5ae2be70b Frederic Weisbecker 2024-02-25  155  		P_flag(nohz, TS_FLAG_NOHZ);
-7988e5ae2be70b Frederic Weisbecker 2024-02-25  156  		P_flag(highres, TS_FLAG_HIGHRES);
-f5d411c91ede16 Frederic Weisbecker 2011-07-31 @157  		P_ns(last_tick);
-a478ffb2ae234e Frederic Weisbecker 2024-02-25  158  		P_flag(tick_stopped, TS_FLAG_STOPPED);
-289f480af87e45 Ingo Molnar         2007-02-16  159  		P(idle_jiffies);
-289f480af87e45 Ingo Molnar         2007-02-16  160  		P(idle_calls);
-289f480af87e45 Ingo Molnar         2007-02-16  161  		P(idle_sleeps);
-289f480af87e45 Ingo Molnar         2007-02-16  162  		P_ns(idle_entrytime);
-5df7fa1c62146a Thomas Gleixner     2008-02-01  163  		P_ns(idle_waketime);
-5df7fa1c62146a Thomas Gleixner     2008-02-01  164  		P_ns(idle_exittime);
-289f480af87e45 Ingo Molnar         2007-02-16  165  		P_ns(idle_sleeptime);
-0224cf4c5ee0d7 Arjan van de Ven    2010-05-09  166  		P_ns(iowait_sleeptime);
-289f480af87e45 Ingo Molnar         2007-02-16  167  		P(last_jiffies);
-c1ad348b452aac Thomas Gleixner     2015-04-14  168  		P(next_timer);
-289f480af87e45 Ingo Molnar         2007-02-16  169  		P_ns(idle_expires);
-9b04bd27564cfd David Miller        2007-05-09  170  		SEQ_printf(m, "jiffies: %Lu\n",
-9b04bd27564cfd David Miller        2007-05-09  171  			   (unsigned long long)jiffies);
-289f480af87e45 Ingo Molnar         2007-02-16  172  	}
-289f480af87e45 Ingo Molnar         2007-02-16  173  #endif
-289f480af87e45 Ingo Molnar         2007-02-16  174  
-
-:::::: The code at line 157 was first introduced by commit
-:::::: f5d411c91ede162240f34e05a233f2759412988e nohz: Rename ts->idle_tick to ts->last_tick
-
-:::::: TO: Frederic Weisbecker <fweisbec@gmail.com>
-:::::: CC: Frederic Weisbecker <fweisbec@gmail.com>
+773bda96492153 Jonathan Lemon  2021-08-03  4411  
+773bda96492153 Jonathan Lemon  2021-08-03  4412  static int
+773bda96492153 Jonathan Lemon  2021-08-03  4413  ptp_ocp_complete(struct ptp_ocp *bp)
+773bda96492153 Jonathan Lemon  2021-08-03  4414  {
+773bda96492153 Jonathan Lemon  2021-08-03  4415  	struct pps_device *pps;
+773bda96492153 Jonathan Lemon  2021-08-03  4416  	char buf[32];
+d7875b4b078f7e Vadim Fedorenko 2024-08-29  4417  
+773bda96492153 Jonathan Lemon  2021-08-03  4418  	sprintf(buf, "ptp%d", ptp_clock_index(bp->ptp));
+773bda96492153 Jonathan Lemon  2021-08-03  4419  	ptp_ocp_link_child(bp, buf, "ptp");
+773bda96492153 Jonathan Lemon  2021-08-03  4420  
+773bda96492153 Jonathan Lemon  2021-08-03  4421  	pps = pps_lookup_dev(bp->ptp);
+773bda96492153 Jonathan Lemon  2021-08-03  4422  	if (pps)
+773bda96492153 Jonathan Lemon  2021-08-03 @4423  		ptp_ocp_symlink(bp, pps->dev, "pps");
+773bda96492153 Jonathan Lemon  2021-08-03  4424  
+f67bf662d2cffa Jonathan Lemon  2021-09-14  4425  	ptp_ocp_debugfs_add_device(bp);
+f67bf662d2cffa Jonathan Lemon  2021-09-14  4426  
+773bda96492153 Jonathan Lemon  2021-08-03  4427  	return 0;
+773bda96492153 Jonathan Lemon  2021-08-03  4428  }
+773bda96492153 Jonathan Lemon  2021-08-03  4429  
 
 -- 
 0-DAY CI Kernel Test Service
