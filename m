@@ -1,61 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C071DC194;
-	Wed,  6 Nov 2024 10:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BE7171C9;
+	Wed,  6 Nov 2024 12:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730888246; cv=none; b=m2yGwqr6bQU0x1FcRAdsfPPt94AHhdLtYO49iIoXsTjJUTCXPlcw32pTNyfJUzVr+V8PHd8IL/dC6Si0oPWsuLWFO+g9kSuGGGySnYCMkoRxREjY9q+8uFygg+UyF9KckAaQFsNcc/g7i6rbSUPecNleANQ8lSTzTUC1cR7Okx4=
+	t=1730896376; cv=none; b=d3r4gBuzF1LZruwc8NsX2hfsDVIAKjGJggiCbwgPOZrB9WCKoRFnW7V2QtNDnGmRs2cQ5DyUlU0rxEm3vL5vw+SCJ9wpsMSpjHGWR5dIFwHc1HPtN+k6vNDFhvFMnk2sO9aR3M477XVXn1shDHJewUSbjb7yZ0hM3of/MNckT/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730888246; c=relaxed/simple;
-	bh=zkb4wZ27Y2KjcXTANjwfpxh6rJegVZieqvBVXEsCfTE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IAsgrADmQSIti/wpeGBsn2+s6sjqfE/pSflRwfC0kaDP90+e4acPc9nSHPO3cnE9FgCD3LDRRUNGXQZhIdYdSk+u7HRVbEWEyWFywkfiiH+SRUJy6H1l74iRNtTZw6A/pT7n0kN2ZSKycNJT/GcdKluZlocMA0TeLY69auzkkFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NI6vbDS5; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1730896376; c=relaxed/simple;
+	bh=pAaxQ9Gjz6nuJzTKxrooqmYKq2ChzragGuK0hhgnAHs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NiM4958EezLARlLduonGNaNBh+ReZvvMHFSE1F/ivoRcRQpvOgnB+z85G7GKNccnGfoFNi0g/3RVkvS6fBMtbEYi9JRzVuTcDD3jYMbjpP4HBQki+xeAmV25Me51TFLdpj9g9NhhOOHwhiDyWa/PbEY6tD2KL1v+9KypjutwgkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j7ksSaeb; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NI6vbDS5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j7ksSaeb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730888245; x=1762424245;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zkb4wZ27Y2KjcXTANjwfpxh6rJegVZieqvBVXEsCfTE=;
-  b=NI6vbDS5R/QJqjthw5ihjRszzz68SIhclAz2j7idUaoz/scXTYb8+tuE
-   G0L7g1F1+W6YqhDvLx/aOa/Tbc5lugHUpMhx0hozsrilC5PhUZLyQOWKt
-   D/VJfwWfv9VCtaxf64Yplr7vFidvxnUBgjBXicX7fMVE34dY+AHhSwZx6
-   UcmHUh9EYoGsSb+L32radYqL9ROeU47AFOC74Ga8KPH7cpsDchynW+9us
-   +5jOPmTCn09XbZFf/l8+dzWJ9ft20fgKPnIvfDBLJjD7vvHgqI7P+sojq
-   D4gCuTCOcv+jDtqwjzhECZW2EcznuecxiivwQChiQxzaYmcWcTpLSFz6v
-   Q==;
-X-CSE-ConnectionGUID: YUxuBiGXR/qvud8Q5VFiIQ==
-X-CSE-MsgGUID: wbVfKw2dSbioq63XTKWkmQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="41270718"
+  t=1730896375; x=1762432375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pAaxQ9Gjz6nuJzTKxrooqmYKq2ChzragGuK0hhgnAHs=;
+  b=j7ksSaebWgX3MiCldODAM+8bM9EMsCy3R3XWhZqQspIL4TApE45d48TD
+   WUcnIx9NXIBWZOKMJo4THl9Y8kzdI4VT+pMW/pn9pEK2eOOxOi9ScjY7z
+   dA2QuZhcjR9MP9fPZ0RP/9sbqB5vjojmIi7AQZ9U/WUllswh8Twt/CqIV
+   faPbY0ds1sD2L9n+a5TuOjxwZXt4/m5y25zs6vaEF/AHjNw1IvpEv2idm
+   2gTXoAObQaM0lxrJ5UUVoL8LlTgrdUyE+CeKimH0gftxogeylKFaS1vQa
+   3tAObnG/yloKR/IHTzAchmwC8a9bzHVLY279w1Eh6OmQmO721qerM6i6N
+   w==;
+X-CSE-ConnectionGUID: +ygHOyrORr2XRJD1nwQxAA==
+X-CSE-MsgGUID: mK6qxoAgScqK7EH5uASfKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="30796866"
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="41270718"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:17:22 -0800
-X-CSE-ConnectionGUID: nJVy8MMLTcyiXYI55ZWMRw==
-X-CSE-MsgGUID: s+7kSnqzTEu67X7N1h6Pig==
+   d="scan'208";a="30796866"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 04:32:54 -0800
+X-CSE-ConnectionGUID: K2WuBYXxT2Oz0PvRjM0onQ==
+X-CSE-MsgGUID: OehlV23PTxyEfmktAHBvXg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="89303428"
+   d="scan'208";a="122042036"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 06 Nov 2024 02:17:21 -0800
+  by orviesa001.jf.intel.com with ESMTP; 06 Nov 2024 04:31:34 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8d6E-000nBE-1w;
-	Wed, 06 Nov 2024 10:17:18 +0000
-Date: Wed, 6 Nov 2024 18:17:10 +0800
+	id 1t8fC7-000neY-2J;
+	Wed, 06 Nov 2024 12:31:31 +0000
+Date: Wed, 6 Nov 2024 20:30:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To: Eason Yang <j2anfernee@gmail.com>, avifishman70@gmail.com,
+	tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+	yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
+	lars@metafoo.de, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
+	javier.carrasco.cruz@gmail.com, andy@kernel.org,
+	marcelo.schmitt@analog.com, olivier.moysan@foss.st.com,
+	mitrutzceclan@gmail.com, matteomartelli3@gmail.com,
+	alisadariana@gmail.com, joao.goncalves@toradex.com,
+	marius.cristea@microchip.com, mike.looijmans@topic.nl,
+	chanh@os.amperecomputing.com, KWLIU@nuvoton.com,
+	yhyang2@nuvoton.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bjorn Andersson <andersson@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [qcom:clk-for-6.13 30/30] drivers/clk/qcom/gcc-ipq5424.c:497:30:
- warning: unused variable 'ftbl_gcc_qupv3_2x_core_clk_src'
-Message-ID: <202411061802.Gncrt9l5-lkp@intel.com>
+	openbmc@lists.ozlabs.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] iio: adc: add Nuvoton NCT720x ADC driver
+Message-ID: <202411062051.TLRkJSSL-lkp@intel.com>
+References: <20241106023916.440767-3-j2anfernee@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,22 +75,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241106023916.440767-3-j2anfernee@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux clk-for-6.13
-head:   21b5d5a4a3114607a27653371c0332f2080e3c05
-commit: 21b5d5a4a3114607a27653371c0332f2080e3c05 [30/30] clk: qcom: add Global Clock controller (GCC) driver for IPQ5424 SoC
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241106/202411061802.Gncrt9l5-lkp@intel.com/config)
+Hi Eason,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v6.12-rc6 next-20241106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eason-Yang/dt-bindings-iio-adc-Add-binding-for-Nuvoton-NCT720x-ADCs/20241106-104046
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20241106023916.440767-3-j2anfernee%40gmail.com
+patch subject: [PATCH v1 2/2] iio: adc: add Nuvoton NCT720x ADC driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241106/202411062051.TLRkJSSL-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411061802.Gncrt9l5-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411062051.TLRkJSSL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411061802.Gncrt9l5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411062051.TLRkJSSL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/clk/qcom/gcc-ipq5424.c:9:
+   In file included from drivers/iio/adc/nct720x.c:9:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
    In file included from include/linux/module.h:19:
    In file included from include/linux/elf.h:6:
    In file included from arch/s390/include/asm/elf.h:181:
@@ -104,95 +129,72 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/clk/qcom/gcc-ipq5424.c:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/clk/qcom/gcc-ipq5424.c:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/clk/qcom/gcc-ipq5424.c:12:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/clk/qcom/gcc-ipq5424.c:497:30: warning: unused variable 'ftbl_gcc_qupv3_2x_core_clk_src' [-Wunused-const-variable]
-     497 | static const struct freq_tbl ftbl_gcc_qupv3_2x_core_clk_src[] = {
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/qcom/gcc-ipq5424.c:957:30: warning: unused variable 'ftbl_gcc_qpic_clk_src' [-Wunused-const-variable]
-     957 | static const struct freq_tbl ftbl_gcc_qpic_clk_src[] = {
-         |                              ^~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/qcom/gcc-ipq5424.c:1064:30: warning: unused variable 'ftbl_gcc_q6_axi_clk_src' [-Wunused-const-variable]
-    1064 | static const struct freq_tbl ftbl_gcc_q6_axi_clk_src[] = {
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~
-   19 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+>> drivers/iio/adc/nct720x.c:526:16: warning: cast to smaller integer type 'enum nct720x_chips' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     526 |                 chip->type = (enum nct720x_chips)device_get_match_data(&client->dev);
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
 
 
-vim +/ftbl_gcc_qupv3_2x_core_clk_src +497 drivers/clk/qcom/gcc-ipq5424.c
+vim +526 drivers/iio/adc/nct720x.c
 
-   496	
- > 497	static const struct freq_tbl ftbl_gcc_qupv3_2x_core_clk_src[] = {
-   498		F(200000000, P_GPLL0_OUT_MAIN, 4, 0, 0),
-   499		{ }
-   500	};
-   501	
+   511	
+   512	static int nct720x_probe(struct i2c_client *client)
+   513	{
+   514		const struct i2c_device_id *id = i2c_client_get_device_id(client);
+   515		struct nct720x_chip_info *chip;
+   516		struct iio_dev *indio_dev;
+   517		int ret;
+   518		u32 tmp;
+   519	
+   520		indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*chip));
+   521		if (!indio_dev)
+   522			return -ENOMEM;
+   523		chip = iio_priv(indio_dev);
+   524	
+   525		if (client->dev.of_node)
+ > 526			chip->type = (enum nct720x_chips)device_get_match_data(&client->dev);
+   527		else
+   528			chip->type = i2c_match_id(nct720x_id, client)->driver_data;
+   529	
+   530		chip->vin_max = (chip->type == nct7201) ? NCT7201_VIN_MAX : NCT7202_VIN_MAX;
+   531	
+   532		ret = of_property_read_u32(client->dev.of_node, "read-vin-data-size", &tmp);
+   533		if (ret < 0) {
+   534			pr_err("read-vin-data-size property not found\n");
+   535			return ret;
+   536		}
+   537	
+   538		if (tmp == 8) {
+   539			chip->use_read_byte_vin = true;
+   540		} else if (tmp == 16) {
+   541			chip->use_read_byte_vin = false;
+   542		} else {
+   543			pr_err("invalid read-vin-data-size (%d)\n", tmp);
+   544			return -EINVAL;
+   545		}
+   546	
+   547		mutex_init(&chip->access_lock);
+   548	
+   549		/* this is only used for device removal purposes */
+   550		i2c_set_clientdata(client, indio_dev);
+   551	
+   552		chip->client = client;
+   553	
+   554		ret = nct720x_init_chip(chip);
+   555		if (ret < 0)
+   556			return ret;
+   557	
+   558		indio_dev->name = id->name;
+   559		indio_dev->channels = nct720x_channels;
+   560		indio_dev->num_channels = ARRAY_SIZE(nct720x_channels);
+   561		indio_dev->info = &nct720x_info;
+   562		indio_dev->modes = INDIO_DIRECT_MODE;
+   563	
+   564		iio_device_register(indio_dev);
+   565	
+   566		return 0;
+   567	}
+   568	
 
 -- 
 0-DAY CI Kernel Test Service
