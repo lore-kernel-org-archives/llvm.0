@@ -1,125 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBA218C903;
-	Wed,  6 Nov 2024 02:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C686764D;
+	Wed,  6 Nov 2024 03:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730858923; cv=none; b=VFu+DtC08/RIQH2WrvtFKb3jTdYQNLcdTM3w6bkYFC4uEk6NrN/g9YvrjGV6IHJv9YPONx5EoY+jy4yQUwyu1O305jJ2hGYruQgI8fAmAmWjsCXFWhMe/mCQ2FUfF63jfLwfpSuZFmFcCxbHbpJl4zEamnQRuk/Sf1snWhDFFKc=
+	t=1730863149; cv=none; b=GX0gqgJT6+mLcab7bguMJc1VVXrrqed4k9Yj9BBAKMJGHxz/N28L6KpF15JisakB5osS3eeS2S4A4swDenQ5PHBt17AShO1+RzIzzh723sAvIzPz/LBz3FUuuF6yOayIh0ekmEsg1lFw09Tt/q4x27TVQe0/MAdEdW3a7M38Fos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730858923; c=relaxed/simple;
-	bh=6RdsDJCekACBSQ/decuXvIXkG38AIIzXKc9s9K/m2gg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lr3yLsxcELH4ZEviu4VrdtYRl43Kp66ga93tfizhtb2RKCgp6I57JX1ngQT8C4vwsTy8cCULleIFdUoHWaWnpcWWU76y+OCW8pwiyzMGpu/KGmNyDo5x+9haai1+tVh1qGfMb/KhC64edndvDOMH+JcYFOF6hUhhygWJM6mBgH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bLHmkCgU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730863149; c=relaxed/simple;
+	bh=o8aQslghnk2+z70tsW+2DklDn7CG8sbivh6qhEJ0ZDw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FliyTWLQwtVQHI3qbfnGZP2slvV7NqJwkrqp8Wl11PWCrRYO6lET7SlvLpGrnSeGhzPdgRVhuRk7GSLWh0tutve5fpxFW+EAwGXtvpdlcwDSWXUcFF+7oXuAiOXSlHo6skDzxyywea8RZky3KpHotpMUpX4HTBI8BDAnsdcB2k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iKFrk0Tw; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bLHmkCgU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9674AC4CECF;
-	Wed,  6 Nov 2024 02:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730858923;
-	bh=6RdsDJCekACBSQ/decuXvIXkG38AIIzXKc9s9K/m2gg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=bLHmkCgUJ8DNphFMJIs7Y3zWta2o/5rLa7tqziceKYdXxus72OVZ4cX+WT3Owi4tH
-	 GeCEDoEbkPXfWNLhFNVRVU3ay+cNaMYJa2ReoghcKoWNjHPVVVZiSKrXE4aKEMlWiu
-	 H2tS88ZzFwO7Re5Wmuz1xRquMvrWiIZAYE8kPVY1o1dNUEzaUzR9cfq2ejIEddVgFN
-	 wullEsRfSuLLKnImSGCS7lZiFgtk8mlvUoks/y7F+tzmnA9rmXFNGKZGhkjzQAC4Qo
-	 dnAnympltpJLRlZvIwnNaoabTBpI8AijOmlIq0rBxWkCkSfY+sT2XPQybyA8l/2DxZ
-	 XsNTTbAkmF/1A==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	conor.dooley@microchip.com
-Cc: Jason Montleon <jmontleo@redhat.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: FAILED: Patch "RISC-V: disallow gcc + rust builds" failed to apply to v6.11-stable tree
-Date: Tue,  5 Nov 2024 21:08:39 -0500
-Message-ID: <20241106020840.164364-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iKFrk0Tw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730863147; x=1762399147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o8aQslghnk2+z70tsW+2DklDn7CG8sbivh6qhEJ0ZDw=;
+  b=iKFrk0TwIVGBVt3HxtOjHyojIfP2bcgm8pVao+89GIoa9749AAHbBYyr
+   r9GZlKr0mxJ2UoGIL6ZNqZVHYdAOYX94ZagfZxu4rCdZNrgAq+oIrqSHg
+   I7uQf2Lz83hVASmgbAOoFRd4M8OFJGAuLAdhg08HceLxXih5PlzvwAosL
+   aR7pCg1epAdU17Z+aCKAlvqWgc6IvxenUpNQBpzYlrphp81+bIu7omhMr
+   dZ0MbQFimXCI4Xp3jpFqdw4mWy+WkL5E8g1H2Ibpy036NkZlGgfz710Mz
+   Yn0Ggi8wv0FWGt+iDElTyKYN29MEKnYcjFMYMS1JciJYOYTxImKhRZbGZ
+   w==;
+X-CSE-ConnectionGUID: wtBflMw+RZ2DsSODeHfrvA==
+X-CSE-MsgGUID: v8ZGg4gfSme4paemXnOF1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="30759608"
+X-IronPort-AV: E=Sophos;i="6.11,261,1725346800"; 
+   d="scan'208";a="30759608"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 19:19:06 -0800
+X-CSE-ConnectionGUID: C3b9hammQ5K62oSusumzvA==
+X-CSE-MsgGUID: xp94QqJRThKSfiZb/sjasA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,261,1725346800"; 
+   d="scan'208";a="84692741"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 05 Nov 2024 19:19:04 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t8WZR-000msn-04;
+	Wed, 06 Nov 2024 03:19:01 +0000
+Date: Wed, 6 Nov 2024 11:18:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marek Vasut <marex@denx.de>, linux-hwmon@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Marek Vasut <marex@denx.de>, Conor Dooley <conor+dt@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] hwmon: (pwm-fan) Introduce start from dead stop
+ handling
+Message-ID: <202411061031.GHHHxm19-lkp@intel.com>
+References: <20241105135259.101126-2-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-stable: review
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241105135259.101126-2-marex@denx.de>
 
-The patch below does not apply to the v6.11-stable tree.
-If someone wants it applied there, or to any other stable or longterm
-tree, then please email the backport, including the original git commit
-id to <stable@vger.kernel.org>.
+Hi Marek,
 
-Thanks,
-Sasha
+kernel test robot noticed the following build errors:
 
------------------- original commit in Linus's tree ------------------
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.12-rc6 next-20241105]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-From 33549fcf37ec461f398f0a41e1c9948be2e5aca4 Mon Sep 17 00:00:00 2001
-From: Conor Dooley <conor.dooley@microchip.com>
-Date: Tue, 1 Oct 2024 12:28:13 +0100
-Subject: [PATCH] RISC-V: disallow gcc + rust builds
+url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/hwmon-pwm-fan-Introduce-start-from-dead-stop-handling/20241105-215454
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20241105135259.101126-2-marex%40denx.de
+patch subject: [PATCH 2/2] hwmon: (pwm-fan) Introduce start from dead stop handling
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20241106/202411061031.GHHHxm19-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411061031.GHHHxm19-lkp@intel.com/reproduce)
 
-During the discussion before supporting rust on riscv, it was decided
-not to support gcc yet, due to differences in extension handling
-compared to llvm (only the version of libclang matching the c compiler
-is supported). Recently Jason Montleon reported [1] that building with
-gcc caused build issues, due to unsupported arguments being passed to
-libclang. After some discussion between myself and Miguel, it is better
-to disable gcc + rust builds to match the original intent, and
-subsequently support it when an appropriate set of extensions can be
-deduced from the version of libclang.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411061031.GHHHxm19-lkp@intel.com/
 
-Closes: https://lore.kernel.org/all/20240917000848.720765-2-jmontleo@redhat.com/ [1]
-Link: https://lore.kernel.org/all/20240926-battering-revolt-6c6a7827413e@spud/ [2]
-Fixes: 70a57b247251a ("RISC-V: enable building 64-bit kernels with rust support")
-Cc: stable@vger.kernel.org
-Reported-by: Jason Montleon <jmontleo@redhat.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20241001-playlist-deceiving-16ece2f440f5@spud
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- Documentation/rust/arch-support.rst | 2 +-
- arch/riscv/Kconfig                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index 750ff371570a0..54be7ddf3e57a 100644
---- a/Documentation/rust/arch-support.rst
-+++ b/Documentation/rust/arch-support.rst
-@@ -17,7 +17,7 @@ Architecture   Level of support  Constraints
- =============  ================  ==============================================
- ``arm64``      Maintained        Little Endian only.
- ``loongarch``  Maintained        \-
--``riscv``      Maintained        ``riscv64`` only.
-+``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
- ``um``         Maintained        \-
- ``x86``        Maintained        ``x86_64`` only.
- =============  ================  ==============================================
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 62545946ecf43..f4c570538d55b 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -177,7 +177,7 @@ config RISCV
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RETHOOK if !XIP_KERNEL
- 	select HAVE_RSEQ
--	select HAVE_RUST if RUSTC_SUPPORTS_RISCV
-+	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
- 	select HAVE_SAMPLE_FTRACE_DIRECT
- 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
- 	select HAVE_STACKPROTECTOR
+>> ERROR: modpost: "__aeabi_uldivmod" [drivers/hwmon/pwm-fan.ko] undefined!
+
 -- 
-2.43.0
-
-
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
