@@ -1,63 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE75E2F26;
-	Wed,  6 Nov 2024 00:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3873D66;
+	Wed,  6 Nov 2024 01:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730852906; cv=none; b=U72RBr/+jhFhFXYO97ngNzDuluIN552b/pV3+tqp31suT9E9rOriTpVrjk8aO4Nq+9TCe7k2lE7CBFFsdeZ2lAaVX3p1aQN6Q8pkXs30JMDlYDK6BRwJRfNli4ebEqVVi38vzv3pJYuYTFCXe2qe2UXrRMZCwTJcMtKj8S5PydU=
+	t=1730856662; cv=none; b=BynkUr36QxNkqIizQ7fLj4QjlXZKnStsqhpesIPphnU/AzGFIW8TlwzhDg0D3GWZd3+EwhXMW8idBxVAyA04IgiV+XRIK2PjTADQsrHZpf8oEknFY7Kn2/Aqp4DifHfym739kucNyTpo3pdjxdF5IS2EA0XrG0kDsRp8WaduJ1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730852906; c=relaxed/simple;
-	bh=112D4tuzI2xIXLLm19Jm49K0UIYLzqkk6fpdRmVG7kA=;
+	s=arc-20240116; t=1730856662; c=relaxed/simple;
+	bh=w4uRAgM8xbGcWtcxv849nFQ4mF6NuoUMjhUqN7BpOZE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iAhW9YvOwRmv5aM698cRshHPiG4wrvGM8fFn5ND2xvLPg3obfTFOVGmDKZ+OsyhiPP2uN0AIUTJq1QOcdFDmLr/8cSmSBx38Ic/6ewcCiUzMrAbvx8HGFc7v7Jg3IuwYmL4xZq/njPiJvU0c9teEdTc3/sU80lu3SbiDCthKpJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hnX4m0Jp; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=BbumkKAYbk9IvIL9AXPs2FxJe1WBKjIQJCt9irFtRKZFwxEfBJOS+nBbz5/OZ2KRcVtXIiR1pYsANaFF4dEbKu94SYM1ZFOY90VcE9b7EWt2whuUiZCHYQ1oG5pjjZ9j86eIhFfp5OcYju869mAkeN27PWdV/VWkiKAfoF4xTPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ONtD99Gr; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hnX4m0Jp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ONtD99Gr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730852903; x=1762388903;
+  t=1730856660; x=1762392660;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=112D4tuzI2xIXLLm19Jm49K0UIYLzqkk6fpdRmVG7kA=;
-  b=hnX4m0Jp7Pdr9x4Ngy2XenOPhf+uCbwjhO828ZBT9VMuZem6XrdfRjJ2
-   3IV5HRA3TluE64ngIXCND8RTjbJ2Q2PrG0TuOHwL/Pgc7C58joe0NfGoS
-   2i/BrqPLnOOlpg7seoJStFWyqfVckD62hTdH/Fgb3kma5LSunlPtlUDvY
-   pV8LTVMTLqJBSnOMXel5hRVLU7n9uUl/uMzZZ+20K3vA1UBdiuB+ksTxl
-   eixtGIC02NOHbnOtEvt7lxyZ4WNHRF3SousZ5vNU+mbPjWQvzqao/+Hcy
-   oMbrJT0C8igEjHF6AnTYmxX9gQvcSHseYUi5obIsFG/GkmVhvOWdymXJq
-   g==;
-X-CSE-ConnectionGUID: tO1w/MURQLOCuYtMcw+Awg==
-X-CSE-MsgGUID: vSF+t8WaSHaDy6jPakM3Sg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30403688"
+  bh=w4uRAgM8xbGcWtcxv849nFQ4mF6NuoUMjhUqN7BpOZE=;
+  b=ONtD99GrBf25+rM34KqHUwiiwURJm/oah1vLGcWaIc5uQ35/pb8qi8bk
+   m32DKNOLqFNO0G1UE38es+/jeRiiG2FSdhTn5QJ20y4RaariVeN/uBFcu
+   7GNO9SJPGq1kHva5k2UKCo0MNlysf+CTJDpdPM83y8ZogbMGBY8ifnqFJ
+   B6VZm7Y0cZBH2l62hclJA8GycLUGFIxUaeBauGxOXBWX4bGs9/w21FEdB
+   xq9wwsQpqByCrRLpItYG9tyL0vDW4gQeHdQL0fyDl+BJCl8Yx8vruioCa
+   uCkzhgp8GU9o3bUvocDy/Vxd6UMKOoKf3GnSUbEkGe9oet0J+NEaGaHgk
+   w==;
+X-CSE-ConnectionGUID: SkPI1xKvRhiDnnscnu1Ing==
+X-CSE-MsgGUID: iMx9vsQRTIilI/iMZ5eBMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53201954"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30403688"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 16:28:23 -0800
-X-CSE-ConnectionGUID: q8R2r8GiSWKV3znXms6uXg==
-X-CSE-MsgGUID: rOQWAb0MTW6mqFrdBLbJWQ==
+   d="scan'208";a="53201954"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 17:30:59 -0800
+X-CSE-ConnectionGUID: 4L7Ct1tFSgaMWkNvEsRxBQ==
+X-CSE-MsgGUID: +Z+xLsTLRoWY1bWMap8SKA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,261,1725346800"; 
-   d="scan'208";a="83766193"
+   d="scan'208";a="84347612"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 05 Nov 2024 16:27:53 -0800
+  by orviesa006.jf.intel.com with ESMTP; 05 Nov 2024 17:30:55 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8Ttn-000mdZ-1c;
-	Wed, 06 Nov 2024 00:27:51 +0000
-Date: Wed, 6 Nov 2024 08:27:36 +0800
+	id 1t8Usn-000mhP-1q;
+	Wed, 06 Nov 2024 01:30:53 +0000
+Date: Wed, 6 Nov 2024 09:30:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alistair Francis <alistair23@gmail.com>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, ojeda@kernel.org,
-	boqun.feng@gmail.com, a.hindborg@kernel.org, benno.lossin@proton.me,
-	aliceryhl@google.com, tmgross@umich.edu, gary@garyguo.net
+To: Jocelyn Falempe <jfalempe@redhat.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	John Ogness <john.ogness@linutronix.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	bluescreen_avenger@verizon.net,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Petr Mladek <pmladek@suse.com>, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alistair23@gmail.com, Alistair Francis <alistair.francis@wdc.com>
-Subject: Re: [PATCH] rust: bindings: Support some inline static functions
-Message-ID: <202411060829.3NoGuTYU-lkp@intel.com>
-References: <20241105022143.1087112-1-alistair.francis@wdc.com>
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH v6 2/6] drm/log: Introduce a new boot logger to draw the
+ kmsg on the screen
+Message-ID: <202411060951.mK9Fi0fi-lkp@intel.com>
+References: <20241105125109.226866-3-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,35 +75,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241105022143.1087112-1-alistair.francis@wdc.com>
+In-Reply-To: <20241105125109.226866-3-jfalempe@redhat.com>
 
-Hi Alistair,
+Hi Jocelyn,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v6.12-rc6]
-[also build test ERROR on linus/master]
-[cannot apply to rust/rust-next next-20241105]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on d78f0ee0406803cda8801fd5201746ccf89e5e4a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Francis/rust-bindings-Support-some-inline-static-functions/20241105-102435
-base:   v6.12-rc6
-patch link:    https://lore.kernel.org/r/20241105022143.1087112-1-alistair.francis%40wdc.com
-patch subject: [PATCH] rust: bindings: Support some inline static functions
-config: um-randconfig-001-20241106 (https://download.01.org/0day-ci/archive/20241106/202411060829.3NoGuTYU-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411060829.3NoGuTYU-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-panic-Move-drawing-functions-to-drm_draw/20241105-205432
+base:   d78f0ee0406803cda8801fd5201746ccf89e5e4a
+patch link:    https://lore.kernel.org/r/20241105125109.226866-3-jfalempe%40redhat.com
+patch subject: [PATCH v6 2/6] drm/log: Introduce a new boot logger to draw the kmsg on the screen
+config: hexagon-randconfig-002-20241106 (https://download.01.org/0day-ci/archive/20241106/202411060951.mK9Fi0fi-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411060951.mK9Fi0fi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411060829.3NoGuTYU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411060951.mK9Fi0fi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> cp: cannot stat '/tmp/bindgen/extern.c': No such file or directory
+>> ld.lld: error: undefined symbol: drm_client_setup
+   >>> referenced by komeda_drv.c:87 (drivers/gpu/drm/arm/display/komeda/komeda_drv.c:87)
+   >>>               drivers/gpu/drm/arm/display/komeda/komeda_drv.o:(komeda_platform_probe) in archive vmlinux.a
+   >>> referenced by komeda_drv.c:87 (drivers/gpu/drm/arm/display/komeda/komeda_drv.c:87)
+   >>>               drivers/gpu/drm/arm/display/komeda/komeda_drv.o:(komeda_platform_probe) in archive vmlinux.a
+   >>> referenced by vkms_drv.c:230 (drivers/gpu/drm/vkms/vkms_drv.c:230)
+   >>>               drivers/gpu/drm/vkms/vkms_drv.o:(vkms_init) in archive vmlinux.a
+   >>> referenced 23 more times
+--
+>> ld.lld: error: undefined symbol: drm_client_setup_with_fourcc
+   >>> referenced by arcpgu.c:399 (drivers/gpu/drm/tiny/arcpgu.c:399)
+   >>>               drivers/gpu/drm/tiny/arcpgu.o:(arcpgu_probe) in archive vmlinux.a
+   >>> referenced by arcpgu.c:399 (drivers/gpu/drm/tiny/arcpgu.c:399)
+   >>>               drivers/gpu/drm/tiny/arcpgu.o:(arcpgu_probe) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
