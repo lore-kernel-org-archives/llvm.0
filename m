@@ -1,74 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B075190685;
-	Wed,  6 Nov 2024 06:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5411922D8;
+	Wed,  6 Nov 2024 08:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730876193; cv=none; b=TvkOMpZqbs4bbRp4fNgNP4gBrkpSQ4oLt+C7Bc4zXxeLPRoR6BsMpYGN8PvRQS9VD3PezklIfqrIHp9FSwdMqxkQt9olzTqWNrWlm5L3cdboVhEgeHDOtKDvNBBOv9s31V8KxOvv8E4bnvdMdCBTwI0TgqbYkkPDIxb1LZ0yllg=
+	t=1730882603; cv=none; b=oIYlraElaSjfimk7uB4cbRWXpig5H1Rcch0Nuh1w0ozlc35RfX60KDGF+XCBkpc2CLcxt4REC/WO21iAJoXCYpzObF/TPyxgtC4O1J8C52RQqOUJuuzF/x5+khfA+miiCRnEUKwIp3hrwfVy9M1s8868dDehOHZAMLFZlHgWB8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730876193; c=relaxed/simple;
-	bh=7Blh7p02YI4RwiQup76IUOMLyinN3Qo+MpfCB2iFvv8=;
+	s=arc-20240116; t=1730882603; c=relaxed/simple;
+	bh=2FaB9DZ+5bt0vHcem3FiA70mddNIj2sFcK506ZwMn/Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZIFfq7WJMjHgzz4GYYOFFhqK5h/CDOcZWN+EFuRVCLNaLm1NxvBFMOjT2109BCpMTvGbGQvE/4/LLoL9M5sw72qO5vMOY9+jtYxLzlZlmcoex8SvvgIGydqM/fABtPIN9Cld+Gv3Xvz1ENdTiHYnPMYLX1FJsUHMPmO2X95ZfhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eiKQTj8H; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5zlgTat+QL6S18EoUJBpbicTfyJV67uiJnUrl2YufZFFmt7PnG8ta422vI+cJjSVES3DW/uiVggo3J+23Nc2k4Nd0H8ckee3r9cL7nn9mL7eSdxYEbeNY7CIR3jAHC9qBxkq8kzY11IizGGZkazNgmYhZJkOEbMqLPPLyOsj3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hLmnbg+x; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eiKQTj8H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hLmnbg+x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730876192; x=1762412192;
+  t=1730882602; x=1762418602;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7Blh7p02YI4RwiQup76IUOMLyinN3Qo+MpfCB2iFvv8=;
-  b=eiKQTj8He7m4DLB3sU9JC7vT5B8ICCmvbpboTZV0P77ju5rmHHoCKe2g
-   qCyIA7iUeKtwRHq9TyszLoXMo7/lU/NUGMqwVxdkntnM5L2Mf0WKZsAIQ
-   dUq4sD3mlDf/FfIs76lJSM22Ftl4U5/6nsnQmXoCkn3mRhdFb8VPv93b3
-   5THn6q1xhmpY9U+UEwroFpm0M4nrQbavh3T7vd4jSxiUilR+dRysdtqXr
-   P3t2wKPMefCnyFahFIuEX+642E/TGjLWvyKk2YjgVVX4K4Qhk4XynhDRG
-   Ro1EQgl3fjVYwOAwAY881G6OPDJDwZMwxQWFT0TgT6S8A6NiayyS07nyr
-   g==;
-X-CSE-ConnectionGUID: ME743KOtQXGjtoGPokGgxw==
-X-CSE-MsgGUID: 4naZfb0SQxCLpYdNzUCcGQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="41285077"
+  bh=2FaB9DZ+5bt0vHcem3FiA70mddNIj2sFcK506ZwMn/Q=;
+  b=hLmnbg+xuE+p5i4UrDdaXcesY6QdwzJEabK+GcFnmVwYMM+V0C7TW+0F
+   EyHTSIsmglWlRxM/EQH2SIjR3KN2HP3iZm0IntdVONmA6wsrSPgkMPiKg
+   bOzt94u98n6YhaF3aZJV9jFkVO2WRu3xJTGxirxn+PuKesa8Ga+zVAUk9
+   FVFIBS8MYW5JE76epZCt3ftYb2Aq7TbJ6dPGSzMD0OpHiWEbwy+iRPE6I
+   lTD6kjNVOS5Soj4n876N6V3PhFEyEH4yA+MMOgfHgSHLqY8F7qcN1fzRX
+   o/nNRBcutN8hOeMMV3HNLUwjBv47IRgGNnlt1H7bgMO9scryl0uIXxVvy
+   A==;
+X-CSE-ConnectionGUID: NGcJJ8Z+SharKQGdp4TkMA==
+X-CSE-MsgGUID: /RXjRShLQLyhL3IQjQ1xsA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="30889103"
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="41285077"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 22:56:31 -0800
-X-CSE-ConnectionGUID: suoCvPbpTgCv3vpY5bfu7w==
-X-CSE-MsgGUID: 79adoSYUTq+OVmjKJvESiw==
+   d="scan'208";a="30889103"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 00:43:21 -0800
+X-CSE-ConnectionGUID: FQSFjxl3TY2wyKbOXhKltw==
+X-CSE-MsgGUID: IM4k9HfgRNW2rIV3li9lkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="84308090"
+   d="scan'208";a="115233886"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 05 Nov 2024 22:56:12 -0800
+  by orviesa002.jf.intel.com with ESMTP; 06 Nov 2024 00:43:18 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8ZxZ-000n1a-2o;
-	Wed, 06 Nov 2024 06:56:09 +0000
-Date: Wed, 6 Nov 2024 14:55:39 +0800
+	id 1t8bdD-000n6B-37;
+	Wed, 06 Nov 2024 08:43:15 +0000
+Date: Wed, 6 Nov 2024 16:43:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sky Huang <SkyLake.Huang@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Daniel Golle <daniel@makrotopia.org>,
-	Qingfang Deng <dqfext@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
+	Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Steven Liu <Steven.Liu@mediatek.com>,
-	"SkyLake.Huang" <skylake.huang@mediatek.com>
-Subject: Re: [PATCH net-next v2 4/5] net: phy: mediatek: Integrate read/write
- page helper functions
-Message-ID: <202411061420.eK9LoyP8-lkp@intel.com>
-References: <20241105141911.13326-5-SkyLake.Huang@mediatek.com>
+	Boris Brezillon <bbrezillon@kernel.org>,
+	dri-devel@lists.freedesktop.org, Liviu Dudau <liviu.dudau@arm.com>,
+	patches@lists.linux.dev, Steven Price <steven.price@arm.com>
+Subject: Re: [PATCH v3 2/3] iommu/io-pgtable-arm-v7s: Remove split on unmap
+ behavior
+Message-ID: <202411061634.3EtgZij8-lkp@intel.com>
+References: <2-v3-b3a5b5937f56+7bb-arm_no_split_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,40 +69,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241105141911.13326-5-SkyLake.Huang@mediatek.com>
+In-Reply-To: <2-v3-b3a5b5937f56+7bb-arm_no_split_jgg@nvidia.com>
 
-Hi Sky,
+Hi Jason,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on net-next/main]
+[auto build test WARNING on 8e929cb546ee42c9a61d24fae60605e9e3192354]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sky-Huang/net-phy-mediatek-Re-organize-MediaTek-ethernet-phy-drivers/20241105-222556
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241105141911.13326-5-SkyLake.Huang%40mediatek.com
-patch subject: [PATCH net-next v2 4/5] net: phy: mediatek: Integrate read/write page helper functions
-config: hexagon-randconfig-002-20241106 (https://download.01.org/0day-ci/archive/20241106/202411061420.eK9LoyP8-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411061420.eK9LoyP8-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Gunthorpe/iommu-io-pgtable-arm-Remove-split-on-unmap-behavior/20241106-021511
+base:   8e929cb546ee42c9a61d24fae60605e9e3192354
+patch link:    https://lore.kernel.org/r/2-v3-b3a5b5937f56%2B7bb-arm_no_split_jgg%40nvidia.com
+patch subject: [PATCH v3 2/3] iommu/io-pgtable-arm-v7s: Remove split on unmap behavior
+config: arm-randconfig-004-20241106 (https://download.01.org/0day-ci/archive/20241106/202411061634.3EtgZij8-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411061634.3EtgZij8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411061420.eK9LoyP8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411061634.3EtgZij8-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: mtk_phy_read_page
-   >>> referenced by mtk-ge.c
-   >>>               drivers/net/phy/mediatek/mtk-ge.o:(mtk_gephy_driver) in archive vmlinux.a
-   >>> referenced by mtk-ge.c
-   >>>               drivers/net/phy/mediatek/mtk-ge.o:(mtk_gephy_driver) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: mtk_phy_write_page
-   >>> referenced by mtk-ge.c
-   >>>               drivers/net/phy/mediatek/mtk-ge.o:(mtk_gephy_driver) in archive vmlinux.a
-   >>> referenced by mtk-ge.c
-   >>>               drivers/net/phy/mediatek/mtk-ge.o:(mtk_gephy_driver) in archive vmlinux.a
+>> drivers/iommu/io-pgtable-arm-v7s.c:823:18: warning: variable 'loopnr' set but not used [-Wunused-but-set-variable]
+     823 |         unsigned int i, loopnr = 0;
+         |                         ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [y]:
+   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+
+
+vim +/loopnr +823 drivers/iommu/io-pgtable-arm-v7s.c
+
+e5fc9753b1a831 Robin Murphy    2016-01-26  810  
+e5fc9753b1a831 Robin Murphy    2016-01-26  811  static int __init arm_v7s_do_selftests(void)
+e5fc9753b1a831 Robin Murphy    2016-01-26  812  {
+e5fc9753b1a831 Robin Murphy    2016-01-26  813  	struct io_pgtable_ops *ops;
+e5fc9753b1a831 Robin Murphy    2016-01-26  814  	struct io_pgtable_cfg cfg = {
+e5fc9753b1a831 Robin Murphy    2016-01-26  815  		.tlb = &dummy_tlb_ops,
+e5fc9753b1a831 Robin Murphy    2016-01-26  816  		.oas = 32,
+e5fc9753b1a831 Robin Murphy    2016-01-26  817  		.ias = 32,
+4f41845b340783 Will Deacon     2019-06-25  818  		.coherent_walk = true,
+4f41845b340783 Will Deacon     2019-06-25  819  		.quirks = IO_PGTABLE_QUIRK_ARM_NS,
+e5fc9753b1a831 Robin Murphy    2016-01-26  820  		.pgsize_bitmap = SZ_4K | SZ_64K | SZ_1M | SZ_16M,
+e5fc9753b1a831 Robin Murphy    2016-01-26  821  	};
+76b8c2705cdd26 Jason Gunthorpe 2024-11-05  822  	unsigned int iova, size;
+e5fc9753b1a831 Robin Murphy    2016-01-26 @823  	unsigned int i, loopnr = 0;
 
 -- 
 0-DAY CI Kernel Test Service
