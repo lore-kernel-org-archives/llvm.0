@@ -1,64 +1,128 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0880D207A0D;
-	Wed,  6 Nov 2024 18:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F8D18FC86;
+	Wed,  6 Nov 2024 18:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730917852; cv=none; b=KztjpV9oFONbPb8CbAvG996iRYcSItve6+ubRCdlWNAc0xkNp3g13rEmUHQMVPlU9jpv8AYi7kDhJR0mtSugOeQtY9Qpr52pjRWZUjvDeDVfyU9VjiI+ywAwpTbtMDcQIHrf529k2v1W4Fc+/kXq7mTa597zl+L7NxS4tnQGEEg=
+	t=1730918738; cv=none; b=f+8ndsAnZ2c2pM585sGXjCDOJXpCK0mpGA/SKLvrB5X26/WvLt/hg29y5cP4TaZkLCO0oxs/Kpnfan2ON9dyhGTZqJTUI6jcOmlbQbSuJ8KrIbCcQWtvqbIr7G8Q93fzt3ojxf4LXW+E98gJrT2fCXp9NDa1FvD+PddhmJmUhLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730917852; c=relaxed/simple;
-	bh=3UKvbNKM++MFOTeqBmPjKQZJQ3wWqu7GOsv8HpfD4xk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z/xPvGFIb0fygUm0CUuh1T8Bu32Lccz42LEBen3TE8KsHMD7LUNK1p6jpBAcLQumAT3gsU5tI2aJKA/a3o9A0rqrAzwSgX/P/c6OLKJ8FVCY7z6rRDcLjvYl7JYQ7TWHKP2HajA8C8IUxt9zTA6p/+UEhdALlrGDU8mbApRS3fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 4A6ITW0E024009;
-	Wed, 6 Nov 2024 12:29:32 -0600
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 4A6ITVEL024004;
-	Wed, 6 Nov 2024 12:29:31 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Wed, 6 Nov 2024 12:29:31 -0600
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] powerpc/vdso: Drop -mstack-protector-guard flags in 32-bit files with clang
-Message-ID: <20241106182931.GI29862@gate.crashing.org>
-References: <20241030-powerpc-vdso-drop-stackp-flags-clang-v1-1-d95e7376d29c@kernel.org> <884cf694-09c7-4082-a6b1-6de987025bf8@csgroup.eu> <20241106133752.GG29862@gate.crashing.org> <20241106152114.GA2738371@thelio-3990X>
+	s=arc-20240116; t=1730918738; c=relaxed/simple;
+	bh=ts1jeFGgXcWV69i9NnWPLiE0tUfahZCCkXmefsTxWgY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JY7srvQ8NUMYSPs3Ocgz+uOdGA/lp5bQiArlJ9mcpJ25p1VNCjzK6RY2UONQcMaMyWTEiFl44gWVjMKNl+RQv1eZK25xgJDW27+2M35aPE3Sfk9MIgFljB/BNN1Nfgp3u7Nr+qxfT4v0U+M9GHhOqpwPexOMjfOmXWkOg07+8W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bh7nRh21; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bh7nRh21"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730918738; x=1762454738;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ts1jeFGgXcWV69i9NnWPLiE0tUfahZCCkXmefsTxWgY=;
+  b=bh7nRh2170HNYGvim2MXS0Y38/7pgoqHo5PH1zBNbrzRITDQVod8/ApX
+   CpDguNMJJxskle7iiYhjdTGbsWVMiMts2r9pKWrRVfVXY7xWGXECf3mJc
+   MhxHdRsJzZ042Q4efMi77mgpcOCLZTeMrQ3bLoPqvF/x7VapiFbF7CIvr
+   T9k9jiN6hLRdBW9K5UClO2CTv+zx60ybrBcXmwWYPoZmLU3tXuSBD8DGY
+   8LGen66GUVqKhU2q1Iz/lst8UZ4JAX9PF5ZvaJDJBQKfBREkoOl97TAxv
+   ivOXC9nETLtGlqbehtbjhUFuNKs0vgld8GNdb2sRMlAP2Jb+ydAUVhf0e
+   g==;
+X-CSE-ConnectionGUID: ap28Kxu8Q0uNerFRBAuSYA==
+X-CSE-MsgGUID: kapNbMCQQvu8dQ6695rYaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41835394"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41835394"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 10:45:37 -0800
+X-CSE-ConnectionGUID: JXbIrWCESACS6phQ1AkCqQ==
+X-CSE-MsgGUID: D5jfgmkXRwyWfuvgMCl/oA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
+   d="scan'208";a="85516951"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 06 Nov 2024 10:45:32 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t8l21-000pIy-2k;
+	Wed, 06 Nov 2024 18:45:29 +0000
+Date: Thu, 7 Nov 2024 02:45:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Peter Yin <peteryin.openbmc@gmail.com>,
+	Noah Wang <noahwang.wang@outlook.com>, Marek Vasut <marex@denx.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>
+Subject: Re: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a,
+ ltp8800-4a, and ltp8800-2
+Message-ID: <202411070232.xrxV7tVx-lkp@intel.com>
+References: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106152114.GA2738371@thelio-3990X>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <20241106030918.24849-3-cedricjustine.encarnacion@analog.com>
 
-Hi!
+Hi Cedric,
 
-On Wed, Nov 06, 2024 at 08:21:14AM -0700, Nathan Chancellor wrote:
-> > (r2 is the default for -m32, r13 is the default for -m64, it appears
-> > that clang does not implement this option at all, it simply checks if
-> > you set the default, and explodes if not).
-> 
-> Not sure that I would say it has not been implemented correctly, more
-> that it has not been implemented in the same manner as GCC. Keith chose
-> not to open up support for arbitrary registers to keep the
-> implementation of this option in LLVM simple:
+kernel test robot noticed the following build warnings:
 
-LLVM claims to be compatible to GCC.  It is not.  This is a bug.  As it
-is, LLVM can not be used to compile the PowerPC kernel.
+[auto build test WARNING on 30a984c0c9d8c631cc135280f83c441d50096b6d]
 
-These flags (-mstack-protector-guard-{reg,offset}=) are there
-*specifically* so that the user can choose to use something different
-from the default.  I added this (back in 2017) because the kernel needed
-it.  Some other GCC ports (aarch64, arm, riscv, x86) have followed suit
-since then, btw.
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-trivial-devices-add-ltp8800/20241106-111734
+base:   30a984c0c9d8c631cc135280f83c441d50096b6d
+patch link:    https://lore.kernel.org/r/20241106030918.24849-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH v2 2/2] hwmon: pmbus: add driver for ltp8800-1a, ltp8800-4a, and ltp8800-2
+config: x86_64-buildonly-randconfig-004-20241107 (https://download.01.org/0day-ci/archive/20241107/202411070232.xrxV7tVx-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411070232.xrxV7tVx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411070232.xrxV7tVx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/pmbus/ltp8800.c:7:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/pmbus/ltp8800.c:12:36: warning: unused variable 'ltp8800_reg_desc' [-Wunused-const-variable]
+      12 | static const struct regulator_desc ltp8800_reg_desc[] = {
+         |                                    ^~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-Segher
+vim +/ltp8800_reg_desc +12 drivers/hwmon/pmbus/ltp8800.c
+
+    11	
+  > 12	static const struct regulator_desc ltp8800_reg_desc[] = {
+    13		PMBUS_REGULATOR("vout", 0),
+    14	};
+    15	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
