@@ -1,256 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C22F2071F9
-	for <llvm@lists.linux.dev>; Wed,  6 Nov 2024 16:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15F920408D;
+	Wed,  6 Nov 2024 17:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730911188; cv=none; b=EkPAxOynHfsmpbAeW6eYDaNMFjLU6qEdc/+XG2MgtLz9VTZXLyu0VYlHjKWZNI1UMgl6j084BzlWe66yom9Uc7pyw98x7XXkxXHUgjciFZolrJ6wOyaaTA1kv4Z6sIKY23ssIanwVAYI70HRJBTFySBgf6W93cX7t0Mft+7DXyc=
+	t=1730915676; cv=none; b=vCMBd22KHPlFgky2Lg2RFalrzUbsZkNb1nsbAP80ciuII7yng3sB6wAoimEMv8N2Q2FrUEXYpABOtxrr3/is8q9RDgiHHZNMsSTgtoY3DAA2cTtyavJyEUs4vKddwvgWt/sR89AHTbVseIpfyjVz/Ti606nLaBvv0COjrbgYkjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730911188; c=relaxed/simple;
-	bh=rOw1cNxmV5yTPdcWqbOutZVPQ5MsIKIqjCjabDSKhXE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uaTsq2AHRuLRiBOsn5HEIiDimlhaq73MTnYP8dR0kBAi3RVEqN7m8mmjJOJwdgacZNNKKYt9Wfw8iUlS7aGCUA1ZFDLyx3WIV/pbzUAXcRms09xiqz1SrK3O9DwPkNss7kDD5Wo4AepkjbD1hf44u8n6fGbOaAbtJruOv8+7Ejc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOJE2JWN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730915676; c=relaxed/simple;
+	bh=cDz3GbfOlnxsDFkNUWxFouzEfiwqYtJwJJki0uFIs1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KUMqFwdgZYxLWrns0JaeSNaS/lwRimw/ri8FNwPCTGciqeFXRwZqyQFeJ9+7LwncYe6ZV81paqa/o5p+2GIZMzVzsqkDMbv/T/rctR/jDxnKc39FQz7pAlsVR/tZg7uEUi3h0RfQnnEvVJYHj+a7ASZ6LILqYED/P08D4+BHlFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VilI7UWP; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOJE2JWN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F59C4AF0C
-	for <llvm@lists.linux.dev>; Wed,  6 Nov 2024 16:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730911187;
-	bh=rOw1cNxmV5yTPdcWqbOutZVPQ5MsIKIqjCjabDSKhXE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dOJE2JWNU00uzXhi+LB+wCrqGUdVxslMiwlG0aSDLSQsdlhwI/QNcG33OSShSKNZh
-	 y9W6eZBqwPk9Pu95Seh+V/0AaAJpxiCBjWOLYiGz+HM3aFxSy0zdK9nKHlxAqmmbTz
-	 S0+9asjMtN+6oyDS23wFv9G8SFwCPQwGYS7v0ci/kwFY+HwKqYRp/HqKrZyQz87sh7
-	 qEMIZeOV+QYpWjz08xJQ0PXCCs7Ar9PX9KuLXgEGMuVFLE6OB84r8sd4JMG88Ihujg
-	 G5L/pyWQ3RYV4mvtaBT5j2rAldXL45X5beA8fFDPn41pzTJinMRxsGMLggXCKaosl9
-	 EGjezBzVP2cjQ==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2fb518014b9so60059521fa.3
-        for <llvm@lists.linux.dev>; Wed, 06 Nov 2024 08:39:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUdcoKGHZhJNMa1pe26s+/HT7xr6FM/vL4ADYlmfJ9+f1fd3fZrREtSwIIOQf0uZWwBsAfY@lists.linux.dev
-X-Gm-Message-State: AOJu0YyCtDLDHYtSTYMyLPFjcuBhv2rWB/Y3f86O7tb47QCg+lImY3/Q
-	8BzN4wzGOEcBGlsQvFzG4AzGTmgBhYTnmF6b96JE61JuCIxzSslzZnHsFXpz9trNDPItPAHHk46
-	RffmYxxnyxTnSZkEBBAM7t6cJ8rE=
-X-Google-Smtp-Source: AGHT+IHzF2jJ4wq8spwQz69HDRPf0ScsSSWGAuM4RFIdZYEHToQmNs2IgK6UCutHxy6jUQXVXP2UuZmv6s+hozl6jR4=
-X-Received: by 2002:a2e:a0cd:0:b0:2f7:4c9d:7a83 with SMTP id
- 38308e7fff4ca-2fcbe078a64mr157857151fa.40.1730911185367; Wed, 06 Nov 2024
- 08:39:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VilI7UWP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730915673; x=1762451673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cDz3GbfOlnxsDFkNUWxFouzEfiwqYtJwJJki0uFIs1k=;
+  b=VilI7UWPfQV9sT+1bGw2MeVyjJTXL/869c7spv7SQemJZ3NYfBw2vMQB
+   +jnLWmG9aEy9M8zlsl8K35BOcatjckFPUN71Hk1fRqDzWqOStvUyt8SwR
+   QSSWo4Zioe1fM45MUfUn+qCNN7h+tRPn6geIz6nutivkFCu+vRYtcVYkQ
+   zdBGNnZnYEk+GzrRJwTTsf2D5rftv2XLF8MBPgMK70rltd7hmrrqti41U
+   DINruTCkKGBOcl68RPlBd/XxhhAVb6Zuc7OTY403mVtWEY7vdRIgACwxX
+   AvROC2RIyeKVnGpB4fkWiyShyLBJlbYhVw+X9Hfc/xezz/9uCYF64C85X
+   A==;
+X-CSE-ConnectionGUID: eRCGYGMwTZSzzIsW6lROVg==
+X-CSE-MsgGUID: Vk7fF9EXQdq7J3fu2MGEvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="48246428"
+X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
+   d="scan'208";a="48246428"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 09:54:33 -0800
+X-CSE-ConnectionGUID: YZVQo7FOSumGqTal8BzSCQ==
+X-CSE-MsgGUID: 7nCFTiLDSaaGVdNjepMI+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
+   d="scan'208";a="115516600"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 06 Nov 2024 09:54:30 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t8kEd-000pFe-0h;
+	Wed, 06 Nov 2024 17:54:27 +0000
+Date: Thu, 7 Nov 2024 01:53:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liviu Dudau <liviu.dudau@arm.com>,
+	Boris Brezillon <bbrezillon@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steven Price <steven.price@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Jann Horn <jannh@google.com>
+Subject: Re: [PATCH] drm/panthor: Lock XArray when getting entries for heap
+ and VM
+Message-ID: <202411070115.YPuBa5QX-lkp@intel.com>
+References: <20241106120748.290697-1-liviu.dudau@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241106161445.189399-1-masahiroy@kernel.org> <20241106161445.189399-2-masahiroy@kernel.org>
-In-Reply-To: <20241106161445.189399-2-masahiroy@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 7 Nov 2024 01:39:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARKPGTbYdM5LxWD=_H6erPwxwb7XjTBBse3w28Yeb08vg@mail.gmail.com>
-Message-ID: <CAK7LNARKPGTbYdM5LxWD=_H6erPwxwb7XjTBBse3w28Yeb08vg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Rename .data.once to .data..once to fix resetting WARN*_ONCE
-To: linux-kbuild@vger.kernel.org
-Cc: Nicholas Piggin <npiggin@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Simon Horman <horms@kernel.org>, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241106120748.290697-1-liviu.dudau@arm.com>
 
-On Thu, Nov 7, 2024 at 1:15=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> Commit b1fca27d384e ("kernel debug: support resetting WARN*_ONCE")
-> added support for clearing the state of once warnings. However,
-> it is not functional when CONFIG_LD_DEAD_CODE_DATA_ELIMINATION or
-> CONFIG_LTO_CLANG is enabled, because .data.unlikely matches the
+Hi Liviu,
 
-This is a copy-paste error.
+kernel test robot noticed the following build errors:
 
-  s/.data.unlikely/.data.once/
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.12-rc6 next-20241106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Liviu-Dudau/drm-panthor-Lock-XArray-when-getting-entries-for-heap-and-VM/20241106-200841
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20241106120748.290697-1-liviu.dudau%40arm.com
+patch subject: [PATCH] drm/panthor: Lock XArray when getting entries for heap and VM
+config: x86_64-buildonly-randconfig-002-20241106 (https://download.01.org/0day-ci/archive/20241107/202411070115.YPuBa5QX-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411070115.YPuBa5QX-lkp@intel.com/reproduce)
 
-> .data.[0-9a-zA-Z_]* pattern in the DATA_MAIN macro.
->
-> Commit cb87481ee89d ("kbuild: linker script do not match C names unless
-> LD_DEAD_CODE_DATA_ELIMINATION is configured") was introduced to suppress
-> the issue for the default CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=3Dn case,
-> providing a minimal fix for stable backporting. We were aware this did
-> not address the issue for CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=3Dy. The
-> plan was to apply correct fixes and then revert cb87481ee89d. [1]
->
-> Seven years have passed since then, yet the #ifdef workaround remains in
-> place. Meanwhile, commit b1fca27d384e introduced the .data.once section,
-> and commit dc5723b02e52 ("kbuild: add support for Clang LTO") extended
-> the #ifdef.
->
-> Using a ".." separator in the section name fixes the issue for
-> CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and CONFIG_LTO_CLANG.
->
-> [1]: https://lore.kernel.org/linux-kbuild/CAK7LNASck6BfdLnESxXUeECYL26yUD=
-m0cwRZuM4gmaWUkxjL5g@mail.gmail.com/
->
-> Fixes: b1fca27d384e ("kernel debug: support resetting WARN*_ONCE")
-> Fixes: dc5723b02e52 ("kbuild: add support for Clang LTO")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  include/asm-generic/vmlinux.lds.h | 2 +-
->  include/linux/mmdebug.h           | 6 +++---
->  include/linux/once.h              | 4 ++--
->  include/linux/once_lite.h         | 2 +-
->  include/net/net_debug.h           | 2 +-
->  mm/internal.h                     | 2 +-
->  6 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
-nux.lds.h
-> index 3c9dc1fd094d..54504013c749 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -359,7 +359,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPE=
-LLER_CLANG)
->         *(.data..shared_aligned) /* percpu related */                   \
->         *(.data..unlikely)                                              \
->         __start_once =3D .;                                              =
- \
-> -       *(.data.once)                                                   \
-> +       *(.data..once)                                                  \
->         __end_once =3D .;                                                =
- \
->         STRUCT_ALIGN();                                                 \
->         *(__tracepoints)                                                \
-> diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
-> index 39a7714605a7..d7cb1e5ecbda 100644
-> --- a/include/linux/mmdebug.h
-> +++ b/include/linux/mmdebug.h
-> @@ -46,7 +46,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi)=
-;
->                 }                                                       \
->         } while (0)
->  #define VM_WARN_ON_ONCE_PAGE(cond, page)       ({                      \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(__ret_warn_once && !__warned)) {                   \
-> @@ -66,7 +66,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi)=
-;
->         unlikely(__ret_warn);                                           \
->  })
->  #define VM_WARN_ON_ONCE_FOLIO(cond, folio)     ({                      \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(__ret_warn_once && !__warned)) {                   \
-> @@ -77,7 +77,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi)=
-;
->         unlikely(__ret_warn_once);                                      \
->  })
->  #define VM_WARN_ON_ONCE_MM(cond, mm)           ({                      \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(__ret_warn_once && !__warned)) {                   \
-> diff --git a/include/linux/once.h b/include/linux/once.h
-> index bc714d414448..30346fcdc799 100644
-> --- a/include/linux/once.h
-> +++ b/include/linux/once.h
-> @@ -46,7 +46,7 @@ void __do_once_sleepable_done(bool *done, struct static=
-_key_true *once_key,
->  #define DO_ONCE(func, ...)                                              =
-    \
->         ({                                                               =
-    \
->                 bool ___ret =3D false;                                   =
-      \
-> -               static bool __section(".data.once") ___done =3D false;   =
-      \
-> +               static bool __section(".data..once") ___done =3D false;  =
-      \
->                 static DEFINE_STATIC_KEY_TRUE(___once_key);              =
-    \
->                 if (static_branch_unlikely(&___once_key)) {              =
-    \
->                         unsigned long ___flags;                          =
-    \
-> @@ -64,7 +64,7 @@ void __do_once_sleepable_done(bool *done, struct static=
-_key_true *once_key,
->  #define DO_ONCE_SLEEPABLE(func, ...)                                    =
-       \
->         ({                                                               =
-       \
->                 bool ___ret =3D false;                                   =
-         \
-> -               static bool __section(".data.once") ___done =3D false;   =
-         \
-> +               static bool __section(".data..once") ___done =3D false;  =
-         \
->                 static DEFINE_STATIC_KEY_TRUE(___once_key);              =
-       \
->                 if (static_branch_unlikely(&___once_key)) {              =
-       \
->                         ___ret =3D __do_once_sleepable_start(&___done);  =
-         \
-> diff --git a/include/linux/once_lite.h b/include/linux/once_lite.h
-> index b7bce4983638..27de7bc32a06 100644
-> --- a/include/linux/once_lite.h
-> +++ b/include/linux/once_lite.h
-> @@ -12,7 +12,7 @@
->
->  #define __ONCE_LITE_IF(condition)                                      \
->         ({                                                              \
-> -               static bool __section(".data.once") __already_done;     \
-> +               static bool __section(".data..once") __already_done;    \
->                 bool __ret_cond =3D !!(condition);                       =
- \
->                 bool __ret_once =3D false;                               =
- \
->                                                                         \
-> diff --git a/include/net/net_debug.h b/include/net/net_debug.h
-> index 1e74684cbbdb..4a79204c8d30 100644
-> --- a/include/net/net_debug.h
-> +++ b/include/net/net_debug.h
-> @@ -27,7 +27,7 @@ void netdev_info(const struct net_device *dev, const ch=
-ar *format, ...);
->
->  #define netdev_level_once(level, dev, fmt, ...)                        \
->  do {                                                           \
-> -       static bool __section(".data.once") __print_once;       \
-> +       static bool __section(".data..once") __print_once;      \
->                                                                 \
->         if (!__print_once) {                                    \
->                 __print_once =3D true;                            \
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 93083bbeeefa..a23f7b11b760 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -48,7 +48,7 @@ struct folio_batch;
->   * when we specify __GFP_NOWARN.
->   */
->  #define WARN_ON_ONCE_GFP(cond, gfp)    ({                              \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(!(gfp & __GFP_NOWARN) && __ret_warn_once && !__warne=
-d)) { \
-> --
-> 2.43.0
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411070115.YPuBa5QX-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/panthor/panthor_heap.c:9:
+   In file included from drivers/gpu/drm/panthor/panthor_device.h:10:
+   In file included from include/linux/io-pgtable.h:6:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/panthor/panthor_heap.c:354:57: error: declaration of 'struct pathor_heap_pool' will not be visible outside of this function [-Werror,-Wvisibility]
+     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+         |                                                         ^
+   drivers/gpu/drm/panthor/panthor_heap.c:358:15: error: incomplete definition of type 'struct pathor_heap_pool'
+     358 |         xa_lock(&pool->xa);
+         |                  ~~~~^
+   include/linux/xarray.h:536:34: note: expanded from macro 'xa_lock'
+     536 | #define xa_lock(xa)             spin_lock(&(xa)->xa_lock)
+         |                                             ^~
+   drivers/gpu/drm/panthor/panthor_heap.c:354:57: note: forward declaration of 'struct pathor_heap_pool'
+     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+         |                                                         ^
+   drivers/gpu/drm/panthor/panthor_heap.c:359:22: error: incomplete definition of type 'struct pathor_heap_pool'
+     359 |         heap = xa_load(&pool->xa, id);
+         |                         ~~~~^
+   drivers/gpu/drm/panthor/panthor_heap.c:354:57: note: forward declaration of 'struct pathor_heap_pool'
+     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+         |                                                         ^
+   drivers/gpu/drm/panthor/panthor_heap.c:360:17: error: incomplete definition of type 'struct pathor_heap_pool'
+     360 |         xa_unlock(&pool->va);
+         |                    ~~~~^
+   include/linux/xarray.h:537:38: note: expanded from macro 'xa_unlock'
+     537 | #define xa_unlock(xa)           spin_unlock(&(xa)->xa_lock)
+         |                                               ^~
+   drivers/gpu/drm/panthor/panthor_heap.c:354:57: note: forward declaration of 'struct pathor_heap_pool'
+     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+         |                                                         ^
+   drivers/gpu/drm/panthor/panthor_heap.c:389:30: error: incompatible pointer types passing 'struct panthor_heap_pool *' to parameter of type 'struct pathor_heap_pool *' [-Werror,-Wincompatible-pointer-types]
+     389 |         heap = panthor_heap_from_id(pool, heap_id);
+         |                                     ^~~~
+   drivers/gpu/drm/panthor/panthor_heap.c:354:75: note: passing argument to parameter 'pool' here
+     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+         |                                                                           ^
+   drivers/gpu/drm/panthor/panthor_heap.c:452:30: error: incompatible pointer types passing 'struct panthor_heap_pool *' to parameter of type 'struct pathor_heap_pool *' [-Werror,-Wincompatible-pointer-types]
+     452 |         heap = panthor_heap_from_id(pool, heap_id);
+         |                                     ^~~~
+   drivers/gpu/drm/panthor/panthor_heap.c:354:75: note: passing argument to parameter 'pool' here
+     354 | static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+         |                                                                           ^
+   10 errors generated.
 
 
---=20
-Best Regards
-Masahiro Yamada
+vim +354 drivers/gpu/drm/panthor/panthor_heap.c
+
+   353	
+ > 354	static struct panthor_heap *panthor_heap_from_id(struct pathor_heap_pool *pool, u32 id)
+   355	{
+   356		struct panthor_heap *heap;
+   357	
+   358		xa_lock(&pool->xa);
+   359		heap = xa_load(&pool->xa, id);
+   360		xa_unlock(&pool->va);
+   361	
+   362		return heap;
+   363	}
+   364	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
