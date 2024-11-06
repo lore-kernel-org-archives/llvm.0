@@ -1,102 +1,283 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E55C207A1A;
-	Wed,  6 Nov 2024 18:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B730209698
+	for <llvm@lists.linux.dev>; Wed,  6 Nov 2024 19:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730919411; cv=none; b=djxISm8FT2C+RB1GaT28/CPBjwUpAUXZDGn9Gd1YoRaCuBhHw7Nl6SKZlFLsr7fM3O7rkHKpyu4ajOuYOpf9hMTG1kPK/XutC7iehDvBR+P9jMuNvnkooC8vQzV1dZHflbIkqT+BELWBlpOE1FUDF5kuEcS2xZz9N3u9clor8LA=
+	t=1730919645; cv=none; b=NhwfvWACwZt8wz5698jA/+XY3eX1XHlixAPFGgPWxHRfZyjfpuevCfEZ8Yr5uiv6Go2hu8+7ELLy38azqeq7XlyojO42QCBlkPYwXbXhYAdA9Trkj2dR/CyGpvb/+Di1IKUkeAxsTM8HnSHI1a7lTSJxUiLFdW6jvfwsFwhrV+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730919411; c=relaxed/simple;
-	bh=WeOYK2Ugv5uXCeV4l3zpKEBTYXRLPK10LIXAB2A6XnU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tsNag7jKTFYktkiPSePmF1nrU5f40Q6Ru+1UtJurF2a8Zb9q6BeSyI02I9yQM4L1XRv8ZvLRLC7ixLv2yQuGmLuK1KOzDF7dMxK62odo3Ky1KS4+L+CjBVi3qcBa1tiU0246rpLm9w1G90G32HzT8fenMHKUbaj9v32VMrjeARY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AVU3aZZ1; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730919645; c=relaxed/simple;
+	bh=bxYqRa17reDCR3qi3gqKwOHIfaaPVANr77NN2TmRhAU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QDd/nqiyU7JsrrFiHHtLlT3x460c+VBzl0LBOuTuNbluz+fe8wwaMnMoJcw1WA67ERurBUrUsOE28M/4CCjVCMrWsvykiFHt1fxjvR9YNwqETEY4ptIrRxJ9EbpEKi/uJMPCEBSZb8FcWHTc4gxEDZAayCAUg1mvdGYJlhq7DWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P2wf0n2x; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AVU3aZZ1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730919408; x=1762455408;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WeOYK2Ugv5uXCeV4l3zpKEBTYXRLPK10LIXAB2A6XnU=;
-  b=AVU3aZZ15jfJCeLCNj/zh7Ue8t6pWblYxHSYi2OUcUzuCZ5ngJ2ZFyyx
-   EUJhtMT13/gp3zfi9jORCMLR9BsMSabxWF3R6uPHtKOYuf5pckeM46ZFi
-   OmxLN2UIZBZNGvJWx6G2bazOSFt9olBTbRmzDjsi0EDJWOxn43Jq6wF3g
-   Y5sVPGSi8f+WjiJoCLMrvzNbQDHyPooInC7MSH2Oy1JXAvDlrvQHPyToE
-   ZFwDGHSFKD9Rp6W3hi1ADBEn8OdhrE+klTPoaU6gbkQq4GEAoNA7fwJoj
-   8Mw53BuF6XCCZVToYHFuaWnH6IoQCXKtkolCishgVuGTlmuzjJeQPJKCj
-   A==;
-X-CSE-ConnectionGUID: Sg3LJSsESKWI6RRHCiU0HQ==
-X-CSE-MsgGUID: 9pcqMyPKTqKLs8csrPsmKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="41357889"
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="41357889"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 10:56:47 -0800
-X-CSE-ConnectionGUID: W/DY7m6ORbiTLi1LGT9rSA==
-X-CSE-MsgGUID: FeROC1g6SKKjySQSZKU9AQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,263,1725346800"; 
-   d="scan'208";a="89289376"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 06 Nov 2024 10:56:32 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8lCg-000pJU-1i;
-	Wed, 06 Nov 2024 18:56:30 +0000
-Date: Thu, 7 Nov 2024 02:56:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marek Vasut <marex@denx.de>, linux-hwmon@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marek Vasut <marex@denx.de>, Conor Dooley <conor+dt@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (pwm-fan) Introduce start from dead stop
- handling
-Message-ID: <202411070251.mEqY5ErJ-lkp@intel.com>
-References: <20241105135259.101126-2-marex@denx.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P2wf0n2x"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4608dddaa35so34751cf.0
+        for <llvm@lists.linux.dev>; Wed, 06 Nov 2024 11:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730919619; x=1731524419; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H9fh4bhhNbF5bLblOSaq+n0wJRTjplH0ZRkQKHqc2Jw=;
+        b=P2wf0n2x7/ONwkJ+hERom4tGIZdwuCB1I5DCx2zeOCOfBJN1KGDZg5vG/naQsBI8PI
+         cx2hLgOiwvYiJwfdDnhgKjQp+FWXTmyrSi4uADGJEeIGjU1FJmnMwKq89Kdl3FPa0S0X
+         4ZjNDDl3B362o5RAziYrgKcq8vxyd6k5st//qDttu+3aVX/8q+tf6yacV74g8Rdrl3xO
+         o+Qq8urkEVrUeuD55ZDNHICnxPY+pmG44vfWAfao8+iM3cW+88n80eR3klARob5yJv66
+         axi512Q7q0pkcERPGYAslGuHz69jW539tWhSby38iK3c07zwzNfseqRjG7BBEKYTj6e+
+         eiYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730919619; x=1731524419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H9fh4bhhNbF5bLblOSaq+n0wJRTjplH0ZRkQKHqc2Jw=;
+        b=F6sgOCUALlGC9Tdm4GnU/ugAhKp7/mv+uLWOnO4K9LuXtQd0gyQqwxUB5EVZ1mkGHC
+         yUD47HDU3cbuEzZBlDKM8g8R0wp9OkXtneXFal6Z322n7K0zn/Hhj6+6fEiopYPeakdo
+         QPTW/8jmm0mszrw5o0U5AiwdmUUIyz76uONpc23QclspCGWjVExPbk9fvqKVl1pR5jc3
+         f79zZgkraJpQJ8/7BdlGuQLmUO2/rSUYyebMZ/y751mcjyNI7y8d0eCeH6VrZkESv543
+         yw7oXbXQ6P7rx3uw0pOt6OLGwE46bVvoMpBsWUIWBYXWCjT+OmS1j9y2CJkg+REB/6zB
+         Wd7g==
+X-Forwarded-Encrypted: i=1; AJvYcCVY9Ye29HDVEBfgBjebTVXA80U/Fvl2vLo5qXCtPohhRJ4XO6I2SJtPbfyBHSF9mCn4q6nl@lists.linux.dev
+X-Gm-Message-State: AOJu0YymwZq+ycsclLv79WwHsGvY9IgE6lJz2JE1cZLZoOOqbOj0c1ZF
+	R2uveFqXcFPZ4J+/6FndxZ3stCZPwpsFAj0ovFgkZtSAvMWUCqTt1OkIyyOTE8hbFEr82//lvIv
+	GyfjJ2ZlhaVBrX5VozLUhtWAR6RsiRXjAUuIh
+X-Gm-Gg: ASbGncsBZhPSiWInslZBwEdx1ktWImfhgwcb1DmtGdkhIduSnjMxwytlMUFDyina4mY
+	PWQSZHUuKLKzdMwXTyC53433BFREsYHx0VxZHrXtHR7vxwAMgG/MokWO34Zjg1g==
+X-Google-Smtp-Source: AGHT+IGmJPKzMHGg7M75nIDLes/dj6VeWqdxQ5VXcaPURxNxzrC5fWIx3w4oUPysqvDGrtdU7x3+PgaWkDnF08Swq5w=
+X-Received: by 2002:ac8:5d55:0:b0:462:b44c:42ff with SMTP id
+ d75a77b69052e-462fa58ed21mr1232211cf.12.1730919618655; Wed, 06 Nov 2024
+ 11:00:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241105135259.101126-2-marex@denx.de>
+References: <20241102175115.1769468-1-xur@google.com> <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
+In-Reply-To: <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
+From: Rong Xu <xur@google.com>
+Date: Wed, 6 Nov 2024 11:00:06 -0800
+Message-ID: <CAF1bQ=R-7z9+57fji4Mn=ZVUgwSniGQ-8H4=42tFunxyp69Wzw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/7] Add AutoFDO and Propeller support for Clang build
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Marek,
+On Wed, Nov 6, 2024 at 8:09=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+>
+> On Sun, Nov 3, 2024 at 2:51=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+> >
+> > Hi,
+> >
+> > This patch series is to integrate AutoFDO and Propeller support into
+> > the Linux kernel. AutoFDO is a profile-guided optimization technique
+> > that leverages hardware sampling to enhance binary performance.
+> > Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
+> > and straightforward application process. While iFDO generally yields
+> > superior profile quality and performance, our findings reveal that
+> > AutoFDO achieves remarkable effectiveness, bringing performance close
+> > to iFDO for benchmark applications.
+> >
+> > Propeller is a profile-guided, post-link optimizer that improves
+> > the performance of large-scale applications compiled with LLVM. It
+> > operates by relinking the binary based on an additional round of runtim=
+e
+> > profiles, enabling precise optimizations that are not possible at
+> > compile time.  Similar to AutoFDO, Propeller too utilizes hardware
+> > sampling to collect profiles and apply post-link optimizations to impro=
+ve
+> > the benchmark=E2=80=99s performance over and above AutoFDO.
+> >
+> > Our empirical data demonstrates significant performance improvements
+> > with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
+> > on large warehouse-scale benchmarks. This makes a strong case for their
+> > inclusion as supported features in the upstream kernel.
+> >
+> > Background
+> >
+> > A significant fraction of fleet processing cycles (excluding idle time)
+> > from data center workloads are attributable to the kernel. Ware-house
+> > scale workloads maximize performance by optimizing the production kerne=
+l
+> > using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
+> >
+> > iFDO can significantly enhance application performance but its use
+> > within the kernel has raised concerns. AutoFDO is a variant of FDO that
+> > uses the hardware=E2=80=99s Performance Monitoring Unit (PMU) to collec=
+t
+> > profiling data. While AutoFDO typically yields smaller performance
+> > gains than iFDO, it presents unique benefits for optimizing kernels.
+> >
+> > AutoFDO eliminates the need for instrumented kernels, allowing a single
+> > optimized kernel to serve both execution and profile collection. It als=
+o
+> > minimizes slowdown during profile collection, potentially yielding
+> > higher-fidelity profiling, especially for time-sensitive code, compared
+> > to iFDO. Additionally, AutoFDO profiles can be obtained from production
+> > environments via the hardware=E2=80=99s PMU whereas iFDO profiles requi=
+re
+> > carefully curated load tests that are representative of real-world
+> > traffic.
+> >
+> > AutoFDO facilitates profile collection across diverse targets.
+> > Preliminary studies indicate significant variation in kernel hot spots
+> > within Google=E2=80=99s infrastructure, suggesting potential performanc=
+e gains
+> > through target-specific kernel customization.
+> >
+> > Furthermore, other advanced compiler optimization techniques, including
+> > ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO=
+.
+> > ThinLTO achieves better runtime performance through whole-program
+> > analysis and cross module optimizations. The main difference between
+> > traditional LTO and ThinLTO is that the latter is scalable in time and
+> > memory.
+> >
+> > This patch series adds AutoFDO and Propeller support to the kernel. The
+> > actual solution comes in six parts:
+> >
+> > [P 1] Add the build support for using AutoFDO in Clang
+> >
+> >       Add the basic support for AutoFDO build and provide the
+> >       instructions for using AutoFDO.
+> >
+> > [P 2] Fix objtool for bogus warnings when -ffunction-sections is enable=
+d
+> >
+> > [P 3] Adjust symbol ordering in text output sections
+> >
+> > [P 4] Add markers for text_unlikely and text_hot sections
+> >
+> > [P 5] Enable =E2=80=93ffunction-sections for the AutoFDO build
+> >
+> > [P 6] Enable Machine Function Split (MFS) optimization for AutoFDO
+> >
+> > [P 7] Add Propeller configuration to the kernel build
+> >
+> > Patch 1 provides basic AutoFDO build support. Patches 2 to 6 further
+> > enhance the performance of AutoFDO builds and are functionally dependen=
+t
+> > on Patch 1. Patch 7 enables support for Propeller and is dependent on
+> > patch 2 to patch 4.
+> >
+> > Caveats
+> >
+> > AutoFDO is compatible with both GCC and Clang, but the patches in this
+> > series are exclusively applicable to LLVM 17 or newer for AutoFDO and
+> > LLVM 19 or newer for Propeller. For profile conversion, two different
+> > tools could be used, llvm_profgen or create_llvm_prof. llvm_profgen
+> > needs to be the LLVM 19 or newer, or just the LLVM trunk. Alternatively=
+,
+> > create_llvm_prof v0.30.1 or newer can be used instead of llvm-profgen.
+> >
+> > Additionally, the build is only supported on x86 platforms equipped
+> > with PMU capabilities, such as LBR on Intel machines. More
+> > specifically:
+> >  * Intel platforms: works on every platform that supports LBR;
+> >    we have tested on Skylake.
+> >  * AMD platforms: tested on AMD Zen3 with the BRS feature. The kernel
+> >    needs to be configured with =E2=80=9CCONFIG_PERF_EVENTS_AMD_BRS=3Dy"=
+, To
+> >    check, use
+> >    $ cat /proc/cpuinfo | grep =E2=80=9C brs=E2=80=9D
+> >    For the AMD Zen4, AMD LBRV2 is supported, but we suspect a bug with
+> >    AMD LBRv2 implementation in Genoa which blocks the usage.
+> >
+> > For ARM, we plan to send patches for SPE-based Propeller when
+> > AutoFDO for Arm is ready.
+> >
+> > Experiments and Results
+> >
+> > Experiments were conducted to compare the performance of AutoFDO-optimi=
+zed
+> > kernel images (version 6.9.x) against default builds.. The evaluation
+> > encompassed both open source microbenchmarks and real-world production
+> > services from Google and Meta. The selected microbenchmarks included Ne=
+per,
+> > a network subsystem benchmark, and UnixBench which is a comprehensive s=
+uite
+> > for assessing various kernel operations.
+> >
+> > For Neper, AutoFDO optimization resulted in a 6.1% increase in throughp=
+ut
+> > and a 10.6% reduction in latency. UnixBench saw a 2.2% improvement in i=
+ts
+> > index score under low system load and a 2.6% improvement under high sys=
+tem
+> > load.
+> >
+> > For further details on the improvements observed in Google and Meta's
+> > production services, please refer to the LLVM discourse post:
+> > https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autofdo-i=
+ncluding-thinlto-and-propeller/79108
+> >
+> > Thanks,
+> >
+> > Rong Xu and Han Shen
+>
+>
+> I applied this series to linux-kbuild.
+>
 
-kernel test robot noticed the following build errors:
+Thanks for taking the patch!
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.12-rc6 next-20241106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> As I mentioned before, I do not like #ifdef because
+> it hides (not fixes) issues only for default cases.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marek-Vasut/hwmon-pwm-fan-Introduce-start-from-dead-stop-handling/20241105-215454
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20241105135259.101126-2-marex%40denx.de
-patch subject: [PATCH 2/2] hwmon: (pwm-fan) Introduce start from dead stop handling
-config: i386-randconfig-016-20241106 (https://download.01.org/0day-ci/archive/20241107/202411070251.mEqY5ErJ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411070251.mEqY5ErJ-lkp@intel.com/reproduce)
+We followed the suggestion and removed most of the #if (or #ifdef) in
+the linker script.
+I just checked: there are two #ifdef remaining:
+(1) in the propeller patch for .llvm_bb_addr_map
+(2) in linker script patch for arch/sparc/kernel/vmlinux.lds.S.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411070251.mEqY5ErJ-lkp@intel.com/
+I think it's likely safe to remove the checks for head_64.o in
+non-SPARC64 builds and .llvm_bb_addr_map symbols in non-propeller builds.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+SPARC64 builds should always produce head_64.o, and non-SPARC64
+builds shouldn't.
 
->> ERROR: modpost: "__udivdi3" [drivers/hwmon/pwm-fan.ko] undefined!
+Propeller builds always generate .llvm_bb_addr_map symbols, and the
+linker will omit the section if it's empty in non-propeller builds.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Keeping the checks is harmless and might slightly reduce linker
+workload for matching.
+But If you'd prefer to remove them, I'm happy to provide a patch.
+
+Best regards,
+
+-Rong
+
+
+
+
+>
+> --
+> Best Regards
+> Masahiro Yamada
