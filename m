@@ -1,201 +1,83 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BE7171C9;
-	Wed,  6 Nov 2024 12:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD181E04AD;
+	Wed,  6 Nov 2024 13:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730896376; cv=none; b=d3r4gBuzF1LZruwc8NsX2hfsDVIAKjGJggiCbwgPOZrB9WCKoRFnW7V2QtNDnGmRs2cQ5DyUlU0rxEm3vL5vw+SCJ9wpsMSpjHGWR5dIFwHc1HPtN+k6vNDFhvFMnk2sO9aR3M477XVXn1shDHJewUSbjb7yZ0hM3of/MNckT/E=
+	t=1730898748; cv=none; b=fAH9Ly+vjSFhE9LC1CSNHqVuejoEw2b5wx9udpwJODhoz6Q/XemdxKTKG16/sCbAjpzonh5h+Du6GWQnPbS2Gy6drBmx9tFsGnaGSgST+nELCL/LnzuyIFGNTtqJGmbt6zVISQW7sMB7evaSzsG+k6kECWDY5uOUazUchOVUAmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730896376; c=relaxed/simple;
-	bh=pAaxQ9Gjz6nuJzTKxrooqmYKq2ChzragGuK0hhgnAHs=;
+	s=arc-20240116; t=1730898748; c=relaxed/simple;
+	bh=3SfESvrKfdyPsR2Toa1m1lCX2fQeSf+A2nGffmF11BM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NiM4958EezLARlLduonGNaNBh+ReZvvMHFSE1F/ivoRcRQpvOgnB+z85G7GKNccnGfoFNi0g/3RVkvS6fBMtbEYi9JRzVuTcDD3jYMbjpP4HBQki+xeAmV25Me51TFLdpj9g9NhhOOHwhiDyWa/PbEY6tD2KL1v+9KypjutwgkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j7ksSaeb; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fGenyS9gPLtx7E6bODNeeZZ1/tPEJEKkj+J4+/XTZkcJPYSWn6uQWcm6BCDFIiFRAkL5j1sotrOTiaSCg+PyMx41lyM+YpaMufL1+abpqBQdrCJyRxT2vVBw5+11Ify9NVwF2YJtwBhmxSsnjU1hfVN17jLcZMU/yk76lDNu0oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BGmwz3OA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j7ksSaeb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730896375; x=1762432375;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pAaxQ9Gjz6nuJzTKxrooqmYKq2ChzragGuK0hhgnAHs=;
-  b=j7ksSaebWgX3MiCldODAM+8bM9EMsCy3R3XWhZqQspIL4TApE45d48TD
-   WUcnIx9NXIBWZOKMJo4THl9Y8kzdI4VT+pMW/pn9pEK2eOOxOi9ScjY7z
-   dA2QuZhcjR9MP9fPZ0RP/9sbqB5vjojmIi7AQZ9U/WUllswh8Twt/CqIV
-   faPbY0ds1sD2L9n+a5TuOjxwZXt4/m5y25zs6vaEF/AHjNw1IvpEv2idm
-   2gTXoAObQaM0lxrJ5UUVoL8LlTgrdUyE+CeKimH0gftxogeylKFaS1vQa
-   3tAObnG/yloKR/IHTzAchmwC8a9bzHVLY279w1Eh6OmQmO721qerM6i6N
-   w==;
-X-CSE-ConnectionGUID: +ygHOyrORr2XRJD1nwQxAA==
-X-CSE-MsgGUID: mK6qxoAgScqK7EH5uASfKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="30796866"
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="30796866"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 04:32:54 -0800
-X-CSE-ConnectionGUID: K2WuBYXxT2Oz0PvRjM0onQ==
-X-CSE-MsgGUID: OehlV23PTxyEfmktAHBvXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="122042036"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 06 Nov 2024 04:31:34 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8fC7-000neY-2J;
-	Wed, 06 Nov 2024 12:31:31 +0000
-Date: Wed, 6 Nov 2024 20:30:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eason Yang <j2anfernee@gmail.com>, avifishman70@gmail.com,
-	tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-	yuenn@google.com, benjaminfair@google.com, jic23@kernel.org,
-	lars@metafoo.de, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
-	javier.carrasco.cruz@gmail.com, andy@kernel.org,
-	marcelo.schmitt@analog.com, olivier.moysan@foss.st.com,
-	mitrutzceclan@gmail.com, matteomartelli3@gmail.com,
-	alisadariana@gmail.com, joao.goncalves@toradex.com,
-	marius.cristea@microchip.com, mike.looijmans@topic.nl,
-	chanh@os.amperecomputing.com, KWLIU@nuvoton.com,
-	yhyang2@nuvoton.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	openbmc@lists.ozlabs.org, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] iio: adc: add Nuvoton NCT720x ADC driver
-Message-ID: <202411062051.TLRkJSSL-lkp@intel.com>
-References: <20241106023916.440767-3-j2anfernee@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BGmwz3OA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74AE1C4CED4;
+	Wed,  6 Nov 2024 13:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730898747;
+	bh=3SfESvrKfdyPsR2Toa1m1lCX2fQeSf+A2nGffmF11BM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BGmwz3OAHtxzQimhPb+0ta8GU6ekMnC0Nr55rDVo5Z3eBQBSlzx2R0yCIlpqJTOug
+	 j2jouZOq2FDue45FB9L57askeLY0wQvdBhk/Gs0RrA+xfuh6r844UNGSxzP1OQXWIs
+	 WXhKJLIxD2erc+Tx9VY3wDSHDZY+JfqC87LI5/t4yCyTb2NIa+Jd6NPO6/Ndk+e/sn
+	 7wPD0pSWLEOAvVSYTLYShwVsWDCllhThbE4uSdrDpnIealbuz3ZctYPnh6JBIFnxXG
+	 77B/lfXugrwKHs9CL6LdpZVWzV+0Ah6f+DmjxZMCmxviBIoCDOqDZRF9mx6ufS7cB3
+	 YKiC40WL00LVg==
+Date: Wed, 6 Nov 2024 13:12:23 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org, conor.dooley@microchip.com,
+	Jason Montleon <jmontleo@redhat.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: FAILED: Patch "RISC-V: disallow gcc + rust builds" failed to
+ apply to v6.11-stable tree
+Message-ID: <20241106-undead-cupbearer-a22f27c8b9e2@spud>
+References: <20241106020840.164364-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="T7IwLFePnUSWKnbZ"
+Content-Disposition: inline
+In-Reply-To: <20241106020840.164364-1-sashal@kernel.org>
+
+
+--T7IwLFePnUSWKnbZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106023916.440767-3-j2anfernee@gmail.com>
 
-Hi Eason,
+On Tue, Nov 05, 2024 at 09:08:39PM -0500, Sasha Levin wrote:
+> The patch below does not apply to the v6.11-stable tree.
+> If someone wants it applied there, or to any other stable or longterm
+> tree, then please email the backport, including the original git commit
+> id to <stable@vger.kernel.org>.
 
-kernel test robot noticed the following build warnings:
+I sent 20241106-happily-unknotted-9984b07a414e@spud that should be a
+6.11 viable version of this change.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.12-rc6 next-20241106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cheers,
+Conor.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eason-Yang/dt-bindings-iio-adc-Add-binding-for-Nuvoton-NCT720x-ADCs/20241106-104046
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20241106023916.440767-3-j2anfernee%40gmail.com
-patch subject: [PATCH v1 2/2] iio: adc: add Nuvoton NCT720x ADC driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241106/202411062051.TLRkJSSL-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411062051.TLRkJSSL-lkp@intel.com/reproduce)
+--T7IwLFePnUSWKnbZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411062051.TLRkJSSL-lkp@intel.com/
+-----BEGIN PGP SIGNATURE-----
 
-All warnings (new ones prefixed by >>):
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZytrNwAKCRB4tDGHoIJi
+0lrZAQDwZgrJpDCrMBOUflphmluD0ARCIvhYF9shsNzm9sAm5gEA4dQEww2rvB2W
+ETWhXsstVjfNvdt4kg8SZh+nFLTwKQc=
+=IEMP
+-----END PGP SIGNATURE-----
 
-   In file included from drivers/iio/adc/nct720x.c:9:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iio/adc/nct720x.c:526:16: warning: cast to smaller integer type 'enum nct720x_chips' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     526 |                 chip->type = (enum nct720x_chips)device_get_match_data(&client->dev);
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
-
-
-vim +526 drivers/iio/adc/nct720x.c
-
-   511	
-   512	static int nct720x_probe(struct i2c_client *client)
-   513	{
-   514		const struct i2c_device_id *id = i2c_client_get_device_id(client);
-   515		struct nct720x_chip_info *chip;
-   516		struct iio_dev *indio_dev;
-   517		int ret;
-   518		u32 tmp;
-   519	
-   520		indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*chip));
-   521		if (!indio_dev)
-   522			return -ENOMEM;
-   523		chip = iio_priv(indio_dev);
-   524	
-   525		if (client->dev.of_node)
- > 526			chip->type = (enum nct720x_chips)device_get_match_data(&client->dev);
-   527		else
-   528			chip->type = i2c_match_id(nct720x_id, client)->driver_data;
-   529	
-   530		chip->vin_max = (chip->type == nct7201) ? NCT7201_VIN_MAX : NCT7202_VIN_MAX;
-   531	
-   532		ret = of_property_read_u32(client->dev.of_node, "read-vin-data-size", &tmp);
-   533		if (ret < 0) {
-   534			pr_err("read-vin-data-size property not found\n");
-   535			return ret;
-   536		}
-   537	
-   538		if (tmp == 8) {
-   539			chip->use_read_byte_vin = true;
-   540		} else if (tmp == 16) {
-   541			chip->use_read_byte_vin = false;
-   542		} else {
-   543			pr_err("invalid read-vin-data-size (%d)\n", tmp);
-   544			return -EINVAL;
-   545		}
-   546	
-   547		mutex_init(&chip->access_lock);
-   548	
-   549		/* this is only used for device removal purposes */
-   550		i2c_set_clientdata(client, indio_dev);
-   551	
-   552		chip->client = client;
-   553	
-   554		ret = nct720x_init_chip(chip);
-   555		if (ret < 0)
-   556			return ret;
-   557	
-   558		indio_dev->name = id->name;
-   559		indio_dev->channels = nct720x_channels;
-   560		indio_dev->num_channels = ARRAY_SIZE(nct720x_channels);
-   561		indio_dev->info = &nct720x_info;
-   562		indio_dev->modes = INDIO_DIRECT_MODE;
-   563	
-   564		iio_device_register(indio_dev);
-   565	
-   566		return 0;
-   567	}
-   568	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--T7IwLFePnUSWKnbZ--
