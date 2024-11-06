@@ -1,83 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD181E04AD;
-	Wed,  6 Nov 2024 13:12:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D2F1CB310;
+	Wed,  6 Nov 2024 13:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730898748; cv=none; b=fAH9Ly+vjSFhE9LC1CSNHqVuejoEw2b5wx9udpwJODhoz6Q/XemdxKTKG16/sCbAjpzonh5h+Du6GWQnPbS2Gy6drBmx9tFsGnaGSgST+nELCL/LnzuyIFGNTtqJGmbt6zVISQW7sMB7evaSzsG+k6kECWDY5uOUazUchOVUAmM=
+	t=1730899455; cv=none; b=lR+oW2Pfr66w2gU4vorFyzOBYAlGNINGIWcuYROT0PeIX80M0IssD4GDPZIYLZf5VwjUg+uPZ8glnT/q2XUAaK7/sywY5M7IfMatZppDl9qzaBq5DM+LGK70Rb+PwsjG9R74P5BVSxnw8tfKkpVM4Zte0ZAQdl3OrxUaKUc63hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730898748; c=relaxed/simple;
-	bh=3SfESvrKfdyPsR2Toa1m1lCX2fQeSf+A2nGffmF11BM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fGenyS9gPLtx7E6bODNeeZZ1/tPEJEKkj+J4+/XTZkcJPYSWn6uQWcm6BCDFIiFRAkL5j1sotrOTiaSCg+PyMx41lyM+YpaMufL1+abpqBQdrCJyRxT2vVBw5+11Ify9NVwF2YJtwBhmxSsnjU1hfVN17jLcZMU/yk76lDNu0oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BGmwz3OA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730899455; c=relaxed/simple;
+	bh=la4Ebtj94mOsj7g5I1iSjX2ivDJvD424D+E14m/cLoE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ivtyc4sbuWOmJxvXh4jsHLBjTsH69z+3YITT4PPILbm50GwITSpaWVFBIhfGOCJWxidtC/F+NeZcVZOyOrWajqAHK6VySxinXZPrxH8q+fk3KXxX9W2vPXQ4uW0q732XYgoP04ke2IbokQ+Q+Et41hicUyxzzg8SC9CC8kXFI+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IVVeVo59; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BGmwz3OA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74AE1C4CED4;
-	Wed,  6 Nov 2024 13:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730898747;
-	bh=3SfESvrKfdyPsR2Toa1m1lCX2fQeSf+A2nGffmF11BM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BGmwz3OAHtxzQimhPb+0ta8GU6ekMnC0Nr55rDVo5Z3eBQBSlzx2R0yCIlpqJTOug
-	 j2jouZOq2FDue45FB9L57askeLY0wQvdBhk/Gs0RrA+xfuh6r844UNGSxzP1OQXWIs
-	 WXhKJLIxD2erc+Tx9VY3wDSHDZY+JfqC87LI5/t4yCyTb2NIa+Jd6NPO6/Ndk+e/sn
-	 7wPD0pSWLEOAvVSYTLYShwVsWDCllhThbE4uSdrDpnIealbuz3ZctYPnh6JBIFnxXG
-	 77B/lfXugrwKHs9CL6LdpZVWzV+0Ah6f+DmjxZMCmxviBIoCDOqDZRF9mx6ufS7cB3
-	 YKiC40WL00LVg==
-Date: Wed, 6 Nov 2024 13:12:23 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: stable@vger.kernel.org, conor.dooley@microchip.com,
-	Jason Montleon <jmontleo@redhat.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: Re: FAILED: Patch "RISC-V: disallow gcc + rust builds" failed to
- apply to v6.11-stable tree
-Message-ID: <20241106-undead-cupbearer-a22f27c8b9e2@spud>
-References: <20241106020840.164364-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IVVeVo59"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730899452; x=1762435452;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=la4Ebtj94mOsj7g5I1iSjX2ivDJvD424D+E14m/cLoE=;
+  b=IVVeVo59JnVlCUyd/Cymr2BjqVvO3VyVXQDmnWD/ec6jfaIiwTfCpYVM
+   lOfGx8oJ+GQWVWHs3/i0WZJ5V95pjiiPZdBZUFNnZiB/sOP21l34RbKds
+   u3NpSPjn1zkVNtlr4qJsOZM4ADDdnyDYXUZ7wlFvXefyDbdwTfqukxXEf
+   GVUkvJ7ovhWToiyty8XeigZGxtyzYzYJf21dXo20tJ0BrU8AN50N7OR6t
+   U4xRcHQcX6D9HNeyufTBlp1I3tPFkgowpDqQHy38/lrtTMQpgrkqX8HoQ
+   nRWHgiQ4dX8VCoZn3o9Mzhod/BQaHBvMAEesWDy4QAFWTb9Z9JwzMWCBy
+   Q==;
+X-CSE-ConnectionGUID: LJWYdgJYSmyjxW0nl9CBrg==
+X-CSE-MsgGUID: OgYDYzelQnehjQEPalv9cA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="41288507"
+X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
+   d="scan'208";a="41288507"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 05:24:11 -0800
+X-CSE-ConnectionGUID: kYMgqX+oT2G/Fd4wZsZiug==
+X-CSE-MsgGUID: 2pUgKqRHRSWoxMfmMqnJrg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="89362759"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 06 Nov 2024 05:24:09 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t8g10-000oms-30;
+	Wed, 06 Nov 2024 13:24:06 +0000
+Date: Wed, 6 Nov 2024 21:23:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Barry Song <v-songbaohua@oppo.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Nhat Pham <nphamcs@gmail.com>
+Subject: [akpm-mm:mm-unstable 27/106] mm/page_io.c:220:3: error: call to
+ undeclared function 'count_objcg_events'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202411062130.JXvq8Cjt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="T7IwLFePnUSWKnbZ"
-Content-Disposition: inline
-In-Reply-To: <20241106020840.164364-1-sashal@kernel.org>
-
-
---T7IwLFePnUSWKnbZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Nov 05, 2024 at 09:08:39PM -0500, Sasha Levin wrote:
-> The patch below does not apply to the v6.11-stable tree.
-> If someone wants it applied there, or to any other stable or longterm
-> tree, then please email the backport, including the original git commit
-> id to <stable@vger.kernel.org>.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   7994b7ea6ac880efd0c38fedfbffd5ab8b1b7b2b
+commit: c10966f19a878a66206327ebe3b85500f59f47e2 [27/106] mm: count zeromap read and set for swapout and swapin
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241106/202411062130.JXvq8Cjt-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241106/202411062130.JXvq8Cjt-lkp@intel.com/reproduce)
 
-I sent 20241106-happily-unknotted-9984b07a414e@spud that should be a
-6.11 viable version of this change.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411062130.JXvq8Cjt-lkp@intel.com/
 
-Cheers,
-Conor.
+Note: the akpm-mm/mm-unstable HEAD 7994b7ea6ac880efd0c38fedfbffd5ab8b1b7b2b builds fine.
+      It only hurts bisectability.
 
---T7IwLFePnUSWKnbZ
-Content-Type: application/pgp-signature; name="signature.asc"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   In file included from mm/page_io.c:14:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> mm/page_io.c:220:3: error: call to undeclared function 'count_objcg_events'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     220 |                 count_objcg_events(objcg, SWPOUT_ZERO, nr_pages);
+         |                 ^
+   mm/page_io.c:220:3: note: did you mean 'count_objcg_event'?
+   include/linux/memcontrol.h:1763:20: note: 'count_objcg_event' declared here
+    1763 | static inline void count_objcg_event(struct obj_cgroup *objcg,
+         |                    ^
+   mm/page_io.c:532:3: error: call to undeclared function 'count_objcg_events'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     532 |                 count_objcg_events(objcg, SWPIN_ZERO, nr_pages);
+         |                 ^
+   4 warnings and 2 errors generated.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZytrNwAKCRB4tDGHoIJi
-0lrZAQDwZgrJpDCrMBOUflphmluD0ARCIvhYF9shsNzm9sAm5gEA4dQEww2rvB2W
-ETWhXsstVjfNvdt4kg8SZh+nFLTwKQc=
-=IEMP
------END PGP SIGNATURE-----
 
---T7IwLFePnUSWKnbZ--
+vim +/count_objcg_events +220 mm/page_io.c
+
+   204	
+   205	static void swap_zeromap_folio_set(struct folio *folio)
+   206	{
+   207		struct obj_cgroup *objcg = get_obj_cgroup_from_folio(folio);
+   208		struct swap_info_struct *sis = swp_swap_info(folio->swap);
+   209		int nr_pages = folio_nr_pages(folio);
+   210		swp_entry_t entry;
+   211		unsigned int i;
+   212	
+   213		for (i = 0; i < folio_nr_pages(folio); i++) {
+   214			entry = page_swap_entry(folio_page(folio, i));
+   215			set_bit(swp_offset(entry), sis->zeromap);
+   216		}
+   217	
+   218		count_vm_events(SWPOUT_ZERO, nr_pages);
+   219		if (objcg) {
+ > 220			count_objcg_events(objcg, SWPOUT_ZERO, nr_pages);
+   221			obj_cgroup_put(objcg);
+   222		}
+   223	}
+   224	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
