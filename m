@@ -1,224 +1,209 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92761DE8BA
-	for <llvm@lists.linux.dev>; Wed,  6 Nov 2024 16:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE781E0084;
+	Wed,  6 Nov 2024 16:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730909359; cv=none; b=u4NISgsL5AiNse6chy/ovSdx7xQW7gWyQI9IPa6rIDfMp0ayYH/2K68KAPkRYQtZhGoh4r8oOeGBnSQ0QQfpp5B0mGh452G6znbJX0nrFx9jOVuuhL/4oZnlSDXbI53AU63AFxTBvmKK6tDyiL8I32e712hZScMROG34XAFezig=
+	t=1730909706; cv=none; b=bcDXmsA4LsZlx3Ohxi2tA0g+b0iY2jnIb/gK2Pv5fsCfa/m8hDIDDGJEH6k7DkM5IiuLoJC/KaQyNZxGV6PYdIirgdfPOVlnBl1dUt9fAhsKdkCXwxo3SAtgunEW3Is7pBf3NX1OkI8W/qvjF+7y4xIPXTllopJGv7XRofkAV6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730909359; c=relaxed/simple;
-	bh=VOUAaO8tbrP/wOcy0Hm9JSPbINDxNuLU/AYW8Ip0Zd4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TB/j/rOqd3/rzYUjvEdRERkWUUPf1JDJHyCfqlSA5TandKYzqV3SY1hFvS6himFhYmyYp5VmcAH7U3oZhMYNoEDVOZXsykV5V6Nw20Qg8ZojTcoodaoa+RXT+zzNmpD/xPPsKCPiRAFtTMX0fjiKKm2VFkkXmVUelQlwvHb6gUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JuQqFPlp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730909706; c=relaxed/simple;
+	bh=L1fz5ifwL7RtYFeEDpd0ry1pl5RXPpuE7qAe8htztHs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nqLvCwsp2aCU0yMzlpUFKORYjuiqz2DjI09/1JgV5Z8Ds2zjthsmzHKrDicvYj3vK/VPCOl6MWris5ij45cC5APdsysZ8X4Twb3HeB1FP6SwGXG1z0bbx+HKmahwxv0YLkFhn5x4tDAUEr4tTTqe0NhMz+0elYrukCRZzs0TI9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rg69Z4SE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JuQqFPlp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D0F4C4CED8
-	for <llvm@lists.linux.dev>; Wed,  6 Nov 2024 16:09:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rg69Z4SE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C388C4CECC;
+	Wed,  6 Nov 2024 16:15:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730909358;
-	bh=VOUAaO8tbrP/wOcy0Hm9JSPbINDxNuLU/AYW8Ip0Zd4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JuQqFPlpGiZAw7TILRMopCknbSMhoSbKx2jz2KR/Z4136chHTIJzi6bsn3gL0+hTS
-	 e2biPgPhKCa3qDTsZK3oGU9ag6yFsmSdHsyCuRlh6zqidBZaOF+DTVoqAZfMX++Uhv
-	 PSkA3uMU8U3BudOhRigGRcWHfPrAIWwmjbH+UwbaDidkQNTNe1X6FpdHr87lQu6nJF
-	 6F4qszR0GXujuSL0Hx1jvOjHS+69UHa30u7ijx0wDL2pGIVmwGiwsXm+6V/I/57AnB
-	 jSruAnH3iySsmiY0+fL2x/BG6YQI65Ewzv8CjSgnBAtbJSqhdPyawhvOWKnlvy+KFf
-	 YpFJa2r1JhqOA==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so6742742e87.3
-        for <llvm@lists.linux.dev>; Wed, 06 Nov 2024 08:09:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXVEhks2Fri1eC08uuoKY5FV8/BLw+PAoOGbciH0jq64vwP/P0gElNuTr1HfEkhiiLVvTiT@lists.linux.dev
-X-Gm-Message-State: AOJu0YwX4pYboFcQPRXJvJ42SdiU/QmsRZnwDd2sPsmywKcpTLaU/RPA
-	q5snfkTKaoQMMALuYiL9QgWPpWKDfsAzV6Psg3Dlxb9lL5MfqwCuswrg8HdE4udyAqvyJ2U6LzW
-	GLxcqL6oBBH8mt0q4uQTvN9/JuyE=
-X-Google-Smtp-Source: AGHT+IFe3LtQOU5rlt2uGICpXWpl9dXGIsyeiu98XXxTi7W/MgXwXeHBmA5AmnRcRDJ/VkMxQJyWrHuX629kG1Abv5I=
-X-Received: by 2002:a05:6512:398d:b0:533:711:35be with SMTP id
- 2adb3069b0e04-53b348e154fmr20852753e87.26.1730909356944; Wed, 06 Nov 2024
- 08:09:16 -0800 (PST)
+	s=k20201202; t=1730909705;
+	bh=L1fz5ifwL7RtYFeEDpd0ry1pl5RXPpuE7qAe8htztHs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Rg69Z4SEgjr14uUSm8raG4/pBqR96KcGJKeZyT1jCty/ybLeUUY9kVlJ9WxpuGvY2
+	 JVRAz0Ve5o8Nq/tPBv1cQl0geGUfCQuoUOrwYQBrrNuZb0yIgNnSKolkr54p0mp8U+
+	 8Mmk58lGjlXIssQ9vVRy2gYIkG7r+951nC1RDlfMVEwKE46+OyDmI+qoghj4KnyykC
+	 zTcOfB2jVEA1HfGxTCRhm04xEmDuh9sRBn+M0XWXlOGjF2L8iBNtGtUmNqjwO8cEd3
+	 QW5s5t+fzIbVXEELqgNo2T/VLiwWgZAOeO2smOMhC90WaFISTshS7lhTEl5JJ6KPW0
+	 imFjIcT+ySYeA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: Nicholas Piggin <npiggin@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Andi Kleen <ak@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Bill Wendling <morbo@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Simon Horman <horms@kernel.org>,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: [PATCH 2/2] Rename .data.once to .data..once to fix resetting WARN*_ONCE
+Date: Thu,  7 Nov 2024 01:14:41 +0900
+Message-ID: <20241106161445.189399-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241106161445.189399-1-masahiroy@kernel.org>
+References: <20241106161445.189399-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com>
-In-Reply-To: <20241102175115.1769468-1-xur@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 7 Nov 2024 01:08:40 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
-Message-ID: <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] Add AutoFDO and Propeller support for Clang build
-To: Rong Xu <xur@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
-	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 3, 2024 at 2:51=E2=80=AFAM Rong Xu <xur@google.com> wrote:
->
-> Hi,
->
-> This patch series is to integrate AutoFDO and Propeller support into
-> the Linux kernel. AutoFDO is a profile-guided optimization technique
-> that leverages hardware sampling to enhance binary performance.
-> Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
-> and straightforward application process. While iFDO generally yields
-> superior profile quality and performance, our findings reveal that
-> AutoFDO achieves remarkable effectiveness, bringing performance close
-> to iFDO for benchmark applications.
->
-> Propeller is a profile-guided, post-link optimizer that improves
-> the performance of large-scale applications compiled with LLVM. It
-> operates by relinking the binary based on an additional round of runtime
-> profiles, enabling precise optimizations that are not possible at
-> compile time.  Similar to AutoFDO, Propeller too utilizes hardware
-> sampling to collect profiles and apply post-link optimizations to improve
-> the benchmark=E2=80=99s performance over and above AutoFDO.
->
-> Our empirical data demonstrates significant performance improvements
-> with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
-> on large warehouse-scale benchmarks. This makes a strong case for their
-> inclusion as supported features in the upstream kernel.
->
-> Background
->
-> A significant fraction of fleet processing cycles (excluding idle time)
-> from data center workloads are attributable to the kernel. Ware-house
-> scale workloads maximize performance by optimizing the production kernel
-> using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
->
-> iFDO can significantly enhance application performance but its use
-> within the kernel has raised concerns. AutoFDO is a variant of FDO that
-> uses the hardware=E2=80=99s Performance Monitoring Unit (PMU) to collect
-> profiling data. While AutoFDO typically yields smaller performance
-> gains than iFDO, it presents unique benefits for optimizing kernels.
->
-> AutoFDO eliminates the need for instrumented kernels, allowing a single
-> optimized kernel to serve both execution and profile collection. It also
-> minimizes slowdown during profile collection, potentially yielding
-> higher-fidelity profiling, especially for time-sensitive code, compared
-> to iFDO. Additionally, AutoFDO profiles can be obtained from production
-> environments via the hardware=E2=80=99s PMU whereas iFDO profiles require
-> carefully curated load tests that are representative of real-world
-> traffic.
->
-> AutoFDO facilitates profile collection across diverse targets.
-> Preliminary studies indicate significant variation in kernel hot spots
-> within Google=E2=80=99s infrastructure, suggesting potential performance =
-gains
-> through target-specific kernel customization.
->
-> Furthermore, other advanced compiler optimization techniques, including
-> ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO.
-> ThinLTO achieves better runtime performance through whole-program
-> analysis and cross module optimizations. The main difference between
-> traditional LTO and ThinLTO is that the latter is scalable in time and
-> memory.
->
-> This patch series adds AutoFDO and Propeller support to the kernel. The
-> actual solution comes in six parts:
->
-> [P 1] Add the build support for using AutoFDO in Clang
->
->       Add the basic support for AutoFDO build and provide the
->       instructions for using AutoFDO.
->
-> [P 2] Fix objtool for bogus warnings when -ffunction-sections is enabled
->
-> [P 3] Adjust symbol ordering in text output sections
->
-> [P 4] Add markers for text_unlikely and text_hot sections
->
-> [P 5] Enable =E2=80=93ffunction-sections for the AutoFDO build
->
-> [P 6] Enable Machine Function Split (MFS) optimization for AutoFDO
->
-> [P 7] Add Propeller configuration to the kernel build
->
-> Patch 1 provides basic AutoFDO build support. Patches 2 to 6 further
-> enhance the performance of AutoFDO builds and are functionally dependent
-> on Patch 1. Patch 7 enables support for Propeller and is dependent on
-> patch 2 to patch 4.
->
-> Caveats
->
-> AutoFDO is compatible with both GCC and Clang, but the patches in this
-> series are exclusively applicable to LLVM 17 or newer for AutoFDO and
-> LLVM 19 or newer for Propeller. For profile conversion, two different
-> tools could be used, llvm_profgen or create_llvm_prof. llvm_profgen
-> needs to be the LLVM 19 or newer, or just the LLVM trunk. Alternatively,
-> create_llvm_prof v0.30.1 or newer can be used instead of llvm-profgen.
->
-> Additionally, the build is only supported on x86 platforms equipped
-> with PMU capabilities, such as LBR on Intel machines. More
-> specifically:
->  * Intel platforms: works on every platform that supports LBR;
->    we have tested on Skylake.
->  * AMD platforms: tested on AMD Zen3 with the BRS feature. The kernel
->    needs to be configured with =E2=80=9CCONFIG_PERF_EVENTS_AMD_BRS=3Dy", =
-To
->    check, use
->    $ cat /proc/cpuinfo | grep =E2=80=9C brs=E2=80=9D
->    For the AMD Zen4, AMD LBRV2 is supported, but we suspect a bug with
->    AMD LBRv2 implementation in Genoa which blocks the usage.
->
-> For ARM, we plan to send patches for SPE-based Propeller when
-> AutoFDO for Arm is ready.
->
-> Experiments and Results
->
-> Experiments were conducted to compare the performance of AutoFDO-optimize=
-d
-> kernel images (version 6.9.x) against default builds.. The evaluation
-> encompassed both open source microbenchmarks and real-world production
-> services from Google and Meta. The selected microbenchmarks included Nepe=
-r,
-> a network subsystem benchmark, and UnixBench which is a comprehensive sui=
-te
-> for assessing various kernel operations.
->
-> For Neper, AutoFDO optimization resulted in a 6.1% increase in throughput
-> and a 10.6% reduction in latency. UnixBench saw a 2.2% improvement in its
-> index score under low system load and a 2.6% improvement under high syste=
-m
-> load.
->
-> For further details on the improvements observed in Google and Meta's
-> production services, please refer to the LLVM discourse post:
-> https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autofdo-inc=
-luding-thinlto-and-propeller/79108
->
-> Thanks,
->
-> Rong Xu and Han Shen
+Commit b1fca27d384e ("kernel debug: support resetting WARN*_ONCE")
+added support for clearing the state of once warnings. However,
+it is not functional when CONFIG_LD_DEAD_CODE_DATA_ELIMINATION or
+CONFIG_LTO_CLANG is enabled, because .data.unlikely matches the
+.data.[0-9a-zA-Z_]* pattern in the DATA_MAIN macro.
 
+Commit cb87481ee89d ("kbuild: linker script do not match C names unless
+LD_DEAD_CODE_DATA_ELIMINATION is configured") was introduced to suppress
+the issue for the default CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n case,
+providing a minimal fix for stable backporting. We were aware this did
+not address the issue for CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y. The
+plan was to apply correct fixes and then revert cb87481ee89d. [1]
 
-I applied this series to linux-kbuild.
+Seven years have passed since then, yet the #ifdef workaround remains in
+place. Meanwhile, commit b1fca27d384e introduced the .data.once section,
+and commit dc5723b02e52 ("kbuild: add support for Clang LTO") extended
+the #ifdef.
 
-As I mentioned before, I do not like #ifdef because
-it hides (not fixes) issues only for default cases.
+Using a ".." separator in the section name fixes the issue for
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and CONFIG_LTO_CLANG.
 
+[1]: https://lore.kernel.org/linux-kbuild/CAK7LNASck6BfdLnESxXUeECYL26yUDm0cwRZuM4gmaWUkxjL5g@mail.gmail.com/
 
---=20
-Best Regards
-Masahiro Yamada
+Fixes: b1fca27d384e ("kernel debug: support resetting WARN*_ONCE")
+Fixes: dc5723b02e52 ("kbuild: add support for Clang LTO")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ include/asm-generic/vmlinux.lds.h | 2 +-
+ include/linux/mmdebug.h           | 6 +++---
+ include/linux/once.h              | 4 ++--
+ include/linux/once_lite.h         | 2 +-
+ include/net/net_debug.h           | 2 +-
+ mm/internal.h                     | 2 +-
+ 6 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 3c9dc1fd094d..54504013c749 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -359,7 +359,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+ 	*(.data..shared_aligned) /* percpu related */			\
+ 	*(.data..unlikely)						\
+ 	__start_once = .;						\
+-	*(.data.once)							\
++	*(.data..once)							\
+ 	__end_once = .;							\
+ 	STRUCT_ALIGN();							\
+ 	*(__tracepoints)						\
+diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
+index 39a7714605a7..d7cb1e5ecbda 100644
+--- a/include/linux/mmdebug.h
++++ b/include/linux/mmdebug.h
+@@ -46,7 +46,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 		}							\
+ 	} while (0)
+ #define VM_WARN_ON_ONCE_PAGE(cond, page)	({			\
+-	static bool __section(".data.once") __warned;			\
++	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+ 	if (unlikely(__ret_warn_once && !__warned)) {			\
+@@ -66,7 +66,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 	unlikely(__ret_warn);						\
+ })
+ #define VM_WARN_ON_ONCE_FOLIO(cond, folio)	({			\
+-	static bool __section(".data.once") __warned;			\
++	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+ 	if (unlikely(__ret_warn_once && !__warned)) {			\
+@@ -77,7 +77,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi);
+ 	unlikely(__ret_warn_once);					\
+ })
+ #define VM_WARN_ON_ONCE_MM(cond, mm)		({			\
+-	static bool __section(".data.once") __warned;			\
++	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+ 	if (unlikely(__ret_warn_once && !__warned)) {			\
+diff --git a/include/linux/once.h b/include/linux/once.h
+index bc714d414448..30346fcdc799 100644
+--- a/include/linux/once.h
++++ b/include/linux/once.h
+@@ -46,7 +46,7 @@ void __do_once_sleepable_done(bool *done, struct static_key_true *once_key,
+ #define DO_ONCE(func, ...)						     \
+ 	({								     \
+ 		bool ___ret = false;					     \
+-		static bool __section(".data.once") ___done = false;	     \
++		static bool __section(".data..once") ___done = false;	     \
+ 		static DEFINE_STATIC_KEY_TRUE(___once_key);		     \
+ 		if (static_branch_unlikely(&___once_key)) {		     \
+ 			unsigned long ___flags;				     \
+@@ -64,7 +64,7 @@ void __do_once_sleepable_done(bool *done, struct static_key_true *once_key,
+ #define DO_ONCE_SLEEPABLE(func, ...)						\
+ 	({									\
+ 		bool ___ret = false;						\
+-		static bool __section(".data.once") ___done = false;		\
++		static bool __section(".data..once") ___done = false;		\
+ 		static DEFINE_STATIC_KEY_TRUE(___once_key);			\
+ 		if (static_branch_unlikely(&___once_key)) {			\
+ 			___ret = __do_once_sleepable_start(&___done);		\
+diff --git a/include/linux/once_lite.h b/include/linux/once_lite.h
+index b7bce4983638..27de7bc32a06 100644
+--- a/include/linux/once_lite.h
++++ b/include/linux/once_lite.h
+@@ -12,7 +12,7 @@
+ 
+ #define __ONCE_LITE_IF(condition)					\
+ 	({								\
+-		static bool __section(".data.once") __already_done;	\
++		static bool __section(".data..once") __already_done;	\
+ 		bool __ret_cond = !!(condition);			\
+ 		bool __ret_once = false;				\
+ 									\
+diff --git a/include/net/net_debug.h b/include/net/net_debug.h
+index 1e74684cbbdb..4a79204c8d30 100644
+--- a/include/net/net_debug.h
++++ b/include/net/net_debug.h
+@@ -27,7 +27,7 @@ void netdev_info(const struct net_device *dev, const char *format, ...);
+ 
+ #define netdev_level_once(level, dev, fmt, ...)			\
+ do {								\
+-	static bool __section(".data.once") __print_once;	\
++	static bool __section(".data..once") __print_once;	\
+ 								\
+ 	if (!__print_once) {					\
+ 		__print_once = true;				\
+diff --git a/mm/internal.h b/mm/internal.h
+index 93083bbeeefa..a23f7b11b760 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -48,7 +48,7 @@ struct folio_batch;
+  * when we specify __GFP_NOWARN.
+  */
+ #define WARN_ON_ONCE_GFP(cond, gfp)	({				\
+-	static bool __section(".data.once") __warned;			\
++	static bool __section(".data..once") __warned;			\
+ 	int __ret_warn_once = !!(cond);					\
+ 									\
+ 	if (unlikely(!(gfp & __GFP_NOWARN) && __ret_warn_once && !__warned)) { \
+-- 
+2.43.0
+
