@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57C0189B94;
-	Thu,  7 Nov 2024 07:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED51B196455;
+	Thu,  7 Nov 2024 07:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730962823; cv=none; b=Mz2q0vGawje/2uTcKsKcoFL4kvgQ72ngxxsr5/cn/BGnjkHZBgKf87GQSuOqtIGmoOHgLo5tDOYp5Za2P8mjJbI4jhmDNg8iQI4DMZMfYgMqhIuk7ad0eegEC0ZitCn+X5WpdGgi+N9bsmOuqVwucVG0jNLdZhgibFuRDptfrUE=
+	t=1730964066; cv=none; b=NxFiq4Uitf8LrfCxYMdofSO8JNowv43ijUelfPSbqXS9SE3k5v+DYFEEvCqBGr7P7wIKptuVd4BaGBAG8cwmps38WScsLdR9hj0uIl4ts50Lz/v/Ge6F9Uw+j0CuaHvvOstRlyzuY74dNbQIatI4uZ22UeiKoLGX4NXuuzdiWqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730962823; c=relaxed/simple;
-	bh=DFsf2RFY4TAtDYCgJRWhyyTH9Q3cA6XTsVINxUYPd/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kwa9clOlPjNpCtMQJP/HfUKvdefjJRtLflD2K4mqtK6FeYuWmuBp66wTFa9ClDb+fDPNaWXMI8gxlrzoS9uozRfpE82oCF0S07IfbMyez4WdidEV+8m/eUvgBFED9ERjQuGf5mKyFZDaXxeU1Y1poFQJ7CnZ/t6tbiMzRIzKEGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IBc+KJ/x; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1730964066; c=relaxed/simple;
+	bh=BR9HErxU59vcteu7kCBNUzLlpaxY29fFA17QslJgXXQ=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bP7/DNQnmhSo6l34mPopnK3Xud51TGTdfTzGU3WYtoW2q6WB1SBvLWxs6Mxmttc08IENdPqv5+SQFeNd3fOajKaKeLeF8fcIVaClaeVZwPZvfiWW1n/lEAzMudLQxaGTVVkKnsokVPOuqTXsFORCqLwR2qhNcJYoAVbbVl2Tusc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e2yXzP2c; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IBc+KJ/x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e2yXzP2c"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730962813; x=1762498813;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DFsf2RFY4TAtDYCgJRWhyyTH9Q3cA6XTsVINxUYPd/M=;
-  b=IBc+KJ/xRkQzO8q1N1ws0hbbNGX41KKl7TGZZzAhgUdBH0SBWOa3xrhu
-   k7I8F/vaLrlQAyAhPfDW90BX7vVA4AYdon0OY3qIWx0BdsaHkWIUFjjfC
-   JpB9wPR/LwlDuB1Pc4Dx8SpI92AbwQDKqzdmOe7Aid1jPSc4Z15z5eeha
-   IdqLyF4z+m9JOaVHfeTYW/nJybM/iGBn1NgqcRe+wyzWtfofqOjdMuPdw
-   4pvPC+sAelI2jJ0AuSfMyle6OtPyj7/Cg5YfRohIBNcLCJsHXBP4mEZca
-   B4cz+wkhzGdVQMeL2EUDcRxaMRabkGtWAUDXH9x0AZyp7A0s6mwRu/aXo
-   w==;
-X-CSE-ConnectionGUID: eycJas0GSNCGLV/5b8oXUA==
-X-CSE-MsgGUID: zZH61/OAQUqlw7yclFLEqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="34486537"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="34486537"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 23:00:00 -0800
-X-CSE-ConnectionGUID: mSs4tlqyRsaPqpdEtNLlFA==
-X-CSE-MsgGUID: FlXoe0EhQ4qigMO30KL40w==
+  t=1730964064; x=1762500064;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=BR9HErxU59vcteu7kCBNUzLlpaxY29fFA17QslJgXXQ=;
+  b=e2yXzP2cAG/TvcxW0TcQ/ARvX09XhnHmd8X/xBdRUY/7Rqe2XTMUkXk4
+   WZ2RH571cvRFREqQ+YqY42fQieCAt6ndPAD2uUAqlod70EsWAZHPhoL0R
+   KhPLjML/ubUx8a+cBlX1VvLR5CMJm0QQG2MiUqhR7IECvjKUVf4h7DgjC
+   1GMnAtcQ4IQX5ypNIrCaTAPlyf7LuZOdmdDaYgLrVTVZbC44aK8a5FYZp
+   mNFUR3IhPcD4jPYhjxIOhUDMPE2KjKWN2XDS57cLN3Ovl6NhL8BgE4vnO
+   KP1POM0G6fqbz6nWYljDN+W5OxjgTI0lsylH3bKHQ78sTRKs6rgkA1tLT
+   A==;
+X-CSE-ConnectionGUID: N3wuKY1qRyyfT/5mtRhGvQ==
+X-CSE-MsgGUID: fyvM086SRD24TPbbgjIkqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="42170503"
+X-IronPort-AV: E=Sophos;i="6.11,265,1725346800"; 
+   d="scan'208";a="42170503"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 23:21:01 -0800
+X-CSE-ConnectionGUID: WBddsoiqTM2h+F6Ig8/ALA==
+X-CSE-MsgGUID: DaF22EDXQbicBRHKqu+GNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,265,1725346800"; 
-   d="scan'208";a="108234754"
+   d="scan'208";a="88915916"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 06 Nov 2024 22:59:59 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 06 Nov 2024 23:21:01 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8wUm-000pvH-1p;
-	Thu, 07 Nov 2024 06:59:56 +0000
-Date: Thu, 7 Nov 2024 14:58:58 +0800
+	id 1t8wp8-000pwM-0g;
+	Thu, 07 Nov 2024 07:20:58 +0000
+Date: Thu, 7 Nov 2024 15:20:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 5/5] net: Convert proto_ops::getname to
- sockaddr_storage
-Message-ID: <202411071440.lRm1q7zc-lkp@intel.com>
-References: <20241104222513.3469025-5-kees@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [peterz-queue:x86/kvm 4/11] fs/nfs/nfsv4.o: warning: objtool:
+ __tracepoint_nfs4_setclientid+0x20: data relocation to !ENDBR:
+ __SCT__tp_func_nfs4_setclientid+0x0
+Message-ID: <202411071522.DSr5ffZB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,159 +61,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241104222513.3469025-5-kees@kernel.org>
 
-Hi Kees,
+TO: Peter Zijlstra <peterz@infradead.org>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bluetooth-next/master]
-[cannot apply to brauner-vfs/vfs.all trondmy-nfs/linux-next bluetooth/master linus/master v6.12-rc6 next-20241106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kees-Cook/Revert-net-dev-Convert-sa_data-to-flexible-array-in-struct-sockaddr/20241105-062801
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20241104222513.3469025-5-kees%40kernel.org
-patch subject: [PATCH RFC 5/5] net: Convert proto_ops::getname to sockaddr_storage
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241107/202411071440.lRm1q7zc-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411071440.lRm1q7zc-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/kvm
+head:   dc414cd768dce496fe3a5dd19255b78fe54d3eb7
+commit: 2ee42da6246414db75627834fd9160edae09f86a [4/11] objtool: Convert instrumentation_{begin,end}() to ANNOTATE
+config: x86_64-randconfig-075-20241107 (https://download.01.org/0day-ci/archive/20241107/202411071522.DSr5ffZB-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411071522.DSr5ffZB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411071440.lRm1q7zc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411071522.DSr5ffZB-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/iucv/af_iucv.c:16:
-   In file included from include/linux/filter.h:9:
-   In file included from include/linux/bpf.h:20:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/iucv/af_iucv.c:16:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from net/iucv/af_iucv.c:16:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from net/iucv/af_iucv.c:16:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> net/iucv/af_iucv.c:858:9: error: no member named 'sa_family' in 'struct sockaddr_iucv'
-     858 |         siucv->sa_family = AF_IUCV;
-         |         ~~~~~  ^
-   16 warnings and 1 error generated.
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_setclientid+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_setclientid+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_setclientid_confirm+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_setclientid_confirm+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_renew+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_renew+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_renew_async+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_renew_async+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_setup_sequence+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_setup_sequence+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_state_mgr+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_state_mgr+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_state_mgr_failed+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_state_mgr_failed+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_xdr_bad_operation+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_xdr_bad_operation+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_xdr_status+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_xdr_status+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_xdr_bad_filehandle+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_xdr_bad_filehandle+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs_cb_no_clp+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs_cb_no_clp+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs_cb_badprinc+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs_cb_badprinc+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_open_reclaim+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_open_reclaim+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_open_expired+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_open_expired+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_open_file+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_open_file+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_cached_open+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_cached_open+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_close+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_close+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_get_lock+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_get_lock+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_unlock+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_unlock+0x0
+>> fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_set_lock+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_set_lock+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_state_lock_reclaim+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_state_lock_reclaim+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_set_delegation+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_set_delegation+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_reclaim_delegation+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_reclaim_delegation+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_delegreturn_exit+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_delegreturn_exit+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_lookup+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_lookup+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_symlink+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_symlink+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_mkdir+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_mkdir+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_mknod+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_mknod+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_remove+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_remove+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_get_fs_locations+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_get_fs_locations+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_secinfo+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_secinfo+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_lookupp+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_lookupp+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_rename+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_rename+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_access+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_access+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_readlink+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_readlink+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_readdir+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_readdir+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_get_acl+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_get_acl+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_set_acl+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_set_acl+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_setattr+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_setattr+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_delegreturn+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_delegreturn+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_open_stateid_update+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_open_stateid_update+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_open_stateid_update_wait+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_open_stateid_update_wait+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_close_stateid_update_wait+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_close_stateid_update_wait+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_getattr+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_getattr+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_lookup_root+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_lookup_root+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_fsinfo+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_fsinfo+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_cb_getattr+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_cb_getattr+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_cb_recall+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_cb_recall+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_cb_layoutrecall_file+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_cb_layoutrecall_file+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_map_name_to_uid+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_map_name_to_uid+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_map_group_to_gid+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_map_group_to_gid+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_map_uid_to_name+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_map_uid_to_name+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_map_gid_to_group+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_map_gid_to_group+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_read+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_read+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_write+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_write+0x0
+   fs/nfs/nfsv4.o: warning: objtool: __tracepoint_nfs4_commit+0x20: data relocation to !ENDBR: __SCT__tp_func_nfs4_commit+0x0
+--
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_aer_uncorrectable_error+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_aer_uncorrectable_error+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_aer_correctable_error+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_aer_correctable_error+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_overflow+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_overflow+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_generic_event+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_generic_event+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_general_media+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_general_media+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_dram+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_dram+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_memory_module+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_memory_module+0x0
+>> drivers/cxl/core/cxl_core.o: warning: objtool: __tracepoint_cxl_poison+0x20: data relocation to !ENDBR: __SCT__tp_func_cxl_poison+0x0
+--
+>> drivers/iio/imu/bno055/bno055_ser.o: warning: objtool: __tracepoint_send_chunk+0x20: data relocation to !ENDBR: __SCT__tp_func_send_chunk+0x0
+>> drivers/iio/imu/bno055/bno055_ser.o: warning: objtool: __tracepoint_cmd_retry+0x20: data relocation to !ENDBR: __SCT__tp_func_cmd_retry+0x0
+>> drivers/iio/imu/bno055/bno055_ser.o: warning: objtool: __tracepoint_write_reg+0x20: data relocation to !ENDBR: __SCT__tp_func_write_reg+0x0
+>> drivers/iio/imu/bno055/bno055_ser.o: warning: objtool: __tracepoint_read_reg+0x20: data relocation to !ENDBR: __SCT__tp_func_read_reg+0x0
+>> drivers/iio/imu/bno055/bno055_ser.o: warning: objtool: __tracepoint_recv+0x20: data relocation to !ENDBR: __SCT__tp_func_recv+0x0
+--
+>> drivers/thunderbolt/thunderbolt.o: warning: objtool: __tracepoint_tb_tx+0x20: data relocation to !ENDBR: __SCT__tp_func_tb_tx+0x0
+>> drivers/thunderbolt/thunderbolt.o: warning: objtool: __tracepoint_tb_event+0x20: data relocation to !ENDBR: __SCT__tp_func_tb_event+0x0
+>> drivers/thunderbolt/thunderbolt.o: warning: objtool: __tracepoint_tb_rx+0x20: data relocation to !ENDBR: __SCT__tp_func_tb_rx+0x0
 
-
-vim +858 net/iucv/af_iucv.c
-
-   850	
-   851	static int iucv_sock_getname(struct socket *sock,
-   852				     struct sockaddr_storage *addr, int peer)
-   853	{
-   854		DECLARE_SOCKADDR(struct sockaddr_iucv *, siucv, addr);
-   855		struct sock *sk = sock->sk;
-   856		struct iucv_sock *iucv = iucv_sk(sk);
-   857	
- > 858		siucv->sa_family = AF_IUCV;
-   859	
-   860		if (peer) {
-   861			memcpy(siucv->siucv_user_id, iucv->dst_user_id, 8);
-   862			memcpy(siucv->siucv_name, iucv->dst_name, 8);
-   863		} else {
-   864			memcpy(siucv->siucv_user_id, iucv->src_user_id, 8);
-   865			memcpy(siucv->siucv_name, iucv->src_name, 8);
-   866		}
-   867		memset(&siucv->siucv_port, 0, sizeof(siucv->siucv_port));
-   868		memset(&siucv->siucv_addr, 0, sizeof(siucv->siucv_addr));
-   869		memset(&siucv->siucv_nodeid, 0, sizeof(siucv->siucv_nodeid));
-   870	
-   871		return sizeof(struct sockaddr_iucv);
-   872	}
-   873	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
 
 -- 
 0-DAY CI Kernel Test Service
