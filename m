@@ -1,182 +1,103 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8313218934
-	for <llvm@lists.linux.dev>; Thu,  7 Nov 2024 21:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9C5EC0
+	for <llvm@lists.linux.dev>; Thu,  7 Nov 2024 22:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731016462; cv=none; b=KV+RYfJ2jUZti9BSq9JcO3aho4ybksMs8JbNU/zJjj+D3bLqO24nl3D6x4A5lmDhLNYthpvk1RWdTlsOgOiZC131qKQOMZiHpB/u5ermoMtPusipdhx2cgj2VNx57oFp4giulsJBEzNpnP76XHHmDuun/Iht+lvy1WXY31LPi4s=
+	t=1731018732; cv=none; b=d2m4JNGOJrcTXydG8/TMV1gfF053E8KbCTGRn/dRU3S9mfBhcOyzBXndxJO5n0fZOZ+jywBoFs56nWaY/6LRD0ImOMrK0/UGNbfF+yYoDSAaeZ1j8nJyjGM3+u2Jft/0w/zHX9AO+SGldwIANftUFvvuDbuOQO+CrsQxt3cLXg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731016462; c=relaxed/simple;
-	bh=L2z5Im7eApEYnSF6VAAS12BUcltczp7EaP9nsBPNtgU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dshgbp8xtbWNjz7r06o9vhkljKRvvTDJsbr3Z6ljBC2Z9vp8Ex7EJMapsdugdsGXOKIP5PYV/hJ4YSShSF1M+k+orndlTgBo47cXmNqjdrg17hTCL67KWnS76LLvSZD6+LHHpNvG/IKjZ4k0maePzAYTudumDC8QuSU8DPozoLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mBi8gGbx; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1731018732; c=relaxed/simple;
+	bh=WFVBchrQ196e6wsI9gB+yJafxuJnfNjoXMCNn2mDU/E=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=q6iW+ZRuLvNBhJcbum+miOxyqogmuwJulJJABcsxHMtSHssuC0QsoNuVaSBM3d6dMqFmH2k3ywcap6NqkWfFOTVFrR17heOPiu8LaoF64JMnIZddApY1PVDtDAv+LvUsx+IZWq8XqCXR/QsPVT8n97EsgVQuMGQo6LtnXn4UWck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fwxk3MGR; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mBi8gGbx"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4608dddaa35so88811cf.0
-        for <llvm@lists.linux.dev>; Thu, 07 Nov 2024 13:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731016459; x=1731621259; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PXyRMpyA+Wotd0AmuT5vj1vIpPFJGkQFHScvE/Azn4Q=;
-        b=mBi8gGbxnvjAjDosa6C7jry5aw7d8zqZUah9rxc9NRzEuqz7XzbOl3mOCOHVLF9Z9k
-         ooY4N2Up4NJDLCcXjUSjgLY0DqaNXexGqsoNaVsdtz0A6eF4uvOmbICv16wrX6zAuJBr
-         wA8K573WbCJgoOZqjglmimxs0ZScPxAW9NwWn5+mEzAsk/uROX9gv1yngU8dKUoJLlHa
-         abQOt7695PiuIMwAlMM8Oy1DD8g5868nudXsIrSC238zZIeQIGW0gIqBsJJKzjt46WfA
-         UpZlkps+CWWynNY9eHqY+x+w/opMFLFmFsVqmQYjdBwTurvf0ZCpdrUO8J+hI71sC2x2
-         gF3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731016459; x=1731621259;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PXyRMpyA+Wotd0AmuT5vj1vIpPFJGkQFHScvE/Azn4Q=;
-        b=DVYXsB5DOS7gBUUjqh7A7wJ/QBD5QxSJQbuwAU8fTly2XkqLioKPLLVOKstygvugln
-         3fsySLJE4tTq9kW8IZzhZ1ivWD02yeBfaSAk7BFCKMWvJIuuEilGmXZJkP3Z3yF1rH2T
-         vdtLmwbeVoOfv02FP/3JDQeNHJZe10IsxlxWw2UAIzCIH6LQsX9qwdmmyG9EhC63/ec1
-         Nozde1NFDvNt+etZvjYFQurdJKMXVYp9WvKLhqEf14o5KAXRUGa2ZC7bLZTGi8LHyuNB
-         iLYe2ImKEoyTnS+agGqbV4UOQ31ZkAmuHE4ormCQ2wRADlJHC8Qu3iJfULVe6cbCYqQc
-         RHBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDc9lp0r6/4ziEUXVHVoMN2+c407fgRLlMQQeO/FY6HwxJWciZaD8U/WRhqh3dgTBwyEJQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywscpgjs0ynBhHY++YM30g4oS2Ja5GwRrYdkaQYkd+SABp3LRJ/
-	5jIfc6iJEXpoXi+krd+IxGN5f9vUd1BcOnlHVvmG2zWSTKD8TI7I89mHlOYszR37KCTZsLoUQnQ
-	WqU57WeTpFIHtsX5g4duwh7v+pqQJt6lRsRpV
-X-Gm-Gg: ASbGncvKoxfMOQVgrH7SDKgdAAX1X0dLrPnuEPXR4LYKxsucgeqZN/fJTqCEqFeB9eo
-	Gz6FTTPYwpGK3iIlQ46jw9UoHW5+caPFJEIlyIx7vtd82C6cgu+CJPI0DR4+e
-X-Google-Smtp-Source: AGHT+IFdkSoHyavqa/rWYWexCV5GeErWCgxte9R1lHiqNRFVJXCyk2W6mdtD7fnvhuSYzrquH11z1oepbqTe6XTTqdc=
-X-Received: by 2002:ac8:5f06:0:b0:462:ad94:3555 with SMTP id
- d75a77b69052e-462fa646403mr5858781cf.25.1731016458594; Thu, 07 Nov 2024
- 13:54:18 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fwxk3MGR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1731018728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0ldzxRaHtzImKB9HOXcdH3LnypaUGZwcPGO2rc9V6SQ=;
+	b=fwxk3MGRuQXJ+2sDRCfcuBu2df9XJZFQSugqStZl7cSPnkmvTtFzMuQe58QQYvbZRX/+4A
+	DyiAHngvsteywtetXbxkpic7u7wR0yuYP+gvJrjF4VkWKY7nodo1uYJkLlwMnmpz/TQAVb
+	vK5g5SEFnTK9Q2Vk0HOYJbYQzsayFyo=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-210-riEqAIgYNCqxdx8_66Gz_Q-1; Thu,
+ 07 Nov 2024 17:32:07 -0500
+X-MC-Unique: riEqAIgYNCqxdx8_66Gz_Q-1
+X-Mimecast-MFC-AGG-ID: riEqAIgYNCqxdx8_66Gz_Q
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5E89C19560BE
+	for <llvm@lists.linux.dev>; Thu,  7 Nov 2024 22:32:06 +0000 (UTC)
+Received: from [172.64.13.23] (unknown [10.30.32.164])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D926D1953880;
+	Thu,  7 Nov 2024 22:32:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc6,
+ upstream-mainline, bfc64d9b)
+Date: Thu, 07 Nov 2024 22:32:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-8-xur@google.com>
- <20241107204504.GA3432398@thelio-3990X>
-In-Reply-To: <20241107204504.GA3432398@thelio-3990X>
-From: Rong Xu <xur@google.com>
-Date: Thu, 7 Nov 2024 13:54:06 -0800
-Message-ID: <CAF1bQ=TNOs7shXMbgY3UYzDZyF3ge=6hUdfEJvHV4LOo--tqVA@mail.gmail.com>
-Subject: Re: [PATCH v7 7/7] Add Propeller configuration for kernel build
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
-	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <28866.124110717320700461@us-mta-210.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: i7ReQnDPEs3OShY-XOm5fzGlvA2zPdEEgjJupoAN7UA_1731018726
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Thanks Nathan for finding this out!
+Hi, we tested your kernel and here are the results:
 
-We changed the propeller option with this patch:
-https://github.com/llvm/llvm-project/pull/110039
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Currently, this patch is only in the ToT clang (v20) and not yet
-released in v19.
-I'll add a compiler version check to the patch: if the clang version >=3D 2=
-0,
-use the new option.
 
-If this patch is later released in v19.x clang, I'll have to update the che=
-ck
-accordingly.
+Kernel information:
+    Commit message: Merge tag 'net-6.12-rc7' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-If I don't hear objections, I'll send a fixup on top of Masahiro's branch.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1532249301
 
-Thanks,
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1532249301-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1532249301-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1532249301-x86_64-kernel-debug
 
--Rong
 
-On Thu, Nov 7, 2024 at 12:45=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hi Rong,
->
-> On Sat, Nov 02, 2024 at 10:51:14AM -0700, Rong Xu wrote:
-> > diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-> > new file mode 100644
-> > index 0000000000000..344190717e471
-> > --- /dev/null
-> > +++ b/scripts/Makefile.propeller
-> > @@ -0,0 +1,28 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +# Enable available and selected Clang Propeller features.
-> > +ifdef CLANG_PROPELLER_PROFILE_PREFIX
-> > +  CFLAGS_PROPELLER_CLANG :=3D -fbasic-block-sections=3Dlist=3D$(CLANG_=
-PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
-> > +  KBUILD_LDFLAGS +=3D --symbol-ordering-file=3D$(CLANG_PROPELLER_PROFI=
-LE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
-> > +else
-> > +  CFLAGS_PROPELLER_CLANG :=3D -fbasic-block-sections=3Dlabels
-> > +endif
->
-> It appears that '-fbasic-block-sections=3Dlabels' has been deprecated in
-> the main branch of LLVM, as I see a warning repeated over and over when
-> building allmodconfig:
->
->   clang: warning: argument '-fbasic-block-sections=3Dlabels' is deprecate=
-d, use '-fbasic-block-address-map' instead [-Wdeprecated]
->
-> https://github.com/llvm/llvm-project/commit/7b7747dc1d3da1a829503ea9505b4=
-cecce4f5bda
->
-> Sorry that I missed this during testing, as I was only using clang-19 at
-> the time.
->
-> I think you can send a fixup on top of Masahiro's branch:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.gi=
-t/log/?h=3Dkbuild
->
-> > +# Propeller requires debug information to embed module names in the pr=
-ofiles.
-> > +# If CONFIG_DEBUG_INFO is not enabled, set -gmlt option. Skip this for=
- AutoFDO,
-> > +# as the option should already be set.
-> > +ifndef CONFIG_DEBUG_INFO
-> > +  ifndef CONFIG_AUTOFDO_CLANG
-> > +    CFLAGS_PROPELLER_CLANG +=3D -gmlt
-> > +  endif
-> > +endif
-> > +
-> > +ifdef CONFIG_LTO_CLANG_THIN
-> > +  ifdef CLANG_PROPELLER_PROFILE_PREFIX
-> > +    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3D$(CLANG_PROPELLER=
-_PROFILE_PREFIX)_cc_profile.txt
-> > +  else
-> > +    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3Dlabels
->
-> I think this might have a similar problem but I have not tested.
->
-> > +  endif
-> > +endif
-> > +
-> > +export CFLAGS_PROPELLER_CLANG
->
-> Cheers,
-> Nathan
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
