@@ -1,179 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail-40137.protonmail.ch (mail-40137.protonmail.ch [185.70.40.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D53BA2D;
-	Thu,  7 Nov 2024 04:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D65B23CE
+	for <llvm@lists.linux.dev>; Thu,  7 Nov 2024 04:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730953322; cv=none; b=VF/mgMesY9bvvT6VceaRnS6Fg5gx6NfXx4bCqgJz2pyQEWfqB7sitFOulLd7TCbcLIYL5D2kwmgj95my2sEtd7J+lx8F/qyGgQnj0iffI0oF7Sn+DT9KQSznoYMNn9eRVzcVdlmLOkABU5p3BylJfRvVM1/um3PtTWFuWTaaELM=
+	t=1730955563; cv=none; b=gqZSK6xpI3aEKbQxVSgKHBYTbm8dQOuaRy9/XThKIjp9LGWfOpYPBd0TON6VWliHMqns5Du7wYeHZCjt8y7Sz3dbzH91wL8R7hNmL+7Zo3AF7e4z/4qfeNkg/6Yx9gG4azAiONptPGKH2PP/b+vYg3kLS8ngxsgkTlmBilriYP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730953322; c=relaxed/simple;
-	bh=x1GdMOh3arTXFvBx2uNVn2vtEdkSMO/HtDKxEyTy4g0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tDap+vgIO8w83dZ8EzNtuvxAvozbnMiWPwzMDaEgYT73NJRha0EqM9TEJRkjKaVukQT9e5YICwp7ceYrREGnKnlQ+zbUXmBsORjgmetWTJckiIFuYuaFYifMtZ7zay4Vc1iiXTYOWu8J7WMrAd5IEbgZyAroFdYY0rmYYWQRX7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RP4PS8YG; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1730955563; c=relaxed/simple;
+	bh=G7Gxwsmv0+3x5lOyM08ljVWb/XbhyZ2QrdlGiuqIGGQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lYH+lFevKpZAjpIplAt7RbyNj3P37rUi948uwTjiWxPRRbM07hmBBL5zIiv1vOi6K/rm/k2RTina1OpGPZw7dVqJBsxgmYaeqbCx6YR9wFgiCLh2YWMXMwPzw/i0fv39OVs1qiEFwA/+WThrw45C7/PmlYOM6q5hOqysuPH/a4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=LfCWsxJa; arc=none smtp.client-ip=185.70.40.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RP4PS8YG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730953320; x=1762489320;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=x1GdMOh3arTXFvBx2uNVn2vtEdkSMO/HtDKxEyTy4g0=;
-  b=RP4PS8YG7gE2tZlf8FGuZDC1txODd5m4zaTQgtcngPFTxfl5dkOQXqOD
-   N62Xil9mwnFd5a6i1OnqCRa5tpxScfqDhl8EU55slwR7wuj9Z3boJeUEQ
-   tsleBUpT6PmiPCnIkeB63/kG/9mcI9zHcoYJn4S/cM/wsXneD9xC8Dw47
-   0aPichendJwAHHJAbAujAgOVygdm6FJZF5PnKlLL5qXRS9JT/Aq4Lr/g/
-   12gmBIS08zZZveuPzJ2tzVvrZNsZag+wSkMaSWMPThkFECN8RxCUIaVf2
-   Gn2SSXkLbruMqOrr+W+Aivd7lfloF8My2XgmMjbDFyH34Aiaat+NgBnYY
-   w==;
-X-CSE-ConnectionGUID: Vws5Gg1dSN+i+sBCB9GkeQ==
-X-CSE-MsgGUID: zGhCuZ1/S5awb6VQQeoywA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="34557138"
-X-IronPort-AV: E=Sophos;i="6.11,264,1725346800"; 
-   d="scan'208";a="34557138"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 20:22:00 -0800
-X-CSE-ConnectionGUID: VNw69FuVREWsBZMH8gQ3eQ==
-X-CSE-MsgGUID: I7THNe+oQu2XtDn3yfgL3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,264,1725346800"; 
-   d="scan'208";a="89750882"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 06 Nov 2024 20:21:56 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t8u1p-000pow-0Q;
-	Thu, 07 Nov 2024 04:21:53 +0000
-Date: Thu, 7 Nov 2024 12:21:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
-	Ivan Delalande <colona@arista.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Boris Pismenny <borisp@nvidia.com>,
-	John Fastabend <john.fastabend@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	mptcp@lists.linux.dev, Dmitry Safonov <0x7f454c46@gmail.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH net 1/6] net/diag: Do not race on dumping MD5 keys with
- adding new MD5 keys
-Message-ID: <202411071218.G7g6a8JG-lkp@intel.com>
-References: <20241106-tcp-md5-diag-prep-v1-1-d62debf3dded@gmail.com>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="LfCWsxJa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1730955559; x=1731214759;
+	bh=G7Gxwsmv0+3x5lOyM08ljVWb/XbhyZ2QrdlGiuqIGGQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=LfCWsxJaELfUNy4MWW7my9jM6f9EGW5SzXgj4lvlgrHZbENCgfTkxOIyqATjVaRdT
+	 GKGl6h4HcgB1OKQBkiQQbzQFojSmdQik+S7MwUKkkcEsbDcxp2qS0JuyWvb9s2RFBk
+	 GY1/3KUCwYG21nEW/ilWyrZY751vxxbxex4nE5afMhAaDb9jHQ/s/3Dc+s18i5oPec
+	 kfAv/yw30LGy7nR6gc4+/PUXnGJ/mEC7TYIM0enEvFUEi8oq7g1dBX0JWvEGYRhZ5l
+	 hyOpg50ZBFl1EyPhjOW+zGxOSMSivkH/epFHDT5RWGpMmvUbM4c0pw6cwqDZ5hPPPu
+	 go1q3MOq1VpLA==
+Date: Thu, 07 Nov 2024 04:59:14 +0000
+To: Nathan Chancellor <nathan@kernel.org>
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] sparc/build: Put usage of -fcall-used* flags behind cc-option
+Message-ID: <rYw6ZTCE58uNrfyK1pJXSaAnn3kXRYBiLf-TYQI8tnJSU3ECWG01RkUahjZC_rkJomCiROTUUvg6Jf1u5VfyBfIalrSF2jHtGqI94MGK8zg=@protonmail.com>
+In-Reply-To: <20241029222421.GA2632697@thelio-3990X>
+References: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com> <20241029-sparc-cflags-v3-1-b28745a6bd71@protonmail.com> <20241029222421.GA2632697@thelio-3990X>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 0a66f026db29138ca89fc00dcc0965591dc038fd
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241106-tcp-md5-diag-prep-v1-1-d62debf3dded@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dmitry,
+Nathan Chancellor <nathan@kernel.org> wrote:
+>=20
+> Clang builds now succeed with this series and builds with GCC 14.2.0
+> continue to pass and boot successfully.
+>=20
+> Reviewed-by: Nathan Chancellor nathan@kernel.org
+>=20
+> Tested-by: Nathan Chancellor nathan@kernel.org
+>=20
+> One comment below, please carry these tags forward if there are future
+> revisions without substantial technical changes.
 
-kernel test robot noticed the following build warnings:
+Forgive me for still being unfamiliar with the term, but does this mean tha=
+t
+when I send a v4 I should paste the Reviewed-by and Tested-by lines into th=
+e
+commit message of the patch?
 
-[auto build test WARNING on 2e1b3cc9d7f790145a80cb705b168f05dab65df2]
+> > -KBUILD_CFLAGS +=3D -m32 -mcpu=3Dv8 -pipe -mno-fpu -fcall-used-g5 -fcal=
+l-used-g7
+> > +KBUILD_CFLAGS +=3D -m32 -mcpu=3Dv8 -pipe -mno-fpu $(call cc-option,-fc=
+all-used-g5) $(call cc-option,-fcall-used-g7)
+>=20
+>=20
+> Small nit, this (and the one in the vdso) could probably be one
+> cc-option call? Is it likely that one flag would be implemented in the
+> compiler without the other?
+>=20
+> $(call cc-option,-fcall-used-g5 -fcall-used-g7)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov-via-B4-Relay/net-diag-Do-not-race-on-dumping-MD5-keys-with-adding-new-MD5-keys/20241107-025054
-base:   2e1b3cc9d7f790145a80cb705b168f05dab65df2
-patch link:    https://lore.kernel.org/r/20241106-tcp-md5-diag-prep-v1-1-d62debf3dded%40gmail.com
-patch subject: [PATCH net 1/6] net/diag: Do not race on dumping MD5 keys with adding new MD5 keys
-config: arm64-randconfig-003-20241107 (https://download.01.org/0day-ci/archive/20241107/202411071218.G7g6a8JG-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411071218.G7g6a8JG-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411071218.G7g6a8JG-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from net/ipv4/tcp_diag.c:9:
-   In file included from include/linux/net.h:24:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> net/ipv4/tcp_diag.c:70:3: warning: variable 'md5sig_count' is uninitialized when used here [-Wuninitialized]
-      70 |                 md5sig_count++;
-         |                 ^~~~~~~~~~~~
-   net/ipv4/tcp_diag.c:60:36: note: initialize the variable 'md5sig_count' to silence this warning
-      60 |         unsigned int attrlen, md5sig_count;
-         |                                           ^
-         |                                            = 0
-   5 warnings generated.
-
-
-vim +/md5sig_count +70 net/ipv4/tcp_diag.c
-
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  54  
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  55  static int tcp_diag_put_md5sig(struct sk_buff *skb,
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  56  			       const struct tcp_md5sig_info *md5sig,
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  57  			       struct nlmsghdr *nlh)
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  58  {
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  59  	size_t key_size = sizeof(struct tcp_diag_md5sig);
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  60  	unsigned int attrlen, md5sig_count;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  61  	const struct tcp_md5sig_key *key;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  62  	struct tcp_diag_md5sig *info;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  63  	struct nlattr *attr;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  64  
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  65  	/*
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  66  	 * Userspace doesn't like to see zero-filled key-values, so
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  67  	 * allocating too large attribute is bad.
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  68  	 */
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  69  	hlist_for_each_entry_rcu(key, &md5sig->head, node)
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31 @70  		md5sig_count++;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  71  	if (md5sig_count == 0)
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  72  		return 0;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  73  
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  74  	attrlen = skb_availroom(skb) - NLA_HDRLEN;
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  75  	md5sig_count = min(md5sig_count, attrlen / key_size);
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  76  	attr = nla_reserve(skb, INET_DIAG_MD5SIG, md5sig_count * key_size);
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  77  	if (!attr)
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  78  		return -EMSGSIZE;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  79  
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  80  	info = nla_data(attr);
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  81  	memset(info, 0, md5sig_count * key_size);
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  82  	hlist_for_each_entry_rcu(key, &md5sig->head, node) {
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  83  		/* More keys on a socket than pre-allocated space available */
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  84  		if (md5sig_count-- == 0) {
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  85  			nlh->nlmsg_flags |= NLM_F_DUMP_INTR;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  86  			break;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  87  		}
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  88  		tcp_diag_md5sig_fill(info++, key);
-4a6144fbc706b3c Dmitry Safonov 2024-11-06  89  	}
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  90  
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  91  	return 0;
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  92  }
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  93  #endif
-c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  94  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ah, didn't know it's possible to do that, the other uses of it I see seem
+to use one flag per call. I'll test and send a new revision, thanks.
