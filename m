@@ -1,375 +1,168 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D9721731F
-	for <llvm@lists.linux.dev>; Thu,  7 Nov 2024 18:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720C3216449;
+	Thu,  7 Nov 2024 19:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731005076; cv=none; b=DsXPn9aCl/H+kAzTeOVK+NPG9IW1lphklVRqIqqk4HYbHQlCaC+F6aMPmKqhvnU7TT3wf8exOHfp+F6sgmBD2TS0sPjTzFEJvl8FojdfqpbhvLMFrIALhviCO5Qxrr1QppSiJnqCBuHkcyDAVhzEiadDntsv/sO/Rx77uIEuYKM=
+	t=1731007897; cv=none; b=s069jeLxMs7WnnM4gE4615uOAA4o9r1rjntRiNr1FFlDay1tVA5FC/CPx0v7ztjB+LnbxoGNlPUxeUpt0aHEp5LxLxSuBNcE4wwxSeS29kI69KdMZZUhHarvPkikZ6/Cf3dFLKZCw8ZOspDtINDPlEzYH+NSuB0Ihk5IcdL26to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731005076; c=relaxed/simple;
-	bh=Tam3C3FSWBIBa879uPr6lOw08wkgu4jeV8XEi7er5NA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u8tejYDj4Y1bepTFNftsv5e/Jo2P85h7vIPKf/4JwaiSyV+7LyV0D7dkhWnQF4QlTk8ykaR9UA24r93K9Es1naYXwHFv/2aWisLfFDdEaqZN0TMiPGBV/o07Nzqf3Nh3/rxhQlitZOaflR8GMzC4uuJyyQHmgOL7IGABlsyeXpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4vgSGBSw; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1731007897; c=relaxed/simple;
+	bh=2NhBq2Rvaw3AwygHdmYrlmMK0IZQwrr0BGDPozBcT8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XZ0UE5opBlABaqZMesXyx4uihZKnuZQeJKO4QdH2Ka14By6EOjtK/EVET3schu3+SWt5Wc7+gCv6Gko2pEqMWs1gybCsgy+SWv7fX7KVqRK7+6/WWWRm/9TrHqs2tFfCLLLWUhYOk4DON+r2nlFbAlzxQF/VKj6zc2GFLmuRb8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RSSs/axx; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4vgSGBSw"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-460a8d1a9b7so21221cf.1
-        for <llvm@lists.linux.dev>; Thu, 07 Nov 2024 10:44:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731005073; x=1731609873; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J4nPpYXP0vVd6qbOkqNtUFVqt4H36QKYv9JFjcka9R4=;
-        b=4vgSGBSwKwO6SlmuBzl6ZHilj2FHvDyITD0mxLyf5MYzen1eO7Zj0gsC6OOmzDGZuS
-         JCsqT9Tm/0SjKLSCxjE2KL03/NbHA2+FexF0llBGXh48S2AxlcgegD4ql8JK5F6rvUnp
-         M5gOpsOENI1EUpTzcp9nBfJDjPhyroHkGYBnfT/Fhug6vzbJ8xWxsp4+ahRKTVF2jmV/
-         v3c5ux1jz2uem0LMrpcS8AEoij1EmmD/sAnimOobdzgFXOb1ELG6sUBesbkQpLwx/cdX
-         JSE+dfZ+YxF7ga2hcYr3eMod6UFBvKfxQ9l+owXIlwfiEHYkDMbLah0vtXc6WzHD2sak
-         ou5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731005073; x=1731609873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J4nPpYXP0vVd6qbOkqNtUFVqt4H36QKYv9JFjcka9R4=;
-        b=XuGawgGyH9WwsnsBVy6ss0Ndc4JHRhHDyLw/OWO5BqIFkQrQhGwGyatgSBFPJE/ug0
-         1t74NZOdn+VlUeBepBYeno3bVi/kXFk+upstVLlF87V8cDcAsrhDgYoEosVhRYxmNa4G
-         da4ElP7x7HVN2P5VyMic2oJ5hAqKZ6l9EhomvAMUbbwjIup4KLwubtNSscb9wXqUnT+r
-         wUt8dydMNA2Wi8VC9/1hERg5IvHVhxg57dOjViKh7BzUaMdjuztaptWGUPX0vgM4/kdB
-         uCdRoh73DnCLa+6/93BmyeXuyd282JVwGdIR64bG4XO7Mrv1YLOZ/LisRLuSE/SAap4p
-         +Mfw==
-X-Forwarded-Encrypted: i=1; AJvYcCV9EoEGTWlh1tmGrdPuO+vtAuCJZU/wphVRo1l4c3NeVoWWysazq9xEEq4W8gQnq1OfJBs+@lists.linux.dev
-X-Gm-Message-State: AOJu0YxNKEZUVLLFES5CzlUYsNt8otf4qjbB5UV2Dl4oredC80ISjM3O
-	1rLAYanC0KiZi5tE9njaI7aZo12PyRSbvip9zIDnc006XuWsZbMXYlfuEe/U/dIznC8DLpKgg3X
-	itXRV08sWEF49PKzOBjtV+V/Hbn6NvgffyhWM
-X-Gm-Gg: ASbGncvmUcvYGG3AFLhvT+tQlmuAbNuvR/ktgAVX2d4zQjidbHTHCCl5Ny2imFVkF5D
-	gsdVmpJsIjQ0diM7Ah34mSuO38vUmf/mtzNWRVkrZ/ixjdeaagnUTkjAw0k1a
-X-Google-Smtp-Source: AGHT+IHrq73eKO0bY8+FfuWfYvfEG6yvw63fkpfi5hna41D9nyt3oGP9CfN+ewePinNTBwT8SH0tAPXgnDQz/bQ4nhs=
-X-Received: by 2002:a05:622a:4b0a:b0:462:c158:9f5b with SMTP id
- d75a77b69052e-462fa610ffbmr4822701cf.19.1731005073310; Thu, 07 Nov 2024
- 10:44:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RSSs/axx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731007894; x=1762543894;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2NhBq2Rvaw3AwygHdmYrlmMK0IZQwrr0BGDPozBcT8U=;
+  b=RSSs/axxwkfEYsFhvU2ZxXaI4TDsFYboFpokkD4iATjGIqOKJ9NcKiy1
+   MmaCjYvME+lQfeJduq8oYcY5Oa43P7tgLIOK57ioscFmRDkhYNfuptQeK
+   mSgzldJQvjjxitqMQqlNnx76WazyHc9YdzFvhV8H+NgaQRBhNDV/xmGco
+   GgN9JMQJkFEr7IK/wTfq34cXfpej6KQq0kp6qen8az9RVQZO6r7jm/SmA
+   SWaKNYbSS2wvys5AnogfTLukpmWY8D9Oz3MBCBc7F0g3rptr456FfX3Xd
+   nGHmFpHMrPhgrvugd8FwqlT3VAzffcfWrhbemst9WeYqFMN8i2Xr25uOm
+   w==;
+X-CSE-ConnectionGUID: PwTdHrs1TlS1DsMM71oRyg==
+X-CSE-MsgGUID: spAHRgBvTjeAGIMA++sSwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31044368"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31044368"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 11:31:32 -0800
+X-CSE-ConnectionGUID: FwaUpT0wTmCFsegJmHSnGQ==
+X-CSE-MsgGUID: lONXDlkQRryYdIGHChLV4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,135,1728975600"; 
+   d="scan'208";a="85205060"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 07 Nov 2024 11:31:30 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t98E3-000qcF-0i;
+	Thu, 07 Nov 2024 19:31:27 +0000
+Date: Fri, 8 Nov 2024 03:30:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-block@vger.kernel.org,
+	Uday Shankar <ushankar@purestorage.com>,
+	Akilesh Kailash <akailash@google.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH V10 11/12] io_uring/uring_cmd: support leasing device
+ kernel buffer to io_uring
+Message-ID: <202411080354.5JXKXPEW-lkp@intel.com>
+References: <20241107110149.890530-12-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
- <CAF1bQ=R-7z9+57fji4Mn=ZVUgwSniGQ-8H4=42tFunxyp69Wzw@mail.gmail.com> <CAK7LNARpXOm1R_BVsH-fSC4ZzQqstHj0amzX8fu6=USwTD91Tw@mail.gmail.com>
-In-Reply-To: <CAK7LNARpXOm1R_BVsH-fSC4ZzQqstHj0amzX8fu6=USwTD91Tw@mail.gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Thu, 7 Nov 2024 10:44:21 -0800
-Message-ID: <CAF1bQ=SRnSP9mgnyRw+Hg=0-CX-uOwKmsiwHf6b2bFXKnWxPHw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] Add AutoFDO and Propeller support for Clang build
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
-	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107110149.890530-12-ming.lei@redhat.com>
 
-Thanks for the explanation.
+Hi Ming,
 
-On Thu, Nov 7, 2024 at 6:58=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> On Thu, Nov 7, 2024 at 4:00=E2=80=AFAM Rong Xu <xur@google.com> wrote:
-> >
-> > On Wed, Nov 6, 2024 at 8:09=E2=80=AFAM Masahiro Yamada <masahiroy@kerne=
-l.org> wrote:
-> > >
-> > > On Sun, Nov 3, 2024 at 2:51=E2=80=AFAM Rong Xu <xur@google.com> wrote=
-:
-> > > >
-> > > > Hi,
-> > > >
-> > > > This patch series is to integrate AutoFDO and Propeller support int=
-o
-> > > > the Linux kernel. AutoFDO is a profile-guided optimization techniqu=
-e
-> > > > that leverages hardware sampling to enhance binary performance.
-> > > > Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-frie=
-ndly
-> > > > and straightforward application process. While iFDO generally yield=
-s
-> > > > superior profile quality and performance, our findings reveal that
-> > > > AutoFDO achieves remarkable effectiveness, bringing performance clo=
-se
-> > > > to iFDO for benchmark applications.
-> > > >
-> > > > Propeller is a profile-guided, post-link optimizer that improves
-> > > > the performance of large-scale applications compiled with LLVM. It
-> > > > operates by relinking the binary based on an additional round of ru=
-ntime
-> > > > profiles, enabling precise optimizations that are not possible at
-> > > > compile time.  Similar to AutoFDO, Propeller too utilizes hardware
-> > > > sampling to collect profiles and apply post-link optimizations to i=
-mprove
-> > > > the benchmark=E2=80=99s performance over and above AutoFDO.
-> > > >
-> > > > Our empirical data demonstrates significant performance improvement=
-s
-> > > > with AutoFDO and Propeller, up to 10% on microbenchmarks and up to =
-5%
-> > > > on large warehouse-scale benchmarks. This makes a strong case for t=
-heir
-> > > > inclusion as supported features in the upstream kernel.
-> > > >
-> > > > Background
-> > > >
-> > > > A significant fraction of fleet processing cycles (excluding idle t=
-ime)
-> > > > from data center workloads are attributable to the kernel. Ware-hou=
-se
-> > > > scale workloads maximize performance by optimizing the production k=
-ernel
-> > > > using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
-> > > >
-> > > > iFDO can significantly enhance application performance but its use
-> > > > within the kernel has raised concerns. AutoFDO is a variant of FDO =
-that
-> > > > uses the hardware=E2=80=99s Performance Monitoring Unit (PMU) to co=
-llect
-> > > > profiling data. While AutoFDO typically yields smaller performance
-> > > > gains than iFDO, it presents unique benefits for optimizing kernels=
-.
-> > > >
-> > > > AutoFDO eliminates the need for instrumented kernels, allowing a si=
-ngle
-> > > > optimized kernel to serve both execution and profile collection. It=
- also
-> > > > minimizes slowdown during profile collection, potentially yielding
-> > > > higher-fidelity profiling, especially for time-sensitive code, comp=
-ared
-> > > > to iFDO. Additionally, AutoFDO profiles can be obtained from produc=
-tion
-> > > > environments via the hardware=E2=80=99s PMU whereas iFDO profiles r=
-equire
-> > > > carefully curated load tests that are representative of real-world
-> > > > traffic.
-> > > >
-> > > > AutoFDO facilitates profile collection across diverse targets.
-> > > > Preliminary studies indicate significant variation in kernel hot sp=
-ots
-> > > > within Google=E2=80=99s infrastructure, suggesting potential perfor=
-mance gains
-> > > > through target-specific kernel customization.
-> > > >
-> > > > Furthermore, other advanced compiler optimization techniques, inclu=
-ding
-> > > > ThinLTO and Propeller can be stacked on top of AutoFDO, similar to =
-iFDO.
-> > > > ThinLTO achieves better runtime performance through whole-program
-> > > > analysis and cross module optimizations. The main difference betwee=
-n
-> > > > traditional LTO and ThinLTO is that the latter is scalable in time =
-and
-> > > > memory.
-> > > >
-> > > > This patch series adds AutoFDO and Propeller support to the kernel.=
- The
-> > > > actual solution comes in six parts:
-> > > >
-> > > > [P 1] Add the build support for using AutoFDO in Clang
-> > > >
-> > > >       Add the basic support for AutoFDO build and provide the
-> > > >       instructions for using AutoFDO.
-> > > >
-> > > > [P 2] Fix objtool for bogus warnings when -ffunction-sections is en=
-abled
-> > > >
-> > > > [P 3] Adjust symbol ordering in text output sections
-> > > >
-> > > > [P 4] Add markers for text_unlikely and text_hot sections
-> > > >
-> > > > [P 5] Enable =E2=80=93ffunction-sections for the AutoFDO build
-> > > >
-> > > > [P 6] Enable Machine Function Split (MFS) optimization for AutoFDO
-> > > >
-> > > > [P 7] Add Propeller configuration to the kernel build
-> > > >
-> > > > Patch 1 provides basic AutoFDO build support. Patches 2 to 6 furthe=
-r
-> > > > enhance the performance of AutoFDO builds and are functionally depe=
-ndent
-> > > > on Patch 1. Patch 7 enables support for Propeller and is dependent =
-on
-> > > > patch 2 to patch 4.
-> > > >
-> > > > Caveats
-> > > >
-> > > > AutoFDO is compatible with both GCC and Clang, but the patches in t=
-his
-> > > > series are exclusively applicable to LLVM 17 or newer for AutoFDO a=
-nd
-> > > > LLVM 19 or newer for Propeller. For profile conversion, two differe=
-nt
-> > > > tools could be used, llvm_profgen or create_llvm_prof. llvm_profgen
-> > > > needs to be the LLVM 19 or newer, or just the LLVM trunk. Alternati=
-vely,
-> > > > create_llvm_prof v0.30.1 or newer can be used instead of llvm-profg=
-en.
-> > > >
-> > > > Additionally, the build is only supported on x86 platforms equipped
-> > > > with PMU capabilities, such as LBR on Intel machines. More
-> > > > specifically:
-> > > >  * Intel platforms: works on every platform that supports LBR;
-> > > >    we have tested on Skylake.
-> > > >  * AMD platforms: tested on AMD Zen3 with the BRS feature. The kern=
-el
-> > > >    needs to be configured with =E2=80=9CCONFIG_PERF_EVENTS_AMD_BRS=
-=3Dy", To
-> > > >    check, use
-> > > >    $ cat /proc/cpuinfo | grep =E2=80=9C brs=E2=80=9D
-> > > >    For the AMD Zen4, AMD LBRV2 is supported, but we suspect a bug w=
-ith
-> > > >    AMD LBRv2 implementation in Genoa which blocks the usage.
-> > > >
-> > > > For ARM, we plan to send patches for SPE-based Propeller when
-> > > > AutoFDO for Arm is ready.
-> > > >
-> > > > Experiments and Results
-> > > >
-> > > > Experiments were conducted to compare the performance of AutoFDO-op=
-timized
-> > > > kernel images (version 6.9.x) against default builds.. The evaluati=
-on
-> > > > encompassed both open source microbenchmarks and real-world product=
-ion
-> > > > services from Google and Meta. The selected microbenchmarks include=
-d Neper,
-> > > > a network subsystem benchmark, and UnixBench which is a comprehensi=
-ve suite
-> > > > for assessing various kernel operations.
-> > > >
-> > > > For Neper, AutoFDO optimization resulted in a 6.1% increase in thro=
-ughput
-> > > > and a 10.6% reduction in latency. UnixBench saw a 2.2% improvement =
-in its
-> > > > index score under low system load and a 2.6% improvement under high=
- system
-> > > > load.
-> > > >
-> > > > For further details on the improvements observed in Google and Meta=
-'s
-> > > > production services, please refer to the LLVM discourse post:
-> > > > https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autof=
-do-including-thinlto-and-propeller/79108
-> > > >
-> > > > Thanks,
-> > > >
-> > > > Rong Xu and Han Shen
-> > >
-> > >
-> > > I applied this series to linux-kbuild.
-> > >
-> >
-> > Thanks for taking the patch!
-> >
-> > > As I mentioned before, I do not like #ifdef because
-> > > it hides (not fixes) issues only for default cases.
-> >
-> > We followed the suggestion and removed most of the #if (or #ifdef) in
-> > the linker script.
-> > I just checked: there are two #ifdef remaining:
-> > (1) in the propeller patch for .llvm_bb_addr_map
-> > (2) in linker script patch for arch/sparc/kernel/vmlinux.lds.S.
-> >
-> > I think it's likely safe to remove the checks for head_64.o in
-> > non-SPARC64 builds and .llvm_bb_addr_map symbols in non-propeller build=
-s.
-> >
-> > SPARC64 builds should always produce head_64.o, and non-SPARC64
-> > builds shouldn't.
-> >
-> > Propeller builds always generate .llvm_bb_addr_map symbols, and the
-> > linker will omit the section if it's empty in non-propeller builds.
-> >
-> > Keeping the checks is harmless and might slightly reduce linker
-> > workload for matching.
-> > But If you'd prefer to remove them, I'm happy to provide a patch.
->
->
-> I am talking about the #ifdef in include/asm-generic/vmlinux.lds.h
->
->
-> Yeah, it is me who (reluctantly) accepted cb87481ee89d.
->
-> Now, the #ifdef has become a little more complicated.
-> The default case is safe, but there are hidden issues.
->
-> Some issues are easy to fix, so I sent some patches.
-> https://lore.kernel.org/linux-kbuild/20241106161445.189399-1-masahiroy@ke=
-rnel.org/T/#t
-> https://lore.kernel.org/linux-kbuild/20241106161445.189399-1-masahiroy@ke=
-rnel.org/T/#m4e4fa70386696e903b68d3fe1d7277e9a63fbefe
-> https://lore.kernel.org/linux-kbuild/20241107111519.GA15424@willie-the-tr=
-uck/T/#mccf6d49ddd11c90dcc583d7a68934bb3311da880
+kernel test robot noticed the following build errors:
 
-I did notice the issues for .data.* -- that is one of the reasons we
-separated text from data in our patch.
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on next-20241107]
+[cannot apply to linus/master v6.12-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> For example, see e41f501d3912.
->
-> When CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=3Dy or
-> CONFIG_LTO_CLANG=3Dy or CONFIG_AUTOFDO_CLANG=3Dy or
-> CONFIG_PROPELLER_CLANG=3Dy, the .text.startup sections
-> will go to TEXT_MAIN instead of INIT_TEXT.
-> This is not a fatal issue, but we cannot reuse memory for .text.startup
-> sections.
->
-> Removing the #ifdef (i.e. reverting cb87481ee89d) is more difficult
-> because we need to take a closer look at potential impacts for all
-> architectures.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/io_uring-rsrc-pass-struct-io_ring_ctx-reference-to-rsrc-helpers/20241107-190456
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20241107110149.890530-12-ming.lei%40redhat.com
+patch subject: [PATCH V10 11/12] io_uring/uring_cmd: support leasing device kernel buffer to io_uring
+config: arm64-randconfig-001-20241108 (https://download.01.org/0day-ci/archive/20241108/202411080354.5JXKXPEW-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411080354.5JXKXPEW-lkp@intel.com/reproduce)
 
-I'm not sure if there is a naming convention for section names in the kerne=
-l.
-For special sections, we should avoid using .text.* or .data.*,
-instead, using "..', or use
-other prefixes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411080354.5JXKXPEW-lkp@intel.com/
 
-The compiler can generate sections names like .text.hot.*", ".text.unknown.=
-*",
-  ".text.unlikely.*", ".text.split.*", ".text.startup." or
-".text.exit. It seems we've
-addressed most of them except .text.startup and .text.exit.
+All errors (new ones prefixed by >>):
 
-For text.startup and .text.exit, have you considered renaming the
-sections within
-the linker script -- they are fixed strings and should be able to be rename=
-d.
+   In file included from block/ioctl.c:4:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm64/include/asm/cacheflush.h:11:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from block/ioctl.c:15:
+>> include/linux/io_uring/cmd.h:89:1: error: expected identifier or '('
+      89 | {
+         | ^
+   3 warnings and 1 error generated.
 
->
-> I understood you did not want to take a risk to break random architecture=
-s,
-> so I decided to postpone the #ifdef issue and accept your patch set.
 
-Thanks for the understanding!
+vim +89 include/linux/io_uring/cmd.h
 
->
-> --
-> Best Regards
-> Masahiro Yamada
+    62	
+    63	int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
+    64				    struct io_rsrc_node *node);
+    65	#else
+    66	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+    67				      struct iov_iter *iter, void *ioucmd)
+    68	{
+    69		return -EOPNOTSUPP;
+    70	}
+    71	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+    72			ssize_t ret2, unsigned issue_flags)
+    73	{
+    74	}
+    75	static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+    76				    void (*task_work_cb)(struct io_uring_cmd *, unsigned),
+    77				    unsigned flags)
+    78	{
+    79	}
+    80	static inline void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+    81			unsigned int issue_flags)
+    82	{
+    83	}
+    84	static inline void io_uring_cmd_issue_blocking(struct io_uring_cmd *ioucmd)
+    85	{
+    86	}
+    87	static inline int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
+    88						  struct io_rsrc_node *node);
+  > 89	{
+    90		return -EOPNOTSUPP;
+    91	}
+    92	#endif
+    93	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
