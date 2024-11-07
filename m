@@ -1,78 +1,114 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE7B21441F
-	for <llvm@lists.linux.dev>; Thu,  7 Nov 2024 15:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BDD185B56;
+	Thu,  7 Nov 2024 16:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730992409; cv=none; b=s+26y8Pet8535TyjzEnsl4GJDFrSESi7ATSSXCl0Nng5q1Nd8FdU4cXjMFelDF3sH2hCv8Jc+3Fmvcxa7oZpDTe2BiLXS2OHHT80zuqpcSS2j8WgMlOy79FZASb/WEks/5CzJ8XQSEVLJUeHUEvcsLp9eJoIJZhamX+HYp3qbFs=
+	t=1730995306; cv=none; b=kDr04ihUAIQB+G8qceL71sASy26fCXNWAwgi5Bkq5TdFkWIdLnvuUpJ8wMlh6ky5y/6lEVN3eRK5TnKDsgModL1qMytqhTpYbhUtVkuQN8CRk3AVXwKVCfWdo2mbQysERIJmnczpfEynZY4ZmcucTyEqUawpGrj5bQfjydTJfSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730992409; c=relaxed/simple;
-	bh=DHX8ouM0mjOZJhCZSF2ORZpQdIyaW/O3bJFn6RvnLi8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MqCxz4pJA7QIwqOsF7+DTeNrcohBXIrf73gSnLF/TBrmXKei/uLEa0LJPsp+CrExdc7jJ5+3/0CR2uo7VkU+5waMwKPH6odHFAtsCFmG75uvOqoZKCg1HIprRxONAjdVrIlPyF3jSiiYHdRHtP4vJvoMC5vU8k6xEzwzDl3mgyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=fEvCKv79; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+	s=arc-20240116; t=1730995306; c=relaxed/simple;
+	bh=hMklc/6WmXMZ09yE5NJe+P85xdMeI48PhxKfCNy5kXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nSRUqGUAJ1uPtKVcII81AZ7nNJxHK+G2bIIcRSLAy9fKlAeYnyZgywjcZa5uYbO1v7KPP3PJoorhr/fsukwXIVzRUYrJqMJyeI+8ZVmpmmH7zfClYp36BoSFvCtLCbQNjyFQhxgOm/+tAIxWdbMuonBDQLQyj87is9jP2VG59+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxRpCXWW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="fEvCKv79"
-Received: from cwcc.thunk.org (pool-173-48-82-224.bstnma.fios.verizon.net [173.48.82.224])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 4A7FD6FU003522
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 7 Nov 2024 10:13:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1730992388; bh=LHIMNJt1AsV12J7iWyhtxwhvOO9nmuY/oYo6OO5n+6U=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=fEvCKv79blMbtOQs+U+8gtvffOQa9HI7Cb9zw9gs5IYP+xOo2KZ6y9QT4vSNs3q9y
-	 QmOtQbMPO4aG13Wv4sS2KRqKTRWXMCQwa19uUHzNkA1IiAm/NU6v+Jr1mFyahD7mf0
-	 i1jbKqdOqt0qrmPUsFoZcJluH8AcHrwXn7nkxAQUf0wOmis+evSlzcdw5F9xb78+Y+
-	 C0BDEAawUwsY6+ACQJUPEjnjNKWGmMJe6e96Ezc7tb+P8HyG19aHC+IPIEYADO7HHd
-	 3kNVX8uVQHnT5m8dtvpikBI/4tguP1TjjNjUk8TNkxYit0Sr+A16A4MVZPEHEBNq3D
-	 JSi+TWAQ/H32g==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id 40A9A15C0328; Thu, 07 Nov 2024 10:13:06 -0500 (EST)
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Theodore Ts'o" <tytso@mit.edu>, Andreas Dilger <adilger.kernel@dilger.ca>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] ext4: Mark ctx_*_flags() with __maybe_unused
-Date: Thu,  7 Nov 2024 10:12:54 -0500
-Message-ID: <173099237652.321265.10285147314842197735.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240905163229.140522-1-andriy.shevchenko@linux.intel.com>
-References: <20240905163229.140522-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxRpCXWW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E48AC4CECC;
+	Thu,  7 Nov 2024 16:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730995306;
+	bh=hMklc/6WmXMZ09yE5NJe+P85xdMeI48PhxKfCNy5kXc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hxRpCXWWnuqesbDNX7V0sh5CLPpZrsc2X058EnX9uOD2aoCCp3jbaGCnHl0biBuTU
+	 1kGpxAnG7rsNmbdlwXq1HdGkDYni+E6g35oKUfovtBtYaQyM4rLKvm6mXfD0BpegqX
+	 MULRkO5xotXaEUDb+VBx9nluqS3CFP01Cq56ARCHu8J7Yna9hkW3bps/sUkVHp15hU
+	 KG6NkSQRPzOnd/BX0AA6BBcixahnv1BiI7QE0yGIVZ9SMtK7NnPwTzQATjDly4qEwt
+	 o3QupO2W1COCQ+iwXYOnoKJJVGCWErJyatlq8OtSi3xoYgbwRWhGfjDYRZf62moAN/
+	 yuBqSBzkMtULA==
+Date: Thu, 7 Nov 2024 09:01:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Jonathan Corbet <corbet@lwn.net>, sparclinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] sparc/build: Put usage of -fcall-used* flags
+ behind cc-option
+Message-ID: <20241107160143.GA1328360@thelio-3990X>
+References: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com>
+ <20241029-sparc-cflags-v3-1-b28745a6bd71@protonmail.com>
+ <20241029222421.GA2632697@thelio-3990X>
+ <rYw6ZTCE58uNrfyK1pJXSaAnn3kXRYBiLf-TYQI8tnJSU3ECWG01RkUahjZC_rkJomCiROTUUvg6Jf1u5VfyBfIalrSF2jHtGqI94MGK8zg=@protonmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <rYw6ZTCE58uNrfyK1pJXSaAnn3kXRYBiLf-TYQI8tnJSU3ECWG01RkUahjZC_rkJomCiROTUUvg6Jf1u5VfyBfIalrSF2jHtGqI94MGK8zg=@protonmail.com>
 
-
-On Thu, 05 Sep 2024 19:32:29 +0300, Andy Shevchenko wrote:
-> When ctx_set_flags() is unused, it prevents kernel builds
-> with clang, `make W=1` and CONFIG_WERROR=y:
+On Thu, Nov 07, 2024 at 04:59:14AM +0000, Koakuma wrote:
+> Nathan Chancellor <nathan@kernel.org> wrote:
+> > 
+> > Clang builds now succeed with this series and builds with GCC 14.2.0
+> > continue to pass and boot successfully.
+> > 
+> > Reviewed-by: Nathan Chancellor nathan@kernel.org
+> > 
+> > Tested-by: Nathan Chancellor nathan@kernel.org
+> > 
+> > One comment below, please carry these tags forward if there are future
+> > revisions without substantial technical changes.
 > 
-> .../ext4/super.c:2120:1: error: unused function 'ctx_set_flags' [-Werror,-Wunused-function]
->  2120 | EXT4_SET_CTX(flags); /* set only */
->       | ^~~~~~~~~~~~~~~~~~~
+> Forgive me for still being unfamiliar with the term, but does this mean that
+
+No worries, it is definitely a customary thing.
+
+> when I send a v4 I should paste the Reviewed-by and Tested-by lines into the
+> commit message of the patch?
+
+Yes, you should add them either right above or right below your signoff.
+It is up to the submitter to add tags that have been sent on prior
+revisions when sending an updated version, assuming that there has not
+been a reason to drop them, such as substantial changes from a prior
+version that might require a new review or testing. In that case, I
+typically add a note in the changelog as to why I did not carry them
+forward.
+
+The tip documentation 4.2.3 through 4.2.6 has some good information
+about some other Linux kernel commit message expectations if you find
+yourself submitting more patches in the future:
+
+https://docs.kernel.org/process/maintainer-tip.html#changelog
+
+> > > -KBUILD_CFLAGS += -m32 -mcpu=v8 -pipe -mno-fpu -fcall-used-g5 -fcall-used-g7
+> > > +KBUILD_CFLAGS += -m32 -mcpu=v8 -pipe -mno-fpu $(call cc-option,-fcall-used-g5) $(call cc-option,-fcall-used-g7)
+> > 
+> > 
+> > Small nit, this (and the one in the vdso) could probably be one
+> > cc-option call? Is it likely that one flag would be implemented in the
+> > compiler without the other?
+> > 
+> > $(call cc-option,-fcall-used-g5 -fcall-used-g7)
 > 
-> [...]
+> Ah, didn't know it's possible to do that, the other uses of it I see seem
+> to use one flag per call. I'll test and send a new revision, thanks.
 
-Applied, thanks!
+Yeah, I would agree that it is typical to use cc-option for one flag at
+a time but the entire string just gets passed to $(CC), so there is
+technically no limitation for how many flags can be tested. This happens
+to be a rare instance where the flags share a common internal compiler
+implementation so we know that one cannot be implemented without the
+other.
 
-[1/1] ext4: Mark ctx_*_flags() with __maybe_unused
-      commit: 7bdb90e0f6c832c00a4c0a5d841aa367502dbfef
-
-Best regards,
--- 
-Theodore Ts'o <tytso@mit.edu>
+Cheers,
+Nathan
