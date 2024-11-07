@@ -1,76 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E452F4400;
-	Thu,  7 Nov 2024 02:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D53BA2D;
+	Thu,  7 Nov 2024 04:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730947076; cv=none; b=YaweFdWbymeFVjgKj8o3yGAYLrTqtYCmtjNwq2Z4/Z3UWaWZXdmIoMPyKfJa9oYd4PMVhB56iysI/m8+hzB+JLDap1EtLpt53PbPC/3tIXWyS/6R9qqhkSHDR/Zw1u3szqWue0flXTEbgcjDMqJgW2FJMHWohPkUkXhyvWx8ApA=
+	t=1730953322; cv=none; b=VF/mgMesY9bvvT6VceaRnS6Fg5gx6NfXx4bCqgJz2pyQEWfqB7sitFOulLd7TCbcLIYL5D2kwmgj95my2sEtd7J+lx8F/qyGgQnj0iffI0oF7Sn+DT9KQSznoYMNn9eRVzcVdlmLOkABU5p3BylJfRvVM1/um3PtTWFuWTaaELM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730947076; c=relaxed/simple;
-	bh=0Rbco+fVVE+WKrntisQUqv4Xf3VKHufAddMWQTy1UOo=;
+	s=arc-20240116; t=1730953322; c=relaxed/simple;
+	bh=x1GdMOh3arTXFvBx2uNVn2vtEdkSMO/HtDKxEyTy4g0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u/EXzJTYpM+U+YEIiwOfuRTVR8DNLt3V1/C82Lvjp9uwfhcezegwUvujLfd0IMgUP41gzE8g2yRPoTSWuBCHc3qC396zAvx/bAI/IK0RP7bp18VfHXCuZ5xzJ4p7j5C9NrrU+rffccPRI7bgHgGNjCJGCPXFh2ddZ+JE+VKfXdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jg7vVZdL; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=tDap+vgIO8w83dZ8EzNtuvxAvozbnMiWPwzMDaEgYT73NJRha0EqM9TEJRkjKaVukQT9e5YICwp7ceYrREGnKnlQ+zbUXmBsORjgmetWTJckiIFuYuaFYifMtZ7zay4Vc1iiXTYOWu8J7WMrAd5IEbgZyAroFdYY0rmYYWQRX7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RP4PS8YG; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jg7vVZdL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RP4PS8YG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730947075; x=1762483075;
+  t=1730953320; x=1762489320;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0Rbco+fVVE+WKrntisQUqv4Xf3VKHufAddMWQTy1UOo=;
-  b=jg7vVZdLVtNmvYwDqmyD8evKoc3n7kK2dE7fqnRI/JcWBa4jdZBC9RTB
-   9PVYh+D8+CIQsgKiIDkg9S2yHtjSLns0S++PWXjgPTN/jdNYP+FQ9yxXG
-   xY9NmV8FYov9F0NZaMPvnuH3PA0ONsg0H50/88xAIX7UReaHlxHotv8gh
-   /kk96Kqs+1pSSD+vIEb1/+UBV3i1kYZrrP2Ft/qgsO0Cq41Wi9zJv4Wxx
-   9/xHr7A7WTcJvPm7mmfHkLOvk3scr9bvsi0Djf+s5IQ3TmJd6IcCNsHNG
-   sqVJvVanvvcaN1n3ZsSL6IqsbfFgrgjh3AIn6o8HJcuBeeGc5+DPTmh3p
-   g==;
-X-CSE-ConnectionGUID: DymxcJu8RoG37wVpNB/ZRw==
-X-CSE-MsgGUID: fgNN8bpQQRSyblp14J1rrA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="34695257"
+  bh=x1GdMOh3arTXFvBx2uNVn2vtEdkSMO/HtDKxEyTy4g0=;
+  b=RP4PS8YG7gE2tZlf8FGuZDC1txODd5m4zaTQgtcngPFTxfl5dkOQXqOD
+   N62Xil9mwnFd5a6i1OnqCRa5tpxScfqDhl8EU55slwR7wuj9Z3boJeUEQ
+   tsleBUpT6PmiPCnIkeB63/kG/9mcI9zHcoYJn4S/cM/wsXneD9xC8Dw47
+   0aPichendJwAHHJAbAujAgOVygdm6FJZF5PnKlLL5qXRS9JT/Aq4Lr/g/
+   12gmBIS08zZZveuPzJ2tzVvrZNsZag+wSkMaSWMPThkFECN8RxCUIaVf2
+   Gn2SSXkLbruMqOrr+W+Aivd7lfloF8My2XgmMjbDFyH34Aiaat+NgBnYY
+   w==;
+X-CSE-ConnectionGUID: Vws5Gg1dSN+i+sBCB9GkeQ==
+X-CSE-MsgGUID: zGhCuZ1/S5awb6VQQeoywA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="34557138"
 X-IronPort-AV: E=Sophos;i="6.11,264,1725346800"; 
-   d="scan'208";a="34695257"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 18:37:54 -0800
-X-CSE-ConnectionGUID: H0tfHc/KTCOBcpT2EROUpg==
-X-CSE-MsgGUID: Y25ZMZNcQteAno0NZmlSgw==
+   d="scan'208";a="34557138"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 20:22:00 -0800
+X-CSE-ConnectionGUID: VNw69FuVREWsBZMH8gQ3eQ==
+X-CSE-MsgGUID: I7THNe+oQu2XtDn3yfgL3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,264,1725346800"; 
-   d="scan'208";a="90004633"
+   d="scan'208";a="89750882"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Nov 2024 18:37:49 -0800
+  by orviesa005.jf.intel.com with ESMTP; 06 Nov 2024 20:21:56 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t8sP4-000phm-2P;
-	Thu, 07 Nov 2024 02:37:46 +0000
-Date: Thu, 7 Nov 2024 10:37:32 +0800
+	id 1t8u1p-000pow-0Q;
+	Thu, 07 Nov 2024 04:21:53 +0000
+Date: Thu, 7 Nov 2024 12:21:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
+To: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, upstream@airoha.com
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Ivan Delalande <colona@arista.com>,
+	Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	Boris Pismenny <borisp@nvidia.com>,
+	John Fastabend <john.fastabend@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v3 3/3] net: phy: Add Airoha AN8855 Internal
- Switch Gigabit PHY
-Message-ID: <202411071000.uL10bu3r-lkp@intel.com>
-References: <20241106122254.13228-4-ansuelsmth@gmail.com>
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	mptcp@lists.linux.dev, Dmitry Safonov <0x7f454c46@gmail.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH net 1/6] net/diag: Do not race on dumping MD5 keys with
+ adding new MD5 keys
+Message-ID: <202411071218.G7g6a8JG-lkp@intel.com>
+References: <20241106-tcp-md5-diag-prep-v1-1-d62debf3dded@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,38 +76,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106122254.13228-4-ansuelsmth@gmail.com>
+In-Reply-To: <20241106-tcp-md5-diag-prep-v1-1-d62debf3dded@gmail.com>
 
-Hi Christian,
+Hi Dmitry,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on net-next/main]
+[auto build test WARNING on 2e1b3cc9d7f790145a80cb705b168f05dab65df2]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/dt-bindings-net-dsa-Add-Airoha-AN8855-Gigabit-Switch-documentation/20241106-203624
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241106122254.13228-4-ansuelsmth%40gmail.com
-patch subject: [net-next PATCH v3 3/3] net: phy: Add Airoha AN8855 Internal Switch Gigabit PHY
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241107/202411071000.uL10bu3r-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411071000.uL10bu3r-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov-via-B4-Relay/net-diag-Do-not-race-on-dumping-MD5-keys-with-adding-new-MD5-keys/20241107-025054
+base:   2e1b3cc9d7f790145a80cb705b168f05dab65df2
+patch link:    https://lore.kernel.org/r/20241106-tcp-md5-diag-prep-v1-1-d62debf3dded%40gmail.com
+patch subject: [PATCH net 1/6] net/diag: Do not race on dumping MD5 keys with adding new MD5 keys
+config: arm64-randconfig-003-20241107 (https://download.01.org/0day-ci/archive/20241107/202411071218.G7g6a8JG-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241107/202411071218.G7g6a8JG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411071000.uL10bu3r-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411071218.G7g6a8JG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/phy/air_an8855.c:6:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from net/ipv4/tcp_diag.c:9:
+   In file included from include/linux/net.h:24:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -130,76 +120,59 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/phy/air_an8855.c:137:6: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     137 |         if (saved_page >= 0)
-         |             ^~~~~~~~~~~~~~~
-   drivers/net/phy/air_an8855.c:139:45: note: uninitialized use occurs here
-     139 |         ret = phy_restore_page(phydev, saved_page, val);
-         |                                                    ^~~
-   drivers/net/phy/air_an8855.c:137:2: note: remove the 'if' if its condition is always true
-     137 |         if (saved_page >= 0)
-         |         ^~~~~~~~~~~~~~~~~~~~
-     138 |                 val = __phy_read(phydev, AN8855_PHY_EXT_REG_14);
-   drivers/net/phy/air_an8855.c:133:9: note: initialize the variable 'val' to silence this warning
-     133 |         int val;
-         |                ^
-         |                 = 0
->> drivers/net/phy/air_an8855.c:155:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     155 |         if (saved_page >= 0) {
-         |             ^~~~~~~~~~~~~~~
-   drivers/net/phy/air_an8855.c:164:46: note: uninitialized use occurs here
-     164 |         return phy_restore_page(phydev, saved_page, ret);
-         |                                                     ^~~
-   drivers/net/phy/air_an8855.c:155:2: note: remove the 'if' if its condition is always true
-     155 |         if (saved_page >= 0) {
-         |         ^~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/air_an8855.c:152:9: note: initialize the variable 'ret' to silence this warning
-     152 |         int ret;
-         |                ^
-         |                 = 0
-   6 warnings generated.
+>> net/ipv4/tcp_diag.c:70:3: warning: variable 'md5sig_count' is uninitialized when used here [-Wuninitialized]
+      70 |                 md5sig_count++;
+         |                 ^~~~~~~~~~~~
+   net/ipv4/tcp_diag.c:60:36: note: initialize the variable 'md5sig_count' to silence this warning
+      60 |         unsigned int attrlen, md5sig_count;
+         |                                           ^
+         |                                            = 0
+   5 warnings generated.
 
 
-vim +137 drivers/net/phy/air_an8855.c
+vim +/md5sig_count +70 net/ipv4/tcp_diag.c
 
-   129	
-   130	static int an8855_get_downshift(struct phy_device *phydev, u8 *data)
-   131	{
-   132		int saved_page;
-   133		int val;
-   134		int ret;
-   135	
-   136		saved_page = phy_select_page(phydev, AN8855_PHY_PAGE_EXTENDED_1);
- > 137		if (saved_page >= 0)
-   138			val = __phy_read(phydev, AN8855_PHY_EXT_REG_14);
-   139		ret = phy_restore_page(phydev, saved_page, val);
-   140		if (ret)
-   141			return ret;
-   142	
-   143		*data = val & AN8855_PHY_EXT_REG_14 ? DOWNSHIFT_DEV_DEFAULT_COUNT :
-   144						      DOWNSHIFT_DEV_DISABLE;
-   145	
-   146		return 0;
-   147	}
-   148	
-   149	static int an8855_set_downshift(struct phy_device *phydev, u8 cnt)
-   150	{
-   151		int saved_page;
-   152		int ret;
-   153	
-   154		saved_page = phy_select_page(phydev, AN8855_PHY_PAGE_EXTENDED_1);
- > 155		if (saved_page >= 0) {
-   156			if (cnt != DOWNSHIFT_DEV_DISABLE)
-   157				ret = __phy_set_bits(phydev, AN8855_PHY_EXT_REG_14,
-   158						     AN8855_PHY_EN_DOWN_SHFIT);
-   159			else
-   160				ret = __phy_clear_bits(phydev, AN8855_PHY_EXT_REG_14,
-   161						       AN8855_PHY_EN_DOWN_SHFIT);
-   162		}
-   163	
-   164		return phy_restore_page(phydev, saved_page, ret);
-   165	}
-   166	
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  54  
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  55  static int tcp_diag_put_md5sig(struct sk_buff *skb,
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  56  			       const struct tcp_md5sig_info *md5sig,
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  57  			       struct nlmsghdr *nlh)
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  58  {
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  59  	size_t key_size = sizeof(struct tcp_diag_md5sig);
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  60  	unsigned int attrlen, md5sig_count;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  61  	const struct tcp_md5sig_key *key;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  62  	struct tcp_diag_md5sig *info;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  63  	struct nlattr *attr;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  64  
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  65  	/*
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  66  	 * Userspace doesn't like to see zero-filled key-values, so
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  67  	 * allocating too large attribute is bad.
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  68  	 */
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  69  	hlist_for_each_entry_rcu(key, &md5sig->head, node)
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31 @70  		md5sig_count++;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  71  	if (md5sig_count == 0)
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  72  		return 0;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  73  
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  74  	attrlen = skb_availroom(skb) - NLA_HDRLEN;
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  75  	md5sig_count = min(md5sig_count, attrlen / key_size);
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  76  	attr = nla_reserve(skb, INET_DIAG_MD5SIG, md5sig_count * key_size);
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  77  	if (!attr)
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  78  		return -EMSGSIZE;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  79  
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  80  	info = nla_data(attr);
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  81  	memset(info, 0, md5sig_count * key_size);
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  82  	hlist_for_each_entry_rcu(key, &md5sig->head, node) {
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  83  		/* More keys on a socket than pre-allocated space available */
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  84  		if (md5sig_count-- == 0) {
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  85  			nlh->nlmsg_flags |= NLM_F_DUMP_INTR;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  86  			break;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  87  		}
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  88  		tcp_diag_md5sig_fill(info++, key);
+4a6144fbc706b3c Dmitry Safonov 2024-11-06  89  	}
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  90  
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  91  	return 0;
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  92  }
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  93  #endif
+c03fa9bcacd9ac0 Ivan Delalande 2017-08-31  94  
 
 -- 
 0-DAY CI Kernel Test Service
