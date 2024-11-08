@@ -1,133 +1,204 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8C11A9B33
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 21:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C1A1AA1D5;
+	Fri,  8 Nov 2024 22:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731102599; cv=none; b=AaHkDmkeU1SSH7U1U3LzFcRDK7kL1lUA9ZsglRBvCh76fHZvRuVjUaxmStRjkvDEcs6N4w8bFE8yuxeLr3mMSmD5+8jYtnK35DIEQWzCkYNIFpb7jwKIM+DaQoPfZ5ddAmgavjW1awABfOtlg/Z68wjf/ZuhiZZ8DUzU8c3oMe4=
+	t=1731103346; cv=none; b=N4DU76ITx1x9oo6uACqNihRrghNu4wAbVFgiPjVssSjrFJBtVH42UiCUGijgXv8MLYerHwLzQRQsZ44dg2prsnhiC4GJq4gsgBJHQ3+cTfCPT4aQHwtZj+eowNmv2B93mxBtfhp6pvp6jSY7Cw2mB9TPDbDglIfsh1phaijQ5H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731102599; c=relaxed/simple;
-	bh=1yrF4jnXLhnSfWIojTz1DEjyYTazYPoSLrO9bq3y4RI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=oV5v2ZvF+B3Fg2WmOxDo9YFfgmcUlguVTAbU19lx5LvbNoySMsFKmTpsOfIH07pV4v8hXesuJRsVc+i1lAhiv2XMB+rJlPj3WqG51dQzkbTtDqe2/cO45gG7XZe3Ii9U5f4kvBhzwKm/IwTNsdd37gqggSWSxgo4jNn9gWpYaUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LmMl6joU; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
+	s=arc-20240116; t=1731103346; c=relaxed/simple;
+	bh=SBRhSVYfm342YwAvm4PH2PawPdS9ufBUuzTqE34Ij8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SMNiHq2gpeLIT2FJ7vDnMvm6nOm4nhrPj2g3OJjeseF+qPYoC5q8w/yxvOizPps6QSMA6CWrKJt0R/0rzi9iBTU63Q0egRcy/x67GPeNKuHo0GXBR2tVagWg4REx+J2Ethg5nfZA5eImcHgW3XK+FZqNufOReMBY8udEXee4aG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HH8LdjDs; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LmMl6joU"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6eae6aba6d4so14361437b3.3
-        for <llvm@lists.linux.dev>; Fri, 08 Nov 2024 13:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731102597; x=1731707397; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Af4hMZ20VDS1C3kB5ShD2dxZfce4JKGeXzwvkb+Jdoc=;
-        b=LmMl6joUJcfqYLHSdOr6waEI+t03iKnnk6+3LQaFv3o7OtrcC91CL9ujEjEiMwWICp
-         Ibuhza8D3ITDowPyQXSFGOyS3eZ34B9K9B6+9lx7+BJp/yUHXrNJI83DieUJcMHn/wD9
-         p1UcKmdwcSZ2sS49QjrxyymGJwI4KgUQ+0iOdY0vp6r/iyty3H274xMXVINTfgCLhJlC
-         pJBThgQWyynCJNeFcAR5hl8Z60FSCV6/QDG+Jdn6Qw+eJ4C4Yk7JnnDzZUHL5GAduA7Q
-         zGmxHjhc2ttgMYuv9vb5fZ6dRApRt3yOwHfptfRrC8WRbLznIO/JHOXwXle7FQgv2aRD
-         k/uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731102597; x=1731707397;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Af4hMZ20VDS1C3kB5ShD2dxZfce4JKGeXzwvkb+Jdoc=;
-        b=GD2uVQdqtavPuXDRh/VoG32fD56GblCfKHhBz0A/5xerifcy7D4CynR2JEzyjysMdI
-         W+0b58YqRWCjhF0vkhQL4YRQtSkGggtnvIlrpRh18BRHgb8D0HPAxQEUmt3dpY+2Mp+z
-         uY8ICGs5DrEFKHIof4Gpu0iNtNm1DICyJlNaUpXsRUuXFcNgFVd7jnE8YqwOC5vpYiNQ
-         +pxSz8KL/ryf6qlwvl/c4BE6qsu+uUYUga+sbtnQHX9lkL5ac54UkpHGrmrs2TdIcl5Y
-         +Q8+uA4gORPOgSHoZeqnO3xZ9tGJ6SwvZccpB8zatShVnOAENhZbygT79A7uy9qgp/xw
-         aYcw==
-X-Forwarded-Encrypted: i=1; AJvYcCUERc/uPM1hYmgh3D+Kp2RgH7G0QO3kTKEhT7GQh1lj1ElEO+Jc9rQEVa+Ni3zcmRDTgB/K@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxu3NxkdaH8m5K2Vr+IKVJat9E1KqTTaJVMFqXuc0Hbqf3dhwhZ
-	0qkp2GgluVSNW2h0wwx44V/1n3l4UKst9qstZpngBLqe1yWUe7++9u9Aurr5gZ6y4A==
-X-Google-Smtp-Source: AGHT+IGY5DjIqopeDmsWhcIroI1hvNOh14a/8IP8B3zDQoN6tNo8YsyS7v29bZZQV4LsFJ1jdq4Wj30=
-X-Received: from xur.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:2330])
- (user=xur job=sendgmr) by 2002:a0d:de02:0:b0:6e3:f12:1ad3 with SMTP id
- 00721157ae682-6eaddfb6818mr536407b3.6.1731102597002; Fri, 08 Nov 2024
- 13:49:57 -0800 (PST)
-Date: Fri,  8 Nov 2024 13:49:53 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HH8LdjDs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731103344; x=1762639344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SBRhSVYfm342YwAvm4PH2PawPdS9ufBUuzTqE34Ij8A=;
+  b=HH8LdjDslb8Maiy/gPu7Irt3NKiVQ0fy6N3lLTbZI3uynpjSIiTZyZzp
+   KtHCy0xcra3gXZwRnZUyBY39NSEJ/lQKZrmvRe+IEV7GIKerNyXPeEeUe
+   +DhZ1ReRzEzc3CA7vNPooBNeY2tuomV79fFA6MUYijo7FN4taCAq2kYNv
+   gDKwNsNKNNKPtUNjcoKCXzQIByUG9INCt5E39s+i8wAcwTgcNu6nqFKqV
+   ynKjaDzrwr9YMFiRberQSi0j0uVrD+eJZqk2hGP9c9gaaxUyaY0YIXIoz
+   L7byqMfdLwm8c+IJ6J+VyLXthVF7XoYRYAzJzc5wuJwc9xF6i7sbeUwKA
+   Q==;
+X-CSE-ConnectionGUID: hP1UASXOT0WrfhRD6Pc0aw==
+X-CSE-MsgGUID: 7Uf85v0oQBmviJnuytyC1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="56398640"
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="56398640"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 14:02:22 -0800
+X-CSE-ConnectionGUID: epwK2O0XTOuRZ+4OeB4wVA==
+X-CSE-MsgGUID: lSG9X2V8T0+sf0sbIgaudw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="90860564"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 08 Nov 2024 14:02:21 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9X3a-000rpd-1v;
+	Fri, 08 Nov 2024 22:02:18 +0000
+Date: Sat, 9 Nov 2024 06:01:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 2/5] vfio-iommufd: Support pasid [at|de]tach for
+ physical VFIO devices
+Message-ID: <202411090535.ma094bix-lkp@intel.com>
+References: <20241108121742.18889-3-yi.l.liu@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.47.0.277.g8800431eea-goog
-Message-ID: <20241108214953.1160765-1-xur@google.com>
-Subject: [PATCH v2] kbuild: Fix Propeller build option
-From: Rong Xu <xur@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108121742.18889-3-yi.l.liu@intel.com>
 
-The '-fbasic-block-sections=labels' option has been deprecated in tip
-of tree clang (20.0.0) [1]. While the option still works, a warning is
-emitted:
+Hi Yi,
 
-  clang: warning: argument '-fbasic-block-sections=labels' is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
+kernel test robot noticed the following build errors:
 
-Add a version check to set the proper option.
+[auto build test ERROR on awilliam-vfio/next]
+[also build test ERROR on akpm-mm/mm-nonmm-unstable pci/next pci/for-linus linus/master awilliam-vfio/for-linus v6.12-rc6 next-20241108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link: https://github.com/llvm/llvm-project/pull/110039 [1]
+url:    https://github.com/intel-lab-lkp/linux/commits/Yi-Liu/ida-Add-ida_find_first_range/20241108-202010
+base:   https://github.com/awilliam/linux-vfio.git next
+patch link:    https://lore.kernel.org/r/20241108121742.18889-3-yi.l.liu%40intel.com
+patch subject: [PATCH v5 2/5] vfio-iommufd: Support pasid [at|de]tach for physical VFIO devices
+config: arm64-randconfig-001-20241109 (https://download.01.org/0day-ci/archive/20241109/202411090535.ma094bix-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090535.ma094bix-lkp@intel.com/reproduce)
 
-Signed-off-by: Rong Xu <xur@google.com>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411090535.ma094bix-lkp@intel.com/
 
----
-ChangeLog in V2
-Integrated suggestions from Nathan Chancellor.
-(1) improved commit message
-(2) added links to the comments
-(3) used ld.lld version in the version check for lld
----
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Rong Xu <xur@google.com>
----
- scripts/Makefile.propeller | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+>> drivers/vfio/iommufd.c:134:3: error: implicit declaration of function 'iommufd_device_pasid_detach' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   iommufd_device_pasid_detach(vdev->iommufd_device, pasid);
+                   ^
+   drivers/vfio/iommufd.c:134:3: note: did you mean 'iommufd_device_detach'?
+   include/linux/iommufd.h:27:6: note: 'iommufd_device_detach' declared here
+   void iommufd_device_detach(struct iommufd_device *idev);
+        ^
+>> drivers/vfio/iommufd.c:190:10: error: implicit declaration of function 'iommufd_device_pasid_replace' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   return iommufd_device_pasid_replace(vdev->iommufd_device,
+                          ^
+   drivers/vfio/iommufd.c:190:10: note: did you mean 'iommufd_device_replace'?
+   include/linux/iommufd.h:26:5: note: 'iommufd_device_replace' declared here
+   int iommufd_device_replace(struct iommufd_device *idev, u32 *pt_id);
+       ^
+>> drivers/vfio/iommufd.c:197:7: error: implicit declaration of function 'iommufd_device_pasid_attach' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           rc = iommufd_device_pasid_attach(vdev->iommufd_device, pasid, pt_id);
+                ^
+   drivers/vfio/iommufd.c:197:7: note: did you mean 'iommufd_device_pasid_replace'?
+   drivers/vfio/iommufd.c:190:10: note: 'iommufd_device_pasid_replace' declared here
+                   return iommufd_device_pasid_replace(vdev->iommufd_device,
+                          ^
+   drivers/vfio/iommufd.c:216:2: error: implicit declaration of function 'iommufd_device_pasid_detach' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           iommufd_device_pasid_detach(vdev->iommufd_device, pasid);
+           ^
+   4 errors generated.
 
-diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-index 344190717e47..48a660128e25 100644
---- a/scripts/Makefile.propeller
-+++ b/scripts/Makefile.propeller
-@@ -5,7 +5,14 @@ ifdef CLANG_PROPELLER_PROFILE_PREFIX
-   CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
-   KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
- else
--  CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
-+  # Starting with Clang v20, the '-fbasic-block-sections=labels' option is
-+  # deprecated. Use the recommended '-fbasic-block-address-map' option.
-+  # Link: https://github.com/llvm/llvm-project/pull/110039
-+  ifeq ($(call clang-min-version, 200000),y)
-+    CFLAGS_PROPELLER_CLANG := -fbasic-block-address-map
-+  else
-+    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
-+  endif
- endif
- 
- # Propeller requires debug information to embed module names in the profiles.
-@@ -21,7 +28,11 @@ ifdef CONFIG_LTO_CLANG_THIN
-   ifdef CLANG_PROPELLER_PROFILE_PREFIX
-     KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
-   else
--    KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-+    ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
-+       KBUILD_LDFLAGS += --lto-basic-block-address-map
-+    else
-+       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-+    endif
-   endif
- endif
- 
 
-base-commit: 0dcc2d1066150787017a71f035145c566597dec7
+vim +/iommufd_device_pasid_detach +134 drivers/vfio/iommufd.c
+
+   126	
+   127	void vfio_iommufd_physical_unbind(struct vfio_device *vdev)
+   128	{
+   129		int pasid;
+   130	
+   131		lockdep_assert_held(&vdev->dev_set->lock);
+   132	
+   133		while ((pasid = ida_find_first(&vdev->pasids)) >= 0) {
+ > 134			iommufd_device_pasid_detach(vdev->iommufd_device, pasid);
+   135			ida_free(&vdev->pasids, pasid);
+   136		}
+   137	
+   138		if (vdev->iommufd_attached) {
+   139			iommufd_device_detach(vdev->iommufd_device);
+   140			vdev->iommufd_attached = false;
+   141		}
+   142		iommufd_device_unbind(vdev->iommufd_device);
+   143		vdev->iommufd_device = NULL;
+   144	}
+   145	EXPORT_SYMBOL_GPL(vfio_iommufd_physical_unbind);
+   146	
+   147	int vfio_iommufd_physical_attach_ioas(struct vfio_device *vdev, u32 *pt_id)
+   148	{
+   149		int rc;
+   150	
+   151		lockdep_assert_held(&vdev->dev_set->lock);
+   152	
+   153		if (WARN_ON(!vdev->iommufd_device))
+   154			return -EINVAL;
+   155	
+   156		if (vdev->iommufd_attached)
+   157			rc = iommufd_device_replace(vdev->iommufd_device, pt_id);
+   158		else
+   159			rc = iommufd_device_attach(vdev->iommufd_device, pt_id);
+   160		if (rc)
+   161			return rc;
+   162		vdev->iommufd_attached = true;
+   163		return 0;
+   164	}
+   165	EXPORT_SYMBOL_GPL(vfio_iommufd_physical_attach_ioas);
+   166	
+   167	void vfio_iommufd_physical_detach_ioas(struct vfio_device *vdev)
+   168	{
+   169		lockdep_assert_held(&vdev->dev_set->lock);
+   170	
+   171		if (WARN_ON(!vdev->iommufd_device) || !vdev->iommufd_attached)
+   172			return;
+   173	
+   174		iommufd_device_detach(vdev->iommufd_device);
+   175		vdev->iommufd_attached = false;
+   176	}
+   177	EXPORT_SYMBOL_GPL(vfio_iommufd_physical_detach_ioas);
+   178	
+   179	int vfio_iommufd_physical_pasid_attach_ioas(struct vfio_device *vdev,
+   180						    u32 pasid, u32 *pt_id)
+   181	{
+   182		int rc;
+   183	
+   184		lockdep_assert_held(&vdev->dev_set->lock);
+   185	
+   186		if (WARN_ON(!vdev->iommufd_device))
+   187			return -EINVAL;
+   188	
+   189		if (ida_exists(&vdev->pasids, pasid))
+ > 190			return iommufd_device_pasid_replace(vdev->iommufd_device,
+   191							    pasid, pt_id);
+   192	
+   193		rc = ida_alloc_range(&vdev->pasids, pasid, pasid, GFP_KERNEL);
+   194		if (rc < 0)
+   195			return rc;
+   196	
+ > 197		rc = iommufd_device_pasid_attach(vdev->iommufd_device, pasid, pt_id);
+   198		if (rc)
+   199			ida_free(&vdev->pasids, pasid);
+   200	
+   201		return rc;
+   202	}
+   203	EXPORT_SYMBOL_GPL(vfio_iommufd_physical_pasid_attach_ioas);
+   204	
+
 -- 
-2.47.0.277.g8800431eea-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
