@@ -1,50 +1,45 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36DF1DEFC2;
-	Fri,  8 Nov 2024 14:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173051F4701;
+	Fri,  8 Nov 2024 14:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731075368; cv=none; b=o/MiTv8LAyfK5jXouWsOmx9cHLsO61g0ZVKgr47vx2FI72otvEQl9NujAfyvzfIIjZtCLw6jkllE+cyHD4mCkTMm3rc1Swd9l7gUbcr3srY4L/YrI8mMygdlMnxoYeFuDo6yrUMVPRqpvJExmZRrH7YONwsj/kCyYRmebSUuFVM=
+	t=1731077839; cv=none; b=lGkOEZETKwnydRZ9nvhFYbmPjb1j0SIdT2FxvUa+QUsLu42zQ8dUfqfdX0MZBzawt1dn+Lycwa6QXzFUjg9ltlgxeupu9DoNyExJZD+wB7ZAc8QEgWPurUlaZ5tbcW/V9g2rlY17psROv6B2ST+9sqsdZta1wGoahdMdAxZBhZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731075368; c=relaxed/simple;
-	bh=ZnOt/QBmN1/tJrQ/3Ih9wNC/mk8h0EJmGW6KeJIZjfM=;
+	s=arc-20240116; t=1731077839; c=relaxed/simple;
+	bh=GIBswxmrFxA/09nr/erPq2+MibYHZUJEtyV3ryd6FjU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nlzMwRq0hBA6Z43fH8AqSgFd5r1QtB1THwdMU2zbQn6gzsIJpCX5U5WUjIOCixBQwFkWDvijlQcZ1PilPlugi1aQrcfmoFI3+2uY3ObE23auzPOTtXorsjVPluLEiKDl4ojnMPaXKk4Q2kQYWLrYnJzSAo1OSjg8oIGX5p+wpw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BS/oIG0L; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=o9poLN4TJi2+3g4z4WuHhiZz5JLxGsY1utbLdMNru9novnJweEQOahxoFQquUz4zreivOQMc8mnzLExmGcJH9XifYGDm/HKcpNxzOtGHL+ThOTPECidCSM6YC1ZTK9s0DAiOg33NRHo967H0TgZMxn8Bd7o0X9bRkUYHQZhZU+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ne9MXo9X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BS/oIG0L"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=bf0kE6+Ar36RvohAg6YRzI2xJ5Dk2ufrDqR36SfdFtk=; b=BS/oIG0L6u2qu4IT+nvicJo3bl
-	EzKKkF7xuJ9NoUQbwGS0NpDdMsIW24TsJ+ioexmMsMstnryDo2rdBWqpUXAzMb7A/2Oo9goftSSKz
-	pp0ZQpuU77sxHoT86vG4UIhCWVReIvwd+ucA+0KZ0t6QoklysJrY1T6JiAYcSOzblu+g/jgok4uLB
-	EMFYzwYpzcPfm/ku8fgA/u/+VcsRTLegs8+TVj3kz2Ae4GG4ytZeQW50uLodUf1gLX04oFf0RVWY2
-	3T0QfiW3vh0oFgN/mG4RIIgMkcqH9i6KWL1o9j0yVBLTIZkoXQsE9Xc7/Ovy08/c3G4CD6zvDzvlH
-	46gGWkXg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t9PmK-0000000CJzi-44m2;
-	Fri, 08 Nov 2024 14:16:01 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4496730049D; Fri,  8 Nov 2024 15:16:00 +0100 (CET)
-Date: Fri, 8 Nov 2024 15:16:00 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sean Christopherson <seanjc@google.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ne9MXo9X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD046C4CECD;
+	Fri,  8 Nov 2024 14:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731077838;
+	bh=GIBswxmrFxA/09nr/erPq2+MibYHZUJEtyV3ryd6FjU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ne9MXo9XrJJYLOVnJcDLyp/o0NetWYt7dWQGYa0FYG+vyek2SYPtJ9s0Wce5pjbw9
+	 cFf1b1n2aoOLBpLemqWcQ/B8drIEXFubfu1RQKDahRgW1u2o/kU8q61ba3n4YePIQM
+	 tLsL+karSwKGjCy53tmJSWyE7JrFHjqY4UW1baTccsOKrv0sumZYgPWDZ6BoLozuo1
+	 ZT8IDs64F+OrTB8FDHFdCYYfmlRgl+Um00SPNPm/4d+6DrLAAkGfq/C7Em3ESnHYCt
+	 Pg3+1nIBFEqB9EDJTqVMS5HwGSt/qRGYG1icV8Pu+by2gGqpE9X+Uwne9BjBxUn1xw
+	 MBRkEr+rF5XmQ==
+Date: Fri, 8 Nov 2024 07:57:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>, Fangrui Song <i@maskray.me>
+Cc: Sean Christopherson <seanjc@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
-	justinstitt@google.com, llvm@lists.linux.dev
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, kvm@vger.kernel.org, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, llvm@lists.linux.dev
 Subject: Re: [PATCH 01/11] objtool: Generic annotation infrastructure
-Message-ID: <20241108141600.GB6497@noisy.programming.kicks-ass.net>
+Message-ID: <20241108145716.GA2564051@thelio-3990X>
 References: <20231204093702.989848513@infradead.org>
  <20231204093731.356358182@infradead.org>
+ <20241108141600.GB6497@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,108 +48,118 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231204093731.356358182@infradead.org>
+In-Reply-To: <20241108141600.GB6497@noisy.programming.kicks-ass.net>
 
-On Mon, Dec 04, 2023 at 10:37:03AM +0100, Peter Zijlstra wrote:
-> Avoid endless .discard.foo sections for each annotation, create a
-> single .discard.annotate section that takes an annotation type along
-> with the instruction.
+On Fri, Nov 08, 2024 at 03:16:00PM +0100, Peter Zijlstra wrote:
+> On Mon, Dec 04, 2023 at 10:37:03AM +0100, Peter Zijlstra wrote:
+> > Avoid endless .discard.foo sections for each annotation, create a
+> > single .discard.annotate section that takes an annotation type along
+> > with the instruction.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> > --- a/include/linux/objtool.h
+> > +++ b/include/linux/objtool.h
+> > @@ -57,6 +57,13 @@
+> >  	".long 998b\n\t"						\
+> >  	".popsection\n\t"
+> >  
+> > +#define ASM_ANNOTATE(x)						\
+> > +	"911:\n\t"						\
+> > +	".pushsection .discard.annotate,\"M\",@progbits,8\n\t"	\
+> > +	".long 911b - .\n\t"					\
+> > +	".long " __stringify(x) "\n\t"				\
+> > +	".popsection\n\t"
+> > +
+> >  #else /* __ASSEMBLY__ */
+> >  
+> >  /*
+> > @@ -146,6 +153,14 @@
+> >  	.popsection
+> >  .endm
+> >  
+> > +.macro ANNOTATE type:req
+> > +.Lhere_\@:
+> > +	.pushsection .discard.annotate,"M",@progbits,8
+> > +	.long	.Lhere_\@ - .
+> > +	.long	\type
+> > +	.popsection
+> > +.endm
+> > +
+> >  #endif /* __ASSEMBLY__ */
+> >  
+> >  #else /* !CONFIG_OBJTOOL */
+> > @@ -167,6 +182,8 @@
+> >  .endm
+> >  .macro REACHABLE
+> >  .endm
+> > +.macro ANNOTATE
+> > +.endm
+> >  #endif
+> >  
+> >  #endif /* CONFIG_OBJTOOL */
+> > --- a/tools/objtool/check.c
+> > +++ b/tools/objtool/check.c
+> > @@ -2308,6 +2308,41 @@ static int read_unwind_hints(struct objt
+> >  	return 0;
+> >  }
+> >  
+> > +static int read_annotate(struct objtool_file *file, void (*func)(int type, struct instruction *insn))
+> > +{
+> > +	struct section *rsec, *sec;
+> > +	struct instruction *insn;
+> > +	struct reloc *reloc;
+> > +	int type;
+> > +
+> > +	rsec = find_section_by_name(file->elf, ".rela.discard.annotate");
+> > +	if (!rsec)
+> > +		return 0;
+> > +
+> > +	sec = find_section_by_name(file->elf, ".discard.annotate");
+> > +	if (!sec)
+> > +		return 0;
+> > +
+> > +	for_each_reloc(rsec, reloc) {
+> > +		insn = find_insn(file, reloc->sym->sec,
+> > +				 reloc->sym->offset + reloc_addend(reloc));
+> > +		if (!insn) {
+> > +			WARN("bad .discard.annotate entry: %d", reloc_idx(reloc));
+> > +			return -1;
+> > +		}
+> > +
+> > +		type = *(u32 *)(sec->data->d_buf + (reloc_idx(reloc) * sec->sh.sh_entsize) + 4);
+> > +
+> > +		func(type, insn);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
-> --- a/include/linux/objtool.h
-> +++ b/include/linux/objtool.h
-> @@ -57,6 +57,13 @@
->  	".long 998b\n\t"						\
->  	".popsection\n\t"
->  
-> +#define ASM_ANNOTATE(x)						\
-> +	"911:\n\t"						\
-> +	".pushsection .discard.annotate,\"M\",@progbits,8\n\t"	\
-> +	".long 911b - .\n\t"					\
-> +	".long " __stringify(x) "\n\t"				\
-> +	".popsection\n\t"
-> +
->  #else /* __ASSEMBLY__ */
->  
->  /*
-> @@ -146,6 +153,14 @@
->  	.popsection
->  .endm
->  
-> +.macro ANNOTATE type:req
-> +.Lhere_\@:
-> +	.pushsection .discard.annotate,"M",@progbits,8
-> +	.long	.Lhere_\@ - .
-> +	.long	\type
-> +	.popsection
-> +.endm
-> +
->  #endif /* __ASSEMBLY__ */
->  
->  #else /* !CONFIG_OBJTOOL */
-> @@ -167,6 +182,8 @@
->  .endm
->  .macro REACHABLE
->  .endm
-> +.macro ANNOTATE
-> +.endm
->  #endif
->  
->  #endif /* CONFIG_OBJTOOL */
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -2308,6 +2308,41 @@ static int read_unwind_hints(struct objt
->  	return 0;
->  }
->  
-> +static int read_annotate(struct objtool_file *file, void (*func)(int type, struct instruction *insn))
-> +{
-> +	struct section *rsec, *sec;
-> +	struct instruction *insn;
-> +	struct reloc *reloc;
-> +	int type;
-> +
-> +	rsec = find_section_by_name(file->elf, ".rela.discard.annotate");
-> +	if (!rsec)
-> +		return 0;
-> +
-> +	sec = find_section_by_name(file->elf, ".discard.annotate");
-> +	if (!sec)
-> +		return 0;
-> +
-> +	for_each_reloc(rsec, reloc) {
-> +		insn = find_insn(file, reloc->sym->sec,
-> +				 reloc->sym->offset + reloc_addend(reloc));
-> +		if (!insn) {
-> +			WARN("bad .discard.annotate entry: %d", reloc_idx(reloc));
-> +			return -1;
-> +		}
-> +
-> +		type = *(u32 *)(sec->data->d_buf + (reloc_idx(reloc) * sec->sh.sh_entsize) + 4);
-> +
-> +		func(type, insn);
-> +	}
-> +
-> +	return 0;
-> +}
+> So... ld.lld hates this :-(
+> 
+> From an LLVM=-19 build we can see that:
+> 
+> $ readelf -WS tmp-build/arch/x86/kvm/vmx/vmenter.o | grep annotate
+>   [13] .discard.annotate PROGBITS        0000000000000000 00028c 000018 08   M  0   0  1
+> 
+> $ readelf -WS tmp-build/arch/x86/kvm/kvm-intel.o | grep annotate
+>   [ 3] .discard.annotate PROGBITS        0000000000000000 069fe0 0089d0 00   M  0   0  1
+> 
+> Which tells us that the translation unit itself has a sh_entsize of 8,
+> while the linked object has sh_entsize of 0.
+> 
+> This then completely messes up the indexing objtool does, which relies
+> on it being a sane number.
+> 
+> GCC/binutils very much does not do this, it retains the 8.
+> 
+> Dear clang folks, help?
 
-So... ld.lld hates this :-(
+Perhaps Fangrui has immediate thoughts, since this appears to be an
+ld.lld thing? Otherwise, I will see if I can dig into this in the next
+couple of weeks (I have an LF webinar on Wednesday that I am still
+prepping for). Is this reproducible with just defconfig or something
+else?
 
-From an LLVM=-19 build we can see that:
-
-$ readelf -WS tmp-build/arch/x86/kvm/vmx/vmenter.o | grep annotate
-  [13] .discard.annotate PROGBITS        0000000000000000 00028c 000018 08   M  0   0  1
-
-$ readelf -WS tmp-build/arch/x86/kvm/kvm-intel.o | grep annotate
-  [ 3] .discard.annotate PROGBITS        0000000000000000 069fe0 0089d0 00   M  0   0  1
-
-Which tells us that the translation unit itself has a sh_entsize of 8,
-while the linked object has sh_entsize of 0.
-
-This then completely messes up the indexing objtool does, which relies
-on it being a sane number.
-
-GCC/binutils very much does not do this, it retains the 8.
-
-Dear clang folks, help?
+Cheers,
+Nathan
