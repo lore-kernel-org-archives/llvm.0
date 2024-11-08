@@ -1,60 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468E51E5019;
-	Fri,  8 Nov 2024 12:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295741E7C0B;
+	Fri,  8 Nov 2024 12:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731067625; cv=none; b=AbUF+0//JWlOzTki5lw3uavpXGeu4f9R/49YxbJvngDpcsNPuqpI9tK0LShiC1w+tUV3Yq6kLZ7r1d4Vzqit4dr8+hHgakCsGSTCTZmDqWLlm0VHnPU4sEV1jHKgMfYddwRSN1nh+X8JaYWKlcJ696XC4+ucaNcK+ciBSJslRQA=
+	t=1731068889; cv=none; b=fnSLSYJlWjwryvlEVQ8SWhzJddNQWHUigmKMdeRZHq4XcnkMSPZ6Wf4c3Q/4vmJBcJBXstKcD/3O2cQ35i/kHTuZF9Rs2dVyjRwgkIUFBLObcOPxB76wpY1xENbi45HYSjTZ4WtjcAWkFZd0UKczyQjbCuTLGMAZfqMGSe4N+Ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731067625; c=relaxed/simple;
-	bh=BPm0h+bV+xsEADH1ZpLdJAmst959FEzmNFAhsDq3Pow=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gsZejo2TLu9u1WkfZRlG7omr6SoEQgsuFmtXH6nDeKqZTs2eX3M5tADCxlxhqdPTAtQtpvaV6ce7QWitIPWhlAlu4/zI85J4AzPL6+MS3BxMvakWxb51qDY7/2x+GyMM45TxiCO3gAvwaCucYSCgLZs1kPG/Gl13SyFVSMYUq4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HhL1a8E1; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1731068889; c=relaxed/simple;
+	bh=bOnSnfghil8eztkx0QAVOkK/Z5EvmrYIytE5HE9doqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pbM+YCbXoke64SuCBrQVzlX8+i/9EOkqMW2f1DHz0nM+K560s99v/+/5Ei8WuBWP5+xpTemVOjyn5fjDS7/Mh4xjeYx27GmElYsZHv171fmD3U79npaO+MnPdVevtEJ/bDlcRF6ciZuTO1NjyfwYSAUJxD9tZu/l8zonzjgQurU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NGDMHdXQ; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HhL1a8E1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NGDMHdXQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731067625; x=1762603625;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BPm0h+bV+xsEADH1ZpLdJAmst959FEzmNFAhsDq3Pow=;
-  b=HhL1a8E1Lx99eku6/eIE+oYwJxtNpNN883egFS+7Mxb3ZUDozLEP74p9
-   A9FUNHZ7xWXWVWYHSZ7eazXE5TYZzP8E8f7dV8SnI5XWahHY6k4xxOiht
-   8bNeXJ8U8w5C4EJm8ycvkSlS3hK4jpasTAQBJkAW5DnuKTclj0/9DrKRX
-   VSOCjChVARcaHA1KjOrlcFN9BMtMyYTj5mx50OZcVOPwHw5AI/RvUcrRX
-   2eQPWfarwbtE52dgGYHZGBZwcOQpr5EVMiUK+PZp7V6Zwcn/OWnIucefr
-   TfGFwxZeVkV27V1aBxcN1Q+FHT2pyNrMH1baWUW907aZp6eZTq06J0Fml
-   w==;
-X-CSE-ConnectionGUID: fQi8g2A5RgKPulbRhkXOuA==
-X-CSE-MsgGUID: +dwAUKgUSyqXjZWVNMT70Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31116622"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="31116622"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:07:04 -0800
-X-CSE-ConnectionGUID: bJpwDKi9SAedTALfbaUTVQ==
-X-CSE-MsgGUID: lzgCYkq+QfKHwvmEe+UKYg==
+  t=1731068888; x=1762604888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bOnSnfghil8eztkx0QAVOkK/Z5EvmrYIytE5HE9doqk=;
+  b=NGDMHdXQKVrsN4EugnYNWUItpISuvRHJL7qOfaSgHZhAmuJEv7uJuaV/
+   b4C7SjpujsQTBAdxX/KSwRGR0u4i95vnrgtiYA6bX1j9xTWvQB7f9rY1i
+   H3HtQgYxTBxifvg+L3E/Sl8BEffsbRR7NBTvQYWYoSs6FtoXxEKuCxy5p
+   oAAICAyopwtuEHGYOYbfwSJXzbV4w8D9XObs8GCBqNm4ClOwj65rYQxfK
+   yxh2bRnt/McNbMv8MM6xHMrpcosPgZeFysH9XJp2eN7oMrfQ0rv8Cw7a+
+   HeLBFSSSOcM247Eq6kLAMwwE4xaT93mIFf2+YkiLKa6sEgMkj7H4g8EFI
+   g==;
+X-CSE-ConnectionGUID: kzISEoPUTlmgsqYCJazHDw==
+X-CSE-MsgGUID: IcdsDHIwSnmqJSGYXl/VgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="42347928"
+X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
+   d="scan'208";a="42347928"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:28:08 -0800
+X-CSE-ConnectionGUID: qk7/gN9KTX+KVphisCHoRw==
+X-CSE-MsgGUID: mrjG7lpOQKmYWiTZko7N9Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="85679499"
+   d="scan'208";a="85054673"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 08 Nov 2024 04:07:01 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 08 Nov 2024 04:28:04 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t9NlT-000rOw-2A;
-	Fri, 08 Nov 2024 12:06:59 +0000
-Date: Fri, 8 Nov 2024 20:06:34 +0800
+	id 1t9O5q-000rPq-0C;
+	Fri, 08 Nov 2024 12:28:02 +0000
+Date: Fri, 8 Nov 2024 20:27:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wenliang Yan <wenliang202407@163.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	John Ogness <john.ogness@linutronix.de>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+	bluescreen_avenger@verizon.net,
+	Caleb Connolly <caleb.connolly@linaro.org>,
+	Petr Mladek <pmladek@suse.com>, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:hwmon-next 32/37] drivers/hwmon/ina2xx.c:734:8:
- error: duplicate case value: 'hwmon_in_input' and 'hwmon_power_average' both
- equal '1'
-Message-ID: <202411082010.YVGQz3Xo-lkp@intel.com>
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH v7 3/7] drm/log: Introduce a new boot logger to draw the
+ kmsg on the screen
+Message-ID: <202411082006.DB7Dlk06-lkp@intel.com>
+References: <20241108082025.1004653-4-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,206 +75,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241108082025.1004653-4-jfalempe@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-head:   33c7c88cd30fa65f5479722ba7eea300ebf889a5
-commit: 8fb186818c2fe7be4e2f722c1bc1108ec854d416 [32/37] hwmon: (ina226) Add support for SY24655
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241108/202411082010.YVGQz3Xo-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411082010.YVGQz3Xo-lkp@intel.com/reproduce)
+Hi Jocelyn,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on baf4afc5831438b35de4b0e951b9cd58435a6d99]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-panic-Move-drawing-functions-to-drm_draw/20241108-162222
+base:   baf4afc5831438b35de4b0e951b9cd58435a6d99
+patch link:    https://lore.kernel.org/r/20241108082025.1004653-4-jfalempe%40redhat.com
+patch subject: [PATCH v7 3/7] drm/log: Introduce a new boot logger to draw the kmsg on the screen
+config: x86_64-buildonly-randconfig-002-20241108 (https://download.01.org/0day-ci/archive/20241108/202411082006.DB7Dlk06-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411082006.DB7Dlk06-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411082010.YVGQz3Xo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411082006.DB7Dlk06-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/hwmon/ina2xx.c:31:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/ina2xx.c:31:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/ina2xx.c:31:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/ina2xx.c:31:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   drivers/hwmon/ina2xx.c:524:15: warning: unused variable 'regval' [-Wunused-variable]
-     524 |         unsigned int regval;
-         |                      ^~~~~~
->> drivers/hwmon/ina2xx.c:734:8: error: duplicate case value: 'hwmon_in_input' and 'hwmon_power_average' both equal '1'
-     734 |                 case hwmon_power_average:
-         |                      ^
-   drivers/hwmon/ina2xx.c:722:8: note: previous case defined here
-     722 |                 case hwmon_in_input:
-         |                      ^
-   8 warnings and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+>> drivers/gpu/drm/drm_client_setup.c:11:38: error: use of undeclared identifier 'CONFIG_DRM_CLIENT_DEFAULT'
+      11 | static char drm_client_default[16] = CONFIG_DRM_CLIENT_DEFAULT;
+         |                                      ^
+>> drivers/gpu/drm/drm_client_setup.c:15:4: error: expected ';' after top level declarator
+      15 |                  CONFIG_DRM_CLIENT_DEFAULT "]");
+         |                  ^
+   drivers/gpu/drm/drm_client_setup.c:33:6: error: redefinition of 'drm_client_setup'
+      33 | void drm_client_setup(struct drm_device *dev, const struct drm_format_info *format)
+         |      ^
+   include/drm/drm_client_setup.h:16:20: note: previous definition is here
+      16 | static inline void drm_client_setup(struct drm_device *dev,
+         |                    ^
+   drivers/gpu/drm/drm_client_setup.c:55:6: error: redefinition of 'drm_client_setup_with_fourcc'
+      55 | void drm_client_setup_with_fourcc(struct drm_device *dev, u32 fourcc)
+         |      ^
+   include/drm/drm_client_setup.h:19:20: note: previous definition is here
+      19 | static inline void drm_client_setup_with_fourcc(struct drm_device *dev, u32 fourcc)
+         |                    ^
+   drivers/gpu/drm/drm_client_setup.c:72:6: error: redefinition of 'drm_client_setup_with_color_mode'
+      72 | void drm_client_setup_with_color_mode(struct drm_device *dev, unsigned int color_mode)
+         |      ^
+   include/drm/drm_client_setup.h:21:20: note: previous definition is here
+      21 | static inline void drm_client_setup_with_color_mode(struct drm_device *dev,
+         |                    ^
+   5 errors generated.
 
 
-vim +734 drivers/hwmon/ina2xx.c
+vim +/CONFIG_DRM_CLIENT_DEFAULT +11 drivers/gpu/drm/drm_client_setup.c
 
-   710	
-   711	static umode_t ina2xx_is_visible(const void *_data, enum hwmon_sensor_types type,
-   712					 u32 attr, int channel)
-   713	{
-   714		const struct ina2xx_data *data = _data;
-   715		bool has_alerts = data->config->has_alerts;
-   716		bool has_power_average = data->config->has_power_average;
-   717		enum ina2xx_ids chip = data->chip;
-   718	
-   719		switch (type) {
-   720		case hwmon_in:
-   721			switch (attr) {
-   722			case hwmon_in_input:
-   723				return 0444;
-   724			case hwmon_in_lcrit:
-   725			case hwmon_in_crit:
-   726				if (has_alerts)
-   727					return 0644;
-   728				break;
-   729			case hwmon_in_lcrit_alarm:
-   730			case hwmon_in_crit_alarm:
-   731				if (has_alerts)
-   732					return 0444;
-   733				break;
- > 734			case hwmon_power_average:
-   735				if (has_power_average)
-   736					return 0444;
-   737				break;
-   738			default:
-   739				break;
-   740			}
-   741			break;
-   742		case hwmon_curr:
-   743			switch (attr) {
-   744			case hwmon_curr_input:
-   745				return 0444;
-   746			case hwmon_curr_lcrit:
-   747			case hwmon_curr_crit:
-   748				if (has_alerts)
-   749					return 0644;
-   750				break;
-   751			case hwmon_curr_lcrit_alarm:
-   752			case hwmon_curr_crit_alarm:
-   753				if (has_alerts)
-   754					return 0444;
-   755				break;
-   756			default:
-   757				break;
-   758			}
-   759			break;
-   760		case hwmon_power:
-   761			switch (attr) {
-   762			case hwmon_power_input:
-   763				return 0444;
-   764			case hwmon_power_crit:
-   765				if (has_alerts)
-   766					return 0644;
-   767				break;
-   768			case hwmon_power_crit_alarm:
-   769				if (has_alerts)
-   770					return 0444;
-   771				break;
-   772			default:
-   773				break;
-   774			}
-   775			break;
-   776		case hwmon_chip:
-   777			switch (attr) {
-   778			case hwmon_chip_update_interval:
-   779				if (chip == ina226 || chip == ina260)
-   780					return 0644;
-   781				break;
-   782			default:
-   783				break;
-   784			}
-   785			break;
-   786		default:
-   787			break;
-   788		}
-   789		return 0;
-   790	}
-   791	
+    10	
+  > 11	static char drm_client_default[16] = CONFIG_DRM_CLIENT_DEFAULT;
+    12	module_param_string(client, drm_client_default, sizeof(drm_client_default), 0444);
+    13	MODULE_PARM_DESC(client,
+    14			 "Choose which drm client to start, default is"
+  > 15			 CONFIG_DRM_CLIENT_DEFAULT "]");
+    16	
 
 -- 
 0-DAY CI Kernel Test Service
