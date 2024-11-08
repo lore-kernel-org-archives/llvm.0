@@ -1,84 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF56233D6E;
-	Fri,  8 Nov 2024 18:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7312233D80
+	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 18:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731089876; cv=none; b=OzxYxSJNHTZuww4+xVzLfoVZKRr+9vwgXfZ76MFqpEJo/jHdDzV6Yxywau8AyJPC2ginUd/d1MWNO93Wu++ZzmsyMku4tZKARMxc7AXmcVjdYbLk4ZOvGE/fettcmS5Ai0GhuZRQs1QtgGIgiU6Ha2pXcMgfkqJh71C8W7shP6Q=
+	t=1731091331; cv=none; b=kLzS9GyER5tqiBIShcGSz8u852TAm/v+06u7GBQLft44VcQF/c+uVLUAFzJjFnYNiJ5VEkyUO8DAXLW5ZJsmSUP6AE6OIJEzWy2NOevgpsjtD/S4RApTeKqaIIncNPwiddcv+O6hoCBcmOvMfkzLo3xKOqVZGC4HQteUwWoXEyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731089876; c=relaxed/simple;
-	bh=nypbHBGDqp7tyTZKtcOJP5r0cq4FwCXcb+BhhHZ2Hlc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNX+Ncfuc0FEEpu28MJj7xEJOn38MPFktRmtdxpjH6WxOjN0CQ74jyhny+2E5yRpSVjNCxHMSMKiSCzO4fXIVECMLHqwHVzmH1wZOgiKlQvpRFcoZOXlD2Lwc+c+qwc+Z65XkXGjoBGaTMN7JXQLARpNezPUS4Xo0n/egCmMFds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PPglazpf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731091331; c=relaxed/simple;
+	bh=s0tydscjfyW7GiJFv9Txyv3rnDzKODqeW47bo7WlQjA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lcJb0Lrn1Wwn6r+YqC9QiLS9tJW9+1fX3mVmMQJ5Uw/A2+CsYCzpu4biSWuCcKP9E7nS1xOn+XO5/gPUf4FynjOxDVAmGxUH29qaNwqxjlhh2QON25ABHajan6H+htSlPD/YMJQslMUfJrwu+fCAtSuJARD+RvGKod/tJnYYSVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JcLyixEg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PPglazpf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F8E0C4CECD;
-	Fri,  8 Nov 2024 18:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731089875;
-	bh=nypbHBGDqp7tyTZKtcOJP5r0cq4FwCXcb+BhhHZ2Hlc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PPglazpfQqnV1jTaVZIO1kY7FWpEOUZFDdQjQ4mt2DStw/uOhr/kM1//peQh/aEmz
-	 LO2gTSo1sr73FshZepwMlqK6Io/f3iAskKqJ1/CJrVAzlJ74qPlFdoQfCCfeQPZ633
-	 syo3MfddEXSVwxVwCVOv+7ELmV4S2172lWoUcU4XBTZF/9NNyoV9WWKxP7ffECf8+r
-	 HF6Ki0EhpOfNrkSsrejdihl9xos9gkNZh33E870l5oC+rKp/E7BzpFTosWeWPCncDL
-	 HS8zPOBmKxvd93bWV+5kEfKAorJunKFxHh1Na62v+CtPYcezFO79/83qp42zMIVOoW
-	 3MJaSzEkuWzZA==
-Date: Fri, 8 Nov 2024 11:17:53 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 sched_ext/for-6.13] sched_ext: Do not enable LLC/NUMA
- optimizations when domains overlap
-Message-ID: <20241108181753.GA2681424@thelio-3990X>
-References: <20241108000136.184909-1-arighi@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JcLyixEg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1731091328;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jV3CFzsIq9SARbJBPwuE488L56/387wssl7RWKUtMvc=;
+	b=JcLyixEgkxu3KHRbkSZS6Nctq0lZ52AoEqY6VIQ8UUmKSbPMTaDFLZsewHhI3Qzmd4wtM9
+	WfLxDzClOF001hH/tcBWiOphHcYyTsjBBIiGKvq/4pC4Nye19PVKsA/1zK1h+OCbjPUTM+
+	IkwG+JzhzFFs21PcfgPXins6C1Yb3SI=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-533-TYcUta45N1GMNiconRqXQA-1; Fri,
+ 08 Nov 2024 13:42:06 -0500
+X-MC-Unique: TYcUta45N1GMNiconRqXQA-1
+X-Mimecast-MFC-AGG-ID: TYcUta45N1GMNiconRqXQA
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 85FEC19560A6
+	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 18:42:05 +0000 (UTC)
+Received: from [172.64.13.23] (unknown [10.30.32.164])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5A0D7195607C;
+	Fri,  8 Nov 2024 18:42:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc6,
+ upstream-mainline, f1dce1f0)
+Date: Fri, 08 Nov 2024 18:42:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241108000136.184909-1-arighi@nvidia.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <20248.124110813420600779@us-mta-533.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 7YC4G1Xw26Cl1AAxtMunzQB7TFZhg7nglS5yvWvEXXA_1731091325
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrea,
+Hi, we tested your kernel and here are the results:
 
-On Fri, Nov 08, 2024 at 01:01:36AM +0100, Andrea Righi wrote:
-...
-> +	/*
-> +	 * Enable NUMA optimization only when there are multiple NUMA domains
-> +	 * among the online CPUs and the NUMA domains don't perfectly overlaps
-> +	 * with the LLC domains.
-> +	 *
-> +	 * If all CPUs belong to the same NUMA node and the same LLC domain,
-> +	 * enabling both NUMA and LLC optimizations is unnecessary, as checking
-> +	 * for an idle CPU in the same domain twice is redundant.
-> +	 */
-> +	cpus = cpumask_of_node(cpu_to_node(cpu));
-> +	if ((cpumask_weight(cpus) < num_online_cpus()) & llc_numa_mismatch())
-> +		enable_numa = true;
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-With this hunk in next-20241108, I am seeing a clang warning (or error
-since CONFIG_WERROR=y):
 
-  In file included from kernel/sched/build_policy.c:63:
-  kernel/sched/ext.c:3252:6: error: use of bitwise '&' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
-   3252 |         if ((cpumask_weight(cpus) < num_online_cpus()) & llc_numa_mismatch())
-        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        |                                                        &&
-  kernel/sched/ext.c:3252:6: note: cast one or both operands to int to silence this warning
-  1 error generated.
+Kernel information:
+    Commit message: Merge tag 'slab-for-6.12-rc7' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vbabka/slab
 
-Was use of a bitwise AND here intentional (i.e., should
-llc_num_mismatch() always be called regardless of the outcome of the
-first condition) or can it be switched to a logical AND to silence the
-warning? I do not mind sending a patch but I did not want to be wrong
-off bat. If there is some other better solution that I am not seeing,
-please feel free to send a patch with this as just a report.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1533976305
 
-Cheers,
-Nathan
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1533976305-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1533976305-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1533976305-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
