@@ -1,179 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F5C1EF08B
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 14:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36DF1DEFC2;
+	Fri,  8 Nov 2024 14:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731075167; cv=none; b=MN5Z8cMzIO55q6tJcLaYX5RWEyE35QE740G7Clma/2k5Eo8IWpF6yRVXpEMT3GQgxDjOVLd+ZBYa6JXnHPOT1Q4iGT9hmWqerFxoYaZdDrkr+spEwLxmE8KUYNVC5QR0T10RxwK7b8mC7zgJ6jaIiZXP/06F/aaTa7Lnt+ddWsY=
+	t=1731075368; cv=none; b=o/MiTv8LAyfK5jXouWsOmx9cHLsO61g0ZVKgr47vx2FI72otvEQl9NujAfyvzfIIjZtCLw6jkllE+cyHD4mCkTMm3rc1Swd9l7gUbcr3srY4L/YrI8mMygdlMnxoYeFuDo6yrUMVPRqpvJExmZRrH7YONwsj/kCyYRmebSUuFVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731075167; c=relaxed/simple;
-	bh=JoSbIGFCX3QXJ8QeoQz4xxBhhwyTvR5PjoWPacA2Mvc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nlmdKc/s2tN3ViB7d+Ef7lHEjiya9Z7T/udC2VQ8tzVv3jaFx0JrkSgVGhUjVETGj3RGDqp3nh5tXd4GvVW8CdkagKZh+w9cQIQ8pXqmltq6RgoWBSwIPpkYx8T2Mt3fO/ucAKOeerVy1uSIc6d1cf31bFSKi5SCg0313aa4MbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R73XqURr; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1731075368; c=relaxed/simple;
+	bh=ZnOt/QBmN1/tJrQ/3Ih9wNC/mk8h0EJmGW6KeJIZjfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nlzMwRq0hBA6Z43fH8AqSgFd5r1QtB1THwdMU2zbQn6gzsIJpCX5U5WUjIOCixBQwFkWDvijlQcZ1PilPlugi1aQrcfmoFI3+2uY3ObE23auzPOTtXorsjVPluLEiKDl4ojnMPaXKk4Q2kQYWLrYnJzSAo1OSjg8oIGX5p+wpw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BS/oIG0L; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R73XqURr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731075165; x=1762611165;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JoSbIGFCX3QXJ8QeoQz4xxBhhwyTvR5PjoWPacA2Mvc=;
-  b=R73XqURr0Njnd+Yc9i8ZIEM6KVKFvSYZnriDMVL78eA7gCP9mgwRZU6G
-   l0KL5F+got+Cb8A9Y79WedOQx+EGvkL1ZcuUwZmt43dHUA/3o6rcTT4pw
-   1BEx5Ihr1Vy7WMydQae1bwfl2IrXNtLt8HM/iJsDycNC5lJIk4s3eoSQR
-   NMsG4DrN15cugDzsVDLaSrYf5gKz4RZpGLdgigdRVeRX2MlPvVrMbrd2b
-   lJiqicnXwPR5lVJ1yxgOlpTxpUJMu6cvpr+3j0wwLx2ghttmI+5fsIkkO
-   HjYYOf9tghTepacAYlhcVfx/Z2AN067tpI0R1vVZxB1dK0vroIsr3dkNN
-   A==;
-X-CSE-ConnectionGUID: bKKWiDUxSDeWCwnJtVM8HA==
-X-CSE-MsgGUID: kMcEesgtSl+BNZQxxWxvQQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="31060473"
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="31060473"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 06:12:42 -0800
-X-CSE-ConnectionGUID: Hqeb6jPXR+OHAwnKafQltg==
-X-CSE-MsgGUID: jCo0yHasT2KCAK7G7tz/hg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="90393947"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa003.jf.intel.com with ESMTP; 08 Nov 2024 06:12:39 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 3385143A; Fri, 08 Nov 2024 16:12:37 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Dave Hansen <dave.hansen@intel.com>
-Subject: [PATCH v4 1/1] x86/cpu: Make sure flag_is_changeable_p() is always being used
-Date: Fri,  8 Nov 2024 16:11:46 +0200
-Message-ID: <20241108141235.1456557-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BS/oIG0L"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=bf0kE6+Ar36RvohAg6YRzI2xJ5Dk2ufrDqR36SfdFtk=; b=BS/oIG0L6u2qu4IT+nvicJo3bl
+	EzKKkF7xuJ9NoUQbwGS0NpDdMsIW24TsJ+ioexmMsMstnryDo2rdBWqpUXAzMb7A/2Oo9goftSSKz
+	pp0ZQpuU77sxHoT86vG4UIhCWVReIvwd+ucA+0KZ0t6QoklysJrY1T6JiAYcSOzblu+g/jgok4uLB
+	EMFYzwYpzcPfm/ku8fgA/u/+VcsRTLegs8+TVj3kz2Ae4GG4ytZeQW50uLodUf1gLX04oFf0RVWY2
+	3T0QfiW3vh0oFgN/mG4RIIgMkcqH9i6KWL1o9j0yVBLTIZkoXQsE9Xc7/Ovy08/c3G4CD6zvDzvlH
+	46gGWkXg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t9PmK-0000000CJzi-44m2;
+	Fri, 08 Nov 2024 14:16:01 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4496730049D; Fri,  8 Nov 2024 15:16:00 +0100 (CET)
+Date: Fri, 8 Nov 2024 15:16:00 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+	justinstitt@google.com, llvm@lists.linux.dev
+Subject: Re: [PATCH 01/11] objtool: Generic annotation infrastructure
+Message-ID: <20241108141600.GB6497@noisy.programming.kicks-ass.net>
+References: <20231204093702.989848513@infradead.org>
+ <20231204093731.356358182@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231204093731.356358182@infradead.org>
 
-When flag_is_changeable_p() is unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
+On Mon, Dec 04, 2023 at 10:37:03AM +0100, Peter Zijlstra wrote:
+> Avoid endless .discard.foo sections for each annotation, create a
+> single .discard.annotate section that takes an annotation type along
+> with the instruction.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+> --- a/include/linux/objtool.h
+> +++ b/include/linux/objtool.h
+> @@ -57,6 +57,13 @@
+>  	".long 998b\n\t"						\
+>  	".popsection\n\t"
+>  
+> +#define ASM_ANNOTATE(x)						\
+> +	"911:\n\t"						\
+> +	".pushsection .discard.annotate,\"M\",@progbits,8\n\t"	\
+> +	".long 911b - .\n\t"					\
+> +	".long " __stringify(x) "\n\t"				\
+> +	".popsection\n\t"
+> +
+>  #else /* __ASSEMBLY__ */
+>  
+>  /*
+> @@ -146,6 +153,14 @@
+>  	.popsection
+>  .endm
+>  
+> +.macro ANNOTATE type:req
+> +.Lhere_\@:
+> +	.pushsection .discard.annotate,"M",@progbits,8
+> +	.long	.Lhere_\@ - .
+> +	.long	\type
+> +	.popsection
+> +.endm
+> +
+>  #endif /* __ASSEMBLY__ */
+>  
+>  #else /* !CONFIG_OBJTOOL */
+> @@ -167,6 +182,8 @@
+>  .endm
+>  .macro REACHABLE
+>  .endm
+> +.macro ANNOTATE
+> +.endm
+>  #endif
+>  
+>  #endif /* CONFIG_OBJTOOL */
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -2308,6 +2308,41 @@ static int read_unwind_hints(struct objt
+>  	return 0;
+>  }
+>  
+> +static int read_annotate(struct objtool_file *file, void (*func)(int type, struct instruction *insn))
+> +{
+> +	struct section *rsec, *sec;
+> +	struct instruction *insn;
+> +	struct reloc *reloc;
+> +	int type;
+> +
+> +	rsec = find_section_by_name(file->elf, ".rela.discard.annotate");
+> +	if (!rsec)
+> +		return 0;
+> +
+> +	sec = find_section_by_name(file->elf, ".discard.annotate");
+> +	if (!sec)
+> +		return 0;
+> +
+> +	for_each_reloc(rsec, reloc) {
+> +		insn = find_insn(file, reloc->sym->sec,
+> +				 reloc->sym->offset + reloc_addend(reloc));
+> +		if (!insn) {
+> +			WARN("bad .discard.annotate entry: %d", reloc_idx(reloc));
+> +			return -1;
+> +		}
+> +
+> +		type = *(u32 *)(sec->data->d_buf + (reloc_idx(reloc) * sec->sh.sh_entsize) + 4);
+> +
+> +		func(type, insn);
+> +	}
+> +
+> +	return 0;
+> +}
 
-arch/x86/kernel/cpu/common.c:351:19: error: unused function 'flag_is_changeable_p' [-Werror,-Wunused-function]
-  351 | static inline int flag_is_changeable_p(u32 flag)
-      |                   ^~~~~~~~~~~~~~~~~~~~
+So... ld.lld hates this :-(
 
-Fix this by moving core around to make sure flag_is_changeable_p() is
-always being used.
+From an LLVM=-19 build we can see that:
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
+$ readelf -WS tmp-build/arch/x86/kvm/vmx/vmenter.o | grep annotate
+  [13] .discard.annotate PROGBITS        0000000000000000 00028c 000018 08   M  0   0  1
 
-While at it, fix the argument type to be unsigned long, although it currently
-only runs in 32-bit cases.
+$ readelf -WS tmp-build/arch/x86/kvm/kvm-intel.o | grep annotate
+  [ 3] .discard.annotate PROGBITS        0000000000000000 069fe0 0089d0 00   M  0   0  1
 
-Suggested-by: Dave Hansen <dave.hansen@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
+Which tells us that the translation unit itself has a sh_entsize of 8,
+while the linked object has sh_entsize of 0.
 
-v4: fixed the type of parameter (hpa)
-v3: rewritten as suggested (Dave)
-v2: marked both 32- and 64-bit cases
+This then completely messes up the indexing objtool does, which relies
+on it being a sane number.
 
- arch/x86/kernel/cpu/common.c | 33 +++++++++++++++------------------
- 1 file changed, 15 insertions(+), 18 deletions(-)
+GCC/binutils very much does not do this, it retains the 8.
 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index a5f221ea5688..49682e35f9bd 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -276,22 +276,14 @@ static int __init x86_noinvpcid_setup(char *s)
- }
- early_param("noinvpcid", x86_noinvpcid_setup);
- 
--#ifdef CONFIG_X86_32
--static int cachesize_override = -1;
--static int disable_x86_serial_nr = 1;
--
--static int __init cachesize_setup(char *str)
--{
--	get_option(&str, &cachesize_override);
--	return 1;
--}
--__setup("cachesize=", cachesize_setup);
--
- /* Standard macro to see if a specific flag is changeable */
--static inline int flag_is_changeable_p(u32 flag)
-+static inline int flag_is_changeable_p(unsigned long flag)
- {
- 	u32 f1, f2;
- 
-+	if (!IS_ENABLED(CONFIG_X86_32))
-+		return 1;
-+
- 	/*
- 	 * Cyrix and IDT cpus allow disabling of CPUID
- 	 * so the code below may return different results
-@@ -316,6 +308,17 @@ static inline int flag_is_changeable_p(u32 flag)
- 	return ((f1^f2) & flag) != 0;
- }
- 
-+#ifdef CONFIG_X86_32
-+static int cachesize_override = -1;
-+static int disable_x86_serial_nr = 1;
-+
-+static int __init cachesize_setup(char *str)
-+{
-+	get_option(&str, &cachesize_override);
-+	return 1;
-+}
-+__setup("cachesize=", cachesize_setup);
-+
- /* Probe for the CPUID instruction */
- int have_cpuid_p(void)
- {
-@@ -349,10 +352,6 @@ static int __init x86_serial_nr_setup(char *s)
- }
- __setup("serialnumber", x86_serial_nr_setup);
- #else
--static inline int flag_is_changeable_p(u32 flag)
--{
--	return 1;
--}
- static inline void squash_the_stupid_serial_number(struct cpuinfo_x86 *c)
- {
- }
-@@ -1088,7 +1087,6 @@ void get_cpu_address_sizes(struct cpuinfo_x86 *c)
- 
- static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
- {
--#ifdef CONFIG_X86_32
- 	int i;
- 
- 	/*
-@@ -1109,7 +1107,6 @@ static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
- 				break;
- 			}
- 		}
--#endif
- }
- 
- #define NO_SPECULATION		BIT(0)
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+Dear clang folks, help?
