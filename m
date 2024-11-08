@@ -1,114 +1,219 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57CC20A5DD
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 15:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A451E7C26
+	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 15:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731079924; cv=none; b=M+SOGJgL1LYkcpXH/DiflbJIK3aDAWQBCDnJRpY+4UTrBXg5gspRoen+9B7rujaNWKZ4/Qyplvkc9XHBKYiw3t1eCrB+Zf2qOhyf+QPApxTBS2XfoeWZH+FUnlyMLOIeP38SC5fausEDw1kv2Xz2Iy5jcrmARU+CXJoLIeIyhjA=
+	t=1731080153; cv=none; b=JAentri1gvXmREPIdUYhd23IQQBEk46P0mJbaJ3pKd4L52E0PXfrKrD1Fk1YXUi2xfPMU1R/uKu3C6aNPYIFYOYD3ysIN8bMuKpKZ+q4UjSh508p92nITs0gYqpSRp9a5o5/+9WAGwBlgBE8iN52UuCM7eG8aHNVK4pjxapFp1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731079924; c=relaxed/simple;
-	bh=VzP/LDCirUJQ3l+YlFKHGVOCDG843Dq6kqqElg0cEHU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ftA20VprKfBAjzhoGu15gFJecqBWIZHLC3xNr7zfpHPDtl+lhSj4sjiVAASwzg0yc1scrCDfVVgRgO2K0pVicZj8hBfmjBGzqat7MP4UqhW+fZGhYZsja3Ma0xf4TyiPk0nQy8UPg/r9bmR35NmsRStl49hKhA1P02YTGopTwsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O95d5/h3; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1731080153; c=relaxed/simple;
+	bh=/dBLc42ZULon4f5jxLW7hmS2yRMFW+dvihOfiV2JL4A=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=bDSKT2BGni24Ji6Y5TGCbUOQWRLXwzQhgDZpCyViTHwCU2LKtCbUxyn9k4SmqkvjQjSosDf1+vacTT9qXH9HzUt2ZyhsYp+6XkbjL6gM23GaPe7w+lvsodKJc5qh/j536bUa0478opDMLOyrOL4jfyQcbBGboyFU0EjfK+ZH184=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=i9r3Y+mh; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O95d5/h3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731079923; x=1762615923;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VzP/LDCirUJQ3l+YlFKHGVOCDG843Dq6kqqElg0cEHU=;
-  b=O95d5/h3c875c5H5xPcjKH9rB4NWNikNFASzudUuxOBkskyzq0dj2vwL
-   CQV36wOPgy8095S+0jyBqvpku6fhYZwRvNh2GoNw4weOdyDlDr6/7pa6f
-   QvsVW8/HAHoqJuI6D2xLVC5xBDEZfLMMFqhFk1ErbAmXDev6pJmCW+1AL
-   K2vrPdQGDUIUbQ6RqGCQv3I5JuwI3qpjfla5CUL2U/5KmscMt1fh6tdti
-   /VMTENgN0b0jtRYVHl7dYHxxsmMKYTWjVNrey6vIGmDqZTWK/NwnmFvNv
-   IZj0e9ecHuT9842oY9LrSulpei3mLYd2JyLIBmHwcHp8sfjPtrRqR3gnJ
-   w==;
-X-CSE-ConnectionGUID: 1lH+Lu57RsOnZmE883Z47Q==
-X-CSE-MsgGUID: /N9rYkPHTTS/chRyYa/xOQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41528854"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="41528854"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 07:32:03 -0800
-X-CSE-ConnectionGUID: ouOLeQSeQ2aZVDdpdPf2+g==
-X-CSE-MsgGUID: luzJEKbTTMuRAJTeJZMh3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="108903402"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 07:31:59 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t9Qxo-0000000Cewz-1VNX;
-	Fri, 08 Nov 2024 17:31:56 +0200
-Date: Fri, 8 Nov 2024 17:31:56 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v4 1/1] x86/cpu: Make sure flag_is_changeable_p() is
- always being used
-Message-ID: <Zy4u7ByPh7WOnpdv@smile.fi.intel.com>
-References: <20241108141235.1456557-1-andriy.shevchenko@linux.intel.com>
- <B7F5B222-2982-43D5-87A5-7510EDCCB4DF@zytor.com>
- <Zy4rw-yx0JL7_-lk@smile.fi.intel.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="i9r3Y+mh"
+Received: from [127.0.0.1] ([90.224.241.145])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 4A8FZPI61651468
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 8 Nov 2024 07:35:27 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 4A8FZPI61651468
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024101701; t=1731080128;
+	bh=G1qv8+XkFa/EOG9R/DaRbnKN3PfbqfQNFabDyoSPFB8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=i9r3Y+mhnswtrCxdbozgjpjZC9Le9CCZTYTTfysRoVZeboqk774A5zftMourtOo3V
+	 9HtSJwPMJZFZWfF3T1TVASTbwnKjmaVKYzsZR7BR6qpg2LxcIRWm31AS+CHzQT2v3R
+	 T9Bn/QgKVMh0DMSfG/d08geuLQsVuO+8oo1Gj8bduwadebesFUxMhPIjSm4g/E483m
+	 NNxiWuSw+c2Yt+NmAftxCk4Xn5lNAWONZU0KpTDgDRBC784WPeAaqwcS+YN/Ue1eiP
+	 lFCAH5iPuhNXKGtmwF1GFR2gsAwMc8aCuXfdCUHl2WAe/S+bEFbj2JTmYbdcu93s8A
+	 AdxmYeSwOaNMg==
+Date: Fri, 08 Nov 2024 16:35:17 +0100
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_1/1=5D_x86/cpu=3A_Make_sure_fl?=
+ =?US-ASCII?Q?ag=5Fis=5Fchangeable=5Fp=28=29_is_always_being_used?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20241108153105.1578186-1-andriy.shevchenko@linux.intel.com>
+References: <20241108153105.1578186-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <732CB428-EE83-455F-A5AF-C008B7541401@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zy4rw-yx0JL7_-lk@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 08, 2024 at 05:18:27PM +0200, Andy Shevchenko wrote:
-> On Fri, Nov 08, 2024 at 04:13:05PM +0100, H. Peter Anvin wrote:
-> > On November 8, 2024 3:11:46 PM GMT+01:00, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > >When flag_is_changeable_p() is unused, it prevents kernel builds
-> > >with clang, `make W=1` and CONFIG_WERROR=y:
-> > >
-> > >arch/x86/kernel/cpu/common.c:351:19: error: unused function 'flag_is_changeable_p' [-Werror,-Wunused-function]
-> > >  351 | static inline int flag_is_changeable_p(u32 flag)
-> > >      |                   ^~~~~~~~~~~~~~~~~~~~
-> > >
-> > >Fix this by moving core around to make sure flag_is_changeable_p() is
-> > >always being used.
-> > >
-> > >See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> > >inline functions for W=1 build").
-> > >
-> > >While at it, fix the argument type to be unsigned long, although it currently
-> > >only runs in 32-bit cases.
+On November 8, 2024 4:30:10 PM GMT+01:00, Andy Shevchenko <andriy=2Eshevche=
+nko@linux=2Eintel=2Ecom> wrote:
+>When flag_is_changeable_p() is unused, it prevents kernel builds
+>with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
+>
+>arch/x86/kernel/cpu/common=2Ec:351:19: error: unused function 'flag_is_ch=
+angeable_p' [-Werror,-Wunused-function]
+>  351 | static inline int flag_is_changeable_p(u32 flag)
+>      |                   ^~~~~~~~~~~~~~~~~~~~
+>
+>Fix this by moving core around to make sure flag_is_changeable_p() is
+>always being used=2E
+>
+>See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+>inline functions for W=3D1 build")=2E
+>
+>While at it, fix the argument type to be unsigned long along with
+>the local variables, although it currently only runs in 32-bit cases=2E
+>Besides that, makes it return boolean instead of int=2E This induces
+>the change of the returning type of have_cpuid_p() to be boolean
+>as well=2E
+>
+>Suggested-by: Dave Hansen <dave=2Ehansen@intel=2Ecom>
+>Signed-off-by: Andy Shevchenko <andriy=2Eshevchenko@linux=2Eintel=2Ecom>
+>---
+>
+>v5: fixed type of the local vars (hpa), made it return bool (hpa)
+>v4: fixed the type of parameter (hpa)
+>v3: rewritten as suggested (Dave)
+>v2: marked both 32- and 64-bit cases
+>
+> arch/x86/include/asm/cpuid=2Eh |  8 +++++---
+> arch/x86/kernel/cpu/common=2Ec | 39 +++++++++++++++++-------------------
+> 2 files changed, 23 insertions(+), 24 deletions(-)
+>
+>diff --git a/arch/x86/include/asm/cpuid=2Eh b/arch/x86/include/asm/cpuid=
+=2Eh
+>index ca4243318aad=2E=2E239b9ba5c398 100644
+>--- a/arch/x86/include/asm/cpuid=2Eh
+>+++ b/arch/x86/include/asm/cpuid=2Eh
+>@@ -6,6 +6,8 @@
+> #ifndef _ASM_X86_CPUID_H
+> #define _ASM_X86_CPUID_H
+>=20
+>+#include <linux/types=2Eh>
+>+
+> #include <asm/string=2Eh>
+>=20
+> struct cpuid_regs {
+>@@ -20,11 +22,11 @@ enum cpuid_regs_idx {
+> };
+>=20
+> #ifdef CONFIG_X86_32
+>-extern int have_cpuid_p(void);
+>+bool have_cpuid_p(void);
+> #else
+>-static inline int have_cpuid_p(void)
+>+static inline bool have_cpuid_p(void)
+> {
+>-	return 1;
+>+	return true;
+> }
+> #endif
+> static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
+>diff --git a/arch/x86/kernel/cpu/common=2Ec b/arch/x86/kernel/cpu/common=
+=2Ec
+>index a5f221ea5688=2E=2Ef361336416ae 100644
+>--- a/arch/x86/kernel/cpu/common=2Ec
+>+++ b/arch/x86/kernel/cpu/common=2Ec
+>@@ -276,21 +276,13 @@ static int __init x86_noinvpcid_setup(char *s)
+> }
+> early_param("noinvpcid", x86_noinvpcid_setup);
+>=20
+>-#ifdef CONFIG_X86_32
+>-static int cachesize_override =3D -1;
+>-static int disable_x86_serial_nr =3D 1;
+>-
+>-static int __init cachesize_setup(char *str)
+>-{
+>-	get_option(&str, &cachesize_override);
+>-	return 1;
+>-}
+>-__setup("cachesize=3D", cachesize_setup);
+>-
+> /* Standard macro to see if a specific flag is changeable */
+>-static inline int flag_is_changeable_p(u32 flag)
+>+static inline bool flag_is_changeable_p(unsigned long flag)
+> {
+>-	u32 f1, f2;
+>+	unsigned long f1, f2;
+>+
+>+	if (!IS_ENABLED(CONFIG_X86_32))
+>+		return true;
+>=20
+> 	/*
+> 	 * Cyrix and IDT cpus allow disabling of CPUID
+>@@ -313,11 +305,22 @@ static inline int flag_is_changeable_p(u32 flag)
+> 		      : "=3D&r" (f1), "=3D&r" (f2)
+> 		      : "ir" (flag));
+>=20
+>-	return ((f1^f2) & flag) !=3D 0;
+>+	return (f1 ^ f2) & flag;
+> }
+>=20
+>+#ifdef CONFIG_X86_32
+>+static int cachesize_override =3D -1;
+>+static int disable_x86_serial_nr =3D 1;
+>+
+>+static int __init cachesize_setup(char *str)
+>+{
+>+	get_option(&str, &cachesize_override);
+>+	return 1;
+>+}
+>+__setup("cachesize=3D", cachesize_setup);
+>+
+> /* Probe for the CPUID instruction */
+>-int have_cpuid_p(void)
+>+bool have_cpuid_p(void)
+> {
+> 	return flag_is_changeable_p(X86_EFLAGS_ID);
+> }
+>@@ -349,10 +352,6 @@ static int __init x86_serial_nr_setup(char *s)
+> }
+> __setup("serialnumber", x86_serial_nr_setup);
+> #else
+>-static inline int flag_is_changeable_p(u32 flag)
+>-{
+>-	return 1;
+>-}
+> static inline void squash_the_stupid_serial_number(struct cpuinfo_x86 *c=
+)
+> {
+> }
+>@@ -1088,7 +1087,6 @@ void get_cpu_address_sizes(struct cpuinfo_x86 *c)
+>=20
+> static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
+> {
+>-#ifdef CONFIG_X86_32
+> 	int i;
+>=20
+> 	/*
+>@@ -1109,7 +1107,6 @@ static void identify_cpu_without_cpuid(struct cpuin=
+fo_x86 *c)
+> 				break;
+> 			}
+> 		}
+>-#endif
+> }
+>=20
+> #define NO_SPECULATION		BIT(0)
 
-...
+Looks good to me:
 
-> > It's good that you are changing the return type, but we need to be consistent
-> > and change f1, f2 to match. At the same time, I suggest changing the return
-> > type to bool.
-> 
-> Ah, that makes sense!
+Reviewed-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
 
-All addressed in v5:
-20241108153105.1578186-1-andriy.shevchenko@linux.intel.com
-You are in Cc there.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+But another question: why the hell does clang complain about an unused sta=
+tic inline function?!
