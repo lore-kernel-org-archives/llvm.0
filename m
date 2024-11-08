@@ -1,103 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6307C233D80
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 18:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A800233D96;
+	Fri,  8 Nov 2024 18:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731091931; cv=none; b=PvYqZ6tONA29en/MXksLRQPEGrnfnLgBgxnA5f2qRbgBxzvIVHnyE0kywhNBYvlGHKOAYy4u51JUEZlLTWh5gqzspcH2Q+sHMuRDNdAmGMy4225hwKohvnibp8jAeLVIgPZ0QETeGS00cw+kMjKyMsMi0zim2nR5O7+AJq9xh9o=
+	t=1731092077; cv=none; b=Eg0BYRBtEWlHOut6OFFzXHsy2jLS91l0qLeY4MPS4CgNfBXtghh5taOhJBuYr1E0g4pLl/2ZjATWPqXr52sc3HlkyMwt6DouLDR6Aklh6KTk155qqnJh2NVNun+p/EDtCtTyft71L+B45q7GnfyMWuPFqToLJQdzqkHkIrgVNt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731091931; c=relaxed/simple;
-	bh=DCEwBdjjJYM6ZD/92f5HvcMY0DaCxoE+BSm6PAL9Nvg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QgoAowvoQaCABtklUcBir/cZUjXYeTyAkODdk8r+n5FJk/vKUul9A2KJT0Fuy4ovFUX86Gv680OZeW+EwdQHRl1PteJzznOgAK2NQNLyG6PjDW/K8UMjVNpprQHR+Z2mgjkoSlgzyZJU8dsLRXqoHfQXxDvaCokSDy153kRIh+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LoIE2K4I; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1731092077; c=relaxed/simple;
+	bh=i+b6iI6rTQzFtWDzZdJZq3XzYiI3fmg6UAFsyE+A1e4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mHfjYKuJ905uHa0Xz2TdSGHeOI0adeQyY2dTt51Rg7ri+VwHTh4NFzEpvmPA5gg3D/5TQqr5S/sWdgUhvTUFbdyo6nwStt+1id+tgn6C2Ld1txtPvwrMNQdwGUkCVAF9SVMyptpwr1NuDig3cECre6T4zjIkBqeBQ0OTBoqHxSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s4T6X1Va; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LoIE2K4I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731091928;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hPr+iGKbwDXShpJBAsr10N/VYRsgXIiPcm7JHZ+rjHw=;
-	b=LoIE2K4IugD6wJpcBAT0KIZfKVOdXE3bLfzMNfVhgZgILykund5xjRx+pta67wnzYq64Sf
-	lEo3pgCpYmBh4CRgwtBYu/Ae3JTZb7jihHve72RIvoIg3l2EprPoxG4K6Ba7qn2l0M2Q3v
-	Q8v/HYCZhCrd+CL5cEx0EObP3uuwPZM=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-617-y9JzrW3EOvmkCbaLFT658g-1; Fri,
- 08 Nov 2024 13:52:06 -0500
-X-MC-Unique: y9JzrW3EOvmkCbaLFT658g-1
-X-Mimecast-MFC-AGG-ID: y9JzrW3EOvmkCbaLFT658g
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0450C19560B4
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 18:52:06 +0000 (UTC)
-Received: from [172.64.13.23] (unknown [10.30.32.164])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 899F61953883;
-	Fri,  8 Nov 2024 18:52:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc6,
- upstream-mainline, 50643bbc)
-Date: Fri, 08 Nov 2024 18:52:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s4T6X1Va"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D49DC4CECD;
+	Fri,  8 Nov 2024 18:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731092074;
+	bh=i+b6iI6rTQzFtWDzZdJZq3XzYiI3fmg6UAFsyE+A1e4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=s4T6X1VaU4CUSlM6gsQqWZMP4HwlShyBLyv5Rru+dzpB3n227w7X84S3APRC+VR+f
+	 abLPqnQEF1JlWeOEIXc4OX0rhIeDUjPAOvsaRvu8lJgI+d/E28knzLKedaeKtQC/69
+	 nDSOZpX79EHoXrC//NBIXHaw3HXq2hcSxvMoF6QaGNaPx8NYvvu9s9vL9iQpygUSb+
+	 ERCKlbSNN6u4H7U3KzckCQmdqSQ41hKrtony6guJwnSBRHKG0e0XDdvoeeOeO8lekh
+	 yzHbkoxc10VZd95YgjHD265H1F7hEQZs7HQux8Lvv/Wln+NagZ6YsLj5aiLVvHTQkL
+	 yiTP4Jkwx7Lcw==
+Date: Fri, 8 Nov 2024 08:54:33 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrea Righi <arighi@nvidia.com>, David Vernet <void@manifault.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 sched_ext/for-6.13] sched_ext: Do not enable LLC/NUMA
+ optimizations when domains overlap
+Message-ID: <Zy5eadwAuQSzqp-1@slm.duckdns.org>
+References: <20241108000136.184909-1-arighi@nvidia.com>
+ <20241108181753.GA2681424@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <81375.124110813520602822@us-mta-617.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AYSPSYFNm8hTwragxwIZCfzZcdD5oZA66gKSpGetpJg_1731091926
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108181753.GA2681424@thelio-3990X>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Nov 08, 2024 at 11:17:53AM -0700, Nathan Chancellor wrote:
+> Hi Andrea,
+> 
+> On Fri, Nov 08, 2024 at 01:01:36AM +0100, Andrea Righi wrote:
+> ...
+> > +	/*
+> > +	 * Enable NUMA optimization only when there are multiple NUMA domains
+> > +	 * among the online CPUs and the NUMA domains don't perfectly overlaps
+> > +	 * with the LLC domains.
+> > +	 *
+> > +	 * If all CPUs belong to the same NUMA node and the same LLC domain,
+> > +	 * enabling both NUMA and LLC optimizations is unnecessary, as checking
+> > +	 * for an idle CPU in the same domain twice is redundant.
+> > +	 */
+> > +	cpus = cpumask_of_node(cpu_to_node(cpu));
+> > +	if ((cpumask_weight(cpus) < num_online_cpus()) & llc_numa_mismatch())
+> > +		enable_numa = true;
+> 
+> With this hunk in next-20241108, I am seeing a clang warning (or error
+> since CONFIG_WERROR=y):
+> 
+>   In file included from kernel/sched/build_policy.c:63:
+>   kernel/sched/ext.c:3252:6: error: use of bitwise '&' with boolean operands [-Werror,-Wbitwise-instead-of-logical]
+>    3252 |         if ((cpumask_weight(cpus) < num_online_cpus()) & llc_numa_mismatch())
+>         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>         |                                                        &&
+>   kernel/sched/ext.c:3252:6: note: cast one or both operands to int to silence this warning
+>   1 error generated.
+> 
+> Was use of a bitwise AND here intentional (i.e., should
+> llc_num_mismatch() always be called regardless of the outcome of the
+> first condition) or can it be switched to a logical AND to silence the
+> warning? I do not mind sending a patch but I did not want to be wrong
+> off bat. If there is some other better solution that I am not seeing,
+> please feel free to send a patch with this as just a report.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Oops, that looks like a mistake. I don't see why it can't be &&.
 
+Thanks.
 
-Kernel information:
-    Commit message: Merge tag 'sound-6.12-rc7' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/tiwai/sound
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1533986611
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1533986611-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1533986611-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1533986611-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+tejun
