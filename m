@@ -1,73 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E271F4729;
-	Fri,  8 Nov 2024 22:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A46C1C1F2B;
+	Fri,  8 Nov 2024 23:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731104008; cv=none; b=I9BI639paiNkMeURt+FcjFCac1q/hVI1HaQzHemo6/JcpkrXFz7yr3FTD/N9jppuT3q9DvuX4PIopmO3Ih5mjnC4oMgjM8RolABBvehsag8t7dHakb+ijILpUR6zPuSysrrMJmmt/abe4NtQxbyQiJcaT7M8Ytifyo1zhAQIYFI=
+	t=1731108326; cv=none; b=B3HchMeqXGhOpgceJxC/7Uw8CYFUhHguTiG50OnJmS2cInXM2+1Qyy584TwGQIGUYbCRUx59fyN6XBKykqUMm3FoW302jvmm/PSpeI51TYU/yndkxz4Wo8ShQZJAkNmgEPMzSB8F1/jKFFbLJWLjtPCOVxQWDSb341gbGIg0rEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731104008; c=relaxed/simple;
-	bh=oDUo9ZINLG96hfXKTnEvhEElrOjkQNRAzFXoy2hRnfE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SO7XUwoSlNzSiQTamnbHHwuU+aUnMZQVbggwnmRMQJpu2vwDu56PgLD+QOV5td1wHTyZOt6IpPPeN18ItT2XZKuYAWOnlAhYyRoml4QViEiKY+3u6huShjs3DwJ8//YNkCnsY7ZxwDI9QcRRctlHlK0994yUwSBtWZmBnCPQo+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EE7nTgrT; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1731108326; c=relaxed/simple;
+	bh=HB9UhES9AjUTvhUzMFfVMWvR01v2sLg4cCRufVUx/GQ=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ROAmkQ77y8ndCil4bfDJButjbxC6RvJ23wWq72NujFDy24Y3UBqThnvaBQuJYKH3CLNTwhBAzwhKuXx6baUhzGFqrUSuZtrZAaUd7N4hUzjTIa1nzw46espZy6uxmvdVaV1pyPyFAazYV17I7ynRx52440RE/Eh0EUGTAvUrHQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GFt+UgHM; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EE7nTgrT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GFt+UgHM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731104006; x=1762640006;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oDUo9ZINLG96hfXKTnEvhEElrOjkQNRAzFXoy2hRnfE=;
-  b=EE7nTgrTQDQ1odRKydN3AkX04ZhWNQRF8/TCgpAG/L0tyaItIGRkOdLa
-   0QTboSDgXElBgT4Lp/R+hWEbSFzfo3VRXZZORmj44DQaLpV8L53NyNA4/
-   P6Pvk7PbmFakkk8D29p1ccHG/cVrcF+FvgOXSDL4ilPH3mbxCbLYmnEs1
-   +JQ+f+w0ol0dGuYETALbB2Qwomz8rXxZfCohVGr05W8is2JzJBxf/6hon
-   5UCFoAVLNT7I+F/l17ZFFP7ZeHS6FHxPAPviGBlpyiwSA8v739OLXtsde
-   ssJNkNUv4773GJtMPsmFx6A1YjzHvRnC/Tcj0MN/+l71hGkDFzEOeDo8G
-   Q==;
-X-CSE-ConnectionGUID: TZx7O+3qTU2vjhCwsAMpEQ==
-X-CSE-MsgGUID: fnVAocM6Tj68gNRa42741Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31158421"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="31158421"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 14:13:25 -0800
-X-CSE-ConnectionGUID: j/bZt1yMR4CE0hvnkDG8JQ==
-X-CSE-MsgGUID: mm06E790Sm6rmPr89IO8jQ==
+  t=1731108324; x=1762644324;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=HB9UhES9AjUTvhUzMFfVMWvR01v2sLg4cCRufVUx/GQ=;
+  b=GFt+UgHMTcbMtFc4nHc51zsQnd9ajS+zJFfjgRdkHBAMajNhJPWS9UeG
+   nsPMrs4hX6pCBxonsuAOIXGwWClAHnAhED3JZcqdpmuTIFX8jWFtkqQEo
+   DXYsuomndTbdcv0GqrLgI1OyE/YNAyrZOdp2YKJnLZhY3ywThcuvkUThC
+   Jz4wqIJWZebSDk+1lx68XCXvhSKaiH2CGUqVXqeMsNZHN68yOH+zdxBUc
+   zJ1a/LgameIBoYwFGPi8AULmk2RhwDYLHkLGmG7lqdmPHftLEktkFvLwh
+   WZf8OhevoZX0arFwhwBpTOEmJ5GJyfV90zFiY9AVzmmuYGwj7CNz58Oog
+   A==;
+X-CSE-ConnectionGUID: zV/U4LgqRPy1oK+ynqmIrA==
+X-CSE-MsgGUID: 2vIgcL4aTKuHiwhgNjxDNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="34792147"
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="34792147"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 15:25:23 -0800
+X-CSE-ConnectionGUID: gRnmPKODTJ21lryzlGX73Q==
+X-CSE-MsgGUID: lUwxVXkrRvSrrJFtPIK3ig==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="90590000"
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="85281508"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 08 Nov 2024 14:13:22 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 08 Nov 2024 15:25:22 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t9XEE-000rpw-2N;
-	Fri, 08 Nov 2024 22:13:18 +0000
-Date: Sat, 9 Nov 2024 06:12:19 +0800
+	id 1t9YLw-000rsZ-1F;
+	Fri, 08 Nov 2024 23:25:20 +0000
+Date: Sat, 9 Nov 2024 07:24:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Adrian Huang <adrianhuang0701@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Raghavendra K T <raghavendra.kt@amd.com>,
-	linux-kernel@vger.kernel.org, Adrian Huang <ahuang12@lenovo.com>,
-	Jiwei Sun <sunjw10@lenovo.com>
-Subject: Re: [PATCH 1/1] sched/numa: Fix memory leak due to the overwritten
- vma->numab_state
-Message-ID: <202411090614.hOVFwh3l-lkp@intel.com>
-References: <20241108133139.25326-1-ahuang12@lenovo.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [peterz-queue:x86/kvm 2/11] arch/x86/kvm/kvm.o: warning: objtool:
+ .discard.annotate: dodgy linker, sh_entsize != 8
+Message-ID: <202411090753.2itRAFAt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,122 +60,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108133139.25326-1-ahuang12@lenovo.com>
 
-Hi Adrian,
+TO: Peter Zijlstra <peterz@infradead.org>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on tip/master tip/sched/core peterz-queue/sched/core linus/master v6.12-rc6 next-20241108]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Adrian-Huang/sched-numa-Fix-memory-leak-due-to-the-overwritten-vma-numab_state/20241108-213420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241108133139.25326-1-ahuang12%40lenovo.com
-patch subject: [PATCH 1/1] sched/numa: Fix memory leak due to the overwritten vma->numab_state
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241109/202411090614.hOVFwh3l-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/kvm
+head:   1b808dd4afc876a60f23ccd0dbf4557009acb47c
+commit: 436d055217f93f2ec67fd3fb015e10b5d3905e64 [2/11] objtool: Convert ANNOTATE_NOENDBR to ANNOTATE
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241109/202411090753.2itRAFAt-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090614.hOVFwh3l-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090753.2itRAFAt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411090614.hOVFwh3l-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411090753.2itRAFAt-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from mm/damon/vaddr.c:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2212:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/damon/vaddr.c:736:
->> mm/damon/tests/vaddr-kunit.h:66:13: warning: stack frame size (2248) exceeds limit (2048) in 'damon_test_three_regions_in_vmas' [-Wframe-larger-than]
-      66 | static void damon_test_three_regions_in_vmas(struct kunit *test)
-         |             ^
-   5 warnings generated.
-
-
-vim +/damon_test_three_regions_in_vmas +66 mm/damon/tests/vaddr-kunit.h
-
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  38  
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  39  /*
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  40   * Test __damon_va_three_regions() function
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  41   *
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  42   * In case of virtual memory address spaces monitoring, DAMON converts the
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  43   * complex and dynamic memory mappings of each target task to three
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  44   * discontiguous regions which cover every mapped areas.  However, the three
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  45   * regions should not include the two biggest unmapped areas in the original
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  46   * mapping, because the two biggest areas are normally the areas between 1)
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  47   * heap and the mmap()-ed regions, and 2) the mmap()-ed regions and stack.
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  48   * Because these two unmapped areas are very huge but obviously never accessed,
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  49   * covering the region is just a waste.
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  50   *
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  51   * '__damon_va_three_regions() receives an address space of a process.  It
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  52   * first identifies the start of mappings, end of mappings, and the two biggest
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  53   * unmapped areas.  After that, based on the information, it constructs the
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  54   * three regions and returns.  For more detail, refer to the comment of
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  55   * 'damon_init_regions_of()' function definition in 'mm/damon.c' file.
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  56   *
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  57   * For example, suppose virtual address ranges of 10-20, 20-25, 200-210,
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  58   * 210-220, 300-305, and 307-330 (Other comments represent this mappings in
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  59   * more short form: 10-20-25, 200-210-220, 300-305, 307-330) of a process are
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  60   * mapped.  To cover every mappings, the three regions should start with 10,
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  61   * and end with 305.  The process also has three unmapped areas, 25-200,
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  62   * 220-300, and 305-307.  Among those, 25-200 and 220-300 are the biggest two
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  63   * unmapped areas, and thus it should be converted to three regions of 10-25,
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  64   * 200-220, and 300-330.
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  65   */
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07 @66  static void damon_test_three_regions_in_vmas(struct kunit *test)
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  67  {
-d0cf3dd47f0d5d mm/damon/vaddr-test.h        Liam R. Howlett 2022-09-06  68  	static struct mm_struct mm;
-ba7196e566516f mm/damon/tests/vaddr-kunit.h Leo Stone       2024-09-22  69  	struct damon_addr_range regions[3] = {0};
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  70  	/* 10-20-25, 200-210-220, 300-305, 307-330 */
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  71  	struct vm_area_struct vmas[] = {
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  72  		(struct vm_area_struct) {.vm_start = 10, .vm_end = 20},
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  73  		(struct vm_area_struct) {.vm_start = 20, .vm_end = 25},
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  74  		(struct vm_area_struct) {.vm_start = 200, .vm_end = 210},
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  75  		(struct vm_area_struct) {.vm_start = 210, .vm_end = 220},
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  76  		(struct vm_area_struct) {.vm_start = 300, .vm_end = 305},
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  77  		(struct vm_area_struct) {.vm_start = 307, .vm_end = 330},
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  78  	};
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  79  
-f0679f9e6d88ae mm/damon/tests/vaddr-kunit.h SeongJae Park   2024-09-04  80  	mt_init_flags(&mm.mm_mt, MT_FLAGS_ALLOC_RANGE | MT_FLAGS_USE_RCU);
-34403fa579514a mm/damon/vaddr-test.h        Liam R. Howlett 2023-01-20  81  	if (__link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)))
-34403fa579514a mm/damon/vaddr-test.h        Liam R. Howlett 2023-01-20  82  		kunit_skip(test, "Failed to create VMA tree");
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  83  
-d0cf3dd47f0d5d mm/damon/vaddr-test.h        Liam R. Howlett 2022-09-06  84  	__damon_va_three_regions(&mm, regions);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  85  
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  86  	KUNIT_EXPECT_EQ(test, 10ul, regions[0].start);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  87  	KUNIT_EXPECT_EQ(test, 25ul, regions[0].end);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  88  	KUNIT_EXPECT_EQ(test, 200ul, regions[1].start);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  89  	KUNIT_EXPECT_EQ(test, 220ul, regions[1].end);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  90  	KUNIT_EXPECT_EQ(test, 300ul, regions[2].start);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  91  	KUNIT_EXPECT_EQ(test, 330ul, regions[2].end);
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  92  }
-17ccae8bb5c928 mm/damon/vaddr-test.h        SeongJae Park   2021-09-07  93  
+>> arch/x86/kvm/kvm.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> drivers/nvme/host/nvme-core.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> drivers/ufs/core/ufshcd-core.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> drivers/nvme/target/nvmet.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> net/wireless/cfg80211.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> net/mac80211/mac80211.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> drivers/scsi/pm8001/pm80xx.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> drivers/scsi/qla2xxx/qla2xxx.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> fs/ext2/ext2.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> fs/nfsd/nfsd.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+--
+>> fs/fuse/fuse.o: warning: objtool: .discard.annotate: dodgy linker, sh_entsize != 8
+..
 
 -- 
 0-DAY CI Kernel Test Service
