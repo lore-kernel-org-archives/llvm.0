@@ -1,73 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AA41E22F9;
-	Fri,  8 Nov 2024 10:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142421E0B9C;
+	Fri,  8 Nov 2024 10:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731060128; cv=none; b=PBoWme1ykocgxQIPvuq817FuxyMFXCQr/l32uoc21mmEFbhUykW32xJbVwsjuEyOIZiudIMvMc1w7mS8VUMhZHIlToCv6FVBA8zTn3QAv3SY3JdW3Q7P0ZUp+60FDnxmr8l7pTelWdkw5uy6w3MCXjbdVMSuIZFuWdbSoRr1qzc=
+	t=1731060784; cv=none; b=XnG4N8PaUUOhX5mrvw4bPMSeGBCc22bWr30nK56tdEKKPoStAC89jCJ7omtWdyvH11k0BERvjiYXrsiYZKE0uU7p7q91IBo/lHX/umhDbRxWwUYUj0NoP+iZgyA6B5w/hmA/VIKMX51VyZYsWEotB18TSf4FbrQHZllEDZW+qOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731060128; c=relaxed/simple;
-	bh=gHWJICSiRxTdrMlSAEib7G0w9VRQZBlYMnDIyscdeNE=;
+	s=arc-20240116; t=1731060784; c=relaxed/simple;
+	bh=Er/tiXvYNotlGr/mneGDlszAar7ahjAVj3NcCM7/bH0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M94SweG6Wz+6VvYG5IY9oaG0ZfY8JfNJDV+JoBisiZgoeuzXz60YD2mnTlwb3ZcYr7dvwu6m+erWgu7T/Xyur6vR94bpBOiAhL+5qidAVVMmvk9eQjam4Bb6ATYqkyeG4SW01zJ6E9OK3AGK8u4BGX/PsqXTQNPYhbQchLpFmD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TaEGDqrH; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=CwhfM/Ic+RG5ygwzyWCzBRaT8naD829GDJXlM69YgUaI7+YwcWvL38Z0k2vLjzqL16EPUteEtgB65exriM0r5SzvpnItr/t6Sh5hfj+OCP+0pltWLFqTZSWZbP5cYn3OO1Ojc2Q20MoUv/dx2um3MYK7WTy8BKL22xU0yNpbmqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jRt8yXNt; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TaEGDqrH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jRt8yXNt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731060127; x=1762596127;
+  t=1731060784; x=1762596784;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gHWJICSiRxTdrMlSAEib7G0w9VRQZBlYMnDIyscdeNE=;
-  b=TaEGDqrHxaT8UxoZT7E0K/+J1LKCaWvARNtSemVCrvuEuKVze7RRTmGW
-   ykRgt4oAV0ZK6aBdS7XO2cqYnSNXtEdaGkWme/21vJqft7g1uIbgzOHzJ
-   SdPNLRMXCZKZG3OlVaOZ02qyp8M4S649YquoAFR2izvIXwql1OuHcr11g
-   1k4t+qIIJ6Qbzp4pd8CXZ+j/8oSx7GTfQOsAhYzjgigmTObPejcFAkZ3Y
-   BELXlBexIgTF0KoKhSiKL7QYE9tqk129r9UhtiIIrNXceuz3e6JWBS/yr
-   VEXObOGfQkBvQrb/rC4fG9pW6nVbLHG5raFqOWGsXXhyL5WIf1aVEuHZD
-   Q==;
-X-CSE-ConnectionGUID: VqRFfS/bTfyPdSDBKbFqxQ==
-X-CSE-MsgGUID: hbBO4Xg1Q4ixDnfpxNvj3w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="34722219"
-X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="34722219"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 02:02:03 -0800
-X-CSE-ConnectionGUID: iqPiGiDuQUeJehsmqANIsQ==
-X-CSE-MsgGUID: LcKUpnWLRiKiJhTMelJ9yg==
+  bh=Er/tiXvYNotlGr/mneGDlszAar7ahjAVj3NcCM7/bH0=;
+  b=jRt8yXNtvWL1zFBoUr2JnOw3u5/uWMGs8yHgGo3/XDDuvr/pa4RWEFDH
+   befAvK6HqEMqXJcO3tiyuA6ZhRhNrOOPN+pTJfuXHeq8xWawdXWETH1ew
+   MdwDCEXzksLQUrcE5pbd8hGX5IcJ8fwiaRNtLVWohV14gHk/UdYkgUoSz
+   5BBlWCGnYJ/oTAbaAEVL9VHFB/iYw1Tum0u0EDmMX23eT1uB9lj6chlYt
+   J8BH+X4OAHqaJDYNZG2cc/W3wGo5duvqEqAHoi+q6Pbb9JZR++7uAeJZd
+   nj1oVnnJGN1pLvWrngcHuhIeVPOKS3u5Fuw6A/41H9IWi8V3xu91YdLGz
+   g==;
+X-CSE-ConnectionGUID: QBQ7QPmJQ7u/2L9khaNFyA==
+X-CSE-MsgGUID: Vh5LBz/cTKifwpRdT5akpg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31107462"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31107462"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 02:13:03 -0800
+X-CSE-ConnectionGUID: jUkMLQ6oRBObxq1OX6AHXA==
+X-CSE-MsgGUID: G7grHtHIRay2/KDuPft3zA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="85876820"
+   d="scan'208";a="85629448"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 08 Nov 2024 02:01:59 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 08 Nov 2024 02:12:58 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t9LoS-000rI3-18;
-	Fri, 08 Nov 2024 10:01:56 +0000
-Date: Fri, 8 Nov 2024 18:01:30 +0800
+	id 1t9Lz6-000rIQ-1U;
+	Fri, 08 Nov 2024 10:12:56 +0000
+Date: Fri, 8 Nov 2024 18:12:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Paloma Arellano <quic_parellan@quicinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Stas Sergeev <stsp2@yandex.ru>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Andy Lutomirski <luto@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jeff Layton <jlayton@kernel.org>,
-	John Johansen <john.johansen@canonical.com>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	Felix Moessbauer <felix.moessbauer@siemens.com>,
-	Jens Axboe <axboe@kernel.dk>, Oleg Nesterov <oleg@redhat.com>,
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/2] procfs: implement PROCFS_SET_GROUPS ioctl
-Message-ID: <202411081700.kAQXSC2u-lkp@intel.com>
-References: <20241107215821.1514623-3-stsp2@yandex.ru>
+	Douglas Anderson <dianders@chromium.org>,
+	Stephen Boyd <swboyd@chromium.org>, linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH 11/14] drm/msm/dp: move/inline audio related functions
+Message-ID: <202411081748.0PPL9MIj-lkp@intel.com>
+References: <20241108-fd-dp-audio-fixup-v1-11-40c8eeb60cf5@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,75 +73,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241107215821.1514623-3-stsp2@yandex.ru>
+In-Reply-To: <20241108-fd-dp-audio-fixup-v1-11-40c8eeb60cf5@linaro.org>
 
-Hi Stas,
+Hi Dmitry,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v6.12-rc6 next-20241108]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 74741a050b79d31d8d2eeee12c77736596d0a6b2]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stas-Sergeev/procfs-avoid-some-usages-of-seq_file-private-data/20241108-060856
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20241107215821.1514623-3-stsp2%40yandex.ru
-patch subject: [PATCH 2/2] procfs: implement PROCFS_SET_GROUPS ioctl
-config: x86_64-buildonly-randconfig-004-20241108 (https://download.01.org/0day-ci/archive/20241108/202411081700.kAQXSC2u-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-msm-dp-fix-msm_dp_utils_pack_sdp_header-interface/20241108-082302
+base:   74741a050b79d31d8d2eeee12c77736596d0a6b2
+patch link:    https://lore.kernel.org/r/20241108-fd-dp-audio-fixup-v1-11-40c8eeb60cf5%40linaro.org
+patch subject: [PATCH 11/14] drm/msm/dp: move/inline audio related functions
+config: x86_64-buildonly-randconfig-002-20241108 (https://download.01.org/0day-ci/archive/20241108/202411081748.0PPL9MIj-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411081700.kAQXSC2u-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411081748.0PPL9MIj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411081700.kAQXSC2u-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411081748.0PPL9MIj-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/proc/base.c:66:
-   In file included from include/linux/mm.h:2213:
+   In file included from drivers/gpu/drm/msm/dp/dp_audio.c:11:
+   In file included from include/drm/display/drm_dp_helper.h:27:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> fs/proc/base.c:891:8: error: call to undeclared function 'set_current_groups'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     891 |         err = set_current_groups(gi);
-         |               ^
-   1 warning and 1 error generated.
+>> drivers/gpu/drm/msm/dp/dp_audio.c:213:5: warning: variable 'safe_to_exit_level' is uninitialized when used here [-Wuninitialized]
+     213 |                                 safe_to_exit_level);
+         |                                 ^~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:636:59: note: expanded from macro 'drm_dbg_dp'
+     636 |         drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DP, fmt, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/drm/drm_print.h:540:39: note: expanded from macro 'drm_dev_dbg'
+     540 |         __drm_dev_dbg(NULL, dev, cat, fmt, ##__VA_ARGS__)
+         |                                              ^~~~~~~~~~~
+   drivers/gpu/drm/msm/dp/dp_audio.c:198:24: note: initialize the variable 'safe_to_exit_level' to silence this warning
+     198 |         u32 safe_to_exit_level, mainlink_levels;
+         |                               ^
+         |                                = 0
+   2 warnings generated.
 
 
-vim +/set_current_groups +891 fs/proc/base.c
+vim +/safe_to_exit_level +213 drivers/gpu/drm/msm/dp/dp_audio.c
 
-   870	
-   871	static int do_proc_setgroups(const struct cred *task_cred,
-   872				     const struct cred *cur_cred,
-   873				     const struct cred *f_cred)
-   874	{
-   875		struct group_info *cgi = get_group_info(cur_cred->group_info);
-   876		struct group_info *gi = get_group_info(task_cred->group_info);
-   877		int err;
-   878	
-   879		/* Make sure groups didn't change since file open. */
-   880		err = -EPERM;
-   881		if (f_cred->group_info != gi)
-   882			goto out_gi;
-   883		/* Don't error if the process is setting the same list again. */
-   884		err = 0;
-   885		if (cgi == gi)
-   886			goto out_gi;
-   887	
-   888		err = -EPERM;
-   889		if (!can_borrow_groups(cur_cred, f_cred))
-   890			goto out_gi;
- > 891		err = set_current_groups(gi);
-   892	
-   893	out_gi:
-   894		put_group_info(gi);
-   895		put_group_info(cgi);
-   896		return err;
-   897	}
-   898	
+d13e36d7d2227e Abhinav Kumar    2020-09-12  195  
+fb7d509b1710d1 Dmitry Baryshkov 2024-10-29  196  static void msm_dp_audio_safe_to_exit_level(struct msm_dp_audio_private *audio)
+d13e36d7d2227e Abhinav Kumar    2020-09-12  197  {
+568837beeb38ef Dmitry Baryshkov 2024-11-08  198  	u32 safe_to_exit_level, mainlink_levels;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  199  
+fb7d509b1710d1 Dmitry Baryshkov 2024-10-29  200  	switch (audio->msm_dp_audio.lane_count) {
+d13e36d7d2227e Abhinav Kumar    2020-09-12  201  	case 1:
+d13e36d7d2227e Abhinav Kumar    2020-09-12  202  		safe_to_exit_level = 14;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  203  		break;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  204  	case 2:
+d13e36d7d2227e Abhinav Kumar    2020-09-12  205  		safe_to_exit_level = 8;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  206  		break;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  207  	case 4:
+d13e36d7d2227e Abhinav Kumar    2020-09-12  208  		safe_to_exit_level = 5;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  209  		break;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  210  	default:
+202aceac8bb3ae Kuogee Hsieh     2022-02-17  211  		drm_dbg_dp(audio->drm_dev,
+202aceac8bb3ae Kuogee Hsieh     2022-02-17  212  				"setting the default safe_to_exit_level = %u\n",
+d13e36d7d2227e Abhinav Kumar    2020-09-12 @213  				safe_to_exit_level);
+d13e36d7d2227e Abhinav Kumar    2020-09-12  214  		safe_to_exit_level = 14;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  215  		break;
+d13e36d7d2227e Abhinav Kumar    2020-09-12  216  	}
+d13e36d7d2227e Abhinav Kumar    2020-09-12  217  
+568837beeb38ef Dmitry Baryshkov 2024-11-08  218  	mainlink_levels = msm_dp_read_link(audio->catalog, REG_DP_MAINLINK_LEVELS);
+568837beeb38ef Dmitry Baryshkov 2024-11-08  219  	mainlink_levels &= 0xFE0;
+568837beeb38ef Dmitry Baryshkov 2024-11-08  220  	mainlink_levels |= safe_to_exit_level;
+568837beeb38ef Dmitry Baryshkov 2024-11-08  221  
+568837beeb38ef Dmitry Baryshkov 2024-11-08  222  	drm_dbg_dp(audio->drm_dev,
+568837beeb38ef Dmitry Baryshkov 2024-11-08  223  		   "mainlink_level = 0x%x, safe_to_exit_level = 0x%x\n",
+568837beeb38ef Dmitry Baryshkov 2024-11-08  224  		   mainlink_levels, safe_to_exit_level);
+568837beeb38ef Dmitry Baryshkov 2024-11-08  225  
+568837beeb38ef Dmitry Baryshkov 2024-11-08  226  	msm_dp_write_link(audio->catalog, REG_DP_MAINLINK_LEVELS, mainlink_levels);
+d13e36d7d2227e Abhinav Kumar    2020-09-12  227  }
+d13e36d7d2227e Abhinav Kumar    2020-09-12  228  
 
 -- 
 0-DAY CI Kernel Test Service
