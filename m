@@ -1,100 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1C0208C4
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 15:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8FA1F6672
+	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 15:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731080485; cv=none; b=KhpwY5PeVFxgFrWX41Rec7kXQOTUHgfZzyHXQopJdtnW/qaxnRh94Cu7W3Ueh502JYvFtUpuhnQ191YHNtzvXMJ9+vkIirFtiEKQhLorPHdz8ZexOnbXq/pXbdNSel7bIsvY5Lce1hySSRJEtio6unUhZnVmZIirasx7uIB4+Ts=
+	t=1731080938; cv=none; b=jnW8UTazX8HBGu+iJjQIMia9cxXVv7wWG77oDP7ac7hYCm/hLUC+93r7rvLGnU1kd40idlfPSMmpTcIPTShu5AwVKVP2y/cGg+WWbMsPHWiESRdbrIsNJ9Y1H52BqGtZZnJKAUYu39gu9ORBe6kQkfavQursvw9zy6kTnmTSKw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731080485; c=relaxed/simple;
-	bh=GRg86Iaef91WkJ0kybWunj6c0WPrPzKuN5k/WFprupo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWAoVkJt9CZKJqTSiWvaji66KnRzw3qrZfA+CZr/ze6KMs32MBQ/+zKBHLgEZVxcjx33kdqnSizOsi98MGeI7PEQiK0hYBdyoBgnNk6nVTKeEhRBQUq3Ud0LgM/u5UiYiOp+HIS09zWSs6ropfdlojxRmn353xENT5slaTh6hAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SqUkrO1D; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1731080938; c=relaxed/simple;
+	bh=MLMZ4Qbm132WMpNRKYFC+f34b+Ke2+QAK8M6qn5aECE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=Zfdb6MwRmi4o1iFNaWeAT2+tkWPRejzICYIM3JgaYkcv2LwPbU9tcGns1wF2C8u83FgrkKaJpHYFuPvxWgR+LZN+d9OX2wroXZYHrCArrx9HRpi/pJx0fFpIC7QgQ0EbesVT6HYhwn/XkdNUcx0WMm725FhANRVyjrFfBvXhTD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=q3iA9Ead; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SqUkrO1D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731080483; x=1762616483;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GRg86Iaef91WkJ0kybWunj6c0WPrPzKuN5k/WFprupo=;
-  b=SqUkrO1DLvhxPaV43l2BBGSJMJK966pL0vegVPnvgSV0FHa3PfEMRgJm
-   pR3zc1hDEyeTXorSrw29nMi5gWtuPMrAi7B6oJrm33BR3e6vwRI8wGdzj
-   +w+6LOJUPcQR7hYu2KTRsbEfolvNC9e1J/NJErtmJKQhaW1kKflZK/skw
-   iqykkfhiuFYwxChQio5WHX4v833hIrOzjNsRPrmoiSp/T/K/DXqJiXk4Q
-   sG+Dh5qxRDyozKSsY4sBuQPX6itoKwme7sS7S3mYWsHeQBG5WH8sZXDYl
-   HRUq9HvyYEhE7cKcDdYIclLv4FS57mVYGNYlMiNpJTs5krRsg2sBHBzBe
-   Q==;
-X-CSE-ConnectionGUID: moz4SWJqS66GIY6T+4qGdQ==
-X-CSE-MsgGUID: /+mERSXoR8aSqoebGAa91Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="31196304"
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="31196304"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 07:41:23 -0800
-X-CSE-ConnectionGUID: OqrJGXnsRN+X2rJ3BoGNdA==
-X-CSE-MsgGUID: SioWeqffS/+gVljleFESbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="85762889"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 07:41:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t9R6r-0000000Cf8Z-0FPz;
-	Fri, 08 Nov 2024 17:41:17 +0200
-Date: Fri, 8 Nov 2024 17:41:16 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v5 1/1] x86/cpu: Make sure flag_is_changeable_p() is
- always being used
-Message-ID: <Zy4xHC3MCtAqlSxy@smile.fi.intel.com>
-References: <20241108153105.1578186-1-andriy.shevchenko@linux.intel.com>
- <732CB428-EE83-455F-A5AF-C008B7541401@zytor.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="q3iA9Ead"
+Received: from [127.0.0.1] ([90.224.241.145])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 4A8FmOh41657183
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 8 Nov 2024 07:48:27 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 4A8FmOh41657183
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024101701; t=1731080909;
+	bh=MLMZ4Qbm132WMpNRKYFC+f34b+Ke2+QAK8M6qn5aECE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=q3iA9EadZdyh/oFOsm2zhku4TPLecF7JXFhTBYy9ulJdJwr//RO1WCaKQoLfVV9q4
+	 rB4P8xujWHSoJrufYU2ExMOYWVT1JfI2rUaPJdBPVDPYmhJ9dFWCFHpuDFyzltMk3a
+	 V+qppx/bNaV6XW5Qsjye1ygboyD5bHKqgoDDKC9UQqTZq3ieLl3HwSnIXNYweNloY6
+	 wWosFqRYVY9q6iH6VjkxR15CV7Q8w8bO4U7eno8Mt0fDClDcTHlQzNA8K3Rsmymrbv
+	 7pyy8LRS0lL8JixzZvKTZPI4YKgaZirQr3RjMEaTkdT0hv8JUYG4MTvzyAS3ud4EgZ
+	 dhKXTb8Ps8pYQ==
+Date: Fri, 08 Nov 2024 16:48:16 +0100
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_1/1=5D_x86/cpu=3A_Make_sure_fl?=
+ =?US-ASCII?Q?ag=5Fis=5Fchangeable=5Fp=28=29_is_always_being_used?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Zy4xHC3MCtAqlSxy@smile.fi.intel.com>
+References: <20241108153105.1578186-1-andriy.shevchenko@linux.intel.com> <732CB428-EE83-455F-A5AF-C008B7541401@zytor.com> <Zy4xHC3MCtAqlSxy@smile.fi.intel.com>
+Message-ID: <4A528893-A428-4A6F-8672-1D14CC57F696@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <732CB428-EE83-455F-A5AF-C008B7541401@zytor.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 08, 2024 at 04:35:17PM +0100, H. Peter Anvin wrote:
-> On November 8, 2024 4:30:10 PM GMT+01:00, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+On November 8, 2024 4:41:16 PM GMT+01:00, Andy Shevchenko <andriy=2Eshevche=
+nko@linux=2Eintel=2Ecom> wrote:
+>On Fri, Nov 08, 2024 at 04:35:17PM +0100, H=2E Peter Anvin wrote:
+>> On November 8, 2024 4:30:10 PM GMT+01:00, Andy Shevchenko <andriy=2Eshe=
+vchenko@linux=2Eintel=2Ecom> wrote:
+>
+>> >See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused stat=
+ic
+>> >inline functions for W=3D1 build")=2E
+>
+>^^^ (1)
+>
+>> Looks good to me:
+>>=20
+>> Reviewed-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
+>
+>Thank you!
+>
+>> But another question: why the hell does clang complain about an unused =
+static inline function?!
+>
+>Does (1) shed a bit of light to this?
+>
 
-> >See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> >inline functions for W=1 build").
+How on earth is that supposed to work?! We have static inline functions in=
+ headers all over the place that are only used in certain circumstances=2E=
+=20
 
-^^^ (1)
-
-> Looks good to me:
-> 
-> Reviewed-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-
-Thank you!
-
-> But another question: why the hell does clang complain about an unused static inline function?!
-
-Does (1) shed a bit of light to this?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Is this a good thing, really? Or is it noise?
