@@ -1,43 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F9E21B458;
-	Fri,  8 Nov 2024 17:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E6B233D63;
+	Fri,  8 Nov 2024 18:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731088001; cv=none; b=uLKFvcbVy2APetz4FpwkhyrX3DWBU+KgylaikdS/epGLxcgGOKLikxqZKUEsV2GQya3WcgrZfdhTj3ztTV5VlyFYvzvmjVKSJyA73AfnyEBSW5fjCvo9Gldwe/gP70mbDAc+kym7atopoGefqUClbJJO/e6zsNj8ToGTu4DA1wI=
+	t=1731089841; cv=none; b=YhgJEuL5tfmIkp+dskpgNOESxQ+B47dQh7X0Pq2CFG0gpLH5UvNaNC5WBZn3bvYv5cZ29y0Xzg2PrSCBUSK7PDJI3ttXP2RpN8Baf5ql4MrWAy6mI2EL3w+hFvjSwNqNp1fKZ2nYIp0gRoxDhmR3/zqx1+Io5Tg3aabW3wqO16E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731088001; c=relaxed/simple;
-	bh=v6CMakwqFx7aJagpFs1cS1sDWNqmR4HwbpiSyjF0JjI=;
+	s=arc-20240116; t=1731089841; c=relaxed/simple;
+	bh=4PaET6TkzgrHWZkK4MiM2Mhki+6QUcpFOgMPv7bRVLs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hQUjqbYbBD32Oa/7ENHzbJu6jmdQE0xyjbJDItDM2Ok6TVwNBnJbl4M84i41WZqW3kgNNnnncCHaUoKGXQTaoPXMQjkAHarhv5arS7wtE8L+LZ/Q2QXCsCYgUZGoerDmHwW02sdTZy6i1/x2PDcj4Mut9lxQRinCaAKSy2WxZ2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TzoWCT0k; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=giKW24MFUoqN4Q3oXEiJakplj+3DoN5RHc1js+mmbtXhtVD01PGG3SaJ+AaZyy+tqW6PhtXaDDmQXEX6TzIUdYppIzr6/o4ESWUCje+rZz2yJpAneEFv1eFe4+RDDNQXXfVj0ki6m2cQncKMqArHwbjZsJoaO2vudzzf2kYynyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A2bLNFfA; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TzoWCT0k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D023C4CECD;
-	Fri,  8 Nov 2024 17:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731088001;
-	bh=v6CMakwqFx7aJagpFs1cS1sDWNqmR4HwbpiSyjF0JjI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TzoWCT0km7qIjw6wL3OQkxyzDX0V9ucpTetlaamJ9ckgAU38Z9fLuOVnzv4AlDvCg
-	 9spSlI7s5sY68DEpeZU6kS4yCQ0Nd03kJDWqLxJJ92HtF1KVbTzYwICdBgl3tbevsA
-	 rTHxnrdXb2uWxrt9SpkCooT2WbBTay8FoA1Vwpohti1nCZ/SAua3oLJqYtDqHbAopu
-	 V4Y//A82tSDQwwHOxjL9O4Cn1r9TOTp7I2LcWl00oXrKLYPIi083zMJD78lkNASHeB
-	 urKvx5ZfAq/7qeZT8kibjd8hh841efdPtqAqG7WpBE7uHT+oXkByZqA+NHbHlPRpnF
-	 O5uFOfViW09gg==
-Date: Fri, 8 Nov 2024 10:46:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rong Xu <xur@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Han Shen <shenhan@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] kbuild: Fix Propeller build option
-Message-ID: <20241108174638.GC2564051@thelio-3990X>
-References: <20241108051030.2918950-1-xur@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A2bLNFfA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731089840; x=1762625840;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4PaET6TkzgrHWZkK4MiM2Mhki+6QUcpFOgMPv7bRVLs=;
+  b=A2bLNFfAXkdfVPNsfTHKYx2z59prseowJXGDjZVaPrAYGAnOT1cH5Tba
+   XQEx8rKuPR3wl6mBbIsCce/03V7PsAbFljWpwoug8k0S2zNMzyihPNVVx
+   KmUZkHIwqSHGHxzhGF1Q9atxgLP0zXdQ0VYKxkD98GrFYduTi4I+2FLi8
+   R2+gRht+w4lnmlClX4Kch4Tf+fUBX6Zr5CGjHYpxkYx3jAHdYPCc1NURP
+   /wPgDD494S8GoB62dU1uQSLyZqKFvshaj7C6wnITi33kd2g3K1PnQ6XOQ
+   VvD0Nlh8QfKyjS2WOzeM6vmMKRkskxg190gU9v7sTt/ShCYwREpC7ZXjT
+   g==;
+X-CSE-ConnectionGUID: uYTcSLq8RV2S9lLuJohmIQ==
+X-CSE-MsgGUID: kKjqVFOORL2OIq1Owble1A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="42368555"
+X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
+   d="scan'208";a="42368555"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 10:17:19 -0800
+X-CSE-ConnectionGUID: lsmZQr7uTgq1VgyQw1S59w==
+X-CSE-MsgGUID: b1luBi1TSSGnldkvh/IxyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
+   d="scan'208";a="123200075"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 08 Nov 2024 10:17:16 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9TXk-000rh8-21;
+	Fri, 08 Nov 2024 18:17:12 +0000
+Date: Sat, 9 Nov 2024 02:17:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jai Luthra <jai.luthra@ideasonboard.com>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH v2 13/15] media: i2c: ds90ub913: Add error handling to
+ ub913_hw_init()
+Message-ID: <202411090151.d5LTbJyn-lkp@intel.com>
+References: <20241108-ub9xx-fixes-v2-13-c7db3b2ad89f@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,115 +70,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108051030.2918950-1-xur@google.com>
+In-Reply-To: <20241108-ub9xx-fixes-v2-13-c7db3b2ad89f@ideasonboard.com>
 
-Hi Rong,
+Hi Tomi,
 
-Thanks for the quick patch!
+kernel test robot noticed the following build errors:
 
-On Thu, Nov 07, 2024 at 09:10:30PM -0800, Rong Xu wrote:
-> The '-fbasic-block-sections=labels' option has been deprecated with
-> the following llvm patch:
-> https://github.com/llvm/llvm-project/pull/110039
-> 
-> The old option still works, but with a warning like
->   clang: warning: argument '-fbasic-block-sections=labels' \
->   is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
-> 
-> Currently, the option change is only in the ToT clang (v20) and not yet
-> released in v19.
+[auto build test ERROR on 98f7e32f20d28ec452afb208f9cffc08448a2652]
 
-I think this whole block could be a little easier to read and understand
-with some more standard kernel commit message practices. I would combine
-the first and third block into one sentence and I would unwrap the
-warning text (it is okay to be long for a little clarity). Perhaps
-something like this?
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomi-Valkeinen/media-i2c-ds90ub9x3-Fix-extra-fwnode_handle_put/20241108-173952
+base:   98f7e32f20d28ec452afb208f9cffc08448a2652
+patch link:    https://lore.kernel.org/r/20241108-ub9xx-fixes-v2-13-c7db3b2ad89f%40ideasonboard.com
+patch subject: [PATCH v2 13/15] media: i2c: ds90ub913: Add error handling to ub913_hw_init()
+config: x86_64-buildonly-randconfig-002-20241108 (https://download.01.org/0day-ci/archive/20241109/202411090151.d5LTbJyn-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090151.d5LTbJyn-lkp@intel.com/reproduce)
 
-  | The '-fbasic-block-sections=labels' option has been deprecated in tip of
-  | tree clang (20.0.0) [1]. While the option still works, a warning is
-  | emitted:
-  |
-  |   clang: warning: argument '-fbasic-block-sections=labels' is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411090151.d5LTbJyn-lkp@intel.com/
 
-then putting:
+All errors (new ones prefixed by >>):
 
-  | Link: https://github.com/llvm/llvm-project/pull/110039 [1]
+   In file included from drivers/media/i2c/ds90ub913.c:16:
+   In file included from include/linux/i2c-atr.h:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/i2c/ds90ub913.c:751:5: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     751 |                                 FIELD_PREP(UB913_REG_GENERAL_CFG_PCLK_RISING,
+         |                                 ^
+   1 warning and 1 error generated.
 
-right above your Signoff.
 
-> This patch adds a check to the Makefile to set the proper option.
+vim +/FIELD_PREP +751 drivers/media/i2c/ds90ub913.c
 
-Try to avoid saying "this patch" in kernel commit messages, it is
-implicit. It would be cleaner to say something like:
+   722	
+   723	static int ub913_hw_init(struct ub913_data *priv)
+   724	{
+   725		struct device *dev = &priv->client->dev;
+   726		bool mode_override;
+   727		u8 mode;
+   728		int ret;
+   729		u8 v;
+   730	
+   731		ret = ub913_read(priv, UB913_REG_MODE_SEL, &v);
+   732		if (ret)
+   733			return ret;
+   734	
+   735		if (!(v & UB913_REG_MODE_SEL_MODE_UP_TO_DATE))
+   736			return dev_err_probe(dev, -ENODEV,
+   737					     "Mode value not stabilized\n");
+   738	
+   739		mode_override = v & UB913_REG_MODE_SEL_MODE_OVERRIDE;
+   740		mode = v & UB913_REG_MODE_SEL_MODE_MASK;
+   741	
+   742		dev_dbg(dev, "mode from %s: %#x\n",
+   743			mode_override ? "reg" : "deserializer", mode);
+   744	
+   745		ret = ub913_i2c_master_init(priv);
+   746		if (ret)
+   747			return dev_err_probe(dev, ret, "i2c master init failed\n");
+   748	
+   749		ret = ub913_update_bits(priv, UB913_REG_GENERAL_CFG,
+   750					UB913_REG_GENERAL_CFG_PCLK_RISING,
+ > 751					FIELD_PREP(UB913_REG_GENERAL_CFG_PCLK_RISING,
+   752						   priv->pclk_polarity_rising));
+   753	
+   754		if (ret)
+   755			return ret;
+   756	
+   757		return 0;
+   758	}
+   759	
 
-  | Add a version check to set the proper option.
-
-You can see some more commit message tips in sections 4.2.3 to 4.2.6 in
-the tip documentation:
-
-https://docs.kernel.org/process/maintainer-tip.html#changelog
-
-> If the option change is later integrated in v19.x, we need to update the
-> check accordingly.
-
-I think it is worth dropping this sentence entirely, as I would argue
-that it is pretty unlikely that this option gets backported to
-release/19.x, since it would basically accelerate the deprecation
-timeline, which seems unreasonable to do in a stable release.
-
-> Signed-off-by: Rong Xu <xur@google.com>
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  scripts/Makefile.propeller | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-> index 344190717e47..1a68ea0d1fe4 100644
-> --- a/scripts/Makefile.propeller
-> +++ b/scripts/Makefile.propeller
-> @@ -5,7 +5,13 @@ ifdef CLANG_PROPELLER_PROFILE_PREFIX
->    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
->    KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
->  else
-> -  CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
-> +  # Staring with clang v20, the '-fbasic-block-sections=labels' option is
-> +  # deprecated. Use the recommended '-fbasic-block-address-map' option.
-
-Might be worth linking the specific change here for archeology sake.
-
-> +  ifeq ($(call clang-min-version, 200000),y)
-> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-address-map
-> +  else
-> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
-> +  endif
->  endif
->  
->  # Propeller requires debug information to embed module names in the profiles.
-> @@ -21,7 +27,11 @@ ifdef CONFIG_LTO_CLANG_THIN
->    ifdef CLANG_PROPELLER_PROFILE_PREFIX
->      KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
->    else
-> -    KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-> +    ifeq ($(call clang-min-version, 200000),y)
-
-Would it be better/more accurate to check the LLD version here? I doubt
-it would really happen but it is possible for someone to have LLVM=1
-(using their system wide ld.lld and LLVM tools) and CC=clang-20 to just
-use an updated clang. Perhaps:
-
-  ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
-
-here?
-
-> +       KBUILD_LDFLAGS += --lto-basic-block-address-map
-> +    else
-> +       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-> +    endif
->    endif
->  endif
->  
-> 
-> base-commit: 0dcc2d1066150787017a71f035145c566597dec7
-> -- 
-> 2.47.0.277.g8800431eea-goog
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
