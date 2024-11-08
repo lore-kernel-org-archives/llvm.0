@@ -1,85 +1,269 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0161E0E10
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 11:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468E51E5019;
+	Fri,  8 Nov 2024 12:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731066687; cv=none; b=i3u+5JGT8aDODX1QIWh93sy38H0uPxZ84GEaPb93yWGcfwG/BeeZxIeUMOI4j3ZGRjlqxhvx9UKEwuXFU7Ow5qMm972Pbk0iytYR/eb42m3SSFg/eKCVtihOB7CfeEoTGO8IlGzJ9sMkGD9l1LmVYXAfCtu21slVZkbYfrL2Az4=
+	t=1731067625; cv=none; b=AbUF+0//JWlOzTki5lw3uavpXGeu4f9R/49YxbJvngDpcsNPuqpI9tK0LShiC1w+tUV3Yq6kLZ7r1d4Vzqit4dr8+hHgakCsGSTCTZmDqWLlm0VHnPU4sEV1jHKgMfYddwRSN1nh+X8JaYWKlcJ696XC4+ucaNcK+ciBSJslRQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731066687; c=relaxed/simple;
-	bh=p+SEOJF42n/7xCSKD/yGr63wTiAxWW12wAHMIbVethY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=cSYWdOS58cgahT6qM0KQUiaSHi5WifkelgCSYebNWq+PR39W8ykms8vXWBbMp6XelCb0xUFZchFbF49Wq+5qVIve5t5w6g47mxXwQYsTKReWu2GUomHQz2m7hD0o55h1DElKryvVzTV8o44OToq3dMu/OiWUSozqRBv6B2zop30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=BHVZVMhd; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1731067625; c=relaxed/simple;
+	bh=BPm0h+bV+xsEADH1ZpLdJAmst959FEzmNFAhsDq3Pow=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gsZejo2TLu9u1WkfZRlG7omr6SoEQgsuFmtXH6nDeKqZTs2eX3M5tADCxlxhqdPTAtQtpvaV6ce7QWitIPWhlAlu4/zI85J4AzPL6+MS3BxMvakWxb51qDY7/2x+GyMM45TxiCO3gAvwaCucYSCgLZs1kPG/Gl13SyFVSMYUq4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HhL1a8E1; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="BHVZVMhd"
-Received: from [127.0.0.1] ([172.58.142.188])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 4A8BovPD1579194
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 8 Nov 2024 03:51:00 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 4A8BovPD1579194
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024101701; t=1731066661;
-	bh=bl4d8eOiYumn5v1PCbU3Zv/ucJgBjpYSbVD/0qR+qRI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=BHVZVMhdHTq7MtzIScgPIgAj1grUC85oacZxWKepzCDJ79rj/DTGivc4d0z0zjTph
-	 5ewL917gz2oiavDZEIxm+/OUN01UPDGptMBkPsOTc6c/WtQn94KumtO4d+dv92JNJF
-	 DLsqbW7p0w4SPVk3hdeqUxTpKR8JaRG6xjODaVqyHDPZjLUFXTdYLd5oT1e+6gvasz
-	 V1Cq4YnFOKBA3+JGulaWRxgUYHqZVuqjLEaAXtIakL7jMXTHDmoBwyt71XdOQ002mg
-	 rUnxPJWihKbCAGhPXcwFPaD5+1kJZudwle51/ooW59c4MSaqAU1b4o1FHwzqSNU7jN
-	 sbF+2sp20jCMg==
-Date: Fri, 08 Nov 2024 12:50:49 +0100
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_1/1=5D_x86/cpu=3A_Make_sure_fl?=
- =?US-ASCII?Q?ag=5Fis=5Fchangeable=5Fp=28=29_is_always_being_used?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Zy3Z3kYOOV3PzG8M@smile.fi.intel.com>
-References: <20240910084356.1518209-1-andriy.shevchenko@linux.intel.com> <Zy3Z3kYOOV3PzG8M@smile.fi.intel.com>
-Message-ID: <52362D81-CE7E-4F06-AA1E-B8C55933B4B4@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HhL1a8E1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731067625; x=1762603625;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BPm0h+bV+xsEADH1ZpLdJAmst959FEzmNFAhsDq3Pow=;
+  b=HhL1a8E1Lx99eku6/eIE+oYwJxtNpNN883egFS+7Mxb3ZUDozLEP74p9
+   A9FUNHZ7xWXWVWYHSZ7eazXE5TYZzP8E8f7dV8SnI5XWahHY6k4xxOiht
+   8bNeXJ8U8w5C4EJm8ycvkSlS3hK4jpasTAQBJkAW5DnuKTclj0/9DrKRX
+   VSOCjChVARcaHA1KjOrlcFN9BMtMyYTj5mx50OZcVOPwHw5AI/RvUcrRX
+   2eQPWfarwbtE52dgGYHZGBZwcOQpr5EVMiUK+PZp7V6Zwcn/OWnIucefr
+   TfGFwxZeVkV27V1aBxcN1Q+FHT2pyNrMH1baWUW907aZp6eZTq06J0Fml
+   w==;
+X-CSE-ConnectionGUID: fQi8g2A5RgKPulbRhkXOuA==
+X-CSE-MsgGUID: +dwAUKgUSyqXjZWVNMT70Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31116622"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31116622"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:07:04 -0800
+X-CSE-ConnectionGUID: bJpwDKi9SAedTALfbaUTVQ==
+X-CSE-MsgGUID: lzgCYkq+QfKHwvmEe+UKYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
+   d="scan'208";a="85679499"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 08 Nov 2024 04:07:01 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9NlT-000rOw-2A;
+	Fri, 08 Nov 2024 12:06:59 +0000
+Date: Fri, 8 Nov 2024 20:06:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenliang Yan <wenliang202407@163.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [groeck-staging:hwmon-next 32/37] drivers/hwmon/ina2xx.c:734:8:
+ error: duplicate case value: 'hwmon_in_input' and 'hwmon_power_average' both
+ equal '1'
+Message-ID: <202411082010.YVGQz3Xo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On November 8, 2024 10:29:02 AM GMT+01:00, Andy Shevchenko <andriy=2Eshevch=
-enko@linux=2Eintel=2Ecom> wrote:
->On Tue, Sep 10, 2024 at 11:42:42AM +0300, Andy Shevchenko wrote:
->> When flag_is_changeable_p() is unused, it prevents kernel builds
->> with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
->>=20
->> arch/x86/kernel/cpu/common=2Ec:351:19: error: unused function 'flag_is_=
-changeable_p' [-Werror,-Wunused-function]
->>   351 | static inline int flag_is_changeable_p(u32 flag)
->>       |                   ^~~~~~~~~~~~~~~~~~~~
->>=20
->> Fix this by moving core around to make sure flag_is_changeable_p() is
->> always being used=2E
->>=20
->> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused stati=
-c
->> inline functions for W=3D1 build")=2E
->
->Any comments on this? Can it be applied?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   33c7c88cd30fa65f5479722ba7eea300ebf889a5
+commit: 8fb186818c2fe7be4e2f722c1bc1108ec854d416 [32/37] hwmon: (ina226) Add support for SY24655
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241108/202411082010.YVGQz3Xo-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411082010.YVGQz3Xo-lkp@intel.com/reproduce)
 
-Incidentally, this really should be "unsigned long" rather than u32, altho=
-ugh I believe it is only used on 32 bits=2E
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411082010.YVGQz3Xo-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/ina2xx.c:31:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/ina2xx.c:31:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/ina2xx.c:31:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/ina2xx.c:31:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/hwmon/ina2xx.c:524:15: warning: unused variable 'regval' [-Wunused-variable]
+     524 |         unsigned int regval;
+         |                      ^~~~~~
+>> drivers/hwmon/ina2xx.c:734:8: error: duplicate case value: 'hwmon_in_input' and 'hwmon_power_average' both equal '1'
+     734 |                 case hwmon_power_average:
+         |                      ^
+   drivers/hwmon/ina2xx.c:722:8: note: previous case defined here
+     722 |                 case hwmon_in_input:
+         |                      ^
+   8 warnings and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [m]:
+   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+
+
+vim +734 drivers/hwmon/ina2xx.c
+
+   710	
+   711	static umode_t ina2xx_is_visible(const void *_data, enum hwmon_sensor_types type,
+   712					 u32 attr, int channel)
+   713	{
+   714		const struct ina2xx_data *data = _data;
+   715		bool has_alerts = data->config->has_alerts;
+   716		bool has_power_average = data->config->has_power_average;
+   717		enum ina2xx_ids chip = data->chip;
+   718	
+   719		switch (type) {
+   720		case hwmon_in:
+   721			switch (attr) {
+   722			case hwmon_in_input:
+   723				return 0444;
+   724			case hwmon_in_lcrit:
+   725			case hwmon_in_crit:
+   726				if (has_alerts)
+   727					return 0644;
+   728				break;
+   729			case hwmon_in_lcrit_alarm:
+   730			case hwmon_in_crit_alarm:
+   731				if (has_alerts)
+   732					return 0444;
+   733				break;
+ > 734			case hwmon_power_average:
+   735				if (has_power_average)
+   736					return 0444;
+   737				break;
+   738			default:
+   739				break;
+   740			}
+   741			break;
+   742		case hwmon_curr:
+   743			switch (attr) {
+   744			case hwmon_curr_input:
+   745				return 0444;
+   746			case hwmon_curr_lcrit:
+   747			case hwmon_curr_crit:
+   748				if (has_alerts)
+   749					return 0644;
+   750				break;
+   751			case hwmon_curr_lcrit_alarm:
+   752			case hwmon_curr_crit_alarm:
+   753				if (has_alerts)
+   754					return 0444;
+   755				break;
+   756			default:
+   757				break;
+   758			}
+   759			break;
+   760		case hwmon_power:
+   761			switch (attr) {
+   762			case hwmon_power_input:
+   763				return 0444;
+   764			case hwmon_power_crit:
+   765				if (has_alerts)
+   766					return 0644;
+   767				break;
+   768			case hwmon_power_crit_alarm:
+   769				if (has_alerts)
+   770					return 0444;
+   771				break;
+   772			default:
+   773				break;
+   774			}
+   775			break;
+   776		case hwmon_chip:
+   777			switch (attr) {
+   778			case hwmon_chip_update_interval:
+   779				if (chip == ina226 || chip == ina260)
+   780					return 0644;
+   781				break;
+   782			default:
+   783				break;
+   784			}
+   785			break;
+   786		default:
+   787			break;
+   788		}
+   789		return 0;
+   790	}
+   791	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
