@@ -1,65 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C3421CFBD;
-	Fri,  8 Nov 2024 17:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F9E21B458;
+	Fri,  8 Nov 2024 17:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731087378; cv=none; b=HEFndx6HCyabFnlkhBGZKhNzr49jmfcqAk4SyViKxu8sMOzhiuW2o6gZPvaKzBY18o7ABkeFQdMkq2lUZNJ4JtvrAzJM449xsLDW/FNcvBpM58+Q3/RX0b73g94k9D+bFX0lIw7ioRpUV/w5jDTCacuozUCApsgbSrVm6RfcBkM=
+	t=1731088001; cv=none; b=uLKFvcbVy2APetz4FpwkhyrX3DWBU+KgylaikdS/epGLxcgGOKLikxqZKUEsV2GQya3WcgrZfdhTj3ztTV5VlyFYvzvmjVKSJyA73AfnyEBSW5fjCvo9Gldwe/gP70mbDAc+kym7atopoGefqUClbJJO/e6zsNj8ToGTu4DA1wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731087378; c=relaxed/simple;
-	bh=VYRtOv+nPghOh1Cg4oPCcRkHkKNpWrkOKEbceRGuIs0=;
+	s=arc-20240116; t=1731088001; c=relaxed/simple;
+	bh=v6CMakwqFx7aJagpFs1cS1sDWNqmR4HwbpiSyjF0JjI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CoznZV6sIndSafdpvZ50GuwE1fCqymvq6Th+nJyESjoX4LC80OOo0wxRzJ9KRGbCqTCQz8nqLzw6C7T6G8fnwd2qAR6D9AVoR4YlaW1XFILIBmkO270uHmmvYLp/ZyKHL2vF6IPnf9jeZt/mP7uCpS0+Xz60GHApDzDffJSQG7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aVc15i7+; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hQUjqbYbBD32Oa/7ENHzbJu6jmdQE0xyjbJDItDM2Ok6TVwNBnJbl4M84i41WZqW3kgNNnnncCHaUoKGXQTaoPXMQjkAHarhv5arS7wtE8L+LZ/Q2QXCsCYgUZGoerDmHwW02sdTZy6i1/x2PDcj4Mut9lxQRinCaAKSy2WxZ2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TzoWCT0k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aVc15i7+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731087377; x=1762623377;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VYRtOv+nPghOh1Cg4oPCcRkHkKNpWrkOKEbceRGuIs0=;
-  b=aVc15i7+9+hpW2dpu4rYldYMu2runTPoriREkG3WTsij3xEXhyRWsgdG
-   LNAY7SJh91MYZq2lKBSww0xFkNuAknvtUL4YVmdvMLT19obfuXOhTMOz1
-   fTujmROAqAS9ziUKYA8Rc55uic5YN0GHPmYaFQq2TPlWJ1uzQg4H0eVbr
-   2LFc0CjZ8O3Y8sVlxyR6W9pYW7pL+jUJfKTBAjKe4S33N7tPVv7niYR7r
-   h3tl+uUEMvLkVoi3MuD63CNeCERvr88aKlWqEzYU6UeSbDrNj3GPUIvnu
-   P8+w3QFtXoBKWr2nhYfs443+5Q9MfoZx/WezrR7RF0Fa4IdmET01CWjBs
-   g==;
-X-CSE-ConnectionGUID: p7eBU/CcQrWH+1nbHVCDpw==
-X-CSE-MsgGUID: rnNscdtdQNCSc5WULsdpKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="34765142"
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="34765142"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 09:36:16 -0800
-X-CSE-ConnectionGUID: fSSNJeBoT1iCWbyIt3pcaw==
-X-CSE-MsgGUID: P11TbQ9UQRKLr4/jfFZM5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
-   d="scan'208";a="108951162"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 08 Nov 2024 09:36:13 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9Su3-000reg-0e;
-	Fri, 08 Nov 2024 17:36:11 +0000
-Date: Sat, 9 Nov 2024 01:36:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Ramon Cristopher M. Calam" <ramoncristopher.calam@analog.com>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Cristopher Calam <ramoncristopher.calam@analog.com>
-Subject: Re: [PATCH 1/2] regulator: lt8722: Add driver for LT8722
-Message-ID: <202411090141.pm0JwBtT-lkp@intel.com>
-References: <20241108093544.9492-2-ramoncristopher.calam@analog.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TzoWCT0k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D023C4CECD;
+	Fri,  8 Nov 2024 17:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731088001;
+	bh=v6CMakwqFx7aJagpFs1cS1sDWNqmR4HwbpiSyjF0JjI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TzoWCT0km7qIjw6wL3OQkxyzDX0V9ucpTetlaamJ9ckgAU38Z9fLuOVnzv4AlDvCg
+	 9spSlI7s5sY68DEpeZU6kS4yCQ0Nd03kJDWqLxJJ92HtF1KVbTzYwICdBgl3tbevsA
+	 rTHxnrdXb2uWxrt9SpkCooT2WbBTay8FoA1Vwpohti1nCZ/SAua3oLJqYtDqHbAopu
+	 V4Y//A82tSDQwwHOxjL9O4Cn1r9TOTp7I2LcWl00oXrKLYPIi083zMJD78lkNASHeB
+	 urKvx5ZfAq/7qeZT8kibjd8hh841efdPtqAqG7WpBE7uHT+oXkByZqA+NHbHlPRpnF
+	 O5uFOfViW09gg==
+Date: Fri, 8 Nov 2024 10:46:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rong Xu <xur@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Han Shen <shenhan@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: Fix Propeller build option
+Message-ID: <20241108174638.GC2564051@thelio-3990X>
+References: <20241108051030.2918950-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,58 +46,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108093544.9492-2-ramoncristopher.calam@analog.com>
+In-Reply-To: <20241108051030.2918950-1-xur@google.com>
 
-Hi Ramon,
+Hi Rong,
 
-kernel test robot noticed the following build errors:
+Thanks for the quick patch!
 
-[auto build test ERROR on e18da71634d12a94a15138947538ef2f0ac22746]
+On Thu, Nov 07, 2024 at 09:10:30PM -0800, Rong Xu wrote:
+> The '-fbasic-block-sections=labels' option has been deprecated with
+> the following llvm patch:
+> https://github.com/llvm/llvm-project/pull/110039
+> 
+> The old option still works, but with a warning like
+>   clang: warning: argument '-fbasic-block-sections=labels' \
+>   is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
+> 
+> Currently, the option change is only in the ToT clang (v20) and not yet
+> released in v19.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ramon-Cristopher-M-Calam/regulator-lt8722-Add-driver-for-LT8722/20241108-174141
-base:   e18da71634d12a94a15138947538ef2f0ac22746
-patch link:    https://lore.kernel.org/r/20241108093544.9492-2-ramoncristopher.calam%40analog.com
-patch subject: [PATCH 1/2] regulator: lt8722: Add driver for LT8722
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241109/202411090141.pm0JwBtT-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090141.pm0JwBtT-lkp@intel.com/reproduce)
+I think this whole block could be a little easier to read and understand
+with some more standard kernel commit message practices. I would combine
+the first and third block into one sentence and I would unwrap the
+warning text (it is okay to be long for a little clarity). Perhaps
+something like this?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411090141.pm0JwBtT-lkp@intel.com/
+  | The '-fbasic-block-sections=labels' option has been deprecated in tip of
+  | tree clang (20.0.0) [1]. While the option still works, a warning is
+  | emitted:
+  |
+  |   clang: warning: argument '-fbasic-block-sections=labels' is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
 
-All errors (new ones prefixed by >>):
+then putting:
 
->> drivers/regulator/lt8722-regulator.c:8:10: fatal error: 'asm/unaligned.h' file not found
-       8 | #include <asm/unaligned.h>
-         |          ^~~~~~~~~~~~~~~~~
-   1 error generated.
+  | Link: https://github.com/llvm/llvm-project/pull/110039 [1]
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+right above your Signoff.
 
+> This patch adds a check to the Makefile to set the proper option.
 
-vim +8 drivers/regulator/lt8722-regulator.c
+Try to avoid saying "this patch" in kernel commit messages, it is
+implicit. It would be cleaner to say something like:
 
-   > 8	#include <asm/unaligned.h>
-     9	#include <linux/bitfield.h>
-    10	#include <linux/bits.h>
-    11	#include <linux/crc8.h>
-    12	#include <linux/delay.h>
-    13	#include <linux/gpio.h>
-    14	#include <linux/math.h>
-    15	#include <linux/module.h>
-    16	#include <linux/regulator/driver.h>
-    17	#include <linux/regulator/machine.h>
-    18	#include <linux/regulator/of_regulator.h>
-    19	#include <linux/spi/spi.h>
-    20	#include <linux/util_macros.h>
-    21	
+  | Add a version check to set the proper option.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can see some more commit message tips in sections 4.2.3 to 4.2.6 in
+the tip documentation:
+
+https://docs.kernel.org/process/maintainer-tip.html#changelog
+
+> If the option change is later integrated in v19.x, we need to update the
+> check accordingly.
+
+I think it is worth dropping this sentence entirely, as I would argue
+that it is pretty unlikely that this option gets backported to
+release/19.x, since it would basically accelerate the deprecation
+timeline, which seems unreasonable to do in a stable release.
+
+> Signed-off-by: Rong Xu <xur@google.com>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/Makefile.propeller | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
+> index 344190717e47..1a68ea0d1fe4 100644
+> --- a/scripts/Makefile.propeller
+> +++ b/scripts/Makefile.propeller
+> @@ -5,7 +5,13 @@ ifdef CLANG_PROPELLER_PROFILE_PREFIX
+>    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
+>    KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
+>  else
+> -  CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
+> +  # Staring with clang v20, the '-fbasic-block-sections=labels' option is
+> +  # deprecated. Use the recommended '-fbasic-block-address-map' option.
+
+Might be worth linking the specific change here for archeology sake.
+
+> +  ifeq ($(call clang-min-version, 200000),y)
+> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-address-map
+> +  else
+> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
+> +  endif
+>  endif
+>  
+>  # Propeller requires debug information to embed module names in the profiles.
+> @@ -21,7 +27,11 @@ ifdef CONFIG_LTO_CLANG_THIN
+>    ifdef CLANG_PROPELLER_PROFILE_PREFIX
+>      KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
+>    else
+> -    KBUILD_LDFLAGS += --lto-basic-block-sections=labels
+> +    ifeq ($(call clang-min-version, 200000),y)
+
+Would it be better/more accurate to check the LLD version here? I doubt
+it would really happen but it is possible for someone to have LLVM=1
+(using their system wide ld.lld and LLVM tools) and CC=clang-20 to just
+use an updated clang. Perhaps:
+
+  ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
+
+here?
+
+> +       KBUILD_LDFLAGS += --lto-basic-block-address-map
+> +    else
+> +       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
+> +    endif
+>    endif
+>  endif
+>  
+> 
+> base-commit: 0dcc2d1066150787017a71f035145c566597dec7
+> -- 
+> 2.47.0.277.g8800431eea-goog
+> 
