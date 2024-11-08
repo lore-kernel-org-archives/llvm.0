@@ -1,103 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94BE1233D92
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 21:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F6719A28D
+	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 21:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731099791; cv=none; b=VOs7wuZ+k5IFondJnpls2dWyDO64QQE4ztEtfPCs7mhK8BTdvkWq+0OD0VsNtaGDbkt1rlO8wXDC3Su+z8uE1+9dYyDExfAt7DA9ubpNNUEsp4q1LM8BdrRI4nGNA83NugZ185e+uwY/VRqH6Mh6dBljQDKEFamZg6lgzX1CIXg=
+	t=1731102409; cv=none; b=Hdj4E9RyF97qwmXtjBK4V8DmtLL1K33o95Uk4crY9URkr3pmRCnTvTnXIRhm8y18oEmGBUnFIzpGZtvv/T8kYgYrf0U5oJmRQJL5dtv6M+qHZjR/hH4fbfneVnChpJVWhxvJOB1NBifNp9jRKf4qZ3DUGfkIRQJljxE7/RqEi3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731099791; c=relaxed/simple;
-	bh=U1WwvWvQ8/n0M6z9nJgCxHS6BLV7YCWk+prfCTiLKTQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=U4SJ/l+FSWo3mkTuztPPrfwwsmeR2WXt6HbbYZpLWaaOjjnilccjyozCOvs5oae5EQZABlZKaaDn6yId8qG7ojyPfcuifD6DecSNFMMLpqa7WGqQWKJqbNK8irsKDL/W51CRRMu9lkK1pmK6LR5BhOzB3A5MdqnBbR/UoJlYyyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bKcxJHxc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1731102409; c=relaxed/simple;
+	bh=AEoUzhmLxJcYmOfM0szL/LZNxLfEvuOcRuf2OVTMz3k=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sPplnRX+th/dYyqR1pbrAhThJBcBI7+sYAS/U8Dbl/PJd1rdRVbbrLNOSJsuqODxsuti0yioj54kmYwJHrnqaKRBJ8I6BgHwH02svtQx7NGZhm5TGti3qVFV5rTQi6aGT4p+ursUlHV/J2Hr4eCJABGOI/O0hBg1pUrUR2O8c60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S1gd68VT; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bKcxJHxc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731099788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TU6AHmaw1qrVGL2Kw57wfLu7i1E1ejiKljE7zDx82sA=;
-	b=bKcxJHxcZA9H140nmzjveBUkL6fZEHSFZqhcjiP9MJoUOBjyUo0wr0XBl1vbGLpozzm6oZ
-	V8qh7eZIL2uFMfA1X9+hshUdLSt7zbas3zIZx1JLgixlYpNdCNaRUj44Xomba9wGcmHGr8
-	XexrHF/lyOwdrEa1m42usqaWHS+CCJI=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-608-PzZsIjIQOqW6iHgm-1oN7Q-1; Fri,
- 08 Nov 2024 16:03:06 -0500
-X-MC-Unique: PzZsIjIQOqW6iHgm-1oN7Q-1
-X-Mimecast-MFC-AGG-ID: PzZsIjIQOqW6iHgm-1oN7Q
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D266119560A2
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 21:03:05 +0000 (UTC)
-Received: from [172.64.13.23] (unknown [10.30.32.164])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5DEA8300019E;
-	Fri,  8 Nov 2024 21:03:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc6,
- upstream-mainline, c291c9cf)
-Date: Fri, 08 Nov 2024 21:03:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S1gd68VT"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e3313b47a95so5265000276.3
+        for <llvm@lists.linux.dev>; Fri, 08 Nov 2024 13:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1731102406; x=1731707206; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rXaV9HHpw5oBXk26XdBSn67dU41wttYgvf+/bW2x+x0=;
+        b=S1gd68VTy20L85SRmvYKrnJOuwRh2TuXvO2ZapM8tgzJdtx/ILH/LUDVcLiZUovsPw
+         kMubJ5EvsFAVh9Re8mD+5KX410fjBXapg0ju8FespaIe16uwm0+jWnii2fllLvn2yDal
+         F2fDyX08EUEETi+UCZLWffM7YPue3jE9pRSCMVAlqapfNa/9VIELAImRuKR74pipxZF+
+         nHJ81CBCi3L4mkUHKtnYEXMSMqJqzialodlBSa3srTDEK+VWxlxYOTEFkuUyVaNf6fdl
+         xiWt7VipHC4zYp6dh9bsYD6tFiFIzOp6qqw0G0zgYA+NBIvdIui1mazK6WAbbE82axaL
+         4XgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731102406; x=1731707206;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rXaV9HHpw5oBXk26XdBSn67dU41wttYgvf+/bW2x+x0=;
+        b=p9jIPRqymMFdGUbiJ3nj97uUBo3bAJGgisOCcZfuUBobNH8Nr5Wt7aG8e5FADrCjfn
+         EHz/WfvK/Yab+Y/kFBd1onHvYxOOd3urcL0n9P7QGoeNgGsIULpcFKT+zapo9rKw4a97
+         vA+yGDV/cvgPLzz0hEAHFv17XImCfUbUbJkUCUUDsVdhwcgIQzWdxI0Yz2pegG5ZP1uc
+         v4dA8yBzM5UywJw9vLk75nYJFKUBx3303SZFd178re6CTgo1Vbjr4iZ+jaqrov1ey5R6
+         IxmuQIopgL/xUzbbx4ZySjG57HxShtY/Gzy+3GFZjB4jGKLyCXMW50uSjQGBwYTnhYLt
+         L4+g==
+X-Forwarded-Encrypted: i=1; AJvYcCV1g/nEU3EByqw7N9oC2cm3c+QERf29Vz8uWCubNyGz0JqolFq0eUT8xxo1oRMyifjJJoUL@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx96WQwFBv0k/Ed/6gvJtUiz83qfP9s6dD8VgwjdWshgcnlhsQW
+	st1UPkA2LubW/PtsS/RdXAIWv8oejyCiN82C/tw2ztY2E9Mcwn8SrpVraKjaWuEIMg==
+X-Google-Smtp-Source: AGHT+IFB86PGUSKJ+j1W7yv6YKMRSZZhNrTjWnqgSnyhBOaULLB3J3ivCKnVz34+e2hMdcyuXkGnsb4=
+X-Received: from xur.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:2330])
+ (user=xur job=sendgmr) by 2002:a05:6902:4f2:b0:e30:cdd0:fc0e with SMTP id
+ 3f1490d57ef6-e337f8e881dmr5357276.5.1731102406545; Fri, 08 Nov 2024 13:46:46
+ -0800 (PST)
+Date: Fri,  8 Nov 2024 13:46:40 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <39436.124110816030603046@us-mta-608.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: KDxtNTzVFbiclfjl8wpwusDQv_Qh_IzVB0ol83Sk-1A_1731099786
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.277.g8800431eea-goog
+Message-ID: <20241108214640.1159739-1-xur@google.com>
+Subject: [PATCH v2] kbuild: Fix Propeller build option
+From: Rong Xu <xur@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+The '-fbasic-block-sections=labels' option has been deprecated in tip
+of tree clang (20.0.0) [1]. While the option still works, a warning is
+emitted:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+  clang: warning: argument '-fbasic-block-sections=labels' is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
 
+Add a version check to set the proper option.
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+Link: https://github.com/llvm/llvm-project/pull/110039 [1]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1534110353
+Signed-off-by: Rong Xu <xur@google.com>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/Makefile.propeller | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1534110353-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1534110353-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1534110353-x86_64-kernel-debug
+diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
+index 344190717e47..48a660128e25 100644
+--- a/scripts/Makefile.propeller
++++ b/scripts/Makefile.propeller
+@@ -5,7 +5,14 @@ ifdef CLANG_PROPELLER_PROFILE_PREFIX
+   CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
+   KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
+ else
+-  CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
++  # Starting with Clang v20, the '-fbasic-block-sections=labels' option is
++  # deprecated. Use the recommended '-fbasic-block-address-map' option.
++  # Link: https://github.com/llvm/llvm-project/pull/110039
++  ifeq ($(call clang-min-version, 200000),y)
++    CFLAGS_PROPELLER_CLANG := -fbasic-block-address-map
++  else
++    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
++  endif
+ endif
+ 
+ # Propeller requires debug information to embed module names in the profiles.
+@@ -21,7 +28,11 @@ ifdef CONFIG_LTO_CLANG_THIN
+   ifdef CLANG_PROPELLER_PROFILE_PREFIX
+     KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
+   else
+-    KBUILD_LDFLAGS += --lto-basic-block-sections=labels
++    ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
++       KBUILD_LDFLAGS += --lto-basic-block-address-map
++    else
++       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
++    endif
+   endif
+ endif
+ 
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+base-commit: 0dcc2d1066150787017a71f035145c566597dec7
+-- 
+2.47.0.277.g8800431eea-goog
 
