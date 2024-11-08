@@ -1,91 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAAA1DE8A8;
-	Fri,  8 Nov 2024 11:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0161E0E10
+	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 11:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731065764; cv=none; b=U73VnCmtxtCkMfA/OFQ3+qThdWyVvwl5TQeoqKNX7sZaMXBQPvZfc7YNSK6CGJIMzcmvk3poS/DU5t614UfDRDweYCwXAw61VcM616MHCO8XfC51/3FCyiSk3H2aV9rcFjytHl146ai5lwnqOWiSEybupSLwCLJ9WcASPwHq/gc=
+	t=1731066687; cv=none; b=i3u+5JGT8aDODX1QIWh93sy38H0uPxZ84GEaPb93yWGcfwG/BeeZxIeUMOI4j3ZGRjlqxhvx9UKEwuXFU7Ow5qMm972Pbk0iytYR/eb42m3SSFg/eKCVtihOB7CfeEoTGO8IlGzJ9sMkGD9l1LmVYXAfCtu21slVZkbYfrL2Az4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731065764; c=relaxed/simple;
-	bh=ypBGfmpFaGuqhw9KqesCNAp9YB/9TkJjLweqAVK542g=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GdR20n1atJJgHZbedy/Xc6i0s1WzsSqdYr7xZX2T6+07AABnmCHcs7TUONcQTze2hfhUZRe5IHOz/XfKwIKhmooJiEvSGiYlqJPRkcS1kvxQZPDW2iepFm8k3/75D1RhNf/nKrU+Z8lWyBDhzKuQq3TyIdYkJv2oM7EUKaxYRaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WvA0sUUs; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731066687; c=relaxed/simple;
+	bh=p+SEOJF42n/7xCSKD/yGr63wTiAxWW12wAHMIbVethY=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=cSYWdOS58cgahT6qM0KQUiaSHi5WifkelgCSYebNWq+PR39W8ykms8vXWBbMp6XelCb0xUFZchFbF49Wq+5qVIve5t5w6g47mxXwQYsTKReWu2GUomHQz2m7hD0o55h1DElKryvVzTV8o44OToq3dMu/OiWUSozqRBv6B2zop30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=BHVZVMhd; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WvA0sUUs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731065762; x=1762601762;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=ypBGfmpFaGuqhw9KqesCNAp9YB/9TkJjLweqAVK542g=;
-  b=WvA0sUUsiUuR861Jl1QwBJ4lNI+HzGeIVk4jcTVdTmMAcE8pWg1/qG7z
-   TdrXFpwh8REoIchQrlJMIE62zdvaggxar4cvELLo3H6Wv26B8UBQ7HN/+
-   NlA34a87m0kYonvDZVYSnhc41jTZYO6DZdvLFsVbF5t2oheW4+A5rXa+t
-   BZSiDgWCtUUKLQjveEuzv6IulgiyEYf75W9dGM25iIjU2pivaKR3WgO5Z
-   oSRF6QBePfm/10M6wOr3Df8ZB4jvHcB75kYl9Zc9sjb/4e/E3uOO4dRNn
-   soVP+JRqXwdVnG8PSz3W0lybZmK6GzQBEZ5I4lNfbFdTBD/gsUfuHBnzu
-   Q==;
-X-CSE-ConnectionGUID: J6OVsAYpQ3itS6S31W4pIg==
-X-CSE-MsgGUID: GMCYvseNSBS8hRLVithJ2Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="34883555"
-X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="34883555"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 03:36:01 -0800
-X-CSE-ConnectionGUID: 1KAVB0ljSxilb0wXZfoeBg==
-X-CSE-MsgGUID: xxPKlmu7S/uxG7sdOBYoKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="90390182"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Nov 2024 03:36:00 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9NHS-000rMw-20;
-	Fri, 08 Nov 2024 11:35:58 +0000
-Date: Fri, 8 Nov 2024 19:35:22 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [linux-next:master 10134/10559] ld.lld: error:
- vmlinux.a(io_uring/rsrc.o):(function io_rsrc_node_alloc: .text+0x1ea):
- relocation R_RISCV_HI20 out of range: 527998 is not in [-524288, 524287];
- references 'random_kmalloc_seed'
-Message-ID: <202411081905.ylTejbtc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="BHVZVMhd"
+Received: from [127.0.0.1] ([172.58.142.188])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 4A8BovPD1579194
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 8 Nov 2024 03:51:00 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 4A8BovPD1579194
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024101701; t=1731066661;
+	bh=bl4d8eOiYumn5v1PCbU3Zv/ucJgBjpYSbVD/0qR+qRI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=BHVZVMhdHTq7MtzIScgPIgAj1grUC85oacZxWKepzCDJ79rj/DTGivc4d0z0zjTph
+	 5ewL917gz2oiavDZEIxm+/OUN01UPDGptMBkPsOTc6c/WtQn94KumtO4d+dv92JNJF
+	 DLsqbW7p0w4SPVk3hdeqUxTpKR8JaRG6xjODaVqyHDPZjLUFXTdYLd5oT1e+6gvasz
+	 V1Cq4YnFOKBA3+JGulaWRxgUYHqZVuqjLEaAXtIakL7jMXTHDmoBwyt71XdOQ002mg
+	 rUnxPJWihKbCAGhPXcwFPaD5+1kJZudwle51/ooW59c4MSaqAU1b4o1FHwzqSNU7jN
+	 sbF+2sp20jCMg==
+Date: Fri, 08 Nov 2024 12:50:49 +0100
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_1/1=5D_x86/cpu=3A_Make_sure_fl?=
+ =?US-ASCII?Q?ag=5Fis=5Fchangeable=5Fp=28=29_is_always_being_used?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Zy3Z3kYOOV3PzG8M@smile.fi.intel.com>
+References: <20240910084356.1518209-1-andriy.shevchenko@linux.intel.com> <Zy3Z3kYOOV3PzG8M@smile.fi.intel.com>
+Message-ID: <52362D81-CE7E-4F06-AA1E-B8C55933B4B4@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-TO: Chuck Lever <chuck.lever@oracle.com>
+On November 8, 2024 10:29:02 AM GMT+01:00, Andy Shevchenko <andriy=2Eshevch=
+enko@linux=2Eintel=2Ecom> wrote:
+>On Tue, Sep 10, 2024 at 11:42:42AM +0300, Andy Shevchenko wrote:
+>> When flag_is_changeable_p() is unused, it prevents kernel builds
+>> with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
+>>=20
+>> arch/x86/kernel/cpu/common=2Ec:351:19: error: unused function 'flag_is_=
+changeable_p' [-Werror,-Wunused-function]
+>>   351 | static inline int flag_is_changeable_p(u32 flag)
+>>       |                   ^~~~~~~~~~~~~~~~~~~~
+>>=20
+>> Fix this by moving core around to make sure flag_is_changeable_p() is
+>> always being used=2E
+>>=20
+>> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused stati=
+c
+>> inline functions for W=3D1 build")=2E
+>
+>Any comments on this? Can it be applied?
+>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   929beafbe7acce3267c06115e13e03ff6e50548a
-commit: 6eb5109a27ed8698809c3bf5acb5df0a579f0095 [10134/10559] Merge branch 'nfsd-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-config: riscv-randconfig-001-20241108 (https://download.01.org/0day-ci/archive/20241108/202411081905.ylTejbtc-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411081905.ylTejbtc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411081905.ylTejbtc-lkp@intel.com/
-
-Note: the linux-next/master HEAD 929beafbe7acce3267c06115e13e03ff6e50548a builds fine.
-      It may have been fixed somewhere.
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: vmlinux.a(io_uring/rsrc.o):(function io_rsrc_node_alloc: .text+0x1ea): relocation R_RISCV_HI20 out of range: 527998 is not in [-524288, 524287]; references 'random_kmalloc_seed'
-   >>> referenced by atomic-arch-fallback.h:0 (include/linux/atomic/atomic-arch-fallback.h:0)
-   >>> defined in vmlinux.a(mm/slab_common.o)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Incidentally, this really should be "unsigned long" rather than u32, altho=
+ugh I believe it is only used on 32 bits=2E
