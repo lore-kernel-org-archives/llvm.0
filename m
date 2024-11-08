@@ -1,143 +1,125 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3090220D73
-	for <llvm@lists.linux.dev>; Fri,  8 Nov 2024 17:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C3421CFBD;
+	Fri,  8 Nov 2024 17:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731087293; cv=none; b=ZCjWRaG/5j4DI3tZYzvWgCAxsEAVJM4eqPI9fycpuIsUALaH5J44nvX5a8yrrC7zW1jN7iyL6WHav5hrS6Rx82MZpgGVydMG59nAP/fV8DY+r7GX/Da9JVd7ykN+mNcZtLhMkblT3jJh/KuIufsIMAJl3x4y77yEQd7eRA+z6JQ=
+	t=1731087378; cv=none; b=HEFndx6HCyabFnlkhBGZKhNzr49jmfcqAk4SyViKxu8sMOzhiuW2o6gZPvaKzBY18o7ABkeFQdMkq2lUZNJ4JtvrAzJM449xsLDW/FNcvBpM58+Q3/RX0b73g94k9D+bFX0lIw7ioRpUV/w5jDTCacuozUCApsgbSrVm6RfcBkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731087293; c=relaxed/simple;
-	bh=m77clOypg5Bb/p6J91Pp5cNEQ360BjUrerAGfHRmROU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=A6XYa8674b4XO0OMLX4bqbMwdjptVYRO0x9yKhx0qRH8rajLiZWFZtq7wTTAauvF8ls5aDjbr32qdcH2LoqQHQMomy5JqqAh4UTtD94RQQkcn4yQdrfHN3SiUy/gPUFSomrsUgI6K2sqVbWPgSPQLf1uO2aMoCz8EKn+YCQnMWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Fohz+Qnn; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1731087378; c=relaxed/simple;
+	bh=VYRtOv+nPghOh1Cg4oPCcRkHkKNpWrkOKEbceRGuIs0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CoznZV6sIndSafdpvZ50GuwE1fCqymvq6Th+nJyESjoX4LC80OOo0wxRzJ9KRGbCqTCQz8nqLzw6C7T6G8fnwd2qAR6D9AVoR4YlaW1XFILIBmkO270uHmmvYLp/ZyKHL2vF6IPnf9jeZt/mP7uCpS0+Xz60GHApDzDffJSQG7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aVc15i7+; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Fohz+Qnn"
-Received: from [127.0.0.1] ([92.33.209.142])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 4A8HYNHV1690340
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Fri, 8 Nov 2024 09:34:26 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 4A8HYNHV1690340
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024101701; t=1731087267;
-	bh=rOuuF4jpluR9N/k0kAaAWHUMFnZhlKp7iRd4kN/VJpo=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=Fohz+Qnn54Hjr9ErA1GDOIasHQsk39D+34OyXQDogYwJU6IswLzrxYM+o/u2E9+15
-	 aaS+kqnoB+C1NcC5g9s/nbWgyfmdzD885ql/rQ6YJ8oUQ6wVXsmdKzd3QarBmlDByk
-	 t0zynKjfKYB0GDwwzNiJKT8WO1svMLgtHzBGDfO5ouZ5TQTQCNoMVFUjEAukpjmwdu
-	 aVS/jN6kWawpSJIs3YZrT8eUdnlE/8BRfqL9+a84CN8VSjMFeMpcb1nm1MPYOh4+ch
-	 ZaHzIbTFCfI+mq7njTjwN3rcJN7we10AOe6Ih9CWbkPtnCvHSGzEedfBVfl8oZmVdh
-	 Nuy8HFzISe3tw==
-Date: Fri, 08 Nov 2024 18:34:15 +0100
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Nathan Chancellor <nathan@kernel.org>
-CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_1/1=5D_x86/cpu=3A_Make_sure_fl?=
- =?US-ASCII?Q?ag=5Fis=5Fchangeable=5Fp=28=29_is_always_being_used?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20241108172920.GB2564051@thelio-3990X>
-References: <20241108153105.1578186-1-andriy.shevchenko@linux.intel.com> <732CB428-EE83-455F-A5AF-C008B7541401@zytor.com> <Zy4xHC3MCtAqlSxy@smile.fi.intel.com> <4A528893-A428-4A6F-8672-1D14CC57F696@zytor.com> <20241108172920.GB2564051@thelio-3990X>
-Message-ID: <106B0D31-F58E-49EA-9FEC-5573B684ACC7@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aVc15i7+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731087377; x=1762623377;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VYRtOv+nPghOh1Cg4oPCcRkHkKNpWrkOKEbceRGuIs0=;
+  b=aVc15i7+9+hpW2dpu4rYldYMu2runTPoriREkG3WTsij3xEXhyRWsgdG
+   LNAY7SJh91MYZq2lKBSww0xFkNuAknvtUL4YVmdvMLT19obfuXOhTMOz1
+   fTujmROAqAS9ziUKYA8Rc55uic5YN0GHPmYaFQq2TPlWJ1uzQg4H0eVbr
+   2LFc0CjZ8O3Y8sVlxyR6W9pYW7pL+jUJfKTBAjKe4S33N7tPVv7niYR7r
+   h3tl+uUEMvLkVoi3MuD63CNeCERvr88aKlWqEzYU6UeSbDrNj3GPUIvnu
+   P8+w3QFtXoBKWr2nhYfs443+5Q9MfoZx/WezrR7RF0Fa4IdmET01CWjBs
+   g==;
+X-CSE-ConnectionGUID: p7eBU/CcQrWH+1nbHVCDpw==
+X-CSE-MsgGUID: rnNscdtdQNCSc5WULsdpKw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="34765142"
+X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
+   d="scan'208";a="34765142"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 09:36:16 -0800
+X-CSE-ConnectionGUID: fSSNJeBoT1iCWbyIt3pcaw==
+X-CSE-MsgGUID: P11TbQ9UQRKLr4/jfFZM5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,138,1728975600"; 
+   d="scan'208";a="108951162"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Nov 2024 09:36:13 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9Su3-000reg-0e;
+	Fri, 08 Nov 2024 17:36:11 +0000
+Date: Sat, 9 Nov 2024 01:36:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Ramon Cristopher M. Calam" <ramoncristopher.calam@analog.com>,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Cristopher Calam <ramoncristopher.calam@analog.com>
+Subject: Re: [PATCH 1/2] regulator: lt8722: Add driver for LT8722
+Message-ID: <202411090141.pm0JwBtT-lkp@intel.com>
+References: <20241108093544.9492-2-ramoncristopher.calam@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108093544.9492-2-ramoncristopher.calam@analog.com>
 
-On November 8, 2024 6:29:20 PM GMT+01:00, Nathan Chancellor <nathan@kernel=
-=2Eorg> wrote:
->On Fri, Nov 08, 2024 at 04:48:16PM +0100, H=2E Peter Anvin wrote:
->> On November 8, 2024 4:41:16 PM GMT+01:00, Andy Shevchenko <andriy=2Eshe=
-vchenko@linux=2Eintel=2Ecom> wrote:
->> >On Fri, Nov 08, 2024 at 04:35:17PM +0100, H=2E Peter Anvin wrote:
->> >> On November 8, 2024 4:30:10 PM GMT+01:00, Andy Shevchenko <andriy=2E=
-shevchenko@linux=2Eintel=2Ecom> wrote:
->> >
->> >> >See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused s=
-tatic
->> >> >inline functions for W=3D1 build")=2E
->> >
->> >^^^ (1)
->> >
->> >> Looks good to me:
->> >>=20
->> >> Reviewed-by: H=2E Peter Anvin (Intel) <hpa@zytor=2Ecom>
->> >
->> >Thank you!
->> >
->> >> But another question: why the hell does clang complain about an unus=
-ed static inline function?!
->> >
->> >Does (1) shed a bit of light to this?
->> >
->>=20
->> How on earth is that supposed to work?! We have static inline functions=
- in headers all over the place that are only used in certain circumstances=
-=2E=20
->>=20
->> Is this a good thing, really? Or is it noise?
->
->Did you read the commit message of 6863f5643dd7 or just the title?
->
->The difference between Clang and GCC is only around static inline
->function in =2Ec files, not =2Eh files=2E
->
->  $ cat test=2Eh
->  static inline void unused_inline_in_h(void) {}
->
->  $ cat test=2Ec
->  #include "test=2Eh"
->
->  static inline void unused_inline_in_c(void) {}
->
->  static void unused_in_c(void) {}
->
->  $ gcc -Wall -c -o /dev/null test=2Ec
->  test=2Ec:5:13: warning: =E2=80=98unused_in_c=E2=80=99 defined but not u=
-sed [-Wunused-function]
->      5 | static void unused_in_c(void) {}
->        |             ^~~~~~~~~~~
->
->  $ clang -fsyntax-only -Wall test=2Ec
->  test=2Ec:3:20: warning: unused function 'unused_inline_in_c' [-Wunused-=
-function]
->      3 | static inline void unused_inline_in_c(void) {}
->        |                    ^~~~~~~~~~~~~~~~~~
->  test=2Ec:5:13: warning: unused function 'unused_in_c' [-Wunused-functio=
-n]
->      5 | static void unused_in_c(void) {}
->        |             ^~~~~~~~~~~
->  2 warnings generated=2E
->
->I do not think there are too many instances of unused static inline
->functions in =2Ec files but Andy might be able to speak more around how
->many instances he has had to fix across the tree=2E I can see how this
->difference can be useful for catching dead code and maybe even making
->code cleaner but if it proves to be too much of an annoyance for the
->wider community, we could potentially discuss reverting 6863f5643dd7=2E
->
->Cheers,
->Nathan
+Hi Ramon,
 
-I'm on the road traveling and have limited ability to look things up at th=
-e moment=2E=20
+kernel test robot noticed the following build errors:
 
-However, in =2Ec files the value becomes very very small: in =2Eh files an=
- unused inline becomes a drag on compile time because it effects a number o=
-f compilation units, but for a =2Ec file it is just one=2E
+[auto build test ERROR on e18da71634d12a94a15138947538ef2f0ac22746]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ramon-Cristopher-M-Calam/regulator-lt8722-Add-driver-for-LT8722/20241108-174141
+base:   e18da71634d12a94a15138947538ef2f0ac22746
+patch link:    https://lore.kernel.org/r/20241108093544.9492-2-ramoncristopher.calam%40analog.com
+patch subject: [PATCH 1/2] regulator: lt8722: Add driver for LT8722
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241109/202411090141.pm0JwBtT-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411090141.pm0JwBtT-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411090141.pm0JwBtT-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/regulator/lt8722-regulator.c:8:10: fatal error: 'asm/unaligned.h' file not found
+       8 | #include <asm/unaligned.h>
+         |          ^~~~~~~~~~~~~~~~~
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GET_FREE_REGION
+   Depends on [n]: SPARSEMEM [=n]
+   Selected by [m]:
+   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+
+
+vim +8 drivers/regulator/lt8722-regulator.c
+
+   > 8	#include <asm/unaligned.h>
+     9	#include <linux/bitfield.h>
+    10	#include <linux/bits.h>
+    11	#include <linux/crc8.h>
+    12	#include <linux/delay.h>
+    13	#include <linux/gpio.h>
+    14	#include <linux/math.h>
+    15	#include <linux/module.h>
+    16	#include <linux/regulator/driver.h>
+    17	#include <linux/regulator/machine.h>
+    18	#include <linux/regulator/of_regulator.h>
+    19	#include <linux/spi/spi.h>
+    20	#include <linux/util_macros.h>
+    21	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
