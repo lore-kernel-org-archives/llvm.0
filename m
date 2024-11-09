@@ -1,67 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D6D823AC;
-	Sat,  9 Nov 2024 02:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BB512FB2E;
+	Sat,  9 Nov 2024 02:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731120635; cv=none; b=R1Fed4IxZlK3jpqUvxs9ASki8k0b3m0vuJE2jyynVHf2MWH6Q5aSaWpZ0EbkVdRG7L6+7smUptG/Oh7mAs9DwYcubmKDDb+9PpXMd8zmtnL87/27fDc0xHqy4ejMqwdT63BOpGv3NSTc4FX01p/iGTUi8Qf482R8ZGDiAiO2ic8=
+	t=1731121010; cv=none; b=ZNFdvNHGnzNwyTUP+VI5nD0vJ2cbivkPzF37zOYapmBcKWmK/sOR1wYQnB22mDeoGHbPIzEk93ONVCAbBCjSA2RnzDEJTHrkHmcVClMNZjdywI/kFcx2y4vQe66ekY4qazORtiq7f6K2D+kH5lfa5ah6yxYIF9T2v/5Xw1LBUkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731120635; c=relaxed/simple;
-	bh=3weHMBmjR79ubky4BUixkDhmQ8AxVUiUmZip+KuDSds=;
+	s=arc-20240116; t=1731121010; c=relaxed/simple;
+	bh=VxMsrcVrxPI9pDjShIlfDOSgcJivK/TFRMcbvDVFT80=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E6g1XcVDpJe9PwzuiGNsSj42K2VwifcOWLkBvDn7BIaZJvPjtCNBn96RPYP1zdKvh90rUdjmVRVARDk44wL8NZpH8XfWcH4sofrzGub4HbLOJHKJrAF0HAc30vIl/7VPbzyty04Ey8Plcy7I14NsvEFBP6d9UESSAK/r2vIgJWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JVqG6aze; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gV6kXTg7b3GiFGOs62ZuPrsSjW/jQYyVyDQYh1YHCXm8c4zKR8yfXowg/03f6fTxNfqhUUEOqbS6O3yXlj2L1MSYa3fGhnWu7xORrZOJQu6t4mvfeg1KTP0n8h2cof4WmaZI4VuKoKss24WlARbSNIsyMhmfFjSby0Go0mwPbfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEywfmuJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JVqG6aze"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731120633; x=1762656633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3weHMBmjR79ubky4BUixkDhmQ8AxVUiUmZip+KuDSds=;
-  b=JVqG6azencj4PBNALK6wfRA3F899exIf9FEu5RFSh0DqajeZ1w3mgvjD
-   zTUuX0d/Yz316zK4my2Du31eolw1/84k0BaPoPfsOdVEh1fVWzDvHOfES
-   r58DDh0C0xcSjIP08I2W4twdGP5fRrKQTm3o5eQD9uZo6N8GbQqi+RLTn
-   tCE8Wa0DCjgZ9OgzJ0+1n8aoqZUTepTlUJsyF9EB9DPxLCOxOjgKHIGoW
-   78n9zshReBMKufIicEQoL/qSlbTM+3iHtjOOQkegjV1pSZFhLu9h0sal6
-   zBHsFFWEnS53JA45m/wxpEDwqtKdALHYutm6LhvDrt3FBpX6/QsteDH2y
-   A==;
-X-CSE-ConnectionGUID: +GeGcR6ZQqOVLD1pqkZc8Q==
-X-CSE-MsgGUID: 3RJ33H1LTqyfF5vMB3qcKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="34952518"
-X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
-   d="scan'208";a="34952518"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 18:50:33 -0800
-X-CSE-ConnectionGUID: HZz/4uUuT/eN8Td5QDAABA==
-X-CSE-MsgGUID: PG6Izi8tTWqs54X8eQqdcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
-   d="scan'208";a="90945060"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 08 Nov 2024 18:50:29 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9bYR-000s0w-0N;
-	Sat, 09 Nov 2024 02:50:27 +0000
-Date: Sat, 9 Nov 2024 10:50:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Christian Marangi <ansuelsmth@gmail.com>,
-	Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [net-next PATCH] net: dsa: add devm_dsa_register_switch()
-Message-ID: <202411091011.vIDu9Nhl-lkp@intel.com>
-References: <20241108200217.2761-1-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEywfmuJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43407C4CECD;
+	Sat,  9 Nov 2024 02:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731121009;
+	bh=VxMsrcVrxPI9pDjShIlfDOSgcJivK/TFRMcbvDVFT80=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AEywfmuJT3uj5MC1sVwPeSgXqv3W6yYrFH6CDuhwebGX3yaYcHnNh2wH69RaltFvZ
+	 Hli3b2c+ujAWGHx8cHjhDK42JkVGS2SszMfqkr8f0wdV3Tp+8grdJ9GOjQ7Hl1CKk6
+	 hYApX3AKdjr04XiSiqOHv0t/wsZteHJhBNyeOAkf4uLTt4hMeLfmBKLxpM532tQ9mK
+	 mt5csNWnI4x4aNDu/RIFN/qteuX9Sr2hK6L9s+OH96jncxu0H1yI7yAAxSZDQo3eSQ
+	 UGu96jkgucQTVPsFDLjcGtFgGhFaZoa3NYRwkEDFeQxRshp63t2WCi48xPmcUdedH8
+	 J6+jT0Cq5NJFg==
+Date: Fri, 8 Nov 2024 19:56:47 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Rong Xu <xur@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Han Shen <shenhan@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] kbuild: Fix Propeller build option
+Message-ID: <20241109025647.GA1182230@thelio-3990X>
+References: <20241108214953.1160765-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,130 +46,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108200217.2761-1-ansuelsmth@gmail.com>
+In-Reply-To: <20241108214953.1160765-1-xur@google.com>
 
-Hi Christian,
+On Fri, Nov 08, 2024 at 01:49:53PM -0800, Rong Xu wrote:
+> The '-fbasic-block-sections=labels' option has been deprecated in tip
+> of tree clang (20.0.0) [1]. While the option still works, a warning is
+> emitted:
+> 
+>   clang: warning: argument '-fbasic-block-sections=labels' is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
+> 
+> Add a version check to set the proper option.
+> 
+> Link: https://github.com/llvm/llvm-project/pull/110039 [1]
+> 
+> Signed-off-by: Rong Xu <xur@google.com>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-dsa-add-devm_dsa_register_switch/20241109-040405
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241108200217.2761-1-ansuelsmth%40gmail.com
-patch subject: [net-next PATCH] net: dsa: add devm_dsa_register_switch()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241109/202411091011.vIDu9Nhl-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411091011.vIDu9Nhl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411091011.vIDu9Nhl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/dsa/dsa.c:10:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/dsa/dsa.c:14:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from net/dsa/dsa.c:14:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from net/dsa/dsa.c:14:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> <inline asm>:4:33: error: symbol '__export_symbol_dsa_register_switch' is already defined
-       4 | .section ".export_symbol","a" ; __export_symbol_dsa_register_switch: ; .asciz "GPL" ; .asciz "" ; .balign 8 ; .quad dsa_register_switch ; .previous
-         |                                 ^
-   16 warnings and 1 error generated.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> ChangeLog in V2
+> Integrated suggestions from Nathan Chancellor.
+> (1) improved commit message
+> (2) added links to the comments
+> (3) used ld.lld version in the version check for lld
+> ---
+> 
+> Signed-off-by: Rong Xu <xur@google.com>
+> ---
+>  scripts/Makefile.propeller | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
+> index 344190717e47..48a660128e25 100644
+> --- a/scripts/Makefile.propeller
+> +++ b/scripts/Makefile.propeller
+> @@ -5,7 +5,14 @@ ifdef CLANG_PROPELLER_PROFILE_PREFIX
+>    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
+>    KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
+>  else
+> -  CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
+> +  # Starting with Clang v20, the '-fbasic-block-sections=labels' option is
+> +  # deprecated. Use the recommended '-fbasic-block-address-map' option.
+> +  # Link: https://github.com/llvm/llvm-project/pull/110039
+> +  ifeq ($(call clang-min-version, 200000),y)
+> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-address-map
+> +  else
+> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
+> +  endif
+>  endif
+>  
+>  # Propeller requires debug information to embed module names in the profiles.
+> @@ -21,7 +28,11 @@ ifdef CONFIG_LTO_CLANG_THIN
+>    ifdef CLANG_PROPELLER_PROFILE_PREFIX
+>      KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
+>    else
+> -    KBUILD_LDFLAGS += --lto-basic-block-sections=labels
+> +    ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
+> +       KBUILD_LDFLAGS += --lto-basic-block-address-map
+> +    else
+> +       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
+> +    endif
+>    endif
+>  endif
+>  
+> 
+> base-commit: 0dcc2d1066150787017a71f035145c566597dec7
+> -- 
+> 2.47.0.277.g8800431eea-goog
+> 
