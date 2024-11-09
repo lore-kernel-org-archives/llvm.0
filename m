@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BB512FB2E;
-	Sat,  9 Nov 2024 02:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E31A55
+	for <llvm@lists.linux.dev>; Sat,  9 Nov 2024 04:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731121010; cv=none; b=ZNFdvNHGnzNwyTUP+VI5nD0vJ2cbivkPzF37zOYapmBcKWmK/sOR1wYQnB22mDeoGHbPIzEk93ONVCAbBCjSA2RnzDEJTHrkHmcVClMNZjdywI/kFcx2y4vQe66ekY4qazORtiq7f6K2D+kH5lfa5ah6yxYIF9T2v/5Xw1LBUkA=
+	t=1731126700; cv=none; b=NcR0o+jJXojMgRZlLPzWnsmsiI08in9xuNVFcn4GuiPABgigKF7CDV7y0et+vIPDVfdS1gGX2mP8xE0cTziXevLy877eV5XieDVz3/JzzAJgN7zFXZ0Iqwr2aiOEG2iqn3V82rnhgWOsxNhBV0zQo/rm3FQse0KJN/84MU6dtp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731121010; c=relaxed/simple;
-	bh=VxMsrcVrxPI9pDjShIlfDOSgcJivK/TFRMcbvDVFT80=;
+	s=arc-20240116; t=1731126700; c=relaxed/simple;
+	bh=6P7VTq0iFuBOPj08izo8XoaSip1zS6ftHKfIXdnSoZc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gV6kXTg7b3GiFGOs62ZuPrsSjW/jQYyVyDQYh1YHCXm8c4zKR8yfXowg/03f6fTxNfqhUUEOqbS6O3yXlj2L1MSYa3fGhnWu7xORrZOJQu6t4mvfeg1KTP0n8h2cof4WmaZI4VuKoKss24WlARbSNIsyMhmfFjSby0Go0mwPbfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEywfmuJ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TI2/hOosJ/jaezJ4JjJYidmOY4Zm9lUwGQi6crzk1+I0nBiekooiRrGuz4LMZ9QHUOuOkQOt308RF4cEAe8/uC3fcn41NEBVOZJYsgC4RlGwbjUHASbKxjIcGgiuMjmJB98r4doXki16tEshSE2XF8HqHx2mpWHEKc8OltcrJVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXSrPL9g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEywfmuJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43407C4CECD;
-	Sat,  9 Nov 2024 02:56:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXSrPL9g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5F9C4CEC6;
+	Sat,  9 Nov 2024 04:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731121009;
-	bh=VxMsrcVrxPI9pDjShIlfDOSgcJivK/TFRMcbvDVFT80=;
+	s=k20201202; t=1731126700;
+	bh=6P7VTq0iFuBOPj08izo8XoaSip1zS6ftHKfIXdnSoZc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AEywfmuJT3uj5MC1sVwPeSgXqv3W6yYrFH6CDuhwebGX3yaYcHnNh2wH69RaltFvZ
-	 Hli3b2c+ujAWGHx8cHjhDK42JkVGS2SszMfqkr8f0wdV3Tp+8grdJ9GOjQ7Hl1CKk6
-	 hYApX3AKdjr04XiSiqOHv0t/wsZteHJhBNyeOAkf4uLTt4hMeLfmBKLxpM532tQ9mK
-	 mt5csNWnI4x4aNDu/RIFN/qteuX9Sr2hK6L9s+OH96jncxu0H1yI7yAAxSZDQo3eSQ
-	 UGu96jkgucQTVPsFDLjcGtFgGhFaZoa3NYRwkEDFeQxRshp63t2WCi48xPmcUdedH8
-	 J6+jT0Cq5NJFg==
-Date: Fri, 8 Nov 2024 19:56:47 -0700
+	b=mXSrPL9gP7yTi305m1Lmv3Piv6BOr1R2IpQE/dFq313e8zKv9k0Rq0hf8LGoA01dJ
+	 MmvbHeiG9p0b79a+5HqtKFAWVNvBEbCKFJOTTZkvrZzqwcO/JAkNWgEgC57TLQVhYe
+	 oFTIPv+zGb8maMiHg7fATs+hI7eJOkOvM8V2r579bwT/E4OhH62SmAvEEQTPddlM4g
+	 mpnR2WaDi/5CKdxUNyo+7WxapAhFZ1SlUEbf4cUcyDZMhHGdWeNlvwunIFSvmd6aoR
+	 nff3gli1az90++Yb+59o1kIPqi/SVeNXvJeGk6ykKB5RMbpZdWl2LZhIW6n/a9YwPF
+	 kpmkfWoQsEXSQ==
+Date: Fri, 8 Nov 2024 21:31:38 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Rong Xu <xur@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Han Shen <shenhan@google.com>,
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Russell King <linux@armlinux.org.uk>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] kbuild: Fix Propeller build option
-Message-ID: <20241109025647.GA1182230@thelio-3990X>
-References: <20241108214953.1160765-1-xur@google.com>
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] ARM: cfi: Fix compilation corner case
+Message-ID: <20241109043138.GA1649953@thelio-3990X>
+References: <20241108-fix-kcfi-bug-v1-1-f8497c4bccae@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,74 +46,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108214953.1160765-1-xur@google.com>
+In-Reply-To: <20241108-fix-kcfi-bug-v1-1-f8497c4bccae@linaro.org>
 
-On Fri, Nov 08, 2024 at 01:49:53PM -0800, Rong Xu wrote:
-> The '-fbasic-block-sections=labels' option has been deprecated in tip
-> of tree clang (20.0.0) [1]. While the option still works, a warning is
-> emitted:
+On Fri, Nov 08, 2024 at 08:37:36AM +0100, Linus Walleij wrote:
+> When enabling expert mode CONFIG_EXPERT and using that power
+> user mode to disable the branch prediction hardening
+> !CONFIG_HARDEN_BRANCH_PREDICTOR, the picky assembly linker
+> in CLANG notices that some assembly in proc-v7.S does
+> not have corresponding C call sites, i.e. the prototypes
+> in proc-v7-bugs.c are enclosed in ifdef
+> CONFIG_HARDEN_BRANCH_PREDICTOR so this assembly:
 > 
->   clang: warning: argument '-fbasic-block-sections=labels' is deprecated, use '-fbasic-block-address-map' instead [-Wdeprecated]
+> SYM_TYPED_FUNC_START(cpu_v7_smc_switch_mm)
+> SYM_TYPED_FUNC_START(cpu_v7_hvc_switch_mm)
 > 
-> Add a version check to set the proper option.
+> Results in:
 > 
-> Link: https://github.com/llvm/llvm-project/pull/110039 [1]
+> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_smc_switch_mm
+> >>> referenced by proc-v7.S:94 (.../arch/arm/mm/proc-v7.S:94)
+> >>> arch/arm/mm/proc-v7.o:(.text+0x108) in archive vmlinux.a
 > 
-> Signed-off-by: Rong Xu <xur@google.com>
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_hvc_switch_mm
+> >>> referenced by proc-v7.S:105 (.../arch/arm/mm/proc-v7.S:105)
+> >>> arch/arm/mm/proc-v7.o:(.text+0x124) in archive vmlinux.a
+> 
+> Fix this by adding an additional requirement that
+> CONFIG_HARDEN_BRANCH_PREDICTOR has to be enabled to compile
+> these assembly calls.
+> 
+> I suppose it wasn't a problem before because the linker is not
+> so picky that other assembly symbols are actually being
+> used.
+
+I think this has been a problem since the original CFI change, so I
+think it is worth dropping this block; it is more likely that
+CONFIG_HARDEN_BRANCH_PREDICTOR is not often disabled outside of
+randconfig, so it is hard to hit this issue in practice. As far as I can
+tell, this is totally expected with the given configuration.
+SYM_TYPED_FUNC_START makes use of __kcfi_typeid_<func>, which the
+compiler generates for address-taken function declarations, but in this
+configuration, cpu_v7_smc_switch_mm() and cpu_v7_hvc_switch_mm() have no
+actual uses aside from their definition, so the compiler does not
+generate these symbols, resulting in the link time error above. Perhaps
+some of this could be encorporated into the beginning of the commit
+message to make the issue a little more clear and less like the compiler
+is at fault here ("the picky assembly linker" stands out a bit to me
+there).
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202411041456.ZsoEiD7T-lkp@intel.com/
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+
+Regardless of the commit message nits, this seems like the right thing
+to do.
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
-> ChangeLog in V2
-> Integrated suggestions from Nathan Chancellor.
-> (1) improved commit message
-> (2) added links to the comments
-> (3) used ld.lld version in the version check for lld
-> ---
+>  arch/arm/mm/proc-v7.S | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Signed-off-by: Rong Xu <xur@google.com>
-> ---
->  scripts/Makefile.propeller | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-> index 344190717e47..48a660128e25 100644
-> --- a/scripts/Makefile.propeller
-> +++ b/scripts/Makefile.propeller
-> @@ -5,7 +5,14 @@ ifdef CLANG_PROPELLER_PROFILE_PREFIX
->    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=list=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
->    KBUILD_LDFLAGS += --symbol-ordering-file=$(CLANG_PROPELLER_PROFILE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
->  else
-> -  CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
-> +  # Starting with Clang v20, the '-fbasic-block-sections=labels' option is
-> +  # deprecated. Use the recommended '-fbasic-block-address-map' option.
-> +  # Link: https://github.com/llvm/llvm-project/pull/110039
-> +  ifeq ($(call clang-min-version, 200000),y)
-> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-address-map
-> +  else
-> +    CFLAGS_PROPELLER_CLANG := -fbasic-block-sections=labels
-> +  endif
->  endif
+> diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
+> index 5fb9a6aecb00..2cd933342679 100644
+> --- a/arch/arm/mm/proc-v7.S
+> +++ b/arch/arm/mm/proc-v7.S
+> @@ -94,7 +94,7 @@ SYM_TYPED_FUNC_START(cpu_v7_dcache_clean_area)
+>  	ret	lr
+>  SYM_FUNC_END(cpu_v7_dcache_clean_area)
 >  
->  # Propeller requires debug information to embed module names in the profiles.
-> @@ -21,7 +28,11 @@ ifdef CONFIG_LTO_CLANG_THIN
->    ifdef CLANG_PROPELLER_PROFILE_PREFIX
->      KBUILD_LDFLAGS += --lto-basic-block-sections=$(CLANG_PROPELLER_PROFILE_PREFIX)_cc_profile.txt
->    else
-> -    KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-> +    ifeq ($(call test-ge, $(CONFIG_LLD_VERSION), 200000),y)
-> +       KBUILD_LDFLAGS += --lto-basic-block-address-map
-> +    else
-> +       KBUILD_LDFLAGS += --lto-basic-block-sections=labels
-> +    endif
->    endif
->  endif
->  
+> -#ifdef CONFIG_ARM_PSCI
+> +#if defined(CONFIG_ARM_PSCI) && defined(CONFIG_HARDEN_BRANCH_PREDICTOR)
+>  	.arch_extension sec
+>  SYM_TYPED_FUNC_START(cpu_v7_smc_switch_mm)
+>  	stmfd	sp!, {r0 - r3}
 > 
-> base-commit: 0dcc2d1066150787017a71f035145c566597dec7
+> ---
+> base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+> change-id: 20241107-fix-kcfi-bug-ae3b08cbc167
+> 
+> Best regards,
 > -- 
-> 2.47.0.277.g8800431eea-goog
+> Linus Walleij <linus.walleij@linaro.org>
 > 
