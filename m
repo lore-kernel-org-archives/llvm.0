@@ -1,111 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9CC154449;
-	Sat,  9 Nov 2024 16:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AB21A0AE0
+	for <llvm@lists.linux.dev>; Sat,  9 Nov 2024 21:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731168774; cv=none; b=YqdmaWdVem+cAsvUxR+eYxygaVyDwttA1h0fHrZvThcaztX2cRqbHDpJsDfpiAHUtTZSA4HeDYMDLqoi9B++1vmQPJ7wD5uVDVzGMFCroWXyS+a5TwTTnZIn4nqc6kw/qXy+yNr5dm7qE9SVIbC1jY3Ng/zEh87ep92BFLfwQAs=
+	t=1731189275; cv=none; b=FgZcB+jOya18uHljoZcrUKJaUAf0HWQLzXSqTRS1G8erLqN86kj3ll/oteebio35WqkQdtOwM4AwI92mIp87SsaIZQPvmYbtjaS7x7ODbdZRfO0+hhlruDcK/IDmIBe5awoIXMOj+WgyAAN+t96ic+R1/04T2+bLmsp8HtWcX6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731168774; c=relaxed/simple;
-	bh=VMDVqd8TxFUE0AbGld+JOgVsRRdkubjke5J41EAtTYc=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lJxSt3HBfDjU9wOxksZGlhOdXf0I4SaMXYLaoifzI0NuMBFYp270v58DvRFt9JbQyHbbw+WdOJcWdQppGwUD8/kxNIF/vWCqWA5yFgU8phS9sG9QzKJdrV4NtIo2Han+P7P2B9c2ItiMZNy/O0gKXAaOEFFVMmo2nqPWbSQzls8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c7CksHap; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731189275; c=relaxed/simple;
+	bh=BUaskLxR1GreD/h9zIqmtGWDYFgSFW3lTBDqlj0a9uM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nB0HDQcDoU/asX7m+uyjWTTQU80pIj4Xtcvn8ovSfw3D0BUvc4rktqtNAjjtyY2m7ZvWw9fWOLhfeZamznjxR3pvc/tCDxjtH2PszW/BNHCRkyo/uNhTnf2zwfAZeWi3W+rAX6xGxxdOWoYSXYMKzt86WQumdeNtowAGFfA4PtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wo2iwjTC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c7CksHap"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731168773; x=1762704773;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=VMDVqd8TxFUE0AbGld+JOgVsRRdkubjke5J41EAtTYc=;
-  b=c7CksHapFoIdUdEpfPwJxhQW/JoCD9JsNdFwhPg2M3MOjNaa7+NhwxAZ
-   DVNYkzMvd43Lwum71+tzqQgesFjK+YGQAhoKv5L9mbzGu3SR4mUUJfExZ
-   0vYDWfPguopzowfX4uwSOwiQGmAe2M+hWNGYcWzaiYBf0VrrV+P6H8RNr
-   geJ7Qi1snaEdWeeR8loeVqdha4YfOAUu0zN8SnwSUbhQJwnmDKzBX2vpV
-   483CLGw+OVcOuZj6PYLSh10bn+9kxTnxLqz4qLHf6D2/ejmx7UtlLPj9w
-   IPHNy/zr1FKg58K5ABQL1OPahQHOW2+CDDzpgMVptRmYO0wlSRe34zpun
-   g==;
-X-CSE-ConnectionGUID: 7aFLeRLjRYeoZZthcnmMzw==
-X-CSE-MsgGUID: hU9MmSxqQNSBnRh/A+w8aA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30995202"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30995202"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2024 08:12:52 -0800
-X-CSE-ConnectionGUID: SWhbRsybQEu0ygwyGvROrw==
-X-CSE-MsgGUID: b+a+JSKPRSy7Y4U16KEM+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,141,1728975600"; 
-   d="scan'208";a="85640800"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 09 Nov 2024 08:12:50 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9o4u-000sSI-0K;
-	Sat, 09 Nov 2024 16:12:48 +0000
-Date: Sun, 10 Nov 2024 00:12:29 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [linux-next:master 9470/10559] ld.lld: error:
- vmlinux.a(init/main.o):(function run_init_process: .text.unlikely.+0x18):
- relocation R_RISCV_HI20 out of range: 527980 is not in [-524288, 524287];
- references '.L.str.86'
-Message-ID: <202411100028.nlT3lqI1-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wo2iwjTC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F78C4CED4
+	for <llvm@lists.linux.dev>; Sat,  9 Nov 2024 21:54:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731189273;
+	bh=BUaskLxR1GreD/h9zIqmtGWDYFgSFW3lTBDqlj0a9uM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Wo2iwjTCUOAPEukxBZuV0ZIkV0UkPeokrS7HUXpQ3hkHuZmVUmGdVRN4TfbsJtfNb
+	 /NzUHwxCAZG8b9iO+Teop9apkU0arQQsDEzu8/rt5uPfKlj/Jt8Xc0GzsH+imrwK6d
+	 Ao16OrE2cr7KAdiPNSxFRA4D7WsGZcnzwyQW7YKpyewcEZBXAsDfnmf+GBFjmM2TOH
+	 Zku1XEEiEasv1bRbyUpzC1rvE83NxhbYVIZnQBmzDU8fauFZX61zCZK/9+sHS1vjcE
+	 Iz0v4uv4kJoVEr1gCqvF+HmRUsLuWqtXGmSZrhPBiW8olSLpxTn2XWBljwyk5XxrVM
+	 Cn9z7SRJTusBg==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539f2b95775so4320188e87.1
+        for <llvm@lists.linux.dev>; Sat, 09 Nov 2024 13:54:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUbLfes5zEyNl6Z8D6ANh+uiby/APNMskjzhTO31m9T4zqIIuFhKVItHQOfyZ4sZOaUCXND@lists.linux.dev
+X-Gm-Message-State: AOJu0YyCAgt1eqtUwrir+f3+Lz2WQPv3dBpwMdNvOBwn2I387uoK0+do
+	gW55EKS5+TSXxC8WETiGPBBLKvU/AH0YPuphTFxrkgIyoa0A/MgzyoQETGG3f5dBi6mA6XayVdF
+	e3NCVddFgW3n/b9Ov8jCa50f+4yM=
+X-Google-Smtp-Source: AGHT+IFzQfMaGAyc/vlcD/pyStYAkvwiojfiADOsdw62Brt+4/oXzpHBsyX/s+wYrEnSv/JO1IIXYT8Gj0t53KJNGZA=
+X-Received: by 2002:a2e:a902:0:b0:2fc:9869:2e0b with SMTP id
+ 38308e7fff4ca-2ff201d3001mr57263831fa.20.1731189271898; Sat, 09 Nov 2024
+ 13:54:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <ZxkYYLbiXZ3p59iu@fjasle.eu> <20241106191846.2079521-1-matt@readmodwrite.com>
+In-Reply-To: <20241106191846.2079521-1-matt@readmodwrite.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 10 Nov 2024 06:53:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARi=SVL_b-FhbGtxDmyBgRFtxWrk+F98cmabRWZBHzTUQ@mail.gmail.com>
+Message-ID: <CAK7LNARi=SVL_b-FhbGtxDmyBgRFtxWrk+F98cmabRWZBHzTUQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kbuild: deb-pkg: add pkg.linux-upstream.nokernelheaders
+ build profile
+To: Matt Fleming <matt@readmodwrite.com>
+Cc: nicolas@fjasle.eu, benh@debian.org, justinstitt@google.com, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org, 
+	ndesaulniers@google.com, re@w6rz.net, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-TO: Rong Xu <xur@google.com>
-CC: Masahiro Yamada <masahiroy@kernel.org>
-CC: Han Shen <shenhan@google.com>
-CC: Kees Cook <kees@kernel.org>
+On Thu, Nov 7, 2024 at 4:18=E2=80=AFAM Matt Fleming <matt@readmodwrite.com>=
+ wrote:
+>
+>
+> Hey there,
+>
+> Can you explain how this change works a bit more? This reads like it's no=
+w
+> impossible to build the debian linux-headers package with clang? At Cloud=
+flare,
+> we're using a custom build of gcc, not the gcc-x86-64-linux-gnu package, =
+and
+> with this change we can no longer build linux-headers.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   929beafbe7acce3267c06115e13e03ff6e50548a
-commit: 622240ea8d71a75055399fd4b3cc2b190e44d2e2 [9470/10559] vmlinux.lds.h: Adjust symbol ordering in text output section
-config: riscv-randconfig-001-20241108 (https://download.01.org/0day-ci/archive/20241110/202411100028.nlT3lqI1-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241110/202411100028.nlT3lqI1-lkp@intel.com/reproduce)
+You need to install the gcc-x86-64-linux-gnu package.
+This is available on both Debian and Ubuntu.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411100028.nlT3lqI1-lkp@intel.com/
+Adding the prefix is required to reliably produce the correct
+linux-headers package.
 
-All errors (new ones prefixed by >>):
+For example, when building a linux-headers package for i386 on amd64,
+userspace tools must be recompiled with 'i686-linux-gnu-gcc'.
 
->> ld.lld: error: vmlinux.a(init/main.o):(function run_init_process: .text.unlikely.+0x18): relocation R_RISCV_HI20 out of range: 527980 is not in [-524288, 524287]; references '.L.str.86'
-   >>> referenced by main.c:1382 (init/main.c:1382)
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function run_init_process: .text.unlikely.+0x8e): relocation R_RISCV_HI20 out of range: 528086 is not in [-524288, 524287]; references 'envp_init'
-   >>> referenced by main.c:1385 (init/main.c:1385)
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function try_to_run_init_process: .text.unlikely.+0xd4): relocation R_RISCV_HI20 out of range: 527980 is not in [-524288, 524287]; references '.L.str.90'
-   >>> referenced by main.c:1385 (init/main.c:1385)
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_initcall_start_cb: .text.unlikely.+0x100): relocation R_RISCV_HI20 out of range: 527925 is not in [-524288, 524287]; references '.L.str.95'
-   >>> referenced by main.c:0 (init/main.c:0)
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_initcall_finish_cb: .text.unlikely.+0x13a): relocation R_RISCV_HI20 out of range: 527802 is not in [-524288, 524287]; references '.LCPI63_0'
-   >>> referenced by main.c:1386 (init/main.c:1386)
-   >>> defined in vmlinux.a(init/main.o)
---
->> ld.lld: error: vmlinux.a(init/main.o):(function trace_initcall_finish_cb: .text.unlikely.+0x150): relocation R_RISCV_HI20 out of range: 527980 is not in [-524288, 524287]; references '.L.str.96'
-   >>> referenced by main.c:1386 (init/main.c:1386)
-   >>> defined in vmlinux.a(init/main.o)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> What's the solution for those of us that want to build the linux-headers =
+deb
+> package but can't install gcc-*-linux-gnu?
+
+DPKG_FLAGS=3D-d
+
+will skip the build dependency check, but 'x86_64-linux-gnu-gcc'
+is still required.
+
+If only clang is available on your system, you need a workaround,
+e.g.
+
+ ln -s clang ~/bin/x86_64-linux-gnu-gcc
+
+Anyway, you need to find a solution.
+
+--=20
+Best Regards
+Masahiro Yamada
