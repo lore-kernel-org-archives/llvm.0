@@ -1,71 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191FA233D65;
-	Sat,  9 Nov 2024 06:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECD94A1E;
+	Sat,  9 Nov 2024 07:08:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731133001; cv=none; b=bsOHhfQwWXSZmIT/gVPplGyfZmtYiOS9Y0u0EjihHOGyEjFrvmyXocGS2j0m2mM95csLCj+n1If2ICMkcqKzEThXuhF8Ix8IYA180Pvw03KW08cWRjA4coscTrciKJpXjAX5UQ9lbnyR7R/pBlYjsYaKcRcmoaNl+HVKotxVNYw=
+	t=1731136120; cv=none; b=eg3u2aQHTrVyFlv4ZawGcR++vFcP0d2tHhe0RZ2S05vQfwpQZEYjnubV8NzUezC3Jq/KHvznPHai8/SGBVK/09FKpxLzkIzP1KK4whM1mg+/Xjsu1Uo+egVjVKNdE9WaiIRfldo86IiuA9ueDOrY3D8pMoyQuKkA7tEThZJmgIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731133001; c=relaxed/simple;
-	bh=rCuKDejdsh+8s+xtkSEN3tnnY5Jx/GJkZI24D8T2Azw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kRnjh8ospEhbwMvsuWSec38RvI0sOopPY6haZOs5ki1xkDATVcalcZu/qK+vO1zp2RmNOU+wYUFlDM6zrrewiQ2F9q9HuCvU4d1418VQeF+LniMyouFL9sRuxAPPOxnJOfu/DiFpwoN+zqech/QQuLatHGHaU1Nsd/71WDGD5bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fAS/whhl; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1731136120; c=relaxed/simple;
+	bh=L6oCa9TrlD0TfiMCSzrm2l8bStG4pehkNWDm2Ah1lVU=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oz8meA3rhSAsXVsQf5hFV2H26SiAmrQBag2oGwOV1r7ODQm1zzRAB4Auc0URd239dskBgp6wOmWkKl/yTKVv27Zg/d2MCdWtknwaUslT84aSMRX7SUcY0sGttI8sXyUaxjx1OLkL8tfwPbRh3fXwi9u8dbTWSX3vXQ7MAWnivyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F+2lCh+e; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fAS/whhl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F+2lCh+e"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731132999; x=1762668999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rCuKDejdsh+8s+xtkSEN3tnnY5Jx/GJkZI24D8T2Azw=;
-  b=fAS/whhlTRwnx/+iCCZNr6diBdMO7Fc31QaAHHjZXcIyg7stUwN/jA+f
-   yd7PY14hUbDIBpt70ZD1tE8jJpkg6Q3FZB+egwbRk7diGlN3sP2ssqoPT
-   40eYPCXos7IRvSCWLYh/LqgibKEe93vUe5PIcA0ptrn8HZI6sAqwbjZYd
-   xZwECr8wUpc7D094FMu+LOQLbT9eb1G//4BCevNKZe9/ySifZM2+0EacH
-   by9A+03PG9fu7LaoJ8s23q1mb75nnBbCt+b3NS1ryRhmJwewAiIYibNqM
-   9bq585cTsG+jD3ePIj0SAES3SyI6zzlv68SGTxyyH6zUGaHFCSGZCTXgV
-   Q==;
-X-CSE-ConnectionGUID: KfCkKQjzQGCFfJxO3K9zPw==
-X-CSE-MsgGUID: SUGc1M+LRBOylGdBkE+/9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="42118402"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="42118402"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 22:16:39 -0800
-X-CSE-ConnectionGUID: 3ft4vDXRRYS9q09f2nN3/Q==
-X-CSE-MsgGUID: Bu6AIph+QXCICCY1dtrNsw==
+  t=1731136118; x=1762672118;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=L6oCa9TrlD0TfiMCSzrm2l8bStG4pehkNWDm2Ah1lVU=;
+  b=F+2lCh+eQuzaS+qJ5qM3OozGmlvjusrDUyhH9FYqM3X5ZP9b2YTYzAYe
+   w4tPoSujFDqEvvp9HRy1R5wQFkNOAORKtF91zwmq0e3ry7q5zZGbW5TNi
+   cWK8pvHqkTlKlh9qXR7fIfm1ZN5eWxcGq4aL1MHgG/zZZZRumfAjYcFz7
+   MBQyZLDc71wVTZ3ZGFYvG7jZdLlID4vmPMateUPE1KqGTSR0c44DZDGLW
+   dHzG9SATlB/ePfTRrFj2Hu2fQtoXn4YWv2GOHUoXpdC/F4IV2fetLb9mu
+   QJdNgYFYAOhx8FjNUEH04JGtq2cVHyjH6NDTQPAxZU0ewpcfrmiyBPATc
+   g==;
+X-CSE-ConnectionGUID: /xN4v3I0S0q5/eptV7oZqA==
+X-CSE-MsgGUID: xw/iTGbSRwG4oa0ncYdkAg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="30417803"
+X-IronPort-AV: E=Sophos;i="6.12,140,1728975600"; 
+   d="scan'208";a="30417803"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 23:08:37 -0800
+X-CSE-ConnectionGUID: AlcgsCGORmazoHDA0IaWrA==
+X-CSE-MsgGUID: 00b85e9HQ4qh6/VtyXwx3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,140,1728975600"; 
-   d="scan'208";a="85893822"
+   d="scan'208";a="86054395"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 08 Nov 2024 22:16:35 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 08 Nov 2024 23:08:37 -0800
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t9elt-000s8G-0I;
-	Sat, 09 Nov 2024 06:16:33 +0000
-Date: Sat, 9 Nov 2024 14:16:26 +0800
+	id 1t9faF-000sB4-07;
+	Sat, 09 Nov 2024 07:08:35 +0000
+Date: Sat, 9 Nov 2024 15:07:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jacob Keller <jacob.e.keller@intel.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	netdev <netdev@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kbuild@vger.kernel.org,
-	Jacob Keller <jacob.e.keller@intel.com>
-Subject: Re: [PATCH net-next v4 3/9] lib: packing: add pack_fields() and
- unpack_fields()
-Message-ID: <202411091400.YHOiIq55-lkp@intel.com>
-References: <20241108-packing-pack-fields-and-ice-implementation-v4-3-81a9f42c30e5@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linux-next:master 9470/10559] ld.lld: error:
+ vmlinux.a(init/main.o):(function run_init_process: .text.unlikely.+0x10):
+ relocation R_RISCV_HI20 out of range: 528087 is not in [-524288, 524287];
+ references 'argv_init'
+Message-ID: <202411091555.zOnIL8kl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,91 +62,29 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108-packing-pack-fields-and-ice-implementation-v4-3-81a9f42c30e5@intel.com>
 
-Hi Jacob,
+TO: Rong Xu <xur@google.com>
+CC: Masahiro Yamada <masahiroy@kernel.org>
+CC: Han Shen <shenhan@google.com>
+CC: Kees Cook <kees@kernel.org>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on a84e8c05f58305dfa808bc5465c5175c29d7c9b6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacob-Keller/lib-packing-create-__pack-and-__unpack-variants-without-error-checking/20241109-093307
-base:   a84e8c05f58305dfa808bc5465c5175c29d7c9b6
-patch link:    https://lore.kernel.org/r/20241108-packing-pack-fields-and-ice-implementation-v4-3-81a9f42c30e5%40intel.com
-patch subject: [PATCH net-next v4 3/9] lib: packing: add pack_fields() and unpack_fields()
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241109/202411091400.YHOiIq55-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411091400.YHOiIq55-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   929beafbe7acce3267c06115e13e03ff6e50548a
+commit: 622240ea8d71a75055399fd4b3cc2b190e44d2e2 [9470/10559] vmlinux.lds.h: Adjust symbol ordering in text output section
+config: riscv-randconfig-001-20241108 (https://download.01.org/0day-ci/archive/20241109/202411091555.zOnIL8kl-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411091555.zOnIL8kl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411091400.YHOiIq55-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411091555.zOnIL8kl-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> scripts/mod/packed_fields.c:135:29: warning: format specifies type 'size_t' (aka 'unsigned long') but the argument has type 'Elf32_Word' (aka 'unsigned int') [-Wformat]
-     134 |                 error("[%s.ko] \"%s\" has size %zu which is not a multiple of the field size (%zu)\n",
-         |                                                ~~~
-         |                                                %u
-     135 |                       mod->name, symname, sym->st_size, field_size);
-         |                                           ^~~~~~~~~~~~
-   scripts/mod/modpost.h:207:54: note: expanded from macro 'error'
-     207 | #define error(fmt, args...)     modpost_log(true, fmt, ##args)
-         |                                                   ~~~    ^~~~
-   1 warning generated.
---
->> scripts/mod/packed_fields.c:135:29: warning: format specifies type 'size_t' (aka 'unsigned long') but the argument has type 'Elf32_Word' (aka 'unsigned int') [-Wformat]
-     134 |                 error("[%s.ko] \"%s\" has size %zu which is not a multiple of the field size (%zu)\n",
-         |                                                ~~~
-         |                                                %u
-     135 |                       mod->name, symname, sym->st_size, field_size);
-         |                                           ^~~~~~~~~~~~
-   scripts/mod/modpost.h:207:54: note: expanded from macro 'error'
-     207 | #define error(fmt, args...)     modpost_log(true, fmt, ##args)
-         |                                                   ~~~    ^~~~
-   1 warning generated.
-
-
-vim +135 scripts/mod/packed_fields.c
-
-    99	
-   100	void handle_packed_field_symbol(struct module *mod, struct elf_info *info,
-   101					Elf_Sym *sym, const char *symname)
-   102	{
-   103		unsigned int secindex = get_secindex(info, sym);
-   104		struct packed_field_elem elem = {}, prev = {};
-   105		enum element_order order = FIRST_ELEMENT;
-   106		enum field_type type = UNKNOWN_SECTION;
-   107		size_t field_size, count;
-   108		const void *data, *ptr;
-   109		const char *section;
-   110	
-   111		/* Skip symbols without a name */
-   112		if (*symname == '\0')
-   113			return;
-   114	
-   115		/* Skip symbols with invalid sections */
-   116		if (secindex >= info->num_sections)
-   117			return;
-   118	
-   119		section = sec_name(info, secindex);
-   120	
-   121		if (strcmp(section, ".rodata.packed_fields_s") == 0)
-   122			type = PACKED_FIELD_S;
-   123		else if (strcmp(section, ".rodata.packed_fields_m") == 0)
-   124			type = PACKED_FIELD_M;
-   125	
-   126		/* Other sections don't relate to packed fields */
-   127		if (type == UNKNOWN_SECTION)
-   128			return;
-   129	
-   130		field_size = field_type_to_size(type);
-   131	
-   132		/* check that the data is a multiple of the size */
-   133		if (sym->st_size % field_size != 0) {
-   134			error("[%s.ko] \"%s\" has size %zu which is not a multiple of the field size (%zu)\n",
- > 135			      mod->name, symname, sym->st_size, field_size);
+>> ld.lld: error: vmlinux.a(init/main.o):(function run_init_process: .text.unlikely.+0x10): relocation R_RISCV_HI20 out of range: 528087 is not in [-524288, 524287]; references 'argv_init'
+   >>> referenced by main.c:1382 (init/main.c:1382)
+   >>> defined in vmlinux.a(init/main.o)
 
 -- 
 0-DAY CI Kernel Test Service
