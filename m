@@ -1,43 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E31A55
-	for <llvm@lists.linux.dev>; Sat,  9 Nov 2024 04:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4A712DD95;
+	Sat,  9 Nov 2024 05:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731126700; cv=none; b=NcR0o+jJXojMgRZlLPzWnsmsiI08in9xuNVFcn4GuiPABgigKF7CDV7y0et+vIPDVfdS1gGX2mP8xE0cTziXevLy877eV5XieDVz3/JzzAJgN7zFXZ0Iqwr2aiOEG2iqn3V82rnhgWOsxNhBV0zQo/rm3FQse0KJN/84MU6dtp0=
+	t=1731129938; cv=none; b=BTv0BAi5wKundKNQ65fG8ZCxDJSIzWUDjvZqWcIKLWfbMjDYyaY9UXwwwK3DIjU1TYdMuoXP4uRkVp3xsJblFwpgsupBkkxomEHcw573I/DJjnE8RLWd+gk3jmPMKlox0IQK+SwWIyHH2oyL3hYcwwdo055kZqqsFT64LKVt8Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731126700; c=relaxed/simple;
-	bh=6P7VTq0iFuBOPj08izo8XoaSip1zS6ftHKfIXdnSoZc=;
+	s=arc-20240116; t=1731129938; c=relaxed/simple;
+	bh=V7Rias5c3jg1UeLsuYAuYQvGfeJT4hPJeYrmiPdzrs0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TI2/hOosJ/jaezJ4JjJYidmOY4Zm9lUwGQi6crzk1+I0nBiekooiRrGuz4LMZ9QHUOuOkQOt308RF4cEAe8/uC3fcn41NEBVOZJYsgC4RlGwbjUHASbKxjIcGgiuMjmJB98r4doXki16tEshSE2XF8HqHx2mpWHEKc8OltcrJVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXSrPL9g; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=XaiWafMB8gTVv38X0frLCWMDtSVBhq53ev/1ztogoM1/MPY93IEwvMC2/xdfMuossRWqTldKsFd95IbWNBf2uDgxzAh7hrYzemgrTnBlp5POFZlY7emVXGspx7A/wi5A13JtBanQopXoI3rGK97AwV/AsbwJ6RFUF82pXS3/Y6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j2NZaIko; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXSrPL9g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5F9C4CEC6;
-	Sat,  9 Nov 2024 04:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731126700;
-	bh=6P7VTq0iFuBOPj08izo8XoaSip1zS6ftHKfIXdnSoZc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mXSrPL9gP7yTi305m1Lmv3Piv6BOr1R2IpQE/dFq313e8zKv9k0Rq0hf8LGoA01dJ
-	 MmvbHeiG9p0b79a+5HqtKFAWVNvBEbCKFJOTTZkvrZzqwcO/JAkNWgEgC57TLQVhYe
-	 oFTIPv+zGb8maMiHg7fATs+hI7eJOkOvM8V2r579bwT/E4OhH62SmAvEEQTPddlM4g
-	 mpnR2WaDi/5CKdxUNyo+7WxapAhFZ1SlUEbf4cUcyDZMhHGdWeNlvwunIFSvmd6aoR
-	 nff3gli1az90++Yb+59o1kIPqi/SVeNXvJeGk6ykKB5RMbpZdWl2LZhIW6n/a9YwPF
-	 kpmkfWoQsEXSQ==
-Date: Fri, 8 Nov 2024 21:31:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Russell King <linux@armlinux.org.uk>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] ARM: cfi: Fix compilation corner case
-Message-ID: <20241109043138.GA1649953@thelio-3990X>
-References: <20241108-fix-kcfi-bug-v1-1-f8497c4bccae@linaro.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j2NZaIko"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731129936; x=1762665936;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V7Rias5c3jg1UeLsuYAuYQvGfeJT4hPJeYrmiPdzrs0=;
+  b=j2NZaIkoxFeG3x3X0cZUZ9CZ5PDp6U24NXKLuQDeIVCGeBKMfKRaW7Pj
+   j2aj2KoF6LmSKsCvf0KW0j7rGM3dirVDJykblFEC967mM6qWaAIO6JxkV
+   S8se4QymOu+woD5ymLIY4SQDpDjtrVSBId0BAJ5ErIPXTfNww9e8/r7sX
+   M40Mte0YQRh2mrY3S8BCsszSx5GaT+8b+x6Ge06BT58uhv0QMFHpUYtpf
+   gOWHHSM1UvS+hDhCIUojM7zO1BLZD4Ye2yyxZv7rZB1uLTHt1fNti3qyi
+   yPmCakAQn3Rwz/dk+Ha/cHQr6hJAX2p95cTK93z+GECDcmxS3GgjI5rLd
+   g==;
+X-CSE-ConnectionGUID: WtcEMZvqQReCpkrJRhqBDg==
+X-CSE-MsgGUID: C9y0AIdcQHOz6MuF/NSIKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="31244369"
+X-IronPort-AV: E=Sophos;i="6.12,140,1728975600"; 
+   d="scan'208";a="31244369"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 21:25:35 -0800
+X-CSE-ConnectionGUID: u1xmh9p1SpC3dBpK8TB6yA==
+X-CSE-MsgGUID: s4hlyDFJQem3BV+GLbwc2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,140,1728975600"; 
+   d="scan'208";a="109196451"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Nov 2024 21:25:32 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9dyU-000s6K-1e;
+	Sat, 09 Nov 2024 05:25:30 +0000
+Date: Sat, 9 Nov 2024 13:24:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joshua Hahn <joshua.hahnjy@gmail.com>, shakeel.butt@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, hannes@cmpxchg.org,
+	mhocko@kernel.org, roman.gushchin@linux.dev, muchun.song@linux.dev,
+	akpm@linux-foundation.org, cgroups@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH 2/3] memcg/hugetlb: Introduce mem_cgroup_charge_hugetlb
+Message-ID: <202411091344.51lAbqmY-lkp@intel.com>
+References: <20241108212946.2642085-3-joshua.hahnjy@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,85 +66,205 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241108-fix-kcfi-bug-v1-1-f8497c4bccae@linaro.org>
+In-Reply-To: <20241108212946.2642085-3-joshua.hahnjy@gmail.com>
 
-On Fri, Nov 08, 2024 at 08:37:36AM +0100, Linus Walleij wrote:
-> When enabling expert mode CONFIG_EXPERT and using that power
-> user mode to disable the branch prediction hardening
-> !CONFIG_HARDEN_BRANCH_PREDICTOR, the picky assembly linker
-> in CLANG notices that some assembly in proc-v7.S does
-> not have corresponding C call sites, i.e. the prototypes
-> in proc-v7-bugs.c are enclosed in ifdef
-> CONFIG_HARDEN_BRANCH_PREDICTOR so this assembly:
-> 
-> SYM_TYPED_FUNC_START(cpu_v7_smc_switch_mm)
-> SYM_TYPED_FUNC_START(cpu_v7_hvc_switch_mm)
-> 
-> Results in:
-> 
-> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_smc_switch_mm
-> >>> referenced by proc-v7.S:94 (.../arch/arm/mm/proc-v7.S:94)
-> >>> arch/arm/mm/proc-v7.o:(.text+0x108) in archive vmlinux.a
-> 
-> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_hvc_switch_mm
-> >>> referenced by proc-v7.S:105 (.../arch/arm/mm/proc-v7.S:105)
-> >>> arch/arm/mm/proc-v7.o:(.text+0x124) in archive vmlinux.a
-> 
-> Fix this by adding an additional requirement that
-> CONFIG_HARDEN_BRANCH_PREDICTOR has to be enabled to compile
-> these assembly calls.
-> 
-> I suppose it wasn't a problem before because the linker is not
-> so picky that other assembly symbols are actually being
-> used.
+Hi Joshua,
 
-I think this has been a problem since the original CFI change, so I
-think it is worth dropping this block; it is more likely that
-CONFIG_HARDEN_BRANCH_PREDICTOR is not often disabled outside of
-randconfig, so it is hard to hit this issue in practice. As far as I can
-tell, this is totally expected with the given configuration.
-SYM_TYPED_FUNC_START makes use of __kcfi_typeid_<func>, which the
-compiler generates for address-taken function declarations, but in this
-configuration, cpu_v7_smc_switch_mm() and cpu_v7_hvc_switch_mm() have no
-actual uses aside from their definition, so the compiler does not
-generate these symbols, resulting in the link time error above. Perhaps
-some of this could be encorporated into the beginning of the commit
-message to make the issue a little more clear and less like the compiler
-is at fault here ("the picky assembly linker" stands out a bit to me
-there).
+kernel test robot noticed the following build errors:
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202411041456.ZsoEiD7T-lkp@intel.com/
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20241108]
+[cannot apply to linus/master v6.12-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Regardless of the commit message nits, this seems like the right thing
-to do.
+url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Hahn/memcg-hugetlb-Introduce-memcg_accounts_hugetlb/20241109-053045
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241108212946.2642085-3-joshua.hahnjy%40gmail.com
+patch subject: [PATCH 2/3] memcg/hugetlb: Introduce mem_cgroup_charge_hugetlb
+config: x86_64-buildonly-randconfig-002-20241109 (https://download.01.org/0day-ci/archive/20241109/202411091344.51lAbqmY-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241109/202411091344.51lAbqmY-lkp@intel.com/reproduce)
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411091344.51lAbqmY-lkp@intel.com/
 
-> ---
->  arch/arm/mm/proc-v7.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
-> index 5fb9a6aecb00..2cd933342679 100644
-> --- a/arch/arm/mm/proc-v7.S
-> +++ b/arch/arm/mm/proc-v7.S
-> @@ -94,7 +94,7 @@ SYM_TYPED_FUNC_START(cpu_v7_dcache_clean_area)
->  	ret	lr
->  SYM_FUNC_END(cpu_v7_dcache_clean_area)
->  
-> -#ifdef CONFIG_ARM_PSCI
-> +#if defined(CONFIG_ARM_PSCI) && defined(CONFIG_HARDEN_BRANCH_PREDICTOR)
->  	.arch_extension sec
->  SYM_TYPED_FUNC_START(cpu_v7_smc_switch_mm)
->  	stmfd	sp!, {r0 - r3}
-> 
-> ---
-> base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
-> change-id: 20241107-fix-kcfi-bug-ae3b08cbc167
-> 
-> Best regards,
-> -- 
-> Linus Walleij <linus.walleij@linaro.org>
-> 
+All errors (new ones prefixed by >>):
+
+   In file included from mm/hugetlb.c:8:
+   In file included from include/linux/mm.h:2211:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/hugetlb.c:37:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/hugetlb.c:3083:8: error: call to undeclared function 'mem_cgroup_charge_hugetlb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3083 |         ret = mem_cgroup_charge_hugetlb(folio, gfp);
+         |               ^
+   mm/hugetlb.c:3083:8: note: did you mean 'mem_cgroup_charge_skmem'?
+   include/linux/memcontrol.h:1613:6: note: 'mem_cgroup_charge_skmem' declared here
+    1613 | bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
+         |      ^
+   3 warnings and 1 error generated.
+
+
+vim +/mem_cgroup_charge_hugetlb +3083 mm/hugetlb.c
+
+  2963	
+  2964	struct folio *alloc_hugetlb_folio(struct vm_area_struct *vma,
+  2965					    unsigned long addr, int avoid_reserve)
+  2966	{
+  2967		struct hugepage_subpool *spool = subpool_vma(vma);
+  2968		struct hstate *h = hstate_vma(vma);
+  2969		struct folio *folio;
+  2970		long map_chg, map_commit;
+  2971		long gbl_chg;
+  2972		int ret, idx;
+  2973		struct hugetlb_cgroup *h_cg = NULL;
+  2974		bool deferred_reserve;
+  2975		gfp_t gfp = htlb_alloc_mask(h) | __GFP_RETRY_MAYFAIL;
+  2976	
+  2977		idx = hstate_index(h);
+  2978		/*
+  2979		 * Examine the region/reserve map to determine if the process
+  2980		 * has a reservation for the page to be allocated.  A return
+  2981		 * code of zero indicates a reservation exists (no change).
+  2982		 */
+  2983		map_chg = gbl_chg = vma_needs_reservation(h, vma, addr);
+  2984		if (map_chg < 0)
+  2985			return ERR_PTR(-ENOMEM);
+  2986	
+  2987		/*
+  2988		 * Processes that did not create the mapping will have no
+  2989		 * reserves as indicated by the region/reserve map. Check
+  2990		 * that the allocation will not exceed the subpool limit.
+  2991		 * Allocations for MAP_NORESERVE mappings also need to be
+  2992		 * checked against any subpool limit.
+  2993		 */
+  2994		if (map_chg || avoid_reserve) {
+  2995			gbl_chg = hugepage_subpool_get_pages(spool, 1);
+  2996			if (gbl_chg < 0)
+  2997				goto out_end_reservation;
+  2998	
+  2999			/*
+  3000			 * Even though there was no reservation in the region/reserve
+  3001			 * map, there could be reservations associated with the
+  3002			 * subpool that can be used.  This would be indicated if the
+  3003			 * return value of hugepage_subpool_get_pages() is zero.
+  3004			 * However, if avoid_reserve is specified we still avoid even
+  3005			 * the subpool reservations.
+  3006			 */
+  3007			if (avoid_reserve)
+  3008				gbl_chg = 1;
+  3009		}
+  3010	
+  3011		/* If this allocation is not consuming a reservation, charge it now.
+  3012		 */
+  3013		deferred_reserve = map_chg || avoid_reserve;
+  3014		if (deferred_reserve) {
+  3015			ret = hugetlb_cgroup_charge_cgroup_rsvd(
+  3016				idx, pages_per_huge_page(h), &h_cg);
+  3017			if (ret)
+  3018				goto out_subpool_put;
+  3019		}
+  3020	
+  3021		ret = hugetlb_cgroup_charge_cgroup(idx, pages_per_huge_page(h), &h_cg);
+  3022		if (ret)
+  3023			goto out_uncharge_cgroup_reservation;
+  3024	
+  3025		spin_lock_irq(&hugetlb_lock);
+  3026		/*
+  3027		 * glb_chg is passed to indicate whether or not a page must be taken
+  3028		 * from the global free pool (global change).  gbl_chg == 0 indicates
+  3029		 * a reservation exists for the allocation.
+  3030		 */
+  3031		folio = dequeue_hugetlb_folio_vma(h, vma, addr, avoid_reserve, gbl_chg);
+  3032		if (!folio) {
+  3033			spin_unlock_irq(&hugetlb_lock);
+  3034			folio = alloc_buddy_hugetlb_folio_with_mpol(h, vma, addr);
+  3035			if (!folio)
+  3036				goto out_uncharge_cgroup;
+  3037			spin_lock_irq(&hugetlb_lock);
+  3038			if (!avoid_reserve && vma_has_reserves(vma, gbl_chg)) {
+  3039				folio_set_hugetlb_restore_reserve(folio);
+  3040				h->resv_huge_pages--;
+  3041			}
+  3042			list_add(&folio->lru, &h->hugepage_activelist);
+  3043			folio_ref_unfreeze(folio, 1);
+  3044			/* Fall through */
+  3045		}
+  3046	
+  3047		hugetlb_cgroup_commit_charge(idx, pages_per_huge_page(h), h_cg, folio);
+  3048		/* If allocation is not consuming a reservation, also store the
+  3049		 * hugetlb_cgroup pointer on the page.
+  3050		 */
+  3051		if (deferred_reserve) {
+  3052			hugetlb_cgroup_commit_charge_rsvd(idx, pages_per_huge_page(h),
+  3053							  h_cg, folio);
+  3054		}
+  3055	
+  3056		spin_unlock_irq(&hugetlb_lock);
+  3057	
+  3058		hugetlb_set_folio_subpool(folio, spool);
+  3059	
+  3060		map_commit = vma_commit_reservation(h, vma, addr);
+  3061		if (unlikely(map_chg > map_commit)) {
+  3062			/*
+  3063			 * The page was added to the reservation map between
+  3064			 * vma_needs_reservation and vma_commit_reservation.
+  3065			 * This indicates a race with hugetlb_reserve_pages.
+  3066			 * Adjust for the subpool count incremented above AND
+  3067			 * in hugetlb_reserve_pages for the same page.  Also,
+  3068			 * the reservation count added in hugetlb_reserve_pages
+  3069			 * no longer applies.
+  3070			 */
+  3071			long rsv_adjust;
+  3072	
+  3073			rsv_adjust = hugepage_subpool_put_pages(spool, 1);
+  3074			hugetlb_acct_memory(h, -rsv_adjust);
+  3075			if (deferred_reserve) {
+  3076				spin_lock_irq(&hugetlb_lock);
+  3077				hugetlb_cgroup_uncharge_folio_rsvd(hstate_index(h),
+  3078						pages_per_huge_page(h), folio);
+  3079				spin_unlock_irq(&hugetlb_lock);
+  3080			}
+  3081		}
+  3082	
+> 3083		ret = mem_cgroup_charge_hugetlb(folio, gfp);
+  3084		if (ret == -ENOMEM) {
+  3085			spin_unlock_irq(&hugetlb_lock);
+  3086			free_huge_folio(folio);
+  3087			return ERR_PTR(-ENOMEM);
+  3088		}
+  3089		else if (!ret)
+  3090			lruvec_stat_mod_folio(folio, NR_HUGETLB,
+  3091			      pages_per_huge_page(h));
+  3092	
+  3093		return folio;
+  3094	
+  3095	out_uncharge_cgroup:
+  3096		hugetlb_cgroup_uncharge_cgroup(idx, pages_per_huge_page(h), h_cg);
+  3097	out_uncharge_cgroup_reservation:
+  3098		if (deferred_reserve)
+  3099			hugetlb_cgroup_uncharge_cgroup_rsvd(idx, pages_per_huge_page(h),
+  3100							    h_cg);
+  3101	out_subpool_put:
+  3102		if (map_chg || avoid_reserve)
+  3103			hugepage_subpool_put_pages(spool, 1);
+  3104	out_end_reservation:
+  3105		vma_end_reservation(h, vma, addr);
+  3106		return ERR_PTR(-ENOSPC);
+  3107	}
+  3108	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
