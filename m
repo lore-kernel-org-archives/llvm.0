@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432BB194AFB;
-	Sat,  9 Nov 2024 23:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5E012F5B;
+	Sun, 10 Nov 2024 03:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731196629; cv=none; b=FjprSNNzDWglbuNuLblT3sh3/i2tQOwc9ZG7olwM+OXPGosDVruJ9cfrG5jVXq2fDZgWGQafAs958zHQcxXn0dOxJxjXs6ZbK1+IaHm2iNN2V/kOaIQRICZ/SLpTb4VsL2a1rzW6GYZEf78gnRBIWb1ULBRtO2iR+JMhZMkKAbI=
+	t=1731210411; cv=none; b=WXIZo/WFQ7UGIA5ON4PNUy2Y/nCcSE0JHTvIUyQ/xC9ZbQ6VJ5xRR8RQqfNrPd9owBA6Tot5cYrw9Kc76sJUsu6ECRUE7lRTTg6QFg5XwUwlH4tcphkZz7eeSFYrkvXRToSNK14M9bgSNb6TaBzTm/JpAO66tfRt92cyrZcSMnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731196629; c=relaxed/simple;
-	bh=dKAgHJZZvOFr+heWDCpsFUk9DYtKmjRghL7zdlTh6U0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=k/HG4UOZVBltJ44W1C/bE8RyNWrQO79YJhenDnCiWDPt5fKtb4s/9dlu1YN2M11Foj8qZxXERwUDremS5eZDAo7wQaiMzuqGctP/5mR1byEnOvOEvHCF93HMIa32Ko/2NoVjWSbui2WaHFzMKtCJEKa25gpgprRYEPeVR+Au46A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hS5sz2kq; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731210411; c=relaxed/simple;
+	bh=sMRRCoaMB6/1PH+eUc/5raCFtksZ8r1HEB2amBDW3Cg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hvdKX2gOfz7EidF5QLO2MH6xrhDROr2p7XkrAbXm+H3+Vq1R+zM7/LPbF365QvlhONoSdQdzvR3m90nHNXOp1jnauiWhdZcLwufNAJrwP5J0O4/zfH/j/E9e16xIyEzhlbnGtLfnw5DC+cjtb3Hyx4fWqV40L1WF9SDzHkyilUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=cFf0H9jY; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hS5sz2kq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731196628; x=1762732628;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dKAgHJZZvOFr+heWDCpsFUk9DYtKmjRghL7zdlTh6U0=;
-  b=hS5sz2kqn4bAiWxQUPmLTWow7oO63PtD1TSM5FHwBPWlUZ8f/Hk4uTwQ
-   lUhVhtPc31lBcIf/ua154vCFmVpVhrEdi7LC0qPVEMBN+WO+J+8buZIyw
-   W6nXLcwqPbmCJMWbh+ZeCnqAJ5Rr+LLV0Sq2twvMEUnHwE0+qoez6MWxT
-   K3McDXz/bKSbnNX9YzrxxHhLXrshkqwdm54qQaeWM5E5nYb15Vm6cpgGZ
-   4IfreiqLYWY/IzmuQgdz1BmsshE6z2V4GUGvBxGqlkX6IpJZ5AnVzu3kT
-   9YggxVZZIKpeOYogsek7xNbMPZmYRm6qE1OoKd6CiScZ80IbLxgIyYjdQ
-   w==;
-X-CSE-ConnectionGUID: AnuUnAGJR/CUEmuvcBBXRg==
-X-CSE-MsgGUID: F/30fGXqQOyvk/u1LBIdBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31204929"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="31204929"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2024 15:57:07 -0800
-X-CSE-ConnectionGUID: 9kdPLtHRRpyo6rPMvT+IAQ==
-X-CSE-MsgGUID: BtZ+4GNFTLSuxUpngAR8rA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,142,1728975600"; 
-   d="scan'208";a="117131868"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 09 Nov 2024 15:57:05 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9vKB-000smQ-0X;
-	Sat, 09 Nov 2024 23:57:03 +0000
-Date: Sun, 10 Nov 2024 07:56:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dvyukov:dvyukov-prot-kernonly 1/1] include/linux/mman.h:109:67:
- error: use of undeclared identifier 'PROT_KERNONLY'
-Message-ID: <202411100710.Xsw5WJSG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="cFf0H9jY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=7Uo7+x1Rgz3g7xlkvmY5PW7juASM51XmbFf1untbUJc=; b=cFf0H9jYksU6URcXqv8pX0wSAK
+	7egOrXD7GraWk4BBtwP+tq0VEjF6AU1HyMFYugLGg8ikiRfqJvjlzxi2tDqGk6bdlH7dxtDrDFd4D
+	C+Pq86SS6fYMJ5W1S/ecO4VSdhJmtiFzRDhpY+iqqkW8i96GGnctHJQwitJ4HxU1XEglVUzxYNd5e
+	orIVf2mVV1KWp7cftovxJGPVsH4lR+Gb3vAsxgnlBN58H5RySh+O2iD+ssQh+Rrlr/pd2LjwqH2JR
+	DSwZqm5f4JXoTiODemOYPV2jo8rU18BqBdISNufNzWFXE2XXFkR2KXoOswg5AMzJO8orcF5Yp7G2w
+	rWbr9gzA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1t9yu8-00FkA7-32;
+	Sun, 10 Nov 2024 11:46:26 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 10 Nov 2024 11:46:24 +0800
+Date: Sun, 10 Nov 2024 11:46:24 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v6 3/3] crypto: Add Mediatek EIP-93 crypto engine support
+Message-ID: <ZzAskOZyclM9dWsg@gondor.apana.org.au>
+References: <20241102175045.10408-1-ansuelsmth@gmail.com>
+ <20241102175045.10408-3-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,128 +62,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241102175045.10408-3-ansuelsmth@gmail.com>
 
-tree:   https://github.com/dvyukov/linux dvyukov-prot-kernonly
-head:   37187db99b42dfb9784b42cb759c3f628de0d808
-commit: 37187db99b42dfb9784b42cb759c3f628de0d808 [1/1] mm: add PROT_KERNONLY
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20241110/202411100710.Xsw5WJSG-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241110/202411100710.Xsw5WJSG-lkp@intel.com/reproduce)
+On Sat, Nov 02, 2024 at 06:50:35PM +0100, Christian Marangi wrote:
+>
+> +static int eip93_hash_import(struct ahash_request *req, const void *in)
+> +{
+> +	struct eip93_hash_reqctx *rctx = ahash_request_ctx(req);
+> +	const struct eip93_hash_export_state *state = in;
+> +	int ret;
+> +
+> +	ret = _eip93_hash_init(req, state->sa_state, state->sa_state_base);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411100710.Xsw5WJSG-lkp@intel.com/
+You cannot export/import any kernel pointers.  The state is meant
+to be a serialised version of the hash state.
 
-All errors (new ones prefixed by >>):
+So state->sa_state_base has got to go.
 
-   In file included from mm/filemap.c:26:
->> include/linux/mman.h:109:67: error: use of undeclared identifier 'PROT_KERNONLY'
-           return (prot & ~(PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM | PROT_KERNONLY)) == 0;
-                                                                            ^
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-                  _calc_vm_trans(prot, PROT_KERNONLY,  VM_KERNONLY) |
-                                       ^
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:135:48: note: expanded from macro '_calc_vm_trans'
-     ((bit1) <= (bit2) ? ((x) & (bit1)) * ((bit2) / (bit1)) \
-                                                  ^ ~~~~~~
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:160:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   3 warnings and 7 errors generated.
---
-   In file included from mm/swap.c:21:
->> include/linux/mman.h:109:67: error: use of undeclared identifier 'PROT_KERNONLY'
-           return (prot & ~(PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM | PROT_KERNONLY)) == 0;
-                                                                            ^
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-                  _calc_vm_trans(prot, PROT_KERNONLY,  VM_KERNONLY) |
-                                       ^
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:147:30: error: use of undeclared identifier 'PROT_KERNONLY'
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:135:48: note: expanded from macro '_calc_vm_trans'
-     ((bit1) <= (bit2) ? ((x) & (bit1)) * ((bit2) / (bit1)) \
-                                                  ^ ~~~~~~
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:160:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   In file included from mm/swap.c:44:
-   In file included from include/trace/events/pagemap.h:83:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:21:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:7:
-   include/linux/poll.h:136:27: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                           ^~~~~~~~~
-   include/linux/poll.h:134:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:120:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   include/linux/poll.h:136:39: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                                       ^~~~~~~~~
-   include/linux/poll.h:134:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:120:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   5 warnings and 7 errors generated.
-
-
-vim +/PROT_KERNONLY +109 include/linux/mman.h
-
-    99	
-   100	#ifndef arch_validate_prot
-   101	/*
-   102	 * This is called from mprotect().  PROT_GROWSDOWN and PROT_GROWSUP have
-   103	 * already been masked out.
-   104	 *
-   105	 * Returns true if the prot flags are valid
-   106	 */
-   107	static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
-   108	{
- > 109		return (prot & ~(PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM | PROT_KERNONLY)) == 0;
-   110	}
-   111	#define arch_validate_prot arch_validate_prot
-   112	#endif
-   113	
-
+Cheers,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
