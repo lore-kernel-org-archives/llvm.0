@@ -1,224 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mx0a-00007101.pphosted.com (mx0a-00007101.pphosted.com [148.163.135.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FCD184F;
-	Mon, 11 Nov 2024 03:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CBB50276
+	for <llvm@lists.linux.dev>; Mon, 11 Nov 2024 06:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731296918; cv=none; b=Iq4LkfOmBx/o5vnILNb3Kn/VPhgyMiW0jZjwufgSnKrOrj9AjHHJBwBA0jHm05V3Ae04uLj42npxgUffSR2dZQa2EmHiU6Gdedymaa9iWuLOOYABuIF8TSQlvUuvNPcO3DmK0drCIddZoy3+jpJq9sc0bVBVft0DwpqUUIvjmd8=
+	t=1731307922; cv=none; b=l+DAlfSzJsfzphrn4cGzWKVwTl76zGm8IkaMw7d17RtFKF/0glt5IXRakgMtiBcchCEDfhdQm29uATf37aOYy1Qc5lsz1x5S0ZD+9yuO7uE/w6/udAp7P2J/Sa6z8t98jYtXL/FZPHCdH32EIDopdKdrMlrwLDP3cpfrOQ3dlzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731296918; c=relaxed/simple;
-	bh=LI/n49Zg6NhGaWP9adjLu7md+zY5ZytUZYwRPvTAsUE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eDy9/2PfraLnCz9dsWTshNpMBftZhbtIUgtkKBX6H6yt50EepLe+isTmO32SNsD4qIPFfZOHnRRDGNm8W7pWst0zPj+MkPIERkQITAo+ln7aPaUCFr9VNJPuPGwWGamw9s7wzycLZg3n131bJSHhAKImRdX+y7Yz3rzliXq+Y7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GG4ceR3+; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731307922; c=relaxed/simple;
+	bh=+U9r4++8vWNjOGgBUQp+LAiKwhXMBYkOY0XY8YYEC9E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JGJpiH3wPFB44dDTlkGcRLRRUD+cb+Tsbxv8QDfKT/+QaHB6yim0bSZSna3DBIApJmAroMHuo4DCuzeJ0m8SDmJ9G79P9KdWJZ0kgd+mxlM5W3R74sRL0Zp031Rn+gt3GkY/dLkDFH9koFdSLKkZv6YiSufCmEGxsPQ0qHqRobA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois.edu header.i=@illinois.edu header.b=IC9DwOE0; arc=none smtp.client-ip=148.163.135.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GG4ceR3+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731296917; x=1762832917;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LI/n49Zg6NhGaWP9adjLu7md+zY5ZytUZYwRPvTAsUE=;
-  b=GG4ceR3+oDQfwPIAZj7Qj8Kt0t+aOVnlGuzy3YNNTkkuFlJiipiLE5mE
-   qxxBPykDHMSKZ0KeOrCpBLxTiJ3EWIdBeAD8Vwud159UlX3LyaDphnh3k
-   DfMed/bELV0hRWfuWzGA/ckRPSMDSvRv3AziYOI/KJiU13+bNUM1i46jO
-   zp5kYQHhs7SneCPmsC/0A922vvn3jfIF4neIa7//os0Bw7v7uYKtFwyBA
-   QUwVQTr8yTO/BupRJV2pzPVPTdUv886gMsuhzOaIXx3k87g4ILrqBWvtb
-   TCytOZvS2LX6jwXWvbFBp1VdW1v7XsMBtXV/Zo/CCYKwOj0pwS5ngFedM
-   w==;
-X-CSE-ConnectionGUID: EgOwDkhKTIaOZPcd5e/Odw==
-X-CSE-MsgGUID: zVkRObIlSHGGa28toma7+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11252"; a="18716841"
-X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="18716841"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2024 19:48:36 -0800
-X-CSE-ConnectionGUID: VS4rlUL2QjmRHB4gPmTm6w==
-X-CSE-MsgGUID: eyOLuNC6TYe6Jk3/aKf9bQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="86868329"
-Received: from lkp-server01.sh.intel.com (HELO 7b17a4138caf) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Nov 2024 19:48:34 -0800
-Received: from kbuild by 7b17a4138caf with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tALPj-0000fa-1c;
-	Mon, 11 Nov 2024 03:48:31 +0000
-Date: Mon, 11 Nov 2024 11:48:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Karol Przybylski <karprzy7@gmail.com>, hverkuil@xs4all.nl,
-	mchehab@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Karol Przybylski <karprzy7@gmail.com>, linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH] media: cec: extron-da-hd-4k-plus: add return check for
- wait_for_completion*()
-Message-ID: <202411111022.sX8ZCJZ8-lkp@intel.com>
-References: <20241110125814.1899076-1-karprzy7@gmail.com>
+	dkim=pass (2048-bit key) header.d=illinois.edu header.i=@illinois.edu header.b="IC9DwOE0"
+Received: from pps.filterd (m0166255.ppops.net [127.0.0.1])
+	by mx0a-00007101.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AB51htV012128;
+	Mon, 11 Nov 2024 06:51:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=illinois.edu; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=campusrelays; bh=G00Djb/CrG1My6IT3+uwf8Xvk9Zx1GAj
+	nDsHf77FZaI=; b=IC9DwOE0Ek905R3uX7ynL6WI4sy41z9nZz38I7mDia5SOX2p
+	jTyOms47q3dLorFVNEs8Qpt5M4GgM/6Qn7Ru+IH7vWEIF2xk3qaTNR3tPsChVCRi
+	f96iF39Lq9jOVEoPX6O9LRCWhK3COxuRYdDHB/vyCpKCsXQTlLEN6kYjmOHJ4d8t
+	5KH3I6VhRcFfyQVOzBxqMeDwG/0Kkzh6ja0LPVYzgw1HZVizTLQ8pCcSchc6lWC2
+	hJ0MQ/l5DbcnSKi3I3gRk8uPRz6bDeah8DSLZ7qr5q1WDmaR6L5+ZRc4XFvpdVp/
+	26sXh/7tuZdpg9lWBcoPqDndCtnplqIiu8Y+Cg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-00007101.pphosted.com (PPS) with ESMTPS id 42t0dy3632-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 11 Nov 2024 06:51:39 +0000 (GMT)
+Received: from m0166255.ppops.net (m0166255.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4AB6pd0M003663;
+	Mon, 11 Nov 2024 06:51:39 GMT
+Received: from localhost.localdomain (oasis.cs.illinois.edu [130.126.137.13])
+	by mx0a-00007101.pphosted.com (PPS) with ESMTP id 42t0dy362v-1;
+	Mon, 11 Nov 2024 06:51:38 +0000 (GMT)
+From: Jinghao Jia <jinghao7@illinois.edu>
+To: Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>
+Cc: netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Jinghao Jia <jinghao7@illinois.edu>, kernel test robot <lkp@intel.com>,
+        Ruowen Qin <ruqin@redhat.com>
+Subject: [PATCH] ipvs: fix UB due to uninitialized stack access in ip_vs_protocol_init()
+Date: Mon, 11 Nov 2024 00:51:05 -0600
+Message-ID: <20241111065105.82431-1-jinghao7@illinois.edu>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241110125814.1899076-1-karprzy7@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: ePDWI69DVPRvmLg5drIxgZ6AhaoctuzM
+X-Proofpoint-ORIG-GUID: UtEpqJ5p1NH21y5diKtFX63ZyGgD1z6l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+X-Spam-Details: rule=cautious_plus_nq_notspam policy=cautious_plus_nq score=0 adultscore=0
+ mlxlogscore=999 priorityscore=1501 malwarescore=0 clxscore=1011
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 spamscore=0 phishscore=0
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2411110057
+X-Spam-Score: 0
+X-Spam-OrigSender: jinghao7@illinois.edu
+X-Spam-Bar: 
 
-Hi Karol,
+Under certain kernel configurations when building with Clang/LLVM, the
+compiler does not generate a return or jump as the terminator
+instruction for ip_vs_protocol_init(), triggering the following objtool
+warning during build time:
 
-kernel test robot noticed the following build errors:
+  vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
 
-[auto build test ERROR on linuxtv-media-stage/master]
-[also build test ERROR on linus/master v6.12-rc6 next-20241108]
-[cannot apply to media-tree/master sailus-media-tree/streams sailus-media-tree/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+At runtime, this either causes an oops when trying to load the ipvs
+module or a boot-time panic if ipvs is built-in. This same issue has
+been reported by the Intel kernel test robot previously.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Karol-Przybylski/media-cec-extron-da-hd-4k-plus-add-return-check-for-wait_for_completion/20241110-210018
-base:   https://git.linuxtv.org/media_stage.git master
-patch link:    https://lore.kernel.org/r/20241110125814.1899076-1-karprzy7%40gmail.com
-patch subject: [PATCH] media: cec: extron-da-hd-4k-plus: add return check for wait_for_completion*()
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241111/202411111022.sX8ZCJZ8-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241111/202411111022.sX8ZCJZ8-lkp@intel.com/reproduce)
+Digging deeper into both LLVM and the kernel code reveals this to be a
+undefined behavior problem. ip_vs_protocol_init() uses a on-stack buffer
+of 64 chars to store the registered protocol names and leaves it
+uninitialized after definition. The function calls strnlen() when
+concatenating protocol names into the buffer. With CONFIG_FORTIFY_SOURCE
+strnlen() performs an extra step to check whether the last byte of the
+input char buffer is a null character (commit 3009f891bb9f ("fortify:
+Allow strlen() and strnlen() to pass compile-time known lengths")).
+This, together with possibly other configurations, cause the following
+IR to be generated:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411111022.sX8ZCJZ8-lkp@intel.com/
+  define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #5 section ".init.text" align 16 !kcfi_type !29 {
+    %1 = alloca [64 x i8], align 16
+    ...
 
-All errors (new ones prefixed by >>):
+  14:                                               ; preds = %11
+    %15 = getelementptr inbounds i8, ptr %1, i64 63
+    %16 = load i8, ptr %15, align 1
+    %17 = tail call i1 @llvm.is.constant.i8(i8 %16)
+    %18 = icmp eq i8 %16, 0
+    %19 = select i1 %17, i1 %18, i1 false
+    br i1 %19, label %20, label %23
 
-   In file included from drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:23:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:23:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:23:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:29:
-   In file included from drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.h:13:
-   In file included from include/media/cec.h:19:
-   In file included from include/media/rc-core.h:13:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:563:3: error: use of undeclared identifier 'ret'
-     563 |                 ret = wait_for_completion_killable_timeout(&extron->edid_completion,
-         |                 ^
-   drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c:565:7: error: use of undeclared identifier 'ret'
-     565 |                 if (ret < 0)
-         |                     ^
-   7 warnings and 2 errors generated.
+  20:                                               ; preds = %14
+    %21 = call i64 @strlen(ptr noundef nonnull dereferenceable(1) %1) #23
+    ...
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+  23:                                               ; preds = %14, %11, %20
+    %24 = call i64 @strnlen(ptr noundef nonnull dereferenceable(1) %1, i64 noundef 64) #24
+    ...
+  }
 
+The above code calculates the address of the last char in the buffer
+(value %15) and then loads from it (value %16). Because the buffer is
+never initialized, the LLVM GVN pass marks value %16 as undefined:
 
-vim +/ret +563 drivers/media/cec/usb/extron-da-hd-4k-plus/extron-da-hd-4k-plus.c
+  %13 = getelementptr inbounds i8, ptr %1, i64 63
+  br i1 undef, label %14, label %17
 
-   540	
-   541	static void extron_read_edid(struct extron_port *port)
-   542	{
-   543		struct extron *extron = port->extron;
-   544		char cmd[10], reply[10];
-   545		unsigned int idx;
-   546	
-   547		idx = port->port.port + (port->is_input ? 0 : extron->num_in_ports);
-   548		snprintf(cmd, sizeof(cmd), "WR%uEDID", idx);
-   549		snprintf(reply, sizeof(reply), "EdidR%u", idx);
-   550		if (mutex_lock_interruptible(&extron->edid_lock))
-   551			return;
-   552		if (port->read_edid)
-   553			goto unlock;
-   554		extron->edid_bytes_read = 0;
-   555		extron->edid_port = port;
-   556		port->edid_blocks = 0;
-   557		if (!port->has_edid)
-   558			goto no_edid;
-   559	
-   560		extron->edid_reading = true;
-   561	
-   562		if (!extron_send_and_wait(extron, port, cmd, reply)) {
- > 563			ret = wait_for_completion_killable_timeout(&extron->edid_completion,
-   564							     msecs_to_jiffies(1000));
-   565			if (ret < 0)
-   566				goto unlock;
-   567		}
-   568		if (port->edid_blocks) {
-   569			extron_parse_edid(port);
-   570			port->read_edid = true;
-   571			if (!port->is_input)
-   572				v4l2_ctrl_s_ctrl(port->ctrl_tx_edid_present, 1);
-   573		}
-   574	no_edid:
-   575		extron->edid_reading = false;
-   576	unlock:
-   577		mutex_unlock(&extron->edid_lock);
-   578		cancel_delayed_work_sync(&extron->work_update_edid);
-   579		if (manufacturer_name[0])
-   580			schedule_delayed_work(&extron->work_update_edid,
-   581					      msecs_to_jiffies(1000));
-   582	}
-   583	
+This gives later passes (SCCP, in particular) to more DCE opportunities
+by propagating the undef value further, and eventually removes
+everything after the load on the uninitialized stack location:
 
+  define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #0 section ".init.text" align 16 !kcfi_type !11 {
+    %1 = alloca [64 x i8], align 16
+    ...
+
+  12:                                               ; preds = %11
+    %13 = getelementptr inbounds i8, ptr %1, i64 63
+    unreachable
+  }
+
+In this way, the generated native code will just fall through to the
+next function, as LLVM does not generate any code for the unreachable IR
+instruction and leaves the function without a terminator.
+
+Zero the on-stack buffer to avoid this possible UB.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
+Co-developed-by: Ruowen Qin <ruqin@redhat.com>
+Signed-off-by: Ruowen Qin <ruqin@redhat.com>
+Signed-off-by: Jinghao Jia <jinghao7@illinois.edu>
+---
+ net/netfilter/ipvs/ip_vs_proto.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/net/netfilter/ipvs/ip_vs_proto.c b/net/netfilter/ipvs/ip_vs_proto.c
+index f100da4ba3bc..a9fd1d3fc2cb 100644
+--- a/net/netfilter/ipvs/ip_vs_proto.c
++++ b/net/netfilter/ipvs/ip_vs_proto.c
+@@ -340,7 +340,7 @@ void __net_exit ip_vs_protocol_net_cleanup(struct netns_ipvs *ipvs)
+ 
+ int __init ip_vs_protocol_init(void)
+ {
+-	char protocols[64];
++	char protocols[64] = { 0 };
+ #define REGISTER_PROTOCOL(p)			\
+ 	do {					\
+ 		register_ip_vs_protocol(p);	\
+@@ -348,8 +348,6 @@ int __init ip_vs_protocol_init(void)
+ 		strcat(protocols, (p)->name);	\
+ 	} while (0)
+ 
+-	protocols[0] = '\0';
+-	protocols[2] = '\0';
+ #ifdef CONFIG_IP_VS_PROTO_TCP
+ 	REGISTER_PROTOCOL(&ip_vs_protocol_tcp);
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.0
+
