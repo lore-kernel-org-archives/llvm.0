@@ -1,96 +1,106 @@
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253C68F77;
-	Mon, 11 Nov 2024 17:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10FD014F117;
+	Mon, 11 Nov 2024 18:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731346328; cv=none; b=d1icd7k3JgtaAluYeh7mb0j+/XFsqcI5CDeQORpTK2NvyeDxuzmHCAvAFJ5m62kmNIX5DuZwxm4USB273+ZoLMmlqtse8ttABNsmOHdfTkVN5/GWt8duwQUiz9EKvDNKHTNJ9FcN7ncv9/1k4lkjtFSQZb5iZfWn+MIwywGi388=
+	t=1731349990; cv=none; b=XmwjRStXXU0g/ooNpGrw1VsMBEW3xD2pZqlSU2ur7aJHYXGNB2i4JDZ8yqEt0IKPEoL3IKBoh/jIUL0vEvfPJ4HUbzpLOcWlYPZjaXHiWK4+Zds6BABEwjeUwsksIY6Xx00Q/g+6gESwgNrZN/Uds44N/E0q76qQGeZqlfnhXZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731346328; c=relaxed/simple;
-	bh=R1OxGtW1OXn6UnWHatNz7pta1Hc/mAoMIINg5IcSwIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W6FewgJtBZVlFeSNQqrAdTaOZfZMjiBGioi2qX7ZVYIXmqdIFuZx33PCdw3/pW3ZaV/ziXZ4LxBDac73y8ujX0qk9swhJYG8libS5AkiExkGLYTlLH0ENEOIysKxEQLZNVbSEPPT+OASPdROTML77mJ2sI8H3F6xWmQlFGg0GfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=mIveQqah; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+	s=arc-20240116; t=1731349990; c=relaxed/simple;
+	bh=3B/5kUYL8W4cwhJZ8ncK+YOGBwMwcZd5A7SQVXdUjpo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KbNlUprHqnAD/nErWq01iqCYhG3EYZNar1fxgp9IzOY4sAJ7G0V9FSeNT1CCnmDHdO+yBeFJF69UgW1BVid2m6ljDnWOCbzVLs/ulM4RTdlYCgqT+4uPIp98tKOdWGTPk74DRhz4+Typf+yD8eoCAAxJUHeN4DosLjYbP+1H54k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eB7PRkM0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="mIveQqah"
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 108F88932A;
-	Mon, 11 Nov 2024 18:32:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1731346324;
-	bh=m+Eyb5nA9rP5UvCqe5BJXcKC8MFjYJaJOoHKui5tOZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mIveQqahnM5ROin2S8Hd9hqJT92YGDjyviAFuRNsqftCOxP0Ha/b5in09JCXIVOba
-	 o5pr2rda+lX8TFA8UPLPUiniuAS3I0t+73b6DwLH7uA8XbumIYrGRTQrkMtxrEjV9n
-	 ESF5hZEiWz7sZ+y+KSZL5ykZNFTCE18BNkAzcfWplnHn+1Bgk6WqKHHrzM7zgqqzUu
-	 1mpDzt4VuXtPZJqKqHHwKyKvpm7dUdctaj6XqKO0KEBSOtXEoeTAxuPkLB+ut55QJD
-	 yNJTvZYE2A8KkZoX46qhtPe3nxOT+heUkH63krZ/A0ahUQKAh3Q6mopMqzHfMhKqqX
-	 QQSCs4dSCPs4w==
-Message-ID: <781bff37-975d-418e-9ea1-ecb3deb16612@denx.de>
-Date: Mon, 11 Nov 2024 17:18:12 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eB7PRkM0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C2FFC4CECF;
+	Mon, 11 Nov 2024 18:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731349989;
+	bh=3B/5kUYL8W4cwhJZ8ncK+YOGBwMwcZd5A7SQVXdUjpo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=eB7PRkM0tXHORqfiHIBcRDu5y+IkUJbJfzKwEJ51BPQxCfXaLr7PUbHsy/n+6kYcP
+	 5sVWVtULEnSeAcTbFuxHYZ1BFlZ1sN3In6ADELGEEwFModnm/K58IXO6Jeqlldk9f2
+	 Stj7iOodNoR2rhClQEOVXy1AaZXUqM5HlvcfnD23mIACZPvlJXYxi6zlxo6b7u5EeP
+	 6oWok625A3KZ9fOmrSMEcAELv3GfTCGHPDjdfnH7dKfHKFnVkuqp4HoHQmQys3XYvP
+	 fe3EYWXp/9bkK5vHxlBugJhtEojgvodqfdF+QzvSDG2rYmt5WCpC8/VDYAI63tavnb
+	 ZXnveMeQwOy0w==
+From: Mark Brown <broonie@kernel.org>
+Date: Mon, 11 Nov 2024 18:32:58 +0000
+Subject: [PATCH] kselftest/arm64: Enable build of PAC tests with LLVM=1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Input: ads7846 - Increase xfer array size in 'struct
- ser_req'
-To: Nathan Chancellor <nathan@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc: linux-input@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-References: <20241111-input-ads7846-increase-xfer-array-size-v1-1-06cd92e9f20f@kernel.org>
-Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <20241111-input-ads7846-increase-xfer-array-size-v1-1-06cd92e9f20f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+Message-Id: <20241111-arm64-selftest-pac-clang-v1-1-08599ceee418@kernel.org>
+X-B4-Tracking: v=1; b=H4sIANlNMmcC/x2MSwqAMAwFryJZG2hF/F1FXNSaasAfjYhQvLvB2
+ Q3MewmEIpNAlyWIdLPwsavYPAO/uH0m5EkdClOUVkEXt6pEoTVcJBeezqNfNUQ/NmYiU7e2akH
+ nZ6TAz3/dD+/7AYmktUhqAAAA
+X-Change-ID: 20241111-arm64-selftest-pac-clang-cb80de079169
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-355e8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1515; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=3B/5kUYL8W4cwhJZ8ncK+YOGBwMwcZd5A7SQVXdUjpo=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnMk3iGC0+I1ctBJ6Drd9vqX4HeZ5w93WHhdwde
+ gKKAdXgreOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZzJN4gAKCRAk1otyXVSH
+ 0N9zB/sGxMPQGy1POFWcAZb/Bw9nz1cJKiFiWxfYnMrZeE4DTxzQXvwgAD0ZdwJKBL+WdWubUrq
+ HxP9lpgZywM/WlPVh8UvOkn8aOwYfeLwzqGtw6GmDwT3ZLywgSZXYgB+/LHewyuLLxwheKgOQhK
+ 29iy0o4kd9SiKG2mdU2IUD2o/ODaA5aqPzE29iICx6prBe2HerBZcCk5wERHaKPlZwgq/juprJE
+ zkBWNyF116RLWExxgAviOGGQuE9owohxbgteEyxkwpN6d4G+nvT7qCjvirFxsKyOTfVem0AJ2fG
+ Pmr064U/ore/bqcfF0pQ4DqzlJE2jBqaKHqsHShaYsuGXdva
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 11/11/24 4:09 PM, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y, trimmed for brevity):
-> 
->    drivers/input/touchscreen/ads7846.c:412:2: error: array index 6 is past the end of the array (that has type 'struct spi_transfer[6]') [-Werror,-Warray-bounds]
->      412 |         req->xfer[6].tx_buf = &req->scratch;
->          |         ^         ~
->    ...
->    drivers/input/touchscreen/ads7846.c:416:2: error: array index 7 is past the end of the array (that has type 'struct spi_transfer[6]') [-Werror,-Warray-bounds]
->      416 |         req->xfer[7].rx_buf = &req->scratch;
->          |         ^         ~
->    drivers/input/touchscreen/ads7846.c:334:2: note: array 'xfer' declared here
->      334 |         struct spi_transfer     xfer[6];
->          |         ^
-> 
-> Increase the size of xfer in 'struct ser_req' to ensure that there is
-> enough space for all necessary members and there are no out of bounds
-> accesses, clearing up the warning.
-> 
-> Fixes: 781a07da9bb9 ("Input: ads7846 - add dummy command register clearing cycle")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->   drivers/input/touchscreen/ads7846.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-> index f7bc0a3e56d86932823b6bc0dcd6bcd8e1b9b5c2..7b3711a3597c86f18c45d040f73bef884ec3c4aa 100644
-> --- a/drivers/input/touchscreen/ads7846.c
-> +++ b/drivers/input/touchscreen/ads7846.c
-> @@ -331,7 +331,7 @@ struct ser_req {
->   	u8			ref_off;
->   	u16			scratch;
->   	struct spi_message	msg;
-> -	struct spi_transfer	xfer[6];
-> +	struct spi_transfer	xfer[8];
-Sigh ...
+Currently we don't build the PAC selftests when building with LLVM=1 since
+we attempt to test for PAC support in the toolchain before we've set up the
+build system to point at LLVM in lib.mk, which has to be one of the last
+things in the Makefile.
 
-Reviewed-by: Marek Vasut <marex@denx.de>
+Since all versions of LLVM supported for use with the kernel have PAC
+support we can just sidestep the issue by just assuming PAC is there when
+doing a LLVM=1 build.
 
-Thank you
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/pauth/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/arm64/pauth/Makefile b/tools/testing/selftests/arm64/pauth/Makefile
+index 72e290b0b10c1ea5bf1b84232f70844a601b8129..b5a1c80e0ead6932d2441a192b9758a049e3b3f8 100644
+--- a/tools/testing/selftests/arm64/pauth/Makefile
++++ b/tools/testing/selftests/arm64/pauth/Makefile
+@@ -7,8 +7,14 @@ CC := $(CROSS_COMPILE)gcc
+ endif
+ 
+ CFLAGS += -mbranch-protection=pac-ret
++
++# All supported LLVMs have PAC, test for GCC
++ifeq ($(LLVM),1)
++pauth_cc_support := 1
++else
+ # check if the compiler supports ARMv8.3 and branch protection with PAuth
+ pauth_cc_support := $(shell if ($(CC) $(CFLAGS) -march=armv8.3-a -E -x c /dev/null -o /dev/null 2>&1) then echo "1"; fi)
++endif
+ 
+ ifeq ($(pauth_cc_support),1)
+ TEST_GEN_PROGS := pac
+
+---
+base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
+change-id: 20241111-arm64-selftest-pac-clang-cb80de079169
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
