@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB661BC58;
-	Mon, 11 Nov 2024 14:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB391BC58;
+	Mon, 11 Nov 2024 14:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731336498; cv=none; b=Xi2aDDn8ytBuR2vt932FfVbo8J9tVrubZrYM+Q43OyV5maO1iLmk92EVCDsZJxz3beqzY6ImA6Px54LPi0oojYC5qPV+g0u14ZtLFbFfWZs45zzPgaj8mE9QKYgf++3cNW+scZr8pn6bX2fpNzptuo71ZHNUeECNFlxJGCG5YTY=
+	t=1731336589; cv=none; b=FM8Hl/o3zunmqeSdGuXnlUzeCynUSoZIJoDKiebw86cS720X0/eogzRRggoLt0V3P5Ag2oog71QhhxqclWHFLqWAGO4Tlaqriboy+Ll3t0FvZ1VDkJ4zVKS/PrmM5GBZL92UrLnJkfJfQ9415c5foOVpo4UxDMC3MVmF1vMURcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731336498; c=relaxed/simple;
-	bh=fwBFnUI7zZAzmO8sGg3BYlDlfcXoixbrHRm+40n+lk8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZKy5nr1tbAarD0wu5DW6ilpMggxC0evDJDCeFT7zi/mnH/CfhqdnXfjrJTUyfcGeSk4IjEzDErWnvDiqIaphpC3NEaDyu/hxmiCt4NEijlmFoFLc5Q8WKUsZrR8h4oqIKR5EYUT+wcOZjSfJ0ue2IPJN1kkjnJ2lZc19uZNsfVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHb+9qJb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731336589; c=relaxed/simple;
+	bh=ZZOkQZlepEFjStUosjL2ipFfpBBqpltZJPRQrLteQ7I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=twVoY3mtiRualZhdxE3w/NAf4cjL4sBbXhRkUVxLJHbhJKKPmUEPjohm3MjBpDgky6lRyksNRV3FxgihjsT6EAi/tvFizhLapNgGWFWPptiB8fNX6zedoKUx5mNYpuYFtJ+07D0Pr0NmLeTubDjhNC0njMUGcLh/eTs9JPfsp50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAhW4mNo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHb+9qJb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33DDC4CECF;
-	Mon, 11 Nov 2024 14:48:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAhW4mNo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717EAC4CECF;
+	Mon, 11 Nov 2024 14:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731336497;
-	bh=fwBFnUI7zZAzmO8sGg3BYlDlfcXoixbrHRm+40n+lk8=;
+	s=k20201202; t=1731336588;
+	bh=ZZOkQZlepEFjStUosjL2ipFfpBBqpltZJPRQrLteQ7I=;
 	h=From:Date:Subject:To:Cc:From;
-	b=MHb+9qJbPFk1ZvtJbEhgbvy/3dWUgRZNdD9IbJDZJh9o0OKScN3QKwPovXbuL07UE
-	 jo6QDtCZqvGPNsBi3mF8/By6cKGPsKyh57GYVpnmKsh7mrCz4XA3ddzD/pGppySn97
-	 /4i9ovM3kg96GOdibKIZMwOekArm5kBpCspSSK05KGSy1MRDaGuZwPjasCr+IkjO1S
-	 Oe1GttwMyxzg9D+sEBiA/73PqWwy9jZFiEgMJny7wDD0JYi7RkqcXxvDHL5FQYOkvg
-	 6pYtcAX+DyprUfKFz2G11DjVlC3wNWN5b+TWy4uVCt3GrT+B+wFA4rllo2PK5Jsiys
-	 a95zJCh0spvmQ==
-From: Simon Horman <horms@kernel.org>
-Date: Mon, 11 Nov 2024 14:47:51 +0000
-Subject: [PATCH nf-next] netfilter: bpf: Pass string literal as format
- argument of request_module()
+	b=PAhW4mNon2UieJ6UMXSzGCOSlFpRqJL7VxB7ijV2lpYigshncvzGh8l7fLSwt7ZnH
+	 TpOWtEkd9y+i2AIw+dn7RKXxz2Hv2xqCz+1NFfVozy0dFid8nomkk7OvVLs/jNgCSL
+	 gw0kwiJJV6KChCtFWUpHsr1Iy1/cTFPeOAosoygEuFtpZPSFYrDymzjOvlEGMkcdJb
+	 HrzK7yrddLgqHKRQZ4dDNHXoVooO+x+E0fPzTrfCHvNvFDcg0WHbmklas8B4iDQwZN
+	 PpQw/KM8ZuROh4gmEj9BHmXMznqFKtKUVA6CTjVaKshtx1NuVWr4IcwEpoChU82CbY
+	 CQwiGKGZHzjBA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 11 Nov 2024 07:49:43 -0700
+Subject: [PATCH] apparmor: Add empty statement between label and
+ declaration in profile_transition(()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,67 +37,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241111-nf-bpf-fmt-v1-1-5f061b6fe35b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIABYZMmcC/x2MSwqAMAwFryJZG2iL4Ocq4kJrollYpRUpSO9uc
- HYD894LiaJQgqF6IdIjSc6gYusK/D6HjVBWdXDGNVbBwLhcjHzcSN60zvez7ZhBB1cklvyfjaB
- doHzDVMoH7c0P0mUAAAA=
-To: Pablo Neira Ayuso <pablo@netfilter.org>, 
- Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.14.0
+Message-Id: <20241111-apparmor-fix-label-declaration-warning-v1-1-adb64ab6482b@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIYZMmcC/x2NQQrDMAwEvxJ0riA2hkC+EnpQbSUROLaRSxsI+
+ XtF9zaHmb2gswp3mIcLlD/SpRYD9xgg7lQ2RknG4EcfnA2pNdKjKq5yYqYXZ0wcMym9TcUvaZG
+ y4RqTD5F9CmECizVlE/5Hy/O+f49tURV4AAAA
+X-Change-ID: 20241111-apparmor-fix-label-declaration-warning-fcd24ce2d447
+To: John Johansen <john.johansen@canonical.com>
+Cc: Ryan Lee <ryan.lee@canonical.com>, apparmor@lists.ubuntu.com, 
+ linux-security-module@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2357; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ZZOkQZlepEFjStUosjL2ipFfpBBqpltZJPRQrLteQ7I=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOlGkj1aedv2/Dkot0DL/lLXycubufgUeW5IXVDedMwn1
+ bBdPmtmRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhI7AtGhj08lleXfD3rsvzp
+ nDVNKa8z2C70rWkBGjrp0TIu9RzzKob/2cevRH8zUjWYeXvxvy/WRW+uytZPNtmko6RatXH91me
+ vuAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Both gcc-14 and clang-18 report that passing a non-string literal as the
-format argument of request_module() is potentially insecure.
+Clang 18 and newer warns (or errors with CONFIG_WERROR=y):
 
-E.g. clang-18 says:
+  security/apparmor/domain.c:695:3: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
+    695 |                 struct aa_profile *new_profile = NULL;
+        |                 ^
 
-.../nf_bpf_link.c:46:24: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-   46 |                 err = request_module(mod);
-      |                                      ^~~
-.../kmod.h:25:55: note: expanded from macro 'request_module'
-   25 | #define request_module(mod...) __request_module(true, mod)
-      |                                                       ^~~
-.../nf_bpf_link.c:46:24: note: treat the string as an argument to avoid this
-   46 |                 err = request_module(mod);
-      |                                      ^
-      |                                      "%s",
-.../kmod.h:25:55: note: expanded from macro 'request_module'
-   25 | #define request_module(mod...) __request_module(true, mod)
-      |                                                       ^
+With Clang 17 and older, this is just an unconditional hard error:
 
-It is always the case where the contents of mod is safe to pass as the
-format argument. That is, in my understanding, it never contains any
-format escape sequences.
+  security/apparmor/domain.c:695:3: error: expected expression
+    695 |                 struct aa_profile *new_profile = NULL;
+        |                 ^
+  security/apparmor/domain.c:697:3: error: use of undeclared identifier 'new_profile'
+    697 |                 new_profile = aa_new_learning_profile(profile, false, name,
+        |                 ^
+  security/apparmor/domain.c:699:8: error: use of undeclared identifier 'new_profile'
+    699 |                 if (!new_profile) {
+        |                      ^
+  security/apparmor/domain.c:704:11: error: use of undeclared identifier 'new_profile'
+    704 |                         new = &new_profile->label;
+        |                                ^
 
-But, it seems better to be safe than sorry. And, as a bonus, compiler
-output becomes less verbose by addressing this issue as suggested by
-clang-18.
+Add a semicolon directly after the label to create an empty statement,
+which keeps the original intent of the code while clearing up the
+warning/error on all clang versions.
 
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
+Fixes: ee650b3820f3 ("apparmor: properly handle cx/px lookup failure for complain")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202411101808.AI8YG6cs-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- net/netfilter/nf_bpf_link.c | 2 +-
+ security/apparmor/domain.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_bpf_link.c b/net/netfilter/nf_bpf_link.c
-index 3d64a4511fcf..06b084844700 100644
---- a/net/netfilter/nf_bpf_link.c
-+++ b/net/netfilter/nf_bpf_link.c
-@@ -43,7 +43,7 @@ get_proto_defrag_hook(struct bpf_nf_link *link,
- 	hook = rcu_dereference(*ptr_global_hook);
- 	if (!hook) {
- 		rcu_read_unlock();
--		err = request_module(mod);
-+		err = request_module("%s", mod);
- 		if (err)
- 			return ERR_PTR(err < 0 ? err : -EINVAL);
+diff --git a/security/apparmor/domain.c b/security/apparmor/domain.c
+index 602d7a1bb44823a9b81e34d270b03c5f3aff3a34..eb0f222aa29442686b0a6751001c879f5b366c59 100644
+--- a/security/apparmor/domain.c
++++ b/security/apparmor/domain.c
+@@ -691,7 +691,7 @@ static struct aa_label *profile_transition(const struct cred *subj_cred,
+ 			error = -EACCES;
+ 		}
+ 	} else if (COMPLAIN_MODE(profile)) {
+-create_learning_profile:
++create_learning_profile:;
+ 		/* no exec permission - learning mode */
+ 		struct aa_profile *new_profile = NULL;
  
+
+---
+base-commit: 8c4f7960ae8a7a03a43f814e4af471b8e6ea3391
+change-id: 20241111-apparmor-fix-label-declaration-warning-fcd24ce2d447
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
