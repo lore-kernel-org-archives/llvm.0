@@ -1,256 +1,235 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7701BC4E;
-	Mon, 11 Nov 2024 20:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D661B0F2B
+	for <llvm@lists.linux.dev>; Mon, 11 Nov 2024 20:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731356209; cv=none; b=G1wzDqyRfpAxl67R3eMbyASuqyqMgcJKU6zNDU2ZBZPENwktfuv40W0C7125+jRSuwH92OE0l8XWLECs8CqFWSPDxmlL+EleOUpzfLMlkmBySUigET53hfs3iZuW0pAVtvkN50Cpo0FmEbUX4+MS7aQUVH1plyQjtH6kkqwHRNU=
+	t=1731357849; cv=none; b=kkKW4jYsZ/AhIVGingCFP0lXO85nR7fIxZ+BOh5phXLX1NGnLK1f4Fjqr/UneV75FvLlLj/z0NEgJvGi5zAyLux4iAxOi0hw0O0VZWdJGcP69ca4o8ZiMh63X7uzNoiZMkjrK+J1QFTy2xZkPfFJWyy409gbLxwxpZYIEm0r/YA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731356209; c=relaxed/simple;
-	bh=CwAXbOxrmH689Ea3tdgf8f02pWsjJIlJAoVkv53F2ug=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ay8kNfWaKRdVTg+YtciTPHbMnRHx/9EimC0xc6a/P13ssD9cbFt/FPg/3foOR5wWPf+IXSz/cvRU1vUs0JEFA3o9+RCB+BuEHsnhdZhkXj+YjtStYNytEteG+NqoIIkNo468uzwVcTXQLyTWdRjoOc1awwKQXm+9hN7KeJXrlNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqoaqqR5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731357849; c=relaxed/simple;
+	bh=pu1bE2oQyz4PIzvOKsfMnSgcPR/vFs7LU5lLf0wlKVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bhH9a/MLCZlmxErPqEIsQtjCZqOYVrBL25CQ3n8/i7c/Zs9u7Bph7lcMXpkGnUl9BBOYQew7/JhC8pjtevoqznIIm/zOeXfWvy74XoXdOKETdWA1lE5ruCA2GXqgGq8Eo5PRvBTFmU4vb/GR/8U+4Q1kgfjjO18WRdlnL8Jthwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1vHtUHjW; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqoaqqR5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB4EC4CECF;
-	Mon, 11 Nov 2024 20:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731356209;
-	bh=CwAXbOxrmH689Ea3tdgf8f02pWsjJIlJAoVkv53F2ug=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gqoaqqR5q9K0BDuMuxpM8V7JvQAm/5HzvsjRVtt88NBcpQSadZWWoAb1onaMePqU4
-	 J2TGClTRxzydahccp+si7LOvMnJGZ3RE2Ihvc1xt3kSca9Z2tPwSlImzruo5QlXcoy
-	 hhav0/18c53T8d+yFMD93wX4me9lSvaLCwOYpggeqpYEgwy9lqdJSW+nxeBsK9JgYm
-	 fLx1x9ZUE48DuKFOThVfnA1aT2vy/pb5XLCZFPI3+KtkmH3aSuEskWYMJM9n5+qQcY
-	 8mU0XLzmIBsFp5IcOYzgdkTlS6cKRc/8/+YyE5BzYVYtvj7EaKRLemhxU4OgB2MYM1
-	 +Yq8cDMS1Q20w==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	rust-for-linux@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	Ben Beasley <code@musicinmybrain.net>,
-	NoisyCoil <noisycoil@tutanota.com>,
-	Matthias Geiger <werdahias@riseup.net>
-Subject: [PATCH v2] rust: warn on bindgen < 0.69.5 and libclang >= 19.1
-Date: Mon, 11 Nov 2024 21:16:07 +0100
-Message-ID: <20241111201607.653149-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1vHtUHjW"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-460a8d1a9b7so1591cf.1
+        for <llvm@lists.linux.dev>; Mon, 11 Nov 2024 12:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1731357847; x=1731962647; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wJ6uFcLfCmrIfQWM4xw2qYGBJMJQRq1denWE0S9O56A=;
+        b=1vHtUHjWhCyBE3i+VPVLpuhG/cbzecB/4Fd51+8q0aVzUzEVbLjhZb0DT4bPoaOtNk
+         YA688bcAEjjUSAdqs8ED1AOwuBZjMwIz0iD1sG236JMsAjAuDcRjs5f0+px0iN07yNzp
+         dTOqrL4vLe5kOZpBet806j2AV4aTxskhMAqd9ypBoAJpEJlHwVsAcPgKSq76Ex3tXNej
+         hQ1WK/V1FyDzwPEpToGRUwOna77mObJSxLHvLAjwNOyimM5SAs493HKhezBNwJ/9HYXN
+         oDYyEKrHaFYTQK0wD+KkQ5HQycOmEtpkutl0UQIDQiMbHF9OAMSjC3orjZBuwXnIdikf
+         lhAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731357847; x=1731962647;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wJ6uFcLfCmrIfQWM4xw2qYGBJMJQRq1denWE0S9O56A=;
+        b=U6mV+4v/qfVWtOSFJgKkK9Ij5GPBJOcVqfeP9LWi0ZnmFF2y5ooIB3Cn8+krmx8e9s
+         JpvZmDvrJRr6YlqVZouc8yaY8v9C5HUrqcm3nENn9oVt44YC6V7n0bZ3fjMA+2cUyvdr
+         M1B9U9NTcdP4KkSa3rLq/AYyIKrbflhco6T6TkgoJpRoydhEu1abHXBDmCFzsi+cg52m
+         WfMbGNVBUMyD6gKe9Kgapcroekc0PaX46KHyAYOdhUNsS7+IlgQl17NPHI4ANcDFFNv3
+         ByO2yvxzWuwuPYIs+VSUN66ebiUIsaQU9wqjhQSmWu12P/6Dz/ckArOLCkbTvuH7JtMN
+         7JSw==
+X-Forwarded-Encrypted: i=1; AJvYcCXmR6rPW4EneeCkZRGANC/bYO0F3vjELET7qlT6VI5cxMrARElxl312Cb/GVjPwrt2ZszN1@lists.linux.dev
+X-Gm-Message-State: AOJu0YxFiwJ44PezMUOby9OwoPZkHiyMItYgLe2718iJ8Y12GCsYpxtX
+	BV3Y72Ps+5FWjPm9EVsFMDGheaUrtU5gqYY1LihWhzwuVTrkcALTLHEI9XpP10dAcDlrr/ysx8d
+	22XO10bLWoXz5SyWWRPGNH9LJ6TZQgGK1Ew9T
+X-Gm-Gg: ASbGncv+r+Kga9w8OqQoiOsEe71y3SRmm6wAYZe/uoAk9cL9v3q+eJ4pYRAtQdtZ6bq
+	iVdmQ0Xd9VrkxfXDAaxSVo3StmBtilPwGagBv3hC3X+hePRg/fZNxpSIryRfrPg==
+X-Google-Smtp-Source: AGHT+IHN/VTkEzYYSUDWzDF6ttzYMfgpvSZeOr4oSBlM+xWBr13kyerRjwvS3iVYPd8P6qhTDE91E+q+P0S+4DZZ1Yw=
+X-Received: by 2002:ac8:57cb:0:b0:462:c961:ab88 with SMTP id
+ d75a77b69052e-4633f2ba6b3mr499291cf.13.1731357846333; Mon, 11 Nov 2024
+ 12:44:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-4-xur@google.com>
+ <44193ca7-9d31-4b58-99cc-3300a6ad5289@gmail.com>
+In-Reply-To: <44193ca7-9d31-4b58-99cc-3300a6ad5289@gmail.com>
+From: Rong Xu <xur@google.com>
+Date: Mon, 11 Nov 2024 12:43:54 -0800
+Message-ID: <CAF1bQ=ShjoEQZGPjDoy_B6wZdD_jr-RevVXwEDPA_-o-Ba0Omg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
+To: Klara Modin <klarasmodin@gmail.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
+	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
+	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
+	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
+	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When testing a `clang` upgrade with Rust Binder, Alice encountered [1] a
-build failure caused by `bindgen` not translating some symbols related to
-tracepoints. This was caused by commit 2e770edd8ce1 ("[libclang] Compute
-the right spelling location") changing the behavior of a function exposed
-by `libclang`. `bindgen` fixed the regression in commit 600f63895f73
-("Use clang_getFileLocation instead of clang_getSpellingLocation").
+Thanks for reporting this issue!
 
-However, the regression fix is only available in `bindgen` versions
-0.69.5 or later (it was backported for 0.69.x). This means that when
-older bindgen versions are used with new versions of `libclang`, `bindgen`
-may do the wrong thing, which could lead to a build failure.
+I'm assuming your kernel build enables dead code elimination and
+uses the --ffunction-sections compiler flag. Without this patch, all
+the functions
+-- I think there are only .text.unlikely.* and .text.* are grouped
+together in the
+final vmlinux. This patch modifies the linker script to place
+.text.unlikely.* functions
+ before .text.* functions. I've examined arch/mips/kernel/vmlinux.lds.S, an=
+d
+haven't found any obvious issue.
 
-Alice encountered the bug with some header files related to tracepoints,
-but it could also cause build failures in other circumstances. Thus,
-always emit a warning when using an old `bindgen` with a new `libclang`
-so that other people do not have to spend time chasing down the same
-bug.
+Can you send me the following?
+(1) the kernel build command
+(2) System.map without the patch
+(3) System.map with the patch
 
-However, testing just the version is inconvenient, since distributions
-do patch their packages without changing the version, so I reduced the
-issue into the following piece of code that can trigger the issue:
+Best regards,
 
-    #define F(x) int x##x
-    F(foo);
+-Rong
 
-In particular, an unpatched `bindgen` will ignore the macro expansion
-and thus not provide a declaration for the exported `int`.
-
-Thus add a build test to `rust_is_available.sh` using the code above
-(that is only triggered if the versions appear to be affected), following
-what we did for the 0.66.x issue.
-
-Moreover, I checked the status in the major distributions we have
-instructions for:
-
-  - Fedora 41 was affected but is now OK, since it now ships `bindgen`
-    0.69.5.
-
-    Thanks Ben for the quick reply on the updates that were ongoing.
-
-    Fedora 40 and earlier are OK (older `libclang`, and they also now
-    carry `bindgen` 0.69.5).
-
-  - Debian Sid was affected but is now OK, since they now ship a patched
-    `bindgen` binary (0.66.1-7+b3). The issue was reported to Debian by
-    email and then as a bug report [2].
-
-    Thanks NoisyCoil and Matthias for the quick replies. NoisyCoil handled
-    the needed updates. Debian may upgrade to `bindgen` 0.70.x, too.
-
-    Debian Testing is OK (older `libclang` so far).
-
-  - Ubuntu non-LTS (oracular) is affected. The issue was reported to Ubuntu
-    by email and then as a bug report [3].
-
-    Ubuntu LTS is not affected (older `libclang` so far).
-
-  - Arch Linux, Gentoo Linux and openSUSE should be OK (newer `bindgen` is
-    provided). Nix as well (older `libclang` so far).
-
-This issue was also added to our "live list" that tracks issues around
-distributions [4].
-
-Cc: Ben Beasley <code@musicinmybrain.net>
-Cc: NoisyCoil <noisycoil@tutanota.com>
-Cc: Matthias Geiger <werdahias@riseup.net>
-Link: https://lore.kernel.org/rust-for-linux/20241030-bindgen-libclang-warn-v1-1-3a7ba9fedcfe@google.com/ [1]
-Link: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1086510 [2]
-Link: https://bugs.launchpad.net/ubuntu/+source/rust-bindgen-cli/+bug/2086639 [3]
-Link: https://github.com/Rust-for-Linux/linux/issues/1127 [4]
-Co-developed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
-We would like to put this into the merge window, or ideally very soon after as a
-"fix" (it is not really a fix, but it is very convenient for people wondering
-why their toolchain may not work, especially if tracepoints land in the merge
-window as expected).
-
-v2 (based on Alice's v1):
-  - Fixed libclang version number (we use a different `get_canonical_version`
-    that returns one more digit).
-  - Added build test -- now we can detect binaries like Debian's that are
-    patched but do not change the version number.
-  - Added tests.
-  - Explained the current status of the distributions in the commit message.
-
- scripts/rust_is_available.sh                  | 15 ++++++++
- ...ust_is_available_bindgen_libclang_concat.h |  3 ++
- scripts/rust_is_available_test.py             | 34 ++++++++++++++++++-
- 3 files changed, 51 insertions(+), 1 deletion(-)
- create mode 100644 scripts/rust_is_available_bindgen_libclang_concat.h
-
-diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-index 5262c56dd674..93c0ef7fb3fb 100755
---- a/scripts/rust_is_available.sh
-+++ b/scripts/rust_is_available.sh
-@@ -225,6 +225,21 @@ if [ "$bindgen_libclang_cversion" -lt "$bindgen_libclang_min_cversion" ]; then
- 	exit 1
- fi
-
-+if [ "$bindgen_libclang_cversion" -ge 1900100 ] &&
-+	[ "$rust_bindings_generator_cversion" -lt 6905 ]; then
-+	# Distributions may have patched the issue (e.g. Debian did).
-+	if ! "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang_concat.h | grep -q foofoo; then
-+		echo >&2 "***"
-+		echo >&2 "*** Rust bindings generator '$BINDGEN' < 0.69.5 together with libclang >= 19.1"
-+		echo >&2 "*** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),"
-+		echo >&2 "*** unless patched (like Debian's)."
-+		echo >&2 "***   Your bindgen version:  $rust_bindings_generator_version"
-+		echo >&2 "***   Your libclang version: $bindgen_libclang_version"
-+		echo >&2 "***"
-+		warning=1
-+	fi
-+fi
-+
- # If the C compiler is Clang, then we can also check whether its version
- # matches the `libclang` version used by the Rust bindings generator.
- #
-diff --git a/scripts/rust_is_available_bindgen_libclang_concat.h b/scripts/rust_is_available_bindgen_libclang_concat.h
-new file mode 100644
-index 000000000000..efc6e98d0f1d
---- /dev/null
-+++ b/scripts/rust_is_available_bindgen_libclang_concat.h
-@@ -0,0 +1,3 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#define F(x) int x##x
-+F(foo);
-diff --git a/scripts/rust_is_available_test.py b/scripts/rust_is_available_test.py
-index 413741037fb3..4fcc319dea84 100755
---- a/scripts/rust_is_available_test.py
-+++ b/scripts/rust_is_available_test.py
-@@ -54,7 +54,7 @@ else:
- """)
-
-     @classmethod
--    def generate_bindgen(cls, version_stdout, libclang_stderr, version_0_66_patched=False):
-+    def generate_bindgen(cls, version_stdout, libclang_stderr, version_0_66_patched=False, libclang_concat_patched=False):
-         if libclang_stderr is None:
-             libclang_case = f"raise SystemExit({cls.bindgen_default_bindgen_libclang_failure_exit_code})"
-         else:
-@@ -65,12 +65,19 @@ else:
-         else:
-             version_0_66_case = "raise SystemExit(1)"
-
-+        if libclang_concat_patched:
-+            libclang_concat_case = "print('pub static mut foofoo: ::std::os::raw::c_int;')"
-+        else:
-+            libclang_concat_case = "pass"
-+
-         return cls.generate_executable(f"""#!/usr/bin/env python3
- import sys
- if "rust_is_available_bindgen_libclang.h" in " ".join(sys.argv):
-     {libclang_case}
- elif "rust_is_available_bindgen_0_66.h" in " ".join(sys.argv):
-     {version_0_66_case}
-+elif "rust_is_available_bindgen_libclang_concat.h" in " ".join(sys.argv):
-+    {libclang_concat_case}
- else:
-     print({repr(version_stdout)})
- """)
-@@ -268,6 +275,31 @@ else:
-         result = self.run_script(self.Expected.FAILURE, { "BINDGEN": bindgen })
-         self.assertIn(f"libclang (used by the Rust bindings generator '{bindgen}') is too old.", result.stderr)
-
-+    def test_bindgen_bad_libclang_concat(self):
-+        for (bindgen_version, libclang_version, expected_not_patched) in (
-+            ("0.69.4", "18.0.0", self.Expected.SUCCESS),
-+            ("0.69.4", "19.1.0", self.Expected.SUCCESS_WITH_WARNINGS),
-+            ("0.69.4", "19.2.0", self.Expected.SUCCESS_WITH_WARNINGS),
-+
-+            ("0.69.5", "18.0.0", self.Expected.SUCCESS),
-+            ("0.69.5", "19.1.0", self.Expected.SUCCESS),
-+            ("0.69.5", "19.2.0", self.Expected.SUCCESS),
-+
-+            ("0.70.0", "18.0.0", self.Expected.SUCCESS),
-+            ("0.70.0", "19.1.0", self.Expected.SUCCESS),
-+            ("0.70.0", "19.2.0", self.Expected.SUCCESS),
-+        ):
-+            with self.subTest(bindgen_version=bindgen_version, libclang_version=libclang_version):
-+                cc = self.generate_clang(f"clang version {libclang_version}")
-+                libclang_stderr = f"scripts/rust_is_available_bindgen_libclang.h:2:9: warning: clang version {libclang_version} [-W#pragma-messages], err: false"
-+                bindgen = self.generate_bindgen(f"bindgen {bindgen_version}", libclang_stderr)
-+                result = self.run_script(expected_not_patched, { "BINDGEN": bindgen, "CC": cc })
-+                if expected_not_patched == self.Expected.SUCCESS_WITH_WARNINGS:
-+                    self.assertIn(f"Rust bindings generator '{bindgen}' < 0.69.5 together with libclang >= 19.1", result.stderr)
-+
-+                bindgen = self.generate_bindgen(f"bindgen {bindgen_version}", libclang_stderr, libclang_concat_patched=True)
-+                result = self.run_script(self.Expected.SUCCESS, { "BINDGEN": bindgen, "CC": cc })
-+
-     def test_clang_matches_bindgen_libclang_different_bindgen(self):
-         bindgen = self.generate_bindgen_libclang("scripts/rust_is_available_bindgen_libclang.h:2:9: warning: clang version 999.0.0 [-W#pragma-messages], err: false")
-         result = self.run_script(self.Expected.SUCCESS_WITH_WARNINGS, { "BINDGEN": bindgen })
-
-base-commit: ae7851c29747fa3765ecb722fe722117a346f988
---
-2.47.0
+On Sat, Nov 9, 2024 at 7:39=E2=80=AFAM Klara Modin <klarasmodin@gmail.com> =
+wrote:
+>
+> Hi,
+>
+> On 2024-10-26 07:14, Rong Xu wrote:
+> > When the -ffunction-sections compiler option is enabled, each function
+> > is placed in a separate section named .text.function_name rather than
+> > putting all functions in a single .text section.
+> >
+> > However, using -function-sections can cause problems with the
+> > linker script. The comments included in include/asm-generic/vmlinux.lds=
+.h
+> > note these issues.:
+> >    =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if=
+ dead
+> >     code elimination is enabled, so these sections should be converted
+> >     to use ".." first.=E2=80=9D
+> >
+> > It is unclear whether there is a straightforward method for converting
+> > a suffix to "..".
+> >
+> > This patch modifies the order of subsections within the text output
+> > section. Specifically, it repositions sections with certain fixed patte=
+rns
+> > (for example .text.unlikely) before TEXT_MAIN, ensuring that they are
+> > grouped and matched together. It also places .text.hot section at the
+> > beginning of a page to help the TLB performance.
+> >
+> > Note that the limitation arises because the linker script employs glob
+> > patterns instead of regular expressions for string matching. While ther=
+e
+> > is a method to maintain the current order using complex patterns, this
+> > significantly complicates the pattern and increases the likelihood of
+> > errors.
+> >
+> > This patch also changes vmlinux.lds.S for the sparc64 architecture to
+> > accommodate specific symbol placement requirements.
+>
+> With this patch (622240ea8d71a75055399fd4b3cc2b190e44d2e2 in
+> next-20241108) my Edgerouter 6P hangs on boot (Cavium Octeon III,
+> mips64, running in big endian). It's using device tree passed from the
+> vendored u-boot (attached in case it's relevant).
+>
+> Disabling dead code elimination does not fix the issue.
+>
+> Please let me know if there's anything else you need.
+>
+> Regards,
+> Klara Modin
+>
+> >
+> > Co-developed-by: Han Shen <shenhan@google.com>
+> > Signed-off-by: Han Shen <shenhan@google.com>
+> > Signed-off-by: Rong Xu <xur@google.com>
+> > Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> > Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> > Tested-by: Yonghong Song <yonghong.song@linux.dev>
+> > Tested-by: Yabin Cui <yabinc@google.com>
+> > Change-Id: I5202d40bc7e24f93c2bfb2f0d987e9dc57dec1b1
+> > ---
+> >   arch/sparc/kernel/vmlinux.lds.S   |  5 +++++
+> >   include/asm-generic/vmlinux.lds.h | 19 ++++++++++++-------
+> >   2 files changed, 17 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/arch/sparc/kernel/vmlinux.lds.S b/arch/sparc/kernel/vmlinu=
+x.lds.S
+> > index d317a843f7ea9..f1b86eb303404 100644
+> > --- a/arch/sparc/kernel/vmlinux.lds.S
+> > +++ b/arch/sparc/kernel/vmlinux.lds.S
+> > @@ -48,6 +48,11 @@ SECTIONS
+> >       {
+> >               _text =3D .;
+> >               HEAD_TEXT
+> > +             ALIGN_FUNCTION();
+> > +#ifdef CONFIG_SPARC64
+> > +             /* Match text section symbols in head_64.S first */
+> > +             *head_64.o(.text)
+> > +#endif
+> >               TEXT_TEXT
+> >               SCHED_TEXT
+> >               LOCK_TEXT
+> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vm=
+linux.lds.h
+> > index eeadbaeccf88b..fd901951549c0 100644
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -553,19 +553,24 @@
+> >    * .text section. Map to function alignment to avoid address changes
+> >    * during second ld run in second ld pass when generating System.map
+> >    *
+> > - * TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
+> > - * code elimination is enabled, so these sections should be converted
+> > - * to use ".." first.
+> > + * TEXT_MAIN here will match symbols with a fixed pattern (for example=
+,
+> > + * .text.hot or .text.unlikely) if dead code elimination or
+> > + * function-section is enabled. Match these symbols first before
+> > + * TEXT_MAIN to ensure they are grouped together.
+> > + *
+> > + * Also placing .text.hot section at the beginning of a page, this
+> > + * would help the TLB performance.
+> >    */
+> >   #define TEXT_TEXT                                                   \
+> >               ALIGN_FUNCTION();                                       \
+> > +             *(.text.asan.* .text.tsan.*)                            \
+> > +             *(.text.unknown .text.unknown.*)                        \
+> > +             *(.text.unlikely .text.unlikely.*)                      \
+> > +             . =3D ALIGN(PAGE_SIZE);                                  =
+ \
+> >               *(.text.hot .text.hot.*)                                \
+> >               *(TEXT_MAIN .text.fixup)                                \
+> > -             *(.text.unlikely .text.unlikely.*)                      \
+> > -             *(.text.unknown .text.unknown.*)                        \
+> >               NOINSTR_TEXT                                            \
+> > -             *(.ref.text)                                            \
+> > -             *(.text.asan.* .text.tsan.*)
+> > +             *(.ref.text)
+> >
+> >
+> >   /* sched.text is aling to function alignment to secure we have same
