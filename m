@@ -1,161 +1,109 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3536219C9E
-	for <llvm@lists.linux.dev>; Tue, 12 Nov 2024 20:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED34C21C182;
+	Tue, 12 Nov 2024 23:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731442418; cv=none; b=uIc3Xu85bYfTZLmjcTC/tSRiNLc/1HkVy2Uw5d2PkNoDRYUnqoT3ms2ENgqP+K3l1dU/4vcFBzdL/qkx5UORTeLS6WJpR5LFv7QZh8i5yiSIud1RD7MIQf+9I47oFPPlh5VMfhFzCS487roXNu3PwXN0omYQchD/u8gdjn/guSM=
+	t=1731453088; cv=none; b=ef4kAOfAQj+MdeVw9la8N7fXONbE/hmavPs9iRa7jIlzwKWZga76RjfPBGbHPoNFPc15qGFx+tQAhsnyW1UAVsh2pL2cPwzbieor0fV3GiciFz1MF8MkuTdF11cgr6Q8beVpj5xFB/tjsfGwg4gCaRd3IXxtjp0zZQPUD+vlNYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731442418; c=relaxed/simple;
-	bh=QY+lZkSp4pEMsOH5ViLZZ71ACCvNupC89gqwzm36rVk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rdZII2hXgieTY/6M8Tw1ugnevzFNl2/z0EmtolwI6/bJriLzTQpGFNmxrv+bQajgSZUlH4g5WXFb3c8dCqfFiNbYOV7x5bmnbW4kD6Xx39NracuT1ilqyYE1L/LZI9t2tGIaWCgNpJ2Q5tTHjNdM83F+RBdsE0y0ME0BmJ4gDgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ibpYzf6m; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1731453088; c=relaxed/simple;
+	bh=J7DBiVuB6kujXPgM2sUDXNT5TqziFoc+KvigSgt2iTw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lOH0z3R8ayh7lrOWcHy4f2+exokatkFoEhRYoKVAJWdNcs8S8AKXtPFLvYgQ27yB1N1c65w26VGV4wVw4QS/7ZVYOVGfmsZbo3GOFlHuGnfdTOxhcHXhKU9pJsaS0CTJF2zLFx+4o7uf5BXqirjr9Vg7F1rHmX1ky4Ck6JHQ88c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lMtGMzxd; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ibpYzf6m"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4608dddaa35so50591cf.0
-        for <llvm@lists.linux.dev>; Tue, 12 Nov 2024 12:13:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731442415; x=1732047215; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ok3qcHy+me2Jj8oTM9OE18MgpCpWLeklNFe0Xu3psIY=;
-        b=ibpYzf6mxp4JV9ihAO1fSoDYz+Nu85egSDMePZtIXbOrCg5fsom4eURWcFmHhzCOxF
-         nnMw28cCyODmKRh1Ep/m+rJgGQxzIno84u4lpAA2ceVxK9K/t49ijibGxqT6fZY7b2aM
-         vh2iD9OT1bPXMlgvKJDrt3/HAw//eE0RsTNO24NtNV7fScp5xm30ZYBHWTOTmTOXO57Z
-         rGmrNfyVFq4G527oDwznn5KG1OxCeVdIArvBqVMkFxhJH+mzA9KpfBgKecA+XXr3I3uj
-         qBCweJKKF9r45GaKPIDMNK6SjzVCl917zJa526JTxcj2LYA82YjRVhuT3VB/UKmewo+a
-         MkCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731442415; x=1732047215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ok3qcHy+me2Jj8oTM9OE18MgpCpWLeklNFe0Xu3psIY=;
-        b=eOFOOqvBIwrD/GvCh+4Ewcva9qvNndp9e/yOim+e96R4yZAW5G93Ci06i2t6p7VG6x
-         j0PVrRgluW3DkIFWxH+lbH2Giz60CQ9fmRjGdRRA545DVTyAf8KcMOlXyfwTQSzooZwL
-         dEjTVbWVgZrx26m+9RdrM73z2GXhyIzHT5Yz98cZ10/gSx7A4uV5p8vg5TxmPItO2hpC
-         JbtVg2JDhR0cR8I7UWPOlamTNGL1jHorDjfhDmbmf/hHKPbhE0sqCv8UEGUqKLmOg8I9
-         BH8rk3O2CWuiI1z7VsIloG+Z8gUlCBBp1VriN/6f2OlgqK6F0FbDmfqfd8/cIgK8YFg/
-         GIQA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0pinqIGx4tkf7o75VKu4r7t4bxHyUDrmD+0DHR0EDTH23YZ7J6yPVaCVcoGND7TRJCAjj@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywjcu04bmPTEQr5+dgrezUVHnx7Yy4FuAt6+1SKKHUyLyFVG8zp
-	G4SUBz8ya8Zd6Y7DxLKgMt8EFRnbBcd/SNz9UuDB8o0Mw0snaBWpYm7hVh88eOiPh6P//udb1Xk
-	yqMvmhsVxckR8Y7PqOChgPeBQSfFJtGEvNYft
-X-Gm-Gg: ASbGnctrA0eOKqaUK/dvMsg0avwN4hvZBpV1Qu64uOxVGBzu1jMh7ZgURSjrRvqeGwn
-	2WIxPNMGcy3YyKwvPFqP/TsElZioYKZ+RzYpdOzlL3ugZ3XpRddtmEQtYhf5U
-X-Google-Smtp-Source: AGHT+IHEhri+khloSfLyc9f+kn+S0I//KWGpBCIikR491QgXS5ZsJTa+TGjEAvCX7DRA5b9a6+qU8vYdidxIcZgIBaA=
-X-Received: by 2002:a05:622a:47c6:b0:461:679f:f1ba with SMTP id
- d75a77b69052e-4634bca4e56mr371601cf.20.1731442415109; Tue, 12 Nov 2024
- 12:13:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lMtGMzxd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731453087; x=1762989087;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J7DBiVuB6kujXPgM2sUDXNT5TqziFoc+KvigSgt2iTw=;
+  b=lMtGMzxdU7+achybDwoHDCOzmB0O9j8GVy9HUBcSSoP6vqzddpt50M2v
+   98QBIFgdT0VeygZPnbjoLbLWinX8i0TPxT6luiUac74SqzYrQ1OmdhyIs
+   Vu6ZvBg3ZzBRrZZMmJalO9ncM4VoST0fAV3ophbXJQDDKxuJmH3l5Kjmj
+   UpOjl5qA2OU5mVv+fq6emq09NB4Mq2+SvR7o9fv7UyQgG/L8iPiMaz+50
+   tp8dt0khrypHEBN40GhQPUIQRiAVb2jXY0ElgLe3NPRb4u216Xobh0J0g
+   7coM7QNIxM27ALHC+Ku+m8UpXo7WIxvoguzej+YTDjzL1OqNMMZBUElOE
+   A==;
+X-CSE-ConnectionGUID: pNjova28S1aV0xiNeheETg==
+X-CSE-MsgGUID: r79d26TLQYKR+3lUa8J98Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31088592"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31088592"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 15:11:27 -0800
+X-CSE-ConnectionGUID: EDB4BjpVSFGZxmIWWyhrQQ==
+X-CSE-MsgGUID: hlAlJtR+QVOMW6HCEKFdzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,149,1728975600"; 
+   d="scan'208";a="87580451"
+Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 12 Nov 2024 15:11:25 -0800
+Received: from kbuild by bcfed0da017c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tB02c-0001ob-1T;
+	Tue, 12 Nov 2024 23:11:22 +0000
+Date: Wed, 13 Nov 2024 07:10:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Melon Liu <melon1335@163.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [rmk:for-next 3/7] arch/arm/mm/ioremap.c:130:32: error: call to
+ undeclared function 'kasan_mem_to_shadow'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202411130711.xfVEiMKn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-4-xur@google.com>
- <44193ca7-9d31-4b58-99cc-3300a6ad5289@gmail.com> <CAF1bQ=ShjoEQZGPjDoy_B6wZdD_jr-RevVXwEDPA_-o-Ba0Omg@mail.gmail.com>
- <e7cd2746-0ad8-452f-aa12-e3a37e8a9288@gmail.com> <CAF1bQ=SYeeKLUTfbqw-KH1rHJCj_CfJBuk+mZUrnnb7aDjRV2A@mail.gmail.com>
- <CAF1bQ=R18HLC2vjCGj+M=VYidrVzz3RT=U8cckXgpgrxc0kG0Q@mail.gmail.com> <70772ce5-9dca-418e-9714-80ba4ae28959@gmail.com>
-In-Reply-To: <70772ce5-9dca-418e-9714-80ba4ae28959@gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Tue, 12 Nov 2024 12:13:22 -0800
-Message-ID: <CAF1bQ=QycziM6GQoTWSMQCGWPkZEDmAHMLfokoJ6k-vn7rCA=g@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
-To: Klara Modin <klarasmodin@gmail.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
-	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I sent the following patch for review:
-https://lkml.org/lkml/2024/11/12/1565
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rmk/linux.git for-next
+head:   315cfa0efa30b8f1c9b8d6b8b5cc9e6c337906ff
+commit: 15c0b4cb0223a5cf9783e3759be115c1ca643368 [3/7] ARM: 9427/1: mm: Fix stack recursion caused by KASAN
+config: arm-integrator_defconfig (https://download.01.org/0day-ci/archive/20241113/202411130711.xfVEiMKn-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411130711.xfVEiMKn-lkp@intel.com/reproduce)
 
-Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411130711.xfVEiMKn-lkp@intel.com/
 
--Rong
+All errors (new ones prefixed by >>):
 
-On Mon, Nov 11, 2024 at 11:45=E2=80=AFPM Klara Modin <klarasmodin@gmail.com=
-> wrote:
->
-> On 2024-11-12 06:38, Rong Xu wrote:
-> > I compared the System.map files from Klara Modin. The linker script is
-> > doing what I expected: relocating the unlikely executed functions to th=
-e
-> > beginning of the .text section.
-> >
-> > However, the problem is with the _stext symbol. It belongs to the
-> > .text section, so
-> > it is positioned after the unlikely (or hot) functions. But it really
-> > needs to be
-> > the start of the text section.
-> >
-> > I checked all vmlinux.lds.S in arch/, I found that most archs
-> > explicitly assign _stext to the same address as _text, with the
-> > following 3 exceptions:
-> >    arch/sh/kernel/vmlinux.lds.S
-> >    arch/mips/kernel/vmlinux.lds.S
-> >    arch/sparc/kernel/vmlinux.lds.S
-> >
-> > Note that we already partially handled arch/sparc/kernel/vmlinux.lds.S
-> > for sparc64.
-> > But we need to handle sparc32 also.
-> >
-> > Additionally, the boot/compressed/vmlinux.lds.S also the TEXT_TEXT
-> > template. However,
-> > I presume these files do not generate the .text.unlikely. or
-> > .text.hot.* sections.
-> >
-> > I sent the following patch to Klara because I don't have an
-> > environment to build and test.
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.=
-lds.S
-> > index 9ff55cb80a64..5f130af44247 100644
-> > --- a/arch/mips/kernel/vmlinux.lds.S
-> > +++ b/arch/mips/kernel/vmlinux.lds.S
-> > @@ -61,6 +61,7 @@ SECTIONS
-> >          /* read-only */
-> >          _text =3D .;      /* Text and read-only data */
-> >          .text : {
-> > +               _stext =3D .;
-> >                  TEXT_TEXT
-> >                  SCHED_TEXT
-> >                  LOCK_TEXT
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > If Klara confirms the fix, I will send the patch for review.
-> >
-> > Thanks,
-> >
-> > -Rong
-> >
->
-> This does indeed fix the issue for me.
->
-> Thanks,
-> Tested-by: Klara Modin <klarasmodin@gmail.com>
+   In file included from arch/arm/mm/ioremap.c:26:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/arm/mm/ioremap.c:130:32: error: call to undeclared function 'kasan_mem_to_shadow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |                 sync_pgds(mm, (unsigned long)kasan_mem_to_shadow(
+         |                                              ^
+   1 warning and 1 error generated.
+
+
+vim +/kasan_mem_to_shadow +130 arch/arm/mm/ioremap.c
+
+   125	
+   126	static inline void sync_vmalloc_pgds(struct mm_struct *mm)
+   127	{
+   128		sync_pgds(mm, VMALLOC_START, VMALLOC_END);
+   129		if (IS_ENABLED(CONFIG_KASAN_VMALLOC))
+ > 130			sync_pgds(mm, (unsigned long)kasan_mem_to_shadow(
+   131						(void *)VMALLOC_START),
+   132				      (unsigned long)kasan_mem_to_shadow(
+   133						(void *)VMALLOC_END));
+   134	}
+   135	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
