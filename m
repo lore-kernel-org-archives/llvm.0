@@ -1,70 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22CD41AAE06;
-	Tue, 12 Nov 2024 09:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394B720E303;
+	Tue, 12 Nov 2024 09:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731404244; cv=none; b=q0CLu2URvw9FJ586WRZIUQ3ZLSFqk70Z6f/x0dfjwGGSEjevgl/RNLjseAL1RFpfloOlxwpb7toEB1TW84P1QQ+aMrNdCLVEwpXvZAt563jVL/ltHJVKXg+SH5d1MxTMOLt+lK/DySyvYuxCaa9EpTw9ImBHo82MxpAAMIfH+xQ=
+	t=1731404841; cv=none; b=mkhoyV2X5CKy1G0xe8sbIdBUOe9E/XtjHjwra6n9aJoRzYHpaSZA2/a0So4QZdV5JcNia5b5dvizLVboWOed2i2oQbMTZY4bHKXGAxN1ylrwH40yUQzlzxkMfa+XX7t5HjP2YiXWx0g98uYV0UkA9N7WLV+SvAJF2ZVEF25PP3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731404244; c=relaxed/simple;
-	bh=x6RpGeAnIQkUeeqnZeB9oJx8eLP+7qJn7Agivvr1kH0=;
+	s=arc-20240116; t=1731404841; c=relaxed/simple;
+	bh=RgQLgKteT7/0JHP5evKwF5/pwbWHfdTs6vICOeDbino=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hb5qGruG8R040cuIBukhiIM86G4pG2OS3WgAWjRD9oirqCWJJ2I+gtxv85PAMOdmk0Y7qARcXlmDmip5sU6XFXp5WUsBjT/Wks/B19sBILHwJO6W/tEplOTLN/mRGEggzeojTJ3F1jmumN4PLugf8ZZUkDcRWRK3FE6Je9XTRTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0kBBUyf; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=iPtJklZcw5wTR1yIKtzXgbpG5xLM8HWE3yxSH8AIZdjanRT38ygcXWHMt9LP0eGhlfxzZbUMYser6UkXBQiOEvwxqaBE5Sz0h0l0bd9PhlOzb9Pxm/BZXlbAIgsx9C+gAxtQLfdo1eBUEffQO2eP5r5uRx1X2fsf8n/pFwvp6V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gn8QF6ar; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0kBBUyf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gn8QF6ar"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731404242; x=1762940242;
+  t=1731404840; x=1762940840;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=x6RpGeAnIQkUeeqnZeB9oJx8eLP+7qJn7Agivvr1kH0=;
-  b=b0kBBUyfBENUJe+rJC4pXXkievIb6u6xKrXdvT6snA8k39iKwmTjx3ug
-   VebbZNx7UcjiVI+bZbzIeuHgTvyN5ponuI6owtUAjLnufpwBuKRWv9wkA
-   rWWw4wgA0MP/8tsTRx61BO5/hLu76dHjnzDNQkF1OsU1hwgWwG+h9Jye8
-   baC4EFnCR73+XPRBPGraYkQ5PJuvZJVy42YsAaSAov2+EeAgxGeOobsTC
-   B4QK7z2zIdoS3ZrBF9MS/Dw800XrlXbrLygQgrB9AzEsctMz5EOwUOUVw
-   lIpNAgAPwTEAD1xTj2Oo3lZqTFU9166tgOnuciZM2/IFjMQCNzWpKUMyh
+  bh=RgQLgKteT7/0JHP5evKwF5/pwbWHfdTs6vICOeDbino=;
+  b=gn8QF6arubF+BTDFCkP+Ny3pOomr4NTy3C/k9nEeQ23O45v+IXlosz/K
+   0uTiu9gJeG0wNmT5+3fE1dB+KzsN/1fHIfv3L8pMGIwJj8OYw1ZKbj5/b
+   QuCXfg+DXPgwvUg1TVtImu6uWXQZHkNk1n89HB85ZjexgfN1WueQY2VAN
+   d9zXa6yja+aWzy/gtulInWPAcevs2qbnuAgWXbMPoXkKvrWFWk73bFcpE
+   9dTsW627MQM7s0XUwQdf4UdUoptPrC9H+z99J1JyWDm1FagegnM6hAD3Q
+   vHoJ0A2VVtYKSYVCkaBf8/mkglrbSv1Ebew/lb/dj9lQGHaHp8p++2zwk
    A==;
-X-CSE-ConnectionGUID: BtzDurMnRUGRJrhd1/Z9JQ==
-X-CSE-MsgGUID: Ja4hndCKSUCECTxf3JF9IA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="31324338"
-X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
-   d="scan'208";a="31324338"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 01:37:21 -0800
-X-CSE-ConnectionGUID: hI9Z+u1QTGCwCowQKLlgfg==
-X-CSE-MsgGUID: qS5Oh+8QSOOoIlWEEEnIVg==
+X-CSE-ConnectionGUID: CCE4ZQ14SPO6PhzszCTQKw==
+X-CSE-MsgGUID: zWkPrrjCTDWGBe8U/SQclA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31383938"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31383938"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 01:47:19 -0800
+X-CSE-ConnectionGUID: cjOcukJIT+iEm5UhVBFeeA==
+X-CSE-MsgGUID: iQePexooTqeMVx3w9gipNw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
-   d="scan'208";a="87726566"
+   d="scan'208";a="92318207"
 Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Nov 2024 01:37:11 -0800
+  by orviesa005.jf.intel.com with ESMTP; 12 Nov 2024 01:47:12 -0800
 Received: from kbuild by bcfed0da017c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tAnKd-0000fh-1o;
-	Tue, 12 Nov 2024 09:37:07 +0000
-Date: Tue, 12 Nov 2024 17:36:43 +0800
+	id 1tAnUL-0000gd-0p;
+	Tue, 12 Nov 2024 09:47:09 +0000
+Date: Tue, 12 Nov 2024 17:47:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	willy@infradead.org, liam.howlett@oracle.com,
-	lorenzo.stoakes@oracle.com, mhocko@suse.com, vbabka@suse.cz,
-	hannes@cmpxchg.org, mjguzik@gmail.com, oliver.sang@intel.com,
-	mgorman@techsingularity.net, david@redhat.com, peterx@redhat.com,
-	oleg@redhat.com, dave@stgolabs.net, paulmck@kernel.org,
-	brauner@kernel.org, dhowells@redhat.com, hdanton@sina.com,
-	hughd@google.com, minchan@google.com, jannh@google.com,
-	shakeel.butt@linux.dev, souravpanda@google.com,
-	pasha.tatashin@soleen.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kernel-team@android.com,
-	surenb@google.com
-Subject: Re: [PATCH 2/4] mm: move per-vma lock into vm_area_struct
-Message-ID: <202411121742.VK3YF84e-lkp@intel.com>
-References: <20241111205506.3404479-3-surenb@google.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH v8 12/29] riscv/shstk: If needed allocate a new shadow
+ stack on clone
+Message-ID: <202411121717.INT1geTN-lkp@intel.com>
+References: <20241111-v5_user_cfi_series-v8-12-dce14aa30207@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,291 +85,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241111205506.3404479-3-surenb@google.com>
+In-Reply-To: <20241111-v5_user_cfi_series-v8-12-dce14aa30207@rivosinc.com>
 
-Hi Suren,
+Hi Deepak,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 931086f2a88086319afb57cd3925607e8cda0a9f]
+[auto build test WARNING on 64f7b77f0bd9271861ed9e410e9856b6b0b21c48]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-introduce-vma_start_read_locked-_nested-helpers/20241112-050531
-base:   931086f2a88086319afb57cd3925607e8cda0a9f
-patch link:    https://lore.kernel.org/r/20241111205506.3404479-3-surenb%40google.com
-patch subject: [PATCH 2/4] mm: move per-vma lock into vm_area_struct
-config: um-defconfig (https://download.01.org/0day-ci/archive/20241112/202411121742.VK3YF84e-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepak-Gupta/mm-Introduce-ARCH_HAS_USER_SHADOW_STACK/20241112-050530
+base:   64f7b77f0bd9271861ed9e410e9856b6b0b21c48
+patch link:    https://lore.kernel.org/r/20241111-v5_user_cfi_series-v8-12-dce14aa30207%40rivosinc.com
+patch subject: [PATCH v8 12/29] riscv/shstk: If needed allocate a new shadow stack on clone
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20241112/202411121717.INT1geTN-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411121742.VK3YF84e-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411121717.INT1geTN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411121742.VK3YF84e-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411121717.INT1geTN-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-         |         ^
-   In file included from ipc/msg.c:30:
-   In file included from include/linux/mm.h:1143:
-   In file included from include/linux/huge_mm.h:7:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:255:10: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     255 |         case 2: set->sig[1] = -1;
-         |                 ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from ipc/msg.c:30:
-   In file included from include/linux/mm.h:2234:
+   In file included from arch/riscv/kernel/process.c:17:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from ipc/msg.c:33:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from ipc/msg.c:33:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from ipc/msg.c:33:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> ipc/msg.c:497:20: warning: implicit conversion from 'int' to 'unsigned short' changes value from 32768000 to 0 [-Wconstant-conversion]
-     497 |         msginfo->msgseg = MSGSEG;
-         |                         ~ ^~~~~~
-   include/uapi/linux/msg.h:87:38: note: expanded from macro 'MSGSEG'
-      87 | #define MSGSEG (__MSGSEG <= 0xffff ? __MSGSEG : 0xffff)
-         |                                      ^~~~~~~~
-   include/uapi/linux/msg.h:86:36: note: expanded from macro '__MSGSEG'
-      86 | #define __MSGSEG ((MSGPOOL * 1024) / MSGSSZ) /* max no. of segments */
-         |                   ~~~~~~~~~~~~~~~~~^~~~~~~~
-   63 warnings and 3 errors generated.
---
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   include/linux/mm.h:877:2: error: call to undeclared function 'vma_lock_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     877 |         vma_lock_init(&vma->vm_lock);
-         |         ^
-   include/linux/mm.h:877:2: note: did you mean 'osq_lock_init'?
-   include/linux/osq_lock.h:23:20: note: 'osq_lock_init' declared here
-      23 | static inline void osq_lock_init(struct optimistic_spin_queue *lock)
-         |                    ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   include/linux/mm.h:877:22: error: no member named 'vm_lock' in 'struct vm_area_struct'
-     877 |         vma_lock_init(&vma->vm_lock);
-         |                        ~~~  ^
-   include/linux/mm.h:878:7: error: no member named 'vm_lock_seq' in 'struct vm_area_struct'
-     878 |         vma->vm_lock_seq = UINT_MAX;
-         |         ~~~  ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/tty/tty_port.c:8:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/tty/tty_port.c:266:2: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     266 |         INIT_KFIFO(port->xmit_fifo);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kfifo.h:136:69: note: expanded from macro 'INIT_KFIFO'
-     136 |         __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : ARRAY_SIZE(__tmp->buf) - 1;\
-         |                       ~                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
-   14 warnings and 3 errors generated.
+>> arch/riscv/kernel/process.c:245:36: warning: expression result unused [-Wunused-value]
+     245 |                 ssp ? set_active_shstk(p, ssp) : 0;
+         |                                                  ^
+   2 warnings generated.
 
 
-vim +497 ipc/msg.c
+vim +245 arch/riscv/kernel/process.c
 
-a0d092fc2df845 Pierre Peiffer  2008-04-29  476  
-156d9ed1260ee5 Al Viro         2017-07-09  477  static int msgctl_info(struct ipc_namespace *ns, int msqid,
-156d9ed1260ee5 Al Viro         2017-07-09  478  			 int cmd, struct msginfo *msginfo)
-a0d092fc2df845 Pierre Peiffer  2008-04-29  479  {
-2cafed30f150f7 Davidlohr Bueso 2013-07-08  480  	int err;
-27c331a1746142 Manfred Spraul  2018-08-21  481  	int max_idx;
-5a06a363ef4844 Ingo Molnar     2006-07-30  482  
-5a06a363ef4844 Ingo Molnar     2006-07-30  483  	/*
-5a06a363ef4844 Ingo Molnar     2006-07-30  484  	 * We must not return kernel stack data.
-^1da177e4c3f41 Linus Torvalds  2005-04-16  485  	 * due to padding, it's not enough
-^1da177e4c3f41 Linus Torvalds  2005-04-16  486  	 * to set all member fields.
-^1da177e4c3f41 Linus Torvalds  2005-04-16  487  	 */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  488  	err = security_msg_queue_msgctl(NULL, cmd);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  489  	if (err)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  490  		return err;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  491  
-156d9ed1260ee5 Al Viro         2017-07-09  492  	memset(msginfo, 0, sizeof(*msginfo));
-156d9ed1260ee5 Al Viro         2017-07-09  493  	msginfo->msgmni = ns->msg_ctlmni;
-156d9ed1260ee5 Al Viro         2017-07-09  494  	msginfo->msgmax = ns->msg_ctlmax;
-156d9ed1260ee5 Al Viro         2017-07-09  495  	msginfo->msgmnb = ns->msg_ctlmnb;
-156d9ed1260ee5 Al Viro         2017-07-09  496  	msginfo->msgssz = MSGSSZ;
-156d9ed1260ee5 Al Viro         2017-07-09 @497  	msginfo->msgseg = MSGSEG;
-d9a605e40b1376 Davidlohr Bueso 2013-09-11  498  	down_read(&msg_ids(ns).rwsem);
-72d1e611082eda Jiebin Sun      2022-09-14  499  	if (cmd == MSG_INFO)
-156d9ed1260ee5 Al Viro         2017-07-09  500  		msginfo->msgpool = msg_ids(ns).in_use;
-72d1e611082eda Jiebin Sun      2022-09-14  501  	max_idx = ipc_get_maxidx(&msg_ids(ns));
-72d1e611082eda Jiebin Sun      2022-09-14  502  	up_read(&msg_ids(ns).rwsem);
-72d1e611082eda Jiebin Sun      2022-09-14  503  	if (cmd == MSG_INFO) {
-72d1e611082eda Jiebin Sun      2022-09-14  504  		msginfo->msgmap = min_t(int,
-72d1e611082eda Jiebin Sun      2022-09-14  505  				     percpu_counter_sum(&ns->percpu_msg_hdrs),
-72d1e611082eda Jiebin Sun      2022-09-14  506  				     INT_MAX);
-72d1e611082eda Jiebin Sun      2022-09-14  507  		msginfo->msgtql = min_t(int,
-72d1e611082eda Jiebin Sun      2022-09-14  508  		                     percpu_counter_sum(&ns->percpu_msg_bytes),
-72d1e611082eda Jiebin Sun      2022-09-14  509  				     INT_MAX);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  510  	} else {
-156d9ed1260ee5 Al Viro         2017-07-09  511  		msginfo->msgmap = MSGMAP;
-156d9ed1260ee5 Al Viro         2017-07-09  512  		msginfo->msgpool = MSGPOOL;
-156d9ed1260ee5 Al Viro         2017-07-09  513  		msginfo->msgtql = MSGTQL;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  514  	}
-27c331a1746142 Manfred Spraul  2018-08-21  515  	return (max_idx < 0) ? 0 : max_idx;
-^1da177e4c3f41 Linus Torvalds  2005-04-16  516  }
-2cafed30f150f7 Davidlohr Bueso 2013-07-08  517  
+   209	
+   210	int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+   211	{
+   212		unsigned long clone_flags = args->flags;
+   213		unsigned long usp = args->stack;
+   214		unsigned long tls = args->tls;
+   215		unsigned long ssp = 0;
+   216		struct pt_regs *childregs = task_pt_regs(p);
+   217	
+   218		/* Ensure all threads in this mm have the same pointer masking mode. */
+   219		if (IS_ENABLED(CONFIG_RISCV_ISA_SUPM) && p->mm && (clone_flags & CLONE_VM))
+   220			set_bit(MM_CONTEXT_LOCK_PMLEN, &p->mm->context.flags);
+   221	
+   222		memset(&p->thread.s, 0, sizeof(p->thread.s));
+   223	
+   224		/* p->thread holds context to be restored by __switch_to() */
+   225		if (unlikely(args->fn)) {
+   226			/* Kernel thread */
+   227			memset(childregs, 0, sizeof(struct pt_regs));
+   228			/* Supervisor/Machine, irqs on: */
+   229			childregs->status = SR_PP | SR_PIE;
+   230	
+   231			p->thread.s[0] = (unsigned long)args->fn;
+   232			p->thread.s[1] = (unsigned long)args->fn_arg;
+   233		} else {
+   234			/* allocate new shadow stack if needed. In case of CLONE_VM we have to */
+   235			ssp = shstk_alloc_thread_stack(p, args);
+   236			if (IS_ERR_VALUE(ssp))
+   237				return PTR_ERR((void *)ssp);
+   238	
+   239			*childregs = *(current_pt_regs());
+   240			/* Turn off status.VS */
+   241			riscv_v_vstate_off(childregs);
+   242			if (usp) /* User fork */
+   243				childregs->sp = usp;
+   244			/* if needed, set new ssp */
+ > 245			ssp ? set_active_shstk(p, ssp) : 0;
+   246			if (clone_flags & CLONE_SETTLS)
+   247				childregs->tp = tls;
+   248			childregs->a0 = 0; /* Return value of fork() */
+   249			p->thread.s[0] = 0;
+   250		}
+   251		p->thread.riscv_v_flags = 0;
+   252		if (has_vector())
+   253			riscv_v_thread_alloc(p);
+   254		p->thread.ra = (unsigned long)ret_from_fork;
+   255		p->thread.sp = (unsigned long)childregs; /* kernel sp */
+   256		return 0;
+   257	}
+   258	
 
 -- 
 0-DAY CI Kernel Test Service
