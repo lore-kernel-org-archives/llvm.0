@@ -1,140 +1,177 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9957F17624F
-	for <llvm@lists.linux.dev>; Mon, 11 Nov 2024 22:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34199204002
+	for <llvm@lists.linux.dev>; Tue, 12 Nov 2024 01:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731364760; cv=none; b=uuEujtMBC3s3gHXHAPRvpI0mZJ8GOFBoQy2cUZWuJSStS8PsKiZzxp5ZybSeclTv7jz9kKtYwxcdoLsF2izLCAaB9kyv0+aARv1xefdsBs4fJywDGEBCVC1bsrBeVggHP8CJVGKwkpo4FZMlQwZIDcAQT5eMbDnYdP9ayRRqAFU=
+	t=1731376797; cv=none; b=tAQzX8SK98vuJdZdhGUFEz0dtFpcabNc+ueiNMev/w9qqWAI900F+fBK/aDSNMDHMjEWeIkfZrMY/Fd0rKy1Mas5EPqpmVMvk0vXUvruXe3iSPJ1nP6/NhmyQw483pJAUav3W7tpiXvwLW0ZvUU5DWKZQK0UCSiTp6tkyoggKso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731364760; c=relaxed/simple;
-	bh=eB8Ofe1WFjYWH1BdIe5Spco+AoLzN0kxnSrTkBUA88Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=onomI+JHiE+H8omtZYRu1BWjGw6ngCDN6jvXUx6ysFr2l3SqCOu2oilUKirW/Ik896BHskAhiKtvB3YpbAcn1k3Tka51gMwrHiYnQIoU/7TpMTVrMYk8pZO+twtg8L/LNnQCffYT1tRnn1vC9PniRAZFanwsD9PSBihF35cW/Es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sbDt9cuG; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1731376797; c=relaxed/simple;
+	bh=aXYZ1wmyao3Lcc2X2UFTZZ/JZa17V3RMqI9Bh2tXkH0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=UQ9Cf2d78I2Vy1QXIw4uUYOqX8eKpjzz6qmS09wdHP2Dm2/EGmMZaGVlTSx6BukO+ZqI1SB8duoPO0nXT/OsySgZeaA8aZM+M3iULyo78nGa47mwzwlVQ5rLBoygLM8mQaem6IbR3CKLpzuT239b7ZBucTiFffQjKcRxTY98fKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcuSSdbO; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sbDt9cuG"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4608dddaa35so101561cf.0
-        for <llvm@lists.linux.dev>; Mon, 11 Nov 2024 14:39:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcuSSdbO"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4314f38d274so64898275e9.1
+        for <llvm@lists.linux.dev>; Mon, 11 Nov 2024 17:59:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731364757; x=1731969557; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/2kkJJPrMSags8YoRSR8VcHdm0Q+fmhGso6Vl4PBlQI=;
-        b=sbDt9cuGdWMCZmdJ0N6GBg5xMZyFqxa1vqi0Y9+hqfiI2uccgDh9MZ3XUnHuGahkyT
-         CKEycLS5qLV9vlKlr71vtF+ucdgNUAB8uFFfFxT4f6ctnJrB8aW6GPjD6EfRiLXYXcRL
-         WdgxydAs42pIueuFUiZBxnbk5DT9s/JxvDNkQNnARxtpX6BRwi6pHF39fjq1APrmFVuM
-         frjLqb7luMR4BGptDjiEZW5p6Kr4uhWyR6CW+nj6SSEA+Pjy2Bi4WvMUaGD4NUtFYZ6l
-         4cbpTLlbduwzZZgoC0V9BQkmgYbhm4LWfiYWcNh4wt0+SCuJwr1CEv6B86PJo7xgJnJo
-         5xtA==
+        d=gmail.com; s=20230601; t=1731376793; x=1731981593; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8v4PHWLECGvbJAUU4tXSsbcNs9XiIiR6lHIjzJ5k2M=;
+        b=RcuSSdbOQHlB2/V8UGEvcxr5EedWu36E6sCTtjmtg5cirIaZaTZEdFj+3Qwist4P31
+         FbbqSh61Nb+U43yX9eL9sArx9e2AvMuozVzBUxWkcUsqAA/pk9bvJ5bEFAwc7QBd3RdJ
+         +G9phzVkUKq44KFvq+bVjybYRp2juLPH3REIifO6+IKcjdfhEcoblJNvjoLuihR9bv8Y
+         mxVc0tk2K2VIPOUQE8lpZlWHL0M2J2GHaJau4ssptZa6sGfjGo/A+obNfHFrbFcGFMsy
+         LlvOQAg/myFb4Y9/ckPaSQLuHW2OF690s17hxr9qM7ykz++rGa3bhmwlXce9fbJnstSi
+         8RUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731364757; x=1731969557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/2kkJJPrMSags8YoRSR8VcHdm0Q+fmhGso6Vl4PBlQI=;
-        b=lTvh+jeasG7VgpEduihGzuaOmbgzNGptmg6DlgLU0nuvlbJX0J3MQBcrlrGSw+JHxe
-         qla4ImgYdabeqQG52bsaau1quf8hsnDW/N+bxYVlG/UHQNF71zEoqGD+JxzpneefBq+E
-         GAWUdXe3Qh+eHN4kjpFh6P2R0MQkmyWaATCqhlOx+Zhk+tE+Nbg31cNZpXmvn+ka0/oS
-         +oazTTmOTGLGqwL+jRJ9GwJ2ENyBPGxzvhhyu5H70yzx1AvUwzcv89v3z5nsEyN8dcQH
-         1H0zxY4fGUWzThLWZ2bOVGYoLSfwFNbiEkdu1NHJdSfvzP8aL0ZyBiceRqBV6ajMTcwX
-         YtBw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXZ+e4J+u7Jjs3JrVqmVc1VVsMO0QaqNMzsnIHc0Tood47bTxomCmXK7R2Wt+/5bwSsVdZ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzysVpTO/0oZnyxGfLKwXBiS/T0WUVMlYzXQPCpkvxa0vw5M/27
-	FFJ29YvvcdAF1p4SYRMOo9BRgCKn2OuPAjSPkkX8KkVuxGnvJiVcBX0scivFL1l56Mc1pSxBHF+
-	5GEZttG1eGHz7sAp0r38qHKMq8SujdmyjC2Vm
-X-Gm-Gg: ASbGncvIJXcvTa7h7CAd34qi4kF+RUl9P+A1lGxQj2A75Hzbd+BrZHjAaC0DvEnreXX
-	hroRMzPQDdmwFzB/1L/eHqruX4zzASb1AKf3wms+SGeLSLzmgutyd5OtyYzn85w==
-X-Google-Smtp-Source: AGHT+IGWz5fxnaCrLCNd/OH6jFNg44ylUdGuht8uH/3QX9IXKi/RoL7fie/C49RsOcadfvZfnBz8SZRoCkm3npHj8KM=
-X-Received: by 2002:a05:622a:190a:b0:462:c96a:bb30 with SMTP id
- d75a77b69052e-4633ef60502mr1176031cf.2.1731364757391; Mon, 11 Nov 2024
- 14:39:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1731376793; x=1731981593;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8v4PHWLECGvbJAUU4tXSsbcNs9XiIiR6lHIjzJ5k2M=;
+        b=S7NimTtN6ugxDCywGWVPH0lCGFP+qT78zndL6jG0zKWycQ7zxdiZ0brh4UlZIphQwp
+         ZSFBSJN45y758/m5it79ApMSAgUBmiZ32aH5+VGXwwsyZ8XbzGj2rmxnR5Hni0YX6ne9
+         +OxpsK/zQ2ikLIpGUQc556LFz1XQcTZ4K0LfGTJzuawCcdWt7fPbdiFQhKNplym4XJNK
+         eQgdNPjBxNHbdQVcVgOpVblT2Ao2sD7yVyerZHa1E+T5Y0yazlNcFhCeE5yOvMKTwtLv
+         Ymwr3DKqvZw59H+Wndai1Kot3BB5c3e/lmkfnO/g4i/4rxdMVlraRVBUFihYkXFwemcf
+         pA/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUIS/+R7S8BTTipBsnQm86Lu/whPBxQXF753upucjTHSpbKvw+aQgUmZ/6USnoiN35p4iBK@lists.linux.dev
+X-Gm-Message-State: AOJu0YytZUp9uju7Nk8OzTX2JywA40ugZtVazhL4yBLvQM0JHaANsiRF
+	61h9rZrJR/+nfnnVptOydzvuqF9X0QPQTxaS1ehOWudTbmsqPCej
+X-Google-Smtp-Source: AGHT+IH/di55KhvyH/nFAQd0By19c/iW/d+gHvodKaUdHseEE4eBVOofeL+t8Uvg4Omb0BJuQIWJWA==
+X-Received: by 2002:a05:600c:1396:b0:431:5c3d:1700 with SMTP id 5b1f17b1804b1-432b7518e11mr148469195e9.21.1731376793276;
+        Mon, 11 Nov 2024 17:59:53 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-432cf2b9fb9sm1783295e9.1.2024.11.11.17.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2024 17:59:52 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	upstream@airoha.com
+Subject: [PATCH v7 0/3] crypto: Add EIP-93 crypto engine support
+Date: Tue, 12 Nov 2024 02:58:57 +0100
+Message-ID: <20241112015920.22564-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241026051410.2819338-1-xur@google.com> <20241026051410.2819338-4-xur@google.com>
- <44193ca7-9d31-4b58-99cc-3300a6ad5289@gmail.com> <CAF1bQ=ShjoEQZGPjDoy_B6wZdD_jr-RevVXwEDPA_-o-Ba0Omg@mail.gmail.com>
- <e7cd2746-0ad8-452f-aa12-e3a37e8a9288@gmail.com>
-In-Reply-To: <e7cd2746-0ad8-452f-aa12-e3a37e8a9288@gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Mon, 11 Nov 2024 14:39:05 -0800
-Message-ID: <CAF1bQ=SYeeKLUTfbqw-KH1rHJCj_CfJBuk+mZUrnnb7aDjRV2A@mail.gmail.com>
-Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
-To: Klara Modin <klarasmodin@gmail.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
-	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-In the new System.map, we have:
-ffffffff81112400 T _stext
+This small series add support for the Inside Secure EIP-93.
+This is a predecessor of the current supported EIP197. It doesn't
+require a firmware but instead it's embedded in the SoC.
 
-This looks wrong. It should point to the beginning of the text, like
-ffffffff81100400 T _stext
+First patch extend guard for spinlock_bh.
 
-I'll do some debugging on this.
+The other actually implement Documentation and Driver.
 
--Rong
+The Driver pass all the normal selft test for the supported
+algo and also pass the EXTRA test with fuzz_iterations set to 10000.
 
-On Mon, Nov 11, 2024 at 1:32=E2=80=AFPM Klara Modin <klarasmodin@gmail.com>=
- wrote:
->
-> On 2024-11-11 21:43, Rong Xu wrote:
-> > Thanks for reporting this issue!
-> >
-> > I'm assuming your kernel build enables dead code elimination and
-> > uses the --ffunction-sections compiler flag. Without this patch, all
-> > the functions
-> > -- I think there are only .text.unlikely.* and .text.* are grouped
-> > together in the
-> > final vmlinux. This patch modifies the linker script to place
-> > .text.unlikely.* functions
-> >   before .text.* functions. I've examined arch/mips/kernel/vmlinux.lds.=
-S, and
-> > haven't found any obvious issue.
-> >
-> > Can you send me the following?
-> > (1) the kernel build command
-> > (2) System.map without the patch
-> > (3) System.map with the patch
-> >
-> > Best regards,
-> >
-> > -Rong
-> >
-> I don't set -ffunction-sections explicitly but it seems to be used when
-> I look at the .cmd files. The build command is nothing fancy, I just set
-> ARCH=3Dmips CROSS_COMPILE=3Dmips64-unknown-linux-gnuabin32- and build wit=
-h
-> make -j24.
->
-> I've attached the System.map, built on next-20241111 as well as it with
-> this series reverted.
->
-> Regards,
-> Klara Modin
+Changes v7:
+- Fix copypaste error in __eip93_hash_init
+- Rework import/export to actually export the partial hash
+  (we actually unmap DMA on export)
+- Rename no_finalize variable to better partial_hash
+- Rename 3rd commit title and drop Mediatek from title.
+- Add Cover Letter
+- Add Reviewed-by to DT commit
+(cumulative changes from old series that had changelog in each patch)
+Changes v6:
+- Add SoC specific compatible
+- Add now supported entry for compatible with no user
+Changes v5:
+- Add Ack tag to guard patch
+- Comment out compatible with no current user
+- Fix smatch warning (reported by Dan Carpenter)
+Changes v4:
+- Out of RFC
+- Add missing bitfield.h
+- Drop useless header
+Changes v3:
+- Mute warning from Clang about C23
+- Fix not inizialized err
+- Drop unused variable
+- Add SoC compatible with generic one
+Changes v2:
+- Rename all variables from mtk to eip93
+- Move to inside-secure directory
+- Check DMA map errors
+- Use guard API for spinlock
+- Minor improvements to code
+- Add guard patch
+- Change to better compatible
+- Add description for EIP93 models
+
+Christian Marangi (3):
+  spinlock: extend guard with spinlock_bh variants
+  dt-bindings: crypto: Add Inside Secure SafeXcel EIP-93 crypto engine
+  crypto: Add Inside Secure SafeXcel EIP-93 crypto engine support
+
+ .../crypto/inside-secure,safexcel-eip93.yaml  |   67 ++
+ MAINTAINERS                                   |    7 +
+ drivers/crypto/Kconfig                        |    1 +
+ drivers/crypto/Makefile                       |    1 +
+ drivers/crypto/inside-secure/eip93/Kconfig    |   20 +
+ drivers/crypto/inside-secure/eip93/Makefile   |    5 +
+ .../crypto/inside-secure/eip93/eip93-aead.c   |  710 ++++++++++++
+ .../crypto/inside-secure/eip93/eip93-aead.h   |   38 +
+ .../crypto/inside-secure/eip93/eip93-aes.h    |   16 +
+ .../crypto/inside-secure/eip93/eip93-cipher.c |  413 +++++++
+ .../crypto/inside-secure/eip93/eip93-cipher.h |   60 +
+ .../crypto/inside-secure/eip93/eip93-common.c |  823 ++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-common.h |   23 +
+ .../crypto/inside-secure/eip93/eip93-des.h    |   16 +
+ .../crypto/inside-secure/eip93/eip93-hash.c   | 1012 +++++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-hash.h   |   78 ++
+ .../crypto/inside-secure/eip93/eip93-main.c   |  502 ++++++++
+ .../crypto/inside-secure/eip93/eip93-main.h   |  152 +++
+ .../crypto/inside-secure/eip93/eip93-regs.h   |  335 ++++++
+ include/linux/spinlock.h                      |   13 +
+ 20 files changed, 4292 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+ create mode 100644 drivers/crypto/inside-secure/eip93/Kconfig
+ create mode 100644 drivers/crypto/inside-secure/eip93/Makefile
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aes.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-des.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-regs.h
+
+-- 
+2.45.2
+
