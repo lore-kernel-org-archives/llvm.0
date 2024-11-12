@@ -1,59 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84AB212160;
-	Tue, 12 Nov 2024 10:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB0E2123E0;
+	Tue, 12 Nov 2024 10:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731406156; cv=none; b=L8EAJ1WhNA33WOVZSM79OH0Chauqb7vU5T555Od3PFLMlUkIyBzgpQXx6LUHKFaYSg36vsk8D+z7F/9qxXMhM+DgFX84FIeowf2DUYh5noYn7+jxliZENogHEkCLa69rkSysYJakDfyfRUM44YOR8G+hOErL1Dt8Fn2AAEi5dFk=
+	t=1731406765; cv=none; b=KdF7AkXt6yySFUZcDGhSrE1SQhQP6KysAURhv7Vmr/pU39ux6PSnF6ya4cOjaWLOytc8l/OQELRMJcuWlZdOmFrzH2est3xWCcdkNi1DpZac6FFFYPxw3SeUVolAvvZAOmGjpcqEPdBiRbP+ox4eFwYQQqTqCBpPXDggJKw7bqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731406156; c=relaxed/simple;
-	bh=5WEzNQzknxX/zlAL9Qx9kMSoOVROMzKSOzm2xf3xRKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZoHsC7CvWPFj+7rjhXHLVUTAIFvOt9UffNI+p49ntxQT1qSDWv/N3YwvlgY7xnSPk9LSoGr5aV3WO1zTdore+4SNr012E6e+dBsitMmBKVTIFDKjvfBhAgXTiBGHSiLAuNq/NHXTFNeEh3sLmCKsfvhfGa1iR3pxiyYYxuyWS+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g6iWOcgG; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1731406765; c=relaxed/simple;
+	bh=hOV0Cyam6/MaGDK/wCOTgJNkoOmx/0lpY0GypN54K+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=crIJ0Rxe/W6TPRg+u7cQuDQylfhRdu/K5Sib/+upBFtQPyFq5ygb+FTyT+FDHGUrh8N3EBLpdLuqkgN/mNTQlXIuT1VYIgetCadvVGryEVlvLxSlOvBG/GUHy52vv2ZeiJ3snfSrIasQBsMbvQOzVBHriPN0up+Njx5DullyVBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ObsaxiO8; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g6iWOcgG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ObsaxiO8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731406154; x=1762942154;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5WEzNQzknxX/zlAL9Qx9kMSoOVROMzKSOzm2xf3xRKI=;
-  b=g6iWOcgG2VwhCQ242aqlVwDANixfiVVeGyyedBKLFs6Q72THqhj+F0VF
-   KlUrqLfx4QLom0YvB8tax/gKZO8r6Eqymy8m0kHUH3rksonkqcJdQuv3G
-   +h0Iorar324Jp6HGaNhFLioiq54cF7atP4sUTHoBZ0H/IukvQLxFU6d5T
-   HaNtlwRRyEf8LFEhnDQLZeowMPuerfQ/BEOTdqH4wX5xuPh1Vohidm1e3
-   dJ4E6urxkWgpE3xCgCz8fy/hpJ2v/WWBIyrgJ78WJr0/ROF8B0C4ml8hS
-   ts0VUhWD1Z4mLd6c2moWcMpBaNxJ4ampkD0mzetsxfgWtDK6ogaiOkh0M
+  t=1731406763; x=1762942763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hOV0Cyam6/MaGDK/wCOTgJNkoOmx/0lpY0GypN54K+s=;
+  b=ObsaxiO8wCxBjuGXOnW89falT4/h5sl30+kAUdTrGVqHyf6o7N/ih4To
+   Hr82Ut8Q48ZYeygBwy++d+IbHK174po3XTxbOzeFYkgnfaKPqA6Trs6B6
+   PwbpbL2W2fZZs/chXoTz4cfJZQb5Yr9sI/lMWHIXUony5ceVbz/IF2bjQ
+   9UWi+B8La9UlVCsoFAR5g5aNfZ/LqMPisAP3QXhBGjC94+zPp3F2y7VHL
+   pjdHwvprF+WQ62DLv2IIunaar4WZ2CBQzdPRLM3ptlgnOHpH1AdW5iPMi
+   EcyRUQJv+JWYdCnt8UVrdP0d3AqTvqV1tejh9C46erWDPEdUNn+6BnYio
    Q==;
-X-CSE-ConnectionGUID: fZANGStWTxeYTAq1jBsj0A==
-X-CSE-MsgGUID: Wx9MIW1iQjKFvfgJ2JWjZQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="30633678"
-X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
-   d="scan'208";a="30633678"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 02:09:14 -0800
-X-CSE-ConnectionGUID: x5exkiDYT66PHj7j2RuRcQ==
-X-CSE-MsgGUID: oaTGnE/gT3OgEmz/rK2VvA==
+X-CSE-ConnectionGUID: yjT69TdzR8mxGBsk0iulMQ==
+X-CSE-MsgGUID: Bnr8ZfVwSiKGCA//hRjeBw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31405560"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31405560"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 02:19:22 -0800
+X-CSE-ConnectionGUID: OvNBB8TvQ8qCQI2O7h2cYQ==
+X-CSE-MsgGUID: GV6Wll5HRcGYT+8l9mpCVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
-   d="scan'208";a="87809813"
+   d="scan'208";a="87802267"
 Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Nov 2024 02:09:13 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 12 Nov 2024 02:19:14 -0800
 Received: from kbuild by bcfed0da017c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tAnpe-0000hV-2n;
-	Tue, 12 Nov 2024 10:09:10 +0000
-Date: Tue, 12 Nov 2024 18:08:26 +0800
+	id 1tAnzL-0000hp-20;
+	Tue, 12 Nov 2024 10:19:11 +0000
+Date: Tue, 12 Nov 2024 18:18:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 112/112] fs/bcachefs/io_write.c:1127:2:
- error: expected expression
-Message-ID: <202411121809.xSrI6EYd-lkp@intel.com>
+	willy@infradead.org, liam.howlett@oracle.com,
+	lorenzo.stoakes@oracle.com, mhocko@suse.com, vbabka@suse.cz,
+	hannes@cmpxchg.org, mjguzik@gmail.com, oliver.sang@intel.com,
+	mgorman@techsingularity.net, david@redhat.com, peterx@redhat.com,
+	oleg@redhat.com, dave@stgolabs.net, paulmck@kernel.org,
+	brauner@kernel.org, dhowells@redhat.com, hdanton@sina.com,
+	hughd@google.com, minchan@google.com, jannh@google.com,
+	shakeel.butt@linux.dev, souravpanda@google.com,
+	pasha.tatashin@soleen.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kernel-team@android.com,
+	surenb@google.com
+Subject: Re: [PATCH 2/4] mm: move per-vma lock into vm_area_struct
+Message-ID: <202411121840.hE2wZKgE-lkp@intel.com>
+References: <20241111205506.3404479-3-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,248 +73,321 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241111205506.3404479-3-surenb@google.com>
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   bf89bd21105c3685314ed3a68f06167ba9f198fa
-commit: e661d0e153cca3184d0914da1866ef8e9c75af29 [112/112] bcachefs: bch2_inum_to_path()
-config: arm-randconfig-003-20241112 (https://download.01.org/0day-ci/archive/20241112/202411121809.xSrI6EYd-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411121809.xSrI6EYd-lkp@intel.com/reproduce)
+Hi Suren,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 931086f2a88086319afb57cd3925607e8cda0a9f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-introduce-vma_start_read_locked-_nested-helpers/20241112-050531
+base:   931086f2a88086319afb57cd3925607e8cda0a9f
+patch link:    https://lore.kernel.org/r/20241111205506.3404479-3-surenb%40google.com
+patch subject: [PATCH 2/4] mm: move per-vma lock into vm_area_struct
+config: hexagon-randconfig-002-20241112 (https://download.01.org/0day-ci/archive/20241112/202411121840.hE2wZKgE-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411121840.hE2wZKgE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411121809.xSrI6EYd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411121840.hE2wZKgE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/bcachefs/io_write.c:1127:2: error: expected expression
-           struct printbuf buf = PRINTBUF;
-           ^
->> fs/bcachefs/io_write.c:1128:23: error: use of undeclared identifier 'buf'
-           bch2_write_op_error(&buf, op);
-                                ^
-   fs/bcachefs/io_write.c:1129:14: error: use of undeclared identifier 'buf'
-           prt_printf(&buf, "error verifying existing checksum while rewriting existing data (memory corruption?)");
-                       ^
-   fs/bcachefs/io_write.c:1130:31: error: use of undeclared identifier 'buf'
-           bch_err_ratelimited(c, "%s", buf.buf);
-                                        ^
-   fs/bcachefs/io_write.c:1131:17: error: use of undeclared identifier 'buf'
-           printbuf_exit(&buf);
-                          ^
-   5 errors generated.
+         |                            ^
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:1143:
+   In file included from include/linux/huge_mm.h:7:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                 ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:1143:
+   In file included from include/linux/huge_mm.h:7:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                                  ^        ~
+   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
+     186 | #define _sig_not(x)     (~(x))
+         |                            ^
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:1143:
+   In file included from include/linux/huge_mm.h:7:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                 ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2234:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/hexagon/include/asm/dma.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/hexagon/include/asm/dma.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/hexagon/include/asm/dma.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> kernel/dma/direct.c:147:20: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                 if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     147 |                     phys_limit < DMA_BIT_MASK(64) &&
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+     148 |                     !(gfp & (GFP_DMA32 | GFP_DMA))) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+>> kernel/dma/direct.c:147:20: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                 if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     147 |                     phys_limit < DMA_BIT_MASK(64) &&
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+     148 |                     !(gfp & (GFP_DMA32 | GFP_DMA))) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+>> kernel/dma/direct.c:147:20: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                 if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     147 |                     phys_limit < DMA_BIT_MASK(64) &&
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+     148 |                     !(gfp & (GFP_DMA32 | GFP_DMA))) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   38 warnings and 3 errors generated.
+--
+   In file included from drivers/iio/adc/fsl-imx25-gcq.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/iio/adc/fsl-imx25-gcq.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/iio/adc/fsl-imx25-gcq.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/iio/adc/fsl-imx25-gcq.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   include/linux/mm.h:877:2: error: call to undeclared function 'vma_lock_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     877 |         vma_lock_init(&vma->vm_lock);
+         |         ^
+   include/linux/mm.h:877:2: note: did you mean 'osq_lock_init'?
+   include/linux/osq_lock.h:23:20: note: 'osq_lock_init' declared here
+      23 | static inline void osq_lock_init(struct optimistic_spin_queue *lock)
+         |                    ^
+   In file included from drivers/iio/adc/fsl-imx25-gcq.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   include/linux/mm.h:877:22: error: no member named 'vm_lock' in 'struct vm_area_struct'
+     877 |         vma_lock_init(&vma->vm_lock);
+         |                        ~~~  ^
+   include/linux/mm.h:878:7: error: no member named 'vm_lock_seq' in 'struct vm_area_struct'
+     878 |         vma->vm_lock_seq = UINT_MAX;
+         |         ~~~  ^
+   In file included from drivers/iio/adc/fsl-imx25-gcq.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2234:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/iio/adc/fsl-imx25-gcq.c:116:8: warning: shift count is negative [-Wshift-count-negative]
+     116 |                      MX25_ADCQ_ITEM(0, chan->channel));
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
+      54 |                 _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
+      52 | #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
+         |                                              ^  ~~~~~~~~~~~~
+   8 warnings and 3 errors generated.
 
 
-vim +1127 fs/bcachefs/io_write.c
+vim +147 kernel/dma/direct.c
 
-   936	
-   937	static int bch2_write_extent(struct bch_write_op *op, struct write_point *wp,
-   938				     struct bio **_dst)
-   939	{
-   940		struct bch_fs *c = op->c;
-   941		struct bio *src = &op->wbio.bio, *dst = src;
-   942		struct bvec_iter saved_iter;
-   943		void *ec_buf;
-   944		unsigned total_output = 0, total_input = 0;
-   945		bool bounce = false;
-   946		bool page_alloc_failed = false;
-   947		int ret, more = 0;
-   948	
-   949		BUG_ON(!bio_sectors(src));
-   950	
-   951		ec_buf = bch2_writepoint_ec_buf(c, wp);
-   952	
-   953		switch (bch2_write_prep_encoded_data(op, wp)) {
-   954		case PREP_ENCODED_OK:
-   955			break;
-   956		case PREP_ENCODED_ERR:
-   957			ret = -EIO;
-   958			goto err;
-   959		case PREP_ENCODED_CHECKSUM_ERR:
-   960			goto csum_err;
-   961		case PREP_ENCODED_DO_WRITE:
-   962			/* XXX look for bug here */
-   963			if (ec_buf) {
-   964				dst = bch2_write_bio_alloc(c, wp, src,
-   965							   &page_alloc_failed,
-   966							   ec_buf);
-   967				bio_copy_data(dst, src);
-   968				bounce = true;
-   969			}
-   970			init_append_extent(op, wp, op->version, op->crc);
-   971			goto do_write;
-   972		}
-   973	
-   974		if (ec_buf ||
-   975		    op->compression_opt ||
-   976		    (op->csum_type &&
-   977		     !(op->flags & BCH_WRITE_PAGES_STABLE)) ||
-   978		    (bch2_csum_type_is_encryption(op->csum_type) &&
-   979		     !(op->flags & BCH_WRITE_PAGES_OWNED))) {
-   980			dst = bch2_write_bio_alloc(c, wp, src,
-   981						   &page_alloc_failed,
-   982						   ec_buf);
-   983			bounce = true;
-   984		}
-   985	
-   986		saved_iter = dst->bi_iter;
-   987	
-   988		do {
-   989			struct bch_extent_crc_unpacked crc = { 0 };
-   990			struct bversion version = op->version;
-   991			size_t dst_len = 0, src_len = 0;
-   992	
-   993			if (page_alloc_failed &&
-   994			    dst->bi_iter.bi_size  < (wp->sectors_free << 9) &&
-   995			    dst->bi_iter.bi_size < c->opts.encoded_extent_max)
-   996				break;
-   997	
-   998			BUG_ON(op->compression_opt &&
-   999			       (op->flags & BCH_WRITE_DATA_ENCODED) &&
-  1000			       bch2_csum_type_is_encryption(op->crc.csum_type));
-  1001			BUG_ON(op->compression_opt && !bounce);
-  1002	
-  1003			crc.compression_type = op->incompressible
-  1004				? BCH_COMPRESSION_TYPE_incompressible
-  1005				: op->compression_opt
-  1006				? bch2_bio_compress(c, dst, &dst_len, src, &src_len,
-  1007						    op->compression_opt)
-  1008				: 0;
-  1009			if (!crc_is_compressed(crc)) {
-  1010				dst_len = min(dst->bi_iter.bi_size, src->bi_iter.bi_size);
-  1011				dst_len = min_t(unsigned, dst_len, wp->sectors_free << 9);
-  1012	
-  1013				if (op->csum_type)
-  1014					dst_len = min_t(unsigned, dst_len,
-  1015							c->opts.encoded_extent_max);
-  1016	
-  1017				if (bounce) {
-  1018					swap(dst->bi_iter.bi_size, dst_len);
-  1019					bio_copy_data(dst, src);
-  1020					swap(dst->bi_iter.bi_size, dst_len);
-  1021				}
-  1022	
-  1023				src_len = dst_len;
-  1024			}
-  1025	
-  1026			BUG_ON(!src_len || !dst_len);
-  1027	
-  1028			if (bch2_csum_type_is_encryption(op->csum_type)) {
-  1029				if (bversion_zero(version)) {
-  1030					version.lo = atomic64_inc_return(&c->key_version);
-  1031				} else {
-  1032					crc.nonce = op->nonce;
-  1033					op->nonce += src_len >> 9;
-  1034				}
-  1035			}
-  1036	
-  1037			if ((op->flags & BCH_WRITE_DATA_ENCODED) &&
-  1038			    !crc_is_compressed(crc) &&
-  1039			    bch2_csum_type_is_encryption(op->crc.csum_type) ==
-  1040			    bch2_csum_type_is_encryption(op->csum_type)) {
-  1041				u8 compression_type = crc.compression_type;
-  1042				u16 nonce = crc.nonce;
-  1043				/*
-  1044				 * Note: when we're using rechecksum(), we need to be
-  1045				 * checksumming @src because it has all the data our
-  1046				 * existing checksum covers - if we bounced (because we
-  1047				 * were trying to compress), @dst will only have the
-  1048				 * part of the data the new checksum will cover.
-  1049				 *
-  1050				 * But normally we want to be checksumming post bounce,
-  1051				 * because part of the reason for bouncing is so the
-  1052				 * data can't be modified (by userspace) while it's in
-  1053				 * flight.
-  1054				 */
-  1055				if (bch2_rechecksum_bio(c, src, version, op->crc,
-  1056						&crc, &op->crc,
-  1057						src_len >> 9,
-  1058						bio_sectors(src) - (src_len >> 9),
-  1059						op->csum_type))
-  1060					goto csum_err;
-  1061				/*
-  1062				 * rchecksum_bio sets compression_type on crc from op->crc,
-  1063				 * this isn't always correct as sometimes we're changing
-  1064				 * an extent from uncompressed to incompressible.
-  1065				 */
-  1066				crc.compression_type = compression_type;
-  1067				crc.nonce = nonce;
-  1068			} else {
-  1069				if ((op->flags & BCH_WRITE_DATA_ENCODED) &&
-  1070				    bch2_rechecksum_bio(c, src, version, op->crc,
-  1071						NULL, &op->crc,
-  1072						src_len >> 9,
-  1073						bio_sectors(src) - (src_len >> 9),
-  1074						op->crc.csum_type))
-  1075					goto csum_err;
-  1076	
-  1077				crc.compressed_size	= dst_len >> 9;
-  1078				crc.uncompressed_size	= src_len >> 9;
-  1079				crc.live_size		= src_len >> 9;
-  1080	
-  1081				swap(dst->bi_iter.bi_size, dst_len);
-  1082				ret = bch2_encrypt_bio(c, op->csum_type,
-  1083						       extent_nonce(version, crc), dst);
-  1084				if (ret)
-  1085					goto err;
-  1086	
-  1087				crc.csum = bch2_checksum_bio(c, op->csum_type,
-  1088						 extent_nonce(version, crc), dst);
-  1089				crc.csum_type = op->csum_type;
-  1090				swap(dst->bi_iter.bi_size, dst_len);
-  1091			}
-  1092	
-  1093			init_append_extent(op, wp, version, crc);
-  1094	
-  1095			if (dst != src)
-  1096				bio_advance(dst, dst_len);
-  1097			bio_advance(src, src_len);
-  1098			total_output	+= dst_len;
-  1099			total_input	+= src_len;
-  1100		} while (dst->bi_iter.bi_size &&
-  1101			 src->bi_iter.bi_size &&
-  1102			 wp->sectors_free &&
-  1103			 !bch2_keylist_realloc(&op->insert_keys,
-  1104					      op->inline_keys,
-  1105					      ARRAY_SIZE(op->inline_keys),
-  1106					      BKEY_EXTENT_U64s_MAX));
-  1107	
-  1108		more = src->bi_iter.bi_size != 0;
-  1109	
-  1110		dst->bi_iter = saved_iter;
-  1111	
-  1112		if (dst == src && more) {
-  1113			BUG_ON(total_output != total_input);
-  1114	
-  1115			dst = bio_split(src, total_input >> 9,
-  1116					GFP_NOFS, &c->bio_write);
-  1117			wbio_init(dst)->put_bio	= true;
-  1118			/* copy WRITE_SYNC flag */
-  1119			dst->bi_opf		= src->bi_opf;
-  1120		}
-  1121	
-  1122		dst->bi_iter.bi_size = total_output;
-  1123	do_write:
-  1124		*_dst = dst;
-  1125		return more;
-  1126	csum_err:
-> 1127		struct printbuf buf = PRINTBUF;
-> 1128		bch2_write_op_error(&buf, op);
-  1129		prt_printf(&buf, "error verifying existing checksum while rewriting existing data (memory corruption?)");
-  1130		bch_err_ratelimited(c, "%s", buf.buf);
-  1131		printbuf_exit(&buf);
-  1132	
-  1133		ret = -EIO;
-  1134	err:
-  1135		if (to_wbio(dst)->bounce)
-  1136			bch2_bio_free_pages_pool(c, dst);
-  1137		if (to_wbio(dst)->put_bio)
-  1138			bio_put(dst);
-  1139	
-  1140		return ret;
-  1141	}
-  1142	
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  117  
+26749b3201ab05e kernel/dma/direct.c Christoph Hellwig      2020-06-15  118  static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  119  		gfp_t gfp, bool allow_highmem)
+a8463d4b0e47d1f lib/dma-noop.c      Christian Borntraeger  2016-02-02  120  {
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  121  	int node = dev_to_node(dev);
+080321d3b3139b3 lib/dma-direct.c    Christoph Hellwig      2017-12-22  122  	struct page *page = NULL;
+a7ba70f1787f977 kernel/dma/direct.c Nicolas Saenz Julienne 2019-11-21  123  	u64 phys_limit;
+a8463d4b0e47d1f lib/dma-noop.c      Christian Borntraeger  2016-02-02  124  
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  125  	WARN_ON_ONCE(!PAGE_ALIGNED(size));
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  126  
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  127  	if (is_swiotlb_for_alloc(dev))
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  128  		return dma_direct_alloc_swiotlb(dev, size);
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  129  
+25a4ce564921db0 kernel/dma/direct.c Petr Tesarik           2023-02-20  130  	gfp |= dma_direct_optimal_gfp_mask(dev, &phys_limit);
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  131  	page = dma_alloc_contiguous(dev, size, gfp);
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  132  	if (page) {
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  133  		if (!dma_coherent_ok(dev, page_to_phys(page), size) ||
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  134  		    (!allow_highmem && PageHighMem(page))) {
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  135  			dma_free_contiguous(dev, page, size);
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  136  			page = NULL;
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  137  		}
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  138  	}
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  139  again:
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  140  	if (!page)
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  141  		page = alloc_pages_node(node, gfp, get_order(size));
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  142  	if (page && !dma_coherent_ok(dev, page_to_phys(page), size)) {
+f689a3ab7b8ece9 kernel/dma/direct.c Chen Yu                2024-08-31  143  		__free_pages(page, get_order(size));
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  144  		page = NULL;
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  145  
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  146  		if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+a7ba70f1787f977 kernel/dma/direct.c Nicolas Saenz Julienne 2019-11-21 @147  		    phys_limit < DMA_BIT_MASK(64) &&
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  148  		    !(gfp & (GFP_DMA32 | GFP_DMA))) {
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  149  			gfp |= GFP_DMA32;
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  150  			goto again;
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  151  		}
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  152  
+fbce251baa6e357 kernel/dma/direct.c Christoph Hellwig      2019-02-13  153  		if (IS_ENABLED(CONFIG_ZONE_DMA) && !(gfp & GFP_DMA)) {
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  154  			gfp = (gfp & ~GFP_DMA32) | GFP_DMA;
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  155  			goto again;
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  156  		}
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  157  	}
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  158  
+b18814e767a4455 kernel/dma/direct.c Christoph Hellwig      2018-11-04  159  	return page;
+b18814e767a4455 kernel/dma/direct.c Christoph Hellwig      2018-11-04  160  }
+b18814e767a4455 kernel/dma/direct.c Christoph Hellwig      2018-11-04  161  
 
 -- 
 0-DAY CI Kernel Test Service
