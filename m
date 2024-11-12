@@ -1,72 +1,64 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B342003C6
-	for <llvm@lists.linux.dev>; Tue, 12 Nov 2024 15:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F2F200B8D;
+	Tue, 12 Nov 2024 15:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731424747; cv=none; b=WwzOdASb/cfK9ugM7hqJzNd8rV/sfT5/M0Q7edSdQNX8/JUvEjKqHtm/+XDm7FikQMPYzIu02EAy5F1ZjmC1/ftBPnA+/hLfvgfPh2HTdUjTaYjqxSTTj05qkS/Yaf7uSjKmrTSpCoT7Vql7+dyNE2PhueRyqO/20zHIQcjxUGM=
+	t=1731425007; cv=none; b=IKJNVMmUOkrb9UZswwA4mhuVj1DPeNaxSFLpcJq2Z8Jr1XMp33XxF6abppNuoExn18LCtX/hscJiMk3rLOvm/4gLrCs5ngmgOsjjqGBej4v9CKuc+MRqYJ2AU5Ul8RVNXRtv1U7T0mFp9ohiKgKtIeb/Y8JeQakUeXJRtH/pJG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731424747; c=relaxed/simple;
-	bh=vRvyBq2ix1ZzyxuxoGvplur4rUnPOqD8lxpB8hJU82M=;
+	s=arc-20240116; t=1731425007; c=relaxed/simple;
+	bh=ZmGj6kivjIzqiKqxOJZckDsly2u9MG2i7lK+kggaPuk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T9PVLgI5Lf9J3s5SRS5YPyfSODZVVtoJq4rWjxA/KEdUqUrlndsmg3VU/TpP9WPmkI/J2PxcGoe3DTFiLg0zd2NgSJxLighFVvLySZLBCu4PRtxBgooHgihKvE3p4HQoXddeeZBHOKRLL3WOn9bdn27rnOTRJAa6N4g1GpxZsP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vmcd1H8D; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=lEnDP147gnu4Hjac1YflsjB9C/mopSgAHxwPZySk+aexD47Y6ken3vnXy6vEn6U3+/5tzVvdqHkw4bn+QyPOL93eXQLRJSS1zJwTVEZWVjKOZAfz5YRtrt3VK6BN6hq9GJhq82TJ7YFQDsqoKIL28YkDoIlanMGhqy6XbSCZNv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OEZkoJIo; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vmcd1H8D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OEZkoJIo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731424746; x=1762960746;
+  t=1731425005; x=1762961005;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vRvyBq2ix1ZzyxuxoGvplur4rUnPOqD8lxpB8hJU82M=;
-  b=Vmcd1H8DiQI6YeHAbmTuidS7azV9qJUtNgU+mC8kbAJz3m12HRQH0iOO
-   5cyg9CDd0CT9HSdVd3wS9ShmGA4NiQ5j+wbEr5TddyFiwcCraplD4+2ad
-   tsrbVQYHkyTXQDlFAGYIBVPgfo/wNEq+n+BRdgUd7eanADAlhAcQ1sqsL
-   QmGvW6PGUkTQZ5/heD1Ju7X6mEp/VlokPGwHhLy1UbIkjthgPak/rL4uA
-   nycpTLpjftPQRUDRzlM7XD31WA43zAsYlWc5znECuoczIrGAc3aqJSOi0
-   62jUhB33S1iRzDAn5uWaSZDgGwR++rWMDOqR3tAYc3wMwVKxBM1BT5VeW
-   g==;
-X-CSE-ConnectionGUID: 7wdK/ymPQZuXhvJrxAXbgg==
-X-CSE-MsgGUID: ballGrDcSYKsvdqmxNhZXg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="18874580"
+  bh=ZmGj6kivjIzqiKqxOJZckDsly2u9MG2i7lK+kggaPuk=;
+  b=OEZkoJIoFl3aRkjyZwt3K6H9PBsCTl57+oqySU/3jECFrYmFlU20BYhK
+   OR8TC31YWWp6+RgkcIwqlCY9fo5QlXJjWzktprpF4N8qCuJEsL6JV7hFc
+   qreBUp+Xno7gk398Hp9bNTUG9rQI20WkIA6eV4ImPBeiyKOeRYZbZ5LHb
+   heR8oEjS9WLmCEBWkCKbTKAbRV5ymBKi56jwiNbsNyoS1WZcUH7VyFFof
+   U7bV4DF4zX2XnPHpOUXInPBXrcg251wD3d86bXK2uHATkwPLlxdfZ3gN9
+   /fzair6wfwvVfOxXzEawb7xiea5DdMCCywe7PqC6x9etUtvI8sXesomve
+   Q==;
+X-CSE-ConnectionGUID: Tx4YoHrDS+WRoxlQrfDDqw==
+X-CSE-MsgGUID: kA4hYARsSI6tsvdpNp0AmA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="18875196"
 X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="18874580"
+   d="scan'208";a="18875196"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 07:19:04 -0800
-X-CSE-ConnectionGUID: aw5apPfpSfOxf0vvArEDJA==
-X-CSE-MsgGUID: 6NO57tGfQTaQdOQtBRg6jw==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 07:23:25 -0800
+X-CSE-ConnectionGUID: 2TDWEbCQS8Wpe20GYEZoBw==
+X-CSE-MsgGUID: L5YTJwh1R5W+IzvL53fAUA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="87475582"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 07:19:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tAsfR-0000000E2WR-0rPM;
-	Tue, 12 Nov 2024 17:18:57 +0200
-Date: Tue, 12 Nov 2024 17:18:56 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] sched/fair: Mark cfs_bandwidth_used() and
- m*_vruntime() with __maybe_unused
-Message-ID: <ZzNx4D5lWVhTG7bk@smile.fi.intel.com>
-References: <20240905171210.267626-1-andriy.shevchenko@linux.intel.com>
- <xhsmh7c98d65h.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+   d="scan'208";a="87477543"
+Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 12 Nov 2024 07:23:21 -0800
+Received: from kbuild by bcfed0da017c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tAsje-0001Sv-2P;
+	Tue, 12 Nov 2024 15:23:18 +0000
+Date: Tue, 12 Nov 2024 23:22:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: mjchen <mjchen0829@gmail.com>, dmitry.torokhov@gmail.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	sudeep.holla@arm.com, peng.fan@nxp.com, arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	mjchen@nuvoton.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 2/2] input: keypad: add new keypad driver for MA35D1
+Message-ID: <202411122236.79vmA2JS-lkp@intel.com>
+References: <20241112053059.3361-3-mjchen0829@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,39 +67,144 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <xhsmh7c98d65h.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20241112053059.3361-3-mjchen0829@gmail.com>
 
-On Tue, Nov 12, 2024 at 12:48:42PM +0100, Valentin Schneider wrote:
-> On 05/09/24 20:12, Andy Shevchenko wrote:
-> > When cfs_bandwidth_used() is unused, it prevents kernel builds
-> > with clang, `make W=1` and CONFIG_WERROR=y:
-> >
-> > kernel/sched/fair.c:526:19: error: unused function 'max_vruntime' [-Werror,-Wunused-function]
-> >   526 | static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
-> >       |                   ^~~~~~~~~~~~
-> > kernel/sched/fair.c:6580:20: error: unused function 'cfs_bandwidth_used' [-Werror,-Wunused-function]
-> >  6580 | static inline bool cfs_bandwidth_used(void)
-> >       |                    ^~~~~~~~~~~~~~~~~~
-> >
-> > Fix this by marking them with __maybe_unused (all cases for the sake of
-> > symmetry).
-> >
-> 
-> I assume that's with CONFIG_CFS_BANDWIDTH=n? Looks like
-> cfs_bandwidth_used() uses are tucked away under helpers that themselves
-> only really do something for CONFIG_CFS_BANDWIDTH=y, so you could remove
-> the CONFIG_CFS_BANDWIDTH=n definition of cfs_bandwidth_used() directly.
+Hi mjchen,
 
-Thanks for looking into this!
+kernel test robot noticed the following build warnings:
 
-> This compiles:
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on dtor-input/for-linus robh/for-next soc/for-next linus/master v6.12-rc7 next-20241112]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-okay, consider then my patch as a report. Can you submit your version as you
-seems much more familiar with this code than me?
+url:    https://github.com/intel-lab-lkp/linux/commits/mjchen/dt-bindings-input-Add-Nuvoton-MA35D1-keypad/20241112-133327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20241112053059.3361-3-mjchen0829%40gmail.com
+patch subject: [PATCH v2 2/2] input: keypad: add new keypad driver for MA35D1
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20241112/202411122236.79vmA2JS-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411122236.79vmA2JS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411122236.79vmA2JS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/input/keyboard/ma35d1_keypad.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/input/keyboard/ma35d1_keypad.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/input/keyboard/ma35d1_keypad.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/input/keyboard/ma35d1_keypad.c:83:46: warning: shift count >= width of type [-Wshift-count-overflow]
+      83 |         pressed_keys  = key_event[0] | key_event[1] << 32;
+         |                                                     ^  ~~
+   drivers/input/keyboard/ma35d1_keypad.c:84:46: warning: shift count >= width of type [-Wshift-count-overflow]
+      84 |         released_keys = key_event[2] | key_event[3] << 32;
+         |                                                     ^  ~~
+   drivers/input/keyboard/ma35d1_keypad.c:130:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     130 |         val |= FIELD_PREP(KCOL, (keypad->kpi_col - 1)) | FIELD_PREP(KROW, (keypad->kpi_row - 1));
+         |                ^
+   8 warnings and 1 error generated.
+
+
+vim +83 drivers/input/keyboard/ma35d1_keypad.c
+
+    59	
+    60	static void ma35d1_keypad_scan_matrix(struct ma35d1_keypad *keypad, unsigned int status)
+    61	{
+    62		struct input_dev *input_dev = keypad->input_dev;
+    63		unsigned int code;
+    64		unsigned int key;
+    65		unsigned long pressed_keys = 0, released_keys = 0;
+    66		unsigned int row_shift = get_count_order(keypad->kpi_col);
+    67		unsigned short *keymap = input_dev->keycode;
+    68		unsigned long key_event[4];
+    69		unsigned int index;
+    70	
+    71		/* Read key event status */
+    72		key_event[0] = readl(keypad->mmio_base + KPI_KPE0);
+    73		key_event[1] = readl(keypad->mmio_base + KPI_KPE1);
+    74		key_event[2] = readl(keypad->mmio_base + KPI_KRE0);
+    75		key_event[3] = readl(keypad->mmio_base + KPI_KRE1);
+    76	
+    77		/* Clear key event status */
+    78		writel(key_event[0], (keypad->mmio_base + KPI_KPE0));
+    79		writel(key_event[1], (keypad->mmio_base + KPI_KPE1));
+    80		writel(key_event[2], (keypad->mmio_base + KPI_KRE0));
+    81		writel(key_event[3], (keypad->mmio_base + KPI_KRE1));
+    82	
+  > 83		pressed_keys  = key_event[0] | key_event[1] << 32;
+    84		released_keys = key_event[2] | key_event[3] << 32;
+    85	
+    86		/* Process pressed keys */
+    87		for_each_set_bit(index, &pressed_keys, KEY_EVENT_BITS) {
+    88			code = MATRIX_SCAN_CODE(index / 8, (index % 8), row_shift);
+    89			key = keymap[code];
+    90	
+    91			input_event(input_dev, EV_MSC, MSC_SCAN, code);
+    92			input_report_key(input_dev, key, 1);
+    93		}
+    94	
+    95		/* Process released keys */
+    96		for_each_set_bit(index, &released_keys, KEY_EVENT_BITS) {
+    97			code = MATRIX_SCAN_CODE(index / 8, (index % 8), row_shift);
+    98			key = keymap[code];
+    99	
+   100			input_event(input_dev, EV_MSC, MSC_SCAN, code);
+   101			input_report_key(input_dev, key, 0);
+   102		}
+   103	
+   104		input_sync(input_dev);
+   105	}
+   106	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
