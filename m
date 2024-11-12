@@ -1,112 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A762076D2;
-	Tue, 12 Nov 2024 17:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C6A2194BA
+	for <llvm@lists.linux.dev>; Tue, 12 Nov 2024 19:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731430929; cv=none; b=I3YZEBxDv7oW/iWJN9UDKvjgMudgp70ZL6jdpfPH4dxfy7/BIuXToLkUuPwcrOSS347N7SKpYaN8wHT9cIZEM5c1p5Gowo8ckJGQpkJbPrbr2Eicxkp0Nrze76MB+oU3tiYAbArhKliCSBf62e0YgAsjkGSEbz8G2VsUpqX04Ok=
+	t=1731440222; cv=none; b=eU0C2yVIXDwlR7+B9B+owl0P6ykYo2TZahjOiJuvzlZM/Fqh9cplQCnAwRWXBr5DinIvVSuHxNLuH6estqVv25i9eUeXEXto6roYC6xnDvbInEHdXcnKCsGJL3wbEJyxCcNE59ynCb427I6IaSSO3Zi9tPAICFpsPD9NZ0tvsHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731430929; c=relaxed/simple;
-	bh=M7ma40ELUhNvpjlyWrEKeeikRjFdp5fR7WH70jTeKyk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NxFgz03G1tkQT4dti1EHPtovam7dI6ul3OAtIl1V5cSuQdY6c6KKFBOo6tmbPuj8a9lKd4GqVuaOOUKIrJWxAMab9oDawkVepSgUvFhl6f8hNAP/UPpbWnnXiEyjHEw8NFdCOvkMyA0O1svqydF7G2VyjAexhNtB61Ej/MBuiSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SqR2b69D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731440222; c=relaxed/simple;
+	bh=O7DCfxLNIjwrCueTIP4Z+l3hI1xzaNRDEQ+l2VDaSOM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=itmHgIAWN8ZV7UYLVDT01LdcHlGB/EC+N/eVChOo2FGmTtmiqEk0ZxznJBSOnwSEPV9ieBLdCpgrJZKWwhwpTs+fmc+LaNHhCkiL4hunPvpmjiuwpfFJe+TXM+gN9REo6V0ROGY4nJmKZC7rjbrM8wixDAVyXbg1pBEqLcEobOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a+2CH45v; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SqR2b69D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FF8C4CECD;
-	Tue, 12 Nov 2024 17:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731430928;
-	bh=M7ma40ELUhNvpjlyWrEKeeikRjFdp5fR7WH70jTeKyk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=SqR2b69DC6UN/itpJEpDivAQ0WvaMssRwPhcspNX/mBkej8BPF1Rw5mvH/VmvJnwr
-	 j+KBHXnB+P72BUU6kRisTvThNZzKNzsAZu2I8OCTS3ccQNp6RkjSGElf05GWaapgeq
-	 GygTNfQq4WFPFD6HbZjFMM9L4k5NQWAg1/dt7wEPZ7rSBwYG9vhqmtlGPIDIqUUfDz
-	 eeqo1aGJPX5InyoQIJ1OGBznqxkgIaih249umw8VFgNpHn5vOG1JG/kv90KfPl7/e/
-	 C0IDVpeKNFSzaj+tFoySzfF3F65anDOQd9IrpLBAN9rXoCoD6W3AYFQ3D0MP1hzdPq
-	 xhGAifx0T49Yw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 12 Nov 2024 10:02:04 -0700
-Subject: [PATCH] LoongArch: KVM: Ensure ret is always initialized in
- kvm_eiointc_{read,write}()
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a+2CH45v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1731440219;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CjDs1uVD5LcAdcMcEag2yGHlBTAQ4ZFwPkuS7Zep/7A=;
+	b=a+2CH45vLGTaSMLfbBW0oHeBkhAtbwTB+qHwTZUwWM4CNumXhki3f92sqKlN38tWhMASDL
+	axLVcbTNcG2SmB9KbxzNUKrniRpmvYu3OGTSHuGMr1QWzmR+6dv9IMkP6oYdzADr2z5mHu
+	30jIwve9rngNFC8X8bov7xC+cMMSBgg=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-340-Sgk_EptINd2nnODTo5-GOw-1; Tue, 12 Nov 2024 14:36:56 -0500
+X-MC-Unique: Sgk_EptINd2nnODTo5-GOw-1
+X-Mimecast-MFC-AGG-ID: Sgk_EptINd2nnODTo5-GOw
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6cbebfc1725so105313176d6.1
+        for <llvm@lists.linux.dev>; Tue, 12 Nov 2024 11:36:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731440216; x=1732045016;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjDs1uVD5LcAdcMcEag2yGHlBTAQ4ZFwPkuS7Zep/7A=;
+        b=a2Yuj9ylsLYSCLmsA6FYN7j/fQuX14mMu+5f/tI7F3kOo6vJ0JsnVCl/XHOmydU5F2
+         J83ElUpUWG2PAs+86tPMGilKvCtXsSvF2Mp2GV3+5aGo8Ct1RuQijKND5nodstODtPkg
+         6IsDlmRE1qt4cORt5GqIBKmZrNQ27xtTjL4T7gHnGghroKX0cO8UgpRwh9IwWMw9DwuQ
+         11+xl+ICoq56zw9H74bMo3yMt2UQxUgtmpD5wMy8GptT40FQaX9enXgDfTNPM+wpvAsn
+         kb2fBdfe/x02rnaIVv/w/32nITTCdppIdN8O80t+JaX6IbjVAj7l19oZC6P+eSNJPbN+
+         RfdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXHOMa624XQIwVvyG/hU7cfWoF1yD8F5Xuu8nXr3sDFD8D7gTHSf/4hR2mT+gHk+NQ86X6P@lists.linux.dev
+X-Gm-Message-State: AOJu0YxmMT4BTdIaTRin0labMWWp/hM3+tEF1y0CgVtsVA69abbuW2JX
+	YNEwK8w9ssgGLhZgrPjHdyO1VkoGB9LT/3NXHskUfdPhGpkVZUCtC9QaPoMHRPZ8G5H3f/ggTfc
+	Dgldp4oAKO+O0K5xadwjok7AdL7tSH8RgfqDUJ2S5gp++8eXBDsk=
+X-Received: by 2002:a05:6214:4909:b0:6cb:d512:e6e6 with SMTP id 6a1803df08f44-6d39e12e459mr225840346d6.23.1731440216269;
+        Tue, 12 Nov 2024 11:36:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF1EIIGXTnIdaiArjVBMT7oIJoOZkcHkKo0u0kUztGcBK1Xhlva/oXoFZG4eDiT0EjZb8zefA==
+X-Received: by 2002:a05:6214:4909:b0:6cb:d512:e6e6 with SMTP id 6a1803df08f44-6d39e12e459mr225840066d6.23.1731440216031;
+        Tue, 12 Nov 2024 11:36:56 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3961f4d37sm74519616d6.51.2024.11.12.11.36.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 11:36:55 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>, Peter Zijlstra
+ <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent
+ Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
+ Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] sched/fair: Mark cfs_bandwidth_used() and
+ m*_vruntime() with __maybe_unused
+In-Reply-To: <ZzNx4D5lWVhTG7bk@smile.fi.intel.com>
+References: <20240905171210.267626-1-andriy.shevchenko@linux.intel.com>
+ <xhsmh7c98d65h.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <ZzNx4D5lWVhTG7bk@smile.fi.intel.com>
+Date: Tue, 12 Nov 2024 20:36:52 +0100
+Message-ID: <xhsmh1pzgckh7.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241112-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-7d881f728d67@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAuKM2cC/x2NwQrCMBAFf6Xs2QUT60F/RTzEZNs+bDaSxCIt/
- fcGjwPDzEZFMqTQvdsoy4KCpA3MqSM/OR2FERqTPdveGGN5TklHl/3E7yWyIEGr5wE/LilKRZT
- CX4Wiws1YJbAJt+HaX8LLBkut+8nS9P/z8dz3Ayn4i+SDAAAA
-X-Change-ID: 20241112-loongarch-kvm-eiointc-fix-sometimes-uninitialized-1d9f543db2d2
-To: Huacai Chen <chenhuacai@kernel.org>, 
- Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>
-Cc: WANG Xuerui <kernel@xen0n.name>, Xianglai Li <lixianglai@loongson.cn>, 
- kvm@vger.kernel.org, loongarch@lists.linux.dev, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2092; i=nathan@kernel.org;
- h=from:subject:message-id; bh=M7ma40ELUhNvpjlyWrEKeeikRjFdp5fR7WH70jTeKyk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOnGXfwfr9Tscn6wWXnZO4P13Smcx9d9U1hz6dpJIR7d6
- O+uszd0d5SyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJMLAxMrRt2i9n3hHp2hvo
- XGSinp6h8jmfeePJI7Jf+7KVrDn03zP8U2hUcJ74foXf4vOxe091zapQWOHgkC9zdz1nvpK9eP8
- CLgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vq_HyBamZ1AFotdxpVqNO6Qh5BArLzVLJw03QW80RhE_1731440216
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain
 
-Clang warns (or errors with CONFIG_WERROR=y):
+On 12/11/24 17:18, Andy Shevchenko wrote:
+> On Tue, Nov 12, 2024 at 12:48:42PM +0100, Valentin Schneider wrote:
+>> On 05/09/24 20:12, Andy Shevchenko wrote:
+>> > When cfs_bandwidth_used() is unused, it prevents kernel builds
+>> > with clang, `make W=1` and CONFIG_WERROR=y:
+>> >
+>> > kernel/sched/fair.c:526:19: error: unused function 'max_vruntime' [-Werror,-Wunused-function]
+>> >   526 | static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
+>> >       |                   ^~~~~~~~~~~~
+>> > kernel/sched/fair.c:6580:20: error: unused function 'cfs_bandwidth_used' [-Werror,-Wunused-function]
+>> >  6580 | static inline bool cfs_bandwidth_used(void)
+>> >       |                    ^~~~~~~~~~~~~~~~~~
+>> >
+>> > Fix this by marking them with __maybe_unused (all cases for the sake of
+>> > symmetry).
+>> >
+>> 
+>> I assume that's with CONFIG_CFS_BANDWIDTH=n? Looks like
+>> cfs_bandwidth_used() uses are tucked away under helpers that themselves
+>> only really do something for CONFIG_CFS_BANDWIDTH=y, so you could remove
+>> the CONFIG_CFS_BANDWIDTH=n definition of cfs_bandwidth_used() directly.
+>
+> Thanks for looking into this!
+>
+>> This compiles:
+>
+> okay, consider then my patch as a report. Can you submit your version as you
+> seems much more familiar with this code than me?
 
-  arch/loongarch/kvm/intc/eiointc.c:323:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-    323 |         default:
-        |         ^~~~~~~
-  arch/loongarch/kvm/intc/eiointc.c:697:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
-    697 |         default:
-        |         ^~~~~~~
-
-Set ret to -EINVAL in the default case to resolve the warning, as len
-was not a valid value for the functions to handle.
-
-Fixes: e24e9e0c1da4 ("LoongArch: KVM: Add EIOINTC read and write functions")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-It appears that my previous version of this change did not get
-incorporated in the new revision. I did not mark this as a v2 since it
-has been some time.
-
-https://lore.kernel.org/r/20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-85142dcb2274@kernel.org
----
- arch/loongarch/kvm/intc/eiointc.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/loongarch/kvm/intc/eiointc.c b/arch/loongarch/kvm/intc/eiointc.c
-index 0084839f41506eb3b99c2c38f9721f3c0101e384..6af3ecbe29caaaef1582b1fbb941c01638e721cf 100644
---- a/arch/loongarch/kvm/intc/eiointc.c
-+++ b/arch/loongarch/kvm/intc/eiointc.c
-@@ -323,6 +323,7 @@ static int kvm_eiointc_read(struct kvm_vcpu *vcpu,
- 	default:
- 		WARN_ONCE(1, "%s: Abnormal address access: addr 0x%llx, size %d\n",
- 						__func__, addr, len);
-+		ret = -EINVAL;
- 	}
- 	spin_unlock_irqrestore(&eiointc->lock, flags);
- 
-@@ -697,6 +698,7 @@ static int kvm_eiointc_write(struct kvm_vcpu *vcpu,
- 	default:
- 		WARN_ONCE(1, "%s: Abnormal address access: addr 0x%llx, size %d\n",
- 						__func__, addr, len);
-+		ret = -EINVAL;
- 	}
- 	spin_unlock_irqrestore(&eiointc->lock, flags);
- 
-
----
-base-commit: f7cc7a98fb7124abc269ebf162fcb3a8893b660a
-change-id: 20241112-loongarch-kvm-eiointc-fix-sometimes-uninitialized-1d9f543db2d2
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+Sure, I'll add this to my todolist.
 
