@@ -1,59 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E64A15B0EF;
-	Wed, 13 Nov 2024 22:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00292AE84;
+	Wed, 13 Nov 2024 22:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731538249; cv=none; b=MVzOHa9PQZwIDBW56G1Hd8ir/KMy33EspYQjVIY+NNei9utt+G1zNksQbgHpJR/pAcEh4+N6/Oq9zN97JBFVvpZG5sO3PAcal0I2W0Odvc7raPMe2EEnFSRYcA+9SzOs06moEYFLsihDWt4+LbE+tTOJh7upKSI4MtwzSppWi1o=
+	t=1731538251; cv=none; b=cqWzhw3Hmb7UmuZJ+3wKVn5ArrPSvc2J1hU0UyOvwjMcDjZ1idroMdAfIV05K9Zd13+R+3cfjwEkzy7goTQSgPjRruxquDNSZ1+6PrVjR7oK6mCQSj78lwKbbhEiOEyZ0lSBBtmT12T5SEq6cThQcKkZYHQMhyxSZdQ71vCWuzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731538249; c=relaxed/simple;
-	bh=c6tlelKl4fRAEbGBWpVDnypfAPx1muTJuLUyMuX5Qes=;
+	s=arc-20240116; t=1731538251; c=relaxed/simple;
+	bh=CYdGGDWei4FClN5/v5jTSMS1CfPN4qDt7+CJVB8J8vQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k8tM5v1MUaHa3oL8VeYLM4ZIKsJXWmGbIrb0OLsA+wOJdINVHXKReYaq7ecFcHDNzk9ygr8Qalz3SZ7bbGjaxhSbhN4ea50+T0AI8xpd4UbmRpToP5lYkGrV59zHQYdxMhgpXY1Qr29MCU/llPvigJTO0WArDAXcan85FOL7QpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHqW8e7p; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+PIFwzmW8+RHXH+FkFsOmXK7veZSP5nF8RxdIVoMPL1D1Cr+DEPD85oTfOT+uwP/XZOC3t+kj1HgRGsg3Nwf9WaTS4F1DDLn5k3fGBeTECmA0y9hzTplStN+hG0iZT46AAZESatMoUeQqn3Id1JVjcZoPrCR2r6gvr2oYSb2s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j5mRqkTn; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHqW8e7p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j5mRqkTn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731538247; x=1763074247;
+  t=1731538249; x=1763074249;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=c6tlelKl4fRAEbGBWpVDnypfAPx1muTJuLUyMuX5Qes=;
-  b=SHqW8e7po0QjBaXUNOjhB7DBbIFVDFov/aH4jFCZFj47go0YPoe3U6y8
-   s9Fs1773FSWjJx4fN9Ee29UGTRBSaTWNg6mUdxoTwGSWbFI8ymmgEWshR
-   CvRUOpO0Gb+quKSOX6H2GxZNInhGwuphv9+oJuX0FuyZitSgQjKCxPHgA
-   gX893n58JCjUgwobjPvdj0RTHCRU6E2/WSQxCDsvpwZojMDx2Jxx7jBn3
-   fvMGE4mrcoF5alPaDkZux7mNJhE+RPDgxK4skH0HKi4HaBMaaabSuhGK5
-   LnmBXFO9zK2FCP/LdVPezFFkysq+fAsk1txSTbDsyDxpywa/MummQVZTI
-   g==;
-X-CSE-ConnectionGUID: sznkE9raQ4CuViClzbck8Q==
-X-CSE-MsgGUID: GImWnyHTRviXIDqTY7riGA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="30862584"
+  bh=CYdGGDWei4FClN5/v5jTSMS1CfPN4qDt7+CJVB8J8vQ=;
+  b=j5mRqkTnuluF+5brLKAoV5ggTMeVTNM+B0rl3k1FEsMuJcRIIQF/bLdG
+   mW84cysYJTRuKk24Vfu7LvTGui+FvHg5nfMrwCh1wik0r6xVrEPIwXuGD
+   JpJUHjMR29pVyQ4heTNGbSgtC3cBhTHVj3LHBVCl/CpKJ1/JCygnBpLL+
+   YubWAUApR9erWo5bnRDyuuGY9V+EWEsJbykXQeKlPT9AVIGzuDG6TJ502
+   kwUDkHeZdeCe1qeEir8H8BDHX4s9uKpzPi7cbuHBEtg+NBE03dxf9unEZ
+   y2H4iYudGK4icUL2D+i59XiCDk8ztBzcrkcEXH6UnG0/CyGzpXZSBr74u
+   Q==;
+X-CSE-ConnectionGUID: JV1MhVqlRFykLITy1B8rBA==
+X-CSE-MsgGUID: Slsh0VWmQAyslnyLLPIf6w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="30862594"
 X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
-   d="scan'208";a="30862584"
+   d="scan'208";a="30862594"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 14:50:46 -0800
-X-CSE-ConnectionGUID: YQLVoXNmQRGjLuczOHvMJw==
-X-CSE-MsgGUID: lZTBUDS7SGqNplawA5kUNg==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 14:50:48 -0800
+X-CSE-ConnectionGUID: GFIBXakPTKK+vdZihgFWfw==
+X-CSE-MsgGUID: fQSc/1U1QhCMkC7OS8ilzA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
-   d="scan'208";a="88806291"
+   d="scan'208";a="88806293"
 Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
   by orviesa008.jf.intel.com with ESMTP; 13 Nov 2024 14:50:45 -0800
 Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tBMCB-0000o2-0Y;
+	id 1tBMCB-0000nz-0T;
 	Wed, 13 Nov 2024 22:50:43 +0000
-Date: Thu, 14 Nov 2024 06:50:28 +0800
+Date: Thu, 14 Nov 2024 06:50:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kartik Rajput <kkartik@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2] serial: amba-pl011: Fix RX stall when DMA is used
-Message-ID: <202411140617.nkjeHhsK-lkp@intel.com>
-References: <20241113092629.60226-1-kkartik@nvidia.com>
+To: Erin Shepherd <erin.shepherd@e43.eu>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Chuck Lever <chuck.lever@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jeff Layton <jlayton@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>, linux-nfs@vger.kernel.org,
+	Erin Shepherd <erin.shepherd@e43.eu>
+Subject: Re: [PATCH v2 2/3] exportfs: allow fs to disable CAP_DAC_READ_SEARCH
+ check
+Message-ID: <202411140603.E03vXsdz-lkp@intel.com>
+References: <20241113-pidfs_fh-v2-2-9a4d28155a37@e43.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,69 +70,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241113092629.60226-1-kkartik@nvidia.com>
+In-Reply-To: <20241113-pidfs_fh-v2-2-9a4d28155a37@e43.eu>
 
-Hi Kartik,
+Hi Erin,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus soc/for-next linus/master v6.12-rc7 next-20241113]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 14b6320953a3f856a3f93bf9a0e423395baa593d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kartik-Rajput/serial-amba-pl011-Fix-RX-stall-when-DMA-is-used/20241113-172830
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20241113092629.60226-1-kkartik%40nvidia.com
-patch subject: [PATCH v2] serial: amba-pl011: Fix RX stall when DMA is used
-config: arm-randconfig-004-20241114 (https://download.01.org/0day-ci/archive/20241114/202411140617.nkjeHhsK-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411140617.nkjeHhsK-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Erin-Shepherd/pseudofs-add-support-for-export_ops/20241114-020539
+base:   14b6320953a3f856a3f93bf9a0e423395baa593d
+patch link:    https://lore.kernel.org/r/20241113-pidfs_fh-v2-2-9a4d28155a37%40e43.eu
+patch subject: [PATCH v2 2/3] exportfs: allow fs to disable CAP_DAC_READ_SEARCH check
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241114/202411140603.E03vXsdz-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411140603.E03vXsdz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411140617.nkjeHhsK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411140603.E03vXsdz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/amba-pl011.c:1822:11: error: no member named 'using_rx_dma' in 'struct uart_amba_port'
-           if (uap->using_rx_dma) {
-               ~~~  ^
->> drivers/tty/serial/amba-pl011.c:1823:8: error: no member named 'dmacr' in 'struct uart_amba_port'
-                   uap->dmacr |= UART011_RXDMAE;
-                   ~~~  ^
-   drivers/tty/serial/amba-pl011.c:1824:20: error: no member named 'dmacr' in 'struct uart_amba_port'
-                   pl011_write(uap->dmacr, uap, REG_DMACR);
-                               ~~~  ^
-   3 errors generated.
+   In file included from fs/fhandle.c:2:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/fhandle.c:242:28: error: initializing 'struct export_operations *' with an expression of type 'const struct export_operations *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     242 |         struct export_operations *nop = root->mnt->mnt_sb->s_export_op;
+         |                                   ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +1822 drivers/tty/serial/amba-pl011.c
+vim +242 fs/fhandle.c
 
-  1808	
-  1809	static void pl011_unthrottle_rx(struct uart_port *port)
-  1810	{
-  1811		struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
-  1812		unsigned long flags;
-  1813	
-  1814		uart_port_lock_irqsave(&uap->port, &flags);
-  1815	
-  1816		uap->im = UART011_RTIM;
-  1817		if (!pl011_dma_rx_running(uap))
-  1818			uap->im |= UART011_RXIM;
-  1819	
-  1820		pl011_write(uap->im, uap, REG_IMSC);
-  1821	
-> 1822		if (uap->using_rx_dma) {
-> 1823			uap->dmacr |= UART011_RXDMAE;
-  1824			pl011_write(uap->dmacr, uap, REG_DMACR);
-  1825		}
-  1826	
-  1827		uart_port_unlock_irqrestore(&uap->port, flags);
-  1828	}
-  1829	
+   237	
+   238	static inline bool may_decode_fh(struct handle_to_path_ctx *ctx,
+   239					 unsigned int o_flags)
+   240	{
+   241		struct path *root = &ctx->root;
+ > 242		struct export_operations *nop = root->mnt->mnt_sb->s_export_op;
+   243	
+   244		if (nop && nop->flags & EXPORT_OP_UNRESTRICTED_OPEN)
+   245			return true;
+   246	
+   247		if (capable(CAP_DAC_READ_SEARCH))
+   248			return true;
+   249	
+   250		/*
+   251		 * Allow relaxed permissions of file handles if the caller has the
+   252		 * ability to mount the filesystem or create a bind-mount of the
+   253		 * provided @mountdirfd.
+   254		 *
+   255		 * In both cases the caller may be able to get an unobstructed way to
+   256		 * the encoded file handle. If the caller is only able to create a
+   257		 * bind-mount we need to verify that there are no locked mounts on top
+   258		 * of it that could prevent us from getting to the encoded file.
+   259		 *
+   260		 * In principle, locked mounts can prevent the caller from mounting the
+   261		 * filesystem but that only applies to procfs and sysfs neither of which
+   262		 * support decoding file handles.
+   263		 *
+   264		 * Restrict to O_DIRECTORY to provide a deterministic API that avoids a
+   265		 * confusing api in the face of disconnected non-dir dentries.
+   266		 *
+   267		 * There's only one dentry for each directory inode (VFS rule)...
+   268		 */
+   269		if (!(o_flags & O_DIRECTORY))
+   270			return false;
+   271	
+   272		if (ns_capable(root->mnt->mnt_sb->s_user_ns, CAP_SYS_ADMIN))
+   273			ctx->flags = HANDLE_CHECK_PERMS;
+   274		else if (is_mounted(root->mnt) &&
+   275			 ns_capable(real_mount(root->mnt)->mnt_ns->user_ns,
+   276				    CAP_SYS_ADMIN) &&
+   277			 !has_locked_children(real_mount(root->mnt), root->dentry))
+   278			ctx->flags = HANDLE_CHECK_PERMS | HANDLE_CHECK_SUBTREE;
+   279		else
+   280			return false;
+   281	
+   282		/* Are we able to override DAC permissions? */
+   283		if (!ns_capable(current_user_ns(), CAP_DAC_READ_SEARCH))
+   284			return false;
+   285	
+   286		ctx->fh_flags = EXPORT_FH_DIR_ONLY;
+   287		return true;
+   288	}
+   289	
 
 -- 
 0-DAY CI Kernel Test Service
