@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69649207A16;
-	Wed, 13 Nov 2024 21:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3146818C01B;
+	Wed, 13 Nov 2024 22:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731532601; cv=none; b=DxduOU8UR/jM605Ifoa4hhsU/Mq0ATumbvHDaXAMZVPlTSHbfpOm8TbuLVCpkK770Gd6svJPLMYbASkqJSvfS1clPtr+aUGjlZM4eNRg5FLNTT/RLXLi6gB8BvBolVI3NF5cvm1o55ZKiECPrvN/2ogktZOi6VHSw94oh8Lv46Y=
+	t=1731535727; cv=none; b=roPz8GKo7fmBpWZmopQl9rA2xjSO7sDFh9F93VkuXiMAf/6oIj1fqo4/MaSTVQ9odlcZulu3WZRjxKexre2gYpzqRYCU0X002jZmkNm+5HiCnueiXwqCp00J6h8vjOs0gfkLHYsUQFq2+1NRZs4VTKi4NSp1kgFJcy6mQYdPjf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731532601; c=relaxed/simple;
-	bh=03wuwAMfX/K1xKI+KUwDaxJqXKn6A3vcvMH1wpG3UUc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ebgEo7guQvfDWQ08+ZCz2f4ovqWKVhzhMaBIraLSNQHU9Ky0LnLNBc+I/jvH01cor4uyRhyZldmiOjvUrC/EZyxHchBQAqnkXQNxNB0jp5WvX7nJMIrO02GGL+oYRXv/8F2+zCb0XVRSOqOOo6Cie/b+FFlbMh9sRiYQ/rse/fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLa9xc8u; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1731535727; c=relaxed/simple;
+	bh=z9stuSLhlEy++TW9cEOH6TRGd9dAPMRqgcaZYellQBU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jy+DqNJlx+vFB/Q4Xw2i86Jqx304pkQv8DnXJNebiwFlaK2gDMzwnJYNUPySXPNgPmd7lp2MSdjgoA1KlQJYxdXhS9pyNM6NJfiu3FVDfpHhJpyR7fIyfOn+91JW304FNFDmWSddglARaw9DnrVtOM2ids4SYwFbrNsByshkbr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F8LXdSub; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLa9xc8u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F8LXdSub"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731532600; x=1763068600;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=03wuwAMfX/K1xKI+KUwDaxJqXKn6A3vcvMH1wpG3UUc=;
-  b=XLa9xc8uzDgUfT/5mk0I6U+YEC+wjt0QG6fQSg2A3JtoQkLOlTq+mQlz
-   LWkh55sQPTaEb16LhA0/IVQ1wbBB3tdrRnfcUdAZ0oJa5eWstT2C0Q37E
-   OIXwn6iuYT8Jrt3VINfovH/soDG4moZ7ht4MNjuNwv8HVpDDv7uRa1gNe
-   n65MJOtQqxY5M1HC+CQiAXCFVT7Klb04NtFQ8PzUfVvYz/XfpJfrTvVCH
-   pUeoRPS37S2qsXvcnAWIeYdGBqhk/7w6NhUaWKUiva9egQCjXxlf1GCIY
-   DJo2qtyQMtf9gEnsNXptF7FeALiseTBDRMCl85KCNrkrj9MUHvsea7kDx
+  t=1731535726; x=1763071726;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z9stuSLhlEy++TW9cEOH6TRGd9dAPMRqgcaZYellQBU=;
+  b=F8LXdSubse39+7Q7a6AH0pLrx5sL7gfwKKLuYuW1titbjGhb3ya7h8pq
+   Tds6XKWIgKlsmPXpfBNhO3w4OUJUyJJIIthnwtfFCDIMyRA7RQIBqAQg2
+   sV7QJg48ggU3mUy6Og4NjZrJlPknwyLa284IBTNGDX3+my39Eb1sZ06gQ
+   JrcbuoW3JNPzq7NskOhtLa2j7h2/6szM/1aYIK7H1mYtJonKpI7nJg2xN
+   cif4R1EM0ok1WutSnEpzD1KwQzLHv+B4nz5alxL1LV+xeskVe2PO3/NcR
+   SRH55eOm3A+caeTamDvOKAXIrVL+xkCdRc0TmJHlZ9KHbJwJMinFUFOv5
    Q==;
-X-CSE-ConnectionGUID: gSexmyhNTUye/E0X0Unoiw==
-X-CSE-MsgGUID: FDvQrdDWRjO+7fNKHoLS6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53990745"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="53990745"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 13:16:38 -0800
-X-CSE-ConnectionGUID: 4NGEhYoKTUeN/NmYf4faHQ==
-X-CSE-MsgGUID: D/QV0AUFTfSQeTpmCMq9tw==
+X-CSE-ConnectionGUID: t0RresSKRnOYqOezTlcNEg==
+X-CSE-MsgGUID: 26FHetLzSQOvbS8PoPgKPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="42077996"
+X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
+   d="scan'208";a="42077996"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 14:08:45 -0800
+X-CSE-ConnectionGUID: xvrdLtP/T/uwTps2LQWlBA==
+X-CSE-MsgGUID: En440rtUR9yjqqh0rkp2mw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
-   d="scan'208";a="93056463"
+   d="scan'208";a="88397161"
 Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 13 Nov 2024 13:16:37 -0800
+  by orviesa007.jf.intel.com with ESMTP; 13 Nov 2024 14:08:42 -0800
 Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tBKj4-0000j4-0I;
-	Wed, 13 Nov 2024 21:16:34 +0000
-Date: Thu, 14 Nov 2024 05:15:59 +0800
+	id 1tBLXT-0000lf-1M;
+	Wed, 13 Nov 2024 22:08:39 +0000
+Date: Thu, 14 Nov 2024 06:08:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	Boqun Feng <boqun.feng@gmail.com>
-Subject: [linux-next:master 8233/11277] error[E0425]: cannot find function
- `rust_do_trace_rust_sample_loaded` in crate `$crate::bindings`
-Message-ID: <202411140520.VL33V6fD-lkp@intel.com>
+To: yongli-oc <yongli-oc@zhaoxin.com>, akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, yongli@zhaoxin.com,
+	cobechen@zhaoxin.com, louisqi@zhaoxin.com, jiangbowang@zhaoxin.com
+Subject: Re: [PATCH] Support lockref reference count if enable LOCK_STAT
+Message-ID: <202411140548.NBssFC0E-lkp@intel.com>
+References: <20241113085703.148839-1-yongli-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,33 +64,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241113085703.148839-1-yongli-oc@zhaoxin.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   bd05b9a700c10473c2f52bf12c5c5938c30e80b0
-commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 [8233/11277] rust: samples: add tracepoint to Rust sample
-config: x86_64-randconfig-013-20241113 (https://download.01.org/0day-ci/archive/20241114/202411140520.VL33V6fD-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411140520.VL33V6fD-lkp@intel.com/reproduce)
+Hi yongli-oc,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on akpm-mm/mm-nonmm-unstable linus/master v6.12-rc7 next-20241113]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/yongli-oc/Support-lockref-reference-count-if-enable-LOCK_STAT/20241113-171348
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241113085703.148839-1-yongli-oc%40zhaoxin.com
+patch subject: [PATCH] Support lockref reference count if enable LOCK_STAT
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241114/202411140548.NBssFC0E-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411140548.NBssFC0E-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411140520.VL33V6fD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411140548.NBssFC0E-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` in crate `$crate::bindings`
-   --> samples/rust/rust_print.rs:87:5
-   |
-   87 | /     kernel::declare_trace! {
-   88 | |         /// # Safety
-   89 | |         ///
-   90 | |         /// Always safe to call.
-   91 | |         unsafe fn rust_sample_loaded(magic: c_int);
-   92 | |     }
-   | |_____^ not found in `$crate::bindings`
-   |
-   = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
+   In file included from arch/s390/purgatory/purgatory.c:10:
+   In file included from include/linux/kexec.h:18:
+   In file included from include/linux/vmcore_info.h:6:
+   In file included from include/linux/elfcore.h:11:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:7:
+   In file included from include/linux/fs.h:8:
+>> include/linux/dcache.h:369:13: warning: taking address of packed member 'lock' of class or structure 'lockref::(anonymous union)::struct (anonymous at include/linux/lockref.h:39:3)' may result in an unaligned pointer value [-Waddress-of-packed-member]
+     369 |         spin_lock(&dentry->d_lock);
+         |                    ^~~~~~~~~~~~~~
+   include/linux/dcache.h:371:15: warning: taking address of packed member 'lock' of class or structure 'lockref::(anonymous union)::struct (anonymous at include/linux/lockref.h:39:3)' may result in an unaligned pointer value [-Waddress-of-packed-member]
+     371 |         spin_unlock(&dentry->d_lock);
+         |                      ^~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +369 include/linux/dcache.h
+
+d83c49f3e36cec Al Viro 2010-04-30  366  
+d83c49f3e36cec Al Viro 2010-04-30  367  static inline void dont_mount(struct dentry *dentry)
+d83c49f3e36cec Al Viro 2010-04-30  368  {
+d83c49f3e36cec Al Viro 2010-04-30 @369  	spin_lock(&dentry->d_lock);
+d83c49f3e36cec Al Viro 2010-04-30  370  	dentry->d_flags |= DCACHE_CANT_MOUNT;
+d83c49f3e36cec Al Viro 2010-04-30  371  	spin_unlock(&dentry->d_lock);
+d83c49f3e36cec Al Viro 2010-04-30  372  }
+d83c49f3e36cec Al Viro 2010-04-30  373  
 
 -- 
 0-DAY CI Kernel Test Service
