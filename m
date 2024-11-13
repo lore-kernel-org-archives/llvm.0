@@ -1,38 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7632566;
-	Wed, 13 Nov 2024 04:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F670180021;
+	Wed, 13 Nov 2024 06:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731471201; cv=none; b=EBd/B9z7K35sKxsNEzlHGCiA573cV6J9WBsB+mgk8FgEbq18glcRLmxsR4WSI81qFDGBNBhzzqQHodI/r+KbpAU/QKAALzgoNPt62N2zgSQWUB6D0fVKoigzydJESEIgF2QueUdEeYx1+oOcINWIHC8J8CCiuYuDzq2BQ/E1jlE=
+	t=1731480217; cv=none; b=gXREtV5o5R8lytA4a5eqLor9B4q8qNKzkCzEnJwrPELGpx77lRz2pvKZG1IHO9YNZNZwXOsU2fTohcBV51ZE9FCGfCHPHGmpJk7kgKZ51Et3M+G/Q1XFj+D5TeSpUoxnxo+Os6Y36Vhx3fW7IaxWZQXypwZ2opHZs6n5Q+IoqfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731471201; c=relaxed/simple;
-	bh=VY0ZrqBxjZyPiDY9TQ5un5PLJISQejsHZY0VY84GiUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JxQ680HD3xW88HU4II/Skg9+kx0voxvOfJxvynZe5G5slPsI2ud4t0zu1sYYk15PlS5282Lhik7vgLnpsu9FJ+Ww0gNFaSSESO/E3nfyUzc6E/vlcRKpkHujp9iCSysKUSVDmiVNov1b8zTFxZSlwHDVIkltsY2lv3ogjxDyiZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4BQ9x5h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731480217; c=relaxed/simple;
+	bh=1HntU/U9oIkJa4i1c5lKFEApaWnibKDf6f+RMdat61o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PRulO8WvWCPX3K1vVIGjFyaTe/huxYVlkqUzO2ha674zMKFSyTnPVz4K1RDXPKgg2kM2aUhXTgigO1U6ju9CCs4Npp2XyV2lNQ3vhQA4NpQ4Xvbozl+S0H1BaBQRBVUZdwXak+vvwMTuD8kRmZhfWSeMyj1g9kqZ+sGk9YmnTCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pzykdwsl; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4BQ9x5h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6A3C4CECF;
-	Wed, 13 Nov 2024 04:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731471201;
-	bh=VY0ZrqBxjZyPiDY9TQ5un5PLJISQejsHZY0VY84GiUI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=F4BQ9x5h8plo+SwgP2zGLqxRPMZVwQ5xtw1a7Bs7y09mkDQB5MU53wOS9srmd7rwL
-	 6NNHpimJWUdlAR2khRq03NLcxOdmXSiLX0R2Pu3E/XIioq+APqNZeHUMk2L/CRDWQb
-	 D7uZt/oMsLGWpJGicaDFpA7NPLbKDCz2PYnYDL2nz2nXzcdbQf3srvYMMId5dSR97R
-	 ffFMQfXRXZ+Bh37wqrzFNx58enVZPpgbrqR8YfRc1hYqWKdwO5xJe0yo8hAtFDY0PO
-	 qt7awwp7IE0mgUOlLe/ntYFn1WwRuVQu+CAy8J7vBDX7yd7/SxW7oGg6SXcG7Xs9i6
-	 n+ZRf2ZIaBmgg==
-Date: Tue, 12 Nov 2024 21:13:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Brian Cain <bcain@quicinc.com>
-Cc: linux-hexagon@vger.kernel.org, llvm@lists.linux.dev
-Subject: allmodconfig link failure on -next (relocation R_HEX_B22_PCREL out
- of range)
-Message-ID: <20241113041319.GA158543@thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pzykdwsl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731480215; x=1763016215;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1HntU/U9oIkJa4i1c5lKFEApaWnibKDf6f+RMdat61o=;
+  b=PzykdwslLWTmGU1iQnM/ehuaRCgWSXraY52O/Co5W98nK90F3qCK8KyD
+   gVOQnbpshY/CsGv69ZG2URpxQ0Mhfu7F1PU7ZUZtu2QFGCqPJmMdQwSF0
+   iBvE7ymWgVUimEyAvWAm2XdV8WCnMrsjia3GaS+QiEERoVcl3rD+FjxgE
+   MYaVd3dE7+5kZCXWFuTgwDFEu4d7NBssIxUzAXSNw2zulfB/bsKBvclUy
+   CjQXbbPT80Kwf8l+Rt1hO9MPK1to7V9fUcfv3+RZlV3NFqWHWK2K/4eHb
+   MsUqsgk05wHla7zpdp2DfNQcSXYVwBLnXC7x4pVgeLECWwsRQ/QpVf2OR
+   g==;
+X-CSE-ConnectionGUID: 96BcgRltTeaWxs6Oa+F4cA==
+X-CSE-MsgGUID: bHv1eecgSK6q6ES57adlcg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="18966250"
+X-IronPort-AV: E=Sophos;i="6.12,150,1728975600"; 
+   d="scan'208";a="18966250"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 22:43:35 -0800
+X-CSE-ConnectionGUID: gTHlVwJyR/+4vfkYN7Gf1w==
+X-CSE-MsgGUID: kzUO2/+xRpS8K/Koi01z9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,150,1728975600"; 
+   d="scan'208";a="92232704"
+Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 12 Nov 2024 22:43:30 -0800
+Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tB768-00003h-1Q;
+	Wed, 13 Nov 2024 06:43:28 +0000
+Date: Wed, 13 Nov 2024 14:42:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yongbang Shi <shiyongbang@huawei.com>, xinliang.liu@linaro.org,
+	tiantao6@hisilicon.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+	daniel@ffwll.ch, kong.kongxinwei@hisilicon.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	liangjian010@huawei.com, chenjianmin@huawei.com,
+	lidongming5@huawei.com, shiyongbang@huawei.com, libaihan@huawei.com,
+	shenjian15@huawei.com, shaojijie@huawei.com,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 drm-dp 1/5] drm/hisilicon/hibmc: add dp aux in hibmc
+Message-ID: <202411131438.RZWYrWTE-lkp@intel.com>
+References: <20241112132348.2631150-2-shiyongbang@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,34 +69,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241112132348.2631150-2-shiyongbang@huawei.com>
 
-Hi Brian,
+Hi Yongbang,
 
-With next-20241112 (and some prior versions) and tip of tree LLVM, I am
-seeing a link failure, possibly because the kernel image has gotten too
-large? A simple reproducer (KCONFIG_ALLCONFIG is needed to workaround
-other tangential warnings/issues):
+kernel test robot noticed the following build warnings:
 
-  $ make -skj"$(nproc)" \
-         ARCH=hexagon \
-         KCONFIG_ALLCONFIG=<(printf 'CONFIG_%s=n\n' {DRM_,WERROR} GPIB_NI_PCI_ISA) \
-         LLVM=1 \
-         mrproper allmodconfig vmlinux
-  ...
-  ld.lld: error: vmlinux.a(arch/hexagon/kernel/head.o):(.init.text+0x160): relocation R_HEX_B22_PCREL out of range: 2098032 is not in [-2097152, 2097151]; references 'memset'
-  >>> defined in vmlinux.a(arch/hexagon/lib/memset.o)
+[auto build test WARNING on linus/master]
+[also build test WARNING on drm-misc/drm-misc-next v6.12-rc7 next-20241112]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I did notice that this error was not reproducible with LLVM 19 so I did
-a bisect of LLVM and it seems like commit 6b11573b8c5e ("Recommit
-"[FunctionAttrs] deduce attr `cold` on functions if all CG paths call a
-`cold` function"") in main introduces this, so maybe it is that
-.text.unlikely grows enough to make .init.text be too far away from
-memset() in .text?
+url:    https://github.com/intel-lab-lkp/linux/commits/Yongbang-Shi/drm-hisilicon-hibmc-add-dp-aux-in-hibmc/20241113-013224
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241112132348.2631150-2-shiyongbang%40huawei.com
+patch subject: [PATCH v4 drm-dp 1/5] drm/hisilicon/hibmc: add dp aux in hibmc
+config: x86_64-buildonly-randconfig-003-20241113 (https://download.01.org/0day-ci/archive/20241113/202411131438.RZWYrWTE-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411131438.RZWYrWTE-lkp@intel.com/reproduce)
 
-As an aside, do you folks working on Hexagon do any sort of validation
-of the kernel and toolchain? I feel like I have run into a decent number
-of Hexagon-specific issues this year and I am curious if any of these
-things have been caught by any testing that you might be doing.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411131438.RZWYrWTE-lkp@intel.com/
 
-Cheers,
-Nathan
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/hisilicon/hibmc/dp/dp_aux.c:9:
+   In file included from drivers/gpu/drm/hisilicon/hibmc/dp/dp_comm.h:14:
+   In file included from include/drm/display/drm_dp_helper.h:27:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/gpu/drm/hisilicon/hibmc/dp/dp_aux.c:9:
+>> drivers/gpu/drm/hisilicon/hibmc/dp/dp_comm.h:31:11: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+      31 |         value |= FIELD_PREP(mask, val);
+         |                  ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
+     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
+      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      74 |                                  _pfx "type of reg too small for mask"); \
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
+     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
+     505 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
+     497 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   2 warnings generated.
+
+
+vim +31 drivers/gpu/drm/hisilicon/hibmc/dp/dp_comm.h
+
+    22	
+    23	static inline void hibmc_dp_reg_write_field(struct hibmc_dp_dev *dp, u32 offset, u32 mask, u32 val)
+    24	{
+    25		u32 value;
+    26	
+    27		mutex_lock(&dp->lock);
+    28	
+    29		value = readl(dp->base + offset);
+    30		value &= ~mask;
+  > 31		value |= FIELD_PREP(mask, val);
+    32		writel(value, dp->base + offset);
+    33	
+    34		mutex_unlock(&dp->lock);
+    35	}
+    36	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
