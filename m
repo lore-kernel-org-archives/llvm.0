@@ -1,91 +1,167 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A16B4C62E
-	for <llvm@lists.linux.dev>; Wed, 13 Nov 2024 14:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F7E1DF75C;
+	Wed, 13 Nov 2024 14:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731507617; cv=none; b=p7+VOlplo7SZT7cHtg8wcz49sOKNoXcAt+r9fAXCeQgSBLMNMN0G/cdYO/u9p0ZLfs0RJPBO/WmhIOLKy/MXDC7zTXzuWjXj/7kePuUth2KPES1lSDMO4XqpYGrIMQO7WdlofHFiD9XF8YAgGBrohMKvZlFr8Zhh1DySFs2djjU=
+	t=1731508483; cv=none; b=oeQnbbtrs382gGTBkKT3lXCmM8CTVhZk3Cg9Dm5O82A2UfNryo0fDIgOyVw0xexSzyCo6RGIUNYVgFw+iVJEVf1uqYrHgWO2PTrrc5oPTTrkM1dMQ5S55U2xq40UKJhXh2+DZS0dRVIwu9pqfONhYVqNt6GaqVuK67nvOnEfMMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731507617; c=relaxed/simple;
-	bh=P17KMoRtkJg6aHvEyApGXy0PV005D3bHiugmndAKsZ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rA3KK0eKgE02UA/OTcdNnu3dsDKFpWDGgnDrFD114HpHFjYRWsrk+gGaftFZxJw5sdoX2jBbDiGIxOUT1k0S19h7Y+zuzNEM3t8lB344rgeSSAzbGqJiG3phCPB9p2MXD48Sm8mx9Rm9uXnxaOgKYXNe7mAPZHHXQSss9x3lXzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=im73hmVV; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1731508483; c=relaxed/simple;
+	bh=XL2q9gFed17spZbib9zirJervoZJ0UWFCGGZgQVhTfs=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=C2NEKEAZ5hOZ/Zt0JhrEXtmc6sd9qzjSpTGfeucudCqXLMW6kyvzyp6BIWANE8jAZiBJyCeTb9ZAVZAyrI9TooBDVXmfEtqbw0OBEqJbu/D+7OP2GbBKg3/ezy5a5bOI6/36xLB9gZa2+dqY5avHXHhn/DcxP8uYHveGSFHtiZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AMxrIBUu; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="im73hmVV"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=SlB5MYusK8b1mv7/1MZmVvegYIaryfpg+zAbobQyH78=; b=im73hmVVpi6xpLao3e5pgmuxUK
-	XZ6r0bFi2obo11fIc0c9c7wZh2EPJ+Lq/303PvQaydRbs02kSaAb46tnbBqmAGTcvaZTYrxNjvmmC
-	ee493QwASJG+9BtQ29OtMyaVnCP82RBwhZ5TSU0+DV4MpiKdUZcjAuDtH7eajSNDOGgM0NUdxqr5o
-	8rgsz/0/wEo5LWLoaiG2J5IE1A4hHGnqIgPS5ysFf3Ftl5BuVEwBoc3FEUINvmye3K7jDzfQHluGT
-	wHa8Uiwp+OpjonVWAX9IMTaIt3d5vitS5bPhpSkvl+zVo/dtjZ+HEpSnN1jco1+XKw9FC1ps77wEZ
-	Ors8NdYg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43462)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1tBEE2-0006Mu-1i;
-	Wed, 13 Nov 2024 14:20:07 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1tBEDy-00006E-10;
-	Wed, 13 Nov 2024 14:20:02 +0000
-Date: Wed, 13 Nov 2024 14:20:02 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: kernel test robot <lkp@intel.com>, Melon Liu <melon1335@163.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [rmk:for-next 3/7] arch/arm/mm/ioremap.c:130:32: error: call to
- undeclared function 'kasan_mem_to_shadow'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <ZzS1ko8pWGvYj895@shell.armlinux.org.uk>
-References: <202411130711.xfVEiMKn-lkp@intel.com>
- <CACRpkdYADg4fg2VgRxFBwp1STLbX062zjbZXQ9snOf_p6NvcEA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AMxrIBUu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731508482; x=1763044482;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=XL2q9gFed17spZbib9zirJervoZJ0UWFCGGZgQVhTfs=;
+  b=AMxrIBUu2A6G/wZa6mheGTE0r4I+sgZXyFcQaBnfDOZEdJA9takcgoJN
+   HPi89kLCWHsuzRfMzZE1uZ06kUebyt1r+84YTa05/bhsUSEWWhy4RT4Ti
+   p8KUbtONhRK35fuRPJ7eMLH3crNvhIzJE/BJ35szG/rWocYocoBD6qiYK
+   VF57hMxFXj0n89OR8YHXAfrr9kxcqHj8575JDAUd46pIuAZBzhPM1QVGt
+   K5Yz2NhnFDJXWmhPeYEcmahKTp9I7JJOui/K9OSm7xWtL4O85U3mNbEaO
+   c8njf+ZCoX/hen15KcMCqXnuldsRGIuoyTuGn77NKV+5nHP9VPaLPbbnQ
+   A==;
+X-CSE-ConnectionGUID: V9YOiycJRgeTz6qd6BhduQ==
+X-CSE-MsgGUID: 5bOr+7BFQtShQV+gm2FhHA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="19010663"
+X-IronPort-AV: E=Sophos;i="6.12,151,1728975600"; 
+   d="scan'208";a="19010663"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 06:34:40 -0800
+X-CSE-ConnectionGUID: QsdnP0vkQSuL7NV1/I8Clg==
+X-CSE-MsgGUID: mNmQvNSHT7yLZ3gabdEUzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,151,1728975600"; 
+   d="scan'208";a="88050340"
+Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 13 Nov 2024 06:34:39 -0800
+Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tBES4-0000Sl-2M;
+	Wed, 13 Nov 2024 14:34:36 +0000
+Date: Wed, 13 Nov 2024 22:34:11 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [net-next PATCH v3 5/6] octeontx2-af: CN20K mbox implementation
+ for AF's VF
+Message-ID: <202411132224.WDBx1t3k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdYADg4fg2VgRxFBwp1STLbX062zjbZXQ9snOf_p6NvcEA@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Wed, Nov 13, 2024 at 01:34:34AM +0100, Linus Walleij wrote:
-> On Wed, Nov 13, 2024 at 12:11 AM kernel test robot <lkp@intel.com> wrote:
-> 
-> > >> arch/arm/mm/ioremap.c:130:32: error: call to undeclared function 'kasan_mem_to_shadow'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >      130 |                 sync_pgds(mm, (unsigned long)kasan_mem_to_shadow(
-> >          |                                              ^
-> >    1 warning and 1 error generated.
-> 
-> I mentioned this in a comment to 9429/1 that it supercedes 9427/1 since the
-> author didn't send a new version to solve this issue. Maybe I should have
-> mailed some more...
+In-Reply-To: <20241112185326.819546-6-saikrishnag@marvell.com>
+References: <20241112185326.819546-6-saikrishnag@marvell.com>
+TO: Sai Krishna <saikrishnag@marvell.com>
+TO: davem@davemloft.net
+TO: edumazet@google.com
+TO: kuba@kernel.org
+TO: pabeni@redhat.com
+TO: netdev@vger.kernel.org
+TO: linux-kernel@vger.kernel.org
+TO: sgoutham@marvell.com
+TO: gakula@marvell.com
+TO: lcherian@marvell.com
+TO: jerinj@marvell.com
+TO: hkelam@marvell.com
+TO: sbhatta@marvell.com
+TO: andrew+netdev@lunn.ch
+TO: kalesh-anakkur.purayil@broadcom.com
+CC: Sai Krishna <saikrishnag@marvell.com>
 
-Sorry, missed that comment.
+Hi Sai,
 
-> 9429/1, 9430/1 and 9431/1 can be applied cleanly in its place.
+kernel test robot noticed the following build warnings:
 
-I initially applied all of them, deciding that 9427/1 was a fix and
-the other three were development. On merging the two branches, the
-conflicts looked horrible, so I dropped the "development" stuff rather
-than the apparent "fix" patch, clearly I should've looked closer and
-done the opposite.
+[auto build test WARNING on net-next/main]
 
-Now corrected, assuming tonight's build is clean, no further action
-should be required.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Krishna/octeontx2-Set-appropriate-PF-VF-masks-and-shifts-based-on-silicon/20241113-030302
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241112185326.819546-6-saikrishnag%40marvell.com
+patch subject: [net-next PATCH v3 5/6] octeontx2-af: CN20K mbox implementation for AF's VF
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241113/202411132224.WDBx1t3k-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411132224.WDBx1t3k-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411132224.WDBx1t3k-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/ethernet/marvell/octeontx2/af/rvu.c:12:
+   In file included from include/linux/pci.h:1650:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:589:33: warning: arithmetic between different enumeration types ('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e') [-Wenum-enum-conversion]
+     589 |                 min_vecs = RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT;
+         |                            ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2989:54: warning: arithmetic between different enumeration types ('enum rvu_af_cn20k_int_vec_e' and 'enum rvu_mbox_pf_int_vec_e') [-Wenum-enum-conversion]
+    2989 |                 return (pfvf->msix.max >= RVU_AF_CN20K_INT_VEC_CNT +
+         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~ ^
+    2990 |                         RVU_MBOX_PF_INT_VEC_CNT) && offset;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2992:47: warning: arithmetic between different enumeration types ('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e') [-Wenum-enum-conversion]
+    2992 |         return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT) &&
+         |                                   ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
+   7 warnings generated.
+
+
+vim +2989 drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+
+  2975	
+  2976	static int rvu_afvf_msix_vectors_num_ok(struct rvu *rvu)
+  2977	{
+  2978		struct rvu_pfvf *pfvf = &rvu->pf[0];
+  2979		int offset;
+  2980	
+  2981		pfvf = &rvu->pf[0];
+  2982		offset = rvu_read64(rvu, BLKADDR_RVUM, RVU_PRIV_PFX_INT_CFG(0)) & 0x3ff;
+  2983	
+  2984		/* Make sure there are enough MSIX vectors configured so that
+  2985		 * VF interrupts can be handled. Offset equal to zero means
+  2986		 * that PF vectors are not configured and overlapping AF vectors.
+  2987		 */
+  2988		if (is_cn20k(rvu->pdev))
+> 2989			return (pfvf->msix.max >= RVU_AF_CN20K_INT_VEC_CNT +
+  2990				RVU_MBOX_PF_INT_VEC_CNT) && offset;
+  2991	
+  2992		return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT) &&
+  2993		       offset;
+  2994	}
+  2995	
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
