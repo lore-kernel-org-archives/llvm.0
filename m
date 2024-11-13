@@ -1,167 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F7E1DF75C;
-	Wed, 13 Nov 2024 14:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4A51632E5
+	for <llvm@lists.linux.dev>; Wed, 13 Nov 2024 16:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731508483; cv=none; b=oeQnbbtrs382gGTBkKT3lXCmM8CTVhZk3Cg9Dm5O82A2UfNryo0fDIgOyVw0xexSzyCo6RGIUNYVgFw+iVJEVf1uqYrHgWO2PTrrc5oPTTrkM1dMQ5S55U2xq40UKJhXh2+DZS0dRVIwu9pqfONhYVqNt6GaqVuK67nvOnEfMMM=
+	t=1731516220; cv=none; b=IeAPPvEb5uY23rFHiT49HGkvanWmAyBM0waPKMImEubgR/rNj+HuSXnqnBVUX/i6imYDyXPn38twOW7vP5tKJfhna2oGkcy6tAInSqV7b/Mha+CbIa/mLx3kCfUIG5K6FueYfHt6QUgj/1HB25RbrwTfJevmRg/7ANIttFTGV+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731508483; c=relaxed/simple;
-	bh=XL2q9gFed17spZbib9zirJervoZJ0UWFCGGZgQVhTfs=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=C2NEKEAZ5hOZ/Zt0JhrEXtmc6sd9qzjSpTGfeucudCqXLMW6kyvzyp6BIWANE8jAZiBJyCeTb9ZAVZAyrI9TooBDVXmfEtqbw0OBEqJbu/D+7OP2GbBKg3/ezy5a5bOI6/36xLB9gZa2+dqY5avHXHhn/DcxP8uYHveGSFHtiZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AMxrIBUu; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731516220; c=relaxed/simple;
+	bh=IX6nwl8S1cSqdlF7c2ZuCCsJWl3Tq/Vv9oqWWKwj2sE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RuVwrDPXGKYBrmkl+1I6GlICwh/u8qySImUDuQ+dlTLCLXg6cUJO5Yb7NFgl3KP3yz/9DIIu0E7EVh335CNzeGvvDLZA/5GZbfkl5yPA48uwNDUAuiMDCc5CvrY+8tv88myT3wiUKlfRh/+zUizSQeNubJy7ayttJGHP+y20450=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=buk0BbLO; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AMxrIBUu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731508482; x=1763044482;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=XL2q9gFed17spZbib9zirJervoZJ0UWFCGGZgQVhTfs=;
-  b=AMxrIBUu2A6G/wZa6mheGTE0r4I+sgZXyFcQaBnfDOZEdJA9takcgoJN
-   HPi89kLCWHsuzRfMzZE1uZ06kUebyt1r+84YTa05/bhsUSEWWhy4RT4Ti
-   p8KUbtONhRK35fuRPJ7eMLH3crNvhIzJE/BJ35szG/rWocYocoBD6qiYK
-   VF57hMxFXj0n89OR8YHXAfrr9kxcqHj8575JDAUd46pIuAZBzhPM1QVGt
-   K5Yz2NhnFDJXWmhPeYEcmahKTp9I7JJOui/K9OSm7xWtL4O85U3mNbEaO
-   c8njf+ZCoX/hen15KcMCqXnuldsRGIuoyTuGn77NKV+5nHP9VPaLPbbnQ
-   A==;
-X-CSE-ConnectionGUID: V9YOiycJRgeTz6qd6BhduQ==
-X-CSE-MsgGUID: 5bOr+7BFQtShQV+gm2FhHA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="19010663"
-X-IronPort-AV: E=Sophos;i="6.12,151,1728975600"; 
-   d="scan'208";a="19010663"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 06:34:40 -0800
-X-CSE-ConnectionGUID: QsdnP0vkQSuL7NV1/I8Clg==
-X-CSE-MsgGUID: mNmQvNSHT7yLZ3gabdEUzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,151,1728975600"; 
-   d="scan'208";a="88050340"
-Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 13 Nov 2024 06:34:39 -0800
-Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tBES4-0000Sl-2M;
-	Wed, 13 Nov 2024 14:34:36 +0000
-Date: Wed, 13 Nov 2024 22:34:11 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [net-next PATCH v3 5/6] octeontx2-af: CN20K mbox implementation
- for AF's VF
-Message-ID: <202411132224.WDBx1t3k-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="buk0BbLO"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20cf6eea3c0so68744515ad.0
+        for <llvm@lists.linux.dev>; Wed, 13 Nov 2024 08:43:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1731516218; x=1732121018; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IgPHRZzhn/BgFJQ3GQ6/XKSU53FzjUunIQ5VJWFDlTQ=;
+        b=buk0BbLOTAKrimS4dJtLvCAPEHAmqvCgMhgwgcjgA4rL72yXZaimuF1kL1PXUD/1ry
+         q2+teB29tXSCggVWTSHi6/PP76e+maZmr6vHgH8uh48m7nQKGWG1yTRvqtd0hE9RLcPP
+         oezib7nn0aMBkXHdU2SeJlssMkGLb1dc7AV6lmnOza0rxco8Kzq5elkPqG4Y7qWO6WUS
+         esVJR/svgZV/d3LH3pmcfkSroTSi1Mx8RNMXuTIlln/3lZaDSyM8GEFeZsF10w7Uw4pn
+         6Il6Wv1dxTHg4+GO/WfWiRDeFBS6oE/ZK81AeCtAXjM01yHYlKu3UG3tO3/CdkWLkmzO
+         N7Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731516218; x=1732121018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IgPHRZzhn/BgFJQ3GQ6/XKSU53FzjUunIQ5VJWFDlTQ=;
+        b=nktehA1QwQADmH8o2m3VMiOw5KP+5xhyfxPQoptUduJtSdBa0GpWG6JuEweNS//mXW
+         jQdmdpCoJ6TlwAdpv4XvrVkOP0OpktJX5BTPQQjEWGi14hZHgTwCPA8CsJ2AMkSlV09C
+         7O7otfPydRz3VMIRiV29StbSrqsE94kISGn20Lmt5RiVVTzXVNaqopgycsOvjFPiO5Q+
+         J0yiuz1ZjY6OM7QzSZVKUa8dRvA0vheofnGexQuR76TUTFbGTdWH2gVp+xuK/y6LHGHh
+         tFBg4cUO29kuaihMDQRNiSVYAcKVhrrMCxfpzj7KSXUNSAmqkFc+DkCF80rkPbebhJpo
+         hhAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJiOvNlgswbHqEV4WXwtV3HXjMtSEjhhnsUrPetiYSj8XbPt8YW+gYcRHjOt5yUjUzSWGl@lists.linux.dev
+X-Gm-Message-State: AOJu0YzNPYFIthuyQfOGThK95wTCdIgZWo7suiNrbWpHqxVs4cxhf1/m
+	1tDtFlVRxaoF8HLdO4g6h5CTvFg/tXRALqoPftDQMJaXKjkzROc5msZQnjhMktYy1FL1B6c9+Ol
+	78yAxJ5Krv7zVabWStHhDqJstD97Tbf6JZkFc
+X-Google-Smtp-Source: AGHT+IE5R5UwXWzDg5H/9eKx/xgIt+u3w4Tu1ahz06jOHoM94pkRh28Cbaqfknle8kqnX49/ySumHHSYecZw5UFsvwU=
+X-Received: by 2002:a17:902:f70a:b0:20c:7509:d948 with SMTP id
+ d9443c01a7336-21183517852mr278644275ad.17.1731516218253; Wed, 13 Nov 2024
+ 08:43:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241113041319.GA158543@thelio-3990X> <DS0PR02MB1025072B87B225A4A8F0953F5B85A2@DS0PR02MB10250.namprd02.prod.outlook.com>
+In-Reply-To: <DS0PR02MB1025072B87B225A4A8F0953F5B85A2@DS0PR02MB10250.namprd02.prod.outlook.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 13 Nov 2024 08:43:25 -0800
+Message-ID: <CAKwvOdnWZZ9We85caDM7zQsrUeKhJ2v2xL8tJbjeVUEgv_vL9g@mail.gmail.com>
+Subject: Re: allmodconfig link failure on -next (relocation R_HEX_B22_PCREL
+ out of range)
+To: Brian Cain <bcain@quicinc.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	"linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Alexey Karyakin <akaryaki@quicinc.com>, 
+	Sid Manning <sidneym@quicinc.com>, Sundeep Kushwaha <sundeepk@quicinc.com>, 
+	Shankar Kalpathi Easwaran <seaswara@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In-Reply-To: <20241112185326.819546-6-saikrishnag@marvell.com>
-References: <20241112185326.819546-6-saikrishnag@marvell.com>
-TO: Sai Krishna <saikrishnag@marvell.com>
-TO: davem@davemloft.net
-TO: edumazet@google.com
-TO: kuba@kernel.org
-TO: pabeni@redhat.com
-TO: netdev@vger.kernel.org
-TO: linux-kernel@vger.kernel.org
-TO: sgoutham@marvell.com
-TO: gakula@marvell.com
-TO: lcherian@marvell.com
-TO: jerinj@marvell.com
-TO: hkelam@marvell.com
-TO: sbhatta@marvell.com
-TO: andrew+netdev@lunn.ch
-TO: kalesh-anakkur.purayil@broadcom.com
-CC: Sai Krishna <saikrishnag@marvell.com>
+On Wed, Nov 13, 2024 at 6:18=E2=80=AFAM Brian Cain <bcain@quicinc.com> wrot=
+e:
+>
+> > -----Original Message-----
+> > From: Nathan Chancellor <nathan@kernel.org>
+> > Sent: Tuesday, November 12, 2024 10:13 PM
+> > To: Brian Cain <bcain@quicinc.com>
+> > Cc: linux-hexagon@vger.kernel.org; llvm@lists.linux.dev
+> > Subject: allmodconfig link failure on -next (relocation R_HEX_B22_PCREL=
+ out of
+> > range)
+> >
+> > As an aside, do you folks working on Hexagon do any sort of validation
+> > of the kernel and toolchain? I feel like I have run into a decent numbe=
+r
+> > of Hexagon-specific issues this year and I am curious if any of these
+> > things have been caught by any testing that you might be doing.
+>
+> We don't do enough testing of the toolchain changes with regard to the ke=
+rnel.  I think we have room to improve there.  I'd like to incorporate more=
+ testing into our workflow for landing changes in upstream LLVM.
+>
 
-Hi Sai,
+Build testing a few "blessed configs" would be a good place to start.
+We spoke briefly a few weeks ago about upstreaming qemu system
+support; that would allow us to start boot testing (though, we're
+using buildroot to create small userspace images; we'd probably need
+to look into hexagon support in buildroot then, too).  We're happy to
+hop on a call to discuss some of these topics if you or the team have
+questions.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sai-Krishna/octeontx2-Set-appropriate-PF-VF-masks-and-shifts-based-on-silicon/20241113-030302
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241112185326.819546-6-saikrishnag%40marvell.com
-patch subject: [net-next PATCH v3 5/6] octeontx2-af: CN20K mbox implementation for AF's VF
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241113/202411132224.WDBx1t3k-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411132224.WDBx1t3k-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411132224.WDBx1t3k-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/marvell/octeontx2/af/rvu.c:12:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:589:33: warning: arithmetic between different enumeration types ('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e') [-Wenum-enum-conversion]
-     589 |                 min_vecs = RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT;
-         |                            ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2989:54: warning: arithmetic between different enumeration types ('enum rvu_af_cn20k_int_vec_e' and 'enum rvu_mbox_pf_int_vec_e') [-Wenum-enum-conversion]
-    2989 |                 return (pfvf->msix.max >= RVU_AF_CN20K_INT_VEC_CNT +
-         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~ ^
-    2990 |                         RVU_MBOX_PF_INT_VEC_CNT) && offset;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2992:47: warning: arithmetic between different enumeration types ('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e') [-Wenum-enum-conversion]
-    2992 |         return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT) &&
-         |                                   ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~
-   7 warnings generated.
-
-
-vim +2989 drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-
-  2975	
-  2976	static int rvu_afvf_msix_vectors_num_ok(struct rvu *rvu)
-  2977	{
-  2978		struct rvu_pfvf *pfvf = &rvu->pf[0];
-  2979		int offset;
-  2980	
-  2981		pfvf = &rvu->pf[0];
-  2982		offset = rvu_read64(rvu, BLKADDR_RVUM, RVU_PRIV_PFX_INT_CFG(0)) & 0x3ff;
-  2983	
-  2984		/* Make sure there are enough MSIX vectors configured so that
-  2985		 * VF interrupts can be handled. Offset equal to zero means
-  2986		 * that PF vectors are not configured and overlapping AF vectors.
-  2987		 */
-  2988		if (is_cn20k(rvu->pdev))
-> 2989			return (pfvf->msix.max >= RVU_AF_CN20K_INT_VEC_CNT +
-  2990				RVU_MBOX_PF_INT_VEC_CNT) && offset;
-  2991	
-  2992		return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT) &&
-  2993		       offset;
-  2994	}
-  2995	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Also, thanks Alexey for the quick fix to LLD!
+--=20
+Thanks,
+~Nick Desaulniers
