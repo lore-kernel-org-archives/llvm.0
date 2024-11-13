@@ -1,135 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CE0161326;
-	Wed, 13 Nov 2024 03:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA8216DEB4;
+	Wed, 13 Nov 2024 03:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731467579; cv=none; b=HWmDwusf+S5BkAzGN2GEa2uuDKxBwN0gY57oOnwHflg5WwKijOPZYpEXvpLpbsWMA1wP8f4s0EZn0KUJOz2yXh2mkgNoLcqGCnZZJchxtvENRzA8GU08w9YVJzKhdQ1aT+3HSHmniFlteEP63263ffjCvTXv/sAdou+qeAnZ3fQ=
+	t=1731468584; cv=none; b=Mj/GNU7YOAuT6d2ogDtbdO4I41H1z116qTWGrfSxNPz43hJV4s+ulXfuc7Hw47zekQDPOe6Haso9yB95axaSaVDu4HB83jTH+dSTprm0/xl/7LRJ47+4kUnw2Anc15dv69PgYI/TS8NE0fB6FXqP18kRh5dtvIOurJy35tdajcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731467579; c=relaxed/simple;
-	bh=aGDEPDsF+Q8EyDgP5RZSD4WuzW+6IkJfG/aIFBd5lFE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dUrJpWMSDvYJ3pEaKVvloCIVfBi+kefc4N3KAFZa8SlF8cnluYoaKp8ots+4cU3da3ktEKxBbOhvCTnOJ/BATCBvBgQnd29Tu/prQDd5JCsLCGWLmVrXHSBFzd4H59lR+yTBXWgGsK9FQzYejqv9rX3Hxwp9tpcziiEDemQOl8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLiJyBYE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731468584; c=relaxed/simple;
+	bh=zBDc456r67UdP1KTxni4OnRh4y7un56AKDTyJiwbpb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ivARuGy+Pg31j7jDSmt6k350ZihH3SLUzevCIqtUGic30GfCI1ys6ozRwUViHgMruqSHZP3wJ4XTkq8tNsP5QcTfLxXwZ2sNCT7o7WvGr7qW4MlDcRcb5iCpJOb/yRceMhK/GelN22iI56fk2XELXXMpWmBjV8pqwB15itUANTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IgAa1zDQ; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLiJyBYE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44274C4CED7;
-	Wed, 13 Nov 2024 03:12:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731467579;
-	bh=aGDEPDsF+Q8EyDgP5RZSD4WuzW+6IkJfG/aIFBd5lFE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BLiJyBYEJRpTjkVtCCWSblUch2sTiexyWIOPgikJ23CEogS6ViDLuU7UCJOnnLLPu
-	 03MgqI7T2ZQWGIBxtvsFmQ114XG/QK+yTIfaHGmxmgkJONVcosclQQRgEcL/jx/r2h
-	 QY5QPQ08T85ssQf7/yI6iPnPTCYXya1V93A2uv4DmUrrSH87bK28CuSI/B5xCoBvXP
-	 OwMimYfurjumoBgOqEhZeRPqwqcwK7P6Q71FpiSkxSCvHABDrbKjDm4VCnT8jklZiq
-	 AYGr5E+PeVZ8Q0WvJOqSyeGLF/3aT/iy2+ueazppPsLdX3OZ8JT9lzFX+QRDBYgEkx
-	 dmeWjBn5s9R9w==
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a9a0ec0a94fso1018833766b.1;
-        Tue, 12 Nov 2024 19:12:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVnSLFP9+JkYgXKg9qldI8WgUSgDAYrtkwUvK2CSfKdmXoAmTE/o5QFMmF2UzLUhZTmFQF9pE9nfw==@lists.linux.dev, AJvYcCWC/wKZ2huFN3kdp0LsD5WYsCnPIGLhvQQTgaTFQ0gzJ1ttYrigE7V1LdLIPgSNlGemGAEb@lists.linux.dev, AJvYcCWTxD5LvZi0KZM42GqXzR6HURjdbwFTTpg4ss9KsR7nTzvazOV1kf5h051a4OGTNiRJ+SDARLlPJZ61@lists.linux.dev
-X-Gm-Message-State: AOJu0YwSN9koLI0c2uK50A+Vqij+7eXVanL5spHiZG7VwbQXHO5e1ymj
-	mszSjMjHnrGG7t0itpVP6kG16b1sIkRgcLiFxFbSz22CizpKIzOQGvWk6ZPdvb6cWvpJbcrQHCU
-	hund5D/+YKQTfg921/+UVB5tqvaM=
-X-Google-Smtp-Source: AGHT+IFBL4MFKWJ2gLMX0Nr5x8TFoj/k14rM6zCbF60i169syTOCZtRjYj9uG4d+KOypD4ObRoxyS5hP/fYn0kHCOTI=
-X-Received: by 2002:a17:907:7dab:b0:a99:f283:8147 with SMTP id
- a640c23a62f3a-a9eeff25cb5mr1714039466b.27.1731467577782; Tue, 12 Nov 2024
- 19:12:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgAa1zDQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731468583; x=1763004583;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zBDc456r67UdP1KTxni4OnRh4y7un56AKDTyJiwbpb8=;
+  b=IgAa1zDQzzrgEdHz/aNZFgzsnZpoEnhhn3Z8Z8Y2OJIatvPzPLjCEtqp
+   MMAZH60ata6S1HnuYJfH9fRKzZqeO5Yuca9SqcxlsO1b/O8+GMF//IwmE
+   Ata4gjc9ajW4fSnvV6tm3cYCYswyrCOKlgP44HGYmeUjWDGypEcprtuPz
+   lAV7JO2i0U/Ls40d34gE5OyK/JiPS8TYE5kzAnWvzz6FcBnMdZ+sSdKCM
+   3IQLTfJWmmDuaVHwjp/9FJGCqxmLbSwK/UfpXtSKo/juh4kkIdYLrYrNp
+   6m5cUDM0uuOpxvlxo3j+Q+A+AAN5/3MnW2V+PjVIb8Rbp5fI6tDl0w08J
+   Q==;
+X-CSE-ConnectionGUID: C80xKIc8SJOsLmPOsdfQgg==
+X-CSE-MsgGUID: C7No7vQlTHSpiQOihst0Wg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53891384"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="53891384"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 19:29:41 -0800
+X-CSE-ConnectionGUID: i2uCDkoQRo2wQ5gXUT4F3g==
+X-CSE-MsgGUID: ISVljHvISOqmem/AdG6++Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,149,1728975600"; 
+   d="scan'208";a="111040572"
+Received: from lkp-server01.sh.intel.com (HELO c782e932e0d3) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 12 Nov 2024 19:29:13 -0800
+Received: from kbuild by c782e932e0d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tB446-00001I-2g;
+	Wed, 13 Nov 2024 03:29:10 +0000
+Date: Wed, 13 Nov 2024 11:28:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:statmount 5/5] samples/vfs/mountinfo.c:122:45: warning:
+ format specifies type 'unsigned long' but the argument has type '__u64' (aka
+ 'unsigned long long')
+Message-ID: <202411131112.x7IgKgNt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241112-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-7d881f728d67@kernel.org>
-In-Reply-To: <20241112-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-7d881f728d67@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 13 Nov 2024 11:12:47 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7dfLLD6wjpVFBvfH3ZZO2-jDRQt6sA6FUL3pXfj2JnZA@mail.gmail.com>
-Message-ID: <CAAhV-H7dfLLD6wjpVFBvfH3ZZO2-jDRQt6sA6FUL3pXfj2JnZA@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: KVM: Ensure ret is always initialized in kvm_eiointc_{read,write}()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	WANG Xuerui <kernel@xen0n.name>, Xianglai Li <lixianglai@loongson.cn>, kvm@vger.kernel.org, 
-	loongarch@lists.linux.dev, llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, Nathan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git statmount
+head:   b362a0ea5036587314ee0f8f5cbc491cd4ded303
+commit: b362a0ea5036587314ee0f8f5cbc491cd4ded303 [5/5] samples: add a mnt-ns-walk program to demonstrate statmount()/listmount()
+config: x86_64-buildonly-randconfig-002-20241113 (https://download.01.org/0day-ci/archive/20241113/202411131112.x7IgKgNt-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411131112.x7IgKgNt-lkp@intel.com/reproduce)
 
-Thank you for your patch, but I think it is better to initialize it at
-declaration, and I will squash the change to the original patch since
-it hasn't been upstream.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411131112.x7IgKgNt-lkp@intel.com/
 
-On Wed, Nov 13, 2024 at 1:02=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Clang warns (or errors with CONFIG_WERROR=3Dy):
->
->   arch/loongarch/kvm/intc/eiointc.c:323:2: error: variable 'ret' is used =
-uninitialized whenever switch default is taken [-Werror,-Wsometimes-uniniti=
-alized]
->     323 |         default:
->         |         ^~~~~~~
->   arch/loongarch/kvm/intc/eiointc.c:697:2: error: variable 'ret' is used =
-uninitialized whenever switch default is taken [-Werror,-Wsometimes-uniniti=
-alized]
->     697 |         default:
->         |         ^~~~~~~
->
-> Set ret to -EINVAL in the default case to resolve the warning, as len
-> was not a valid value for the functions to handle.
->
-> Fixes: e24e9e0c1da4 ("LoongArch: KVM: Add EIOINTC read and write function=
-s")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> It appears that my previous version of this change did not get
-> incorporated in the new revision. I did not mark this as a v2 since it
-> has been some time.
->
-> https://lore.kernel.org/r/20240916-loongarch-kvm-eiointc-fix-sometimes-un=
-initialized-v1-1-85142dcb2274@kernel.org
-I'm very sorry that I have ignored this and didn't signal Xianglai.
+All warnings (new ones prefixed by >>):
 
-Huacai
+>> samples/vfs/mountinfo.c:122:45: warning: format specifies type 'unsigned long' but the argument has type '__u64' (aka 'unsigned long long') [-Wformat]
+     122 |         printf("0x%lx 0x%lx %u:%u %s %s ", mnt_id, buf->mnt_parent_id,
+         |                         ~~~                        ^~~~~~~~~~~~~~~~~~
+         |                         %llx
+   1 warning generated.
 
-> ---
->  arch/loongarch/kvm/intc/eiointc.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/loongarch/kvm/intc/eiointc.c b/arch/loongarch/kvm/intc/=
-eiointc.c
-> index 0084839f41506eb3b99c2c38f9721f3c0101e384..6af3ecbe29caaaef1582b1fbb=
-941c01638e721cf 100644
-> --- a/arch/loongarch/kvm/intc/eiointc.c
-> +++ b/arch/loongarch/kvm/intc/eiointc.c
-> @@ -323,6 +323,7 @@ static int kvm_eiointc_read(struct kvm_vcpu *vcpu,
->         default:
->                 WARN_ONCE(1, "%s: Abnormal address access: addr 0x%llx, s=
-ize %d\n",
->                                                 __func__, addr, len);
-> +               ret =3D -EINVAL;
->         }
->         spin_unlock_irqrestore(&eiointc->lock, flags);
->
-> @@ -697,6 +698,7 @@ static int kvm_eiointc_write(struct kvm_vcpu *vcpu,
->         default:
->                 WARN_ONCE(1, "%s: Abnormal address access: addr 0x%llx, s=
-ize %d\n",
->                                                 __func__, addr, len);
-> +               ret =3D -EINVAL;
->         }
->         spin_unlock_irqrestore(&eiointc->lock, flags);
->
->
-> ---
-> base-commit: f7cc7a98fb7124abc269ebf162fcb3a8893b660a
-> change-id: 20241112-loongarch-kvm-eiointc-fix-sometimes-uninitialized-1d9=
-f543db2d2
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+
+vim +122 samples/vfs/mountinfo.c
+
+   106	
+   107	static int dump_mountinfo(uint64_t mnt_id, uint64_t mnt_ns_id)
+   108	{
+   109		int ret;
+   110		struct statmount *buf = alloca(STATMOUNT_BUFSIZE);
+   111		const uint64_t mask = STATMOUNT_SB_BASIC | STATMOUNT_MNT_BASIC |
+   112					STATMOUNT_PROPAGATE_FROM | STATMOUNT_FS_TYPE |
+   113					STATMOUNT_MNT_ROOT | STATMOUNT_MNT_POINT |
+   114					STATMOUNT_MNT_OPTS | STATMOUNT_FS_SUBTYPE |
+   115					STATMOUNT_SB_SOURCE;
+   116	
+   117		ret = statmount(mnt_id, mnt_ns_id, mask, buf, STATMOUNT_BUFSIZE, 0);
+   118		if (ret < 0) {
+   119			perror("statmount");
+   120			return 1;
+   121		}
+ > 122		printf("0x%lx 0x%lx %u:%u %s %s ", mnt_id, buf->mnt_parent_id,
+   123					   buf->sb_dev_major, buf->sb_dev_minor,
+   124					   &buf->str[buf->mnt_root],
+   125					   &buf->str[buf->mnt_point]);
+   126		show_mnt_attrs(buf->mnt_attr);
+   127		show_propagation(buf);
+   128	
+   129		printf(" - %s", &buf->str[buf->fs_type]);
+   130		if (buf->mask & STATMOUNT_FS_SUBTYPE)
+   131			printf(".%s", &buf->str[buf->fs_subtype]);
+   132		if (buf->mask & STATMOUNT_SB_SOURCE)
+   133			printf(" %s", &buf->str[buf->sb_source]);
+   134		else
+   135			printf(":none");
+   136	
+   137		show_sb_flags(buf->sb_flags);
+   138		printf(",%s\n", &buf->str[buf->mnt_opts]);
+   139		return 0;
+   140	}
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
