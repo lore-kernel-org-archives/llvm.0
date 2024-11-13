@@ -1,66 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F670180021;
-	Wed, 13 Nov 2024 06:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BE51FA84A;
+	Wed, 13 Nov 2024 10:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731480217; cv=none; b=gXREtV5o5R8lytA4a5eqLor9B4q8qNKzkCzEnJwrPELGpx77lRz2pvKZG1IHO9YNZNZwXOsU2fTohcBV51ZE9FCGfCHPHGmpJk7kgKZ51Et3M+G/Q1XFj+D5TeSpUoxnxo+Os6Y36Vhx3fW7IaxWZQXypwZ2opHZs6n5Q+IoqfI=
+	t=1731492058; cv=none; b=uCYSdLhuQNYFx3oQ+o8V08ZjMghLvA1AM8I+fRvTS8CqiPrBB4LLN1dSkZEnHoicLw9ySfOue2z9ZAwOFqkpx/zMIBtSauVAjLduOmmNdkuFGczWwZkYe4oYkBbO+foRbitY666b7DkA+zCC2fY73TO81GDIh88iN6Gi58VjiAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731480217; c=relaxed/simple;
-	bh=1HntU/U9oIkJa4i1c5lKFEApaWnibKDf6f+RMdat61o=;
+	s=arc-20240116; t=1731492058; c=relaxed/simple;
+	bh=ZkMq79c4JGzoIJVfdWDk1J1kcO/pPfiYg79E2+IsnHk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PRulO8WvWCPX3K1vVIGjFyaTe/huxYVlkqUzO2ha674zMKFSyTnPVz4K1RDXPKgg2kM2aUhXTgigO1U6ju9CCs4Npp2XyV2lNQ3vhQA4NpQ4Xvbozl+S0H1BaBQRBVUZdwXak+vvwMTuD8kRmZhfWSeMyj1g9kqZ+sGk9YmnTCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pzykdwsl; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=s0mSSM067ARezx4pGMTWuJHhaEWP/NCiQceP4NCLqnl9T5SchNUi/ywbn6HhFn94iPU/FTkois9zwiwgAmgs5P2MsNWW7ngNsjsX112zhe5nPOGxTcR+QA3T52QHsthMmj0FszVuF66MRYwQiPKSXADhV47k7Zl4Fd9VBhfV6nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PerTfzZS; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pzykdwsl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PerTfzZS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731480215; x=1763016215;
+  t=1731492054; x=1763028054;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1HntU/U9oIkJa4i1c5lKFEApaWnibKDf6f+RMdat61o=;
-  b=PzykdwslLWTmGU1iQnM/ehuaRCgWSXraY52O/Co5W98nK90F3qCK8KyD
-   gVOQnbpshY/CsGv69ZG2URpxQ0Mhfu7F1PU7ZUZtu2QFGCqPJmMdQwSF0
-   iBvE7ymWgVUimEyAvWAm2XdV8WCnMrsjia3GaS+QiEERoVcl3rD+FjxgE
-   MYaVd3dE7+5kZCXWFuTgwDFEu4d7NBssIxUzAXSNw2zulfB/bsKBvclUy
-   CjQXbbPT80Kwf8l+Rt1hO9MPK1to7V9fUcfv3+RZlV3NFqWHWK2K/4eHb
-   MsUqsgk05wHla7zpdp2DfNQcSXYVwBLnXC7x4pVgeLECWwsRQ/QpVf2OR
-   g==;
-X-CSE-ConnectionGUID: 96BcgRltTeaWxs6Oa+F4cA==
-X-CSE-MsgGUID: bHv1eecgSK6q6ES57adlcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="18966250"
-X-IronPort-AV: E=Sophos;i="6.12,150,1728975600"; 
-   d="scan'208";a="18966250"
+  bh=ZkMq79c4JGzoIJVfdWDk1J1kcO/pPfiYg79E2+IsnHk=;
+  b=PerTfzZSExiLH4O+M7QIlzpt56PQDqTMxoPCHgtNEvO9b6+w6pUrd+ZQ
+   CU4dDN57Ca0s3UUCi8EIDkydf+4WtdhsxtDgTC4TWRK9KmwnhngK/Qt+m
+   IrCnOb8uJJloPvWxkc7QSeVZm0OQO2DOzf3WsrxO+jZRSttZ6pM6NNSFG
+   /2OmY7tmP9GwKWjW2NBlguYuUTbBZls0oxcR7YqVz3o8eQtnby+iGYEaF
+   UweXWSs0Ryqw78Gu/czXAU3j+PBp/iAtSMadMmjGzBRMWgZpxFhDfQpy3
+   o3ICxfkS0ek5ZCnRIGP2EhiAIRViH0Iv0tgRKb7WlZMYSVG5GxbSL2mN4
+   w==;
+X-CSE-ConnectionGUID: xsS8iHa9Te+rehq3NxIAjg==
+X-CSE-MsgGUID: wCoBcznTTvSINvOWhn9nbA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="35085699"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="35085699"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 22:43:35 -0800
-X-CSE-ConnectionGUID: gTHlVwJyR/+4vfkYN7Gf1w==
-X-CSE-MsgGUID: kzUO2/+xRpS8K/Koi01z9w==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 02:00:53 -0800
+X-CSE-ConnectionGUID: xHi9XD1fRge89TMU/HzhZQ==
+X-CSE-MsgGUID: lE+YIcgmQxCsnQn5M+kxkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,150,1728975600"; 
-   d="scan'208";a="92232704"
+   d="scan'208";a="92292266"
 Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 12 Nov 2024 22:43:30 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 13 Nov 2024 02:00:51 -0800
 Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tB768-00003h-1Q;
-	Wed, 13 Nov 2024 06:43:28 +0000
-Date: Wed, 13 Nov 2024 14:42:53 +0800
+	id 1tBAB7-0000D7-0W;
+	Wed, 13 Nov 2024 10:00:49 +0000
+Date: Wed, 13 Nov 2024 18:00:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yongbang Shi <shiyongbang@huawei.com>, xinliang.liu@linaro.org,
-	tiantao6@hisilicon.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	daniel@ffwll.ch, kong.kongxinwei@hisilicon.com
+To: Ragavendra <ragavendra.bn@gmail.com>, mturquette@baylibre.com,
+	sboyd@kernel.org, unicorn_wang@outlook.com, inochiama@outlook.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	liangjian010@huawei.com, chenjianmin@huawei.com,
-	lidongming5@huawei.com, shiyongbang@huawei.com, libaihan@huawei.com,
-	shenjian15@huawei.com, shaojijie@huawei.com,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 drm-dp 1/5] drm/hisilicon/hibmc: add dp aux in hibmc
-Message-ID: <202411131438.RZWYrWTE-lkp@intel.com>
-References: <20241112132348.2631150-2-shiyongbang@huawei.com>
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Ragavendra <ragavendra.bn@gmail.com>
+Subject: Re: [PATCH] clk:sophgo:clk-cv18xx-pll: Remove uninitialized u32
+ parameter and variable
+Message-ID: <202411131750.bsCkQYb6-lkp@intel.com>
+References: <20241113025318.3667350-1-ragavendra.bn@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,91 +66,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241112132348.2631150-2-shiyongbang@huawei.com>
+In-Reply-To: <20241113025318.3667350-1-ragavendra.bn@gmail.com>
 
-Hi Yongbang,
+Hi Ragavendra,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on drm-misc/drm-misc-next v6.12-rc7 next-20241112]
+[auto build test ERROR on sophgo/for-next]
+[also build test ERROR on sophgo/fixes linus/master v6.12-rc7 next-20241112]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yongbang-Shi/drm-hisilicon-hibmc-add-dp-aux-in-hibmc/20241113-013224
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241112132348.2631150-2-shiyongbang%40huawei.com
-patch subject: [PATCH v4 drm-dp 1/5] drm/hisilicon/hibmc: add dp aux in hibmc
-config: x86_64-buildonly-randconfig-003-20241113 (https://download.01.org/0day-ci/archive/20241113/202411131438.RZWYrWTE-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411131438.RZWYrWTE-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ragavendra/clk-sophgo-clk-cv18xx-pll-Remove-uninitialized-u32-parameter-and-variable/20241113-105536
+base:   https://github.com/sophgo/linux.git for-next
+patch link:    https://lore.kernel.org/r/20241113025318.3667350-1-ragavendra.bn%40gmail.com
+patch subject: [PATCH] clk:sophgo:clk-cv18xx-pll: Remove uninitialized u32 parameter and variable
+config: arm-randconfig-001-20241113 (https://download.01.org/0day-ci/archive/20241113/202411131750.bsCkQYb6-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411131750.bsCkQYb6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411131438.RZWYrWTE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411131750.bsCkQYb6-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/hisilicon/hibmc/dp/dp_aux.c:9:
-   In file included from drivers/gpu/drm/hisilicon/hibmc/dp/dp_comm.h:14:
-   In file included from include/drm/display/drm_dp_helper.h:27:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/hisilicon/hibmc/dp/dp_aux.c:9:
->> drivers/gpu/drm/hisilicon/hibmc/dp/dp_comm.h:31:11: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-      31 |         value |= FIELD_PREP(mask, val);
-         |                  ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
-     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
-      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      74 |                                  _pfx "type of reg too small for mask"); \
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/linux/compiler_types.h:517:22: note: expanded from macro 'compiletime_assert'
-     517 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:505:23: note: expanded from macro '_compiletime_assert'
-     505 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:497:9: note: expanded from macro '__compiletime_assert'
-     497 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   2 warnings generated.
+>> drivers/clk/sophgo/clk-cv18xx-pll.c:80:4: error: use of undeclared identifier 'value'
+      80 |                 *value = detected;
+         |                  ^
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MODVERSIONS
+   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
+   Selected by [y]:
+   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
 
 
-vim +31 drivers/gpu/drm/hisilicon/hibmc/dp/dp_comm.h
+vim +/value +80 drivers/clk/sophgo/clk-cv18xx-pll.c
 
-    22	
-    23	static inline void hibmc_dp_reg_write_field(struct hibmc_dp_dev *dp, u32 offset, u32 mask, u32 val)
-    24	{
-    25		u32 value;
-    26	
-    27		mutex_lock(&dp->lock);
-    28	
-    29		value = readl(dp->base + offset);
-    30		value &= ~mask;
-  > 31		value |= FIELD_PREP(mask, val);
-    32		writel(value, dp->base + offset);
-    33	
-    34		mutex_unlock(&dp->lock);
-    35	}
-    36	
+80fd61ec46124e Inochi Amaoto 2024-03-09  46  
+d666c0d9d14eb5 Ragavendra    2024-11-12  47  
+80fd61ec46124e Inochi Amaoto 2024-03-09  48  static int ipll_find_rate(const struct cv1800_clk_pll_limit *limit,
+d666c0d9d14eb5 Ragavendra    2024-11-12  49  			  unsigned long prate, unsigned long *rate)
+80fd61ec46124e Inochi Amaoto 2024-03-09  50  {
+80fd61ec46124e Inochi Amaoto 2024-03-09  51  	unsigned long best_rate = 0;
+80fd61ec46124e Inochi Amaoto 2024-03-09  52  	unsigned long trate = *rate;
+80fd61ec46124e Inochi Amaoto 2024-03-09  53  	unsigned long pre_div_sel = 0, div_sel = 0, post_div_sel = 0;
+80fd61ec46124e Inochi Amaoto 2024-03-09  54  	unsigned long pre, div, post;
+d666c0d9d14eb5 Ragavendra    2024-11-12  55  	u32 detected = 0;
+80fd61ec46124e Inochi Amaoto 2024-03-09  56  	unsigned long tmp;
+80fd61ec46124e Inochi Amaoto 2024-03-09  57  
+80fd61ec46124e Inochi Amaoto 2024-03-09  58  	for_each_pll_limit_range(pre, &limit->pre_div) {
+80fd61ec46124e Inochi Amaoto 2024-03-09  59  		for_each_pll_limit_range(div, &limit->div) {
+80fd61ec46124e Inochi Amaoto 2024-03-09  60  			for_each_pll_limit_range(post, &limit->post_div) {
+80fd61ec46124e Inochi Amaoto 2024-03-09  61  				tmp = ipll_calc_rate(prate, pre, div, post);
+80fd61ec46124e Inochi Amaoto 2024-03-09  62  
+80fd61ec46124e Inochi Amaoto 2024-03-09  63  				if (tmp > trate)
+80fd61ec46124e Inochi Amaoto 2024-03-09  64  					continue;
+80fd61ec46124e Inochi Amaoto 2024-03-09  65  
+80fd61ec46124e Inochi Amaoto 2024-03-09  66  				if ((trate - tmp) < (trate - best_rate)) {
+80fd61ec46124e Inochi Amaoto 2024-03-09  67  					best_rate = tmp;
+80fd61ec46124e Inochi Amaoto 2024-03-09  68  					pre_div_sel = pre;
+80fd61ec46124e Inochi Amaoto 2024-03-09  69  					div_sel = div;
+80fd61ec46124e Inochi Amaoto 2024-03-09  70  					post_div_sel = post;
+80fd61ec46124e Inochi Amaoto 2024-03-09  71  				}
+80fd61ec46124e Inochi Amaoto 2024-03-09  72  			}
+80fd61ec46124e Inochi Amaoto 2024-03-09  73  		}
+80fd61ec46124e Inochi Amaoto 2024-03-09  74  	}
+80fd61ec46124e Inochi Amaoto 2024-03-09  75  
+80fd61ec46124e Inochi Amaoto 2024-03-09  76  	if (best_rate) {
+80fd61ec46124e Inochi Amaoto 2024-03-09  77  		detected = PLL_SET_PRE_DIV_SEL(detected, pre_div_sel);
+80fd61ec46124e Inochi Amaoto 2024-03-09  78  		detected = PLL_SET_POST_DIV_SEL(detected, post_div_sel);
+80fd61ec46124e Inochi Amaoto 2024-03-09  79  		detected = PLL_SET_DIV_SEL(detected, div_sel);
+80fd61ec46124e Inochi Amaoto 2024-03-09 @80  		*value = detected;
+80fd61ec46124e Inochi Amaoto 2024-03-09  81  		*rate = best_rate;
+80fd61ec46124e Inochi Amaoto 2024-03-09  82  		return 0;
+80fd61ec46124e Inochi Amaoto 2024-03-09  83  	}
+80fd61ec46124e Inochi Amaoto 2024-03-09  84  
+80fd61ec46124e Inochi Amaoto 2024-03-09  85  	return -EINVAL;
+80fd61ec46124e Inochi Amaoto 2024-03-09  86  }
+80fd61ec46124e Inochi Amaoto 2024-03-09  87  
 
 -- 
 0-DAY CI Kernel Test Service
