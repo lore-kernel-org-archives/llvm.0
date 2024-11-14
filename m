@@ -1,120 +1,115 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8084F16FF4E
-	for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 09:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+Received: from mail.nfschina.com (unknown [42.101.60.213])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 15E3E1E04BE
+	for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 09:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731575397; cv=none; b=XPmNVropBf7O+x5uZE8Np6TLP03nfI1/kk9mKzZljt/tQiQ2XCb3bv0YfA5sgxqIaEVwXivqjHRhSSCFce6m0vZip2HozVfD8680JuOwv85byP+k1ynJX5XoIxwedUF43q2mDIPEzMHl3UCIA4JVlaCpLCvinryPqwJaOqolnLY=
+	t=1731576867; cv=none; b=je/fltEY2DAm+athIV8fzVaYLF6Oaq9g3tfX3GC/+bxrUZ5nnbpEEUvHQgBc6Q+Cw0qdee5UGm9BaJVX7D++LmT8XodwwCMvPTy5SZ1H16Au/+x25Lz/8mtFjmJVB/q86/mw+zNnzzXFA4OjVGvU5ARBp+zF0xrb0dxiuw2+vgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731575397; c=relaxed/simple;
-	bh=PXXiTOHQpXHEQRGW+QOZTJIMm+Kw3J/KPuf46M5D3sg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CKDGObaE52/mjHSLdTMSPs54lr7R4qugZyYnvjf4cxO92z33aRcN4LDUB/UFLMeB23enP/9wmbascXCTvkszkLQ3/NpcOkw4U6KF3pWJTvfiI8xPWGJldnw6GlLGaqcmKrYm5b5ANmYV4akR2WjZfFQaZG4JUVGxOeAeoTo9HXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BYmFkLUq; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BYmFkLUq"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4315df7b43fso3735955e9.0
-        for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 01:09:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731575394; x=1732180194; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=snrIemuufDuHlApDkEdxfvq/ObcDoeWFzUnMAOE/OGg=;
-        b=BYmFkLUq09WKVq7l27PpNM2zTmI8DlNlwe1RIZQZYh7PumRmF2vEfO9Th+/7VcxOrT
-         YVM2FPeE6auTF9sDWIFe6rSG0bTn5qSq60oJBKhoQqDVf4vjaAAsf1KiKzqyYB5lQxjv
-         7nCHXGssTUmXpNWYOhAuchB2B2IIE2eU9FRqyKfuM4QxBYWIE1QcxTXE5YpMtwtpEsqe
-         fJvkyR57mP9KN9qJwdl2nIpkqRNJMTNLyqKAifvUuTBCrG+5QxPQ3n+m1MAveSQSSy+3
-         vrsnrgFoqDZuxHNMyv4uZnkNh6RzTifz3ib9bDhcDhGiLBZ3K9ZeH3+PIxxmTlcjEV/X
-         pCDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731575394; x=1732180194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=snrIemuufDuHlApDkEdxfvq/ObcDoeWFzUnMAOE/OGg=;
-        b=XpmzpA2UVvSPZaJU5CQnh8FqAWtoZMen5S2DB2gmdnlhKfOqxwLJdompb+wWxNRpGS
-         74nKGYRsxhQn3raOOQfxj9yX/VYOAolYCpYdqzfLY1a05iJJdSN4/42M3JKXYtwvCu4e
-         ajPY+7DarO7v11tPL9F+PT5SKKjNKfloyE2nsMpfgaB4f8vMERIPqe8Zlx9sRRVbLCPA
-         90S+0g7rYVkWZFSbHxb0tIYi7U0BOh7gl1zewva98uSpxMD2DjTq7xTVPsX/YBDuXCid
-         db7lZ0ye3ybZob2XP0Oz26/2BUM0Xc9VjfruN75n8yIoKf87mheeJiYnZ5NYPbYOHXzv
-         mH2g==
-X-Gm-Message-State: AOJu0YzWUPoLJqZzrAbS5IK6IRNFiVAF355H6eesQ8jakMmXMmMvY18y
-	YblDq8aNWHKwHt/dzYAHu4KfHmUAzxl19DahfbY1e+VSGJrrua6tbZmJ66mBXPBr+4Dmw7e60Gx
-	6MGVqMnghYHCenfV5bOjwErRQx2hl+szW6+Dc
-X-Google-Smtp-Source: AGHT+IHl0YWMjVvQXfBmpZasv/AG4TN0t/e3GEjRFSir20aLU4svh+bxXjwNfmgPiqts/mQJb7ilPfmVaSUPRQZ8974=
-X-Received: by 2002:a5d:5d89:0:b0:37c:ce58:5a1a with SMTP id
- ffacd0b85a97d-381f188ca8cmr18357244f8f.54.1731575393711; Thu, 14 Nov 2024
- 01:09:53 -0800 (PST)
+	s=arc-20240116; t=1731576867; c=relaxed/simple;
+	bh=myrJcA/kaJM9MSdwEkR2gSyVF5erP6z7ffO5TOvnsNk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type; b=rk5yWoIdZWV/gkIK3r8x90qC3HaxDWCLNzkgKQyTwsSSO9O7wJ+teOEQMfSwpacU8tya60wAIYPr6IwLzUdQqZj9IFqrDBEmLu4bvxd5Gxs5rhtEJfjlvON7kdQPYOHoI85mtmBYxqf1PnJZIUJtFBDf/TFD36BlGejSnfoAWtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from [172.30.20.101] (unknown [180.167.10.98])
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 6D581613746FC;
+	Thu, 14 Nov 2024 17:34:18 +0800 (CST)
+Message-ID: <3c35be8b-95e2-1ee6-9745-7766008fd1f6@nfschina.com>
+Date: Thu, 14 Nov 2024 17:34:17 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202411140520.VL33V6fD-lkp@intel.com>
-In-Reply-To: <202411140520.VL33V6fD-lkp@intel.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Thu, 14 Nov 2024 10:09:42 +0100
-Message-ID: <CAH5fLggEzmerC6Qg1fjuc_wiy21BJQGGYdZSZA+KV=oP6q9iJg@mail.gmail.com>
-Subject: Re: [linux-next:master 8233/11277] error[E0425]: cannot find function
- `rust_do_trace_rust_sample_loaded` in crate `$crate::bindings`
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Miguel Ojeda <ojeda@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH] bus: fsl-mc: Fix the double free in fsl_mc_device_add()
+Content-Language: en-US
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: stuyoder@gmail.com, laurentiu.tudor@nxp.com, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+In-Reply-To: <b767348e-d89c-416e-acea-1ebbff3bea20@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 13, 2024 at 10:16=E2=80=AFPM kernel test robot <lkp@intel.com> =
-wrote:
+On 2024/11/14 16:57, Dan Carpenter wrote:
+> On Thu, Nov 14, 2024 at 11:41:25AM +0300, Dan Carpenter wrote:
+>> On Thu, Nov 14, 2024 at 04:27:52PM +0800, Su Hui wrote:
+>>> Clang static checker(scan-build) warning：
+>>> drivers/bus/fsl-mc/fsl-mc-bus.c: line 909, column 2
+>>> Attempt to free released memory.
+>>>
+>>> When 'obj_desc->type' == "dprc" and begin to free 'mc_bus' and 'mc_dev',
+>>> there is a double free problem because of 'mc_dev = &mc_bus->mc_dev'.
+>>> Add a judgment to fix this problem.
+>>>
+>>> Fixes: a042fbed0290 ("staging: fsl-mc: simplify couple of deallocations")
+>>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>>> ---
+>>>   drivers/bus/fsl-mc/fsl-mc-bus.c | 6 ++++--
+>>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/bus/fsl-mc/fsl-mc-bus.c b/drivers/bus/fsl-mc/fsl-mc-bus.c
+>>> index 930d8a3ba722..8d2d5d3cc782 100644
+>>> --- a/drivers/bus/fsl-mc/fsl-mc-bus.c
+>>> +++ b/drivers/bus/fsl-mc/fsl-mc-bus.c
+>>> @@ -905,8 +905,10 @@ int fsl_mc_device_add(struct fsl_mc_obj_desc *obj_desc,
+>>>   
+>>>   error_cleanup_dev:
+>>>   	kfree(mc_dev->regions);
+>>> -	kfree(mc_bus);
+>>> -	kfree(mc_dev);
+>>> +	if (strcmp(mc_dev->obj_desc.type, "dprc") == 0)
+>> This works, but it would probably be nicer to write this as:
+>>
+>> 	if (is_fsl_mc_bus_dprc(mc_dev))
+>> 		kfree(mc_bus);
+>> 	else
+>> 		kfree(mc_dev);
+>>
+>> That way it would match the release function.
+Yes, it's better!
+>     820          mc_dev->dev.release = fsl_mc_device_release;
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it master
-> head:   bd05b9a700c10473c2f52bf12c5c5938c30e80b0
-> commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 [8233/11277] rust: sampl=
-es: add tracepoint to Rust sample
-> config: x86_64-randconfig-013-20241113 (https://download.01.org/0day-ci/a=
-rchive/20241114/202411140520.VL33V6fD-lkp@intel.com/config)
-> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51=
-eccf88f5321e7c60591c5546b254b6afab99)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20241114/202411140520.VL33V6fD-lkp@intel.com/reproduce)
+> 	[ snip ]
 >
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202411140520.VL33V6fD-lkp=
-@intel.com/
+>     891           * The device-specific probe callback will get invoked by device_add()
+>     892           */
+>     893          error = device_add(&mc_dev->dev);
+>     894          if (error < 0) {
+>     895                  dev_err(parent_dev,
+>     896                          "device_add() failed for device %s: %d\n",
+>     897                          dev_name(&mc_dev->dev), error);
+>     898                  goto error_cleanup_dev;
 >
-> All errors (new ones prefixed by >>):
+> I don't think this goto is correct.  I think fsl_mc_device_release() will be
+> called automaticall on this path so the goto is a double free.
+Agreed too, maybe using put_device(&mc_dev->dev) to replace ?
 >
-> >> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` =
-in crate `$crate::bindings`
->    --> samples/rust/rust_print.rs:87:5
->    |
->    87 | /     kernel::declare_trace! {
->    88 | |         /// # Safety
->    89 | |         ///
->    90 | |         /// Always safe to call.
->    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
->    92 | |     }
->    | |_____^ not found in `$crate::bindings`
->    |
->    =3D note: this error originates in the macro `kernel::declare_trace` (=
-in Nightly builds, run with -Z macro-backtrace for more info)
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+>     899          }
+>     900
+>     901          dev_dbg(parent_dev, "added %s\n", dev_name(&mc_dev->dev));
+>     902
+>     903          *new_mc_dev = mc_dev;
+>     904          return 0;
+>     905
+>     906  error_cleanup_dev:
+>     907          kfree(mc_dev->regions);
+>     908          if (is_fsl_mc_bus_dprc(mc_dev))
 
-Please see:
-https://lore.kernel.org/rust-for-linux/20241111201607.653149-1-ojeda@kernel=
-.org/
-which is already in rust-next.
+Yep, this looks better :)
 
-Alice
+I will send a v2 patch to use is_fsl_mc_bus_dprc().
+It might take some time because I'm not sure about using
+'put_device(&mc_dev->dev)' to replace 'goto error_cleanup_dev'.
+
+regards,
+Su Hui
+
