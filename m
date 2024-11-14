@@ -1,81 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A86262A3;
-	Thu, 14 Nov 2024 17:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04F2EEDE
+	for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 20:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731604716; cv=none; b=jHUo+2ADbO8DID+23WXE1/iEiC3lD8tvQWjs94ZL0g0+5iZ7MMGmpDOpVV8jF0LClXuBAiIlbvE5CMFhaJ46GpRvVD7zgJl1P5rPxHRQMP8ZkqwHFRv+zoP9NgeZQZwny9AdYif8uC9ZSJQI+hrMLKCM53rWpmZJni6FPlh5Cu8=
+	t=1731615187; cv=none; b=Rr4FL0UJQjwsJGNavhuroirv9gNPlzYaFKMO9z6bsHQITAqhFF+wsyQvkwfs6JFHH8pWq2lOU0ODPuMzR+IhQEgRVq7oHoZiLTWtz4ZSiCaXh0m8O/CQVYpERTzITtGcN3K2JljsIKrXJke5ioF4x+u0TZ5sbu4XJViIPUhLj6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731604716; c=relaxed/simple;
-	bh=tBxxWmfOqYr/kDobeGFGIMoT6xPlx0njLqyX8nov6mQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mU/yZvax5dZ1i/JQjD3dfTXb+Hsn0aR6+VWydAmwS/C2h0EzNZsqW6WD5+tzL8KQ7ZoAYvKthB6GY1mE5rU9aL4miT2vT/e8Tssz1lLTMdxDPn99jWVeZMr+/rrU03siRXD2ZZnvB8N6ny6eLqpFhK4koSzeDMtTy/v6B2y1XAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJpOeS3V; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731615187; c=relaxed/simple;
+	bh=kEDdUiSQqoUWuiPijZoIKK1rRTRr36VhR8WF6yqUiFk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HeUFPRIKquwmCojoqgUM2sJlPgq1FJ4DZIsCqA3fa/GZ/Pj10xxlC3gG0BJLdEX0A5lOqEJa5pogZIXvdx5iANKbu74VZZBHwT25IyYvMgQH6w8xl4m4n4H5UWKruUIw8J24WemiTJt8i8nv2w8dalPp3LhSvh1fb8qx2j4pw+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TT04o0F6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJpOeS3V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DEDC4CECD;
-	Thu, 14 Nov 2024 17:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731604716;
-	bh=tBxxWmfOqYr/kDobeGFGIMoT6xPlx0njLqyX8nov6mQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DJpOeS3VW1PLkb92B/Q9r/tPvobq7ErytAqjFC4lr0Z2i5uVXWsyKYKtZZObKuR5C
-	 8GqaimQeoxK3tGKvxJ/sJyRDTuvv2UpMKKHqmbUgPILhS0fpmAvs/V+5HTgO3oiJ3p
-	 HK13s/zUj28FJxhgZselNl43FQyjEXTe3qIkqYNdBDeWbEKhtrN3DvxOiOjQ2u1EzK
-	 hdTL+b7PwqoRdqU3M++qTFHP/4tm0nMT9vpOFCYM8ZDiG2HFBGnHj0e2OaUKJHQOjA
-	 H9Ksl3elfJIpgsFaD/IuvOc67zksVYW1JY4Ei1pnJh5fcT6lNwL/J7E04ySSKsp6yK
-	 ZxHGWOkNNRbgw==
-Date: Thu, 14 Nov 2024 10:18:34 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Brian Cain <bcain@quicinc.com>
-Cc: "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Alexey Karyakin <akaryaki@quicinc.com>,
-	Sid Manning <sidneym@quicinc.com>,
-	Sundeep Kushwaha <sundeepk@quicinc.com>,
-	Shankar Kalpathi Easwaran <seaswara@quicinc.com>
-Subject: Re: allmodconfig link failure on -next (relocation R_HEX_B22_PCREL
- out of range)
-Message-ID: <20241114171834.GA1956005@thelio-3990X>
-References: <20241113041319.GA158543@thelio-3990X>
- <DS0PR02MB1025072B87B225A4A8F0953F5B85A2@DS0PR02MB10250.namprd02.prod.outlook.com>
- <20241113182523.GA2701299@thelio-3990X>
- <DS0PR02MB102504C35F7F82A71261B9381B85A2@DS0PR02MB10250.namprd02.prod.outlook.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TT04o0F6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1731615184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=C1TCtjszErRqzyR1+6U2s16axro53u1zzYlVF3UpW2o=;
+	b=TT04o0F6ry3jTba5MKcdqC1/jH2MoRvUVwnwa/XDw7nWJx23mX4yDe4Csb8NbR7ZSAzuTU
+	5Js9ubUakoeWr+eHPSvPbaqoVVChvRlCVxUAr0TxHYzVnp3O5wc/TMqYnjeEnAvZG+zQZu
+	1ieLe+rQ4vqj6h4xtngIn5fQw7yX8fs=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-114-xlTm_7BJOk25JPPJrPvV3A-1; Thu,
+ 14 Nov 2024 15:13:03 -0500
+X-MC-Unique: xlTm_7BJOk25JPPJrPvV3A-1
+X-Mimecast-MFC-AGG-ID: xlTm_7BJOk25JPPJrPvV3A
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2219719560AF
+	for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 20:13:02 +0000 (UTC)
+Received: from [172.64.11.46] (unknown [10.30.34.132])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BDB2E3003B71;
+	Thu, 14 Nov 2024 20:13:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc7,
+ upstream-mainline, cfaaa7d0)
+Date: Thu, 14 Nov 2024 20:13:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS0PR02MB102504C35F7F82A71261B9381B85A2@DS0PR02MB10250.namprd02.prod.outlook.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <34599.124111415130300301@us-mta-114.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: mX5yEor18CBW0XgjQGE011QBuohShiQA2mb_2cBFRqM_1731615182
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 13, 2024 at 06:34:15PM +0000, Brian Cain wrote:
-> > > This error seems to be due to an incorrect range calculation for this
-> > > and other relocations.  Alexey has a PR for lld under review
-> > > https://github.com/llvm/llvm-project/pull/115925
-> > 
-> > Thanks! This does appear to resolve this particular problem for me. Will
-> > that need to be backported?
-> 
-> I was hoping/planning to request it to be cherry-picked to 19.1.x once
+Hi, we tested your kernel and here are the results:
 
-Sounds good!
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-> it lands on main - are you asking for branches older than that too?
 
-No, I am aware that the older branches are not supported, so we will
-just take what we can get :)
+Kernel information:
+    Commit message: Merge tag 'net-6.12-rc8' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-> This linker problem has been there "forever" but I suppose the
-> compiler only recently made a change that makes it more apparent.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1543464505
 
-Right, if this becomes more prevalent, then we will just stop building
-allmodconfig with older versions of LLVM. For now, I think ensuring the
-fix lands in main and gets backported to 19.1.x should be enough to
-avoid any issues.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1543464505-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1543464505-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1543464505-x86_64-kernel-debug
 
-Cheers,
-Nathan
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
