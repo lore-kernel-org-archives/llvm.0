@@ -1,200 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E12370;
-	Thu, 14 Nov 2024 00:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+Received: from mail.nfschina.com (unknown [42.101.60.213])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id C590D70818
+	for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 06:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731544626; cv=none; b=fMm2yzfEcZaQmToc5bSLmsCyJS23t1xXLMeXn3hRtFw/orvD+/Qqedxu8cW0APIFgSOIDNz/8F6MMPaoB8JGBtoUplcN0LPMMUn4pLEddNpqd+6t8mzf2idcfDz3urTTnYntSn0qy858OcG+Gi4BTjw4xLXPbktYjeCP8dvOZlE=
+	t=1731566403; cv=none; b=jpqe7xclzOD+GvJ+y/EeHVWg+gvC5sjud7Lr39AY91D3xD4Kx8cDq8Uh+DhhBKgXlIcu10tbsj/aGMmOfuKG1X9/NDHSLCIaEQzdfPNTkfZATFULBEQacj58eHprCg6w86G9GdjvNDzbDqAkQjxA4MoHEcmDQZftx6Wozt0GaBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731544626; c=relaxed/simple;
-	bh=wB+qdsF1zvcupnZAmiFUD2WPtTMEGPHMhe/Wu8Kaqzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mE5D60fUG+G8dv5iszzdtUuUh7gzdoBZDNtUaMb5sNYeqAm5o5aMYZWVIF53mUzaZ4nSgXs8h6aWAuQAEE2na1eO8E0FVHSTtutMQu0A5jFKAjkDniuV9dL+hDVntKH6BCDMdgJNxN4SyQ1X6FzcJGdefDTYMGGXMUyj/Wys+nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KiDYa6Lw; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KiDYa6Lw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731544624; x=1763080624;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wB+qdsF1zvcupnZAmiFUD2WPtTMEGPHMhe/Wu8Kaqzs=;
-  b=KiDYa6LwVrplojAgs+h90h1VSYiMt05Lvnzn2RDiwRVqMNMsgLtg2NSj
-   iyGyCgswkbih5zJRV3qFd2tSIpMuuDPUg4vCuqN7Pi0OSQb4s91JI0K8J
-   8jSVWtOiZQ+dFRn9WgLLXN8Ow/2oHWDk06dHfu4YQQLLDzEpm0YfijvAr
-   /+8woazjpl3B0zolaxRvQ6x1AU18xG1ZOSAPY2fdzA/6lrZdw4jNrKzmj
-   nU3bD9VGY6Q0B71GJ+CRrnEh3/p2KZRMAP4Qpjb9+knY1MMBr792X/dhL
-   EUqtQQVXbtSfjF3NtQMtlCjKGo1aZdy9pN15DwbaWYeZ25ckWPNXyAoJL
-   w==;
-X-CSE-ConnectionGUID: IgGQHsAqQbmxq6n3A0NDrg==
-X-CSE-MsgGUID: N2wmkIZIRjCdMVPsvUH4mg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11255"; a="56854494"
-X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
-   d="scan'208";a="56854494"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2024 16:37:03 -0800
-X-CSE-ConnectionGUID: 81TFp5NzQkm+LjalFbFfOQ==
-X-CSE-MsgGUID: evH2ReHqT962TEV9Fkg/eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,152,1728975600"; 
-   d="scan'208";a="87791094"
-Received: from lkp-server01.sh.intel.com (HELO 80bd855f15b3) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 13 Nov 2024 16:36:58 -0800
-Received: from kbuild by 80bd855f15b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tBNqy-0000yP-07;
-	Thu, 14 Nov 2024 00:36:56 +0000
-Date: Thu, 14 Nov 2024 08:36:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Wagner <wagi@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	John Garry <john.g.garry@oracle.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-	storagedev@microchip.com, linux-nvme@lists.infradead.org,
-	Daniel Wagner <wagi@kernel.org>
-Subject: Re: [PATCH v4 07/10] scsi: hisi_sas: use blk_mq_hctx_map_queues to
- map queues
-Message-ID: <202411140822.ZRutrwWP-lkp@intel.com>
-References: <20241113-refactor-blk-affinity-helpers-v4-7-dd3baa1e267f@kernel.org>
+	s=arc-20240116; t=1731566403; c=relaxed/simple;
+	bh=hpBO1M0VcIImyLo4FrA1nKJzLz/Xz+zv3f5mi+3OoIc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=f3KzIm+fz17wExEhHWojPIQiX15muVr93Ubz06MOtS7rwMMDUBvtQWfLIsIiHIAYAeiJsKCVrkNMonRFPwDvpKiVOJLB0EovSw9HlTgTJNufY4KW7/0WtwAzhjkdFqQ9LHLn0xgyzKo1FCtYzqzg25rYCuxMJQ54oTOkHWckUpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id E0C01610C36C1;
+	Thu, 14 Nov 2024 14:39:47 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: lucas.demarchi@intel.com,
+	thomas.hellstrom@linux.intel.com,
+	rodrigo.vivi@intel.com,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: Su Hui <suhui@nfschina.com>,
+	matthew.brost@intel.com,
+	francois.dugast@intel.com,
+	intel-xe@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH] drm/xe/hw_engine_group: Fix bad free in xe_hw_engine_setup_groups()
+Date: Thu, 14 Nov 2024 14:39:43 +0800
+Message-Id: <20241114063942.3448607-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241113-refactor-blk-affinity-helpers-v4-7-dd3baa1e267f@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Daniel,
+Clang static checker(scan-build) warning：
+drivers/gpu/drm/xe/xe_hw_engine_group.c: line 134, column 2
+Argument to kfree() is a constant address (18446744073709551604), which
+is not memory allocated by malloc().
 
-kernel test robot noticed the following build errors:
+There are some problems in hw_engine_group_alloc() and
+xe_hw_engine_setup_groups(). First, kfree() can only handle NULL
+pointers instead of negitave error codes. When hw_engine_group_alloc()
+failed, there is a bad kfree call for negitave error codes in
+xe_hw_engine_setup_groups(). Second, when drmm_add_action_or_reset()
+failed, destroy_workqueue() should be called to free 'group->resume_wq'.
 
-[auto build test ERROR on c9af98a7e8af266bae73e9d662b8341da1ec5824]
+Free 'group' and destroy 'group->resume_wq' when hw_engine_group_alloc()
+failed to fix these problems.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Wagner/driver-core-bus-add-irq_get_affinity-callback-to-bus_type/20241113-223232
-base:   c9af98a7e8af266bae73e9d662b8341da1ec5824
-patch link:    https://lore.kernel.org/r/20241113-refactor-blk-affinity-helpers-v4-7-dd3baa1e267f%40kernel.org
-patch subject: [PATCH v4 07/10] scsi: hisi_sas: use blk_mq_hctx_map_queues to map queues
-config: i386-buildonly-randconfig-006-20241114 (https://download.01.org/0day-ci/archive/20241114/202411140822.ZRutrwWP-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241114/202411140822.ZRutrwWP-lkp@intel.com/reproduce)
+Fixes: d16ef1a18e39 ("drm/xe/exec: Switch hw engine group execution mode upon job submission")
+Fixes: f784750c670f ("drm/xe/hw_engine_group: Introduce xe_hw_engine_group")
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/gpu/drm/xe/xe_hw_engine_group.c | 31 ++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411140822.ZRutrwWP-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:7:
-   In file included from drivers/scsi/hisi_sas/hisi_sas.h:11:
-   In file included from include/linux/blk-mq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3375:45: error: use of undeclared identifier 'COQ_IRQ_INDEX'
-    3375 |                 cq->irq_no = hisi_hba->irq_map[queue_no + COQ_IRQ_INDEX];
-         |                                                           ^
-   1 warning and 1 error generated.
-
-
-vim +/COQ_IRQ_INDEX +3375 drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-
-  3322	
-  3323	/*
-  3324	 * There is a limitation in the hip06 chipset that we need
-  3325	 * to map in all mbigen interrupts, even if they are not used.
-  3326	 */
-  3327	static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
-  3328	{
-  3329		struct platform_device *pdev = hisi_hba->platform_dev;
-  3330		struct device *dev = &pdev->dev;
-  3331		int irq, rc = 0;
-  3332		int i, phy_no, fatal_no, queue_no;
-  3333	
-  3334		for (i = 0; i < HISI_SAS_PHY_INT_NR; i++) {
-  3335			irq = hisi_hba->irq_map[i + 1]; /* Phy up/down is irq1 */
-  3336			rc = devm_request_irq(dev, irq, phy_interrupts[i], 0,
-  3337					      DRV_NAME " phy", hisi_hba);
-  3338			if (rc) {
-  3339				dev_err(dev, "irq init: could not request phy interrupt %d, rc=%d\n",
-  3340					irq, rc);
-  3341				rc = -ENOENT;
-  3342				goto err_out;
-  3343			}
-  3344		}
-  3345	
-  3346		for (phy_no = 0; phy_no < hisi_hba->n_phy; phy_no++) {
-  3347			struct hisi_sas_phy *phy = &hisi_hba->phy[phy_no];
-  3348	
-  3349			irq = hisi_hba->irq_map[phy_no + 72];
-  3350			rc = devm_request_irq(dev, irq, sata_int_v2_hw, 0,
-  3351					      DRV_NAME " sata", phy);
-  3352			if (rc) {
-  3353				dev_err(dev, "irq init: could not request sata interrupt %d, rc=%d\n",
-  3354					irq, rc);
-  3355				rc = -ENOENT;
-  3356				goto err_out;
-  3357			}
-  3358		}
-  3359	
-  3360		for (fatal_no = 0; fatal_no < HISI_SAS_FATAL_INT_NR; fatal_no++) {
-  3361			irq = hisi_hba->irq_map[fatal_no + 81];
-  3362			rc = devm_request_irq(dev, irq, fatal_interrupts[fatal_no], 0,
-  3363					      DRV_NAME " fatal", hisi_hba);
-  3364			if (rc) {
-  3365				dev_err(dev, "irq init: could not request fatal interrupt %d, rc=%d\n",
-  3366					irq, rc);
-  3367				rc = -ENOENT;
-  3368				goto err_out;
-  3369			}
-  3370		}
-  3371	
-  3372		for (queue_no = 0; queue_no < hisi_hba->cq_nvecs; queue_no++) {
-  3373			struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
-  3374	
-> 3375			cq->irq_no = hisi_hba->irq_map[queue_no + COQ_IRQ_INDEX];
-  3376			rc = devm_request_threaded_irq(dev, cq->irq_no,
-  3377						       cq_interrupt_v2_hw,
-  3378						       cq_thread_v2_hw, IRQF_ONESHOT,
-  3379						       DRV_NAME " cq", cq);
-  3380			if (rc) {
-  3381				dev_err(dev, "irq init: could not request cq interrupt %d, rc=%d\n",
-  3382						cq->irq_no, rc);
-  3383				rc = -ENOENT;
-  3384				goto err_out;
-  3385			}
-  3386			cq->irq_mask = irq_get_affinity_mask(cq->irq_no);
-  3387		}
-  3388	err_out:
-  3389		return rc;
-  3390	}
-  3391	
-
+diff --git a/drivers/gpu/drm/xe/xe_hw_engine_group.c b/drivers/gpu/drm/xe/xe_hw_engine_group.c
+index 82750520a90a..ee2cb32817fa 100644
+--- a/drivers/gpu/drm/xe/xe_hw_engine_group.c
++++ b/drivers/gpu/drm/xe/xe_hw_engine_group.c
+@@ -51,7 +51,7 @@ static struct xe_hw_engine_group *
+ hw_engine_group_alloc(struct xe_device *xe)
+ {
+ 	struct xe_hw_engine_group *group;
+-	int err;
++	int err = -ENOMEM;
+ 
+ 	group = kzalloc(sizeof(*group), GFP_KERNEL);
+ 	if (!group)
+@@ -59,7 +59,7 @@ hw_engine_group_alloc(struct xe_device *xe)
+ 
+ 	group->resume_wq = alloc_workqueue("xe-resume-lr-jobs-wq", 0, 0);
+ 	if (!group->resume_wq)
+-		return ERR_PTR(-ENOMEM);
++		goto free_group;
+ 
+ 	init_rwsem(&group->mode_sem);
+ 	INIT_WORK(&group->resume_work, hw_engine_group_resume_lr_jobs_func);
+@@ -67,9 +67,15 @@ hw_engine_group_alloc(struct xe_device *xe)
+ 
+ 	err = drmm_add_action_or_reset(&xe->drm, hw_engine_group_free, group);
+ 	if (err)
+-		return ERR_PTR(err);
++		goto destroy_wq;
+ 
+ 	return group;
++
++destroy_wq:
++	destroy_workqueue(group->resume_wq);
++free_group:
++	kfree(group);
++	return ERR_PTR(err);
+ }
+ 
+ /**
+@@ -87,21 +93,19 @@ int xe_hw_engine_setup_groups(struct xe_gt *gt)
+ 	int err;
+ 
+ 	group_rcs_ccs = hw_engine_group_alloc(xe);
+-	if (IS_ERR(group_rcs_ccs)) {
+-		err = PTR_ERR(group_rcs_ccs);
+-		goto err_group_rcs_ccs;
+-	}
++	if (IS_ERR(group_rcs_ccs))
++		return PTR_ERR(group_rcs_ccs);
+ 
+ 	group_bcs = hw_engine_group_alloc(xe);
+ 	if (IS_ERR(group_bcs)) {
+ 		err = PTR_ERR(group_bcs);
+-		goto err_group_bcs;
++		goto free_group_rcs_ccs;
+ 	}
+ 
+ 	group_vcs_vecs = hw_engine_group_alloc(xe);
+ 	if (IS_ERR(group_vcs_vecs)) {
+ 		err = PTR_ERR(group_vcs_vecs);
+-		goto err_group_vcs_vecs;
++		goto free_group_bcs;
+ 	}
+ 
+ 	for_each_hw_engine(hwe, gt, id) {
+@@ -126,13 +130,12 @@ int xe_hw_engine_setup_groups(struct xe_gt *gt)
+ 
+ 	return 0;
+ 
+-err_group_vcs_vecs:
+-	kfree(group_vcs_vecs);
+-err_group_bcs:
++free_group_bcs:
++	destroy_workqueue(group_bcs->resume_wq);
+ 	kfree(group_bcs);
+-err_group_rcs_ccs:
++free_group_rcs_ccs:
++	destroy_workqueue(group_rcs_ccs->resume_wq);
+ 	kfree(group_rcs_ccs);
+-
+ 	return err;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.30.2
+
