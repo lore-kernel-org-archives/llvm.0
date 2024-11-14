@@ -1,160 +1,136 @@
-Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id C590D70818
-	for <llvm@lists.linux.dev>; Thu, 14 Nov 2024 06:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ED81E8857;
+	Thu, 14 Nov 2024 07:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731566403; cv=none; b=jpqe7xclzOD+GvJ+y/EeHVWg+gvC5sjud7Lr39AY91D3xD4Kx8cDq8Uh+DhhBKgXlIcu10tbsj/aGMmOfuKG1X9/NDHSLCIaEQzdfPNTkfZATFULBEQacj58eHprCg6w86G9GdjvNDzbDqAkQjxA4MoHEcmDQZftx6Wozt0GaBo=
+	t=1731568112; cv=none; b=EUoCyr8Rz9Wu4nwWfuTew+HyatK75KfcNIuuRmgBfQHIaBuQxb8Tou3sXKo5gSU7f+0yJmMg5i9j7ahN5+z6eGMxWPutPlsjUYta/+kk+G66LBfU9SHSfcWbf2IOMc4EZ0iLlpzRW4aanj9N0UBZeNjJ7PSNvj15Z7juUIPTkhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731566403; c=relaxed/simple;
-	bh=hpBO1M0VcIImyLo4FrA1nKJzLz/Xz+zv3f5mi+3OoIc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=f3KzIm+fz17wExEhHWojPIQiX15muVr93Ubz06MOtS7rwMMDUBvtQWfLIsIiHIAYAeiJsKCVrkNMonRFPwDvpKiVOJLB0EovSw9HlTgTJNufY4KW7/0WtwAzhjkdFqQ9LHLn0xgyzKo1FCtYzqzg25rYCuxMJQ54oTOkHWckUpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id E0C01610C36C1;
-	Thu, 14 Nov 2024 14:39:47 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: lucas.demarchi@intel.com,
-	thomas.hellstrom@linux.intel.com,
-	rodrigo.vivi@intel.com,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: Su Hui <suhui@nfschina.com>,
-	matthew.brost@intel.com,
-	francois.dugast@intel.com,
-	intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH] drm/xe/hw_engine_group: Fix bad free in xe_hw_engine_setup_groups()
-Date: Thu, 14 Nov 2024 14:39:43 +0800
-Message-Id: <20241114063942.3448607-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1731568112; c=relaxed/simple;
+	bh=Xf9RPXk0+DeYNvG2CZ1zSCdTTHYqNthnfVeGrCcu568=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UB/Yluh9ZmUwjgK3CJwnRzRkOUcPwdWIAXkPmZt3Vp6hnPZJ/BooxT1eFyTmLgcGWdieb6OyW+kyKeXHpw1h/y8dieAuLk1MJcSEHSgaOrhjKBKkItL3lePJhoXmo951n16RAYGqs9GsadmIQ872xHv8uwF+LeQbbsTtk3gxa+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ai55etLO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=MrEu63DX; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nVVaLUcd; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=BFHtJys6; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ai55etLO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="MrEu63DX";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nVVaLUcd";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="BFHtJys6"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B5E6B21843;
+	Thu, 14 Nov 2024 07:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1731568109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fH/J7W9xtRwFNQE/LUMlKXXmvZxw9o++gxI2KFMe4OE=;
+	b=ai55etLO0FKw5w7LyU52GCY+AHzLrBBtpPyfNh0CKsE2gih2w2w4BAX/3IoxLPy/uR8Tx3
+	C9oueBw3vAzYeYqDdntv138TjcYZHyfh+5peUFZDLpirlAThYiXzqiz4EYP7pN4OFebUMR
+	wEvDbC2q9iNxFZflhVQU2G3ZH87I3U0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1731568109;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fH/J7W9xtRwFNQE/LUMlKXXmvZxw9o++gxI2KFMe4OE=;
+	b=MrEu63DXOVGz4fm4cZa1w13ddQTMs02dpVVdhoDgzehPBvs3y9wIz4PeUa+kYjoAKfzEvy
+	3GGDt+u3Nil67mAg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=nVVaLUcd;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=BFHtJys6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1731568108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fH/J7W9xtRwFNQE/LUMlKXXmvZxw9o++gxI2KFMe4OE=;
+	b=nVVaLUcdCP/xpYRdKAAcdXvEZYgw1pR1GqTz0o2UW+eaqcX+JrasaWh03IPdZclmOsasju
+	v2RlDIIgXCpiMTeot9OzMo+5niPevZQauTeNj1JwdOFxQVPNT8iu4tSRYA9nI2iuqnZW+T
+	NJEps6aDJVupwz88C67EYJLD98hxD6E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1731568108;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fH/J7W9xtRwFNQE/LUMlKXXmvZxw9o++gxI2KFMe4OE=;
+	b=BFHtJys6pFY7mSK1Ix781r9oc8LLrppSLNVx45P+hBpqpZWD71GMrgq9uZvg5TBtAibFNh
+	nCTfdZCepww54pCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8EF9413794;
+	Thu, 14 Nov 2024 07:08:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id T9eWIuyhNWdnXQAAD6G6ig
+	(envelope-from <dwagner@suse.de>); Thu, 14 Nov 2024 07:08:28 +0000
+Date: Thu, 14 Nov 2024 08:08:27 +0100
+From: Daniel Wagner <dwagner@suse.de>
+To: kernel test robot <lkp@intel.com>
+Cc: Daniel Wagner <wagi@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Bjorn Helgaas <helgaas@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	John Garry <john.g.garry@oracle.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Hannes Reinecke <hare@suse.de>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	virtualization@lists.linux.dev, linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com, 
+	mpi3mr-linuxdrv.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com, storagedev@microchip.com, 
+	linux-nvme@lists.infradead.org
+Subject: Re: [PATCH v4 07/10] scsi: hisi_sas: use blk_mq_hctx_map_queues to
+ map queues
+Message-ID: <395d3187-e87e-43b9-b590-635fde86b435@flourine.local>
+References: <20241113-refactor-blk-affinity-helpers-v4-7-dd3baa1e267f@kernel.org>
+ <202411140822.ZRutrwWP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202411140822.ZRutrwWP-lkp@intel.com>
+X-Rspamd-Queue-Id: B5E6B21843
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MISSING_XM_UA(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLbomrtoisjzkgzhj6iko5ju7u)];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.51
+X-Spam-Flag: NO
 
-Clang static checker(scan-build) warning：
-drivers/gpu/drm/xe/xe_hw_engine_group.c: line 134, column 2
-Argument to kfree() is a constant address (18446744073709551604), which
-is not memory allocated by malloc().
+On Thu, Nov 14, 2024 at 08:36:35AM +0800, kernel test robot wrote:
+> >> drivers/scsi/hisi_sas/hisi_sas_v2_hw.c:3375:45: error: use of undeclared identifier 'COQ_IRQ_INDEX'
+>     3375 |                 cq->irq_no = hisi_hba->irq_map[queue_no + COQ_IRQ_INDEX];
+>          |                                                           ^
 
-There are some problems in hw_engine_group_alloc() and
-xe_hw_engine_setup_groups(). First, kfree() can only handle NULL
-pointers instead of negitave error codes. When hw_engine_group_alloc()
-failed, there is a bad kfree call for negitave error codes in
-xe_hw_engine_setup_groups(). Second, when drmm_add_action_or_reset()
-failed, destroy_workqueue() should be called to free 'group->resume_wq'.
-
-Free 'group' and destroy 'group->resume_wq' when hw_engine_group_alloc()
-failed to fix these problems.
-
-Fixes: d16ef1a18e39 ("drm/xe/exec: Switch hw engine group execution mode upon job submission")
-Fixes: f784750c670f ("drm/xe/hw_engine_group: Introduce xe_hw_engine_group")
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/gpu/drm/xe/xe_hw_engine_group.c | 31 ++++++++++++++-----------
- 1 file changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/gpu/drm/xe/xe_hw_engine_group.c b/drivers/gpu/drm/xe/xe_hw_engine_group.c
-index 82750520a90a..ee2cb32817fa 100644
---- a/drivers/gpu/drm/xe/xe_hw_engine_group.c
-+++ b/drivers/gpu/drm/xe/xe_hw_engine_group.c
-@@ -51,7 +51,7 @@ static struct xe_hw_engine_group *
- hw_engine_group_alloc(struct xe_device *xe)
- {
- 	struct xe_hw_engine_group *group;
--	int err;
-+	int err = -ENOMEM;
- 
- 	group = kzalloc(sizeof(*group), GFP_KERNEL);
- 	if (!group)
-@@ -59,7 +59,7 @@ hw_engine_group_alloc(struct xe_device *xe)
- 
- 	group->resume_wq = alloc_workqueue("xe-resume-lr-jobs-wq", 0, 0);
- 	if (!group->resume_wq)
--		return ERR_PTR(-ENOMEM);
-+		goto free_group;
- 
- 	init_rwsem(&group->mode_sem);
- 	INIT_WORK(&group->resume_work, hw_engine_group_resume_lr_jobs_func);
-@@ -67,9 +67,15 @@ hw_engine_group_alloc(struct xe_device *xe)
- 
- 	err = drmm_add_action_or_reset(&xe->drm, hw_engine_group_free, group);
- 	if (err)
--		return ERR_PTR(err);
-+		goto destroy_wq;
- 
- 	return group;
-+
-+destroy_wq:
-+	destroy_workqueue(group->resume_wq);
-+free_group:
-+	kfree(group);
-+	return ERR_PTR(err);
- }
- 
- /**
-@@ -87,21 +93,19 @@ int xe_hw_engine_setup_groups(struct xe_gt *gt)
- 	int err;
- 
- 	group_rcs_ccs = hw_engine_group_alloc(xe);
--	if (IS_ERR(group_rcs_ccs)) {
--		err = PTR_ERR(group_rcs_ccs);
--		goto err_group_rcs_ccs;
--	}
-+	if (IS_ERR(group_rcs_ccs))
-+		return PTR_ERR(group_rcs_ccs);
- 
- 	group_bcs = hw_engine_group_alloc(xe);
- 	if (IS_ERR(group_bcs)) {
- 		err = PTR_ERR(group_bcs);
--		goto err_group_bcs;
-+		goto free_group_rcs_ccs;
- 	}
- 
- 	group_vcs_vecs = hw_engine_group_alloc(xe);
- 	if (IS_ERR(group_vcs_vecs)) {
- 		err = PTR_ERR(group_vcs_vecs);
--		goto err_group_vcs_vecs;
-+		goto free_group_bcs;
- 	}
- 
- 	for_each_hw_engine(hwe, gt, id) {
-@@ -126,13 +130,12 @@ int xe_hw_engine_setup_groups(struct xe_gt *gt)
- 
- 	return 0;
- 
--err_group_vcs_vecs:
--	kfree(group_vcs_vecs);
--err_group_bcs:
-+free_group_bcs:
-+	destroy_workqueue(group_bcs->resume_wq);
- 	kfree(group_bcs);
--err_group_rcs_ccs:
-+free_group_rcs_ccs:
-+	destroy_workqueue(group_rcs_ccs->resume_wq);
- 	kfree(group_rcs_ccs);
--
- 	return err;
- }
- 
--- 
-2.30.2
-
+Argh, I forgot to fold my fix in...
