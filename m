@@ -1,123 +1,102 @@
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1C31BBBF4
-	for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 12:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C06B1CDFC0
+	for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 13:36:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731675227; cv=none; b=KUXh3VCTaZNf9hr6ilDAm4I+MXytQN31drUMI20s99aFVDqWirXqULfu1f7O0dHlT0majZXSebHuX2JwNxgQJP3sKgDi0PkRV3VnZCx81SFS8IuJnGgTOmGspVDRq9EPweV83jjCfmVurNZVz8iYM0VME3J4uGVJaUYyLgqAP7A=
+	t=1731677818; cv=none; b=FgkrIUij1rJz7qEoEXCuAjjBKsltSgo3v5a8dNDDnfFQkmbL4TDjU+GZsWFGPBRIHl3VAbCqw58HSRvrfbYAg1wUZFafDX8j4nDojen6YiFn0j/gccoXXfKzyJ4tSsqVAVRLvvrb5ECM3r8i3Ng3jD8PKizVr0JiI5e7cru//7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731675227; c=relaxed/simple;
-	bh=kC5b4Nc50fbhWMMi5vOolJEMARSuns1Kxgz8mfrxf0I=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=IHxavAAV/L0NzjVpCbqRm/v9vlNiRBDYy6CYLhfViQs/+jeW04Xnxl3mP/sGgIjk/TNCTa1k56JxaZK6SNoan/RZYFIgG5YM6lVyT2qUlqoxcDdSS4HlKDoMd+LmToyUtQUw0YWoXdb+I5CDPKtM1ATQgqPowsuyOh3evBeWMMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hmgIjsSP; arc=none smtp.client-ip=209.85.221.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1731677818; c=relaxed/simple;
+	bh=oZPobkORwo+/HRRLRucyVNiplKGWixvyOKvZqcp02No=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=k3pYMgBeaIrqB+ABOi8SkYzGuJFqXJsRF5S80rbjJRfjYAF+x9gqLGFX52i+LTJLfUPJsV/jTciQGUa4G1BWDsDyL8hJ8whpVnmUAxa9kn63cQOLrUVY7gm8ut7mcHt7JNWpxbItl+SBVbHIvCoW8gpJYD3GXhfnyWpxpD45s4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=JsGIA7iv; arc=none smtp.client-ip=168.119.48.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hmgIjsSP"
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-50d3998923dso851419e0c.2
-        for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 04:53:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731675225; x=1732280025; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NEbeDGIYvAwvzpGJm9/Bl8sSZPwTY7aHupGksBQNqK0=;
-        b=hmgIjsSPOTdUQLBVwihzecNUPbO0vpNM+iCpHkC9tlKWwcxsZCuc5JRBJ+AJ+gKrP1
-         D/HouSVYup1l5nWOfOtK8LZgXMaOENlMNxW+E+MTTTJDLuewWawevntnG39UiCkeFCXr
-         igc5Tb9iGBKpOy0x+cIvCV0IrvWvzuwQgGtsKwbqtjMyNnKDlg40xcDrlkFwaqJddL5L
-         ILU4WDdP2p1j7gm+Iq8i35YkbG9OJjFwaGqA03hdS0Zcnv7PK3TME0O0u8RBxC/UmRfy
-         10YA8TiJGrQ8/N7xH0fBf8bpW1ZtUL/71Gvo+mylg2Hjcj/FoXKJilSlm6JFnrYG/MsX
-         kM/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731675225; x=1732280025;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NEbeDGIYvAwvzpGJm9/Bl8sSZPwTY7aHupGksBQNqK0=;
-        b=AolrFidX/TxbsRMT+Zq4eZibDof0Hy9EUiApG5+yf/SDy/CBHZljkzwF0UsBh8bYTi
-         xCpLAT17MXs9ulkcyKZ4bZuiZjw/OqEusPAq+iFKSj70Yaa4nmi1hf6ItGICsz+/y0kz
-         knfnC88TstSFJtfZaRtDlq8sWYpLz0p8O6SqCs8KNMI90T0KYlWDkEPnOEyZdhM0J39+
-         soLKZ9LkMv/dfo2p3JmF2KFNmm0t+nAl7efpoqdIRq7Q4ubct5wa8d2nLggcvBj13rt3
-         6OiVLZWO8pUhZNuckJU8RzGCp2rZTeGYmWU0Yrz4y8sanVTkI6Hu+Q9Psjyq8c6XKqKi
-         W7wA==
-X-Forwarded-Encrypted: i=1; AJvYcCWs8XZ4kBBLBNCJFG2NViZhdwVpqeVbYKMkc7pa87dUXWSW1tYlK7PFs8rXZpstSngvc6Th@lists.linux.dev
-X-Gm-Message-State: AOJu0YxxQuVPh8jJiXymFOG7SWWec+dOPLdH1TMNWng+1VLUXUu0YZIT
-	eoex7fX6tv568zeq6gC4m1WaCDsQVBybkFrYegPuheg6FOMB3vS+THaAxnGtalFVyHkqiLceC6/
-	c2Afwk8rZRl3KOIxKdhIyV+Nz/Spd9Ov1R1teYA==
-X-Google-Smtp-Source: AGHT+IEtDEtXKpcCidRqx6bebqrisPTC0Px9Xm1sUVNWuLsQVQUre+hBcxnbLyeeXGplNKk47hIC4CRTO6saY/xxXGY=
-X-Received: by 2002:a05:6122:8c22:b0:50c:79a4:c25 with SMTP id
- 71dfb90a1353d-51477f7c9f3mr3308737e0c.8.1731675224854; Fri, 15 Nov 2024
- 04:53:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="JsGIA7iv"
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
+	s=2023072701; t=1731677806;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+	bh=QtoaQcYfTrLpqRWaDjsaLs+uKe0TRDoWf7UyCJsOHd0=;
+	b=JsGIA7ivnnmzNjIA6EPCFitbvcGApew2OLvOsfWre5KPaMzEfE7MEA74FqkCWSFxrX24NA
+	PuTXGjYyXqs5n4QCn/j1pPzxNlDixDOisIRKsvVRsy/6NNKsPtFq44nCQF0zHUXy6WxHML
+	QCdKRfbtwU4KD7M11UOWTr9Uv1Yp87rCQRZddMaHm0cqCeVRtKNbuBEsIdms66i4sMtPZ6
+	ULsbnMsvOymp7dphliJcsiWCV+Phh4A+8Qen0ASIFexRvLZWPGyktyPmeB5en3Fg+cbTf5
+	daVYbXYXXy+Z9d3uQ2KY4KB7X3f+yDrZYf4ZbqYfvwYHwXlzDqJddU+4vIONKQ==
+To: selinux@vger.kernel.org
+Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	=?UTF-8?q?Bram=20Bonn=C3=A9?= <brambonne@google.com>,
+	=?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH 01/22] selinux: supply missing field initializers
+Date: Fri, 15 Nov 2024 14:35:20 +0100
+Message-ID: <20241115133619.114393-1-cgoettsche@seltendoof.de>
+Reply-To: cgzones@googlemail.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 15 Nov 2024 18:23:33 +0530
-Message-ID: <CA+G9fYtThFpgHJvVwmvp274QJ0QBbrsr+qnYi0b5fWJ5oJL2uw@mail.gmail.com>
-Subject: next-20241114: clang: fs/netfs/read_retry.c:235:20: error: variable
- 'subreq' is uninitialized when used here [-Werror,-Wuninitialized]
-To: open list <linux-kernel@vger.kernel.org>, linux-fsdevel@vger.kernel.org, 
-	netfs@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>, linux-cachefs@redhat.com, 
-	lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>
-Cc: Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, David Howells <dhowells@redhat.com>, 
-	Jeff Layton <jlayton@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The following builds failed with clang-19 and clang-nightly on the
-Linux next-20241114 and next-20241115 tags on x86 architecture.
-But the build passed with gcc-13.
+From: Christian Göttsche <cgzones@googlemail.com>
 
-First seen on Linux next-20241114 tag.
-  Good: next-20241113
-  Bad:  next-20241114
+Please clang by supplying the missing field initializes:
 
-build:
-  * clang-19-lkftconfig
-  * clang-nightly-lkftconfig
+    security/selinux/selinuxfs.c:2004:21: warning: missing field 'ops' initializer [-Wmissing-field-initializers]
+     2004 |                 /* last one */ {""}
+          |                                   ^
+    ./security/selinux/include/classmap.h:182:9: warning: missing field 'perms' initializer [-Wmissing-field-initializers]
+      182 |         { NULL }
+          |                ^
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ security/selinux/include/classmap.h | 2 +-
+ security/selinux/selinuxfs.c        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Build log:
----------
-fs/netfs/read_retry.c:235:20: error: variable 'subreq' is
-uninitialized when used here [-Werror,-Wuninitialized]
-  235 |         if (list_is_last(&subreq->rreq_link, &stream->subrequests))
-      |                           ^~~~~~
-fs/netfs/read_retry.c:28:36: note: initialize the variable 'subreq' to
-silence this warning
-   28 |         struct netfs_io_subrequest *subreq;
-      |                                           ^
-      |                                            = NULL
-1 error generated.
-make[5]: *** [scripts/Makefile.build:229: fs/netfs/read_retry.o] Error 1
+diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+index 2bc20135324a..03e82477dce9 100644
+--- a/security/selinux/include/classmap.h
++++ b/security/selinux/include/classmap.h
+@@ -179,7 +179,7 @@ const struct security_class_mapping secclass_map[] = {
+ 	{ "anon_inode", { COMMON_FILE_PERMS, NULL } },
+ 	{ "io_uring", { "override_creds", "sqpoll", "cmd", NULL } },
+ 	{ "user_namespace", { "create", NULL } },
+-	{ NULL }
++	/* last one */ { NULL, {} }
+ };
+ 
+ #ifdef __KERNEL__ /* avoid this check when building host programs */
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index 234f4789b787..c3e9627f1283 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -2001,7 +2001,7 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
+ 		[SEL_POLICY] = {"policy", &sel_policy_ops, S_IRUGO},
+ 		[SEL_VALIDATE_TRANS] = {"validatetrans", &sel_transition_ops,
+ 					S_IWUGO},
+-		/* last one */ {""}
++		/* last one */ {"", NULL, 0}
+ 	};
+ 
+ 	ret = selinux_fs_info_create(sb);
+-- 
+2.45.2
 
-Build image:
------------
-- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241114/testrun/25811023/suite/build/test/clang-19-lkftconfig/details/
-- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241114/testrun/25811023/suite/build/test/clang-19-lkftconfig/log
-- https://storage.tuxsuite.com/public/linaro/lkft/builds/2opUctayqtTsKWUeLDYKbGaUqa9/
-
-Steps to reproduce:
-------------
-- tuxmake --runtime podman --target-arch x86_64 --toolchain clang-19
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2opUctayqtTsKWUeLDYKbGaUqa9/config
-LLVM=1 LLVM_IAS=1
-
-metadata:
-----
-  git describe: next-20241114
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git sha: 37c5695cb37a20403947062be8cb7e00f6bed353
-  kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2opUctayqtTsKWUeLDYKbGaUqa9/config
-  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2opUctayqtTsKWUeLDYKbGaUqa9/
-  toolchain: clang-19
-  config: lkftconfig
-  arch: x86_64
-
---
-Linaro LKFT
-https://lkft.linaro.org
