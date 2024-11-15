@@ -1,190 +1,97 @@
-Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04401D270D
-	for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 13:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8932E1BF37;
+	Fri, 15 Nov 2024 16:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731677841; cv=none; b=TOxEStk1bYCFJ/yJmY7zIwwaqxaip39oGOffQN2FA2woJAEJ/sAIf/JFShxQXLbnXLxefav56P2ZH5P26+XBHoNxfXrkxvsdLBbiBmqRbtRPImfCmBMzxHZQsr2NwZI7z++nXCSHShsQmGsyzRUQlTj0UDjj8rDFwy7pDSh+m4U=
+	t=1731687115; cv=none; b=CnXgKD//JPaZwpsozIrxFzsngN9cwwFx1RyZW2dOWfinMk3HCKtr6fMxmbzWIVesA5D4tH9/6ZcMOdY2Vl1uCrSIdOznGWNlb5nlc9TDqiu+upIda6a7u5BwZWC4tjsPRFkdBb6qjTsOZ55dZ+33zPCJCEe4lGD7FCSWitfOsYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731677841; c=relaxed/simple;
-	bh=kM866a9ZfFSyqH48L107V69h0QsOKj3dnNWiHF1WkTs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W2ns89laD+2lqHoeOzjenWYpbiX3vEZhmMuKWjLiPaV4cDaQ4wY0Ue+k4SAkzked7jKurQP+gbi+RLcAAWOFCBri/301xMbrbbBoYe8ALFR1vorsHnxpd80fBEnzNIaB3slivm7Sbuakayjdj6cj4wdKtq74yfa8VKRxNKdodOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=LLTM6Gym; arc=none smtp.client-ip=168.119.48.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
+	s=arc-20240116; t=1731687115; c=relaxed/simple;
+	bh=osgNz0gKptCvUBgqJAqxMcZYAThmuDPQIhZOKDwmIjw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IA7lzes+0aQoOCLskTDENoJECWEQhOE1NVg/U3IQnDcoxR5LcAMbHX40DrMhTGvMKVQLxCJHDQMBfQiBIefIQMqFolFO2sa3a4TREP7X4tH+3OV0DH8rBsFI2XfnyS2DhXHP1CY0AYz0cZm5kRl7W0bNKvtl90SGj4UjdwJ7uGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GsHecrcC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="LLTM6Gym"
-From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1731677838;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GZ8KPP2zXft46cfzo8SCoNLJxvL4UK5mv+632ZYNLp8=;
-	b=LLTM6GymdH7Gi4IxnFzZTK8Z7tLlAgdlXR2YegyFtz6UC5M2GvISzRd3iML3VQr5gHRHKB
-	y81Nr+lN5zNggEJMZBKLwq7e9nt/zDo6+bWPgmfmMyhgZtuqagzGSrqgqnVZcr8w51y8pi
-	y3VVCdEiufvaGhtSuQK24tyEHiuxbssksQhCCBghBV/G2CBrhlw6902FCACiqHEwDyWlBQ
-	0LMpPUcXypoTLINwJttzuMg8Y+/JfGDtcGO0RJUCylvJNY20rutLyRzL/a+Lqih7P7IWIw
-	1b70n/c1xH+sOfPomI/4YBniY6x5Cp44aR6JLhlUNBhe2D9GUd7V+hTIx6S4zg==
-To: selinux@vger.kernel.org
-Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [RFC PATCH 19/22] selinux: validate symbols
-Date: Fri, 15 Nov 2024 14:35:38 +0100
-Message-ID: <20241115133619.114393-19-cgoettsche@seltendoof.de>
-In-Reply-To: <20241115133619.114393-1-cgoettsche@seltendoof.de>
-References: <20241115133619.114393-1-cgoettsche@seltendoof.de>
-Reply-To: cgzones@googlemail.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GsHecrcC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF34C4CECF;
+	Fri, 15 Nov 2024 16:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731687115;
+	bh=osgNz0gKptCvUBgqJAqxMcZYAThmuDPQIhZOKDwmIjw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=GsHecrcC+rdfZhGzjeqqfOdp4K4d8SN5emtWij+2DXzbCHJEtWPinpGCJHARna/6e
+	 Rna2zDLKzrthWl5m8MletxgK0t7gFsYcmmN7Zay3eKcshEp6Bd8jIl0vUCGi3Zw5pW
+	 aEUtqWho17ibIDXeNBZQrOZtLWUxDbGFwULHB1Bqr/k5JwevoMBVZlc1gj0evfBWNE
+	 cP9gqgys07s2SD+KU4EfOnMFWPTMp8hflpy73q2fcoz9g8OSbFXysaD82AkCs3adPC
+	 RUZy4UBW2MTvoMlArbumRadfqzrnNmMNS22X6giJvKgcPOwxEfQgTNxcKqfjdCfg89
+	 3N7giTWmeysCw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 15 Nov 2024 09:10:04 -0700
+Subject: [PATCH] ubifs: Fix uninitialized use of err in
+ ubifs_jnl_write_inode()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241115-ubifs-fix-uninitialized-err-v1-1-446849982e27@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFtyN2cC/x3MQQqDMBBG4avIrDvgiKbYq5Quoo72B4ll0ogo3
+ t3g8oPHOyiqQSO9ioNMV0QsIUMeBfVfHyZlDNlUlVUtIg2nDmPkERungIA//IxdB1Yzbl3nnRd
+ 9Nq6nfPiZ5vC+vz/neQGQDUj5bQAAAA==
+X-Change-ID: 20241115-ubifs-fix-uninitialized-err-96ba6a1e756c
+To: Richard Weinberger <richard@nod.at>, 
+ Zhihao Cheng <chengzhihao1@huawei.com>
+Cc: linux-mtd@lists.infradead.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1332; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=osgNz0gKptCvUBgqJAqxMcZYAThmuDPQIhZOKDwmIjw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOnmRacqN7FZfNOueJf48tTUp3d25QYG/+a+uqxwa9VMz
+ cVa+S8NOkpZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBENsQxMrzJWPk2+nzi4ojD
+ c29nVD33MmdWaPgZyi/CeUtIq7RfRIqRYdqkqoxb3LHzLy1xslgozpyaJjXh1dsqdaO9Wnd0Yle
+ 18AIA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Christian Göttsche <cgzones@googlemail.com>
+Clang warns (or errors with CONFIG_WERROR=y):
 
-Some symbol tables need to be validated after indexing, since during
-indexing their referenced entries might not yet have been indexed.
+  fs/ubifs/journal.c:986:20: error: variable 'err' is uninitialized when used here [-Werror,-Wuninitialized]
+    986 |                 ubifs_ro_mode(c, err);
+        |                                  ^~~
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+Set err to -EPERM before the call to ubifs_ro_mode() and reuse it in the
+return statement to resolve the warning.
+
+Fixes: 957e1c4e1779 ("ubifs: ubifs_jnl_write_inode: Only check once for the limitation of xattr count")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- security/selinux/ss/policydb.c | 94 ++++++++++++++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
+ fs/ubifs/journal.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policydb.c
-index 191d4f2de93f..691c2c5caeb3 100644
---- a/security/selinux/ss/policydb.c
-+++ b/security/selinux/ss/policydb.c
-@@ -668,6 +668,84 @@ static int (*const index_f[SYM_NUM])(void *key, void *datum, void *datap) = {
- };
- /* clang-format on */
+diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
+index 8e98be64237154105cd6f7cb62cf0338ac26d3e9..36ba79fbd2ff80ff3d5c1f0bf965e439d8c55ab2 100644
+--- a/fs/ubifs/journal.c
++++ b/fs/ubifs/journal.c
+@@ -983,8 +983,9 @@ int ubifs_jnl_write_inode(struct ubifs_info *c, const struct inode *inode)
  
-+static int role_validate(void *key, void *datum, void *datap)
-+{
-+	const struct policydb *p = datap;
-+	const struct role_datum *role = datum;
-+	struct ebitmap_node *node;
-+	u32 i;
-+
-+	ebitmap_for_each_positive_bit(&role->dominates, node, i) {
-+		if (!policydb_role_isvalid(p, i))
-+			goto bad;
-+	}
-+
-+	ebitmap_for_each_positive_bit(&role->types, node, i) {
-+		if (!policydb_type_isvalid(p, i + 1))
-+			goto bad;
-+	}
-+
-+	return 0;
-+
-+bad:
-+	pr_err("SELinux:  invalid role %s\n", sym_name(p, SYM_ROLES, role->value - 1));
-+	return -EINVAL;
-+}
-+
-+static int user_validate(void *key, void *datum, void *datap)
-+{
-+	const struct policydb *p = datap;
-+	const struct user_datum *usrdatum = datum;
-+	struct ebitmap_node *node;
-+	u32 i;
-+
-+	ebitmap_for_each_positive_bit(&usrdatum->roles, node, i) {
-+		if (!policydb_role_isvalid(p, i))
-+			goto bad;
-+	}
-+
-+	if (!mls_range_isvalid(p, &usrdatum->range))
-+		goto bad;
-+
-+	if (!mls_level_isvalid(p, &usrdatum->dfltlevel))
-+		goto bad;
-+
-+	return 0;
-+
-+bad:
-+	pr_err("SELinux:  invalid user %s\n", sym_name(p, SYM_USERS, usrdatum->value - 1));
-+	return -EINVAL;
-+}
-+
-+static int sens_validate(void *key, void *datum, void *datap)
-+{
-+	const struct policydb *p = datap;
-+	const struct level_datum *levdatum = datum;
-+
-+	if (!mls_level_isvalid(p, &levdatum->level))
-+		goto bad;
-+
-+	return 0;
-+
-+bad:
-+	pr_err("SELinux:  invalid sensitivity\n");
-+	return -EINVAL;
-+}
-+
-+
-+/* clang-format off */
-+static int (*const validate_f[SYM_NUM])(void *key, void *datum, void *datap) = {
-+	NULL, /* Everything validated in common_read() and common_index() */
-+	NULL, /* Everything validated in class_read() and class_index() */
-+	role_validate,
-+	NULL, /* Everything validated in type_read(), type_index() and type_bounds_sanity_check() */
-+	user_validate,
-+	NULL, /* Everything validated in cond_read_bool() and cond_index_bool() */
-+	sens_validate,
-+	NULL, /* Everything validated in cat_read() and cat_index() */
-+};
-+/* clang-format on */
-+
- #ifdef CONFIG_SECURITY_SELINUX_DEBUG
- static void hash_eval(struct hashtab *h, const char *hash_name,
- 		      const char *hash_details)
-@@ -760,6 +838,16 @@ static int policydb_index(struct policydb *p)
- 		if (rc)
- 			goto out;
- 	}
-+
-+	for (i = 0; i < SYM_NUM; i++) {
-+		if (!validate_f[i])
-+			continue;
-+
-+		rc = hashtab_map(&p->symtab[i].table, validate_f[i], p);
-+		if (rc)
-+			goto out;
-+	}
-+
- 	rc = 0;
- out:
- 	return rc;
-@@ -1082,6 +1170,12 @@ static int context_read_and_validate(struct context *c, struct policydb *p,
- 			pr_err("SELinux: error reading MLS range of context\n");
- 			goto out;
- 		}
-+
-+		rc = -EINVAL;
-+		if (!mls_range_isvalid(p, &c->range)) {
-+			pr_warn("SELinux: invalid range in security context\n");
-+			goto out;
-+		}
+ 	if (kill_xattrs && ui->xattr_cnt > ubifs_xattr_max_cnt(c)) {
+ 		ubifs_err(c, "Cannot delete inode, it has too much xattrs!");
++		err = -EPERM;
+ 		ubifs_ro_mode(c, err);
+-		return -EPERM;
++		return err;
  	}
  
- 	rc = -EINVAL;
+ 	/*
+
+---
+base-commit: fe051552f5078fa02d593847529a3884305a6ffe
+change-id: 20241115-ubifs-fix-uninitialized-err-96ba6a1e756c
+
+Best regards,
 -- 
-2.45.2
+Nathan Chancellor <nathan@kernel.org>
 
