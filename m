@@ -1,19 +1,20 @@
 Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 1413E2D7B8
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 140ED10E3
 	for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 02:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731637980; cv=none; b=aKSvRH+Q0ycrnzv8S6gP0WfKtOdC7tMiT+174gZo3WE1EeU7LapK6SLA17EDmiwwMnjBsL3NYE8wtsoM2KHxZiS/1zY+uakzx0wZYDg+IDC3ENq5OguBJN7iPsZseCe5v6RmfWiq6/2EqEFsRzs5wv1+ChvR5HrIBwXs7N1DxyU=
+	t=1731637980; cv=none; b=OrvqXeBZjwddbP7cs43ytcEskx9KdAogLVaorEJX+FJrnXeV/uv5DvilL2vTt5b/jU82VPtghvxU9iQT5JU/fWNWzFw7YwkGeOgl16AfsDknOZbRBcMLY80OXeQJpzhpA54FJdtvTQb+/21X046+RD6y+flJeQ78vmKQu0YEnuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731637980; c=relaxed/simple;
-	bh=OX1t5DPbooVFsbdG4KwG5aXVwsLvCwuExJhDiWSi97M=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=r9GbpJpkvYKiEuQzY9uVhMx18wOmya9AKir4APsnE92hg/I+Ha6MLfhxUvWHzUvHwH4HTvaNW98ieeoifTHPhFzJUb1fCJ15cjgYXPMJOphKaW7A2Y2TWZIi4rVhmMa0aoC0gvLiiPmFh0gyjh9P7LeLw0rBVsboouHNgDfy/ZQ=
+	bh=QbQ5UfyTZEJzQO34MWfS+X2qlDIJc6GDRUyFUdxypZA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
+	 Content-Type; b=efM2ltbHvFXr+gY8P77/9lq0QAKgEQVTVrgb+Xr47iCujNsxL7osYqyEJvbgD9vqJYy6n3TC4btp+0fri1LaycFAsaFRgnoCCycJy75x2f+kX5paAzMje9RTG2RETRFQHeYzZGB+RzyK91dQG9mw/BYv0riRHvPc50f5mWVlwbU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
 Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id D73CE619C974D;
-	Fri, 15 Nov 2024 10:32:48 +0800 (CST)
+	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id B2CF26018EEEC;
+	Fri, 15 Nov 2024 10:32:49 +0800 (CST)
 X-MD-Sfrom: suhui@nfschina.com
 X-MD-SrcIP: 180.167.10.98
 From: Su Hui <suhui@nfschina.com>
@@ -29,10 +30,11 @@ Cc: Su Hui <suhui@nfschina.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	kernel-janitors@vger.kernel.org
-Subject: [PATCH v2 0/2]  bus: fsl-mc: Fix two double free problems in fsl_mc_device_add()
-Date: Fri, 15 Nov 2024 10:32:05 +0800
-Message-Id: <20241115023206.3722933-1-suhui@nfschina.com>
+Subject: [PATCH v2 1/2] bus: fsl-mc:  Fix the double free in fsl_mc_device_add()
+Date: Fri, 15 Nov 2024 10:32:06 +0800
+Message-Id: <20241115023206.3722933-2-suhui@nfschina.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20241115023206.3722933-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,22 +44,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patchset fixes two double free problems in fsl_mc_device_add().
-One is reported by clang static checker, another is reported by Dan when
-reviewing the code.
+Clang static checker(scan-build) warning：
+drivers/bus/fsl-mc/fsl-mc-bus.c: line 909, column 2
+Attempt to free released memory.
 
-ps: There is only patch 1 in v1 patch, patch 2 has no v1 version.
+When 'obj_desc->type' == "dprc" and begin to free 'mc_bus' and 'mc_dev',
+there is a double free problem because of 'mc_dev = &mc_bus->mc_dev'.
+Add a judgment to fix this problem.
 
-v1: https://lore.kernel.org/all/20241114082751.3475110-1-suhui@nfschina.com/
+Fixes: a042fbed0290 ("staging: fsl-mc: simplify couple of deallocations")
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+v2:
+ - using is_fsl_mc_bus_dprc().  
+ https://lore.kernel.org/all/20241114082751.3475110-1-suhui@nfschina.com/
 
-Su Hui (2):
-  bus: fsl-mc:  Fix the double free in fsl_mc_device_add()
-  bus: fsl-mc: using put_device() when add_device() failed in
-    fsl_mc_device_add()
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- drivers/bus/fsl-mc/fsl-mc-bus.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/bus/fsl-mc/fsl-mc-bus.c b/drivers/bus/fsl-mc/fsl-mc-bus.c
+index 930d8a3ba722..319a081a29ef 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-bus.c
++++ b/drivers/bus/fsl-mc/fsl-mc-bus.c
+@@ -905,8 +905,10 @@ int fsl_mc_device_add(struct fsl_mc_obj_desc *obj_desc,
+ 
+ error_cleanup_dev:
+ 	kfree(mc_dev->regions);
+-	kfree(mc_bus);
+-	kfree(mc_dev);
++	if (is_fsl_mc_bus_dprc(mc_dev))
++		kfree(mc_bus);
++	else
++		kfree(mc_dev);
+ 
+ 	return error;
+ }
 -- 
 2.30.2
 
