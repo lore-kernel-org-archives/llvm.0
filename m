@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D561957FF;
-	Sat, 16 Nov 2024 23:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9ACA18C008;
+	Sat, 16 Nov 2024 23:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731798623; cv=none; b=KAjTwDOeQaZ/0LUw0Wq1Wq4zJIWUMQnQ9y5JB5Zv4fJcfHzpdUuZS+XCgYxQ/FQBcMk9ZadZyiEiDKTnIe/PqhlMOA6sghQhO6zpc+nYvpNrp+i3rFdgrOvlveOQtCD5x+Q7HcgkRLJoZBwej6IDgQuHlGFoTUkVAtxW58PIIaI=
+	t=1731799282; cv=none; b=P1QJ/NpaFn88N12uXu+B4FXS9jTVwF/qW2IslTy3jfVDibtTBdBI7h4iHzK4t+8XXhwDcpG558xjIHqyN1kTYY7Lwg5a+Dd4hvTK79fYSgDe8zFOaSXTN/6OxVBz1nsR0tTd9vUqRNsoYyeIxt19JFGgKx6bKkueq4eILsg8uOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731798623; c=relaxed/simple;
-	bh=Z/HkpWipnwhLBIY9kdd/Ia1KBf9aWjemqDYlqmxB1ug=;
+	s=arc-20240116; t=1731799282; c=relaxed/simple;
+	bh=ikX2yoYOYRQ8RiG+71LUSv1FdTjHPo1fs4MlRSblGSI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rHPATOvOu2FMQmq+v6nJLRFlxs6FYUQjANE3ScjhhpzoIm80FU5D2E0OT3DoWElN7+Qbq9MLZTF6FJtugBM+AVVVz1XS4evYOJ8F3gN0z7AHRyy+zkTShtgHhwk9nZuR2ef3RCP69DGwPbuCs1GSF+OaEmruqvmNeSgNZZXVBGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qr/C0qZB; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=KmFmiO75+chPt5k9MhA19JbxMZBG8NVYSJMV4yIZW+Shn7GOw5OFT0Ct9LUmLbnm/RVyW9U8MIYIU53Wf188eMospCttozdzHGeN8PGjTsejBrQSlhdO9d7pvuNDwQQSU7PpSNGb8KW5ePeFa6Sol0+zJ4KMZZNfDaXv693fCDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPjd2cjF; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qr/C0qZB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPjd2cjF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731798622; x=1763334622;
+  t=1731799281; x=1763335281;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z/HkpWipnwhLBIY9kdd/Ia1KBf9aWjemqDYlqmxB1ug=;
-  b=Qr/C0qZBSdjnfxLIa+JybBYsAyOlP8naLkrfI9P3tjo66Y0mVPnTogNV
-   Rhhu3ReIl2H4mLSkfEwRdUzuLXcRfGHulbftPQjAWUmrtknAtjhxO7mR9
-   qZuFiL2lZlmnxfGAAuvsWvl4mjVwZjQMFMJXUfMrRdWPM9KmQYW7IUWhK
-   ocul0c8cCluIyoXKCKcNC+yZVYvX7kTeicAEaLZh9PjaUkyBP65CpjOLU
-   d67IKZMCm3QAnTpIzkIhSqPc18m8pD1CGCDhf6pR21UW1EGW0V0TyrSwJ
-   Rt3Jxxff7Hf6TOLodmD5kuTy+ms2yLo3ZKY/oZfk78nzgW/0z9meE2/CP
-   A==;
-X-CSE-ConnectionGUID: Fr2ARjUhROGC1AZ/owBVEA==
-X-CSE-MsgGUID: MWnxpHu7RPSbmmgWsEb2Ig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31936052"
+  bh=ikX2yoYOYRQ8RiG+71LUSv1FdTjHPo1fs4MlRSblGSI=;
+  b=UPjd2cjFokpN40bWwC6VE3fnZ0TDD6D0w8XpaKrV2Kmgw5leld0S/8CJ
+   A0dha5+IdA5Zmj5v9fK4uXCJO9KZJR08YmR64I47iVR/sW+Oscu7fuhWl
+   jOj/bWxIXksYB0oE6duRlONxCZgjkKJg56nVy9xapUurBOUCEfngW08Ii
+   EFBdb/ZDNuL4nxXGS6Q5m+9nF/p822kdxxakDQxJIjFQhDE5qUPyTkwG+
+   sSA4944odrRp3wQ+iRvGW6MxOP+HfAJV6i5EiqCFM+DxrbbYCxOMaZObD
+   KlqFcomEoTDR9iC3yUIVm0s8pXkSQGfVWqh18so2YPoLoWdjzKZrFwUBa
+   w==;
+X-CSE-ConnectionGUID: bkFACoZxQ7C2WwjBxnyTeA==
+X-CSE-MsgGUID: 0wCtNHHzSkOiyA6Omd6miQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31534952"
 X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="31936052"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 15:10:19 -0800
-X-CSE-ConnectionGUID: mLHCh854RHu0eag25PyN2Q==
-X-CSE-MsgGUID: p0sHHGDLSb2cqsYsjMZFKQ==
+   d="scan'208";a="31534952"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 15:21:21 -0800
+X-CSE-ConnectionGUID: 1/ynm51SSdGTaduoTuYUGQ==
+X-CSE-MsgGUID: yEymUa0TQcSNAdI8mPVraQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="88636107"
+   d="scan'208";a="126419797"
 Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 16 Nov 2024 15:10:17 -0800
+  by orviesa001.jf.intel.com with ESMTP; 16 Nov 2024 15:21:19 -0800
 Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tCRvi-0001A1-2v;
-	Sat, 16 Nov 2024 23:10:14 +0000
-Date: Sun, 17 Nov 2024 07:09:43 +0800
+	id 1tCS6O-0001AH-1n;
+	Sat, 16 Nov 2024 23:21:16 +0000
+Date: Sun, 17 Nov 2024 07:20:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
+To: Thomas =?unknown-8bit?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl/fwctl 21/28] drivers/fwctl/cxl/cxl.c:68:12: error: use
- of undeclared identifier '__free_kvfree'; did you mean '__free_pages'?
-Message-ID: <202411170749.kYYAaKTi-lkp@intel.com>
+Subject: [thomas-weissschuh:b4/hwmon-thermal 2/3]
+ include/linux/thermal.h:292:75: warning: omitting the parameter name in a
+ function definition is a C23 extension
+Message-ID: <202411170759.O3omfgat-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,83 +63,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
-head:   81cb57f64be6af29f39bde3b3ca4203975a84377
-commit: 8d042dccf81ccdd81279cd26a9bbd89f705fea56 [21/28] fwctl/cxl: Add hw_info callback
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20241117/202411170749.kYYAaKTi-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/hwmon-thermal
+head:   cabfa33b49cc42e6b5648560d9813c16fa1e94d1
+commit: a020a527900a03dc4215f48ba0f37329a04a1cc0 [2/3] thermal: core: Add stub for thermal_zone_device_update()
+config: arm-lpc18xx_defconfig (https://download.01.org/0day-ci/archive/20241117/202411170759.O3omfgat-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411170749.kYYAaKTi-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411170759.O3omfgat-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411170749.kYYAaKTi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411170759.O3omfgat-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/fwctl/cxl/cxl.c:47:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      47 |         info = kzalloc(sizeof(*info), GFP_KERNEL);
-         |                ^
-   drivers/fwctl/cxl/cxl.c:47:7: error: incompatible integer to pointer conversion assigning to 'struct fwctl_info_cxl *' from 'int' [-Wint-conversion]
-      47 |         info = kzalloc(sizeof(*info), GFP_KERNEL);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/fwctl/cxl/cxl.c:68:12: error: use of undeclared identifier '__free_kvfree'; did you mean '__free_pages'?
-      68 |         void *out __free(kvfree) = kvzalloc(*out_len, GFP_KERNEL);
-         |                   ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:11:1: note: expanded from here
-      11 | __free_kvfree
-         | ^
-   include/linux/gfp.h:371:13: note: '__free_pages' declared here
-     371 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
->> drivers/fwctl/cxl/cxl.c:68:12: error: 'cleanup' function '__free_pages' must take 1 parameter
-      68 |         void *out __free(kvfree) = kvzalloc(*out_len, GFP_KERNEL);
-         |                   ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:11:1: note: expanded from here
-      11 | __free_kvfree
-         | ^
->> drivers/fwctl/cxl/cxl.c:68:29: error: call to undeclared function 'kvzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      68 |         void *out __free(kvfree) = kvzalloc(*out_len, GFP_KERNEL);
-         |                                    ^
->> drivers/fwctl/cxl/cxl.c:68:8: error: incompatible integer to pointer conversion initializing 'void *' with an expression of type 'int' [-Wint-conversion]
-      68 |         void *out __free(kvfree) = kvzalloc(*out_len, GFP_KERNEL);
-         |               ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 errors generated.
+   In file included from drivers/hwmon/hwmon.c:17:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/hwmon/hwmon.c:26:
+>> include/linux/thermal.h:292:75: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     292 | static inline void thermal_zone_device_update(struct thermal_zone_device *,
+         |                                                                           ^
+   include/linux/thermal.h:293:37: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     293 |                                               enum thermal_notify_event)
+         |                                                                        ^
+   3 warnings generated.
 
 
-vim +68 drivers/fwctl/cxl/cxl.c
+vim +292 include/linux/thermal.h
 
-    55	
-    56	static void *cxlctl_hw_info(struct fwctl_uctx *uctx, int commands, size_t *out_len)
-    57	{
-    58		struct cxlctl_uctx *cxlctl_uctx =
-    59			container_of(uctx, struct cxlctl_uctx, uctx);
-    60		struct fwctl_device *fwctl = uctx->fwctl;
-    61		struct cxlctl_dev *cxlctl =
-    62			container_of(fwctl, struct cxlctl_dev, fwctl);
-    63		int rc;
-    64	
-    65		if (commands > cxlctl_uctx->nr_commands)
-    66			return ERR_PTR(-EINVAL);
-    67	
-  > 68		void *out __free(kvfree) = kvzalloc(*out_len, GFP_KERNEL);
-    69		if (!out)
-    70			return ERR_PTR(-ENOMEM);
-    71	
-    72		rc = cxl_mailbox_user_commands_info_get(cxlctl->mbox,
-    73							commands, out, out_len);
-    74		if (rc)
-    75			return ERR_PTR(rc);
-    76	
-    77		return_ptr(out);
-    78	}
-    79	
+   291	
+ > 292	static inline void thermal_zone_device_update(struct thermal_zone_device *,
+   293						      enum thermal_notify_event)
+   294	{ }
+   295	
 
 -- 
 0-DAY CI Kernel Test Service
