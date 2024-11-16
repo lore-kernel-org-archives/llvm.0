@@ -1,70 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4A223C9;
-	Sat, 16 Nov 2024 02:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5753B14A4E9
+	for <llvm@lists.linux.dev>; Sat, 16 Nov 2024 08:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731724464; cv=none; b=Ffnt+Ohoi0aNtR/kFsbPT6fYvxOBqF7IQ90kJYyrvjPqTXoh591/p5SXkU4pygL1jscryfs3swrz1LqlaAg1G9o150kF1QnTT9W1zHQlAVx467Gz5VAsk6YXRK31zAzEJszbfs9WLkMGRm4NlYBjHgJaM0VYbGN7ZJsSBkT+6rE=
+	t=1731745881; cv=none; b=CdBdwgRKBypyb8MoHQVIQ4k2kw4sSKTThmHRqyaqAsMQ3qGaJe1Oc15oeu1p84nBbrhziwrA1TRzARHn17UL/UgKnLXW8Nbaf4t+rPRr3RB5KVazCuN6KEWyd3NY7yJyuuHahaSl/xSenglmHPkoiaWh4iSRpN859Mi3+wzL8Sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731724464; c=relaxed/simple;
-	bh=ya+vhYwhUfjQ4xrFFeeMm8nVtaqHetmuWmueZEJDbGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=myhaLlEyfAeBl3bjwzKu9aLMl9FTzakG2kW5x8hmj0e25nG3cMM8ERVS/PVX2xjEMQ+5oBa69UBDscQontP5+7u+jCZxBpslBtB13N4RAkZK/OJOkS4EbasxNRaZ61eAdEDk7nTT6makjupDUO6e87kF6iVLbmYiS1HHTxnodlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwPadPhO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731745881; c=relaxed/simple;
+	bh=Iyuhl/jr6P9w67XtFsNYU6bXtOQwPW74TNT609bIAtc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tddk04cKBIH/Zaxs2kVFLOuvcERDQXVgmEde+r5DK/gDGBkWEceXrCSSwOpg1LqE+6xz7PY5xKCrAUiBlcBysDvWg7wbodRJbj0kWzNW8qAjf9STLGuAdc1/0bx3dV5cR4+73NwryUS49UIJ67NySd3LDLfwCUm1GSx/ZdPB0vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=h6bntngO; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwPadPhO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B19C4CECF;
-	Sat, 16 Nov 2024 02:34:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731724463;
-	bh=ya+vhYwhUfjQ4xrFFeeMm8nVtaqHetmuWmueZEJDbGQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uwPadPhO8zekdW5oWegMrQiSomFmjIQBDmG7Q8dSSVK8PXB/X6rL2l02W+QuIdO/C
-	 7BPY7YU5kov+PvpLP6F8C/tg0XmAkVwMaKaCki4F/Ylu0HQciWIa7K6HBV7eVUGILj
-	 1OUgHYNwvb/9xfr4LVliVUdgIjNMMOJEUkcHoasLh0JgbWDZfdZBfqMvP/XZR2oPG7
-	 cXFLwX+D6U5i816ts24qLzDxAmVMn6pJ2oSfo/iBSbQr3iFYXB2z+fdA2c9jmxJPse
-	 G6M3DR8kmRRYK5te4H1zWe3QYXkmBGhLxXaPi+9Hjho+489/KTJCCSXC2pVVLnTC6E
-	 en92QUOfmR6rw==
-Date: Fri, 15 Nov 2024 19:34:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: John Johansen <john.johansen@canonical.com>
-Cc: Ryan Lee <ryan.lee@canonical.com>, apparmor@lists.ubuntu.com,
-	linux-security-module@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] apparmor: Add empty statement between label and
- declaration in profile_transition(()
-Message-ID: <20241116023421.GA1215050@thelio-3990X>
-References: <20241111-apparmor-fix-label-declaration-warning-v1-1-adb64ab6482b@kernel.org>
- <7cc38d2d-5e4f-4b03-a1a8-e0b89f4005b8@canonical.com>
+	dkim=pass (1024-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="h6bntngO"
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4Xr6YK3TmBz1DHcg;
+	Sat, 16 Nov 2024 09:31:17 +0100 (CET)
+Received: from [10.10.15.6] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp.simply.com (Simply.com) with ESMTPSA id 4Xr6YJ6SB1z1DDrT;
+	Sat, 16 Nov 2024 09:31:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=unoeuro; t=1731745877;
+	bh=6ZbV4+IoJk8L+0GgX4YxbWtM3elPBL8i/qWEAd1wwdk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=h6bntngONbblphvXdMJKIwxW0vSHrrQe1DWKjc+cmiB+YDDpyk7QfIgoKFwYR+myg
+	 Nysfk+LUFefGh5TcrVY0SoX5HMocliC6/hilK/RFyaYE2vE94+/JPNhyOQNDXrZNQh
+	 SMfTzeqwuT4hB2sn1BnauSe9X4KMSveLro46JTxQ=
+Message-ID: <cfc033a8-a7de-469b-8afa-0069593c5c6f@gaisler.com>
+Date: Sat, 16 Nov 2024 09:31:16 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cc38d2d-5e4f-4b03-a1a8-e0b89f4005b8@canonical.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/2] sparc/build: Rework CFLAGS for clang compatibility
+To: koachan@protonmail.com, "David S. Miller" <davem@davemloft.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ glaubitz@physik.fu-berlin.de, Masahiro Yamada <masahiroy@kernel.org>,
+ Nicolas Schier <nicolas@fjasle.eu>, Jonathan Corbet <corbet@lwn.net>
+Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com>
+Content-Language: en-US
+From: Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20241029-sparc-cflags-v3-0-b28745a6bd71@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 15, 2024 at 06:17:11PM -0800, John Johansen wrote:
-> thanks for the patch, but I went with an alternate version, that I did last Sunday
-> (sorry I guess I forgot to push the tree). Since I hadn't pushed the tree I did
-> consider replacing my patch with it but in the end decided to not go with
-> the C99 variable declaration, moving the var to the top of the outer block (what
-> my Sunday patch did).
+On 2024-10-29 15:49, Koakuma via B4 Relay wrote:
+> Hello~
+> 
+> This changes the CFLAGS for building the SPARC kernel so that it can be
+> built with clang, as a follow up from the discussion in this thread:
+> 
+> https://lore.kernel.org/lkml/JAYB7uS-EdLABTR4iWZdtFOVa5MvlKosIrD_cKTzgeozCOGRM7lhxeLigFB1g3exX445I_W5VKB-tAzl2_G1zCVJRQjp67ODfsSqiZWOZ9o=@protonmail.com/T/#u
+> 
+> The changes are removal of various `-fcall-used-*` flags, and adding
+> clang target flags for SPARC:
+> 
+> - `-fcall-used-*` flags is gated behind cc-option as it is
+>   not supported in clang. It should be safe; clang won't use the registers
+>   specified as temporaries, but it is a safe change wrt. the ABI.
+>   Assembly code can still use those registers as needed.
+>   A cursory look at the assembly generated by GCC 13.2 shows that
+>   the compiler was able to reallocate uses of those registers into
+>   other temporary registers without adding extra spills, so there
+>   should be no change in performance.
+> 
+> - More trivial is to add CLANG_TARGET_FLAGS for SPARC target.
+> 
+> Building with these changes still result in a working kernel,
+> at least for Sun T5120, Oracle T4-1, and qemu virtual machines.
+> 
+> On the LLVM side, the effort for building Linux/SPARC is tracked here:
+> https://github.com/llvm/llvm-project/issues/40792
+> 
+> Signed-off-by: Koakuma <koachan@protonmail.com>
+> ---
+> Changes in v3:
+> - Use cc-option to allow GCC to still use -fcall-used-* flags.
+> - Add documentation on building on SPARC, along with required LLVM version.
+> - Link to v2: https://lore.kernel.org/r/20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com
+> 
+> Changes in v2:
+> - Remove the -mv8plus change; it will be handled on clang side:
+>   https://github.com/llvm/llvm-project/pull/98713
+> - Add CLANG_TARGET_FLAGS as suggested in v1 review.
+> - Link to v1: https://lore.kernel.org/r/20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com
+> 
+> ---
+> Koakuma (2):
+>       sparc/build: Put usage of -fcall-used* flags behind cc-option
+>       sparc/build: Add SPARC target flags for compiling with clang
+> 
+>  Documentation/kbuild/llvm.rst | 3 +++
+>  arch/sparc/Makefile           | 4 ++--
+>  arch/sparc/vdso/Makefile      | 2 +-
+>  scripts/Makefile.clang        | 1 +
+>  4 files changed, 7 insertions(+), 3 deletions(-)
+> ---
+> base-commit: c2ee9f594da826bea183ed14f2cc029c719bf4da
+> change-id: 20240620-sparc-cflags-e7f2dbbd4b9d
+Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 
-Thanks for the information, I considered doing the same thing but went
-with the minimal fix just for ease of acceptance. Appreciate you getting
-this resolved now.
+I see no pressing need for a v4. Picking the series up to my for-next.
 
-> The reason being that while I don't think the style guideline forbid them, I end
-> up getting patches for them anyways, as some compiler flag sets will warn about
-> them.
-
-For what it's worth, commit b5ec6fd286df ("kbuild: Drop
--Wdeclaration-after-statement") dropped the option that warns about
-that, so you should not have to worry about that anymore.
-
-Cheers,
-Nathan
+Thanks,
+Andreas
