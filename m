@@ -1,110 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9ACA18C008;
-	Sat, 16 Nov 2024 23:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E03194C7A
+	for <llvm@lists.linux.dev>; Sat, 16 Nov 2024 23:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731799282; cv=none; b=P1QJ/NpaFn88N12uXu+B4FXS9jTVwF/qW2IslTy3jfVDibtTBdBI7h4iHzK4t+8XXhwDcpG558xjIHqyN1kTYY7Lwg5a+Dd4hvTK79fYSgDe8zFOaSXTN/6OxVBz1nsR0tTd9vUqRNsoYyeIxt19JFGgKx6bKkueq4eILsg8uOE=
+	t=1731800693; cv=none; b=L/d6ROi93qCthi6UPcYQy3wkONe8L0xMikVzBrCi4MjqwAaKlwhwvjxk0GiWovSJAHdCAcVy+jtuKjrJ2QLB3RfxYjrtVhqTZI9wJZ2owsKYC9EMSwmucUDz7DPp64v/hUAYI1CRpK0aLXl6zLr3EnT2GL5y5IfJnlBJtjwDa5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731799282; c=relaxed/simple;
-	bh=ikX2yoYOYRQ8RiG+71LUSv1FdTjHPo1fs4MlRSblGSI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KmFmiO75+chPt5k9MhA19JbxMZBG8NVYSJMV4yIZW+Shn7GOw5OFT0Ct9LUmLbnm/RVyW9U8MIYIU53Wf188eMospCttozdzHGeN8PGjTsejBrQSlhdO9d7pvuNDwQQSU7PpSNGb8KW5ePeFa6Sol0+zJ4KMZZNfDaXv693fCDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPjd2cjF; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731800693; c=relaxed/simple;
+	bh=yX6PXFJsWJV++bCpi3eMzC7Yg2y6EF2jfCPjAS1De6s=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZK6v3SmyMil0uvvexJhxfP7WnaWjk/ZYulUs+nT3uLjB+eji1+S2K7oiIKUQd2SOsA14GgJ9q9nXhT1/aLFR+52TlTBVwEfSSuIIDNi0T5BN+miausw610XUlJLjftykxCyjojmW+d0TFy7IjeFwFlTEKDGDAmK1W49EQLGitVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=N+f6cozo; arc=none smtp.client-ip=185.70.43.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPjd2cjF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731799281; x=1763335281;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ikX2yoYOYRQ8RiG+71LUSv1FdTjHPo1fs4MlRSblGSI=;
-  b=UPjd2cjFokpN40bWwC6VE3fnZ0TDD6D0w8XpaKrV2Kmgw5leld0S/8CJ
-   A0dha5+IdA5Zmj5v9fK4uXCJO9KZJR08YmR64I47iVR/sW+Oscu7fuhWl
-   jOj/bWxIXksYB0oE6duRlONxCZgjkKJg56nVy9xapUurBOUCEfngW08Ii
-   EFBdb/ZDNuL4nxXGS6Q5m+9nF/p822kdxxakDQxJIjFQhDE5qUPyTkwG+
-   sSA4944odrRp3wQ+iRvGW6MxOP+HfAJV6i5EiqCFM+DxrbbYCxOMaZObD
-   KlqFcomEoTDR9iC3yUIVm0s8pXkSQGfVWqh18so2YPoLoWdjzKZrFwUBa
-   w==;
-X-CSE-ConnectionGUID: bkFACoZxQ7C2WwjBxnyTeA==
-X-CSE-MsgGUID: 0wCtNHHzSkOiyA6Omd6miQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31534952"
-X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="31534952"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 15:21:21 -0800
-X-CSE-ConnectionGUID: 1/ynm51SSdGTaduoTuYUGQ==
-X-CSE-MsgGUID: yEymUa0TQcSNAdI8mPVraQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="126419797"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 16 Nov 2024 15:21:19 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCS6O-0001AH-1n;
-	Sat, 16 Nov 2024 23:21:16 +0000
-Date: Sun, 17 Nov 2024 07:20:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?unknown-8bit?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/hwmon-thermal 2/3]
- include/linux/thermal.h:292:75: warning: omitting the parameter name in a
- function definition is a C23 extension
-Message-ID: <202411170759.O3omfgat-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="N+f6cozo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1731800682; x=1732059882;
+	bh=yX6PXFJsWJV++bCpi3eMzC7Yg2y6EF2jfCPjAS1De6s=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=N+f6cozoFNiMcqzL9hENR8Og4xWkBrgs3w6gNmsi0UCyUfLVmY9l9QAkYWyHdQYP4
+	 /YfiWj93NHEWTTNvhfPHvdxU+E3lfGZe8KD/xnA8qkf5bwZ8Tk9HqdoeOXZauon5j+
+	 pk8+fqffvmKCDCXtaRpPuiyk32Ny4qnDjzRxQNzwRvl9Ngnc7z56OQL6lYcd2d6/75
+	 eWNwdjWR3eR2sO6plmyXTjktP7ZRM4M89XTE4jDYUTXefdEjXcu2wGzF4ziOsWbxj8
+	 y6Zyf39ZN5amoJNNYH6s6cvV1moGuMm2jFFUW5d50OleDyhl4AXdPEge+Gikd8SBbS
+	 p3UdbyX5jkr6Q==
+Date: Sat, 16 Nov 2024 23:44:37 +0000
+To: Andreas Larsson <andreas@gaisler.com>
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] sparc/vdso: Add helper function for 64-bit right shift on 32-bit target
+Message-ID: <gecz9pMRccdD2v_dImhonTGStG4FmiUko8IM2fkc9Rh2thw_QuSOvlsYTspZSf9bjtidQOD2uVL2aSaQ29-neWABRm1cpyXQr6xV0wELTU0=@protonmail.com>
+In-Reply-To: <1b2e776e-0ae3-4f48-a2b9-99b486d49368@gaisler.com>
+References: <20240808-sparc-shr64-v2-1-fd18f1b2cea9@protonmail.com> <1b2e776e-0ae3-4f48-a2b9-99b486d49368@gaisler.com>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 3d1c3566c3b675db725ff6937b0d516c7c4c2190
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/hwmon-thermal
-head:   cabfa33b49cc42e6b5648560d9813c16fa1e94d1
-commit: a020a527900a03dc4215f48ba0f37329a04a1cc0 [2/3] thermal: core: Add stub for thermal_zone_device_update()
-config: arm-lpc18xx_defconfig (https://download.01.org/0day-ci/archive/20241117/202411170759.O3omfgat-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411170759.O3omfgat-lkp@intel.com/reproduce)
+Andreas Larsson <andreas@gaisler.com> wrote:
+> Koakuma via B4 Relay wrote:
+> > +notrace static __always_inline u64 __shr64(u64 val, int amt)
+> > +{
+> > + u64 ret;
+> > +
+> > + asm volatile("sllx %H1, 32, %%g1\n\t"
+> > + "srl %L1, 0, %L1\n\t"
+> > + "or %%g1, %L1, %%g1\n\t"
+> > + "srlx %%g1, %2, %L0\n\t"
+> > + "srlx %L0, 32, %H0"
+> > + : "=3Dr" (ret)
+> > + : "r" (val), "r" (amt)
+> > + : "g1");
+> > + return ret;
+> > +}
+>=20
+> Can not residual in bits 63:32 of %L0 potentially pose a problem?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411170759.O3omfgat-lkp@intel.com/
+It shouldn't be a problem, upon returning the caller should treat
+the upper bits of %L0 as an unspecified value and not depend on/use
+its contents.
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/hwmon.c:17:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/hwmon/hwmon.c:26:
->> include/linux/thermal.h:292:75: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     292 | static inline void thermal_zone_device_update(struct thermal_zone_device *,
-         |                                                                           ^
-   include/linux/thermal.h:293:37: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     293 |                                               enum thermal_notify_event)
-         |                                                                        ^
-   3 warnings generated.
-
-
-vim +292 include/linux/thermal.h
-
-   291	
- > 292	static inline void thermal_zone_device_update(struct thermal_zone_device *,
-   293						      enum thermal_notify_event)
-   294	{ }
-   295	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
