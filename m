@@ -1,58 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C0917BA1;
-	Sat, 16 Nov 2024 14:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEF01F95E
+	for <llvm@lists.linux.dev>; Sat, 16 Nov 2024 15:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731768636; cv=none; b=Th04oyDNKOghF//kFFSZESR1+eAWI3jQGf+dnDwusrthi4vTmW1yx/LCFpEIAN/qo1Nn7IL+uhANGv84H9YrzjFG8/B4zoU6fE1rpFQO1Nsedtdph/otCeLbIPCWo3akD15e1CpFLVKJ2kpO7cuGzv9XjKWLKAtQ8JxuCB6ZTz0=
+	t=1731772550; cv=none; b=CJNVUKV7HAAU9wl4rygRDhH5p4OPRKjTv3FgTpjhRMa3zc1kliMCOI4r1Mia+jlov6Nc6M4tZ+7Ok+ZrkEBDiI+xmsbKLbVGcI+wue/QPiuCiWUZaw/nMRQ8o653hemBPXye8DTuaaAQAaiXJqFFtbvzXQ/bfPlt0A6s9QIl1ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731768636; c=relaxed/simple;
-	bh=jUC4cNlhGXLp5U4iWDIHFeH463bbQwE/QRiuhBUl6aA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HZZadMrAy/ru8UKYLYAqARjP61IlBTXMbokuCVyJyujd6fl15opqoT8anirIkX77AXVc4q3UcqrFfhfl9J3PqmiypOKrdQdqX3y2WnzkcWpx8+g92PstaXbPF80aP8Dl28g+rdF9w7X22WAWZ3w3BJSO616/DWtpm85SyTfhmB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IemAUFv/; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731772550; c=relaxed/simple;
+	bh=Wd+7kLQISUZlzyPvYmSUTVOb8NV4Vyd3OpsFXw6X7a0=;
+	h=From:Message-ID:To:Subject:Date:MIME-Version:Content-Type; b=ptYEQQdeukSc8SZdpvWCIjI0BHd0Lo13xo8Gjd+nWyOj3eSJ1YLU0wfVt2dXQ52dApwS7V1hmHmAA6ysGs7AZyRWowU6UwlR9PA2+lvawkh9II00eY36g5Ai1inXsEJIuFMty0JH4EPqBopS4Sam0PpUckjwr52Xjjz91DWbVnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T0xoIll7; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IemAUFv/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731768635; x=1763304635;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jUC4cNlhGXLp5U4iWDIHFeH463bbQwE/QRiuhBUl6aA=;
-  b=IemAUFv/aa5EtDbylr9hd/ukfu4smQ3we/Zu7Zc11GHVKL2ZV/eoYZDr
-   NtzcOOyQo09wO2GMcq/QY0wClC8xJG90gg1o0g2VGAtqfR0YDX6Aab8+5
-   sWAoYeC1gCYkVbgYQg9JAOpR4BkZTaXGTVxAN1MlrPl7OutaCn/GtlkyB
-   6/HR93Ov6ROhBHMmP//7ujkc81hOoDq3YcDqZch0zcYupBYy6HE5XWrOO
-   3QDi4p9bUctM1gsCLki36kiB0TlfbjBU6IzIjJIdAaMMRa6PbnEJwcLyG
-   2bVbhHql7wcab4urkmna+coR25XE9JRjww/cRfeqzuG2PpWqbKp0jG9ow
-   g==;
-X-CSE-ConnectionGUID: CTNWJCa+TxirJMix8pJH3A==
-X-CSE-MsgGUID: vzB73usrTk+XrsRJwwT4QQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="43162612"
-X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="43162612"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 06:50:33 -0800
-X-CSE-ConnectionGUID: UQmuassKQYCzalayPq5yXA==
-X-CSE-MsgGUID: qTucyoVHQAuCDnR+6qQrHg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,160,1728975600"; 
-   d="scan'208";a="88817534"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 16 Nov 2024 06:50:31 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCK85-0000hm-1h;
-	Sat, 16 Nov 2024 14:50:29 +0000
-Date: Sat, 16 Nov 2024 22:49:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl/fwctl 24/28] drivers/cxl/core/mbox.c:968:38: warning:
- variable 'u' is uninitialized when used here
-Message-ID: <202411161501.RHC8S9Oq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T0xoIll7"
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-20c805a0753so27412045ad.0
+        for <llvm@lists.linux.dev>; Sat, 16 Nov 2024 07:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731772547; x=1732377347; darn=lists.linux.dev;
+        h=mime-version:date:subject:to:reply-to:message-id:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XHEOkgJ64rwJ+cv0sVIqPUmbc8l+iTifR7HzGzNced0=;
+        b=T0xoIll758o90HNyZ109NInYJzKTDI1WbzO1JW0+sB9C6V3NTPt/uZEj+q1MnEcx/h
+         q3FZD03yNQEy3W+ul542faRt1auWVFi+7kV79GA0ifArrWnhjeLbSWqvzaQhjyQfxKCa
+         fwU4j+AqCoAgzHW+afdlCoOiLy+GX9tLgXJoezrDi0ufum3ioUiwg8wIERMb3b7bfJOw
+         hwV5lwMhDt/KSAwPRv5BOfuN69pw7z5YeuH92h8gYlb5JGx08QM+mmz1YvHbFJfKxInH
+         gDWtoKnPkTj6Sya2OW4ogq6fSq5F92PePGg8peZ+80ith5EUMahD/5la33EN42y5kFON
+         oNlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731772547; x=1732377347;
+        h=mime-version:date:subject:to:reply-to:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XHEOkgJ64rwJ+cv0sVIqPUmbc8l+iTifR7HzGzNced0=;
+        b=hA00blH4nDMEsRMxKaSotQnxAL+4n7nV3YVgF6N5S5zDY/fKzoPwhe7WYphO9RnsYO
+         M5I8pcfIofv4pMSOtho3piWkBoU+y4Q7c49Y8BILRkR+ZF9kwJsIQVKt8ML06MFu7/Mf
+         l/pv5pt4XylUSrwr+g479aSBQGgU3zCD6kXvJyDZPC9mNz1zNztlv3pij1XXDvl98ug7
+         4bO+trCzU6F40pgSv8FsjCtqn2ibz1a5Dy4RY0yOMFVYuVq5XmbFllKHxFmtPARbZwSI
+         zhJmiX74wf5oLfeINaIDToEbnY4Xm8kUCpDRo8AWMxKmJu4LjjvP4NEcmKRbGQ4sz7+h
+         VFuw==
+X-Gm-Message-State: AOJu0Yx+KLU24ha0JQySReaEiVizDgkF1duxMNH/iz1BmZGHY6Mj3TLO
+	NwQbGVLNCN8c6s1/997d7xAKxd33N/jxTKEn2HQvCLiIzzJvjDalPttaDcEA
+X-Google-Smtp-Source: AGHT+IFnNFe6k8i8DJiAsjQIxOS9MufVJuZAIgXC2wPHNG2ts2Je1opvIMvazgfz9QwnybOF0HMGxQ==
+X-Received: by 2002:a17:902:e887:b0:210:e75f:e6b0 with SMTP id d9443c01a7336-211d0ec2e6amr104503195ad.40.1731772547334;
+        Sat, 16 Nov 2024 07:55:47 -0800 (PST)
+Received: from [103.67.163.162] ([103.67.163.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0f4f2casm29093245ad.224.2024.11.16.07.55.46
+        for <llvm@lists.linux.dev>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 16 Nov 2024 07:55:46 -0800 (PST)
+From: "Van. HR" <yongsaravia48@gmail.com>
+X-Google-Original-From: "Van. HR" <infodesk@information.com>
+Message-ID: <86f18c870fa78afe638fec9a815327e660b2625101833c7277dfc138ee0b8c4b@mx.google.com>
+Reply-To: dirofdptvancollin@gmail.com
+To: llvm@lists.linux.dev
+Subject: Nov:16:24
+Date: Sat, 16 Nov 2024 10:55:44 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,201 +63,13 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
-head:   350392d25327a67c7299583a05481dfe524c7257
-commit: 6cf5361c36766f6ea8fc0ff6bc80407cd343168e [24/28] fwctl/cxl: Add support to filter exclusive features
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241116/202411161501.RHC8S9Oq-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241116/202411161501.RHC8S9Oq-lkp@intel.com/reproduce)
+Hello,
+I am a private investment consultant representing the interest of a multinational  conglomerate that wishes to place funds into a trust management portfolio.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411161501.RHC8S9Oq-lkp@intel.com/
+Please indicate your interest for additional information.
 
-All warnings (new ones prefixed by >>):
+Regards,
 
-   In file included from drivers/cxl/core/mbox.c:3:
-   In file included from include/linux/security.h:33:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/cxl/core/mbox.c:10:
-   In file included from drivers/cxl/cxlpci.h:5:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/cxl/core/mbox.c:10:
-   In file included from drivers/cxl/cxlpci.h:5:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/cxl/core/mbox.c:10:
-   In file included from drivers/cxl/cxlpci.h:5:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/cxl/core/mbox.c:968:38: warning: variable 'u' is uninitialized when used here [-Wuninitialized]
-     968 |         feat_out->num_entries = cpu_to_le16(u);
-         |                                             ^
-   include/linux/byteorder/generic.h:90:21: note: expanded from macro 'cpu_to_le16'
-      90 | #define cpu_to_le16 __cpu_to_le16
-         |                     ^
-   include/uapi/linux/byteorder/big_endian.h:36:53: note: expanded from macro '__cpu_to_le16'
-      36 | #define __cpu_to_le16(x) ((__force __le16)__swab16((x)))
-         |                                                     ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   drivers/cxl/core/mbox.c:913:24: note: initialize the variable 'u' to silence this warning
-     913 |         int out_count, ents, u;
-         |                               ^
-         |                                = 0
-   17 warnings generated.
+Van Collin.
 
-
-vim +/u +968 drivers/cxl/core/mbox.c
-
-   900	
-   901	/*
-   902	 * Emulate the 'get supported features' mailbox command and only copy out the
-   903	 * features that are not marked as exclusive for kernel.
-   904	 */
-   905	static void cxl_mbox_get_supported_features_filtered(struct cxl_mailbox *cxl_mbox,
-   906							     struct cxl_mbox_cmd *mbox_cmd)
-   907	{
-   908		struct cxl_mbox_get_sup_feats_in *feat_in = mbox_cmd->payload_in;
-   909		struct cxl_mbox_get_sup_feats_out *feat_out = mbox_cmd->payload_out;
-   910		const int feat_out_size = sizeof(*feat_out);
-   911		struct cxl_feat_entry *pos;
-   912		const int feat_ent_size = sizeof(*pos);
-   913		int out_count, ents, u;
-   914		u32 count;
-   915		u16 start;
-   916	
-   917		count = le32_to_cpu(feat_in->count);
-   918		start = le16_to_cpu(feat_in->start_idx);
-   919		ents = count / sizeof(struct cxl_feat_entry);
-   920		ents -= start;
-   921		if (ents < 0) {
-   922			mbox_cmd->size_out = 0;
-   923			mbox_cmd->return_code = CXL_MBOX_CMD_RC_INPUT;
-   924			return;
-   925		}
-   926	
-   927		if (mbox_cmd->size_out < feat_out_size) {
-   928			mbox_cmd->size_out = 0;
-   929			mbox_cmd->return_code = CXL_MBOX_CMD_RC_INPUT;
-   930			return;
-   931		}
-   932	
-   933		feat_out->supported_feats =
-   934			cpu_to_le16(cxl_mbox->num_user_feats);
-   935		if (ents == 0) {
-   936			feat_out->num_entries = cpu_to_le16(0);
-   937			mbox_cmd->size_out = feat_out_size;
-   938			mbox_cmd->return_code = CXL_MBOX_CMD_RC_SUCCESS;
-   939			return;
-   940		}
-   941	
-   942		pos = &feat_out->ents[0];
-   943		out_count = feat_out_size;
-   944		for (int i = 0, u = 0; i < cxl_mbox->num_features; i++) {
-   945			struct cxl_feature *feat = &cxl_mbox->entries[i];
-   946	
-   947			if (feat->exclusive)
-   948				continue;
-   949	
-   950			if (u < start) {
-   951				u++;
-   952				continue;
-   953			}
-   954	
-   955			memcpy(pos, &feat->entry, feat_ent_size);
-   956			out_count += feat_ent_size;
-   957			pos++;
-   958			u++;
-   959	
-   960			if (u == count)
-   961				break;
-   962	
-   963			/* Make sure it does not go over total output buffer size */
-   964			if (out_count + feat_ent_size >= mbox_cmd->size_out)
-   965				break;
-   966		}
-   967	
- > 968		feat_out->num_entries = cpu_to_le16(u);
-   969		mbox_cmd->size_out = out_count;
-   970		mbox_cmd->return_code = CXL_MBOX_CMD_RC_SUCCESS;
-   971	}
-   972	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
