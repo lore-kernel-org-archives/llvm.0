@@ -1,103 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529971E2315
-	for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 20:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B1D2913;
+	Sat, 16 Nov 2024 01:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731700929; cv=none; b=DUFTmrVfsa80wYZZe2kaZR75JPP0J8yXKX69VLw/xgZM1mlxTmHZToeQ347W1y/BL6s18lhMUhbeHxoZgmKZ1Loj7Pb5UaHUf0nsGfKKIjW5II3ewIda7zLFXSkAnwc47PQkt5sw/bsltz2hDO39j1P9kaHD5xUSnK6xpvFqJRw=
+	t=1731722281; cv=none; b=pilYqN5AInbyAjg/eljkGshafDU4aLfOeGKt1tk9NVCvgbhxLtp9BQPSZrAFbevkEeN+El+5P5Of3lDbR/pxNrckzaJuU3Ji/aI6Efp87EzY105sD2JedPZlSz1Fgftr1X5rkrna5X597JHIL0yUFkkfN2vb6SEzDVB/WjQRtOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731700929; c=relaxed/simple;
-	bh=64eWTAj7AtI03VRfRKFDJT95Mf1S2RyMWRzclcRDlac=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=k/WAWQ7Fs0wsSUdsPeZKUgjbU2vZmbLgIEIbjq5pnZOLqhys9U2GrP3XcGsa6nORqZpd17zWkOGfYWtTE3fj+eDcV1gmdt5lKqr5r4ySyRjKBEBv5+aQKNSvo9DAEH801w2YuUnv7tQSY82gWim35HUW+TBrGf8JtBKoobBV4Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JwRFNhLo; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JwRFNhLo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731700927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vFF2QVeeFZVOCGnXJW9uMs0KjlluuJCWeRC1lPbNVvw=;
-	b=JwRFNhLoWl5OthdKcH1dOT3wktc6iaqLQ4D/91cV458aeWxFXTiO7JdhZNDL7O1fX/05GC
-	KbnpAEpJvKNYtN/kJHM7/Qle1Stv24xStfchCR9GWGqB0irnDD/DvqxiLm3lxrPiJMF43L
-	6a2+wpMOGP+JrHc/w5RvTldCQ8M0+dE=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-396-9K7ANlVhM9C13px-0josNw-1; Fri,
- 15 Nov 2024 15:02:06 -0500
-X-MC-Unique: 9K7ANlVhM9C13px-0josNw-1
-X-Mimecast-MFC-AGG-ID: 9K7ANlVhM9C13px-0josNw
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1E0D81955F2B
-	for <llvm@lists.linux.dev>; Fri, 15 Nov 2024 20:02:05 +0000 (UTC)
-Received: from [172.64.11.46] (unknown [10.30.34.132])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BBC7D3003B76;
-	Fri, 15 Nov 2024 20:02:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc7,
- upstream-mainline, f868cd25)
-Date: Fri, 15 Nov 2024 20:02:04 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1731722281; c=relaxed/simple;
+	bh=eiJcqMDEhlGGOW3OTvAOY7MzaUC9F0+ELd8mjZOdWGA=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=uJ/dMzVZvm3m3pDRlRulltguxsKHdYbBj0bMEBNNqX9q9p7uO76LTClcWPZUrDAVk4UfpfNxwZsbxnoO3DxjDb9V78dmIl4MHEeu02MVic54JdOQnz8kNuvxaekZoLdd43ckz7+zVzvZvuHQ+5cOx85iQ1J855NA6fzI/gzq1FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XqxnH3lfqzpb1X;
+	Sat, 16 Nov 2024 09:56:03 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id B14BD180106;
+	Sat, 16 Nov 2024 09:57:55 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 16 Nov 2024 09:57:54 +0800
+Subject: Re: [PATCH] ubifs: Fix uninitialized use of err in
+ ubifs_jnl_write_inode()
+To: Nathan Chancellor <nathan@kernel.org>, Richard Weinberger <richard@nod.at>
+CC: <linux-mtd@lists.infradead.org>, <llvm@lists.linux.dev>,
+	<patches@lists.linux.dev>
+References: <20241115-ubifs-fix-uninitialized-err-v1-1-446849982e27@kernel.org>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <b560f413-70f1-8ebb-7403-34591658ca86@huawei.com>
+Date: Sat, 16 Nov 2024 09:57:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <23230.124111515020600320@us-mta-396.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: r6HCHcihCaLVcZkT6ewfFtjbRyAEXF23ArochikYLIk_1731700925
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241115-ubifs-fix-uninitialized-err-v1-1-446849982e27@kernel.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-Hi, we tested your kernel and here are the results:
+ÔÚ 2024/11/16 0:10, Nathan Chancellor Ð´µÀ:
+> Clang warns (or errors with CONFIG_WERROR=y):
+> 
+>    fs/ubifs/journal.c:986:20: error: variable 'err' is uninitialized when used here [-Werror,-Wuninitialized]
+>      986 |                 ubifs_ro_mode(c, err);
+>          |                                  ^~~
+> 
+> Set err to -EPERM before the call to ubifs_ro_mode() and reuse it in the
+> return statement to resolve the warning.
+> 
+> Fixes: 957e1c4e1779 ("ubifs: ubifs_jnl_write_inode: Only check once for the limitation of xattr count")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   fs/ubifs/journal.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+My mistake, thanks for fixing it.
 
-
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2024-11-16' of https://gitlab.free=
-desktop.org/drm/kernel
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1546405088
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1546405088-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1546405088-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1546405088-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Reviewed-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> 
+> diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
+> index 8e98be64237154105cd6f7cb62cf0338ac26d3e9..36ba79fbd2ff80ff3d5c1f0bf965e439d8c55ab2 100644
+> --- a/fs/ubifs/journal.c
+> +++ b/fs/ubifs/journal.c
+> @@ -983,8 +983,9 @@ int ubifs_jnl_write_inode(struct ubifs_info *c, const struct inode *inode)
+>   
+>   	if (kill_xattrs && ui->xattr_cnt > ubifs_xattr_max_cnt(c)) {
+>   		ubifs_err(c, "Cannot delete inode, it has too much xattrs!");
+> +		err = -EPERM;
+>   		ubifs_ro_mode(c, err);
+> -		return -EPERM;
+> +		return err;
+>   	}
+>   
+>   	/*
+> 
+> ---
+> base-commit: fe051552f5078fa02d593847529a3884305a6ffe
+> change-id: 20241115-ubifs-fix-uninitialized-err-96ba6a1e756c
+> 
+> Best regards,
+> 
 
