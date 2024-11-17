@@ -1,73 +1,56 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BE612C499
-	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 23:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141081DDC37
+	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 23:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731887315; cv=none; b=ZVBy+DrLvDURs/++PJRJ6lMC8rK/b/BZOSxv2mh8Qz4MD11H0cUMXZW7kqf3xCxVP5OSilisHt28IaJpWD9/JCLeYhApZoSoGSUwAH6HALYftg/vHtlnrYVLOS+F+RrArySW3qaux8m8LNkuDhwKx+J6zlKB70A152BSBJBMxoY=
+	t=1731887380; cv=none; b=Y1NR0fOR4cCUmr3clMfGlhZ8Q4E3+fUWbhqoYuIDjKR2eAsdJzM1IRQjus2CUJhDRR0uB6ddckG4yCL7LLrzQYmIRQfOHICHpDUzXrYGL36uxhQb6PWS+XzPab+vAT6fpBsMgYBwDe0DtnUYipRunqyRHgoXoll2iEmf/+kZcJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731887315; c=relaxed/simple;
-	bh=ri6Ho4ucUdEBaSs6tOZ0fI21T90qoYj7m+XdRVkRm0k=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eXWxFo/IGPOaI7UCwPX1bTXgj93oA4JDiyWUscMt2XdR5b21hply20bAC5wcJI5fomQFGsZcFUMaplmI8VXrhpMShxPXcDa+QsprAMYdXdL0NUElaIcNWV/5Dmsl6hMb3a+quF35+3v6WKpw/Wd6gZbDcHyKeUI86hPQw8bs0nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=SR9QYUiv; arc=none smtp.client-ip=185.70.40.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1731887380; c=relaxed/simple;
+	bh=RXy9zM4D/wtkk/3vzQbpW9uPjA0eh8924g1+lxWfxKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fK+emEdRqpUpRUUeYKorrICdgXu98MtRZpmUEMBFq+2+UIZ3vsykTx3p6QVVxYpJxjSg9o3RI3eMdczs1it0xzLi6WM2zL+rsS1HbXBvCJ7Q2jfmyOsLuvEPMtqk7FTTBMP47iPFngunT6bIvEOWc9Nq6ij5K38KWYF7RD5V0zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cZlcw9ZN; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="SR9QYUiv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1731887305; x=1732146505;
-	bh=ri6Ho4ucUdEBaSs6tOZ0fI21T90qoYj7m+XdRVkRm0k=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
-	 List-Unsubscribe:List-Unsubscribe-Post;
-	b=SR9QYUiv5IZwlM8oofocnfC+QIg98fhR3iKgxFAvN2YQJobPc6QsDTyo12D5UG1pp
-	 /5rs0NecKXVkTaDxL2GZc3nGWTe0/kTUM65XURafWdLT8mSW7Mk7jHD2zm+ll0iIay
-	 KYiqOp7f5BYGHDQBxlduu+g+/7DkML05QUK3d/yidtmuobNOMJoFjkMYNAu0Mql15u
-	 MW4hoxvlgXz48i+z1+fuRnkmYrEKPtLdifazadqXpx00NDAL1J4XCGN/o2Cb8HJZRt
-	 uEukLVVQ6XcgtS/3w4btZ787rCPRwXsLDRPt0jnCZq6RuFCKhjMMuJE9PGX8RoajkZ
-	 F8mXezrNDLxBw==
-Date: Sun, 17 Nov 2024 23:48:23 +0000
-To: kent.overstreet@linux.dev, nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, linux-bcachefs@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-From: Piotr Zalewski <pZ010001011111@proton.me>
-Cc: skhan@linuxfoundation.org, Piotr Zalewski <pZ010001011111@proton.me>
-Subject: [PATCH] bcachefs: initialize local variables in bch2_evacuate_bucket
-Message-ID: <20241117234334.722730-4-pZ010001011111@proton.me>
-Feedback-ID: 53478694:user:proton
-X-Pm-Message-ID: 7835e83be954f30a22e5bcf361713dba078952f7
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cZlcw9ZN"
+Date: Sun, 17 Nov 2024 18:49:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1731887375;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Agxt+AwFYrRD7m03b1C+qujn1oHH+KdH2UDB7HCD1qc=;
+	b=cZlcw9ZNLPwWBytyWFSWDwgTuttuToQm6D5j3CkbbJ6h8r4TBm72DQNwIsDtegBlOiNVju
+	FMvMNXAqLMPvC9yHJp3BFF6AWaK7r+luT/XslxBCVN63Dg/hJnkqys3BqOfIRfJtzaAL51
+	tKoKaixMwDS4Lmys4QYzXZfEbaTWOmA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Piotr Zalewski <pZ010001011111@proton.me>
+Cc: nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, linux-bcachefs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, skhan@linuxfoundation.org
+Subject: Re: [PATCH] bcachefs: initialize local variables in
+ bch2_evacuate_bucket
+Message-ID: <enjo6na4qnoamw74tyfabwriczmwo4ir3hs7hc7ma2p4eomwec@q54ebukphsiz>
+References: <20241117234334.722730-4-pZ010001011111@proton.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241117234334.722730-4-pZ010001011111@proton.me>
+X-Migadu-Flow: FLOW_OUT
 
-Compiling bcachefs sources with LLVM triggers uninitialized variables
-warnings.
+On Sun, Nov 17, 2024 at 11:48:23PM +0000, Piotr Zalewski wrote:
+> Compiling bcachefs sources with LLVM triggers uninitialized variables
+> warnings.
+> 
+> Signed-off-by: Piotr Zalewski <pZ010001011111@proton.me>
 
-Signed-off-by: Piotr Zalewski <pZ010001011111@proton.me>
----
- fs/bcachefs/move.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/bcachefs/move.c b/fs/bcachefs/move.c
-index 8c032ef3a567..94cac498d372 100644
---- a/fs/bcachefs/move.c
-+++ b/fs/bcachefs/move.c
-@@ -674,8 +674,8 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
- =09struct bkey_buf sk;
- =09struct bkey_s_c k;
- =09struct data_update_opts data_opts;
--=09unsigned dirty_sectors, bucket_size;
--=09u64 fragmentation;
-+=09unsigned dirty_sectors =3D 0, bucket_size =3D 0;
-+=09u64 fragmentation =3D 0;
- =09int ret =3D 0;
-=20
- =09struct bch_dev *ca =3D bch2_dev_tryget(c, bucket.inode);
---=20
-2.47.0
-
-
+Thanks, applied
