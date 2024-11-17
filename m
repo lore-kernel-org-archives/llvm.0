@@ -1,103 +1,71 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48F4179BC
-	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 18:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F65884A3E;
+	Sun, 17 Nov 2024 21:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731868931; cv=none; b=neN+A1NCdjbbJpjgtGTaBEofjoHmPDccHNJut6zovnKO8xQaFrIcxXNcIxlIbZi7FnZxMk0zZa6dlhEzF4K+cL2N95P/gDzGiXGKGmUhV0j7S+jIry8OnzaUTp5hamS3MdBeEmltPFfNxTkHOqNOf2h6U5a0gI+TfJ1OQaeYp5g=
+	t=1731877812; cv=none; b=nX08Ll7fqopN5CZADw8o9PT4WJS6YNRdSSqqJxDE9MWp9KJUup6XxrSEU8BLEa+tkSYpqTozs/Erm1nO5vod2NHlO/ng7jN3vxEKGHmB3pAJ+xFFojnPrJQk7qy8WM49+hZ9fTnlb38QLcZmWsRDH2ZqRctLiv/HtBY8YlvxCuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731868931; c=relaxed/simple;
-	bh=KLnZ6JBfWy0jIzLY614rvxEPZBLxYhnFMEMhgR/7FPQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nDgLBZ6J4PQdo9Hy9SdBW4MYPdj9eqE9wGVI2LPRdoRreGjIRQ1DfpMGWT4FcXcgDT764Nliv0/fgua+ko+WaS5eZETJvq3t3b9nejclqSLFej6Is3mSaZ0iD1hQXCOmUcMrzb2UnpVKHBp8rFNUmrI5nO/L84tqkeS/+7nvFMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gC0dGQgQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1731877812; c=relaxed/simple;
+	bh=VWjBlZ26MchQzz8fZi9aGEOX4tEJitUwSPEEfw6xwwE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=oaJjtnlHkSwoAzxGYrlOT/wwbSPwNzAjoVXHFJZeZg5Hc7KK7p5uiMhlyQN4NYmHnVG57BdAqcpYLsbSRO6uo9360ien1xIOR0g4v6X2Rn3GK/xTiQTCGuZDmW8VGubRClHKkQuu0ME4rN27VDFLveLMQya+M5FAB0t6//vRIe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+0H2TrV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gC0dGQgQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1731868927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sAygo53yJ0u6jMBMyqK13g3iOoOxDqH9wZMSJQY8+sw=;
-	b=gC0dGQgQVWDSx7mtergPa7PavvlrFZDB4ZIJKoD062h2kcqyhtZH41XRGaGziLdivpvLOY
-	vnm0Gfkin/WodSyBYKWmfFm2wKPfdSYisGP21qBponFoNGlQT4XkTocbs0sggRttjjAdRO
-	HKeb3KBX94SX1zgR0vPMPLvnDd0u5nY=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-690-ibCJ2YGLNAmYJJ47I1Bmyg-1; Sun,
- 17 Nov 2024 13:42:05 -0500
-X-MC-Unique: ibCJ2YGLNAmYJJ47I1Bmyg-1
-X-Mimecast-MFC-AGG-ID: ibCJ2YGLNAmYJJ47I1Bmyg
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 01BAF1955EE7
-	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 18:42:05 +0000 (UTC)
-Received: from [172.64.11.46] (unknown [10.30.34.132])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8332D19560A3;
-	Sun, 17 Nov 2024 18:42:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0-rc7,
- upstream-mainline, f66d6acc)
-Date: Sun, 17 Nov 2024 18:42:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+0H2TrV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE331C4CECD;
+	Sun, 17 Nov 2024 21:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731877812;
+	bh=VWjBlZ26MchQzz8fZi9aGEOX4tEJitUwSPEEfw6xwwE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=T+0H2TrV/a/43xrHl9e0Tr5hWwmh1OzMdRq1kRaId92EXFc9klgLUVWDAGj+GuvGZ
+	 JtkX8llfQZVYABOEiAgT5xOuvRQte5kcazNwJqaLEPxf2M4WCyCH5AGTcNODwsumEl
+	 oRs8s8rgkMrcmXAQtzXMzE3O+2kGHBn+33SNZuAXuek4BbmoEQerHorxOQ/zCx2Z9r
+	 418L5tBDsTkheCwYYyPtyciJGfvK//5GmsFfmNIuAIWG52aRZBmg+WE09mjVJVZhge
+	 J1+wPVcroKoVOp/rnKj2FOYIGWwxdbaPNIKP4NSxDk8g6OyeZksuWNBzpVKK8zf3H7
+	 0+WnEMUQKm9Gg==
+From: SeongJae Park <sj@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [sj:damon/next 54/54] mm/damon/core.c:2027:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true
+Date: Sun, 17 Nov 2024 13:10:08 -0800
+Message-Id: <20241117211008.55104-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <202411180218.mUqglaqC-lkp@intel.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <25081.124111713420600175@us-mta-690.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: MPC2N9ArSUuNskmA0vMjXyMkQReMGDlr9dsAekn0hGQ_1731868925
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+On Mon, 18 Nov 2024 02:24:59 +0800 kernel test robot <lkp@intel.com> wrote:
 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+> head:   26e20409cfae740fa1111007c575241ef2b3baeb
+> commit: 26e20409cfae740fa1111007c575241ef2b3baeb [54/54] mm/damon/core: simplify damon_call() callback path
+> config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20241118/202411180218.mUqglaqC-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241118/202411180218.mUqglaqC-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202411180218.mUqglaqC-lkp@intel.com/
 
-Kernel information:
-    Commit message: Merge tag 'x86_urgent_for_v6.12' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1548009639
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1548009639-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1548009639-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1548009639-x86_64-kernel-debug
+Thank you for this nice report!  Just pushed a fix:
+https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?h=damon/next&id=beb3db106b44e3601fa019bf6173850c252c03a0
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Thanks,
+SJ
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+[...]
