@@ -1,92 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D49038C
-	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 04:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9771B815;
+	Sun, 17 Nov 2024 05:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731819202; cv=none; b=u5dVon7b/ZW/v7SaDY27a9tOF4JCPggvrXiVqMYbI2AgKngxQIbSVOgO/TWHzxGYaAYbjyVwwQVlwLedHRPIh1Gsy7imx8EtEbhQHcB67nyKd7Nq5N99gt/7VObuTslK/HeclSwuGoZgqcdDh2oqBmZZ8jj2AZUcPpi0OIuwThw=
+	t=1731819900; cv=none; b=sBJhuQdL/hmDqKK37HDIrmDgy/Eu8TIDgu54er+Ih94YK6/cy1DpDJENxlBNY4lPpCtMH3i+xG/ponTh8DsTxPlNdaxJIhx1Tm2qlDkegsE1P+0voSEC8Kib7q9JnfB8HSa+6svXtqZ6U2ln6cMZZwBervSVfREd9vWL4/UUfYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731819202; c=relaxed/simple;
-	bh=Z4M/l36RQ7BDxA0KkJcywqBI1etn5Goa+uDViOuOZao=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p1smu8VVj6cmDmwNhyPEt32ag5TeI+zLz0exmVP/TFeLTdeTnhwTrpXYD/7eVtbXgHBRrcnPXZQO7qyscGBxJGcECaAGV6OqpBo+qNgHfXgf6PiVvC1iJy7i/gMkPCQE1t8DcQdvXadhfDYmOoO2Ca4owHQuh7ZjvbQDcNV4s3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=juXa5VM2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731819900; c=relaxed/simple;
+	bh=ndMyTrE/eufFAjs1aspgtRBjcU/z9cS6DONPFlZa8jY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pFIUM/BRR2R0gKXn1NK4/R/dFztpIv2B14S/CMn92eUZa5JD4BTuNWpj6aMC2ivndla9jC3z60vKyjHXbgFZa/WnFxSxKyMTZR0H++tl1XY9AK13/O2QmIm8sf1yk8ZcbudT8rx5cQbdvd/GIcX3EXERhNsQawgdm++NIezDBxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kaAHqqNp; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="juXa5VM2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA63FC4AF0B
-	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 04:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731819201;
-	bh=Z4M/l36RQ7BDxA0KkJcywqBI1etn5Goa+uDViOuOZao=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=juXa5VM2/3+gf5GKqZo2M0CM5a64MV7GtJW4uxarzymsNmtEjNFADlwrXXQWNeMFV
-	 KJt7QUXfdahobcnv5LdrxDqPCdLQsnbPnEXQxcVeUMdzobUaqdIUjwi3sFTOA+ReUb
-	 TTPM9PmbPYSxKxZix4/SUDOcFRQivtjmU75w7q++WCsBaZk7dfNr68JchAIViZYIsa
-	 Qhz6kgjf0AN0qXTyIhh0BZbEF0sAKl69yljkCllDKExmJUVvSd+EVU6a8a+5GZfeXT
-	 PokapZtrtiF/8047rXyoZ0q0Zjg/JePUCczkm6lT1LYaI/gbD21IAGFv+t6Uu53pku
-	 kIr99w7ZzupEA==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ff64e5d31bso13951181fa.0
-        for <llvm@lists.linux.dev>; Sat, 16 Nov 2024 20:53:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXAHoJWMV2xVyhUtCKTY/8dFi9iVY/mpSYnA4U0Q6IzFY2rPOaBwpuAuXIyn4q2/QIjFw3a@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz3o6iPqhNPGlqsqkure6/d8jZjT83cIpk9pjd4Ek1qHflqFc1h
-	d2vpwBcCInDCZSeOt8Wp5yYVYS7KB8hX4XuqbubUNGjs+5L8Tl9QGHaRJ81+Gti/Tx6Wmp9mopq
-	4EPcGZczOh0mf2YE1nsl66yPp0SU=
-X-Google-Smtp-Source: AGHT+IFfyVPI/OVi1o+HOnvr+Rz8GoX4PcmXLXqpQzSsQLua2qkafXKAkY8vkxBQcZ+N/vBhCTLgDEDFQ/sdJsp/NN4=
-X-Received: by 2002:a05:651c:1595:b0:2ff:5210:4128 with SMTP id
- 38308e7fff4ca-2ff60925ebcmr36647001fa.22.1731819200527; Sat, 16 Nov 2024
- 20:53:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kaAHqqNp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731819899; x=1763355899;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ndMyTrE/eufFAjs1aspgtRBjcU/z9cS6DONPFlZa8jY=;
+  b=kaAHqqNpAkK3uRvgbCNs1E3MxRXlPVxxUiKCL4Jf4Nk37uY6MCW2AcGb
+   kIi+Jvb62rm6jmZJwVaXqi6ktb+S7WRl+vTF+xZTfR7IPTmkwV6hIxTEy
+   vPxZoRNF66tpVLV9JkFFhoZXRhETsb9qwmX+dugtteaa3kSJns4IdFGYg
+   PV70vnTf7QRYWQSihGIxzeQfEDyjOynnAPpJ/sP+q524efuYy1VsPH6d6
+   Y24BiFI6CKNgdNlELLsHI0d1ZQKF1qnSeuIyfrrZxd47X8/r8Y305IYBP
+   Ltk992e1aIDT28i/II6uH+EAqzhe72mFbspxJF5uNHUXzrnh+xUh8oWMy
+   w==;
+X-CSE-ConnectionGUID: 4bDb4hRfTFma/L+SzTyBnQ==
+X-CSE-MsgGUID: mEx82E4DTFWBVx+uRDKBdg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31713538"
+X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
+   d="scan'208";a="31713538"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 21:04:56 -0800
+X-CSE-ConnectionGUID: xqVdjCJqR4KpqTeAXtciOA==
+X-CSE-MsgGUID: PziM0WyNR3aBYvIf4Ho5kw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
+   d="scan'208";a="119853904"
+Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 16 Nov 2024 21:04:54 -0800
+Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tCXSu-0001Wz-1t;
+	Sun, 17 Nov 2024 05:04:52 +0000
+Date: Sun, 17 Nov 2024 13:04:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-efi@vger.kernel.org
+Subject: [efi:next 14/16] drivers/firmware/efi/libstub/file.c:221:3: warning:
+ label followed by a declaration is a C23 extension
+Message-ID: <202411171305.mtelLSJK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241108214953.1160765-1-xur@google.com>
-In-Reply-To: <20241108214953.1160765-1-xur@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 17 Nov 2024 13:52:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARO307kMjXgBPG59g4zbiW6KPQK8SJqjhVS1A7esDJaZw@mail.gmail.com>
-Message-ID: <CAK7LNARO307kMjXgBPG59g4zbiW6KPQK8SJqjhVS1A7esDJaZw@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Fix Propeller build option
-To: Rong Xu <xur@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Han Shen <shenhan@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Nov 9, 2024 at 6:50=E2=80=AFAM Rong Xu <xur@google.com> wrote:
->
-> The '-fbasic-block-sections=3Dlabels' option has been deprecated in tip
-> of tree clang (20.0.0) [1]. While the option still works, a warning is
-> emitted:
->
->   clang: warning: argument '-fbasic-block-sections=3Dlabels' is deprecate=
-d, use '-fbasic-block-address-map' instead [-Wdeprecated]
->
-> Add a version check to set the proper option.
->
-> Link: https://github.com/llvm/llvm-project/pull/110039 [1]
->
-> Signed-off-by: Rong Xu <xur@google.com>
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
->
-> ---
-> ChangeLog in V2
-> Integrated suggestions from Nathan Chancellor.
-> (1) improved commit message
-> (2) added links to the comments
-> (3) used ld.lld version in the version check for lld
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+head:   8e060452c658e09ce7bcdeaa19dc080d74176a56
+commit: 257f826a691aa9eff8767f0ca5b82a3368b3d02a [14/16] efi/libstub: Fix command line fallback handling when loading files
+config: arm-randconfig-002-20241117 (https://download.01.org/0day-ci/archive/20241117/202411171305.mtelLSJK-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171305.mtelLSJK-lkp@intel.com/reproduce)
 
-Applied to linux-kbuild.
-Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411171305.mtelLSJK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/firmware/efi/libstub/file.c:11:
+   In file included from arch/arm/include/asm/efi.h:9:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/firmware/efi/libstub/file.c:221:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     221 |                 static const efi_char16_t builtin_cmdline[] = L"" CONFIG_CMDLINE;
+         |                 ^
+   2 warnings generated.
 
 
+vim +221 drivers/firmware/efi/libstub/file.c
 
---=20
-Best Regards
-Masahiro Yamada
+   177	
+   178	/*
+   179	 * Check the cmdline for a LILO-style file= arguments.
+   180	 *
+   181	 * We only support loading a file from the same filesystem as
+   182	 * the kernel image.
+   183	 */
+   184	efi_status_t handle_cmdline_files(efi_loaded_image_t *image,
+   185					  const efi_char16_t *optstr,
+   186					  int optstr_size,
+   187					  unsigned long soft_limit,
+   188					  unsigned long hard_limit,
+   189					  unsigned long *load_addr,
+   190					  unsigned long *load_size)
+   191	{
+   192		const bool ignore_load_options = false;
+   193		const efi_char16_t *cmdline = efi_table_attr(image, load_options);
+   194		u32 cmdline_len = efi_table_attr(image, load_options_size);
+   195		unsigned long efi_chunk_size = ULONG_MAX;
+   196		efi_file_protocol_t *volume = NULL;
+   197		efi_file_protocol_t *file;
+   198		unsigned long alloc_addr;
+   199		unsigned long alloc_size;
+   200		efi_status_t status;
+   201		bool twopass;
+   202		int offset;
+   203	
+   204		if (!load_addr || !load_size)
+   205			return EFI_INVALID_PARAMETER;
+   206	
+   207		efi_apply_loadoptions_quirk((const void **)&cmdline, &cmdline_len);
+   208		cmdline_len /= sizeof(*cmdline);
+   209	
+   210		if (IS_ENABLED(CONFIG_X86) && !efi_nochunk)
+   211			efi_chunk_size = EFI_READ_CHUNK_SIZE;
+   212	
+   213		alloc_addr = alloc_size = 0;
+   214	
+   215		if (!ignore_load_options && cmdline_len > 0) {
+   216			twopass = IS_ENABLED(CONFIG_CMDLINE_BOOL) ||
+   217				  IS_ENABLED(CONFIG_CMDLINE_EXTEND);
+   218		} else {
+   219	do_builtin:
+   220	#ifdef CONFIG_CMDLINE
+ > 221			static const efi_char16_t builtin_cmdline[] = L"" CONFIG_CMDLINE;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
