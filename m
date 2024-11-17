@@ -1,75 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD40BE49;
-	Sun, 17 Nov 2024 03:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E875364A;
+	Sun, 17 Nov 2024 03:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731814068; cv=none; b=QARSPhAQDqtq0hNDy7x/uo5EMTjP4NpINdbmiyGKpQQkew/EaJXSgDVtQK7NKglxR7ttgNTAUEX4BFlJNFkiABeev7naYTy+Atht4ezKmQYW7x76+T0sgzMlcHw/V4f2nGREfMA2RT34pUpTXKERAg6b8vRpDN/3TqjAnnB96XA=
+	t=1731815329; cv=none; b=fNJzKebZXCTYcr3XgopKvBfONTc1csfiPQXJCElXZPOgk2GBZATFWnv+hKOP6ICVe6LI6Jex8D0SwxYtadqFTul+maTrCa3VS6c/jpUB6lmXuhLQ2Jz3lZxmGUaK53pchPLlb7TJrQ2xKgeC8r+DKZoFhDBdhY/kAmiDVrGyEJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731814068; c=relaxed/simple;
-	bh=5ITUgTk83bVHTXHHqKXnQknCDI3cg7wq8bv7laRd1OE=;
+	s=arc-20240116; t=1731815329; c=relaxed/simple;
+	bh=SU4ZxkobQzJFaYo6lLfeiNErr6NI3r+NOqva1u4xrZ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hfn8S3TfkqoH15STRDEeHAHosYQ/p6FhmK4qw5tXhEjD+2iK1YZIQGhKlety2YBHG/RDulYoGRF8ba5CAD435gV/RPloQhhoDUwu/sIJaT3G0BvYX9027Rngcyr0YOxToH4x/pGot57AButECGxE2ZrgQoDS+cZqSF9W+3eCay4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZnhmbhfM; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=S3q1UC6Ti048qwyEfDvyiMAUqpQVvCJTnhUhTtcDSKY8eKdIdBz1F0QGEzlUd/yjjbSBSTISf3F+FhBISCkYQ1N2EbIZaIw54y2RfrYbXAUsUZZJi/2Zxy2wA9SOtDNTXH/sOgEccmKk76CwvP507dn2u+Oqk1EdQ88OYTG07T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a/9rmHZf; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZnhmbhfM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a/9rmHZf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731814066; x=1763350066;
+  t=1731815328; x=1763351328;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5ITUgTk83bVHTXHHqKXnQknCDI3cg7wq8bv7laRd1OE=;
-  b=ZnhmbhfMhLMrQNwxdbMG4BLC/du8PgXVYZNYualXOkWN+4kTl9ZVc4tv
-   sGcOehkG0kaBk3gSMSc04Y/ORwjhAyxDUlrJ/VQ0hPLboW4oGK1gqjeRt
-   fVIIrotrv21Zy+O6VkeHXagV6J28OzXZT0sLwHob5yLdkItJlXIHH1lHc
-   A1NGUK4myqXo/lJePquuS4CChDiMLktMrz942Lz6xIezgVVqdpMv0Pk4+
-   b/T7s5rvaF8a/DeJZCTTYlkBs/WimoqoZQlbV4+S7zRPPwvGYRb+0qV3p
-   UrQkRzNe+mhnW3lre1Qf0E/HkYQP27muiTn83gmfBQi0g9bB63bKnMZUj
-   g==;
-X-CSE-ConnectionGUID: 7j2mzFu9QC2Foh0//MMejQ==
-X-CSE-MsgGUID: I06hKiKJQcyJL2h/NY3zCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="54289157"
+  bh=SU4ZxkobQzJFaYo6lLfeiNErr6NI3r+NOqva1u4xrZ8=;
+  b=a/9rmHZfu13FNsS2W7WE6zGS8yVg/VxmlWQQ+K9uOGNr4yLsKEd7mJEy
+   nYzrBC752v/pkYnaxzIBvedKcvXALoyQjKGtsLh8yImKXiW3mwcaBWNBm
+   d3FdDb6xuGTFlZSUHJpbdnHTyHSrbA2TsnSi6prsa7IE711YnQndRj41g
+   m3TmVo7mz8TUI6a88Bj+0tQYtDOX20hlw9kboHLAhqo0PxbPUd+txI18z
+   h8HMxx0m95XdD/Fq5WmTyM3qLmtaM13enCgXGjOROFd5vKTBPWQ2P239v
+   YRQrJr4uygxwNwAtBb8204wajZkrlWyck1/8RpBfcDSXoY7sQr2kFRlAv
+   Q==;
+X-CSE-ConnectionGUID: o7TbTlZTSz6nyjYLEiIA0Q==
+X-CSE-MsgGUID: tnsy2SVmSGSztK8nc4dH6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="35466403"
 X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="54289157"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 19:27:46 -0800
-X-CSE-ConnectionGUID: xUENNUGtQCWbgkQ+iH8bSA==
-X-CSE-MsgGUID: ilK6R/C3R62WusFcHgBm3w==
+   d="scan'208";a="35466403"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 19:48:48 -0800
+X-CSE-ConnectionGUID: VuS+mxuWT86DTBpM0pcc2A==
+X-CSE-MsgGUID: h2jnVQGwSji8O1nIwLxjMA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="119844329"
+   d="scan'208";a="88906967"
 Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 16 Nov 2024 19:27:41 -0800
+  by orviesa009.jf.intel.com with ESMTP; 16 Nov 2024 19:48:44 -0800
 Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tCVwo-0001Kj-3C;
-	Sun, 17 Nov 2024 03:27:38 +0000
-Date: Sun, 17 Nov 2024 11:26:40 +0800
+	id 1tCWHB-0001N7-2n;
+	Sun, 17 Nov 2024 03:48:41 +0000
+Date: Sun, 17 Nov 2024 11:48:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, upstream@airoha.com
+To: Kajol Jain <kjain@linux.ibm.com>, mpe@ellerman.id.au,
+	maddy@linux.ibm.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v5 1/4] net: dsa: add devm_dsa_register_switch()
-Message-ID: <202411171135.vgruCFdx-lkp@intel.com>
-References: <20241112204743.6710-2-ansuelsmth@gmail.com>
+	atrajeev@linux.vnet.ibm.com, kjain@linux.ibm.com,
+	disgoel@linux.ibm.com, hbathini@linux.ibm.com, adubey@linux.ibm.com,
+	gautam@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] powerpc/perf: Add perf interface to expose vpa
+ counters
+Message-ID: <202411171117.Eq9JtACb-lkp@intel.com>
+References: <20241114084013.1140010-1-kjain@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,37 +68,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241112204743.6710-2-ansuelsmth@gmail.com>
+In-Reply-To: <20241114084013.1140010-1-kjain@linux.ibm.com>
 
-Hi Christian,
+Hi Kajol,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on net-next/main]
+[auto build test WARNING on powerpc/topic/ppc-kvm]
+[also build test WARNING on powerpc/next powerpc/fixes linus/master v6.12-rc7 next-20241115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-dsa-add-devm_dsa_register_switch/20241113-045219
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241112204743.6710-2-ansuelsmth%40gmail.com
-patch subject: [net-next PATCH v5 1/4] net: dsa: add devm_dsa_register_switch()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241117/202411171135.vgruCFdx-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kajol-Jain/docs-ABI-sysfs-bus-event_source-devices-vpa-pmu-Document-sysfs-event-format-entries-for-vpa_pmu/20241114-164451
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git topic/ppc-kvm
+patch link:    https://lore.kernel.org/r/20241114084013.1140010-1-kjain%40linux.ibm.com
+patch subject: [PATCH 1/4] powerpc/perf: Add perf interface to expose vpa counters
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20241117/202411171117.Eq9JtACb-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171135.vgruCFdx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171117.Eq9JtACb-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411171135.vgruCFdx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411171117.Eq9JtACb-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/dsa/dsa.c:10:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from arch/powerpc/perf/vpa-pmu.c:10:
+   In file included from include/linux/perf_event.h:50:
+   In file included from include/linux/pid_namespace.h:7:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -128,79 +117,35 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/dsa/dsa.c:14:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from net/dsa/dsa.c:14:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from net/dsa/dsa.c:14:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:95:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> <inline asm>:4:33: error: symbol '__export_symbol_dsa_register_switch' is already defined
-       4 | .section ".export_symbol","a" ; __export_symbol_dsa_register_switch: ; .asciz "GPL" ; .asciz "" ; .balign 8 ; .quad dsa_register_switch ; .previous
-         |                                 ^
-   16 warnings and 1 error generated.
+>> arch/powerpc/perf/vpa-pmu.c:87:32: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+      87 |         if ((event->attr.config <= 0) && (event->attr.config > 3))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
+
+
+vim +87 arch/powerpc/perf/vpa-pmu.c
+
+    72	
+    73	static int vpa_pmu_event_init(struct perf_event *event)
+    74	{
+    75		if (event->attr.type != event->pmu->type)
+    76			return -ENOENT;
+    77	
+    78		/* it does not support event sampling mode */
+    79		if (is_sampling_event(event))
+    80			return -EOPNOTSUPP;
+    81	
+    82		/* no branch sampling */
+    83		if (has_branch_stack(event))
+    84			return -EOPNOTSUPP;
+    85	
+    86		/* Invalid event code */
+  > 87		if ((event->attr.config <= 0) && (event->attr.config > 3))
+    88			return -EINVAL;
+    89	
+    90		return 0;
+    91	}
+    92	
 
 -- 
 0-DAY CI Kernel Test Service
