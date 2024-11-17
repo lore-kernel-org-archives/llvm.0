@@ -1,59 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E09B2B2F2;
-	Sun, 17 Nov 2024 07:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8537A3D96A;
+	Sun, 17 Nov 2024 07:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731827590; cv=none; b=V4y+Qf+W+JiygXz0f1oniHa+BMcuYwUa4Xy1WofPAjB/JldKWUGliK8fEwQiMxHYKA3b1DxpfUdhe6d7xgdHV7BRSv/GcBk1i+obS37WmwP8rSWKwJetjrUHf7U4r63PxDT0iHhLZRtOLDHGFaMutUY19wvRwcKHjXK6S1/MlDc=
+	t=1731827592; cv=none; b=gBVKggI602JgPp5NQaIgQudtItD1TXFmzZDpPclxakKmeLlpMKcU+l2H+kv/mo4oqnCvZvSwrsMFCOyqqr/YrC0CgdltvhO8MDrDVNipJq05VL+olR8Q+XtnO9Dt3vw+aONi1CPndQ79iYNrx4/j//mnN8BoA8Bz8TUUXVEqNe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731827590; c=relaxed/simple;
-	bh=Q0DSojzS6SMBV75ThQ8WkD1uiP1t2+Zuv6GVveanh28=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ixBqrRM0AqzUxw+YGMj2LdBLeVTI0GvSiK1jJRElIa1pRtK5Rgdr3dFzb8UM+viDLWj31aqovFNFGOoyeX/pqzwiy4x2z0ylzTnR0Lc232viMbdT/RzkD8dObEa/VaxZ3e8WYlijoc1xYN9o7Jn0/8zWN1elAqjMmFM+A2ms3KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gzNYOCgk; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1731827592; c=relaxed/simple;
+	bh=rQBcQbykMk0tLp5YALUMbtDcDwg04OCFBS3BiDb9kO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jrlHLUHQ0Fu/XmGP/SPWzf0mVWtavuFy6eIouhZttftuUq/K4saR8qXJmacPq7LphI6HmW40zEYKkw4BftwETIlPn7ofoVj9YEihT5mc+/Kb7Ek0KbZMvfV2BLHtD57RLEKTCqgEog/rWDVyX5A9hTiTjvgYyanBQXnX/Zz6fWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CciDX/37; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gzNYOCgk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CciDX/37"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731827589; x=1763363589;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q0DSojzS6SMBV75ThQ8WkD1uiP1t2+Zuv6GVveanh28=;
-  b=gzNYOCgkUSinjm1Xn0f/2wm2JqPkUFaTcNhLv2RsywXvfA5xi/X9r5uh
-   A63rKcEobrXqxo2yEMz9bFQgveXdFFfrcOD1p9UTBORHVyY/Do2yorjdz
-   SNZHnOci0aXqHijG6SPQRTFzG4Ay9cRjiwPPsLPl9zjgTNyDlvBngbl11
-   5xDll95TWhcNEv6/Q2JH2/U32KdA2GRjIwW7INdQ6Lz8p4jyVtJdwGOwZ
-   zUUalgYt8JYUB/pQmIPt+jDvSwsg/2F5XNMAjN8roMB0nKfwPq04YdHRs
-   SBzsRVag5ME89FWUT3Vk8JGB6/Ur6b29VjdlxEb9QYFxn/60VF6WW0p8K
+  t=1731827591; x=1763363591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rQBcQbykMk0tLp5YALUMbtDcDwg04OCFBS3BiDb9kO0=;
+  b=CciDX/37ZAd9vXwTy9un8oMpqA182hVArqZyUaKmcaJG1TBTrpnIkjbI
+   6LUtU+t3GMQ06LLEawlUNsRAhiEecbSdpBMTBiAQuWQBcLQqGjSzIhOPS
+   cjvhJAnlBRbFyG5VmeSuZ7nfl/KAKtKj22WTFH4VP/xEg0q8gC7fr+vub
+   Z7lABEds1fdYmHT+efLecmm0gfvoAhhXNtgo/xkcDxzyfzyG4Z589Sbt4
+   G4jxBeTFk2S6eqPRpQ1Kf1ZJZMRbznSOb4ESlC3fifjGX0FnUuAtGYyO3
+   U26vHSttEWIBgyl13G3lHOHB1kesgDWPIfebM04ZPXmu+MJa3WjV8bgCR
    A==;
-X-CSE-ConnectionGUID: oRInq8RZSN2TXF/uZFjn7Q==
-X-CSE-MsgGUID: ZzJAccGhS4eCYDuhDtx6xA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31638514"
+X-CSE-ConnectionGUID: fYZfLh42SvGVP1BktpuG+g==
+X-CSE-MsgGUID: bBlV9d/5R52P65o86Pvc3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31638518"
 X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="31638514"
+   d="scan'208";a="31638518"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 23:13:08 -0800
-X-CSE-ConnectionGUID: ydQ5d1h8SKajqIKI81aJQg==
-X-CSE-MsgGUID: yHi+J0IIRNeC1MJS8iys1w==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 23:13:09 -0800
+X-CSE-ConnectionGUID: e9FA9D5hTrurc79A9hOCaQ==
+X-CSE-MsgGUID: wFdtOkIkQ1ay5u/4R5VxXw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="89094165"
+   d="scan'208";a="89094162"
 Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
   by orviesa006.jf.intel.com with ESMTP; 16 Nov 2024 23:13:07 -0800
 Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tCZSx-0001cV-3C;
+	id 1tCZSx-0001cP-34;
 	Sun, 17 Nov 2024 07:13:03 +0000
-Date: Sun, 17 Nov 2024 15:12:50 +0800
+Date: Sun, 17 Nov 2024 15:12:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Martin =?unknown-8bit?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/180-sio 2/4] drivers/dma/apple-sio.c:512:5:
- warning: variable 'param' set but not used
-Message-ID: <202411171547.QP5TMxtb-lkp@intel.com>
+To: Lothar Rubusch <l.rubusch@gmail.com>, lars@metafoo.de,
+	Michael.Hennerich@analog.com, jic23@kernel.org,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, l.rubusch@gmx.ch,
+	Lothar Rubusch <l.rubusch@gmail.com>
+Subject: Re: [PATCH 15/22] iio: accel: adxl345: reset the FIFO on error
+Message-ID: <202411171552.BWbWLHpL-lkp@intel.com>
+References: <20241114231002.98595-16-l.rubusch@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,110 +65,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241114231002.98595-16-l.rubusch@gmail.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/180-sio
-head:   bdf5443483813f581ab80ea5e4a6b675ec2c211f
-commit: b84a7086d959ffdb1184c2022e5e0f0941467055 [2/4] dmaengine: apple-sio: Add Apple SIO driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241117/202411171547.QP5TMxtb-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171547.QP5TMxtb-lkp@intel.com/reproduce)
+Hi Lothar,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on jic23-iio/togreg]
+[also build test WARNING on linus/master v6.12-rc7 next-20241115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lothar-Rubusch/iio-accel-adxl345-fix-comment-on-probe/20241115-190245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20241114231002.98595-16-l.rubusch%40gmail.com
+patch subject: [PATCH 15/22] iio: accel: adxl345: reset the FIFO on error
+config: arm-randconfig-002-20241117 (https://download.01.org/0day-ci/archive/20241117/202411171552.BWbWLHpL-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171552.BWbWLHpL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411171547.QP5TMxtb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411171552.BWbWLHpL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/dma/apple-sio.c:12:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/dma/apple-sio.c:512:5: warning: variable 'param' set but not used [-Wunused-but-set-variable]
-     512 |         u8 param, type, tag, sioep;
-         |            ^
-   5 warnings generated.
+>> drivers/iio/accel/adxl345_core.c:383:6: warning: no previous prototype for function 'adxl345_empty_fifo' [-Wmissing-prototypes]
+     383 | void adxl345_empty_fifo(struct adxl34x_state *st)
+         |      ^
+   drivers/iio/accel/adxl345_core.c:383:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     383 | void adxl345_empty_fifo(struct adxl34x_state *st)
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +/param +512 drivers/dma/apple-sio.c
+vim +/adxl345_empty_fifo +383 drivers/iio/accel/adxl345_core.c
 
-   506	
-   507	static void sio_recv_msg(void *cookie, u8 ep, u64 msg)
-   508	{
-   509		struct sio_data *sio = cookie;
-   510		struct sio_tagdata *tags = &sio->tags;
-   511		u32 data;
- > 512		u8 param, type, tag, sioep;
-   513	
-   514		if (ep != EP_SIO)
-   515			goto unknown;
-   516	
-   517		data  = FIELD_GET(SIOMSG_DATA, msg);
-   518		param = FIELD_GET(SIOMSG_PARAM, msg);
-   519		type  = FIELD_GET(SIOMSG_TYPE, msg);
-   520		tag   = FIELD_GET(SIOMSG_TAG, msg);
-   521		sioep = FIELD_GET(SIOMSG_EP, msg);
-   522	
-   523		switch (type) {
-   524		case MSG_STARTED:
-   525			dev_info(sio->dev, "SIO protocol v%u\n", data);
-   526			type = MSG_ACK; /* Pretend this is an ACK */
-   527			fallthrough;
-   528		case MSG_ACK:
-   529		case MSG_NACK:
-   530			if (WARN_ON(tag >= SIO_NTAGS))
-   531				break;
-   532	
-   533			if (tags->atomic[tag]) {
-   534				sio_ack_callback callback = tags->ack_callback[tag];
-   535	
-   536				if (callback && !WARN_ON(sioep >= sio->nchannels))
-   537					callback(&sio->channels[sioep],
-   538						 tags->cookie[tag], type == MSG_ACK);
-   539				if (type == MSG_NACK)
-   540					dev_err(sio->dev, "got a NACK on channel %d\n", sioep);
-   541				sio_free_tag(sio, tag);
-   542			} else {
-   543				tags->acked[tag] = (type == MSG_ACK);
-   544				complete(&tags->completions[tag]);
-   545			}
-   546			break;
-   547	
-   548		case MSG_REPORT:
-   549			if (WARN_ON(sioep >= sio->nchannels))
-   550				break;
-   551	
-   552			sio_process_report(&sio->channels[sioep]);
-   553			break;
-   554	
-   555		default:
-   556			goto unknown;
-   557		}
-   558		return;
-   559	
-   560	unknown:
-   561		dev_warn(sio->dev, "received unknown message: ep %x data %016llx\n",
-   562			 ep, msg);
-   563	}
-   564	
+   376	
+   377	/**
+   378	 * Empty the fifo. This is needed also in case of overflow or error handling.
+   379	 * Read out all remaining elements and reset the fifo_entries counter.
+   380	 *
+   381	 * @st: The instance to the state object of the sensor.
+   382	 */
+ > 383	void adxl345_empty_fifo(struct adxl34x_state *st)
+   384	{
+   385		int regval;
+   386		int fifo_entries;
+   387	
+   388		/* In case the HW is not "clean" just read out remaining elements */
+   389		adxl345_get_fifo_entries(st, &fifo_entries);
+   390		if (fifo_entries > 0)
+   391			adxl345_read_fifo_elements(st, fifo_entries);
+   392	
+   393		/* Reset the INT_SOURCE register by reading the register */
+   394		regmap_read(st->regmap, ADXL345_REG_INT_SOURCE, &regval);
+   395	}
+   396	
 
 -- 
 0-DAY CI Kernel Test Service
