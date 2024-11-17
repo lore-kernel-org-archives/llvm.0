@@ -1,112 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427A411CAF;
-	Sun, 17 Nov 2024 04:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D49038C
+	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 04:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731818637; cv=none; b=SXaMzU3CVr2rvafhQpOX5YJbH3f7Y2FSSLsN4Iqssv0oWuxVqq6kFYdNHCSVKxAyWg63+i4nQ5uKaS6O4gqlwUBbbsvdpg+KwYfYPJjFjq2XChrKne3u1BH31UhWE1B0O9Y2utBq36y7rxhCgYdnGcdb5/HaIlj+dy1Ox3QZzhg=
+	t=1731819202; cv=none; b=u5dVon7b/ZW/v7SaDY27a9tOF4JCPggvrXiVqMYbI2AgKngxQIbSVOgO/TWHzxGYaAYbjyVwwQVlwLedHRPIh1Gsy7imx8EtEbhQHcB67nyKd7Nq5N99gt/7VObuTslK/HeclSwuGoZgqcdDh2oqBmZZ8jj2AZUcPpi0OIuwThw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731818637; c=relaxed/simple;
-	bh=HQ1l0HFtXZ1+g8fi7xatSYiS6b9qnMHvZ8I248CcOIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hylGF4RypzaD/gFuLyioi2/9mlNrjT+yJXURJBO/Kf7sGGas0e/3VuvsBZFH/yf7sKCUhnC+1W4omnaO6c6pLWE9N06nGUZWELtYjQZykP67olb6797BcjJeIbf2w9YCB1nXOtqplqx08KaWjgy07HpK7COvKCOt2ORkjbOA9xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O219LMhe; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731819202; c=relaxed/simple;
+	bh=Z4M/l36RQ7BDxA0KkJcywqBI1etn5Goa+uDViOuOZao=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p1smu8VVj6cmDmwNhyPEt32ag5TeI+zLz0exmVP/TFeLTdeTnhwTrpXYD/7eVtbXgHBRrcnPXZQO7qyscGBxJGcECaAGV6OqpBo+qNgHfXgf6PiVvC1iJy7i/gMkPCQE1t8DcQdvXadhfDYmOoO2Ca4owHQuh7ZjvbQDcNV4s3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=juXa5VM2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O219LMhe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731818637; x=1763354637;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HQ1l0HFtXZ1+g8fi7xatSYiS6b9qnMHvZ8I248CcOIU=;
-  b=O219LMhe7FV4Wg1hCOnxBAAg+npdzG+IiJ/OR0RXuLzxdrG8629SPE2y
-   Go8OmapN679E0cInggCXPuoGNusdwdl532AtNFYnQ04zhnpALNQUdDzQm
-   qIzhJz9lPMcoqNMKCHaa/jIrtrKrjs/587CAvTiS9KK1QTobxIp1ncc8W
-   qIPTFa59GvyZDO6GsKYTys0rZmH3tQa0pDhrzujZBdHjSJrznXze2xnpY
-   AT60vEY5SZhYsIrKAk3PloDsZ8nMH1zx099AGNk7r4RvR9cBT4YSvQmHZ
-   Z8tFtL3RRRvuABRsmvieoZo3kai9DEcfEA2G+JeNd8CqyxT0zxgbyPuc4
-   g==;
-X-CSE-ConnectionGUID: 8aokPnc3Q/mxorWUxg1EaA==
-X-CSE-MsgGUID: D8HsSB5VSw2RTkPZGm2S3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="35560905"
-X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="35560905"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 20:43:55 -0800
-X-CSE-ConnectionGUID: E+OCPVqJQ7KNfXaFrmth9w==
-X-CSE-MsgGUID: udVJSe2oTIe4UuMW8PBpLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="93375793"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 16 Nov 2024 20:43:52 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCX8Y-0001UV-0T;
-	Sun, 17 Nov 2024 04:43:50 +0000
-Date: Sun, 17 Nov 2024 12:43:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ryan Wilson <ryantimwilson@gmail.com>, bpf@vger.kernel.org,
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ryantimwilson@meta.com
-Subject: Re: [PATCH bpf-next] bpf: Add multi-prog support for XDP BPF programs
-Message-ID: <202411171200.F60G1P8R-lkp@intel.com>
-References: <20241114170721.3939099-1-ryantimwilson@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="juXa5VM2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA63FC4AF0B
+	for <llvm@lists.linux.dev>; Sun, 17 Nov 2024 04:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731819201;
+	bh=Z4M/l36RQ7BDxA0KkJcywqBI1etn5Goa+uDViOuOZao=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=juXa5VM2/3+gf5GKqZo2M0CM5a64MV7GtJW4uxarzymsNmtEjNFADlwrXXQWNeMFV
+	 KJt7QUXfdahobcnv5LdrxDqPCdLQsnbPnEXQxcVeUMdzobUaqdIUjwi3sFTOA+ReUb
+	 TTPM9PmbPYSxKxZix4/SUDOcFRQivtjmU75w7q++WCsBaZk7dfNr68JchAIViZYIsa
+	 Qhz6kgjf0AN0qXTyIhh0BZbEF0sAKl69yljkCllDKExmJUVvSd+EVU6a8a+5GZfeXT
+	 PokapZtrtiF/8047rXyoZ0q0Zjg/JePUCczkm6lT1LYaI/gbD21IAGFv+t6Uu53pku
+	 kIr99w7ZzupEA==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ff64e5d31bso13951181fa.0
+        for <llvm@lists.linux.dev>; Sat, 16 Nov 2024 20:53:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXAHoJWMV2xVyhUtCKTY/8dFi9iVY/mpSYnA4U0Q6IzFY2rPOaBwpuAuXIyn4q2/QIjFw3a@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz3o6iPqhNPGlqsqkure6/d8jZjT83cIpk9pjd4Ek1qHflqFc1h
+	d2vpwBcCInDCZSeOt8Wp5yYVYS7KB8hX4XuqbubUNGjs+5L8Tl9QGHaRJ81+Gti/Tx6Wmp9mopq
+	4EPcGZczOh0mf2YE1nsl66yPp0SU=
+X-Google-Smtp-Source: AGHT+IFfyVPI/OVi1o+HOnvr+Rz8GoX4PcmXLXqpQzSsQLua2qkafXKAkY8vkxBQcZ+N/vBhCTLgDEDFQ/sdJsp/NN4=
+X-Received: by 2002:a05:651c:1595:b0:2ff:5210:4128 with SMTP id
+ 38308e7fff4ca-2ff60925ebcmr36647001fa.22.1731819200527; Sat, 16 Nov 2024
+ 20:53:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241114170721.3939099-1-ryantimwilson@gmail.com>
+References: <20241108214953.1160765-1-xur@google.com>
+In-Reply-To: <20241108214953.1160765-1-xur@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 17 Nov 2024 13:52:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARO307kMjXgBPG59g4zbiW6KPQK8SJqjhVS1A7esDJaZw@mail.gmail.com>
+Message-ID: <CAK7LNARO307kMjXgBPG59g4zbiW6KPQK8SJqjhVS1A7esDJaZw@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Fix Propeller build option
+To: Rong Xu <xur@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Han Shen <shenhan@google.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ryan,
+On Sat, Nov 9, 2024 at 6:50=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> The '-fbasic-block-sections=3Dlabels' option has been deprecated in tip
+> of tree clang (20.0.0) [1]. While the option still works, a warning is
+> emitted:
+>
+>   clang: warning: argument '-fbasic-block-sections=3Dlabels' is deprecate=
+d, use '-fbasic-block-address-map' instead [-Wdeprecated]
+>
+> Add a version check to set the proper option.
+>
+> Link: https://github.com/llvm/llvm-project/pull/110039 [1]
+>
+> Signed-off-by: Rong Xu <xur@google.com>
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+>
+> ---
+> ChangeLog in V2
+> Integrated suggestions from Nathan Chancellor.
+> (1) improved commit message
+> (2) added links to the comments
+> (3) used ld.lld version in the version check for lld
+> ---
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Wilson/bpf-Add-multi-prog-support-for-XDP-BPF-programs/20241115-015104
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20241114170721.3939099-1-ryantimwilson%40gmail.com
-patch subject: [PATCH bpf-next] bpf: Add multi-prog support for XDP BPF programs
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241117/202411171200.F60G1P8R-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171200.F60G1P8R-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411171200.F60G1P8R-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/s390/boot/startup.c:14:
-   In file included from arch/s390/include/asm/diag.h:12:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:24:
-   In file included from include/linux/bpf_mprog.h:6:
->> include/linux/bpf.h:2068:24: warning: field 'hdr' with variable sized type 'struct bpf_prog_array' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-    2068 |         struct bpf_prog_array hdr;
-         |                               ^
-   1 warning generated.
+Applied to linux-kbuild.
+Thanks!
 
 
-vim +2068 include/linux/bpf.h
 
-324bda9e6c5add Alexei Starovoitov 2017-10-02  2066  
-46531a30364bd4 Pavel Begunkov     2022-01-27  2067  struct bpf_empty_prog_array {
-46531a30364bd4 Pavel Begunkov     2022-01-27 @2068  	struct bpf_prog_array hdr;
-46531a30364bd4 Pavel Begunkov     2022-01-27  2069  	struct bpf_prog *null_prog;
-46531a30364bd4 Pavel Begunkov     2022-01-27  2070  };
-46531a30364bd4 Pavel Begunkov     2022-01-27  2071  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Best Regards
+Masahiro Yamada
