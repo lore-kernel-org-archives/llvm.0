@@ -1,58 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91634A92D;
-	Sun, 17 Nov 2024 01:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A29BA27;
+	Sun, 17 Nov 2024 02:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731807575; cv=none; b=skVclNd1s4ZjKKnivVGYY06i+YB74SCIM6z6nRIDttiOogPfjS5JgOGFtM4Nk+olWmnuygZuYcKj0KRWM8/k41dn8OZNgedI4O2yTK9RaVyQL8Ytou9CvsB4jx2tQXQ93F2dyBq7jQ4uuo5nlHIPHulfP0tuMUjojhheSkeAZZU=
+	t=1731809499; cv=none; b=s3hzBeED/buR+LG3WWvVs7ubGdxsWDtOhvmunumPfbuMDXJ0szxZOrnmlYQnlKiTdL3lg0TNFdGJlRHWJUO8a6qNJqh6Mp7Cl29cAHfp50k5SY3+0rHEaGiFBagMfU9XfwbmDQcL2bd96SwDtazVgguk1BssXvwDHoX3BFfEc+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731807575; c=relaxed/simple;
-	bh=BEdOQeNAYRmY1nTLzYIXuE80Gqp+rmFNpibzVJP9iZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VTMvQHud4Xcjwn9oyjrf9QdTbIpvC1PuSabfdAUbrH8dObu/PzEjXbdKNryKc+QPgq7ZcnLWWWjWDyutMhzKWK3rgEaw7e0UjUH5tH8q91yQv5fL2iHQD6HyA5txAWIo8XQwa11TzbqeBnP6apx9Mx+r4aYz13eC+yYV1VW9uXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PyWQtcJn; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1731809499; c=relaxed/simple;
+	bh=tVZvsogeDvUitYLdBp6E51d/i6g5c7hpqZ3jcqdhnLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o78PeB+mi0Q40LYaQvHPm0ozyVofm6fM06adTRmwhSaRCFQdKMTtQ3bTgG04lVp+N4cJGfrZ7VwWTbVLPzerfw27kqmAxb4ze/0MN24oh0HseoSWfedzASgt5nGbMnPG7pWPMOfcP/E9SQtrW6nQMRRrZv7cxlcmiua6I8WAPqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UO5hW9H/; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PyWQtcJn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UO5hW9H/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731807573; x=1763343573;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BEdOQeNAYRmY1nTLzYIXuE80Gqp+rmFNpibzVJP9iZQ=;
-  b=PyWQtcJnDIDD1XhiRyIY/RKAOsrQA1YoeafZs1Uj44ITD8Q3swimrVRx
-   +RlN11uBaGGEXtWrJiaDM0/2G0OgenMXQShVuA2E6A0Q4qgXSjZcRoBDV
-   IQxLOnyxI+ItcDwdpo+0+g+XSYyejx8a/gXfksUNvaiRlQdP6j0ctcPCL
-   6ko9bfrT/tJszG9CMRHFz6zXuztUy9pJ89ixffujEApVbZTXmOtB2tB+w
-   WastNKPMhmU7C1cX65MpGP204BfdWcr1+Roumntu1wjntpB3hkpyl+Jn/
-   S2pfOZb/VrGfCzFnkSBNRuQhK4QzFF5VwOJPr9VTrREfqtUkN4Wms4NE9
-   w==;
-X-CSE-ConnectionGUID: TvGsIgRrTYSJoAZXGNxUQw==
-X-CSE-MsgGUID: b3F9YUh2R9Oj46bGYgHjBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="35463180"
+  t=1731809498; x=1763345498;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tVZvsogeDvUitYLdBp6E51d/i6g5c7hpqZ3jcqdhnLw=;
+  b=UO5hW9H/tCdwjj81pJRuAjYm7PWWMrYsO1if7GfKtnTrsXtFsWKVFA1a
+   57OAFGpvCmfbE1eQyfMj2RROt+d53eHHHulaTR92bdqmz/WHgp3SMNoNa
+   6MnyLzHZUd/mZPr0GpA+IQHudcPtMqQvSRcmFlQUoDZUaWPFaxz2MxK35
+   WC5ZdoQ1eczX3DivckWHwGmkpYmSM3eDtRRsfrmk6yK1beoSmIGf9ota8
+   RyJMrwqLAsD1S/hU77vLKtyudt3F5fnf1IlwAb9FVSeAqAGJlSSZ+uSNz
+   KmmvLuS4w9VSYl9KYprUNDXDfbiS27MhNOhMWSnUKN6tQn7gUwkqkrPXP
+   g==;
+X-CSE-ConnectionGUID: KtZ9SyZERmWIy49qOf8kzA==
+X-CSE-MsgGUID: KJlg2yxlSAymdmakHQCzWg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="54287625"
 X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="35463180"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 17:39:31 -0800
-X-CSE-ConnectionGUID: rKO5WFrRSBOis41a8AYCoA==
-X-CSE-MsgGUID: Oh5TG1G9SveF29LLzBpeEA==
+   d="scan'208";a="54287625"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 18:11:37 -0800
+X-CSE-ConnectionGUID: e+Uz3MTaRD66oL4grPliOQ==
+X-CSE-MsgGUID: hG/qfnzjSFSW1prYkRQJVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="119741585"
+   d="scan'208";a="112185207"
 Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 16 Nov 2024 17:39:29 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 16 Nov 2024 18:11:30 -0800
 Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tCUG6-0001DN-24;
-	Sun, 17 Nov 2024 01:39:26 +0000
-Date: Sun, 17 Nov 2024 09:38:29 +0800
+	id 1tCUl6-0001Dv-27;
+	Sun, 17 Nov 2024 02:11:28 +0000
+Date: Sun, 17 Nov 2024 10:10:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrea Gelmini <andrea.gelmini@gelma.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:pr/739 1/1] fs/bcachefs/acl.c:139:8: error:
- use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
-Message-ID: <202411170906.GCK3OZr6-lkp@intel.com>
+To: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+	alexander.deucher@amd.com, christian.koenig@amd.com,
+	ltuikov89@gmail.com, matthew.brost@intel.com,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+	dri-devel@lists.freedesktop.org, ville.syrjala@linux.intel.com,
+	rostedt@goodmis.org, l.stach@pengutronix.de, matt.coster@imgtec.com,
+	frank.binns@imgtec.com, yuq825@gmail.com, robdclark@gmail.com,
+	kherbst@redhat.com, lyude@redhat.com, boris.brezillon@collabora.com,
+	steven.price@arm.com, mwen@igalia.com, mcanal@igalia.com,
+	thomas.hellstrom@linux.intel.com, tvrtko.ursulin@igalia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+Subject: Re: [PATCH v6 2/7] drm/sched: store the drm client_id in
+ drm_sched_fence
+Message-ID: <202411170920.6ntlbMfi-lkp@intel.com>
+References: <20241114100113.150647-3-pierre-eric.pelloux-prayer@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,298 +74,131 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241114100113.150647-3-pierre-eric.pelloux-prayer@amd.com>
 
-tree:   https://github.com/koverstreet/bcachefs pr/739
-head:   6b0cc29d15ef1d80120c936e982104c33e757ba2
-commit: 47cda59a3c898ef9dc663848b9ce8e138c076aca [1/1] Fix typos
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241117/202411170906.GCK3OZr6-lkp@intel.com/config)
+Hi Pierre-Eric,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-xe/drm-xe-next]
+[also build test ERROR on next-20241115]
+[cannot apply to linus/master drm-misc/drm-misc-next v6.12-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Eric-Pelloux-Prayer/drm-debugfs-output-client_id-in-in-drm_clients_info/20241114-180547
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20241114100113.150647-3-pierre-eric.pelloux-prayer%40amd.com
+patch subject: [PATCH v6 2/7] drm/sched: store the drm client_id in drm_sched_fence
+config: arm-randconfig-002-20241117 (https://download.01.org/0day-ci/archive/20241117/202411170920.6ntlbMfi-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411170906.GCK3OZr6-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411170920.6ntlbMfi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411170906.GCK3OZr6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411170920.6ntlbMfi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/acl.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
+   In file included from drivers/gpu/drm/panthor/panthor_mmu.c:5:
+   In file included from include/drm/drm_debugfs.h:38:
+   In file included from include/drm/drm_gpuvm.h:34:
+   In file included from include/drm/drm_gem.h:42:
+   In file included from include/drm/drm_vma_manager.h:27:
    In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/acl.c:139:8: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
-     139 |         acl = allocate_dropping_locks(trans, ret,
-         |               ^
-   fs/bcachefs/btree_iter.h:917:37: note: expanded from macro 'allocate_dropping_locks'
-     917 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                            ^
->> fs/bcachefs/acl.c:139:8: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
-   fs/bcachefs/btree_iter.h:917:59: note: expanded from macro 'allocate_dropping_locks'
-     917 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                                                  ^
-   fs/bcachefs/acl.c:425:8: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
-     425 |         ret = allocate_dropping_locks_errcode(trans,
-         |               ^
-   fs/bcachefs/btree_iter.h:907:31: note: expanded from macro 'allocate_dropping_locks_errcode'
-     907 |         int _ret = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                      ^
-   fs/bcachefs/acl.c:425:8: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
-   fs/bcachefs/btree_iter.h:907:53: note: expanded from macro 'allocate_dropping_locks_errcode'
-     907 |         int _ret = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                                            ^
-   4 warnings and 4 errors generated.
+>> drivers/gpu/drm/panthor/panthor_mmu.c:2472:57: error: too few arguments to function call, expected 5, have 4
+    2472 |         ret = drm_sched_job_init(&job->base, &vm->entity, 1, vm);
+         |               ~~~~~~~~~~~~~~~~~~                               ^
+   include/drm/gpu_scheduler.h:571:5: note: 'drm_sched_job_init' declared here
+     571 | int drm_sched_job_init(struct drm_sched_job *job,
+         |     ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     572 |                        struct drm_sched_entity *entity,
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     573 |                        u32 credits, void *owner,
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+     574 |                        uint64_t drm_client_id);
+         |                        ~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 --
-   In file included from fs/bcachefs/btree_cache.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
+   In file included from drivers/gpu/drm/panthor/panthor_sched.c:6:
+   In file included from include/drm/drm_gem_shmem_helper.h:7:
    In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/btree_cache.c:832:24: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'; did you mean 'KMALLOC_RECLAIM'?
-     832 |         if (memalloc_flags_do(PF_MEMALLOC_NORECLAIM,
-         |                               ^~~~~~~~~~~~~~~~~~~~~
-         |                               KMALLOC_RECLAIM
-   fs/bcachefs/btree_iter.h:899:46: note: expanded from macro 'memalloc_flags_do'
-     899 |         unsigned _saved_flags = memalloc_flags_save(_flags);                    \
+>> drivers/gpu/drm/panthor/panthor_sched.c:3729:25: error: too few arguments to function call, expected 5, have 4
+    3727 |         ret = drm_sched_job_init(&job->base,
+         |               ~~~~~~~~~~~~~~~~~~
+    3728 |                                  &job->group->queues[job->queue_idx]->entity,
+    3729 |                                  credits, job->group);
          |                                                     ^
-   include/linux/slab.h:584:2: note: 'KMALLOC_RECLAIM' declared here
-     584 |         KMALLOC_RECLAIM = KMALLOC_NORMAL,
-         |         ^
-   4 warnings and 1 error generated.
---
-   In file included from fs/bcachefs/btree_key_cache.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/btree_key_cache.c:149:7: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
-     149 |         ck = allocate_dropping_locks(trans, ret,
-         |              ^
-   fs/bcachefs/btree_iter.h:917:37: note: expanded from macro 'allocate_dropping_locks'
-     917 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                            ^
->> fs/bcachefs/btree_key_cache.c:149:7: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
-   fs/bcachefs/btree_iter.h:917:59: note: expanded from macro 'allocate_dropping_locks'
-     917 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                                                  ^
-   fs/bcachefs/btree_key_cache.c:243:26: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
-     243 |                 struct bkey_i *new_k = allocate_dropping_locks(trans, ret,
-         |                                        ^
-   fs/bcachefs/btree_iter.h:917:37: note: expanded from macro 'allocate_dropping_locks'
-     917 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                            ^
-   fs/bcachefs/btree_key_cache.c:243:26: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
-   fs/bcachefs/btree_iter.h:917:59: note: expanded from macro 'allocate_dropping_locks'
-     917 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                                                  ^
-   4 warnings and 4 errors generated.
---
-   In file included from fs/bcachefs/ec.c:5:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/ec.c:952:9: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
-     952 |         return allocate_dropping_locks_errcode(trans,
-         |                ^
-   fs/bcachefs/btree_iter.h:907:31: note: expanded from macro 'allocate_dropping_locks_errcode'
-     907 |         int _ret = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                      ^
->> fs/bcachefs/ec.c:952:9: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
-   fs/bcachefs/btree_iter.h:907:53: note: expanded from macro 'allocate_dropping_locks_errcode'
-     907 |         int _ret = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
-         |                                                            ^
-   4 warnings and 2 errors generated.
+   include/drm/gpu_scheduler.h:571:5: note: 'drm_sched_job_init' declared here
+     571 | int drm_sched_job_init(struct drm_sched_job *job,
+         |     ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     572 |                        struct drm_sched_entity *entity,
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     573 |                        u32 credits, void *owner,
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+     574 |                        uint64_t drm_client_id);
+         |                        ~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/PF_MEMALLOC_NORECLAIM +139 fs/bcachefs/acl.c
+vim +2472 drivers/gpu/drm/panthor/panthor_mmu.c
 
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   87  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   88  /*
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   89   * Convert from filesystem to in-memory representation.
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   90   */
-5ff10c0a04c4217 Kent Overstreet 2023-05-28   91  static struct posix_acl *bch2_acl_from_disk(struct btree_trans *trans,
-5ff10c0a04c4217 Kent Overstreet 2023-05-28   92  					    const void *value, size_t size)
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   93  {
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   94  	const void *p, *end = value + size;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   95  	struct posix_acl *acl;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   96  	struct posix_acl_entry *out;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   97  	unsigned count = 0;
-5ff10c0a04c4217 Kent Overstreet 2023-05-28   98  	int ret;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16   99  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  100  	if (!value)
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  101  		return NULL;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  102  	if (size < sizeof(bch_acl_header))
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  103  		goto invalid;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  104  	if (((bch_acl_header *)value)->a_version !=
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  105  	    cpu_to_le32(BCH_ACL_VERSION))
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  106  		goto invalid;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  107  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  108  	p = value + sizeof(bch_acl_header);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  109  	while (p < end) {
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  110  		const bch_acl_entry *entry = p;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  111  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  112  		if (p + sizeof(bch_acl_entry_short) > end)
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  113  			goto invalid;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  114  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  115  		switch (le16_to_cpu(entry->e_tag)) {
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  116  		case ACL_USER_OBJ:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  117  		case ACL_GROUP_OBJ:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  118  		case ACL_MASK:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  119  		case ACL_OTHER:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  120  			p += sizeof(bch_acl_entry_short);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  121  			break;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  122  		case ACL_USER:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  123  		case ACL_GROUP:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  124  			p += sizeof(bch_acl_entry);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  125  			break;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  126  		default:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  127  			goto invalid;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  128  		}
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  129  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  130  		count++;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  131  	}
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  132  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  133  	if (p > end)
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  134  		goto invalid;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  135  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  136  	if (!count)
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  137  		return NULL;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  138  
-5ff10c0a04c4217 Kent Overstreet 2023-05-28 @139  	acl = allocate_dropping_locks(trans, ret,
-47cda59a3c898ef Andrea Gelmini  2024-11-12  140  			posix_acl_alloc(count, GFP_KERNEL));
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  141  	if (!acl)
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  142  		return ERR_PTR(-ENOMEM);
-5ff10c0a04c4217 Kent Overstreet 2023-05-28  143  	if (ret) {
-5ff10c0a04c4217 Kent Overstreet 2023-05-28  144  		kfree(acl);
-5ff10c0a04c4217 Kent Overstreet 2023-05-28  145  		return ERR_PTR(ret);
-5ff10c0a04c4217 Kent Overstreet 2023-05-28  146  	}
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  147  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  148  	out = acl->a_entries;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  149  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  150  	p = value + sizeof(bch_acl_header);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  151  	while (p < end) {
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  152  		const bch_acl_entry *in = p;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  153  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  154  		out->e_tag  = le16_to_cpu(in->e_tag);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  155  		out->e_perm = le16_to_cpu(in->e_perm);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  156  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  157  		switch (out->e_tag) {
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  158  		case ACL_USER_OBJ:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  159  		case ACL_GROUP_OBJ:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  160  		case ACL_MASK:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  161  		case ACL_OTHER:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  162  			p += sizeof(bch_acl_entry_short);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  163  			break;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  164  		case ACL_USER:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  165  			out->e_uid = make_kuid(&init_user_ns,
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  166  					       le32_to_cpu(in->e_id));
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  167  			p += sizeof(bch_acl_entry);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  168  			break;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  169  		case ACL_GROUP:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  170  			out->e_gid = make_kgid(&init_user_ns,
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  171  					       le32_to_cpu(in->e_id));
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  172  			p += sizeof(bch_acl_entry);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  173  			break;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  174  		}
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  175  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  176  		out++;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  177  	}
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  178  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  179  	BUG_ON(out != acl->a_entries + acl->a_count);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  180  
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  181  	return acl;
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  182  invalid:
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  183  	pr_err("invalid acl entry");
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  184  	return ERR_PTR(-EINVAL);
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  185  }
-1c6fdbd8f2465dd Kent Overstreet 2017-03-16  186  
-
-:::::: The code at line 139 was first introduced by commit
-:::::: 5ff10c0a04c4217b24997d9b127c50602d717ab3 bcachefs: Convert acl.c to allocate_dropping_locks()
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+647810ec247641e Boris Brezillon 2024-02-29  2435  
+647810ec247641e Boris Brezillon 2024-02-29  2436  /**
+647810ec247641e Boris Brezillon 2024-02-29  2437   * panthor_vm_bind_job_create() - Create a VM_BIND job
+647810ec247641e Boris Brezillon 2024-02-29  2438   * @file: File.
+647810ec247641e Boris Brezillon 2024-02-29  2439   * @vm: VM targeted by the VM_BIND job.
+647810ec247641e Boris Brezillon 2024-02-29  2440   * @op: VM operation data.
+647810ec247641e Boris Brezillon 2024-02-29  2441   *
+647810ec247641e Boris Brezillon 2024-02-29  2442   * Return: A valid pointer on success, an ERR_PTR() otherwise.
+647810ec247641e Boris Brezillon 2024-02-29  2443   */
+647810ec247641e Boris Brezillon 2024-02-29  2444  struct drm_sched_job *
+647810ec247641e Boris Brezillon 2024-02-29  2445  panthor_vm_bind_job_create(struct drm_file *file,
+647810ec247641e Boris Brezillon 2024-02-29  2446  			   struct panthor_vm *vm,
+647810ec247641e Boris Brezillon 2024-02-29  2447  			   const struct drm_panthor_vm_bind_op *op)
+647810ec247641e Boris Brezillon 2024-02-29  2448  {
+647810ec247641e Boris Brezillon 2024-02-29  2449  	struct panthor_vm_bind_job *job;
+647810ec247641e Boris Brezillon 2024-02-29  2450  	int ret;
+647810ec247641e Boris Brezillon 2024-02-29  2451  
+647810ec247641e Boris Brezillon 2024-02-29  2452  	if (!vm)
+647810ec247641e Boris Brezillon 2024-02-29  2453  		return ERR_PTR(-EINVAL);
+647810ec247641e Boris Brezillon 2024-02-29  2454  
+647810ec247641e Boris Brezillon 2024-02-29  2455  	if (vm->destroyed || vm->unusable)
+647810ec247641e Boris Brezillon 2024-02-29  2456  		return ERR_PTR(-EINVAL);
+647810ec247641e Boris Brezillon 2024-02-29  2457  
+647810ec247641e Boris Brezillon 2024-02-29  2458  	job = kzalloc(sizeof(*job), GFP_KERNEL);
+647810ec247641e Boris Brezillon 2024-02-29  2459  	if (!job)
+647810ec247641e Boris Brezillon 2024-02-29  2460  		return ERR_PTR(-ENOMEM);
+647810ec247641e Boris Brezillon 2024-02-29  2461  
+647810ec247641e Boris Brezillon 2024-02-29  2462  	ret = panthor_vm_bind_prepare_op_ctx(file, vm, op, &job->ctx);
+647810ec247641e Boris Brezillon 2024-02-29  2463  	if (ret) {
+647810ec247641e Boris Brezillon 2024-02-29  2464  		kfree(job);
+647810ec247641e Boris Brezillon 2024-02-29  2465  		return ERR_PTR(ret);
+647810ec247641e Boris Brezillon 2024-02-29  2466  	}
+647810ec247641e Boris Brezillon 2024-02-29  2467  
+647810ec247641e Boris Brezillon 2024-02-29  2468  	INIT_WORK(&job->cleanup_op_ctx_work, panthor_vm_bind_job_cleanup_op_ctx_work);
+647810ec247641e Boris Brezillon 2024-02-29  2469  	kref_init(&job->refcount);
+647810ec247641e Boris Brezillon 2024-02-29  2470  	job->vm = panthor_vm_get(vm);
+647810ec247641e Boris Brezillon 2024-02-29  2471  
+647810ec247641e Boris Brezillon 2024-02-29 @2472  	ret = drm_sched_job_init(&job->base, &vm->entity, 1, vm);
+647810ec247641e Boris Brezillon 2024-02-29  2473  	if (ret)
+647810ec247641e Boris Brezillon 2024-02-29  2474  		goto err_put_job;
+647810ec247641e Boris Brezillon 2024-02-29  2475  
+647810ec247641e Boris Brezillon 2024-02-29  2476  	return &job->base;
+647810ec247641e Boris Brezillon 2024-02-29  2477  
+647810ec247641e Boris Brezillon 2024-02-29  2478  err_put_job:
+647810ec247641e Boris Brezillon 2024-02-29  2479  	panthor_vm_bind_job_put(&job->base);
+647810ec247641e Boris Brezillon 2024-02-29  2480  	return ERR_PTR(ret);
+647810ec247641e Boris Brezillon 2024-02-29  2481  }
+647810ec247641e Boris Brezillon 2024-02-29  2482  
 
 -- 
 0-DAY CI Kernel Test Service
