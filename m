@@ -1,76 +1,141 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41569188735;
-	Mon, 18 Nov 2024 09:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980C4189919
+	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 09:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731921943; cv=none; b=DIERAt3HvoMNWLN8UEkp5pl6p6AdPnJ7GiGTcRP+iRng7uaXlu0tUNiAVAgVHH0YUEHIucSo0F0QT7teYxyA6mATuWfAHKAN01Jk/Zg4BmKtFCVHBMAmDDEuxpf3OMAtCAxUWf34ArAWpKK4pgGeJho8YP+L4mgptFlgo4gEsOM=
+	t=1731923162; cv=none; b=OLCLuMmtIcHub58LyBLbj1C8JNZ4BaiHSGu6bqTM0cVKQpWAzaFO6wJkTwW5T69b7BzWaLEGKymNmwjHmVapYoBs4PlR42Y3voRJV0sCPJaTacuxoXRdWq1v8xHDMJL84EQTd9Zi+MmnFyokufHS5yesYHZcl93Y7HJziEEPQ6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731921943; c=relaxed/simple;
-	bh=QZv9B88aiudPzp5KFIC/r8NmKWNQgmSFAM98pAwSItI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H4Xt/uU7+/PHnyO/yx92MMA4IDYjsVIEIHXABfqGwm9kTAPAnOMkJc60vGikokJfltXjpETMzP4IsU8noSt8oQEVZAIb0L35CFnu7Wyme6pMJZztbqmkiKea1am23Ok5w40PhTZXOa/Z0R8NYevQZaexQsANXIpt5yE99YEJLMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jATJIly7; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1731923162; c=relaxed/simple;
+	bh=mUQUbdZM2wB07Dr6dMNlFKE5OpDs/vuM8ExzU1Ox/kI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=fnqwggmXmsZQGXpExJ5ncL3WaJpRSSnkkyacUdOTIJfhno13OjYoeml0WjE4IyfjTr5ymTQp+k5OYwErnOc5y8AgAogLfpybFcwupA7yQREgh9Vp5YNV+cHgHia879v1U+X/wXkG9G4Ji88omcv4sanberuG4coiLxBhffxDrck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wWakfleJ; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jATJIly7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=QZv9B88aiudPzp5KFIC/r8NmKWNQgmSFAM98pAwSItI=; b=jATJIly71K9XLkVd42isb8BV28
-	Z0Sh/qK1Z7BJtWHTOQuJXHH+Aom5xYqXR7OLOB7/P4bR6OYK3w5QX4o63cGvDgrqk073aLn67cQsW
-	bjD8br0XSffBxCBn3WYcMacgCOZ9Se7QKExkYBIzNj4J26j/VYdWF0fKGDJv1MjAti4pnPfDXfeMf
-	SINasJGzO/LFTzTUXQh7D+wLoKXxVGT25qOeb/srHkoBam2b/z4NfzLNPbmCBeLsCGLpbfKQ8llB6
-	yhpAWkM4rmtb8c1e9tb7sx2qYwOR7RoSDsolvBI/sll0tIHtcVb/nylzONb4prHcMaJueai3/3Qhu
-	pNBaYF6A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tCy0U-00000000CxD-25nF;
-	Mon, 18 Nov 2024 09:25:18 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 468F530049D; Mon, 18 Nov 2024 10:25:17 +0100 (CET)
-Date: Mon, 18 Nov 2024 10:25:17 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Michal Hocko <mhocko@suse.com>
-Cc: "Nysal Jan K.A." <nysal@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Segher Boessenkool <segher@kernel.crashing.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	linuxppc-dev@lists.ozlabs.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Brown <broonie@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of
- membarrier_state
-Message-ID: <20241118092517.GE39245@noisy.programming.kicks-ass.net>
-References: <20241007053936.833392-1-nysal@linux.ibm.com>
- <20241029055133.121418-1-nysal@linux.ibm.com>
- <ZzsDEvJn-vauz9gE@tiehlicka>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wWakfleJ"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4317391101aso13672895e9.2
+        for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 01:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1731923159; x=1732527959; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RSzXbcfeBbUeVFqww01Yww7G1C9jrZS952jPysDA1Dc=;
+        b=wWakfleJm2YfeEc2WRZuI42JwnGjEdoqeVpOqMDhR/8tPhTL0AzeyIcVHqKbd0SJak
+         Csde3Ylb7K94DrYlvJgKx29+2gmCGg5jfcvMO5J1LTjKo+vjgCm707BvmOwTCqaraVDU
+         F+uEzsu9bERJ8RTulWtgwuwpFcJqW1tosS+TXYZ5kx35oRW8KJ80CZzG2R0+UR4o0LxV
+         9pAedvCJmsIV6mAmrybeWDlRoO9byBSRGAdtPohSV/Dfur5cgD84NCvXFlQaCflWfjby
+         T5YlNRYy7+vOc4yD8FsT0sL0oFWLQnysDVPMkZp2zW8Mxcz9851B5Siv3oFc4+ZwoN3w
+         c2+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731923159; x=1732527959;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RSzXbcfeBbUeVFqww01Yww7G1C9jrZS952jPysDA1Dc=;
+        b=knrwQmx/QxiUAUbr8kl7FVHsmAOYYJRoUHrfevb0OZjAgOMDJLB2LFTl2lMVt5Lxpo
+         j0vXQ5OPnhmm1+1GgtAysLhP5iC8a5G2hnbPC67iTnznc0UrDu+sa6Qbe5M0f6K9n11+
+         99U8yoI97NRtHShkzltkDezi8mESz3H8n2xNwbulmoly4wL11+1zqN/AjL8muzCzvHFG
+         Lq+Go4FcTqeqgmJmSGfUfSWiGsbbmzBNuaNgsbDZ/A0rI3NgUeMugET6S0XcEj4/QKOg
+         2vtfS74mQ5WcAiKXwUuOC/jCS5TPXAWNuJOsJyMNSRkWhxzb33fhlsprWVDlVNia2wJv
+         fVhw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEmbAU0wuIi/iSkf+i+Aqt2yrswv+37hS7k3dhQv1gzD8GfPl4wY9UTw4E+60Z4N0ubNtr@lists.linux.dev
+X-Gm-Message-State: AOJu0YwImI5tmmpgbNsYndVFC/eVrA+up/Yn5/XROT1ObaTXEqMgxBXd
+	UMwcDPSGxmrZ/T8ijcTaLK3QwJ5PYblb+MuOmJWajrh79Hm92kHJlJCtb/a1xgoSpx03B7+ZTJn
+	alqWAjS3OytzEyQ==
+X-Google-Smtp-Source: AGHT+IGXNocgNSIUHqqsyjnvJEyCJXmTljyWq9QmJHH3np9JIxVnk5W+lA6r62qYmN0JCERlE9ZVGtFwx/58rss=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:68:fe9:ac10:f29e])
+ (user=aliceryhl job=sendgmr) by 2002:a05:600c:4215:b0:431:4162:6ae4 with SMTP
+ id 5b1f17b1804b1-432df795362mr208495e9.7.1731923159062; Mon, 18 Nov 2024
+ 01:45:59 -0800 (PST)
+Date: Mon, 18 Nov 2024 09:45:55 +0000
+In-Reply-To: <202411181440.qEdcuyh6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZzsDEvJn-vauz9gE@tiehlicka>
+Mime-Version: 1.0
+References: <202411181440.qEdcuyh6-lkp@intel.com>
+X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2118; i=aliceryhl@google.com;
+ h=from:subject; bh=mUQUbdZM2wB07Dr6dMNlFKE5OpDs/vuM8ExzU1Ox/kI=;
+ b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBnOwxwrFVPAYwYEld95H7+qqElBC3vV734EtpiP
+ fx0k+rNdreJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCZzsMcAAKCRAEWL7uWMY5
+ Rm6wD/9agfhSO35uSz3ujzRglJWSW+eKrJ7uUYHCFpWA5ybgvsbCYYb6V9V1T7G8U6NPtbLw98n
+ 3i2iYhiBk0RuIHH/+oQvfK1DDIlTSn5RdJGuJ1KSWFXz/lgqFJP32bWQwkqtupkHQLS0xQEaiFS
+ TxhGgAv1ZNVSLMijj4HBjTU5zJhVbyvaA569dFuh5ogazF+WosY4gOxKR6xpvYIgGood6wMOBUZ
+ 2t3I1I1BLA7Ol8UAkh4Mj/2/t8XUXAQeUyvktDIDi74QIEM+dH6VsB5Qo3gvh++mnCUuggJD+ey
+ 5uCj+n55DydJbueuUJlbYLvpuZU90aM5Y/jJ+ml7TnyIVuDhu0clhtFTqP4blvfNCfeD9GY503/
+ bSidq71l6rN5fhLFnGLUl/kOy6rFd2hrw3kJOeNGDsGt9ZmJamccMhN5KoJZRiCfqtdWHCDn03w
+ 5x9K/BcbqoS6N/+n1EN/+4O7W4SAw/yL/duCDiDMliEU/7P3Zd5arQolUQCiAoLZInXXGWBej+r
+ R80vew0eJJagQnOq1KUtwJxsmL/uw4uJcruJts6hqUq4KL2PIJXG+cujOB/k+EEPZyY6xm1nWYm
+ ItIl8WGy2yTHU44Dq1/asmQo+MQhTlz68GN+bS1BxkbsnYm0Mz+r5XCj4MEhqui0GLiZ2t18PEI DVm4QA2wl5EHpaw==
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+Message-ID: <20241118094555.2583708-1-aliceryhl@google.com>
+Subject: [PATCH] jump_label: rust: pass a mut ptr to `static_key_count`
+From: Alice Ryhl <aliceryhl@google.com>
+To: lkp@intel.com
+Cc: aliceryhl@google.com, boqun.feng@gmail.com, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, ojeda@kernel.org, rostedt@goodmis.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 18, 2024 at 10:04:18AM +0100, Michal Hocko wrote:
-> I do not see this patch staged in any tree (e.g. linux-next). Is this on
-> its way to be merged?
+When building the rust_print sample with CONFIG_JUMP_LABEL=n, the Rust
+static key support falls back to using static_key_count. This function
+accepts a mutable pointer to the `struct static_key`, but the Rust
+abstractions are incorrectly passing a const pointer.
 
-I only now found it -- it doesn't look super urgent. I'll get it into a
-git tree after -rc1.
+This means that builds using CONFIG_JUMP_LABEL=n and SAMPLE_RUST_PRINT=y
+fail with the following error message:
+
+	error[E0308]: mismatched types
+	  --> <root>/samples/rust/rust_print_main.rs:87:5
+	   |
+	87 | /     kernel::declare_trace! {
+	88 | |         /// # Safety
+	89 | |         ///
+	90 | |         /// Always safe to call.
+	91 | |         unsafe fn rust_sample_loaded(magic: c_int);
+	92 | |     }
+	   | |     ^
+	   | |     |
+	   | |_____types differ in mutability
+	   |       arguments to this function are incorrect
+	   |
+	   = note: expected raw pointer `*mut kernel::bindings::static_key`
+	              found raw pointer `*const kernel::bindings::static_key`
+	note: function defined here
+	  --> <root>/rust/bindings/bindings_helpers_generated.rs:33:12
+	   |
+	33 |     pub fn static_key_count(key: *mut static_key) -> c_int;
+	   |            ^^^^^^^^^^^^^^^^
+
+To fix this, insert a pointer cast so that the pointer is mutable.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202411181440.qEdcuyh6-lkp@intel.com/
+Fixes: 169484ab6677 ("rust: add arch_static_branch")
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ rust/kernel/jump_label.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rust/kernel/jump_label.rs b/rust/kernel/jump_label.rs
+index 2f2df03a3275..b5aff632ecc7 100644
+--- a/rust/kernel/jump_label.rs
++++ b/rust/kernel/jump_label.rs
+@@ -26,7 +26,7 @@ macro_rules! static_branch_unlikely {
+ 
+         #[cfg(not(CONFIG_JUMP_LABEL))]
+         {
+-            $crate::bindings::static_key_count(_key) > 0
++            $crate::bindings::static_key_count(_key.cast_mut()) > 0
+         }
+ 
+         #[cfg(CONFIG_JUMP_LABEL)]
+
+base-commit: 22193c586b43ee88d66954395885742a6e4a49a9
+-- 
+2.47.0.338.g60cca15819-goog
+
