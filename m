@@ -1,181 +1,125 @@
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023E943173
-	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 12:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22C61991BB
+	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 13:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731934223; cv=none; b=Ujbbqnt2v8Jt1Ah1jYZgPOMunkaVvxE6+4BjT3oN028rMFENllRRHfWlLqwDcbC2srgluTWaOnqBSENZNQklqxV6ssVOh2jj9zKKY2yB18jjAZvWjEue+YpPoCcrUSIkPXk0rVZTvbySgMnRf77VkAYTTsFsMuMZ4qLI/89ZEtc=
+	t=1731935453; cv=none; b=om/wmpr5//KEdfdtxtP3cyYxXMJzOc/zamSYQDnYOd6JxeNDj0CeXjypDieN2DCeTdopY2zm6Avb5wT8eNeKans3Owv940Ubz9UP175/RtCqRW0IJkH9rZn5I9AKgo+CnNmcvSQi3kWyZCRV/AtQJKYkVAtEya9BbqLZZ5FYYrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731934223; c=relaxed/simple;
-	bh=s58+oJpUcZU53E8zvr9EuG43vMWpmCCxA/lYnCWlie0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=MOhkVwwXvFW2uaNpRLhl1Vsit3rMsSVapG0U9i3A8N7dtWfy3IchgmYoweWJT5u05I08/v412YagrhovqEYCIX+24JmytRnIS8BqAI4NOznMrFaQeyGxebY1aFTD8Qmp2cpkGPREyxuCSbHfc5w6wYq+QdBy9YwSN5AUAaNJ//0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=si6TuWGl; arc=none smtp.client-ip=193.238.174.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
+	s=arc-20240116; t=1731935453; c=relaxed/simple;
+	bh=Op2I8dr35muBs/N0wwVSV8bMfv9/DBnetL23eBdhKSw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=kqarYZuMtK1jp5eXx3XMgmn4kO8HBhVULK8aCDwDfYImmoYEXeiQE0anUPdlwRuCR74TTuMuJJZLifwn/6WznabxAYHKK0b03OszQ+eJ5XdiYADMtW+QfrJIVfpLkhmv2mbm1N9iQV71kn4u1bTpkRMUU4Zhi1dwDRRPcl27ayY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ibQtaOp/; arc=none smtp.client-ip=209.85.167.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="si6TuWGl"
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-	by mg.ssi.bg (Proxmox) with ESMTP id 107AA8258B;
-	Mon, 18 Nov 2024 14:41:31 +0200 (EET)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-	by mg.ssi.bg (Proxmox) with ESMTPS;
-	Mon, 18 Nov 2024 14:41:30 +0200 (EET)
-Received: from ja.ssi.bg (unknown [213.16.62.126])
-	by ink.ssi.bg (Postfix) with ESMTPSA id 7D5553026AC;
-	Mon, 18 Nov 2024 14:41:25 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
-	t=1731933686; bh=s58+oJpUcZU53E8zvr9EuG43vMWpmCCxA/lYnCWlie0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References;
-	b=si6TuWGlYBk+G6fQqyuo9TlTiEl6043HtoNQHe+IIoPBtwwMj3UWFkDQyq2VSIaDo
-	 +4GmqhYXrYKydei89Nsky+aPap/JMujkMQl2fi0XxSXBIb5TfnK492EcxKAjZ5X3Ba
-	 elu5nyO9AmeHEQgX2MdmaFtExY9aP4Kpn2LjPuDU=
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 4AICfNOD034252;
-	Mon, 18 Nov 2024 14:41:23 +0200
-Date: Mon, 18 Nov 2024 14:41:23 +0200 (EET)
-From: Julian Anastasov <ja@ssi.bg>
-To: Jinghao Jia <jinghao7@illinois.edu>
-cc: Simon Horman <horms@verge.net.au>, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
-        kernel test robot <lkp@intel.com>, Ruowen Qin <ruqin@redhat.com>
-Subject: Re: [PATCH] ipvs: fix UB due to uninitialized stack access in
- ip_vs_protocol_init()
-In-Reply-To: <20241111065105.82431-1-jinghao7@illinois.edu>
-Message-ID: <f97ef69b-a15e-03ab-5e24-c1dfd3c4542b@ssi.bg>
-References: <20241111065105.82431-1-jinghao7@illinois.edu>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ibQtaOp/"
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3e60e57a322so2066664b6e.3
+        for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 05:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731935451; x=1732540251; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YTw7RWvWoc0SMzgWBayRA2wygazsMYV1x3KYiELVVeY=;
+        b=ibQtaOp/c2tef2715ew/fFuHJTx/QDoJKK1SV6ziAwwCHT6VejJ+NiKCS/1F6JmjTP
+         UNdIps2kz5lZAY8tokbQCNXzc+ojRMp2EFa60tZiHG+eAPV3dpaeq7MqXWbjb7dXCTux
+         mlONjsCTAZG4QFHFfm0iSmwEvJt8OfdXm30zi9rfeuNnA30GBktlmGaDXIKnjl92aZrh
+         3iF5duM1X8vhYMjZPkN2hptGA+D8ETtvy5O50ywBi3Vt+l4HFtfHXDfaVdaS9JxO/fIq
+         1vfUK23j49BX3XPKacChW0Yf3G9oqv8yk+5leX2+Q+Aln0e0H8en+a93wtOh8Z7oOlNM
+         1p2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731935451; x=1732540251;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YTw7RWvWoc0SMzgWBayRA2wygazsMYV1x3KYiELVVeY=;
+        b=PumpusMbOk37T+hrU16H1tpqzVXIsUQLRY1H4XFsB5sGr8g2ZyificsOn96iqLAYry
+         eAYsLvIycrDefBZ4oEhCgwBdphTz7Glaeka0K8q5CY7Xgv7wVtc3xE3jsi49MtYUZyoX
+         Pbd3JJYVlw8w5ldIggKJkco5LO/4qp2QjS+pAttDtn3u6D52YmkxDWDBd10dxF8Njx4m
+         jVAlO3uAOUdHBPsEd6Lzzdb/CIKhAYC5fnRAi4Tojkap9MROdwWeS9ekXr915Fl2PPVW
+         VibzhYwr9k+l6sWeV58Kc/RnLUVHMXFKC+iEh6P7GcQfuFrUjGWVCbqdXHz2lhw6kqKV
+         pPqw==
+X-Forwarded-Encrypted: i=1; AJvYcCXO1eCCIM3Az/I7G9YHVtjKRDVHUTdT4eBXX+aHuJVqxUyQJi6GF+tiSEi7AgUZnLoigQbF@lists.linux.dev
+X-Gm-Message-State: AOJu0YwvAIL2gjq2fCONQYqo/w0LDa1Rh45qukGTmB4yB68OmVQHP6CB
+	xuzNorwOYmEJgkToh1J6zzPIUBu4LE3oM/ZouNClg0cJ/a0S6VQvS6lPrSA1Gq/4VaORn+QVtpJ
+	E9JPefVYhrme+j09gph6Eb90xAILl+7KlFe/ZPg==
+X-Google-Smtp-Source: AGHT+IHGcZHpXIet+VQyE38gSaCHSlt7RMcXTgIjtwxRtsxmDxLBiM8FQSw90gh105xogQgSb+fpkFDsIdEuZz4rOJY=
+X-Received: by 2002:a05:6808:2017:b0:3e7:a284:9b13 with SMTP id
+ 5614622812f47-3e7bc7d87a8mr10574272b6e.21.1731935450734; Mon, 18 Nov 2024
+ 05:10:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 18 Nov 2024 18:40:38 +0530
+Message-ID: <CA+G9fYs+gwu67Y0Tm2FHfNuUA5eLxT2FAWkfKvYrEbXJUXXiiA@mail.gmail.com>
+Subject: drivers/clk/davinci/psc.c:281:10: error: incompatible integer to
+ pointer conversion returning 'int' from a function with result type 'struct
+ davinci_lpsc_clk *' [-Wint-conversion]
+To: linux-clk <linux-clk@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>
+Cc: hanchunchao@inspur.com, Stephen Boyd <sboyd@kernel.org>, david@lechnology.com, 
+	Michael Turquette <mturquette@baylibre.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
+The davinci_all_defconfig and multi_v5_defconfig builds failed with clang-19 and
+clang-nightly on the Linux next-20241115 tag for the arm architectures.
+Same build pass with gcc-13.
 
-	Hello,
+First seen on Linux next-20241118 tag.
+  Good: next-20241115
+  Bad:  next-20241118
 
-On Mon, 11 Nov 2024, Jinghao Jia wrote:
+arm
+* arm, build
+  - clang-19-davinci_all_defconfig
+  - clang-19-multi_v5_defconfig
+  - clang-19-multi_v5_defconfig-65236a87
+  - clang-nightly-davinci_all_defconfig
+  - clang-nightly-multi_v5_defconfig
+  - clang-nightly-multi_v5_defconfig-65236a87
 
-> Under certain kernel configurations when building with Clang/LLVM, the
-> compiler does not generate a return or jump as the terminator
-> instruction for ip_vs_protocol_init(), triggering the following objtool
-> warning during build time:
-> 
->   vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
-> 
-> At runtime, this either causes an oops when trying to load the ipvs
-> module or a boot-time panic if ipvs is built-in. This same issue has
-> been reported by the Intel kernel test robot previously.
-> 
-> Digging deeper into both LLVM and the kernel code reveals this to be a
-> undefined behavior problem. ip_vs_protocol_init() uses a on-stack buffer
-> of 64 chars to store the registered protocol names and leaves it
-> uninitialized after definition. The function calls strnlen() when
-> concatenating protocol names into the buffer. With CONFIG_FORTIFY_SOURCE
-> strnlen() performs an extra step to check whether the last byte of the
-> input char buffer is a null character (commit 3009f891bb9f ("fortify:
-> Allow strlen() and strnlen() to pass compile-time known lengths")).
-> This, together with possibly other configurations, cause the following
-> IR to be generated:
-> 
->   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #5 section ".init.text" align 16 !kcfi_type !29 {
->     %1 = alloca [64 x i8], align 16
->     ...
-> 
->   14:                                               ; preds = %11
->     %15 = getelementptr inbounds i8, ptr %1, i64 63
->     %16 = load i8, ptr %15, align 1
->     %17 = tail call i1 @llvm.is.constant.i8(i8 %16)
->     %18 = icmp eq i8 %16, 0
->     %19 = select i1 %17, i1 %18, i1 false
->     br i1 %19, label %20, label %23
-> 
->   20:                                               ; preds = %14
->     %21 = call i64 @strlen(ptr noundef nonnull dereferenceable(1) %1) #23
->     ...
-> 
->   23:                                               ; preds = %14, %11, %20
->     %24 = call i64 @strnlen(ptr noundef nonnull dereferenceable(1) %1, i64 noundef 64) #24
->     ...
->   }
-> 
-> The above code calculates the address of the last char in the buffer
-> (value %15) and then loads from it (value %16). Because the buffer is
-> never initialized, the LLVM GVN pass marks value %16 as undefined:
-> 
->   %13 = getelementptr inbounds i8, ptr %1, i64 63
->   br i1 undef, label %14, label %17
-> 
-> This gives later passes (SCCP, in particular) to more DCE opportunities
-> by propagating the undef value further, and eventually removes
-> everything after the load on the uninitialized stack location:
-> 
->   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #0 section ".init.text" align 16 !kcfi_type !11 {
->     %1 = alloca [64 x i8], align 16
->     ...
-> 
->   12:                                               ; preds = %11
->     %13 = getelementptr inbounds i8, ptr %1, i64 63
->     unreachable
->   }
-> 
-> In this way, the generated native code will just fall through to the
-> next function, as LLVM does not generate any code for the unreachable IR
-> instruction and leaves the function without a terminator.
-> 
-> Zero the on-stack buffer to avoid this possible UB.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
-> Co-developed-by: Ruowen Qin <ruqin@redhat.com>
-> Signed-off-by: Ruowen Qin <ruqin@redhat.com>
-> Signed-off-by: Jinghao Jia <jinghao7@illinois.edu>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-	Looks good to me, thanks! I assume it is for
-net-next/nf-next, right?
+Build error:
+---------
+drivers/clk/davinci/psc.c:281:10: error: incompatible integer to
+pointer conversion returning 'int' from a function with result type
+'struct davinci_lpsc_clk *' [-Wint-conversion]
+  281 |                 return -ENOMEM;
+      |                        ^~~~~~~
+1 error generated.
+make[6]: *** [scripts/Makefile.build:200: drivers/clk/davinci/psc.o] Error 1
 
-Acked-by: Julian Anastasov <ja@ssi.bg>
+Build image:
+-----------
+- https://storage.tuxsuite.com/public/linaro/lkft/builds/2p15j4StPnjuuRXu3qgndSTbahH/
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241118/testrun/25881399/suite/build/test/clang-19-davinci_all_defconfig/history/
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241118/testrun/25881399/suite/build/test/clang-19-davinci_all_defconfig/details/
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241118/testrun/25881399/suite/build/test/clang-19-davinci_all_defconfig/log
 
-> ---
->  net/netfilter/ipvs/ip_vs_proto.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_proto.c b/net/netfilter/ipvs/ip_vs_proto.c
-> index f100da4ba3bc..a9fd1d3fc2cb 100644
-> --- a/net/netfilter/ipvs/ip_vs_proto.c
-> +++ b/net/netfilter/ipvs/ip_vs_proto.c
-> @@ -340,7 +340,7 @@ void __net_exit ip_vs_protocol_net_cleanup(struct netns_ipvs *ipvs)
->  
->  int __init ip_vs_protocol_init(void)
->  {
-> -	char protocols[64];
-> +	char protocols[64] = { 0 };
->  #define REGISTER_PROTOCOL(p)			\
->  	do {					\
->  		register_ip_vs_protocol(p);	\
-> @@ -348,8 +348,6 @@ int __init ip_vs_protocol_init(void)
->  		strcat(protocols, (p)->name);	\
->  	} while (0)
->  
-> -	protocols[0] = '\0';
-> -	protocols[2] = '\0';
->  #ifdef CONFIG_IP_VS_PROTO_TCP
->  	REGISTER_PROTOCOL(&ip_vs_protocol_tcp);
->  #endif
-> -- 
-> 2.47.0
+Steps to reproduce:
+------------
+- # tuxmake --runtime podman --target-arch arm --toolchain clang-19
+--kconfig davinci_all_defconfig LLVM=1 LLVM_IAS=1
 
-Regards
+metadata:
+----
+  git describe: next-20241118
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git sha: ae58226b89ac0cffa05ba7357733776542e40216
+  kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2p15j4StPnjuuRXu3qgndSTbahH/config
+  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2p15j4StPnjuuRXu3qgndSTbahH/
+  toolchain: clang-19
+  config: davinci_all_defconfig and multi_v5_defconfig
+  arch: arm
 
 --
-Julian Anastasov <ja@ssi.bg>
-
+Linaro LKFT
+https://lkft.linaro.org
