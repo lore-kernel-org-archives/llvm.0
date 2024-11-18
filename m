@@ -1,60 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2771547E8;
-	Mon, 18 Nov 2024 08:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C322907
+	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 09:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731920322; cv=none; b=acRdbaU8kMuM+GoWZ74bCQNVpWA1tLAEc5kUAwZJD/KMe5/7ilmo9USE8xsZeRoBB2RK1YPIE/01BedcjHDOiG2gumTlGmuMa1Ay0/UPISGY5E0JcL/KpAglG4Q2AcF704vbTeJKL4GW2DrXdwq/3kPz5J1Gc1n6feQ+X8WG2fQ=
+	t=1731920664; cv=none; b=YA6eNw8knLSiWDZl2fMWdBpW0tDa06eTu4An2g1uRb6hGgy09aQcI4HVxC75VV3vNJraOXi5QeGsO0ZZe/ndVZ/KcSTj/zjd54LKVpDtPWvvpEecceAPd1X3ZTDVpdHJ098IN4HNf7wrtJK9U/iH/Zgyt/Gs84P7ZsCYfn/CuLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731920322; c=relaxed/simple;
-	bh=p+8gOqiMuowCoUchcE+B9SvOC+DKTckesEZLieiQNmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=J2OCYBYBtoPSlpzcMjcOKqVkqvxCLvhPn6FFR5eOcpXJwvsiMCKpguZNU4mrmVCFM8IH1rY2BuHVuOvlsVFKiCdKpOp61NtcUf1dDcTh9JeTjrqL1DqfiOH2g98Im5RJs5AB2AfG0VmP6YIjyEl6TVKM/zVQ1kY4qdxvccIBk3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VR6gMOdj; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731920664; c=relaxed/simple;
+	bh=4BQxpIeuu0nVwUe5p6hnFcoQh6vfzVx7Oksv1WzT3M0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JWy1A/j01U/7THwdhwJUqukt2NdjJ8aPDoAJ+GueXRq1EekALiDNy9+tbQfKLAgB7UCdYZ+LODNFKjtCaHrfQZa//LLgYSFqbu94IF/fl9kVslbzCfZMY+DheWcuB5OfRN2xtA/S9x7JAcEqGI7yOjnMoS++qzhfl9tQMrq6dlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NZXdC+9Z; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VR6gMOdj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731920320; x=1763456320;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p+8gOqiMuowCoUchcE+B9SvOC+DKTckesEZLieiQNmk=;
-  b=VR6gMOdjCTBGOI2cFdywaCLuKoEnLuDnv/RV/GwJvN6zts6XEGvnlB8K
-   Cjymlz3gMO3r3HaRDPPt8fo+dENu2irtzYt6J4xOA0ZAOprUhwfVuEJhV
-   LWOpmZy41lhlF/QLUxghue+Vw/AxwtCHTT3JKJLjFlahoDPlDlnD4v5vt
-   UeKIvIO/83ou4i6w7d1crs2KReOTjSWrfYAOQSOi4b0lpIHn7O+fFLPa4
-   bk8cRALPFTFw/7uMcYLRnnyNT3np+HzdoSpDUHS6OcdJ+VvQjU1Tf+YLk
-   pIQTC2P2DZLGDDnPdaFcRyuArtwTU7UDKQVH93vOltaIVdX8ooFW4Y/Yh
-   w==;
-X-CSE-ConnectionGUID: GDHCF1OITHaEAjmhW5gtBQ==
-X-CSE-MsgGUID: 0YHJcNp8T/axKInA/0tmNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="35636861"
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="35636861"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 00:58:40 -0800
-X-CSE-ConnectionGUID: clftAcuvQiS+YdDX0zYATw==
-X-CSE-MsgGUID: wDfGKkUkRqOZ4r/Z62D2/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="89173046"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 18 Nov 2024 00:58:38 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCxad-0002Kz-1H;
-	Mon, 18 Nov 2024 08:58:35 +0000
-Date: Mon, 18 Nov 2024 16:58:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/020-dart 16/21] drivers/iommu/apple-dart.c:783:16:
- warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka
- 'unsigned int') changes value from 18446744073709551615 to 4294967295
-Message-ID: <202411181653.NzV6rKaz-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NZXdC+9Z"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a9ed0ec0e92so262234266b.0
+        for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 01:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1731920660; x=1732525460; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ws/rbfiwFMNWy8k0tnCWfMeaJzWW6S4EceX0n9OoukE=;
+        b=NZXdC+9ZrlEysQeQZRp1D19To/cuxTbqSabgb0FzjJ/w2S3AP+06w1fVS77gLuB+m0
+         vNaT1KmZzU0eyJqT81WjixVdZyEsJYW6O8iQHgLIMcMguXa0OL8kWjIogAxP/aLoqH7q
+         zO0Md6zh0K+DvtWCNNA/JLiS8s1cyfPeZaYF2I+gJ4d0wfkPRYbx0H32aIUiCqNUBH/F
+         rv1592sx+woDWG06D8T4pEYJEVcf4M3OC51jH4MnXzoksY0ADacxxq13J6rcxAVUcuBx
+         jTC9oHKbfkbW/s/jzHFnbFoi1TR+WBW0MxalS5MlmW0QSk38P54kULhx8nljQu93J0/h
+         kTMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731920660; x=1732525460;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ws/rbfiwFMNWy8k0tnCWfMeaJzWW6S4EceX0n9OoukE=;
+        b=BM1+9f0jG465BN5UJdPCFZh/IIUPCYNIHw2bnFGzyfytRGW1qfHPbZYCvqh8eFy/MA
+         9+9yXefLq5oqAgHBmA+0YGEHWqVfNMcUX2ARdeu+hs6n6khl/XdKQnVwIuRfiU+Oj2pc
+         PGk5312AK36BodMXH4wLqeN7HlTz+UY6OpIaIw75nERGayM4g9vP8S7Y4NBiVm4Q0h5w
+         NOGFY8JgQ6jjyfCk6AVN02aDOmgdSqQn1c1lbAHj4Bz/LcjKduptAnz1xWzs3B/momiK
+         vWmsYoqYR0KG3WBshCg7ZM2c8Ch35OSvruIoC6Lf4heNEhDhNiPtR7VqQqFca5hHSWB2
+         oRJA==
+X-Forwarded-Encrypted: i=1; AJvYcCW1RzJAmtIK0Qz8JZad58Sm/+LrSTpPxvChip+B7KBugoCmBIwy6mRuL1lNt9Dm6IZKBDHN@lists.linux.dev
+X-Gm-Message-State: AOJu0YxP7tMpX7sVAemjBOWExlk6PTBgqNkZRaOt/lOMKWBeNWkpov60
+	vfFNUUFmZbt7KPUQj/CsxbnFZktjOkXiRsbOQ89c/Eul//ieFfdpxWOL9OciYBI=
+X-Google-Smtp-Source: AGHT+IHiDm/bz3WEh1enyRl0N1th54dk8RHN4GA3K1qzcDnriUz2+DDQ+dD96pBdIfYZ9dcNHYkGjA==
+X-Received: by 2002:a17:907:7284:b0:a9e:c263:29a7 with SMTP id a640c23a62f3a-aa483420a9amr1096106266b.23.1731920659889;
+        Mon, 18 Nov 2024 01:04:19 -0800 (PST)
+Received: from localhost (109-81-88-120.rct.o2.cz. [109.81.88.120])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df50defsm513526566b.50.2024.11.18.01.04.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2024 01:04:19 -0800 (PST)
+Date: Mon, 18 Nov 2024 10:04:18 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: "Nysal Jan K.A." <nysal@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Segher Boessenkool <segher@kernel.crashing.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linuxppc-dev@lists.ozlabs.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Brown <broonie@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of
+ membarrier_state
+Message-ID: <ZzsDEvJn-vauz9gE@tiehlicka>
+References: <20241007053936.833392-1-nysal@linux.ibm.com>
+ <20241029055133.121418-1-nysal@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,144 +84,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241029055133.121418-1-nysal@linux.ibm.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/020-dart
-head:   7b4afedff097b1b09da32f01db73cbc0788bafd9
-commit: 3cf6b6955a32259ac85ffe4ce2d4c858d69faf8e [16/21] iommu: apple-dart: Support specifying the DMA aperture in the DT
-config: i386-buildonly-randconfig-004-20241118 (https://download.01.org/0day-ci/archive/20241118/202411181653.NzV6rKaz-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241118/202411181653.NzV6rKaz-lkp@intel.com/reproduce)
+I do not see this patch staged in any tree (e.g. linux-next). Is this on
+its way to be merged?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411181653.NzV6rKaz-lkp@intel.com/
+Thanks!
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/iommu/apple-dart.c:18:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/iommu/apple-dart.c:783:16: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-     783 |                                         dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
-         |                                                 ~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   drivers/iommu/apple-dart.c:1387:18: warning: implicit conversion from 'unsigned long long' to 'dma_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-    1387 |         dart->dma_max = DMA_BIT_MASK(dart->ias);
-         |                       ~ ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   3 warnings generated.
-
-
-vim +783 drivers/iommu/apple-dart.c
-
-   723	
-   724	static int apple_dart_finalize_domain(struct apple_dart_domain *dart_domain,
-   725					      struct device *dev,
-   726					      struct apple_dart_master_cfg *cfg)
-   727	{
-   728		struct apple_dart *dart = cfg->stream_maps[0].dart;
-   729		struct io_pgtable_cfg pgtbl_cfg;
-   730		dma_addr_t dma_max = dart->dma_max;
-   731		u32 ias = min_t(u32, dart->ias, fls64(dma_max));
-   732		int ret = 0;
-   733		int i, j;
-   734	
-   735		if (dart->pgsize > PAGE_SIZE)
-   736			return -EINVAL;
-   737	
-   738		mutex_lock(&dart_domain->init_lock);
-   739	
-   740		if (dart_domain->finalized)
-   741			goto done;
-   742	
-   743		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   744			dart_domain->stream_maps[i].dart = cfg->stream_maps[i].dart;
-   745			for (j = 0; j < BITS_TO_LONGS(dart->num_streams); j++)
-   746				atomic_long_set(&dart_domain->stream_maps[i].sidmap[j],
-   747						cfg->stream_maps[i].sidmap[j]);
-   748		}
-   749	
-   750		pgtbl_cfg = (struct io_pgtable_cfg){
-   751			.pgsize_bitmap = dart->pgsize,
-   752			.ias = ias,
-   753			.oas = dart->oas,
-   754			.coherent_walk = 1,
-   755			.iommu_dev = dart->dev,
-   756		};
-   757	
-   758		if (dart->locked) {
-   759			unsigned long *sidmap;
-   760			int sid;
-   761			u32 ttbr;
-   762	
-   763			/* Locked DARTs can only have a single stream bound */
-   764			sidmap = cfg->stream_maps[0].sidmap;
-   765			sid = find_first_bit(sidmap, dart->num_streams);
-   766	
-   767			WARN_ON((sid < 0) || bitmap_weight(sidmap, dart->num_streams) > 1);
-   768			ttbr = readl(dart->regs + DART_TTBR(dart, sid, 0));
-   769	
-   770			WARN_ON(!(ttbr & dart->hw->ttbr_valid));
-   771	
-   772			/* If the DART is locked, we need to keep the translation level count. */
-   773			if (dart->hw->tcr_4level && dart->ias > 36) {
-   774				if (readl(dart->regs + DART_TCR(dart, sid)) & dart->hw->tcr_4level) {
-   775					if (ias < 37) {
-   776						dev_info(dart->dev, "Expanded to ias=37 due to lock\n");
-   777						pgtbl_cfg.ias = 37;
-   778					}
-   779				} else if (ias > 36) {
-   780					dev_info(dart->dev, "Limited to ias=36 due to lock\n");
-   781					pgtbl_cfg.ias = 36;
-   782					if (dart->dma_min == 0 && dma_max == DMA_BIT_MASK(dart->ias)) {
- > 783						dma_max = DMA_BIT_MASK(pgtbl_cfg.ias);
-   784					} else if ((dart->dma_min ^ dma_max) & ~DMA_BIT_MASK(36)) {
-   785						dev_err(dart->dev,
-   786							"Invalid DMA range for locked 3-level PT\n");
-   787						ret = -ENOMEM;
-   788						goto done;
-   789					}
-   790				}
-   791			}
-   792		}
-   793	
-   794		dart_domain->pgtbl_ops = alloc_io_pgtable_ops(dart->hw->fmt, &pgtbl_cfg,
-   795							      &dart_domain->domain);
-   796		if (!dart_domain->pgtbl_ops) {
-   797			ret = -ENOMEM;
-   798			goto done;
-   799		}
-   800	
-   801		if (pgtbl_cfg.pgsize_bitmap == SZ_4K)
-   802			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 32));
-   803		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 3)
-   804			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 36));
-   805		else if (pgtbl_cfg.apple_dart_cfg.n_levels == 4)
-   806			dart_domain->mask = DMA_BIT_MASK(min_t(u32, dart->ias, 47));
-   807	
-   808		dart_domain->domain.pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
-   809		dart_domain->domain.geometry.aperture_start = dart->dma_min;
-   810		dart_domain->domain.geometry.aperture_end = dma_max;
-   811		dart_domain->domain.geometry.force_aperture = true;
-   812	
-   813		dart_domain->finalized = true;
-   814	
-   815		ret = apple_dart_setup_resv_locked(&dart_domain->domain, dev, dart->pgsize);
-   816	done:
-   817		mutex_unlock(&dart_domain->init_lock);
-   818		return ret;
-   819	}
-   820	
+On Tue 29-10-24 11:21:28, Nysal Jan K.A. wrote:
+> On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+> is not selected, sync_core_before_usermode() is a no-op.
+> In membarrier_mm_sync_core_before_usermode() the compiler does not
+> eliminate redundant branches and load of mm->membarrier_state
+> for this case as the atomic_read() cannot be optimized away.
+> 
+> Here's a snippet of the code generated for finish_task_switch() on powerpc
+> prior to this change:
+> 
+> 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
+> .......
+> 1b78c8:   cmpdi   cr7,r26,0
+> 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
+> 1b78d0:   ld      r9,2312(r13)    # current
+> 1b78d4:   ld      r9,1888(r9)     # current->mm
+> 1b78d8:   cmpd    cr7,r26,r9
+> 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
+> 1b78e0:   hwsync
+> 1b78e4:   cmplwi  cr7,r27,128
+> .......
+> 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
+> 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
+> 
+> This was found while analyzing "perf c2c" reports on kernels prior
+> to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
+> where mm_count was false sharing with membarrier_state.
+> 
+> There is a minor improvement in the size of finish_task_switch().
+> The following are results from bloat-o-meter for ppc64le:
+> 
+> GCC 7.5.0
+> ---------
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+> Function                                     old     new   delta
+> finish_task_switch                           884     852     -32
+> 
+> GCC 12.2.1
+> ----------
+> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+> Function                                     old     new   delta
+> finish_task_switch.isra                      852     820     -32
+> 
+> LLVM 17.0.6
+> -----------
+> add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
+> Function                                     old     new   delta
+> rt_mutex_schedule                            120     104     -16
+> finish_task_switch                           792     772     -20
+> 
+> Results on aarch64:
+> 
+> GCC 14.1.1
+> ----------
+> add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
+> Function                                     old     new   delta
+> get_nohz_timer_target                        352     356      +4
+> e843419@0b02_0000d7e7_408                      8       -      -8
+> e843419@01bb_000021d2_868                      8       -      -8
+> finish_task_switch.isra                      592     548     -44
+> 
+> Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
+> ---
+> V1 -> V2:
+> - Add results for aarch64
+> - Add a comment describing the changes
+> ---
+>  include/linux/sched/mm.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> index 928a626725e6..b13474825130 100644
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -531,6 +531,13 @@ enum {
+>  
+>  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+>  {
+> +	/*
+> +	 * The atomic_read() below prevents CSE. The following should
+> +	 * help the compiler generate more efficient code on architectures
+> +	 * where sync_core_before_usermode() is a no-op.
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
+> +		return;
+>  	if (current->mm != mm)
+>  		return;
+>  	if (likely(!(atomic_read(&mm->membarrier_state) &
+> -- 
+> 2.47.0
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Michal Hocko
+SUSE Labs
