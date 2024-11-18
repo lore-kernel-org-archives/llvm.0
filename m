@@ -1,61 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AB24A1E;
-	Mon, 18 Nov 2024 01:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680021DA32
+	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 01:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731892971; cv=none; b=UhH33k6N/BZ5ZrftA7aSJLIcS3IOLSxjzma82xSChnn/S9pubAKavyfaStDGL4r0B2LQNg0e5SjLEbrBiDL6ZTC5diaiuxEpknnq4mPKdeSd1Ew61gqdoDIIdF8UmJlvr+c1kXTzbk6L0uN6Q78nqjdkCDWuCYWjFgPXQ3D4m58=
+	t=1731893555; cv=none; b=lkRZSsP8U3CLPjcMwX0392A7BD1l7YdftUq1xzV7avYds8ZKQasI6YewF5WqZt8m3To2ZAaQ9of2uFRYRaC3F1L0SDxSa9PRILMrB33+eMM9k24sioTTbZ67g7SqTwwzMkkCfIGR5RH/h/p9xmOg/8iqeWn74HNiLUpo8uR1mxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731892971; c=relaxed/simple;
-	bh=99x8lfyQ+g2O/mcjSWdPRx8rz59R7f5P39DGWnF93hg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dcqbOag9K4/5s4/oOiICpaEwgE3fgW/HpPIKnQLFtOOTb+Fw5NKVzyvL0Qr94XsWYZKCDeXOFA+ZD1RP7U15RrEPuuE8Viii3iG4LWTHYCyR9bMYQoXr0GwblyVk6l0yPGKTFvsqbEfCU0RPIQwl+ITP4fMHL8VSad76850f4pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bet+va/p; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731893555; c=relaxed/simple;
+	bh=oSM7pj/ixTmYiF1/y9YQ/4qPvCb+nrQ29mcMH0KKnw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FuJiHmVWRSCmYkVl0TsfyNFXgHCaVpqK6wz5uzObCu2j51Q+KfZdA/j9lnZWtRCnJW8YinOZkAjJ6fVUdgyf6uCFckTnxcmBIQrIrLqT/oxLB1IhTMgy7LhQ/ACFvSPlpDCBDYhGPa+03K6AiLjoGHnbzk9woYQfhtbxC6GDpqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZCVWA2hK; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bet+va/p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731892970; x=1763428970;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=99x8lfyQ+g2O/mcjSWdPRx8rz59R7f5P39DGWnF93hg=;
-  b=bet+va/prPuUpLRdqdxf8saox+OtvuvRQmRQdEVVt6uYgNA5J1nnGaqF
-   N1NqO6JpYiH6Q8JIYykDza3QsTmPEa0Xv4k7xdV17GD2OwTqh5b5i/RYZ
-   hnnfdzgbwOxiIHMktNjkBiIIcz0in9Odna6/Lv+4O7e+8yiYm2H5oz5ci
-   eMEovwqtaiwepKCjsqqq1Xo3BXb3AaG1TS1OddR4AQpig3r8ytY6Yu5hd
-   S0sDDeMOGkaSOA1GA8micZOhEBvhNRLoyLlzj4/Oll67D9NeJsPmxxI9e
-   vHrcOyLnIr8FQ00fh8nZmahzejbnAQxmifmjTORrSqQTtW67Owbu80Mwg
-   g==;
-X-CSE-ConnectionGUID: +abRMVIvTxqychvX2x8SlA==
-X-CSE-MsgGUID: IesENNtXQiWxCDnnT1v1AA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="42354795"
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="42354795"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2024 17:22:47 -0800
-X-CSE-ConnectionGUID: fkbpHW3aSfKmTBADjLfTXw==
-X-CSE-MsgGUID: EROWQInNTSOpcLhcySuCOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="89510917"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 17 Nov 2024 17:22:38 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCqTG-0002B9-2F;
-	Mon, 18 Nov 2024 01:22:30 +0000
-Date: Mon, 18 Nov 2024 09:22:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20241114 1/22]
- kernel/sched/ext.c:3765:10: error: incompatible pointer types returning
- 'struct cgroup_hdr *' from a function with result type 'struct cgroup *'
-Message-ID: <202411180931.Jr9Zovhz-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZCVWA2hK"
+Date: Sun, 17 Nov 2024 20:32:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1731893549;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J39uwACjJIBlwffCvkAxz54QC2YS5dLdBtCbyHjkNfk=;
+	b=ZCVWA2hKDaJx5ZKvgOFqJWDOd2DJ3qUrybotXd+zI8YDPsOGQGJ7bUYl/vpqxDPVV/JaXy
+	TY5EQxitWsiStABOlKoROjQsCJmlaba8MD3CZ7EF91Q5PNLoT0zpLtcVFqvpfDe45laAaW
+	PtZWXPI98Vr0pfGSDtCLSnBLJ1vSIRE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Piotr Zalewski <pZ010001011111@proton.me>, ndesaulniers@google.com, 
+	morbo@google.com, justinstitt@google.com, linux-bcachefs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, skhan@linuxfoundation.org
+Subject: Re: [PATCH] bcachefs: initialize local variables in
+ bch2_evacuate_bucket
+Message-ID: <jwob7wwk6eijpsusqfuqllnmo4e5wj7a7lwnbmcp5exgrpkget@b4lo6d4yy5ya>
+References: <20241117234334.722730-4-pZ010001011111@proton.me>
+ <20241118010040.GB3588455@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,55 +45,173 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241118010040.GB3588455@thelio-3990X>
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20241114
-head:   ffa0ea7cd2216fa4db0e24844e1675e94b7db1aa
-commit: 0fd0709da703a3bd95ed738a114858aa57e3d712 [1/22] cgroup: Avoid -Wflex-array-member-not-at-end warnings
-config: powerpc64-randconfig-001-20241118 (https://download.01.org/0day-ci/archive/20241118/202411180931.Jr9Zovhz-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241118/202411180931.Jr9Zovhz-lkp@intel.com/reproduce)
+On Sun, Nov 17, 2024 at 06:00:40PM -0700, Nathan Chancellor wrote:
+> On Sun, Nov 17, 2024 at 11:48:23PM +0000, Piotr Zalewski wrote:
+> > Compiling bcachefs sources with LLVM triggers uninitialized variables
+> > warnings.
+> > 
+> > Signed-off-by: Piotr Zalewski <pZ010001011111@proton.me>
+> > ---
+> >  fs/bcachefs/move.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/fs/bcachefs/move.c b/fs/bcachefs/move.c
+> > index 8c032ef3a567..94cac498d372 100644
+> > --- a/fs/bcachefs/move.c
+> > +++ b/fs/bcachefs/move.c
+> > @@ -674,8 +674,8 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
+> >  	struct bkey_buf sk;
+> >  	struct bkey_s_c k;
+> >  	struct data_update_opts data_opts;
+> > -	unsigned dirty_sectors, bucket_size;
+> > -	u64 fragmentation;
+> > +	unsigned dirty_sectors = 0, bucket_size = 0;
+> > +	u64 fragmentation = 0;
+> 
+> Shouldn't these just be removed altogether...? They are only used in a
+> trace event and now only zero.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411180931.Jr9Zovhz-lkp@intel.com/
+Actually, I think we want to bring them back; being able to understand
+the behaviour of these background tasks is important whenever we have to
+debug something.
 
-All errors (new ones prefixed by >>):
+Hasn't come up as much with copygc recently, but it has with rebalance
+and I was just improving the rebalance tracepoint.
 
-   In file included from kernel/sched/build_policy.c:63:
->> kernel/sched/ext.c:3765:10: error: incompatible pointer types returning 'struct cgroup_hdr *' from a function with result type 'struct cgroup *' [-Werror,-Wincompatible-pointer-types]
-                   return &cgrp_dfl_root.cgrp;
-                          ^~~~~~~~~~~~~~~~~~~
->> kernel/sched/ext.c:7533:17: error: incompatible pointer types initializing 'struct cgroup *' with an expression of type 'struct cgroup_hdr *' [-Werror,-Wincompatible-pointer-types]
-           struct cgroup *cgrp = &cgrp_dfl_root.cgrp;
-                          ^      ~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+(The copygc issue that does come up is that it behaves poorly with a
+multi device tiering filesystem where it's rebalance's job to move data
+off a full foreground device, not copygc, but that doesn't hit this
+codepath).
 
+But - fragmentation is not really a "evacuate_bucket()" concern, that's
+a generic codepath, so I think I'll do something simpler here and then
+later we can add a dedicated copygc tracepoint, and that can include
+information about the fragmentation LRU that copygc looks at.
 
-vim +3765 kernel/sched/ext.c
+So...
 
-f0e1a0643a59bf Tejun Heo 2024-06-18  3753  
-8195136669661f Tejun Heo 2024-09-04  3754  #ifdef CONFIG_EXT_GROUP_SCHED
-8195136669661f Tejun Heo 2024-09-04  3755  static struct cgroup *tg_cgrp(struct task_group *tg)
-8195136669661f Tejun Heo 2024-09-04  3756  {
-8195136669661f Tejun Heo 2024-09-04  3757  	/*
-8195136669661f Tejun Heo 2024-09-04  3758  	 * If CGROUP_SCHED is disabled, @tg is NULL. If @tg is an autogroup,
-8195136669661f Tejun Heo 2024-09-04  3759  	 * @tg->css.cgroup is NULL. In both cases, @tg can be treated as the
-8195136669661f Tejun Heo 2024-09-04  3760  	 * root cgroup.
-8195136669661f Tejun Heo 2024-09-04  3761  	 */
-8195136669661f Tejun Heo 2024-09-04  3762  	if (tg && tg->css.cgroup)
-8195136669661f Tejun Heo 2024-09-04  3763  		return tg->css.cgroup;
-8195136669661f Tejun Heo 2024-09-04  3764  	else
-8195136669661f Tejun Heo 2024-09-04 @3765  		return &cgrp_dfl_root.cgrp;
-8195136669661f Tejun Heo 2024-09-04  3766  }
-8195136669661f Tejun Heo 2024-09-04  3767  
+From 6e1a9826444612f49e3667a0c0f4cd592dad9948 Mon Sep 17 00:00:00 2001
+From: Kent Overstreet <kent.overstreet@linux.dev>
+Date: Sun, 17 Nov 2024 20:27:34 -0500
+Subject: [PATCH] bcachefs: Fix evacuate_bucket tracepoint
 
-:::::: The code at line 3765 was first introduced by commit
-:::::: 8195136669661fdfe54e9a8923c33b31c92fc1da sched_ext: Add cgroup support
+86a494c8eef9 ("bcachefs: Kill bch2_get_next_backpointer()") dropped some
+things the tracepoint emitted because bch2_evacuate_bucket() no longer
+looks at the alloc key - but we did want at least some of that.
 
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Tejun Heo <tj@kernel.org>
+We still no longer look at the alloc key so we can't report on the
+fragmentation number, but that's a direct function of dirty_sectors and
+a copygc concern anyways - copygc should get its own tracepoint that
+includes information from the fragmentation LRU.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+But we can report on the number of sectors we moved and the bucket size.
+
+Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+
+diff --git a/fs/bcachefs/move.c b/fs/bcachefs/move.c
+index a98a0893a03b..07064872a697 100644
+--- a/fs/bcachefs/move.c
++++ b/fs/bcachefs/move.c
+@@ -674,8 +674,7 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
+ 	struct bkey_buf sk;
+ 	struct bkey_s_c k;
+ 	struct data_update_opts data_opts;
+-	unsigned dirty_sectors = 0, bucket_size = 0;
+-	u64 fragmentation = 0;
++	unsigned sectors_moved = 0;
+ 	struct bkey_buf last_flushed;
+ 	int ret = 0;
+ 
+@@ -750,15 +749,18 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
+ 			data_opts.target	= io_opts.background_target;
+ 			data_opts.rewrite_ptrs = 0;
+ 
+-			unsigned i = 0;
+-			bkey_for_each_ptr(bch2_bkey_ptrs_c(k), ptr) {
+-				if (ptr->dev == bucket.inode) {
+-					data_opts.rewrite_ptrs |= 1U << i;
+-					if (ptr->cached) {
++			unsigned i = 0, sectors = 0;
++			const union bch_extent_entry *entry;
++			struct extent_ptr_decoded p;
++			bkey_for_each_ptr_decode(k.k, bch2_bkey_ptrs_c(k), p, entry) {
++				if (p.ptr.dev == bucket.inode) {
++					if (p.ptr.cached) {
+ 						bch2_trans_iter_exit(trans, &iter);
+ 						goto next;
+ 					}
++					data_opts.rewrite_ptrs |= 1U << i;
+ 				}
++					sectors = ptr_disk_sectors(k.k->size, p);
+ 				i++;
+ 			}
+ 
+@@ -777,7 +779,8 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
+ 				goto err;
+ 
+ 			if (ctxt->stats)
+-				atomic64_add(k.k->size, &ctxt->stats->sectors_seen);
++				atomic64_add(sectors, &ctxt->stats->sectors_seen);
++			sectors_moved += sectors;
+ 		} else {
+ 			struct btree *b;
+ 
+@@ -808,12 +811,13 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
+ 				atomic64_add(sectors, &ctxt->stats->sectors_seen);
+ 				atomic64_add(sectors, &ctxt->stats->sectors_moved);
+ 			}
++			sectors_moved += btree_sectors(c);
+ 		}
+ next:
+ 		bch2_btree_iter_advance(&bp_iter);
+ 	}
+ 
+-	trace_evacuate_bucket(c, &bucket, dirty_sectors, bucket_size, fragmentation, ret);
++	trace_evacuate_bucket(c, &bucket, sectors_moved, ca->mi.bucket_size, ret);
+ err:
+ 	bch2_trans_iter_exit(trans, &bp_iter);
+ 	bch2_dev_put(ca);
+diff --git a/fs/bcachefs/trace.h b/fs/bcachefs/trace.h
+index 5597b9d6297f..2d5932d2881e 100644
+--- a/fs/bcachefs/trace.h
++++ b/fs/bcachefs/trace.h
+@@ -848,8 +848,8 @@ TRACE_EVENT(move_data,
+ TRACE_EVENT(evacuate_bucket,
+ 	TP_PROTO(struct bch_fs *c, struct bpos *bucket,
+ 		 unsigned sectors, unsigned bucket_size,
+-		 u64 fragmentation, int ret),
+-	TP_ARGS(c, bucket, sectors, bucket_size, fragmentation, ret),
++		 int ret),
++	TP_ARGS(c, bucket, sectors, bucket_size, ret),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(dev_t,		dev		)
+@@ -857,7 +857,6 @@ TRACE_EVENT(evacuate_bucket,
+ 		__field(u64,		bucket		)
+ 		__field(u32,		sectors		)
+ 		__field(u32,		bucket_size	)
+-		__field(u64,		fragmentation	)
+ 		__field(int,		ret		)
+ 	),
+ 
+@@ -867,15 +866,14 @@ TRACE_EVENT(evacuate_bucket,
+ 		__entry->bucket			= bucket->offset;
+ 		__entry->sectors		= sectors;
+ 		__entry->bucket_size		= bucket_size;
+-		__entry->fragmentation		= fragmentation;
+ 		__entry->ret			= ret;
+ 	),
+ 
+-	TP_printk("%d,%d %llu:%llu sectors %u/%u fragmentation %llu ret %i",
++	TP_printk("%d,%d %llu:%llu sectors %u/%u ret %i",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __entry->member, __entry->bucket,
+ 		  __entry->sectors, __entry->bucket_size,
+-		  __entry->fragmentation, __entry->ret)
++		  __entry->ret)
+ );
+ 
+ TRACE_EVENT(copygc,
