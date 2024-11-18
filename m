@@ -1,142 +1,121 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BE214D2BB
-	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 20:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3026C1E5711;
+	Mon, 18 Nov 2024 20:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731961654; cv=none; b=WrZq8usIYAEnFm0ijSg+PUbQmy4esW15RlhqXX8D6qmAOA/BbanA6pAX6XnSxMIuOsdgfyGgEk9+5rQZCfE2uNEvLW1mKWUqJB6n+53VZJorvkiUZlubWwtecrIP4zcP9kJM5ESK9Qyreop/294GqoPMVdcZwR4kGwyKnSlPHPY=
+	t=1731962529; cv=none; b=NeGtPRZ8oYJT7UtwDDjfR0Nf2JJTPNUGIb6Dqmu9Te6kRHsblf1AZqCt5VmfJWwhDmzECCeEeX5FSXuWHDcJmzE5c7UOVFDlaMBRWrX04IXQnPdjHrfpZ7RFyR61QaGbhO54M2mVlBB4kQXLa2RCf0kWPrPbl2Vogg0o8RLkGVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731961654; c=relaxed/simple;
-	bh=mUQUbdZM2wB07Dr6dMNlFKE5OpDs/vuM8ExzU1Ox/kI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lVIPZ7U6DtfVfN3idbJ2WdGUR+sm1bpBunpb5cfG0GxUvVzNOEfc0Km9jKKfL2Y69RQptb9AhLJwHPqhw477TpowkFXjqU4YylSTmUhrNpyUOTDZ/jJqpyEajRjcOpiWbqD/bPrqhi+gJy2xybMvja7LWjknxKS6+1fMh8AnuhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rcQZCnqX; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1731962529; c=relaxed/simple;
+	bh=UkJuL8+zmGtSoHuxf0o8yRBe8ZiUwlbXINtsp7R8Cnc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G0aDGL7fZ+ZxBE6j9enhdsCTcFvgN9+GjOhrDp4cj+UHIbu8DE2enAQ6Qn2s0/olU6X5ePJKzJpvrJ9dgSAoUqo5++/+vRiG54c1pUXIiPzX4MqgX3eAg7a6eYbb/2Et896DJ3FZHZGgLNMAvhlq3wi6v4CggPaSMd8J4kRcHW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RP6ICOQR; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rcQZCnqX"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ee65ae21b9so36837147b3.3
-        for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 12:27:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RP6ICOQR"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ea35c0b0b0so167469a91.1;
+        Mon, 18 Nov 2024 12:42:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731961652; x=1732566452; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSzXbcfeBbUeVFqww01Yww7G1C9jrZS952jPysDA1Dc=;
-        b=rcQZCnqX1xJH5p767ntYCnH5hBglY15nHNRlKSJhZWX1BD5MpAO+paDtHb5+Lsk27T
-         v5npdLiHxU2e58qvHtNTmLlHoCmRr5IsUqbHArHNbyvnfsoybSIX6Tgczln9NAoTRDZQ
-         75/Fm6OepULQ1EDsVYvl4Kl/72mIxWcUfxWc5mX6xx/gr2HOFN13hEkvlqPQMpoeOL/A
-         Qu5iaUSEKubrE7VIS/jn9+BQcTttu8L5XsWxlYqsXhV7cy750JkScuBAOMrh32IKIpq1
-         2sUSWJ484L1DdJlggVtOhPlujYiKPE0CuTfxOsVZKxWpN7sJt/CnweaSDurHmPRez3vG
-         ekbw==
+        d=gmail.com; s=20230601; t=1731962527; x=1732567327; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F+Xdj7KiBLCPRzY3Todf2snUR+C3yfhMagkENx1A3bE=;
+        b=RP6ICOQR3sKcdqzIXqKqEcnufW6vRGy+NLh1PeFNdkQbauDdC1JngL0O33gHM9zdpP
+         SPQAEXHJirLoAlb4WRgM7WDCR7yWN7q5WjomifWsf3uuED6lVBV2GC7CrSexdmavLpfH
+         HC2lvkKziHudpmnrtFJhNuG5PzYekDjTg64yUCf7WDS7cjTi1n0dr/choZB2PAgFvUmt
+         AihAMwg2RSupEh65EsSpwd0GzIou1ZwKcNzRjrVFKuusvsct12U7dF88YCXeVKcOyrTp
+         Nddanz+DaHlDkbZezRvgZcuz5xjU7XBVDAtHXdg2H1m93KrFP4TQGG033hPS6mXxH7cM
+         Z+vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731961652; x=1732566452;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSzXbcfeBbUeVFqww01Yww7G1C9jrZS952jPysDA1Dc=;
-        b=pX44pkl/6Rqk0M2j5ykhWyqH9IgC0NLZ+quf1t8gTLbJGFTKsx9T0FASpbejSCZ8uC
-         6V+NiaOOLbqscEPXZSGsGNY1BhQ51xW/iaMXALCFH7bOp24H3ADMIsQAUi+/NOwylD8E
-         FKeJ88P8TuBW3QGsYfCHwBejW9JIkcfb8p/OA8a+YtOs5Y2bS2hXRjJIbX6ZHPK+hV9T
-         3TaUpRYq+3/mGwJPlKMz5ECXPSyYOJ9N1PHQHEXFDVNrrbeawgX07y9PyfcNc8uLGOtt
-         2OSOPjg4n9v9gkrc94q9BdHu12kyGDbRLcZiizeyrXLpXUePkGxImosisRW/gHVMvRQh
-         gxDA==
-X-Forwarded-Encrypted: i=1; AJvYcCXskRcN/RSpnwPzgvLEBNF9KoOvUB2GpIVRwBFizwQw8nU6uf350mRuucB48YG+kgeLHplR@lists.linux.dev
-X-Gm-Message-State: AOJu0YzujeExueDScIR02C04ouqPvyMWEABium3/OohurH/4o3OuvuB0
-	rqVFeqnhLsyq+Y1k/3pbjWf1awY5lh9ZU4G2+sfRpBlUG6cq4afgWoVRRQI2q9p3JxyDv0ucjBQ
-	azv5OPw5EHZ/wdA==
-X-Google-Smtp-Source: AGHT+IE6GHgT+hW4JUk5Xmrgx6KYP92+Suqui+d2CTeWLEFST887tqS+GAcBTlvDTt0v4RG9AbgYe1GwYfM9ftg=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:68:fe9:ac10:f29e])
- (user=aliceryhl job=sendgmr) by 2002:a05:690c:4e0a:b0:6ee:613b:10c3 with SMTP
- id 00721157ae682-6ee613b1307mr509897b3.8.1731961651857; Mon, 18 Nov 2024
- 12:27:31 -0800 (PST)
-Date: Mon, 18 Nov 2024 20:27:26 +0000
-In-Reply-To: <202411181440.qEdcuyh6-lkp@intel.com>
+        d=1e100.net; s=20230601; t=1731962527; x=1732567327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F+Xdj7KiBLCPRzY3Todf2snUR+C3yfhMagkENx1A3bE=;
+        b=IxHI5wCZwwDcw8HXBrc+WrakUnhGHKgj7N/h3H7u1omwOb50vA4Tbt6gXeKdd6dvjh
+         RtOyUaGjJzPxqq12t05tqEghDb9EGRRzre4h+c8xhGeWxrLH9XCm2AMUmfGVAyyub/5j
+         w1EKVu5TjwD//6JjF34Sx+yltn1A0QbIeIdYg6zdHa2UK5Dv75t71vhvo38b2/YiSuJH
+         w6xYnbr60mcYqLESedoEtI7bN1dUh7/WlBvF0VE6nSC9EX5X86bRFsblLRqAATPrNv2R
+         cHC6MTDpdBNoaEdCAepXzbpdqcHk8GXTA3SQBW5YWJPaDhI3HpAqn/qXmAOyPrgdLku4
+         tsmw==
+X-Forwarded-Encrypted: i=1; AJvYcCV45Ev8q/RotIUNGWdMxlqJTa/2J4fFl4v8kCvVaFkDY00oigRX+UfN168ec7CcT22ku5zx@lists.linux.dev, AJvYcCVubKwtPyrfl7z7VyPHFN4TIRthxRYuvvLHpEGM0hhLB2I8YyFOJ7elC4OqayLPOiZxP9flmtrVlo2WEFCopg==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw9mC2IbizIMQ8mwdFuerlLiLgW7ZDP+NE1gZ6zC42CwZBGVBhG
+	qh+4AXyuJyvxRDjiAKTCIm6e4Habjf0wpwHWrjSoVesLC3HinVbFx/KvsPFxa3n/gngAQgQFqdZ
+	6SMukrS3/AaZxkEzVWE527rC0Axg=
+X-Google-Smtp-Source: AGHT+IGxkBt0lYQ/pb92GnoB4p2dqZtFYBy874Hafj/esamMytu1A0yojsAYvUjvM/AphNdqGi/7a7NpBFxY/qLiFfc=
+X-Received: by 2002:a17:90b:1e10:b0:2ea:5c01:c1a0 with SMTP id
+ 98e67ed59e1d1-2ea5c01c415mr3170816a91.3.1731962527424; Mon, 18 Nov 2024
+ 12:42:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <202411181440.qEdcuyh6-lkp@intel.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2118; i=aliceryhl@google.com;
- h=from:subject; bh=mUQUbdZM2wB07Dr6dMNlFKE5OpDs/vuM8ExzU1Ox/kI=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBnO6LxrFVPAYwYEld95H7+qqElBC3vV734EtpiP
- fx0k+rNdreJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCZzui8QAKCRAEWL7uWMY5
- RtMiD/0eqyxfN1l7zjWtJ16eTVp6cevdvqzVnil6da8f7cxXhbPrLaU6SE2H5lAZlqhrBdpTWIn
- hgBOIrPLdkeiq71OoRZ3Tsvm8ILFJO0XUQBqXUqDsMrMUJPogisPD25xuCzhe64cNVGFntcVZHG
- HHCe7o5eXP0ce6/2R6vO8QgxnMWUZHIoX40xBJZRdQJbwIXO3c/Yh5Gj+pXJycPogdzbKNYTQ1r
- 4vd0HmXeMKfJz93WgQxK+91bloc6kZTKUWFtX+fCq3792CDIquwp21DAv0769ueAk2O8EcorvDZ
- jawc6ZX1XVI//cLepwYeQe6cBRj9IcqRoIuhaFFjo1ZIVKXvE3ueYnYJxiDnZkgzcs+XspL63bV
- pPAYxtXnsZSEYOMqyuUlOgZv4jitZ/fHnLM4tn/CkuYMqgjN190T1Vyx8UatLfGmrDGSzpm1V8+
- JDSxall5DpylmY8+B7Iwr8kLebfb7MIFmYC/rK432R0u8DkDXPSVqmMcpCeZWaRFba38yU4zc4E
- VK1bfbkjepWFYHf/Iht3CqKOfoAmleUTL3pJWyoRhe/D2PkBtZevxVzTS/T5RyD4A2umDI//nh1
- d1tpvp0jJnxCxNQbMj4GozbUxx+/clxo9IQH9tfSXAqftEgSQEQJKpA6vJWJasVtOKvVuWq6hpv bSce6v+aQ7DMoqw==
-X-Mailer: git-send-email 2.47.0.371.ga323438b13-goog
-Message-ID: <20241118202727.73646-1-aliceryhl@google.com>
-Subject: [PATCH RESEND] jump_label: rust: pass a mut ptr to `static_key_count`
-From: Alice Ryhl <aliceryhl@google.com>
-To: lkp@intel.com
-Cc: aliceryhl@google.com, boqun.feng@gmail.com, llvm@lists.linux.dev, 
+MIME-Version: 1.0
+References: <202411181440.qEdcuyh6-lkp@intel.com> <20241118202727.73646-1-aliceryhl@google.com>
+In-Reply-To: <20241118202727.73646-1-aliceryhl@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 18 Nov 2024 21:41:53 +0100
+Message-ID: <CANiq72kd31HsDTPNBnLrRC+mkGE-u3qTiPWuQ08TXFcr-M7k9g@mail.gmail.com>
+Subject: Re: [PATCH RESEND] jump_label: rust: pass a mut ptr to `static_key_count`
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: lkp@intel.com, boqun.feng@gmail.com, llvm@lists.linux.dev, 
 	oe-kbuild-all@lists.linux.dev, ojeda@kernel.org, rostedt@goodmis.org, 
 	linux-trace-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When building the rust_print sample with CONFIG_JUMP_LABEL=n, the Rust
-static key support falls back to using static_key_count. This function
-accepts a mutable pointer to the `struct static_key`, but the Rust
-abstractions are incorrectly passing a const pointer.
+On Mon, Nov 18, 2024 at 9:27=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> When building the rust_print sample with CONFIG_JUMP_LABEL=3Dn, the Rust
+> static key support falls back to using static_key_count. This function
+> accepts a mutable pointer to the `struct static_key`, but the Rust
+> abstractions are incorrectly passing a const pointer.
+>
+> This means that builds using CONFIG_JUMP_LABEL=3Dn and SAMPLE_RUST_PRINT=
+=3Dy
+> fail with the following error message:
+>
+>         error[E0308]: mismatched types
+>           --> <root>/samples/rust/rust_print_main.rs:87:5
+>            |
+>         87 | /     kernel::declare_trace! {
+>         88 | |         /// # Safety
+>         89 | |         ///
+>         90 | |         /// Always safe to call.
+>         91 | |         unsafe fn rust_sample_loaded(magic: c_int);
+>         92 | |     }
+>            | |     ^
+>            | |     |
+>            | |_____types differ in mutability
+>            |       arguments to this function are incorrect
+>            |
+>            =3D note: expected raw pointer `*mut kernel::bindings::static_=
+key`
+>                       found raw pointer `*const kernel::bindings::static_=
+key`
+>         note: function defined here
+>           --> <root>/rust/bindings/bindings_helpers_generated.rs:33:12
+>            |
+>         33 |     pub fn static_key_count(key: *mut static_key) -> c_int;
+>            |            ^^^^^^^^^^^^^^^^
+>
+> To fix this, insert a pointer cast so that the pointer is mutable.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202411181440.qEdcuyh6-lkp@i=
+ntel.com/
+> Fixes: 169484ab6677 ("rust: add arch_static_branch")
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-This means that builds using CONFIG_JUMP_LABEL=n and SAMPLE_RUST_PRINT=y
-fail with the following error message:
+Yeah, the original had the `.cast_mut()`.
 
-	error[E0308]: mismatched types
-	  --> <root>/samples/rust/rust_print_main.rs:87:5
-	   |
-	87 | /     kernel::declare_trace! {
-	88 | |         /// # Safety
-	89 | |         ///
-	90 | |         /// Always safe to call.
-	91 | |         unsafe fn rust_sample_loaded(magic: c_int);
-	92 | |     }
-	   | |     ^
-	   | |     |
-	   | |_____types differ in mutability
-	   |       arguments to this function are incorrect
-	   |
-	   = note: expected raw pointer `*mut kernel::bindings::static_key`
-	              found raw pointer `*const kernel::bindings::static_key`
-	note: function defined here
-	  --> <root>/rust/bindings/bindings_helpers_generated.rs:33:12
-	   |
-	33 |     pub fn static_key_count(key: *mut static_key) -> c_int;
-	   |            ^^^^^^^^^^^^^^^^
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-To fix this, insert a pointer cast so that the pointer is mutable.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202411181440.qEdcuyh6-lkp@intel.com/
-Fixes: 169484ab6677 ("rust: add arch_static_branch")
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
- rust/kernel/jump_label.rs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/rust/kernel/jump_label.rs b/rust/kernel/jump_label.rs
-index 2f2df03a3275..b5aff632ecc7 100644
---- a/rust/kernel/jump_label.rs
-+++ b/rust/kernel/jump_label.rs
-@@ -26,7 +26,7 @@ macro_rules! static_branch_unlikely {
- 
-         #[cfg(not(CONFIG_JUMP_LABEL))]
-         {
--            $crate::bindings::static_key_count(_key) > 0
-+            $crate::bindings::static_key_count(_key.cast_mut()) > 0
-         }
- 
-         #[cfg(CONFIG_JUMP_LABEL)]
-
-base-commit: 22193c586b43ee88d66954395885742a6e4a49a9
--- 
-2.47.0.338.g60cca15819-goog
-
+Cheers,
+Miguel
