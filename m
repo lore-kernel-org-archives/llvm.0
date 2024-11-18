@@ -1,217 +1,254 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680021DA32
-	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 01:32:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DCF29408;
+	Mon, 18 Nov 2024 03:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731893555; cv=none; b=lkRZSsP8U3CLPjcMwX0392A7BD1l7YdftUq1xzV7avYds8ZKQasI6YewF5WqZt8m3To2ZAaQ9of2uFRYRaC3F1L0SDxSa9PRILMrB33+eMM9k24sioTTbZ67g7SqTwwzMkkCfIGR5RH/h/p9xmOg/8iqeWn74HNiLUpo8uR1mxA=
+	t=1731899349; cv=none; b=WnW/zgYOOYB/qjzU9WzR6mXi/i5lGoMyvlycM4sbYWNqYzcPXQ8S7oYbo9pjjZbFVRw3kZiH1vurU84NUObWjGODJa4kijsqoiAlyn8bqeJrQh+Lq/CzVzqSftYrUHUsrWDUUw/SohEnrbxxvbusk7O0mEOwlYW/cLg3x59J8ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731893555; c=relaxed/simple;
-	bh=oSM7pj/ixTmYiF1/y9YQ/4qPvCb+nrQ29mcMH0KKnw8=;
+	s=arc-20240116; t=1731899349; c=relaxed/simple;
+	bh=dDwWUVNnirjI1/hTh+Mdh9it9Mka4TIEqAcLGcL9fCU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FuJiHmVWRSCmYkVl0TsfyNFXgHCaVpqK6wz5uzObCu2j51Q+KfZdA/j9lnZWtRCnJW8YinOZkAjJ6fVUdgyf6uCFckTnxcmBIQrIrLqT/oxLB1IhTMgy7LhQ/ACFvSPlpDCBDYhGPa+03K6AiLjoGHnbzk9woYQfhtbxC6GDpqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZCVWA2hK; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=AXE0DRNGUGsJoK02U+b/fgCXBYDYDyU3Bw0+HSeu8AKhYgm5Did2hXlzexqpWkxHbmiqqIMeiTbL8M2Ba2y2T6cT40AZRghr3NPZ4UnMjoivrEBaZvDGNpbEfSSzsPPXYmfGXxd2sfDfx/k3I1arW4I0nQD0ecNL1M1eiFNfsA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bHREZKkF; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZCVWA2hK"
-Date: Sun, 17 Nov 2024 20:32:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1731893549;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=J39uwACjJIBlwffCvkAxz54QC2YS5dLdBtCbyHjkNfk=;
-	b=ZCVWA2hKDaJx5ZKvgOFqJWDOd2DJ3qUrybotXd+zI8YDPsOGQGJ7bUYl/vpqxDPVV/JaXy
-	TY5EQxitWsiStABOlKoROjQsCJmlaba8MD3CZ7EF91Q5PNLoT0zpLtcVFqvpfDe45laAaW
-	PtZWXPI98Vr0pfGSDtCLSnBLJ1vSIRE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Piotr Zalewski <pZ010001011111@proton.me>, ndesaulniers@google.com, 
-	morbo@google.com, justinstitt@google.com, linux-bcachefs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, skhan@linuxfoundation.org
-Subject: Re: [PATCH] bcachefs: initialize local variables in
- bch2_evacuate_bucket
-Message-ID: <jwob7wwk6eijpsusqfuqllnmo4e5wj7a7lwnbmcp5exgrpkget@b4lo6d4yy5ya>
-References: <20241117234334.722730-4-pZ010001011111@proton.me>
- <20241118010040.GB3588455@thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bHREZKkF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731899347; x=1763435347;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=dDwWUVNnirjI1/hTh+Mdh9it9Mka4TIEqAcLGcL9fCU=;
+  b=bHREZKkFXKK1jIA9eW8qHzsh1pOX3+/+lsSkcmAGoOg2qJhqzGvQ5TUX
+   c3ar34bDym7jGt+ewr8SfiHvLE4acLJ9Mc2wJlJlAKzWlzJEcrrfQkemn
+   1dUPw467NEn/Cfmjs5RT0wdL5NRx1e4Sb0S8TR50NLeb6rQAc8qO5z5H3
+   y2P3U3Y1NyIGssjtWlUONIf37VSpJ0ztusOThw76WtXxjvfuhL/c8mV3z
+   nRiapVBXTEpgFYowyzWUjZl5khuHJiz4LcHiKTN1iQVk62voqPvnygBeU
+   oMKedIlQ7u8sAv8/Q26YDh9EkFvHP7CtjhlNWnYnBshwIAZlUYuyWWCUb
+   w==;
+X-CSE-ConnectionGUID: 6KW1yFC/SHeZRyPakMecrA==
+X-CSE-MsgGUID: Nlu9TNA+R/OksugcZssqmg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="31246720"
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="31246720"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2024 19:09:07 -0800
+X-CSE-ConnectionGUID: kQg4B/iuSJSn7pQnY/lZhg==
+X-CSE-MsgGUID: ZjlL5zuxQ/eTsxWn/0Lw+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="94025082"
+Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 17 Nov 2024 19:09:03 -0800
+Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tCs8K-0002Eb-1o;
+	Mon, 18 Nov 2024 03:09:00 +0000
+Date: Mon, 18 Nov 2024 11:08:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?unknown-8bit?Q?Adri=C3=A1n?= Larumbe <adrian.larumbe@collabora.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel@collabora.com,
+	=?unknown-8bit?Q?Adri=C3=A1n?= Larumbe <adrian.larumbe@collabora.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm/panthor: register size of internal objects
+ through fdinfo
+Message-ID: <202411181036.aieis7tj-lkp@intel.com>
+References: <20241115191426.3101123-1-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=unknown-8bit
 Content-Disposition: inline
-In-Reply-To: <20241118010040.GB3588455@thelio-3990X>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241115191426.3101123-1-adrian.larumbe@collabora.com>
 
-On Sun, Nov 17, 2024 at 06:00:40PM -0700, Nathan Chancellor wrote:
-> On Sun, Nov 17, 2024 at 11:48:23PM +0000, Piotr Zalewski wrote:
-> > Compiling bcachefs sources with LLVM triggers uninitialized variables
-> > warnings.
-> > 
-> > Signed-off-by: Piotr Zalewski <pZ010001011111@proton.me>
-> > ---
-> >  fs/bcachefs/move.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/bcachefs/move.c b/fs/bcachefs/move.c
-> > index 8c032ef3a567..94cac498d372 100644
-> > --- a/fs/bcachefs/move.c
-> > +++ b/fs/bcachefs/move.c
-> > @@ -674,8 +674,8 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
-> >  	struct bkey_buf sk;
-> >  	struct bkey_s_c k;
-> >  	struct data_update_opts data_opts;
-> > -	unsigned dirty_sectors, bucket_size;
-> > -	u64 fragmentation;
-> > +	unsigned dirty_sectors = 0, bucket_size = 0;
-> > +	u64 fragmentation = 0;
-> 
-> Shouldn't these just be removed altogether...? They are only used in a
-> trace event and now only zero.
+Hi Adrián,
 
-Actually, I think we want to bring them back; being able to understand
-the behaviour of these background tasks is important whenever we have to
-debug something.
+kernel test robot noticed the following build warnings:
 
-Hasn't come up as much with copygc recently, but it has with rebalance
-and I was just improving the rebalance tracepoint.
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on next-20241115]
+[cannot apply to linus/master v6.12]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-(The copygc issue that does come up is that it behaves poorly with a
-multi device tiering filesystem where it's rebalance's job to move data
-off a full foreground device, not copygc, but that doesn't hit this
-codepath).
+url:    https://github.com/intel-lab-lkp/linux/commits/Adri-n-Larumbe/drm-panthor-register-size-of-internal-objects-through-fdinfo/20241117-000321
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20241115191426.3101123-1-adrian.larumbe%40collabora.com
+patch subject: [PATCH v2] drm/panthor: register size of internal objects through fdinfo
+config: x86_64-buildonly-randconfig-005-20241118 (https://download.01.org/0day-ci/archive/20241118/202411181036.aieis7tj-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241118/202411181036.aieis7tj-lkp@intel.com/reproduce)
 
-But - fragmentation is not really a "evacuate_bucket()" concern, that's
-a generic codepath, so I think I'll do something simpler here and then
-later we can add a dedicated copygc tracepoint, and that can include
-information about the fragmentation LRU that copygc looks at.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411181036.aieis7tj-lkp@intel.com/
 
-So...
+All warnings (new ones prefixed by >>):
 
-From 6e1a9826444612f49e3667a0c0f4cd592dad9948 Mon Sep 17 00:00:00 2001
-From: Kent Overstreet <kent.overstreet@linux.dev>
-Date: Sun, 17 Nov 2024 20:27:34 -0500
-Subject: [PATCH] bcachefs: Fix evacuate_bucket tracepoint
+>> drivers/gpu/drm/panthor/panthor_gem.c:118: warning: Function parameter or struct member 'pfile' not described in 'panthor_kernel_bo_create'
+--
+>> drivers/gpu/drm/panthor/panthor_heap.c:280: warning: Function parameter or struct member 'pfile' not described in 'panthor_heap_create'
+>> drivers/gpu/drm/panthor/panthor_heap.c:538: warning: Function parameter or struct member 'pfile' not described in 'panthor_heap_pool_create'
+--
+   drivers/gpu/drm/panthor/panthor_fw.c:139: warning: Excess struct member 'start' description in 'panthor_fw_binary_section_entry_hdr'
+   drivers/gpu/drm/panthor/panthor_fw.c:139: warning: Excess struct member 'end' description in 'panthor_fw_binary_section_entry_hdr'
+   drivers/gpu/drm/panthor/panthor_fw.c:139: warning: Excess struct member 'start' description in 'panthor_fw_binary_section_entry_hdr'
+   drivers/gpu/drm/panthor/panthor_fw.c:139: warning: Excess struct member 'end' description in 'panthor_fw_binary_section_entry_hdr'
+   drivers/gpu/drm/panthor/panthor_fw.c:196: warning: Excess struct member 'buf' description in 'panthor_fw_section'
+   drivers/gpu/drm/panthor/panthor_fw.c:196: warning: Excess struct member 'size' description in 'panthor_fw_section'
+   drivers/gpu/drm/panthor/panthor_fw.c:278: warning: Excess struct member 'ping_work' description in 'panthor_fw'
+>> drivers/gpu/drm/panthor/panthor_fw.c:456: warning: Function parameter or struct member 'pfile' not described in 'panthor_fw_alloc_queue_iface_mem'
+>> drivers/gpu/drm/panthor/panthor_fw.c:495: warning: Function parameter or struct member 'pfile' not described in 'panthor_fw_alloc_suspend_buf_mem'
+--
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Function parameter or struct member 'as' not described in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'slots_lock' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'alloc_mask' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'faulty_mask' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'slots' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'lru_list' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'lock' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'list' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'reset_in_progress' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:102: warning: Excess struct member 'wq' description in 'panthor_mmu'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'count' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'ptr' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'page' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'addr' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'range' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'vm_bo' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'bo_offset' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'sgt' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:217: warning: Excess struct member 'new_vma' description in 'panthor_vm_op_ctx'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'start' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'size' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'id' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'active_cnt' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'lru_node' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'pool' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:389: warning: Excess struct member 'lock' description in 'panthor_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:412: warning: Cannot understand  * @pt_cache: Cache used to allocate MMU page tables.
+    on line 412 - I thought it was a doc line
+   drivers/gpu/drm/panthor/panthor_mmu.c:481: warning: Cannot understand  * @free_pt() - Custom page table free function
+    on line 481 - I thought it was a doc line
+   drivers/gpu/drm/panthor/panthor_mmu.c:707: warning: Function parameter or struct member 'vm' not described in 'panthor_vm_active'
+   drivers/gpu/drm/panthor/panthor_mmu.c:707: warning: Excess function parameter 'VM' description in 'panthor_vm_active'
+   drivers/gpu/drm/panthor/panthor_mmu.c:816: warning: Function parameter or struct member 'vm' not described in 'panthor_vm_idle'
+   drivers/gpu/drm/panthor/panthor_mmu.c:816: warning: Excess function parameter 'VM' description in 'panthor_vm_idle'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1035: warning: Function parameter or struct member 'vm' not described in 'panthor_vm_alloc_va'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1035: warning: Excess function parameter 'VM' description in 'panthor_vm_alloc_va'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1068: warning: Function parameter or struct member 'vm' not described in 'panthor_vm_free_va'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1068: warning: Excess function parameter 'VM' description in 'panthor_vm_free_va'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1502: warning: Function parameter or struct member 'ptdev' not described in 'panthor_vm_pool_create_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1502: warning: Function parameter or struct member 'args' not described in 'panthor_vm_pool_create_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1502: warning: Excess function parameter 'kernel_va_start' description in 'panthor_vm_pool_create_vm'
+   drivers/gpu/drm/panthor/panthor_mmu.c:1502: warning: Excess function parameter 'kernel_va_range' description in 'panthor_vm_pool_create_vm'
+>> drivers/gpu/drm/panthor/panthor_mmu.c:1919: warning: Function parameter or struct member 'pfile' not described in 'panthor_vm_get_heap_pool'
 
-86a494c8eef9 ("bcachefs: Kill bch2_get_next_backpointer()") dropped some
-things the tracepoint emitted because bch2_evacuate_bucket() no longer
-looks at the alloc key - but we did want at least some of that.
 
-We still no longer look at the alloc key so we can't report on the
-fragmentation number, but that's a direct function of dirty_sectors and
-a copygc concern anyways - copygc should get its own tracepoint that
-includes information from the fragmentation LRU.
+vim +118 drivers/gpu/drm/panthor/panthor_gem.c
 
-But we can report on the number of sectors we moved and the bucket size.
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15   99  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  100  /**
+8a1cc07578bf42 Boris Brezillon 2024-02-29  101   * panthor_kernel_bo_create() - Create and map a GEM object to a VM
+8a1cc07578bf42 Boris Brezillon 2024-02-29  102   * @ptdev: Device.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  103   * @vm: VM to map the GEM to. If NULL, the kernel object is not GPU mapped.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  104   * @size: Size of the buffer object.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  105   * @bo_flags: Combination of drm_panthor_bo_flags flags.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  106   * @vm_map_flags: Combination of drm_panthor_vm_bind_op_flags (only those
+8a1cc07578bf42 Boris Brezillon 2024-02-29  107   * that are related to map operations).
+8a1cc07578bf42 Boris Brezillon 2024-02-29  108   * @gpu_va: GPU address assigned when mapping to the VM.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  109   * If gpu_va == PANTHOR_VM_KERNEL_AUTO_VA, the virtual address will be
+8a1cc07578bf42 Boris Brezillon 2024-02-29  110   * automatically allocated.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  111   *
+8a1cc07578bf42 Boris Brezillon 2024-02-29  112   * Return: A valid pointer in case of success, an ERR_PTR() otherwise.
+8a1cc07578bf42 Boris Brezillon 2024-02-29  113   */
+8a1cc07578bf42 Boris Brezillon 2024-02-29  114  struct panthor_kernel_bo *
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  115  panthor_kernel_bo_create(struct panthor_device *ptdev, struct panthor_file *pfile,
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  116  			 struct panthor_vm *vm, size_t size, u32 bo_flags,
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  117  			 u32 vm_map_flags, u64 gpu_va)
+8a1cc07578bf42 Boris Brezillon 2024-02-29 @118  {
+8a1cc07578bf42 Boris Brezillon 2024-02-29  119  	struct drm_gem_shmem_object *obj;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  120  	struct panthor_kernel_bo *kbo;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  121  	struct panthor_gem_object *bo;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  122  	int ret;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  123  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  124  	if (drm_WARN_ON(&ptdev->base, !vm))
+8a1cc07578bf42 Boris Brezillon 2024-02-29  125  		return ERR_PTR(-EINVAL);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  126  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  127  	kbo = kzalloc(sizeof(*kbo), GFP_KERNEL);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  128  	if (!kbo)
+8a1cc07578bf42 Boris Brezillon 2024-02-29  129  		return ERR_PTR(-ENOMEM);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  130  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  131  	obj = drm_gem_shmem_create(&ptdev->base, size);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  132  	if (IS_ERR(obj)) {
+8a1cc07578bf42 Boris Brezillon 2024-02-29  133  		ret = PTR_ERR(obj);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  134  		goto err_free_bo;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  135  	}
+8a1cc07578bf42 Boris Brezillon 2024-02-29  136  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  137  	bo = to_panthor_bo(&obj->base);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  138  	kbo->obj = &obj->base;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  139  	bo->flags = bo_flags;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  140  
+5d01b56f0518d8 Boris Brezillon 2024-10-30  141  	/* The system and GPU MMU page size might differ, which becomes a
+5d01b56f0518d8 Boris Brezillon 2024-10-30  142  	 * problem for FW sections that need to be mapped at explicit address
+5d01b56f0518d8 Boris Brezillon 2024-10-30  143  	 * since our PAGE_SIZE alignment might cover a VA range that's
+5d01b56f0518d8 Boris Brezillon 2024-10-30  144  	 * expected to be used for another section.
+5d01b56f0518d8 Boris Brezillon 2024-10-30  145  	 * Make sure we never map more than we need.
+5d01b56f0518d8 Boris Brezillon 2024-10-30  146  	 */
+5d01b56f0518d8 Boris Brezillon 2024-10-30  147  	size = ALIGN(size, panthor_vm_page_size(vm));
+8a1cc07578bf42 Boris Brezillon 2024-02-29  148  	ret = panthor_vm_alloc_va(vm, gpu_va, size, &kbo->va_node);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  149  	if (ret)
+8a1cc07578bf42 Boris Brezillon 2024-02-29  150  		goto err_put_obj;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  151  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  152  	ret = panthor_vm_map_bo_range(vm, bo, 0, size, kbo->va_node.start, vm_map_flags);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  153  	if (ret)
+8a1cc07578bf42 Boris Brezillon 2024-02-29  154  		goto err_free_va;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  155  
+ff60c8da0aaf7e Boris Brezillon 2024-05-02  156  	kbo->vm = panthor_vm_get(vm);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  157  	bo->exclusive_vm_root_gem = panthor_vm_root_gem(vm);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  158  	drm_gem_object_get(bo->exclusive_vm_root_gem);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  159  	bo->base.base.resv = bo->exclusive_vm_root_gem->resv;
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  160  
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  161  	INIT_LIST_HEAD(&kbo->private_obj);
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  162  
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  163  	/* Only FW regions are not bound to an open file */
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  164  	if (pfile) {
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  165  		mutex_lock(&ptdev->private_obj_list_lock);
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  166  		list_add(&kbo->private_obj, &pfile->private_file_list);
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  167  		mutex_unlock(&ptdev->private_obj_list_lock);
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  168  	}
+7b8b62a7db49e2 Adrián Larumbe  2024-11-15  169  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  170  	return kbo;
+8a1cc07578bf42 Boris Brezillon 2024-02-29  171  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  172  err_free_va:
+8a1cc07578bf42 Boris Brezillon 2024-02-29  173  	panthor_vm_free_va(vm, &kbo->va_node);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  174  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  175  err_put_obj:
+8a1cc07578bf42 Boris Brezillon 2024-02-29  176  	drm_gem_object_put(&obj->base);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  177  
+8a1cc07578bf42 Boris Brezillon 2024-02-29  178  err_free_bo:
+8a1cc07578bf42 Boris Brezillon 2024-02-29  179  	kfree(kbo);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  180  	return ERR_PTR(ret);
+8a1cc07578bf42 Boris Brezillon 2024-02-29  181  }
+8a1cc07578bf42 Boris Brezillon 2024-02-29  182  
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-
-diff --git a/fs/bcachefs/move.c b/fs/bcachefs/move.c
-index a98a0893a03b..07064872a697 100644
---- a/fs/bcachefs/move.c
-+++ b/fs/bcachefs/move.c
-@@ -674,8 +674,7 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
- 	struct bkey_buf sk;
- 	struct bkey_s_c k;
- 	struct data_update_opts data_opts;
--	unsigned dirty_sectors = 0, bucket_size = 0;
--	u64 fragmentation = 0;
-+	unsigned sectors_moved = 0;
- 	struct bkey_buf last_flushed;
- 	int ret = 0;
- 
-@@ -750,15 +749,18 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
- 			data_opts.target	= io_opts.background_target;
- 			data_opts.rewrite_ptrs = 0;
- 
--			unsigned i = 0;
--			bkey_for_each_ptr(bch2_bkey_ptrs_c(k), ptr) {
--				if (ptr->dev == bucket.inode) {
--					data_opts.rewrite_ptrs |= 1U << i;
--					if (ptr->cached) {
-+			unsigned i = 0, sectors = 0;
-+			const union bch_extent_entry *entry;
-+			struct extent_ptr_decoded p;
-+			bkey_for_each_ptr_decode(k.k, bch2_bkey_ptrs_c(k), p, entry) {
-+				if (p.ptr.dev == bucket.inode) {
-+					if (p.ptr.cached) {
- 						bch2_trans_iter_exit(trans, &iter);
- 						goto next;
- 					}
-+					data_opts.rewrite_ptrs |= 1U << i;
- 				}
-+					sectors = ptr_disk_sectors(k.k->size, p);
- 				i++;
- 			}
- 
-@@ -777,7 +779,8 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
- 				goto err;
- 
- 			if (ctxt->stats)
--				atomic64_add(k.k->size, &ctxt->stats->sectors_seen);
-+				atomic64_add(sectors, &ctxt->stats->sectors_seen);
-+			sectors_moved += sectors;
- 		} else {
- 			struct btree *b;
- 
-@@ -808,12 +811,13 @@ int bch2_evacuate_bucket(struct moving_context *ctxt,
- 				atomic64_add(sectors, &ctxt->stats->sectors_seen);
- 				atomic64_add(sectors, &ctxt->stats->sectors_moved);
- 			}
-+			sectors_moved += btree_sectors(c);
- 		}
- next:
- 		bch2_btree_iter_advance(&bp_iter);
- 	}
- 
--	trace_evacuate_bucket(c, &bucket, dirty_sectors, bucket_size, fragmentation, ret);
-+	trace_evacuate_bucket(c, &bucket, sectors_moved, ca->mi.bucket_size, ret);
- err:
- 	bch2_trans_iter_exit(trans, &bp_iter);
- 	bch2_dev_put(ca);
-diff --git a/fs/bcachefs/trace.h b/fs/bcachefs/trace.h
-index 5597b9d6297f..2d5932d2881e 100644
---- a/fs/bcachefs/trace.h
-+++ b/fs/bcachefs/trace.h
-@@ -848,8 +848,8 @@ TRACE_EVENT(move_data,
- TRACE_EVENT(evacuate_bucket,
- 	TP_PROTO(struct bch_fs *c, struct bpos *bucket,
- 		 unsigned sectors, unsigned bucket_size,
--		 u64 fragmentation, int ret),
--	TP_ARGS(c, bucket, sectors, bucket_size, fragmentation, ret),
-+		 int ret),
-+	TP_ARGS(c, bucket, sectors, bucket_size, ret),
- 
- 	TP_STRUCT__entry(
- 		__field(dev_t,		dev		)
-@@ -857,7 +857,6 @@ TRACE_EVENT(evacuate_bucket,
- 		__field(u64,		bucket		)
- 		__field(u32,		sectors		)
- 		__field(u32,		bucket_size	)
--		__field(u64,		fragmentation	)
- 		__field(int,		ret		)
- 	),
- 
-@@ -867,15 +866,14 @@ TRACE_EVENT(evacuate_bucket,
- 		__entry->bucket			= bucket->offset;
- 		__entry->sectors		= sectors;
- 		__entry->bucket_size		= bucket_size;
--		__entry->fragmentation		= fragmentation;
- 		__entry->ret			= ret;
- 	),
- 
--	TP_printk("%d,%d %llu:%llu sectors %u/%u fragmentation %llu ret %i",
-+	TP_printk("%d,%d %llu:%llu sectors %u/%u ret %i",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		  __entry->member, __entry->bucket,
- 		  __entry->sectors, __entry->bucket_size,
--		  __entry->fragmentation, __entry->ret)
-+		  __entry->ret)
- );
- 
- TRACE_EVENT(copygc,
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
