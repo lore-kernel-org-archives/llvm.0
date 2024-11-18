@@ -1,81 +1,60 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C322907
-	for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 09:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54BA18A6C6;
+	Mon, 18 Nov 2024 09:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731920664; cv=none; b=YA6eNw8knLSiWDZl2fMWdBpW0tDa06eTu4An2g1uRb6hGgy09aQcI4HVxC75VV3vNJraOXi5QeGsO0ZZe/ndVZ/KcSTj/zjd54LKVpDtPWvvpEecceAPd1X3ZTDVpdHJ098IN4HNf7wrtJK9U/iH/Zgyt/Gs84P7ZsCYfn/CuLQ=
+	t=1731921593; cv=none; b=dHOVqMrekG44VwvA1nwGPttfGi485Qyvf/iAYR9XvNyuUoqVievYF/62WqL7pCMAPnwB/9gv3eQbsQVIzZ1YSDAA/ytkwhxwd+yvTziC33WXB1nmhjhfZFx/xSil67Otf2gNT8FmDesZQk59u1gAVmZI4os4XxuPJxkhHfcILsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731920664; c=relaxed/simple;
-	bh=4BQxpIeuu0nVwUe5p6hnFcoQh6vfzVx7Oksv1WzT3M0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JWy1A/j01U/7THwdhwJUqukt2NdjJ8aPDoAJ+GueXRq1EekALiDNy9+tbQfKLAgB7UCdYZ+LODNFKjtCaHrfQZa//LLgYSFqbu94IF/fl9kVslbzCfZMY+DheWcuB5OfRN2xtA/S9x7JAcEqGI7yOjnMoS++qzhfl9tQMrq6dlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NZXdC+9Z; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1731921593; c=relaxed/simple;
+	bh=jWRSDeooLQ3eaEGLpCQCurCRbXVY8ysESwTWbnbB83s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NUQsErRQhCZdAUj6IbfQ7nFXAC+iZDofBDfYHZP+NAqwp7LFhd1mL7jK2zbWxgyS0DtUvsb6m7dl4UTwAPVLNtpmNR1XIZSyj5BazQlbOu2Xj83uIh++4S24c4vm9sWHfGb1D33HR0uurpJjPsRxwKCeWTY3njy/9GjnDfRlrd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpRx855h; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NZXdC+9Z"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a9ed0ec0e92so262234266b.0
-        for <llvm@lists.linux.dev>; Mon, 18 Nov 2024 01:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1731920660; x=1732525460; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ws/rbfiwFMNWy8k0tnCWfMeaJzWW6S4EceX0n9OoukE=;
-        b=NZXdC+9ZrlEysQeQZRp1D19To/cuxTbqSabgb0FzjJ/w2S3AP+06w1fVS77gLuB+m0
-         vNaT1KmZzU0eyJqT81WjixVdZyEsJYW6O8iQHgLIMcMguXa0OL8kWjIogAxP/aLoqH7q
-         zO0Md6zh0K+DvtWCNNA/JLiS8s1cyfPeZaYF2I+gJ4d0wfkPRYbx0H32aIUiCqNUBH/F
-         rv1592sx+woDWG06D8T4pEYJEVcf4M3OC51jH4MnXzoksY0ADacxxq13J6rcxAVUcuBx
-         jTC9oHKbfkbW/s/jzHFnbFoi1TR+WBW0MxalS5MlmW0QSk38P54kULhx8nljQu93J0/h
-         kTMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731920660; x=1732525460;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ws/rbfiwFMNWy8k0tnCWfMeaJzWW6S4EceX0n9OoukE=;
-        b=BM1+9f0jG465BN5UJdPCFZh/IIUPCYNIHw2bnFGzyfytRGW1qfHPbZYCvqh8eFy/MA
-         9+9yXefLq5oqAgHBmA+0YGEHWqVfNMcUX2ARdeu+hs6n6khl/XdKQnVwIuRfiU+Oj2pc
-         PGk5312AK36BodMXH4wLqeN7HlTz+UY6OpIaIw75nERGayM4g9vP8S7Y4NBiVm4Q0h5w
-         NOGFY8JgQ6jjyfCk6AVN02aDOmgdSqQn1c1lbAHj4Bz/LcjKduptAnz1xWzs3B/momiK
-         vWmsYoqYR0KG3WBshCg7ZM2c8Ch35OSvruIoC6Lf4heNEhDhNiPtR7VqQqFca5hHSWB2
-         oRJA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1RzJAmtIK0Qz8JZad58Sm/+LrSTpPxvChip+B7KBugoCmBIwy6mRuL1lNt9Dm6IZKBDHN@lists.linux.dev
-X-Gm-Message-State: AOJu0YxP7tMpX7sVAemjBOWExlk6PTBgqNkZRaOt/lOMKWBeNWkpov60
-	vfFNUUFmZbt7KPUQj/CsxbnFZktjOkXiRsbOQ89c/Eul//ieFfdpxWOL9OciYBI=
-X-Google-Smtp-Source: AGHT+IHiDm/bz3WEh1enyRl0N1th54dk8RHN4GA3K1qzcDnriUz2+DDQ+dD96pBdIfYZ9dcNHYkGjA==
-X-Received: by 2002:a17:907:7284:b0:a9e:c263:29a7 with SMTP id a640c23a62f3a-aa483420a9amr1096106266b.23.1731920659889;
-        Mon, 18 Nov 2024 01:04:19 -0800 (PST)
-Received: from localhost (109-81-88-120.rct.o2.cz. [109.81.88.120])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df50defsm513526566b.50.2024.11.18.01.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 01:04:19 -0800 (PST)
-Date: Mon, 18 Nov 2024 10:04:18 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: "Nysal Jan K.A." <nysal@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Segher Boessenkool <segher@kernel.crashing.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Peter Zijlstra <peterz@infradead.org>,
-	linuxppc-dev@lists.ozlabs.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Brown <broonie@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of
- membarrier_state
-Message-ID: <ZzsDEvJn-vauz9gE@tiehlicka>
-References: <20241007053936.833392-1-nysal@linux.ibm.com>
- <20241029055133.121418-1-nysal@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpRx855h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731921591; x=1763457591;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jWRSDeooLQ3eaEGLpCQCurCRbXVY8ysESwTWbnbB83s=;
+  b=bpRx855h90nZ5Eq53gVs4ecCQ/PfezvbPsZBWjRtwn66RoqIYSXefmxL
+   DzxE3NYiSW35qi3ajVjUkXVWZjKGZxuvF4S2g7m55DIAaolP5txL3fH+J
+   VZpH8bAtLlriLNjE6WyiM1GEvSwPRetz+L90NxbF6QIwKlZcR2Xa+guNb
+   UCNf+t6/3zLc8gmh0182StmWQcwUIgZmDlejW+RctwvrjW+zy0w6lKs6i
+   KHN9qsXuDBJnc6Umtiy8HkNw+W2pe1xmre9V04d46jXe5hlxKkwZjrBU7
+   AR6E83HEl0pI0ucwa1JRCKU2wAacTlWcNGomDVlPiVFAnD1RVlksI3+1y
+   A==;
+X-CSE-ConnectionGUID: GJ9umMQ0TZiTtJ6v9bnAbw==
+X-CSE-MsgGUID: jGBSvgOWSPKBEq4LcCzblQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="49403634"
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="49403634"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 01:19:48 -0800
+X-CSE-ConnectionGUID: srS860NSRw6Abno98WC5Bg==
+X-CSE-MsgGUID: Nhd4KlVYTYGo81S9D2rAzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="120105265"
+Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 18 Nov 2024 01:19:47 -0800
+Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tCxv6-0002LT-1V;
+	Mon, 18 Nov 2024 09:19:44 +0000
+Date: Mon, 18 Nov 2024 17:18:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Asahi Lina <lina@asahilina.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/240-isp 20/54]
+ drivers/media/platform/apple/isp/isp-fw.c:290:46: warning: shift count >=
+ width of type
+Message-ID: <202411181744.C6bGNo9v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,105 +63,257 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241029055133.121418-1-nysal@linux.ibm.com>
 
-I do not see this patch staged in any tree (e.g. linux-next). Is this on
-its way to be merged?
+tree:   https://github.com/AsahiLinux/linux bits/240-isp
+head:   168f992948f0f021255ff3cfb365098fd122a225
+commit: 71fe5bbcb639393e679bc25ba6a99e477f33b942 [20/54] media: apple: isp: Support >32bit VAs for t602x
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20241118/202411181744.C6bGNo9v-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241118/202411181744.C6bGNo9v-lkp@intel.com/reproduce)
 
-Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411181744.C6bGNo9v-lkp@intel.com/
 
-On Tue 29-10-24 11:21:28, Nysal Jan K.A. wrote:
-> On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
-> is not selected, sync_core_before_usermode() is a no-op.
-> In membarrier_mm_sync_core_before_usermode() the compiler does not
-> eliminate redundant branches and load of mm->membarrier_state
-> for this case as the atomic_read() cannot be optimized away.
-> 
-> Here's a snippet of the code generated for finish_task_switch() on powerpc
-> prior to this change:
-> 
-> 1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
-> .......
-> 1b78c8:   cmpdi   cr7,r26,0
-> 1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
-> 1b78d0:   ld      r9,2312(r13)    # current
-> 1b78d4:   ld      r9,1888(r9)     # current->mm
-> 1b78d8:   cmpd    cr7,r26,r9
-> 1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
-> 1b78e0:   hwsync
-> 1b78e4:   cmplwi  cr7,r27,128
-> .......
-> 1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
-> 1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
-> 
-> This was found while analyzing "perf c2c" reports on kernels prior
-> to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
-> where mm_count was false sharing with membarrier_state.
-> 
-> There is a minor improvement in the size of finish_task_switch().
-> The following are results from bloat-o-meter for ppc64le:
-> 
-> GCC 7.5.0
-> ---------
-> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-> Function                                     old     new   delta
-> finish_task_switch                           884     852     -32
-> 
-> GCC 12.2.1
-> ----------
-> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
-> Function                                     old     new   delta
-> finish_task_switch.isra                      852     820     -32
-> 
-> LLVM 17.0.6
-> -----------
-> add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
-> Function                                     old     new   delta
-> rt_mutex_schedule                            120     104     -16
-> finish_task_switch                           792     772     -20
-> 
-> Results on aarch64:
-> 
-> GCC 14.1.1
-> ----------
-> add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
-> Function                                     old     new   delta
-> get_nohz_timer_target                        352     356      +4
-> e843419@0b02_0000d7e7_408                      8       -      -8
-> e843419@01bb_000021d2_868                      8       -      -8
-> finish_task_switch.isra                      592     548     -44
-> 
-> Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
-> ---
-> V1 -> V2:
-> - Add results for aarch64
-> - Add a comment describing the changes
-> ---
->  include/linux/sched/mm.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> index 928a626725e6..b13474825130 100644
-> --- a/include/linux/sched/mm.h
-> +++ b/include/linux/sched/mm.h
-> @@ -531,6 +531,13 @@ enum {
->  
->  static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
->  {
-> +	/*
-> +	 * The atomic_read() below prevents CSE. The following should
-> +	 * help the compiler generate more efficient code on architectures
-> +	 * where sync_core_before_usermode() is a no-op.
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
-> +		return;
->  	if (current->mm != mm)
->  		return;
->  	if (likely(!(atomic_read(&mm->membarrier_state) &
-> -- 
-> 2.47.0
-> 
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/apple/isp/isp-fw.c:8:
+   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
+   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/apple/isp/isp-fw.c:8:
+   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
+   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/apple/isp/isp-fw.c:8:
+   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
+   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/platform/apple/isp/isp-fw.c:8:
+   In file included from drivers/media/platform/apple/isp/isp-cmd.h:7:
+   In file included from drivers/media/platform/apple/isp/isp-drv.h:13:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2676:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/media/platform/apple/isp/isp-fw.c:216:5: warning: no previous prototype for function 'apple_isp_alloc_firmware_surface' [-Wmissing-prototypes]
+     216 | int apple_isp_alloc_firmware_surface(struct apple_isp *isp)
+         |     ^
+   drivers/media/platform/apple/isp/isp-fw.c:216:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     216 | int apple_isp_alloc_firmware_surface(struct apple_isp *isp)
+         | ^
+         | static 
+   drivers/media/platform/apple/isp/isp-fw.c:235:6: warning: no previous prototype for function 'apple_isp_free_firmware_surface' [-Wmissing-prototypes]
+     235 | void apple_isp_free_firmware_surface(struct apple_isp *isp)
+         |      ^
+   drivers/media/platform/apple/isp/isp-fw.c:235:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     235 | void apple_isp_free_firmware_surface(struct apple_isp *isp)
+         | ^
+         | static 
+>> drivers/media/platform/apple/isp/isp-fw.c:290:46: warning: shift count >= width of type [-Wshift-count-overflow]
+     290 |         isp_gpio_write32(isp, ISP_GPIO_1, args_iova >> 32);
+         |                                                     ^  ~~
+   drivers/media/platform/apple/isp/isp-fw.c:384:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
+     382 |                 isp_dbg(isp, "chan: %s type: %d src: %d num: %d iova: 0x%llx\n",
+         |                                                                         ~~~~
+         |                                                                         %x
+     383 |                         chan->name, chan->type, chan->src, chan->num,
+     384 |                         chan->iova);
+         |                         ^~~~~~~~~~
+   drivers/media/platform/apple/isp/isp-drv.h:237:47: note: expanded from macro 'isp_dbg'
+     237 |         dev_dbg((isp)->dev, "[%s] " fmt, __func__, ##__VA_ARGS__)
+         |                                     ~~~              ^~~~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/media/platform/apple/isp/isp-fw.c:534:4: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
+     533 |                 isp_dbg(isp, "freeing iova: 0x%llx size: 0x%llx virt: %pS\n",
+         |                                               ~~~~
+         |                                               %x
+     534 |                         surf->iova, surf->size, (void *)surf->virt);
+         |                         ^~~~~~~~~~
+   drivers/media/platform/apple/isp/isp-drv.h:237:47: note: expanded from macro 'isp_dbg'
+     237 |         dev_dbg((isp)->dev, "[%s] " fmt, __func__, ##__VA_ARGS__)
+         |                                     ~~~              ^~~~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/media/platform/apple/isp/isp-fw.c:601:5: warning: no previous prototype for function 'apple_isp_firmware_boot' [-Wmissing-prototypes]
+     601 | int apple_isp_firmware_boot(struct apple_isp *isp)
+         |     ^
+   drivers/media/platform/apple/isp/isp-fw.c:601:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     601 | int apple_isp_firmware_boot(struct apple_isp *isp)
+         | ^
+         | static 
+   drivers/media/platform/apple/isp/isp-fw.c:622:6: warning: no previous prototype for function 'apple_isp_firmware_shutdown' [-Wmissing-prototypes]
+     622 | void apple_isp_firmware_shutdown(struct apple_isp *isp)
+         |      ^
+   drivers/media/platform/apple/isp/isp-fw.c:622:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     622 | void apple_isp_firmware_shutdown(struct apple_isp *isp)
+         | ^
+         | static 
+   14 warnings generated.
+
+
+vim +290 drivers/media/platform/apple/isp/isp-fw.c
+
+   245	
+   246	static int isp_firmware_boot_stage2(struct apple_isp *isp)
+   247	{
+   248		struct isp_firmware_bootargs args;
+   249		dma_addr_t args_iova;
+   250		int err, retries;
+   251	
+   252		u32 num_ipc_chans = isp_gpio_read32(isp, ISP_GPIO_0);
+   253		u32 args_offset = isp_gpio_read32(isp, ISP_GPIO_1);
+   254		u32 extra_size = isp_gpio_read32(isp, ISP_GPIO_3);
+   255		isp->num_ipc_chans = num_ipc_chans;
+   256	
+   257		if (!isp->num_ipc_chans) {
+   258			dev_err(isp->dev, "No IPC channels found\n");
+   259			return -ENODEV;
+   260		}
+   261	
+   262		if (isp->num_ipc_chans != 7)
+   263			dev_warn(isp->dev, "unexpected channel count (%d)\n",
+   264				 num_ipc_chans);
+   265	
+   266		isp->extra_surf = isp_alloc_surface_vmap(isp, extra_size);
+   267		if (!isp->extra_surf) {
+   268			isp_err(isp, "failed to alloc surface for extra heap\n");
+   269			return -ENOMEM;
+   270		}
+   271	
+   272		args_iova = isp->ipc_surf->iova + args_offset + 0x40;
+   273		isp->cmd_iova = args_iova + sizeof(args) + 0x40;
+   274	
+   275		memset(&args, 0, sizeof(args));
+   276		args.ipc_iova = isp->ipc_surf->iova;
+   277		args.ipc_size = isp->ipc_surf->size;
+   278		args.shared_base = isp->fw.heap_top & 0xffffffff;
+   279		args.shared_size = 0x10000000UL - args.shared_base;
+   280		args.extra_iova = isp->extra_surf->iova;
+   281		args.extra_size = isp->extra_surf->size;
+   282		args.platform_id = isp->hw->platform_id;
+   283		args.unk5 = 0x40;
+   284		args.unk7 = 0x1;
+   285		args.unk_iova1 = args_iova + sizeof(args) - 0xc;
+   286		args.unk9 = 0x3;
+   287		isp_iowrite(isp, args_iova, &args, sizeof(args));
+   288	
+   289		isp_gpio_write32(isp, ISP_GPIO_0, args_iova);
+ > 290		isp_gpio_write32(isp, ISP_GPIO_1, args_iova >> 32);
+   291		wmb();
+   292	
+   293		/* Wait for ISP_GPIO_7 to 0xf7fbdff9 -> 0x8042006 */
+   294		isp_gpio_write32(isp, ISP_GPIO_7, 0xf7fbdff9);
+   295	
+   296		for (retries = 0; retries < ISP_FIRMWARE_MAX_TRIES; retries++) {
+   297			u32 val = isp_gpio_read32(isp, ISP_GPIO_7);
+   298			if (val == 0x8042006) {
+   299				isp_dbg(isp,
+   300					"got second magic number (0x%x) from firmware\n",
+   301					val);
+   302				break;
+   303			}
+   304			mdelay(ISP_FIRMWARE_MDELAY);
+   305		}
+   306		if (retries >= ISP_FIRMWARE_MAX_TRIES) {
+   307			isp_err(isp,
+   308				"never received second magic number from firmware\n");
+   309			err = -ENODEV;
+   310			goto free_extra;
+   311		}
+   312	
+   313		return 0;
+   314	
+   315	free_extra:
+   316		isp_free_surface(isp, isp->extra_surf);
+   317		return err;
+   318	}
+   319	
 
 -- 
-Michal Hocko
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
