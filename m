@@ -1,61 +1,54 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A2E1E102E;
-	Mon, 18 Nov 2024 18:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC014D2B7;
+	Mon, 18 Nov 2024 20:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731956116; cv=none; b=UkeqaOt+XapgisqPwigK3GuQgKqh4/vJwlsPUH6aL5tvq5Rn+47pNXrvzuhNORm/yBpJuIg/OEUzWy5HAb6MzhQblWsjUSQmb6Yit3KyA8cV/gbYu8PDbZWi/1VoT0wCfgZpH9qsRR2klOClg6pZDsFY2IBwauWsPwLQufRn2F4=
+	t=1731960405; cv=none; b=rfxAnLM+u8VnptPTRX4pZ5DbxgZ0OuEpNqruIfZDzFZ3qhlPd8yjQrWI4RbwlVKk+aSZuDa6lnK9BsjM7GntuTLxRF7hQXWFe8Z8zC+ZJdtituNh8oRKh4xSBRhNx5doibEW0SLQUFSho/Cu9qtDOW1t9+v1Gd8S+lx49YffXEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731956116; c=relaxed/simple;
-	bh=EvRhSBNYc55EKAxT72wNHpNHuSnYhb1S5kCwu92RAMI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dUyVnewsQRYzn7d3Y2K682/xw3QpClltiFhTgEvIPKoDQKVzCapmY/1jalNHvX7/sJ0yUE8k/Dp2qsdfD3KXYpd01z5RRKETEYyINFvtXZbcn+v8RyM8D2G74dTI3y2CgMZkvmFBK3UbpFp0W+Fm1mvOjzJhSTIEh6IBc3b2UA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gQ74UD6X; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1731960405; c=relaxed/simple;
+	bh=BZLFINsMS8pPfEa2wS5Xd+1akLeYv9BQloWJ6y92+qs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5XqRF/WMIW7X3o7EDEaSoV23rngDKADIi6WOSIdBKPy/3KyUKe1CENZGxgYYyp0ZJXII4mbXPlCZT+KoohMSqLPipV1YSy+890I/rMnOcm3+0CK/epi6ZW6bmBxO38El8bHu8Jznd8l1dnpCZM+FZgbqbNGUfdaaUOb0HUtuVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8xchKHW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gQ74UD6X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731956115; x=1763492115;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EvRhSBNYc55EKAxT72wNHpNHuSnYhb1S5kCwu92RAMI=;
-  b=gQ74UD6XCC33tPm5EZ2hZ7Sdhe3AA/M//hQ4FFkB1kyj2g1rUsZRrPHU
-   m/lvf12SjMDr1uSUXOZzbg5KOVSI0F8QxeZvsbZBzn2qeHrnL19idYubD
-   hPm0rK56VcOjy5EtKPuIxioSnNCzymO/0KhuxvkzoblDbGzkx+BLIroWZ
-   z+jF5XtntcKaidb/y82NOHSWcg/d6UjxEPRq0MsaLInHoFWrmOTWXOdAp
-   66c5MaT0Q+In73RqecxCLA4YKCNOWvDq+YXb4UtnLrr5z3aeZKBdTwCCs
-   ABPgu5G8r64j0v75gWIMEuCIphPfe2Od2uQR2Py1FH3MQE2iuXKaI4D1c
-   Q==;
-X-CSE-ConnectionGUID: sbI2X2DFS/aVLiSZuf884g==
-X-CSE-MsgGUID: fZLnAyA0R+68XEikEtE1/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11260"; a="31303536"
-X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="31303536"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 10:55:14 -0800
-X-CSE-ConnectionGUID: cvk7YwdkQQGWRYJkRNO6Bw==
-X-CSE-MsgGUID: zC6UJiB4SW+zX9Sku3pzvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="126851312"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 18 Nov 2024 10:55:13 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tD6tx-0002bF-2R;
-	Mon, 18 Nov 2024 18:55:09 +0000
-Date: Tue, 19 Nov 2024 02:54:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Charles Han <hanchunchao@inspur.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Stephen Boyd <sboyd@kernel.org>,
-	David Lechner <david@lechnology.com>
-Subject: [linux-next:master 11416/12140] drivers/clk/davinci/psc.c:281:10:
- error: incompatible integer to pointer conversion returning 'int' from a
- function with result type 'struct davinci_lpsc_clk *'
-Message-ID: <202411190217.UaeAgJnO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8xchKHW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E787C4CECC;
+	Mon, 18 Nov 2024 20:06:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731960404;
+	bh=BZLFINsMS8pPfEa2wS5Xd+1akLeYv9BQloWJ6y92+qs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p8xchKHWTiB7DLpXpMZ/rokpIHqbjnduyfTKuCNXQEAf8AeSOLePjc+Vz+G2TUAL4
+	 bpBKb6XqAuQNCqFX71br72A+J0DklZhUq/degpMQJQGgb2vb8XA6KKCowg04xS8aP9
+	 9GTvY56pB99209v+dvdbbNjXAb79yBrula6Js7cz390kTxZLT+qxkPy1pYX0HGQq6c
+	 0QVFz2Ighd7iypAIMlF7glyswIWxYg32oKez0Dq9SDXou1+K7vLbJeBLnVe1HGSK2L
+	 kQArLC61iaOrvMcnTbSZeEkWLfCv6VWoAqoktmiFSkES/ka9EAobpzLoBIWgMGz1Qn
+	 quba2HIWN95Sw==
+Date: Mon, 18 Nov 2024 13:06:41 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Tiffany Lin <tiffany.lin@mediatek.com>,
+	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+	Yunfei Dong <yunfei.dong@mediatek.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Sebastian Fricke <sebastian.fricke@collabora.com>,
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] media: mediatek: vcodec: mark
+ vdec_vp9_slice_map_counts_eob_coef noinline
+Message-ID: <20241118200641.GA768549@thelio-3990X>
+References: <20241018151448.3694052-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,102 +57,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241018151448.3694052-1-arnd@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   ae58226b89ac0cffa05ba7357733776542e40216
-commit: 48ce11b9099800eee6fb6dc386374096f2e6564b [11416/12140] clk: davinci: Add NULL check in davinci_lpsc_clk_register
-config: arm-randconfig-003-20241119 (https://download.01.org/0day-ci/archive/20241119/202411190217.UaeAgJnO-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241119/202411190217.UaeAgJnO-lkp@intel.com/reproduce)
+On Fri, Oct 18, 2024 at 03:14:42PM +0000, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> With KASAN enabled, clang fails to optimize the inline version of
+> vdec_vp9_slice_map_counts_eob_coef() properly, leading to kilobytes
+> of temporary values spilled to the stack:
+> 
+> drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c:1526:12: error: stack frame size (2160) exceeds limit (2048) in 'vdec_vp9_slice_update_prob' [-Werror,-Wframe-larger-than]
+> 
+> This seems to affect all versions of clang including the latest (clang-20),
+> but the degree of stack overhead is different per release.
+> 
+> Marking the function as noinline_for_stack is harmless here and avoids
+> the problem completely.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411190217.UaeAgJnO-lkp@intel.com/
+Unfortunately, I have seen no moment on my upstream report and this
+warning is breaking allmodconfig builds because of -Werror. Can this be
+applied as a workaround for now (preferrably with a Cc: stable on it)?
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
->> drivers/clk/davinci/psc.c:281:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct davinci_lpsc_clk *' [-Wint-conversion]
-     281 |                 return -ENOMEM;
-         |                        ^~~~~~~
-   1 error generated.
-
-
-vim +281 drivers/clk/davinci/psc.c
-
-   221	
-   222	/**
-   223	 * davinci_lpsc_clk_register - register LPSC clock
-   224	 * @dev: the clocks's device or NULL
-   225	 * @name: name of this clock
-   226	 * @parent_name: name of clock's parent
-   227	 * @regmap: PSC MMIO region
-   228	 * @md: local PSC number
-   229	 * @pd: power domain
-   230	 * @flags: LPSC_* flags
-   231	 */
-   232	static struct davinci_lpsc_clk *
-   233	davinci_lpsc_clk_register(struct device *dev, const char *name,
-   234				  const char *parent_name, struct regmap *regmap,
-   235				  u32 md, u32 pd, u32 flags)
-   236	{
-   237		struct clk_init_data init;
-   238		struct davinci_lpsc_clk *lpsc;
-   239		int ret;
-   240		bool is_on;
-   241	
-   242		lpsc = kzalloc(sizeof(*lpsc), GFP_KERNEL);
-   243		if (!lpsc)
-   244			return ERR_PTR(-ENOMEM);
-   245	
-   246		init.name = name;
-   247		init.ops = &davinci_lpsc_clk_ops;
-   248		init.parent_names = (parent_name ? &parent_name : NULL);
-   249		init.num_parents = (parent_name ? 1 : 0);
-   250		init.flags = 0;
-   251	
-   252		if (flags & LPSC_ALWAYS_ENABLED)
-   253			init.flags |= CLK_IS_CRITICAL;
-   254	
-   255		if (flags & LPSC_SET_RATE_PARENT)
-   256			init.flags |= CLK_SET_RATE_PARENT;
-   257	
-   258		lpsc->dev = dev;
-   259		lpsc->regmap = regmap;
-   260		lpsc->hw.init = &init;
-   261		lpsc->md = md;
-   262		lpsc->pd = pd;
-   263		lpsc->flags = flags;
-   264	
-   265		ret = clk_hw_register(dev, &lpsc->hw);
-   266		if (ret < 0) {
-   267			kfree(lpsc);
-   268			return ERR_PTR(ret);
-   269		}
-   270	
-   271		/* for now, genpd is only registered when using device-tree */
-   272		if (!dev || !dev->of_node)
-   273			return lpsc;
-   274	
-   275		/* genpd attach needs a way to look up this clock */
-   276		ret = clk_hw_register_clkdev(&lpsc->hw, name, best_dev_name(dev));
-   277	
-   278		lpsc->pm_domain.name = devm_kasprintf(dev, GFP_KERNEL, "%s: %s",
-   279						      best_dev_name(dev), name);
-   280		if (!lpsc->pm_domain.name)
- > 281			return -ENOMEM;
-   282	
-   283		lpsc->pm_domain.attach_dev = davinci_psc_genpd_attach_dev;
-   284		lpsc->pm_domain.detach_dev = davinci_psc_genpd_detach_dev;
-   285		lpsc->pm_domain.flags = GENPD_FLAG_PM_CLK;
-   286	
-   287		is_on = davinci_lpsc_clk_is_enabled(&lpsc->hw);
-   288		pm_genpd_init(&lpsc->pm_domain, NULL, is_on);
-   289	
-   290		return lpsc;
-   291	}
-   292	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> I have not come to a conclusion on how exactly clang fails to do this
+> right, but can provide the .config and/or preprocessed source files
+> and command line if we think this should be fixed in clang.
+> ---
+>  .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c         | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+> index eea709d93820..47c302745c1d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
+> @@ -1188,7 +1188,8 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
+>  	return ret;
+>  }
+>  
+> -static
+> +/* clang stack usage explodes if this is inlined */
+> +static noinline_for_stack
+>  void vdec_vp9_slice_map_counts_eob_coef(unsigned int i, unsigned int j, unsigned int k,
+>  					struct vdec_vp9_slice_frame_counts *counts,
+>  					struct v4l2_vp9_frame_symbol_counts *counts_helper)
+> -- 
+> 2.39.5
+> 
