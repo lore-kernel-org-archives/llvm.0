@@ -1,109 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC014D2B7;
-	Mon, 18 Nov 2024 20:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF4619DF64;
+	Mon, 18 Nov 2024 20:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731960405; cv=none; b=rfxAnLM+u8VnptPTRX4pZ5DbxgZ0OuEpNqruIfZDzFZ3qhlPd8yjQrWI4RbwlVKk+aSZuDa6lnK9BsjM7GntuTLxRF7hQXWFe8Z8zC+ZJdtituNh8oRKh4xSBRhNx5doibEW0SLQUFSho/Cu9qtDOW1t9+v1Gd8S+lx49YffXEI=
+	t=1731961025; cv=none; b=fLxvu2hWPEcKbEMdErrPQoMM5cCWpvQIP4mchY/DzlX+R0/sZEir/fkhyH5HRevbrbCJY22h62LKh03PAGAFj4XdBQt77LOTZxM/dZCK6HLgw4Xsq1tJ5fHwaf/eO6moZzPWXdR0j9Ao99n/V/Or3DFlym+jX/+Coe77YlfgV2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731960405; c=relaxed/simple;
-	bh=BZLFINsMS8pPfEa2wS5Xd+1akLeYv9BQloWJ6y92+qs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5XqRF/WMIW7X3o7EDEaSoV23rngDKADIi6WOSIdBKPy/3KyUKe1CENZGxgYYyp0ZJXII4mbXPlCZT+KoohMSqLPipV1YSy+890I/rMnOcm3+0CK/epi6ZW6bmBxO38El8bHu8Jznd8l1dnpCZM+FZgbqbNGUfdaaUOb0HUtuVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p8xchKHW; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p8xchKHW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E787C4CECC;
-	Mon, 18 Nov 2024 20:06:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731960404;
-	bh=BZLFINsMS8pPfEa2wS5Xd+1akLeYv9BQloWJ6y92+qs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p8xchKHWTiB7DLpXpMZ/rokpIHqbjnduyfTKuCNXQEAf8AeSOLePjc+Vz+G2TUAL4
-	 bpBKb6XqAuQNCqFX71br72A+J0DklZhUq/degpMQJQGgb2vb8XA6KKCowg04xS8aP9
-	 9GTvY56pB99209v+dvdbbNjXAb79yBrula6Js7cz390kTxZLT+qxkPy1pYX0HGQq6c
-	 0QVFz2Ighd7iypAIMlF7glyswIWxYg32oKez0Dq9SDXou1+K7vLbJeBLnVe1HGSK2L
-	 kQArLC61iaOrvMcnTbSZeEkWLfCv6VWoAqoktmiFSkES/ka9EAobpzLoBIWgMGz1Qn
-	 quba2HIWN95Sw==
-Date: Mon, 18 Nov 2024 13:06:41 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Tiffany Lin <tiffany.lin@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Sebastian Fricke <sebastian.fricke@collabora.com>,
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] media: mediatek: vcodec: mark
- vdec_vp9_slice_map_counts_eob_coef noinline
-Message-ID: <20241118200641.GA768549@thelio-3990X>
-References: <20241018151448.3694052-1-arnd@kernel.org>
+	s=arc-20240116; t=1731961025; c=relaxed/simple;
+	bh=dnw1xFwWHA3hTIC33XSzzj6TApG4qpFfXtEvzyt0Hww=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dGSyZOGHdzzf3IGJ/b/v9AFkZh2KL2aN4encyTDZUMJ5zMLAklat+ya3hnp/sBQYtm33B/cMpQr73eJiVhyaRDuN7tCuEvV/itySXWmQSv9ZJ98ftOc37Hv1dFz+hZj/4gPrgtKSKAYd1pSXh+1rrrKdFv5Tfi710XNceoF05P0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1559C4CECC;
+	Mon, 18 Nov 2024 20:17:03 +0000 (UTC)
+Date: Mon, 18 Nov 2024 15:17:35 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: lkp@intel.com, boqun.feng@gmail.com, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, ojeda@kernel.org
+Subject: Re: [PATCH] jump_label: rust: pass a mut ptr to `static_key_count`
+Message-ID: <20241118151735.3a47d4ac@gandalf.local.home>
+In-Reply-To: <20241118094555.2583708-1-aliceryhl@google.com>
+References: <202411181440.qEdcuyh6-lkp@intel.com>
+	<20241118094555.2583708-1-aliceryhl@google.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241018151448.3694052-1-arnd@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 18, 2024 at 03:14:42PM +0000, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> With KASAN enabled, clang fails to optimize the inline version of
-> vdec_vp9_slice_map_counts_eob_coef() properly, leading to kilobytes
-> of temporary values spilled to the stack:
-> 
-> drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c:1526:12: error: stack frame size (2160) exceeds limit (2048) in 'vdec_vp9_slice_update_prob' [-Werror,-Wframe-larger-than]
-> 
-> This seems to affect all versions of clang including the latest (clang-20),
-> but the degree of stack overhead is different per release.
-> 
-> Marking the function as noinline_for_stack is harmless here and avoids
-> the problem completely.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Mon, 18 Nov 2024 09:45:55 +0000
+Alice Ryhl <aliceryhl@google.com> wrote:
 
-Unfortunately, I have seen no moment on my upstream report and this
-warning is breaking allmodconfig builds because of -Werror. Can this be
-applied as a workaround for now (preferrably with a Cc: stable on it)?
+> When building the rust_print sample with CONFIG_JUMP_LABEL=n, the Rust
+> static key support falls back to using static_key_count. This function
+> accepts a mutable pointer to the `struct static_key`, but the Rust
+> abstractions are incorrectly passing a const pointer.
+> 
+> This means that builds using CONFIG_JUMP_LABEL=n and SAMPLE_RUST_PRINT=y
+> fail with the following error message:
+> 
+> 	error[E0308]: mismatched types
+> 	  --> <root>/samples/rust/rust_print_main.rs:87:5  
+> 	   |
+> 	87 | /     kernel::declare_trace! {
+> 	88 | |         /// # Safety
+> 	89 | |         ///
+> 	90 | |         /// Always safe to call.
+> 	91 | |         unsafe fn rust_sample_loaded(magic: c_int);
+> 	92 | |     }
+> 	   | |     ^
+> 	   | |     |
+> 	   | |_____types differ in mutability
+> 	   |       arguments to this function are incorrect
+> 	   |
+> 	   = note: expected raw pointer `*mut kernel::bindings::static_key`
+> 	              found raw pointer `*const kernel::bindings::static_key`
+> 	note: function defined here
+> 	  --> <root>/rust/bindings/bindings_helpers_generated.rs:33:12  
+> 	   |
+> 	33 |     pub fn static_key_count(key: *mut static_key) -> c_int;
+> 	   |            ^^^^^^^^^^^^^^^^
+> 
+> To fix this, insert a pointer cast so that the pointer is mutable.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202411181440.qEdcuyh6-lkp@intel.com/
+> Fixes: 169484ab6677 ("rust: add arch_static_branch")
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+I take it, this needs to go through my tree. Please resend and Cc
+linux-trace-kernel@vger.kernel.org, otherwise it will not go through my
+workflow.
 
+-- Steve
+
+
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 > ---
-> I have not come to a conclusion on how exactly clang fails to do this
-> right, but can provide the .config and/or preprocessed source files
-> and command line if we think this should be fixed in clang.
-> ---
->  .../mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c         | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  rust/kernel/jump_label.rs | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-> index eea709d93820..47c302745c1d 100644
-> --- a/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/decoder/vdec/vdec_vp9_req_lat_if.c
-> @@ -1188,7 +1188,8 @@ static int vdec_vp9_slice_setup_lat(struct vdec_vp9_slice_instance *instance,
->  	return ret;
->  }
+> diff --git a/rust/kernel/jump_label.rs b/rust/kernel/jump_label.rs
+> index 2f2df03a3275..b5aff632ecc7 100644
+> --- a/rust/kernel/jump_label.rs
+> +++ b/rust/kernel/jump_label.rs
+> @@ -26,7 +26,7 @@ macro_rules! static_branch_unlikely {
 >  
-> -static
-> +/* clang stack usage explodes if this is inlined */
-> +static noinline_for_stack
->  void vdec_vp9_slice_map_counts_eob_coef(unsigned int i, unsigned int j, unsigned int k,
->  					struct vdec_vp9_slice_frame_counts *counts,
->  					struct v4l2_vp9_frame_symbol_counts *counts_helper)
-> -- 
-> 2.39.5
+>          #[cfg(not(CONFIG_JUMP_LABEL))]
+>          {
+> -            $crate::bindings::static_key_count(_key) > 0
+> +            $crate::bindings::static_key_count(_key.cast_mut()) > 0
+>          }
+>  
+>          #[cfg(CONFIG_JUMP_LABEL)]
 > 
+> base-commit: 22193c586b43ee88d66954395885742a6e4a49a9
+
