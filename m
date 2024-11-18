@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBE218B47E;
-	Mon, 18 Nov 2024 16:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A2E1E102E;
+	Mon, 18 Nov 2024 18:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731948785; cv=none; b=iu8vz5i79VQjiS6CSjMuYWK54CQsNEaJeuxFrzEqQLWBBzJY/lWoTmtpSRwcCP0aCpicT3Yn549zzuvpx4m5+4bAgOh0P/re67IugzKJa8Zc/SZmhzNZ4SDeyhjBLid8oj9AvCqCv5ejjmEV04tGNxiYVvWdPtyN9vOrsOZskcI=
+	t=1731956116; cv=none; b=UkeqaOt+XapgisqPwigK3GuQgKqh4/vJwlsPUH6aL5tvq5Rn+47pNXrvzuhNORm/yBpJuIg/OEUzWy5HAb6MzhQblWsjUSQmb6Yit3KyA8cV/gbYu8PDbZWi/1VoT0wCfgZpH9qsRR2klOClg6pZDsFY2IBwauWsPwLQufRn2F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731948785; c=relaxed/simple;
-	bh=IlE5jQMC28qvEIO1TsmfMkUNehxSyMRk/N6i1dXZ0VA=;
+	s=arc-20240116; t=1731956116; c=relaxed/simple;
+	bh=EvRhSBNYc55EKAxT72wNHpNHuSnYhb1S5kCwu92RAMI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FRzZvHd6lw9Dq07lZoZRO5EDeANpVHIe3Q+jQLqadmHmO2hzh+fJQOxjQYhFR67LLx4ZshFT6xcLx9AYc93HLff9dRCmhSOQQwIi86/Am5nfPrIzNl90kNbirZz6NQ5HoEczFfIx3YUPAyHZCeA+dCZ3P1TyfuCYjoh7HhHJBds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bK9z7SDX; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=dUyVnewsQRYzn7d3Y2K682/xw3QpClltiFhTgEvIPKoDQKVzCapmY/1jalNHvX7/sJ0yUE8k/Dp2qsdfD3KXYpd01z5RRKETEYyINFvtXZbcn+v8RyM8D2G74dTI3y2CgMZkvmFBK3UbpFp0W+Fm1mvOjzJhSTIEh6IBc3b2UA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gQ74UD6X; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bK9z7SDX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gQ74UD6X"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731948784; x=1763484784;
+  t=1731956115; x=1763492115;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IlE5jQMC28qvEIO1TsmfMkUNehxSyMRk/N6i1dXZ0VA=;
-  b=bK9z7SDXQeSZOoX7kuT5fg9HUXXVE/NeKbngLNWlLdmOSiYve/NXQdeX
-   BE2c9arqWrqxSrL9XdgLQKp4BNxxZYzoCBHCqVN4pnwNSbwwR5PddYjyY
-   JyoQlV+Ei4B6Cqi3gDD6Zxu6Vzgg15tQstOlrnKUrVnzxFB0PFrfKPJ8N
-   iTnZjjSGXY7e9PoLzYFsSoyVUzvlk1NM5dNaL1WJB6Nv+NmJygIzkMGXN
-   XwcFrxfb/DqmnuuH8dlArSuolwg9R1v1TXN4Cr5sx5X6ExMjBMUDvDrcc
-   TVCfihDzPmA7sikwilG0mVWyrjxG1T5GKKKJiwcSkgRcuV9GpIPxVrFfO
-   w==;
-X-CSE-ConnectionGUID: 3V7sBkYOSw6XKhldlpxIhw==
-X-CSE-MsgGUID: bqTM9vzFRx6CsMKzIo7x4g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11260"; a="31321469"
+  bh=EvRhSBNYc55EKAxT72wNHpNHuSnYhb1S5kCwu92RAMI=;
+  b=gQ74UD6XCC33tPm5EZ2hZ7Sdhe3AA/M//hQ4FFkB1kyj2g1rUsZRrPHU
+   m/lvf12SjMDr1uSUXOZzbg5KOVSI0F8QxeZvsbZBzn2qeHrnL19idYubD
+   hPm0rK56VcOjy5EtKPuIxioSnNCzymO/0KhuxvkzoblDbGzkx+BLIroWZ
+   z+jF5XtntcKaidb/y82NOHSWcg/d6UjxEPRq0MsaLInHoFWrmOTWXOdAp
+   66c5MaT0Q+In73RqecxCLA4YKCNOWvDq+YXb4UtnLrr5z3aeZKBdTwCCs
+   ABPgu5G8r64j0v75gWIMEuCIphPfe2Od2uQR2Py1FH3MQE2iuXKaI4D1c
+   Q==;
+X-CSE-ConnectionGUID: sbI2X2DFS/aVLiSZuf884g==
+X-CSE-MsgGUID: fZLnAyA0R+68XEikEtE1/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11260"; a="31303536"
 X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="31321469"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 08:53:03 -0800
-X-CSE-ConnectionGUID: AIFHBgNZRyy9PyE3dm02qQ==
-X-CSE-MsgGUID: /LEg28OKQ3uZ9zslWRsbpg==
+   d="scan'208";a="31303536"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 10:55:14 -0800
+X-CSE-ConnectionGUID: cvk7YwdkQQGWRYJkRNO6Bw==
+X-CSE-MsgGUID: zC6UJiB4SW+zX9Sku3pzvA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="89427910"
+   d="scan'208";a="126851312"
 Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 18 Nov 2024 08:53:01 -0800
+  by orviesa001.jf.intel.com with ESMTP; 18 Nov 2024 10:55:13 -0800
 Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tD4zi-0002Y2-0C;
-	Mon, 18 Nov 2024 16:52:58 +0000
-Date: Tue, 19 Nov 2024 00:51:59 +0800
+	id 1tD6tx-0002bF-2R;
+	Mon, 18 Nov 2024 18:55:09 +0000
+Date: Tue, 19 Nov 2024 02:54:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Nyekjaer <sean@geanix.com>
+To: Charles Han <hanchunchao@inspur.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [mkl-can-next:testing 4/5]
- drivers/net/can/m_can/tcan4x5x-core.c:333:22: warning: unused variable 'np'
-Message-ID: <202411190037.WDcg9NkS-lkp@intel.com>
+	Stephen Boyd <sboyd@kernel.org>,
+	David Lechner <david@lechnology.com>
+Subject: [linux-next:master 11416/12140] drivers/clk/davinci/psc.c:281:10:
+ error: incompatible integer to pointer conversion returning 'int' from a
+ function with result type 'struct davinci_lpsc_clk *'
+Message-ID: <202411190217.UaeAgJnO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,63 +65,100 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-head:   e0b741bc53c94f9ae25d4140202557a0aa51b5a0
-commit: 490105aa8f79a2f96de9c6c23fb22437faf0d6a4 [4/5] can: tcan4x5x: add option for selecting nWKRQ voltage
-config: x86_64-buildonly-randconfig-004-20241118 (https://download.01.org/0day-ci/archive/20241119/202411190037.WDcg9NkS-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241119/202411190037.WDcg9NkS-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   ae58226b89ac0cffa05ba7357733776542e40216
+commit: 48ce11b9099800eee6fb6dc386374096f2e6564b [11416/12140] clk: davinci: Add NULL check in davinci_lpsc_clk_register
+config: arm-randconfig-003-20241119 (https://download.01.org/0day-ci/archive/20241119/202411190217.UaeAgJnO-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241119/202411190217.UaeAgJnO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411190037.WDcg9NkS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411190217.UaeAgJnO-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/can/m_can/tcan4x5x-core.c:5:
-   In file included from drivers/net/can/m_can/tcan4x5x.h:14:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/can/m_can/tcan4x5x-core.c:333:22: warning: unused variable 'np' [-Wunused-variable]
-     333 |         struct device_node *np = cdev->dev->of_node;
-         |                             ^~
-   5 warnings generated.
+>> drivers/clk/davinci/psc.c:281:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct davinci_lpsc_clk *' [-Wint-conversion]
+     281 |                 return -ENOMEM;
+         |                        ^~~~~~~
+   1 error generated.
 
 
-vim +/np +333 drivers/net/can/m_can/tcan4x5x-core.c
+vim +281 drivers/clk/davinci/psc.c
 
-   329	
-   330	static void tcan4x5x_get_dt_data(struct m_can_classdev *cdev)
-   331	{
-   332		struct tcan4x5x_priv *tcan4x5x = cdev_to_priv(cdev);
- > 333		struct device_node *np = cdev->dev->of_node;
-   334	
-   335		tcan4x5x->nwkrq_voltage_vio =
-   336			of_property_read_bool(cdev->dev->of_node, "ti,nwkrq-voltage-vio");
-   337	}
-   338	
+   221	
+   222	/**
+   223	 * davinci_lpsc_clk_register - register LPSC clock
+   224	 * @dev: the clocks's device or NULL
+   225	 * @name: name of this clock
+   226	 * @parent_name: name of clock's parent
+   227	 * @regmap: PSC MMIO region
+   228	 * @md: local PSC number
+   229	 * @pd: power domain
+   230	 * @flags: LPSC_* flags
+   231	 */
+   232	static struct davinci_lpsc_clk *
+   233	davinci_lpsc_clk_register(struct device *dev, const char *name,
+   234				  const char *parent_name, struct regmap *regmap,
+   235				  u32 md, u32 pd, u32 flags)
+   236	{
+   237		struct clk_init_data init;
+   238		struct davinci_lpsc_clk *lpsc;
+   239		int ret;
+   240		bool is_on;
+   241	
+   242		lpsc = kzalloc(sizeof(*lpsc), GFP_KERNEL);
+   243		if (!lpsc)
+   244			return ERR_PTR(-ENOMEM);
+   245	
+   246		init.name = name;
+   247		init.ops = &davinci_lpsc_clk_ops;
+   248		init.parent_names = (parent_name ? &parent_name : NULL);
+   249		init.num_parents = (parent_name ? 1 : 0);
+   250		init.flags = 0;
+   251	
+   252		if (flags & LPSC_ALWAYS_ENABLED)
+   253			init.flags |= CLK_IS_CRITICAL;
+   254	
+   255		if (flags & LPSC_SET_RATE_PARENT)
+   256			init.flags |= CLK_SET_RATE_PARENT;
+   257	
+   258		lpsc->dev = dev;
+   259		lpsc->regmap = regmap;
+   260		lpsc->hw.init = &init;
+   261		lpsc->md = md;
+   262		lpsc->pd = pd;
+   263		lpsc->flags = flags;
+   264	
+   265		ret = clk_hw_register(dev, &lpsc->hw);
+   266		if (ret < 0) {
+   267			kfree(lpsc);
+   268			return ERR_PTR(ret);
+   269		}
+   270	
+   271		/* for now, genpd is only registered when using device-tree */
+   272		if (!dev || !dev->of_node)
+   273			return lpsc;
+   274	
+   275		/* genpd attach needs a way to look up this clock */
+   276		ret = clk_hw_register_clkdev(&lpsc->hw, name, best_dev_name(dev));
+   277	
+   278		lpsc->pm_domain.name = devm_kasprintf(dev, GFP_KERNEL, "%s: %s",
+   279						      best_dev_name(dev), name);
+   280		if (!lpsc->pm_domain.name)
+ > 281			return -ENOMEM;
+   282	
+   283		lpsc->pm_domain.attach_dev = davinci_psc_genpd_attach_dev;
+   284		lpsc->pm_domain.detach_dev = davinci_psc_genpd_detach_dev;
+   285		lpsc->pm_domain.flags = GENPD_FLAG_PM_CLK;
+   286	
+   287		is_on = davinci_lpsc_clk_is_enabled(&lpsc->hw);
+   288		pm_genpd_init(&lpsc->pm_domain, NULL, is_on);
+   289	
+   290		return lpsc;
+   291	}
+   292	
 
 -- 
 0-DAY CI Kernel Test Service
