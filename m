@@ -1,84 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD69F1D04A5;
-	Tue, 19 Nov 2024 17:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13181D0F5C;
+	Tue, 19 Nov 2024 17:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732037195; cv=none; b=aCflfDykSd2g/sRos2WUTU8zB2/lYyoCq8GJFcUrKOOBfY4uhO6CbYlXVeQKcNejdE5+0MJDms0Fw3BK8CZSKg2sx8Jn9J6YpUgjpsf2I93RZCvA5AF4k7YIu3yEX1v634//TxHlGO8WP1TJyF2ZyKsiTAur2vNpeisjU/ooHgw=
+	t=1732037923; cv=none; b=RiwOaA2DlYaLnUU97XWpuViP3ryrazDX3sftqJZvUtJuq3zQ54+h8+Az/y5xl1bvzvtYvZHO6sE90XnQjzjb25x0byERsQ1CEENUSOOfB3IjOh81++ejoSAlzF/Uqo8QlZ8tXSl0KMwWXY7D0StHoyn2FVwbyBC0DZ6gxkIEvHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732037195; c=relaxed/simple;
-	bh=4FczEMCiPK8wpc3ODDtfIp947673ljSp+A5ZMU+Mb4E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t/ajTSYI3zrzJy7z2Iu789lz9Fwug8XouMa7i1UWJVQZ3ExUme57Kf2CQ8vAKfdwuqM6xsdoy51TcBYSPdXPfro6F13Ad+bDOyNua0D79ziUr5hnURE4S76nCYKCuquaAM9Qb56s4P3l/IDMrDZewfL/ZLa9dYD8OUrwYD0LfD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxZGSQzM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732037923; c=relaxed/simple;
+	bh=8FvQe7CmDiiqtCg1COmi0pytCuaxj4XI0WYiZ+k1y8w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ld+Xtt6QWJhiFL1fG3Jrp76Bb2FqLlacxdYjyZ8LD5V9HX8t4S0RT6e3DwZb9guMuidXRNyDbIz+DDCc5PHolX2Z7U87moaCltvDShlYNSd3PSx76iGeY4koy2zfBDJ+JSA0dADaCFy8gxheaebcy5snY6KYFYW4sQyTnIhRB+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MlF6T3re; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxZGSQzM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6233FC4CED0;
-	Tue, 19 Nov 2024 17:26:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MlF6T3re"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29607C4CECF;
+	Tue, 19 Nov 2024 17:38:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732037193;
-	bh=4FczEMCiPK8wpc3ODDtfIp947673ljSp+A5ZMU+Mb4E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AxZGSQzMVCI6uEHu93dplVVkrsdTohR0WxM4WtEDq7AF2Mff4O8vkVSW0/WThUo5g
-	 y/ili1yUIiHysFTrFyFamiPgymnhVZCRyEdC00sU53EHw5FSGnt2DMjxaaVsarlycJ
-	 6eJTKGLrg6TWLP+XdAWZAD7jNvQQZ0wcG96LJl54NZ6N+auBP5RpPRHpu0LXdDDcJQ
-	 xJYo9rw6OOBgjIP7Ms2LuU+hIdPF3N+HbSyZKBt9vqKU0Gp1k13YvSWZpUgQ2HKFLR
-	 y2fwh0uRchZIEC3XY+bxEYRRlBCyV+pOH5mi351oqNrpbK0ZZueekGj0kKnYm+3W7F
-	 oZ+PYSOqM0DpQ==
+	s=k20201202; t=1732037923;
+	bh=8FvQe7CmDiiqtCg1COmi0pytCuaxj4XI0WYiZ+k1y8w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MlF6T3re1MNzu3fiZVN7RnFS3JFfCG1wcknEQhoPhmW/RBMu2WLFxbSRdVIHsoQ3F
+	 WW5JNHxs4Z2lXUogrm4q5vICLusABYIgMJnX4tsv4kPge4QfAdFE7/9zWWNYg4Z4lm
+	 GiJ18o9rQ2iYPmGpvjqvGtvTAd4iffBHmukfhrA5kStpThiZR0Ab7p/VVMfMzjth5H
+	 IxD2ocbOMAqeQm+IrQoVzgkPv/pZ7ANl8uOVsYtUbam1V3NTXdn6MLdFjWoFJSbiOU
+	 BxR01NPKlNmwiFItoUjOEdybxHxOD+V2I5JawxIzW85EtuU3nvHoyg2+er+Vc5m7ab
+	 Jy3uGs0Df//Jg==
+Date: Tue, 19 Nov 2024 09:38:40 -0800
 From: Kees Cook <kees@kernel.org>
-To: Jan Hendrik Farr <kernel@jfarr.cc>
-Cc: Kees Cook <kees@kernel.org>,
-	nathan@kernel.org,
-	ojeda@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	thorsten.blum@toblux.com,
-	ardb@kernel.org,
-	oliver.sang@intel.com,
-	gustavoars@kernel.org,
-	kent.overstreet@linux.dev,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
-	akpm@linux-foundation.org,
-	tavianator@tavianator.com,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] Compiler Attributes: disable __counted_by for clang < 19.1.3
-Date: Tue, 19 Nov 2024 09:26:27 -0800
-Message-Id: <173203718634.3118906.4631874727014346327.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241029140036.577804-2-kernel@jfarr.cc>
-References: <20241029140036.577804-1-kernel@jfarr.cc> <20241029140036.577804-2-kernel@jfarr.cc>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	kunit-dev@googlegroups.com,
+	open list <linux-kernel@vger.kernel.org>,
+	David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <rmoar@google.com>
+Subject: Re: DEFINE_FLEX_test: EXPECTATION FAILED at
+ lib/overflow_kunit.c:1200:
+Message-ID: <202411190932.DB9B746B8@keescook>
+References: <CA+G9fYs0mh8ex1wWYTW_o+BstwCAZ6rgQJZbGRkSH4WoQNTJdw@mail.gmail.com>
+ <20241119150516.GB2196859@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241119150516.GB2196859@thelio-3990X>
 
-On Tue, 29 Oct 2024 15:00:36 +0100, Jan Hendrik Farr wrote:
-> This patch disables __counted_by for clang versions < 19.1.3 because
-> of the two issues listed below. It does this by introducing
-> CONFIG_CC_HAS_COUNTED_BY.
+On Tue, Nov 19, 2024 at 08:05:16AM -0700, Nathan Chancellor wrote:
+> Hi Naresh,
 > 
-> 1. clang < 19.1.2 has a bug that can lead to __bdos returning 0:
-> https://github.com/llvm/llvm-project/pull/110497
+> + Kees (it does not look like you own lib/overflow_kunit.c, should that
+> be updated?)
+
+Yeah, though I thought the selftest tree was moving a bunch of these
+into a subdirectory? Maybe that didn't happen for v6.12?
+
+> On Tue, Nov 19, 2024 at 04:17:41PM +0530, Naresh Kamboju wrote:
+> > The overflow_DEFINE_FLEX_test KUnit test case. This test consistently
+> > passes when built with GCC-13 but fails when using Clang-19 or
+> > Clang-nightly.
+> > 
+> > Test Case: overflow_DEFINE_FLEX_test
+> > Compilers: Passing: GCC-13
+> >            Failing: Clang-19, Clang-nightly
+> > Observed Behavior: The test failure is reproducible with Clang builds,
+> >                    while GCC builds produce consistent success.
+> > 
+> > This inconsistency suggests a potential issue either in the Clang toolchain
+> > or in the test implementation that is exposed by Clang's compilation behavior.
+> > 
+> > Test log:
+> > ----------
+> > <6>[   92.471692]     # castable_to_type_test: 103 castable_to_type()
+> > tests finished
+> > <6>[   92.474933]     ok 21 castable_to_type_test
+> > <3>[   92.476715]     # DEFINE_FLEX_test: EXPECTATION FAILED at
+> > lib/overflow_kunit.c:1200
+> > <3>[   92.476715]     Expected
+> > __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size,
+> > but
+> > <3>[   92.476715]         __builtin_dynamic_object_size(two_but_zero,
+> > 0) == 12 (0xc)
+> > <3>[   92.476715]         expected_raw_size == 8 (0x8)
+> > <6>[   92.480178]     not ok 22 DEFINE_FLEX_test
+> > <6>[   92.483020] # overflow: pass:21 fail:1 skip:0 total:22
 > 
-> [...]
+> I can reproduce this with Clang 19.1.3 on 6.12, so it does not appear to
+> be a recent problem.
+> 
+>   $ printf 'CONFIG_%s=y\n' KUNIT OVERFLOW_KUNIT_TEST >kernel/configs/overflow_kunit.config
+> 
+>   $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 mrproper {def,hardening.,overflow_kunit.}config Image.gz
+> 
+>   $ boot-qemu.py ...
+>   [    0.000000] Linux version 6.12.0 (nathan@thelio-3990X) (ClangBuiltLinux clang version 19.1.3 (https://github.com/llvm/llvm-project.git ab51eccf88f5321e7c60591c5546b254b6afab99), ClangBuiltLinux LLD 19.1.3 (https://github.com/llvm/llvm-project.git ab51eccf88f5321e7c60591c5546b254b6afab99)) #1 SMP PREEMPT Tue Nov 19 07:28:39 MST 2024
+>   ...
+>   [    4.184764]     # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200
+>   [    4.184764]     Expected __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size, but
+>   [    4.184764]         __builtin_dynamic_object_size(two_but_zero, 0) == 12 (0xc)
+>   [    4.184764]         expected_raw_size == 8 (0x8)
+>   [    4.190023]     not ok 22 DEFINE_FLEX_test
+>   [    4.206181] # overflow: pass:21 fail:1 skip:0 total:22
+>   [    4.208635] # Totals: pass:21 fail:1 skip:0 total:22
+>   [    4.212218] not ok 1 overflow
+>   ...
+> 
+> I do not really understand how __builtin_dynamic_object_size() can
+> return 12 for two_but_zero with __counted_by() because DEFINE_RAW_FLEX()
+> does not initialize the counter so it should be zero... Kees? I guess
+> maybe something changed on the LLVM side, I will see if I can bisect
+> later (all the boxes are tied up with other compilations at the moment).
 
-Applied to for-next/hardening, thanks!
+Hmm. I assume this is related to recent bdos vs counted_by changes in
+Clang 19.1.2 (or .3?) But I'm going to have to track down which is
+causing it.
 
-[1/1] Compiler Attributes: disable __counted_by for clang < 19.1.3
-      https://git.kernel.org/kees/c/f06e108a3dc5
+The test is supposed to check this...
 
-Take care,
+if counted_by is supported, DEFINE_RAW_FLEX will init counted_by to 0,
+so the object is expected to be seen as sizeof(int) + sizeof(u32) (8).
+
+if counted_by is NOT supported, then bdos will return the on-stack size
+of the object (8 + sizeof(s16) * 2) == 12.
+
+If LLVM switch to "max of counted_by or bos", then returning 12 would
+make sense again.
+
+I will check behaviors and compare it to GCC 15...
 
 -- 
 Kees Cook
-
