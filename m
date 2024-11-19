@@ -1,98 +1,156 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF221CEE8B
-	for <llvm@lists.linux.dev>; Tue, 19 Nov 2024 15:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E131CD1FA;
+	Tue, 19 Nov 2024 15:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732030315; cv=none; b=TQUnPzyJz3KyIdtksrYBntGFcpB8tIrb2DckL+nODdtOSfMYSMxD8xgYwJiEk6RQr19oG+4Ua0l1Mf8PmHV2AH8NyLchec6zIgfpEbSEv+HdSWV9kuZ8ArvzSILMHvlTGkyyhSSh02ob2na5/VLybTA/DaFiMKwn9A0rmjD03f0=
+	t=1732031275; cv=none; b=do7jifA/j9BbTXL49xAr9en2YRpZKGGF63vALZ9ie4Qx0h03ZYSPZYuKFjneiBXhNBI5jMJLf249YwxhlJ+JOgjz6fDpCsg0KlUf3JPW4wvRH/q3+5YkSYrmDqnipjcsx00F/gMbd8nrb9vTJYXupjXyNoSpcIzTqRHto1de4F8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732030315; c=relaxed/simple;
-	bh=nJNfO/bwZyhb4bIR1ODhbOeQ+Qaqt3sJfucPEncnRCI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gz7IP8xQt0HrJgswxxlLseW+ADVjkbnY8asPUSZ+bzkg84SM/RSJsCY4YnfE/757FiTPzlWUP6CJjeaXKW47MzlPDGiiadTjzRe7iPIDzQ9BJY34b2Ma4O80WOQqq71JGWUh0MG9A7o23aD0g7qOS1YEOhInr1T7IDgwXJLtlL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AFiO5U7M; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1732031275; c=relaxed/simple;
+	bh=5MF/eHFxhz4lLiYgNMoLEJmeQOGm6mspTqQslf4kDSA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=fe7+p7puCF+9QHwLIjsMx0oPoiN5NEXA5UgWBES5h+Hn/gd7F8ZhVLOg/2+WfuRwOsnCoN7t/4KGNiiuz1XRx3EaNWA+WfMGesFN4zUwUSON11yRzDdySOOrolG1z79xdr0nOSA46GBip6Q8mcTifOigQ5+oezQN+eRgC7oXAnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=TZbPbM8h; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AFiO5U7M"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4315c1c7392so31359425e9.1
-        for <llvm@lists.linux.dev>; Tue, 19 Nov 2024 07:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732030312; x=1732635112; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nJNfO/bwZyhb4bIR1ODhbOeQ+Qaqt3sJfucPEncnRCI=;
-        b=AFiO5U7MTKyY8I11atAvEVWWeot6bh2+kkj6pJ7EGJfzubdDOcoNx+K7unlWic3Aq/
-         ANx0pVFL9Ip8/uEWj+Ry32XZCBMyzhy5hwvTUbj4CIOu9opkp1420M1mic2YhkVMT91l
-         6YnIIGjQ33K2YmACa1v5hnympfDf2eh9XJJvemXGcw/2hn/vR4peisyHKp1kjclKTeUA
-         GV3KLyftbRIFqSxzOr8B19Ygwmu5RCdT9HmRbeOv7P7axOK5/tfzaVoZPdK1oVbDA1Yi
-         ao5U1nPl1rfzwFxyl/fWl5NyUZpZZ9KhK9EhQrCmfLGNMO9tZMGuwJE7zrMiFGUjpMsv
-         unQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732030312; x=1732635112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nJNfO/bwZyhb4bIR1ODhbOeQ+Qaqt3sJfucPEncnRCI=;
-        b=syITsEHjFgt42Dt3CyvFxOF36N1oJCwfVDCqwhYu7re7fv8OrcmO9WEyPW/UVPKFvF
-         r0dEwXbWKzrwqkX3b5BuK2jBd7xQq9gjhRjFzD624LODgF4FSd/8GWIVYsFjm0iVXeEt
-         UmfxqRCn6KKbwxb/Ud7zZ2OoVC5yBsTyYXtF74oYkhmC8y1pXCmZIlBw2m2yCwOXQcTH
-         spKYo8vTPhh0RDLgQRL9wMgeN0zQYGTbiyWpUjVztbgjGGWKS6EfdqneRS3oMGT8NKYW
-         /0TiO0+g9jcQWbABsJAmGgOyDc2+RioAFZILD0ti25uLbJiAqMHKwqI22TLN0gInkFct
-         s2TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWoZEN+QwbOARO5260BwyapNxPmhZ2DDvQgdpeT5Xl6QbAeqTB/BjPQDNIwtrJE05ohlA5e@lists.linux.dev
-X-Gm-Message-State: AOJu0YxCKkt7m0Xrh/TwAo2CaG47tcKQPaoIXhyIIv2koVp1aBFzJzKG
-	srCN02Cj4lYIKKl0xX5LI9yq0Epa4DqY5CFHGh4slNAmAlr5FuH7lrHGtNsvVv/W/B16lsSoJNB
-	o6GE5k5HSpnXLPtZAa9puS/0D/8CJ6xBwqXmq
-X-Google-Smtp-Source: AGHT+IHyc1gfR30/9ccinwyjnWdNj3QQZleX0xPYSYr/TPzZ45QLzWIk4oq4JbY0vFb8hDr91FcbI9kQKzugEZDc7SI=
-X-Received: by 2002:a05:600c:1d0b:b0:431:5f3b:6ae4 with SMTP id
- 5b1f17b1804b1-432df74ea76mr165756915e9.17.1732030312126; Tue, 19 Nov 2024
- 07:31:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TZbPbM8h"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJ7tGMx004845;
+	Tue, 19 Nov 2024 15:47:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	X087BfXQg6BD2sjwe/yB8ONSWahVOcFU4h791bEZ9Vk=; b=TZbPbM8hEKGGsMq+
+	vFjKsZP4Bl78ijmIuXj9kmJimJIjYXCZji2UMt0dTmwpa8tchlDy8c++rHbsp6rg
+	KRaDzBGWw/I4JiJKMVaJm31U+4lyIJKM3wJk1FDur2vZIGmTCE1fUUPVn5zI+oie
+	XfD//vhss4Y0XDy6iHcfuBAjhWWBGDCBh2dQqxNMzpN+k0dRubp0LPH2+9k6KbjT
+	sUAhTzrJBjNmtkx/esoNcShR3oLXYHYacBkrR6ULX021DOqDfzCufNaoExGU8lAc
+	8f8aU6PdFTWlCXzoaBcosg960FYKkYHNec34kGbAIXh4cxQEsDeNfyepvCbA60Hg
+	SkMSgA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y7ty0f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 15:47:46 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AJFljoW020030
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 15:47:45 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 19 Nov
+ 2024 07:47:44 -0800
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Tue, 19 Nov 2024 07:47:38 -0800
+Subject: [PATCH 1/3] wifi: ath11k: mark some QMI driver event helpers as
+ noinline
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202411181440.qEdcuyh6-lkp@intel.com> <20241118202727.73646-1-aliceryhl@google.com>
- <20241118182818.7717993c@gandalf.local.home> <CAH5fLgjBpz7bPvanupPSsJx3fjLAa7g7nMjLgSxjEde_KDGV2w@mail.gmail.com>
- <20241119101233.19005043@gandalf.local.home>
-In-Reply-To: <20241119101233.19005043@gandalf.local.home>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Tue, 19 Nov 2024 16:31:40 +0100
-Message-ID: <CAH5fLgiyWDiDFAJO-LDj_ZdRjSnqh-j7vw7URLUm8ZHiFKfGXw@mail.gmail.com>
-Subject: Re: [PATCH RESEND] jump_label: rust: pass a mut ptr to `static_key_count`
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: lkp@intel.com, boqun.feng@gmail.com, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, ojeda@kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20241119-ath11k-noinline-v1-1-4ec0a8aa30b2@quicinc.com>
+References: <20241119-ath11k-noinline-v1-0-4ec0a8aa30b2@quicinc.com>
+In-Reply-To: <20241119-ath11k-noinline-v1-0-4ec0a8aa30b2@quicinc.com>
+To: Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>,
+        "Nathan
+ Chancellor" <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Arnd Bergmann" <arnd@kernel.org>
+CC: <linux-wireless@vger.kernel.org>, <ath11k@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        Jeff Johnson
+	<quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.14.0
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ANTenyc0ixLNJC7vqakfpwpD54qyl3Hy
+X-Proofpoint-ORIG-GUID: ANTenyc0ixLNJC7vqakfpwpD54qyl3Hy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=999 adultscore=0 mlxscore=0 phishscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411190117
 
-On Tue, Nov 19, 2024 at 4:12=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Tue, 19 Nov 2024 09:36:38 +0100
-> Alice Ryhl <aliceryhl@google.com> wrote:
->
-> > I've only really used the sample in this series as a build test. The
-> > bulk of my testing has occurred by using this tracepoint support in
-> > Rust Binder where I have 30 different tracepoints and I've been able
-> > to verify that I can enable them and so on there.
->
-> Could you modify the sample code to have a tracepoint that I could enable=
-.
-> I don't use the Rust Binder code so I can't test it. I use the trace_even=
-t
-> sample code for selftests, and it would also be a good idea to add the ru=
-st
-> trace event sample to the self tests as well.
->
-> Would you be able to create some simple code to do that? If you add
-> something in the rust sample code, I'll add it to the ftrace selftests.
+When compiling the ath11k driver using clang with KASAN enabled, the
+following warning is observed:
 
-Sure, I'll submit a sample which does that for the 6.14 cycle.
+drivers/net/wireless/ath/ath11k/qmi.c:3199:13: warning: stack frame size (1560) exceeds limit (1024) in 'ath11k_qmi_driver_event_work' [-Wframe-larger-than]
 
-Alice
+This is similar to the issue found in ath12k/qmi.c that was discussed
+in [1] and fixed with [2]. The issue is that clang inlining can
+explode stack usage.
+
+Just as in ath12k, ath11k_qmi_driver_event_work() itself is a pretty
+lightweight function, but it dispatches to several other functions
+which do the real work:
+
+ath11k_qmi_driver_event_work()
+	ath11k_qmi_event_server_arrive()
+		ath11k_qmi_fw_ind_register_send()
+		ath11k_qmi_host_cap_send() *
+		ath11k_qmi_event_load_bdf()
+	ath11k_qmi_event_mem_request()
+		ath11k_qmi_respond_fw_mem_request()
+	ath11k_qmi_event_load_bdf()
+	ath11k_qmi_wlanfw_m3_info_send() *
+		ath11k_qmi_m3_load()
+	ath11k_qmi_process_coldboot_calibration()
+
+Of these, the two marked with * have non-trivial stack usage. Mark
+those functions as 'noinline_for_stack' to prevent them from being
+inlined in ath12k_qmi_driver_event_work(), thereby eliminating the
+excessive stack usage.
+
+Note that this approach is a bit more "surgical" than the ath12k
+approach as only the two functions with the largest stack usage are
+modified.
+
+Link: https://msgid.link/bc214795-1c51-4cb7-922f-67d6ef98bff2@quicinc.com # [1]
+Link: https://patch.msgid.link/20241028-ath12k_qmi_driver_event_work-v1-1-0d532eb593fa@quicinc.com # [2]
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/net/wireless/ath/ath11k/qmi.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 7a22483b35cd..5759fc521316 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -1704,7 +1704,9 @@ static const struct qmi_elem_info qmi_wlfw_fw_init_done_ind_msg_v01_ei[] = {
+ 	},
+ };
+ 
+-static int ath11k_qmi_host_cap_send(struct ath11k_base *ab)
++/* clang stack usage explodes if this is inlined */
++static noinline_for_stack
++int ath11k_qmi_host_cap_send(struct ath11k_base *ab)
+ {
+ 	struct qmi_wlanfw_host_cap_req_msg_v01 req;
+ 	struct qmi_wlanfw_host_cap_resp_msg_v01 resp;
+@@ -2570,7 +2572,9 @@ static void ath11k_qmi_m3_free(struct ath11k_base *ab)
+ 	m3_mem->size = 0;
+ }
+ 
+-static int ath11k_qmi_wlanfw_m3_info_send(struct ath11k_base *ab)
++/* clang stack usage explodes if this is inlined */
++static noinline_for_stack
++int ath11k_qmi_wlanfw_m3_info_send(struct ath11k_base *ab)
+ {
+ 	struct m3_mem_region *m3_mem = &ab->qmi.m3_mem;
+ 	struct qmi_wlanfw_m3_info_req_msg_v01 req;
+
+-- 
+2.42.0
+
