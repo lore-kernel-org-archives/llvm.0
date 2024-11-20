@@ -1,300 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2B6EC5;
-	Wed, 20 Nov 2024 02:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68B5156968
+	for <llvm@lists.linux.dev>; Wed, 20 Nov 2024 06:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732068278; cv=none; b=cF2ekIylv+W9m1BRCIiro0OXAQHEgnpetbPhQSCJ6Y6E51luMkKXNOwg8nFAuZGtbvYREiLxeF2uqHUIuwxJGF67ZvbfpwntG6H3MwymnbWUEPtAzZ+WyUG9PpHju85esAvs0to/lROUlFfphLNHcT4MR4FmGCmK5v+3BmrBpnc=
+	t=1732084145; cv=none; b=gxNocXI21pfcHECygZeUr3D1yXxXj807n5A1T1uirUFZ9VHs8ny5CdJ0BCxHgd8xxa8jjVuGuDyRIPsP3V8pz9a0Z/e1NAxXDqXOVtWZcdxqMTB/n73UPKuvYYY06CFVWKkR3T9QeRK7nB05bo8BTJ3e3jus/ISHh5MqIDfQY/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732068278; c=relaxed/simple;
-	bh=ulDBRRDEg5PDbrwES0+g/0BRxklJ36sQNAr83Lsl0Ms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GsM/xM4pkP/EmwMy1GKxYpE9cUfde5AHeWpM0bfkUZI98Exs1GE96I/jr45o6ChVLoF6DoAC/7M5OCLEzb3ZsUy23S4AIAu+TAK3d5zT3NBtXmwOCQAqY14HbhZ0CA5iMU5D96ENQsYAkV0j8Dyn2ZyL63oUyf0vi3kJkJUPhf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O9pRL4hm; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732084145; c=relaxed/simple;
+	bh=VTxbb/FA+LrX7dEAvkvXGSupBOxfDQtTsbIt0IrzIYU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WLJNa2+DbpfJoRiPyLThXO4tRQefBRt5QQBfxOIWGG1IHSWtg3hgcqag0DVnIVFc+9i3uBfgiJdzNUGl4yQnKmEPqljUp8Gjw65go6limWX+qQRRTAP4EvRyHDnu/rFxwvHvMNeQYqW4IVEPmY7Xf1iGq2Gt716nuN7NzbYSwdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Q1fkJT3m; arc=none smtp.client-ip=209.85.222.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O9pRL4hm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732068275; x=1763604275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ulDBRRDEg5PDbrwES0+g/0BRxklJ36sQNAr83Lsl0Ms=;
-  b=O9pRL4hm00ooX4+j2/sdG1T6TgfumEHpwwkvCMiOQ77lsS3cCPlR6TyE
-   7wiurTzicHnV7r0Ew5p++dve3FS/u97WS0XgzO/VhIqJvQ4JlBPyBkXEM
-   V2vHnnS8fvydbcV1qg/WSMF+gOsnSRIg3AxDJ29UT8rnpSHqh5HpY7Stg
-   JLmH0O1dYZ0VBXOnYSs1Cg0qg3yXge06a+1Zv6swj6gDREdubcAVm+X3M
-   n4BNdwcIclgcZKoqIQ+jgUrbza/lU3h0yFqM3/cAxsQHT3a9l/nSa2GF1
-   zucxez387u/G9jYtpZ1qMRT8i5NuCp9wr57azd1mbP9qHsrEazpjTw8q0
-   g==;
-X-CSE-ConnectionGUID: DdJW1FbQR7SBIy66Qlksiw==
-X-CSE-MsgGUID: 0uF8EVIAQiuk3pMQxiFCeQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="57510043"
-X-IronPort-AV: E=Sophos;i="6.12,168,1728975600"; 
-   d="scan'208";a="57510043"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2024 18:04:34 -0800
-X-CSE-ConnectionGUID: en4MPyl6SlK2QuUAVDOuSA==
-X-CSE-MsgGUID: 57ZcyO/DT3mfogSEoVlDMw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,168,1728975600"; 
-   d="scan'208";a="120710695"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 19 Nov 2024 18:04:33 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tDa51-0000Rd-0H;
-	Wed, 20 Nov 2024 02:04:31 +0000
-Date: Wed, 20 Nov 2024 10:03:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alessandro Carminati <acarmina@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC] mm/kmemleak: Fix sleeping function called from invalid
- context at print message
-Message-ID: <202411200936.B78Lbwlm-lkp@intel.com>
-References: <20241115145410.114376-1-acarmina@redhat.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Q1fkJT3m"
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7b14554468fso92928385a.1
+        for <llvm@lists.linux.dev>; Tue, 19 Nov 2024 22:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1732084142; x=1732688942; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VTxbb/FA+LrX7dEAvkvXGSupBOxfDQtTsbIt0IrzIYU=;
+        b=Q1fkJT3mwhYfzjPjWqN9eGsO9TTFsVnFCIC1qTfKXbIl6qig0mrAYRihBxIBMCx6AU
+         dt+p3JKfVlO7f9yY8/XjNqVJl3/yooB2e0TP3Uti/enrO/juedgNR78yQAzCK7ZskrqI
+         t8jZCtuIu7/4yQfKWW2L91pPmQo9MNG8xXmQbKKMWION8z6Nmvoucei5kfloopRULgIa
+         qSDbTuZm9TcIQWwv0w+Y/8Nhp/PZfPgHL4vxW/fXbZgxeFadJU07WnnzYkK3BKvGwb6D
+         pFxqGdNhfGGItcVjHllriSAnq7JQFXwk1u7GTYShHPI8gkiNdj9i296vpt3Cg/Zv8CLc
+         r7Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732084142; x=1732688942;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VTxbb/FA+LrX7dEAvkvXGSupBOxfDQtTsbIt0IrzIYU=;
+        b=hpeisQWQeSKjkNdp5mngwhfnJDdy3QzkniiSxLTZpIgmZikKmbToOfts8i/eo7jnAa
+         s7VLu8oQY0KpjobE/QAjoQvuVsS6JSY+Dw+S2SdvaBNkYAytCgSRBo0i1sd5JKdnnjPu
+         NRNyErkvvD5HDvlmKygUIykgaTRT0GfvCAhnREAz7vda394fK39LeSlOaeMbbQg1uVDR
+         FJWgAXf8MrOEqTQ734S0KoObYv9OXbEEViITcAo4ahb5nr4U+c4a6tfuDOKZbEa86Fqk
+         a3/hPEb6kXsSlOjNIOm9oU5hoglnZCXfkGujljLojmHm/VZD9GFUWckLtgC4fJF+9MqO
+         8O5A==
+X-Forwarded-Encrypted: i=1; AJvYcCXGT9CAASeCZPsnNalJEz7lR91TYg41Tnr32hSQ6fDA6N2LmesUMHPh0bAs6PbnFY7lf2xi@lists.linux.dev
+X-Gm-Message-State: AOJu0YwiWrvh1gu4Ym1UvxjpdDYwSvwyaoVXvok+qaUL6vsNDKwiX0xc
+	sCOheFEgPPL9KnRHLPsbfPCUz/vvNu0BLtd/UVncjGI/qXTqQTjkdlS8vI50vKlCBUO2jyismAz
+	x5vhgjPcQfMKrE5WJUto65KNSiyZBjztmd4Pu
+X-Google-Smtp-Source: AGHT+IErd5QYcWgHSZB5iMU4wOHq1Bsnmm75yHVif6pXYY1OuoUhltWll1bzoLSae9bO3Uxztfjon8PWumH0hUWkB10=
+X-Received: by 2002:a05:6214:1d03:b0:6d4:1199:50 with SMTP id
+ 6a1803df08f44-6d43779cd55mr24938116d6.12.1732084142528; Tue, 19 Nov 2024
+ 22:29:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241115145410.114376-1-acarmina@redhat.com>
+References: <CA+G9fYs0mh8ex1wWYTW_o+BstwCAZ6rgQJZbGRkSH4WoQNTJdw@mail.gmail.com>
+ <20241119150516.GB2196859@thelio-3990X> <202411190932.DB9B746B8@keescook>
+In-Reply-To: <202411190932.DB9B746B8@keescook>
+From: David Gow <davidgow@google.com>
+Date: Wed, 20 Nov 2024 14:28:48 +0800
+Message-ID: <CABVgOSk5L1FL-2ZT5NCk_mnB0T=NPYh3veBTM7PDU0iDO5HN7A@mail.gmail.com>
+Subject: Re: DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200:
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, kunit-dev@googlegroups.com, 
+	open list <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Anders Roxell <anders.roxell@linaro.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000000f5d9306275244f1"
 
-Hi Alessandro,
+--0000000000000f5d9306275244f1
+Content-Type: text/plain; charset="UTF-8"
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+On Wed, 20 Nov 2024 at 01:38, Kees Cook <kees@kernel.org> wrote:
+>
+> On Tue, Nov 19, 2024 at 08:05:16AM -0700, Nathan Chancellor wrote:
+> > Hi Naresh,
+> >
+> > + Kees (it does not look like you own lib/overflow_kunit.c, should that
+> > be updated?)
+>
+> Yeah, though I thought the selftest tree was moving a bunch of these
+> into a subdirectory? Maybe that didn't happen for v6.12?
+>
 
-[auto build test WARNING on akpm-mm/mm-everything]
+This should be happening post 6.13-rc1, in order to dodge a bunch of conflicts.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alessandro-Carminati/mm-kmemleak-Fix-sleeping-function-called-from-invalid-context-at-print-message/20241117-004112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241115145410.114376-1-acarmina%40redhat.com
-patch subject: [RFC] mm/kmemleak: Fix sleeping function called from invalid context at print message
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241120/202411200936.B78Lbwlm-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241120/202411200936.B78Lbwlm-lkp@intel.com/reproduce)
+-- David
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411200936.B78Lbwlm-lkp@intel.com/
+--0000000000000f5d9306275244f1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/kmemleak.c:84:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2211:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/kmemleak.c:84:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/kmemleak.c:84:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/kmemleak.c:84:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/kmemleak.c:1879:31: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-    1879 |                                 tmp = ptr_storage_get(&s, i);
-         |                                                           ^
-   mm/kmemleak.c:1705:22: note: initialize the variable 'i' to silence this warning
-    1705 |         int __maybe_unused i;
-         |                             ^
-         |                              = 0
-   14 warnings generated.
-
-
-vim +/i +1879 mm/kmemleak.c
-
-  1758	
-  1759		/*
-  1760		 * Struct page scanning for each node.
-  1761		 */
-  1762		get_online_mems();
-  1763		for_each_populated_zone(zone) {
-  1764			unsigned long start_pfn = zone->zone_start_pfn;
-  1765			unsigned long end_pfn = zone_end_pfn(zone);
-  1766			unsigned long pfn;
-  1767	
-  1768			for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-  1769				struct page *page = pfn_to_online_page(pfn);
-  1770	
-  1771				if (!(pfn & 63))
-  1772					cond_resched();
-  1773	
-  1774				if (!page)
-  1775					continue;
-  1776	
-  1777				/* only scan pages belonging to this zone */
-  1778				if (page_zone(page) != zone)
-  1779					continue;
-  1780				/* only scan if page is in use */
-  1781				if (page_count(page) == 0)
-  1782					continue;
-  1783				scan_block(page, page + 1, NULL);
-  1784			}
-  1785		}
-  1786		put_online_mems();
-  1787	
-  1788		/*
-  1789		 * Scanning the task stacks (may introduce false negatives).
-  1790		 */
-  1791		if (kmemleak_stack_scan) {
-  1792			struct task_struct *p, *g;
-  1793	
-  1794			rcu_read_lock();
-  1795			for_each_process_thread(g, p) {
-  1796				void *stack = try_get_task_stack(p);
-  1797				if (stack) {
-  1798					scan_block(stack, stack + THREAD_SIZE, NULL);
-  1799					put_task_stack(p);
-  1800				}
-  1801			}
-  1802			rcu_read_unlock();
-  1803		}
-  1804	
-  1805		/*
-  1806		 * Scan the objects already referenced from the sections scanned
-  1807		 * above.
-  1808		 */
-  1809		scan_gray_list();
-  1810	
-  1811		/*
-  1812		 * Check for new or unreferenced objects modified since the previous
-  1813		 * scan and color them gray until the next scan.
-  1814		 */
-  1815		rcu_read_lock();
-  1816		list_for_each_entry_rcu(object, &object_list, object_list) {
-  1817			if (need_resched())
-  1818				kmemleak_cond_resched(object);
-  1819	
-  1820			/*
-  1821			 * This is racy but we can save the overhead of lock/unlock
-  1822			 * calls. The missed objects, if any, should be caught in
-  1823			 * the next scan.
-  1824			 */
-  1825			if (!color_white(object))
-  1826				continue;
-  1827			raw_spin_lock_irq(&object->lock);
-  1828			if (color_white(object) && (object->flags & OBJECT_ALLOCATED)
-  1829			    && update_checksum(object) && get_object(object)) {
-  1830				/* color it gray temporarily */
-  1831				object->count = object->min_count;
-  1832				list_add_tail(&object->gray_list, &gray_list);
-  1833			}
-  1834			raw_spin_unlock_irq(&object->lock);
-  1835		}
-  1836		rcu_read_unlock();
-  1837	
-  1838		/*
-  1839		 * Re-scan the gray list for modified unreferenced objects.
-  1840		 */
-  1841		scan_gray_list();
-  1842	
-  1843		/*
-  1844		 * If scanning was stopped do not report any new unreferenced objects.
-  1845		 */
-  1846		if (scan_should_stop())
-  1847			return;
-  1848	
-  1849		/*
-  1850		 * Scanning result reporting.
-  1851		 */
-  1852		rcu_read_lock();
-  1853		list_for_each_entry_rcu(object, &object_list, object_list) {
-  1854			if (need_resched())
-  1855				kmemleak_cond_resched(object);
-  1856	
-  1857			/*
-  1858			 * This is racy but we can save the overhead of lock/unlock
-  1859			 * calls. The missed objects, if any, should be caught in
-  1860			 * the next scan.
-  1861			 */
-  1862			if (!color_white(object))
-  1863				continue;
-  1864			raw_spin_lock_irq(&object->lock);
-  1865			if (unreferenced_object(object) &&
-  1866			    !(object->flags & OBJECT_REPORTED)) {
-  1867				object->flags |= OBJECT_REPORTED;
-  1868	
-  1869				if (kmemleak_verbose) {
-  1870					print_unreferenced(NULL, object, &s);
-  1871					do_print = true;
-  1872				}
-  1873	
-  1874				new_leaks++;
-  1875			}
-  1876			raw_spin_unlock_irq(&object->lock);
-  1877			if (kmemleak_verbose && do_print) {
-  1878				for (inx = 0; inx < s.nr_entries; inx++) {
-> 1879					tmp = ptr_storage_get(&s, i);
-  1880					warn_or_seq_printf(NULL, "    [<%pK>] %pS\n", tmp, tmp);
-  1881				}
-  1882			}
-  1883		}
-  1884		rcu_read_unlock();
-  1885	
-  1886		if (new_leaks) {
-  1887			kmemleak_found_leaks = true;
-  1888	
-  1889			pr_info("%d new suspected memory leaks (see /sys/kernel/debug/kmemleak)\n",
-  1890				new_leaks);
-  1891		}
-  1892	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
+cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
+nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
+hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
+XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
+h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
+ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
+hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
+BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
+0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
+hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgTzxQ2BQp818xqvWMtoQ4fixPM3LC
+jCoUpVOgZTgsavUwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTIwMDYyOTAyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAMvimjmPfM6BShhOvMVCJlF0vZEn5sKxUlfpp9jsj/wstBzO
+MdoNr2bWATAni+NeYF4P6rCzPSi5eJeX9cgMj3o5IiNxKh8aofH1RWe/XdmY+apmZoFv+o8dxHTo
+si6njYUiIy+5clyL+eg0WCwjnu9I6OaUsBgOKlXY+TtvCPthxVhHI7PiCD08j98kxy4YpkI9vQFj
+tlEQDU1tGiPIvEmO4HxnLBevKJMnwtZyQ8eEiX9PPuSSgx1hS1HIlOkQb0JbY3GGH9SgtvZm4g0/
+nE6O8FO/ourD5hvtA/44bCapbPzHI6NucDreVR4A9ykpas+3lM4tOfpuq2mgt9QDDCo=
+--0000000000000f5d9306275244f1--
