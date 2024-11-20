@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C5F1AC89A;
-	Wed, 20 Nov 2024 14:07:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B5F1BE235;
+	Wed, 20 Nov 2024 14:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732111629; cv=none; b=Fp/OeNQmYyYfMH4xJ2Tt+13f1NEmorK0A8JpPHb/POL8Vn6U29duZP5ZEbyvY+VHg+vEVxE1M+OsLQOuVcRuWHtSYR7dVwbRbmSMBo74JdSwHdI5aW1PuzAFoYLnBwloVFP7wNdrbc2R/SDm1Xo3EEAt4+eh1zr74eawoRyRclw=
+	t=1732111665; cv=none; b=TGBCSbslHyi6P9EgQ8BlTXF8wljvSqlW2GIz5It2khfkwtP061Re0AEkDOqaldeTGnKsefmbfjE2pp7sB8a4n9kyqjBfJ7wh2ayMbgwDImVHufjFDnWbPruk6ci78qpohMUxmlmmtq7x+NhkUFSyK9cRWef5UvLammBu/u/f5d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732111629; c=relaxed/simple;
-	bh=DKek5Oayrz6LgCVAqEw5i/CoZsCQVMoEfVXkm5eofCg=;
+	s=arc-20240116; t=1732111665; c=relaxed/simple;
+	bh=1h+r44bKItFpy5BY/SuLv+HOEtbQLxNAGpyYMYt2Hyc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LrF2mJJ5yKEuT7n9vP/T0YfFJjktWf1VQrx2ArfnDu+hz9rIbW6n8zKkqp+2BpPJVU/kgKjOEpbavtcgxqzKLk2dF/NvHuaIu8ZcNYY4Hhfi9r5R0uBbkisOQqUEAqyP68JyrI/VpPzCssWS3TL3ueQsX5QpGeEa2eCNYLBVs88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqygtr3l; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=fx9tqoSbNB+OtPIATRlK2QZVVLN7ha8kFSAeQ7VgwMenSSA0qOdO6cGHJy4lEujUe4cOGwz+l719dXxNsiU+7SPaBWuJzGHxbruio91EzL9VSsXSREVnV2z4YpRRsFNakTyfNZbRzEHB3kCS630mzvIGRrURUVqm4oir+T7HZp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8n1+8FI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqygtr3l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F412C4CECD;
-	Wed, 20 Nov 2024 14:07:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8n1+8FI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB18CC4CECD;
+	Wed, 20 Nov 2024 14:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732111629;
-	bh=DKek5Oayrz6LgCVAqEw5i/CoZsCQVMoEfVXkm5eofCg=;
+	s=k20201202; t=1732111665;
+	bh=1h+r44bKItFpy5BY/SuLv+HOEtbQLxNAGpyYMYt2Hyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mqygtr3l3eWWP8FDKFms99Z0wp+XfGQ5Ptxjh9k+ID/EYoE5I8ooKjj7FJY9H2yPo
-	 /2pf7jrPFNVubG0S3F40Xs4TeOEcC33Mt4lGgDThx+vUgyBWRu3bD/wJjwz5kA0Py5
-	 Xy6Qs83cPHAq35sJ1T3iS7NUXrezMMlgqh8OJY8l5mMS/OBy3bpPvb5ZtiMtEWGFs9
-	 dnonGJL1DdDgPAbblbLv6v0IaJtEoS9EV6/7CPdd4AYUyJ0bVnklOScSQc6WD3AsZ1
-	 jxRobYgyisDx4MVyyhjZVuT/jz8mp7IjNH15OK+xQcVd7CajoGCuWMoA+dH/ekHZtZ
-	 +VX4KNxK0Nuig==
+	b=C8n1+8FIuMhs7cV0wU8DT3wZxqIbIHvqlfJmJokC65INu6hxHVRitEHntDQb92YMu
+	 uUu/wtJfX2S3X0mgOmMGfn9l8uP/hyKyjsoCtrZeE6EIoZAzkk7t4usmkecC4YI+fZ
+	 tKCAKE9vrBtvWr/HPfVi0mqCJckWH6Ue5iTKJD9fP0S788sdiQq7myoPzMV9l+Gxlm
+	 SRR0DkKeTu2K4Ybhjq5iRsaUYeZvbGPP7XA8vpD6a+1HrfoUNDxd7u9LtQanQj1mtg
+	 1TwBkIpMrCu8xvPxbqQH2goGpBxwuyFRgbhWTjVMF9DuYr+stgblBsSeb2PCMzCci3
+	 iDL/nr53Ep5VQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -35,16 +35,16 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	Russell King <rmk+kernel@armlinux.org.uk>,
 	Sasha Levin <sashal@kernel.org>,
 	linux@armlinux.org.uk,
-	arnd@arndb.de,
 	samitolvanen@google.com,
+	arnd@arndb.de,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 5/6] ARM: 9434/1: cfi: Fix compilation corner case
-Date: Wed, 20 Nov 2024 09:06:35 -0500
-Message-ID: <20241120140647.1768984-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 5/6] ARM: 9434/1: cfi: Fix compilation corner case
+Date: Wed, 20 Nov 2024 09:07:11 -0500
+Message-ID: <20241120140722.1769147-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241120140647.1768984-1-sashal@kernel.org>
-References: <20241120140647.1768984-1-sashal@kernel.org>
+In-Reply-To: <20241120140722.1769147-1-sashal@kernel.org>
+References: <20241120140722.1769147-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.62
+X-stable-base: Linux 6.1.118
 Content-Transfer-Encoding: 8bit
 
 From: Linus Walleij <linus.walleij@linaro.org>
@@ -97,10 +97,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
-index 193c7aeb67039..bea11f9bfe856 100644
+index 26d726a08a34b..2090c23e49311 100644
 --- a/arch/arm/mm/proc-v7.S
 +++ b/arch/arm/mm/proc-v7.S
-@@ -93,7 +93,7 @@ ENTRY(cpu_v7_dcache_clean_area)
+@@ -91,7 +91,7 @@ ENTRY(cpu_v7_dcache_clean_area)
  	ret	lr
  ENDPROC(cpu_v7_dcache_clean_area)
  
