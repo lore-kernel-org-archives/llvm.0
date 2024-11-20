@@ -1,116 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CE5149C42;
-	Wed, 20 Nov 2024 15:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD3E5A4D5;
+	Wed, 20 Nov 2024 17:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732115623; cv=none; b=b2eHAj8Mbc32qxhb4XVHZZBjFAigZZw3LTGirdVKHz5FvW+QqdIb/myU3mkDNYecnjhkYmIFXc9u3tm4bw4brOGs147PvSboUFyJSWZi1w4suYsy4QJm2DoNyWuFKYTwHcUzB4MfzMr/BXXElKYrIlOBbZqLfG/w6ikcJgy3FQ0=
+	t=1732123126; cv=none; b=rf5wafy6wF/5sJHPTkiRHGuHiiBDaVfKsm9QbihR6mobXioZieQH+TBczvk0WM3Ij1D/ps4hPClVKuxfWAMcZeFcuzQ0CsdzYOWQ5mtDxFyX9AEw+XNMKZsVeE3HzElHOIVQ1/JR5KUSj+D6N0fz9+0+TtlSB/VxgHy58M4ejYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732115623; c=relaxed/simple;
-	bh=yYsWTQBIMD66SABAUXfCYw2uFwXuceiArk0rR9d0OxQ=;
+	s=arc-20240116; t=1732123126; c=relaxed/simple;
+	bh=Z0pr7ju78IJ6A2dquBo/UIbHx1DH8qaOUr9hRKU4fnU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AhKz/quvPeZwxWjsKtvp3HZZBdASOv8cR337L4f7afRl2LSq5qMf6vJOLaEg/Fq/T1sv0wFE/pHAP4Wp3zppMM181I55Vb7X+qjkdKVW9X0dnUJ3SRWJyhgvRozt4iMF6rRs2+eO3JB5HiuZ7F698gmsG5cRaUKClzKm4dnz4hQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3aS6CeO; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=H5HU4tlpSzD7GwSt5vzxxggjnLBZZTbPi6zD3JtfpuhaVdsdXDVFXrOOUFA2tDIvsQyqE0mmzrDNVQRkT98lIaxufXtWgkXMT5FMZGGR7QqD6g9BY641sy1uQc95dRndRonASovCw8pxCtahyDDFtVnz7eVea/XnnrqwxdKPxvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mWrt0pki; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3aS6CeO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245D4C4CECD;
-	Wed, 20 Nov 2024 15:13:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mWrt0pki"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F27C4CECD;
+	Wed, 20 Nov 2024 17:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732115620;
-	bh=yYsWTQBIMD66SABAUXfCYw2uFwXuceiArk0rR9d0OxQ=;
+	s=k20201202; t=1732123125;
+	bh=Z0pr7ju78IJ6A2dquBo/UIbHx1DH8qaOUr9hRKU4fnU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g3aS6CeOXkJpy+IgbAMv19UCKWR0mwxWb4lKwmER/FXkWvVOe3dWB/5N3XWRj81XD
-	 LTFeVjm2lq/Of7hrUKd9kxfvOk1JL1QS//3XUvmU/7OMCYsRs17cIxOm9qB8u0bs+X
-	 JOVkcJ6MJnlrZJJbOo4kMspZU0UvXqxE6cnSmUuYnTcPcyhz0ChVjXvPI57/pc9Wm0
-	 CH19C2eqyPZMjZtXoWizJbDurUwIpBCO25n4Fen8Mrp+8nDRWzbQNys/ux+nuanRQw
-	 Q42AE1k8INrejX3OP2gNGAq0nWPUKA9yZSQyRrXJWgHRNsUta47UjwgaJRJZNUM6yG
-	 BOx8Nvl2eyaeQ==
-Date: Wed, 20 Nov 2024 08:13:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	kernel test robot <lkp@intel.com>,
-	Russell King <rmk+kernel@armlinux.org.uk>, linux@armlinux.org.uk,
-	arnd@arndb.de, samitolvanen@google.com,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH AUTOSEL 6.6 5/6] ARM: 9434/1: cfi: Fix compilation corner
- case
-Message-ID: <20241120151338.GA3158726@thelio-3990X>
-References: <20241120140647.1768984-1-sashal@kernel.org>
- <20241120140647.1768984-5-sashal@kernel.org>
+	b=mWrt0pki5hrDDRzOcLtbuU1Pr7CdwzOaGmFO2lWyTrAma0ZVNMR5HguVFBMCfFX4Q
+	 QWVZHZegHvpmnYPKpmG+Ev9bKXzO/hYPCHkdGH0I33VE/o7nzCpEJ8wst24ZIy5BQR
+	 Rd5uHXw730z/d7ohASqs1E3pJuDmZnks0z+39hcH1Z8frKoxGRImVT1gQDVkbgOV5J
+	 4KpwjmrESO6PQEa5ObShp1S2widCuuA3tlsCrf/gYQCoU0Z/X91Jdzdw9NEJGADUah
+	 VU3q8qzH8XWd+xN3A3r6yquvNylE9bWaBbqZ+sIXi9Fq7YAZBdeC5h6vnRgQLfywtS
+	 iO8xhP15E2BwA==
+Date: Wed, 20 Nov 2024 17:18:40 +0000
+From: Conor Dooley <conor@kernel.org>
+To: mgonellabolduc@dimonoff.com
+Cc: Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH 1/2] dt-bindings: iio: light: Add APDS9160 binding
+Message-ID: <20241120-case-guy-7456f9f850fa@spud>
+References: <20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com>
+ <20241119-apds9160-driver-v1-1-fa00675b4ea4@dimonoff.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MfqXDEob/mz4hwMu"
+Content-Disposition: inline
+In-Reply-To: <20241119-apds9160-driver-v1-1-fa00675b4ea4@dimonoff.com>
+
+
+--MfqXDEob/mz4hwMu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241120140647.1768984-5-sashal@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sasha,
-
-On Wed, Nov 20, 2024 at 09:06:35AM -0500, Sasha Levin wrote:
-> From: Linus Walleij <linus.walleij@linaro.org>
-> 
-> [ Upstream commit 4aea16b7cfb76bd3361858ceee6893ef5c9b5570 ]
-> 
-> When enabling expert mode CONFIG_EXPERT and using that power
-> user mode to disable the branch prediction hardening
-> !CONFIG_HARDEN_BRANCH_PREDICTOR, the assembly linker
-> in CLANG notices that some assembly in proc-v7.S does
-> not have corresponding C call sites, i.e. the prototypes
-> in proc-v7-bugs.c are enclosed in ifdef
-> CONFIG_HARDEN_BRANCH_PREDICTOR so this assembly:
-> 
-> SYM_TYPED_FUNC_START(cpu_v7_smc_switch_mm)
-> SYM_TYPED_FUNC_START(cpu_v7_hvc_switch_mm)
-> 
-> Results in:
-> 
-> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_smc_switch_mm
-> >>> referenced by proc-v7.S:94 (.../arch/arm/mm/proc-v7.S:94)
-> >>> arch/arm/mm/proc-v7.o:(.text+0x108) in archive vmlinux.a
-> 
-> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_hvc_switch_mm
-> >>> referenced by proc-v7.S:105 (.../arch/arm/mm/proc-v7.S:105)
-> >>> arch/arm/mm/proc-v7.o:(.text+0x124) in archive vmlinux.a
-> 
-> Fix this by adding an additional requirement that
-> CONFIG_HARDEN_BRANCH_PREDICTOR has to be enabled to compile
-> these assembly calls.
-> 
-> Closes: https://lore.kernel.org/oe-kbuild-all/202411041456.ZsoEiD7T-lkp@intel.com/
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Tue, Nov 19, 2024 at 03:36:56PM -0500, Mikael Gonella-Bolduc via B4 Rela=
+y wrote:
+> From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+>=20
+> Add device tree bindings for APDS9160 driver
+>=20
+> Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
 > ---
->  arch/arm/mm/proc-v7.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
-> index 193c7aeb67039..bea11f9bfe856 100644
-> --- a/arch/arm/mm/proc-v7.S
-> +++ b/arch/arm/mm/proc-v7.S
-> @@ -93,7 +93,7 @@ ENTRY(cpu_v7_dcache_clean_area)
->  	ret	lr
->  ENDPROC(cpu_v7_dcache_clean_area)
->  
-> -#ifdef CONFIG_ARM_PSCI
-> +#if defined(CONFIG_ARM_PSCI) && defined(CONFIG_HARDEN_BRANCH_PREDICTOR)
->  	.arch_extension sec
->  ENTRY(cpu_v7_smc_switch_mm)
+>  .../bindings/iio/light/avago,apds9160.yaml         | 50 ++++++++++++++++=
+++++++
+>  1 file changed, 50 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/iio/light/avago,apds9160.y=
+aml b/Documentation/devicetree/bindings/iio/light/avago,apds9160.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..12e196b297fe523e4d3241560=
+41ef9c6900676eb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/light/avago,apds9160.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/light/avago,apds9160.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom Combined Proximity & Ambient light sensor
+> +
+> +maintainers:
+> +  - Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
+> +
+> +description: |
+> +  Datasheet: https://docs.broadcom.com/docs/APDS-9160-003-DS
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - avago,apds9160
+> +      - broadmobi,apds9160
 
-This patch is unnecessary in branches prior to 6.10 (when ARM started
-supporting kCFI) because SYM_TYPED_FUNC_START() is not used here. I
-would just drop it for 6.6 and earlier.
+What is the difference between these two devices? There's no match data,
+makes it seem like there should be a fallback going on here.
 
->  	stmfd	sp!, {r0 - r3}
-> -- 
-> 2.43.0
-> 
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vdd-supply: true
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        apds9160@53 {
+> +          compatible =3D "broadmobi,apds9160";
+> +          reg =3D <0x53>;
+> +          interrupts =3D <29 IRQ_TYPE_EDGE_FALLING>;
+> +          interrupt-parent =3D <&pinctrl>;
+> +        };
+> +    };
+> +...
+>=20
+> --=20
+> 2.34.1
+>=20
+>=20
+
+--MfqXDEob/mz4hwMu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZz4Z8AAKCRB4tDGHoIJi
+0irIAQCFplUzuvBHohSHEWOpiepgMv3yKQgtT7Nymecs6VPtWQD+KPrWLB6VEpX6
+R7Q5I91n6XO8l2Xn5Yeoh/PBP+VhzAQ=
+=3+si
+-----END PGP SIGNATURE-----
+
+--MfqXDEob/mz4hwMu--
