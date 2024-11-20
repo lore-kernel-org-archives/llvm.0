@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B5F1BE235;
-	Wed, 20 Nov 2024 14:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6E21CF5E0;
+	Wed, 20 Nov 2024 14:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732111665; cv=none; b=TGBCSbslHyi6P9EgQ8BlTXF8wljvSqlW2GIz5It2khfkwtP061Re0AEkDOqaldeTGnKsefmbfjE2pp7sB8a4n9kyqjBfJ7wh2ayMbgwDImVHufjFDnWbPruk6ci78qpohMUxmlmmtq7x+NhkUFSyK9cRWef5UvLammBu/u/f5d0=
+	t=1732111691; cv=none; b=d89b1GL4P39iRPkMXLgtSO38/XFPcxvz1EJnSB8MMgBVrQe7p9F290IdTF2hasjkRL0z7T7JEun30hey9iCtfmbWPefzGa/k62O0IfElWVNKb+IpqoVirSvC3qy0Fe4pLS2LHyPkFojCfRlPSNPDySikMdkVBSCDWpuX+lVwpc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732111665; c=relaxed/simple;
+	s=arc-20240116; t=1732111691; c=relaxed/simple;
 	bh=1h+r44bKItFpy5BY/SuLv+HOEtbQLxNAGpyYMYt2Hyc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fx9tqoSbNB+OtPIATRlK2QZVVLN7ha8kFSAeQ7VgwMenSSA0qOdO6cGHJy4lEujUe4cOGwz+l719dXxNsiU+7SPaBWuJzGHxbruio91EzL9VSsXSREVnV2z4YpRRsFNakTyfNZbRzEHB3kCS630mzvIGRrURUVqm4oir+T7HZp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8n1+8FI; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=TONjr5nWOt9oPeO74dKtM+dFNkJq9t/aOmUfkLTQxFO8J/l9my4kr/FrRx3Xlzzulm24DW2l87jPuYkpHce0olZ1vSHOYy7f+dmnQXmaF1TmA484A8ydcW0wcKhdXrgnSJhjVeMX6kknct6vLC57k/G1rcSXrKTn4bXDpody/YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qSGXeRla; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8n1+8FI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB18CC4CECD;
-	Wed, 20 Nov 2024 14:07:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qSGXeRla"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4186C4CECD;
+	Wed, 20 Nov 2024 14:08:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732111665;
+	s=k20201202; t=1732111691;
 	bh=1h+r44bKItFpy5BY/SuLv+HOEtbQLxNAGpyYMYt2Hyc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C8n1+8FIuMhs7cV0wU8DT3wZxqIbIHvqlfJmJokC65INu6hxHVRitEHntDQb92YMu
-	 uUu/wtJfX2S3X0mgOmMGfn9l8uP/hyKyjsoCtrZeE6EIoZAzkk7t4usmkecC4YI+fZ
-	 tKCAKE9vrBtvWr/HPfVi0mqCJckWH6Ue5iTKJD9fP0S788sdiQq7myoPzMV9l+Gxlm
-	 SRR0DkKeTu2K4Ybhjq5iRsaUYeZvbGPP7XA8vpD6a+1HrfoUNDxd7u9LtQanQj1mtg
-	 1TwBkIpMrCu8xvPxbqQH2goGpBxwuyFRgbhWTjVMF9DuYr+stgblBsSeb2PCMzCci3
-	 iDL/nr53Ep5VQ==
+	b=qSGXeRlacVCYMzINqJemW9UJUiq8r+FYqwN2P8hzUmLBb5yMwjgRpdz+4irFobQT5
+	 K/wkUpDPgLNYbTiJFoq8decP4O0kD+LOXvA/NwKZD715ncvXEfwaTIDjW2zoJAerwK
+	 gnr9GE07wCOyOFNuvvZiZL4IqNKJ8Rz77oEXplA8+vZKze9cQUf436p7PIZI7EPadO
+	 lROy52LHfIzctTYkRfqSBCFCIsqyAE46HvsGnJrepMtG8bNTIx791nSN9s7xv6h+eW
+	 mH/la8syG4IbDvX+0O1/b8HS1IwzDzE5lsCS4rAPDC9hDYEuwjiUOEXiy/7Qn/W5L7
+	 GYI1mlAh/ufbQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -39,12 +39,12 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	arnd@arndb.de,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 5/6] ARM: 9434/1: cfi: Fix compilation corner case
-Date: Wed, 20 Nov 2024 09:07:11 -0500
-Message-ID: <20241120140722.1769147-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 3/4] ARM: 9434/1: cfi: Fix compilation corner case
+Date: Wed, 20 Nov 2024 09:07:46 -0500
+Message-ID: <20241120140758.1769473-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241120140722.1769147-1-sashal@kernel.org>
-References: <20241120140722.1769147-1-sashal@kernel.org>
+In-Reply-To: <20241120140758.1769473-1-sashal@kernel.org>
+References: <20241120140758.1769473-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.118
+X-stable-base: Linux 5.15.173
 Content-Transfer-Encoding: 8bit
 
 From: Linus Walleij <linus.walleij@linaro.org>
