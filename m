@@ -1,31 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35B5B1A0AF5;
-	Wed, 20 Nov 2024 14:08:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9D51C4A00;
+	Wed, 20 Nov 2024 14:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732111707; cv=none; b=cEtBiMBsgHNkHrClI6Y7PgxVrWCg/i6G7CGARQWuWh+Zq2uO5EmZdBIN+eQSjD+3XWpK/LcJHG3a9/J9kiWJdSTkzcSI+7Q45t095j7kirQNmTdMrU2d+FaKCHOfwXRoUBmwf3u2h+Ku5NczHC7Fn79HiwfXmSXi/MnSL7VsNL4=
+	t=1732111717; cv=none; b=bJxKfrBrwGHniPxB5B4+gk6IEh6pGOkGB7lvcmDa8YJJZ5roCMQCvsCeHcAp2TOP2YAo4EVe35nEv7WCnvpXiwBIK8p/vKmPnQovP7dAgH4TP+KoAHDsUn1wmSCdRJQh+5zvbDyIKX4iM6a21vyPtJPEHA8wS1aN0EABMswtTwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732111707; c=relaxed/simple;
-	bh=Qkn2TGa/epeCHDrjdIDriCHj6rl+KeWU7Q9FUblDxAA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lq06Q/LHsDR37qSVOH6OCKKQM2sI2RqHXIHK3bg+6aMeqlpOZJ8P3AZ3PlvdI4kiQDImn4GkmCa2EB8r0rBlaQ0OhwR1yS/QrmcekJf67HS+rLw/GG1j0owiKEJk4dJgTwpy1i74NdUyXj3nQVDfMM/gZYvw1ZJJbx2/TbW2W9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBx/PlgK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732111717; c=relaxed/simple;
+	bh=4jdFJWsdI9PxVp1APJgllRrhtufNYUIdFGx8Y2yorsY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BPpOmSTguBJqOT0GinIRx6YZ/Lbdsuh/IrlemUTjWGykLEwQlv0dLLvGzmHFMDKoPD1dWmMR73C34jriT+LVBY8tBwQ0tBDQREW4DWHvnpAXfPqx4behro653Sju2ySHfAqccQ4VSgweSqbQYP6rX1rwnE93m+Vzk8VCkhVUoos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=clasueZq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBx/PlgK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A82C4CECD;
-	Wed, 20 Nov 2024 14:08:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="clasueZq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEDEC4CECD;
+	Wed, 20 Nov 2024 14:08:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732111707;
-	bh=Qkn2TGa/epeCHDrjdIDriCHj6rl+KeWU7Q9FUblDxAA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kBx/PlgK4v6erVe9gXAg2ayc7aTS4AiYuecx80BpJ9XvSUXX2SZnZLY77WVf9D3mB
-	 q4VSUsYT9rvj8Wum/Bh/SDlL9idi2Y7gbzoseMVkcQ4Np+2yNRaj/4qn4yenpq7q6x
-	 mOiUjFyQEW9Pz/DC2gbgizeP8/OWu0Mzzl5kcJsxAjo7zbnu6BK0ZwubM/w3aO93Dh
-	 y1/X2vygL9wToP2jZ8J34YRgLJEz2l2NFWCo891iOKr8qOeyBm8AiD6UO/CvwZQBht
-	 vlmBYrdn04RaOgBODHRauI91/PLBfiLaASNZBbp7908N0fH9bhctpf0tf8oI7jR6Cj
-	 guA+A3jDcQT7A==
+	s=k20201202; t=1732111716;
+	bh=4jdFJWsdI9PxVp1APJgllRrhtufNYUIdFGx8Y2yorsY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=clasueZqwH9CiaOhsw4b39/1aSXEE0XSqJ8b97IVQliu+oXeLcubF8eE5z6YSwt3n
+	 pp61T7nDKIGs8smjHbwg3FsCWWk13+z2wWRhFPJXR5YW0oEm56JQeDplhauu92129Z
+	 NsDgLFIB4JxNbqPCl7a2HI8/K8Oy2Rt8eU17JcJBJmQnXUV7vaIiTpLSt3YL554fZB
+	 //+fxWTv3ldlbfFtgK/wewiEU87x4iBm2UAyPfb9y4gO3LcrOBkUdKZTe2F/CBdwCG
+	 Xx/36utxpzlJfyvwIdQNELwok70y11ilhg3A7vhzoVQxOWOFzckMX08LuAgfLCSCyG
+	 P5gnKuQ899ykg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -39,12 +38,10 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	samitolvanen@google.com,
 	linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 2/3] ARM: 9434/1: cfi: Fix compilation corner case
-Date: Wed, 20 Nov 2024 09:08:12 -0500
-Message-ID: <20241120140819.1769699-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 1/2] ARM: 9434/1: cfi: Fix compilation corner case
+Date: Wed, 20 Nov 2024 09:08:28 -0500
+Message-ID: <20241120140833.1769807-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241120140819.1769699-1-sashal@kernel.org>
-References: <20241120140819.1769699-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +50,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.230
+X-stable-base: Linux 5.4.286
 Content-Transfer-Encoding: 8bit
 
 From: Linus Walleij <linus.walleij@linaro.org>
@@ -97,7 +94,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
-index 28c9d32fa99a5..db6a720ec0fc4 100644
+index 48e0ef6f0dccf..aee85fd261f5d 100644
 --- a/arch/arm/mm/proc-v7.S
 +++ b/arch/arm/mm/proc-v7.S
 @@ -91,7 +91,7 @@ ENTRY(cpu_v7_dcache_clean_area)
