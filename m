@@ -1,124 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51E41D6DB5;
-	Thu, 21 Nov 2024 12:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53AB27447
+	for <llvm@lists.linux.dev>; Thu, 21 Nov 2024 15:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732193764; cv=none; b=NGgOVjJ7s+XrdliB8aSniyDDauxKoKeL621jiVT8FiEreptol/ShrCBe47ic+zI+8MwSnYPPhm5y+8eYs9vK0vChd7w22Z3YTBPtWZ7EEcDxFQ/vJ4EBqIqvtxcYlVpjHHhyRTbZXDxV6tMUQA8Qcozb9vK+bG57jOq8FDqa5lE=
+	t=1732202666; cv=none; b=SzGnx3PvJgKzQZL3Cm+1419HgwiRNL4LNzYUBnXWhaAWd9uK6SEysM3LMyoXWRJC0zpsWx/WmY3/s8pWZo70daOsKbxrLVgwtyGMBSFxjt+1kbJJ/zzJ80DRjIz98eruaiBUo34jMNoFGahXoVbHzRhROn/eNP6Ujm3nqEYjnzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732193764; c=relaxed/simple;
-	bh=OJ7jpXptzMvUw5SQvMFqKJ9P9BuHEp7aI5omam+VfLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T7uD5RJXXtyOhnMEWgxZN0p1pOwbAK1OcoSShGLrQO5OzLZu/NqaBXh4NYfefHJsveoF+3xORUbjsYeQTXHagUNlZsqrEUcdjb9hYNydi4ATizEGHIgLqhZOfhwCjPKr/L4eIB90SloDAOal2Y1R3s1ByE0RsordEQx1r/FDMvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Muf4CKR7; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732202666; c=relaxed/simple;
+	bh=7Zx2yBPzpQPZys9FtYhLvm+JYV+pYduZxHC4bcYUS3o=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=NfkBJhqikHQb3QuTyuczKJS/CdRTZ8AIn8HpMm2gqV0dM/zNFHXVPBUwx192E8bM119x43SVmUvOgZTz0GMdpwPENJ+RLPULIeqDKVK05HDEYJKzIReokg9qyZL5iaFDEPOyyusEsjLGJxqlE38CmoW0lp30fYdd5aQsfsusBeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=F/EpqzNP; arc=none smtp.client-ip=193.238.174.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Muf4CKR7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732193763; x=1763729763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OJ7jpXptzMvUw5SQvMFqKJ9P9BuHEp7aI5omam+VfLQ=;
-  b=Muf4CKR7ceAVLH5s00znc0aaXIKyK/JAxmFSXk8jjPkEQuTvwDW3KCin
-   trL9f5MngK/R4qFoXPqyxM+YOkod9rQf9z9e6aZPkWjrh4YN9q3iZeMh3
-   3pNDdMvLmmYSDnOkLtUgwH+bfh41coY83Gsd+q8eRmw298LjAwnnsW0+m
-   rKSeKeLKygLDkRCEyjvvyRTxyfq8ix5/JST9Bn8lR5/naUC2MsMu5H3il
-   +C80W/2emVoz1PMb2/sndW10+CBkjkZpeoPBu9Pkyiq2GQnC3+0ehChuc
-   J2CeMMI6BIqP56j7hQFGXxqK7wxulDkzt4kmOiwMOg7wThvW5e3DmSBK9
-   Q==;
-X-CSE-ConnectionGUID: k5S6F5DIS02h6bboX01HAA==
-X-CSE-MsgGUID: /XiqKEGQRMiZR2LBYU/kVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32154254"
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="32154254"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 04:56:03 -0800
-X-CSE-ConnectionGUID: yej0/1NpRA2rwMa2tT724Q==
-X-CSE-MsgGUID: GykF+9oBRGCCLEWmxWYMyg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="95046739"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 21 Nov 2024 04:55:57 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tE6iw-0002zb-3A;
-	Thu, 21 Nov 2024 12:55:54 +0000
-Date: Thu, 21 Nov 2024 20:55:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	cros-qcom-dts-watchers@chromium.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?unknown-8bit?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-	quic_vpernami@quicinc.com, quic_mrana@quicinc.com,
-	mmareddy@quicinc.com, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Subject: Re: [PATCH 2/3] PCI: dwc: Add ECAM support with iATU configuration
-Message-ID: <202411212032.CbThzjSv-lkp@intel.com>
-References: <20241117-ecam-v1-2-6059faf38d07@quicinc.com>
+	dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="F/EpqzNP"
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+	by mg.ssi.bg (Proxmox) with ESMTP id C389E80E92;
+	Thu, 21 Nov 2024 17:24:13 +0200 (EET)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+	by mg.ssi.bg (Proxmox) with ESMTPS;
+	Thu, 21 Nov 2024 17:24:13 +0200 (EET)
+Received: from ja.ssi.bg (unknown [213.16.62.126])
+	by ink.ssi.bg (Postfix) with ESMTPSA id 15AC53027E6;
+	Thu, 21 Nov 2024 17:24:09 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
+	t=1732202650; bh=7Zx2yBPzpQPZys9FtYhLvm+JYV+pYduZxHC4bcYUS3o=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=F/EpqzNPvknBT/zP/P8tPlKwkcFc4obCKi/QHVU+SI1KO7MEFJJyL605Y+UMCxVSU
+	 pKUA3vmyX4jiJPq5gMITmhAI3alvrroyZ/2IBJ5W+nfbMhwg2mgWSXJ+knywvLyLBJ
+	 wJbAUz55kZ2tALxP685UyhBueV5mhMHWPImme+YI=
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 4ALFNuTQ040696;
+	Thu, 21 Nov 2024 17:23:58 +0200
+Date: Thu, 21 Nov 2024 17:23:56 +0200 (EET)
+From: Julian Anastasov <ja@ssi.bg>
+To: Jinghao Jia <jinghao7@illinois.edu>
+cc: Simon Horman <horms@verge.net.au>, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        kernel test robot <lkp@intel.com>, Ruowen Qin <ruqin@redhat.com>
+Subject: Re: [PATCH] ipvs: fix UB due to uninitialized stack access in
+ ip_vs_protocol_init()
+In-Reply-To: <a271e479-2a78-44b5-868d-3edc1f6c102a@illinois.edu>
+Message-ID: <10eddab8-ebc3-083d-f912-d4aebcf9f9e6@ssi.bg>
+References: <20241111065105.82431-1-jinghao7@illinois.edu> <f97ef69b-a15e-03ab-5e24-c1dfd3c4542b@ssi.bg> <a271e479-2a78-44b5-868d-3edc1f6c102a@illinois.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241117-ecam-v1-2-6059faf38d07@quicinc.com>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Krishna,
 
-kernel test robot noticed the following build errors:
+	Hello,
 
-[auto build test ERROR on 2f87d0916ce0d2925cedbc9e8f5d6291ba2ac7b2]
+On Tue, 19 Nov 2024, Jinghao Jia wrote:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/arm64-dts-qcom-sc7280-Increase-config-size-to-256MB-for-ECAM-feature/20241121-095614
-base:   2f87d0916ce0d2925cedbc9e8f5d6291ba2ac7b2
-patch link:    https://lore.kernel.org/r/20241117-ecam-v1-2-6059faf38d07%40quicinc.com
-patch subject: [PATCH 2/3] PCI: dwc: Add ECAM support with iATU configuration
-config: i386-buildonly-randconfig-005-20241121 (https://download.01.org/0day-ci/archive/20241121/202411212032.CbThzjSv-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241121/202411212032.CbThzjSv-lkp@intel.com/reproduce)
+> On 11/18/24 6:41 AM, Julian Anastasov wrote:
+> > 
+> > On Mon, 11 Nov 2024, Jinghao Jia wrote:
+> > 
+> >> Under certain kernel configurations when building with Clang/LLVM, the
+> >> compiler does not generate a return or jump as the terminator
+> >> instruction for ip_vs_protocol_init(), triggering the following objtool
+> >> warning during build time:
+> >>
+> >>   vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
+> >>
+...
+> >> This gives later passes (SCCP, in particular) to more DCE opportunities
+> 
+> One small request: if you could help us remove the extra "to" in the above
+> sentence when committing this patch, it would be great.
+> 
+...
+> > 	Looks good to me, thanks! I assume it is for
+> > net-next/nf-next, right?
+> 
+> I am actually not familiar with the netfilter trees. IMHO this should also be
+> back-ported to the stable kernels -- I wonder if net-next/nf-next is a good
+> tree for this?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411212032.CbThzjSv-lkp@intel.com/
+	Then may be it is better to send [PATCHv2 net] after fixing
+the above "to" and selecting proper commit for a Fixes line (probably
+the initial commit 1da177e4c3f4 ?).
 
-All errors (new ones prefixed by >>):
+> >> -	char protocols[64];
+> >> +	char protocols[64] = { 0 };
+> >>  #define REGISTER_PROTOCOL(p)			\
+> >>  	do {					\
+> >>  		register_ip_vs_protocol(p);	\
+> >> @@ -348,8 +348,6 @@ int __init ip_vs_protocol_init(void)
+> >>  		strcat(protocols, (p)->name);	\
+> >>  	} while (0)
+> >>  
+> >> -	protocols[0] = '\0';
+> >> -	protocols[2] = '\0';
+> >>  #ifdef CONFIG_IP_VS_PROTO_TCP
+> >>  	REGISTER_PROTOCOL(&ip_vs_protocol_tcp);
+> >>  #endif
 
->> ld.lld: error: undefined symbol: pci_generic_ecam_ops
-   >>> referenced by pcie-designware-host.c
-   >>>               drivers/pci/controller/dwc/pcie-designware-host.o:(dw_pcie_host_init) in archive vmlinux.a
-   >>> referenced by pcie-designware-host.c
-   >>>               drivers/pci/controller/dwc/pcie-designware-host.o:(dw_pcie_host_init) in archive vmlinux.a
+Regards
+
 --
->> ld.lld: error: undefined symbol: pci_ecam_create
-   >>> referenced by pcie-designware-host.c
-   >>>               drivers/pci/controller/dwc/pcie-designware-host.o:(dw_pcie_host_init) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: pci_ecam_free
-   >>> referenced by pcie-designware-host.c
-   >>>               drivers/pci/controller/dwc/pcie-designware-host.o:(dw_pcie_host_init) in archive vmlinux.a
-   >>> referenced by pcie-designware-host.c
-   >>>               drivers/pci/controller/dwc/pcie-designware-host.o:(dw_pcie_host_deinit) in archive vmlinux.a
+Julian Anastasov <ja@ssi.bg>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
