@@ -1,103 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FE639FCE
-	for <llvm@lists.linux.dev>; Thu, 21 Nov 2024 02:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7997080A;
+	Thu, 21 Nov 2024 02:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732155188; cv=none; b=euP9GBDCLpqgOYDkI+puFhzB54fk5esoYEYxaHpE52j4cn5KlSOvGHbJ/qIEEuJ7H45nFGI8KdSCJ+cM6nfchTRHbLBntAO+B3e4tSkpIHu+Mp0Ll67Xm9SFVkSilRabXn1o3JbZFhDCNm5gaFSqA5DUrHP0GQibAUwqGp0PJYo=
+	t=1732155197; cv=none; b=jS9ouv0/1W/13AdsGWRCempsGc468YmEFHVHGQ/MpT1hMnlKKPoQWcyjHHvJKSz7hPdFoZsF8GkbkQb3uRiInB4XFjPKPwUegMfgVdyX4/kTrQfiaU+qenRnfY1Kye0f47bMTm1qJHehY/nVPdOb8WyCO6nF6LEkWpXvLMrabeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732155188; c=relaxed/simple;
-	bh=62FPn9yAoYEJ8oZi2lOJU2btlt/gth/4oZptpESexCc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lHs1LRfgm/IurMfo+IfwuMoNW3vngHgaBRV91Bn4t9lT2pTrU2yO6R6MW9pth9O2+BexOMPXG3VrUKqrj/7pBRwYQkrBjWyUzbZtbDWMbSjjkH1Ai7GlwRNGeA6C8bmDn0XMk9f42eBHVWF4jgIdl1JjVde5Jp2sPNaD2x1NaX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GsuqsdxX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1732155197; c=relaxed/simple;
+	bh=KcBF1Jr/ez1bhiqSUbKF2XhKb/yJSguKB4HnvUtOFh0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TS/VgRn9LoZ8Mc3nxbxuPmNuvPg73T/RLhZkfIelzGSaFjeiVbFdHevs2yFABqB7JAMBsf6+zZ8jiIrAt5KyslmixsCmoDLeyc9XkSDNzYP0dptX63YdL3PJWe6tmT4vzD67yNNr6DpXp6txqCe0vCVqSE9EGasL0y/92u6+c3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SIMFcPEl; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GsuqsdxX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732155185;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VuTsd5LNdANEA7mbJaqWOFWG6VVL8yHQ3hpPiYUk8p4=;
-	b=GsuqsdxXoFEY4e+r/23rz2qrVbPMqWVm7VNNuGsqQ1JRNBU6yW1DA/x+NWiNCe4LgLMmoc
-	RBVRqFCsE7IkewMyLNXJFjoCcV45iFTwFvVOyv/zjBViwX4EwCwYqh4nZc/PcnReOW+784
-	eEXbsuazwjIKRb5TkZfRmUDdpZQ+Iz8=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-447-qSeWdKbAMdm7FOMby3kMGg-1; Wed,
- 20 Nov 2024 21:13:04 -0500
-X-MC-Unique: qSeWdKbAMdm7FOMby3kMGg-1
-X-Mimecast-MFC-AGG-ID: qSeWdKbAMdm7FOMby3kMGg
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8842B1955F57
-	for <llvm@lists.linux.dev>; Thu, 21 Nov 2024 02:13:03 +0000 (UTC)
-Received: from [172.64.9.62] (unknown [10.30.33.134])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0F5771955F40;
-	Thu, 21 Nov 2024 02:13:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
- upstream-mainline, c66fbc6c)
-Date: Thu, 21 Nov 2024 02:13:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SIMFcPEl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732155196; x=1763691196;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KcBF1Jr/ez1bhiqSUbKF2XhKb/yJSguKB4HnvUtOFh0=;
+  b=SIMFcPElPyfclJsCQA2At5aTCu3C6oV9gyc+SJJTmaDxd7IgpMBeZiry
+   Yp8u+TUzX2GJp9VAqGYjgxb6QfRtTNbDJFw6TUikSy01oxi8ZMbT4vylS
+   Kw30s8qBX5Xqtw0hwk5Q81tPaZGCvWFKT7F4hMxuhqE1d52/QMR7JamLg
+   xFZGUYORUXEp+xhySPPQ2es8sItKbx6AIv41Buopgz2Y8v8tGAJrijIGj
+   WxpU3nnBOir3A0f4iwVqFG6aSXRv4R13dwyAq+BSejJmaGsPyIc0haO1V
+   t5XrYgBmNsoIMB25QAZWNI/L/Tut7JtudyfsEXH+/Tg4AB29k+BR1JFSg
+   Q==;
+X-CSE-ConnectionGUID: ynzzHob4Ry2icu44ih+QLA==
+X-CSE-MsgGUID: uVFIUnQaSIW8IKp3opawQQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="32099885"
+X-IronPort-AV: E=Sophos;i="6.12,171,1728975600"; 
+   d="scan'208";a="32099885"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 18:13:15 -0800
+X-CSE-ConnectionGUID: P2dn31XlTYquTO91E7i5cQ==
+X-CSE-MsgGUID: cORhwNVsQf2nS5/t5jsvxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,171,1728975600"; 
+   d="scan'208";a="90063135"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 20 Nov 2024 18:13:13 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tDwgw-0001QE-29;
+	Thu, 21 Nov 2024 02:13:10 +0000
+Date: Thu, 21 Nov 2024 10:12:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gregory Price <gourry@gourry.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Gregory Price <gourry@gourry.net>
+Subject: [gourryinverse:gourry_pagecache 3/4] mm/memory.c:5450:20: error: use
+ of undeclared identifier 'NUMA_HINT_FAULTS'
+Message-ID: <202411211042.18o8eGXe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <04594.124112021130400779@us-mta-447.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: OA6jXUxgtS6tFxzYMbyGduwpXjS_xkR0B2MumPXWk_s_1732155183
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/gourryinverse/linux gourry_pagecache
+head:   22a918e8984faca048ec24295ed20e91b682a03e
+commit: 425aa488c12121665243fbb89d75a0f6312fa28a [3/4] vmstat: add page-cache numa hints
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241121/202411211042.18o8eGXe-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241121/202411211042.18o8eGXe-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411211042.18o8eGXe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from mm/memory.c:45:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/memory.c:5450:20: error: use of undeclared identifier 'NUMA_HINT_FAULTS'
+    5450 |         int event = vmf ? NUMA_HINT_FAULTS : NUMA_HINT_PAGE_CACHE;
+         |                           ^
+>> mm/memory.c:5450:39: error: use of undeclared identifier 'NUMA_HINT_PAGE_CACHE'
+    5450 |         int event = vmf ? NUMA_HINT_FAULTS : NUMA_HINT_PAGE_CACHE;
+         |                                              ^
+   6 warnings and 2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of https://github.com/openrisc/li=
-nux
+vim +/NUMA_HINT_FAULTS +5450 mm/memory.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1553585386
+  5445	
+  5446	int numa_migrate_check(struct folio *folio, struct vm_fault *vmf,
+  5447			      unsigned long addr, int *flags,
+  5448			      bool writable, int *last_cpupid)
+  5449	{
+> 5450		int event = vmf ? NUMA_HINT_FAULTS : NUMA_HINT_PAGE_CACHE;
+  5451	
+  5452		if (vmf) {
+  5453			struct vm_area_struct *vma = vmf->vma;
+  5454			const vm_flags_t vmflags = vma->vm_flags;
+  5455	
+  5456			/*
+  5457			 * Flag if the folio is shared between multiple address spaces.
+  5458			 * This used later when determining whether to group tasks.
+  5459			 */
+  5460			if (folio_likely_mapped_shared(folio))
+  5461				*flags |= vmflags & VM_SHARED ? TNF_SHARED : 0;
+  5462	
+  5463			/* Record the current PID acceesing VMA */
+  5464			vma_set_access_pid_bit(vma);
+  5465		}
+  5466	
+  5467		/*
+  5468		 * Avoid grouping on RO pages in general. RO pages shouldn't hurt as
+  5469		 * much anyway since they can be in shared cache state. This misses
+  5470		 * the case where a mapping is writable but the process never writes
+  5471		 * to it but pte_write gets cleared during protection updates and
+  5472		 * pte_dirty has unpredictable behaviour between PTE scan updates,
+  5473		 * background writeback, dirty balancing and application behaviour.
+  5474		 */
+  5475		if (!writable)
+  5476			*flags |= TNF_NO_GROUP;
+  5477	
+  5478		/*
+  5479		 * For memory tiering mode, cpupid of slow memory page is used
+  5480		 * to record page access time.  So use default value.
+  5481		 */
+  5482		if (folio_use_access_time(folio))
+  5483			*last_cpupid = (-1 & LAST_CPUPID_MASK);
+  5484		else
+  5485			*last_cpupid = folio_last_cpupid(folio);
+  5486	
+  5487		numa_migrate_hint_event(folio, event, flags);
+  5488	
+  5489		return mpol_misplaced(folio, vmf, addr);
+  5490	}
+  5491	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1553585386-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1553585386-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1553585386-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
