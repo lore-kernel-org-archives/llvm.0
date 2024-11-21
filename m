@@ -1,114 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2D01CFED1
-	for <llvm@lists.linux.dev>; Thu, 21 Nov 2024 10:58:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4CE9474;
+	Thu, 21 Nov 2024 11:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732186729; cv=none; b=eJ78X/wLfNtf1/pfujbusSd7zh/yUqep1Muset3dyntGKNau9Z9nLQnBMhXFpYjIonC1/nl1LEmH6ADPoOoKrRj/zH1QTqRca8lbGiahzSmHrhR+r/YxgtmSwFregTLl3MrxVg0IVGtaMgVRYvQPIaTSmKDVTRoBBi08cjv4S5Q=
+	t=1732188005; cv=none; b=k/QBcJvxnCaYWR86L2fPt9IgdHNb3hokmBrOajGcKTMpVAcuv7intY7SKfAawrIqmcCxOQsxR3OcYnzOJWYsgtp5fxlD2PTMSNa8tMWARwPO9xmweOFoWjN1y/agw7WnG9luMXVklmo6Ig4yY7RC9z1KI0IU5sC8yIZGdUboWvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732186729; c=relaxed/simple;
-	bh=UOShiaopThGZW3idfKE30w3RHaDOTrWaSt+rbaz4iMY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I5+dH7UcPBcdx2FPL1uyhwMZ9FCcOWo/d/tc0+zUiCv7+RxnPkBiLxffwhDYKuyVnm/WZyCkV04UxUuV8PWW2KW+QlHHwUsmZD4dYSj3Sb41TlBOxeYYwdFZ+jdobeOeGr/HMy0hsX08V29oq/pZhNdraHAtCjGgy2wqqEsp4uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KxS1k9xn; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1732188005; c=relaxed/simple;
+	bh=mWqhOi5kNRqEpp8ydItF5JLam0/fEY56MYBvK355DRg=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=oCVyX/YEx3c1i7bZ10SyJcXTTXMW/Qfi+42ZAmPrkXnas/pJiFXjjdjuUhhAg08CAut4vJ2sUB2b6YB3NpIZ1FU/yFlZzzm4Eue1dRTQJke3DoC09LNA4vsQ+dEcmMZsnYrGDEXwUFCc8aVs/LrspQST3o/MBs3uBo7tI2Jvw9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OoPYRGfK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KxS1k9xn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732186728; x=1763722728;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UOShiaopThGZW3idfKE30w3RHaDOTrWaSt+rbaz4iMY=;
-  b=KxS1k9xn1ApPerS5QfEEv0cizaVHQndPqcCmdDiIHbkEKDBs3use2h9F
-   F84phk9xwyzbp4Y2jDXP4qhnolG6aMwAhUseiLtGEfLQt2SmuYBVVbIjZ
-   VXqgut1WdZOwlDJx1tikxHeZcuPt0pA7BexHOhWV3JBpIgwow0OwP0VcF
-   mauiWs/OP1KF5MGz2+lsFbwMEOo6oPO7kbAHksga42OrOkJYNb2bB5ASl
-   pZjfmKVyIOgf8NCbKL0Khk7ivDWLAEi1x5OIVKdU/goAJCd2dSH7PuuSb
-   wmSqGfKuooNomAgf9kSetx/ibGVeGZ4X+nGnTxOrtrFJEswONoHUlY9uK
-   w==;
-X-CSE-ConnectionGUID: jzkOcRllT4moVdAHTVBdBg==
-X-CSE-MsgGUID: etiFi0dvQp6oObiKR4DzHQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="19882816"
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="19882816"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 02:58:45 -0800
-X-CSE-ConnectionGUID: tErbgRfSS+OfkAa64pv44A==
-X-CSE-MsgGUID: z7boQprvT3a8HRe9rjNd6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="127744823"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 21 Nov 2024 02:58:43 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 43CBE38C; Thu, 21 Nov 2024 12:58:41 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 3/3] regmap: place foo / 8 and foo % 8 closer to each other
-Date: Thu, 21 Nov 2024 12:57:23 +0200
-Message-ID: <20241121105838.4073659-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20241121105838.4073659-1-andriy.shevchenko@linux.intel.com>
-References: <20241121105838.4073659-1-andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OoPYRGfK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5983C4CECC;
+	Thu, 21 Nov 2024 11:20:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732188005;
+	bh=mWqhOi5kNRqEpp8ydItF5JLam0/fEY56MYBvK355DRg=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=OoPYRGfK33eEaj4TSOXurZ1ficEBLcmADw14Aac2la9G0MyZyQ375x8K1RdrJng9w
+	 gvDLnOIIwSfsC/WN0YSVXjOn56IlonUH7Quu/Yqqv8Rl1y+0Sx9shmrKXg1nrL8wkx
+	 61V5xhKOsls5pPBShmdFWoKrc9zi1bHnaUnNNveKAqr9JILozoQyOHkgnSYJdSdS+q
+	 Q/8boiWrZv9wpK6aXpwSRpmw8bU/Nx3BB0SQYbTzY8MXFU9epoiQAI3RhTLYK5j5vx
+	 1eyFMBObvNI+AlAFfZF+Rh2c6T/Yz/OwyxQkRr/eE7dW6owOrC2qzF9V9g57Dh/Mxf
+	 4gG53Bg4agTqg==
+From: Kalle Valo <kvalo@kernel.org>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc: Jeff Johnson <jjohnson@kernel.org>,  "Nathan Chancellor"
+ <nathan@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,  Bill
+ Wendling <morbo@google.com>,  Justin Stitt <justinstitt@google.com>,
+  "Arnd Bergmann" <arnd@kernel.org>,  <linux-wireless@vger.kernel.org>,
+  <ath11k@lists.infradead.org>,  <linux-kernel@vger.kernel.org>,
+  <llvm@lists.linux.dev>
+Subject: Re: [PATCH 1/3] wifi: ath11k: mark some QMI driver event helpers as
+ noinline
+References: <20241119-ath11k-noinline-v1-0-4ec0a8aa30b2@quicinc.com>
+	<20241119-ath11k-noinline-v1-1-4ec0a8aa30b2@quicinc.com>
+Date: Thu, 21 Nov 2024 13:20:01 +0200
+In-Reply-To: <20241119-ath11k-noinline-v1-1-4ec0a8aa30b2@quicinc.com> (Jeff
+	Johnson's message of "Tue, 19 Nov 2024 07:47:38 -0800")
+Message-ID: <87y11cx28u.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On x86 the compiler (gcc (Debian 14.2.0-8) 14.2.0) may generate
-a better code if it sees division and modulo goes together.
+Jeff Johnson <quic_jjohnson@quicinc.com> writes:
 
-  Function                          old     new   delta
-  __regmap_init                    3740    3732      -8
-  Total: Before=31159, After=31151, chg -0.03%
+> When compiling the ath11k driver using clang with KASAN enabled, the
+> following warning is observed:
+>
+> drivers/net/wireless/ath/ath11k/qmi.c:3199:13: warning: stack frame size (1560) exceeds limit (1024) in 'ath11k_qmi_driver_event_work' [-Wframe-larger-than]
+>
+> This is similar to the issue found in ath12k/qmi.c that was discussed
+> in [1] and fixed with [2]. The issue is that clang inlining can
+> explode stack usage.
+>
+> Just as in ath12k, ath11k_qmi_driver_event_work() itself is a pretty
+> lightweight function, but it dispatches to several other functions
+> which do the real work:
+>
+> ath11k_qmi_driver_event_work()
+> 	ath11k_qmi_event_server_arrive()
+> 		ath11k_qmi_fw_ind_register_send()
+> 		ath11k_qmi_host_cap_send() *
+> 		ath11k_qmi_event_load_bdf()
+> 	ath11k_qmi_event_mem_request()
+> 		ath11k_qmi_respond_fw_mem_request()
+> 	ath11k_qmi_event_load_bdf()
+> 	ath11k_qmi_wlanfw_m3_info_send() *
+> 		ath11k_qmi_m3_load()
+> 	ath11k_qmi_process_coldboot_calibration()
+>
+> Of these, the two marked with * have non-trivial stack usage. Mark
+> those functions as 'noinline_for_stack' to prevent them from being
+> inlined in ath12k_qmi_driver_event_work(), thereby eliminating the
+> excessive stack usage.
+>
+> Note that this approach is a bit more "surgical" than the ath12k
+> approach as only the two functions with the largest stack usage are
+> modified.
+>
+> Link: https://msgid.link/bc214795-1c51-4cb7-922f-67d6ef98bff2@quicinc.com # [1]
+> Link: https://patch.msgid.link/20241028-ath12k_qmi_driver_event_work-v1-1-0d532eb593fa@quicinc.com # [2]
+> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
-clang (Debian clang version 18.1.8) on x86_64 still shows better code
+Acked-by: Kalle Valo <kvalo@kernel.org>
 
-  Function                          old     new   delta
-  __regmap_init                    3582    3579      -3
-  Total: Before=39854, After=39851, chg -0.01%
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/base/regmap/regmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index d2944271022c..4f8ec8528e34 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -758,13 +758,13 @@ struct regmap *__regmap_init(struct device *dev,
- 		map->alloc_flags = GFP_KERNEL;
- 
- 	map->reg_base = config->reg_base;
-+	map->reg_shift = config->pad_bits % 8;
- 
--	map->format.reg_bytes = BITS_TO_BYTES(config->reg_bits);
- 	map->format.pad_bytes = config->pad_bits / 8;
- 	map->format.reg_shift = config->reg_shift;
-+	map->format.reg_bytes = BITS_TO_BYTES(config->reg_bits);
- 	map->format.val_bytes = BITS_TO_BYTES(config->val_bits);
- 	map->format.buf_size = BITS_TO_BYTES(config->reg_bits + config->val_bits + config->pad_bits);
--	map->reg_shift = config->pad_bits % 8;
- 	if (config->reg_stride)
- 		map->reg_stride = config->reg_stride;
- 	else
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
