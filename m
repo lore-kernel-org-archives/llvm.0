@@ -1,118 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E184C84D2B;
-	Thu, 21 Nov 2024 17:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E57F19DF66;
+	Thu, 21 Nov 2024 18:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732208609; cv=none; b=SGussKqv3bKy+lHLDbPuaL9xFLhik5U15SQ3+B4rmekYCugzrC4732hERx6Q3HJeldd85ULhGr0WGW3+MnS/3sBKeb5oM3CpeDpusuFTA2/4Mk5X6gYxSK9qnhZ2twDHc0rImff16L/rkh7RG88c3to8xz8Gf8GB6WJ7gLD7F34=
+	t=1732213352; cv=none; b=Y191Co3VsHAtq11a41eceYrTpvVvHrwO+pbAmjmZ9L5quIT7C6oqI+SBrec7NlqWNjX2Am5NYfobpNebBt4T38dH6kxSLWBq1vxkXEhK/Wv6v81M81P09lK9iX1a+BZ3ycvNtjwbBH10bipgkW7YY+a/U8y2oUaFA028WyZ75I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732208609; c=relaxed/simple;
-	bh=+shSRTzFabFaIafWtFpPZ6aUZOBiAppLjUjYiLPxorw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qotWnQR4HFOprETMhX3DQeOjsSthnQGK4QOvFjn496+etlzd8eANXl3AJv1L5mble99oLuOVdhW1FTHFTVUD7Leaey1rHLWkMGekDMAtzEn7CYNzAB0cE503EZ7GhIjuoyMF3Zdim6/dQ1EB/9pzYS1HaSsuRNX5eMo8cS5AqTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UBucW4uP; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732213352; c=relaxed/simple;
+	bh=NlOGgKbYlSPT5mGVg0Vqrr2RjMPYarQpOk/xs/FSmYk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=S8GlCDEdNcqVaZLdBVlID97tSY/uV+Gx/oZlUYzNiKOEqI0BQbxnElH53fpHa3222TNiWb9ydMFn98cKXFr8dMKfoM1o7QQeSm7muOQekJcTWWdqvjkAGg1qBRbux+7k/RVymT0Rdf6+6qPCoPRvn3bZGBt/Klyk5Te32m3iFeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atvUalK/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UBucW4uP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732208608; x=1763744608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+shSRTzFabFaIafWtFpPZ6aUZOBiAppLjUjYiLPxorw=;
-  b=UBucW4uPvnQxuwJRQL2FCw9oeJ9/R6cjIN8mRVxL7vT3uYP8A4n1ityw
-   ZlEHkPKLIEyYRbbgpDI2L2pNdDVfkX3axD0t0JmiNW74In+BPgplLfEqh
-   5soyf0fRyDZuuhEblT8mpju5u+YyVmmbxKbEqtM7/0moSck5KZPJL/2Kg
-   gb2W5erE3kjCGEKR9rTj47AM3itdPkJ3QKk8fuvJNGNlFvcoIo2QGD92q
-   OxeMMQA553bBJ+0c/JlTQESfhfnO+Ivm+VZsINfhzFdNpLmzzSgHIQOvJ
-   tovNDfpg4Y9lppy/VWqdeAbDwvEH0Nt7mvDX7FNdsUvuATxO9Y58Uh2Lr
-   A==;
-X-CSE-ConnectionGUID: 8Mk2CCyZSw+KnR7nuRxRMg==
-X-CSE-MsgGUID: JwToUzTDTBGo+w4GhH7iLQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32267897"
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="32267897"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 09:03:27 -0800
-X-CSE-ConnectionGUID: 6QRGIroBSMuEEAywAfCoaA==
-X-CSE-MsgGUID: QEG5FWVzT4GEYSYFSOKE0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="90732752"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 21 Nov 2024 09:03:25 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEAaR-0003Bn-0X;
-	Thu, 21 Nov 2024 17:03:23 +0000
-Date: Fri, 22 Nov 2024 01:03:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] ASoC: qcom: apq8016_sbc: Fix second argument of
- apq8016_dai_init()
-Message-ID: <202411220058.7q2qlvXO-lkp@intel.com>
-References: <20241117232100.23760-1-spasswolf@web.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atvUalK/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B671C4CECC;
+	Thu, 21 Nov 2024 18:22:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732213351;
+	bh=NlOGgKbYlSPT5mGVg0Vqrr2RjMPYarQpOk/xs/FSmYk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=atvUalK/cG6ylxLiD0a+I5dn9F7g0pAOH0QaU3bxPk0lUB0cdKxKoerXOF+bAlaYT
+	 XA7F75fFoRHiYd1i7XPk06BpZWPBuBSWL8iq2kNJJLMpRrBu17+30fuSclDF7GT2nL
+	 jyNOS14kQ39ciM+QmJSRv8jkIgYBt5vy/c9EUbc6xd+UZlPOkZq+aFwWObfxvtzxsX
+	 hlU4pEkrKUkZxQzSi4ybrPNOJx+hPBhvOnxzC1dP0Ny9LIDGg5AemNI8NNn/aaWJkf
+	 nJ4oopgOA5gRBo33SCnPHsWIVy5i6CkBH+mzrxs97GEOLuRXgyEma7zgd7XZW2i+YX
+	 xQT9e6eX47lIA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 21 Nov 2024 11:22:18 -0700
+Subject: [PATCH v2] hexagon: Disable constant extender optimization for
+ LLVM prior to 19.1.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241117232100.23760-1-spasswolf@web.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241121-hexagon-disable-constant-expander-pass-v2-1-1a92e9afb0f4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFl6P2cC/43NQQ6CMBCF4auQrh1DCxZw5T0MiykdoJG0pEMIh
+ nB3K/EALv+3eN8umKIjFvdsF5FWxy74FOqSiW5EPxA4m1qoXJV5nSsYacMheLCO0UwEXfC8oF+
+ Athm9pQgzMkNttNHSGo19J9LZHKl32wk929Sj4yXE9+mu8rv+CNn8S6wSJBQaq6Kk5qYq+3hR9
+ DRdQxxEexzHB6moz63dAAAA
+X-Change-ID: 20240802-hexagon-disable-constant-expander-pass-8b6b61db6afc
+To: Brian Cain <bcain@quicinc.com>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-hexagon@vger.kernel.org, patches@lists.linux.dev, 
+ llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2848; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=NlOGgKbYlSPT5mGVg0Vqrr2RjMPYarQpOk/xs/FSmYk=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOn2Ven3w17GXkmtbC9WKHRauz/9Quh2o8WPX8dJlzif1
+ d398OqjjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARBzuG/yGLl5ltCfJbwbhN
+ 8Hjmp7bIyXs9zEQN52Y95nZnfF76roCRYVfnuSqFRb/1vJa0n3vFsFcqLnLDttzsrPKPWd/Ytoq
+ /YQYA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Bert,
+The Hexagon-specific constant extender optimization in LLVM may crash on
+Linux kernel code [1], such as fs/bcache/btree_io.c after
+commit 32ed4a620c54 ("bcachefs: Btree path tracepoints") in 6.12:
 
-kernel test robot noticed the following build errors:
+  clang: llvm/lib/Target/Hexagon/HexagonConstExtenders.cpp:745: bool (anonymous namespace)::HexagonConstExtenders::ExtRoot::operator<(const HCE::ExtRoot &) const: Assertion `ThisB->getParent() == OtherB->getParent()' failed.
+  Stack dump:
+  0.      Program arguments: clang --target=hexagon-linux-musl ... fs/bcachefs/btree_io.c
+  1.      <eof> parser at end of file
+  2.      Code generation
+  3.      Running pass 'Function Pass Manager' on module 'fs/bcachefs/btree_io.c'.
+  4.      Running pass 'Hexagon constant-extender optimization' on function '@__btree_node_lock_nopath'
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on linus/master v6.12 next-20241121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Without assertions enabled, there is just a hang during compilation.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bert-Karwatzki/ASoC-qcom-apq8016_sbc-Fix-second-argument-of-apq8016_dai_init/20241121-111313
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20241117232100.23760-1-spasswolf%40web.de
-patch subject: [PATCH] ASoC: qcom: apq8016_sbc: Fix second argument of apq8016_dai_init()
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20241122/202411220058.7q2qlvXO-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220058.7q2qlvXO-lkp@intel.com/reproduce)
+This has been resolved in LLVM main (20.0.0) [2] and backported to LLVM
+19.1.0 but the kernel supports LLVM 13.0.1 and newer, so disable the
+constant expander optimization using the '-mllvm' option when using a
+toolchain that is not fixed.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411220058.7q2qlvXO-lkp@intel.com/
+Cc: stable@vger.kernel.org
+Link: https://github.com/llvm/llvm-project/issues/99714 [1]
+Link: https://github.com/llvm/llvm-project/commit/68df06a0b2998765cb0a41353fcf0919bbf57ddb [2]
+Link: https://github.com/llvm/llvm-project/commit/2ab8d93061581edad3501561722ebd5632d73892 [3]
+Reviewed-by: Brian Cain <bcain@quicinc.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Andrew, can you please take this for 6.13? Our CI continues to hit this.
 
-All errors (new ones prefixed by >>):
+Changes in v2:
+- Rebase on 6.12 to make sure it is still applicable
+- Name exact bcachefs commit that introduces crash now that it is
+  merged
+- Add 'Cc: stable' as this is now visible in a stable release
+- Carry forward Brian's reviewed-by
+- Link to v1: https://lore.kernel.org/r/20240819-hexagon-disable-constant-expander-pass-v1-1-36a734e9527d@kernel.org
+---
+ arch/hexagon/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
->> sound/soc/qcom/apq8016_sbc.c:153:31: error: implicit declaration of function 'qdsp6_dai_get_lpass_id' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return apq8016_dai_init(rtd, qdsp6_dai_get_lpass_id(cpu_dai));
-                                        ^
-   sound/soc/qcom/apq8016_sbc.c:165:12: error: static declaration of 'qdsp6_dai_get_lpass_id' follows non-static declaration
-   static int qdsp6_dai_get_lpass_id(struct snd_soc_dai *cpu_dai)
-              ^
-   sound/soc/qcom/apq8016_sbc.c:153:31: note: previous implicit declaration is here
-           return apq8016_dai_init(rtd, qdsp6_dai_get_lpass_id(cpu_dai));
-                                        ^
-   2 errors generated.
+diff --git a/arch/hexagon/Makefile b/arch/hexagon/Makefile
+index 92d005958dfb232d48a4ca843b46262a84a08eb4..ff172cbe5881a074f9d9430c37071992a4c8beac 100644
+--- a/arch/hexagon/Makefile
++++ b/arch/hexagon/Makefile
+@@ -32,3 +32,9 @@ KBUILD_LDFLAGS += $(ldflags-y)
+ TIR_NAME := r19
+ KBUILD_CFLAGS += -ffixed-$(TIR_NAME) -DTHREADINFO_REG=$(TIR_NAME) -D__linux__
+ KBUILD_AFLAGS += -DTHREADINFO_REG=$(TIR_NAME)
++
++# Disable HexagonConstExtenders pass for LLVM versions prior to 19.1.0
++# https://github.com/llvm/llvm-project/issues/99714
++ifneq ($(call clang-min-version, 190100),y)
++KBUILD_CFLAGS += -mllvm -hexagon-cext=false
++endif
 
+---
+base-commit: adc218676eef25575469234709c2d87185ca223a
+change-id: 20240802-hexagon-disable-constant-expander-pass-8b6b61db6afc
 
-vim +/qdsp6_dai_get_lpass_id +153 sound/soc/qcom/apq8016_sbc.c
-
-   148	
-   149	static int apq8016_sbc_dai_init(struct snd_soc_pcm_runtime *rtd)
-   150	{
-   151		struct snd_soc_dai *cpu_dai = snd_soc_rtd_to_cpu(rtd, 0);
-   152	
- > 153		return apq8016_dai_init(rtd, qdsp6_dai_get_lpass_id(cpu_dai));
-   154	}
-   155	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
