@@ -1,122 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E57F19DF66;
-	Thu, 21 Nov 2024 18:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9681BF58
+	for <llvm@lists.linux.dev>; Thu, 21 Nov 2024 20:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732213352; cv=none; b=Y191Co3VsHAtq11a41eceYrTpvVvHrwO+pbAmjmZ9L5quIT7C6oqI+SBrec7NlqWNjX2Am5NYfobpNebBt4T38dH6kxSLWBq1vxkXEhK/Wv6v81M81P09lK9iX1a+BZ3ycvNtjwbBH10bipgkW7YY+a/U8y2oUaFA028WyZ75I8=
+	t=1732220591; cv=none; b=d731GM+V/yomkSIjVoDLrpCraAZK89C4+K1FZS0Q6qIO4XgEqHf8yUF+PkXWh37qS/tpWoUr98vhAtq4AmO+g70VDUPVZtDx1PbF7hYmjxH2oDngtvkgYGrbD9EOw52CSz8ZVttmSiGV5TMYq9CdJkTmyCaLUX/HFKrmfj3mPAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732213352; c=relaxed/simple;
-	bh=NlOGgKbYlSPT5mGVg0Vqrr2RjMPYarQpOk/xs/FSmYk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=S8GlCDEdNcqVaZLdBVlID97tSY/uV+Gx/oZlUYzNiKOEqI0BQbxnElH53fpHa3222TNiWb9ydMFn98cKXFr8dMKfoM1o7QQeSm7muOQekJcTWWdqvjkAGg1qBRbux+7k/RVymT0Rdf6+6qPCoPRvn3bZGBt/Klyk5Te32m3iFeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=atvUalK/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732220591; c=relaxed/simple;
+	bh=YdumrW3M0xTAtvAgpZjzmC4o0puhLcRJs5mWhHw8SIk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=FPRa/PAmbUUu8TWa5U/0xJvzcIhR+PUWOm3/SabNr/zYdIZwgtb/0hCoJ/0Ua39Uu2OSCZrbGsnDr/Aa8mXCkn+VS2XBagVmIM6c5YWyAI0nUMWjknW19dE8k47CCaz3ten0BcDx/0VBVG+77pfUhJxPonkP6ZDZyeFPhSrpV8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MnjkYUDu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="atvUalK/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B671C4CECC;
-	Thu, 21 Nov 2024 18:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732213351;
-	bh=NlOGgKbYlSPT5mGVg0Vqrr2RjMPYarQpOk/xs/FSmYk=;
-	h=From:Date:Subject:To:Cc:From;
-	b=atvUalK/cG6ylxLiD0a+I5dn9F7g0pAOH0QaU3bxPk0lUB0cdKxKoerXOF+bAlaYT
-	 XA7F75fFoRHiYd1i7XPk06BpZWPBuBSWL8iq2kNJJLMpRrBu17+30fuSclDF7GT2nL
-	 jyNOS14kQ39ciM+QmJSRv8jkIgYBt5vy/c9EUbc6xd+UZlPOkZq+aFwWObfxvtzxsX
-	 hlU4pEkrKUkZxQzSi4ybrPNOJx+hPBhvOnxzC1dP0Ny9LIDGg5AemNI8NNn/aaWJkf
-	 nJ4oopgOA5gRBo33SCnPHsWIVy5i6CkBH+mzrxs97GEOLuRXgyEma7zgd7XZW2i+YX
-	 xQT9e6eX47lIA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 21 Nov 2024 11:22:18 -0700
-Subject: [PATCH v2] hexagon: Disable constant extender optimization for
- LLVM prior to 19.1.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MnjkYUDu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732220588;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=v/CXE5c4MUYtaEK2/0x3A8rCMA6ObxYb2nNUz0+TQHg=;
+	b=MnjkYUDudnaHGwPjxd9WDFfxOs5aQ4Dp/f/xuKDYtLNvl0BbZ2R4iKbUkjsA8FxVW5E7kU
+	BqFGsrkD1tMBoGRv2txx3pfUHdXMWSJg+4Uw4NrQWO7ILXKCv3jLqNjb2tf0nW6bgGng//
+	bNz98b+Cbdt2bgTYhF3vPGf0NblMaVc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-633-SRe5JcEpNduj74F7BaFCew-1; Thu,
+ 21 Nov 2024 15:23:07 -0500
+X-MC-Unique: SRe5JcEpNduj74F7BaFCew-1
+X-Mimecast-MFC-AGG-ID: SRe5JcEpNduj74F7BaFCew
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 479CB1955D4D
+	for <llvm@lists.linux.dev>; Thu, 21 Nov 2024 20:23:06 +0000 (UTC)
+Received: from [172.64.9.62] (unknown [10.30.33.134])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CA4771955E9E;
+	Thu, 21 Nov 2024 20:23:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
+ upstream-mainline, fc39fb56)
+Date: Thu, 21 Nov 2024 20:23:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <89171.124112115230703951@us-mta-633.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: U_Gdw1yZLbaqpuBQpjmUF9C4X7naHrBdSH4opCYGlnY_1732220586
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241121-hexagon-disable-constant-expander-pass-v2-1-1a92e9afb0f4@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFl6P2cC/43NQQ6CMBCF4auQrh1DCxZw5T0MiykdoJG0pEMIh
- nB3K/EALv+3eN8umKIjFvdsF5FWxy74FOqSiW5EPxA4m1qoXJV5nSsYacMheLCO0UwEXfC8oF+
- Athm9pQgzMkNttNHSGo19J9LZHKl32wk929Sj4yXE9+mu8rv+CNn8S6wSJBQaq6Kk5qYq+3hR9
- DRdQxxEexzHB6moz63dAAAA
-X-Change-ID: 20240802-hexagon-disable-constant-expander-pass-8b6b61db6afc
-To: Brian Cain <bcain@quicinc.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-hexagon@vger.kernel.org, patches@lists.linux.dev, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2848; i=nathan@kernel.org;
- h=from:subject:message-id; bh=NlOGgKbYlSPT5mGVg0Vqrr2RjMPYarQpOk/xs/FSmYk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOn2Ven3w17GXkmtbC9WKHRauz/9Quh2o8WPX8dJlzif1
- d398OqjjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARBzuG/yGLl5ltCfJbwbhN
- 8Hjmp7bIyXs9zEQN52Y95nZnfF76roCRYVfnuSqFRb/1vJa0n3vFsFcqLnLDttzsrPKPWd/Ytoq
- /YQYA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: quoted-printable
 
-The Hexagon-specific constant extender optimization in LLVM may crash on
-Linux kernel code [1], such as fs/bcache/btree_io.c after
-commit 32ed4a620c54 ("bcachefs: Btree path tracepoints") in 6.12:
+Hi, we tested your kernel and here are the results:
 
-  clang: llvm/lib/Target/Hexagon/HexagonConstExtenders.cpp:745: bool (anonymous namespace)::HexagonConstExtenders::ExtRoot::operator<(const HCE::ExtRoot &) const: Assertion `ThisB->getParent() == OtherB->getParent()' failed.
-  Stack dump:
-  0.      Program arguments: clang --target=hexagon-linux-musl ... fs/bcachefs/btree_io.c
-  1.      <eof> parser at end of file
-  2.      Code generation
-  3.      Running pass 'Function Pass Manager' on module 'fs/bcachefs/btree_io.c'.
-  4.      Running pass 'Hexagon constant-extender optimization' on function '@__btree_node_lock_nopath'
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Without assertions enabled, there is just a hang during compilation.
 
-This has been resolved in LLVM main (20.0.0) [2] and backported to LLVM
-19.1.0 but the kernel supports LLVM 13.0.1 and newer, so disable the
-constant expander optimization using the '-mllvm' option when using a
-toolchain that is not fixed.
+Kernel information:
+    Commit message: Merge tag 'jfs-6.13' of github.com:kleikamp/linux-shagg=
+y
 
-Cc: stable@vger.kernel.org
-Link: https://github.com/llvm/llvm-project/issues/99714 [1]
-Link: https://github.com/llvm/llvm-project/commit/68df06a0b2998765cb0a41353fcf0919bbf57ddb [2]
-Link: https://github.com/llvm/llvm-project/commit/2ab8d93061581edad3501561722ebd5632d73892 [3]
-Reviewed-by: Brian Cain <bcain@quicinc.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Andrew, can you please take this for 6.13? Our CI continues to hit this.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1555111612
 
-Changes in v2:
-- Rebase on 6.12 to make sure it is still applicable
-- Name exact bcachefs commit that introduces crash now that it is
-  merged
-- Add 'Cc: stable' as this is now visible in a stable release
-- Carry forward Brian's reviewed-by
-- Link to v1: https://lore.kernel.org/r/20240819-hexagon-disable-constant-expander-pass-v1-1-36a734e9527d@kernel.org
----
- arch/hexagon/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1555111612-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1555111612-x86_64-kernel-debug
 
-diff --git a/arch/hexagon/Makefile b/arch/hexagon/Makefile
-index 92d005958dfb232d48a4ca843b46262a84a08eb4..ff172cbe5881a074f9d9430c37071992a4c8beac 100644
---- a/arch/hexagon/Makefile
-+++ b/arch/hexagon/Makefile
-@@ -32,3 +32,9 @@ KBUILD_LDFLAGS += $(ldflags-y)
- TIR_NAME := r19
- KBUILD_CFLAGS += -ffixed-$(TIR_NAME) -DTHREADINFO_REG=$(TIR_NAME) -D__linux__
- KBUILD_AFLAGS += -DTHREADINFO_REG=$(TIR_NAME)
-+
-+# Disable HexagonConstExtenders pass for LLVM versions prior to 19.1.0
-+# https://github.com/llvm/llvm-project/issues/99714
-+ifneq ($(call clang-min-version, 190100),y)
-+KBUILD_CFLAGS += -mllvm -hexagon-cext=false
-+endif
 
----
-base-commit: adc218676eef25575469234709c2d87185ca223a
-change-id: 20240802-hexagon-disable-constant-expander-pass-8b6b61db6afc
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
