@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A96148FE8;
-	Thu, 21 Nov 2024 20:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E951A2C04;
+	Thu, 21 Nov 2024 21:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732221050; cv=none; b=vCPpiXH+Ho7tzfv5hAY+7mFmkhxNFkJ2m4ruuKhK8ZMe/qqMapyM1ZP3oisgp61w7XVCzHmzD3kIZ57V+1gFbe1gu1DRX3Xori+GNso1lZPH7dLhDO6xF3a4xlxbzfphZGk1bmla8cYp8sfiHMDt85wOFWKuy1y69I3xZLhIBlE=
+	t=1732223575; cv=none; b=FzzxiB2sL8EwtRUcLon9vGOS+awOD0BmVQ6fQ92m0sZSEsCQ7s5Jdod6wlYewvKzJam2LOdK60FeqoYLj7DbeoUmrEx5kavfyRJfdTvWMkB08GwtK0wBpR4Q7pjLVB86+8SG4RvRAThyE2L2EqRh97Nuv1iEzEFy20OYadqm5Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732221050; c=relaxed/simple;
-	bh=ZVvJCxgJ6cywU+vTk1gExW6TynVWTqDwCnaFUlyf6KY=;
+	s=arc-20240116; t=1732223575; c=relaxed/simple;
+	bh=QCLxfolFsBmQDw94JgmEhMlnZgCR51ibBZn/hZN7lqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cszWCX6z15UJ6PpDOAM/vxmeuR5wzV+hBrlSE8wzY8jE7QYVuj3plS6njssFm+yOq1vo1rzQVgdEy+2uJbsqJq1hx3sj4LJjzcgbdqamA6raq8yqnKf/GyLkhkMfy+RHC1fQASWUe4q4zqHlll6YQTVIDH0jCFHnWjBTGH3Ure0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L/NqLe6R; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=uKKUucwJFLsDIQsUt4fKk6DY9DKnU0MLuHf/4bz88he5VofkwMOIuIdX1SHKcz3ShuRmuvitcgVpbwgHfMXylfSPZWSU8v+WgQDMMiP3nrofVw3Qn6iXbEXpEnuITbEKsUvJY77NjajdkaYErWRZFQqsyWF66DU2WQjA5IxoiQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l5J6cU0s; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L/NqLe6R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l5J6cU0s"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732221049; x=1763757049;
+  t=1732223573; x=1763759573;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZVvJCxgJ6cywU+vTk1gExW6TynVWTqDwCnaFUlyf6KY=;
-  b=L/NqLe6R07Ym6fDVm0gKXX/YQdeB1dsMSylMK+sFvQ+GlZoh3grTtPDI
-   aXci/fn8KHOkAyEl3M5DkPoFGoe3VoyELIHka/Ds7Xe18z0kapXSlg7LR
-   5S6RkX6zkB58hNerV6K2qZCTlfQz1SqdxU+wAuBaoPbCPQwJtBjP5l+YA
-   LOifATWOq8Nt+Z+dDbPjl7a/72K3HKXvT0H+Vr10KaMBK23j6JZIvDjl8
-   /a/I54k5IewTy2QCmS/ereP/zcTPcWaOV/DSWEl/dZ1dRauK5RtIxaXj+
-   n4A796dBHuNL83UzY4YATwi61errhWh87eEuJ9bLy6W29riKAQjlXUjPi
+  bh=QCLxfolFsBmQDw94JgmEhMlnZgCR51ibBZn/hZN7lqU=;
+  b=l5J6cU0sWRNDw66DOHBLQhly9s9zE7Qyp/rrQURr7BKLQAh7Rt1909wp
+   Rs7FhX0nv6D4wUCdgjmTn00I7Hme4OvHYlkuoXYHXtjl30v6DSOxjOqPi
+   mXFB+xaoACu5spCAuBt8L/O/HkUW1uf0hrJTCu9I54yfkOA5a669QaJ3R
+   9JC05IBgVl1iI/A9c0HAcj6zoObTB5/xoEez1ojdjSFRTb60K63eqMc0V
+   masTgsxWk7bsw75UejmmzIDywDMit73uqtt9OXCXc/9iSgBycenijQNPv
+   drYofZyj3WVWRZZDeEHC63uyUGEsu0B4KWa7dYND+4XnHCOLyq1+vE4Hu
    g==;
-X-CSE-ConnectionGUID: KYJXmdv2TLOkSRO8xrvxiw==
-X-CSE-MsgGUID: AYmr2fNnSbmW3VFwatfs2w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="43755238"
+X-CSE-ConnectionGUID: JEnfag8FRLGW0MudkhhjIA==
+X-CSE-MsgGUID: mDrYucPWS9i0B2wU6NtnxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32420123"
 X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="43755238"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 12:30:48 -0800
-X-CSE-ConnectionGUID: 5+Ny8WzLSbacDbEeF/7zkQ==
-X-CSE-MsgGUID: 1uGq9qQ6QCm8XkQ4Aew7kQ==
+   d="scan'208";a="32420123"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:12:52 -0800
+X-CSE-ConnectionGUID: SGTc7guUTz+5z3Iz4oM72A==
+X-CSE-MsgGUID: UZLM8tkHR4SzlRlz1yzxgQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="95440319"
+   d="scan'208";a="95320460"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 21 Nov 2024 12:30:46 -0800
+  by orviesa005.jf.intel.com with ESMTP; 21 Nov 2024 13:12:52 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tEDp5-0003KN-2Y;
-	Thu, 21 Nov 2024 20:30:43 +0000
-Date: Fri, 22 Nov 2024 04:30:33 +0800
+	id 1tEETp-0003MF-1C;
+	Thu, 21 Nov 2024 21:12:49 +0000
+Date: Fri, 22 Nov 2024 05:12:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dan Carpenter <error27@gmail.com>, Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] overflow: improve size_add/mul for 32bit systems
-Message-ID: <202411220455.2X9OAAvt-lkp@intel.com>
-References: <ebdae636-11f3-4f02-a158-f15bbed2847f@stanley.mountain>
+To: Matthew Brost <matthew.brost@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 02/29] dma-fence: Add dma_fence_user_fence
+Message-ID: <202411220754.4LD2Xt3z-lkp@intel.com>
+References: <20241118233757.2374041-3-matthew.brost@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,113 +62,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ebdae636-11f3-4f02-a158-f15bbed2847f@stanley.mountain>
+In-Reply-To: <20241118233757.2374041-3-matthew.brost@intel.com>
 
-Hi Dan,
+Hi Matthew,
 
-kernel test robot noticed the following build warnings:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on kees/for-next/hardening]
-[also build test WARNING on kees/for-next/pstore kees/for-next/kspp linus/master v6.12 next-20241121]
+[auto build test ERROR on drm-xe/drm-xe-next]
+[also build test ERROR on drm-exynos/exynos-drm-next linus/master drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip v6.12 next-20241121]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/overflow-improve-size_add-mul-for-32bit-systems/20241121-124847
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-patch link:    https://lore.kernel.org/r/ebdae636-11f3-4f02-a158-f15bbed2847f%40stanley.mountain
-patch subject: [PATCH] overflow: improve size_add/mul for 32bit systems
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20241122/202411220455.2X9OAAvt-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220455.2X9OAAvt-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/dma-fence-Add-dma_fence_preempt-base-class/20241121-124856
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20241118233757.2374041-3-matthew.brost%40intel.com
+patch subject: [RFC PATCH 02/29] dma-fence: Add dma_fence_user_fence
+config: hexagon-randconfig-002-20241121 (https://download.01.org/0day-ci/archive/20241122/202411220754.4LD2Xt3z-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220754.4LD2Xt3z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411220455.2X9OAAvt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411220754.4LD2Xt3z-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from block/bio.c:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> block/bio.c:616:17: warning: result of comparison of constant 4294967295 with expression of type 'typeof (nr_vecs)' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-     616 |         return kmalloc(struct_size(bio, bi_inline_vecs, nr_vecs), gfp_mask);
-         |                ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:396:18: note: expanded from macro 'struct_size'
-     396 |                 sizeof(*(p)) + flex_array_size(p, member, count),       \
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:381:3: note: expanded from macro 'flex_array_size'
-     381 |                 size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:281:11: note: expanded from macro 'size_mul'
-     281 |             (__a >= (u64)SIZE_MAX || __b >= (u64)SIZE_MAX))             \
-         |              ~~~ ^
-   include/linux/slab.h:884:52: note: expanded from macro 'kmalloc'
-     884 | #define kmalloc(...)                            alloc_hooks(kmalloc_noprof(__VA_ARGS__))
-         |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/alloc_tag.h:210:31: note: expanded from macro 'alloc_hooks'
-     210 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
-   include/linux/alloc_tag.h:202:27: note: expanded from macro 'alloc_hooks_tag'
-     202 |         typeof(_do_alloc) _res = _do_alloc;                             \
-         |                                  ^~~~~~~~~
->> block/bio.c:616:17: warning: result of comparison of constant 4294967295 with expression of type 'typeof (nr_vecs)' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
-     616 |         return kmalloc(struct_size(bio, bi_inline_vecs, nr_vecs), gfp_mask);
-         |                ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:397:26: note: expanded from macro 'struct_size'
-     397 |                 size_add(sizeof(*(p)), flex_array_size(p, member, count)))
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:381:3: note: expanded from macro 'flex_array_size'
-     381 |                 size_mul(count, sizeof(*(p)->member) + __must_be_array((p)->member)))
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:281:11: note: expanded from macro 'size_mul'
-     281 |             (__a >= (u64)SIZE_MAX || __b >= (u64)SIZE_MAX))             \
-         |              ~~~ ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/slab.h:884:52: note: expanded from macro 'kmalloc'
-     884 | #define kmalloc(...)                            alloc_hooks(kmalloc_noprof(__VA_ARGS__))
-         |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/alloc_tag.h:210:31: note: expanded from macro 'alloc_hooks'
-     210 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
-   include/linux/alloc_tag.h:202:27: note: expanded from macro 'alloc_hooks_tag'
-     202 |         typeof(_do_alloc) _res = _do_alloc;                             \
-         |                                  ^~~~~~~~~
-   3 warnings generated.
+   In file included from drivers/dma-buf/dma-fence-user-fence.c:6:
+   In file included from include/linux/dma-fence-user-fence.h:10:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/dma-buf/dma-fence-user-fence.c:6:
+   In file included from include/linux/dma-fence-user-fence.h:10:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/dma-buf/dma-fence-user-fence.c:6:
+   In file included from include/linux/dma-fence-user-fence.h:10:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/dma-buf/dma-fence-user-fence.c:15:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   writeq(user_fence->seqno, user_fence->map.vaddr_iomem);
+                   ^
+   6 warnings and 1 error generated.
 
 
-vim +616 block/bio.c
+vim +/writeq +15 drivers/dma-buf/dma-fence-user-fence.c
 
-^1da177e4c3f41 fs/bio.c    Linus Torvalds    2005-04-16  593  
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  594  /**
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  595   * bio_kmalloc - kmalloc a bio
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  596   * @nr_vecs:	number of bio_vecs to allocate
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  597   * @gfp_mask:   the GFP_* mask given to the slab allocator
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  598   *
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  599   * Use kmalloc to allocate a bio (including bvecs).  The bio must be initialized
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  600   * using bio_init() before use.  To free a bio returned from this function use
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  601   * kfree() after calling bio_uninit().  A bio returned from this function can
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  602   * be reused by calling bio_uninit() before calling bio_init() again.
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  603   *
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  604   * Note that unlike bio_alloc() or bio_alloc_bioset() allocations from this
-340e134727c9ad block/bio.c Deming Wang       2022-10-06  605   * function are not backed by a mempool can fail.  Do not use this function
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  606   * for allocations in the file system I/O path.
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  607   *
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  608   * Returns: Pointer to new bio on success, NULL on failure.
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  609   */
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  610  struct bio *bio_kmalloc(unsigned short nr_vecs, gfp_t gfp_mask)
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  611  {
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  612  	struct bio *bio;
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  613  
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06  614  	if (nr_vecs > UIO_MAXIOV)
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  615  		return NULL;
-066ff571011d84 block/bio.c Christoph Hellwig 2022-04-06 @616  	return kmalloc(struct_size(bio, bi_inline_vecs, nr_vecs), gfp_mask);
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  617  }
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  618  EXPORT_SYMBOL(bio_kmalloc);
-3175199ab0ac8c block/bio.c Christoph Hellwig 2021-01-26  619  
+     8	
+     9	static void user_fence_cb(struct dma_fence *fence, struct dma_fence_cb *cb)
+    10	{
+    11		struct dma_fence_user_fence *user_fence =
+    12			container_of(cb, struct dma_fence_user_fence, cb);
+    13	
+    14		if (user_fence->map.is_iomem)
+  > 15			writeq(user_fence->seqno, user_fence->map.vaddr_iomem);
+    16		else
+    17			*(u64 *)user_fence->map.vaddr = user_fence->seqno;
+    18	
+    19		dma_fence_user_fence_free(user_fence);
+    20	}
+    21	
 
 -- 
 0-DAY CI Kernel Test Service
