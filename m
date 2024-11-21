@@ -1,125 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5A94317E;
-	Thu, 21 Nov 2024 07:44:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C164206E;
+	Thu, 21 Nov 2024 07:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732175065; cv=none; b=hz5p2xfLkpNsDcKFuHZKr0BNK808UY2qnVJBRu9pIUdRYTVSV/WhR7gHM7hlj2eH9US9fZzt+RZmSNeMRRmgAJ2nVk2pHruQ/NgB+XikTTbI48nKP9pjoO6oT0tub3uZ3gPrz/FClD1h95X0QjViKQoilb7Txc7sdcLwcoDH+QE=
+	t=1732175549; cv=none; b=FfS8K81p8ys28DPkDl/DYHRdZgiQ44yAFm4PfWa6wDmdUWJdtF2o4nEa9ghsk1giGMLRx4dmpDHXEdxxo+BRGZinyltyI87SmdKLm3wxSQCQ7gggZQGUBIdkmnJgJWzUJnME2cWOigNxqRZksYApkV++F1niYfwGSvBIu+BVc0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732175065; c=relaxed/simple;
-	bh=0TLbLPLBgcM3iGjdM8q6JOi1u/2UwoegboxVplByXgc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Qf4jEnzgtZ18ZhdVaMfpX9PV10HyJDzuRy9OTZM+EBcDQ2LVp/jVNgra/rSKwFMgkBihQkLR3hwDOlEQ30g7EaMnWSYMgZYU2vdxVU37OrAQN6xFlpGFQmMfI1n98nWjlKSA0V6wy4kU2JhNeqZoxkrnAgH00tcNwaccc4Vf4Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kwWCM6kR; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732175549; c=relaxed/simple;
+	bh=FsZnS+BPUxlTWtLuYGviVz6SM4TotXdAK09EcB98b/o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j5rdKBe1XjW/XTVrrT7AG/YgDbKeeNdPZqIknZfXHSFlC3JwXCN205u/qC5eVu+Bx06C5JKhk2Xxe3uMbtB0q8PKuslgPcEORIBpQ+vhF/br7Cte+Hlvu0smLbKUpcol3DLnPcFgLTpKHX5Z1Fp8DK/jQVUcPC/OQhYpblnMVmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pzAeYQ2P; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kwWCM6kR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732175063; x=1763711063;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0TLbLPLBgcM3iGjdM8q6JOi1u/2UwoegboxVplByXgc=;
-  b=kwWCM6kRRSy3WNSihDRfLWoK6lyjSCr58Eo1bJaTcXgjahaxpCEipv/8
-   HmODF3CvQGPZQB1Z2J9BG39S0Xu0TmF9TPsLusYzP29zwcriq9mmxxtuS
-   FQTW2nhrc/dxvpz/puGvZ3ui0Bgvxe03qXABheiuVrjx+i//N241yN1ee
-   VlViBikeoTFiPYH1Oautbh2BlLXPRCF85IdZifsAVIjG/S+KFGQeFeT0U
-   RLeD37nS/5BukXi11Ne9oK6hyNlJcVUvMPQTX1GNM+7Ek395DPV/Ye8yK
-   s/NsMdrnmVOxnKV3oQa+8g9bWyy18Gi3xYPXNed7agyHc2G/CeB+mEhze
-   w==;
-X-CSE-ConnectionGUID: 5TMXIONuSlud1SOvFAaHHQ==
-X-CSE-MsgGUID: JdnD7qpLQ5yL/Q9h9w2IqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="32419538"
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="32419538"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 23:44:23 -0800
-X-CSE-ConnectionGUID: Cta6EdotQ2a2azWLvS5Dpg==
-X-CSE-MsgGUID: yVnXHSnHTNKR1szQnH1Ycw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="94237216"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Nov 2024 23:44:20 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tE1rO-0002ep-1z;
-	Thu, 21 Nov 2024 07:44:18 +0000
-Date: Thu, 21 Nov 2024 15:43:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sheng Yong <shengyong@oppo.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Song Feng <songfeng@oppo.com>,
-	Yongpeng Yang <yangyongpeng1@oppo.com>,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [jaegeuk-f2fs:dev-test 35/36] ERROR: modpost:
- "f2fs_check_and_fix_write_pointer" [fs/f2fs/f2fs.ko] undefined!
-Message-ID: <202411211538.Tus6kZm1-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pzAeYQ2P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC7EC4CECC;
+	Thu, 21 Nov 2024 07:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732175545;
+	bh=FsZnS+BPUxlTWtLuYGviVz6SM4TotXdAK09EcB98b/o=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=pzAeYQ2P3Ucsqy2Xme2Jrmxbynq7t+1wPzAMRVotNI8uTk6HAppUuxX8h5GaI/73O
+	 fzR5I3gL2yH1l9JxM/h6Vn69mpN44AdV81P6+g7z5/ILjVu8WBqBxriNPldf0Kj3fb
+	 mFSdNPpGQJrYcYNpBYA2GZ1kZl5fxz7V19S2gBWrnrytlAgblf6pSchjFezLLPTwBS
+	 NT6I6VN3z6ffW8HD7FQjDni/7ftvQ6dH0NTxC7T5ia4/vTC29uQVWDJzz6Xrf0Ss1H
+	 mJhYXD2xqCYk/E3P4Irt9H+02RZD9cFFLltwnPz+v3oQnx0sojw/AW6Cd7/Ah8CxEJ
+	 pzuWwnMbGzG9g==
+Message-ID: <efafb881-2bfe-4d64-ae1b-4648ce43ec63@kernel.org>
+Date: Thu, 21 Nov 2024 08:52:17 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: iio: light: Add APDS9160 binding
+To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Cc: Conor Dooley <conor@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>
+References: <20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com>
+ <20241119-apds9160-driver-v1-1-fa00675b4ea4@dimonoff.com>
+ <20241120-case-guy-7456f9f850fa@spud>
+ <769d80cf-c4ce-48eb-964a-e5963f2ed138@kernel.org> <Zz5F4JQVxA/AgNva@uva.nl>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <Zz5F4JQVxA/AgNva@uva.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-head:   05735334776f7f446fbda9fd7efa7d9f835096ca
-commit: 98eebae9535e3ca2df2157d29a37c1b74d8deb79 [35/36] f2fs: fix changing cursegs if recovery fails on zoned device
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241121/202411211538.Tus6kZm1-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241121/202411211538.Tus6kZm1-lkp@intel.com/reproduce)
+On 20/11/2024 21:26, Mikael Gonella-Bolduc wrote:
+>>>> +$id: http://devicetree.org/schemas/iio/light/avago,apds9160.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Broadcom Combined Proximity & Ambient light sensor
+>>>> +
+>>>> +maintainers:
+>>>> +  - Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
+>>>> +
+>>>> +description: |
+>>>> +  Datasheet: https://docs.broadcom.com/docs/APDS-9160-003-DS
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - avago,apds9160
+>>>> +      - broadmobi,apds9160
+>>>
+>>> What is the difference between these two devices? There's no match data,
+>>> makes it seem like there should be a fallback going on here.
+>> Same device names suggest this is some legacy. We don't take new
+>> bindings for legacy stuff.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hi,
+> Thank you for the feedback.
+> 
+> There's no difference between these two devices, it's the same chip using two different names.
+> There's two names because the chip was first released before the Avago & Broadcom acquisition.
+> 
+> The datasheet available has the avago name in it and it's referenced using both names.
+> I did not know which name to include so I wrote both.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411211538.Tus6kZm1-lkp@intel.com/
+Choose only one. Preferably newer one. Just notice that broadcom and
+broadmobi are a bit different entities, according to vendor prefixes.
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> It's old but still being produced today and active for new designs.
+> 
+> Is it too old for the driver to be mainlined?
 
-In file included from fs/f2fs/segment.c:9:
-In file included from include/linux/f2fs_fs.h:11:
-In file included from include/linux/pagemap.h:8:
-In file included from include/linux/mm.h:2213:
-include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-|                            ~~~~~~~~~~~~~~~~~~~~~ ^
-505 |                            item];
-|                            ~~~~
-include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-|                            ~~~~~~~~~~~~~~~~~~~~~ ^
-512 |                            NR_VM_NUMA_EVENT_ITEMS +
-|                            ~~~~~~~~~~~~~~~~~~~~~~
-include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-|                               ~~~~~~~~~~~ ^ ~~~
-include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-|                            ~~~~~~~~~~~~~~~~~~~~~ ^
-525 |                            NR_VM_NUMA_EVENT_ITEMS +
-|                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/f2fs/segment.c:5452:5: warning: no previous prototype for function 'f2fs_fix_curseg_write_pointer' [-Wmissing-prototypes]
-5452 | int f2fs_fix_curseg_write_pointer(struct f2fs_sb_info *sbi)
-|     ^
-fs/f2fs/segment.c:5452:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-5452 | int f2fs_fix_curseg_write_pointer(struct f2fs_sb_info *sbi)
-| ^
-| static
->> fs/f2fs/segment.c:5457:5: warning: no previous prototype for function 'f2fs_check_write_pointer' [-Wmissing-prototypes]
-5457 | int f2fs_check_write_pointer(struct f2fs_sb_info *sbi)
-|     ^
-fs/f2fs/segment.c:5457:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-5457 | int f2fs_check_write_pointer(struct f2fs_sb_info *sbi)
-| ^
-| static
-6 warnings generated.
---
->> ERROR: modpost: "f2fs_check_and_fix_write_pointer" [fs/f2fs/f2fs.ko] undefined!
+No, it is fine.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> If not, which name should I use?
+
+
+Best regards,
+Krzysztof
