@@ -1,151 +1,291 @@
-Received: from ewa-mbsout-02.mbs.boeing.net (ewa-mbsout-02.mbs.boeing.net [130.76.20.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924AA16133C
-	for <llvm@lists.linux.dev>; Fri, 22 Nov 2024 19:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.76.20.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0C0158DA3;
+	Fri, 22 Nov 2024 19:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732303821; cv=none; b=Jdp93MxGQSlQiH+tiJDuhKfM2kLnTcSPpRiZiRJSmc5P+W75KTBF/iUY5Wyp6BULW1EqYdBdblEaiQo6nFlBJVW9J49ZN8RCTVfDkgorV6KOaP7u6dJr8eKpgTc4mf70bsJN7NGYQ4wSDHgpWGdzHZ/C0EMUt980bsBi0yKM/bo=
+	t=1732304290; cv=none; b=f6+gqfFWZ4JuPTgTHuN9hCUrjJWblPNKhAjYWFv5Kj+lP3SJSIKFuTF5IhMZ1uZdT8JAnO1BpGhql3895jTX8MV7YBQSv8jPv3wEY+aFuxrzsqbm0DRRLOlJ+s2hf2VxRIEv0QoJPHPPbvXxpE+TGajyx25SDR7L9FtL+jF6Oo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732303821; c=relaxed/simple;
-	bh=wG2inwSpR/9+X54wlCts1dEXVIrIecNMNuwaBfvJ464=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ECpBJ/+5e20k7RfvMQ0MUp8rD/dMWYeEh17oEOWdiTHGCNuqYJh5pv9Fmj8ZQWRUc/qDsIEegRdZZXCSPcn6us1GfYiB5CbWYwgdZMFL+7ir4ifWt/5P8Z9J/K2K1Ad0iOP8Om+mqrrcMOW/O0eDauHCsyk3yc5j+r6QbJ7No0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=boeing.com; spf=pass smtp.mailfrom=boeing.com; dkim=pass (2048-bit key) header.d=boeing.com header.i=@boeing.com header.b=LsEQ7Ltc; arc=none smtp.client-ip=130.76.20.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=boeing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=boeing.com
+	s=arc-20240116; t=1732304290; c=relaxed/simple;
+	bh=ibL2e7E9hR59pIsSHWfw93yujCD0mKk4Gs097TRUJ+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2h6ALeTIid4HB7ykA6eQx5jhpem67492Mx1/Ag87wStlQMIeeij8MiBYWEmgqdfdsjGdWVInDUMYF542QzlhUSuKog8g89xPO6ZkEVCN2KCDcVoRUjeWil2EDpfsLbfCPKPL41T/vVCcFyn/RthNrxDH4rQASHPUfIiEHiK3rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ges8kgyF; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=boeing.com header.i=@boeing.com header.b="LsEQ7Ltc"
-Received: from localhost (localhost [127.0.0.1])
-	by ewa-mbsout-02.mbs.boeing.net (8.15.2/8.15.2/DOWNSTREAM_MBSOUT) with SMTP id 4AMJT4fX028071;
-	Fri, 22 Nov 2024 11:29:11 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=boeing.com;
-	s=boeing-s1912; t=1732303751;
-	bh=wG2inwSpR/9+X54wlCts1dEXVIrIecNMNuwaBfvJ464=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=LsEQ7LtcR9sP47E6r5F/EI5LFYYhNnoequTqgwbeSkJLVrC7B6FjXDsgH0/mYXDOI
-	 KggVQPvtpjkStulYl7sH1BQc9w2VhG0s7MltQe8XYfnhS0vARYfFWRoDB1LJWLZhS1
-	 kvnGJpavpvqfy7AvfbM1MPbt7eYB6TDSiVcQBWGeTwVbsF93mBu4465x/hetKp84Ba
-	 yzNidQpbEv4hWNxH1yLLvIAjU8W+CUS7VAsHSBAIHZ8rUf17+s88Ix3fIFkdILU+jy
-	 nAnmz4jh35Nf5DHNEA5TcHDXuj6XafQi99HEUHY84LQfuRcuqdPSzXg65pDuGIvi0P
-	 4C0ipOsm9/jtQ==
-Received: from XCH16-03-02.nos.boeing.com (xch16-03-02.nos.boeing.com [137.137.111.11])
-	by ewa-mbsout-02.mbs.boeing.net (8.15.2/8.15.2/8.15.2/UPSTREAM_MBSOUT) with ESMTPS id 4AMJSmxp027883
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 22 Nov 2024 11:28:49 -0800
-Received: from XCH16-03-04.nos.boeing.com (137.137.111.13) by
- XCH16-03-02.nos.boeing.com (137.137.111.11) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 22 Nov 2024 11:28:46 -0800
-Received: from XCH16-03-04.nos.boeing.com ([fe80::7809:c78b:36c8:935e]) by
- XCH16-03-04.nos.boeing.com ([fe80::7809:c78b:36c8:935e%13]) with mapi id
- 15.01.2507.039; Fri, 22 Nov 2024 11:28:46 -0800
-From: "Wolber (US), Chuck" <chuck.wolber@boeing.com>
-To: Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor
-	<nathan@kernel.org>
-CC: Wentao Zhang <wentaoz5@illinois.edu>,
-        "Kelly (US), Matt"
-	<Matt.Kelly2@boeing.com>,
-        "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>,
-        "Oppelt (US), Andrew J"
-	<andrew.j.oppelt@boeing.com>,
-        "anton.ivanov@cambridgegreys.com"
-	<anton.ivanov@cambridgegreys.com>,
-        "ardb@kernel.org" <ardb@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jinghao7@illinois.edu"
-	<jinghao7@illinois.edu>,
-        "johannes@sipsolutions.net"
-	<johannes@sipsolutions.net>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "justinstitt@google.com" <justinstitt@google.com>,
-        "kees@kernel.org"
-	<kees@kernel.org>,
-        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "luto@kernel.org"
-	<luto@kernel.org>,
-        "marinov@illinois.edu" <marinov@illinois.edu>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "maskray@google.com"
-	<maskray@google.com>,
-        "mathieu.desnoyers@efficios.com"
-	<mathieu.desnoyers@efficios.com>,
-        "Weber (US), Matthew L"
-	<matthew.l.weber3@boeing.com>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "morbo@google.com" <morbo@google.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "oberpar@linux.ibm.com"
-	<oberpar@linux.ibm.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "richard@nod.at" <richard@nod.at>,
-        "rostedt@goodmis.org"
-	<rostedt@goodmis.org>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "Sarkisian (US), Samuel" <samuel.sarkisian@boeing.com>,
-        "Vanderleest (US),
- Steven H" <steven.h.vanderleest@boeing.com>,
-        "tglx@linutronix.de"
-	<tglx@linutronix.de>,
-        "tingxur@illinois.edu" <tingxur@illinois.edu>,
-        "tyxu@illinois.edu" <tyxu@illinois.edu>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [EXTERNAL] Re: [PATCH v2 0/4] Enable measuring the kernel's
- Source-based Code Coverage and MC/DC with Clang
-Thread-Topic: [EXTERNAL] Re: [PATCH v2 0/4] Enable measuring the kernel's
- Source-based Code Coverage and MC/DC with Clang
-Thread-Index: AQHbFIcZxf21kGRuK0Wyyav9pF/OKLJzeOYAgAKrngCATew1gP//77aA
-Date: Fri, 22 Nov 2024 19:28:46 +0000
-Message-ID: <5F5EA6BE-94BD-4352-ADA9-D14BBE703D4F@boeing.com>
-References: <20241002045347.GE555609@thelio-3990X>
- <20241002064252.41999-1-wentaoz5@illinois.edu>
- <20241003232938.GA1663252@thelio-3990X>
- <20241122122703.GW24774@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241122122703.GW24774@noisy.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Microsoft-MacOutlook/16.90.24110120
-x-tm-snts-smtp: 7DF70432748D194DD0E592FE746D6476C899CCB5789BECADCB3900194B2B36932000:8
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <16FA026E611EC84494309EE6F018901D@boeing.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ges8kgyF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732304289; x=1763840289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ibL2e7E9hR59pIsSHWfw93yujCD0mKk4Gs097TRUJ+o=;
+  b=ges8kgyFxaXgJ3nH5bpfJLD26iBU2BekC9RaIsmUwRquBHHynUdEvPFx
+   aRPFoku8ndsFO+x0NUd3bel9i+8TQAaNAaY7SiyWaC8fmgiFajPlX9BkJ
+   Fq1mQvxDNdOu5saSkojQDNRh9tf8kHU3nptKJ8UHPluIjTHQJC13STNbu
+   vxnByXEnYYVX6Rgv03zcuFVn4G8Kjki/1q+IZSFzx2zvBiaJXExo2Abbh
+   C8zrg64r/B82qk1gJamF5hSOGbnlBLENDlMjbYSUSyJE71QzdVVjmaRHZ
+   psXsORSGmroGR+7MyefJWuuYS13hUBuJvjecWBI+otRELtMTLs69xEYa7
+   w==;
+X-CSE-ConnectionGUID: UW/PftQrSo2TYozQM7l47w==
+X-CSE-MsgGUID: syR4iTL6QOSXHoKHTkjIJA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="43118446"
+X-IronPort-AV: E=Sophos;i="6.12,176,1728975600"; 
+   d="scan'208";a="43118446"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 11:38:08 -0800
+X-CSE-ConnectionGUID: Oe9wIpEfTfCdxaHiXMZpSQ==
+X-CSE-MsgGUID: H5PCyu/USiuBaq8VtDEBoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,176,1728975600"; 
+   d="scan'208";a="91088483"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 22 Nov 2024 11:38:07 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEZTf-0004Ah-2P;
+	Fri, 22 Nov 2024 19:38:03 +0000
+Date: Sat, 23 Nov 2024 03:37:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] mm: convert mm_lock_seq to a proper seqcount
+Message-ID: <202411230304.3VXv880b-lkp@intel.com>
+References: <20241121162826.987947-2-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241121162826.987947-2-surenb@google.com>
 
-PiA+IE9uIFRodSwgT2N0IDAzLCAyMDI0IGF0IDA0OjI5OjM4UE0gLTA3MDAsIE5hdGhhbiBDaGFu
-Y2VsbG9yIHdyb3RlOg0KPiA+DQo+ID4gJCAvdXNyL2Jpbi90aW1lIC12IG1ha2UgLXNraiIkKG5w
-cm9jKSIgQVJDSD14ODZfNjQgTExWTT0xIG1ycHJvcGVyIHtkZWYsYW1kX21lbV9lbmNyeXB0Lixm
-b3J0aWZ5X3NvdXJjZS4sbGx2bV9jb3YufWNvbmZpZyBiekltYWdlDQo+ID4gLi4uDQo+ID4gdm1s
-aW51eC5vOiB3YXJuaW5nOiBvYmp0b29sOiBfX3Nldl9lc19ubWlfY29tcGxldGUrMHg2ZTogY2Fs
-bCB0byBrYXNhbl9jaGVja193cml0ZSgpIGxlYXZlcyAubm9pbnN0ci50ZXh0IHNlY3Rpb24NCg0K
-JTwgU05JUCAlPA0KDQo+ID4gdm1saW51eC5vOiB3YXJuaW5nOiBvYmp0b29sOiBhY3BpX2lkbGVf
-ZG9fZW50cnkrMHg0OiBjYWxsIHRvIHBlcmZfbG9wd3JfY2IoKSBsZWF2ZXMgLm5vaW5zdHIudGV4
-dCBzZWN0aW9uDQo+DQo+DQo+IEp1c3Qgc2F3IHRoaXMgZmx5IGJ5LCB0aGF0IGxvb2tzIGxpa2Ug
-c29tZXRoaW5nIGlzIGJ1Z2dlcmVkIGJhZC4gTm90YWJseQ0KPiBsb2NrZGVwX2hhcmRpcnFzX3tv
-bixvZmZ9KCkgYXJlIG5vaW5zdHIuDQo+DQo+DQo+IElzIHRoaXMgcGF0Y2gtc2V0IGNhdXNpbmcg
-dGhpcywgb3Igd2hhdD8NCg0KTm8sIHRoZXNlIHBhdGNoZXMgYXJlIG5vdCBjYXVzaW5nIHRoaXMu
-IFRoaXMgcGF0Y2gtc2V0IGFwcGVhcnMgdG8gaGF2ZSBleHBvc2VkIGENCmJ1ZyBpbiB0aGUgbGx2
-bSBsaW5rZXIgKGxsZCk6DQoNCmh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdC9p
-c3N1ZXMvMTE2NTc1DQoNCi4uQ2g6Vy4uDQoNCg==
+Hi Suren,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 43fb83c17ba2d63dfb798f0be7453ed55ca3f9c2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-convert-mm_lock_seq-to-a-proper-seqcount/20241122-003050
+base:   43fb83c17ba2d63dfb798f0be7453ed55ca3f9c2
+patch link:    https://lore.kernel.org/r/20241121162826.987947-2-surenb%40google.com
+patch subject: [PATCH v2 2/3] mm: convert mm_lock_seq to a proper seqcount
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241123/202411230304.3VXv880b-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411230304.3VXv880b-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411230304.3VXv880b-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/char/tpm/tpm-chip.c:24:
+   In file included from include/linux/tpm_eventlog.h:6:
+   In file included from include/linux/tpm.h:24:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:16:
+>> include/linux/mmap_lock.h:140:30: error: no member named 'mm_lock_seq' in 'struct mm_struct'
+     140 |         ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+         |                                 ~~  ^
+   include/linux/kcsan-checks.h:371:25: note: expanded from macro 'ASSERT_EXCLUSIVE_WRITER'
+     371 |         __kcsan_check_access(&(var), sizeof(var), KCSAN_ACCESS_ASSERT)
+         |                                ^~~
+   In file included from drivers/char/tpm/tpm-chip.c:24:
+   In file included from include/linux/tpm_eventlog.h:6:
+   In file included from include/linux/tpm.h:24:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:16:
+>> include/linux/mmap_lock.h:140:30: error: no member named 'mm_lock_seq' in 'struct mm_struct'
+     140 |         ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+         |                                 ~~  ^
+   include/linux/kcsan-checks.h:371:38: note: expanded from macro 'ASSERT_EXCLUSIVE_WRITER'
+     371 |         __kcsan_check_access(&(var), sizeof(var), KCSAN_ACCESS_ASSERT)
+         |                                             ^~~
+   In file included from drivers/char/tpm/tpm-chip.c:24:
+   In file included from include/linux/tpm_eventlog.h:6:
+   In file included from include/linux/tpm.h:24:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/char/tpm/tpm-chip.c:24:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+     167 |         int mapping_size;
+         |             ^
+   2 warnings and 2 errors generated.
+--
+   In file included from drivers/char/tpm/tpm-buf.c:8:
+   In file included from include/linux/tpm.h:24:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:16:
+>> include/linux/mmap_lock.h:140:30: error: no member named 'mm_lock_seq' in 'struct mm_struct'
+     140 |         ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+         |                                 ~~  ^
+   include/linux/kcsan-checks.h:371:25: note: expanded from macro 'ASSERT_EXCLUSIVE_WRITER'
+     371 |         __kcsan_check_access(&(var), sizeof(var), KCSAN_ACCESS_ASSERT)
+         |                                ^~~
+   In file included from drivers/char/tpm/tpm-buf.c:8:
+   In file included from include/linux/tpm.h:24:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:16:
+>> include/linux/mmap_lock.h:140:30: error: no member named 'mm_lock_seq' in 'struct mm_struct'
+     140 |         ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+         |                                 ~~  ^
+   include/linux/kcsan-checks.h:371:38: note: expanded from macro 'ASSERT_EXCLUSIVE_WRITER'
+     371 |         __kcsan_check_access(&(var), sizeof(var), KCSAN_ACCESS_ASSERT)
+         |                                             ^~~
+   In file included from drivers/char/tpm/tpm-buf.c:8:
+   In file included from include/linux/tpm.h:24:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2225:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:16:
+>> include/linux/mmap_lock.h:140:30: error: no member named 'mm_lock_seq' in 'struct mm_struct'
+     140 |         ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+         |                                 ~~  ^
+   include/linux/kcsan-checks.h:371:25: note: expanded from macro 'ASSERT_EXCLUSIVE_WRITER'
+     371 |         __kcsan_check_access(&(var), sizeof(var), KCSAN_ACCESS_ASSERT)
+         |                                ^~~
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:16:
+>> include/linux/mmap_lock.h:140:30: error: no member named 'mm_lock_seq' in 'struct mm_struct'
+     140 |         ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+         |                                 ~~  ^
+   include/linux/kcsan-checks.h:371:38: note: expanded from macro 'ASSERT_EXCLUSIVE_WRITER'
+     371 |         __kcsan_check_access(&(var), sizeof(var), KCSAN_ACCESS_ASSERT)
+         |                                             ^~~
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/char/tpm/tpm_tis_spi_main.c:32:
+   In file included from include/linux/spi/spi.h:17:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:1132:
+   In file included from include/linux/huge_mm.h:8:
+
+
+vim +140 include/linux/mmap_lock.h
+
+   128	
+   129	/*
+   130	 * Drop all currently-held per-VMA locks.
+   131	 * This is called from the mmap_lock implementation directly before releasing
+   132	 * a write-locked mmap_lock (or downgrading it to read-locked).
+   133	 * This should normally NOT be called manually from other places.
+   134	 * If you want to call this manually anyway, keep in mind that this will release
+   135	 * *all* VMA write locks, including ones from further up the stack.
+   136	 */
+   137	static inline void vma_end_write_all(struct mm_struct *mm)
+   138	{
+   139		mmap_assert_write_locked(mm);
+ > 140		ASSERT_EXCLUSIVE_WRITER(mm->mm_lock_seq);
+   141		mm_lock_seqcount_end(mm);
+   142	}
+   143	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
