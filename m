@@ -1,122 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABCB83CD3;
-	Fri, 22 Nov 2024 15:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17282309BF;
+	Fri, 22 Nov 2024 15:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732288246; cv=none; b=R5k2VKFeGiWbNtBwrMu1YApsAsNPl3QB7HMhN2JCOyP7h/srYdNKDp3A483qWqcX4iL6R1YnKbagKH4JHX1C3g1kxZc+k47A3fINaFD/WfXHNWzC4ujw306xADpq8NcHTDFzJ/cpOFEVSLCCA5prirQcc/Mv5GLNvH5WxUk1JnQ=
+	t=1732288866; cv=none; b=MN/ENGx0cZOOSbToZmRDwQiCvC/2q+NZhBGYq7b/l+VgQD9iOaBpa9ASr7b57pzF+Xj/6qbaAn+rO1UMcQ2SzL+az7t+JL7GmvMC1A07Iiob6fR3Jrzvls1w/r/6EVTEXHpV7FOtt8PnDzeOqk+kXJbBRWFs7EubRcZ0CMoCHfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732288246; c=relaxed/simple;
-	bh=O8W8V2v3ggSNRbf/WtoNsYdZzZHeFWKhWoWdKWTGSXM=;
+	s=arc-20240116; t=1732288866; c=relaxed/simple;
+	bh=7pz32RbN7KvAwY8Z4VR7ySVX87cMIOLDDNQdlcRElAg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iulm5X0jMmE9P5cgjK1JPvUkmMe4GCw4Mfy5pzckgYnmQsIY7nF2gOSLyJ1mcFIm30jUNRfi9BqGDkhNJcMuCHAVWR0iDSBwIZ4w27zyvD1f58hfJ4VSNl/LcYt4oDDOK713u9/0L1Y6PYhacBVwB7dKYb2J5ZNTq4O807sIA6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QZot2vJs; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fQKgNcI8YYCTryj+Atdsp/4ySnRzaxhV5eIf2fFu+qWJoyoyqqo2GTRrfRRtdjyBVInFAV5eYrZFEMnWfLaucsj4xyeCo2LtqSrakZVNJB3JCXO/kHW+tHVI3nGxscjK6PanEoP8z7uLxHIC72c1S4jZ1BEdsDCxKEo0pHJ7CSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ma1GLpGc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QZot2vJs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732288245; x=1763824245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O8W8V2v3ggSNRbf/WtoNsYdZzZHeFWKhWoWdKWTGSXM=;
-  b=QZot2vJs4lCCR5vKJV2Hn+waowr3Pj6cpy8IXNapPHOCLsyFXxRh80w4
-   u+xyL0QYu1aOS3ajNlA0G4xwE6wMz4PCGYEKMWBCdGslJ6gco7FjcVo4b
-   fJmdyw04ZXvJk9kAP4n0CttPSok03Ns/Wg2UVp56el1/iMN2/mpnQBmDL
-   i8m9qmdt+3nPD4fygJg1amlv5iFM7mAN8bFpAYRywY4fvV6dxFA+k+BlW
-   2qeXw+1MolrLfKp+np4maLnZiG8Kie6Gp44Vw+LxbpAE5HfjJGYCSiMU8
-   4qN62zdZNyQLZxCptEm9XLt+KLfr1wMSNpu99WkduTaXNXOYbtdbnY1gw
-   g==;
-X-CSE-ConnectionGUID: lcY7CLFORIylI4yE9d+uVQ==
-X-CSE-MsgGUID: +VvVpwOjREWUr89NQnCbnQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="49963258"
-X-IronPort-AV: E=Sophos;i="6.12,176,1728975600"; 
-   d="scan'208";a="49963258"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 07:10:44 -0800
-X-CSE-ConnectionGUID: SJBTruWmRNS5ScurZDldnw==
-X-CSE-MsgGUID: K2W/b0a/RQ+8fyEru8EmRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,176,1728975600"; 
-   d="scan'208";a="121551606"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Nov 2024 07:10:40 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEVIs-00040Z-0f;
-	Fri, 22 Nov 2024 15:10:38 +0000
-Date: Fri, 22 Nov 2024 23:09:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
- driver
-Message-ID: <202411222244.oAiveIHV-lkp@intel.com>
-References: <20241119-apds9160-driver-v1-2-fa00675b4ea4@dimonoff.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ma1GLpGc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F5EDC4CECE;
+	Fri, 22 Nov 2024 15:21:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732288866;
+	bh=7pz32RbN7KvAwY8Z4VR7ySVX87cMIOLDDNQdlcRElAg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ma1GLpGcU49K7V4i4V697Y2v1F+5gFEzWWYfG5ikQE+epTRKFWCKoH1EKhBUlvgg5
+	 Rmuxt/3KU1BnX25bq4mq4g/MgfNMmzgnc3Oz6kOk/ENKy4N0brAfguPHD6jmQ6fu+a
+	 2Gc4fcqjhh4EkAyn8gWE5c06MQwMBq5ZRiGINmHPhF9nO7yBjnolYua+7MfjyPeQ18
+	 NLTTzKlS3ZC3p/iuWeIRAJ0od+DZuaxN2wuVP+e2tY1c94VMmdNMZXYdLj/oWLG9Oj
+	 z4miGV/9poZHenA3v3hzPb8qGGkOcXCoxFRhj1jbf3w9hm51XJGkYvPW3wEXf8VEvL
+	 8W/a3r9HB3mWg==
+Date: Fri, 22 Nov 2024 10:21:04 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	kernel test robot <lkp@intel.com>,
+	Russell King <rmk+kernel@armlinux.org.uk>, linux@armlinux.org.uk,
+	arnd@arndb.de, samitolvanen@google.com,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH AUTOSEL 6.6 5/6] ARM: 9434/1: cfi: Fix compilation corner
+ case
+Message-ID: <Z0ChYA7bsmnZRI2d@sashalap>
+References: <20241120140647.1768984-1-sashal@kernel.org>
+ <20241120140647.1768984-5-sashal@kernel.org>
+ <20241120151338.GA3158726@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20241119-apds9160-driver-v1-2-fa00675b4ea4@dimonoff.com>
+In-Reply-To: <20241120151338.GA3158726@thelio-3990X>
 
-Hi Mikael,
+On Wed, Nov 20, 2024 at 08:13:38AM -0700, Nathan Chancellor wrote:
+>Hi Sasha,
+>
+>On Wed, Nov 20, 2024 at 09:06:35AM -0500, Sasha Levin wrote:
+>> From: Linus Walleij <linus.walleij@linaro.org>
+>>
+>> [ Upstream commit 4aea16b7cfb76bd3361858ceee6893ef5c9b5570 ]
+>>
+>> When enabling expert mode CONFIG_EXPERT and using that power
+>> user mode to disable the branch prediction hardening
+>> !CONFIG_HARDEN_BRANCH_PREDICTOR, the assembly linker
+>> in CLANG notices that some assembly in proc-v7.S does
+>> not have corresponding C call sites, i.e. the prototypes
+>> in proc-v7-bugs.c are enclosed in ifdef
+>> CONFIG_HARDEN_BRANCH_PREDICTOR so this assembly:
+>>
+>> SYM_TYPED_FUNC_START(cpu_v7_smc_switch_mm)
+>> SYM_TYPED_FUNC_START(cpu_v7_hvc_switch_mm)
+>>
+>> Results in:
+>>
+>> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_smc_switch_mm
+>> >>> referenced by proc-v7.S:94 (.../arch/arm/mm/proc-v7.S:94)
+>> >>> arch/arm/mm/proc-v7.o:(.text+0x108) in archive vmlinux.a
+>>
+>> ld.lld: error: undefined symbol: __kcfi_typeid_cpu_v7_hvc_switch_mm
+>> >>> referenced by proc-v7.S:105 (.../arch/arm/mm/proc-v7.S:105)
+>> >>> arch/arm/mm/proc-v7.o:(.text+0x124) in archive vmlinux.a
+>>
+>> Fix this by adding an additional requirement that
+>> CONFIG_HARDEN_BRANCH_PREDICTOR has to be enabled to compile
+>> these assembly calls.
+>>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202411041456.ZsoEiD7T-lkp@intel.com/
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>>  arch/arm/mm/proc-v7.S | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm/mm/proc-v7.S b/arch/arm/mm/proc-v7.S
+>> index 193c7aeb67039..bea11f9bfe856 100644
+>> --- a/arch/arm/mm/proc-v7.S
+>> +++ b/arch/arm/mm/proc-v7.S
+>> @@ -93,7 +93,7 @@ ENTRY(cpu_v7_dcache_clean_area)
+>>  	ret	lr
+>>  ENDPROC(cpu_v7_dcache_clean_area)
+>>
+>> -#ifdef CONFIG_ARM_PSCI
+>> +#if defined(CONFIG_ARM_PSCI) && defined(CONFIG_HARDEN_BRANCH_PREDICTOR)
+>>  	.arch_extension sec
+>>  ENTRY(cpu_v7_smc_switch_mm)
+>
+>This patch is unnecessary in branches prior to 6.10 (when ARM started
+>supporting kCFI) because SYM_TYPED_FUNC_START() is not used here. I
+>would just drop it for 6.6 and earlier.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on adc218676eef25575469234709c2d87185ca223a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mikael-Gonella-Bolduc-via-B4-Relay/dt-bindings-iio-light-Add-APDS9160-binding/20241121-123509
-base:   adc218676eef25575469234709c2d87185ca223a
-patch link:    https://lore.kernel.org/r/20241119-apds9160-driver-v1-2-fa00675b4ea4%40dimonoff.com
-patch subject: [PATCH 2/2] iio: light: Add APDS9160 ALS & Proximity sensor driver
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20241122/202411222244.oAiveIHV-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411222244.oAiveIHV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411222244.oAiveIHV-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/light/apds9160.c:3: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * This file is part of the APDS9160 sensor driver.
->> drivers/iio/light/apds9160.c:565: warning: Function parameter or struct member 'data' not described in 'apds9160_set_ps_cancellation_level'
->> drivers/iio/light/apds9160.c:565: warning: Function parameter or struct member 'val' not described in 'apds9160_set_ps_cancellation_level'
->> drivers/iio/light/apds9160.c:565: warning: expecting prototype for The PS intelligent cancellation level register allows for an on(). Prototype was for apds9160_set_ps_cancellation_level() instead
-   drivers/iio/light/apds9160.c:585: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * This parameter determines the cancellation pulse duration in each of the PWM pulse.
-   drivers/iio/light/apds9160.c:609: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Set the proximity sensor led current
-
-
-vim +3 drivers/iio/light/apds9160.c
-
-   > 3	 * This file is part of the APDS9160 sensor driver.
-     4	 * Chip is combined proximity and ambient light sensor.
-     5	 * Author: Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
-     6	 */
-     7	
+Ack, will do.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Sasha
