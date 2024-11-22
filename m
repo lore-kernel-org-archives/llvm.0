@@ -1,132 +1,151 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from ewa-mbsout-02.mbs.boeing.net (ewa-mbsout-02.mbs.boeing.net [130.76.20.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F311DE4E4;
-	Fri, 22 Nov 2024 19:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924AA16133C
+	for <llvm@lists.linux.dev>; Fri, 22 Nov 2024 19:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.76.20.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732303690; cv=none; b=q3eCSoLZUQFoB1RvGPzyEQXsthYyurAJN6Pv0xfPpmF5ZjqnQxZJoi8R1e33p+D5BwcYpmwiJ9lmeMt2mI+je/kSTtp1T7ZFkMhD9MdAW+7XUhiJWTXkNSWmtq8F0OySuLQcCeo2PDK+tlgSU6ksv4t4iIJF3y/tKStAIr0w07k=
+	t=1732303821; cv=none; b=Jdp93MxGQSlQiH+tiJDuhKfM2kLnTcSPpRiZiRJSmc5P+W75KTBF/iUY5Wyp6BULW1EqYdBdblEaiQo6nFlBJVW9J49ZN8RCTVfDkgorV6KOaP7u6dJr8eKpgTc4mf70bsJN7NGYQ4wSDHgpWGdzHZ/C0EMUt980bsBi0yKM/bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732303690; c=relaxed/simple;
-	bh=XOuugtMzqS81ax0GoSPiEWRpEv4ozJdRIVnvBRce30c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OEviYXalsYfB52wWAchAVIgp8lGdDKtFLdX0sNbm+sXQk8+ulVhjWniVBhnDKNqLi2pYLCNwjjTB5+K4wWd+g4mjOGlEhYI7rAkv/qT9qR7M2V8JEHqNC3KHzoXDWso2y7ryRwalYrQ4HV7+nPjRcqcbC5lvT95vwpLmc81aQxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fRUIA/6x; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732303821; c=relaxed/simple;
+	bh=wG2inwSpR/9+X54wlCts1dEXVIrIecNMNuwaBfvJ464=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ECpBJ/+5e20k7RfvMQ0MUp8rD/dMWYeEh17oEOWdiTHGCNuqYJh5pv9Fmj8ZQWRUc/qDsIEegRdZZXCSPcn6us1GfYiB5CbWYwgdZMFL+7ir4ifWt/5P8Z9J/K2K1Ad0iOP8Om+mqrrcMOW/O0eDauHCsyk3yc5j+r6QbJ7No0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=boeing.com; spf=pass smtp.mailfrom=boeing.com; dkim=pass (2048-bit key) header.d=boeing.com header.i=@boeing.com header.b=LsEQ7Ltc; arc=none smtp.client-ip=130.76.20.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=boeing.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=boeing.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fRUIA/6x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732303688; x=1763839688;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XOuugtMzqS81ax0GoSPiEWRpEv4ozJdRIVnvBRce30c=;
-  b=fRUIA/6xgVi5AsacOmk5eJugUMzoetZOVHby+Y1iBBPJdj1Lw43j9/1B
-   7xuWK39CCgzfwRhfzjpvQkv/TmfeoylYVELIh+C8qXvtTrt5S1y8tN4Wl
-   cWRiLvu27aUVMObNXqUqsZPQ1GEsTAbnj80FDXET98W1XSfcCo0fh7+aV
-   ADIk37SJnfznV+FzsYV6jlhMjG9qotfeFu2V0H/365tlrnuj3Wmqp2Sy+
-   Hkk+hNwgBUAyIehy3Mz+QLYjrWkbynqraOBm/RlpWcRwhM+R4UUJyzyps
-   VEYuzowx3glOi1DdK9yIF5JomMji0ReBYx1fIVOVw2x17sADtGZV12izU
-   Q==;
-X-CSE-ConnectionGUID: HX0UUPS6QB6070W2969fOw==
-X-CSE-MsgGUID: blzTBLeiQRyLJEJFLpP2xg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="32408267"
-X-IronPort-AV: E=Sophos;i="6.12,176,1728975600"; 
-   d="scan'208";a="32408267"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 11:28:06 -0800
-X-CSE-ConnectionGUID: 4UzzGolKSMKuAjYnADxjzw==
-X-CSE-MsgGUID: oRrOuiU0QEiK2IreCL4L2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,176,1728975600"; 
-   d="scan'208";a="121615988"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Nov 2024 11:28:05 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEZJz-0004AR-09;
-	Fri, 22 Nov 2024 19:28:03 +0000
-Date: Sat, 23 Nov 2024 03:27:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ding Xiang Fei <dingxiangfei2009@protonmail.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>
-Subject: [rust:pr/1130 1/2] error[E0432]: unresolved import
- `core::marker::CoercePointee`
-Message-ID: <202411230332.WDjeYBE4-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=boeing.com header.i=@boeing.com header.b="LsEQ7Ltc"
+Received: from localhost (localhost [127.0.0.1])
+	by ewa-mbsout-02.mbs.boeing.net (8.15.2/8.15.2/DOWNSTREAM_MBSOUT) with SMTP id 4AMJT4fX028071;
+	Fri, 22 Nov 2024 11:29:11 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=boeing.com;
+	s=boeing-s1912; t=1732303751;
+	bh=wG2inwSpR/9+X54wlCts1dEXVIrIecNMNuwaBfvJ464=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=LsEQ7LtcR9sP47E6r5F/EI5LFYYhNnoequTqgwbeSkJLVrC7B6FjXDsgH0/mYXDOI
+	 KggVQPvtpjkStulYl7sH1BQc9w2VhG0s7MltQe8XYfnhS0vARYfFWRoDB1LJWLZhS1
+	 kvnGJpavpvqfy7AvfbM1MPbt7eYB6TDSiVcQBWGeTwVbsF93mBu4465x/hetKp84Ba
+	 yzNidQpbEv4hWNxH1yLLvIAjU8W+CUS7VAsHSBAIHZ8rUf17+s88Ix3fIFkdILU+jy
+	 nAnmz4jh35Nf5DHNEA5TcHDXuj6XafQi99HEUHY84LQfuRcuqdPSzXg65pDuGIvi0P
+	 4C0ipOsm9/jtQ==
+Received: from XCH16-03-02.nos.boeing.com (xch16-03-02.nos.boeing.com [137.137.111.11])
+	by ewa-mbsout-02.mbs.boeing.net (8.15.2/8.15.2/8.15.2/UPSTREAM_MBSOUT) with ESMTPS id 4AMJSmxp027883
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 22 Nov 2024 11:28:49 -0800
+Received: from XCH16-03-04.nos.boeing.com (137.137.111.13) by
+ XCH16-03-02.nos.boeing.com (137.137.111.11) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Fri, 22 Nov 2024 11:28:46 -0800
+Received: from XCH16-03-04.nos.boeing.com ([fe80::7809:c78b:36c8:935e]) by
+ XCH16-03-04.nos.boeing.com ([fe80::7809:c78b:36c8:935e%13]) with mapi id
+ 15.01.2507.039; Fri, 22 Nov 2024 11:28:46 -0800
+From: "Wolber (US), Chuck" <chuck.wolber@boeing.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor
+	<nathan@kernel.org>
+CC: Wentao Zhang <wentaoz5@illinois.edu>,
+        "Kelly (US), Matt"
+	<Matt.Kelly2@boeing.com>,
+        "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>,
+        "Oppelt (US), Andrew J"
+	<andrew.j.oppelt@boeing.com>,
+        "anton.ivanov@cambridgegreys.com"
+	<anton.ivanov@cambridgegreys.com>,
+        "ardb@kernel.org" <ardb@kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jinghao7@illinois.edu"
+	<jinghao7@illinois.edu>,
+        "johannes@sipsolutions.net"
+	<johannes@sipsolutions.net>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "justinstitt@google.com" <justinstitt@google.com>,
+        "kees@kernel.org"
+	<kees@kernel.org>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "luto@kernel.org"
+	<luto@kernel.org>,
+        "marinov@illinois.edu" <marinov@illinois.edu>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "maskray@google.com"
+	<maskray@google.com>,
+        "mathieu.desnoyers@efficios.com"
+	<mathieu.desnoyers@efficios.com>,
+        "Weber (US), Matthew L"
+	<matthew.l.weber3@boeing.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "morbo@google.com" <morbo@google.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "oberpar@linux.ibm.com"
+	<oberpar@linux.ibm.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "richard@nod.at" <richard@nod.at>,
+        "rostedt@goodmis.org"
+	<rostedt@goodmis.org>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "Sarkisian (US), Samuel" <samuel.sarkisian@boeing.com>,
+        "Vanderleest (US),
+ Steven H" <steven.h.vanderleest@boeing.com>,
+        "tglx@linutronix.de"
+	<tglx@linutronix.de>,
+        "tingxur@illinois.edu" <tingxur@illinois.edu>,
+        "tyxu@illinois.edu" <tyxu@illinois.edu>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH v2 0/4] Enable measuring the kernel's
+ Source-based Code Coverage and MC/DC with Clang
+Thread-Topic: [EXTERNAL] Re: [PATCH v2 0/4] Enable measuring the kernel's
+ Source-based Code Coverage and MC/DC with Clang
+Thread-Index: AQHbFIcZxf21kGRuK0Wyyav9pF/OKLJzeOYAgAKrngCATew1gP//77aA
+Date: Fri, 22 Nov 2024 19:28:46 +0000
+Message-ID: <5F5EA6BE-94BD-4352-ADA9-D14BBE703D4F@boeing.com>
+References: <20241002045347.GE555609@thelio-3990X>
+ <20241002064252.41999-1-wentaoz5@illinois.edu>
+ <20241003232938.GA1663252@thelio-3990X>
+ <20241122122703.GW24774@noisy.programming.kicks-ass.net>
+In-Reply-To: <20241122122703.GW24774@noisy.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Microsoft-MacOutlook/16.90.24110120
+x-tm-snts-smtp: 7DF70432748D194DD0E592FE746D6476C899CCB5789BECADCB3900194B2B36932000:8
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <16FA026E611EC84494309EE6F018901D@boeing.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-TM-AS-GCONF: 00
 
-tree:   https://github.com/Rust-for-Linux/linux pr/1130
-head:   36e9396cf5591aa42b19eacba22ee3f7e96bf792
-commit: 54c00aa91853810a419c18207ce25034773b30ea [1/2] switch to CoercePointee macro, with examples
-config: x86_64-randconfig-006-20241122 (https://download.01.org/0day-ci/archive/20241123/202411230332.WDjeYBE4-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411230332.WDjeYBE4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411230332.WDjeYBE4-lkp@intel.com/
-
-Note: the rust/pr/1130 HEAD 36e9396cf5591aa42b19eacba22ee3f7e96bf792 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-   |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
-   In file included from rust/helpers/helpers.c:10:
-   In file included from rust/helpers/blk.c:3:
-   In file included from include/linux/blk-mq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-   |                               ~~~~~~~~~~~ ^ ~~~
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   1 warning generated.
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->> error[E0432]: unresolved import `core::marker::CoercePointee`
-   --> rust/kernel/list/arc.rs:10:5
-   |
-   10 | use core::marker::CoercePointee;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `CoercePointee` in `marker`
---
->> error[E0432]: unresolved import `core::pin::PinCoerceUnsized`
-   --> rust/kernel/list/arc.rs:13:22
-   |
-   13 | use core::pin::{Pin, PinCoerceUnsized};
-   |                      ^^^^^^^^^^^^^^^^
-   |                      |
-   |                      no `PinCoerceUnsized` in `pin`
-   |                      help: a similar name exists in the module: `CoerceUnsized`
---
->> error[E0432]: unresolved import `core::marker::CoercePointee`
-   --> rust/kernel/sync/arc.rs:29:14
-   |
-   29 |     marker::{CoercePointee, PhantomData},
-   |              ^^^^^^^^^^^^^ no `CoercePointee` in `marker`
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+PiA+IE9uIFRodSwgT2N0IDAzLCAyMDI0IGF0IDA0OjI5OjM4UE0gLTA3MDAsIE5hdGhhbiBDaGFu
+Y2VsbG9yIHdyb3RlOg0KPiA+DQo+ID4gJCAvdXNyL2Jpbi90aW1lIC12IG1ha2UgLXNraiIkKG5w
+cm9jKSIgQVJDSD14ODZfNjQgTExWTT0xIG1ycHJvcGVyIHtkZWYsYW1kX21lbV9lbmNyeXB0Lixm
+b3J0aWZ5X3NvdXJjZS4sbGx2bV9jb3YufWNvbmZpZyBiekltYWdlDQo+ID4gLi4uDQo+ID4gdm1s
+aW51eC5vOiB3YXJuaW5nOiBvYmp0b29sOiBfX3Nldl9lc19ubWlfY29tcGxldGUrMHg2ZTogY2Fs
+bCB0byBrYXNhbl9jaGVja193cml0ZSgpIGxlYXZlcyAubm9pbnN0ci50ZXh0IHNlY3Rpb24NCg0K
+JTwgU05JUCAlPA0KDQo+ID4gdm1saW51eC5vOiB3YXJuaW5nOiBvYmp0b29sOiBhY3BpX2lkbGVf
+ZG9fZW50cnkrMHg0OiBjYWxsIHRvIHBlcmZfbG9wd3JfY2IoKSBsZWF2ZXMgLm5vaW5zdHIudGV4
+dCBzZWN0aW9uDQo+DQo+DQo+IEp1c3Qgc2F3IHRoaXMgZmx5IGJ5LCB0aGF0IGxvb2tzIGxpa2Ug
+c29tZXRoaW5nIGlzIGJ1Z2dlcmVkIGJhZC4gTm90YWJseQ0KPiBsb2NrZGVwX2hhcmRpcnFzX3tv
+bixvZmZ9KCkgYXJlIG5vaW5zdHIuDQo+DQo+DQo+IElzIHRoaXMgcGF0Y2gtc2V0IGNhdXNpbmcg
+dGhpcywgb3Igd2hhdD8NCg0KTm8sIHRoZXNlIHBhdGNoZXMgYXJlIG5vdCBjYXVzaW5nIHRoaXMu
+IFRoaXMgcGF0Y2gtc2V0IGFwcGVhcnMgdG8gaGF2ZSBleHBvc2VkIGENCmJ1ZyBpbiB0aGUgbGx2
+bSBsaW5rZXIgKGxsZCk6DQoNCmh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdC9p
+c3N1ZXMvMTE2NTc1DQoNCi4uQ2g6Vy4uDQoNCg==
