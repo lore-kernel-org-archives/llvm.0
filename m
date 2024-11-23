@@ -1,89 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D004C139;
-	Sat, 23 Nov 2024 04:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A215E208AD
+	for <llvm@lists.linux.dev>; Sat, 23 Nov 2024 06:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732337170; cv=none; b=IswAeefWNYn+RJvZYWgbS+314fcX0mkgGi4zdQ8xX5HVyaxiejLZzjJjFVvHjn+f45mDMXG86hx7KOFyjq1cb6xNr7O2aJn/bIOfngtGnghL0MUjgisdAENPeQ3C2w2v1Nz1BNSNItI65VQoJYQp5KNk0v+29Alw5WIqbp66hG4=
+	t=1732343591; cv=none; b=CW2glx5HjRbYMk9+/Fa3HRSA2LNiu6kiqpRmFMGAyi6DfWWlpvlmdRwrUt4bTigjuDo0/4OFm2fbkD5iNDbcJF1S5Or0lGOEUpSGyDnQvgiqiiD8uS6uyw2XrplPrTwB86JZsxu91r9vhPuHm9Z65NexeeJT14LSLtiMBVpWOZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732337170; c=relaxed/simple;
-	bh=ymezLTy2kI1j7k5cJ+BeZ5Mvox8T4TUJ/AHJmTCYx18=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UVW8U2SBDeRa2NF9z+qGpkfLu940Bl0PIo3w9dEDjJNl3qMMbXWhdNJxnqpwYIZA6SdfMpJsV6U5WQqnD6gTeWZkj1UE/BDsXOCy3fn+hq64a4luKEOXhnoCXcJL0BtGr1K6Z996qIQAT4oZDnEqZoC03HSev60MJawZOQYNVaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bojIAU1T; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732343591; c=relaxed/simple;
+	bh=0TW/Cy8aYI+j0xLB6UY8URAvjPu6ZdTQyhy+w1ABkto=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fGba0POUs2RtgroKGl+rq2gF9ZhpxxnlonXOgumrSHPh9NAFRNqkYqsr6VZco3UehO6sY+g94PQtW7yKzuH9UHsn/HxaeK5EGdRiyzAUERw7ePcuOAuTgNY7wgg7N83hcETcspc2UaHyZq6XbBJOLTVrh2ZjUH9fykUUe+e8Om0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gHPBBaOW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bojIAU1T"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732337170; x=1763873170;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ymezLTy2kI1j7k5cJ+BeZ5Mvox8T4TUJ/AHJmTCYx18=;
-  b=bojIAU1TM2VzBpFq3oBYUlncpPjnKw0TpUOt0MnLcqvuW+OJSRSkjHp6
-   Dt5VYKRXf4ekTI/Sd8MT7gGWLf1w6Ljos0clEJvM+pz61BnNsdeS+opGF
-   PE71SL1sXR56XiPnhznFCGlgZkA/GH1WD/I5NviT+OgEPx9Ht9Tmu734h
-   MA+chJ32U6Tu3I2Zf6c4PvzRDNV5QkKv/TmvyKB9V7SvcsLA/bzeOwtce
-   Drjt+F2Djq8R1FWh9TpgYxB4gh9NhT4on5eOfcLBV/tvftZdXSkwW7ivL
-   YxL8ONvlbU1OOEyc7j7YYCLPrvW/iiadOzlDNR9auIsZtbTUU5q6ZXMId
-   A==;
-X-CSE-ConnectionGUID: ZeIMRJV4SymBKH8RVjTejA==
-X-CSE-MsgGUID: JokrjjAJTjuI303ESRzPUQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="36280590"
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="36280590"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 20:46:09 -0800
-X-CSE-ConnectionGUID: f0dosGyoQ365/OPFZh/vqQ==
-X-CSE-MsgGUID: dgrHFsobTD6IoSaksmX6uQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="121626456"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Nov 2024 20:46:07 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEi21-0004RB-0C;
-	Sat, 23 Nov 2024 04:46:05 +0000
-Date: Sat, 23 Nov 2024 12:45:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li Nan <linan122@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
-	Yu Kuai <yukuai3@huawei.com>
-Subject: ld.lld: error: relocation refers to a symbol in a discarded section:
- .Ltmp78
-Message-ID: <202411231215.IsJm3IZm-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gHPBBaOW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732343587;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PrUdgkKC5CIPliNL5wRwDrS9SIppScj0R9tEpH7DkNo=;
+	b=gHPBBaOWMmEZIE+6ciiUwEKPzcW785d6nPcPmysgnBluUPNOa2WJHzZJD9CYIWyx3OQpCM
+	S4Kkao+/3Z6fMQDymMiAhWehKOs/E7J6w5BN6AZ3isqBHBGMH/mMLk0Yvylc+pLNC0VlaG
+	wak6x9amzLZfUHvyDtUteYFxBgV2FxA=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-198-VBqYVIiJOBy_OyOCQYIDlg-1; Sat,
+ 23 Nov 2024 01:33:05 -0500
+X-MC-Unique: VBqYVIiJOBy_OyOCQYIDlg-1
+X-Mimecast-MFC-AGG-ID: VBqYVIiJOBy_OyOCQYIDlg
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C17CC1956083
+	for <llvm@lists.linux.dev>; Sat, 23 Nov 2024 06:33:04 +0000 (UTC)
+Received: from [172.64.9.62] (unknown [10.30.33.134])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4F2771955F3E;
+	Sat, 23 Nov 2024 06:33:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
+ upstream-mainline, 228a1157)
+Date: Sat, 23 Nov 2024 06:33:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <63358.124112301330500379@us-mta-198.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: aN330jtbsMYAnrehHDwNpIZmsmoaf1I9OclmoHffwp8_1732343585
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   619d996c86421da1057d589123a28e2da0bf0785
-commit: 62ce0782bbacd32ec10292b9bdd127330e9b6968 md: ensure child flush IO does not affect origin bio->bi_status
-date:   5 weeks ago
-config: arm-randconfig-003-20241122 (https://download.01.org/0day-ci/archive/20241123/202411231215.IsJm3IZm-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231215.IsJm3IZm-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411231215.IsJm3IZm-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-All errors (new ones prefixed by >>):
 
->> ld.lld: error: relocation refers to a symbol in a discarded section: .Ltmp78
-   >>> defined in vmlinux.a(drivers/md/md.o)
-   >>> referenced by md.c
-   >>>               drivers/md/md.o:(.alt.smp.init+0x120) in archive vmlinux.a
+Kernel information:
+    Commit message: Merge tag '6.13-rc-part1-SMB3-client-fixes' of git://gi=
+t.samba.org/sfrench/cifs-2.6
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1557239779
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1557239779-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1557239779-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
