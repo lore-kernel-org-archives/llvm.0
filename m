@@ -1,199 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx0b-00007101.pphosted.com (mx0b-00007101.pphosted.com [148.163.139.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845D914F9E9;
-	Sat, 23 Nov 2024 08:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D7B1514EE
+	for <llvm@lists.linux.dev>; Sat, 23 Nov 2024 09:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.139.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732350750; cv=none; b=NDe+rtsU4bzMkq2RwCa+82RtNnwApFMz5k4LsWlyvy2m/iCwbDMZPZYCnpf5R7flfc3Azy5xIovE1l+ftFAThMLnRssBo4ghf15m5gASztHnbvbNf38iuuptu3sm4aAgolBVEErwZKO+Fob8LtX43egK70VNRXD111yOM3NCGMg=
+	t=1732355039; cv=none; b=Z1F/ZXK20k4m1WtOIN+wzdVFrfi8t+vxtCMFtl8Boi2HpVTQpeuLMvK+Z5i7mkDEA7qSkY5EI0zhsqehV8OXYedqONFN9uu9Xbd1OXHDQdEaKQmZVDlx11yeyVRESW9zXFGAul4w4XdfBPI7UpaukzTzQ3t5CzfEiuefR5pgYws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732350750; c=relaxed/simple;
-	bh=QVVQVUkwUKvj4AcABye2tB/9AricLFsjzdPmpmeWWtg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ib8XTcyImqe4MqpxBWlbnPioMDG5d8Ag0DPzFAuqF/y1/jwhSyF6iB7C2KH/FyIAXhFyk5Rw+o97gfnpq/0k2+yCywm6Fhuo0Uqkovf8yb+9ORcMy8hsaVXAxuC8z6PagZjcbIciPSFFYKgm9dxmTtDwN4B+SRBPe2jv12dj6eA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xyx9FjeF; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732355039; c=relaxed/simple;
+	bh=RB/wVdH0A5HO1rOsPwKJVyYz186feknowQ1S27C5oi0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=npTH3pcEKI17LqFRzbEFG6YNC78idNdH9Ny1GQPfpPd33WcSCqREoMf4yGPUGGwLpzEjAPR8k/JJW2ND+x5EQEXm75d6T9j+jMkv6gO1veVV5xGYNGDUcErhrK7QXTBP8GAKOcnZWdEkRgitonI8LY5GVf3D2TJTuoPfpxCQ9Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois.edu header.i=@illinois.edu header.b=rC3I8S1o; arc=none smtp.client-ip=148.163.139.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xyx9FjeF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732350749; x=1763886749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QVVQVUkwUKvj4AcABye2tB/9AricLFsjzdPmpmeWWtg=;
-  b=Xyx9FjeFtn/34yEbsgnDZ0ytjtN6r8LOZREZ7gH4U2KSdNxvkshBBU1r
-   n74V4VLuOlacnQ93WYHxYm2lPQqqDJtwnWSQ4ozsCvyPzT0+I2bs5pkFC
-   nZe7u00S3BichV0ys3k4/67cuiTMawZT/6LawPbRi40nQ3TeMDWj5tv2z
-   TBjdEXxMr1I7HPTfHzeKyiuLQ4W3wcZCawJNy1MPMnFyNpw8LbyhRMJgm
-   RjqNowHflgBqsK09EMM1z5E07bfr6lJUq9VAWndxtF4sKF7FKLgzcuVBv
-   c+2u3oAiccrAu/POjfD/BmRgQvuXdkSlThRHFr0fggc945dlzvC1sH2iI
-   w==;
-X-CSE-ConnectionGUID: /QSFFG4WRa+Lo0LY7LggMg==
-X-CSE-MsgGUID: mBFuY1wLTNGHtgiLoTcCWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="36170897"
-X-IronPort-AV: E=Sophos;i="6.12,178,1728975600"; 
-   d="scan'208";a="36170897"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2024 00:32:28 -0800
-X-CSE-ConnectionGUID: iFKF55+nTgWHLfTFRbv9zA==
-X-CSE-MsgGUID: GgiivKJNRWeqMgs9wXzwPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,178,1728975600"; 
-   d="scan'208";a="91144616"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 23 Nov 2024 00:32:24 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tElZ0-0004WV-1g;
-	Sat, 23 Nov 2024 08:32:22 +0000
-Date: Sat, 23 Nov 2024 16:31:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mika Laitio <lamikr@gmail.com>, christian.koenig@amd.com,
-	Xinhui.Pan@amd.com, airlied@gmail.com, simona@ffwll.ch,
-	Hawking.Zhang@amd.com, sunil.khatri@amd.com, lijo.lazar@amd.com,
-	kevinyang.wang@amd.com, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] ammdgpu fix for gfx1103 queue evict/restore crash
-Message-ID: <202411231603.PMbyCkko-lkp@intel.com>
-References: <20241121195233.10679-1-lamikr@gmail.com>
+	dkim=pass (2048-bit key) header.d=illinois.edu header.i=@illinois.edu header.b="rC3I8S1o"
+Received: from pps.filterd (m0272703.ppops.net [127.0.0.1])
+	by mx0b-00007101.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AN9aZG0017862;
+	Sat, 23 Nov 2024 09:43:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=illinois.edu; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=campusrelays; bh=oL+PRjo2JKV4WqCO3w0QPZTzXUUvuXwd
+	1UgHTC1NMcM=; b=rC3I8S1oAOG0DBzgHqkM3Y2xs4glRRFa9Gaw0FmUCRKHI2/p
+	JYdvL/nFfnB8MCBYxo3soem+4iRqrhRkWa47rd+9yYgq1ocPlR+iY83W/2DIS5IH
+	BXu0kgeSqP5UuByb1fbwX8peRoNPHuMbJwYc5yC6p3Gxg/3Xw50gkl4LJ3PxiGJJ
+	3xsvglsA02543ROhEMpyVVbxFQy3rV/9lQwUUsOCHOxxOxZGKwNKreQRIjKer5zs
+	23s76YC8zt5c5+mQGwt8fNVyJF1YkiwSZi3pXNmYrptYUwSI9f12m87tTZsQten9
+	n/+NgUe7ZJHRL//65iqS1HJE41OLB2weMBKEQg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0b-00007101.pphosted.com (PPS) with ESMTPS id 43382n0y4a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 23 Nov 2024 09:43:34 +0000 (GMT)
+Received: from m0272703.ppops.net (m0272703.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4AN9hY2H031684;
+	Sat, 23 Nov 2024 09:43:34 GMT
+Received: from localhost.localdomain (oasis.cs.illinois.edu [130.126.137.13])
+	by mx0b-00007101.pphosted.com (PPS) with ESMTP id 43382n0y2x-1;
+	Sat, 23 Nov 2024 09:43:34 +0000 (GMT)
+From: Jinghao Jia <jinghao7@illinois.edu>
+To: Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>
+Cc: netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Jinghao Jia <jinghao7@illinois.edu>, kernel test robot <lkp@intel.com>,
+        Ruowen Qin <ruqin@redhat.com>
+Subject: [PATCH v3 net] ipvs: fix UB due to uninitialized stack access in ip_vs_protocol_init()
+Date: Sat, 23 Nov 2024 03:42:56 -0600
+Message-ID: <20241123094256.28887-1-jinghao7@illinois.edu>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241121195233.10679-1-lamikr@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: asx8e01n9hRQlIb2y9Vm7UXV7wqwW2F7
+X-Proofpoint-ORIG-GUID: d_JrjJKs9g1oNL8oG2RL9eSfW7K1zTGo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+X-Spam-Details: rule=cautious_plus_nq_notspam policy=cautious_plus_nq score=0 mlxscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 adultscore=0 clxscore=1015
+ bulkscore=0 mlxlogscore=999 spamscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411230081
+X-Spam-Score: 0
+X-Spam-OrigSender: jinghao7@illinois.edu
+X-Spam-Bar: 
 
-Hi Mika,
+Under certain kernel configurations when building with Clang/LLVM, the
+compiler does not generate a return or jump as the terminator
+instruction for ip_vs_protocol_init(), triggering the following objtool
+warning during build time:
 
-kernel test robot noticed the following build warnings:
+  vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm-tip/drm-tip v6.12 next-20241122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+At runtime, this either causes an oops when trying to load the ipvs
+module or a boot-time panic if ipvs is built-in. This same issue has
+been reported by the Intel kernel test robot previously.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mika-Laitio/ammdgpu-fix-for-gfx1103-queue-evict-restore-crash/20241122-035602
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20241121195233.10679-1-lamikr%40gmail.com
-patch subject: [PATCH] ammdgpu fix for gfx1103 queue evict/restore crash
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241123/202411231603.PMbyCkko-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231603.PMbyCkko-lkp@intel.com/reproduce)
+Digging deeper into both LLVM and the kernel code reveals this to be a
+undefined behavior problem. ip_vs_protocol_init() uses a on-stack buffer
+of 64 chars to store the registered protocol names and leaves it
+uninitialized after definition. The function calls strnlen() when
+concatenating protocol names into the buffer. With CONFIG_FORTIFY_SOURCE
+strnlen() performs an extra step to check whether the last byte of the
+input char buffer is a null character (commit 3009f891bb9f ("fortify:
+Allow strlen() and strnlen() to pass compile-time known lengths")).
+This, together with possibly other configurations, cause the following
+IR to be generated:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411231603.PMbyCkko-lkp@intel.com/
+  define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #5 section ".init.text" align 16 !kcfi_type !29 {
+    %1 = alloca [64 x i8], align 16
+    ...
 
-All warnings (new ones prefixed by >>):
+  14:                                               ; preds = %11
+    %15 = getelementptr inbounds i8, ptr %1, i64 63
+    %16 = load i8, ptr %15, align 1
+    %17 = tail call i1 @llvm.is.constant.i8(i8 %16)
+    %18 = icmp eq i8 %16, 0
+    %19 = select i1 %17, i1 %18, i1 false
+    br i1 %19, label %20, label %23
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:32:
-   In file included from drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_priv.h:37:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:1354:1: warning: unused label 'out_unlock' [-Wunused-label]
-    1354 | out_unlock:
-         | ^~~~~~~~~~~
-   5 warnings generated.
+  20:                                               ; preds = %14
+    %21 = call i64 @strlen(ptr noundef nonnull dereferenceable(1) %1) #23
+    ...
 
+  23:                                               ; preds = %14, %11, %20
+    %24 = call i64 @strnlen(ptr noundef nonnull dereferenceable(1) %1, i64 noundef 64) #24
+    ...
+  }
 
-vim +/out_unlock +1354 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c
+The above code calculates the address of the last char in the buffer
+(value %15) and then loads from it (value %16). Because the buffer is
+never initialized, the LLVM GVN pass marks value %16 as undefined:
 
-  1292	
-  1293	static int restore_process_queues_cpsch(struct device_queue_manager *dqm,
-  1294						struct qcm_process_device *qpd)
-  1295	{
-  1296		struct queue *q;
-  1297		struct device *dev = dqm->dev->adev->dev;
-  1298		struct kfd_process_device *pdd;
-  1299		uint64_t eviction_duration;
-  1300		int retval = 0;
-  1301	
-  1302		// gfx1103 APU fails to remove the queue usually after 10-50 attempts
-  1303		if (dqm->dev->adev->flags & AMD_IS_APU)
-  1304			goto out;
-  1305		pdd = qpd_to_pdd(qpd);
-  1306	
-  1307		dqm_lock(dqm);
-  1308		if (WARN_ON_ONCE(!qpd->evicted)) /* already restored, do nothing */
-  1309			goto out;
-  1310		if (qpd->evicted > 1) { /* ref count still > 0, decrement & quit */
-  1311			qpd->evicted--;
-  1312			goto out;
-  1313		}
-  1314	
-  1315		/* The debugger creates processes that temporarily have not acquired
-  1316		 * all VMs for all devices and has no VMs itself.
-  1317		 * Skip queue restore on process restore.
-  1318		 */
-  1319		if (!pdd->drm_priv)
-  1320			goto vm_not_acquired;
-  1321	
-  1322		pr_debug_ratelimited("Restoring PASID 0x%x queues\n",
-  1323				    pdd->process->pasid);
-  1324	
-  1325		/* Update PD Base in QPD */
-  1326		qpd->page_table_base = amdgpu_amdkfd_gpuvm_get_process_page_dir(pdd->drm_priv);
-  1327		pr_debug("Updated PD address to 0x%llx\n", qpd->page_table_base);
-  1328	
-  1329		/* activate all active queues on the qpd */
-  1330		list_for_each_entry(q, &qpd->queues_list, list) {
-  1331			q->properties.is_evicted = false;
-  1332			if (!QUEUE_IS_ACTIVE(q->properties))
-  1333				continue;
-  1334	
-  1335			q->properties.is_active = true;
-  1336			increment_queue_count(dqm, &pdd->qpd, q);
-  1337	
-  1338			if (dqm->dev->kfd->shared_resources.enable_mes) {
-  1339				retval = add_queue_mes(dqm, q, qpd);
-  1340				if (retval) {
-  1341					dev_err(dev, "Failed to restore queue %d\n",
-  1342						q->properties.queue_id);
-  1343					goto out;
-  1344				}
-  1345			}
-  1346		}
-  1347		if (!dqm->dev->kfd->shared_resources.enable_mes)
-  1348			retval = execute_queues_cpsch(dqm,
-  1349						      KFD_UNMAP_QUEUES_FILTER_DYNAMIC_QUEUES, 0, USE_DEFAULT_GRACE_PERIOD);
-  1350		eviction_duration = get_jiffies_64() - pdd->last_evict_timestamp;
-  1351		atomic64_add(eviction_duration, &pdd->evict_duration_counter);
-  1352	vm_not_acquired:
-  1353		qpd->evicted = 0;
-> 1354	out_unlock:
-  1355		dqm_unlock(dqm);
-  1356	out:
-  1357		return retval;
-  1358	}
-  1359	
+  %13 = getelementptr inbounds i8, ptr %1, i64 63
+  br i1 undef, label %14, label %17
 
+This gives later passes (SCCP, in particular) more DCE opportunities by
+propagating the undef value further, and eventually removes everything
+after the load on the uninitialized stack location:
+
+  define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #0 section ".init.text" align 16 !kcfi_type !11 {
+    %1 = alloca [64 x i8], align 16
+    ...
+
+  12:                                               ; preds = %11
+    %13 = getelementptr inbounds i8, ptr %1, i64 63
+    unreachable
+  }
+
+In this way, the generated native code will just fall through to the
+next function, as LLVM does not generate any code for the unreachable IR
+instruction and leaves the function without a terminator.
+
+Zero the on-stack buffer to avoid this possible UB.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
+Co-developed-by: Ruowen Qin <ruqin@redhat.com>
+Signed-off-by: Ruowen Qin <ruqin@redhat.com>
+Signed-off-by: Jinghao Jia <jinghao7@illinois.edu>
+---
+Changelog:
+v2 -> v3:
+v2: https://lore.kernel.org/lkml/20241122045257.27452-1-jinghao7@illinois.edu/
+* Fix changelog format based on Julian's feedback
+
+v1 -> v2:
+v1: https://lore.kernel.org/lkml/20241111065105.82431-1-jinghao7@illinois.edu/
+* Fix small error in commit message
+* Address Julian's feedback:
+  * Make this patch target the net tree rather than net-next
+  * Add a "Fixes" tag for the initial git commit
+
+ net/netfilter/ipvs/ip_vs_proto.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/net/netfilter/ipvs/ip_vs_proto.c b/net/netfilter/ipvs/ip_vs_proto.c
+index f100da4ba3bc..a9fd1d3fc2cb 100644
+--- a/net/netfilter/ipvs/ip_vs_proto.c
++++ b/net/netfilter/ipvs/ip_vs_proto.c
+@@ -340,7 +340,7 @@ void __net_exit ip_vs_protocol_net_cleanup(struct netns_ipvs *ipvs)
+ 
+ int __init ip_vs_protocol_init(void)
+ {
+-	char protocols[64];
++	char protocols[64] = { 0 };
+ #define REGISTER_PROTOCOL(p)			\
+ 	do {					\
+ 		register_ip_vs_protocol(p);	\
+@@ -348,8 +348,6 @@ int __init ip_vs_protocol_init(void)
+ 		strcat(protocols, (p)->name);	\
+ 	} while (0)
+ 
+-	protocols[0] = '\0';
+-	protocols[2] = '\0';
+ #ifdef CONFIG_IP_VS_PROTO_TCP
+ 	REGISTER_PROTOCOL(&ip_vs_protocol_tcp);
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.0
+
