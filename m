@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B912018C932;
-	Sat, 23 Nov 2024 10:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1427B1EEE6;
+	Sat, 23 Nov 2024 13:01:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732359458; cv=none; b=oNKe9jENm/rigYUZa+WUvzvBlUzp7MkPFqaScHm+wxQCQ9JWOp4Ni0spx5G4jnrGfx4EdkUzvhdXzyicg/Kz86L5nxtPAPo87f60f0hhC7LMjxnioyPbimBxHILWzJprpYpo/WiIYLVQukoA3wYD/fjTAyRGDYeNNzjVfi6xKy0=
+	t=1732366908; cv=none; b=fjBLjci/xTohU5t+sEYktORXOFF24z1vTr/IhEW3Xjo/rbUJHQ9vFXMm5FwJo7YIv+QeVdvHZzCQwdGOcuJdsvU8RJAa9ovnPvdj7KI2xxqej2UFezOoipjgFWklPuip9CeP1ekqqq3gLWDvxLpUvMxdVSrDp59zZGPRpeUrH7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732359458; c=relaxed/simple;
-	bh=MLNosuv8mhtr+GNnMJgsW8nTQ1F0oEMxCH1BcX+i0b8=;
+	s=arc-20240116; t=1732366908; c=relaxed/simple;
+	bh=PkLB2EKMGfyeA0YWK2imyVpgrz3ZuahKh7V3yLXuF7U=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OHnnRBOHkhz+uItmzSaOH0iicFc69hW42zxhYR1w8irA9RohVVoYEfL5h9WoQ/pjm+aryCDfcMlhPGFRGFArhSjrhl3PcfMWbWs/gjglNEJxggwAGR7jxoJrLghInKaGggNd4USFpelvqEVMYcZSkE6Iyj8BOYF3gkTi/JU6VnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oARJ4jkU; arc=none smtp.client-ip=192.198.163.15
+	 Content-Disposition; b=Z7fGoHBHdkLURBXU+Ydeyx3Cp/gNJMZtuxGdSa5bSOF0Vj6+ULjJojFkrzSaApi8Saw2kHJxHITmT2+ufaLNF8XG9gVZVkEWbWIuVc8UX3VDCr4y2KSBMiI/SHTjz6WpRT+/mQVKVaPyuOWlTGtCMbKpmqW3ucxfm3cFUBtmXsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LfbxGn30; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oARJ4jkU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LfbxGn30"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732359457; x=1763895457;
+  t=1732366907; x=1763902907;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MLNosuv8mhtr+GNnMJgsW8nTQ1F0oEMxCH1BcX+i0b8=;
-  b=oARJ4jkUDthPrvoJPRySg6Q7uSjTuKWwcgwcB73q90lQMEAVc8ga7Bue
-   3KeM6pt3i4/IcAY4JfyhsIKsQ2Ne6QxM3WnSQNOszW2M98Ro4+paEJSoB
-   ct2TvOkPMCJVCTRy1cAqiYn3IlOeOo/GVzImQ8rQLBQ4RibsCmrq5WcgQ
-   Y2WG45u4Xl3bjDYCKTYGHn0RlLcqXgPfZcbu+54F5AMN6VlbJn7ciZzcr
-   n3aCtm/TRL/XNdMoiNzRo1Y60oRgo1xvPbO8m0j2MYqaRoslcNUQCMmQQ
-   YJ68DyIdX3mtt1Bk+YX3z3bMDBE52rngqk/eB+G+SrBPrunueR/X6/LbO
-   Q==;
-X-CSE-ConnectionGUID: Gffw4npBT/G6aoUR5bKoNQ==
-X-CSE-MsgGUID: La6erTbUSbmJz3BOcUcBmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="32636245"
+  bh=PkLB2EKMGfyeA0YWK2imyVpgrz3ZuahKh7V3yLXuF7U=;
+  b=LfbxGn30xwrJJPiINoEylmZtZrgpzvXngSWNn0hmmXkaiXauPhZPdscw
+   VlyqQyaVz/85LomG7ctxoeMjbh5ATePZsJIDrQRcNzB6FAwybgNyR60SZ
+   s3yxfQUAlbP22yDBDcdVnYq/r+i7j0XoJoaJAm7+QDbquhsHFWXIfiU0i
+   h2vfd5deJC8zweeq5MDtXKYo6VfpYY2zqG7YlOck7g+daTJxIv6QRcixE
+   6a5RYpTl4gA/w1MNyFS5dncFQExJSpj9eVoxyGrAlTpCHtyh0K3Z4Nkv/
+   cMUK1tw2k2S/ZmK5DIaRCU9cbNVuCW7XeqHZpN58f0+z3Psh6xOpVnY99
+   A==;
+X-CSE-ConnectionGUID: ObDB7Vu+TXuJvW539lgnuw==
+X-CSE-MsgGUID: subfek+KQ1+/RaE6fXdF4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11265"; a="32666657"
 X-IronPort-AV: E=Sophos;i="6.12,178,1728975600"; 
-   d="scan'208";a="32636245"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2024 02:57:36 -0800
-X-CSE-ConnectionGUID: lqw87e/eRuadoxxfjA3A1A==
-X-CSE-MsgGUID: x986CjWkSZy36SoO5R3UnA==
+   d="scan'208";a="32666657"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2024 05:01:46 -0800
+X-CSE-ConnectionGUID: iSEaPX3HRcOGPo0MnEatzA==
+X-CSE-MsgGUID: qIyHfDzUSdyRcG/OTmVASA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,178,1728975600"; 
-   d="scan'208";a="91228966"
+   d="scan'208";a="91619818"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 23 Nov 2024 02:57:35 -0800
+  by orviesa008.jf.intel.com with ESMTP; 23 Nov 2024 05:01:45 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tEnpU-0004a5-2F;
-	Sat, 23 Nov 2024 10:57:32 +0000
-Date: Sat, 23 Nov 2024 18:56:59 +0800
+	id 1tEple-0004dT-1o;
+	Sat, 23 Nov 2024 13:01:42 +0000
+Date: Sat, 23 Nov 2024 21:01:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: Janne Grunau <j@jannau.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/190-rust 123/169] error[E0308]: arguments to this
- function are incorrect
-Message-ID: <202411231809.pyWJLzf2-lkp@intel.com>
+Subject: [asahilinux:bits/190-rust 96/170] error: cannot find macro `vec` in
+ this scope
+Message-ID: <202411232001.pjkAkjgA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,38 +63,42 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://github.com/AsahiLinux/linux bits/190-rust
-head:   68a53019e107ce663269246902815de4cfdc7eb8
-commit: 0a3c09b05d84448d10cadf0c61e49efcae8d6f44 [123/169] fixup! rust: io_pgtable: Add io_pgtable abstraction
-config: um-randconfig-001-20241123 (https://download.01.org/0day-ci/archive/20241123/202411231809.pyWJLzf2-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231809.pyWJLzf2-lkp@intel.com/reproduce)
+head:   d2162ac6537bde95fc68fe4ec97d67c43846231c
+commit: 4083ae246e9f06bcf4c1e1e9208cd82c18ca6e48 [96/170] rust: alloc: Vec: Implement .clear()/.truncate()
+config: x86_64-randconfig-001-20241123 (https://download.01.org/0day-ci/archive/20241123/202411232001.pjkAkjgA-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411232001.pjkAkjgA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411231809.pyWJLzf2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411232001.pjkAkjgA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0308]: arguments to this function are incorrect
-   --> rust/kernel/io_pgtable.rs:162:13
+>> error: cannot find macro `vec` in this scope
+   --> rust/doctests_kernel_generated.rs:1127:15
    |
-   162 |             (*self.inner_mut().ops).map_pages.unwrap()(
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   163 |                 self.inner_mut().ops,
-   164 |                 iova as u64,
-   |                 ----------- expected `u32`, found `u64`
-   165 |                 paddr as u64,
-   |                 ------------ expected `u32`, found `u64`
+   1127 | let mut vec = vec![1, 2, 3];
+   |               ^^^
+--
+>> error: cannot find macro `vec` in this scope
+   --> rust/doctests_kernel_generated.rs:1079:15
    |
-   help: you can convert a `u64` to a `u32` and panic if the converted value doesn't fit
+   1079 | let mut vec = vec![1, 2, 3];
+   |               ^^^
+--
+>> error: cannot find macro `vec` in this scope
+   --> rust/doctests_kernel_generated.rs:1031:15
    |
-   164 |                 (iova as u64).try_into().unwrap(),
-   |                 +           +++++++++++++++++++++
-   help: you can convert a `u64` to a `u32` and panic if the converted value doesn't fit
+   1031 | let mut vec = vec![1, 2, 3, 4, 5];
+   |               ^^^
+--
+>> error: cannot find macro `vec` in this scope
+   --> rust/doctests_kernel_generated.rs:981:13
    |
-   165 |                 (paddr as u64).try_into().unwrap(),
-   |                 +            +++++++++++++++++++++
+   981 | let mut v = vec![1, 2, 3];
+   |             ^^^
 
 -- 
 0-DAY CI Kernel Test Service
