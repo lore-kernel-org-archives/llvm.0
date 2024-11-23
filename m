@@ -1,59 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344F46136;
-	Sat, 23 Nov 2024 00:25:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F0A817;
+	Sat, 23 Nov 2024 02:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732321546; cv=none; b=Dx0rI8Gxj6cNuAvX+XduMgwtrrvMPe6vJsKliBWPlwXz1CflIvRHH3tUAgKFSC7kCUXIo/KFBtl/41ZS8iL9/W7vnKVAErLo2BDdspUPX6eoJPMW8/pe95KFK4VbcH5TPzWMiWdJXoECRBT3vgBVYoPPnssMbjr6KmBSlqt2UYI=
+	t=1732329597; cv=none; b=UMGT3Pc1AcJLNup0618poWNn5zzPuWVRUogneZ4jDU7cll/u/9CsgJksg0PZdTM0eYnmgQaOkSgLgaIGDinb1xjGeH7pYk0APd4Q1q3JDnq6NcpSp9L8pRCw379uK1d0jixN5EJWbqBS78Gw7J+p6KTAypk9ZJkZgqxI8QHlLYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732321546; c=relaxed/simple;
-	bh=PuPmWBRxqI4fli86UfRCmE9zh+5xXeyGiiE/rns2Njo=;
+	s=arc-20240116; t=1732329597; c=relaxed/simple;
+	bh=BWkwl0wUrC8fzdHBPtR0QHgU3P7veu2AMHKXyX4woJ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=G5vDanuKVqEVN4lpneYVdr/cXq9+MpDfY1LrI5WPfv4zDwwLQViKMCi+Skds5Pszd1pAtbLjOL2Lgs4o3ZFHxTkVXZE1KDs6wJeSi4YU4dd4BEeRWPQIcZrkxdz7mDdOBl9Z7YihxnRWwtFs5mH1wDcRQ/qDwLwcapi53a8RCZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WY4gM2PC; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=r+SLo6+DcTSkN7N99fHAvhbFFo2v8CRm7WQl8WFYfmYlejRGjcVrA259jlI7GWxNQU3QgrnEri34cLQre2QaJAxPb9xuUApRwmvZ9bgA4uyjbyfT7LRhqWZqS3cgCpW4PX/WNWN0aMFnjUExX1sw+XDXeSeTcB3DiWl0XVVo9LU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I9/2V/dM; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WY4gM2PC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I9/2V/dM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732321545; x=1763857545;
+  t=1732329595; x=1763865595;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PuPmWBRxqI4fli86UfRCmE9zh+5xXeyGiiE/rns2Njo=;
-  b=WY4gM2PCXJ61YHoKLQdC1O+oY00vBJeb5RmY+/5twYDQJEhsvNXSm9Jl
-   819ci8xbqrlt5+IW8m11emHaxIKKztp7clvMTzXdtSez1cjMkz/SKtDM6
-   9iWPYQ+jB+Iay1HY5FMAfgAQF5ZlbOEl7nrLC+XCVMvyodrZbA/3iLVNe
-   OEVFkJs7ikF+tmfK2xuKduTHB8Gy61D3jODnkUJSXDXT7UATcDNpYQPq9
-   XtUoqO/gSENa71ngJ7UqZT3to4Du4fi4Hs9gtce5N/TW1Pv3Y9FlYMI0g
-   CEIqkVGbE6OOiGAPvSjdmcjpJzVH+HU+Sh7UxENT967Pzq5z9e14d72vs
-   g==;
-X-CSE-ConnectionGUID: cJ6xkZBmQ0i/xJJJwARpSw==
-X-CSE-MsgGUID: ah2uahPhTSqmKWn62kdEXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="49910218"
+  bh=BWkwl0wUrC8fzdHBPtR0QHgU3P7veu2AMHKXyX4woJ0=;
+  b=I9/2V/dMwS1PJ/l4i7prEIqpI1Pn+bnWvqiwI/p5NERPm982x5zPQ4N9
+   wUVcUXk0V7ugoH7yOBHq/6Z79koCHqxyqkIvroHGy5jAWHaOi0FfColC9
+   IQnauR5tZFQoJ5qEOX0H8fMUu1mjqOQQeJ9a0ekJnpEjz95qcvKlRrlg7
+   s9C7WuQljkKuxYUqXVJdfP/nJ81i/8xBTVUd1JeZYuqkG+YLC2fIEkuSO
+   hj5YtviCpWceng2FjsqYjRqZNx4ePdxXpzZvGK2HlpI4ZdUf8BHExviDE
+   2PBrE+hvJC8AZKbdFOVxfaMphEO+nIR+7yY9vbYPYn3SL1xekqOd6i7lE
+   w==;
+X-CSE-ConnectionGUID: e1WWVO3dRYWFbLLR/7Ixlw==
+X-CSE-MsgGUID: zg9g3GVwRo2EA8+tvVVqOg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="31856594"
 X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="49910218"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 16:25:44 -0800
-X-CSE-ConnectionGUID: 8ZDuLhYaT1SBxFjwyRcu+w==
-X-CSE-MsgGUID: 7k1edDQ+S5+RpeqmQps8pA==
+   d="scan'208";a="31856594"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 18:39:55 -0800
+X-CSE-ConnectionGUID: /8W/YqEiRTW96EflkZOyWA==
+X-CSE-MsgGUID: fk9+UE78RY+pM3AKY+wUpw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="90355082"
+   d="scan'208";a="95158750"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 22 Nov 2024 16:25:42 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 22 Nov 2024 18:39:53 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tEdy0-0004JT-0D;
-	Sat, 23 Nov 2024 00:25:40 +0000
-Date: Sat, 23 Nov 2024 08:24:58 +0800
+	id 1tEg3r-0004Ml-2f;
+	Sat, 23 Nov 2024 02:39:51 +0000
+Date: Sat, 23 Nov 2024 10:39:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: [mark:arm64/brbe 7/11] drivers/perf/arm_brbe.c:620:4: warning:
- variable 'sample_type' is uninitialized when used here
-Message-ID: <202411230804.AOrSAnxZ-lkp@intel.com>
+To: Paul Lawrence <paullawrence@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: ld.lld: error: undefined symbol: ZSTD_DStreamWorkspaceBound
+Message-ID: <202411231043.rG86kUA2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,95 +61,74 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/brbe
-head:   f971faff791ba89b11f5e6ca351be0f54ee765bd
-commit: 642985af34d2d6f54e76995380cf24d512078c56 [7/11] WIP: drivers/perf: arm_pmuv3: Add support for the Branch Record Buffer Extension (BRBE)
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241123/202411230804.AOrSAnxZ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411230804.AOrSAnxZ-lkp@intel.com/reproduce)
+tree:   https://github.com/ambarus/linux-0day syzkaller-id-5ecbc557fcdb8a2864e876f690ef377db999c50f
+head:   caa714448992ba4eb583735a4acb26917fbc67a8
+commit: 95a43fc99f147282c64e68baf1ea18041c7755ea ANDROID: Incremental fs: Add zstd compression support
+date:   4 years, 1 month ago
+config: i386-buildonly-randconfig-001-20241123 (https://download.01.org/0day-ci/archive/20241123/202411231043.rG86kUA2-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231043.rG86kUA2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411230804.AOrSAnxZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411231043.rG86kUA2-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/perf/arm_brbe.c:9:
-   In file included from drivers/perf/arm_brbe.h:9:
-   In file included from include/linux/perf/arm_pmu.h:12:
-   In file included from include/linux/perf_event.h:50:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/perf/arm_brbe.c:620:4: warning: variable 'sample_type' is uninitialized when used here [-Wuninitialized]
-     620 |                         sample_type |= event->attr.branch_sample_type;
-         |                         ^~~~~~~~~~~
-   drivers/perf/arm_brbe.c:612:17: note: initialize the variable 'sample_type' to silence this warning
-     612 |         u64 sample_type;
-         |                        ^
-         |                         = 0
-   5 warnings generated.
+>> ld.lld: error: undefined symbol: ZSTD_getFrameParams
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_DStreamWorkspaceBound
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_initDStream
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_decompressStream
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_DCtxWorkspaceBound
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_initDCtx
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_findFrameCompressedSize
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
+--
+>> ld.lld: error: undefined symbol: ZSTD_decompressDCtx
+   >>> referenced by decompress_unzstd.c
+   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
 
-
-vim +/sample_type +620 drivers/perf/arm_brbe.c
-
-   607	
-   608	void brbe_enable(struct arm_pmu *arm_pmu)
-   609	{
-   610		struct pmu_hw_events *cpuc = this_cpu_ptr(arm_pmu->hw_events);
-   611		u64 brbfcr, brbcr;
-   612		u64 sample_type;
-   613	
-   614		/*
-   615		 * Merge the permitted branch filters of all events.
-   616		 */
-   617		for (int i = 0; i < ARMPMU_MAX_HWEVENTS; i++) {
-   618			struct perf_event *event = cpuc->events[i];
-   619			if (event && has_branch_stack(event))
- > 620				sample_type |= event->attr.branch_sample_type;
-   621		}
-   622	
-   623		/*
-   624		 * TODO: explain why we disacrd any prior branches
-   625		 * TODO: avoid the redundant ISB?
-   626		 */
-   627		brbe_invalidate();
-   628	
-   629		/*
-   630		 * BRBE gets configured with a new mismatched branch sample
-   631		 * type request, overriding any previous branch filters.
-   632		 */
-   633		brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-   634		brbfcr &= ~BRBFCR_EL1_CONFIG_MASK;
-   635		brbfcr |= branch_type_to_brbfcr(sample_type);
-   636		write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-   637		isb();
-   638	
-   639		brbcr = read_sysreg_s(SYS_BRBCR_EL1);
-   640		brbcr &= ~BRBCR_ELx_CONFIG_MASK;
-   641		brbcr |= branch_type_to_brbcr(sample_type);
-   642		write_sysreg_s(brbcr, SYS_BRBCR_EL1);
-   643		isb();
-   644	}
-   645	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for WIRELESS_EXT
+   Depends on [n]: NET [=n] && WIRELESS [=n]
+   Selected by [y]:
+   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
+   WARNING: unmet direct dependencies detected for WEXT_CORE
+   Depends on [n]: NET [=n] && WIRELESS [=n] && (CFG80211_WEXT [=n] || WIRELESS_EXT [=y])
+   Selected by [y]:
+   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
+   WARNING: unmet direct dependencies detected for WEXT_PROC
+   Depends on [n]: NET [=n] && WIRELESS [=n] && PROC_FS [=y] && WEXT_CORE [=y]
+   Selected by [y]:
+   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
+   WARNING: unmet direct dependencies detected for WEXT_PRIV
+   Depends on [n]: NET [=n] && WIRELESS [=n]
+   Selected by [y]:
+   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
+   WARNING: unmet direct dependencies detected for WEXT_SPY
+   Depends on [n]: NET [=n] && WIRELESS [=n]
+   Selected by [y]:
+   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
 
 -- 
 0-DAY CI Kernel Test Service
