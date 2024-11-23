@@ -1,101 +1,176 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A215E208AD
-	for <llvm@lists.linux.dev>; Sat, 23 Nov 2024 06:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B534A0A;
+	Sat, 23 Nov 2024 07:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732343591; cv=none; b=CW2glx5HjRbYMk9+/Fa3HRSA2LNiu6kiqpRmFMGAyi6DfWWlpvlmdRwrUt4bTigjuDo0/4OFm2fbkD5iNDbcJF1S5Or0lGOEUpSGyDnQvgiqiiD8uS6uyw2XrplPrTwB86JZsxu91r9vhPuHm9Z65NexeeJT14LSLtiMBVpWOZo=
+	t=1732346423; cv=none; b=FA4n6sT4RhsvMix+F4V9OX6drJuo/28RYLaKhd65GoWsCto9QKkwpytUPUd6Qz501691N8jyA7hIc0RkTLT2E3ANU7ZOqDaQPovwmBkmX/NSf42qMehyEgQPDsm3NXYCv/xznAmap1jZtdvYDAxkwpcJkN4CLwb/8/dNNpCxgTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732343591; c=relaxed/simple;
-	bh=0TW/Cy8aYI+j0xLB6UY8URAvjPu6ZdTQyhy+w1ABkto=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fGba0POUs2RtgroKGl+rq2gF9ZhpxxnlonXOgumrSHPh9NAFRNqkYqsr6VZco3UehO6sY+g94PQtW7yKzuH9UHsn/HxaeK5EGdRiyzAUERw7ePcuOAuTgNY7wgg7N83hcETcspc2UaHyZq6XbBJOLTVrh2ZjUH9fykUUe+e8Om0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gHPBBaOW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1732346423; c=relaxed/simple;
+	bh=h99ug78CQJLCQoIlVf6Bqxdxdxa/wrZrqWfi12PfGLU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Nx3MRdskEeATP1UExFqYv4oepIERktIKtHrhH39Xn/rfSIN9ufELFCXd3zr30Ff7tDT6s6ukPH5xLCdZJlUqYzqwhVfFUK9kUDGrUuNxcxKvFQWcHkP4YG2/O3LlD7SsSWlqNRNjq/6hS/Qzw8A/275P/DXk7T3NZaj2JdMnWp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VLMM/d2Y; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gHPBBaOW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732343587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PrUdgkKC5CIPliNL5wRwDrS9SIppScj0R9tEpH7DkNo=;
-	b=gHPBBaOWMmEZIE+6ciiUwEKPzcW785d6nPcPmysgnBluUPNOa2WJHzZJD9CYIWyx3OQpCM
-	S4Kkao+/3Z6fMQDymMiAhWehKOs/E7J6w5BN6AZ3isqBHBGMH/mMLk0Yvylc+pLNC0VlaG
-	wak6x9amzLZfUHvyDtUteYFxBgV2FxA=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-198-VBqYVIiJOBy_OyOCQYIDlg-1; Sat,
- 23 Nov 2024 01:33:05 -0500
-X-MC-Unique: VBqYVIiJOBy_OyOCQYIDlg-1
-X-Mimecast-MFC-AGG-ID: VBqYVIiJOBy_OyOCQYIDlg
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C17CC1956083
-	for <llvm@lists.linux.dev>; Sat, 23 Nov 2024 06:33:04 +0000 (UTC)
-Received: from [172.64.9.62] (unknown [10.30.33.134])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4F2771955F3E;
-	Sat, 23 Nov 2024 06:33:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
- upstream-mainline, 228a1157)
-Date: Sat, 23 Nov 2024 06:33:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VLMM/d2Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732346421; x=1763882421;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h99ug78CQJLCQoIlVf6Bqxdxdxa/wrZrqWfi12PfGLU=;
+  b=VLMM/d2YX4U09LpBiv+Kcy/uXOuiYs0+vU9ZqlViNhXnULco5fWvrIhE
+   NulNcPMThIFAN0ZoAKWAGLaAfLiS8GTFl0kwr3FXuJPVwgEf4RbDiGWxZ
+   OCzhF3fVg4y+wxlU9AS4Q4+QodpSUgeTMApr1CzC94DWLJYBaWwSkBG8Y
+   BpZYrSZsgOaaJbvZrNVROrPQFzfklznpD/ct97fPwxCVBBs/JcshLa2pq
+   wQ5Rs/P02/qW8OnbWSbQxMhwEBU9CZ19yGpDk6k/SCK47B3g97QDAqsmU
+   tTrli1rmnCKFLJCq+lOfnHhkA48JJj7xU/1Byg1GuwQAvK6xpkF1/NHQ3
+   w==;
+X-CSE-ConnectionGUID: dtgBD30vQHSfuQpa1wXZpA==
+X-CSE-MsgGUID: I2/wYm4JTu+SHkGVOxnF+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="32437045"
+X-IronPort-AV: E=Sophos;i="6.12,178,1728975600"; 
+   d="scan'208";a="32437045"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 23:20:20 -0800
+X-CSE-ConnectionGUID: S+wstj37Q4eIJMf7/eo+HQ==
+X-CSE-MsgGUID: tbl+DRZaRKCdMWWx8yp/5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,178,1728975600"; 
+   d="scan'208";a="91575367"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 22 Nov 2024 23:20:20 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tEkRF-0004Uj-0k;
+	Sat, 23 Nov 2024 07:20:17 +0000
+Date: Sat, 23 Nov 2024 15:20:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: SeongJae Park <sj@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sj:damon/next 12/59] samples/damon/prcl.c:86:22: warning: implicit
+ conversion from 'unsigned long' to 'unsigned int' changes value from
+ 18446744073709551615 to 4294967295
+Message-ID: <202411231754.4u5u1Nwv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <63358.124112301330500379@us-mta-198.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: aN330jtbsMYAnrehHDwNpIZmsmoaf1I9OclmoHffwp8_1732343585
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+head:   78907e9aaa2afc17557ccada5eeafa2f4423ddcc
+commit: 6a0ed0a7aac349150628bda45521200cb75006c2 [12/59] samples/damon/prcl: implement schemes setup
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241123/202411231754.4u5u1Nwv-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231754.4u5u1Nwv-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411231754.4u5u1Nwv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from samples/damon/prcl.c:9:
+   In file included from include/linux/damon.h:11:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2211:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> samples/damon/prcl.c:86:22: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+      80 |                         &(struct damos_access_pattern) {
+         |                                                        ~
+      81 |                         .min_sz_region = PAGE_SIZE,
+      82 |                         .max_sz_region = ULONG_MAX,
+      83 |                         .min_nr_accesses = 0,
+      84 |                         .max_nr_accesses = 0,
+      85 |                         .min_age_region = 50,
+      86 |                         .max_age_region = ULONG_MAX},
+         |                                           ^~~~~~~~~
+   include/vdso/limits.h:13:20: note: expanded from macro 'ULONG_MAX'
+      13 | #define ULONG_MAX       (~0UL)
+         |                          ^~~~
+   5 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag '6.13-rc-part1-SMB3-client-fixes' of git://gi=
-t.samba.org/sfrench/cifs-2.6
+vim +86 samples/damon/prcl.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1557239779
+    48	
+    49	static int damon_sample_prcl_start(void)
+    50	{
+    51		struct damon_target *target;
+    52		struct damos *scheme;
+    53	
+    54		pr_info("start\n");
+    55	
+    56		ctx = damon_new_ctx();
+    57		if (!ctx)
+    58			return -ENOMEM;
+    59		if (damon_select_ops(ctx, DAMON_OPS_VADDR)) {
+    60			damon_destroy_ctx(ctx);
+    61			return -EINVAL;
+    62		}
+    63	
+    64		target = damon_new_target();
+    65		if (!target) {
+    66			damon_destroy_ctx(ctx);
+    67			return -ENOMEM;
+    68		}
+    69		damon_add_target(ctx, target);
+    70		target_pidp = find_get_pid(target_pid);
+    71		if (!target_pidp) {
+    72			damon_destroy_ctx(ctx);
+    73			return -EINVAL;
+    74		}
+    75		target->pid = target_pidp;
+    76	
+    77		ctx->callback.after_aggregation = damon_sample_prcl_after_aggregate;
+    78	
+    79		scheme = damon_new_scheme(
+    80				&(struct damos_access_pattern) {
+    81				.min_sz_region = PAGE_SIZE,
+    82				.max_sz_region = ULONG_MAX,
+    83				.min_nr_accesses = 0,
+    84				.max_nr_accesses = 0,
+    85				.min_age_region = 50,
+  > 86				.max_age_region = ULONG_MAX},
+    87				DAMOS_PAGEOUT,
+    88				0,
+    89				&(struct damos_quota){},
+    90				&(struct damos_watermarks){},
+    91				NUMA_NO_NODE);
+    92		if (!scheme) {
+    93			damon_destroy_ctx(ctx);
+    94			return -ENOMEM;
+    95		}
+    96		damon_set_schemes(ctx, &scheme, 1);
+    97	
+    98		return damon_start(&ctx, 1, true);
+    99	}
+   100	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1557239779-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1557239779-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
