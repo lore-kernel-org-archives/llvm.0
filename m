@@ -1,57 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F0A817;
-	Sat, 23 Nov 2024 02:39:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AA7259C;
+	Sat, 23 Nov 2024 03:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732329597; cv=none; b=UMGT3Pc1AcJLNup0618poWNn5zzPuWVRUogneZ4jDU7cll/u/9CsgJksg0PZdTM0eYnmgQaOkSgLgaIGDinb1xjGeH7pYk0APd4Q1q3JDnq6NcpSp9L8pRCw379uK1d0jixN5EJWbqBS78Gw7J+p6KTAypk9ZJkZgqxI8QHlLYs=
+	t=1732331361; cv=none; b=tfMtvLNGw4bpkxaM36Qkg5XAAYGm+ant6MU3+q5waKKWgDi5TngTKdLgZnJ0WJJtvZqev4+WG9+LjBAh+Y4nU2y9KFo0C7qhurTmop8jaeYiV1T95h4zk0YhvlAcPw124PjV8VQgkSEAec1X4fqD9rxO/JpmIqBOLWpofxQri6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732329597; c=relaxed/simple;
-	bh=BWkwl0wUrC8fzdHBPtR0QHgU3P7veu2AMHKXyX4woJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=r+SLo6+DcTSkN7N99fHAvhbFFo2v8CRm7WQl8WFYfmYlejRGjcVrA259jlI7GWxNQU3QgrnEri34cLQre2QaJAxPb9xuUApRwmvZ9bgA4uyjbyfT7LRhqWZqS3cgCpW4PX/WNWN0aMFnjUExX1sw+XDXeSeTcB3DiWl0XVVo9LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I9/2V/dM; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732331361; c=relaxed/simple;
+	bh=xTIHzGabawTieoNHPmY6TAGibaQ4jK9SnDJEWSTFpxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YtXeqaPL5ksR0cvzTefz5eioXe6oGUCtT5qsaONkObdLyRO897CUChQijnmPfC/WpSEsMeeJApZ1d0MwtluSJbJX9ElZfr/UbzXjB8g7Ox5v16ppY9k2otDnfe0FguTr2UFmC7zy7yC7hpO33w8OwDUcfZUaJ5bg3TOU0+saq6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rb2mV5E+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I9/2V/dM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732329595; x=1763865595;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BWkwl0wUrC8fzdHBPtR0QHgU3P7veu2AMHKXyX4woJ0=;
-  b=I9/2V/dMwS1PJ/l4i7prEIqpI1Pn+bnWvqiwI/p5NERPm982x5zPQ4N9
-   wUVcUXk0V7ugoH7yOBHq/6Z79koCHqxyqkIvroHGy5jAWHaOi0FfColC9
-   IQnauR5tZFQoJ5qEOX0H8fMUu1mjqOQQeJ9a0ekJnpEjz95qcvKlRrlg7
-   s9C7WuQljkKuxYUqXVJdfP/nJ81i/8xBTVUd1JeZYuqkG+YLC2fIEkuSO
-   hj5YtviCpWceng2FjsqYjRqZNx4ePdxXpzZvGK2HlpI4ZdUf8BHExviDE
-   2PBrE+hvJC8AZKbdFOVxfaMphEO+nIR+7yY9vbYPYn3SL1xekqOd6i7lE
-   w==;
-X-CSE-ConnectionGUID: e1WWVO3dRYWFbLLR/7Ixlw==
-X-CSE-MsgGUID: zg9g3GVwRo2EA8+tvVVqOg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11264"; a="31856594"
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="31856594"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 18:39:55 -0800
-X-CSE-ConnectionGUID: /8W/YqEiRTW96EflkZOyWA==
-X-CSE-MsgGUID: fk9+UE78RY+pM3AKY+wUpw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,177,1728975600"; 
-   d="scan'208";a="95158750"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 22 Nov 2024 18:39:53 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEg3r-0004Ml-2f;
-	Sat, 23 Nov 2024 02:39:51 +0000
-Date: Sat, 23 Nov 2024 10:39:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Lawrence <paullawrence@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: ld.lld: error: undefined symbol: ZSTD_DStreamWorkspaceBound
-Message-ID: <202411231043.rG86kUA2-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rb2mV5E+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A6BC4CECE;
+	Sat, 23 Nov 2024 03:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732331359;
+	bh=xTIHzGabawTieoNHPmY6TAGibaQ4jK9SnDJEWSTFpxE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rb2mV5E+AX3UHtwVJrGvMLxMzSAQmyj1gb9WqUzDmisEbMoiww63NDH3or1xk6CYs
+	 fbJi3gb+WJLWuYsSWxKalwT/Wiw91Hn6Q8cfHKNebAnw9llm9PKT7tAsrMzPu9Ibkd
+	 hJZOSmKoEoYS3P+aFcphSAjnEMqNI0h4kvT+2Yi73LNk509HDO0ozBlEUXk0woux73
+	 HCBRiJXcgt6w6zBWcHf9bxIMdCX/GP9cvSV0vO1N+JQghu6PCmmR7UJVk4Xv7PLbD0
+	 TyH9F+FH3fx6Q+bf0OJo5wXMB/Ld5Yme3wtp6hcTGyaXPgUqDKNtDlO8fANt2obQnD
+	 pL+/7UoZOQhrA==
+Date: Fri, 22 Nov 2024 20:09:15 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Wentao Zhang <wentaoz5@illinois.edu>, Matt.Kelly2@boeing.com,
+	akpm@linux-foundation.org, andrew.j.oppelt@boeing.com,
+	anton.ivanov@cambridgegreys.com, ardb@kernel.org, arnd@arndb.de,
+	bhelgaas@google.com, bp@alien8.de, chuck.wolber@boeing.com,
+	dave.hansen@linux.intel.com, dvyukov@google.com, hpa@zytor.com,
+	jinghao7@illinois.edu, johannes@sipsolutions.net,
+	jpoimboe@kernel.org, justinstitt@google.com, kees@kernel.org,
+	kent.overstreet@linux.dev, linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, llvm@lists.linux.dev, luto@kernel.org,
+	marinov@illinois.edu, masahiroy@kernel.org, maskray@google.com,
+	mathieu.desnoyers@efficios.com, matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
+	ndesaulniers@google.com, oberpar@linux.ibm.com, paulmck@kernel.org,
+	richard@nod.at, rostedt@goodmis.org, samitolvanen@google.com,
+	samuel.sarkisian@boeing.com, steven.h.vanderleest@boeing.com,
+	tglx@linutronix.de, tingxur@illinois.edu, tyxu@illinois.edu,
+	x86@kernel.org
+Subject: Re: [PATCH v2 0/4] Enable measuring the kernel's Source-based Code
+ Coverage and MC/DC with Clang
+Message-ID: <20241123030915.GA1020125@thelio-3990X>
+References: <20241002045347.GE555609@thelio-3990X>
+ <20241002064252.41999-1-wentaoz5@illinois.edu>
+ <20241003232938.GA1663252@thelio-3990X>
+ <20241122122703.GW24774@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,76 +63,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241122122703.GW24774@noisy.programming.kicks-ass.net>
 
-tree:   https://github.com/ambarus/linux-0day syzkaller-id-5ecbc557fcdb8a2864e876f690ef377db999c50f
-head:   caa714448992ba4eb583735a4acb26917fbc67a8
-commit: 95a43fc99f147282c64e68baf1ea18041c7755ea ANDROID: Incremental fs: Add zstd compression support
-date:   4 years, 1 month ago
-config: i386-buildonly-randconfig-001-20241123 (https://download.01.org/0day-ci/archive/20241123/202411231043.rG86kUA2-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231043.rG86kUA2-lkp@intel.com/reproduce)
+On Fri, Nov 22, 2024 at 01:27:03PM +0100, Peter Zijlstra wrote:
+> On Thu, Oct 03, 2024 at 04:29:38PM -0700, Nathan Chancellor wrote:
+> 
+> > $ /usr/bin/time -v make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper {def,amd_mem_encrypt.,fortify_source.,llvm_cov.}config bzImage
+> > ...
+> > vmlinux.o: warning: objtool: __sev_es_nmi_complete+0x6e: call to kasan_check_write() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: do_syscall_64+0x141: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: do_int80_emulation+0x138: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: handle_bug+0x5: call to kmsan_unpoison_entry_regs() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x105: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x73: call to user_enter_irqoff() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x105: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x62: call to user_enter_irqoff() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_enter+0x45: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_exit+0x4a: call to lockdep_hardirqs_on() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_nmi_enter+0x4: call to lockdep_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_nmi_exit+0x67: call to lockdep_on() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: enter_s2idle_proper+0xb5: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: cpuidle_enter_state+0x113: call to lockdep_hardirqs_off() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: default_idle_call+0xad: call to lockdep_hardirqs_on() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: cpu_idle_poll+0x29: call to lockdep_hardirqs_on() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: acpi_idle_enter_bm+0x118: call to lockdep_hardirqs_on() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: acpi_idle_do_entry+0x4: call to perf_lopwr_cb() leaves .noinstr.text section
+> 
+> Just saw this fly by, that looks like something is buggered bad. Notably
+> lockdep_hardirqs_{on,off}() are noinstr.
+> 
+> Is this patch-set causing this, or what?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411231043.rG86kUA2-lkp@intel.com/
+These warnings are not present without CONFIG_LLVM_COV_PROFILE_ALL, so
+it certainly seems related to this patchset. In this configuration,
+CONFIG_KASAN and CONFIG_LOCKDEP are disabled, so these functions are
+simple 'static inline' functions. An immediate theory is that because
+this instrumentation is applied by the frontend, these functions will
+not actually be empty or simple, which may affect the ability to inline
+them and eliminate the instrumentation by the __no_profile from noinstr?
+It definitely seems like this should probably be investigated...
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: ZSTD_getFrameParams
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_DStreamWorkspaceBound
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_initDStream
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_decompressStream
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(__unzstd) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_DCtxWorkspaceBound
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_initDCtx
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_findFrameCompressedSize
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
---
->> ld.lld: error: undefined symbol: ZSTD_decompressDCtx
-   >>> referenced by decompress_unzstd.c
-   >>>               decompress_unzstd.o:(decompress_single) in archive lib/lib.a
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for WIRELESS_EXT
-   Depends on [n]: NET [=n] && WIRELESS [=n]
-   Selected by [y]:
-   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
-   WARNING: unmet direct dependencies detected for WEXT_CORE
-   Depends on [n]: NET [=n] && WIRELESS [=n] && (CFG80211_WEXT [=n] || WIRELESS_EXT [=y])
-   Selected by [y]:
-   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
-   WARNING: unmet direct dependencies detected for WEXT_PROC
-   Depends on [n]: NET [=n] && WIRELESS [=n] && PROC_FS [=y] && WEXT_CORE [=y]
-   Selected by [y]:
-   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
-   WARNING: unmet direct dependencies detected for WEXT_PRIV
-   Depends on [n]: NET [=n] && WIRELESS [=n]
-   Selected by [y]:
-   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
-   WARNING: unmet direct dependencies detected for WEXT_SPY
-   Depends on [n]: NET [=n] && WIRELESS [=n]
-   Selected by [y]:
-   - GKI_LEGACY_WEXT_ALLCONFIG [=y]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
