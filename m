@@ -1,88 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB38B2770B;
-	Sat, 23 Nov 2024 15:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2654A11
+	for <llvm@lists.linux.dev>; Sun, 24 Nov 2024 01:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732376676; cv=none; b=nV0XzAK7H3rVmDRMId1jYKnEd47CzsgCYYEwiAMAf0BWs5t6EFJ9He1OVDOwaGmPMSvd3waOhoXDYmwztoZRvgkZSq9QAuKVNuYhWs7GTJdrKWfM0jrbmIebrSyBUb+9+4isLEwaxcVpFE8qM0tHEnRgy7dI67a2+MeFJCvQ4q0=
+	t=1732411388; cv=none; b=ABvM8WH8Tll9EOsDWi7RcgNX2MssSLMW5gcbVH7CIqKax/lFL0TbmkY+WzPFe9g8debcn4RwfYZo6sy9m1N6JBz2u1I+uCt59mvJG4NK9HEhpCiT070cMbDboesSZXKI79+OV8QLWwJr1m+vNQyQHw3ID7Bo7gx1ddUQljqzgAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732376676; c=relaxed/simple;
-	bh=eREf6+PuvHEx4ifTbBV5FzQdlxai1Wh0qMkDepBAK+E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RGOBYMKOa2EgVqXMUtNtcstOZ1Ctj+vEGWwm7rWqLyMdFnJD/nUqUcZkf93WNQIdDQT4al8pbwTGbvz62H9BK9X9nKpdjzReId9fVFcFvsCsAVEQYN7fuXZaPGbz7YyZ2VufDl8q9ULHz/9f6RnYl/IBaEa+4CZblMBeTZMy8Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U/gklImV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732411388; c=relaxed/simple;
+	bh=bTeTdSQyiaQXhKlk+w3sS1jTER0QnWUYsfYh34xNy5s=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XyI4IMHgwB1JTGsFiBDFD7ua9WatiI7ABKilJyyyPYyoCDdsovAWg1yfdmEZ7gV53PfchojZEuhh2HP0wZaMst5MM8g6HIVdhAa8kKmBmCm0FHEIb/EmFnpjvMWLME8xbwmvkjK/oWlXQWblEJZD3nscA+sNjZzcuY+CqXoha7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YclmHqVM; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U/gklImV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D92DC4CECD;
-	Sat, 23 Nov 2024 15:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732376676;
-	bh=eREf6+PuvHEx4ifTbBV5FzQdlxai1Wh0qMkDepBAK+E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U/gklImVYLZnKfye/A2lUAQh0bJn/XDsHIFWCvrFmH80F2915SUhLLPeRkYFfJrt6
-	 97QnjBWzD3o+SoNHXCue1fGw+HUHxjpYV1+tQTcCszFLo4hI3je+7t499jRH0k69l/
-	 iSRSVQj90bSZ5ue3UC6blHSCMOOH91kVGp+8Dlp0Q1ceAxWsMFUo3hS4az90n8TqlE
-	 LQygokn9sLABP+5+0SPCNDD8W/CVtWayUtWJqU0xItNH81ShqBQ0NGl5E+UhYXTFH4
-	 oF+ipK8TuuVGxX3E7hcNFkzAK1gU0rmb1o0g+wp3LjxJBORV/ZNSmeNvzCuazYOMpQ
-	 59LX8NLBj2AGQ==
-From: SeongJae Park <sj@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	damon@lists.linux.dev
-Subject: Re: [sj:damon/next 12/59] samples/damon/prcl.c:86:22: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295
-Date: Sat, 23 Nov 2024 07:44:33 -0800
-Message-Id: <20241123154433.52687-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <202411231754.4u5u1Nwv-lkp@intel.com>
-References: 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YclmHqVM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732411384;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yUN/8P58i+khv96l1+/fCaLq3xwT0nFZinjzEnjajT4=;
+	b=YclmHqVMd6J5ZjyNMjTH5q8ud4XK/DfcnrZ9m9NYMIX5PYvztsUPGpU0ebEH+TvAL48Czp
+	c3I5dHkNsgnhyEKilibbgexAOk0iG4gBTLqWg1ltfuGwtzH8h3ZipC1N5x6mLU0SPCPbTG
+	PmC1qVIaX9BiBh2RwUxJvP2Uxs6Tqng=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-300-83sVR0pjOjOqPkO5SqTfVg-1; Sat,
+ 23 Nov 2024 20:23:02 -0500
+X-MC-Unique: 83sVR0pjOjOqPkO5SqTfVg-1
+X-Mimecast-MFC-AGG-ID: 83sVR0pjOjOqPkO5SqTfVg
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EDA0A1956096
+	for <llvm@lists.linux.dev>; Sun, 24 Nov 2024 01:23:01 +0000 (UTC)
+Received: from [172.64.9.62] (unknown [10.30.33.134])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7B3211955F43;
+	Sun, 24 Nov 2024 01:23:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
+ upstream-mainline, 9f16d5e6)
+Date: Sun, 24 Nov 2024 01:23:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <82452.124112320230300135@us-mta-300.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 1v9B0OexxBFx6KMXVvNYIz5EqSR4uycmsaM4J7sTWTY_1732411382
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 23 Nov 2024 15:20:07 +0800 kernel test robot <lkp@intel.com> wrote:
+Hi, we tested your kernel and here are the results:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-> head:   78907e9aaa2afc17557ccada5eeafa2f4423ddcc
-> commit: 6a0ed0a7aac349150628bda45521200cb75006c2 [12/59] samples/damon/prcl: implement schemes setup
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241123/202411231754.4u5u1Nwv-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241123/202411231754.4u5u1Nwv-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202411231754.4u5u1Nwv-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-[...]
-> >> samples/damon/prcl.c:86:22: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
->       80 |                         &(struct damos_access_pattern) {
->          |                                                        ~
->       81 |                         .min_sz_region = PAGE_SIZE,
->       82 |                         .max_sz_region = ULONG_MAX,
->       83 |                         .min_nr_accesses = 0,
->       84 |                         .max_nr_accesses = 0,
->       85 |                         .min_age_region = 50,
->       86 |                         .max_age_region = ULONG_MAX},
->          |                                           ^~~~~~~~~
->    include/vdso/limits.h:13:20: note: expanded from macro 'ULONG_MAX'
->       13 | #define ULONG_MAX       (~0UL)
->          |                          ^~~~
->    5 warnings generated.
-
-Thank you for this report!  Just pushed a fix:
-https://git.kernel.org/sj/c/74b866938a402fc479938747f93b9ced3c9a1282
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-Thanks,
-SJ
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
 
-[...]
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1557771563
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1557771563-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1557771563-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
