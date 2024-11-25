@@ -1,130 +1,104 @@
-Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BA6194A6C
-	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 11:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6903194A44;
+	Mon, 25 Nov 2024 11:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732532814; cv=none; b=eXeDydTueEFFWPvmdAm/hFb0EJXfqGYcpCJQEdWel+zhWzEZolMGlH2ODxXDje9esWsu6JPplCnzGz0NPUMSPzIXO9hzTcACabZVFKjypwG/GBI8zaE578ECNPMTnu1WriV1gqlgv54qQovWeBY1QH3g0GaEflaDE8boPqeNwig=
+	t=1732534972; cv=none; b=Zu7wZLBdYWNRRLHG5MRxo6ZrrM8sxGBWGCDufRHn3cmL3JJzPY0+tm5DrRcsfD9xpf9wKy5ODh1XEW6WSgFqH60BpeGuu67qZKjV1fCunfFF5FFBOmasjBPixmNSoRg/+gDQcGKVGSYzaol4+01uN3MkhKuEJnta231JqbNtUq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732532814; c=relaxed/simple;
-	bh=UVNJLl8hFonaDEFxsXRGskK1o/7O9VRwYYLYXSB7WTk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RX5/L9ubMZpEsP7fS8sPbStgie5fuW9MxPZPS5wwQkWwo0u/NBABZjtywRdTSdMffh4beckILsNLMWrhe+mnQZCt+B+29F0uQtJVhNy/9cCAHSdTvm91CcNg8niTXJWv6PmAO72Um+gZm3VW5sTe0pJuAp6gUVak7B5n+FMqggg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=ZQZH+PNb; arc=none smtp.client-ip=168.119.48.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
+	s=arc-20240116; t=1732534972; c=relaxed/simple;
+	bh=/tvYCZ2YN+fHWCx8kb6FLlRxDsTEAuSmzNv0Qt9XmIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TfeDEhz81COWL2D62kV6b9kl5X/TS308qub2MLGR7na6aiKFSQSWLeAYYnjs+mMqZQ07JC+oI833EwUzZq8yqce2/JeZQmfevKtOxxQEcmT2YnbxYhskoF9HiO27FF68pH2zAsPndyLDlsI3OSsu3spcHnJHSItxjPdVCeMS9HU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eqoo0JrW; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="ZQZH+PNb"
-From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1732532811;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=L6d8K7ZSOHhNo5Pcm4o5EGE0pY7Wd8vWiLSOK+rhHxk=;
-	b=ZQZH+PNbTtjpjwWgn5trae/MgLUEjewejT2SGIVaV5GVyBH259kw0Bz3ILROSQN0DnhYJf
-	zGf890PNYuhmJKL7/iYQq5RbvKV6nn/Q9fNq5lqRcNkbWYnPabPZewe1INEzUBm+0PO4Ss
-	1vOzZC9/frILziCy/A9wbxXN3O61ecpsOy4UEpfBHTebIQAZR2eFQuZRqsqbUPBW/lF0H0
-	FYYlanCvpWy2cTvaF6RdyHHMsoVlY4jksqvvrP8p4QcGnYAvF9Zxl3qrw6T8mVWL2QIczw
-	hRmJZyH4UDmoAlI+ciZD2orQDLQY4phoKL4hT0oM72/P4YbL/2JjWLCclzECHA==
-To: 
-Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	selinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] selinux: use native iterator types
-Date: Mon, 25 Nov 2024 12:06:44 +0100
-Message-ID: <20241125110646.50799-1-cgoettsche@seltendoof.de>
-Reply-To: cgzones@googlemail.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eqoo0JrW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732534971; x=1764070971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/tvYCZ2YN+fHWCx8kb6FLlRxDsTEAuSmzNv0Qt9XmIY=;
+  b=eqoo0JrWts/Wl5B+do1opBh5NSr+OVq5FxYvgEsoefc0MFUnhfCSll0u
+   M8fkaT3HRphId4kVor2v8Quczfma+4oyKdZmNwZPs1iqOu1XsVmrhdIB9
+   VjOCT1S34FFvuLbPij2WLbLJN8cSqo0xNB2ZajxFj0MYwoTS2KpClHQFY
+   9FJIG+40qHksfA4tDSY0rt3u2RcZqNyG/EBQsQq4pRrHkHR1mGvpk1veG
+   Vjo1iEwAwP4ue8iB1nPO9Cjp2j2vi+uHTDP64noGNSj7Fwc4n+Bu0Q+HK
+   04tumBCP2165WydxxdWiWPaFLI4qkqrtYIpJTnljDJDX0C/0ax9vRkTrx
+   A==;
+X-CSE-ConnectionGUID: rOFIPJZGRCKxndOZfycxxQ==
+X-CSE-MsgGUID: jqTOmgSxRj6NqNb3SBDz/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="43699115"
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="43699115"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 03:42:49 -0800
+X-CSE-ConnectionGUID: MTmHcvOASc+QL/oqKW29QQ==
+X-CSE-MsgGUID: yoIqH574SOqq/islBK6hdA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="95654008"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 25 Nov 2024 03:42:46 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tFXUK-0006GH-0h;
+	Mon, 25 Nov 2024 11:42:44 +0000
+Date: Mon, 25 Nov 2024 19:42:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mateusz Guzik <mjguzik@gmail.com>, tglx@linutronix.de, bp@alien8.de,
+	andy@kernel.org, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Mateusz Guzik <mjguzik@gmail.com>
+Subject: Re: [PATCH 2/2] string: retire bcmp()
+Message-ID: <202411251926.sIYJ9sEV-lkp@intel.com>
+References: <20241123094729.1099378-3-mjguzik@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241123094729.1099378-3-mjguzik@gmail.com>
 
-From: Christian Göttsche <cgzones@googlemail.com>
+Hi Mateusz,
 
-Use types for iterators equal to the type of the to be compared values.
+kernel test robot noticed the following build errors:
 
-Reported by clang:
+[auto build test ERROR on kees/for-next/hardening]
+[also build test ERROR on tip/master tip/x86/core linus/master v6.12 next-20241125]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-    security/selinux/ss/sidtab.c:126:2: warning: comparison of integers of different signs: 'int' and 'unsigned long' [-Wsign-compare]
-      126 |         hash_for_each_rcu(sidtab->context_to_sid, i, entry, list) {
-          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ./include/linux/hashtable.h:139:51: note: expanded from macro 'hash_for_each_rcu'
-      139 |         for ((bkt) = 0, obj = NULL; obj == NULL && (bkt) < HASH_SIZE(name);\
-          |                                                     ~~~  ^ ~~~~~~~~~~~~~~~
+url:    https://github.com/intel-lab-lkp/linux/commits/Mateusz-Guzik/x86-callthunks-s-bcmp-memcmp/20241125-110959
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+patch link:    https://lore.kernel.org/r/20241123094729.1099378-3-mjguzik%40gmail.com
+patch subject: [PATCH 2/2] string: retire bcmp()
+config: arm-footbridge_defconfig (https://download.01.org/0day-ci/archive/20241125/202411251926.sIYJ9sEV-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251926.sIYJ9sEV-lkp@intel.com/reproduce)
 
-    security/selinux/selinuxfs.c:1520:23: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
-     1520 |         for (cpu = *idx; cpu < nr_cpu_ids; ++cpu) {
-          |                          ~~~ ^ ~~~~~~~~~~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411251926.sIYJ9sEV-lkp@intel.com/
 
-    security/selinux/hooks.c:412:16: warning: comparison of integers of different signs: 'int' and 'unsigned long' [-Wsign-compare]
-      412 |         for (i = 0; i < ARRAY_SIZE(tokens); i++) {
-          |                     ~ ^ ~~~~~~~~~~~~~~~~~~
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
----
- security/selinux/hooks.c     | 2 +-
- security/selinux/selinuxfs.c | 2 +-
- security/selinux/ss/sidtab.c | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+>> ERROR: modpost: "bcmp" [fs/fat/fat.ko] undefined!
+>> ERROR: modpost: "bcmp" [fs/isofs/isofs.ko] undefined!
+>> ERROR: modpost: "bcmp" [fs/nfsd/nfsd.ko] undefined!
+>> ERROR: modpost: "bcmp" [drivers/net/slip/slhc.ko] undefined!
+>> ERROR: modpost: "bcmp" [drivers/usb/core/usbcore.ko] undefined!
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index ad3abd48eed1..8cab0413df95 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -407,7 +407,7 @@ static const struct {
- 
- static int match_opt_prefix(char *s, int l, char **arg)
- {
--	int i;
-+	unsigned int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(tokens); i++) {
- 		size_t len = tokens[i].len;
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 234f4789b787..ea563e6215a1 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -1515,7 +1515,7 @@ static const struct file_operations sel_avc_hash_stats_ops = {
- #ifdef CONFIG_SECURITY_SELINUX_AVC_STATS
- static struct avc_cache_stats *sel_avc_get_stat_idx(loff_t *idx)
- {
--	int cpu;
-+	loff_t cpu;
- 
- 	for (cpu = *idx; cpu < nr_cpu_ids; ++cpu) {
- 		if (!cpu_possible(cpu))
-diff --git a/security/selinux/ss/sidtab.c b/security/selinux/ss/sidtab.c
-index c8848cbba81f..cb7125cc7f8e 100644
---- a/security/selinux/ss/sidtab.c
-+++ b/security/selinux/ss/sidtab.c
-@@ -114,12 +114,12 @@ int sidtab_set_initial(struct sidtab *s, u32 sid, struct context *context)
- 
- int sidtab_hash_stats(struct sidtab *sidtab, char *page)
- {
--	int i;
-+	unsigned int i;
- 	int chain_len = 0;
- 	int slots_used = 0;
- 	int entries = 0;
- 	int max_chain_len = 0;
--	int cur_bucket = 0;
-+	unsigned int cur_bucket = 0;
- 	struct sidtab_entry *entry;
- 
- 	rcu_read_lock();
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
