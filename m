@@ -1,62 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651021C4A1E;
-	Mon, 25 Nov 2024 21:22:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB5718FDDE;
+	Mon, 25 Nov 2024 22:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732569756; cv=none; b=NYCS1v2i0sYYiwfj75w2U0GpWNNL1EPTIiz1/5vcndaqWm7senHRNB61c6n98XFovNIHJHYSuC9iZ07bDAyrnZPrB5rmnO7I7+aSQbngCJgZXBFnoD4KTs19myjWXeAkdZOusPtQWutP89ymjtOY1Q9hESlZWDQvp6qdb1yLtX0=
+	t=1732573429; cv=none; b=RTbS8agenUKsUqXMErKv0O0yOkyA4oZWfn4SlafMpP9e5iUcm1SX/H0fqlSEQCQ5go8kFh9Ns1sNH97EZXCIwsuUcwi85T1QWmMvUoNXgYJ5YG3/htRgtAw7IMQDI0w1FA/A2C7YxcKpTvZCW//DLmqdt4Im5qXjkJMeH/OzMsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732569756; c=relaxed/simple;
-	bh=twnL+B7JtJeYbJ1JfiZtGSamChzL0Ng6pjqhRSeR06k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MhJiA2bWwEr3wFmybCxcIsGSDtgyHJhlQPyIhK/cceat/SLlijEHqAyD7BL13aWJHwHXA1M7CKN9ZCPDRvco8Wv13PsgvHBzm6eaKt0vC71NwtyLrAHtba6hTZ76CjPqtuqRskdRTJ8zAO3pjjMU3ANWOrpoH38ej3Yjj/kfYvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YrjH2tPR; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1732573429; c=relaxed/simple;
+	bh=VOiOYKKB2AomuTECgrbzPW9cDAf3glqiPFj3FOVU0xQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eIt7SCFPZRC9C0oW6uivGF/rXH5Y0CyM0Vx4pRevurXeVJTLE7oC2BNM4cH3i3QcBjeFdQrKpT0EC2d43Hzc01OIJGpA/ojMCJGRFz4aEaZ5n3DTAY6PunIin283vq016AmX2H9XKzi6x2N1xT+SgM0MPIJAn9bdALl/if9ZuaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c++1tLUe; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YrjH2tPR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c++1tLUe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732569754; x=1764105754;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=twnL+B7JtJeYbJ1JfiZtGSamChzL0Ng6pjqhRSeR06k=;
-  b=YrjH2tPR9bQ27H9FrCPziLS2Yb459ZqkyhWpiPNAV+Zv7kP9EjkI+wCN
-   P9QUb96oHOqqhh1VM0+vVGK3h+b0kTPrUbMGRjIKAVmC1cLc7eXdHdP+O
-   LEgNVjbecbFDx7Z5oTDnsWoeSWQu/XdeJzN5yAs+arc/A5o+7j9HHIw5J
-   tF24p5dQ34FP2cZAHhpHwxDHYuqMUoq7CdcVyVxO3WH91xbdu0zP/m/ty
-   9OpGavhWGdQQp5EFE9qpkiIzIw7BaJLC5NX6vOgq1YcRKryGDborRM/yy
-   +DfK1/eONBi/pi12ggOhWhglJKAZhxY88Qna7TeF6bGSQfOkvBcWsRnKa
-   w==;
-X-CSE-ConnectionGUID: ZV/BoD2WSgiADxlILPxVUQ==
-X-CSE-MsgGUID: 1UPrs9f2RdqapV+vxqpw+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="32444467"
-X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
-   d="scan'208";a="32444467"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 13:22:34 -0800
-X-CSE-ConnectionGUID: Rgalz3ZwS/m9Kpoe3m+OBQ==
-X-CSE-MsgGUID: XtYAQFmqRBykA+T/6rfnpg==
+  t=1732573428; x=1764109428;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VOiOYKKB2AomuTECgrbzPW9cDAf3glqiPFj3FOVU0xQ=;
+  b=c++1tLUeZpBZKIkm4sinYSA4d67S+dkHGyAMEqu8VDFCEAA2xw/uYuwd
+   b2izY5eBfyP3LhiAsos+WPG1b/cWWe44dcpkeV44FTxILj/JzIFgiAPmP
+   m4pjsZkmIiL2Cb1+mcD3wMHXpzmu8xl0SdZ2UTCCPrqtz22hV42Lt9rf5
+   7IuqVfqi0VVZzHno9nF9z827I45MSdil7k8sixgP70d/g/0h8v2DrWQBT
+   WF58If0/a5TO53LB4vzqGyFjhr+40W5QcBxNltK3vVe7vFBHNQhv9SE1a
+   5QEG05cq5UhA0cSlcLGKfvcybAE69PATsAGT+dRq4zZeL0TvnSCGd/BnZ
+   g==;
+X-CSE-ConnectionGUID: EYJulEirQ7KGL6Op3Uwf4A==
+X-CSE-MsgGUID: ebIPN6JBRXyJ2k4F4wKIlg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="32649575"
+X-IronPort-AV: E=Sophos;i="6.12,184,1728975600"; 
+   d="scan'208";a="32649575"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 14:23:47 -0800
+X-CSE-ConnectionGUID: xu9I1bG8SYy2MGkoiQBEng==
+X-CSE-MsgGUID: IQwi2F8eS9Kkp/yFv2GBXg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="96449527"
+X-IronPort-AV: E=Sophos;i="6.12,184,1728975600"; 
+   d="scan'208";a="114667263"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 25 Nov 2024 13:22:31 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 25 Nov 2024 14:23:45 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tFgXM-0006oP-39;
-	Mon, 25 Nov 2024 21:22:28 +0000
-Date: Tue, 26 Nov 2024 05:22:28 +0800
+	id 1tFhUd-0006qk-1f;
+	Mon, 25 Nov 2024 22:23:43 +0000
+Date: Tue, 26 Nov 2024 06:23:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Issam Hamdi <ih@simonwunderlich.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	johannes@sipsolutions.net, linux-wireless@vger.kernel.org,
-	mathias.kretschmer@fit.fraunhofer.de, sw@simonwunderlich.de
-Subject: Re: [PATCH v2] wifi: mac80211: fix mbss changed flags corruption on
- 32 bit systems
-Message-ID: <202411260443.dZKFWC4G-lkp@intel.com>
-References: <20241118125640.1110502-1-ih@simonwunderlich.de>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:b4/sm8750-dispcc 30/35]
+ drivers/clk/qcom/dispcc-sm8750.c:17:10: fatal error:
+ 'dt-bindings/clock/qcom,sm8750-dispcc.h' file not found
+Message-ID: <202411260603.MSOB8Gem-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,125 +62,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241118125640.1110502-1-ih@simonwunderlich.de>
 
-Hi Issam,
+Hi Krzysztof,
 
-kernel test robot noticed the following build warnings:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on dfc14664794a4706e0c2186a0c082386e6b14c4d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Issam-Hamdi/wifi-mac80211-fix-mbss-changed-flags-corruption-on-32-bit-systems/20241121-150801
-base:   dfc14664794a4706e0c2186a0c082386e6b14c4d
-patch link:    https://lore.kernel.org/r/20241118125640.1110502-1-ih%40simonwunderlich.de
-patch subject: [PATCH v2] wifi: mac80211: fix mbss changed flags corruption on 32 bit systems
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20241126/202411260443.dZKFWC4G-lkp@intel.com/config)
+tree:   https://github.com/krzk/linux b4/sm8750-dispcc
+head:   5350ae4691e59d4aa71df7addb636caef6f730f6
+commit: b97538c00c8e24fc168f3addbe7eba146b06396b [30/35] sq
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241126/202411260603.MSOB8Gem-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260443.dZKFWC4G-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260603.MSOB8Gem-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411260443.dZKFWC4G-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411260603.MSOB8Gem-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/mac80211/mesh.c:11:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2213:
+   In file included from drivers/clk/qcom/dispcc-sm8750.c:11:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/mac80211/mesh.c:11:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/mac80211/mesh.c:11:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/mac80211/mesh.c:11:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> net/mac80211/mesh.c:1163:7: warning: address of array 'bits' will always evaluate to 'true' [-Wpointer-bool-conversion]
-    1163 |         if (!bits)
-         |             ~^~~~
-   8 warnings generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/qcom/dispcc-sm8750.c:17:10: fatal error: 'dt-bindings/clock/qcom,sm8750-dispcc.h' file not found
+      17 | #include <dt-bindings/clock/qcom,sm8750-dispcc.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 1 error generated.
 
 
-vim +1163 net/mac80211/mesh.c
+vim +17 drivers/clk/qcom/dispcc-sm8750.c
 
-2b5e19677592c1 Thomas Pedersen 2013-02-14  1155  
-2b5e19677592c1 Thomas Pedersen 2013-02-14  1156  void ieee80211_mbss_info_change_notify(struct ieee80211_sub_if_data *sdata,
-15ddba5f43114c Anjaneyulu      2023-06-04  1157  				       u64 changed)
-2b5e19677592c1 Thomas Pedersen 2013-02-14  1158  {
-f81a9dedaff434 Thomas Pedersen 2013-06-13  1159  	struct ieee80211_if_mesh *ifmsh = &sdata->u.mesh;
-f0e1110ae72964 Issam Hamdi     2024-11-18  1160  	unsigned long bits[] = { BITMAP_FROM_U64(changed) };
-f81a9dedaff434 Thomas Pedersen 2013-06-13  1161  	u32 bit;
-f81a9dedaff434 Thomas Pedersen 2013-06-13  1162  
-f81a9dedaff434 Thomas Pedersen 2013-06-13 @1163  	if (!bits)
-2b5e19677592c1 Thomas Pedersen 2013-02-14  1164  		return;
-f81a9dedaff434 Thomas Pedersen 2013-06-13  1165  
-f81a9dedaff434 Thomas Pedersen 2013-06-13  1166  	/* if we race with running work, worst case this work becomes a noop */
-f0e1110ae72964 Issam Hamdi     2024-11-18  1167  	for_each_set_bit(bit, bits, sizeof(changed) * BITS_PER_BYTE)
-6e48ebffc2db54 Felix Fietkau   2023-09-13  1168  		set_bit(bit, ifmsh->mbss_changed);
-f81a9dedaff434 Thomas Pedersen 2013-06-13  1169  	set_bit(MESH_WORK_MBSS_CHANGED, &ifmsh->wrkq_flags);
-16114496d684a3 Johannes Berg   2023-06-06  1170  	wiphy_work_queue(sdata->local->hw.wiphy, &sdata->work);
-2b5e19677592c1 Thomas Pedersen 2013-02-14  1171  }
-2b5e19677592c1 Thomas Pedersen 2013-02-14  1172  
+9594918bb3708f Krzysztof Kozlowski 2024-11-25  16  
+9594918bb3708f Krzysztof Kozlowski 2024-11-25 @17  #include <dt-bindings/clock/qcom,sm8750-dispcc.h>
+9594918bb3708f Krzysztof Kozlowski 2024-11-25  18  
+
+:::::: The code at line 17 was first introduced by commit
+:::::: 9594918bb3708f775e232e4a0a9b543135dbc6fa WIP
+
+:::::: TO: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+:::::: CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
