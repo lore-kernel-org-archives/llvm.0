@@ -1,57 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D15A1BFE0C;
-	Mon, 25 Nov 2024 21:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651021C4A1E;
+	Mon, 25 Nov 2024 21:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732568478; cv=none; b=NGozrHNPik0m2Eo3wPxzCbeU39xbXA4E2GDDuF4BWPFJFHeogxbyPaBiJs789xwCRKC/UYQBr0rh/MT2+cvBhVJjnKpFspqmUfeZTL7VIAX7jrV3RltFgLSEnBiKwklijzFrk6JRKgXKr5ePWYg6tP2VlT4uy7svHZ7HJm/vdxo=
+	t=1732569756; cv=none; b=NYCS1v2i0sYYiwfj75w2U0GpWNNL1EPTIiz1/5vcndaqWm7senHRNB61c6n98XFovNIHJHYSuC9iZ07bDAyrnZPrB5rmnO7I7+aSQbngCJgZXBFnoD4KTs19myjWXeAkdZOusPtQWutP89ymjtOY1Q9hESlZWDQvp6qdb1yLtX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732568478; c=relaxed/simple;
-	bh=XAwiMozoNLPS8mjHOorPqrFiU28vaKiYB4yk9iHltBU=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ejsp4V2H9jQ+aOkpifS92EzWZlDGW8wSGJ4pWeDjq11CV6wWAa1FDGocgjYpJG9UvUf1LI3KwSSsxvLJ6QqUgp9cq/jBSgwvdUh3jr/C8+hIuVBNOi3V+yeWImMteR5IrimC64eeSUMLnZCQUCbYOaMRg/SWvlalEg3gwcA4eEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MC4R0u0o; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1732569756; c=relaxed/simple;
+	bh=twnL+B7JtJeYbJ1JfiZtGSamChzL0Ng6pjqhRSeR06k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MhJiA2bWwEr3wFmybCxcIsGSDtgyHJhlQPyIhK/cceat/SLlijEHqAyD7BL13aWJHwHXA1M7CKN9ZCPDRvco8Wv13PsgvHBzm6eaKt0vC71NwtyLrAHtba6hTZ76CjPqtuqRskdRTJ8zAO3pjjMU3ANWOrpoH38ej3Yjj/kfYvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YrjH2tPR; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MC4R0u0o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YrjH2tPR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732568476; x=1764104476;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=XAwiMozoNLPS8mjHOorPqrFiU28vaKiYB4yk9iHltBU=;
-  b=MC4R0u0oqpxnXwsqxvjSL9Hq9eQVORLEuN7J1I7hXx4dOEOwEb+sQEyV
-   f2ID7ztcJ8ylvQe1gU53+9y8bI4KGC91rLVfvla+0ly8l1uNC2ArBRfMZ
-   R+gb8ssA8b1Prkz4HT/ATuPA7f/jpzhLymDo1P3QLybLin1szXagne5ma
-   T+D8P0x0v58vUOkCkBx2SQhs5Rha+hUV9IvNnDZ8Mh+8dxPpbPR5eiscr
-   XuuOXw17kLvHRNy9taMiQZy9VBT3zs1xqsqgk293vO4XswPdzBqCXzw0W
-   K2h+l0rb1ciMvyaRpSsBsQzPcPkxTpOGOnr73zJmZ+GTJplSecSR+C8Ez
-   g==;
-X-CSE-ConnectionGUID: tQzYVxfXQ0ymTqkCIhUzug==
-X-CSE-MsgGUID: /Y6+snoDTt6TjzprCSzbMw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="36481836"
+  t=1732569754; x=1764105754;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=twnL+B7JtJeYbJ1JfiZtGSamChzL0Ng6pjqhRSeR06k=;
+  b=YrjH2tPR9bQ27H9FrCPziLS2Yb459ZqkyhWpiPNAV+Zv7kP9EjkI+wCN
+   P9QUb96oHOqqhh1VM0+vVGK3h+b0kTPrUbMGRjIKAVmC1cLc7eXdHdP+O
+   LEgNVjbecbFDx7Z5oTDnsWoeSWQu/XdeJzN5yAs+arc/A5o+7j9HHIw5J
+   tF24p5dQ34FP2cZAHhpHwxDHYuqMUoq7CdcVyVxO3WH91xbdu0zP/m/ty
+   9OpGavhWGdQQp5EFE9qpkiIzIw7BaJLC5NX6vOgq1YcRKryGDborRM/yy
+   +DfK1/eONBi/pi12ggOhWhglJKAZhxY88Qna7TeF6bGSQfOkvBcWsRnKa
+   w==;
+X-CSE-ConnectionGUID: ZV/BoD2WSgiADxlILPxVUQ==
+X-CSE-MsgGUID: 1UPrs9f2RdqapV+vxqpw+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="32444467"
 X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
-   d="scan'208";a="36481836"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 13:01:16 -0800
-X-CSE-ConnectionGUID: 7o9SDh7XSfu0Y2lO2rW6IQ==
-X-CSE-MsgGUID: lDk20KUtT/S6F73iGxtVlQ==
+   d="scan'208";a="32444467"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 13:22:34 -0800
+X-CSE-ConnectionGUID: Rgalz3ZwS/m9Kpoe3m+OBQ==
+X-CSE-MsgGUID: XtYAQFmqRBykA+T/6rfnpg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
-   d="scan'208";a="91340615"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="96449527"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 25 Nov 2024 13:01:15 -0800
+  by orviesa003.jf.intel.com with ESMTP; 25 Nov 2024 13:22:31 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tFgCm-0006nP-3B;
-	Mon, 25 Nov 2024 21:01:12 +0000
-Date: Tue, 26 Nov 2024 05:00:45 +0800
+	id 1tFgXM-0006oP-39;
+	Mon, 25 Nov 2024 21:22:28 +0000
+Date: Tue, 26 Nov 2024 05:22:28 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [peterz-queue:objtool/core 3/12] arch/x86/kvm/kvm.o: warning:
- objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
-Message-ID: <202411260421.4JBdFPW5-lkp@intel.com>
+To: Issam Hamdi <ih@simonwunderlich.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	johannes@sipsolutions.net, linux-wireless@vger.kernel.org,
+	mathias.kretschmer@fit.fraunhofer.de, sw@simonwunderlich.de
+Subject: Re: [PATCH v2] wifi: mac80211: fix mbss changed flags corruption on
+ 32 bit systems
+Message-ID: <202411260443.dZKFWC4G-lkp@intel.com>
+References: <20241118125640.1110502-1-ih@simonwunderlich.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,45 +65,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241118125640.1110502-1-ih@simonwunderlich.de>
 
-TO: Peter Zijlstra <peterz@infradead.org>
+Hi Issam,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git objtool/core
-head:   a5091c456d5d4e22f5729d7600080b18a37f10a2
-commit: f4b16a1d266666624331222f640e9de652bc1dd4 [3/12] objtool: Convert ANNOTATE_NOENDBR to ANNOTATE
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241126/202411260421.4JBdFPW5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260421.4JBdFPW5-lkp@intel.com/reproduce)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on dfc14664794a4706e0c2186a0c082386e6b14c4d]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Issam-Hamdi/wifi-mac80211-fix-mbss-changed-flags-corruption-on-32-bit-systems/20241121-150801
+base:   dfc14664794a4706e0c2186a0c082386e6b14c4d
+patch link:    https://lore.kernel.org/r/20241118125640.1110502-1-ih%40simonwunderlich.de
+patch subject: [PATCH v2] wifi: mac80211: fix mbss changed flags corruption on 32 bit systems
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20241126/202411260443.dZKFWC4G-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260443.dZKFWC4G-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411260421.4JBdFPW5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411260443.dZKFWC4G-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/kvm.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/nvme/host/nvme-core.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/nvme/target/nvmet.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> net/wireless/cfg80211.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> net/mac80211/mac80211.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/ufs/core/ufshcd-core.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/scsi/pm8001/pm80xx.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/scsi/qla2xxx/qla2xxx.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> fs/ext2/ext2.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> fs/nfsd/nfsd.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> fs/fuse/fuse.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
-..
+   In file included from net/mac80211/mesh.c:11:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from net/mac80211/mesh.c:11:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/mac80211/mesh.c:11:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/mac80211/mesh.c:11:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> net/mac80211/mesh.c:1163:7: warning: address of array 'bits' will always evaluate to 'true' [-Wpointer-bool-conversion]
+    1163 |         if (!bits)
+         |             ~^~~~
+   8 warnings generated.
+
+
+vim +1163 net/mac80211/mesh.c
+
+2b5e19677592c1 Thomas Pedersen 2013-02-14  1155  
+2b5e19677592c1 Thomas Pedersen 2013-02-14  1156  void ieee80211_mbss_info_change_notify(struct ieee80211_sub_if_data *sdata,
+15ddba5f43114c Anjaneyulu      2023-06-04  1157  				       u64 changed)
+2b5e19677592c1 Thomas Pedersen 2013-02-14  1158  {
+f81a9dedaff434 Thomas Pedersen 2013-06-13  1159  	struct ieee80211_if_mesh *ifmsh = &sdata->u.mesh;
+f0e1110ae72964 Issam Hamdi     2024-11-18  1160  	unsigned long bits[] = { BITMAP_FROM_U64(changed) };
+f81a9dedaff434 Thomas Pedersen 2013-06-13  1161  	u32 bit;
+f81a9dedaff434 Thomas Pedersen 2013-06-13  1162  
+f81a9dedaff434 Thomas Pedersen 2013-06-13 @1163  	if (!bits)
+2b5e19677592c1 Thomas Pedersen 2013-02-14  1164  		return;
+f81a9dedaff434 Thomas Pedersen 2013-06-13  1165  
+f81a9dedaff434 Thomas Pedersen 2013-06-13  1166  	/* if we race with running work, worst case this work becomes a noop */
+f0e1110ae72964 Issam Hamdi     2024-11-18  1167  	for_each_set_bit(bit, bits, sizeof(changed) * BITS_PER_BYTE)
+6e48ebffc2db54 Felix Fietkau   2023-09-13  1168  		set_bit(bit, ifmsh->mbss_changed);
+f81a9dedaff434 Thomas Pedersen 2013-06-13  1169  	set_bit(MESH_WORK_MBSS_CHANGED, &ifmsh->wrkq_flags);
+16114496d684a3 Johannes Berg   2023-06-06  1170  	wiphy_work_queue(sdata->local->hw.wiphy, &sdata->work);
+2b5e19677592c1 Thomas Pedersen 2013-02-14  1171  }
+2b5e19677592c1 Thomas Pedersen 2013-02-14  1172  
 
 -- 
 0-DAY CI Kernel Test Service
