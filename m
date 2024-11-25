@@ -1,116 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE59A2500CC;
-	Mon, 25 Nov 2024 04:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2AC8472;
+	Mon, 25 Nov 2024 05:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732508805; cv=none; b=j1BKascdvHEZsNY0QOrFHIpwTUi/HiIFKB2vAwQn1OmYwcnC2EgXIdjBdYW3gby4lcrBzxHcDdUQmv/GoRodFSNAwHmt6X72zZm0sAcM0O8KsT2L/2Xx58UJblZJ0JasImAf2pC3ajE8Yos7J/Lvst/mA06thDs/5Y1mzjgaqAg=
+	t=1732511169; cv=none; b=oOo41Xv8ShSYXZv/5IIU0xWEpLMLAyecy7JOmxASlDUVnkQP5ACZSJGWygDMsqnftkPrr/8/wwBRNSMlz7sSg0lOAE8ZZ0QhYB4Ms7BjCmJ1HNzoqtd/+kSOsVz/T9dXcInYauZ3PqvfQ4wFfzNn6zLBgLakdlBW/aJyKNMGVNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732508805; c=relaxed/simple;
-	bh=GB7YURUt9O1B8nHeuYoFva97GHMNGRHvMHourBC9DqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pTc6WmHhOdbBR/sH2I4dliH3R6dQe/y5+Qguuq9gaIeFwWMQCiU8a3TYYARVxtiwoBPPivA6hH0P0F13udHSi0/oJELXSD5me0VPb+b8EQZhg/oB04y8GMrWsqgluPUHDtkZkaeLQwKdXaZmtI3Ptr2MONBLRsbj+SyA/e/GYSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLKw8wi1; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1732511169; c=relaxed/simple;
+	bh=NREGBayAwFFBU4tE1Ma2gDyzoVU71MdcWhe9JFquPAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NxoX7BaEuEKN8/CN2etkMlwwm2dK+lTqFhcIua3idzfDZMEfK/jlhUec+78N4QJU5OPirRb6FeTi1mAuxeCjxmYuAKkBCYlVMmIF7L0tbNpQePV/yFxghRBc0vsSDdbzWFuUPBj/U/56W749r1boO/y0G/CK9go3vHkbVtbyPOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftFMpJDl; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLKw8wi1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftFMpJDl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732508802; x=1764044802;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GB7YURUt9O1B8nHeuYoFva97GHMNGRHvMHourBC9DqU=;
-  b=HLKw8wi1B9BuojNhXriipHn7SkTU1VUqeAAwbZQzBi3OeDKCrWJLjXJ9
-   QGQDCGq5NjkOz8G5YRQTZ6QESXUsT9ULHTigFJso+wh28ulZLg/+rbp1e
-   Th85BmmrVP6xj05hhEcwVFbvcpRdZdjXlbshsmLgisLyQ7R5dPliM4kr+
-   CY59OvxKtZOjvfFXAFkxEYfBwvPLumA/R671vbRXz1bU7eyLRkBjSXa+d
-   lsvPgB40+X/VuNxH5//yzwE/RG1/dtadWmbUKUtAFx/7SRlJzm+0Mx5dG
-   yv3uyx+1GtzPN1Ij/lkj0vuWhUROOu3m8dqLGcdufd+Nyas5Vo+5QaaCG
+  t=1732511168; x=1764047168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NREGBayAwFFBU4tE1Ma2gDyzoVU71MdcWhe9JFquPAI=;
+  b=ftFMpJDlnfXXH/Hu/Vhxqjml5blzP4+I0d/lcj0WGH4p1y0WPXzEvyzr
+   WHzJjk1gvbEszEukHJgiCqoLZrbCNnHvVv6/+K4FkuR3XPt159cM0LQm6
+   viK5e6FNU2VtIqDL2T1Lt1+Sglw8xnQElK28FvdFoBzMsWVkcEQ0xsbEh
+   ewILnLDrFKbVy3aJlCe5uyjZ5pcNNJ8lOZo6+98wJWv2PmVwW7SsKp33e
+   YynQfN+tMHvcoZF0CSVFUCdeN4vQ6UOeMWJxAP3XYRrtHquBZbvkb7oEi
+   ixevH4JlHSRPd/5IvUbgQtXf2GdNF3wlbDp1lueanMHme1WvYDgsReW1r
    Q==;
-X-CSE-ConnectionGUID: ZfUecP0/RhG7uPiSt9prgg==
-X-CSE-MsgGUID: 3kxgntqgSyqya++WxIF3Tw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="32842202"
+X-CSE-ConnectionGUID: V3ShsdpFQKWMayh8OeMABQ==
+X-CSE-MsgGUID: Ji2aiu0NS6e/dQnwoNlvEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="36515045"
 X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="32842202"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2024 20:25:57 -0800
-X-CSE-ConnectionGUID: F0RvgCv+SyOWOt0AMf6t0w==
-X-CSE-MsgGUID: jIlz5kcFT5y7FJJ6ft7s4Q==
+   d="scan'208";a="36515045"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2024 21:06:07 -0800
+X-CSE-ConnectionGUID: d/cc0nO9SLOOH97XqPNIkw==
+X-CSE-MsgGUID: suWKtIxOTi+PfZR2YkgwOg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="95233079"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="96212099"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 24 Nov 2024 20:25:56 -0800
+  by orviesa003.jf.intel.com with ESMTP; 24 Nov 2024 21:06:00 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tFQfa-0005sP-0G;
-	Mon, 25 Nov 2024 04:25:54 +0000
-Date: Mon, 25 Nov 2024 12:24:55 +0800
+	id 1tFRIL-0005uL-2Z;
+	Mon, 25 Nov 2024 05:05:57 +0000
+Date: Mon, 25 Nov 2024 13:05:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Martin =?unknown-8bit?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+To: Alistair Popple <apopple@nvidia.com>, dan.j.williams@intel.com,
+	linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/070-audio 7/115] sound/soc/codecs/tas2764.c:781:34:
- warning: unused variable 'tas2764_of_match'
-Message-ID: <202411251255.ZFGm8ln5-lkp@intel.com>
+	Alistair Popple <apopple@nvidia.com>, lina@asahilina.net,
+	zhang.lyra@gmail.com, gerald.schaefer@linux.ibm.com,
+	vishal.l.verma@intel.com, dave.jiang@intel.com, logang@deltatee.com,
+	bhelgaas@google.com, jack@suse.cz, jgg@ziepe.ca,
+	catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
+	npiggin@gmail.com, dave.hansen@linux.intel.com, ira.weiny@intel.com,
+	willy@infradead.org, djwong@kernel.org, tytso@mit.edu,
+	linmiaohe@huawei.com, david@redhat.com, peterx@redhat.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
+Subject: Re: [PATCH v3 11/25] mm: Allow compound zone device pages
+Message-ID: <202411251251.Tjig4oaV-lkp@intel.com>
+References: <f1a93b8a38e14e2ab279ece310175334e973b970.1732239628.git-series.apopple@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=unknown-8bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <f1a93b8a38e14e2ab279ece310175334e973b970.1732239628.git-series.apopple@nvidia.com>
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   070347d4a0876921be5b0bbc11fff848c2ed3e59
-commit: 242fdc910725b9fbb7be410e9bfab2480761085a [7/115] ASoC: tas2764: Extend driver to SN012776
-config: i386-randconfig-003-20241124 (https://download.01.org/0day-ci/archive/20241125/202411251255.ZFGm8ln5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251255.ZFGm8ln5-lkp@intel.com/reproduce)
+Hi Alistair,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 81983758430957d9a5cb3333fe324fd70cf63e7e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/fuse-Fix-dax-truncate-punch_hole-fault-path/20241125-094004
+base:   81983758430957d9a5cb3333fe324fd70cf63e7e
+patch link:    https://lore.kernel.org/r/f1a93b8a38e14e2ab279ece310175334e973b970.1732239628.git-series.apopple%40nvidia.com
+patch subject: [PATCH v3 11/25] mm: Allow compound zone device pages
+config: powerpc-ebony_defconfig (https://download.01.org/0day-ci/archive/20241125/202411251251.Tjig4oaV-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251251.Tjig4oaV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411251255.ZFGm8ln5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411251251.Tjig4oaV-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from sound/soc/codecs/tas2764.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
+   In file included from arch/powerpc/kernel/asm-offsets.c:19:
+   In file included from include/linux/mman.h:5:
+   In file included from include/linux/mm.h:32:
+>> include/linux/memremap.h:164:3: error: call to undeclared function 'page_pgmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     164 |                 page_pgmap(page)->type == MEMORY_DEVICE_PRIVATE;
+         |                 ^
+>> include/linux/memremap.h:164:21: error: member reference type 'int' is not a pointer
+     164 |                 page_pgmap(page)->type == MEMORY_DEVICE_PRIVATE;
+         |                 ~~~~~~~~~~~~~~~~  ^
+   include/linux/memremap.h:176:3: error: call to undeclared function 'page_pgmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     176 |                 page_pgmap(page)->type == MEMORY_DEVICE_PCI_P2PDMA;
+         |                 ^
+   include/linux/memremap.h:176:21: error: member reference type 'int' is not a pointer
+     176 |                 page_pgmap(page)->type == MEMORY_DEVICE_PCI_P2PDMA;
+         |                 ~~~~~~~~~~~~~~~~  ^
+   include/linux/memremap.h:182:3: error: call to undeclared function 'page_pgmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     182 |                 page_pgmap(page)->type == MEMORY_DEVICE_COHERENT;
+         |                 ^
+   include/linux/memremap.h:182:21: error: member reference type 'int' is not a pointer
+     182 |                 page_pgmap(page)->type == MEMORY_DEVICE_COHERENT;
+         |                 ~~~~~~~~~~~~~~~~  ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:19:
+   In file included from include/linux/mman.h:5:
    In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> sound/soc/codecs/tas2764.c:781:34: warning: unused variable 'tas2764_of_match' [-Wunused-const-variable]
-     781 | static const struct of_device_id tas2764_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~
-   2 warnings generated.
+   In file included from arch/powerpc/kernel/asm-offsets.c:19:
+   include/linux/mman.h:157:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     157 |                _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     158 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     159 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   4 warnings and 6 errors generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/powerpc/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/tas2764_of_match +781 sound/soc/codecs/tas2764.c
+vim +/page_pgmap +164 include/linux/memremap.h
 
-827ed8a0fa50bd Dan Murphy     2020-10-07  780  
-827ed8a0fa50bd Dan Murphy     2020-10-07 @781  static const struct of_device_id tas2764_of_match[] = {
-242fdc910725b9 Martin Povišer 2022-03-11  782  	{ .compatible = "ti,tas2764",  },
-242fdc910725b9 Martin Povišer 2022-03-11  783  	{ .compatible = "ti,sn012776", },
-827ed8a0fa50bd Dan Murphy     2020-10-07  784  	{},
-827ed8a0fa50bd Dan Murphy     2020-10-07  785  };
-827ed8a0fa50bd Dan Murphy     2020-10-07  786  MODULE_DEVICE_TABLE(of, tas2764_of_match);
-827ed8a0fa50bd Dan Murphy     2020-10-07  787  
-
-:::::: The code at line 781 was first introduced by commit
-:::::: 827ed8a0fa50bdd365c9f4c9f6ef561ca7032e49 ASoC: tas2764: Add the driver for the TAS2764
-
-:::::: TO: Dan Murphy <dmurphy@ti.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+   159	
+   160	static inline bool is_device_private_page(const struct page *page)
+   161	{
+   162		return IS_ENABLED(CONFIG_DEVICE_PRIVATE) &&
+   163			is_zone_device_page(page) &&
+ > 164			page_pgmap(page)->type == MEMORY_DEVICE_PRIVATE;
+   165	}
+   166	
 
 -- 
 0-DAY CI Kernel Test Service
