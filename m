@@ -1,195 +1,97 @@
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E451BBBC9
-	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 17:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FAC1BBBD4;
+	Mon, 25 Nov 2024 20:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732557593; cv=none; b=A1p6MHD8ZorJd8PkP7dqRQHFBmKh/hZAfrJEVFVjaSaqW2CI5KTx/QCE4K6QuQLqX7PuExan/Z0kVVutsBouo/MMOk56ZI7PKP4uZ7NNiH0KtGvpcY6HODjrXrGj51qrJK1HngK7SJQ11GReD65LFqgcf5D1h7P+V0lMY9FOa+E=
+	t=1732564812; cv=none; b=V59NjaALIhShZ9a8Iyw/a3UQuRf+e/Y2MpF2M7TW/hID2K1QgayzYU+ViXTRtXzq/wIJseCixFqQRtyiHdQ3GW9xmKL2oYuyvhzbmL4YcQBah+Cx1nrVqnqqRPyaRNNHaGLnAPmPI/HChvbDGX+zppVOwCOyHYoU0k0R0rxLDVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732557593; c=relaxed/simple;
-	bh=V5N4wSUZrBPuCZ/XKy+HU1S/9iyK0UN1290lQKfMNms=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=U3IWP6aIJ1Xjpoxa7kvIdayjHmhc/yDPUWjhnbLEKYC7B23PkDBiSl+rKoRARHlgMpsPYgVPZLPG9Ta9KId/mMgGMF8NYfpvuzoCGp2+VhZunMku6wLwadT2VqMTJeDM0JeIIbesIRthjh+8+Pt04tvJs7yd5LmsNHBfOpFaV8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=Vz/y+APZ; arc=none smtp.client-ip=193.238.174.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
+	s=arc-20240116; t=1732564812; c=relaxed/simple;
+	bh=N5w51BT33syzCvPKds+4HYxzFvxvMfunxNBVpslPy24=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gRzTibT+08R/vzQztnnNBTYsAvsZAz6hdxilBY3prXDFpJQN3ovieQdPNHncf+bqpGYstYVsapyKomZJ8RRaOvD1TkQpwwWt+n81mctfskpTfQmkRbngk05TSDaIVYaKQxFd/MAlStkhId83hCUXh6LHCWhKy9vFkhErIzAV68Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bi7C3Gcm; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="Vz/y+APZ"
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-	by mg.ssi.bg (Proxmox) with ESMTP id 7B99080CB0;
-	Mon, 25 Nov 2024 19:59:41 +0200 (EET)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-	by mg.ssi.bg (Proxmox) with ESMTPS;
-	Mon, 25 Nov 2024 19:59:40 +0200 (EET)
-Received: from ja.ssi.bg (unknown [213.16.62.126])
-	by ink.ssi.bg (Postfix) with ESMTPSA id 37359303248;
-	Mon, 25 Nov 2024 19:59:32 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
-	t=1732557574; bh=V5N4wSUZrBPuCZ/XKy+HU1S/9iyK0UN1290lQKfMNms=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References;
-	b=Vz/y+APZW/fp7aSEDdYfl2HL12Ly4g47GuG9/uZ/SjF4n62iUW75Tjpzj8PC0DwwR
-	 KcjpelfK5wYlaKZaIbK2BecBEjiMSKOgG00anIJR5J3r+prqsxqiDA1iasgVg+kfJw
-	 aBCV8gKnx5cEDFNNupYNs/xwB5yEWAPT3ilabObE=
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 4APHxJKD053777;
-	Mon, 25 Nov 2024 19:59:21 +0200
-Date: Mon, 25 Nov 2024 19:59:19 +0200 (EET)
-From: Julian Anastasov <ja@ssi.bg>
-To: Jinghao Jia <jinghao7@illinois.edu>
-cc: Simon Horman <horms@verge.net.au>, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        kernel test robot <lkp@intel.com>, Ruowen Qin <ruqin@redhat.com>
-Subject: Re: [PATCH v3 net] ipvs: fix UB due to uninitialized stack access
- in ip_vs_protocol_init()
-In-Reply-To: <20241123094256.28887-1-jinghao7@illinois.edu>
-Message-ID: <8b210ce9-19d8-eefd-fc86-febdc33394f6@ssi.bg>
-References: <20241123094256.28887-1-jinghao7@illinois.edu>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bi7C3Gcm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732564810; x=1764100810;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N5w51BT33syzCvPKds+4HYxzFvxvMfunxNBVpslPy24=;
+  b=Bi7C3GcmYol8Qh455CfIq/cvLiRw0jLdEurEZDoyKJVTCfbtEzrvdm+V
+   6a8qVNRxaxWjvp9VueVlkCnCNqzlHmBO8LD8CYZfiVPEWTaPsFUR5G5Dw
+   /asD9UL8p7R6/D9gUNnvx0VSliNheVVlROD+RdnGe3Hy5Qm5K1JW9a5/y
+   YSnTwcnca6zeY4Nfbm9UsZbD/kL89C+mIqFeWf8njgQJI4T6MXNcL1tSv
+   X+lkvDwRpu73SnoxFWx4EagIC8xtGzUk/4cNvBBhVraw7nIuMj9e+pOSf
+   V5xjUEUrPRIYJA3zbea2bXke3gS7ExI2mNV2VmEPGRg2ZjLZnnnMfkmIG
+   w==;
+X-CSE-ConnectionGUID: TeRX8KHKTu6XAE8UGS6ZfQ==
+X-CSE-MsgGUID: AcSbx80mRGmOHwToMaV1VQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="58103552"
+X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
+   d="scan'208";a="58103552"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 12:00:08 -0800
+X-CSE-ConnectionGUID: BMJikntxQI67YIwYTq+miQ==
+X-CSE-MsgGUID: 8aJgUreOSjCxro97AMQ3dw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
+   d="scan'208";a="122233362"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 25 Nov 2024 12:00:07 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tFfFb-0006km-2W;
+	Mon, 25 Nov 2024 20:00:03 +0000
+Date: Tue, 26 Nov 2024 03:59:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mptcp@lists.linux.dev, matthieu.baerts@tessares.net
+Subject: [mptcp:export-net 4/8] .github/ISSUE_TEMPLATE/01-bug.yml: warning:
+ ignored by one of the .gitignore files
+Message-ID: <202411260324.B29iWmwj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://github.com/multipath-tcp/mptcp_net-next.git export-net
+head:   a901f3057f733a28f0816c46617979e828f2a717
+commit: 665011912bfbc690f923de3dc1ef3f17b9bf2d06 [4/8] DO-NOT-MERGE: mptcp: add CI support
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241126/202411260324.B29iWmwj-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260324.B29iWmwj-lkp@intel.com/reproduce)
 
-	Hello,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411260324.B29iWmwj-lkp@intel.com/
 
-On Sat, 23 Nov 2024, Jinghao Jia wrote:
+All warnings (new ones prefixed by >>):
 
-> Under certain kernel configurations when building with Clang/LLVM, the
-> compiler does not generate a return or jump as the terminator
-> instruction for ip_vs_protocol_init(), triggering the following objtool
-> warning during build time:
-> 
->   vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
-> 
-> At runtime, this either causes an oops when trying to load the ipvs
-> module or a boot-time panic if ipvs is built-in. This same issue has
-> been reported by the Intel kernel test robot previously.
-> 
-> Digging deeper into both LLVM and the kernel code reveals this to be a
-> undefined behavior problem. ip_vs_protocol_init() uses a on-stack buffer
-> of 64 chars to store the registered protocol names and leaves it
-> uninitialized after definition. The function calls strnlen() when
-> concatenating protocol names into the buffer. With CONFIG_FORTIFY_SOURCE
-> strnlen() performs an extra step to check whether the last byte of the
-> input char buffer is a null character (commit 3009f891bb9f ("fortify:
-> Allow strlen() and strnlen() to pass compile-time known lengths")).
-> This, together with possibly other configurations, cause the following
-> IR to be generated:
-> 
->   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #5 section ".init.text" align 16 !kcfi_type !29 {
->     %1 = alloca [64 x i8], align 16
->     ...
-> 
->   14:                                               ; preds = %11
->     %15 = getelementptr inbounds i8, ptr %1, i64 63
->     %16 = load i8, ptr %15, align 1
->     %17 = tail call i1 @llvm.is.constant.i8(i8 %16)
->     %18 = icmp eq i8 %16, 0
->     %19 = select i1 %17, i1 %18, i1 false
->     br i1 %19, label %20, label %23
-> 
->   20:                                               ; preds = %14
->     %21 = call i64 @strlen(ptr noundef nonnull dereferenceable(1) %1) #23
->     ...
-> 
->   23:                                               ; preds = %14, %11, %20
->     %24 = call i64 @strnlen(ptr noundef nonnull dereferenceable(1) %1, i64 noundef 64) #24
->     ...
->   }
-> 
-> The above code calculates the address of the last char in the buffer
-> (value %15) and then loads from it (value %16). Because the buffer is
-> never initialized, the LLVM GVN pass marks value %16 as undefined:
-> 
->   %13 = getelementptr inbounds i8, ptr %1, i64 63
->   br i1 undef, label %14, label %17
-> 
-> This gives later passes (SCCP, in particular) more DCE opportunities by
-> propagating the undef value further, and eventually removes everything
-> after the load on the uninitialized stack location:
-> 
->   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #0 section ".init.text" align 16 !kcfi_type !11 {
->     %1 = alloca [64 x i8], align 16
->     ...
-> 
->   12:                                               ; preds = %11
->     %13 = getelementptr inbounds i8, ptr %1, i64 63
->     unreachable
->   }
-> 
-> In this way, the generated native code will just fall through to the
-> next function, as LLVM does not generate any code for the unreachable IR
-> instruction and leaves the function without a terminator.
-> 
-> Zero the on-stack buffer to avoid this possible UB.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
-> Co-developed-by: Ruowen Qin <ruqin@redhat.com>
-> Signed-off-by: Ruowen Qin <ruqin@redhat.com>
-> Signed-off-by: Jinghao Jia <jinghao7@illinois.edu>
+   .b4-config: warning: ignored by one of the .gitignore files
+   .git_markup: warning: ignored by one of the .gitignore files
+   .github/FUNDING.yml: warning: ignored by one of the .gitignore files
+>> .github/ISSUE_TEMPLATE/01-bug.yml: warning: ignored by one of the .gitignore files
+>> .github/ISSUE_TEMPLATE/02-feature.yml: warning: ignored by one of the .gitignore files
+>> .github/ISSUE_TEMPLATE/03-question.yml: warning: ignored by one of the .gitignore files
+   .github/workflows/build-validation.yml: warning: ignored by one of the .gitignore files
+   .github/workflows/checkpatch.yml: warning: ignored by one of the .gitignore files
+   .github/workflows/notif.yml: warning: ignored by one of the .gitignore files
+   .github/workflows/tests.yml: warning: ignored by one of the .gitignore files
+   .github/workflows/update-tg-tree.yml: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
 
-	Looks good to me, thanks!
-
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
-> ---
-> Changelog:
-> v2 -> v3:
-> v2: https://lore.kernel.org/lkml/20241122045257.27452-1-jinghao7@illinois.edu/
-> * Fix changelog format based on Julian's feedback
-> 
-> v1 -> v2:
-> v1: https://lore.kernel.org/lkml/20241111065105.82431-1-jinghao7@illinois.edu/
-> * Fix small error in commit message
-> * Address Julian's feedback:
->   * Make this patch target the net tree rather than net-next
->   * Add a "Fixes" tag for the initial git commit
-> 
->  net/netfilter/ipvs/ip_vs_proto.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_proto.c b/net/netfilter/ipvs/ip_vs_proto.c
-> index f100da4ba3bc..a9fd1d3fc2cb 100644
-> --- a/net/netfilter/ipvs/ip_vs_proto.c
-> +++ b/net/netfilter/ipvs/ip_vs_proto.c
-> @@ -340,7 +340,7 @@ void __net_exit ip_vs_protocol_net_cleanup(struct netns_ipvs *ipvs)
->  
->  int __init ip_vs_protocol_init(void)
->  {
-> -	char protocols[64];
-> +	char protocols[64] = { 0 };
->  #define REGISTER_PROTOCOL(p)			\
->  	do {					\
->  		register_ip_vs_protocol(p);	\
-> @@ -348,8 +348,6 @@ int __init ip_vs_protocol_init(void)
->  		strcat(protocols, (p)->name);	\
->  	} while (0)
->  
-> -	protocols[0] = '\0';
-> -	protocols[2] = '\0';
->  #ifdef CONFIG_IP_VS_PROTO_TCP
->  	REGISTER_PROTOCOL(&ip_vs_protocol_tcp);
->  #endif
-> -- 
-> 2.47.0
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
