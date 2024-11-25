@@ -1,71 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2AC8472;
-	Mon, 25 Nov 2024 05:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4727C57333;
+	Mon, 25 Nov 2024 07:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732511169; cv=none; b=oOo41Xv8ShSYXZv/5IIU0xWEpLMLAyecy7JOmxASlDUVnkQP5ACZSJGWygDMsqnftkPrr/8/wwBRNSMlz7sSg0lOAE8ZZ0QhYB4Ms7BjCmJ1HNzoqtd/+kSOsVz/T9dXcInYauZ3PqvfQ4wFfzNn6zLBgLakdlBW/aJyKNMGVNc=
+	t=1732518526; cv=none; b=TfH7lVCkvxHXXNmukYtLd+mMbuP0lo9HZmxWu3rvK3WwLHyewz8m9FLbQCxerxJ7EPA1N9R/Zgm42l44h3/tLCYI+xIGl9JLi59Nn5WBvS9IlPCPnNCOEQytCzUCAYreik62ydHZ8yBVQiGm956O11JvmDYcGjLz414uLEBivXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732511169; c=relaxed/simple;
-	bh=NREGBayAwFFBU4tE1Ma2gDyzoVU71MdcWhe9JFquPAI=;
+	s=arc-20240116; t=1732518526; c=relaxed/simple;
+	bh=WJbXdcgfvguf8CuGHlRWBxJdyi6RsDDATGIB0c4kkz8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NxoX7BaEuEKN8/CN2etkMlwwm2dK+lTqFhcIua3idzfDZMEfK/jlhUec+78N4QJU5OPirRb6FeTi1mAuxeCjxmYuAKkBCYlVMmIF7L0tbNpQePV/yFxghRBc0vsSDdbzWFuUPBj/U/56W749r1boO/y0G/CK9go3vHkbVtbyPOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftFMpJDl; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gr67oiSuCReZ5iZsgSJ2EDohe/rlsI/O5U4+mkYgK24Zr8GJutGyiQ8Fiyiblxq6aCg10t5hqa0uOY+Q2i758YSuYXpG8i7/29YYt804XBfSXzxc/l3w+sBn6DW+Yd8fxwumr/3WPFE8cKx49lJd69NB8VClG7LKYo5B6/yE6bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KLTshtrU; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftFMpJDl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KLTshtrU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732511168; x=1764047168;
+  t=1732518524; x=1764054524;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NREGBayAwFFBU4tE1Ma2gDyzoVU71MdcWhe9JFquPAI=;
-  b=ftFMpJDlnfXXH/Hu/Vhxqjml5blzP4+I0d/lcj0WGH4p1y0WPXzEvyzr
-   WHzJjk1gvbEszEukHJgiCqoLZrbCNnHvVv6/+K4FkuR3XPt159cM0LQm6
-   viK5e6FNU2VtIqDL2T1Lt1+Sglw8xnQElK28FvdFoBzMsWVkcEQ0xsbEh
-   ewILnLDrFKbVy3aJlCe5uyjZ5pcNNJ8lOZo6+98wJWv2PmVwW7SsKp33e
-   YynQfN+tMHvcoZF0CSVFUCdeN4vQ6UOeMWJxAP3XYRrtHquBZbvkb7oEi
-   ixevH4JlHSRPd/5IvUbgQtXf2GdNF3wlbDp1lueanMHme1WvYDgsReW1r
-   Q==;
-X-CSE-ConnectionGUID: V3ShsdpFQKWMayh8OeMABQ==
-X-CSE-MsgGUID: Ji2aiu0NS6e/dQnwoNlvEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="36515045"
+  bh=WJbXdcgfvguf8CuGHlRWBxJdyi6RsDDATGIB0c4kkz8=;
+  b=KLTshtrUgQ3feIXaOiJ3qDnWD6TeWSpnO4Q2dF5PB9dZU7+6+s4Rv01U
+   RMMEKvthfW3SbzYG+CG4rjETXNtjf+82/zvHxYLOdZCPg0Z2yK6C57I7Y
+   vuPYVkRiPfWSuMkdk9QihzoqulGZikobx2xjHtbZpB2adi7lixTL4Ix9+
+   bSsQsTsE7EESZOy4YRT1zASM3PeyBgoQ57aTt/pmuQ4bStqXc6L3U7J82
+   jIaKQErm6euCDF4sVZpDl+2JOp/0o/Xx3ttaU9ks+op1Ym5z/WN2a5F5F
+   xJqDBpWNHpZY/lSbpLi5sCTU5Vhwm4kzr51EgHw6YmVI2QJGyUgVQUCPQ
+   w==;
+X-CSE-ConnectionGUID: bFIjHhBnQ4CiTNHr3wS1/A==
+X-CSE-MsgGUID: S+MFDDe4Q1m3oznteP9A+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="35460735"
 X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="36515045"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2024 21:06:07 -0800
-X-CSE-ConnectionGUID: d/cc0nO9SLOOH97XqPNIkw==
-X-CSE-MsgGUID: suWKtIxOTi+PfZR2YkgwOg==
+   d="scan'208";a="35460735"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2024 23:08:44 -0800
+X-CSE-ConnectionGUID: sI4dlCLDSuaWIaYkIUCAqQ==
+X-CSE-MsgGUID: GF7Z3ytISYCEVbkrKznaGg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="96212099"
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="122129776"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Nov 2024 21:06:00 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 24 Nov 2024 23:08:42 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tFRIL-0005uL-2Z;
-	Mon, 25 Nov 2024 05:05:57 +0000
-Date: Mon, 25 Nov 2024 13:05:52 +0800
+	id 1tFTD5-00060n-2j;
+	Mon, 25 Nov 2024 07:08:39 +0000
+Date: Mon, 25 Nov 2024 15:08:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alistair Popple <apopple@nvidia.com>, dan.j.williams@intel.com,
-	linux-mm@kvack.org
+To: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Valentin Schneider <vschneid@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alistair Popple <apopple@nvidia.com>, lina@asahilina.net,
-	zhang.lyra@gmail.com, gerald.schaefer@linux.ibm.com,
-	vishal.l.verma@intel.com, dave.jiang@intel.com, logang@deltatee.com,
-	bhelgaas@google.com, jack@suse.cz, jgg@ziepe.ca,
-	catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
-	npiggin@gmail.com, dave.hansen@linux.intel.com, ira.weiny@intel.com,
-	willy@infradead.org, djwong@kernel.org, tytso@mit.edu,
-	linmiaohe@huawei.com, david@redhat.com, peterx@redhat.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-Subject: Re: [PATCH v3 11/25] mm: Allow compound zone device pages
-Message-ID: <202411251251.Tjig4oaV-lkp@intel.com>
-References: <f1a93b8a38e14e2ab279ece310175334e973b970.1732239628.git-series.apopple@nvidia.com>
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 3/3] objtool: Add noinstr validation for static
+ branches/calls
+Message-ID: <202411251459.P7KctSbw-lkp@intel.com>
+References: <b5746646456eb030673cdb62c23d69ed83c2702a.1732326588.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,96 +65,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1a93b8a38e14e2ab279ece310175334e973b970.1732239628.git-series.apopple@nvidia.com>
+In-Reply-To: <b5746646456eb030673cdb62c23d69ed83c2702a.1732326588.git.jpoimboe@kernel.org>
 
-Hi Alistair,
+Hi Josh,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 81983758430957d9a5cb3333fe324fd70cf63e7e]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.12 next-20241122]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/fuse-Fix-dax-truncate-punch_hole-fault-path/20241125-094004
-base:   81983758430957d9a5cb3333fe324fd70cf63e7e
-patch link:    https://lore.kernel.org/r/f1a93b8a38e14e2ab279ece310175334e973b970.1732239628.git-series.apopple%40nvidia.com
-patch subject: [PATCH v3 11/25] mm: Allow compound zone device pages
-config: powerpc-ebony_defconfig (https://download.01.org/0day-ci/archive/20241125/202411251251.Tjig4oaV-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251251.Tjig4oaV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Poimboeuf/jump_label-Add-annotations-for-validating-noinstr-usage/20241125-105905
+base:   linus/master
+patch link:    https://lore.kernel.org/r/b5746646456eb030673cdb62c23d69ed83c2702a.1732326588.git.jpoimboe%40kernel.org
+patch subject: [PATCH 3/3] objtool: Add noinstr validation for static branches/calls
+config: powerpc-motionpro_defconfig (https://download.01.org/0day-ci/archive/20241125/202411251459.P7KctSbw-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251459.P7KctSbw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411251251.Tjig4oaV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411251459.P7KctSbw-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/powerpc/kernel/asm-offsets.c:19:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/mm.h:32:
->> include/linux/memremap.h:164:3: error: call to undeclared function 'page_pgmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     164 |                 page_pgmap(page)->type == MEMORY_DEVICE_PRIVATE;
-         |                 ^
->> include/linux/memremap.h:164:21: error: member reference type 'int' is not a pointer
-     164 |                 page_pgmap(page)->type == MEMORY_DEVICE_PRIVATE;
-         |                 ~~~~~~~~~~~~~~~~  ^
-   include/linux/memremap.h:176:3: error: call to undeclared function 'page_pgmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     176 |                 page_pgmap(page)->type == MEMORY_DEVICE_PCI_P2PDMA;
-         |                 ^
-   include/linux/memremap.h:176:21: error: member reference type 'int' is not a pointer
-     176 |                 page_pgmap(page)->type == MEMORY_DEVICE_PCI_P2PDMA;
-         |                 ~~~~~~~~~~~~~~~~  ^
-   include/linux/memremap.h:182:3: error: call to undeclared function 'page_pgmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     182 |                 page_pgmap(page)->type == MEMORY_DEVICE_COHERENT;
-         |                 ^
-   include/linux/memremap.h:182:21: error: member reference type 'int' is not a pointer
-     182 |                 page_pgmap(page)->type == MEMORY_DEVICE_COHERENT;
-         |                 ~~~~~~~~~~~~~~~~  ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:19:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/powerpc/kernel/asm-offsets.c:19:
-   include/linux/mman.h:157:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     157 |                _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     158 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     159 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
-     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   4 warnings and 6 errors generated.
-   make[3]: *** [scripts/Makefile.build:102: arch/powerpc/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1203: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> init/main.c:821:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     821 | DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
+         | ^
+   include/linux/jump_label.h:430:2: note: expanded from macro 'DEFINE_STATIC_KEY_MAYBE_RO'
+     430 |         __PASTE(_DEFINE_STATIC_KEY_RO_, IS_ENABLED(cfg))(name)
+         |         ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:51:1: note: expanded from here
+      51 | _DEFINE_STATIC_KEY_RO_0
+         | ^
+   include/linux/jump_label.h:428:39: note: expanded from macro '_DEFINE_STATIC_KEY_RO_0'
+     428 | #define _DEFINE_STATIC_KEY_RO_0(name)   DEFINE_STATIC_KEY_FALSE_RO(name)
+         |                                         ^
+   include/linux/jump_label.h:388:2: note: expanded from macro 'DEFINE_STATIC_KEY_FALSE_RO'
+     388 |         ANNOTATE_NOINSTR_ALLOWED(name)
+         |         ^
+>> init/main.c:822:7: error: a parameter list without types is only allowed in a function definition
+     822 |                            randomize_kstack_offset);
+         |                            ^
+   2 errors generated.
 
 
-vim +/page_pgmap +164 include/linux/memremap.h
+vim +/int +821 init/main.c
 
-   159	
-   160	static inline bool is_device_private_page(const struct page *page)
-   161	{
-   162		return IS_ENABLED(CONFIG_DEVICE_PRIVATE) &&
-   163			is_zone_device_page(page) &&
- > 164			page_pgmap(page)->type == MEMORY_DEVICE_PRIVATE;
-   165	}
-   166	
+4e37958d1288ce Steven Rostedt (VMware  2018-03-26  819) 
+8cb37a5974a485 Marco Elver             2022-01-31  820  #ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+39218ff4c625db Kees Cook               2021-04-01 @821  DEFINE_STATIC_KEY_MAYBE_RO(CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT,
+39218ff4c625db Kees Cook               2021-04-01 @822  			   randomize_kstack_offset);
+39218ff4c625db Kees Cook               2021-04-01  823  DEFINE_PER_CPU(u32, kstack_offset);
+39218ff4c625db Kees Cook               2021-04-01  824  
 
 -- 
 0-DAY CI Kernel Test Service
