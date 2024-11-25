@@ -1,105 +1,138 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855AD190696;
-	Mon, 25 Nov 2024 09:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E1C18C031;
+	Mon, 25 Nov 2024 10:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732526940; cv=none; b=Ywvw5zNricDkwjlh9INcECLv/jI00dziTgvrdKYzuIitIsBkOsiR/49yVSX4NLEcWiyNWTIzV6Sr0bwYWLBK6X/WpAmKK9l0KdIIaCesctyAO/eDBYdcJJ0y44ogCm/j3ODD/kMdtn9FqjWKJiyn375iGYG/KugMC2DSFHXlo18=
+	t=1732529743; cv=none; b=gvacUmHXVBFrUFf8+i9rZRS0bUszUUkRjbY/a5Q+bXltE4ItgkbBLYiZSaaXo3rEhm+J2JFluWrsLl+9mxDJ9ALn+L2f4QD6yUtlqDogOjDagfV5iU72r6hq3v8GgE+w+q+u53uMZNniQ3iogu1zEdmsxLMqPUs71mXf2gX118A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732526940; c=relaxed/simple;
-	bh=Gy/c40HnFX5lfiJDX3MOa3xqCqS/HefmnZXSHoaVp4Y=;
+	s=arc-20240116; t=1732529743; c=relaxed/simple;
+	bh=GiIac8RYgpyiBtV5sX1sMUgkSXZVze0gtDqZg8DIDXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fnRHVWrHUtnoVfetWhpol6KzDE3ueHQbBc9L2L3FravcDE9cxwGwaGznrorN+mHy7xDVpE3ki2WT+2vbxDbKuZEdCbwVd6Wnt8iy2PDzSQ0WirpmZa+4jiWgXG2TLFxBsGHiVE6bZBaEQ5lYQtgIV5OQdbdfgFM/qJaW9Sr9MHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QP/GEmsD; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dk9kgs8tiUCpR4TuhkhH81QYc0f1Snk5sN1V7A96H8NnMa+d3/XrY83nH1wu27R6tXscT+1g1G1FmR2LcJMtYQFXzVeWkf47SS60Z60zXHwdOou6DHHiE1FISBDZvcDWT5CKwwnmomk0EaKbjMtlui4/2DX7NRLmqYxEmx/my48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yu6+kOlL; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QP/GEmsD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=tof/qubOSp2l2+fEKOwuosAzk3Cq2zkdUc2ew5U+ClY=; b=QP/GEmsDW9dwpTcMSXBtlWSDQa
-	BtKxUYI2UBHxhyox+GAvlHSLQsmeIjY9mHEevSS4LnRuvQalQaQwBVB6/IQdsE8Qvqq5+p8SKx4kK
-	a1/QMBDIMdDnnfYt8h7Wt7kf7ZfnZ65DdAT87j4cwMgVJDGHR6vQawzBhqfDjx4TEJx6YwzIq1Zs0
-	ceeFPmqfF5I+e9f8lL6kH2iHarw68UYj9FKtHEd/rMQTWzq0zthEXon2GIb2IA/rD70s77MXVX7NF
-	KVTP/zjTMDI4vda1vuPo2QhzonjEjOWXLKkZm/WfBdyYoQj4h/stwq9GhX45idUl/SI8N/zX/7De9
-	E5Kw1Kyw==;
-Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tFVOp-000000014OY-2RGD;
-	Mon, 25 Nov 2024 09:28:55 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A783730026A; Mon, 25 Nov 2024 10:28:54 +0100 (CET)
-Date: Mon, 25 Nov 2024 10:28:54 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-	Fangrui Song <i@maskray.me>, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/9] objtool: Generic annotation infrastructure
-Message-ID: <20241125092854.GG24774@noisy.programming.kicks-ass.net>
-References: <20241122121016.372005127@infradead.org>
- <20241122121555.621070802@infradead.org>
- <20241124031640.GA3646332@thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yu6+kOlL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732529741; x=1764065741;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=GiIac8RYgpyiBtV5sX1sMUgkSXZVze0gtDqZg8DIDXo=;
+  b=Yu6+kOlLN8Ril0d5waDtiR9nXOyMImS4PfVU5ELLGOBuv3Vz3MFP2b76
+   pYApLNnzqDs4ZpnPBmJMkmcq/SqKvNPxJ3Y1xXQT1VNbbh8V20rpA7S62
+   yE3AyFsAp5ej09+so1w3GSuD1tgcliBmZ3XequIS1zs4QkTBB99aKLVQc
+   oRo/9gMyIPJd90E0WYnX1q3P3kigyTgnagx4UxHE7hO+YVEF+ANkRR5op
+   x92twRjD+khAGE6Sre6zBjNbSFFBgFbmDXK2Iw2ncCpCVE1KZwo1zNu90
+   Ew5Wo6jF3GvTIhzxNglTQJ0f+O4tK5129Wh3HVJnzqZ6LtGOLKKUrHSV1
+   w==;
+X-CSE-ConnectionGUID: FZoEnYyVSWaQ/jSUF7ovfA==
+X-CSE-MsgGUID: 10QjZHdrRvKuiK/y8235Yg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="32775360"
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="32775360"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 02:15:41 -0800
+X-CSE-ConnectionGUID: CXoMBjGrSLi4vnp/rs/TZg==
+X-CSE-MsgGUID: PstgRX2IRbmlkbtaqb3uRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="91636260"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 25 Nov 2024 02:15:37 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tFW7y-00068s-2H;
+	Mon, 25 Nov 2024 10:15:34 +0000
+Date: Mon, 25 Nov 2024 18:14:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uwe =?unknown-8bit?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexandru Ardelean <aardelean@baylibre.com>,
+	Alisa-Dariana Roman <alisa.roman@analog.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Dumitru Ceclan <dumitru.ceclan@analog.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Nuno Sa <nuno.sa@analog.com>,
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 07/10] iio: adc: ad_sigma_delta: Store information
+ about reset sequence length
+Message-ID: <202411251711.ZE0hl0cg-lkp@intel.com>
+References: <20241122113322.242875-19-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=unknown-8bit
 Content-Disposition: inline
-In-Reply-To: <20241124031640.GA3646332@thelio-3990X>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241122113322.242875-19-u.kleine-koenig@baylibre.com>
 
-On Sat, Nov 23, 2024 at 08:16:40PM -0700, Nathan Chancellor wrote:
-> On Fri, Nov 22, 2024 at 01:10:17PM +0100, Peter Zijlstra wrote:
-> > Avoid endless .discard.foo sections for each annotation, create a
-> > single .discard.annotate section that takes an annotation type along
-> > with the instruction.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ...
-> > --- a/tools/objtool/check.c
-> > +++ b/tools/objtool/check.c
-> > @@ -2373,6 +2373,49 @@ static int read_unwind_hints(struct objt
-> >  	return 0;
-> >  }
-> >  
-> > +static int read_annotate(struct objtool_file *file, void (*func)(int type, struct instruction *insn))
-> > +{
-> > +	struct section *sec;
-> > +	struct instruction *insn;
-> > +	struct reloc *reloc;
-> > +	int type;
-> > +
-> > +	sec = find_section_by_name(file->elf, ".discard.annotate");
-> > +	if (!sec)
-> > +		return 0;
-> > +
-> > +	if (!sec->rsec)
-> > +		return 0;
-> > +
-> > +	if (sec->sh.sh_entsize != 8) {
-> > +		static bool warned = false;
-> > +		if (!warned) {
-> > +			WARN("%s: dodgy linker, sh_entsize != 8", sec->name);
-> 
-> Thanks to Fangrui, this has been resolved in LLVM main:
-> 
-> https://github.com/llvm/llvm-project/commit/d4bed617f4378873d7ddf4b53c041e7b39d1a9ca
-> https://github.com/ClangBuiltLinux/linux/issues/2057#issuecomment-2495675374
-> 
-> I have built a version of LLVM from main and verified that this warning
-> does not trigger with that version, while it does with LLVM 19.1.4.
+Hi Uwe,
 
-Excellent, thanks for getting this sorted.
+kernel test robot noticed the following build warnings:
 
-Since there's a fair number of llvm releases between the minimally
-supported version to build a kernel with and this fix, I'll leave the
-warning as non fatal.
+[auto build test WARNING on adc218676eef25575469234709c2d87185ca223a]
 
-One question; is there any other means of setting entsize aside from
-(ab)using SHF_MERGE ? The (GNU) as documetation for .section only
-mentions entsize in combination with SHF_MERGE.
+url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/iio-adc-ad7124-Don-t-create-more-channels-than-the-driver-can-handle/20241125-104725
+base:   adc218676eef25575469234709c2d87185ca223a
+patch link:    https://lore.kernel.org/r/20241122113322.242875-19-u.kleine-koenig%40baylibre.com
+patch subject: [PATCH v3 07/10] iio: adc: ad_sigma_delta: Store information about reset sequence length
+config: i386-buildonly-randconfig-003-20241125 (https://download.01.org/0day-ci/archive/20241125/202411251711.ZE0hl0cg-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251711.ZE0hl0cg-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411251711.ZE0hl0cg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iio/adc/ad_sigma_delta.c:186: warning: Excess function parameter 'reset_length' description in 'ad_sd_reset'
+
+
+vim +186 drivers/iio/adc/ad_sigma_delta.c
+
+af3008485ea037 Lars-Peter Clausen 2012-08-10  176  
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  177  /**
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  178   * ad_sd_reset() - Reset the serial interface
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  179   *
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  180   * @sigma_delta: The sigma delta device
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  181   * @reset_length: Number of SCLKs with DIN = 1
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  182   *
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  183   * Returns 0 on success, an error code otherwise.
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  184   **/
+066265377484bc Uwe Kleine-König   2024-11-22  185  int ad_sd_reset(struct ad_sigma_delta *sigma_delta)
+7fc10de8d49a74 Dragos Bogdan      2017-09-05 @186  {
+066265377484bc Uwe Kleine-König   2024-11-22  187  	unsigned int reset_length = sigma_delta->info->num_resetclks;
+066265377484bc Uwe Kleine-König   2024-11-22  188  	unsigned int size = DIV_ROUND_UP(reset_length, 8);
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  189  	uint8_t *buf;
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  190  	int ret;
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  191  
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  192  	buf = kcalloc(size, sizeof(*buf), GFP_KERNEL);
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  193  	if (!buf)
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  194  		return -ENOMEM;
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  195  
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  196  	memset(buf, 0xff, size);
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  197  	ret = spi_write(sigma_delta->spi, buf, size);
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  198  	kfree(buf);
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  199  
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  200  	return ret;
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  201  }
+ef807729767fb7 Jonathan Cameron   2022-01-30  202  EXPORT_SYMBOL_NS_GPL(ad_sd_reset, IIO_AD_SIGMA_DELTA);
+7fc10de8d49a74 Dragos Bogdan      2017-09-05  203  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
