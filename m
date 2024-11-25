@@ -1,54 +1,54 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A905376E0
-	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 14:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69621B3923
+	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 15:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732543477; cv=none; b=c65e0WzT9LUL1f87GU+kmzqWxnEc/IfUcvHFTy+EZBj7XUg4qnj3gyvaLQ38NOoFx9XKgw1+mEzsAllxUMyvc0pYrGuwD5+hyzdoy7tzt+pllZpZZwImcEHKqYiPwBULfLy9xOoqSCqnG0rzWH6AzQLKSSrx4D1mO6wXcnT509g=
+	t=1732547011; cv=none; b=UCEwnExk+sCBgUrIyI0KDyv1VlOauyxH/DwszeuJCVlZ35ytyeuqvRVDkI3R7F9nUMDX36dKeVx9YI8EpYwtR3FOxcYlW3w/SpH3VI3WfV7fP6zc17zb3j/1QMKi72kAh2httVXKyARLy4LIAkTSYprunRSovKRL4KcylO0rCIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732543477; c=relaxed/simple;
-	bh=SYB5GH1mmBB+VsU+I6gGuPVqopmmWNMekXlpDrzXIzI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=oAWt8R3uHxHH89Kvy/h/wNr+1KTfEUWPc8qLpR/YsgLjlPNsHISHRVjHdGb5hA6zoV44awXXQDYlMX80y54aK0x6Sw2wnY+hEeD2i3+8vZ9D2BBC+2wb1dLSxTDwph8qMoRZEpeGSqV87/CeD5rIvFCVyt1mtaKZQk6AFKnMYpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mgi1KhkU; arc=none smtp.client-ip=209.85.221.178
+	s=arc-20240116; t=1732547011; c=relaxed/simple;
+	bh=BYAPbifOGFMbT/oNeV5H8H8GoSCuhZDyr7rtHcDE4Ro=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Wglan2YdG2IgmzKTSKHvR+/uWIswO5D5lBXZT/Y+gTykGShh/RFQlWGvhVgfwvafthyENbP1tGcY+EGG1yxlzwhjEf4G4S7gNFr54tn07KpKYNP2oNxiJKc3xCcpjf9YVlhFPx9yF2bB+ooJtiyB51GSAyKmS6DIAEI9LFywebg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RkZv8+32; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mgi1KhkU"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5152a86a097so294492e0c.1
-        for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 06:04:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RkZv8+32"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b66d08d529so64514985a.1
+        for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 07:03:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732543474; x=1733148274; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1732547005; x=1733151805; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=AvMibFWbbW0D6iGkpr8k5tIQAWSiMspQ5qpQzH9tADA=;
-        b=mgi1KhkUndJA6iGxb3Iiop5zIhtae8+BVe2CXd8abWuU+Jdq/mBcs3DAKQ4L8vlFFu
-         +pmYJO3mHMd5Zvc6bVVQljqH5wRkoByncRK2mYJqPmcA/zdfpAiFQuabVf6pmpRDRe4P
-         D3Q1FIHcopw5dzcuTOROS0A5Iu47CFpmIoUIo2buLUNvOWN7TbymsKRviTYmlIKeG915
-         40n7dmJCD5hu8IzmlRSAWs6vks6J7k15PcFBdkPj3VLhCoowtY2GGBonFatCEk10BGNY
-         GvrOkmIv52RGV7O7BpuaiPopDQi5ZqrOjn7Uqn4BdCFv7vOqfPNklZFPiJc/hinME1uR
-         iPaw==
+        bh=1PVBG0drlljsVkEBbeau35zte0zCftwnSF7ZEns2RkI=;
+        b=RkZv8+32/lFqbrhxOihha4U1T7vDTORKUC4Du6rPsp6z+YFcjZrkRi2atcxrS6WQeJ
+         ie881PrnCt0OmYIv3HRFyyL5KEcjXjkh+agLJHZP2BF31JGZKGk01FkzxpL21vfvh7OT
+         4IPbM3zwsqcrHY5WMvM4ZUHnS9M4yHGY7CiJbTiNNRgjNiuD3/gjJylNxCie93wd+U8D
+         QZYRI9/ShOVGXRNcj3I6Tt801b+hndfQsoVD/16Uqlw8XGP9oLsZew8FIEnmMiXiUxqC
+         QuRnH556G6iy1EcgI5tByvFhEaICPlppf1ssmfAGKNZk3S5stgmQrHnDKMYlm6JstbT4
+         vo+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732543474; x=1733148274;
+        d=1e100.net; s=20230601; t=1732547005; x=1733151805;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AvMibFWbbW0D6iGkpr8k5tIQAWSiMspQ5qpQzH9tADA=;
-        b=e2TJ1FgruSA0Sf5Ea8/Zg8v9ucAvXjxcYrWi4v8gjarxWoD25VvNPRyRofddosvrsY
-         G4m6bSG45sLaIzJ2mR5Or41I6TsTrSmS2XinWLxczIKVKgRQhZph8imzJQBkx2skW/mp
-         BZxYzgnZDpYy/NBvLIZE3RSfSJyxjhstZT23gq6vTaCrZ0Lmtll80owe0NJnOM0T7jZh
-         igcxbnF+AC81eGfMYnY9Io5ZoobWfXHQb8GD4IAXLpeYqXPjG+MTv+SQiMtGyhWUHlk5
-         QOJER/BIP9VRIXO2OwoNz3n1eB2urzArfGIRFnvtwRYBi1ftN41Au/vS9tCfY64iVs4T
-         GgAg==
-X-Forwarded-Encrypted: i=1; AJvYcCWaaAWXv7uevE3uu1+/VTD7fhywLGUuKFLoz0v9lM+EpOf569BcLfV9OuhsqM6IwnlHf2FX@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw1MHOeDB9qimPdbYT4BMfnYqPm/edEIs1ObUiQrPuP60xaPbBO
-	yz8mkm85VwtvNGdt9C3YuATCOCsjO9U9+7YxYHfR7TXkvPojzHvBTZXYWSztcp77rZ7U7KaItVu
-	W8sCRWx9ZSclrfCoF5UFeOpNNANRUzMnLYJkgVg==
-X-Gm-Gg: ASbGncvByCXfOhcpNKQszP/Iq76ceTqssrOJy8Cum0akTkpqL8IxBD9QNaZQydxtIau
-	6rg7yfq1FmGoXSOKxLGSLpGe4MUuTU7uwNA==
-X-Google-Smtp-Source: AGHT+IG4fq3o3LIW4i9cU82pcMC1WwjRdtQbbu4OTpF4HtXWJWzh5Vy0V7HfDoMKtSUZH5fuAXf7ft90u6MBQqOu/3E=
-X-Received: by 2002:a05:6122:488b:b0:50d:7a14:ddf6 with SMTP id
- 71dfb90a1353d-51500ae18b0mr12929685e0c.10.1732543473312; Mon, 25 Nov 2024
- 06:04:33 -0800 (PST)
+        bh=1PVBG0drlljsVkEBbeau35zte0zCftwnSF7ZEns2RkI=;
+        b=gXzwE+1hzUS9wTCIRf3HEoi0z1+G4pAKiCTewph+PfRasc88GwEhzaIyWEoVFbMPlv
+         CikOByugee27VcID2zlCk5xNk8qjbfIr+DkTtpzBddLemwM6Uqhu4gSKdC54cgifPnCW
+         0yBlFm9c5nqe3asZv4ECox7cUl6Acub92lrIo/n/IGR6m9zol6JlEkhhiKTqeZYoe6H5
+         jhNnFsS605Mt4qYvQwd6wYVF9kUV5hBh9rdvop9xeSIJOWtNHdsl7ifU79xKaGdK8FQG
+         J7O3nI4++yZTPSYswyKjxcVuG5rUgqdiR5AkGfn+LHXz9PqEnK4WB3MlBqCvIa2UxR6F
+         ujtg==
+X-Forwarded-Encrypted: i=1; AJvYcCX8V+yhcrNiIO7W14PD8UIRkJmR/q5UX9we9/W+h4wq3vN2YvOXcHrC47KdUmccpVkunN56@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx2vSrCIVEA6En9MAeOzL+w2KH0UjdVCn3QbEzOr+pD3hk80KEu
+	Bq9pded1E2EsXAG7n8gkITnzBGgkjTAK8+nabfvYH3OKVTguI5dErbpAixmI3dogeIXt9efVpUf
+	JNbYVStG9JJ9A491AWiSk8PAkKh11wWJyXNBC1g==
+X-Gm-Gg: ASbGncsau+ptRqer/pggFmM4an6oFn0QAuR6fr5NR/yUGsZZ6tLyYomNWDEd6IWHnSR
+	MO2geEQi3a9zkQG4ap2ou9Nhggl1wngMJYg==
+X-Google-Smtp-Source: AGHT+IFM1jutegIbH3N1whIkVDo6HftuxY2rAiLT8oMAJlAXEVGXzFA7vyxDFNULJGUY40WX45oiWmYu6pzPREG0P6s=
+X-Received: by 2002:a05:620a:2947:b0:7b1:5545:7104 with SMTP id
+ af79cd13be357-7b50c11a8a5mr2933373985a.2.1732547005320; Mon, 25 Nov 2024
+ 07:03:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,292 +56,198 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 25 Nov 2024 19:34:22 +0530
-Message-ID: <CA+G9fYuaWJYQcxQ=3UqQbbuD_YNdOS_KB46N=mh47rxE049f-Q@mail.gmail.com>
-Subject: korg-clang-19-lkftconfig-hardening: TI x15 board - PC is at
- edma_probe (drivers/dma/ti/edma.c
-To: open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	dmaengine@vger.kernel.org, lkft-triage@lists.linaro.org
-Cc: peter.ujfalusi@gmail.com, Vinod Koul <vkoul@kernel.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 25 Nov 2024 20:33:14 +0530
+Message-ID: <CA+G9fYs+2mBz1y2dAzxkj9-oiBJ2Acm1Sf1h2YQ3VmBqj_VX2g@mail.gmail.com>
+Subject: pc : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:269) :
+ Dragonboard 410c - arm64 - boot failed
+To: linux-arm-msm <linux-arm-msm@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+Cc: Georgi Djakov <djakov@kernel.org>, konradybcio@kernel.org, quic_okukatla@quicinc.com, 
+	quic_rlaggysh@quicinc.com, quic_jjohnson@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
 
-The arm TI x15 board boot has failed with the Linux next, mainline
+The arm64 Dragonboard 410c has failed with the Linux next, mainline
 and the Linux stable. Please find boot log and build links.
 
-The boot failed with clang tool chain and PASS with gcc-13.
-
-Device: TI x15 device
-Boot pass: gcc-13
+Device: Dragonboard 410c - arm64
 Boot failed: clang-19
 Configs: korg-clang-19-lkftconfig-hardening
-Boot pass: qemu-armv7 (Additional info)
+Boot pass: qemu-arm64 (Additional info)
 
 This is always reproducible.
 
-x15 beagleboard:
-  boot:
-    * clang-nightly-lkftconfig-hardening
-    * korg-clang-19-lkftconfig-hardening
+Dragonboard 410c - arm64:
+boot:
+ * clang-nightly-lkftconfig-hardening
+ * korg-clang-19-lkftconfig-hardening
 
 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 Log details:
 ------------
-[    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 6.12.0 (tuxmake@tuxmake) (ClangBuiltLinux
-clang version 19.1.4 (https://github.com/llvm/llvm-project.git
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
+[    0.000000] Linux version 6.12.0-next-20241125 (tuxmake@tuxmake)
+(ClangBuiltLinux clang version 19.1.4
+(https://github.com/llvm/llvm-project.git
 aadaa00de76ed0c4987b97450dd638f63a385bed), ClangBuiltLinux LLD 19.1.4
 (https://github.com/llvm/llvm-project.git
-aadaa00de76ed0c4987b97450dd638f63a385bed)) #1 SMP @1732428891
-[    0.000000] CPU: ARMv7 Processor [412fc0f2] revision 2 (ARMv7), cr=30c5387d
-<>
-[    3.543395] pcieport 0000:00:00.0: PME: Signaling with IRQ 136
-[    3.556976] Internal error: Oops - undefined instruction: 0 [#1] SMP ARM
-[    3.563720] Modules linked in:
-[    3.566802] CPU: 1 UID: 0 PID: 41 Comm: kworker/u10:2 Not tainted 6.12.0 #1
-[    3.573822] Hardware name: Generic DRA74X (Flattened Device Tree)
-[    3.579956] Workqueue: events_unbound deferred_probe_work_func
-[    3.585815] PC is at edma_probe (drivers/dma/ti/edma.c:0)
-[    3.590026] LR is at devm_kmalloc (drivers/base/devres.c:839)
-[    3.594329] pc : lr : psr: 60000013
-[    3.600616] sp : f00f5938  ip : 00070007  fp : efcd8728
-[    3.605865] r10: c3cd2c10  r9 : c3c17a40  r8 : c3cd2c00
-[    3.611145] r7 : 00000002  r6 : 00000000  r5 : 00000003  r4 : 00000001
-[    3.617706] r3 : 00000001  r2 : 00000002  r1 : 00000002  r0 : c3ba8340
-[    3.624267] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
-[    3.631439] Control: 30c5387d  Table: 80203000  DAC: 55555555
-[    3.637207] Register r0 information: slab kmalloc-rnd-01-128 start
-c3ba8300 pointer offset 64 size 128
-[    3.646575] Register r1 information: non-paged memory
-[    3.651672] Register r2 information: non-paged memory
-[    3.656768] Register r3 information: non-paged memory
-[    3.661834] Register r4 information: non-paged memory
-[    3.666931] Register r5 information: non-paged memory
-[    3.671997] Register r6 information: NULL pointer
-[    3.676727] Register r7 information: non-paged memory
-[    3.681823] Register r8 information: slab kmalloc-rnd-06-1k start
-c3cd2c00 pointer offset 0 size 1024
-[    3.691101] Register r9 information: slab kmalloc-rnd-14-512 start
-c3c17a00 pointer offset 64 size 512
-[    3.700469] Register r10 information: slab kmalloc-rnd-06-1k start
-c3cd2c00 pointer offset 16 size 1024
-[    3.709960] Register r11 information: non-slab/vmalloc memory
-[    3.715728] Register r12 information: non-paged memory
-[    3.720886] Process kworker/u10:2 (pid: 41, stack limit = 0x0678741b)
-[    3.727386] Stack: (0xf00f5938 to 0xf00f6000)
-[    3.731750] 5920:
-    00000001 c132a2a0
-[    3.739990] 5940: c3cd2c10 c23d2304 c23d2304 efcd8728 00000001
-c3d10fc0 c290fabc 00000000
-[    3.748199] 5960: 00000001 00000000 c24d4c98 c1326cd4 c1d88d7d
-c1d251f2 efcd8728 3f45655f
-[    3.756408] 5980: c24d4c98 fc8f9ed5 f00f5a98 c1327924 ffffffff
-c06fa4e0 00000000 00000000
-[    3.764648] 59a0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 42aa2a98
-[    3.772857] 59c0: 42aa2a98 c3cd2c10 c23d2304 c23d2304 3f45655f
-c24d4c98 fc8f9ed5 f00f5a98
-[    3.781097] 59e0: 00000001 c0ddeafc c3cd2c10 c23d2304 00000000
-c0ddb238 c3cd2c10 c23d2304
-[    3.789306] 5a00: c24d4ca0 000000ab 00000001 c0dda2bc 60000013
-efcd8728 c3cd2c10 c3cd2c10
-[    3.797515] 5a20: c24d4ca0 000000ab c24d4c98 fc8f9ed5 00000001
-c0ddaf48 c3cd2c10 c23d2304
-[    3.805755] 5a40: f00f5a98 00000000 c28e1b00 c0ddae00 c0ddaccc
-c0ddaccc 00000000 f00f5a68
-[    3.813964] 5a60: 00000001 c0dd733c c28e1b6c c2e39038 c28e1b00
-42aa2a98 c3cd2c10 c3cd2c54
-[    3.822204] 5a80: 00000000 00000001 00000000 c28e1b00 00000000
-c0dda0d4 c3cd2c10 00000001
-[    3.830413] 5aa0: 00000100 42aa2a98 c3cd2c10 c24d4c8c c28e1b00
-c1a466d0 c3cd2c10 c0dd75a8
-[    3.838653] 5ac0: c3cd2c10 c3cd3410 00000000 c3cd3410 c3cd2c10
-efcd878c 00000001 c0dd2cbc
-[    3.846862] 5ae0: 42aa2a98 00000000 00000000 00000000 c3cd2c00
-efcd8728 c3cd2c10 efcd878c
-[    3.855072] 5b00: 00000000 c13298d8 efcd8728 c3cd3410 c221d2a0
-00000000 00000000 efcd878c
-[    3.863311] 5b20: c1843838 c1329b70 c2c10c10 c3cd3410 00000000
-00000000 00000000 00000000
-[    3.871520] 5b40: 00000000 00000000 00000000 00000000 00000000
-00000000 42aa2a98 efcd8728
-[    3.879760] 5b60: c221d2a0 c1843838 efcd842c 00000000 c3cd3410
-00000001 c24c3718 c1329dec
-[    3.887969] 5b80: 00000001 c1cfa6f6 c3d11f40 efcd8590 f00f5be0
-00000001 00000000 c1cfa6f6
-[    3.896179] 5ba0: c1dffe3e c0a2de8c 00000000 00000000 c1d88d7d
-c3cd3410 c221d50c efcd842c
-[    3.904418] 5bc0: 00000000 00000000 43300000 00000000 00100000
-00000000 00000200 00000000
-[    3.912628] 5be0: 00000002 c1b14540 ff9e82f0 ff9e82f0 00000001
-00000001 00000001 00000000
-[    3.920867] 5c00: 42aa2a98 c3cd3410 c230f244 c230f244 3f45655f
-c24d4c98 fc8f9ed5 f00f5cd8
-[    3.929077] 5c20: 00000001 c0ddeafc c3cd3410 c230f244 00000000
-c0ddb238 c3cd3410 c230f244
-[    3.937316] 5c40: c24d4ca0 000000ab 00000001 c0dda2bc 60000013
-ffffffff c3cd3410 c3cd3410
-[    3.945526] 5c60: c24d4ca0 000000ab c24d4c98 fc8f9ed5 00000001
-c0ddaf48 c3cd3410 c230f244
-[    3.953735] 5c80: f00f5cd8 00000000 c28e1b00 c0ddae00 c0ddaccc
-c0ddaccc 00000000 f00f5ca8
-[    3.961975] 5ca0: 00000001 c0dd733c c28e1b6c c3873938 c28e1b00
-42aa2a98 c3cd3410 c3cd3454
-[    3.970184] 5cc0: 00000000 00000001 00000000 c28e1b00 c221d50c
-c0dda0d4 c3cd3410 00000001
-[    3.978424] 5ce0: 00000100 42aa2a98 c3cd3410 c24d4c8c c28e1b00
-c1a466d0 c3cd3410 c0dd75a8
-[    3.986633] 5d00: c3cd3410 c2c10c10 00000000 c2c10c10 c3cd3410
-efcd8490 00000001 c0dd2cbc
-[    3.994842] 5d20: 42aa2a98 00000000 00000000 00000000 c3cd3400
-efcd842c c3cd3410 efcd8490
-[    4.003082] 5d40: c221d50c c13298d8 efcd842c c2c10c10 c221d2a0
-c221d50c 00000000 efcd8490
-[    4.011291] 5d60: 00000000 c1329b70 00000000 c2c10c10 43300000
-00000000 43300003 00000000
-[    4.019500] 5d80: ff9e8254 00000200 00000000 00000000 00000000
-00000000 42aa2a98 efcd842c
-[    4.027740] 5da0: c221d2a0 00000000 efc76d7c 00000000 c2c10c10
-00000001 c291ab0d c1329dec
-[    4.035949] 5dc0: 00000001 f00f5eb8 c2c10c10 efc76d7c c3a37d40
-c2c10c00 c230f168 c221d2a0
-[    4.044189] 5de0: f00f5eb8 c0a2d154 c2c10c10 c230f168 c230f168
-3f45655f c24d4c98 fc8f9ed5
-[    4.052398] 5e00: c291ab0d c0ddeafc c2c10c10 c230f168 00000000
-c0ddb238 c2c10c10 c230f168
-[    4.060607] 5e20: c24d4ca0 00000001 c291ab0d c0dda2bc 60000013
-efc76d7c c2c10c10 c2c10c10
-[    4.068847] 5e40: c24d4ca0 00000001 c24d4c98 fc8f9ed5 c291ab0d
-c0ddaf48 c2c10c10 c230f168
-[    4.077056] 5e60: f00f5eb8 00000000 c28e1b00 c0ddae00 c0ddaccc
-c0ddaccc 00000000 f00f5e88
-[    4.085296] 5e80: c291ab0d c0dd733c c28e1b6c c38733b8 c28e1b00
-42aa2a98 c2c10c10 c2c10c54
-[    4.093505] 5ea0: 00000000 00000001 00000000 c28e1b00 c291ab00
-c0dda0d4 c2c10c10 00000001
-[    4.101745] 5ec0: c291ab0d 42aa2a98 c2c10c10 c24d4c8c c28e1b00
-c1a466d0 00000000 c0dd75a8
-[    4.109954] 5ee0: c23fe4dc c2c10c10 c29106d4 c23fe4f8 00000000
-00000004 c291ab0d c0ddaa60
-[    4.118164] 5f00: c29c0f80 c23fe500 c282e400 c291ab80 0000000a
-c04783d4 f00f5f70 c1805e20
-[    4.126403] 5f20: 00000000 00000002 42aa2a98 c29e1bc0 c29c0f98
-c29c0fd0 c29c0fac c282e400
-[    4.134613] 5f40: c29c0f80 c29c0fac c29e1bc0 c282e420 c246b274
-00000402 00000000 c047a89c
-[    4.142852] 5f60: c29c4300 c047a5ec c29c0f80 00000040 c29e22a4
-c29c4314 c29c4300 c047a5ec
-[    4.151062] 5f80: c29c0f80 c29e1bc0 00000000 c04810d4 c29c1b40
-c0480f9c 00000000 00000000
-[    4.159271] 5fa0: 00000000 00000000 00000000 c040029c 00000000
-00000000 00000000 00000000
-[    4.167510] 5fc0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[    4.175720] 5fe0: 00000000 00000000 00000000 00000000 00000013
-00000000 00000000 00000000
-[    4.183959] Call trace:
-[    4.183959] edma_probe from platform_probe (drivers/base/platform.c:1404)
-[    4.191589] platform_probe from really_probe (drivers/base/dd.c:581
-drivers/base/dd.c:658)
-[    4.197021] really_probe from __driver_probe_device (drivers/base/dd.c:800)
-[    4.202972] __driver_probe_device from driver_probe_device
-(drivers/base/dd.c:830)
-[    4.209564] driver_probe_device from __device_attach_driver
-(drivers/base/dd.c:959)
-[    4.216308] __device_attach_driver from bus_for_each_drv
-(drivers/base/bus.c:459)
-[    4.222778] bus_for_each_drv from __device_attach (drivers/base/dd.c:1030)
-[    4.228576] __device_attach from bus_probe_device (drivers/base/bus.c:536)
-[    4.234344] bus_probe_device from device_add (drivers/base/core.c:3679)
-[    4.239807] device_add from of_platform_device_create_pdata
-(drivers/of/platform.c:186)
-[    4.246368] of_platform_device_create_pdata from
-of_platform_bus_create (drivers/of/platform.c:381)
-[    4.254150] of_platform_bus_create from of_platform_populate
-(drivers/of/platform.c:469)
-[    4.260833] of_platform_populate from sysc_probe (drivers/bus/ti-sysc.c:3269)
-[    4.266601] sysc_probe from platform_probe (drivers/base/platform.c:1404)
-[    4.271697] platform_probe from really_probe (drivers/base/dd.c:581
-drivers/base/dd.c:658)
-[    4.277130] really_probe from __driver_probe_device (drivers/base/dd.c:800)
-[    4.283081] __driver_probe_device from driver_probe_device
-(drivers/base/dd.c:830)
-[    4.289672] driver_probe_device from __device_attach_driver
-(drivers/base/dd.c:959)
-[    4.296417] __device_attach_driver from bus_for_each_drv
-(drivers/base/bus.c:459)
-[    4.302886] bus_for_each_drv from __device_attach (drivers/base/dd.c:1030)
-[    4.308685] __device_attach from bus_probe_device (drivers/base/bus.c:536)
-[    4.314453] bus_probe_device from device_add (drivers/base/core.c:3679)
-[    4.319915] device_add from of_platform_device_create_pdata
-(drivers/of/platform.c:186)
-[    4.326477] of_platform_device_create_pdata from
-of_platform_bus_create (drivers/of/platform.c:381)
-[    4.334259] of_platform_bus_create from of_platform_populate
-(drivers/of/platform.c:469)
-[    4.340911] of_platform_populate from simple_pm_bus_probe
-(drivers/bus/simple-pm-bus.c:0)
-[    4.347320] simple_pm_bus_probe from platform_probe
-(drivers/base/platform.c:1404)
-[    4.353179] platform_probe from really_probe (drivers/base/dd.c:581
-drivers/base/dd.c:658)
-[    4.358612] really_probe from __driver_probe_device (drivers/base/dd.c:800)
-[    4.364593] __driver_probe_device from driver_probe_device
-(drivers/base/dd.c:830)
-[    4.371154] driver_probe_device from __device_attach_driver
-(drivers/base/dd.c:959)
-[    4.377899] __device_attach_driver from bus_for_each_drv
-(drivers/base/bus.c:459)
-[    4.384399] bus_for_each_drv from __device_attach (drivers/base/dd.c:1030)
-[    4.390167] __device_attach from bus_probe_device (drivers/base/bus.c:536)
-[    4.395965] bus_probe_device from deferred_probe_work_func
-(drivers/base/dd.c:124)
-[    4.402435] deferred_probe_work_func from process_scheduled_works
-(include/linux/atomic/atomic-arch-fallback.h:457
-include/linux/jump_label.h:261 include/trace/events/workqueue.h:110
-kernel/workqueue.c:3234 kernel/workqueue.c:3310)
-[    4.409729] process_scheduled_works from worker_thread
-(include/linux/list.h:373 kernel/workqueue.c:946
-kernel/workqueue.c:3392)
-[    4.416015] worker_thread from kthread (kernel/kthread.c:391)
-[    4.420928] kthread from ret_from_fork (arch/arm/kernel/entry-common.S:138)
-[    4.425659] Exception stack(0xf00f5fb0 to 0xf00f5ff8)
-[    4.430755] 5fa0:                                     00000000
-00000000 00000000 00000000
-[    4.438964] 5fc0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[    4.447204] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[ 4.453857] Code: e3a03001 13540001 e5c03002 1a000006 (e7ffdefe)
+aadaa00de76ed0c4987b97450dd638f63a385bed)) #1 SMP PREEMPT @1732509632
+[    0.000000] KASLR disabled due to lack of seed
+[    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+<Trim>
+[    8.983574] videodev: Linux video capture interface: v2.00
+[    8.990308] Internal error: UBSAN: array index out of bounds:
+00000000f2005512 [#1] PREEMPT SMP
+[    8.990374] Modules linked in: qcom_rng drm_client_lib qcom_stats
+qnoc_msm8916(+) videodev videobuf2_memops videobuf2_common mc
+rpmsg_ctrl rpmsg_char display_connector phy_qcom_usb_hs drm_kms_helper
+ramoops reed_solomon socinfo rmtfs_mem fuse drm backlight ip_tables
+x_tables ipv6
+[    9.000620] CPU: 0 UID: 0 PID: 199 Comm: (udev-worker) Not tainted
+6.12.0-next-20241125 #1
+[    9.022836] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[    9.030902] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    9.037760] pc : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:269)
+[    9.044439] lr : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:0)
+[    9.048258] sp : ffff800083b93470
+[    9.052075] x29: ffff800083b93480 x28: ffff000002c2ae80 x27: ffff80007ac3d3e0
+[    9.055554] x26: ffff000002c2ae88 x25: 0000000000000000 x24: ffff000009bb7400
+[    9.062671] x23: 0000000000000000 x22: 0000000000000001 x21: ffff000004931400
+[    9.069788] x20: ffff000004931410 x19: ffff0000048e0c80 x18: ffff800083a7d0a8
+[    9.076907] x17: fffffffffffc23a2 x16: 0000000000000001 x15: 000000000000026c
+[    9.084027] x14: fffffffffffffffd x13: 0000000000000000 x12: ffff7fffba293000
+[    9.091145] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000001
+[    9.098262] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 000000000000003f
+[    9.105381] x5 : 0000000000000040 x4 : ffff00003c75d9e0 x3 : 0000000000199400
+[    9.112497] x2 : 0000000000000008 x1 : 0000000000000000 x0 : 0000000000000000
+[    9.119617] Call trace:
+[    9.126727] qnoc_probe+0x4c8/0x4d0 P
+[    9.128987] qnoc_probe+0x354/0x4d0 L
+[    9.132805] platform_probe (drivers/base/platform.c:1405)
+[    9.136624] really_probe (drivers/base/dd.c:581 drivers/base/dd.c:658)
+[    9.140443] __driver_probe_device (drivers/base/dd.c:800)
+[    9.144089] driver_probe_device (drivers/base/dd.c:830)
+[    9.148429] __driver_attach (drivers/base/dd.c:1217)
+[    9.152422] bus_for_each_dev (drivers/base/bus.c:369)
+[    9.156590] driver_attach (drivers/base/dd.c:1234)
+[    9.160495] bus_add_driver (drivers/base/bus.c:676)
+[    9.164140] driver_register (drivers/base/driver.c:247)
+[    9.167700] __platform_driver_register (drivers/base/platform.c:867)
+[    9.171520] init_module+0x20/0xfbc qnoc_msm8916
+[    9.176383] do_one_initcall (init/main.c:1250 init/main.c:1267)
+[    9.181068] do_init_module (kernel/module/main.c:2910)
+[    9.184800] load_module (kernel/module/main.c:3376)
+[    9.188618] __arm64_sys_finit_module (kernel/module/main.c:3565
+kernel/module/main.c:3577 kernel/module/main.c:3603
+kernel/module/main.c:3587 kernel/module/main.c:3587)
+[    9.192353] invoke_syscall (arch/arm64/kernel/syscall.c:50)
+[    9.197127] el0_svc_common (arch/arm64/kernel/syscall.c:139)
+[    9.200771] do_el0_svc (arch/arm64/kernel/syscall.c:152)
+[    9.204503] el0_svc (arch/arm64/kernel/entry-common.c:165
+arch/arm64/kernel/entry-common.c:178
+arch/arm64/kernel/entry-common.c:745)
+[    9.207802] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:797)
+[    9.210756] el0t_64_sync (arch/arm64/kernel/entry.S:600)
+[ 9.215189] Code: aa1303e0 97fff41c 17ffff79 d4200020 (d42aa240)
 All code
 ========
 
 Code starting with the faulting instruction
 ===========================================
-[    4.459960] ---[ end trace 0000000000000000 ]---
-[    4.464630] note: kworker/u10:2[41] exited with irqs disabled
+[    9.218752] ---[ end trace 0000000000000000 ]---
+[    9.233047] note: (udev-worker)[199] exited with irqs disabled
+[    9.233245] note: (udev-worker)[199] exited with preempt_count 1
+[    9.243434] ------------[ cut here ]------------
+<trim>
+[    9.243951] WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
+ct_kernel_exit (kernel/context_tracking.c:153)
+[    9.248555] Modules linked in: videobuf2_v4l2 qcom_rng
+drm_client_lib qcom_stats qnoc_msm8916(+) videodev videobuf2_memops
+videobuf2_common mc rpmsg_ctrl rpmsg_char display_connector
+phy_qcom_usb_hs drm_kms_helper ramoops reed_solomon socinfo rmtfs_mem
+fuse drm backlight ip_tables x_tables ipv6
+[    9.260538] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G      D
+          6.12.0-next-20241125 #1
+[    9.282755] Tainted: [D]=DIE
+[    9.292113] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+[    9.292888] Unable to handle kernel read from unreadable memory at
+virtual address 0000ffffa3c44d20
+[    9.295061] pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    9.295071] pc : ct_kernel_exit (kernel/context_tracking.c:153)
+[    9.295088] lr : ct_kernel_exit (kernel/context_tracking.c:126)
+[    9.301765] Mem abort info:
+[    9.310514] sp : ffff800082503d10
+[    9.310519] x29: ffff800082503d10 x28: ffff8000824c4ff0 x27: ffff800082509000
+[    9.310536] x26: 0000000000000000 x25: ffff0000041f9898
+[    9.317463]   ESR = 0x0000000096000004
+[    9.321618]  x24: ffff0000041f9898
+[    9.321625] x23: 0000000226f30819 x22: 0000000000000000
+[    9.325621]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    9.328214]  x21: ffff00003c757ff8
+[    9.328221] x20: ffff8000824c2350 x19: ffff00003c755350
+[    9.331701]   SET = 0, FnV = 0
+[    9.338806]  x18: ffff800082514880
+[    9.338813] x17: 00000000529c6ef0 x16: 00000000529c6ef0 x15: 000000000000007e
+[    9.343850]   EA = 0, S1PTW = 0
+[    9.347659]
+[    9.347662] x14: 00000000000000c8 x13: 0000000000000004 x12: 000000000a929b85
+[    9.351058]   FSC = 0x04: level 0 translation fault
+[    9.356167]
+[    9.356171] x11: 0000000000000015 x10: 000000000682aaab x9 : 4000000000000000
+[    9.361732] Data abort info:
+[    9.364935] x8 : 4000000000000002 x7 : 0000000000005221 x6 : 0000000000055ad0
+[    9.370064]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+[    9.373179] x5 : 0000000000005469 x4 : 0000000000000093 x3 : 0000000000000006
+[    9.376580]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[    9.383768] x2 : 0000000000000000 x1 : ffff0000041f9880 x0 : ffff7fffba293000
+[    9.386730]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[    9.388462] Call trace:
+[    9.395502] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000856aa000
+[    9.400175] ct_kernel_exit+0x80/0x8c P
+[    9.401918] [0000ffffa3c44d20] pgd=0000000000000000
+[    9.408943] ct_kernel_exit+0x14/0x8c L
+[    9.408958] ct_idle_enter (kernel/context_tracking.c:321)
+[    9.411910] , p4d=0800000089bb0403
+[    9.418929] cpuidle_enter_state (drivers/cpuidle/cpuidle.c:268)
+[    9.418943] cpuidle_enter (drivers/cpuidle/cpuidle.c:391)
+[    9.418953] do_idle (kernel/sched/idle.c:155
+kernel/sched/idle.c:230 kernel/sched/idle.c:325)
+[    9.424326] , pud=080000008943e403
+[    9.431516] cpu_startup_entry (kernel/sched/idle.c:422)
+[    9.431527] rest_init+0xe0/0xe4
+[    9.436563] , pmd=0800000089bac403
+[    9.443668] start_kernel (init/main.c:1040)
+[    9.443681] __primary_switched (arch/arm64/kernel/head.S:247)
+[    9.449057] , pte=00200000910f9fc3
+[    9.451224] ---[ end trace 0000000000000000 ]---
 
 Links:
-- https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.12-9073-g9f16d5e6f220/testrun/26029148/suite/boot/test/korg-clang-19-lkftconfig-hardening/details/
-- https://lkft.validation.linaro.org/scheduler/job/8004562#L2109
-- https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pHgoZfhSxCBwwjm4YIlCiyWlfE
-- https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/
+------
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/log
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/details/
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/history/
+- https://lkft.validation.linaro.org/scheduler/job/8004888#L2200
+- https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/
 
 Build image:
 -----------
-- https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/
+- https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/
+
+Steps to reproduce:
+------------
+- https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/reproducer
+- https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/tux_plan
 
 metadata:
 ----
-Linux version: 6.12.0
 git repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/config
-build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/
+https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/config
+build url: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/
 toolchain: clang-19 and clang-nightly
 config:  korg-clang-19-lkftconfig-hardening
-arch: TI x15
+arch: arm64
 
 --
 Linaro LKFT
