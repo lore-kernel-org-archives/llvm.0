@@ -1,50 +1,48 @@
 Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5508D192D75
-	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 10:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35347192B7F
+	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 10:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732531835; cv=none; b=afoBWcW8gh0OAKvfHmC4UhvPq/avQea8ElBVpyjEdc9QPkUsvd639vnaQbCxDxcVrUhRs5BRLWMRNiYEsfYtPouDcZC59Ji3wd4r1aR59G18wsk0pq0JsPTCowoNf686goEoQyYl7490a0wqYb49H06mVIsLzhh6rM+4qE3TB78=
+	t=1732531967; cv=none; b=YS6o3cnJqhi/fFFIvYZfYxniTvdqnPtU7KJD0Ty6qAnslaSHs/wA2DOfH/8FGGW35Xw42dHWhkhj2lB640dS6rHeq4c7ox6jfEBql7X9cUeJZQda5tqKNP94QlwpdAZIinsGZswzshoMInoAD0MyCKvZXrj5zaVxhWCMynYRswo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732531835; c=relaxed/simple;
-	bh=aUW89A+cMdYHpkt+oiZdLB+dni4vxT9wWinfiQBYBPY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rZn+ufbeiEti+uUHZpomVVKiZlQwFhvkrM8OFjwgjSigXEr2RIQSqDR4YjD451y5G7x5ikO8xVzT12xkk9GQtQvvIz4EBPUch9X8KivkcwtVyeRkKfvd21E3miAxPTu3vYif+ve8OROJV7NWXLJcBIcZzmDU8XHzPzq0wlXTtdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=SavjqTM1; arc=none smtp.client-ip=168.119.48.163
+	s=arc-20240116; t=1732531967; c=relaxed/simple;
+	bh=JpGjeBjmwwj4tAr/NvIpAh2+TZXeSq9SG3rXs+foLRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cbCi9nul2IlmKLRC1ukyMc5dzfKPBqXDsAHVJRv9wkhfSvjU6OjgPu43EHdodYyb9hlT3yFiLD1LEtJaF2kgCZcZRYC6/w7PUPRu7vtYdsr/+/tzX9A2aLygKGqi1axCssy37xqCk0XgRyEy2sVHBEMTelba/qwQ4sihEEaMKSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=gtFtymY9; arc=none smtp.client-ip=168.119.48.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="SavjqTM1"
+	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="gtFtymY9"
 From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1732531832;
+	s=2023072701; t=1732531964;
 	h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=dzS3rptQpBOYwpq3ixwqSK/AVNS+4t/jVRKj+6wTiiE=;
-	b=SavjqTM1fnGwsO0LH8q7sS8uuh6zvh5BCPYzfvx4b4tkBkdUZc/RBoflAVT9o0MJX+bL3D
-	wrdP5gJpVbflM24qtzzozxmVdEEFEUXY7R00xUXQsmJ4fVDn8XoQ8j9H7UAca4Bq0TTvmR
-	Sjc58f8OE6umSRjPdQlpfloYoqiqICVSlo3+3B3JJNvIq/TKCS8mmKnpj6F44v/IiSqtm1
-	i7t1ZTHk6l7NtVuWndh5Re3cu6DoIdKeMZikornUmOkW5SLxltbjPgNZjDCU3RXtOFlPqO
-	H3no0I7ukjdOZZ3178Ha53Y0MWneKlQq1z8c6S2XorSEftCqNSIcCeoPugN8ZQ==
+	bh=Bk64MtqGkER1ZMPO0RH9GpVeWujqZYsCThNqF69MyRo=;
+	b=gtFtymY9JwUJFkpAL/kSf+Ma/1ghajXUrJ5yxsHGl8kT4QAt4TJkESBUOH573AEerDUtFC
+	z5/OInOsdB3Z8GCO+0hzJyWNRIYFq9K58bJ+D4bscwCdlyseZbzE6dpsXE3kbikgzBKKu1
+	JNwAgUyM1T1RyphrFdbh3rcY0SSBCMhcEY9GYTrHaJCtsPmjnDPGai7tZWw4X6DdXGUfgz
+	TWRDkp82HzI37siSO+cOpuqPB9mCab6S2h+CNEBg+Ejc6DCuyStLVq5GA/e6s1m1ReXKim
+	R0NyE/1qMexlD3AhdsLS3cI3GlEAzOSsMal/wFkhE8SoFKmNjPLXIt4j0SVkxQ==
 To: 
 Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] trace: constify string literal data member
-Date: Mon, 25 Nov 2024 11:50:25 +0100
-Message-ID: <20241125105028.42807-1-cgoettsche@seltendoof.de>
+Subject: [PATCH] kunit: constify return of string literals
+Date: Mon, 25 Nov 2024 11:52:39 +0100
+Message-ID: <20241125105240.44219-1-cgoettsche@seltendoof.de>
 Reply-To: cgzones@googlemail.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -57,49 +55,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Christian Göttsche <cgzones@googlemail.com>
 
-The name member of the struct trace_event_call is assigned with
-generated string literals; declare them pointer to read-only.
+The function kunit_status_to_ok_not_ok() returns string literals, thus
+declare the return value as such.
 
 Reported by clang:
 
-    security/landlock/syscalls.c:179:1: warning: initializing 'char *' with an expression of type 'const char[34]' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
-      179 | SYSCALL_DEFINE3(landlock_create_ruleset,
-          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      180 |                 const struct landlock_ruleset_attr __user *const, attr,
-          |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      181 |                 const size_t, size, const __u32, flags)
-          |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ./include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE3'
-      226 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
-          |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ./include/linux/syscalls.h:234:2: note: expanded from macro 'SYSCALL_DEFINEx'
-      234 |         SYSCALL_METADATA(sname, x, __VA_ARGS__)                 \
-          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ./include/linux/syscalls.h:184:2: note: expanded from macro 'SYSCALL_METADATA'
-      184 |         SYSCALL_TRACE_ENTER_EVENT(sname);                       \
-          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ./include/linux/syscalls.h:151:30: note: expanded from macro 'SYSCALL_TRACE_ENTER_EVENT'
-      151 |                         .name                   = "sys_enter"#sname,    \
-          |                                                   ^~~~~~~~~~~~~~~~~
+    ./include/kunit/test.h:143:10: warning: returning 'const char[3]' from a function with result type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+      143 |                 return "ok";
+          |                        ^~~~
+    ./include/kunit/test.h:145:10: warning: returning 'const char[7]' from a function with result type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+      145 |                 return "not ok";
+          |                        ^~~~~~~~
+    ./include/kunit/test.h:147:9: warning: returning 'const char[8]' from a function with result type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+      147 |         return "invalid";
+          |                ^~~~~~~~~
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- include/linux/trace_events.h | 2 +-
+ include/kunit/test.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 016b29a56c87..423104db6f93 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -359,7 +359,7 @@ struct trace_event_call {
- 	struct list_head	list;
- 	struct trace_event_class *class;
- 	union {
--		char			*name;
-+		const char		*name;
- 		/* Set TRACE_EVENT_FL_TRACEPOINT flag when using "tp" */
- 		struct tracepoint	*tp;
- 	};
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 34b71e42fb10..ae1b57578476 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -135,7 +135,7 @@ struct kunit_case {
+ 	struct string_stream *log;
+ };
+ 
+-static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
++static inline const char *kunit_status_to_ok_not_ok(enum kunit_status status)
+ {
+ 	switch (status) {
+ 	case KUNIT_SKIPPED:
 -- 
 2.45.2
 
