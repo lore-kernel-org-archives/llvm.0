@@ -1,62 +1,105 @@
-Received: from c1521c0h.mwprem.net (c1521c0h.mwprem.net [122.17.135.105])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4357D2500CC
-	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 20:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=122.17.135.105
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732565615; cv=pass; b=S5+5AnaWGnfmxjdrsLn8I0vWt2VjM93Qq2qT5RiiysprO8Umu2KwQf1TYGCwwZ8AuqKJBkqF38nz5tWj8iic3xCLhqAbUjbioq7ULRnlP8IE58PCjggUn+cridKwUPev2ZJGrm38Ns4RJ8bMzn3CFDXlyobJZWjBb6nuAQjvpbE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732565615; c=relaxed/simple;
-	bh=4NPDwwNBJrqobK34eXVgHRLUUUsimz0Cf3DgCzrS8OA=;
-	h=Content-Type:MIME-Version:Subject:To:From:Date:Message-Id; b=RsbX6Lzdm5YPAQqGIWAQDY1QIoPaQuikl0es2ap4GIIgBL3SoWe643ZPLyATrgxN5x/sdTSbGxTJ48MxNER8ZY1WVwekaPmUEmCmQc58C/I0FF7HiDTDKRxXQ7XCrfYyASqWUVDlaXCxKxYAOJTa+0KvXI/bcdpa3cY+5OigXFA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=robert-harewood.com; spf=fail smtp.mailfrom=robert-harewood.com; arc=pass smtp.client-ip=122.17.135.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=robert-harewood.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=robert-harewood.com
-Received: from [192.168.0.149] (unknown [146.70.201.136])
-	by c1521c0h.mwprem.net (Postfix) with ESMTPA id BCF76C4ACDC9
-	for <llvm@lists.linux.dev>; Tue, 26 Nov 2024 05:13:31 +0900 (JST)
-Authentication-Results: c1521c0h.mwprem.net; arc=none smtp.remote-ip=146.70.201.136
-ARC-Seal: i=1; a=rsa-sha256; d=mwprem.net; s=default; t=1732565612; cv=none;
-	b=Arxf77pQ1eD51QvyMzUyO+4CRhE8SOVGsbGAIB4iPl8+zxwzex+Fz8BkXBYkKsn/BT0x9dO1mq8zGJJNqm252l0SYZ7PoRMmv/vDx7WgKAZaHs9q+54wdAdV/5v0gbhCRv1yS/h8E177bho96B6KoPbghuLcEfVfhmpmjbNweG4=
-ARC-Message-Signature: i=1; a=rsa-sha256; d=mwprem.net; s=default;
-	t=1732565612; c=relaxed/relaxed;
-	bh=4NPDwwNBJrqobK34eXVgHRLUUUsimz0Cf3DgCzrS8OA=;
-	h=MIME-Version:Subject:To:From:Date:Message-Id; b=vYCgediVXHDSCGhwOrjcY+SGjPA1jvpXbvSId7l90ZGtAt2mH6SYqO/qB7AvnLzOW5Ee6IIchTuEK5oGrk7WVO9j2h/AoIhF6iiEeDYpgx0/hL+Qca/V6EZyYYFuRG5iVFaREMd7LofFhe1wHtLl1q7y9YshKAq56Ev1e/5Qy1U=
-ARC-Authentication-Results: i=1; c1521c0h.mwprem.net
-Content-Type: text/plain; charset="iso-8859-1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D15A1BFE0C;
+	Mon, 25 Nov 2024 21:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732568478; cv=none; b=NGozrHNPik0m2Eo3wPxzCbeU39xbXA4E2GDDuF4BWPFJFHeogxbyPaBiJs789xwCRKC/UYQBr0rh/MT2+cvBhVJjnKpFspqmUfeZTL7VIAX7jrV3RltFgLSEnBiKwklijzFrk6JRKgXKr5ePWYg6tP2VlT4uy7svHZ7HJm/vdxo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732568478; c=relaxed/simple;
+	bh=XAwiMozoNLPS8mjHOorPqrFiU28vaKiYB4yk9iHltBU=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ejsp4V2H9jQ+aOkpifS92EzWZlDGW8wSGJ4pWeDjq11CV6wWAa1FDGocgjYpJG9UvUf1LI3KwSSsxvLJ6QqUgp9cq/jBSgwvdUh3jr/C8+hIuVBNOi3V+yeWImMteR5IrimC64eeSUMLnZCQUCbYOaMRg/SWvlalEg3gwcA4eEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MC4R0u0o; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MC4R0u0o"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732568476; x=1764104476;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=XAwiMozoNLPS8mjHOorPqrFiU28vaKiYB4yk9iHltBU=;
+  b=MC4R0u0oqpxnXwsqxvjSL9Hq9eQVORLEuN7J1I7hXx4dOEOwEb+sQEyV
+   f2ID7ztcJ8ylvQe1gU53+9y8bI4KGC91rLVfvla+0ly8l1uNC2ArBRfMZ
+   R+gb8ssA8b1Prkz4HT/ATuPA7f/jpzhLymDo1P3QLybLin1szXagne5ma
+   T+D8P0x0v58vUOkCkBx2SQhs5Rha+hUV9IvNnDZ8Mh+8dxPpbPR5eiscr
+   XuuOXw17kLvHRNy9taMiQZy9VBT3zs1xqsqgk293vO4XswPdzBqCXzw0W
+   K2h+l0rb1ciMvyaRpSsBsQzPcPkxTpOGOnr73zJmZ+GTJplSecSR+C8Ez
+   g==;
+X-CSE-ConnectionGUID: tQzYVxfXQ0ymTqkCIhUzug==
+X-CSE-MsgGUID: /Y6+snoDTt6TjzprCSzbMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="36481836"
+X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
+   d="scan'208";a="36481836"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 13:01:16 -0800
+X-CSE-ConnectionGUID: 7o9SDh7XSfu0Y2lO2rW6IQ==
+X-CSE-MsgGUID: lDk20KUtT/S6F73iGxtVlQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
+   d="scan'208";a="91340615"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 25 Nov 2024 13:01:15 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tFgCm-0006nP-3B;
+	Mon, 25 Nov 2024 21:01:12 +0000
+Date: Tue, 26 Nov 2024 05:00:45 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [peterz-queue:objtool/core 3/12] arch/x86/kvm/kvm.o: warning:
+ objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+Message-ID: <202411260421.4JBdFPW5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re:
-To: llvm@lists.linux.dev
-From: "Robert Harewood" <info@robert-harewood.com>
-Date: Tue, 26 Nov 2024 04:13:31 +0800
-Reply-To: "Robert Harewood" <rh@robert-harewood.com>
-Message-Id: <20241125201331.BCF76C4ACDC9@c1521c0h.mwprem.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Dear CEO,
+TO: Peter Zijlstra <peterz@infradead.org>
 
-I hope this message finds you safe and well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git objtool/core
+head:   a5091c456d5d4e22f5729d7600080b18a37f10a2
+commit: f4b16a1d266666624331222f640e9de652bc1dd4 [3/12] objtool: Convert ANNOTATE_NOENDBR to ANNOTATE
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241126/202411260421.4JBdFPW5-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260421.4JBdFPW5-lkp@intel.com/reproduce)
 
-I have a team of investors who are interested in providing capital to your
-business operations and projects without any upfront costs from you. I'd
-love to have the chance to discuss the details with you further.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411260421.4JBdFPW5-lkp@intel.com/
 
-Please let me know if this is something that you would be interested in, and
-we can schedule a call to further evaluate the details.
+All warnings (new ones prefixed by >>):
 
-Thank you for your time and consideration.
+>> arch/x86/kvm/kvm.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> drivers/nvme/host/nvme-core.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> drivers/nvme/target/nvmet.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> net/wireless/cfg80211.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> net/mac80211/mac80211.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> drivers/ufs/core/ufshcd-core.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> drivers/scsi/pm8001/pm80xx.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> drivers/scsi/qla2xxx/qla2xxx.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> fs/ext2/ext2.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> fs/nfsd/nfsd.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+--
+>> fs/fuse/fuse.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+..
 
-Warm regards,
-
-Robert Harewood,
-Robert Harewood Advisory
-The Broadgate Tower
-20 Primrose St,
-London, United Kingdom, EC2A 2EW.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
