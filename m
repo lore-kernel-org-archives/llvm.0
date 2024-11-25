@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F7B1AC448;
-	Mon, 25 Nov 2024 15:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB362AD25;
+	Mon, 25 Nov 2024 16:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732549358; cv=none; b=UdxYc72GF+3Rp1+aIfsYsHkqEdiN/s1p8DkSRn4NloPEssbn2yJpBpFix8evKi/i+n3I6+CEAFfBODa6+4Ub344yTAvNNhYsRARxB8aTT3leMzmMFsnE0K8xpOVf4zeCF0nwllag7fv3ZtpKre45FRCkOH1XhyTjue1quXLBYco=
+	t=1732551837; cv=none; b=ApGQNP/BimZphBzHOaOssM7ZXl0ZgT30a7ZUB91s5hF5MRu0C8XwBCvTi50c26RMb43S7XhfvLpNOhaU0cIK7s2uRntM7WydOkS9NoKOn4ue6s5DWjskrNnX4AA7g+eRMiRMrXk9trgTVB/aOQ/tUT+8D4NzJ9SLoY2fKm8n6vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732549358; c=relaxed/simple;
-	bh=1uGaURJFL+k5ljmFzecqQ8yWrYUK0nMYqG+LAJjeIHI=;
+	s=arc-20240116; t=1732551837; c=relaxed/simple;
+	bh=GUQfgpAXeziJyVc0BBmJJPh2ZiKlviBhiYwLQbTcq+U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kUz8L5ni7cWQXlWfuH+HgzqxP8XCJPxXIIHNVIaWeA+7kkca1CYXOAzkzEepoO4sYMl1rzCdxnyg0Q2DU/miXu5z7mb9b7Ka8ySlihYTObZep1qwBgIjnV0XOmC0xONOQuhYKisufL3ZOSIQnPHBcYZOyb0sZNYHL0eYFrtBvA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFn18wbN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=rgLAxvcgXwlEXNxRU5pc3SsY1TL5JLw7+ud9Y5gpuO2XHBxRgvw3mwQUSNNQPhqZlAdIHZ57XT6NUa87iaEScI5n6U6VLXpsRECUeMn6t9E3UZvIKk801+jSL2pw+AGvdyUpq+ySnkkFjF/xEn5h7Z2D22d/pS2huavEQCsEdgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vFQxbsXK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFn18wbN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7527FC4CECF;
-	Mon, 25 Nov 2024 15:42:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vFQxbsXK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B0D3C4CECE;
+	Mon, 25 Nov 2024 16:23:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732549358;
-	bh=1uGaURJFL+k5ljmFzecqQ8yWrYUK0nMYqG+LAJjeIHI=;
+	s=k20201202; t=1732551837;
+	bh=GUQfgpAXeziJyVc0BBmJJPh2ZiKlviBhiYwLQbTcq+U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BFn18wbNBs9mU22Xhw9Zgov43fj3pg71n5DMdBZHf6WRMLk/8lF5sqU+d0szP/hAW
-	 NoL865FCb3Y1lP7w0x/8DHaUtmdmI/u2ITwf/35eRs49f7BVgkRGx1efszV2AaEW+v
-	 3wZ0/+grTY09h3Koc2ZB94MmOHL/Xgd/Xu1L4J1dJ/iUz7c3L4ZV8t0+O2h68T0wWe
-	 SF2Z86cBkS5reM9Ycfn8yqiGC8LN7SfgYamIf7KMj4i3KrMwoXkThoxM0ncvoKCytR
-	 YB6uyXHgPBFX8AA6clWyVCRw2Hvf3xT18MJ4Y/RtbDDKGzNG3/JKR3i29I9qdNlJLM
-	 ZRTuaIm0+B9Pw==
-Date: Mon, 25 Nov 2024 08:42:35 -0700
+	b=vFQxbsXK+pkR/3qzEDnhH+sb2bm6VvVLfwQLY6MKqvMdf9teT/gJO2HWZ63kqMCqn
+	 LI4fRbSMs3L2NeBL39LQY0krgJ0FnYhxoIfrt6XkRbN09xwZee83uuBubh6m723ydT
+	 d6zK9fU5AGoFTjU8/p/PSIrtltHq8pRMigDYs9W+r8OEqt95ClQXAQXsytZhsgOfO5
+	 dgJW3hUDM54pRR8wLhmohZriXcxhEudHE3MOY5fiuNlqYWIbHPxttNGkPVqYkmwHas
+	 i03WRf0QaghK50JTcvt/Iv82YYcm7M6+vtJ2hZ1h9nsej+BGEihxcHV5k9yS3RzfoC
+	 oIN/+FSOIaBzw==
+Date: Mon, 25 Nov 2024 09:23:54 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Georgi Djakov <djakov@kernel.org>, konradybcio@kernel.org,
-	quic_okukatla@quicinc.com, quic_rlaggysh@quicinc.com,
-	quic_jjohnson@quicinc.com
-Subject: Re: pc : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:269) :
- Dragonboard 410c - arm64 - boot failed
-Message-ID: <20241125154235.GC2067874@thelio-3990X>
-References: <CA+G9fYs+2mBz1y2dAzxkj9-oiBJ2Acm1Sf1h2YQ3VmBqj_VX2g@mail.gmail.com>
- <CA+G9fYvh8n=CTCmcCdLViH=o-UXH1Euncn+7YuYkvt5O-k8NMg@mail.gmail.com>
+Cc: open list <linux-kernel@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>, dmaengine@vger.kernel.org,
+	lkft-triage@lists.linaro.org, peter.ujfalusi@gmail.com,
+	Vinod Koul <vkoul@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, kees@kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: korg-clang-19-lkftconfig-hardening: TI x15 board - PC is at
+ edma_probe (drivers/dma/ti/edma.c
+Message-ID: <20241125162354.GD2067874@thelio-3990X>
+References: <CA+G9fYuaWJYQcxQ=3UqQbbuD_YNdOS_KB46N=mh47rxE049f-Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,210 +49,304 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYvh8n=CTCmcCdLViH=o-UXH1Euncn+7YuYkvt5O-k8NMg@mail.gmail.com>
+In-Reply-To: <CA+G9fYuaWJYQcxQ=3UqQbbuD_YNdOS_KB46N=mh47rxE049f-Q@mail.gmail.com>
 
-On Mon, Nov 25, 2024 at 08:43:44PM +0530, Naresh Kamboju wrote:
-> [Small correction]
-> 
-> On Mon, 25 Nov 2024 at 20:33, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > The arm64 Dragonboard 410c has failed with the Linux next, mainline
-> > and the Linux stable. Please find boot log and build links.
-> 
-> This boot regression is noticed only on Dragonboard 845c.
-> Linux next-20241125 tag.
-> 
-> Good: next-20241122
-> Bad: next-20241125
+Hi Naresh,
 
-Can you bisect to see what change introduced this?
++ Kees and linux-hardening, since this is a hardening configuration.
 
-> >
-> > Device: Dragonboard 410c - arm64
-> > Boot failed: clang-19
-> > Configs: korg-clang-19-lkftconfig-hardening
-> > Boot pass: qemu-arm64 (Additional info)
-> >
-> > This is always reproducible.
-> >
-> > Dragonboard 410c - arm64:
-> > boot:
-> >  * clang-nightly-lkftconfig-hardening
-> >  * korg-clang-19-lkftconfig-hardening
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Log details:
-> > ------------
-> > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
-> > [    0.000000] Linux version 6.12.0-next-20241125 (tuxmake@tuxmake)
-> > (ClangBuiltLinux clang version 19.1.4
-> > (https://github.com/llvm/llvm-project.git
-> > aadaa00de76ed0c4987b97450dd638f63a385bed), ClangBuiltLinux LLD 19.1.4
-> > (https://github.com/llvm/llvm-project.git
-> > aadaa00de76ed0c4987b97450dd638f63a385bed)) #1 SMP PREEMPT @1732509632
-> > [    0.000000] KASLR disabled due to lack of seed
-> > [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
-> > <Trim>
-> > [    8.983574] videodev: Linux video capture interface: v2.00
-> > [    8.990308] Internal error: UBSAN: array index out of bounds:
-> > 00000000f2005512 [#1] PREEMPT SMP
-> > [    8.990374] Modules linked in: qcom_rng drm_client_lib qcom_stats
-> > qnoc_msm8916(+) videodev videobuf2_memops videobuf2_common mc
-> > rpmsg_ctrl rpmsg_char display_connector phy_qcom_usb_hs drm_kms_helper
-> > ramoops reed_solomon socinfo rmtfs_mem fuse drm backlight ip_tables
-> > x_tables ipv6
-> > [    9.000620] CPU: 0 UID: 0 PID: 199 Comm: (udev-worker) Not tainted
-> > 6.12.0-next-20241125 #1
-> > [    9.022836] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > [    9.030902] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    9.037760] pc : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:269)
-> > [    9.044439] lr : qnoc_probe (drivers/interconnect/qcom/icc-rpmh.c:0)
-> > [    9.048258] sp : ffff800083b93470
-> > [    9.052075] x29: ffff800083b93480 x28: ffff000002c2ae80 x27: ffff80007ac3d3e0
-> > [    9.055554] x26: ffff000002c2ae88 x25: 0000000000000000 x24: ffff000009bb7400
-> > [    9.062671] x23: 0000000000000000 x22: 0000000000000001 x21: ffff000004931400
-> > [    9.069788] x20: ffff000004931410 x19: ffff0000048e0c80 x18: ffff800083a7d0a8
-> > [    9.076907] x17: fffffffffffc23a2 x16: 0000000000000001 x15: 000000000000026c
-> > [    9.084027] x14: fffffffffffffffd x13: 0000000000000000 x12: ffff7fffba293000
-> > [    9.091145] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000001
-> > [    9.098262] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 000000000000003f
-> > [    9.105381] x5 : 0000000000000040 x4 : ffff00003c75d9e0 x3 : 0000000000199400
-> > [    9.112497] x2 : 0000000000000008 x1 : 0000000000000000 x0 : 0000000000000000
-> > [    9.119617] Call trace:
-> > [    9.126727] qnoc_probe+0x4c8/0x4d0 P
-> > [    9.128987] qnoc_probe+0x354/0x4d0 L
-> > [    9.132805] platform_probe (drivers/base/platform.c:1405)
-> > [    9.136624] really_probe (drivers/base/dd.c:581 drivers/base/dd.c:658)
-> > [    9.140443] __driver_probe_device (drivers/base/dd.c:800)
-> > [    9.144089] driver_probe_device (drivers/base/dd.c:830)
-> > [    9.148429] __driver_attach (drivers/base/dd.c:1217)
-> > [    9.152422] bus_for_each_dev (drivers/base/bus.c:369)
-> > [    9.156590] driver_attach (drivers/base/dd.c:1234)
-> > [    9.160495] bus_add_driver (drivers/base/bus.c:676)
-> > [    9.164140] driver_register (drivers/base/driver.c:247)
-> > [    9.167700] __platform_driver_register (drivers/base/platform.c:867)
-> > [    9.171520] init_module+0x20/0xfbc qnoc_msm8916
-> > [    9.176383] do_one_initcall (init/main.c:1250 init/main.c:1267)
-> > [    9.181068] do_init_module (kernel/module/main.c:2910)
-> > [    9.184800] load_module (kernel/module/main.c:3376)
-> > [    9.188618] __arm64_sys_finit_module (kernel/module/main.c:3565
-> > kernel/module/main.c:3577 kernel/module/main.c:3603
-> > kernel/module/main.c:3587 kernel/module/main.c:3587)
-> > [    9.192353] invoke_syscall (arch/arm64/kernel/syscall.c:50)
-> > [    9.197127] el0_svc_common (arch/arm64/kernel/syscall.c:139)
-> > [    9.200771] do_el0_svc (arch/arm64/kernel/syscall.c:152)
-> > [    9.204503] el0_svc (arch/arm64/kernel/entry-common.c:165
-> > arch/arm64/kernel/entry-common.c:178
-> > arch/arm64/kernel/entry-common.c:745)
-> > [    9.207802] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:797)
-> > [    9.210756] el0t_64_sync (arch/arm64/kernel/entry.S:600)
-> > [ 9.215189] Code: aa1303e0 97fff41c 17ffff79 d4200020 (d42aa240)
-> > All code
-> > ========
-> >
-> > Code starting with the faulting instruction
-> > ===========================================
-> > [    9.218752] ---[ end trace 0000000000000000 ]---
-> > [    9.233047] note: (udev-worker)[199] exited with irqs disabled
-> > [    9.233245] note: (udev-worker)[199] exited with preempt_count 1
-> > [    9.243434] ------------[ cut here ]------------
-> > <trim>
-> > [    9.243951] WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
-> > ct_kernel_exit (kernel/context_tracking.c:153)
-> > [    9.248555] Modules linked in: videobuf2_v4l2 qcom_rng
-> > drm_client_lib qcom_stats qnoc_msm8916(+) videodev videobuf2_memops
-> > videobuf2_common mc rpmsg_ctrl rpmsg_char display_connector
-> > phy_qcom_usb_hs drm_kms_helper ramoops reed_solomon socinfo rmtfs_mem
-> > fuse drm backlight ip_tables x_tables ipv6
-> > [    9.260538] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G      D
-> >           6.12.0-next-20241125 #1
-> > [    9.282755] Tainted: [D]=DIE
-> > [    9.292113] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> > [    9.292888] Unable to handle kernel read from unreadable memory at
-> > virtual address 0000ffffa3c44d20
-> > [    9.295061] pstate: 204000c5 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    9.295071] pc : ct_kernel_exit (kernel/context_tracking.c:153)
-> > [    9.295088] lr : ct_kernel_exit (kernel/context_tracking.c:126)
-> > [    9.301765] Mem abort info:
-> > [    9.310514] sp : ffff800082503d10
-> > [    9.310519] x29: ffff800082503d10 x28: ffff8000824c4ff0 x27: ffff800082509000
-> > [    9.310536] x26: 0000000000000000 x25: ffff0000041f9898
-> > [    9.317463]   ESR = 0x0000000096000004
-> > [    9.321618]  x24: ffff0000041f9898
-> > [    9.321625] x23: 0000000226f30819 x22: 0000000000000000
-> > [    9.325621]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [    9.328214]  x21: ffff00003c757ff8
-> > [    9.328221] x20: ffff8000824c2350 x19: ffff00003c755350
-> > [    9.331701]   SET = 0, FnV = 0
-> > [    9.338806]  x18: ffff800082514880
-> > [    9.338813] x17: 00000000529c6ef0 x16: 00000000529c6ef0 x15: 000000000000007e
-> > [    9.343850]   EA = 0, S1PTW = 0
-> > [    9.347659]
-> > [    9.347662] x14: 00000000000000c8 x13: 0000000000000004 x12: 000000000a929b85
-> > [    9.351058]   FSC = 0x04: level 0 translation fault
-> > [    9.356167]
-> > [    9.356171] x11: 0000000000000015 x10: 000000000682aaab x9 : 4000000000000000
-> > [    9.361732] Data abort info:
-> > [    9.364935] x8 : 4000000000000002 x7 : 0000000000005221 x6 : 0000000000055ad0
-> > [    9.370064]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> > [    9.373179] x5 : 0000000000005469 x4 : 0000000000000093 x3 : 0000000000000006
-> > [    9.376580]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> > [    9.383768] x2 : 0000000000000000 x1 : ffff0000041f9880 x0 : ffff7fffba293000
-> > [    9.386730]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > [    9.388462] Call trace:
-> > [    9.395502] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000856aa000
-> > [    9.400175] ct_kernel_exit+0x80/0x8c P
-> > [    9.401918] [0000ffffa3c44d20] pgd=0000000000000000
-> > [    9.408943] ct_kernel_exit+0x14/0x8c L
-> > [    9.408958] ct_idle_enter (kernel/context_tracking.c:321)
-> > [    9.411910] , p4d=0800000089bb0403
-> > [    9.418929] cpuidle_enter_state (drivers/cpuidle/cpuidle.c:268)
-> > [    9.418943] cpuidle_enter (drivers/cpuidle/cpuidle.c:391)
-> > [    9.418953] do_idle (kernel/sched/idle.c:155
-> > kernel/sched/idle.c:230 kernel/sched/idle.c:325)
-> > [    9.424326] , pud=080000008943e403
-> > [    9.431516] cpu_startup_entry (kernel/sched/idle.c:422)
-> > [    9.431527] rest_init+0xe0/0xe4
-> > [    9.436563] , pmd=0800000089bac403
-> > [    9.443668] start_kernel (init/main.c:1040)
-> > [    9.443681] __primary_switched (arch/arm64/kernel/head.S:247)
-> > [    9.449057] , pte=00200000910f9fc3
-> > [    9.451224] ---[ end trace 0000000000000000 ]---
-> >
-> > Links:
-> > ------
-> > - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/log
-> > - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/details/
-> > - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241125/testrun/26040307/suite/boot/test/korg-clang-19-lkftconfig-hardening/history/
-> > - https://lkft.validation.linaro.org/scheduler/job/8004888#L2200
-> > - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/
-> >
-> > Build image:
-> > -----------
-> > - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/
-> >
-> > Steps to reproduce:
-> > ------------
-> > - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/reproducer
-> > - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/tux_plan
-> >
-> > metadata:
-> > ----
+On Mon, Nov 25, 2024 at 07:34:22PM +0530, Naresh Kamboju wrote:
+> The arm TI x15 board boot has failed with the Linux next, mainline
+> and the Linux stable. Please find boot log and build links.
 > 
-> git repo:  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> git sha: 85a2dd7d7c8152cb125712a1ecae1d0a6ccac250
+> The boot failed with clang tool chain and PASS with gcc-13.
 > 
-> > kernel config:
-> > https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/config
-> > build url: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pKKSWo1tVldooGuq0fBz0nRD07/
-> > toolchain: clang-19 and clang-nightly
-> > config:  korg-clang-19-lkftconfig-hardening
-> > arch: arm64
-> >
-> > --
-> > Linaro LKFT
-> > https://lkft.linaro.org
+> Device: TI x15 device
+> Boot pass: gcc-13
+
+Are the UBSAN options getting enabled with GCC as well? I am somewhat
+surprised that they are not agreeing here, unless this is a __counted_by
+related issue? Does this not happen with GCC 14 as well? It would be
+nice if we could get a copy of GCC 15 with __counted_by into TuxMake for
+validation of __counted_by between the two compilers easily. I did not
+see any obvious instances of __counted_by in edma_probe() but
+admittedly, I did not look too hard.
+
+> Boot failed: clang-19
+> Configs: korg-clang-19-lkftconfig-hardening
+> Boot pass: qemu-armv7 (Additional info)
 > 
-> - Naresh
+> This is always reproducible.
 > 
+> x15 beagleboard:
+>   boot:
+>     * clang-nightly-lkftconfig-hardening
+>     * korg-clang-19-lkftconfig-hardening
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Log details:
+> ------------
+> [    0.000000] Booting Linux on physical CPU 0x0
+> [    0.000000] Linux version 6.12.0 (tuxmake@tuxmake) (ClangBuiltLinux
+> clang version 19.1.4 (https://github.com/llvm/llvm-project.git
+> aadaa00de76ed0c4987b97450dd638f63a385bed), ClangBuiltLinux LLD 19.1.4
+> (https://github.com/llvm/llvm-project.git
+> aadaa00de76ed0c4987b97450dd638f63a385bed)) #1 SMP @1732428891
+> [    0.000000] CPU: ARMv7 Processor [412fc0f2] revision 2 (ARMv7), cr=30c5387d
+> <>
+> [    3.543395] pcieport 0000:00:00.0: PME: Signaling with IRQ 136
+> [    3.556976] Internal error: Oops - undefined instruction: 0 [#1] SMP ARM
+
+Can you turn off UBSAN_TRAP and see if that gives us any indication as
+to where exactly UBSAN_BOUNDS is triggering here? It is not entirely
+clear because we do not seem to have a line number in edma.c from
+decoding the stacktrace.
+
+> [    3.563720] Modules linked in:
+> [    3.566802] CPU: 1 UID: 0 PID: 41 Comm: kworker/u10:2 Not tainted 6.12.0 #1
+> [    3.573822] Hardware name: Generic DRA74X (Flattened Device Tree)
+> [    3.579956] Workqueue: events_unbound deferred_probe_work_func
+> [    3.585815] PC is at edma_probe (drivers/dma/ti/edma.c:0)
+> [    3.590026] LR is at devm_kmalloc (drivers/base/devres.c:839)
+> [    3.594329] pc : lr : psr: 60000013
+> [    3.600616] sp : f00f5938  ip : 00070007  fp : efcd8728
+> [    3.605865] r10: c3cd2c10  r9 : c3c17a40  r8 : c3cd2c00
+> [    3.611145] r7 : 00000002  r6 : 00000000  r5 : 00000003  r4 : 00000001
+> [    3.617706] r3 : 00000001  r2 : 00000002  r1 : 00000002  r0 : c3ba8340
+> [    3.624267] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
+> [    3.631439] Control: 30c5387d  Table: 80203000  DAC: 55555555
+> [    3.637207] Register r0 information: slab kmalloc-rnd-01-128 start
+> c3ba8300 pointer offset 64 size 128
+> [    3.646575] Register r1 information: non-paged memory
+> [    3.651672] Register r2 information: non-paged memory
+> [    3.656768] Register r3 information: non-paged memory
+> [    3.661834] Register r4 information: non-paged memory
+> [    3.666931] Register r5 information: non-paged memory
+> [    3.671997] Register r6 information: NULL pointer
+> [    3.676727] Register r7 information: non-paged memory
+> [    3.681823] Register r8 information: slab kmalloc-rnd-06-1k start
+> c3cd2c00 pointer offset 0 size 1024
+> [    3.691101] Register r9 information: slab kmalloc-rnd-14-512 start
+> c3c17a00 pointer offset 64 size 512
+> [    3.700469] Register r10 information: slab kmalloc-rnd-06-1k start
+> c3cd2c00 pointer offset 16 size 1024
+> [    3.709960] Register r11 information: non-slab/vmalloc memory
+> [    3.715728] Register r12 information: non-paged memory
+> [    3.720886] Process kworker/u10:2 (pid: 41, stack limit = 0x0678741b)
+> [    3.727386] Stack: (0xf00f5938 to 0xf00f6000)
+> [    3.731750] 5920:
+>     00000001 c132a2a0
+> [    3.739990] 5940: c3cd2c10 c23d2304 c23d2304 efcd8728 00000001
+> c3d10fc0 c290fabc 00000000
+> [    3.748199] 5960: 00000001 00000000 c24d4c98 c1326cd4 c1d88d7d
+> c1d251f2 efcd8728 3f45655f
+> [    3.756408] 5980: c24d4c98 fc8f9ed5 f00f5a98 c1327924 ffffffff
+> c06fa4e0 00000000 00000000
+> [    3.764648] 59a0: 00000000 00000000 00000000 00000000 00000000
+> 00000000 00000000 42aa2a98
+> [    3.772857] 59c0: 42aa2a98 c3cd2c10 c23d2304 c23d2304 3f45655f
+> c24d4c98 fc8f9ed5 f00f5a98
+> [    3.781097] 59e0: 00000001 c0ddeafc c3cd2c10 c23d2304 00000000
+> c0ddb238 c3cd2c10 c23d2304
+> [    3.789306] 5a00: c24d4ca0 000000ab 00000001 c0dda2bc 60000013
+> efcd8728 c3cd2c10 c3cd2c10
+> [    3.797515] 5a20: c24d4ca0 000000ab c24d4c98 fc8f9ed5 00000001
+> c0ddaf48 c3cd2c10 c23d2304
+> [    3.805755] 5a40: f00f5a98 00000000 c28e1b00 c0ddae00 c0ddaccc
+> c0ddaccc 00000000 f00f5a68
+> [    3.813964] 5a60: 00000001 c0dd733c c28e1b6c c2e39038 c28e1b00
+> 42aa2a98 c3cd2c10 c3cd2c54
+> [    3.822204] 5a80: 00000000 00000001 00000000 c28e1b00 00000000
+> c0dda0d4 c3cd2c10 00000001
+> [    3.830413] 5aa0: 00000100 42aa2a98 c3cd2c10 c24d4c8c c28e1b00
+> c1a466d0 c3cd2c10 c0dd75a8
+> [    3.838653] 5ac0: c3cd2c10 c3cd3410 00000000 c3cd3410 c3cd2c10
+> efcd878c 00000001 c0dd2cbc
+> [    3.846862] 5ae0: 42aa2a98 00000000 00000000 00000000 c3cd2c00
+> efcd8728 c3cd2c10 efcd878c
+> [    3.855072] 5b00: 00000000 c13298d8 efcd8728 c3cd3410 c221d2a0
+> 00000000 00000000 efcd878c
+> [    3.863311] 5b20: c1843838 c1329b70 c2c10c10 c3cd3410 00000000
+> 00000000 00000000 00000000
+> [    3.871520] 5b40: 00000000 00000000 00000000 00000000 00000000
+> 00000000 42aa2a98 efcd8728
+> [    3.879760] 5b60: c221d2a0 c1843838 efcd842c 00000000 c3cd3410
+> 00000001 c24c3718 c1329dec
+> [    3.887969] 5b80: 00000001 c1cfa6f6 c3d11f40 efcd8590 f00f5be0
+> 00000001 00000000 c1cfa6f6
+> [    3.896179] 5ba0: c1dffe3e c0a2de8c 00000000 00000000 c1d88d7d
+> c3cd3410 c221d50c efcd842c
+> [    3.904418] 5bc0: 00000000 00000000 43300000 00000000 00100000
+> 00000000 00000200 00000000
+> [    3.912628] 5be0: 00000002 c1b14540 ff9e82f0 ff9e82f0 00000001
+> 00000001 00000001 00000000
+> [    3.920867] 5c00: 42aa2a98 c3cd3410 c230f244 c230f244 3f45655f
+> c24d4c98 fc8f9ed5 f00f5cd8
+> [    3.929077] 5c20: 00000001 c0ddeafc c3cd3410 c230f244 00000000
+> c0ddb238 c3cd3410 c230f244
+> [    3.937316] 5c40: c24d4ca0 000000ab 00000001 c0dda2bc 60000013
+> ffffffff c3cd3410 c3cd3410
+> [    3.945526] 5c60: c24d4ca0 000000ab c24d4c98 fc8f9ed5 00000001
+> c0ddaf48 c3cd3410 c230f244
+> [    3.953735] 5c80: f00f5cd8 00000000 c28e1b00 c0ddae00 c0ddaccc
+> c0ddaccc 00000000 f00f5ca8
+> [    3.961975] 5ca0: 00000001 c0dd733c c28e1b6c c3873938 c28e1b00
+> 42aa2a98 c3cd3410 c3cd3454
+> [    3.970184] 5cc0: 00000000 00000001 00000000 c28e1b00 c221d50c
+> c0dda0d4 c3cd3410 00000001
+> [    3.978424] 5ce0: 00000100 42aa2a98 c3cd3410 c24d4c8c c28e1b00
+> c1a466d0 c3cd3410 c0dd75a8
+> [    3.986633] 5d00: c3cd3410 c2c10c10 00000000 c2c10c10 c3cd3410
+> efcd8490 00000001 c0dd2cbc
+> [    3.994842] 5d20: 42aa2a98 00000000 00000000 00000000 c3cd3400
+> efcd842c c3cd3410 efcd8490
+> [    4.003082] 5d40: c221d50c c13298d8 efcd842c c2c10c10 c221d2a0
+> c221d50c 00000000 efcd8490
+> [    4.011291] 5d60: 00000000 c1329b70 00000000 c2c10c10 43300000
+> 00000000 43300003 00000000
+> [    4.019500] 5d80: ff9e8254 00000200 00000000 00000000 00000000
+> 00000000 42aa2a98 efcd842c
+> [    4.027740] 5da0: c221d2a0 00000000 efc76d7c 00000000 c2c10c10
+> 00000001 c291ab0d c1329dec
+> [    4.035949] 5dc0: 00000001 f00f5eb8 c2c10c10 efc76d7c c3a37d40
+> c2c10c00 c230f168 c221d2a0
+> [    4.044189] 5de0: f00f5eb8 c0a2d154 c2c10c10 c230f168 c230f168
+> 3f45655f c24d4c98 fc8f9ed5
+> [    4.052398] 5e00: c291ab0d c0ddeafc c2c10c10 c230f168 00000000
+> c0ddb238 c2c10c10 c230f168
+> [    4.060607] 5e20: c24d4ca0 00000001 c291ab0d c0dda2bc 60000013
+> efc76d7c c2c10c10 c2c10c10
+> [    4.068847] 5e40: c24d4ca0 00000001 c24d4c98 fc8f9ed5 c291ab0d
+> c0ddaf48 c2c10c10 c230f168
+> [    4.077056] 5e60: f00f5eb8 00000000 c28e1b00 c0ddae00 c0ddaccc
+> c0ddaccc 00000000 f00f5e88
+> [    4.085296] 5e80: c291ab0d c0dd733c c28e1b6c c38733b8 c28e1b00
+> 42aa2a98 c2c10c10 c2c10c54
+> [    4.093505] 5ea0: 00000000 00000001 00000000 c28e1b00 c291ab00
+> c0dda0d4 c2c10c10 00000001
+> [    4.101745] 5ec0: c291ab0d 42aa2a98 c2c10c10 c24d4c8c c28e1b00
+> c1a466d0 00000000 c0dd75a8
+> [    4.109954] 5ee0: c23fe4dc c2c10c10 c29106d4 c23fe4f8 00000000
+> 00000004 c291ab0d c0ddaa60
+> [    4.118164] 5f00: c29c0f80 c23fe500 c282e400 c291ab80 0000000a
+> c04783d4 f00f5f70 c1805e20
+> [    4.126403] 5f20: 00000000 00000002 42aa2a98 c29e1bc0 c29c0f98
+> c29c0fd0 c29c0fac c282e400
+> [    4.134613] 5f40: c29c0f80 c29c0fac c29e1bc0 c282e420 c246b274
+> 00000402 00000000 c047a89c
+> [    4.142852] 5f60: c29c4300 c047a5ec c29c0f80 00000040 c29e22a4
+> c29c4314 c29c4300 c047a5ec
+> [    4.151062] 5f80: c29c0f80 c29e1bc0 00000000 c04810d4 c29c1b40
+> c0480f9c 00000000 00000000
+> [    4.159271] 5fa0: 00000000 00000000 00000000 c040029c 00000000
+> 00000000 00000000 00000000
+> [    4.167510] 5fc0: 00000000 00000000 00000000 00000000 00000000
+> 00000000 00000000 00000000
+> [    4.175720] 5fe0: 00000000 00000000 00000000 00000000 00000013
+> 00000000 00000000 00000000
+> [    4.183959] Call trace:
+> [    4.183959] edma_probe from platform_probe (drivers/base/platform.c:1404)
+> [    4.191589] platform_probe from really_probe (drivers/base/dd.c:581
+> drivers/base/dd.c:658)
+> [    4.197021] really_probe from __driver_probe_device (drivers/base/dd.c:800)
+> [    4.202972] __driver_probe_device from driver_probe_device
+> (drivers/base/dd.c:830)
+> [    4.209564] driver_probe_device from __device_attach_driver
+> (drivers/base/dd.c:959)
+> [    4.216308] __device_attach_driver from bus_for_each_drv
+> (drivers/base/bus.c:459)
+> [    4.222778] bus_for_each_drv from __device_attach (drivers/base/dd.c:1030)
+> [    4.228576] __device_attach from bus_probe_device (drivers/base/bus.c:536)
+> [    4.234344] bus_probe_device from device_add (drivers/base/core.c:3679)
+> [    4.239807] device_add from of_platform_device_create_pdata
+> (drivers/of/platform.c:186)
+> [    4.246368] of_platform_device_create_pdata from
+> of_platform_bus_create (drivers/of/platform.c:381)
+> [    4.254150] of_platform_bus_create from of_platform_populate
+> (drivers/of/platform.c:469)
+> [    4.260833] of_platform_populate from sysc_probe (drivers/bus/ti-sysc.c:3269)
+> [    4.266601] sysc_probe from platform_probe (drivers/base/platform.c:1404)
+> [    4.271697] platform_probe from really_probe (drivers/base/dd.c:581
+> drivers/base/dd.c:658)
+> [    4.277130] really_probe from __driver_probe_device (drivers/base/dd.c:800)
+> [    4.283081] __driver_probe_device from driver_probe_device
+> (drivers/base/dd.c:830)
+> [    4.289672] driver_probe_device from __device_attach_driver
+> (drivers/base/dd.c:959)
+> [    4.296417] __device_attach_driver from bus_for_each_drv
+> (drivers/base/bus.c:459)
+> [    4.302886] bus_for_each_drv from __device_attach (drivers/base/dd.c:1030)
+> [    4.308685] __device_attach from bus_probe_device (drivers/base/bus.c:536)
+> [    4.314453] bus_probe_device from device_add (drivers/base/core.c:3679)
+> [    4.319915] device_add from of_platform_device_create_pdata
+> (drivers/of/platform.c:186)
+> [    4.326477] of_platform_device_create_pdata from
+> of_platform_bus_create (drivers/of/platform.c:381)
+> [    4.334259] of_platform_bus_create from of_platform_populate
+> (drivers/of/platform.c:469)
+> [    4.340911] of_platform_populate from simple_pm_bus_probe
+> (drivers/bus/simple-pm-bus.c:0)
+> [    4.347320] simple_pm_bus_probe from platform_probe
+> (drivers/base/platform.c:1404)
+> [    4.353179] platform_probe from really_probe (drivers/base/dd.c:581
+> drivers/base/dd.c:658)
+> [    4.358612] really_probe from __driver_probe_device (drivers/base/dd.c:800)
+> [    4.364593] __driver_probe_device from driver_probe_device
+> (drivers/base/dd.c:830)
+> [    4.371154] driver_probe_device from __device_attach_driver
+> (drivers/base/dd.c:959)
+> [    4.377899] __device_attach_driver from bus_for_each_drv
+> (drivers/base/bus.c:459)
+> [    4.384399] bus_for_each_drv from __device_attach (drivers/base/dd.c:1030)
+> [    4.390167] __device_attach from bus_probe_device (drivers/base/bus.c:536)
+> [    4.395965] bus_probe_device from deferred_probe_work_func
+> (drivers/base/dd.c:124)
+> [    4.402435] deferred_probe_work_func from process_scheduled_works
+> (include/linux/atomic/atomic-arch-fallback.h:457
+> include/linux/jump_label.h:261 include/trace/events/workqueue.h:110
+> kernel/workqueue.c:3234 kernel/workqueue.c:3310)
+> [    4.409729] process_scheduled_works from worker_thread
+> (include/linux/list.h:373 kernel/workqueue.c:946
+> kernel/workqueue.c:3392)
+> [    4.416015] worker_thread from kthread (kernel/kthread.c:391)
+> [    4.420928] kthread from ret_from_fork (arch/arm/kernel/entry-common.S:138)
+> [    4.425659] Exception stack(0xf00f5fb0 to 0xf00f5ff8)
+> [    4.430755] 5fa0:                                     00000000
+> 00000000 00000000 00000000
+> [    4.438964] 5fc0: 00000000 00000000 00000000 00000000 00000000
+> 00000000 00000000 00000000
+> [    4.447204] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [ 4.453857] Code: e3a03001 13540001 e5c03002 1a000006 (e7ffdefe)
+> All code
+> ========
+> 
+> Code starting with the faulting instruction
+> ===========================================
+> [    4.459960] ---[ end trace 0000000000000000 ]---
+> [    4.464630] note: kworker/u10:2[41] exited with irqs disabled
+> 
+> Links:
+> - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.12-9073-g9f16d5e6f220/testrun/26029148/suite/boot/test/korg-clang-19-lkftconfig-hardening/details/
+> - https://lkft.validation.linaro.org/scheduler/job/8004562#L2109
+> - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2pHgoZfhSxCBwwjm4YIlCiyWlfE
+> - https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/
+> 
+> Build image:
+> -----------
+> - https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/
+> 
+> metadata:
+> ----
+> Linux version: 6.12.0
+> git repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> kernel config:
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/config
+> build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2pHgnVqB6fC9d8asA1VUZJ0NRxT/
+> toolchain: clang-19 and clang-nightly
+> config:  korg-clang-19-lkftconfig-hardening
+> arch: TI x15
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
