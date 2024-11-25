@@ -1,139 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C522500CB;
-	Mon, 25 Nov 2024 16:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E451BBBC9
+	for <llvm@lists.linux.dev>; Mon, 25 Nov 2024 17:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732553076; cv=none; b=OyxLrIIALvloZyse+gh699bb0g9+2/JaIk6OpiZ0gCtFrseR0ouesoSRv/JFYZtD7KZPItbH3oHYRkvZeRXUk+8MKM2mgk+QkthNC3FzCcQfqGfcUKLPhXLwHE2oGU+/gjsItc9yPykCb42QkMHVuJToD2rkj/e8Esw4hq65oqw=
+	t=1732557593; cv=none; b=A1p6MHD8ZorJd8PkP7dqRQHFBmKh/hZAfrJEVFVjaSaqW2CI5KTx/QCE4K6QuQLqX7PuExan/Z0kVVutsBouo/MMOk56ZI7PKP4uZ7NNiH0KtGvpcY6HODjrXrGj51qrJK1HngK7SJQ11GReD65LFqgcf5D1h7P+V0lMY9FOa+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732553076; c=relaxed/simple;
-	bh=qGZQS7FcAB/UyIGtfCnfdxY4J+dkVBrjNgPot3Tg9UU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tjl3erPJUTOXnZC7RGdsq/Pt8NTPzJ2grXAqk9qSAzDWptLxCWW+MGsDP1Ax2OGySUhNtCB2cqvpgNzyhsaEsyPG+5SZ0lMQ2erqoGvHUqPcFxe36qbQ4kdp+SoEY9mE6yFQQNzQHQbzRcLAsWiYgaP5GOlj9WpYwWkTnkHKh48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AAMloT0p; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732557593; c=relaxed/simple;
+	bh=V5N4wSUZrBPuCZ/XKy+HU1S/9iyK0UN1290lQKfMNms=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=U3IWP6aIJ1Xjpoxa7kvIdayjHmhc/yDPUWjhnbLEKYC7B23PkDBiSl+rKoRARHlgMpsPYgVPZLPG9Ta9KId/mMgGMF8NYfpvuzoCGp2+VhZunMku6wLwadT2VqMTJeDM0JeIIbesIRthjh+8+Pt04tvJs7yd5LmsNHBfOpFaV8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=Vz/y+APZ; arc=none smtp.client-ip=193.238.174.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AAMloT0p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732553073; x=1764089073;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qGZQS7FcAB/UyIGtfCnfdxY4J+dkVBrjNgPot3Tg9UU=;
-  b=AAMloT0puq/vl6PK0+3ZzeCRzuSxCrKLkz7/ybvpt8Kcyn79JsgUQfCS
-   yJFa4r5we+vf0E2LrNhMq/VT+GSC763+GQYirUBYJfCYRkKVTeIZYAzyi
-   UVS0R290qjxP+246567PIRXFMH/PMeJzVbyeyaZUMV5A1qQZBK/u4Fgdn
-   4nDPiboFQAOHLRtvRF0gP3PhaE6PU6hvqUtEOzHmf5nNkiVl2U8QVEDKp
-   GZ1Ps4ookr0EqWbyJnM4MjnYN6JxQZR6xGI9dDjnb2/FBWOxz2mz970hg
-   MiZGURGmWUbi7na81z8+87BjJnQwyfb4mrUxYmDP3JsaswPWBa1TE7KpA
-   Q==;
-X-CSE-ConnectionGUID: 6bfri2JZQnK82FB+BZyVXQ==
-X-CSE-MsgGUID: LUZLsf/0Te6MnNJNHA36IA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11267"; a="32800242"
-X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
-   d="scan'208";a="32800242"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 08:44:29 -0800
-X-CSE-ConnectionGUID: qRb3L2/GQ/CikwDougXocg==
-X-CSE-MsgGUID: gLFjNOJaQL2e6gP9WmUCGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,183,1728975600"; 
-   d="scan'208";a="91221279"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 25 Nov 2024 08:44:28 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tFcCH-0006bt-12;
-	Mon, 25 Nov 2024 16:44:25 +0000
-Date: Tue, 26 Nov 2024 00:43:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haren Myneni <haren@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mpe@ellerman.id.au,
-	npiggin@gmail.com, maddy@linux.ibm.com, msuchanek@suse.de,
-	tyreld@linux.ibm.com, hbabu@us.ibm.com, haren@linux.ibm.com
-Subject: Re: [PATCH] powerpc/pseries: Add papr-platform-dump character driver
- for dump retrieval
-Message-ID: <202411260057.wrWAIl67-lkp@intel.com>
-References: <20241124052040.239813-1-haren@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="Vz/y+APZ"
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+	by mg.ssi.bg (Proxmox) with ESMTP id 7B99080CB0;
+	Mon, 25 Nov 2024 19:59:41 +0200 (EET)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+	by mg.ssi.bg (Proxmox) with ESMTPS;
+	Mon, 25 Nov 2024 19:59:40 +0200 (EET)
+Received: from ja.ssi.bg (unknown [213.16.62.126])
+	by ink.ssi.bg (Postfix) with ESMTPSA id 37359303248;
+	Mon, 25 Nov 2024 19:59:32 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
+	t=1732557574; bh=V5N4wSUZrBPuCZ/XKy+HU1S/9iyK0UN1290lQKfMNms=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=Vz/y+APZW/fp7aSEDdYfl2HL12Ly4g47GuG9/uZ/SjF4n62iUW75Tjpzj8PC0DwwR
+	 KcjpelfK5wYlaKZaIbK2BecBEjiMSKOgG00anIJR5J3r+prqsxqiDA1iasgVg+kfJw
+	 aBCV8gKnx5cEDFNNupYNs/xwB5yEWAPT3ilabObE=
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 4APHxJKD053777;
+	Mon, 25 Nov 2024 19:59:21 +0200
+Date: Mon, 25 Nov 2024 19:59:19 +0200 (EET)
+From: Julian Anastasov <ja@ssi.bg>
+To: Jinghao Jia <jinghao7@illinois.edu>
+cc: Simon Horman <horms@verge.net.au>, Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        kernel test robot <lkp@intel.com>, Ruowen Qin <ruqin@redhat.com>
+Subject: Re: [PATCH v3 net] ipvs: fix UB due to uninitialized stack access
+ in ip_vs_protocol_init()
+In-Reply-To: <20241123094256.28887-1-jinghao7@illinois.edu>
+Message-ID: <8b210ce9-19d8-eefd-fc86-febdc33394f6@ssi.bg>
+References: <20241123094256.28887-1-jinghao7@illinois.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241124052040.239813-1-haren@linux.ibm.com>
-
-Hi Haren,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes linus/master v6.12 next-20241125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Haren-Myneni/powerpc-pseries-Add-papr-platform-dump-character-driver-for-dump-retrieval/20241125-112816
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20241124052040.239813-1-haren%40linux.ibm.com
-patch subject: [PATCH] powerpc/pseries: Add papr-platform-dump character driver for dump retrieval
-config: powerpc64-randconfig-001-20241125 (https://download.01.org/0day-ci/archive/20241126/202411260057.wrWAIl67-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241126/202411260057.wrWAIl67-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411260057.wrWAIl67-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Function parameter or struct member 'dump_tag_hi' not described in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Function parameter or struct member 'dump_tag_lo' not described in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Function parameter or struct member 'sequence_hi' not described in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Function parameter or struct member 'sequence_lo' not described in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Function parameter or struct member 'bytes_ret_hi' not described in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Function parameter or struct member 'bytes_ret_lo' not described in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Excess struct member 'dump_tag' description in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Excess struct member 'sequence' description in 'ibm_platform_dump_params'
->> arch/powerpc/platforms/pseries/papr-platform-dump.c:51: warning: Excess struct member 'written' description in 'ibm_platform_dump_params'
+Content-Type: text/plain; charset=US-ASCII
 
 
-vim +51 arch/powerpc/platforms/pseries/papr-platform-dump.c
+	Hello,
 
-    25	
-    26	/**
-    27	 * struct ibm_platform_dump_params - Parameters (in and out) for
-    28	 *                                              ibm,platform-dump
-    29	 * @work_area:	In: work area buffer for results.
-    30	 * @buf_length:	In: work area buffer length in bytes
-    31	 * @dump_tag:	In: Dump_Tag representing an id of the dump being processed
-    32	 * @sequence:	In: Sequence number. Out: Next sequence number.
-    33	 * @written:	Out: Bytes written by ibm,platform-dump to @work_area.
-    34	 * @status:	Out: RTAS call status.
-    35	 * @list:	Maintain the list of dumps are in progress. Can retrieve
-    36	 *		multiple dumps with different dump IDs at the same time,
-    37	 *		but not with the same dump ID. This list is used to
-    38	 *		determine whether the dump for the same ID is in progress.
-    39	 */
-    40	struct ibm_platform_dump_params {
-    41		struct rtas_work_area	*work_area;
-    42		u32			buf_length;
-    43		u32			dump_tag_hi;
-    44		u32			dump_tag_lo;
-    45		u32			sequence_hi;
-    46		u32			sequence_lo;
-    47		u32			bytes_ret_hi;
-    48		u32			bytes_ret_lo;
-    49		s32			status;
-    50		struct list_head	list;
-  > 51	};
-    52	
+On Sat, 23 Nov 2024, Jinghao Jia wrote:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Under certain kernel configurations when building with Clang/LLVM, the
+> compiler does not generate a return or jump as the terminator
+> instruction for ip_vs_protocol_init(), triggering the following objtool
+> warning during build time:
+> 
+>   vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
+> 
+> At runtime, this either causes an oops when trying to load the ipvs
+> module or a boot-time panic if ipvs is built-in. This same issue has
+> been reported by the Intel kernel test robot previously.
+> 
+> Digging deeper into both LLVM and the kernel code reveals this to be a
+> undefined behavior problem. ip_vs_protocol_init() uses a on-stack buffer
+> of 64 chars to store the registered protocol names and leaves it
+> uninitialized after definition. The function calls strnlen() when
+> concatenating protocol names into the buffer. With CONFIG_FORTIFY_SOURCE
+> strnlen() performs an extra step to check whether the last byte of the
+> input char buffer is a null character (commit 3009f891bb9f ("fortify:
+> Allow strlen() and strnlen() to pass compile-time known lengths")).
+> This, together with possibly other configurations, cause the following
+> IR to be generated:
+> 
+>   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #5 section ".init.text" align 16 !kcfi_type !29 {
+>     %1 = alloca [64 x i8], align 16
+>     ...
+> 
+>   14:                                               ; preds = %11
+>     %15 = getelementptr inbounds i8, ptr %1, i64 63
+>     %16 = load i8, ptr %15, align 1
+>     %17 = tail call i1 @llvm.is.constant.i8(i8 %16)
+>     %18 = icmp eq i8 %16, 0
+>     %19 = select i1 %17, i1 %18, i1 false
+>     br i1 %19, label %20, label %23
+> 
+>   20:                                               ; preds = %14
+>     %21 = call i64 @strlen(ptr noundef nonnull dereferenceable(1) %1) #23
+>     ...
+> 
+>   23:                                               ; preds = %14, %11, %20
+>     %24 = call i64 @strnlen(ptr noundef nonnull dereferenceable(1) %1, i64 noundef 64) #24
+>     ...
+>   }
+> 
+> The above code calculates the address of the last char in the buffer
+> (value %15) and then loads from it (value %16). Because the buffer is
+> never initialized, the LLVM GVN pass marks value %16 as undefined:
+> 
+>   %13 = getelementptr inbounds i8, ptr %1, i64 63
+>   br i1 undef, label %14, label %17
+> 
+> This gives later passes (SCCP, in particular) more DCE opportunities by
+> propagating the undef value further, and eventually removes everything
+> after the load on the uninitialized stack location:
+> 
+>   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #0 section ".init.text" align 16 !kcfi_type !11 {
+>     %1 = alloca [64 x i8], align 16
+>     ...
+> 
+>   12:                                               ; preds = %11
+>     %13 = getelementptr inbounds i8, ptr %1, i64 63
+>     unreachable
+>   }
+> 
+> In this way, the generated native code will just fall through to the
+> next function, as LLVM does not generate any code for the unreachable IR
+> instruction and leaves the function without a terminator.
+> 
+> Zero the on-stack buffer to avoid this possible UB.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
+> Co-developed-by: Ruowen Qin <ruqin@redhat.com>
+> Signed-off-by: Ruowen Qin <ruqin@redhat.com>
+> Signed-off-by: Jinghao Jia <jinghao7@illinois.edu>
+
+	Looks good to me, thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
+> ---
+> Changelog:
+> v2 -> v3:
+> v2: https://lore.kernel.org/lkml/20241122045257.27452-1-jinghao7@illinois.edu/
+> * Fix changelog format based on Julian's feedback
+> 
+> v1 -> v2:
+> v1: https://lore.kernel.org/lkml/20241111065105.82431-1-jinghao7@illinois.edu/
+> * Fix small error in commit message
+> * Address Julian's feedback:
+>   * Make this patch target the net tree rather than net-next
+>   * Add a "Fixes" tag for the initial git commit
+> 
+>  net/netfilter/ipvs/ip_vs_proto.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/net/netfilter/ipvs/ip_vs_proto.c b/net/netfilter/ipvs/ip_vs_proto.c
+> index f100da4ba3bc..a9fd1d3fc2cb 100644
+> --- a/net/netfilter/ipvs/ip_vs_proto.c
+> +++ b/net/netfilter/ipvs/ip_vs_proto.c
+> @@ -340,7 +340,7 @@ void __net_exit ip_vs_protocol_net_cleanup(struct netns_ipvs *ipvs)
+>  
+>  int __init ip_vs_protocol_init(void)
+>  {
+> -	char protocols[64];
+> +	char protocols[64] = { 0 };
+>  #define REGISTER_PROTOCOL(p)			\
+>  	do {					\
+>  		register_ip_vs_protocol(p);	\
+> @@ -348,8 +348,6 @@ int __init ip_vs_protocol_init(void)
+>  		strcat(protocols, (p)->name);	\
+>  	} while (0)
+>  
+> -	protocols[0] = '\0';
+> -	protocols[2] = '\0';
+>  #ifdef CONFIG_IP_VS_PROTO_TCP
+>  	REGISTER_PROTOCOL(&ip_vs_protocol_tcp);
+>  #endif
+> -- 
+> 2.47.0
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
