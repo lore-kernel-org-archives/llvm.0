@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287CF1D7E42;
-	Tue, 26 Nov 2024 16:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243591D63F0;
+	Tue, 26 Nov 2024 17:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732640003; cv=none; b=WMRmrFG3F4mKUYLp+y1fSWTWDNyvTm84HthuCRxWMeNfzeZpIy05gg3t2WBYzw3MVe+ZtUDYUjXFaoh5i+T2Sq1seU32M5m2l802aiC+6dRAILRw17ByBoM/ufOFaQ+FxycM7s+f9pxkqWP2iR7DDkBai7K2MC0qkmo6xrEyQKs=
+	t=1732640671; cv=none; b=uDuj0LY9MUik4E/gcthXTyRyvmeqVxwguST3ZpjZmGduhq5/d7ueG8pn+NOFno69lu1WIXQ2CiUKu3lonpyYevubRspZKikXB6ftTVjkqWsmYeJbsdd+LYB73fXiKfK2Pi8QmwLhOmGYzhnoPYHUe0KuKGZAu1tl7SG95tH4jHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732640003; c=relaxed/simple;
-	bh=Pvyh1H6EaLf7PE7LGmr4JCJzNEj1wRxUDn/bAHmyEKU=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=P3T6OBQrlN7CrzXdOBJJzD+810TWFMcb2t56fXU6WGQbPTeSj+wbS1eGqpMeTQIJQRRM63i9LftdAc3KMKADkD9DSikRc6cfKZ/yPFIZQ/fDnYKjKzv4buLsn1gy8EDEltXh9jodX+LAf/aFChE3c1uA0wVYMOZfX+MUYyHJewE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cGyhRrmx; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1732640671; c=relaxed/simple;
+	bh=XlJogXeU96y9CA9wNIBfV10zwsqOVWg3NuHbNQ6xAQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tEKxw9MjWd+mAF0vRoV+KTMgjE2lgBWRAcMpA1Wrw3TD8JxhfBq4R8ap6Mv12LK3tZajKAuK3wTZyYcIq6K3xYt9N/p8bmnDSDr21ZV5Vckn8jdK92EWfjQMlmGmJJ/QPKWdZ6UU2wL9f/MU2Zl8UGTBiN0yOyXMF6iMLb8Sf9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k7BFk2IH; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cGyhRrmx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k7BFk2IH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732640001; x=1764176001;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Pvyh1H6EaLf7PE7LGmr4JCJzNEj1wRxUDn/bAHmyEKU=;
-  b=cGyhRrmxaZsq3Umsy6UDYR1W38CC98VNzG+W6e23DeRe06dXn59cN5WQ
-   FYnZ7kM7M4oAqLvB+kEbLkX3nWy3FIWy1ceYVK2bpwRUHw7e7iSAHdVXC
-   J3ZMjbVmjC9y3xoxeuKi5sMzvC7haINgL//knZjq0nuYdkETUttYYPhsn
-   +uYMARC65DGR23x/MANC3K03gD2vcc+0AV0KLr0ofLy01XOzXpjYIot8a
-   OfVwMYE5C2GRIF3+prNsanH3Y3PVbxzLZ638TzhM30yVBI50tzQDGx/fK
-   NaAyg3b6ltiyEF9xQVfjJD+oYAw1SKXOV+sva5I9rj2YJNJF2J3Gm75ed
-   A==;
-X-CSE-ConnectionGUID: 6qH+i5rTSCGgIlhqhYO8XA==
-X-CSE-MsgGUID: QE2DNfnLSpCkPXm1gsj6PA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11268"; a="50218659"
+  t=1732640669; x=1764176669;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XlJogXeU96y9CA9wNIBfV10zwsqOVWg3NuHbNQ6xAQ0=;
+  b=k7BFk2IHQwuAv7PrJhc5flXpWp2sr3hhayK6FhgnXstBAi4DPOKNfGV3
+   manIxQdhq7+fsTE4sRg8QQlH4V5GZks8Ev11ZU318V85MeUcA2JFzJoDK
+   hQSIORnL/wjra6Qgz7+TjScyGMFBvOebaNruEnr3SrP1evzRk3k2gqFxy
+   4bqDbWuCLrhXprI01kgtT5Xy9Lh38Bc5G72GvvsBjlxcmaOOWsSsNW8y/
+   Xd2D1CR2/rTRU3dHMW/AqZx2FWcx+ixF4/qCPYrL70qGfIwJyNM4PWXaa
+   ZCL9o61dNcTQJUDeH5C7LPa9R6xL0+NRmMHVSqZpDqqy23++4NBq1u4zN
+   w==;
+X-CSE-ConnectionGUID: 60y8S2vSQkGokNSAHef8Sg==
+X-CSE-MsgGUID: pe+JoS6DRR+f6i2/Xuyl4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11268"; a="32763251"
 X-IronPort-AV: E=Sophos;i="6.12,186,1728975600"; 
-   d="scan'208";a="50218659"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2024 08:53:21 -0800
-X-CSE-ConnectionGUID: aBhHRwF8RQS4DC5dWINKJQ==
-X-CSE-MsgGUID: EDDbNNNqQeyAa3YCp7vApg==
+   d="scan'208";a="32763251"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2024 09:04:28 -0800
+X-CSE-ConnectionGUID: jL54A7ohRRCo5p38704s5Q==
+X-CSE-MsgGUID: TgZizWsHR1GIrLTRC0jP9g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="96726535"
+X-IronPort-AV: E=Sophos;i="6.12,186,1728975600"; 
+   d="scan'208";a="96104575"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 26 Nov 2024 08:53:20 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 26 Nov 2024 09:04:27 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tFyoP-0007QL-1Y;
-	Tue, 26 Nov 2024 16:53:17 +0000
-Date: Wed, 27 Nov 2024 00:53:13 +0800
+	id 1tFyzB-0007Qt-1V;
+	Tue, 26 Nov 2024 17:04:25 +0000
+Date: Wed, 27 Nov 2024 01:03:29 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [peterz-queue:objtool/core 4/12]
- drivers/pci/hotplug/cpcihp_generic.o: warning: objtool:
- .discard.annotate_insn: dodgy linker, sh_entsize != 8
-Message-ID: <202411270035.DZwKG9aA-lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dwmw2:kexec-debug 2/21] ld.lld: error: undefined symbol:
+ saved_context_gdt_desc
+Message-ID: <202411270006.ZyyzpYf8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,77 +62,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Peter Zijlstra <peterz@infradead.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git objtool/core
-head:   cd9921a0bc2a79a77a7e1f03f84491760d88b6a8
-commit: 066bfe2dc3d6859fc66929c81b49f218f90110b4 [4/12] objtool: Convert ANNOTATE_RETPOLINE_SAFE to ANNOTATE
-config: x86_64-randconfig-011-20241126 (https://download.01.org/0day-ci/archive/20241127/202411270035.DZwKG9aA-lkp@intel.com/config)
+tree:   git://git.infradead.org/users/dwmw2/linux kexec-debug
+head:   605ee978620415b08606653176ef0db89211f3fa
+commit: 94f97b1bb453b5c445f0ef1d21a32b130256cbeb [2/21] x86/kexec: Restore GDT on return from preserve_context kexec
+config: x86_64-buildonly-randconfig-005-20241126 (https://download.01.org/0day-ci/archive/20241127/202411270006.ZyyzpYf8-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241127/202411270035.DZwKG9aA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241127/202411270006.ZyyzpYf8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411270035.DZwKG9aA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411270006.ZyyzpYf8-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/pci/hotplug/cpcihp_generic.c:21:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/pci/hotplug/cpcihp_generic.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/hwmon/nct6683.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/hwmon/smsc47m1.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/hwmon/smsc47b397.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/hwmon/lenovo-ec-sensors.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/hwmon/abituguru3.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/input/serio/ct82c710.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from drivers/i2c/busses/i2c-nforce2.c:38:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/i2c/busses/i2c-nforce2.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from drivers/i2c/busses/i2c-ali15x3.c:50:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/i2c/busses/i2c-ali15x3.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from drivers/i2c/busses/i2c-i801.c:102:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/i2c/busses/i2c-i801.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+>> ld.lld: error: undefined symbol: saved_context_gdt_desc
+   >>> referenced by arch/x86/kernel/relocate_kernel_64.o:(virtual_mapped) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
