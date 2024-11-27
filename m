@@ -1,86 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EA5201002;
-	Wed, 27 Nov 2024 16:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72F51FF7D5
+	for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 16:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732726375; cv=none; b=JOmdvUZBOXsrdxV/P+8NrVBzz9WMKJADBl3ReYIXIJojJRQm3dfD/jg3akvpxH+oqnK6lyODmYNo7PVXINl6QcpDsAGMVO/CkTnGqW/n0/CZ+W69r1HKd7SM/AEPVo98jYAxS/rRmZ8gIckba4T8D8+9+0DsW/sXlpt9eBhhn40=
+	t=1732726534; cv=none; b=F6JeC7fSvFcfYzMUEjKEEvEJXiCK3lWOXjRj1wdAKRlloIOQ2/FUt5hnhc97mQlKxIOEpRJZdkWv2SEaZCcGkXB4tYHcrdWFLdeEE92i9TLUDyQ75koZiX8Rw/MTMhpfnPRnB2596WEi6JB0FUGAXY78dRsl1SsvUWTEsVD/7/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732726375; c=relaxed/simple;
-	bh=pQFFJkVDgwGGcNT3jNePQjm/pQxkmLBBuFzPz74TwaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aFyzB7pPDltRyHPaTYBgZDkzzJ7LhAUoIKuuBhZcxSxH5va3vvLW/W9eKIrIKe5mkTlQOJ0hrVdMY/Ibw7IFu9iVG3bGdfYS0UhTJSMDPj94ArwGLRHnTC5iVKQoEANYsD88Z0RWb7Fc/3YuAuhq71ZmFeeNdWNcW0uUhP+TjwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePXK54qV; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732726534; c=relaxed/simple;
+	bh=Sw/lC3wbc7lK5AOa4tshnDQwwuGg4F54NnCQVifJxTA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BZbLMaTiOjMidcijebvqzHU2UmY+HxltFDAJZy6Qoir1I2etQo9JRy7Whn3nHsiIOumsWqPo2WcMIzn6WIUPB0Ix0a2l4Y5unlZ//LcJUvvURzu1UHgXEpR3U/4eqhbb4vxgc/laPLr8Dq0jsVanAFOX30qbZYQVtndv0LDMApE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L2k8a+qD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePXK54qV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732726374; x=1764262374;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pQFFJkVDgwGGcNT3jNePQjm/pQxkmLBBuFzPz74TwaQ=;
-  b=ePXK54qVKsGDwiZdKHolkH8bf55CZxZC53ZpHJruuJMi/mlisteSVWhe
-   zM85HZeaXqsNhtktUTT7/TYd4yX9id1b0QPhJ+OSMDK5G8RrOJePIk5pX
-   n5K33zsko1J/gqVeJc0OLpOblGAMn7TL+QOmC3yRYXGqFNsO3ByKi7+Pw
-   05zazCHoG75X4tYl+3yGmvScin9fLeA0CQX7xMxPtC7gEiKoqmZVq01YK
-   dTEOef2gJC8hB56u2ImIZFZam4pyGlSL4+MIgmjZu8N1b8Go3ipFN9yNy
-   jB1+qBaQ1cpJmtEhs+KE7Ye5sO9g8RfQP//NkCaDceG06cxS7C1KNgRQp
-   w==;
-X-CSE-ConnectionGUID: GVEYNmCHR9CLbRVHixJMYQ==
-X-CSE-MsgGUID: cej6EbLyTA6FYR+7UbnJjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="44319680"
-X-IronPort-AV: E=Sophos;i="6.12,189,1728975600"; 
-   d="scan'208";a="44319680"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 08:52:51 -0800
-X-CSE-ConnectionGUID: Vw/1rTUZSwuiQ8dZJqr4jg==
-X-CSE-MsgGUID: 2y2bsZxOSkiXBzzqNQcsSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,189,1728975600"; 
-   d="scan'208";a="96750875"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 27 Nov 2024 08:52:49 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tGLHT-0008Aq-1B;
-	Wed, 27 Nov 2024 16:52:47 +0000
-Date: Thu, 28 Nov 2024 00:52:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marcelo Dalmas <marcelo.dalmas@ge.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [tip:timers/urgent 1/1] ld.lld: error: undefined symbol: __divdi3
-Message-ID: <202411280005.IVzoUqkP-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L2k8a+qD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732726531;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ElG/i+aYGl7GQLJ2l091Zzj1HQkN8C9gntVQhHWTBzI=;
+	b=L2k8a+qD9I2leAzq/LuysQHMZeCkIbfkaRfQQyFhdNmO0B8YkqnA/bHJHCQsNCPfClRa0c
+	NcS2NaT8Z+9XA8HeGPlbO/2EmE+XXXemCzUSjfLSZzISzJ/D3h1jhHGG1sVaxa3aNsN4rO
+	jGux3SH5hFAsdcHiOoG79OLPYctwt1I=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-615--d_R0ZkaN_aN8EpGvgbVeg-1; Wed,
+ 27 Nov 2024 11:55:26 -0500
+X-MC-Unique: -d_R0ZkaN_aN8EpGvgbVeg-1
+X-Mimecast-MFC-AGG-ID: -d_R0ZkaN_aN8EpGvgbVeg
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E97891955EA2;
+	Wed, 27 Nov 2024 16:55:23 +0000 (UTC)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.193.244])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 12072300019E;
+	Wed, 27 Nov 2024 16:55:17 +0000 (UTC)
+From: Valentin Schneider <vschneid@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: [PATCH] sched/fair: Remove CONFIG_CFS_BANDWIDTH=n definition of cfs_bandwidth_used()
+Date: Wed, 27 Nov 2024 17:55:01 +0100
+Message-ID: <20241127165501.160004-1-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
-head:   299130166e70124956c865a66a3669a61db1c212
-commit: 299130166e70124956c865a66a3669a61db1c212 [1/1] ntp: Remove invalid cast in time offset math
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20241128/202411280005.IVzoUqkP-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411280005.IVzoUqkP-lkp@intel.com/reproduce)
+Andy reported that clang gets upset with CONFIG_CFS_BANDWIDTH=n:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411280005.IVzoUqkP-lkp@intel.com/
+  kernel/sched/fair.c:6580:20: error: unused function 'cfs_bandwidth_used' [-Werror,-Wunused-function]
+   6580 | static inline bool cfs_bandwidth_used(void)
+	|                    ^~~~~~~~~~~~~~~~~~
 
-All errors (new ones prefixed by >>):
+Indeed, cfs_bandwidth_used() is only used within functions defined under
+CONFIG_CFS_BANDWIDTH=y. Remove its CONFIG_CFS_BANDWIDTH=n declaration &
+definition.
 
->> ld.lld: error: undefined symbol: __divdi3
-   >>> referenced by ntp.c
-   >>>               kernel/time/ntp.o:(__do_adjtimex) in archive vmlinux.a
+Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Link: http://lore.kernel.org/r/20240905171210.267626-1-andriy.shevchenko@linux.intel.com
+---
+ kernel/sched/fair.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 3356315d7e641..55e0a32d2027f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5373,8 +5373,6 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+ static inline int cfs_rq_throttled(struct cfs_rq *cfs_rq);
+ 
+-static inline bool cfs_bandwidth_used(void);
+-
+ static void
+ requeue_delayed_entity(struct sched_entity *se);
+ 
+@@ -6747,11 +6745,6 @@ static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
+ 
+ #else /* CONFIG_CFS_BANDWIDTH */
+ 
+-static inline bool cfs_bandwidth_used(void)
+-{
+-	return false;
+-}
+-
+ static void account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec) {}
+ static bool check_cfs_rq_runtime(struct cfs_rq *cfs_rq) { return false; }
+ static void check_enqueue_throttle(struct cfs_rq *cfs_rq) {}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
