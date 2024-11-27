@@ -1,192 +1,99 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB15E201015
-	for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 17:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C90819
+	for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 17:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732728596; cv=none; b=P3ObGKVgaLNVnizkQELUveW15ylqTyl8VBAf+blzK7LvSCYtzL3owZN/0LA+tP3GXU2kZC3+JITUVh7zodB7UG0QVynKMfTBDTVttvswh0gV5LtI6G8mneABvTum689ECLTESsPtISgwNDdRd0sX2OpQDpmRxjIgoE8a1bumbBo=
+	t=1732729554; cv=none; b=b5LEkHFcOahBUHZlYt3iKedrGjUmA/yfQuYHzH9zPfNZL+UNgOvPoKdJaiEPbPcUyR8RQNqqIPzcparT1iJprSEvR2fTFFzKXzwlDOoB6+PQ0PC4VRUoQeaMxc35ofaJmjND55LRAWdrVGoxN1f1nDxGH6Ni0TWpxs8Tlotry/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732728596; c=relaxed/simple;
-	bh=bpMqPVQ3HsfWe+bk5gds1iHBJEE9VMgZp3CPDFR8+go=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KjlYuXVtdnzT8neAczl5XtWXXemLXrtgbXmvDmuE+bqVLdm7WW9sBMaUrXNQt30Zr/Xu9oPy5tsvMeGjr0zh0L6aqp8hvs7bK/G7ahcF+4o7L9nrL3p0lO5XGiMTI7dIjn9Xz9DhK3JqEQhNiHiuXxZGOYtJyKBj8SmHaPP2AB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSIxg6HV; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1732729554; c=relaxed/simple;
+	bh=8OfaUvJ9o9eIT//2viRH5VonqIyT8g3R4krV9Hm2+Q4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U8fiKsl9NfMDr/E/NkwJoZgPwTGxptNpcvqana6BhTqtCFn5dAwC3/Stb2ngVQ5EIXIC+TI5Pz+ZLWVPsG8OEaE7jBkCLURRG++7Bndu/aKC2uacyXQggfRjY3g1lOUUBDiQegCTqOqfeNOTTIpkc1gVjVriOsEE8doOuWIhO4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EiiT8GOt; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSIxg6HV"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-724f74d6457so47988b3a.0
-        for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 09:29:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EiiT8GOt"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9f1d76dab1so1159330766b.0
+        for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 09:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732728594; x=1733333394; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1732729551; x=1733334351; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VhqF3E4/w+YtOL58NNfG2rcUNmjyen3grJ9NA1x6juQ=;
-        b=iSIxg6HVvxOciQav9lbp4dsOvb3wnUFQe5S5/OI7j9egkV+JAxGFKcBCBVDjOziDn+
-         ItYfOyDcwkYfhn/I5blDZy2e3pJ2OPCIO0gUmmoY0ud4S9vRigZoY6sBUaieC6ptGfid
-         HtD3Zz7mBBHM9igCw57NgHANAIqk1EcXW/t4Ybl1Er8gwtyub2Q3hl6haZ8ML7haRXd4
-         fFYwg72+vPqkZk9E//t1sLvFZmBYKPkTFc3acnE4Q9DOYq2FqKQITMy3cIjiYc/j0mWN
-         DGvR4LXvgfkIHzfmNuDzcNaPzDikguZXZSwRq+ILpLGFzhCBtRiogRpcylnsAer7oIL6
-         9A5A==
+        bh=+GM1k7e/CGPkjphrw4jyDzxyswsZTnM5h4OmjO0f7EY=;
+        b=EiiT8GOtDRVZnhu9JGcbejecY8/1dQBZFGocHLiD81o8OmBAZoNNASC6wE0okJ85g6
+         AOe6+U6Bw+6viu3fKbYinp/zPAzXkS8LkxeBZGPIbImd0im3UNJkwKTQPMRMG7VzWQaf
+         X3TKjjs+wLwlCtz31FHg3x1haIPBVFj02Gj1+aGa/E794HH8zFppEjTRtw9E/olQz0h1
+         +rdNsr3nqmZePBwa+0s1VKvy7fq2d9s2u0HRivY47SHjipraCKh3lc/Q/vp2yqAzxKAt
+         Ix3fBzOAsBGOxWLnhKxK0KO1MdyE3BqM69a4gErwoFf9brmqCoRXe0lgNEwUaz9KTK1L
+         MRoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732728594; x=1733333394;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1732729551; x=1733334351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VhqF3E4/w+YtOL58NNfG2rcUNmjyen3grJ9NA1x6juQ=;
-        b=EoUZ65ihe1S+CtCMIJvkjkUd5DZ9/x1VHWvmzaRPoRxttd8dc5oUNRvrFY/XLKOf5I
-         cNUem9rs7HSK8w8pXBW2Yw6924QmE3d0CE/UBIJxQiuuEUqKQqp2Ny2q6pLFsy1HJuB3
-         5nAYIvJKbTsv5lxpE903Am1OcCLAF5aQGxg14X/eNDycd12qUTCkg8ffSpvOYIOVhzHG
-         O+rJLuvfgftAtYne3ia9T6UvIClUgYCn4uHWcCxvo1Fe1NAW9779zErIz8SC95r7gEoY
-         M4NJCVVIE00BlaLzbdoO8b6d3XLJnrmFfxds1k1qZRV939xx1yLl5Gm6KT2UwxMxrRCS
-         AXtg==
-X-Forwarded-Encrypted: i=1; AJvYcCVEbmLQezOwl4DSvjCFYUYdpYN4Dy3Yb2LmXQ1tew6tBkUBRAOrSvmXWWAnWlWbJ6SSfFsU@lists.linux.dev
-X-Gm-Message-State: AOJu0YwTPsViIOQ9nPfwIp0cjM1A4lv9ENfO59ducdwj6lEtVBdv2fb2
-	dhR+4hsaMKXg5rB0rc8QAaB17Q2Amh78h1QnifRewbNJfSprKXYm
-X-Gm-Gg: ASbGnctzpwZ8tGk01VNPByUkfui7utax0yZkbyhLEXQdt3a7ime/goRQNzK3gAOnbj/
-	wOeBh6bXT5e7Q4N/YV/kogWE8DPUozwBWJCQk3UW6AIYsSa1b11On1TB6jyHleVPo0N7NfHlIv4
-	2iBw/kM9Fpfr5AfnjiQ5JSAod6aPqYfb/LqkkjouEABHZmid/KH2R/56mxd0UTC2Koowi1hYWgQ
-	vNa8YkMBEGwlzpIejcPQi0LOIHi3nWnriKxC8NbAP1tjPExT/BsMAF5xzqh/r39DT05S1oOF4Yk
-	+a2ZZ74yq/Hn7ozm0WfgG7BYoCnD
-X-Google-Smtp-Source: AGHT+IHe4vfUFn689BzH733Y3azaB4OQQfGNQ2U5d2DUk6y3aLJvqA63KG7l5W6jxcEPLUbmlo8oFg==
-X-Received: by 2002:a05:6a00:3c89:b0:724:eac3:576a with SMTP id d2e1a72fcca58-725301a5b92mr5270747b3a.25.1732728594123;
-        Wed, 27 Nov 2024 09:29:54 -0800 (PST)
-Received: from localhost.localdomain (1-171-29-17.dynamic-ip.hinet.net. [1.171.29.17])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbcc1e3fdbsm9359582a12.30.2024.11.27.09.29.50
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 27 Nov 2024 09:29:53 -0800 (PST)
-From: Andy Chiu <andybnac@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev,
-	bjorn@rivosinc.com,
-	puranjay12@gmail.com,
-	alexghiti@rivosinc.com,
-	yongxuan.wang@sifive.com,
-	greentime.hu@sifive.com,
-	nick.hu@sifive.com,
-	nylon.chen@sifive.com,
-	tommy.wu@sifive.com,
-	eric.lin@sifive.com,
-	viccent.chen@sifive.com,
-	zong.li@sifive.com,
-	samuel.holland@sifive.com
-Subject: [PATCH v3 1/7] riscv: ftrace: support fastcc in Clang for WITH_ARGS
-Date: Thu, 28 Nov 2024 01:29:02 +0800
-Message-Id: <20241127172908.17149-2-andybnac@gmail.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-145)
-In-Reply-To: <20241127172908.17149-1-andybnac@gmail.com>
-References: <20241127172908.17149-1-andybnac@gmail.com>
+        bh=+GM1k7e/CGPkjphrw4jyDzxyswsZTnM5h4OmjO0f7EY=;
+        b=e9bGh8fJf4ql8awX4yG8cKSmCBj7JZTbW2+e1YZRCKmeJKfWKEJUGkESit/dQ5k+7U
+         k2/2ty3ruhXVg2XyfoePeyqaZMnEVMbseHWH30vs51uaWYmXUQTT7OuANZjcrWKa4A74
+         LqUBCligpa94njrR/23BdxBsxDFZmmOjXbmfG1rsI8//DJSVBnKmHr95vEmaGmp7RFEM
+         aI6Le7+TZ9Z6N6lehCDT+mBeDQLTs5/XMkSUmToX41divIt/lhzrx7mTHjxwpYul0Snx
+         BlkzWbZ9Iso+v5e+7Ac4k/HpH8hnZ9UZZslBboXyIoycGgx43e/k6DYf4tBA0sS5jgHk
+         A32w==
+X-Forwarded-Encrypted: i=1; AJvYcCXaQxr1J8uoN9iCgpe4Gab1JRnB43KPVIYPYH2zZbF0vQwtQaiDH6J4sfgWnzZXL/T9/GsE@lists.linux.dev
+X-Gm-Message-State: AOJu0YzhxRmi3MO9fT1c8dMH73cynTiKYivxHxSHLUG3rdl+54xKQO+z
+	zt76wUqfN3jnz/0l4KG3Mb9Am7tJStaRwWWb74ZlHhrJnJKe/zno0h01wfHdvOpkEWVH/BHiQqm
+	OFvRbWCkqsHtWsnP7nhtgzF9Ufz0=
+X-Gm-Gg: ASbGnctI8Ys/ZOteBMr5bn8hYDL3DNz8e2XbhOMMMGCeduAvKB8n87qrdCYLuZ4scRs
+	osS6alk1O0GFlzQhjhsQ+8v9y8In5zj4=
+X-Google-Smtp-Source: AGHT+IEU+8rlp9swAa8yRpNgrrvRbJDFo5WKcO/NokGdy7on0sT9HWVZf7T7pR+rv2OwOGDtoxYZO5X/CiiVRTRc7B4=
+X-Received: by 2002:a17:907:2cc9:b0:aa5:49a4:9189 with SMTP id
+ a640c23a62f3a-aa580f5753emr388982866b.33.1732729550833; Wed, 27 Nov 2024
+ 09:45:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241127165501.160004-1-vschneid@redhat.com>
+In-Reply-To: <20241127165501.160004-1-vschneid@redhat.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 27 Nov 2024 19:45:13 +0200
+Message-ID: <CAHp75Vd2T0-k-RuVK37zmEzWPAnWAhpRN2cBANvg=ENT0_oGFg@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Remove CONFIG_CFS_BANDWIDTH=n definition of cfs_bandwidth_used()
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Andy Chiu <andy.chiu@sifive.com>
+On Wed, Nov 27, 2024 at 6:55=E2=80=AFPM Valentin Schneider <vschneid@redhat=
+.com> wrote:
+>
+> Andy reported that clang gets upset with CONFIG_CFS_BANDWIDTH=3Dn:
+>
+>   kernel/sched/fair.c:6580:20: error: unused function 'cfs_bandwidth_used=
+' [-Werror,-Wunused-function]
+>    6580 | static inline bool cfs_bandwidth_used(void)
+>         |                    ^~~~~~~~~~~~~~~~~~
+>
+> Indeed, cfs_bandwidth_used() is only used within functions defined under
+> CONFIG_CFS_BANDWIDTH=3Dy. Remove its CONFIG_CFS_BANDWIDTH=3Dn declaration=
+ &
+> definition.
 
-Some caller-saved registers which are not defined as function arguments
-in the ABI can still be passed as arguments when the kernel is compiled
-with Clang. As a result, we must save and restore those registers to
-prevent ftrace from clobbering them.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-- [1]: https://reviews.llvm.org/D68559
+Thank you for fixing this issue!
 
-Reported-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-Closes: https://lore.kernel.org/linux-riscv/7e7c7914-445d-426d-89a0-59a9199c45b1@yadro.com/
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
----
- arch/riscv/include/asm/ftrace.h |  7 +++++++
- arch/riscv/kernel/asm-offsets.c |  7 +++++++
- arch/riscv/kernel/mcount-dyn.S  | 16 ++++++++++++++--
- 3 files changed, 28 insertions(+), 2 deletions(-)
-
-diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
-index 2cddd79ff21b..4ca7ce7f34d7 100644
---- a/arch/riscv/include/asm/ftrace.h
-+++ b/arch/riscv/include/asm/ftrace.h
-@@ -143,6 +143,13 @@ struct ftrace_regs {
- 			unsigned long a5;
- 			unsigned long a6;
- 			unsigned long a7;
-+#ifdef CONFIG_CC_IS_CLANG
-+			unsigned long t2;
-+			unsigned long t3;
-+			unsigned long t4;
-+			unsigned long t5;
-+			unsigned long t6;
-+#endif
- 		};
- 	};
- };
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index e94180ba432f..59789dfb2d5d 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -504,6 +504,13 @@ void asm_offsets(void)
- 	DEFINE(FREGS_SP,	    offsetof(struct ftrace_regs, sp));
- 	DEFINE(FREGS_S0,	    offsetof(struct ftrace_regs, s0));
- 	DEFINE(FREGS_T1,	    offsetof(struct ftrace_regs, t1));
-+#ifdef CONFIG_CC_IS_CLANG
-+	DEFINE(FREGS_T2,	    offsetof(struct ftrace_regs, t2));
-+	DEFINE(FREGS_T3,	    offsetof(struct ftrace_regs, t3));
-+	DEFINE(FREGS_T4,	    offsetof(struct ftrace_regs, t4));
-+	DEFINE(FREGS_T5,	    offsetof(struct ftrace_regs, t5));
-+	DEFINE(FREGS_T6,	    offsetof(struct ftrace_regs, t6));
-+#endif
- 	DEFINE(FREGS_A0,	    offsetof(struct ftrace_regs, a0));
- 	DEFINE(FREGS_A1,	    offsetof(struct ftrace_regs, a1));
- 	DEFINE(FREGS_A2,	    offsetof(struct ftrace_regs, a2));
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 745dd4c4a69c..e988bd26b28b 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -96,7 +96,13 @@
- 	REG_S	x8,  FREGS_S0(sp)
- #endif
- 	REG_S	x6,  FREGS_T1(sp)
--
-+#ifdef CONFIG_CC_IS_CLANG
-+	REG_S	x7,  FREGS_T2(sp)
-+	REG_S	x28, FREGS_T3(sp)
-+	REG_S	x29, FREGS_T4(sp)
-+	REG_S	x30, FREGS_T5(sp)
-+	REG_S	x31, FREGS_T6(sp)
-+#endif
- 	// save the arguments
- 	REG_S	x10, FREGS_A0(sp)
- 	REG_S	x11, FREGS_A1(sp)
-@@ -115,7 +121,13 @@
- 	REG_L	x8, FREGS_S0(sp)
- #endif
- 	REG_L	x6,  FREGS_T1(sp)
--
-+#ifdef CONFIG_CC_IS_CLANG
-+	REG_L	x7,  FREGS_T2(sp)
-+	REG_L	x28, FREGS_T3(sp)
-+	REG_L	x29, FREGS_T4(sp)
-+	REG_L	x30, FREGS_T5(sp)
-+	REG_L	x31, FREGS_T6(sp)
-+#endif
- 	// restore the arguments
- 	REG_L	x10, FREGS_A0(sp)
- 	REG_L	x11, FREGS_A1(sp)
--- 
-2.39.3 (Apple Git-145)
-
+--=20
+With Best Regards,
+Andy Shevchenko
