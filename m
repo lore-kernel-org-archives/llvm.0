@@ -1,103 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD81114A604
-	for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 20:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FA213D518;
+	Wed, 27 Nov 2024 21:26:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732738330; cv=none; b=NaZxVhhPdRBgPXoFLGVAFu1J7+Yhgg2k1TBvRXpgimi2D0oBglxopsoGT5Q55isjkPvZR3umbf1DkBjQTFh026Y52YWkSfNPSMAmZk0aNbZLGJBoR4FGQl5wTK+si5klyBH12CB6VPVutzjHH04mBtp+oj0pCpjJksRLER3SkUI=
+	t=1732742761; cv=none; b=KAWw1x1bzSmcBth5yXGwtogXE0FDvvILpkpW/U8b4cBhz5KP1v/4AzWt+FjJ/QjBYcy981OyFbDhKwKIyN+4/Hrni89at7VMu6n1+cQaZPqpIES6wVya/2tsKDZ7wS1pQUGSnJ7Hw9tYym/l2yy9felnCE4FwMtUVGzQ5DxirV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732738330; c=relaxed/simple;
-	bh=ncdhA3Db7RWjip1XxazBSrD8/gq0GiJMgqkDQKO8BSw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lbnS4wvUUqQTu/HtgYf50v8oDKGq5J7Jb9hBwoyG7O5aF95SFIKH3b+60yBUsFIwXgu8SNL11gtAfG+RbdAxcvs5YzdLz4Fug0PL4E/UxTmQI5ogmAvWP+Qt2GDFipWZTfwUE0emo20VlPXzm7g/Hfx+8vLXeeG2B+fOGMYS9Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iko5wQqX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1732742761; c=relaxed/simple;
+	bh=RrHDVweNwvoqrOMwYtZp9qluVuL3gDi+cBfsfnkg6Tc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=etWq8W4CHZ5FyxqlmQIer/oWpWTOhyn+a+Yesozwo1JQa6LHKIEXe2k34Tk+VZni5Us+862ptuptUkDY7NHbUttXqYumuYfVLc/CPDpip1RoNmYhth43OZoOeJ58uLW318bX/oIG1Bl/D9dD6IAsjqTDRsiJSRiGLHhRis8I2Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3t9bZ8E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iko5wQqX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732738327;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=cUpahrTiPSSyivlInNuwqgIKcaQl6fPyrwTG3n0paqo=;
-	b=iko5wQqXLyGLcIke56j12v3O+z5exOQyo79b7R4Kt6J6VhZdqmEgKJGpsQQfOo3AOvxKQG
-	CBPsJYTYDuLNnWzzDE1+hEaLH+2h9lTAgoq2hoQOvFTbGJw7suazhV9WCza7fzMoaPqjTW
-	kzFj8ChcUlzWqAtwS8459hYaLpbmzv8=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-567-y382YUMgMNqKFDKf8acs1g-1; Wed,
- 27 Nov 2024 15:12:06 -0500
-X-MC-Unique: y382YUMgMNqKFDKf8acs1g-1
-X-Mimecast-MFC-AGG-ID: y382YUMgMNqKFDKf8acs1g
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5070719560AF
-	for <llvm@lists.linux.dev>; Wed, 27 Nov 2024 20:12:05 +0000 (UTC)
-Received: from [172.64.12.14] (unknown [10.30.33.24])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE80E19560A3;
-	Wed, 27 Nov 2024 20:12:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
- upstream-mainline, 7d405072)
-Date: Wed, 27 Nov 2024 20:12:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3t9bZ8E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CAFC4CED2;
+	Wed, 27 Nov 2024 21:26:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732742761;
+	bh=RrHDVweNwvoqrOMwYtZp9qluVuL3gDi+cBfsfnkg6Tc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=A3t9bZ8EmXIioTHMce62anSQn+jiH5uF/rZyxanOkDQJTerumAdx6BvH5CUUsYVJY
+	 /FqFUQGppa67XuiFZ9AkIgMmjCuGgQXl5XFZY3t741JUj5LIJ3SXK4EwbXSvP2aneT
+	 3ua+zeVZDXd4LWpXvuq2wTnL/7UQSVPj6fIN+cjiFwVUCDEhgf0efVqY9rmFbmxxn8
+	 I0j+DJGmy1npu6wud1U7fF129t/G923zKnTTXC+by5V/0dI0GrL4d0DaWYwWEk+pME
+	 ryFsL/TTc2wFoSYXhUjuX+A7WRBWaOg6wHYeaqQILgET258ezYH79S2JJhRkP0hIwf
+	 yzFaJNvlNoEsQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Andy Chiu <andybnac@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Steven Rostedt
+ <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, bjorn@rivosinc.com, puranjay12@gmail.com,
+ alexghiti@rivosinc.com, yongxuan.wang@sifive.com, greentime.hu@sifive.com,
+ nick.hu@sifive.com, nylon.chen@sifive.com, tommy.wu@sifive.com,
+ eric.lin@sifive.com, viccent.chen@sifive.com, zong.li@sifive.com,
+ samuel.holland@sifive.com
+Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
+ improvements
+In-Reply-To: <20241127172908.17149-1-andybnac@gmail.com>
+References: <20241127172908.17149-1-andybnac@gmail.com>
+Date: Wed, 27 Nov 2024 22:25:57 +0100
+Message-ID: <87frncmkre.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <85344.124112715120600341@us-mta-567.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: katvYfTn7hPKcaDIkfRdnszceVW2ORE2Jet-4r5F_N8_1732738325
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Adding Steven.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Andy Chiu <andybnac@gmail.com> writes:
+
+> This series makes atmoic code patching possible in riscv ftrace. A
+> direct benefit of this is that we can get rid of stop_machine() when
+> patching function entries. This also makes it possible to run ftrace
+> with full kernel preemption. Before this series, the kernel initializes
+> patchable function entries to NOP4 + NOP4. To start tracing, it updates
+> entries to AUIPC + JALR while holding other cores in stop_machine.
+> stop_machine() is required because it is impossible to update 2
+> instructions, and be seen atomically. And preemption must have to be
+> prevented, as kernel preemption allows process to be scheduled out while
+> executing on one of these instruction pairs.
+>
+> This series addresses the problem by initializing the first NOP4 to
+> AUIPC. So, atmoic patching is possible because the kernel only has to
+> update one instruction. As long as the instruction is naturally aligned,
+> then it is expected to be updated atomically.
+>
+> However, the address range of the ftrace trampoline is limited to +-2K
+> from ftrace_caller after appplying this series. This issue is expected
+> to be solved by Puranjay's CALL_OPS, where it adds 8B naturally align
+> data in front of pacthable functions and can  use it to direct execution
+> out to any custom trampolines.
+>
+> The series is composed by three parts. The first part cleans up the
+> existing issues when the kernel is compiled with clang.The second part
+> modifies the ftrace code patching mechanism (2-4) as mentioned above.
+> Then prepare ftrace to be able to run with kernel preemption (5,6)
+>
+> An ongoing fix:
+>
+> Since there is no room for marking *kernel_text_address as notrace[1] at
+> source code level, there is a significant performance regression when
+> using function_graph with TRACE_IRQFLAGS enabled. There can be as much as
+> 8 graph handler being called in each function-entry. The current
+> workaround requires us echo "*kernel_text_address" into
+> set_ftrace_notrace before starting the trace. However, we observed that
+> the kernel still enables the patch site in some cases even with
+> *kernel_text_address properly added in the file While the root cause is
+> still under investagtion, we consider that it should not be the reason
+> for holding back the code patching, in order to unblock the call_ops
+> part.
+
+Maybe Steven knows this from the top of his head!
+
+As Andy points out, "*kernel_text_address" is used in the stack
+unwinding on RISC-V. So, if you do a tracing without filtering *and*
+TRACE_IRQFLAGS, one will drown in traces.
+
+E.g. the ftrace selftest:
+  | $ ./ftracetest -vvv test.d/ftrace/fgraph-multi.tc
+
+will generate a lot of traces.
+
+Now, if we add:
+--8<--
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc b=
+/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+index ff88f97e41fb..4f30a4d81d99 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+@@ -84,6 +84,7 @@ cd $INSTANCE2
+ do_test '*rcu*' 'rcu'
+ cd $WD
+ cd $INSTANCE3
++echo '*kernel_text_address' > set_ftrace_notrace
+ echo function_graph > current_tracer
+=20
+ sleep 1
+-->8--
+
+The graph tracer will not honor the "set_ftrace_notrace" in $INSTANCE3,
+but still enable the *kernel_text_address traces. (Note that there are
+no filters in the test, so *all* ftrace recs will be enabled.)
+
+Are we holding the graph tracer wrong?
 
 
-Kernel information:
-    Commit message: Merge tag 'vfs-6.13-rc1.fixes' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/vfs/vfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1563035772
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1563035772-ppc64le-kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1563035772-x86_64-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1563035772-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Happy thanksgiving!
+Bj=C3=B6rn
