@@ -1,67 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CDF1E4B2;
-	Thu, 28 Nov 2024 13:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C6B19ABBB;
+	Thu, 28 Nov 2024 15:06:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732801984; cv=none; b=mZJZMv09CBbhwsJpMZjfQ+pvXt2pF3rQdq6jkTxh3TZvz02E99nQ9ONJqT4iPGX0nKAaVIRxyMDSAkt21eqVdD2RfDXhW61McV1Azt44xjYJRb6sW68NPpFA0PuP64koS2EGBvmkVhXyZt5Uym5VJp5ITVM9wT2fUP/n8z4vLu0=
+	t=1732806363; cv=none; b=XnnRslcB6TVrGVf+O4ETo+wOssYXmQJJ5AeuQ3psjsUlZxJKw1KGQOlLw/LbYpDR3/b1jtUnbq+SAdwZqsxceOO+MGO1hXlG3xmfsfe9m/dZ4Z5UnZUC6YFY5PDDliUI0aFZWSWaQgJcDEeI6q0Bb0kyhCVK1I1ofNNZvuMe+54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732801984; c=relaxed/simple;
-	bh=UG+77VmKk7jPmYy+z4+sWVfveyZZmvMyCQvvHM+X7Gs=;
+	s=arc-20240116; t=1732806363; c=relaxed/simple;
+	bh=Rt/78/cxh3j3w2s9KmYWZ56N6kK9udqbOk1XcHGYS8M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z5vzkfNa/gIIFCPomIGx4siItgQeAcPpt4VrejWE/QsQS9TsoFCPZ59oAhN5IR4cTB/F6SdfbVfeibKStNg7/7ysCVmdeeEXTVDjM6g48TVAAxFoEQK+CMt/YYuyTaIlEjPsSk/YfpLmiTbqSyUUm/3HIvDAxYupn9y+Dve8bUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nXru4PHy; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/Q09uv1ReC0RChThRQ5UJ+vmPmnHFhdetDp05Z1qGuRtExEce67PCSNQmDriRCKtUZyhXd/Da2Q+QqMF8wjnBNGZmlY/cDCue7jU/VWCPdBYcJ3v6XoX3N2WrgdrlvidsQ0kkvQL6Ii2Cq2LdIdNzbWNcpGbdfN4wF7yOFsmD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dwb8TpWF; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nXru4PHy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dwb8TpWF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732801983; x=1764337983;
+  t=1732806362; x=1764342362;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UG+77VmKk7jPmYy+z4+sWVfveyZZmvMyCQvvHM+X7Gs=;
-  b=nXru4PHy8tKuVyt638fxhfaX7gC8I2gzvHVqZqEfHl0yxOIVrosxMVn1
-   MqvMNGjHa/DBleZuSV1j7mHuY+qAmh3mJaJ5Fsyi05sCoM7tLf9FHLLKw
-   +koHjdmUbSJzlxM4zNGWDADLHOxVXzLjhTWGelSC+rRP+z1Fg3EgS9L7i
-   RpWAdH6Om8BWFtHKwwbbbWPuxd3pczmSPkr0EP9PfgICjiWwSlnRBE6uF
-   A+s3LH1MHDgeA2fLjhQXUuoVRyydWzAZwIeQAzC0O+yy1PgyBJIDzN2R2
-   CoSJXM2boHcizQL6cYV7pO7bcKfUEQVcGHgel/GPZ+1PYbCyYXltKgh7F
-   A==;
-X-CSE-ConnectionGUID: Zo6XJjuWTjCcWNp8H9L20Q==
-X-CSE-MsgGUID: 9ONz8eOkQjmRRxoPBzplqw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11270"; a="33279020"
+  bh=Rt/78/cxh3j3w2s9KmYWZ56N6kK9udqbOk1XcHGYS8M=;
+  b=dwb8TpWFi91EgOSXiCUXpNcKa88EKwl2KNxOYUvn/Usynue/nwGL2W3x
+   MgC89OhFAkYC+hnaNESymzDIGbslKb7Pix4pZgD6wcVq06FEzXcXBoiwX
+   U/+tOjdIZhStGWDIHTlo2ozH7ZIFbQWpDkKNT5EA38smBtp7rfW9pdIh2
+   w8w1d434nQKcfCl9XuAciZC/FWBfJPMzkuljgoty/YRQ06KPnrFvEU8Js
+   xqYJsvF1xmzI2vjQGXfgxrJCJrqvhun3/fwYqgfRlbWhq5w3E0aH8bwuh
+   iCMgRtfBA4zg9by5yTIOPPrxw6VyjTscr/NMgtaLmjvhBgFhPfBnKpolv
+   w==;
+X-CSE-ConnectionGUID: r155GRC8Qty0y2r1CqvDig==
+X-CSE-MsgGUID: Xl+hUWi1SzegJ7feD9IIBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11270"; a="32788450"
 X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
-   d="scan'208";a="33279020"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 05:53:02 -0800
-X-CSE-ConnectionGUID: bTMg1z2ETMCuv7KPMMZ99A==
-X-CSE-MsgGUID: ucUiTrj/RAaNx28VzoteOg==
+   d="scan'208";a="32788450"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 07:06:01 -0800
+X-CSE-ConnectionGUID: LSAnbzK9TUSjtwBZ8I8p0A==
+X-CSE-MsgGUID: FR7LH26mRWe4M/jOu7VF4A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
-   d="scan'208";a="97203444"
+   d="scan'208";a="96349291"
 Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 28 Nov 2024 05:52:58 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 28 Nov 2024 07:05:56 -0800
 Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tGewx-0009dT-1q;
-	Thu, 28 Nov 2024 13:52:55 +0000
-Date: Thu, 28 Nov 2024 21:52:13 +0800
+	id 1tGg5a-0009gx-1K;
+	Thu, 28 Nov 2024 15:05:54 +0000
+Date: Thu, 28 Nov 2024 23:05:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Guangguan Wang <guangguan.wang@linux.alibaba.com>, wenjia@linux.ibm.com,
-	jaka@linux.ibm.com, alibuda@linux.alibaba.com,
-	tonylu@linux.alibaba.com, guwen@linux.alibaba.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org
+To: David Laight <David.Laight@aculab.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dust Li <dust.li@linux.alibaba.com>
-Subject: Re: [PATCH net-next 2/2] net/smc: support ipv4 mapped ipv6 addr
- client for smc-r v2
-Message-ID: <202411282154.DjX7ilwF-lkp@intel.com>
-References: <20241127094533.18459-3-guangguan.wang@linux.alibaba.com>
+	LKML <linux-kernel@vger.kernel.org>,
+	'Arnd Bergmann' <arnd@kernel.org>, 'Jens Axboe' <axboe@kernel.dk>,
+	'Matthew Wilcox' <willy@infradead.org>,
+	'Christoph Hellwig' <hch@infradead.org>,
+	'Andrew Morton' <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+	'Dan Carpenter' <dan.carpenter@linaro.org>,
+	"'Jason A . Donenfeld'" <Jason@zx2c4.com>,
+	"'pedro.falcato@gmail.com'" <pedro.falcato@gmail.com>,
+	'Mateusz Guzik' <mjguzik@gmail.com>,
+	'Lorenzo Stoakes' <lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH next 6/7] minmax.h: Simplify the variants of clamp()
+Message-ID: <202411282222.oF0B4110-lkp@intel.com>
+References: <8f69f4deac014f558bab186444bac2e8@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,105 +75,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241127094533.18459-3-guangguan.wang@linux.alibaba.com>
+In-Reply-To: <8f69f4deac014f558bab186444bac2e8@AcuMS.aculab.com>
 
-Hi Guangguan,
+Hi David,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on net-next/main]
+[auto build test WARNING on next-20241121]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guangguan-Wang/net-smc-support-SMC-R-V2-for-rdma-devices-with-max_recv_sge-equals-to-1/20241128-111259
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241127094533.18459-3-guangguan.wang%40linux.alibaba.com
-patch subject: [PATCH net-next 2/2] net/smc: support ipv4 mapped ipv6 addr client for smc-r v2
-config: arm-randconfig-001-20241128 (https://download.01.org/0day-ci/archive/20241128/202411282154.DjX7ilwF-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/minmax-h-Add-whitespace-around-operators-and-after-commas/20241121-152617
+base:   next-20241121
+patch link:    https://lore.kernel.org/r/8f69f4deac014f558bab186444bac2e8%40AcuMS.aculab.com
+patch subject: [PATCH next 6/7] minmax.h: Simplify the variants of clamp()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241128/202411282222.oF0B4110-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411282154.DjX7ilwF-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411282222.oF0B4110-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411282154.DjX7ilwF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411282222.oF0B4110-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/smc/af_smc.c:27:
-   In file included from include/linux/if_vlan.h:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2225:
+   In file included from drivers/iio/magnetometer/yamaha-yas530.c:30:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> net/smc/af_smc.c:1120:46: error: no member named 'skc_v6_rcv_saddr' in 'struct sock_common'; did you mean 'skc_rcv_saddr'?
-    1120 |              !ipv6_addr_v4mapped(&smc->clcsock->sk->sk_v6_rcv_saddr)) ||
-         |                                                     ^
-   include/net/sock.h:376:37: note: expanded from macro 'sk_v6_rcv_saddr'
-     376 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
-         |                                     ^
-   include/net/sock.h:155:11: note: 'skc_rcv_saddr' declared here
-     155 |                         __be32  skc_rcv_saddr;
-         |                                 ^
-   1 warning and 1 error generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/iio/magnetometer/yamaha-yas530.c:414:20: warning: implicit conversion from 'unsigned long' to 'typeof (h[i])' (aka 'int') changes value from 18446744073709543424 to -8192 [-Wconstant-conversion]
+     414 |                         clamp_val(h[i], -BIT(13), BIT(13) - 1);
+         |                         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:233:66: note: expanded from macro 'clamp_val'
+     233 | #define clamp_val(val, lo, hi) __careful_clamp(typeof(val), val, lo, hi)
+         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   include/linux/minmax.h:197:26: note: expanded from macro '__careful_clamp'
+     197 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:188:14: note: expanded from macro '__clamp_once'
+     188 |         type ulo = (lo);                                                        \
+         |              ~~~    ^~
+   5 warnings generated.
 
 
-vim +1120 net/smc/af_smc.c
+vim +414 drivers/iio/magnetometer/yamaha-yas530.c
 
-  1087	
-  1088	static int smc_find_proposal_devices(struct smc_sock *smc,
-  1089					     struct smc_init_info *ini)
-  1090	{
-  1091		int rc = 0;
-  1092	
-  1093		/* check if there is an ism device available */
-  1094		if (!(ini->smcd_version & SMC_V1) ||
-  1095		    smc_find_ism_device(smc, ini) ||
-  1096		    smc_connect_ism_vlan_setup(smc, ini))
-  1097			ini->smcd_version &= ~SMC_V1;
-  1098		/* else ISM V1 is supported for this connection */
-  1099	
-  1100		/* check if there is an rdma device available */
-  1101		if (!(ini->smcr_version & SMC_V1) ||
-  1102		    smc_find_rdma_device(smc, ini))
-  1103			ini->smcr_version &= ~SMC_V1;
-  1104		/* else RDMA is supported for this connection */
-  1105	
-  1106		ini->smc_type_v1 = smc_indicated_type(ini->smcd_version & SMC_V1,
-  1107						      ini->smcr_version & SMC_V1);
-  1108	
-  1109		/* check if there is an ism v2 device available */
-  1110		if (!(ini->smcd_version & SMC_V2) ||
-  1111		    !smc_ism_is_v2_capable() ||
-  1112		    smc_find_ism_v2_device_clnt(smc, ini))
-  1113			ini->smcd_version &= ~SMC_V2;
-  1114	
-  1115		/* check if there is an rdma v2 device available */
-  1116		ini->check_smcrv2 = true;
-  1117		ini->smcrv2.saddr = smc->clcsock->sk->sk_rcv_saddr;
-  1118		if (!(ini->smcr_version & SMC_V2) ||
-  1119		    (smc->clcsock->sk->sk_family != AF_INET &&
-> 1120		     !ipv6_addr_v4mapped(&smc->clcsock->sk->sk_v6_rcv_saddr)) ||
-  1121		    !smc_clc_ueid_count() ||
-  1122		    smc_find_rdma_device(smc, ini))
-  1123			ini->smcr_version &= ~SMC_V2;
-  1124		ini->check_smcrv2 = false;
-  1125	
-  1126		ini->smc_type_v2 = smc_indicated_type(ini->smcd_version & SMC_V2,
-  1127						      ini->smcr_version & SMC_V2);
-  1128	
-  1129		/* if neither ISM nor RDMA are supported, fallback */
-  1130		if (ini->smc_type_v1 == SMC_TYPE_N && ini->smc_type_v2 == SMC_TYPE_N)
-  1131			rc = SMC_CLC_DECL_NOSMCDEV;
-  1132	
-  1133		return rc;
-  1134	}
-  1135	
+de8860b1ed4701 Linus Walleij 2020-12-24  358  
+65f79b50103067 Jakob Hauser  2022-08-13  359  /**
+65f79b50103067 Jakob Hauser  2022-08-13  360   * yas537_measure() - Make a measure from the hardware
+65f79b50103067 Jakob Hauser  2022-08-13  361   * @yas5xx: The device state
+65f79b50103067 Jakob Hauser  2022-08-13  362   * @t: the raw temperature measurement
+65f79b50103067 Jakob Hauser  2022-08-13  363   * @x: the raw x axis measurement
+65f79b50103067 Jakob Hauser  2022-08-13  364   * @y1: the y1 axis measurement
+65f79b50103067 Jakob Hauser  2022-08-13  365   * @y2: the y2 axis measurement
+65f79b50103067 Jakob Hauser  2022-08-13  366   * @return: 0 on success or error code
+65f79b50103067 Jakob Hauser  2022-08-13  367   */
+65f79b50103067 Jakob Hauser  2022-08-13  368  static int yas537_measure(struct yas5xx *yas5xx, u16 *t, u16 *x, u16 *y1, u16 *y2)
+de8860b1ed4701 Linus Walleij 2020-12-24  369  {
+65f79b50103067 Jakob Hauser  2022-08-13  370  	struct yas5xx_calibration *c = &yas5xx->calibration;
+65f79b50103067 Jakob Hauser  2022-08-13  371  	unsigned int busy;
+65f79b50103067 Jakob Hauser  2022-08-13  372  	u8 data[8];
+65f79b50103067 Jakob Hauser  2022-08-13  373  	u16 xy1y2[3];
+65f79b50103067 Jakob Hauser  2022-08-13  374  	s32 h[3], s[3];
+65f79b50103067 Jakob Hauser  2022-08-13  375  	int i, ret;
+65f79b50103067 Jakob Hauser  2022-08-13  376  
+65f79b50103067 Jakob Hauser  2022-08-13  377  	mutex_lock(&yas5xx->lock);
+65f79b50103067 Jakob Hauser  2022-08-13  378  
+65f79b50103067 Jakob Hauser  2022-08-13  379  	/* Contrary to YAS530/532, also a "cont" bit is set, meaning unknown */
+65f79b50103067 Jakob Hauser  2022-08-13  380  	ret = regmap_write(yas5xx->map, YAS537_MEASURE, YAS5XX_MEASURE_START |
+65f79b50103067 Jakob Hauser  2022-08-13  381  			   YAS5XX_MEASURE_CONT);
+65f79b50103067 Jakob Hauser  2022-08-13  382  	if (ret < 0)
+65f79b50103067 Jakob Hauser  2022-08-13  383  		goto out_unlock;
+65f79b50103067 Jakob Hauser  2022-08-13  384  
+65f79b50103067 Jakob Hauser  2022-08-13  385  	/* Use same timeout like YAS530/532 but the bit is in data row 2 */
+65f79b50103067 Jakob Hauser  2022-08-13  386  	ret = regmap_read_poll_timeout(yas5xx->map, YAS5XX_MEASURE_DATA + 2, busy,
+65f79b50103067 Jakob Hauser  2022-08-13  387  				       !(busy & YAS5XX_MEASURE_DATA_BUSY),
+65f79b50103067 Jakob Hauser  2022-08-13  388  				       500, 20000);
+65f79b50103067 Jakob Hauser  2022-08-13  389  	if (ret) {
+65f79b50103067 Jakob Hauser  2022-08-13  390  		dev_err(yas5xx->dev, "timeout waiting for measurement\n");
+65f79b50103067 Jakob Hauser  2022-08-13  391  		goto out_unlock;
+65f79b50103067 Jakob Hauser  2022-08-13  392  	}
+65f79b50103067 Jakob Hauser  2022-08-13  393  
+65f79b50103067 Jakob Hauser  2022-08-13  394  	ret = regmap_bulk_read(yas5xx->map, YAS5XX_MEASURE_DATA,
+65f79b50103067 Jakob Hauser  2022-08-13  395  			       data, sizeof(data));
+65f79b50103067 Jakob Hauser  2022-08-13  396  	if (ret)
+65f79b50103067 Jakob Hauser  2022-08-13  397  		goto out_unlock;
+65f79b50103067 Jakob Hauser  2022-08-13  398  
+65f79b50103067 Jakob Hauser  2022-08-13  399  	mutex_unlock(&yas5xx->lock);
+65f79b50103067 Jakob Hauser  2022-08-13  400  
+65f79b50103067 Jakob Hauser  2022-08-13  401  	*t = get_unaligned_be16(&data[0]);
+65f79b50103067 Jakob Hauser  2022-08-13  402  	xy1y2[0] = FIELD_GET(GENMASK(13, 0), get_unaligned_be16(&data[2]));
+65f79b50103067 Jakob Hauser  2022-08-13  403  	xy1y2[1] = get_unaligned_be16(&data[4]);
+65f79b50103067 Jakob Hauser  2022-08-13  404  	xy1y2[2] = get_unaligned_be16(&data[6]);
+65f79b50103067 Jakob Hauser  2022-08-13  405  
+65f79b50103067 Jakob Hauser  2022-08-13  406  	/* The second version of YAS537 needs to include calibration coefficients */
+65f79b50103067 Jakob Hauser  2022-08-13  407  	if (yas5xx->version == YAS537_VERSION_1) {
+65f79b50103067 Jakob Hauser  2022-08-13  408  		for (i = 0; i < 3; i++)
+65f79b50103067 Jakob Hauser  2022-08-13  409  			s[i] = xy1y2[i] - BIT(13);
+65f79b50103067 Jakob Hauser  2022-08-13  410  		h[0] = (c->k *   (128 * s[0] + c->a2 * s[1] + c->a3 * s[2])) / BIT(13);
+65f79b50103067 Jakob Hauser  2022-08-13  411  		h[1] = (c->k * (c->a4 * s[0] + c->a5 * s[1] + c->a6 * s[2])) / BIT(13);
+65f79b50103067 Jakob Hauser  2022-08-13  412  		h[2] = (c->k * (c->a7 * s[0] + c->a8 * s[1] + c->a9 * s[2])) / BIT(13);
+65f79b50103067 Jakob Hauser  2022-08-13  413  		for (i = 0; i < 3; i++) {
+65f79b50103067 Jakob Hauser  2022-08-13 @414  			clamp_val(h[i], -BIT(13), BIT(13) - 1);
+65f79b50103067 Jakob Hauser  2022-08-13  415  			xy1y2[i] = h[i] + BIT(13);
+65f79b50103067 Jakob Hauser  2022-08-13  416  		}
+65f79b50103067 Jakob Hauser  2022-08-13  417  	}
+65f79b50103067 Jakob Hauser  2022-08-13  418  
+65f79b50103067 Jakob Hauser  2022-08-13  419  	*x = xy1y2[0];
+65f79b50103067 Jakob Hauser  2022-08-13  420  	*y1 = xy1y2[1];
+65f79b50103067 Jakob Hauser  2022-08-13  421  	*y2 = xy1y2[2];
+65f79b50103067 Jakob Hauser  2022-08-13  422  
+65f79b50103067 Jakob Hauser  2022-08-13  423  	return 0;
+65f79b50103067 Jakob Hauser  2022-08-13  424  
+65f79b50103067 Jakob Hauser  2022-08-13  425  out_unlock:
+65f79b50103067 Jakob Hauser  2022-08-13  426  	mutex_unlock(&yas5xx->lock);
+65f79b50103067 Jakob Hauser  2022-08-13  427  	return ret;
+65f79b50103067 Jakob Hauser  2022-08-13  428  }
+65f79b50103067 Jakob Hauser  2022-08-13  429  
 
 -- 
 0-DAY CI Kernel Test Service
