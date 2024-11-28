@@ -1,164 +1,206 @@
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173AE191F8E
-	for <llvm@lists.linux.dev>; Thu, 28 Nov 2024 11:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A62192D95;
+	Thu, 28 Nov 2024 11:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732792751; cv=none; b=CMDF6xYfxUWuvPycqKxs5K4pOeReJNKbYu8S1YAa0aXJcDAB2+05imesAJ5rfhHb26it9yvsQc8if5wKQWjim9RP5gvHN0LSp+43DNlyFcIRLHFwaxr5oYNuj7IB6F5LeYX+wxKrr2holTGFinxfS7x2ID6rpDO22lpiWVv/ogU=
+	t=1732793342; cv=none; b=l/brf23dMzHOGm1JbhYeh+mEj4+hw1kbE29amaTvMvOeckgK3Kf1OghRkI3fgXCnVlQJFqLy7SOzmqG1PCJ4ENTFDBT1AkJdQkXK4ppje6lEvyoG95ThQYlBjvC0UJHmAs8KVkkjMD9f6IKn7jsZnU2fEqqLZuIKsMzg8xcYIvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732792751; c=relaxed/simple;
-	bh=UeZaCJrPRNOMMCTBxSYlt5tB19qDO3+mBAS1XVsGV0A=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=f50n0wc44OxjXPq2YogRazGpUrLjWirTUZryvfKoyq4S/eI3h9f2M95AWPjxn0XMff3neOWbXsgae/GTMI0bUdiuPAWEZmQA+XokEQZavuww+vhiZTzUufr/4bTwBdQB4Xez19Ce04POp4jfsVLw6rr7SYl+ri3nknBCVb4JfJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=gSatPmu+; arc=none smtp.client-ip=193.238.174.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
+	s=arc-20240116; t=1732793342; c=relaxed/simple;
+	bh=GOGSdHxhNEpjsOwO7lywxaLS0up1lx0fM8IsWbTEf+E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQ5ln/0oS7uZTSoMG3l7VGgOtVK+EUR094iY3YoaGjOBWYZ0N0gvrRvYEmZoSMSqeqFRlU6a5Zw/pkOvE5rnnbMJibTZgt5cLiHLq5X2k9KMgI2YjFSfS5/mi+LLrNZxREAMfW+qsquQEm6EZjXzQ+qn1q1OZ56ldN10tXKHQbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qfhlye54; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="gSatPmu+"
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-	by mg.ssi.bg (Proxmox) with ESMTP id E35E380CD9;
-	Thu, 28 Nov 2024 13:18:58 +0200 (EET)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-	by mg.ssi.bg (Proxmox) with ESMTPS;
-	Thu, 28 Nov 2024 13:18:57 +0200 (EET)
-Received: from ja.ssi.bg (unknown [213.16.62.126])
-	by ink.ssi.bg (Postfix) with ESMTPSA id DF85A302E72;
-	Thu, 28 Nov 2024 13:18:49 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
-	t=1732792731; bh=UeZaCJrPRNOMMCTBxSYlt5tB19qDO3+mBAS1XVsGV0A=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References;
-	b=gSatPmu+YkuDPMzVzD08d01eTowkOx6BFD8bNfsIC9QiGnfTQeawdi4B87JHBAzs3
-	 gIUbq85ZKcI0aJbVdQlEBaCNR/gkcDYK9Bru178+Nafv7zVYm+wnVcyY7SSiNWq9QC
-	 ylYe0bSzxW9reJ7b67ZyY3wVGRk28GgZ24gcNItg=
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 4ASBIdhE024472;
-	Thu, 28 Nov 2024 13:18:39 +0200
-Date: Thu, 28 Nov 2024 13:18:39 +0200 (EET)
-From: Julian Anastasov <ja@ssi.bg>
-To: Paolo Abeni <pabeni@redhat.com>
-cc: Simon Horman <horms@verge.net.au>, Pablo Neira Ayuso <pablo@netfilter.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "David S. Miller" <davem@davemloft.net>,
-        kernel test robot <lkp@intel.com>, Ruowen Qin <ruqin@redhat.com>,
-        Jinghao Jia <jinghao7@illinois.edu>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v3 net] ipvs: fix UB due to uninitialized stack access
- in ip_vs_protocol_init()
-In-Reply-To: <70cd1035-07d8-4356-a53e-020d93c2515e@redhat.com>
-Message-ID: <87fca918-403d-2fd5-576a-dfa730483fc2@ssi.bg>
-References: <20241123094256.28887-1-jinghao7@illinois.edu> <70cd1035-07d8-4356-a53e-020d93c2515e@redhat.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qfhlye54"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732793340; x=1764329340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GOGSdHxhNEpjsOwO7lywxaLS0up1lx0fM8IsWbTEf+E=;
+  b=Qfhlye54rRMxhRK0CJJz0zflz6NNogV4TDlrYdeBA8g0z695C7i6MiNT
+   lmJh8DDD4q+swH867mCGSQXJHYR+43Lu/Uj3kTWy8OJtsDDpdEtNVyDMG
+   MCXGCJNffx1w/3AMRg4gi5U/sVJjYWB8kvbGT77SOpuUSRDwx49wffCYz
+   aVud02hchWoCw3Ezmtg1K1KxRKFLVnpFFRo1N82m0pVD2LyHPUP2SkqJ3
+   9nO/hy242ZuP0sBYJmECxv/H9DNfDu3P8BHpRhNayV1UcPw7KdUTo92JQ
+   8oUC4S1O92K65GeziR+cj/dj2ZCLyNwsSmKMOk1mrm4BkwEsvI37AzmpC
+   g==;
+X-CSE-ConnectionGUID: qsaqjwxLQtWE5XT49NWfCA==
+X-CSE-MsgGUID: Bnrrxw2sRBedgpNrSU1HPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="33076885"
+X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
+   d="scan'208";a="33076885"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 03:29:00 -0800
+X-CSE-ConnectionGUID: Fa0PQXDvT92Zg4JrkfRbxA==
+X-CSE-MsgGUID: TnVO9SYjSDuUlM2KNDH2dA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
+   d="scan'208";a="92020639"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 28 Nov 2024 03:28:54 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tGchX-0009WL-33;
+	Thu, 28 Nov 2024 11:28:51 +0000
+Date: Thu, 28 Nov 2024 19:28:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andy.yan@rock-chips.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, andrzej.hajda@intel.com,
+	neil.armstrong@linaro.org, rfoss@kernel.org,
+	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+	jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	quentin.schulz@cherry.de, Heiko Stuebner <heiko.stuebner@cherry.de>,
+	Daniel Semkowicz <dse@thaumatec.com>
+Subject: Re: [PATCH v2 3/3] drm/rockchip: Add MIPI DSI2 glue driver for RK3588
+Message-ID: <202411281937.QyowC5lv-lkp@intel.com>
+References: <20241126201213.522753-4-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241126201213.522753-4-heiko@sntech.de>
+
+Hi Heiko,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.12 next-20241128]
+[cannot apply to rockchip/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/drm-bridge-synopsys-Add-MIPI-DSI2-host-controller-bridge/20241128-103709
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241126201213.522753-4-heiko%40sntech.de
+patch subject: [PATCH v2 3/3] drm/rockchip: Add MIPI DSI2 glue driver for RK3588
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241128/202411281937.QyowC5lv-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411281937.QyowC5lv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411281937.QyowC5lv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:20:
+   In file included from include/drm/bridge/dw_mipi_dsi2.h:15:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:315:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     315 |         val |= PHY_LPTX_CLK_DIV(esc_clk_div);
+         |                ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:72:30: note: expanded from macro 'PHY_LPTX_CLK_DIV'
+      72 | #define PHY_LPTX_CLK_DIV(x)             FIELD_PREP(GENMASK(12, 8), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:340:6: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     340 |                    PHY_IPI_RATIO(tmp));
+         |                    ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:88:27: note: expanded from macro 'PHY_IPI_RATIO'
+      88 | #define PHY_IPI_RATIO(x)                FIELD_PREP(GENMASK(21, 0), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:361:53: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     361 |         regmap_write(dsi2->regmap, DSI2_PHY_LP2HS_MAN_CFG, PHY_LP2HS_TIME(timing.data_lp2hs));
+         |                                                            ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:77:28: note: expanded from macro 'PHY_LP2HS_TIME'
+      77 | #define PHY_LP2HS_TIME(x)               FIELD_PREP(GENMASK(28, 0), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:375:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     375 |                 val |= PPI_WIDTH(PPI_WIDTH_8_BITS);
+         |                        ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:68:24: note: expanded from macro 'PPI_WIDTH'
+      68 | #define PPI_WIDTH(x)                    FIELD_PREP(GENMASK(9, 8), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:388:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     388 |         val |= PHY_LANES(dsi2->lanes);
+         |                ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:69:24: note: expanded from macro 'PHY_LANES'
+      69 | #define PHY_LANES(x)                    FIELD_PREP(GENMASK(5, 4), (x) - 1)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:409:48: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     409 |         regmap_write(dsi2->regmap, DSI2_DSI_VCID_CFG, TX_VCID(dsi2->channel));
+         |                                                       ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:96:22: note: expanded from macro 'TX_VCID'
+      96 | #define TX_VCID(x)                      FIELD_PREP(GENMASK(1, 0), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:430:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     430 |         val = IPI_DEPTH(color_depth) |
+         |               ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:116:24: note: expanded from macro 'IPI_DEPTH'
+     116 | #define IPI_DEPTH(x)                    FIELD_PREP(GENMASK(7, 4), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:445:55: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     445 |         regmap_write(dsi2->regmap, DSI2_IPI_VID_VSA_MAN_CFG, VID_VSA_LINES(vsa));
+         |                                                              ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:133:27: note: expanded from macro 'VID_VSA_LINES'
+     133 | #define VID_VSA_LINES(x)                FIELD_PREP(GENMASK(9, 0), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:461:51: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     461 |         regmap_write(dsi2->regmap, DSI2_IPI_PIX_PKT_CFG, MAX_PIX_PKT(val));
+         |                                                          ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:141:26: note: expanded from macro 'MAX_PIX_PKT'
+     141 | #define MAX_PIX_PKT(x)                  FIELD_PREP(GENMASK(15, 0), x)
+         |                                         ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:573:56: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     573 |         regmap_write(dsi2->regmap, DSI2_CRI_TX_HDR, hdr_val | CMD_TX_MODE(lpm));
+         |                                                               ^
+   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c:110:26: note: expanded from macro 'CMD_TX_MODE'
+     110 | #define CMD_TX_MODE(x)                  FIELD_PREP(BIT(24), x)
+         |                                         ^
+   1 warning and 10 errors generated.
 
 
-	Hello,
+vim +/FIELD_PREP +315 drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi2.c
 
-On Thu, 28 Nov 2024, Paolo Abeni wrote:
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  300  
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  301  static void dw_mipi_dsi2_phy_clk_mode_cfg(struct dw_mipi_dsi2 *dsi2)
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  302  {
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  303  	u32 sys_clk, esc_clk_div;
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  304  	u32 val = 0;
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  305  
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  306  	/*
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  307  	 * clk_type should be NON_CONTINUOUS_CLK before
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  308  	 * initial deskew calibration be sent.
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  309  	 */
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  310  	val |= NON_CONTINUOUS_CLK;
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  311  
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  312  	/* The maximum value of the escape clock frequency is 20MHz */
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  313  	sys_clk = clk_get_rate(dsi2->sys_clk) / USEC_PER_SEC;
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  314  	esc_clk_div = DIV_ROUND_UP(sys_clk, 20 * 2);
+c55ecdf5f795ca Heiko Stuebner 2024-11-26 @315  	val |= PHY_LPTX_CLK_DIV(esc_clk_div);
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  316  
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  317  	regmap_write(dsi2->regmap, DSI2_PHY_CLK_CFG, val);
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  318  }
+c55ecdf5f795ca Heiko Stuebner 2024-11-26  319  
 
-> On 11/23/24 10:42, Jinghao Jia wrote:
-> > Under certain kernel configurations when building with Clang/LLVM, the
-> > compiler does not generate a return or jump as the terminator
-> > instruction for ip_vs_protocol_init(), triggering the following objtool
-> > warning during build time:
-> > 
-> >   vmlinux.o: warning: objtool: ip_vs_protocol_init() falls through to next function __initstub__kmod_ip_vs_rr__935_123_ip_vs_rr_init6()
-> > 
-> > At runtime, this either causes an oops when trying to load the ipvs
-> > module or a boot-time panic if ipvs is built-in. This same issue has
-> > been reported by the Intel kernel test robot previously.
-> > 
-> > Digging deeper into both LLVM and the kernel code reveals this to be a
-> > undefined behavior problem. ip_vs_protocol_init() uses a on-stack buffer
-> > of 64 chars to store the registered protocol names and leaves it
-> > uninitialized after definition. The function calls strnlen() when
-> > concatenating protocol names into the buffer. With CONFIG_FORTIFY_SOURCE
-> > strnlen() performs an extra step to check whether the last byte of the
-> > input char buffer is a null character (commit 3009f891bb9f ("fortify:
-> > Allow strlen() and strnlen() to pass compile-time known lengths")).
-> > This, together with possibly other configurations, cause the following
-> > IR to be generated:
-> > 
-> >   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #5 section ".init.text" align 16 !kcfi_type !29 {
-> >     %1 = alloca [64 x i8], align 16
-> >     ...
-> > 
-> >   14:                                               ; preds = %11
-> >     %15 = getelementptr inbounds i8, ptr %1, i64 63
-> >     %16 = load i8, ptr %15, align 1
-> >     %17 = tail call i1 @llvm.is.constant.i8(i8 %16)
-> >     %18 = icmp eq i8 %16, 0
-> >     %19 = select i1 %17, i1 %18, i1 false
-> >     br i1 %19, label %20, label %23
-> > 
-> >   20:                                               ; preds = %14
-> >     %21 = call i64 @strlen(ptr noundef nonnull dereferenceable(1) %1) #23
-> >     ...
-> > 
-> >   23:                                               ; preds = %14, %11, %20
-> >     %24 = call i64 @strnlen(ptr noundef nonnull dereferenceable(1) %1, i64 noundef 64) #24
-> >     ...
-> >   }
-> > 
-> > The above code calculates the address of the last char in the buffer
-> > (value %15) and then loads from it (value %16). Because the buffer is
-> > never initialized, the LLVM GVN pass marks value %16 as undefined:
-> > 
-> >   %13 = getelementptr inbounds i8, ptr %1, i64 63
-> >   br i1 undef, label %14, label %17
-> > 
-> > This gives later passes (SCCP, in particular) more DCE opportunities by
-> > propagating the undef value further, and eventually removes everything
-> > after the load on the uninitialized stack location:
-> > 
-> >   define hidden i32 @ip_vs_protocol_init() local_unnamed_addr #0 section ".init.text" align 16 !kcfi_type !11 {
-> >     %1 = alloca [64 x i8], align 16
-> >     ...
-> > 
-> >   12:                                               ; preds = %11
-> >     %13 = getelementptr inbounds i8, ptr %1, i64 63
-> >     unreachable
-> >   }
-> > 
-> > In this way, the generated native code will just fall through to the
-> > next function, as LLVM does not generate any code for the unreachable IR
-> > instruction and leaves the function without a terminator.
-> > 
-> > Zero the on-stack buffer to avoid this possible UB.
-> > 
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202402100205.PWXIz1ZK-lkp@intel.com/
-> > Co-developed-by: Ruowen Qin <ruqin@redhat.com>
-> > Signed-off-by: Ruowen Qin <ruqin@redhat.com>
-> > Signed-off-by: Jinghao Jia <jinghao7@illinois.edu>
-> 
-> @Pablo, @Simon, @Julian: recent ipvs patches landed either on the
-> net(-next) trees or the netfiler trees according to a random (?) pattern.
-> 
-> What is your preference here? Should such patches go via netfilter or
-> net? Or something else. FTR, I *think* netfilter should be the
-> preferable target, but I'm open to other options.
-
-	IPVS patches should go always via Netfilter trees.
-It is my fault to tell people to use the 'net' tag, I'll
-recommend the proper nf tree the next time. Sorry for the
-confusion.
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
