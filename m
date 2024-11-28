@@ -1,245 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653231537A8;
-	Thu, 28 Nov 2024 09:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052D615854A
+	for <llvm@lists.linux.dev>; Thu, 28 Nov 2024 10:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732785252; cv=none; b=n/bV7b1jYYa6BeG3aRtxV4mT5y5FSSmOE1fa9PGYr6WDVCMj1AB322tS34Sgn1HmqW1E/p+Cegc63em+m+En1SZbGFsjxKR1iKcKYGfhxcT8GtJWV0r+3ppMdZ6hPy56Tu2Ulq7wxA8qzwku0JCiAivKNGufWGggLXtE3yLn9RE=
+	t=1732788070; cv=none; b=LhxajOy5Hnu3OQVskIPvvVzmh60OJPzWreLSMVFQwpokM6UXGel+2yroW6DlWPR8M04tklQQb2KfZPdx3QH6fzoutxjFta6U4RXzT0Wv7Z0Gx6D8GgxImVchfLLolGvw6StDyNtkNFhQkOQ7P7IEVelFTe+heTUyUJR841fA0Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732785252; c=relaxed/simple;
-	bh=xw2wO2fUU8KQ8iSrqcL95ODU94SFi+VqIXlFh7Mb7T0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=luxYn3s4HvLBdEIBFRxCY3/ernUYsnaC0wSViM3lM/e6nFK1dcBB10MRGerUcFPpM+wMgt07Bi7wwV8xgn2JC61XZO2vEf9uj4LIM0uoSWw6cco71wazMbd8pLuhFPzKodO/anLecciPmCcNCZNuG8VJnpkXgGbBzeLrqvILp5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UKFi0FUf; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732788070; c=relaxed/simple;
+	bh=sr3m4q8NQ+yWL/GM/aZn5V9dc0T5vWuPfLus3LYfktY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UOq94WOcjvm4jtsZI78Wev7NEnPLMu6JMIFKKuzWQLDuvyFJGBID3E5wrWcj2mJEfceFsBS8x/7G7qXdVLJK58U4BAqrN1zu2S7cs4uhjHiV4QQj1t2T/DfqKo0IeN/0uaR6xSCHkyTIrrw75e9/MN8VMgE3odZiJyTTBsoJhSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uh3Ydam3; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UKFi0FUf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732785250; x=1764321250;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xw2wO2fUU8KQ8iSrqcL95ODU94SFi+VqIXlFh7Mb7T0=;
-  b=UKFi0FUfTDx7s57mp537/9lJeVxZdVsuRNpYeUpzDIevRmgNeRVPQPDO
-   tleYI9odU6GT3W6fNS4j2sB3kcCpuw2tfRpnG2oCKJy6Z4q5yn3FEZVr2
-   XkrkDQMDkugLxl2wej7zSCFSTfI80wASagwP3h24fM/u98c9ka+Fwj33i
-   hZh3Ysii8vQ6k0D686YdHuBNR97FjqZDkqFtAaXMVP2FEb7OkQrIgs3j5
-   SLDgGDDJyBEjJi/YejLFFFqAyFVQ8AL3yC4NtZc5WArf5ww7AXauC32+u
-   0j50suW+LGPXMABu3BFxgt7FyXAqli38UB+afknJOBU1c8lqyBzHpFwUY
-   A==;
-X-CSE-ConnectionGUID: wCOpS0SxRdGUS/8CLfAnzA==
-X-CSE-MsgGUID: BCSLg922T7quCOTYOQ4EtQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="32946944"
-X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
-   d="scan'208";a="32946944"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 01:14:09 -0800
-X-CSE-ConnectionGUID: uqOmvXfmQWGhfoFoRafCKg==
-X-CSE-MsgGUID: qGqrPxt/RbKGmMsdYDmvEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
-   d="scan'208";a="96942880"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 28 Nov 2024 01:14:03 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tGab3-0009Nx-07;
-	Thu, 28 Nov 2024 09:14:01 +0000
-Date: Thu, 28 Nov 2024 17:13:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiko Stuebner <heiko@sntech.de>, vkoul@kernel.org, kishon@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, quentin.schulz@cherry.de,
-	sebastian.reichel@collabora.com, heiko@sntech.de,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-	dse@thaumatec.com, Heiko Stuebner <heiko.stuebner@cherry.de>
-Subject: Re: [PATCH v4 2/2] phy: rockchip: Add Samsung MIPI D-/C-PHY driver
-Message-ID: <202411281638.UyY41bPE-lkp@intel.com>
-References: <20241126131736.465111-3-heiko@sntech.de>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uh3Ydam3"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3ea5a7a5e48so343469b6e.0
+        for <llvm@lists.linux.dev>; Thu, 28 Nov 2024 02:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732788068; x=1733392868; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JSLLTaqyAduW2ArQyIX+tknhwh7psIKkLCezIRIcTH8=;
+        b=uh3Ydam3hm3IWe6xc7d7heP86iiqcmpxYEgrEiD75y4WgZ6rRoAYpXliWPAGDp4o6h
+         UNm2T11qf2hYToZ9b23+zFVfhtQaeLytMCz72TT96OkxosumdxyHmV4vKyHvUng6bQBb
+         N4c27EvAC1vrP+2D7T3YtbcPrbx/cUc1cUuaf39k5p+KHuOb+xHaHE+9jwb5QbxFk+r8
+         ja8ZyH2YI0K8cLNyuvB2nGHZfa9OM0mRzO50K/SbTCPBs1FHwuQdTJNaolVJWgDdbb7r
+         cyoRQBPqIa5HAW0Tb55mdX4RyfRsWEvXHUmxAjsSfb53I95Ac1K4ssNqNY7hoiR+T3ca
+         MW/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732788068; x=1733392868;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JSLLTaqyAduW2ArQyIX+tknhwh7psIKkLCezIRIcTH8=;
+        b=VmZMce2db1ze79Yp+B04vFfJ/CH0VG4621aJfHMtF2ERn69ZRYcuA9pTTSfk9Yy6m2
+         i+8+FNG4jNeSqaBrH6Cjwl2sabW9rndq03pfwrXP0mb2X9PUn0czSbuY/wJEmB1tXy3f
+         mY+JVIBaG7fHZ9OUmusr1E2XSvqNscpUWqoxmLeRN5FsuIqdec+tkdRcGsTqCkE4nK3d
+         RxiXtzkTtOLMxeFFWVR5GMZEjU4Dx6yLmdM1Ddi42hjvkhWpCShTxqBYDNLm7/joCMuT
+         39x/A9d8uEnjHiDs+b/3ozkFl99SXF9aA5NG9kk6b7/8sYETuwkJjIQYUMZiBrUeMlL9
+         7Qsg==
+X-Forwarded-Encrypted: i=1; AJvYcCVucxvVvzGiGiWY16j0/zopP0Uah9gO1H1DjZ08O/E8UNqLcUmmNvt2Y8RZjEVlKvjV9ghV@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw7D6A1XCsP61q1qLJ5PRAw26fgIJVTYF+Wal/a4C1sSomE4LDC
+	QpgeYPf5lbqKkVy4j5MADRya+URjyjk88Bawa1ikATeNJKthnlpWIZVFHdQWRQYOaJ4uV5hGTA6
+	vQDUqzcMUJ5y4681E9EBcbdYS1my2FWstfWe3Uw==
+X-Gm-Gg: ASbGncu91J9yVf1v0vSmaOhtjqfn0828bgxSBIeBO7WSmfnVCw4Xhe7VpPOAtpa7Afh
+	YKkJ6Pg0HO3tWRCTRTDE/a/7FViw4BWhsVQ==
+X-Google-Smtp-Source: AGHT+IFQJ2vqlwir+TVj8VrxIEsFkK/0glqr+WYlo4RXfaelhJ1mOeWad0OAsfuEv05eXPQ6Wfy96mNVzfuVmE7f838=
+X-Received: by 2002:a05:6808:d51:b0:3e5:cf3b:4fc5 with SMTP id
+ 5614622812f47-3ea6dbd5d8dmr6480398b6e.15.1732788068001; Thu, 28 Nov 2024
+ 02:01:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241126131736.465111-3-heiko@sntech.de>
+References: <CA+G9fYuaWJYQcxQ=3UqQbbuD_YNdOS_KB46N=mh47rxE049f-Q@mail.gmail.com>
+ <20241125162354.GD2067874@thelio-3990X>
+In-Reply-To: <20241125162354.GD2067874@thelio-3990X>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 28 Nov 2024 15:30:56 +0530
+Message-ID: <CA+G9fYuf6A+3gjNfifnd5cRL5oOU6HA2j-KXaaP90mskNVrV9Q@mail.gmail.com>
+Subject: Re: korg-clang-19-lkftconfig-hardening: TI x15 board - PC is at
+ edma_probe (drivers/dma/ti/edma.c
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: open list <linux-kernel@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	dmaengine@vger.kernel.org, lkft-triage@lists.linaro.org, 
+	peter.ujfalusi@gmail.com, Vinod Koul <vkoul@kernel.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, kees@kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Heiko,
+On Mon, 25 Nov 2024 at 21:53, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Naresh,
+>
+> + Kees and linux-hardening, since this is a hardening configuration.
+>
+> On Mon, Nov 25, 2024 at 07:34:22PM +0530, Naresh Kamboju wrote:
+> > The arm TI x15 board boot has failed with the Linux next, mainline
+> > and the Linux stable. Please find boot log and build links.
+> >
+> > The boot failed with clang tool chain and PASS with gcc-13.
+> >
+> > Device: TI x15 device
+> > Boot pass: gcc-13
+>
+> Are the UBSAN options getting enabled with GCC as well? I am somewhat
+> surprised that they are not agreeing here, unless this is a __counted_by
+> related issue? Does this not happen with GCC 14 as well? It would be
+> nice if we could get a copy of GCC 15 with __counted_by into TuxMake for
+> validation of __counted_by between the two compilers easily. I did not
+> see any obvious instances of __counted_by in edma_probe() but
+> admittedly, I did not look too hard.
+>
+> > Boot failed: clang-19
+> > Configs: korg-clang-19-lkftconfig-hardening
+> > Boot pass: qemu-armv7 (Additional info)
+> >
+> > This is always reproducible.
+> >
+> > x15 beagleboard:
+> >   boot:
+> >     * clang-nightly-lkftconfig-hardening
+> >     * korg-clang-19-lkftconfig-hardening
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Log details:
+> > ------------
+> > [    0.000000] Booting Linux on physical CPU 0x0
+> > [    0.000000] Linux version 6.12.0 (tuxmake@tuxmake) (ClangBuiltLinux
+> > clang version 19.1.4 (https://github.com/llvm/llvm-project.git
+> > aadaa00de76ed0c4987b97450dd638f63a385bed), ClangBuiltLinux LLD 19.1.4
+> > (https://github.com/llvm/llvm-project.git
+> > aadaa00de76ed0c4987b97450dd638f63a385bed)) #1 SMP @1732428891
+> > [    0.000000] CPU: ARMv7 Processor [412fc0f2] revision 2 (ARMv7), cr=30c5387d
+> > <>
+> > [    3.543395] pcieport 0000:00:00.0: PME: Signaling with IRQ 136
+> > [    3.556976] Internal error: Oops - undefined instruction: 0 [#1] SMP ARM
+>
+> Can you turn off UBSAN_TRAP and see if that gives us any indication as
+> to where exactly UBSAN_BOUNDS is triggering here? It is not entirely
+> clear because we do not seem to have a line number in edma.c from
+> decoding the stacktrace.
 
-kernel test robot noticed the following build errors:
+Anders made a new build with UBSAN_TRAP turn off and the boot pass
+ CONFIG_UBSAN_TRAP=n
+on arm TI x15 device.
 
-[auto build test ERROR on rockchip/for-next]
-[also build test ERROR on robh/for-next linus/master v6.12 next-20241128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Link Log:
+--------
+ - https://lkft.validation.linaro.org/scheduler/job/8008096#L1846
+ - https://storage.tuxsuite.com/public/linaro/anders/builds/2pR6MSNK0MqztHMe45eAqWYlIaf/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/dt-bindings-phy-Add-Rockchip-MIPI-C-D-PHY-schema/20241128-100435
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-patch link:    https://lore.kernel.org/r/20241126131736.465111-3-heiko%40sntech.de
-patch subject: [PATCH v4 2/2] phy: rockchip: Add Samsung MIPI D-/C-PHY driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241128/202411281638.UyY41bPE-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411281638.UyY41bPE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411281638.UyY41bPE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:15:
-   In file included from include/linux/phy/phy.h:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:15:
-   In file included from include/linux/phy/phy.h:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:15:
-   In file included from include/linux/phy/phy.h:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:15:
-   In file included from include/linux/phy/phy.h:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:895:23: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     895 |                            I_MUX_SEL_MASK, I_MUX_SEL_400MV);
-         |                                            ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:33:26: note: expanded from macro 'I_MUX_SEL_400MV'
-      33 | #define I_MUX_SEL_400MV         I_MUX_SEL(0)
-         |                                 ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:32:23: note: expanded from macro 'I_MUX_SEL'
-      32 | #define I_MUX_SEL(x)            FIELD_PREP(I_MUX_SEL_MASK, x)
-         |                                 ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:900:50: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     900 |         regmap_write(samsung->regmap, DPHY_MC_GNR_CON1, T_PHY_READY(0x2000));
-         |                                                         ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:69:25: note: expanded from macro 'T_PHY_READY'
-      69 | #define T_PHY_READY(x)          FIELD_PREP(GENMASK(15, 0), x)
-         |                                 ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:945:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     945 |                            S(samsung->pll.scaler) | P(samsung->pll.prediv));
-         |                            ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:40:16: note: expanded from macro 'S'
-      40 | #define S(x)                    FIELD_PREP(S_MASK, x)
-         |                                 ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:1116:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1116 |         val = EDGE_CON(7) | EDGE_CON_DIR(0) | EDGE_CON_EN |
-         |               ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:71:22: note: expanded from macro 'EDGE_CON'
-      71 | #define EDGE_CON(x)             FIELD_PREP(GENMASK(14, 12), x)
-         |                                 ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:1170:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1170 |         val = EDGE_CON(7) | EDGE_CON_DIR(0) | EDGE_CON_EN |
-         |               ^
-   drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c:71:22: note: expanded from macro 'EDGE_CON'
-      71 | #define EDGE_CON(x)             FIELD_PREP(GENMASK(14, 12), x)
-         |                                 ^
-   7 warnings and 5 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MODVERSIONS
-   Depends on [n]: MODULES [=y] && !COMPILE_TEST [=y]
-   Selected by [y]:
-   - RANDSTRUCT_FULL [=y] && (CC_HAS_RANDSTRUCT [=y] || GCC_PLUGINS [=n]) && MODULES [=y]
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
-
-
-vim +/FIELD_PREP +895 drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c
-
-   881	
-   882	static void samsung_mipi_dcphy_bias_block_enable(struct samsung_mipi_dcphy *samsung)
-   883	{
-   884		u32 bias_con2 = 0x3223;
-   885	
-   886		regmap_write(samsung->regmap, BIAS_CON0, 0x0010);
-   887		regmap_write(samsung->regmap, BIAS_CON1, 0x0110);
-   888		regmap_write(samsung->regmap, BIAS_CON2, bias_con2);
-   889	
-   890		/* default output voltage select:
-   891		 * dphy: 400mv
-   892		 * cphy: 530mv
-   893		 */
-   894		regmap_update_bits(samsung->regmap, BIAS_CON4,
- > 895				   I_MUX_SEL_MASK, I_MUX_SEL_400MV);
-   896	}
-   897	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+- Naresh
