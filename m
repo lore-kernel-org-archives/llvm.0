@@ -1,281 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7410019E7D0;
-	Fri, 29 Nov 2024 18:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6FB13AA35
+	for <llvm@lists.linux.dev>; Fri, 29 Nov 2024 20:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732905646; cv=none; b=u0qQpvhexWzG2IfbYGFT5qG+QfCv0Re85f5v3uKPp68zBRGXvnQyuJXCv6bMw10UNGALk301zurRg7oioaMVa5L0ftXbsblLmzyfp3fnm9RT46a42f2FmZ5CQmD2lEj4I7JawgwNiBaXdyomo00bP5D+NXoFdp+Hxr8RxoTTyu4=
+	t=1732912331; cv=none; b=OjjS3IKia5/fbbpu8PVNxOY+9X0ulWEQB7XUqD6rWJ54z+dnVKeJDAgAIYLRPDoDpxJk+ZnV1WrSCrw6R1YLS0C6TcoFeb41WC676I2CkafQbLDf35lMaubmk20KU/xdXarYQgbBM36QHMmHewCYK4bAqrwyIw/hmKk5ltbcCTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732905646; c=relaxed/simple;
-	bh=Qsng7FU1DeYTg+48WQ34KtK/cEVfuDBd81zp+Xy/Ueg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P70zYUDDYGoY9G53DhlQBZ5gy+8U+HBH+6cDDfrNuphYolV6LQc1MXuDZuBqnmc4p6YCo9vvuuSqQ0PJNfFsnQQJ5xVBtmkP3TgF0ytbbJ4jqlTp3o5q2K/zoqJviGdljJRMdRPViONDRHIBWWdWYyvyTL+d4Tch3Pmtbh43dKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IrIzwqBG; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732912331; c=relaxed/simple;
+	bh=udmqC/EWUelOEU8Z8dPsyEWVMYTiSwkMTL7AFSsg9Hk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SDB9kaYf3VYogJSCsRNE6x9xgLfLLAnLRkLq/LNKXSHehvN4//VXIeLurM98dTfGsXO6eXnobaiZRN029QawXttiNia7hXSHdyR9LveJw3ez455cDjHPiYmAppqH7Xx/e/9Hh5XoIOL864DX+mEj9pkLB+A8psj8wgsXzjJMUpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YabvEl/c; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IrIzwqBG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732905645; x=1764441645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qsng7FU1DeYTg+48WQ34KtK/cEVfuDBd81zp+Xy/Ueg=;
-  b=IrIzwqBGrVNGAFq5/FqMfzfqi+ojZZDHqXi1YD2t4Sv5B6jukiHdVE/F
-   pvifb6BJU9EoH8BPw29nHFcTjpB/Usi7Ijl3tHqVQTB0B9EOAxVK6dw+R
-   LNZ4RHgCt2b+1cGWtSqRm9Vy5ZA/SZIjhhzb8RdVltC8oez9aTUSV6xW8
-   uh41upuy2UG861H8KJsTWo9sVNtJZOP+Ec1Ykorc4iqj1RzmhNsd0xemo
-   x8nCTAznqQS3NJw9qWrseBxSFYdJ3X5twlqg0pm5bI6heCVxBse3UjX1f
-   nyxW2pRW0Wlj40Fcg6Gtppnxmlpo85vdS+EK4IARbSZcCvt0hIFJCQ4Jk
-   Q==;
-X-CSE-ConnectionGUID: t6MiNGzuQG+lcRzXpsrb8g==
-X-CSE-MsgGUID: ILoMb7jESZK70IgU9rIaVA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11271"; a="36928711"
-X-IronPort-AV: E=Sophos;i="6.12,196,1728975600"; 
-   d="scan'208";a="36928711"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 10:40:42 -0800
-X-CSE-ConnectionGUID: eLNBb6bSR9KN6PQ0nY+wtA==
-X-CSE-MsgGUID: Sz3wLXyKRxuGfEj0PedYZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="97587111"
-Received: from lkp-server01.sh.intel.com (HELO 5e2646291792) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 29 Nov 2024 10:40:40 -0800
-Received: from kbuild by 5e2646291792 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tH5uw-0000cb-01;
-	Fri, 29 Nov 2024 18:40:38 +0000
-Date: Sat, 30 Nov 2024 02:40:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael V. Volkmer" <rafael.v.volkmer@gmail.com>, ukleinek@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	rafael.v.volkmer@gmail.com
-Subject: Re: [PATCH] pwm: tiehrpwm: ensures that state.enabled is
- synchronized during .probe()
-Message-ID: <202411300250.wkH4Isc0-lkp@intel.com>
-References: <20241129034334.27203-1-rafael.v.volkmer@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YabvEl/c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732912327;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4cGy1nZ024HMFA1rp8O51vzaDjC1jHy+LXBlYj5UHC0=;
+	b=YabvEl/c1f+I+qZGFU2g67yrYBbT7Q5XnSgky+5bvCAEWPvwe8jBrHVwby2LMXF/v/vrdA
+	OBMpMcBSt56lwGEFyZ6VRW5JwDx17Yy84cUjtKFW4QR8p5bGQmO003XMUyGHOdezBvJ7KL
+	t/nznFiNnHtcRuqkwd6CYihaNbBzjjg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-117-UProyCxHNT6aC5qI8ue7bA-1; Fri,
+ 29 Nov 2024 15:32:06 -0500
+X-MC-Unique: UProyCxHNT6aC5qI8ue7bA-1
+X-Mimecast-MFC-AGG-ID: UProyCxHNT6aC5qI8ue7bA
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA9D1195608F
+	for <llvm@lists.linux.dev>; Fri, 29 Nov 2024 20:32:05 +0000 (UTC)
+Received: from [172.64.12.14] (unknown [10.30.33.24])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 75F251955D47;
+	Fri, 29 Nov 2024 20:32:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
+ upstream-mainline, 93e064ce)
+Date: Fri, 29 Nov 2024 20:32:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241129034334.27203-1-rafael.v.volkmer@gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <29823.124112915320600359@us-mta-117.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Mw3BgP1SNz01h7vOSDu-hIkEKKgr7rQguK46UgDA5Zs_1732912326
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rafael,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.12 next-20241128]
-[cannot apply to thierry-reding-pwm/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rafael-V-Volkmer/pwm-tiehrpwm-ensures-that-state-enabled-is-synchronized-during-probe/20241129-114649
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241129034334.27203-1-rafael.v.volkmer%40gmail.com
-patch subject: [PATCH] pwm: tiehrpwm: ensures that state.enabled is synchronized during .probe()
-config: x86_64-buildonly-randconfig-002-20241129 (https://download.01.org/0day-ci/archive/20241130/202411300250.wkH4Isc0-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241130/202411300250.wkH4Isc0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411300250.wkH4Isc0-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/pwm/pwm-tiehrpwm.c:537:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     537 |         return ret;
-         |                ^~~
-   drivers/pwm/pwm-tiehrpwm.c:525:9: note: initialize the variable 'ret' to silence this warning
-     525 |         int ret;
-         |                ^
-         |                 = 0
->> drivers/pwm/pwm-tiehrpwm.c:642:27: error: no member named 'chip' in 'struct ehrpwm_pwm_chip'
-     642 |         ehrpwm_get_hw_state(&pc->chip, &pc->chip.pwms[0], &state);
-         |                              ~~  ^
-   drivers/pwm/pwm-tiehrpwm.c:642:38: error: no member named 'chip' in 'struct ehrpwm_pwm_chip'
-     642 |         ehrpwm_get_hw_state(&pc->chip, &pc->chip.pwms[0], &state);
-         |                                         ~~  ^
->> drivers/pwm/pwm-tiehrpwm.c:642:53: error: use of undeclared identifier 'state'; did you mean 'stac'?
-     642 |         ehrpwm_get_hw_state(&pc->chip, &pc->chip.pwms[0], &state);
-         |                                                            ^~~~~
-         |                                                            stac
-   arch/x86/include/asm/smap.h:36:29: note: 'stac' declared here
-      36 | static __always_inline void stac(void)
-         |                             ^
-   drivers/pwm/pwm-tiehrpwm.c:644:5: error: use of undeclared identifier 'state'
-     644 |         if(state.enabled == true) {
-         |            ^
-   drivers/pwm/pwm-tiehrpwm.c:664:22: error: no member named 'chip' in 'struct ehrpwm_pwm_chip'
-     664 |         pwmchip_remove(&pc->chip);
-         |                         ~~  ^
-   1 warning and 5 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +642 drivers/pwm/pwm-tiehrpwm.c
+Kernel information:
+    Commit message: Merge tag 'modules-6.13-rc1-v2' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/modules/linux
 
-   521	
-   522	static int ehrpwm_get_hw_state(struct pwm_chip *chip, struct pwm_device *pwm, 
-   523									struct pwm_state *state)
-   524	{
-   525		int ret;
-   526	
-   527		if(chip == NULL || pwm == NULL || state == NULL){
-   528			return -EINVAL;
-   529		}
-   530	
-   531		state->enabled = ehrpwm_is_enabled(chip);
-   532	
-   533		state->period = ehrpwm_read_period(chip);
-   534	    state->duty_cycle = ehrpwm_read_duty_cycle(chip);
-   535	    state->polarity = ehrpwm_read_polarity(chip);
-   536	
- > 537		return ret;
-   538	}
-   539	
-   540	static int ehrpwm_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-   541				    const struct pwm_state *state)
-   542	{
-   543		int err;
-   544		bool enabled = pwm->state.enabled;
-   545	
-   546		if (state->polarity != pwm->state.polarity) {
-   547			if (enabled) {
-   548				ehrpwm_pwm_disable(chip, pwm);
-   549				enabled = false;
-   550			}
-   551	
-   552			err = ehrpwm_pwm_set_polarity(chip, pwm, state->polarity);
-   553			if (err)
-   554				return err;
-   555		}
-   556	
-   557		if (!state->enabled) {
-   558			if (enabled)
-   559				ehrpwm_pwm_disable(chip, pwm);
-   560			return 0;
-   561		}
-   562	
-   563		err = ehrpwm_pwm_config(chip, pwm, state->duty_cycle, state->period);
-   564		if (err)
-   565			return err;
-   566	
-   567		if (!enabled)
-   568			err = ehrpwm_pwm_enable(chip, pwm);
-   569	
-   570		return err;
-   571	}
-   572	
-   573	static const struct pwm_ops ehrpwm_pwm_ops = {
-   574		.free = ehrpwm_pwm_free,
-   575		.apply = ehrpwm_pwm_apply,
-   576	};
-   577	
-   578	static const struct of_device_id ehrpwm_of_match[] = {
-   579		{ .compatible = "ti,am3352-ehrpwm" },
-   580		{ .compatible = "ti,am33xx-ehrpwm" },
-   581		{},
-   582	};
-   583	MODULE_DEVICE_TABLE(of, ehrpwm_of_match);
-   584	
-   585	static int ehrpwm_pwm_probe(struct platform_device *pdev)
-   586	{
-   587		struct device_node *np = pdev->dev.of_node;
-   588		struct ehrpwm_pwm_chip *pc;
-   589		struct pwm_chip *chip;
-   590		bool tbclk_enabled;
-   591		struct clk *clk;
-   592		int ret;
-   593	
-   594		chip = devm_pwmchip_alloc(&pdev->dev, NUM_PWM_CHANNEL, sizeof(*pc));
-   595		if (IS_ERR(chip))
-   596			return PTR_ERR(chip);
-   597		pc = to_ehrpwm_pwm_chip(chip);
-   598	
-   599		clk = devm_clk_get(&pdev->dev, "fck");
-   600		if (IS_ERR(clk)) {
-   601			if (of_device_is_compatible(np, "ti,am33xx-ecap")) {
-   602				dev_warn(&pdev->dev, "Binding is obsolete.\n");
-   603				clk = devm_clk_get(pdev->dev.parent, "fck");
-   604			}
-   605		}
-   606	
-   607		if (IS_ERR(clk))
-   608			return dev_err_probe(&pdev->dev, PTR_ERR(clk), "Failed to get fck\n");
-   609	
-   610		pc->clk_rate = clk_get_rate(clk);
-   611		if (!pc->clk_rate) {
-   612			dev_err(&pdev->dev, "failed to get clock rate\n");
-   613			return -EINVAL;
-   614		}
-   615	
-   616		chip->ops = &ehrpwm_pwm_ops;
-   617	
-   618		pc->mmio_base = devm_platform_ioremap_resource(pdev, 0);
-   619		if (IS_ERR(pc->mmio_base))
-   620			return PTR_ERR(pc->mmio_base);
-   621	
-   622		/* Acquire tbclk for Time Base EHRPWM submodule */
-   623		pc->tbclk = devm_clk_get(&pdev->dev, "tbclk");
-   624		if (IS_ERR(pc->tbclk))
-   625			return dev_err_probe(&pdev->dev, PTR_ERR(pc->tbclk), "Failed to get tbclk\n");
-   626	
-   627		ret = clk_prepare(pc->tbclk);
-   628		if (ret < 0) {
-   629			dev_err(&pdev->dev, "clk_prepare() failed: %d\n", ret);
-   630			return ret;
-   631		}
-   632	
-   633		ret = pwmchip_add(chip);
-   634		if (ret < 0) {
-   635			dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
-   636			goto err_clk_unprepare;
-   637		}
-   638	
-   639		platform_set_drvdata(pdev, chip);
-   640		pm_runtime_enable(&pdev->dev);
-   641	
- > 642		ehrpwm_get_hw_state(&pc->chip, &pc->chip.pwms[0], &state);
-   643	
-   644		if(state.enabled == true) {
-   645			ret = clk_prepare_enable(pc->tbclk);
-   646			if (ret) {	
-   647				dev_err(&pdev->dev, "clk_prepare_enable() failed: %d\n", ret);
-   648				goto err_pwmchip_remove;
-   649			}
-   650			
-   651			tbclk_enabled = true;
-   652	
-   653			ret = pm_runtime_get_sync(&pdev->dev);
-   654			if(ret < 0) {
-   655				dev_err(&pdev->dev, "pm_runtime_get_sync() failed: %d\n", ret);
-   656				clk_disable_unprepare(pc->tbclk);
-   657				goto err_pwmchip_remove;
-   658			}
-   659		}
-   660	
-   661		return 0;
-   662	
-   663	err_pwmchip_remove:
-   664		pwmchip_remove(&pc->chip);
-   665	err_clk_unprepare:
-   666		if(tbclk_enabled)
-   667			clk_unprepare(pc->tbclk);
-   668	
-   669		return ret;
-   670	}
-   671	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1566518898
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1566518898-ppc64le-kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1566518898-x86_64-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1566518898-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
