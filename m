@@ -1,64 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E40C145324;
-	Fri, 29 Nov 2024 15:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846AF145B1D;
+	Fri, 29 Nov 2024 15:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732895003; cv=none; b=Hakqp3qXxpnEjAcOgZgD5czBMNWkJSwlOACJ6+bNhCo3jqD/nSt1iqNmXFplyoCtjfQFhQYFyxSKBmRVtPEMOAeJYLAwffpkySsXhntjQ2mc/NxZDuRrb/WqapNgQ5zRyeon0JdJzl4hLwYHGlb3mPToCFmYGTaeMcGtNKtG/ns=
+	t=1732895608; cv=none; b=W85ZlgCZh7qSfqgVktJUVmgOuHiG1LdfcyELXeNkaHaf5cinKiva1gUiIYeC4OmstILMIwi/q3LzK0YbBaVg7fzjyGiwWdBGS/sATH0Myri0upbJ736jEuBSu04YRpf9DSMi56iPivDg/evEF71xNtnNIzcxSCcBOm4OIB94yQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732895003; c=relaxed/simple;
-	bh=9ZR8meMzxqoVA1ARLMYuDfRXGJGKTDRavNgddjOtIR4=;
+	s=arc-20240116; t=1732895608; c=relaxed/simple;
+	bh=X8kdzcem7IoN9L8/nNtQOwRxzQErlTl262LyjmQLTLs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ngdSEj1yZrPrHqp3Fj8JtGTg3pRxYo03uTJRR55Z9vHE83NvWngCjb1yFos7UBZDXXfHa5cyf+BaMbsGM2/bG/guK9MSJ3ArctZOwjE5WZlyNJgo3FTiFQUgpdyLmtKNFqPlIUFs0JUlrQabkMXK2uT7w52qlF7ZpFKJ/Y0HRAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZEbhqk2G; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=N3kLa8maeaL4r4ARD6jjCrG0DMyBHXT4wEk7UoGBhkuXe+teup/4KicGU+i4ob1NjM6qiK/wTON+YWCHyfwcU8uNWb8BvaMsBGLqLwfqlIe6ePzOnG2k2q+HQXLr0wA2q7Hz6+zxVRm8UcnZ1GvyP/cQJd4TZmS8SkMWvrMRbqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hm0Q/L9/; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZEbhqk2G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hm0Q/L9/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732895000; x=1764431000;
+  t=1732895606; x=1764431606;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9ZR8meMzxqoVA1ARLMYuDfRXGJGKTDRavNgddjOtIR4=;
-  b=ZEbhqk2GRphT4pel5lSIsW9q3MAa5nt9zf2fD4gdXN8ubROUwT4ongoL
-   D2v4sw/9SYt+DIMRRrHTH2R+3FIsQ54V5RCWcD4s2DqsPVoEPAeT4Kv4y
-   itJlVC16CLVO/nAm7ePS+W97a4mq9xDMhyZf1kec9VVorgJ5f/QVbW4QD
-   tUDOW7XSFLU+glxnudx33E4ZIl0Yi/uOwuInkD3NONmVt2RuZryKr1kG4
-   PEARJbj/3f/YI7IpxNyLXtGlGXlb6YL4sonJQkRAhBqnotLycgbzteKXF
-   4HiFqEwCvypYqRgCnumZxg4JH0kyCv75DjKbXTYogNWInvLO6hIO0r/xR
-   g==;
-X-CSE-ConnectionGUID: dY01IUgNRHCgl+fet3CtuA==
-X-CSE-MsgGUID: RLitWLoMSKmY4/Vx9UrayA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11271"; a="35995818"
+  bh=X8kdzcem7IoN9L8/nNtQOwRxzQErlTl262LyjmQLTLs=;
+  b=hm0Q/L9/wysu8NHFkeivl0/NGM+w55A+otBsrlhUpMK5Pnp3LzUCJzD3
+   leeIkgdA87vBVPnZp+Kl7QEHZEZTPJF+YW28yw3Ng4+P1Ymy9r2wt0Voy
+   1zKWY1fUkypobFboQ7gY3SLEtDzi/1hTAdTvTkd/NXFOD/KAaLaFRoJmF
+   C6GWkF9gTAMaCrTTOBKR51xs9XjYO+niTFNpHN8iJlZ2p3pRlb/OQEyAR
+   LHkP1DyeA+lZhziU+FYk0wPlpkXnCBeLO9sq+xeqvGSjFU3bMN0ROA/ZY
+   iPondkvIwBe9MbO5ng8DQZ7t3hcNbFwctRWlXY6u3EcKZp+J33rDL2FC0
+   A==;
+X-CSE-ConnectionGUID: yjoTUu/gRgm7twWKrFdaOg==
+X-CSE-MsgGUID: 7BFBc3mKR5yxK9+vCyZAtg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11271"; a="36802614"
 X-IronPort-AV: E=Sophos;i="6.12,195,1728975600"; 
-   d="scan'208";a="35995818"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 07:43:19 -0800
-X-CSE-ConnectionGUID: 9pqMYTlqQ+yd1qxvuew+Hw==
-X-CSE-MsgGUID: IG1KKfyRSlS+g6yX1kimSg==
+   d="scan'208";a="36802614"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 07:53:25 -0800
+X-CSE-ConnectionGUID: 7//IIXS5QRGX+aRBQ6lUBQ==
+X-CSE-MsgGUID: tJhAP9U8QW+LzJR0JKxV6A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="97555294"
+X-IronPort-AV: E=Sophos;i="6.12,196,1728975600"; 
+   d="scan'208";a="96596770"
 Received: from lkp-server01.sh.intel.com (HELO 5e2646291792) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 29 Nov 2024 07:43:16 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 29 Nov 2024 07:53:17 -0800
 Received: from kbuild by 5e2646291792 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tH39G-0000T9-0g;
-	Fri, 29 Nov 2024 15:43:14 +0000
-Date: Fri, 29 Nov 2024 23:42:44 +0800
+	id 1tH3Ix-0000TX-0E;
+	Fri, 29 Nov 2024 15:53:15 +0000
+Date: Fri, 29 Nov 2024 23:53:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Ilya Dryomov <idryomov@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Xiubo Li <xiubli@redhat.com>, ceph-devel@vger.kernel.org,
-	Jeff Layton <jlayton@kernel.org>, linux-fsdevel@vger.kernel.org,
-	David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH 5/5] ceph: Use a folio in ceph_writepages_start()
-Message-ID: <202411292322.iv4hDiEQ-lkp@intel.com>
-References: <20241129055058.858940-6-willy@infradead.org>
+To: Eliav Farber <farbere@amazon.com>, linux@armlinux.org.uk,
+	catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
+	npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org,
+	maddy@linux.ibm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, tglx@linutronix.de, ebiederm@xmission.com,
+	akpm@linux-foundation.org, bhe@redhat.com, hbathini@linux.ibm.com,
+	sourabhjain@linux.ibm.com, adityag@linux.ibm.com,
+	songshuaishuai@tinylab.org, takakura@valinux.co.jp,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	kexec@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jonnyc@amazon.com
+Subject: Re: [PATCH v4 1/2] kexec: Consolidate
+ machine_kexec_mask_interrupts() implementation
+Message-ID: <202411292312.KnEWhcVS-lkp@intel.com>
+References: <20241129113119.26669-2-farbere@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,552 +73,409 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241129055058.858940-6-willy@infradead.org>
+In-Reply-To: <20241129113119.26669-2-farbere@amazon.com>
 
-Hi Matthew,
+Hi Eliav,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on next-20241128]
-[cannot apply to ceph-client/testing ceph-client/for-linus v6.12]
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on powerpc/fixes tip/irq/core arm64/for-next/core linus/master v6.12 next-20241128]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/ceph-Do-not-look-at-the-index-of-an-encrypted-page/20241129-135252
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241129055058.858940-6-willy%40infradead.org
-patch subject: [PATCH 5/5] ceph: Use a folio in ceph_writepages_start()
-config: x86_64-buildonly-randconfig-002-20241129 (https://download.01.org/0day-ci/archive/20241129/202411292322.iv4hDiEQ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eliav-Farber/kexec-Consolidate-machine_kexec_mask_interrupts-implementation/20241129-193342
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/20241129113119.26669-2-farbere%40amazon.com
+patch subject: [PATCH v4 1/2] kexec: Consolidate machine_kexec_mask_interrupts() implementation
+config: i386-buildonly-randconfig-002-20241129 (https://download.01.org/0day-ci/archive/20241129/202411292312.KnEWhcVS-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241129/202411292322.iv4hDiEQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241129/202411292312.KnEWhcVS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411292322.iv4hDiEQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411292312.KnEWhcVS-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/ceph/addr.c:4:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from kernel/kexec_core.c:9:
+   In file included from include/linux/btf.h:8:
+   In file included from include/linux/bpfptr.h:6:
    In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> fs/ceph/addr.c:1178:39: warning: variable 'page' is uninitialized when used here [-Wuninitialized]
-    1178 |                                         fscrypt_encrypt_pagecache_blocks(page,
-         |                                                                          ^~~~
-   fs/ceph/addr.c:1043:20: note: initialize the variable 'page' to silence this warning
-    1043 |                 struct page *page;
-         |                                  ^
-         |                                   = NULL
-   4 warnings generated.
+   In file included from kernel/kexec_core.c:43:
+>> include/linux/irqdesc.h:68:25: error: field has incomplete type 'struct irq_common_data'
+      68 |         struct irq_common_data  irq_common_data;
+         |                                 ^
+   include/linux/irqdesc.h:68:9: note: forward declaration of 'struct irq_common_data'
+      68 |         struct irq_common_data  irq_common_data;
+         |                ^
+>> include/linux/irqdesc.h:69:19: error: field has incomplete type 'struct irq_data'
+      69 |         struct irq_data         irq_data;
+         |                                 ^
+   include/linux/irqdesc.h:69:9: note: forward declaration of 'struct irq_data'
+      69 |         struct irq_data         irq_data;
+         |                ^
+   include/linux/irqdesc.h:71:2: error: unknown type name 'irq_flow_handler_t'; did you mean 'irq_handler_t'?
+      71 |         irq_flow_handler_t      handle_irq;
+         |         ^~~~~~~~~~~~~~~~~~
+         |         irq_handler_t
+   include/linux/interrupt.h:104:23: note: 'irq_handler_t' declared here
+     104 | typedef irqreturn_t (*irq_handler_t)(int, void *);
+         |                       ^
+   In file included from kernel/kexec_core.c:43:
+>> include/linux/irqdesc.h:139:26: error: incomplete definition of type 'struct irq_data'
+     139 |         return container_of(data->common, struct irq_desc, irq_common_data);
+         |                             ~~~~^
+   include/linux/container_of.h:19:26: note: expanded from macro 'container_of'
+      19 |         void *__mptr = (void *)(ptr);                                   \
+         |                                 ^~~
+   include/linux/irqdesc.h:69:9: note: forward declaration of 'struct irq_data'
+      69 |         struct irq_data         irq_data;
+         |                ^
+>> include/linux/irqdesc.h:139:26: error: incomplete definition of type 'struct irq_data'
+     139 |         return container_of(data->common, struct irq_desc, irq_common_data);
+         |                             ~~~~^
+   include/linux/container_of.h:20:30: note: expanded from macro 'container_of'
+      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                     ^~~
+   include/linux/compiler_types.h:464:63: note: expanded from macro '__same_type'
+     464 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                               ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                                  ^~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/irqdesc.h:69:9: note: forward declaration of 'struct irq_data'
+      69 |         struct irq_data         irq_data;
+         |                ^
+>> include/linux/irqdesc.h:139:26: error: incomplete definition of type 'struct irq_data'
+     139 |         return container_of(data->common, struct irq_desc, irq_common_data);
+         |                             ~~~~^
+   include/linux/container_of.h:21:23: note: expanded from macro 'container_of'
+      21 |                       __same_type(*(ptr), void),                        \
+         |                                     ^~~
+   include/linux/compiler_types.h:464:63: note: expanded from macro '__same_type'
+     464 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                               ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                                  ^~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/irqdesc.h:69:9: note: forward declaration of 'struct irq_data'
+      69 |         struct irq_data         irq_data;
+         |                ^
+>> include/linux/irqdesc.h:173:23: error: too few arguments to function call, expected 2, have 1
+     173 |         desc->handle_irq(desc);
+         |         ~~~~~~~~~~~~~~~~     ^
+   include/linux/irqdesc.h:208:8: error: unknown type name 'irq_flow_handler_t'; did you mean 'irq_handler_t'?
+     208 |                                           irq_flow_handler_t handler)
+         |                                           ^~~~~~~~~~~~~~~~~~
+         |                                           irq_handler_t
+   include/linux/interrupt.h:104:23: note: 'irq_handler_t' declared here
+     104 | typedef irqreturn_t (*irq_handler_t)(int, void *);
+         |                       ^
+   In file included from kernel/kexec_core.c:43:
+   include/linux/irqdesc.h:230:6: error: unknown type name 'irq_flow_handler_t'; did you mean 'irq_handler_t'?
+     230 |                                  irq_flow_handler_t handler, const char *name)
+         |                                  ^~~~~~~~~~~~~~~~~~
+         |                                  irq_handler_t
+   include/linux/interrupt.h:104:23: note: 'irq_handler_t' declared here
+     104 | typedef irqreturn_t (*irq_handler_t)(int, void *);
+         |                       ^
+   In file included from kernel/kexec_core.c:43:
+   include/linux/irqdesc.h:236:6: error: incomplete definition of type 'struct irq_data'
+     236 |         data->chip = (struct irq_chip *)chip;
+         |         ~~~~^
+   include/linux/irqdesc.h:69:9: note: forward declaration of 'struct irq_data'
+      69 |         struct irq_data         irq_data;
+         |                ^
+>> include/linux/irqdesc.h:243:35: error: use of undeclared identifier 'IRQ_NO_BALANCING_MASK'
+     243 |         return irq_check_status_bit(irq, IRQ_NO_BALANCING_MASK);
+         |                                          ^
+>> include/linux/irqdesc.h:248:35: error: use of undeclared identifier 'IRQ_PER_CPU'; did you mean 'MEM_PERCPU'?
+     248 |         return irq_check_status_bit(irq, IRQ_PER_CPU);
+         |                                          ^~~~~~~~~~~
+         |                                          MEM_PERCPU
+   include/linux/bpf.h:650:2: note: 'MEM_PERCPU' declared here
+     650 |         MEM_PERCPU              = BIT(4 + BPF_BASE_TYPE_BITS),
+         |         ^
+   In file included from kernel/kexec_core.c:43:
+>> include/linux/irqdesc.h:253:35: error: use of undeclared identifier 'IRQ_PER_CPU_DEVID'
+     253 |         return irq_check_status_bit(irq, IRQ_PER_CPU_DEVID);
+         |                                          ^
+   kernel/kexec_core.c:1098:24: error: incomplete definition of type 'struct irq_chip'
+    1098 |                 if (check_eoi && chip->irq_eoi && irqd_irq_inprogress(&desc->irq_data))
+         |                                  ~~~~^
+   include/linux/irqdesc.h:152:22: note: forward declaration of 'struct irq_chip'
+     152 | static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
+         |                      ^
+   kernel/kexec_core.c:1098:37: error: call to undeclared function 'irqd_irq_inprogress'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1098 |                 if (check_eoi && chip->irq_eoi && irqd_irq_inprogress(&desc->irq_data))
+         |                                                   ^
+   kernel/kexec_core.c:1099:8: error: incomplete definition of type 'struct irq_chip'
+    1099 |                         chip->irq_eoi(&desc->irq_data);
+         |                         ~~~~^
+   include/linux/irqdesc.h:152:22: note: forward declaration of 'struct irq_chip'
+     152 | static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
+         |                      ^
+   kernel/kexec_core.c:1101:11: error: incomplete definition of type 'struct irq_chip'
+    1101 |                 if (chip->irq_mask)
+         |                     ~~~~^
+   include/linux/irqdesc.h:152:22: note: forward declaration of 'struct irq_chip'
+     152 | static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
+         |                      ^
+   kernel/kexec_core.c:1102:8: error: incomplete definition of type 'struct irq_chip'
+    1102 |                         chip->irq_mask(&desc->irq_data);
+         |                         ~~~~^
+   include/linux/irqdesc.h:152:22: note: forward declaration of 'struct irq_chip'
+     152 | static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
+         |                      ^
+   kernel/kexec_core.c:1104:11: error: incomplete definition of type 'struct irq_chip'
+    1104 |                 if (chip->irq_disable && !irqd_irq_disabled(&desc->irq_data))
+         |                     ~~~~^
+   include/linux/irqdesc.h:152:22: note: forward declaration of 'struct irq_chip'
+     152 | static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
+         |                      ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
 
-vim +/page +1178 fs/ceph/addr.c
+vim +68 include/linux/irqdesc.h
 
-1d3576fd10f0d7a Sage Weil               2009-10-06   941  
-1d3576fd10f0d7a Sage Weil               2009-10-06   942  /*
-1d3576fd10f0d7a Sage Weil               2009-10-06   943   * initiate async writeback
-1d3576fd10f0d7a Sage Weil               2009-10-06   944   */
-1d3576fd10f0d7a Sage Weil               2009-10-06   945  static int ceph_writepages_start(struct address_space *mapping,
-1d3576fd10f0d7a Sage Weil               2009-10-06   946  				 struct writeback_control *wbc)
-1d3576fd10f0d7a Sage Weil               2009-10-06   947  {
-1d3576fd10f0d7a Sage Weil               2009-10-06   948  	struct inode *inode = mapping->host;
-1d3576fd10f0d7a Sage Weil               2009-10-06   949  	struct ceph_inode_info *ci = ceph_inode(inode);
-5995d90d2d19f33 Xiubo Li                2023-06-12   950  	struct ceph_fs_client *fsc = ceph_inode_to_fs_client(inode);
-38d46409c4639a1 Xiubo Li                2023-06-12   951  	struct ceph_client *cl = fsc->client;
-fc2744aa12da718 Yan, Zheng              2013-05-31   952  	struct ceph_vino vino = ceph_vino(inode);
-2a2d927e35dd8dc Yan, Zheng              2017-09-01   953  	pgoff_t index, start_index, end = -1;
-80e755fedebc8de Sage Weil               2010-03-31   954  	struct ceph_snap_context *snapc = NULL, *last_snapc = NULL, *pgsnapc;
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04   955) 	struct folio_batch fbatch;
-1d3576fd10f0d7a Sage Weil               2009-10-06   956  	int rc = 0;
-93407472a21b82f Fabian Frederick        2017-02-27   957  	unsigned int wsize = i_blocksize(inode);
-1d3576fd10f0d7a Sage Weil               2009-10-06   958  	struct ceph_osd_request *req = NULL;
-1f934b00e907527 Yan, Zheng              2017-08-30   959  	struct ceph_writeback_ctl ceph_wbc;
-590e9d9861f5f21 Yan, Zheng              2017-09-03   960  	bool should_loop, range_whole = false;
-af9cc401ce7452f Yan, Zheng              2018-03-04   961  	bool done = false;
-1702e79734104d7 Jeff Layton             2021-12-07   962  	bool caching = ceph_is_cache_enabled(inode);
-7d41870d65db028 Xiubo Li                2023-03-08   963  	xa_mark_t tag;
-1d3576fd10f0d7a Sage Weil               2009-10-06   964  
-503d4fa6ee28e8d NeilBrown               2022-03-22   965  	if (wbc->sync_mode == WB_SYNC_NONE &&
-503d4fa6ee28e8d NeilBrown               2022-03-22   966  	    fsc->write_congested)
-503d4fa6ee28e8d NeilBrown               2022-03-22   967  		return 0;
-503d4fa6ee28e8d NeilBrown               2022-03-22   968  
-38d46409c4639a1 Xiubo Li                2023-06-12   969  	doutc(cl, "%llx.%llx (mode=%s)\n", ceph_vinop(inode),
-1d3576fd10f0d7a Sage Weil               2009-10-06   970  	      wbc->sync_mode == WB_SYNC_NONE ? "NONE" :
-1d3576fd10f0d7a Sage Weil               2009-10-06   971  	      (wbc->sync_mode == WB_SYNC_ALL ? "ALL" : "HOLD"));
-1d3576fd10f0d7a Sage Weil               2009-10-06   972  
-5d6451b1489ad17 Jeff Layton             2021-08-31   973  	if (ceph_inode_is_shutdown(inode)) {
-6c93df5db628e71 Yan, Zheng              2016-04-15   974  		if (ci->i_wrbuffer_ref > 0) {
-38d46409c4639a1 Xiubo Li                2023-06-12   975  			pr_warn_ratelimited_client(cl,
-38d46409c4639a1 Xiubo Li                2023-06-12   976  				"%llx.%llx %lld forced umount\n",
-38d46409c4639a1 Xiubo Li                2023-06-12   977  				ceph_vinop(inode), ceph_ino(inode));
-6c93df5db628e71 Yan, Zheng              2016-04-15   978  		}
-a341d4df87487ae Yan, Zheng              2015-07-01   979  		mapping_set_error(mapping, -EIO);
-1d3576fd10f0d7a Sage Weil               2009-10-06   980  		return -EIO; /* we're in a forced umount, don't write! */
-1d3576fd10f0d7a Sage Weil               2009-10-06   981  	}
-95cca2b44e54b00 Yan, Zheng              2017-07-11   982  	if (fsc->mount_options->wsize < wsize)
-3d14c5d2b6e15c2 Yehuda Sadeh            2010-04-06   983  		wsize = fsc->mount_options->wsize;
-1d3576fd10f0d7a Sage Weil               2009-10-06   984  
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04   985) 	folio_batch_init(&fbatch);
-1d3576fd10f0d7a Sage Weil               2009-10-06   986  
-590e9d9861f5f21 Yan, Zheng              2017-09-03   987  	start_index = wbc->range_cyclic ? mapping->writeback_index : 0;
-590e9d9861f5f21 Yan, Zheng              2017-09-03   988  	index = start_index;
-1d3576fd10f0d7a Sage Weil               2009-10-06   989  
-7d41870d65db028 Xiubo Li                2023-03-08   990  	if (wbc->sync_mode == WB_SYNC_ALL || wbc->tagged_writepages) {
-7d41870d65db028 Xiubo Li                2023-03-08   991  		tag = PAGECACHE_TAG_TOWRITE;
-7d41870d65db028 Xiubo Li                2023-03-08   992  	} else {
-7d41870d65db028 Xiubo Li                2023-03-08   993  		tag = PAGECACHE_TAG_DIRTY;
-7d41870d65db028 Xiubo Li                2023-03-08   994  	}
-1d3576fd10f0d7a Sage Weil               2009-10-06   995  retry:
-1d3576fd10f0d7a Sage Weil               2009-10-06   996  	/* find oldest snap context with dirty data */
-05455e1177f7684 Yan, Zheng              2017-09-02   997  	snapc = get_oldest_context(inode, &ceph_wbc, NULL);
-1d3576fd10f0d7a Sage Weil               2009-10-06   998  	if (!snapc) {
-1d3576fd10f0d7a Sage Weil               2009-10-06   999  		/* hmm, why does writepages get called when there
-1d3576fd10f0d7a Sage Weil               2009-10-06  1000  		   is no dirty data? */
-38d46409c4639a1 Xiubo Li                2023-06-12  1001  		doutc(cl, " no snap context with dirty data?\n");
-1d3576fd10f0d7a Sage Weil               2009-10-06  1002  		goto out;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1003  	}
-38d46409c4639a1 Xiubo Li                2023-06-12  1004  	doutc(cl, " oldest snapc is %p seq %lld (%d snaps)\n", snapc,
-38d46409c4639a1 Xiubo Li                2023-06-12  1005  	      snapc->seq, snapc->num_snaps);
-fc2744aa12da718 Yan, Zheng              2013-05-31  1006  
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1007  	should_loop = false;
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1008  	if (ceph_wbc.head_snapc && snapc != last_snapc) {
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1009  		/* where to start/end? */
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1010  		if (wbc->range_cyclic) {
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1011  			index = start_index;
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1012  			end = -1;
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1013  			if (index > 0)
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1014  				should_loop = true;
-38d46409c4639a1 Xiubo Li                2023-06-12  1015  			doutc(cl, " cyclic, start at %lu\n", index);
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1016  		} else {
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1017  			index = wbc->range_start >> PAGE_SHIFT;
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1018  			end = wbc->range_end >> PAGE_SHIFT;
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1019  			if (wbc->range_start == 0 && wbc->range_end == LLONG_MAX)
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1020  				range_whole = true;
-38d46409c4639a1 Xiubo Li                2023-06-12  1021  			doutc(cl, " not cyclic, %lu to %lu\n", index, end);
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1022  		}
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1023  	} else if (!ceph_wbc.head_snapc) {
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1024  		/* Do not respect wbc->range_{start,end}. Dirty pages
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1025  		 * in that range can be associated with newer snapc.
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1026  		 * They are not writeable until we write all dirty pages
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1027  		 * associated with 'snapc' get written */
-1582af2eaaf17cb Yan, Zheng              2018-03-06  1028  		if (index > 0)
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1029  			should_loop = true;
-38d46409c4639a1 Xiubo Li                2023-06-12  1030  		doutc(cl, " non-head snapc, range whole\n");
-1d3576fd10f0d7a Sage Weil               2009-10-06  1031  	}
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1032  
-7d41870d65db028 Xiubo Li                2023-03-08  1033  	if (wbc->sync_mode == WB_SYNC_ALL || wbc->tagged_writepages)
-7d41870d65db028 Xiubo Li                2023-03-08  1034  		tag_pages_for_writeback(mapping, index, end);
-7d41870d65db028 Xiubo Li                2023-03-08  1035  
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1036  	ceph_put_snap_context(last_snapc);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1037  	last_snapc = snapc;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1038  
-af9cc401ce7452f Yan, Zheng              2018-03-04  1039  	while (!done && index <= end) {
-5b64640cf65be4a Yan, Zheng              2016-01-07  1040  		int num_ops = 0, op_idx;
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1041) 		unsigned i, nr_folios, max_pages, locked_pages = 0;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1042  		struct page **pages = NULL, **data_pages;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1043  		struct page *page;
-0e5ecac71683665 Yan, Zheng              2017-08-31  1044  		pgoff_t strip_unit_end = 0;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1045  		u64 offset = 0, len = 0;
-a0102bda5bc0991 Jeff Layton             2020-07-30  1046  		bool from_pool = false;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1047  
-0e5ecac71683665 Yan, Zheng              2017-08-31  1048  		max_pages = wsize >> PAGE_SHIFT;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1049  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1050  get_more_pages:
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1051) 		nr_folios = filemap_get_folios_tag(mapping, &index,
-7d41870d65db028 Xiubo Li                2023-03-08  1052  						   end, tag, &fbatch);
-38d46409c4639a1 Xiubo Li                2023-06-12  1053  		doutc(cl, "pagevec_lookup_range_tag got %d\n", nr_folios);
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1054) 		if (!nr_folios && !locked_pages)
-1d3576fd10f0d7a Sage Weil               2009-10-06  1055  			break;
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1056) 		for (i = 0; i < nr_folios && locked_pages < max_pages; i++) {
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1057) 			struct folio *folio = fbatch.folios[i];
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1058) 
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1059) 			doutc(cl, "? %p idx %lu\n", folio, folio->index);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1060  			if (locked_pages == 0)
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1061) 				folio_lock(folio);  /* first page */
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1062) 			else if (!folio_trylock(folio))
-1d3576fd10f0d7a Sage Weil               2009-10-06  1063  				break;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1064  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1065  			/* only dirty pages, or our accounting breaks */
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1066) 			if (unlikely(!folio_test_dirty(folio)) ||
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1067) 			    unlikely(folio->mapping != mapping)) {
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1068) 				doutc(cl, "!dirty or !mapping %p\n", folio);
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1069) 				folio_unlock(folio);
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1070  				continue;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1071  			}
-af9cc401ce7452f Yan, Zheng              2018-03-04  1072  			/* only if matching snap context */
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1073) 			pgsnapc = page_snap_context(&folio->page);
-af9cc401ce7452f Yan, Zheng              2018-03-04  1074  			if (pgsnapc != snapc) {
-38d46409c4639a1 Xiubo Li                2023-06-12  1075  				doutc(cl, "page snapc %p %lld != oldest %p %lld\n",
-af9cc401ce7452f Yan, Zheng              2018-03-04  1076  				      pgsnapc, pgsnapc->seq, snapc, snapc->seq);
-1582af2eaaf17cb Yan, Zheng              2018-03-06  1077  				if (!should_loop &&
-1582af2eaaf17cb Yan, Zheng              2018-03-06  1078  				    !ceph_wbc.head_snapc &&
-1582af2eaaf17cb Yan, Zheng              2018-03-06  1079  				    wbc->sync_mode != WB_SYNC_NONE)
-1582af2eaaf17cb Yan, Zheng              2018-03-06  1080  					should_loop = true;
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1081) 				folio_unlock(folio);
-af9cc401ce7452f Yan, Zheng              2018-03-04  1082  				continue;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1083  			}
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1084) 			if (folio_pos(folio) >= ceph_wbc.i_size) {
-38d46409c4639a1 Xiubo Li                2023-06-12  1085  				doutc(cl, "folio at %lu beyond eof %llu\n",
-a628304ebe6ab02 Matthew Wilcox (Oracle  2022-02-09  1086) 				      folio->index, ceph_wbc.i_size);
-c95f1c5f436badb Erqi Chen               2019-07-24  1087  				if ((ceph_wbc.size_stable ||
-a628304ebe6ab02 Matthew Wilcox (Oracle  2022-02-09  1088) 				    folio_pos(folio) >= i_size_read(inode)) &&
-a628304ebe6ab02 Matthew Wilcox (Oracle  2022-02-09  1089) 				    folio_clear_dirty_for_io(folio))
-a628304ebe6ab02 Matthew Wilcox (Oracle  2022-02-09  1090) 					folio_invalidate(folio, 0,
-a628304ebe6ab02 Matthew Wilcox (Oracle  2022-02-09  1091) 							folio_size(folio));
-a628304ebe6ab02 Matthew Wilcox (Oracle  2022-02-09  1092) 				folio_unlock(folio);
-af9cc401ce7452f Yan, Zheng              2018-03-04  1093  				continue;
-af9cc401ce7452f Yan, Zheng              2018-03-04  1094  			}
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1095) 			if (strip_unit_end && (folio->index > strip_unit_end)) {
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1096) 				doutc(cl, "end of strip unit %p\n", folio);
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1097) 				folio_unlock(folio);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1098  				break;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1099  			}
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1100) 			if (folio_test_writeback(folio) ||
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1101) 			    folio_test_private_2(folio) /* [DEPRECATED] */) {
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1102  				if (wbc->sync_mode == WB_SYNC_NONE) {
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1103) 					doutc(cl, "%p under writeback\n", folio);
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1104) 					folio_unlock(folio);
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1105  					continue;
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1106  				}
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1107) 				doutc(cl, "waiting on writeback %p\n", folio);
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1108) 				folio_wait_writeback(folio);
-fd15ba4cb00a43f Matthew Wilcox (Oracle  2024-10-02  1109) 				folio_wait_private_2(folio); /* [DEPRECATED] */
-1d3576fd10f0d7a Sage Weil               2009-10-06  1110  			}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1111  
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1112) 			if (!folio_clear_dirty_for_io(folio)) {
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1113) 				doutc(cl, "%p !clear_page_dirty_for_io\n", folio);
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1114) 				folio_unlock(folio);
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1115  				continue;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1116  			}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1117  
-e5975c7c8eb6aea Alex Elder              2013-03-14  1118  			/*
-e5975c7c8eb6aea Alex Elder              2013-03-14  1119  			 * We have something to write.  If this is
-e5975c7c8eb6aea Alex Elder              2013-03-14  1120  			 * the first locked page this time through,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1121  			 * calculate max possinle write size and
-5b64640cf65be4a Yan, Zheng              2016-01-07  1122  			 * allocate a page array
-e5975c7c8eb6aea Alex Elder              2013-03-14  1123  			 */
-1d3576fd10f0d7a Sage Weil               2009-10-06  1124  			if (locked_pages == 0) {
-5b64640cf65be4a Yan, Zheng              2016-01-07  1125  				u64 objnum;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1126  				u64 objoff;
-dccbf08005df800 Ilya Dryomov            2018-02-17  1127  				u32 xlen;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1128  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1129  				/* prepare async write request */
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1130) 				offset = folio_pos(folio);
-dccbf08005df800 Ilya Dryomov            2018-02-17  1131  				ceph_calc_file_object_mapping(&ci->i_layout,
-dccbf08005df800 Ilya Dryomov            2018-02-17  1132  							      offset, wsize,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1133  							      &objnum, &objoff,
-dccbf08005df800 Ilya Dryomov            2018-02-17  1134  							      &xlen);
-dccbf08005df800 Ilya Dryomov            2018-02-17  1135  				len = xlen;
-8c71897be2ddfd8 Henry C Chang           2011-05-03  1136  
-3fb99d483e614bc Yanhu Cao               2017-07-21  1137  				num_ops = 1;
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1138) 				strip_unit_end = folio->index +
-09cbfeaf1a5a67b Kirill A. Shutemov      2016-04-01  1139  					((len - 1) >> PAGE_SHIFT);
-88486957f9fbf52 Alex Elder              2013-03-14  1140  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1141  				BUG_ON(pages);
-88486957f9fbf52 Alex Elder              2013-03-14  1142  				max_pages = calc_pages_for(0, (u64)len);
-6da2ec56059c3c7 Kees Cook               2018-06-12  1143  				pages = kmalloc_array(max_pages,
-6da2ec56059c3c7 Kees Cook               2018-06-12  1144  						      sizeof(*pages),
-fc2744aa12da718 Yan, Zheng              2013-05-31  1145  						      GFP_NOFS);
-88486957f9fbf52 Alex Elder              2013-03-14  1146  				if (!pages) {
-a0102bda5bc0991 Jeff Layton             2020-07-30  1147  					from_pool = true;
-a0102bda5bc0991 Jeff Layton             2020-07-30  1148  					pages = mempool_alloc(ceph_wb_pagevec_pool, GFP_NOFS);
-e5975c7c8eb6aea Alex Elder              2013-03-14  1149  					BUG_ON(!pages);
-88486957f9fbf52 Alex Elder              2013-03-14  1150  				}
-5b64640cf65be4a Yan, Zheng              2016-01-07  1151  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1152  				len = 0;
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1153) 			} else if (folio->index !=
-09cbfeaf1a5a67b Kirill A. Shutemov      2016-04-01  1154  				   (offset + len) >> PAGE_SHIFT) {
-a0102bda5bc0991 Jeff Layton             2020-07-30  1155  				if (num_ops >= (from_pool ?  CEPH_OSD_SLAB_OPS :
-5b64640cf65be4a Yan, Zheng              2016-01-07  1156  							     CEPH_OSD_MAX_OPS)) {
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1157) 					folio_redirty_for_writepage(wbc, folio);
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1158) 					folio_unlock(folio);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1159  					break;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1160  				}
-5b64640cf65be4a Yan, Zheng              2016-01-07  1161  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1162  				num_ops++;
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1163) 				offset = folio_pos(folio);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1164  				len = 0;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1165  			}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1166  
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1167) 			/* note position of first page in fbatch */
-38d46409c4639a1 Xiubo Li                2023-06-12  1168  			doutc(cl, "%llx.%llx will write page %p idx %lu\n",
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1169) 			      ceph_vinop(inode), folio, folio->index);
-2baba25019ec564 Yehuda Sadeh            2009-12-18  1170  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1171  			if (atomic_long_inc_return(&fsc->writeback_count) >
-5b64640cf65be4a Yan, Zheng              2016-01-07  1172  			    CONGESTION_ON_THRESH(
-503d4fa6ee28e8d NeilBrown               2022-03-22  1173  				    fsc->mount_options->congestion_kb))
-503d4fa6ee28e8d NeilBrown               2022-03-22  1174  				fsc->write_congested = true;
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1175  
-d55207717ded95c Jeff Layton             2022-08-25  1176  			if (IS_ENCRYPTED(inode)) {
-d55207717ded95c Jeff Layton             2022-08-25  1177  				pages[locked_pages] =
-d55207717ded95c Jeff Layton             2022-08-25 @1178  					fscrypt_encrypt_pagecache_blocks(page,
-d55207717ded95c Jeff Layton             2022-08-25  1179  						PAGE_SIZE, 0,
-d55207717ded95c Jeff Layton             2022-08-25  1180  						locked_pages ? GFP_NOWAIT : GFP_NOFS);
-d55207717ded95c Jeff Layton             2022-08-25  1181  				if (IS_ERR(pages[locked_pages])) {
-d55207717ded95c Jeff Layton             2022-08-25  1182  					if (PTR_ERR(pages[locked_pages]) == -EINVAL)
-38d46409c4639a1 Xiubo Li                2023-06-12  1183  						pr_err_client(cl,
-38d46409c4639a1 Xiubo Li                2023-06-12  1184  							"inode->i_blkbits=%hhu\n",
-38d46409c4639a1 Xiubo Li                2023-06-12  1185  							inode->i_blkbits);
-d55207717ded95c Jeff Layton             2022-08-25  1186  					/* better not fail on first page! */
-d55207717ded95c Jeff Layton             2022-08-25  1187  					BUG_ON(locked_pages == 0);
-d55207717ded95c Jeff Layton             2022-08-25  1188  					pages[locked_pages] = NULL;
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1189) 					folio_redirty_for_writepage(wbc, folio);
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1190) 					folio_unlock(folio);
-d55207717ded95c Jeff Layton             2022-08-25  1191  					break;
-d55207717ded95c Jeff Layton             2022-08-25  1192  				}
-d55207717ded95c Jeff Layton             2022-08-25  1193  				++locked_pages;
-d55207717ded95c Jeff Layton             2022-08-25  1194  			} else {
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1195) 				pages[locked_pages++] = &folio->page;
-d55207717ded95c Jeff Layton             2022-08-25  1196  			}
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1197  
-d55207717ded95c Jeff Layton             2022-08-25  1198  			fbatch.folios[i] = NULL;
-a38da1eafb17612 Matthew Wilcox (Oracle  2024-11-29  1199) 			len += folio_size(folio);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1200  		}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1201  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1202  		/* did we get anything? */
-1d3576fd10f0d7a Sage Weil               2009-10-06  1203  		if (!locked_pages)
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1204) 			goto release_folios;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1205  		if (i) {
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1206  			unsigned j, n = 0;
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1207) 			/* shift unused page to beginning of fbatch */
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1208) 			for (j = 0; j < nr_folios; j++) {
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1209) 				if (!fbatch.folios[j])
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1210  					continue;
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1211  				if (n < j)
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1212) 					fbatch.folios[n] = fbatch.folios[j];
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1213  				n++;
-0713e5f24b7deb8 Yan, Zheng              2017-08-31  1214  			}
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1215) 			fbatch.nr = n;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1216  
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1217) 			if (nr_folios && i == nr_folios &&
-1d3576fd10f0d7a Sage Weil               2009-10-06  1218  			    locked_pages < max_pages) {
-38d46409c4639a1 Xiubo Li                2023-06-12  1219  				doutc(cl, "reached end fbatch, trying for more\n");
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1220) 				folio_batch_release(&fbatch);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1221  				goto get_more_pages;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1222  			}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1223  		}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1224  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1225  new_request:
-d55207717ded95c Jeff Layton             2022-08-25  1226  		offset = ceph_fscrypt_page_offset(pages[0]);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1227  		len = wsize;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1228  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1229  		req = ceph_osdc_new_request(&fsc->client->osdc,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1230  					&ci->i_layout, vino,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1231  					offset, &len, 0, num_ops,
-1f934b00e907527 Yan, Zheng              2017-08-30  1232  					CEPH_OSD_OP_WRITE, CEPH_OSD_FLAG_WRITE,
-1f934b00e907527 Yan, Zheng              2017-08-30  1233  					snapc, ceph_wbc.truncate_seq,
-1f934b00e907527 Yan, Zheng              2017-08-30  1234  					ceph_wbc.truncate_size, false);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1235  		if (IS_ERR(req)) {
-5b64640cf65be4a Yan, Zheng              2016-01-07  1236  			req = ceph_osdc_new_request(&fsc->client->osdc,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1237  						&ci->i_layout, vino,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1238  						offset, &len, 0,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1239  						min(num_ops,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1240  						    CEPH_OSD_SLAB_OPS),
-5b64640cf65be4a Yan, Zheng              2016-01-07  1241  						CEPH_OSD_OP_WRITE,
-54ea0046b6fe36e Ilya Dryomov            2017-02-11  1242  						CEPH_OSD_FLAG_WRITE,
-1f934b00e907527 Yan, Zheng              2017-08-30  1243  						snapc, ceph_wbc.truncate_seq,
-1f934b00e907527 Yan, Zheng              2017-08-30  1244  						ceph_wbc.truncate_size, true);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1245  			BUG_ON(IS_ERR(req));
-5b64640cf65be4a Yan, Zheng              2016-01-07  1246  		}
-d55207717ded95c Jeff Layton             2022-08-25  1247  		BUG_ON(len < ceph_fscrypt_page_offset(pages[locked_pages - 1]) +
-d55207717ded95c Jeff Layton             2022-08-25  1248  			     thp_size(pages[locked_pages - 1]) - offset);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1249  
-1464de9f813e355 Xiubo Li                2023-05-09  1250  		if (!ceph_inc_osd_stopping_blocker(fsc->mdsc)) {
-1464de9f813e355 Xiubo Li                2023-05-09  1251  			rc = -EIO;
-1464de9f813e355 Xiubo Li                2023-05-09  1252  			goto release_folios;
-1464de9f813e355 Xiubo Li                2023-05-09  1253  		}
-5b64640cf65be4a Yan, Zheng              2016-01-07  1254  		req->r_callback = writepages_finish;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1255  		req->r_inode = inode;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1256  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1257  		/* Format the osd request message and submit the write */
-5b64640cf65be4a Yan, Zheng              2016-01-07  1258  		len = 0;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1259  		data_pages = pages;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1260  		op_idx = 0;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1261  		for (i = 0; i < locked_pages; i++) {
-d55207717ded95c Jeff Layton             2022-08-25  1262  			struct page *page = ceph_fscrypt_pagecache_page(pages[i]);
-d55207717ded95c Jeff Layton             2022-08-25  1263  
-d55207717ded95c Jeff Layton             2022-08-25  1264  			u64 cur_offset = page_offset(page);
-1702e79734104d7 Jeff Layton             2021-12-07  1265  			/*
-1702e79734104d7 Jeff Layton             2021-12-07  1266  			 * Discontinuity in page range? Ceph can handle that by just passing
-1702e79734104d7 Jeff Layton             2021-12-07  1267  			 * multiple extents in the write op.
-1702e79734104d7 Jeff Layton             2021-12-07  1268  			 */
-5b64640cf65be4a Yan, Zheng              2016-01-07  1269  			if (offset + len != cur_offset) {
-1702e79734104d7 Jeff Layton             2021-12-07  1270  				/* If it's full, stop here */
-3fb99d483e614bc Yanhu Cao               2017-07-21  1271  				if (op_idx + 1 == req->r_num_ops)
-5b64640cf65be4a Yan, Zheng              2016-01-07  1272  					break;
-1702e79734104d7 Jeff Layton             2021-12-07  1273  
-1702e79734104d7 Jeff Layton             2021-12-07  1274  				/* Kick off an fscache write with what we have so far. */
-1702e79734104d7 Jeff Layton             2021-12-07  1275  				ceph_fscache_write_to_cache(inode, offset, len, caching);
-1702e79734104d7 Jeff Layton             2021-12-07  1276  
-1702e79734104d7 Jeff Layton             2021-12-07  1277  				/* Start a new extent */
-5b64640cf65be4a Yan, Zheng              2016-01-07  1278  				osd_req_op_extent_dup_last(req, op_idx,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1279  							   cur_offset - offset);
-38d46409c4639a1 Xiubo Li                2023-06-12  1280  				doutc(cl, "got pages at %llu~%llu\n", offset,
-38d46409c4639a1 Xiubo Li                2023-06-12  1281  				      len);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1282  				osd_req_op_extent_osd_data_pages(req, op_idx,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1283  							data_pages, len, 0,
-a0102bda5bc0991 Jeff Layton             2020-07-30  1284  							from_pool, false);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1285  				osd_req_op_extent_update(req, op_idx, len);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1286  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1287  				len = 0;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1288  				offset = cur_offset;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1289  				data_pages = pages + i;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1290  				op_idx++;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1291  			}
-5b64640cf65be4a Yan, Zheng              2016-01-07  1292  
-d55207717ded95c Jeff Layton             2022-08-25  1293  			set_page_writeback(page);
-8e5ced7804cb918 David Howells           2024-07-30  1294  			if (caching)
-8e5ced7804cb918 David Howells           2024-07-30  1295  				ceph_set_page_fscache(page);
-8ff2d290c8ce77c Jeff Layton             2021-04-05  1296  			len += thp_size(page);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1297  		}
-1702e79734104d7 Jeff Layton             2021-12-07  1298  		ceph_fscache_write_to_cache(inode, offset, len, caching);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1299  
-1f934b00e907527 Yan, Zheng              2017-08-30  1300  		if (ceph_wbc.size_stable) {
-1f934b00e907527 Yan, Zheng              2017-08-30  1301  			len = min(len, ceph_wbc.i_size - offset);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1302  		} else if (i == locked_pages) {
-e1966b49446a439 Yan, Zheng              2015-06-18  1303  			/* writepages_finish() clears writeback pages
-e1966b49446a439 Yan, Zheng              2015-06-18  1304  			 * according to the data length, so make sure
-e1966b49446a439 Yan, Zheng              2015-06-18  1305  			 * data length covers all locked pages */
-8ff2d290c8ce77c Jeff Layton             2021-04-05  1306  			u64 min_len = len + 1 - thp_size(page);
-1f934b00e907527 Yan, Zheng              2017-08-30  1307  			len = get_writepages_data_length(inode, pages[i - 1],
-1f934b00e907527 Yan, Zheng              2017-08-30  1308  							 offset);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1309  			len = max(len, min_len);
-e1966b49446a439 Yan, Zheng              2015-06-18  1310  		}
-d55207717ded95c Jeff Layton             2022-08-25  1311  		if (IS_ENCRYPTED(inode))
-d55207717ded95c Jeff Layton             2022-08-25  1312  			len = round_up(len, CEPH_FSCRYPT_BLOCK_SIZE);
-d55207717ded95c Jeff Layton             2022-08-25  1313  
-38d46409c4639a1 Xiubo Li                2023-06-12  1314  		doutc(cl, "got pages at %llu~%llu\n", offset, len);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1315  
-d55207717ded95c Jeff Layton             2022-08-25  1316  		if (IS_ENCRYPTED(inode) &&
-d55207717ded95c Jeff Layton             2022-08-25  1317  		    ((offset | len) & ~CEPH_FSCRYPT_BLOCK_MASK))
-38d46409c4639a1 Xiubo Li                2023-06-12  1318  			pr_warn_client(cl,
-38d46409c4639a1 Xiubo Li                2023-06-12  1319  				"bad encrypted write offset=%lld len=%llu\n",
-38d46409c4639a1 Xiubo Li                2023-06-12  1320  				offset, len);
-d55207717ded95c Jeff Layton             2022-08-25  1321  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1322  		osd_req_op_extent_osd_data_pages(req, op_idx, data_pages, len,
-a0102bda5bc0991 Jeff Layton             2020-07-30  1323  						 0, from_pool, false);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1324  		osd_req_op_extent_update(req, op_idx, len);
-e5975c7c8eb6aea Alex Elder              2013-03-14  1325  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1326  		BUG_ON(op_idx + 1 != req->r_num_ops);
-e5975c7c8eb6aea Alex Elder              2013-03-14  1327  
-a0102bda5bc0991 Jeff Layton             2020-07-30  1328  		from_pool = false;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1329  		if (i < locked_pages) {
-5b64640cf65be4a Yan, Zheng              2016-01-07  1330  			BUG_ON(num_ops <= req->r_num_ops);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1331  			num_ops -= req->r_num_ops;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1332  			locked_pages -= i;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1333  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1334  			/* allocate new pages array for next request */
-5b64640cf65be4a Yan, Zheng              2016-01-07  1335  			data_pages = pages;
-6da2ec56059c3c7 Kees Cook               2018-06-12  1336  			pages = kmalloc_array(locked_pages, sizeof(*pages),
-5b64640cf65be4a Yan, Zheng              2016-01-07  1337  					      GFP_NOFS);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1338  			if (!pages) {
-a0102bda5bc0991 Jeff Layton             2020-07-30  1339  				from_pool = true;
-a0102bda5bc0991 Jeff Layton             2020-07-30  1340  				pages = mempool_alloc(ceph_wb_pagevec_pool, GFP_NOFS);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1341  				BUG_ON(!pages);
-5b64640cf65be4a Yan, Zheng              2016-01-07  1342  			}
-5b64640cf65be4a Yan, Zheng              2016-01-07  1343  			memcpy(pages, data_pages + i,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1344  			       locked_pages * sizeof(*pages));
-5b64640cf65be4a Yan, Zheng              2016-01-07  1345  			memset(data_pages + i, 0,
-5b64640cf65be4a Yan, Zheng              2016-01-07  1346  			       locked_pages * sizeof(*pages));
-5b64640cf65be4a Yan, Zheng              2016-01-07  1347  		} else {
-9182bf4af1f077d Matthew Wilcox (Oracle  2024-11-29  1348) 			struct folio *folio;
-9182bf4af1f077d Matthew Wilcox (Oracle  2024-11-29  1349) 
-5b64640cf65be4a Yan, Zheng              2016-01-07  1350  			BUG_ON(num_ops != req->r_num_ops);
-9182bf4af1f077d Matthew Wilcox (Oracle  2024-11-29  1351) 			folio = ceph_fscrypt_pagecache_folio(pages[i - 1]);
-9182bf4af1f077d Matthew Wilcox (Oracle  2024-11-29  1352) 			index = folio->index + 1;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1353  			/* request message now owns the pages array */
-5b64640cf65be4a Yan, Zheng              2016-01-07  1354  			pages = NULL;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1355  		}
-e5975c7c8eb6aea Alex Elder              2013-03-14  1356  
-c453bdb535341b5 Jeff Layton             2023-10-04  1357  		req->r_mtime = inode_get_mtime(inode);
-a8af0d682ae0c9c Jeff Layton             2022-06-30  1358  		ceph_osdc_start_request(&fsc->client->osdc, req);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1359  		req = NULL;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1360  
-5b64640cf65be4a Yan, Zheng              2016-01-07  1361  		wbc->nr_to_write -= i;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1362  		if (pages)
-5b64640cf65be4a Yan, Zheng              2016-01-07  1363  			goto new_request;
-5b64640cf65be4a Yan, Zheng              2016-01-07  1364  
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1365  		/*
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1366  		 * We stop writing back only if we are not doing
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1367  		 * integrity sync. In case of integrity sync we have to
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1368  		 * keep going until we have written all the pages
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1369  		 * we tagged for writeback prior to entering this loop.
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1370  		 */
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1371  		if (wbc->nr_to_write <= 0 && wbc->sync_mode == WB_SYNC_NONE)
-af9cc401ce7452f Yan, Zheng              2018-03-04  1372  			done = true;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1373  
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1374) release_folios:
-38d46409c4639a1 Xiubo Li                2023-06-12  1375  		doutc(cl, "folio_batch release on %d folios (%p)\n",
-38d46409c4639a1 Xiubo Li                2023-06-12  1376  		      (int)fbatch.nr, fbatch.nr ? fbatch.folios[0] : NULL);
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1377) 		folio_batch_release(&fbatch);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1378  	}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1379  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1380  	if (should_loop && !done) {
-1d3576fd10f0d7a Sage Weil               2009-10-06  1381  		/* more to do; loop back to beginning of file */
-38d46409c4639a1 Xiubo Li                2023-06-12  1382  		doutc(cl, "looping back to beginning of file\n");
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1383  		end = start_index - 1; /* OK even when start_index == 0 */
-f275635ee0b6641 Yan, Zheng              2017-09-01  1384  
-f275635ee0b6641 Yan, Zheng              2017-09-01  1385  		/* to write dirty pages associated with next snapc,
-f275635ee0b6641 Yan, Zheng              2017-09-01  1386  		 * we need to wait until current writes complete */
-f275635ee0b6641 Yan, Zheng              2017-09-01  1387  		if (wbc->sync_mode != WB_SYNC_NONE &&
-f275635ee0b6641 Yan, Zheng              2017-09-01  1388  		    start_index == 0 && /* all dirty pages were checked */
-f275635ee0b6641 Yan, Zheng              2017-09-01  1389  		    !ceph_wbc.head_snapc) {
-f275635ee0b6641 Yan, Zheng              2017-09-01  1390  			struct page *page;
-f275635ee0b6641 Yan, Zheng              2017-09-01  1391  			unsigned i, nr;
-f275635ee0b6641 Yan, Zheng              2017-09-01  1392  			index = 0;
-f275635ee0b6641 Yan, Zheng              2017-09-01  1393  			while ((index <= end) &&
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1394) 			       (nr = filemap_get_folios_tag(mapping, &index,
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1395) 						(pgoff_t)-1,
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1396) 						PAGECACHE_TAG_WRITEBACK,
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1397) 						&fbatch))) {
-f275635ee0b6641 Yan, Zheng              2017-09-01  1398  				for (i = 0; i < nr; i++) {
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1399) 					page = &fbatch.folios[i]->page;
-f275635ee0b6641 Yan, Zheng              2017-09-01  1400  					if (page_snap_context(page) != snapc)
-f275635ee0b6641 Yan, Zheng              2017-09-01  1401  						continue;
-f275635ee0b6641 Yan, Zheng              2017-09-01  1402  					wait_on_page_writeback(page);
-f275635ee0b6641 Yan, Zheng              2017-09-01  1403  				}
-590a2b5f0a9b740 Vishal Moola (Oracle    2023-01-04  1404) 				folio_batch_release(&fbatch);
-f275635ee0b6641 Yan, Zheng              2017-09-01  1405  				cond_resched();
-f275635ee0b6641 Yan, Zheng              2017-09-01  1406  			}
-f275635ee0b6641 Yan, Zheng              2017-09-01  1407  		}
-f275635ee0b6641 Yan, Zheng              2017-09-01  1408  
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1409  		start_index = 0;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1410  		index = 0;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1411  		goto retry;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1412  	}
-1d3576fd10f0d7a Sage Weil               2009-10-06  1413  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1414  	if (wbc->range_cyclic || (range_whole && wbc->nr_to_write > 0))
-1d3576fd10f0d7a Sage Weil               2009-10-06  1415  		mapping->writeback_index = index;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1416  
-1d3576fd10f0d7a Sage Weil               2009-10-06  1417  out:
-1d3576fd10f0d7a Sage Weil               2009-10-06  1418  	ceph_osdc_put_request(req);
-2a2d927e35dd8dc Yan, Zheng              2017-09-01  1419  	ceph_put_snap_context(last_snapc);
-38d46409c4639a1 Xiubo Li                2023-06-12  1420  	doutc(cl, "%llx.%llx dend - startone, rc = %d\n", ceph_vinop(inode),
-38d46409c4639a1 Xiubo Li                2023-06-12  1421  	      rc);
-1d3576fd10f0d7a Sage Weil               2009-10-06  1422  	return rc;
-1d3576fd10f0d7a Sage Weil               2009-10-06  1423  }
-1d3576fd10f0d7a Sage Weil               2009-10-06  1424  
+86d2a2f51fbada Bitao Hu                  2024-04-11   31  
+e144710b302525 Thomas Gleixner           2010-10-01   32  /**
+e144710b302525 Thomas Gleixner           2010-10-01   33   * struct irq_desc - interrupt descriptor
+0d0b4c866bcce6 Jiang Liu                 2015-06-01   34   * @irq_common_data:	per irq and chip data passed down to chip functions
+e144710b302525 Thomas Gleixner           2010-10-01   35   * @kstat_irqs:		irq stats per cpu
+770767787c2304 Geert Uytterhoeven        2011-04-10   36   * @handle_irq:		highlevel irq-events handler
+e144710b302525 Thomas Gleixner           2010-10-01   37   * @action:		the irq action chain
+80ebc420ec59a7 Yunfeng Ye                2019-09-18   38   * @status_use_accessors: status information
+dbec07bac614a6 Thomas Gleixner           2011-02-07   39   * @core_internal_state__do_not_mess_with_it: core internal status information
+e144710b302525 Thomas Gleixner           2010-10-01   40   * @depth:		disable-depth, for nested irq_disable() calls
+0911f124bf5535 Geert Uytterhoeven        2011-04-10   41   * @wake_depth:		enable depth, for multiple irq_set_irq_wake() callers
+030fc443aef663 Waiman Long               2019-02-12   42   * @tot_count:		stats field for non-percpu irqs
+e144710b302525 Thomas Gleixner           2010-10-01   43   * @irq_count:		stats field to detect stalled irqs
+e144710b302525 Thomas Gleixner           2010-10-01   44   * @last_unhandled:	aging timer for unhandled count
+e144710b302525 Thomas Gleixner           2010-10-01   45   * @irqs_unhandled:	stats field for spurious unhandled interrupts
+1e77d0a1ed7417 Thomas Gleixner           2013-03-07   46   * @threads_handled:	stats field for deferred spurious detection of threaded handlers
+a359f757965aaf Ingo Molnar               2021-03-22   47   * @threads_handled_last: comparator field for deferred spurious detection of threaded handlers
+e144710b302525 Thomas Gleixner           2010-10-01   48   * @lock:		locking for SMP
+770767787c2304 Geert Uytterhoeven        2011-04-10   49   * @affinity_hint:	hint to user space for preferred irq affinity
+cd7eab44e9946c Ben Hutchings             2011-01-19   50   * @affinity_notify:	context for notification of affinity changes
+e144710b302525 Thomas Gleixner           2010-10-01   51   * @pending_mask:	pending rebalanced interrupts
+b5faba21a6805c Thomas Gleixner           2011-02-23   52   * @threads_oneshot:	bitfield to handle shared oneshot threads
+e144710b302525 Thomas Gleixner           2010-10-01   53   * @threads_active:	number of irqaction threads currently running
+e144710b302525 Thomas Gleixner           2010-10-01   54   * @wait_for_threads:	wait queue for sync_irq to wait for threaded handlers
+cab303be91dc47 Thomas Gleixner           2014-08-28   55   * @nr_actions:		number of installed actions on this descriptor
+cab303be91dc47 Thomas Gleixner           2014-08-28   56   * @no_suspend_depth:	number of irqactions on a irq descriptor with
+cab303be91dc47 Thomas Gleixner           2014-08-28   57   *			IRQF_NO_SUSPEND set
+cab303be91dc47 Thomas Gleixner           2014-08-28   58   * @force_resume_depth:	number of irqactions on a irq descriptor with
+cab303be91dc47 Thomas Gleixner           2014-08-28   59   *			IRQF_FORCE_RESUME set
+425a5072dcd1bd Thomas Gleixner           2015-12-13   60   * @rcu:		rcu head for delayed free
+ecb3f394c5dba8 Craig Gallek              2016-09-13   61   * @kobj:		kobject used to represent this struct in sysfs
+9114014cf4e6df Thomas Gleixner           2017-06-29   62   * @request_mutex:	mutex to protect request/free before locking desc->lock
+e144710b302525 Thomas Gleixner           2010-10-01   63   * @dir:		/proc/irq/ procfs entry
+087cdfb662ae50 Thomas Gleixner           2017-06-20   64   * @debugfs_file:	dentry for the debugfs file
+e144710b302525 Thomas Gleixner           2010-10-01   65   * @name:		flow handler name for /proc/interrupts output
+e144710b302525 Thomas Gleixner           2010-10-01   66   */
+e144710b302525 Thomas Gleixner           2010-10-01   67  struct irq_desc {
+0d0b4c866bcce6 Jiang Liu                 2015-06-01  @68  	struct irq_common_data	irq_common_data;
+e144710b302525 Thomas Gleixner           2010-10-01  @69  	struct irq_data		irq_data;
+86d2a2f51fbada Bitao Hu                  2024-04-11   70  	struct irqstat __percpu	*kstat_irqs;
+e144710b302525 Thomas Gleixner           2010-10-01  @71  	irq_flow_handler_t	handle_irq;
+e144710b302525 Thomas Gleixner           2010-10-01   72  	struct irqaction	*action;	/* IRQ action list */
+a6967caf00ebbb Thomas Gleixner           2011-02-10   73  	unsigned int		status_use_accessors;
+dbec07bac614a6 Thomas Gleixner           2011-02-07   74  	unsigned int		core_internal_state__do_not_mess_with_it;
+e144710b302525 Thomas Gleixner           2010-10-01   75  	unsigned int		depth;		/* nested irq disables */
+e144710b302525 Thomas Gleixner           2010-10-01   76  	unsigned int		wake_depth;	/* nested wake enables */
+1136b072896990 Thomas Gleixner           2019-02-08   77  	unsigned int		tot_count;
+e144710b302525 Thomas Gleixner           2010-10-01   78  	unsigned int		irq_count;	/* For detecting broken IRQs */
+e144710b302525 Thomas Gleixner           2010-10-01   79  	unsigned long		last_unhandled;	/* Aging timer for unhandled count */
+e144710b302525 Thomas Gleixner           2010-10-01   80  	unsigned int		irqs_unhandled;
+1e77d0a1ed7417 Thomas Gleixner           2013-03-07   81  	atomic_t		threads_handled;
+1e77d0a1ed7417 Thomas Gleixner           2013-03-07   82  	int			threads_handled_last;
+e144710b302525 Thomas Gleixner           2010-10-01   83  	raw_spinlock_t		lock;
+31d9d9b6d83030 Marc Zyngier              2011-09-23   84  	struct cpumask		*percpu_enabled;
+222df54fd8b764 Marc Zyngier              2016-04-11   85  	const struct cpumask	*percpu_affinity;
+e144710b302525 Thomas Gleixner           2010-10-01   86  #ifdef CONFIG_SMP
+e144710b302525 Thomas Gleixner           2010-10-01   87  	const struct cpumask	*affinity_hint;
+cd7eab44e9946c Ben Hutchings             2011-01-19   88  	struct irq_affinity_notify *affinity_notify;
+e144710b302525 Thomas Gleixner           2010-10-01   89  #ifdef CONFIG_GENERIC_PENDING_IRQ
+e144710b302525 Thomas Gleixner           2010-10-01   90  	cpumask_var_t		pending_mask;
+e144710b302525 Thomas Gleixner           2010-10-01   91  #endif
+e144710b302525 Thomas Gleixner           2010-10-01   92  #endif
+b5faba21a6805c Thomas Gleixner           2011-02-23   93  	unsigned long		threads_oneshot;
+e144710b302525 Thomas Gleixner           2010-10-01   94  	atomic_t		threads_active;
+e144710b302525 Thomas Gleixner           2010-10-01   95  	wait_queue_head_t       wait_for_threads;
+cab303be91dc47 Thomas Gleixner           2014-08-28   96  #ifdef CONFIG_PM_SLEEP
+cab303be91dc47 Thomas Gleixner           2014-08-28   97  	unsigned int		nr_actions;
+cab303be91dc47 Thomas Gleixner           2014-08-28   98  	unsigned int		no_suspend_depth;
+17f480342026e5 Rafael J. Wysocki         2015-02-27   99  	unsigned int		cond_suspend_depth;
+cab303be91dc47 Thomas Gleixner           2014-08-28  100  	unsigned int		force_resume_depth;
+cab303be91dc47 Thomas Gleixner           2014-08-28  101  #endif
+e144710b302525 Thomas Gleixner           2010-10-01  102  #ifdef CONFIG_PROC_FS
+e144710b302525 Thomas Gleixner           2010-10-01  103  	struct proc_dir_entry	*dir;
+425a5072dcd1bd Thomas Gleixner           2015-12-13  104  #endif
+087cdfb662ae50 Thomas Gleixner           2017-06-20  105  #ifdef CONFIG_GENERIC_IRQ_DEBUGFS
+087cdfb662ae50 Thomas Gleixner           2017-06-20  106  	struct dentry		*debugfs_file;
+07557ccb8c83f3 Thomas Gleixner           2017-09-13  107  	const char		*dev_name;
+087cdfb662ae50 Thomas Gleixner           2017-06-20  108  #endif
+425a5072dcd1bd Thomas Gleixner           2015-12-13  109  #ifdef CONFIG_SPARSE_IRQ
+425a5072dcd1bd Thomas Gleixner           2015-12-13  110  	struct rcu_head		rcu;
+ecb3f394c5dba8 Craig Gallek              2016-09-13  111  	struct kobject		kobj;
+e144710b302525 Thomas Gleixner           2010-10-01  112  #endif
+9114014cf4e6df Thomas Gleixner           2017-06-29  113  	struct mutex		request_mutex;
+293a7a0a165c4f Thomas Gleixner           2012-10-16  114  	int			parent_irq;
+b6873807a7143b Sebastian Andrzej Siewior 2011-07-11  115  	struct module		*owner;
+e144710b302525 Thomas Gleixner           2010-10-01  116  	const char		*name;
+bc06a9e0874239 Shanker Donthineni        2023-05-19  117  #ifdef CONFIG_HARDIRQS_SW_RESEND
+bc06a9e0874239 Shanker Donthineni        2023-05-19  118  	struct hlist_node	resend_node;
+bc06a9e0874239 Shanker Donthineni        2023-05-19  119  #endif
+e144710b302525 Thomas Gleixner           2010-10-01  120  } ____cacheline_internodealigned_in_smp;
+e144710b302525 Thomas Gleixner           2010-10-01  121  
+a899418167264c Thomas Gleixner           2015-07-05  122  #ifdef CONFIG_SPARSE_IRQ
+a899418167264c Thomas Gleixner           2015-07-05  123  extern void irq_lock_sparse(void);
+a899418167264c Thomas Gleixner           2015-07-05  124  extern void irq_unlock_sparse(void);
+a899418167264c Thomas Gleixner           2015-07-05  125  #else
+a899418167264c Thomas Gleixner           2015-07-05  126  static inline void irq_lock_sparse(void) { }
+a899418167264c Thomas Gleixner           2015-07-05  127  static inline void irq_unlock_sparse(void) { }
+e144710b302525 Thomas Gleixner           2010-10-01  128  extern struct irq_desc irq_desc[NR_IRQS];
+e144710b302525 Thomas Gleixner           2010-10-01  129  #endif
+e144710b302525 Thomas Gleixner           2010-10-01  130  
+501e2db67fa426 Thomas Gleixner           2020-12-10  131  static inline unsigned int irq_desc_kstat_cpu(struct irq_desc *desc,
+501e2db67fa426 Thomas Gleixner           2020-12-10  132  					      unsigned int cpu)
+501e2db67fa426 Thomas Gleixner           2020-12-10  133  {
+86d2a2f51fbada Bitao Hu                  2024-04-11  134  	return desc->kstat_irqs ? per_cpu(desc->kstat_irqs->cnt, cpu) : 0;
+501e2db67fa426 Thomas Gleixner           2020-12-10  135  }
+501e2db67fa426 Thomas Gleixner           2020-12-10  136  
+7bbf1dd24b17b9 Jiang Liu                 2015-06-01  137  static inline struct irq_desc *irq_data_to_desc(struct irq_data *data)
+7bbf1dd24b17b9 Jiang Liu                 2015-06-01  138  {
+755d119a620497 Thomas Gleixner           2015-09-16 @139  	return container_of(data->common, struct irq_desc, irq_common_data);
+7bbf1dd24b17b9 Jiang Liu                 2015-06-01  140  }
+7bbf1dd24b17b9 Jiang Liu                 2015-06-01  141  
+304adf8a8fff97 Jiang Liu                 2015-06-04  142  static inline unsigned int irq_desc_get_irq(struct irq_desc *desc)
+304adf8a8fff97 Jiang Liu                 2015-06-04  143  {
+304adf8a8fff97 Jiang Liu                 2015-06-04  144  	return desc->irq_data.irq;
+304adf8a8fff97 Jiang Liu                 2015-06-04  145  }
+304adf8a8fff97 Jiang Liu                 2015-06-04  146  
+d9936bb3952a08 Thomas Gleixner           2011-03-11  147  static inline struct irq_data *irq_desc_get_irq_data(struct irq_desc *desc)
+d9936bb3952a08 Thomas Gleixner           2011-03-11  148  {
+d9936bb3952a08 Thomas Gleixner           2011-03-11  149  	return &desc->irq_data;
+d9936bb3952a08 Thomas Gleixner           2011-03-11  150  }
+d9936bb3952a08 Thomas Gleixner           2011-03-11  151  
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  152  static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  153  {
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  154  	return desc->irq_data.chip;
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  155  }
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  156  
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  157  static inline void *irq_desc_get_chip_data(struct irq_desc *desc)
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  158  {
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  159  	return desc->irq_data.chip_data;
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  160  }
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  161  
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  162  static inline void *irq_desc_get_handler_data(struct irq_desc *desc)
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  163  {
+af7080e040d223 Jiang Liu                 2015-06-01  164  	return desc->irq_common_data.handler_data;
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  165  }
+a0cd9ca2b907d7 Thomas Gleixner           2011-02-10  166  
+e144710b302525 Thomas Gleixner           2010-10-01  167  /*
+e144710b302525 Thomas Gleixner           2010-10-01  168   * Architectures call this to let the generic IRQ layer
+6584d84c3e504c Huang Shijie              2015-09-01  169   * handle an interrupt.
+e144710b302525 Thomas Gleixner           2010-10-01  170   */
+bd0b9ac405e179 Thomas Gleixner           2015-09-14  171  static inline void generic_handle_irq_desc(struct irq_desc *desc)
+e144710b302525 Thomas Gleixner           2010-10-01  172  {
+bd0b9ac405e179 Thomas Gleixner           2015-09-14 @173  	desc->handle_irq(desc);
+e144710b302525 Thomas Gleixner           2010-10-01  174  }
+e144710b302525 Thomas Gleixner           2010-10-01  175  
+a3016b26ee6ee1 Marc Zyngier              2021-05-04  176  int handle_irq_desc(struct irq_desc *desc);
+fe12bc2c996d3e Thomas Gleixner           2011-05-18  177  int generic_handle_irq(unsigned int irq);
+509853f9e1e7b1 Sebastian Andrzej Siewior 2022-02-11  178  int generic_handle_irq_safe(unsigned int irq);
+e144710b302525 Thomas Gleixner           2010-10-01  179  
+e1c054918c6c7a Marc Zyngier              2021-05-12  180  #ifdef CONFIG_IRQ_DOMAIN
+76ba59f8366f2d Marc Zyngier              2014-08-26  181  /*
+76ba59f8366f2d Marc Zyngier              2014-08-26  182   * Convert a HW interrupt number to a logical one using a IRQ domain,
+76ba59f8366f2d Marc Zyngier              2014-08-26  183   * and handle the result interrupt number. Return -EINVAL if
+9626d18a20e166 Marc Zyngier              2021-05-04  184   * conversion failed.
+76ba59f8366f2d Marc Zyngier              2014-08-26  185   */
+8240ef50d48643 Marc Zyngier              2021-05-12  186  int generic_handle_domain_irq(struct irq_domain *domain, unsigned int hwirq);
+6a164c64699984 Sebastian Andrzej Siewior 2022-05-09  187  int generic_handle_domain_irq_safe(struct irq_domain *domain, unsigned int hwirq);
+0953fb263714e1 Mark Rutland              2021-10-20  188  int generic_handle_domain_nmi(struct irq_domain *domain, unsigned int hwirq);
+76ba59f8366f2d Marc Zyngier              2014-08-26  189  #endif
+76ba59f8366f2d Marc Zyngier              2014-08-26  190  
+e144710b302525 Thomas Gleixner           2010-10-01  191  /* Test to see if a driver has successfully requested an irq */
+f61ae4fb66a4f7 Thomas Gleixner           2015-08-02  192  static inline int irq_desc_has_action(struct irq_desc *desc)
+e144710b302525 Thomas Gleixner           2010-10-01  193  {
+a313357e704f26 Thomas Gleixner           2020-12-10  194  	return desc && desc->action != NULL;
+f61ae4fb66a4f7 Thomas Gleixner           2015-08-02  195  }
+f61ae4fb66a4f7 Thomas Gleixner           2015-08-02  196  
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  197  /**
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  198   * irq_set_handler_locked - Set irq handler from a locked region
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  199   * @data:	Pointer to the irq_data structure which identifies the irq
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  200   * @handler:	Flow control handler function for this interrupt
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  201   *
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  202   * Sets the handler in the irq descriptor associated to @data.
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  203   *
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  204   * Must be called with irq_desc locked and valid parameters. Typical
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  205   * call site is the irq_set_type() callback.
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  206   */
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  207  static inline void irq_set_handler_locked(struct irq_data *data,
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  208  					  irq_flow_handler_t handler)
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  209  {
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  210  	struct irq_desc *desc = irq_data_to_desc(data);
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  211  
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  212  	desc->handle_irq = handler;
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  213  }
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  214  
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  215  /**
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  216   * irq_set_chip_handler_name_locked - Set chip, handler and name from a locked region
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  217   * @data:	Pointer to the irq_data structure for which the chip is set
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  218   * @chip:	Pointer to the new irq chip
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  219   * @handler:	Flow control handler function for this interrupt
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  220   * @name:	Name of the interrupt
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  221   *
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  222   * Replace the irq chip at the proper hierarchy level in @data and
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  223   * sets the handler and name in the associated irq descriptor.
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  224   *
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  225   * Must be called with irq_desc locked and valid parameters.
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  226   */
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  227  static inline void
+ef6e5d61eb7a0a Michael Walle             2022-07-06  228  irq_set_chip_handler_name_locked(struct irq_data *data,
+ef6e5d61eb7a0a Michael Walle             2022-07-06  229  				 const struct irq_chip *chip,
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  230  				 irq_flow_handler_t handler, const char *name)
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  231  {
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  232  	struct irq_desc *desc = irq_data_to_desc(data);
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  233  
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  234  	desc->handle_irq = handler;
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  235  	desc->name = name;
+ef6e5d61eb7a0a Michael Walle             2022-07-06 @236  	data->chip = (struct irq_chip *)chip;
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  237  }
+bbc9d21fc0071c Thomas Gleixner           2015-06-23  238  
+fdd029630434b4 Thomas Gleixner           2020-12-10  239  bool irq_check_status_bit(unsigned int irq, unsigned int bitmask);
+fdd029630434b4 Thomas Gleixner           2020-12-10  240  
+4ce413d1840b25 Will Deacon               2017-12-01  241  static inline bool irq_balancing_disabled(unsigned int irq)
+e144710b302525 Thomas Gleixner           2010-10-01  242  {
+fdd029630434b4 Thomas Gleixner           2020-12-10 @243  	return irq_check_status_bit(irq, IRQ_NO_BALANCING_MASK);
+e144710b302525 Thomas Gleixner           2010-10-01  244  }
+781295762defc7 Thomas Gleixner           2011-02-10  245  
+4ce413d1840b25 Will Deacon               2017-12-01  246  static inline bool irq_is_percpu(unsigned int irq)
+7f4a8e7b1943c1 Vinayak Kale              2013-12-04  247  {
+fdd029630434b4 Thomas Gleixner           2020-12-10 @248  	return irq_check_status_bit(irq, IRQ_PER_CPU);
+7f4a8e7b1943c1 Vinayak Kale              2013-12-04  249  }
+7f4a8e7b1943c1 Vinayak Kale              2013-12-04  250  
+4ce413d1840b25 Will Deacon               2017-12-01  251  static inline bool irq_is_percpu_devid(unsigned int irq)
+08395c7f4d9f58 Julien Thierry            2017-10-13  252  {
+fdd029630434b4 Thomas Gleixner           2020-12-10 @253  	return irq_check_status_bit(irq, IRQ_PER_CPU_DEVID);
+08395c7f4d9f58 Julien Thierry            2017-10-13  254  }
+08395c7f4d9f58 Julien Thierry            2017-10-13  255  
 
 -- 
 0-DAY CI Kernel Test Service
