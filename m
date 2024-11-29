@@ -1,155 +1,295 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB043C3C;
-	Fri, 29 Nov 2024 03:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC0642AA5;
+	Fri, 29 Nov 2024 03:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732850005; cv=none; b=oCR7hZ0L8mY0Cf+4wSKnxTBVqFhSkSnYCVtspjRdyLavtJibDM4+CynM/cP+f47vuIaOgbi4CFIJWEUMQfsfW7vOoQKsq0vWjAegQYo5W+aoHorf551fbz8GRB9jI3+T5DwH9YCtVYXVERLGr8Z5ypl2oZPIrdEI5WtJzqNPyJo=
+	t=1732850887; cv=none; b=bAslmfC1590er+1+8ooNlr7nUGSghPh3CXZBIdej/qt8Pf4Kms6jgFNBxdPr6Xr0vLM6Cz4GQRZR6YVJN33oRHnlZozAZpzSSL6gvYdznd+Qh/KOS5vH5jcU6j0XG+mzWuH5KAYsD0B2IY2zU/MbaeQTzuHNGK+bJIT13DQxkXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732850005; c=relaxed/simple;
-	bh=4+VOq2ixpvyl4tzq3jTq1NH0uR907uyPyKXv6pIDRO0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IgkEaGjXlRwxwT1k3ccVZ94aqdcrkUQ3xoGUgUccoVFOVLt8K+LJLULW7lAbodGb/jXa7T0buoP8Zh8oS87z2kKa+/fPLXLjQNqJYIS4u/ipWfwvdcEODVnN+SJsgp2pQbzgGhwKeZOZPy/nAwEVpRPoc8Vpw110rDiZ6uzahcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=gFBuH601; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1732850887; c=relaxed/simple;
+	bh=SqP2dd17BuL0UWqua6pPUEHPsvNTLNkphUMKxypDkNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MFDC6fxV6KajfJlip0RMY+gqqdvH19914O7IKCJPE5UYDCGdIteqNRFL9aIecrOyD2f86oleXotRVGVqluee6RTit2AGRRsXHGaGJdz2dvM5wEG6m0+KPCoO8bwuxHcS7zrLiq3hcfcESrvLzbF9/49Qb8QC/uRki76ONLOjVvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IoMUONus; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="gFBuH601"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1732850000; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=ZS2N9Ztg4oqUGmtvXN2lkocM1mP8nrxwbJEZrWU66EI=;
-	b=gFBuH601MmL27n8tRPQLgDTCkpWDbI/qZrLBl4rZx3XZN4FJRg1qAoDvzHRg85Jnow7GDf/GkENrjjFBEjRkGFRBr7zWdUfS++x7ZLOua6Dy+yoPbrzqdcHqG0WTAbcfT2ypRZfFU+jIwyAKvdfuZFz1NvGVhmtHqNEBJtzddA8=
-Received: from 30.221.101.88(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0WKSTgss_1732849997 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 29 Nov 2024 11:13:19 +0800
-Message-ID: <a863ffe5-b5b9-4ed4-9c1e-472f49214750@linux.alibaba.com>
-Date: Fri, 29 Nov 2024 11:13:16 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IoMUONus"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732850886; x=1764386886;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SqP2dd17BuL0UWqua6pPUEHPsvNTLNkphUMKxypDkNg=;
+  b=IoMUONusDMykekm4j3wqWF8lADWI71U0WeTHYGNaxwaUcyNubC4gOND+
+   jDVKfJ/j90RQvi0aE+dmUrRTLG3a4x30Y7IRK504aRAsIRwO9XmzWzajY
+   fVmLIswAMMBGErEfKK45nXCs+tKSP02PRL64OOqIdbTEkcuDyO0JWo5DB
+   Cjvl4tvQNPR7gAlZ57pYGvF3B4rMDq9/NYRudknjlZ5+mSKR8snR0RzWT
+   0X5XSioZuO8P39zZLqfqDxPZhKO6090yxQ8LQDSFZ8/pJthAzHiCxHNxS
+   ukobCRZHePUD3o9O1fuBVfnVRYElz3+MR0Kwjwsr1K80vCMBA3v7nQIQv
+   w==;
+X-CSE-ConnectionGUID: RrJZwWdHRHaAj5Wh8lIlTg==
+X-CSE-MsgGUID: OPP9SqPqQMmNOVcQ4IoS4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11270"; a="36750909"
+X-IronPort-AV: E=Sophos;i="6.12,194,1728975600"; 
+   d="scan'208";a="36750909"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 19:28:03 -0800
+X-CSE-ConnectionGUID: cvtrns9MQ5G7GuqTRszgcA==
+X-CSE-MsgGUID: eWPszb6lRAe2YVBQJKJxtQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,194,1728975600"; 
+   d="scan'208";a="123247066"
+Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 28 Nov 2024 19:28:02 -0800
+Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tGrfj-000AIH-1W;
+	Fri, 29 Nov 2024 03:27:59 +0000
+Date: Fri, 29 Nov 2024 11:27:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 142/147] fs/bcachefs/error.c:323:6:
+ warning: variable 'exiting' is used uninitialized whenever 'if' condition is
+ true
+Message-ID: <202411291149.pdeKSqU3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/2] net/smc: support ipv4 mapped ipv6 addr
- client for smc-r v2
-To: kernel test robot <lkp@intel.com>, wenjia@linux.ibm.com,
- jaka@linux.ibm.com, alibuda@linux.alibaba.com, tonylu@linux.alibaba.com,
- guwen@linux.alibaba.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Dust Li <dust.li@linux.alibaba.com>
-References: <20241127094533.18459-3-guangguan.wang@linux.alibaba.com>
- <202411282154.DjX7ilwF-lkp@intel.com>
-Content-Language: en-US
-From: Guangguan Wang <guangguan.wang@linux.alibaba.com>
-In-Reply-To: <202411282154.DjX7ilwF-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   e7e6724a942234516ca2b1776a32d6741e0bc6ce
+commit: 7d937c4d949db9bba45c2d0dd30a59e36ec1e6e4 [142/147] bcachefs: Don't error out when logging fsck error
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241129/202411291149.pdeKSqU3-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241129/202411291149.pdeKSqU3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411291149.pdeKSqU3-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/bcachefs/error.c:2:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/bcachefs/error.c:323:6: warning: variable 'exiting' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     323 |         if ((flags & FSCK_AUTOFIX) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+     324 |             (c->opts.errors == BCH_ON_ERROR_continue ||
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     325 |              c->opts.errors == BCH_ON_ERROR_fix_safe)) {
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/error.c:420:6: note: uninitialized use occurs here
+     420 |         if (exiting)
+         |             ^~~~~~~
+   fs/bcachefs/error.c:323:2: note: remove the 'if' if its condition is always false
+     323 |         if ((flags & FSCK_AUTOFIX) &&
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     324 |             (c->opts.errors == BCH_ON_ERROR_continue ||
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     325 |              c->opts.errors == BCH_ON_ERROR_fix_safe)) {
+         |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     326 |                 prt_str(out, ", ");
+         |                 ~~~~~~~~~~~~~~~~~~~
+     327 |                 if (flags & FSCK_CAN_FIX) {
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     328 |                         prt_actioning(out, action);
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     329 |                         ret = -BCH_ERR_fsck_fix;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~
+     330 |                 } else {
+         |                 ~~~~~~~~
+     331 |                         prt_str(out, ", continuing");
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     332 |                         ret = -BCH_ERR_fsck_ignore;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     333 |                 }
+         |                 ~
+     334 | 
+     335 |                 goto print;
+         |                 ~~~~~~~~~~~
+     336 |         } else if (!test_bit(BCH_FS_fsck_running, &c->flags)) {
+         |         ~~~~~~
+>> fs/bcachefs/error.c:324:7: warning: variable 'exiting' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+     324 |             (c->opts.errors == BCH_ON_ERROR_continue ||
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/error.c:420:6: note: uninitialized use occurs here
+     420 |         if (exiting)
+         |             ^~~~~~~
+   fs/bcachefs/error.c:324:7: note: remove the '||' if its condition is always false
+     324 |             (c->opts.errors == BCH_ON_ERROR_continue ||
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/error.c:405:2: note: variable 'exiting' is declared here
+     405 |         bool exiting =
+         |         ^
+   6 warnings generated.
 
 
-Sorry for build error, I will fix it in the next version.
+vim +323 fs/bcachefs/error.c
 
-On 2024/11/28 21:52, kernel test robot wrote:
-> Hi Guangguan,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on net-next/main]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Guangguan-Wang/net-smc-support-SMC-R-V2-for-rdma-devices-with-max_recv_sge-equals-to-1/20241128-111259
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20241127094533.18459-3-guangguan.wang%40linux.alibaba.com
-> patch subject: [PATCH net-next 2/2] net/smc: support ipv4 mapped ipv6 addr client for smc-r v2
-> config: arm-randconfig-001-20241128 (https://download.01.org/0day-ci/archive/20241128/202411282154.DjX7ilwF-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411282154.DjX7ilwF-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202411282154.DjX7ilwF-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from net/smc/af_smc.c:27:
->    In file included from include/linux/if_vlan.h:10:
->    In file included from include/linux/netdevice.h:38:
->    In file included from include/net/net_namespace.h:43:
->    In file included from include/linux/skbuff.h:17:
->    In file included from include/linux/bvec.h:10:
->    In file included from include/linux/highmem.h:8:
->    In file included from include/linux/cacheflush.h:5:
->    In file included from arch/arm/include/asm/cacheflush.h:10:
->    In file included from include/linux/mm.h:2225:
->    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->>> net/smc/af_smc.c:1120:46: error: no member named 'skc_v6_rcv_saddr' in 'struct sock_common'; did you mean 'skc_rcv_saddr'?
->     1120 |              !ipv6_addr_v4mapped(&smc->clcsock->sk->sk_v6_rcv_saddr)) ||
->          |                                                     ^
->    include/net/sock.h:376:37: note: expanded from macro 'sk_v6_rcv_saddr'
->      376 | #define sk_v6_rcv_saddr __sk_common.skc_v6_rcv_saddr
->          |                                     ^
->    include/net/sock.h:155:11: note: 'skc_rcv_saddr' declared here
->      155 |                         __be32  skc_rcv_saddr;
->          |                                 ^
->    1 warning and 1 error generated.
-> 
-> 
-> vim +1120 net/smc/af_smc.c
-> 
->   1087	
->   1088	static int smc_find_proposal_devices(struct smc_sock *smc,
->   1089					     struct smc_init_info *ini)
->   1090	{
->   1091		int rc = 0;
->   1092	
->   1093		/* check if there is an ism device available */
->   1094		if (!(ini->smcd_version & SMC_V1) ||
->   1095		    smc_find_ism_device(smc, ini) ||
->   1096		    smc_connect_ism_vlan_setup(smc, ini))
->   1097			ini->smcd_version &= ~SMC_V1;
->   1098		/* else ISM V1 is supported for this connection */
->   1099	
->   1100		/* check if there is an rdma device available */
->   1101		if (!(ini->smcr_version & SMC_V1) ||
->   1102		    smc_find_rdma_device(smc, ini))
->   1103			ini->smcr_version &= ~SMC_V1;
->   1104		/* else RDMA is supported for this connection */
->   1105	
->   1106		ini->smc_type_v1 = smc_indicated_type(ini->smcd_version & SMC_V1,
->   1107						      ini->smcr_version & SMC_V1);
->   1108	
->   1109		/* check if there is an ism v2 device available */
->   1110		if (!(ini->smcd_version & SMC_V2) ||
->   1111		    !smc_ism_is_v2_capable() ||
->   1112		    smc_find_ism_v2_device_clnt(smc, ini))
->   1113			ini->smcd_version &= ~SMC_V2;
->   1114	
->   1115		/* check if there is an rdma v2 device available */
->   1116		ini->check_smcrv2 = true;
->   1117		ini->smcrv2.saddr = smc->clcsock->sk->sk_rcv_saddr;
->   1118		if (!(ini->smcr_version & SMC_V2) ||
->   1119		    (smc->clcsock->sk->sk_family != AF_INET &&
->> 1120		     !ipv6_addr_v4mapped(&smc->clcsock->sk->sk_v6_rcv_saddr)) ||
->   1121		    !smc_clc_ueid_count() ||
->   1122		    smc_find_rdma_device(smc, ini))
->   1123			ini->smcr_version &= ~SMC_V2;
->   1124		ini->check_smcrv2 = false;
->   1125	
->   1126		ini->smc_type_v2 = smc_indicated_type(ini->smcd_version & SMC_V2,
->   1127						      ini->smcr_version & SMC_V2);
->   1128	
->   1129		/* if neither ISM nor RDMA are supported, fallback */
->   1130		if (ini->smc_type_v1 == SMC_TYPE_N && ini->smc_type_v2 == SMC_TYPE_N)
->   1131			rc = SMC_CLC_DECL_NOSMCDEV;
->   1132	
->   1133		return rc;
->   1134	}
->   1135	
-> 
+   322	
+ > 323		if ((flags & FSCK_AUTOFIX) &&
+ > 324		    (c->opts.errors == BCH_ON_ERROR_continue ||
+   325		     c->opts.errors == BCH_ON_ERROR_fix_safe)) {
+   326			prt_str(out, ", ");
+   327			if (flags & FSCK_CAN_FIX) {
+   328				prt_actioning(out, action);
+   329				ret = -BCH_ERR_fsck_fix;
+   330			} else {
+   331				prt_str(out, ", continuing");
+   332				ret = -BCH_ERR_fsck_ignore;
+   333			}
+   334	
+   335			goto print;
+   336		} else if (!test_bit(BCH_FS_fsck_running, &c->flags)) {
+   337			if (c->opts.errors != BCH_ON_ERROR_continue ||
+   338			    !(flags & (FSCK_CAN_FIX|FSCK_CAN_IGNORE))) {
+   339				prt_str(out, ", shutting down");
+   340				inconsistent = true;
+   341				ret = -BCH_ERR_fsck_errors_not_fixed;
+   342			} else if (flags & FSCK_CAN_FIX) {
+   343				prt_str(out, ", ");
+   344				prt_actioning(out, action);
+   345				ret = -BCH_ERR_fsck_fix;
+   346			} else {
+   347				prt_str(out, ", continuing");
+   348				ret = -BCH_ERR_fsck_ignore;
+   349			}
+   350		} else if (c->opts.fix_errors == FSCK_FIX_exit) {
+   351			prt_str(out, ", exiting");
+   352			ret = -BCH_ERR_fsck_errors_not_fixed;
+   353		} else if (flags & FSCK_CAN_FIX) {
+   354			int fix = s && s->fix
+   355				? s->fix
+   356				: c->opts.fix_errors;
+   357	
+   358			if (fix == FSCK_FIX_ask) {
+   359				prt_str(out, ", ");
+   360				prt_str(out, action);
+   361	
+   362				if (bch2_fs_stdio_redirect(c))
+   363					bch2_print(c, "%s", out->buf);
+   364				else
+   365					bch2_print_string_as_lines(KERN_ERR, out->buf);
+   366				print = false;
+   367	
+   368				int ask = bch2_fsck_ask_yn(c, trans);
+   369	
+   370				if (trans) {
+   371					ret = bch2_trans_relock(trans);
+   372					if (ret) {
+   373						mutex_unlock(&c->fsck_error_msgs_lock);
+   374						goto err;
+   375					}
+   376				}
+   377	
+   378				if (ask >= YN_ALLNO && s)
+   379					s->fix = ask == YN_ALLNO
+   380						? FSCK_FIX_no
+   381						: FSCK_FIX_yes;
+   382	
+   383				ret = ask & 1
+   384					? -BCH_ERR_fsck_fix
+   385					: -BCH_ERR_fsck_ignore;
+   386			} else if (fix == FSCK_FIX_yes ||
+   387				   (c->opts.nochanges &&
+   388				    !(flags & FSCK_CAN_IGNORE))) {
+   389				prt_str(out, ", ");
+   390				prt_actioning(out, action);
+   391				ret = -BCH_ERR_fsck_fix;
+   392			} else {
+   393				prt_str(out, ", not ");
+   394				prt_actioning(out, action);
+   395			}
+   396		} else if (!(flags & FSCK_CAN_IGNORE)) {
+   397			prt_str(out, " (repair unimplemented)");
+   398		}
+   399	
+   400		if (ret == -BCH_ERR_fsck_ignore &&
+   401		    (c->opts.fix_errors == FSCK_FIX_exit ||
+   402		     !(flags & FSCK_CAN_IGNORE)))
+   403			ret = -BCH_ERR_fsck_errors_not_fixed;
+   404	
+   405		bool exiting =
+   406			test_bit(BCH_FS_fsck_running, &c->flags) &&
+   407			(ret != -BCH_ERR_fsck_fix &&
+   408			 ret != -BCH_ERR_fsck_ignore);
+   409	
+   410		if (exiting)
+   411			print = true;
+   412	print:
+   413		if (print) {
+   414			if (bch2_fs_stdio_redirect(c))
+   415				bch2_print(c, "%s\n", out->buf);
+   416			else
+   417				bch2_print_string_as_lines(KERN_ERR, out->buf);
+   418		}
+   419	
+   420		if (exiting)
+   421			bch_err(c, "Unable to continue, halting");
+   422		else if (suppressing)
+   423			bch_err(c, "Ratelimiting new instances of previous error");
+   424	
+   425		if (s)
+   426			s->ret = ret;
+   427	
+   428		mutex_unlock(&c->fsck_error_msgs_lock);
+   429	
+   430		if (inconsistent)
+   431			bch2_inconsistent_error(c);
+   432	
+   433		/*
+   434		 * We don't yet track whether the filesystem currently has errors, for
+   435		 * log_fsck_err()s: that would require us to track for every error type
+   436		 * which recovery pass corrects it, to get the fsck exit status correct:
+   437		 */
+   438		if (flags & FSCK_CAN_FIX) {
+   439			if (ret == -BCH_ERR_fsck_fix) {
+   440				set_bit(BCH_FS_errors_fixed, &c->flags);
+   441			} else {
+   442				set_bit(BCH_FS_errors_not_fixed, &c->flags);
+   443				set_bit(BCH_FS_error, &c->flags);
+   444			}
+   445		}
+   446	err:
+   447		if (action != action_orig)
+   448			kfree(action);
+   449		printbuf_exit(&buf);
+   450		return ret;
+   451	}
+   452	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
