@@ -1,190 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A9A13C3D3;
-	Sat, 30 Nov 2024 07:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5329B132103
+	for <llvm@lists.linux.dev>; Sat, 30 Nov 2024 19:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732950226; cv=none; b=QfdKnSZC+kM0uzQUqMXkyPkyigrXXlj+TleDEnQsr8fP+jy0dfPNeztg1edWQ2cJIpPx/7sXNO+yX7CEWqOMmfme48FR+UuWfuYbIabkr6WiPaozNQDQ02V03Pe1TpHDldx0pbdJlTNOadR2aWHI39t+M/2qSaGRGr+iMv0ErEw=
+	t=1732993989; cv=none; b=hOGms0LHGhso5Xvna7ezcHjl/oYqSt7jklA3FLhAd0iW9EpkRGzuKynVpA7CJC9kYF43tCr9th51QnlceaumjK3EThFZp4HpECv2ZHBgDRa/4t5/Zow5QllLTgclGysryXe3W9GO4abGqcFYil+48JJZWXX42HpcmWr1LjDzOHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732950226; c=relaxed/simple;
-	bh=YfiMztccSiKe3YBK5wXH7dyEjzjJD3Ix0Pp3ghKMdHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jUlT7HwRtSojMSTyMKCHRhfWp4nICNcuplGc/d6DWapIl9QtR6u0Nrj+AmtJGg1AnUl4x3QZFknQYjIHsovHSDrc6KB5r/NR8xUUz69xjqjgadTd7Jt8LTS2m0IoMh9Y95yRrd5ajsId/IOyvSD1biF/QCagTsmILAaUsgvMEH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1ItzbGt; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732993989; c=relaxed/simple;
+	bh=h/zOnmr1FmFWnYD6rGn6TVXBakisalw+zqTs9YU76JE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=g2Ka1q9/03dyTJpAhgkTDrlSvIjqvoNlgLBG104Wr4D8WXNAIrS0S+HR4uusLPzZ9foRTQqc5L4y++8xrqCoWssW6rvjkQKmxr8Pfr1b+QxbH8z28zxmjzgXxBUrCPAj3nI/ih6SNDbRnmZNFimjeGmAvctKdKcUO8FM26gF3pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EQyi8jPh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1ItzbGt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732950224; x=1764486224;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YfiMztccSiKe3YBK5wXH7dyEjzjJD3Ix0Pp3ghKMdHM=;
-  b=b1ItzbGtSRza2TCLesgYGiJFh0yLkxYmSuV2JKumJPR9RyXLfUeDN/JD
-   U4R2LNnTszBjfhrRUM8CzArvmDTjapJ6HWAYQew5COvMLFF6canQ/Gki7
-   0U4BDeFgJ+yBRUzb0ljQfuXmxAKxoi59mEMo8cOFIr3ywWD8tqpYKGhrw
-   dfuQPhiQ9B+J4A3an0JQDcLL5IR37H1TrKOXsA01nvrI40a09IVDGxjWz
-   mrMFY/5IBZEUJsTioMyFnJduVgYFg7cbSUs9q6qKxnz02+IHcH2ZrI+5Q
-   rl/oBj0A5n4GeRwa4vMCnqx97zAcQxxLj3ffk1PjuwaNzJOKqEDnczBy4
-   A==;
-X-CSE-ConnectionGUID: Z+Y59gdUT+KWkYMfq2gVOA==
-X-CSE-MsgGUID: YkthMkkTQ46dB2oTAypRRw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11271"; a="37103629"
-X-IronPort-AV: E=Sophos;i="6.12,198,1728975600"; 
-   d="scan'208";a="37103629"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 23:03:44 -0800
-X-CSE-ConnectionGUID: ukG/bsjtQNGVIPKqBCfwng==
-X-CSE-MsgGUID: EJPLnNDaRrG81S7SiZc4Og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,198,1728975600"; 
-   d="scan'208";a="93028917"
-Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 29 Nov 2024 23:03:42 -0800
-Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tHHVz-00009v-31;
-	Sat, 30 Nov 2024 07:03:39 +0000
-Date: Sat, 30 Nov 2024 15:03:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lunn:v6.12.0-scu4-dt-overlay 24/30]
- drivers/gpio/gpiolib-of.c:1201:2: error: call to undeclared function
- 'of_changeset_revert'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202411301523.8UcTC7Yz-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EQyi8jPh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732993985;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XlPpSGkF4YRZstJVk5Kmto+RVdZ/vqKWdco65pkJQgE=;
+	b=EQyi8jPhUOeO15DIkyb3RlNw4nFxem1owLRTrCdjmzoB8cuPef4rjhO/aZy+WKicwKf4Gj
+	UXplb42vjm6ra6zWlVKcTraf+jU/UBZ409ldRxPdQgalwpQqZbIGup9AMSFkcpzKnqa57Z
+	K+NZ1L6NlMtiPuj5LdnonzGwO40cWcM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-7-MLjSFWKWNaO52lEW35KoXA-1; Sat,
+ 30 Nov 2024 14:13:03 -0500
+X-MC-Unique: MLjSFWKWNaO52lEW35KoXA-1
+X-Mimecast-MFC-AGG-ID: MLjSFWKWNaO52lEW35KoXA
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3B995195395F
+	for <llvm@lists.linux.dev>; Sat, 30 Nov 2024 19:13:02 +0000 (UTC)
+Received: from [172.64.12.14] (unknown [10.30.33.24])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D357C300019F;
+	Sat, 30 Nov 2024 19:13:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.12.0,
+ upstream-mainline, d8b78066)
+Date: Sat, 30 Nov 2024 19:13:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <54245.124113014130300211@us-mta-7.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: MnoFIZPOxPZ7oe3eexCIy7HN8EGpruek17BEQOsTVD8_1732993982
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/lunn/linux.git v6.12.0-scu4-dt-overlay
-head:   6a87eb702125c86f68c9c466c941b914713c8252
-commit: 3003e9eae5cddbc635a165d44194a95e1d26b5be [24/30] gpio: Dynamically add OF nodes if not present
-config: arm-integrator_defconfig (https://download.01.org/0day-ci/archive/20241130/202411301523.8UcTC7Yz-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241130/202411301523.8UcTC7Yz-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411301523.8UcTC7Yz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/gpio/gpiolib-of.c:1191:6: error: redefinition of 'of_gpiochip_remove_dev_node'
-    1191 | void of_gpiochip_remove_dev_node(struct gpio_chip *chip)
-         |      ^
-   drivers/gpio/gpiolib-of.h:50:20: note: previous definition is here
-      50 | static inline void of_gpiochip_remove_dev_node(struct gpio_chip *chip) {};
-         |                    ^
->> drivers/gpio/gpiolib-of.c:1201:2: error: call to undeclared function 'of_changeset_revert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1201 |         of_changeset_revert(np->data);
-         |         ^
->> drivers/gpio/gpiolib-of.c:1202:2: error: call to undeclared function 'of_changeset_destroy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1202 |         of_changeset_destroy(np->data);
-         |         ^
->> drivers/gpio/gpiolib-of.c:1217:8: error: call to undeclared function 'of_changeset_add_prop_bool'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1217 |         ret = of_changeset_add_prop_bool(ocs, np, "gpio-controller");
-         |               ^
->> drivers/gpio/gpiolib-of.c:1221:9: error: call to undeclared function 'of_changeset_add_prop_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1221 |         return of_changeset_add_prop_u32(ocs, np, "#gpio-cells", 2);
-         |                ^
-   drivers/gpio/gpiolib-of.c:1224:6: error: redefinition of 'of_gpiochip_make_dev_node'
-    1224 | void of_gpiochip_make_dev_node(struct gpio_chip *chip)
-         |      ^
-   drivers/gpio/gpiolib-of.h:49:20: note: previous definition is here
-      49 | static inline void of_gpiochip_make_dev_node(struct gpio_chip *chip) {}
-         |                    ^
->> drivers/gpio/gpiolib-of.c:1241:2: error: call to undeclared function 'of_changeset_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1241 |         of_changeset_init(cset);
-         |         ^
->> drivers/gpio/gpiolib-of.c:1243:7: error: call to undeclared function 'of_changeset_create_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1243 |         np = of_changeset_create_node(cset, of_root, chip->label);
-         |              ^
->> drivers/gpio/gpiolib-of.c:1243:5: error: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
-    1243 |         np = of_changeset_create_node(cset, of_root, chip->label);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpio/gpiolib-of.c:1251:8: error: call to undeclared function 'of_changeset_apply'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1251 |         ret = of_changeset_apply(cset);
-         |               ^
-   drivers/gpio/gpiolib-of.c:1263:2: error: call to undeclared function 'of_changeset_destroy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1263 |         of_changeset_destroy(cset);
-         |         ^
-   11 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/of_changeset_revert +1201 drivers/gpio/gpiolib-of.c
+Kernel information:
+    Commit message: Merge tag 'tty-6.13-rc1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/gregkh/tty
 
-  1190	
-  1191	void of_gpiochip_remove_dev_node(struct gpio_chip *chip)
-  1192	{
-  1193		struct device_node *np;
-  1194	
-  1195		np = dev_of_node(&chip->gpiodev->dev);
-  1196		if (!np || !of_node_check_flag(np, OF_DYNAMIC))
-  1197			return;
-  1198	
-  1199		chip->gpiodev->dev.of_node = NULL;
-  1200	
-> 1201		of_changeset_revert(np->data);
-> 1202		of_changeset_destroy(np->data);
-  1203		of_node_put(np);
-  1204	}
-  1205	
-  1206	static int of_gpiochip_add_properties(struct gpio_chip *chip,
-  1207					      struct of_changeset *ocs,
-  1208					      struct device_node *np)
-  1209	{
-  1210		int ret;
-  1211	
-  1212		/*
-  1213		 * The added properties will be released when the
-  1214		 * changeset is destroyed.
-  1215		 */
-  1216	
-> 1217		ret = of_changeset_add_prop_bool(ocs, np, "gpio-controller");
-  1218		if (ret)
-  1219			return ret;
-  1220	
-> 1221		return of_changeset_add_prop_u32(ocs, np, "#gpio-cells", 2);
-  1222	}
-  1223	
-  1224	void of_gpiochip_make_dev_node(struct gpio_chip *chip)
-  1225	{
-  1226		struct device_node *np = NULL;
-  1227		struct of_changeset *cset;
-  1228		int ret;
-  1229	
-  1230		/*
-  1231		 * If there is already a device tree node linked to this device,
-  1232		 * return immediately.
-  1233		 */
-  1234		if (chip->gpiodev->dev.of_node)
-  1235			return;
-  1236	
-  1237		cset = kmalloc(sizeof(*cset), GFP_KERNEL);
-  1238		if (!cset)
-  1239		       return;
-  1240	
-> 1241		of_changeset_init(cset);
-  1242	
-> 1243		np = of_changeset_create_node(cset, of_root, chip->label);
-  1244		if (!np)
-  1245			goto out_destroy_cset;
-  1246	
-  1247		ret = of_gpiochip_add_properties(chip, cset, np);
-  1248		if (ret)
-  1249			goto out_free_node;
-  1250	
-> 1251		ret = of_changeset_apply(cset);
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1567217481
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1567217481-ppc64le-kernel
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1567217481-x86_64-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1567217481-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
