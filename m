@@ -1,197 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD202D638;
-	Sun,  1 Dec 2024 11:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE8C2CA8;
+	Sun,  1 Dec 2024 13:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733053737; cv=none; b=tEf+w5oDtUCgW49wRu3VOdfJQFEBXl21pTlOKSF8eyR0yC+84KGwad8FjMWr1SH0geT3i7GwAoD0VhMIvGyGfILT0NcWNUdwjXzU8RJvm4zCh6MIxZX8TtfLPV+erikMxv8e5WNXyVbQ5xrqqrQvwM1FjsvaJP0xS3/5TZAZbQU=
+	t=1733059263; cv=none; b=FpQ5QpYErCBrtcwOcSkS6iL8t3WaqCLwiA2nk+7psMWUeqgIuS7MXwpwfNRZGu2pFvw+3GlpCflgYn+1P+H36jLai+DRx+lBInNFRpZpcmPIowOm180qHhtAT56ed4qWMHzg87jzWpDSdqI8Q5vSI6WCgSkLJTqoofdtjeCK7rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733053737; c=relaxed/simple;
-	bh=M86sxjlQe9/Xmtml2kDFrAWKg6HV+R2zDkqdlrQ4lUA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KBny4OFM0vN+a3gmLkUFsYAHa7CjMXRRHaLBWpnz2JxvLdeQ7Q5ZVpj2IBIcGmjQfZ0FqPA6DTYQONHwgIuxpXX0lCMgbl/22rxPljyloji3kVwDwqGwINnNdwGR6wr430kAGHNjfoaU5ozwGDXsfe5QLCzZR9pX73U8bpNqZh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HajdhURB; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733059263; c=relaxed/simple;
+	bh=ztB5yIm9DtiaC8R6vn7o/JGvks6oHXhp3FH7dLKnQ4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=vFW8sWELEz5RnCqlSfhgN80RXZ8+JEuNnXpwKTCi21kBMyU9n19sfDHptfEu+OxZLpkwAFI6AIEVaBUQ8zBPqsQZaCGkFcu9tMuVK7efvTAiIffDaputiqF/EAlCxkdcMRySySKiYDrKMfIBMwCOMymBsNSIVK+YM376AvN4KI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDfg1AA6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HajdhURB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733053735; x=1764589735;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M86sxjlQe9/Xmtml2kDFrAWKg6HV+R2zDkqdlrQ4lUA=;
-  b=HajdhURBzmz93QvJv/rJ2f0I/rJWeynTPZmyB+fp5c9EFxy3lkllpzFp
-   x5qcXBNwuMvH0iyq0yeOm0eBoiNxPJbuvVZzJuDP4MztLYVP3GlChKaED
-   Si2tJXZUS6TDKxAxRdhijDIWKkRQwt+4NsKlG6cyhXp9cB8V739Gf7MNS
-   IxpsuJ4zBai+H72ND9UIlUO/XIRR1wXKxhDoVr9XgtFWu5Ap6Pxa0LTTr
-   giqEpdnOL9HgGmXIvJ4gcfpH9ZQD8nPCxIy1aD947VpAq1s6qa9HtZh9a
-   XJiWLqVVq7KXU8NOV01qPBfuKENKxNousJxU6S8IO1dhCX8eE8h5yAgwu
-   g==;
-X-CSE-ConnectionGUID: uT2qtPmFThekBS6GqWkUwQ==
-X-CSE-MsgGUID: OofY+2HfSwmNGymFVwrtag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11273"; a="33099602"
-X-IronPort-AV: E=Sophos;i="6.12,200,1728975600"; 
-   d="scan'208";a="33099602"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2024 03:48:54 -0800
-X-CSE-ConnectionGUID: GsAUQ0PaSCqYxQ7nlUoP6g==
-X-CSE-MsgGUID: jR6XAsPLRIyOqIdj5a6Y7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,200,1728975600"; 
-   d="scan'208";a="92668077"
-Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 01 Dec 2024 03:48:52 -0800
-Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tHiRE-0001VR-34;
-	Sun, 01 Dec 2024 11:48:36 +0000
-Date: Sun, 1 Dec 2024 19:47:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eugen Hristev <eugen.hristev@microchip.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/adc/at91-sama5d2_adc.c:374: warning: Excess struct
- member 'adc_channels' description in 'at91_adc_platform'
-Message-ID: <202412011904.wH9p6YVx-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDfg1AA6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3066EC4CED2;
+	Sun,  1 Dec 2024 13:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733059263;
+	bh=ztB5yIm9DtiaC8R6vn7o/JGvks6oHXhp3FH7dLKnQ4Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gDfg1AA6hjrimr5xEpEcdiOBniAytM82NBmbx8GepfFzwLCjjtNg9uajDh3kYVlO4
+	 r/OnYQAGF13mcYGK9hDaohp4x8hAMOS921pIhxjb/QdKX1DxgqxKiwDy6avhmB7HkR
+	 CWTYo3L9BWCxk6TyfL2nHDLKLIoGNFGmfkC8EMcrQVzKLMDTwA+l6t63U5V8ESPm5m
+	 ifdUQeUXv0m4y4J9TsHE6+fUIJeczjo8zb+prIfLwgr1HSlHMPRtkMA4pq2WFtY44Y
+	 N/ejWeQ1im6g839TjcrtYj8K9p41fz0JLzITZcwf0s0zz1ssez4NH90SZB5yrJsOMi
+	 95yqZGphHoVPA==
+Date: Sun, 1 Dec 2024 13:20:54 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Cc: Mikael Gonella-Bolduc via B4 Relay
+ <devnull+mgonellabolduc.dimonoff.com@kernel.org>, Lars-Peter Clausen
+ <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Mikael
+ Gonella-Bolduc <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
+ Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
+ driver
+Message-ID: <20241201132054.0c063a11@jic23-huawei>
+In-Reply-To: <Z0eY+1X1ZSkNui9U@uva.nl>
+References: <20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com>
+	<20241119-apds9160-driver-v1-2-fa00675b4ea4@dimonoff.com>
+	<20241124211545.194a9f87@jic23-huawei>
+	<Z0eY+1X1ZSkNui9U@uva.nl>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bcc8eda6d34934d80b96adb8dc4ff5dfc632a53a
-commit: 8940de2e48902e95b588b6244d5a1b61a4d75c4a iio: adc: at91-sama5d2_adc: convert to platform specific data structures
-date:   3 years, 3 months ago
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241201/202412011904.wH9p6YVx-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241201/202412011904.wH9p6YVx-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412011904.wH9p6YVx-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/adc/at91-sama5d2_adc.c:374: warning: Excess struct member 'adc_channels' description in 'at91_adc_platform'
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
 
-vim +374 drivers/iio/adc/at91-sama5d2_adc.c
+> > > +};
+> > > +MODULE_DEVICE_TABLE(of, apds9160_of_match);
+> > > +
+> > > +static struct i2c_driver apds9160_driver = {
+> > > +	.driver	  = {
+> > > +		.name	= APDS9160_DRIVER_NAME,
+> > > +		.owner = THIS_MODULE,
+> > > +		.of_match_table = apds9160_of_match,
+> > > +	},
+> > > +	.probe    = apds9160_probe,
+> > > +	.remove	  = apds9160_remove,
+> > > +	.id_table = apds9160_id,
+> > > +};  
+> 
+> Hi Jonathan,
+> 
 
-   269	
-   270	#define AT91_SAMA5D2_CHAN_SINGLE(index, num, addr)			\
-   271		{								\
-   272			.type = IIO_VOLTAGE,					\
-   273			.channel = num,						\
-   274			.address = addr,					\
-   275			.scan_index = index,					\
-   276			.scan_type = {						\
-   277				.sign = 'u',					\
-   278				.realbits = 14,					\
-   279				.storagebits = 16,				\
-   280			},							\
-   281			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-   282			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
-   283			.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ)|\
-   284					BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),	\
-   285			.datasheet_name = "CH"#num,				\
-   286			.indexed = 1,						\
-   287		}
-   288	
-   289	#define AT91_SAMA5D2_CHAN_DIFF(index, num, num2, addr)			\
-   290		{								\
-   291			.type = IIO_VOLTAGE,					\
-   292			.differential = 1,					\
-   293			.channel = num,						\
-   294			.channel2 = num2,					\
-   295			.address = addr,					\
-   296			.scan_index = index,					\
-   297			.scan_type = {						\
-   298				.sign = 's',					\
-   299				.realbits = 14,					\
-   300				.storagebits = 16,				\
-   301			},							\
-   302			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-   303			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
-   304			.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ)|\
-   305					BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),	\
-   306			.datasheet_name = "CH"#num"-CH"#num2,			\
-   307			.indexed = 1,						\
-   308		}
-   309	
-   310	#define AT91_SAMA5D2_CHAN_TOUCH(num, name, mod)				\
-   311		{								\
-   312			.type = IIO_POSITIONRELATIVE,				\
-   313			.modified = 1,						\
-   314			.channel = num,						\
-   315			.channel2 = mod,					\
-   316			.scan_index = num,					\
-   317			.scan_type = {						\
-   318				.sign = 'u',					\
-   319				.realbits = 12,					\
-   320				.storagebits = 16,				\
-   321			},							\
-   322			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-   323			.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ)|\
-   324					BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),	\
-   325			.datasheet_name = name,					\
-   326		}
-   327	#define AT91_SAMA5D2_CHAN_PRESSURE(num, name)				\
-   328		{								\
-   329			.type = IIO_PRESSURE,					\
-   330			.channel = num,						\
-   331			.scan_index = num,					\
-   332			.scan_type = {						\
-   333				.sign = 'u',					\
-   334				.realbits = 12,					\
-   335				.storagebits = 16,				\
-   336			},							\
-   337			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-   338			.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ)|\
-   339					BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),	\
-   340			.datasheet_name = name,					\
-   341		}
-   342	
-   343	#define at91_adc_readl(st, reg)						\
-   344		readl_relaxed((st)->base + (st)->soc_info.platform->layout->reg)
-   345	#define at91_adc_read_chan(st, reg)					\
-   346		readl_relaxed((st)->base + reg)
-   347	#define at91_adc_writel(st, reg, val)					\
-   348		writel_relaxed(val, (st)->base + (st)->soc_info.platform->layout->reg)
-   349	
-   350	/**
-   351	 * struct at91_adc_platform - at91-sama5d2 platform information struct
-   352	 * @layout:		pointer to the reg layout struct
-   353	 * @adc_channels:	pointer to an array of channels for registering in
-   354	 *			the iio subsystem
-   355	 * @nr_channels:	number of physical channels available
-   356	 * @touch_chan_x:	index of the touchscreen X channel
-   357	 * @touch_chan_y:	index of the touchscreen Y channel
-   358	 * @touch_chan_p:	index of the touchscreen P channel
-   359	 * @max_channels:	number of total channels
-   360	 * @max_index:		highest channel index (highest index may be higher
-   361	 *			than the total channel number)
-   362	 * @hw_trig_cnt:	number of possible hardware triggers
-   363	 */
-   364	struct at91_adc_platform {
-   365		const struct at91_adc_reg_layout	*layout;
-   366		const struct iio_chan_spec		(*adc_channels)[];
-   367		unsigned int				nr_channels;
-   368		unsigned int				touch_chan_x;
-   369		unsigned int				touch_chan_y;
-   370		unsigned int				touch_chan_p;
-   371		unsigned int				max_channels;
-   372		unsigned int				max_index;
-   373		unsigned int				hw_trig_cnt;
- > 374	};
-   375	
+Hi Mikael,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One quick process thing first.  Please crop replies. It is far too easy to miss comments
+inline (I don't think there were any?) and reviewers aren't fond of scrolling through lots
+of context that isn't relevant to a particular discussion.
+
+> Thank you for the feedback. I'm currently in the process of integrating the comments from all the reviewers for a rev 2.
+> However, there's still some things that are not clear for me that I'm not sure on how to handle properly.
+> 
+> First, regarding the integration time/gain/scale parameters. I took a look at the datasheet again as there is a table
+> provided to get lux/count (scale?) for the ALS sensor depending on gain and integration time. 
+> 
+> It looks like the correlation in the table is almost linear but it's not as there is a loss of precision.
+> For example, at 1x gain with integration time 100ms the lux/count is 0.819 but at 3x the table is stating 0.269 instead of exepected 0.273.
+> 
+> Is it still possible to use the gts helpers in that case?
+
+Ah. Probably not if it goes non linear.  Matti? (+CC)
+
+> 
+> Second, regarding the use of the IIO_CHAN_INFO_HARDWAREGAIN channel info.
+> I took a look at a couple of recent drivers, some use the IIO_CHAN_INFO_SCALE to ajust gain type registers.
+> 
+> In my use case, it feels like the scale is read-only as it is affected by the gain and integration time and both can be set independently
+> with their respective available values. How should I handle this?
+The general preference is for the scale to be the primary control. 
+For a light sensor assuming the device doesn't support very long integration times, the
+trade off is normally set the integration time as high as possible (as that gives lowest
+noise) then tune the gain as necessary.
+
+Another model is to let the integration time be controllable and then try and adjust
+the gain to keep as close as possible to a requested scale.  Matti has spent more
+brain power on this than anyone so I'll over to him for more precise suggestions!
+
+> 
+> Finally, you mention to use a dma safe buffer when calling regmap_bulk_read. 
+> I took a look at other recent drivers and I don't see any differences on how they are handling this. 
+> Could you provide an example of how to ensure the buffer allocated on the stack is dma safe?
+Gah. Before going on, I'd failed to notice this was an I2C device and I2C transports
+don't need DMA safe buffers (whether or not accessed through regmap). So that comment
+was spurious.  Not sure why I thought it was an SPI device :(
+
+Anyhow for future reference:
+The only way to do a safe buffer on the stack is to allocate a huge buffer and then
+find an appropriate aligned padding.  We simply don't do that.  So reality is you can't use a buffer
+on the stack for transfers that require DMA safe buffers.  Either kzalloc the buffer
+or look at the many examples where the driver has __aligned(IIO_DMA_MINALIGN) data in iio_priv()
+accessed structure.
+
+The regmap case is a little less than clear though.  Last time I checked the reality was
+that regmap always bounce buffered anyway as part of it's handling for weird register
+formats.  It doesn't need to though and when I asked the maintainer a few years back the
+response was that we should continue to use dma safe buffers for bulk transfers if
+the underlying transport (e.g. SPI) requires them.
+
+Jonathan
+
+
+
+> 
+> Best regards,
+> Mikael
+
