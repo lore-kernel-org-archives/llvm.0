@@ -1,140 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE8C2CA8;
-	Sun,  1 Dec 2024 13:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33BF1D4337;
+	Sun,  1 Dec 2024 14:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733059263; cv=none; b=FpQ5QpYErCBrtcwOcSkS6iL8t3WaqCLwiA2nk+7psMWUeqgIuS7MXwpwfNRZGu2pFvw+3GlpCflgYn+1P+H36jLai+DRx+lBInNFRpZpcmPIowOm180qHhtAT56ed4qWMHzg87jzWpDSdqI8Q5vSI6WCgSkLJTqoofdtjeCK7rE=
+	t=1733061875; cv=none; b=GVOzXINXnnZW2zcDLwT2evuTs9fMhlVBLSsFviEmxOtHZIUbEwPHeRaRalRIBDRiZVeyjcvzjT4GKNYK4EX5o+azfiWzI83yY+padkSno98CHJsoASgcB1Xrc/DoGgoow6gIKg1uCyOZGuQ9QR/nh7P8jSVIDCT8EqmMzYoUU2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733059263; c=relaxed/simple;
-	bh=ztB5yIm9DtiaC8R6vn7o/JGvks6oHXhp3FH7dLKnQ4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vFW8sWELEz5RnCqlSfhgN80RXZ8+JEuNnXpwKTCi21kBMyU9n19sfDHptfEu+OxZLpkwAFI6AIEVaBUQ8zBPqsQZaCGkFcu9tMuVK7efvTAiIffDaputiqF/EAlCxkdcMRySySKiYDrKMfIBMwCOMymBsNSIVK+YM376AvN4KI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDfg1AA6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733061875; c=relaxed/simple;
+	bh=VpIBwsR24ML9IUv+PVCxbZyA/aRA1Ka5B3mTy5p1oGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kGY0ZLT35a35JfI/bzFRGe1yyickCyPXfA/qm9fIQ6g53r6LaKXsjelIwxF/tvawu9EhotFl1lWS0fSlU37D2j0nr7h1sNds0l86EMOOKO3K1abfu4S7eeipc1Fb26/dw++gfaXL7BK0NZYZ7NxWO4uaG5Cm2jL0+m+8kgeriDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bvc4UrNE; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDfg1AA6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3066EC4CED2;
-	Sun,  1 Dec 2024 13:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733059263;
-	bh=ztB5yIm9DtiaC8R6vn7o/JGvks6oHXhp3FH7dLKnQ4Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gDfg1AA6hjrimr5xEpEcdiOBniAytM82NBmbx8GepfFzwLCjjtNg9uajDh3kYVlO4
-	 r/OnYQAGF13mcYGK9hDaohp4x8hAMOS921pIhxjb/QdKX1DxgqxKiwDy6avhmB7HkR
-	 CWTYo3L9BWCxk6TyfL2nHDLKLIoGNFGmfkC8EMcrQVzKLMDTwA+l6t63U5V8ESPm5m
-	 ifdUQeUXv0m4y4J9TsHE6+fUIJeczjo8zb+prIfLwgr1HSlHMPRtkMA4pq2WFtY44Y
-	 N/ejWeQ1im6g839TjcrtYj8K9p41fz0JLzITZcwf0s0zz1ssez4NH90SZB5yrJsOMi
-	 95yqZGphHoVPA==
-Date: Sun, 1 Dec 2024 13:20:54 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-Cc: Mikael Gonella-Bolduc via B4 Relay
- <devnull+mgonellabolduc.dimonoff.com@kernel.org>, Lars-Peter Clausen
- <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Mikael
- Gonella-Bolduc <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
- driver
-Message-ID: <20241201132054.0c063a11@jic23-huawei>
-In-Reply-To: <Z0eY+1X1ZSkNui9U@uva.nl>
-References: <20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com>
-	<20241119-apds9160-driver-v1-2-fa00675b4ea4@dimonoff.com>
-	<20241124211545.194a9f87@jic23-huawei>
-	<Z0eY+1X1ZSkNui9U@uva.nl>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bvc4UrNE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733061874; x=1764597874;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VpIBwsR24ML9IUv+PVCxbZyA/aRA1Ka5B3mTy5p1oGM=;
+  b=bvc4UrNEjWc5ZOODHls6cvB/l2X/0t8vfnHwOHMmmXatcEOqK/+9aGPh
+   niY23Nl8PK1DegYZKBV98YQsu5sj6/aGJBMU2NQsceNuSQ0tFgOJXlGJt
+   QBpfbDw91Ie2w+qTVKTDNl87f10FwM3OxdDrcxSJhZaNCxo8y5o5tS72S
+   I3dsMrXtIcGQClKU3GqnVzn1/FuOpqb778Om8CKac7BcWYdXGL4W2q2T2
+   zAiFQSM3w7/lB+ecpqF4E/KhSTLVEi12TkwFHnZWRFATHTNIY+9NFXHu+
+   yn8dlW1gkg1GmBActb/fpZCuPdRjFQbaj8EmMGYjO3KY+0yk5aiTxTM/P
+   w==;
+X-CSE-ConnectionGUID: jekuafFUScif20xOPGSo9g==
+X-CSE-MsgGUID: /zq4caiCTdasXMqVpfie8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11273"; a="33105962"
+X-IronPort-AV: E=Sophos;i="6.12,200,1728975600"; 
+   d="scan'208";a="33105962"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2024 06:04:34 -0800
+X-CSE-ConnectionGUID: i9DkVg3HR++dqowuGeD2VA==
+X-CSE-MsgGUID: EcblWCdUQ56eTXvcw5aqQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,200,1728975600"; 
+   d="scan'208";a="97835501"
+Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 01 Dec 2024 06:04:32 -0800
+Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tHkYn-0001Zw-2Z;
+	Sun, 01 Dec 2024 14:04:29 +0000
+Date: Sun, 1 Dec 2024 22:04:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Kees Cook <kees@kernel.org>
+Subject: ld.lld: error: unknown argument '-dp'
+Message-ID: <202412012119.tcZO7su9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Nathan,
 
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, apds9160_of_match);
-> > > +
-> > > +static struct i2c_driver apds9160_driver = {
-> > > +	.driver	  = {
-> > > +		.name	= APDS9160_DRIVER_NAME,
-> > > +		.owner = THIS_MODULE,
-> > > +		.of_match_table = apds9160_of_match,
-> > > +	},
-> > > +	.probe    = apds9160_probe,
-> > > +	.remove	  = apds9160_remove,
-> > > +	.id_table = apds9160_id,
-> > > +};  
-> 
-> Hi Jonathan,
-> 
+FYI, the error/warning still remains.
 
-Hi Mikael,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bcc8eda6d34934d80b96adb8dc4ff5dfc632a53a
+commit: dd3a7ee91e0ce0b03d22e974a79e8247cc99959b hardening: Adjust dependencies in selection of MODVERSIONS
+date:   9 weeks ago
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241201/202412012119.tcZO7su9-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241201/202412012119.tcZO7su9-lkp@intel.com/reproduce)
 
-One quick process thing first.  Please crop replies. It is far too easy to miss comments
-inline (I don't think there were any?) and reviewers aren't fond of scrolling through lots
-of context that isn't relevant to a particular discussion.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412012119.tcZO7su9-lkp@intel.com/
 
-> Thank you for the feedback. I'm currently in the process of integrating the comments from all the reviewers for a rev 2.
-> However, there's still some things that are not clear for me that I'm not sure on how to handle properly.
-> 
-> First, regarding the integration time/gain/scale parameters. I took a look at the datasheet again as there is a table
-> provided to get lux/count (scale?) for the ALS sensor depending on gain and integration time. 
-> 
-> It looks like the correlation in the table is almost linear but it's not as there is a loss of precision.
-> For example, at 1x gain with integration time 100ms the lux/count is 0.819 but at 3x the table is stating 0.269 instead of exepected 0.273.
-> 
-> Is it still possible to use the gts helpers in that case?
+All errors (new ones prefixed by >>):
 
-Ah. Probably not if it goes non linear.  Matti? (+CC)
+>> ld.lld: error: unknown argument '-dp'
 
-> 
-> Second, regarding the use of the IIO_CHAN_INFO_HARDWAREGAIN channel info.
-> I took a look at a couple of recent drivers, some use the IIO_CHAN_INFO_SCALE to ajust gain type registers.
-> 
-> In my use case, it feels like the scale is read-only as it is affected by the gain and integration time and both can be set independently
-> with their respective available values. How should I handle this?
-The general preference is for the scale to be the primary control. 
-For a light sensor assuming the device doesn't support very long integration times, the
-trade off is normally set the integration time as high as possible (as that gives lowest
-noise) then tune the gain as necessary.
-
-Another model is to let the integration time be controllable and then try and adjust
-the gain to keep as close as possible to a requested scale.  Matti has spent more
-brain power on this than anyone so I'll over to him for more precise suggestions!
-
-> 
-> Finally, you mention to use a dma safe buffer when calling regmap_bulk_read. 
-> I took a look at other recent drivers and I don't see any differences on how they are handling this. 
-> Could you provide an example of how to ensure the buffer allocated on the stack is dma safe?
-Gah. Before going on, I'd failed to notice this was an I2C device and I2C transports
-don't need DMA safe buffers (whether or not accessed through regmap). So that comment
-was spurious.  Not sure why I thought it was an SPI device :(
-
-Anyhow for future reference:
-The only way to do a safe buffer on the stack is to allocate a huge buffer and then
-find an appropriate aligned padding.  We simply don't do that.  So reality is you can't use a buffer
-on the stack for transfers that require DMA safe buffers.  Either kzalloc the buffer
-or look at the many examples where the driver has __aligned(IIO_DMA_MINALIGN) data in iio_priv()
-accessed structure.
-
-The regmap case is a little less than clear though.  Last time I checked the reality was
-that regmap always bounce buffered anyway as part of it's handling for weird register
-formats.  It doesn't need to though and when I asked the maintainer a few years back the
-response was that we should continue to use dma safe buffers for bulk transfers if
-the underlying transport (e.g. SPI) requires them.
-
-Jonathan
-
-
-
-> 
-> Best regards,
-> Mikael
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
