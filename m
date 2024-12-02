@@ -1,101 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17F61DED6F;
-	Mon,  2 Dec 2024 20:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529711DED7B
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 20:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733171768; cv=none; b=fAQGOROU50bjKnnORkfkjLg4w3Aeku01dtYK8SMZ9TFoQko5lNMgT/P03TNNeA8caLAA1w2JaR2S3h1WR26O+96v0kmE9c7rOKgQNnDCS3A9LkwH8PlOIEUtDOP15Vh7msJWANyqRMwr2SfRf242Uc0+8+PRH2uJn5Q2N0gpXUA=
+	t=1733172003; cv=none; b=kunpuJL6dv6dAFmO7bSPyn4Pm7VEtf9gkk0oP8w+J+hHzb/3myKH2C+7LpabG8ikLonBsDiTDwtfXucZyTLMYHPPfC7E90QQMZ0MtokIJ+ODHaVaZvZKrq9JWBZghx81mVQ1UKHgflv4TTcxgDFROly8rja3atmNyS5cXUemBws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733171768; c=relaxed/simple;
-	bh=AFKSCUypHwXVOLHrBjU96IpLAARRE/zEft7It6LMgo8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dfaAUrINqMYN98doQ+sq/VmrlmbyQzdMddqnHdwCgXJLC+ImRRinPSH1V1iQKzMC1eLt0Unmke7mo948+jRpINYS+vqXe2LfbOF/+CnpD8CsTAiDCEq3GY9QQlicC4t2DceoIr1ckgHve8qysSM08tIrLR8FKKzm0HQgEa+uqZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hyaKlVhg; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733172003; c=relaxed/simple;
+	bh=cyxcPd52gACP8SxGjZ4luSPaose5u0/LNbMFAm5Cf7A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Md2AMMajTU93qI06RBfy/ItT4ByijZyi7ydGm/RjfXCm5ACBuQGGLpChPDzoh89J78DAZ6cy8Ymp/WyiXsiqSMr8it/gknqbkM1ZOsoU59CtyJeh1OuOOT29PvFdMz9Seh+qFXIzKSBCW4cG4OOtp26nMle/VM0hykBH+71XXO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXdykwfZ; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hyaKlVhg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733171766; x=1764707766;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AFKSCUypHwXVOLHrBjU96IpLAARRE/zEft7It6LMgo8=;
-  b=hyaKlVhgZwBho7syv/e9O8objNMFY7glCIbYR2fcMETmQQgEzzuHS48k
-   W0HrqMo8nr0v4dflesM3evyjwi489JWOp5kb6D9KH9uFspG/gJ9z9wULm
-   cgymOARC1vuhnxYfsdn8T2wjrw5LYfWAgb27Kafz9gdc3o8PBWDx0EOVW
-   RQB/Thu+04v9loktBp1y5dJ1W83vlkMDLhGJqcmOl2xL30DWg7zxZXzsK
-   bVN1TwwGB97JEG+eos386QRTSA2VNDrMQOFdpn6IRmymApK1lTUGZBv8M
-   DdUqU18Qiw4fVzvA5R2HRUnDHZkwqY+MktAoxlGVbq13Bmoe6NxUlY9g6
-   w==;
-X-CSE-ConnectionGUID: qOrKvOrmToSzmSG7socRmg==
-X-CSE-MsgGUID: RiMUxkVkSS+O9r7y8cme+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="20950356"
-X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
-   d="scan'208";a="20950356"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 12:36:05 -0800
-X-CSE-ConnectionGUID: MKGlhwU7Q++lln8d+JSFTw==
-X-CSE-MsgGUID: C5+voUgqTYiyoJnVoWKXDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
-   d="scan'208";a="130679051"
-Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 02 Dec 2024 12:36:03 -0800
-Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tID8x-0002s5-1r;
-	Mon, 02 Dec 2024 20:35:49 +0000
-Date: Tue, 3 Dec 2024 04:34:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	Matthew Wilcox <willy@infradead.org>,
-	David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH] intel_th: avoid using deprecated page->mapping, index
- fields
-Message-ID: <202412030410.qX3ejEnD-lkp@intel.com>
-References: <20241202122127.51313-1-lorenzo.stoakes@oracle.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXdykwfZ"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ee67e9287fso2642537a91.0
+        for <llvm@lists.linux.dev>; Mon, 02 Dec 2024 12:40:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733172001; x=1733776801; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLRpz1Zk+hfN1AHa7tmG/5rj2S8mobqC+RuZhy+4X2I=;
+        b=gXdykwfZI7+yuYZaMcgL7+/dXqhJBA6gn6lsMjjPCCkDMNidBwIZHSrY7RGZvl/hRc
+         nbKaL98VAW6eKesZtTa5Hcut4Gg+eSq4DWBvGk8uftCA4MS7czjJ0X0CcbshKdmBwZPh
+         Soeq2zk/misWbiVvMpwxMZ+/Pfvzt9pmg2uvLCKkK83vjkKeS3wolJfDLzO2Agd6bJfW
+         KVVi1rnK5Eebtvqv2F2px+KucQu2sB73Zsw7VBDoZgv5brnTjwVjw76pdeY5rNdGu4dm
+         auJbOg82ENfBvcBlCYHkwsWm18kyIcqoT9QYHjxxyba9N0vdlcKxP/iGnWPz3WHbPrCE
+         aWDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733172001; x=1733776801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLRpz1Zk+hfN1AHa7tmG/5rj2S8mobqC+RuZhy+4X2I=;
+        b=pg3V6XJ3J9qCFOUwr03mkUZq496j4HOfqYYvcJ7VhaFU+V/iYi3Z9I0KGJ4G3Tguu0
+         6rGsSyJcj66H8welbR1ggw1y+t3VsnXmv50W5ArbLkpYYeNtAb6wF0iycUhKfuSBA6pE
+         JgZBnc2pad2N32Axp7qAXfcVQFGIt74EWTdjhEzcE0rT3Pq2JqSoNqq4skqHeLa7Irzd
+         7YfCahQjGAuD36R+2CvgK4raQAe5NbL9mvFoPdGYs+4LTb5EzumXNFikMP5LRaFcuP0f
+         CCstfBmc7v5/Xwif/DR7xSybQvDpHEY8ugL29+tltF2HaKw7KnTZcOUd0Yl/gNec8fVk
+         LvZw==
+X-Forwarded-Encrypted: i=1; AJvYcCV6mAdWdZhzeATm1CgZuc5E5cvMQF/8Feys/O6vmGoPLUutsvTU0vhOLqdxiOMMKBEP/34V@lists.linux.dev
+X-Gm-Message-State: AOJu0YxnzRZ1Ez3Ql+BmON+vGtrsgg3qzKbt5VOAGKT+ehZSZbd8kCIS
+	z8HJy7Au+sSmNgj0LNZtdP8KaeXdvEGoLS6+NV2254Y2Wi+IwyBJACSK15yhdySunSYTLPL2L0c
+	032PgKftVfQZj0Mscj6L2JPZ/a8U=
+X-Gm-Gg: ASbGncu1UETfGItm5R4n1BDzy0i9ZzLGvMRlZG7pVGpmlAq9qYWRHtSSdGBVddp82g7
+	nPW0ea3rxRPyMKfVQqjFGTsF1aw7D
+X-Google-Smtp-Source: AGHT+IHmtqRzaVmAlDgjKyNEPsGkR13thUm6uPwrECK1jcapO0NEnL6jvuXlh2uXpxWOxWfIFYP5kAQjGVrojGvK4z0=
+X-Received: by 2002:a17:90b:1d0f:b0:2ee:d433:7c54 with SMTP id
+ 98e67ed59e1d1-2eed4337dbfmr6055343a91.19.1733172001590; Mon, 02 Dec 2024
+ 12:40:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241202122127.51313-1-lorenzo.stoakes@oracle.com>
+References: <20241129091003.87716-1-jameshongleiwang@126.com>
+In-Reply-To: <20241129091003.87716-1-jameshongleiwang@126.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 2 Dec 2024 12:39:49 -0800
+Message-ID: <CAEf4BzYAG320uwJrtehe-7j1vsta1JwHT9JJs_DcmX892W736A@mail.gmail.com>
+Subject: Re: [PATCH] sched_ext: Add __weak to fix the build errors
+To: Honglei Wang <jameshongleiwang@126.com>
+Cc: tj@kernel.org, void@manifault.com, nathan@kernel.org, 
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	haoluo@google.com, brho@google.com, joshdon@google.com, vishalc@linux.ibm.com, 
+	hongyan.xia2@arm.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lorenzo,
+On Fri, Nov 29, 2024 at 1:36=E2=80=AFAM Honglei Wang <jameshongleiwang@126.=
+com> wrote:
+>
+> commit 5cbb302880f5 ("sched_ext: Rename
+> scx_bpf_dispatch[_vtime]_from_dsq*() -> scx_bpf_dsq_move[_vtime]*()")
+> introduced several new functions which caused compilation errors when
+> compiled with clang.
+>
+> Let's fix this by adding __weak markers.
+>
+> Signed-off-by: Honglei Wang <jameshongleiwang@126.com>
+> ---
+>  tools/sched_ext/include/scx/common.bpf.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/sched_ext/include/scx/common.bpf.h b/tools/sched_ext/i=
+nclude/scx/common.bpf.h
+> index 2f36b7b6418d..625f5b046776 100644
+> --- a/tools/sched_ext/include/scx/common.bpf.h
+> +++ b/tools/sched_ext/include/scx/common.bpf.h
+> @@ -40,9 +40,9 @@ void scx_bpf_dsq_insert(struct task_struct *p, u64 dsq_=
+id, u64 slice, u64 enq_fl
+>  void scx_bpf_dsq_insert_vtime(struct task_struct *p, u64 dsq_id, u64 sli=
+ce, u64 vtime, u64 enq_flags) __ksym __weak;
+>  u32 scx_bpf_dispatch_nr_slots(void) __ksym;
+>  void scx_bpf_dispatch_cancel(void) __ksym;
+> -bool scx_bpf_dsq_move_to_local(u64 dsq_id) __ksym;
+> -void scx_bpf_dsq_move_set_slice(struct bpf_iter_scx_dsq *it__iter, u64 s=
+lice) __ksym;
+> -void scx_bpf_dsq_move_set_vtime(struct bpf_iter_scx_dsq *it__iter, u64 v=
+time) __ksym;
+> +bool scx_bpf_dsq_move_to_local(u64 dsq_id) __ksym __weak;
+> +void scx_bpf_dsq_move_set_slice(struct bpf_iter_scx_dsq *it__iter, u64 s=
+lice) __ksym __weak;
+> +void scx_bpf_dsq_move_set_vtime(struct bpf_iter_scx_dsq *it__iter, u64 v=
+time) __ksym __weak;
 
-kernel test robot noticed the following build errors:
+Ack, this is the way!
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.13-rc1 next-20241128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/intel_th-avoid-using-deprecated-page-mapping-index-fields/20241202-202330
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241202122127.51313-1-lorenzo.stoakes%40oracle.com
-patch subject: [PATCH] intel_th: avoid using deprecated page->mapping, index fields
-config: arm-randconfig-004-20241202 (https://download.01.org/0day-ci/archive/20241203/202412030410.qX3ejEnD-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241203/202412030410.qX3ejEnD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412030410.qX3ejEnD-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "vmf_insert_mixed" [drivers/hwtracing/intel_th/intel_th_msu.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  bool scx_bpf_dsq_move(struct bpf_iter_scx_dsq *it__iter, struct task_str=
+uct *p, u64 dsq_id, u64 enq_flags) __ksym __weak;
+>  bool scx_bpf_dsq_move_vtime(struct bpf_iter_scx_dsq *it__iter, struct ta=
+sk_struct *p, u64 dsq_id, u64 enq_flags) __ksym __weak;
+>  u32 scx_bpf_reenqueue_local(void) __ksym;
+> --
+> 2.45.2
+>
+>
