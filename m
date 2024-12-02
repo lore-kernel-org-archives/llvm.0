@@ -1,98 +1,106 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3711D958E;
-	Mon,  2 Dec 2024 19:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6404F1DE4CC
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 19:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733166248; cv=none; b=Vi+jeexJOkvkmGrUbjP5fBZYIreGcS0xbO8icjb8/lckZxD0IIICTErdjqOWnlMAH6nJ0NdAN3OtORJ6TKYscLdKGUQU5DwmqA8sIiilEm2KzORPXma6gwAFZlmh8r5s3EAVy26yShPa4FTS4jSQWXZzN18nEMgx/2130lUy0hg=
+	t=1733168095; cv=none; b=E114PX2uGnTFF8GNsxRKkNQBpxINwB1dozQdltZcdvraVvLU41jpkionkst0ACSX9ugCIyXguRm56lI0QEPWxcQZTsPTrLjMaSBCy1Y8ATurXyw8tRnzaJNsNjicyZCj8/xXv/yee4XYMnKxV0yNK8ynN2F2B7eh1CkfHkc1gRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733166248; c=relaxed/simple;
-	bh=R+EFamtDipQJhF9nv3eu3I3TJ6149H7R4q3kWXfEaKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FI1la7Ixnufl+i5ORZgvuXk+sUN/dlxdJSnqmXidvbBogLZ/lNyUtplw8gljbRe6u3AehtX574VDhzRrrt6/urKyjg7zqkzlGxn+p/7Yf08NZP2h+rwOymAecuyLAwI6uxrqkzB28TCqWI0MCJ8ykFs4foPksRnqa5jcWiWVJ3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kFzPvbBd; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1733168095; c=relaxed/simple;
+	bh=wp4BmsGxvjD7oTxaF2bUxCCEqVLETSyVeENvWalTvxM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VmDxeL7nxk4vdSlB3bPssMuXNDTY9WOm2iYYx6tSeKb5zmt9fdiSR0dET2ttV0uPUKmfKDiZkwwAHO5ViABv0wCiqG1vrn5MO4qFmxoIdexW+MQ7LErzhqZIKk75GwotQ/ndY6vFZauUw32uLR7XV5b5o7NGOaXgXiVU6Mx4BYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QgEqmon/; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kFzPvbBd"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=rB5zOkGVK9tONvMKWptVJOAKG502RIHXWt9G7MFcAT8=; b=kFzPvbBd94g3zvpl4kGqXDTrcP
-	hXtSMjh4EHOtrYrDsJ94wC5lbEYIexXJbldmAOfvQSjgK+0OxsVSUNZ1aJPMJIc0E/lD9MYTUz6aY
-	B5tUDDom4YXWAWaA7NOSuDTN6VsrbVuGZ2d1iC9AawDlTd5U4m9xUmYmiZ5MWMTDwrC31dPBitOii
-	Sre86dxJjNHVlbFq0LMsNa4A0rVcWq34oKMil8wfMRURRsY6gUPfri4/E7j7RD+SdvGbZhL7YM9kQ
-	8hwblYjXI3VF6bequ7AWXiXeDkczyCT05LF5j9rzAhYCPmC4TZ87EvL6YENVG8EqHH83TfV0IFHph
-	DLBxycaw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1tIBiE-00000008VPm-46nk;
-	Mon, 02 Dec 2024 19:04:03 +0000
-Date: Mon, 2 Dec 2024 19:04:02 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Ilya Dryomov <idryomov@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Xiubo Li <xiubli@redhat.com>,
-	ceph-devel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-	linux-fsdevel@vger.kernel.org, David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH 5/5] ceph: Use a folio in ceph_writepages_start()
-Message-ID: <Z04EopWaTpI5a4R3@casper.infradead.org>
-References: <20241129055058.858940-6-willy@infradead.org>
- <202411292322.iv4hDiEQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QgEqmon/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733168093; x=1764704093;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wp4BmsGxvjD7oTxaF2bUxCCEqVLETSyVeENvWalTvxM=;
+  b=QgEqmon/sWQKn0pz25Dh/kNc+LvFiem08AqwX/5u2CXjtny6NaA8JIQ2
+   IWlyh1w/ieF8m/FIbizGd/kvSptHtb5JkPBQprwTgizqkykeJmp7he44W
+   7XDSOtUF5/EqXYKCRsWPadPsraSyijsq2YmizjX3rDTXP01az6UEqkMs8
+   G0mP3jiJAHfeqK8Xb08aA300JqXxSRhL9Fqe2vh9Bkqcbz8xGYkcaQIyb
+   JfTZHcPbZzX66R7TRBkI0fDf1YmExe9fMQ6V7MnvhCdrB4yiMO/C4ojEe
+   WZHeyvDWtjMHoqmMQWoMhi95+1872OG4jNHy+gnG1hOz+pM7AIsWVdos0
+   g==;
+X-CSE-ConnectionGUID: pDy6tLiXT1CqGd4iarN0+Q==
+X-CSE-MsgGUID: f8vIzaLhSqCeDBtkqfSCwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="33274269"
+X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
+   d="scan'208";a="33274269"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 11:34:53 -0800
+X-CSE-ConnectionGUID: 1bxLlLjBRme8NsbbevLGrA==
+X-CSE-MsgGUID: qGBGCvheTq2SjJsZSNvUUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
+   d="scan'208";a="92855911"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa006.fm.intel.com with ESMTP; 02 Dec 2024 11:34:50 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id CBEFE31C; Mon, 02 Dec 2024 21:34:48 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] lockdep: Move lockdep_assert_locked() under #ifdef CONFIG_PROVE_LOCKING
+Date: Mon,  2 Dec 2024 21:34:45 +0200
+Message-ID: <20241202193445.769567-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202411292322.iv4hDiEQ-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 29, 2024 at 11:42:44PM +0800, kernel test robot wrote:
-> >> fs/ceph/addr.c:1178:39: warning: variable 'page' is uninitialized when used here [-Wuninitialized]
->     1178 |                                         fscrypt_encrypt_pagecache_blocks(page,
+When lockdep_assert_locked() is unused, it prevents kernel builds
+with clang, `make W=1` and CONFIG_WERROR=y:
 
-This will fix the bug.  I'll send a v2 with this folded in.
+  kernel/locking/lockdep.c:160:20: error: unused function 'lockdep_assert_locked' [-Werror,-Wunused-function]
 
-diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
-index 1e0c982f5abe..b065b971a9f0 100644
---- a/fs/ceph/addr.c
-+++ b/fs/ceph/addr.c
-@@ -1040,7 +1040,7 @@ static int ceph_writepages_start(struct address_space *mapping,
- 		int num_ops = 0, op_idx;
- 		unsigned i, nr_folios, max_pages, locked_pages = 0;
- 		struct page **pages = NULL, **data_pages;
--		struct page *page;
-+		struct folio *folio;
- 		pgoff_t strip_unit_end = 0;
- 		u64 offset = 0, len = 0;
- 		bool from_pool = false;
-@@ -1054,7 +1054,7 @@ static int ceph_writepages_start(struct address_space *mapping,
- 		if (!nr_folios && !locked_pages)
- 			break;
- 		for (i = 0; i < nr_folios && locked_pages < max_pages; i++) {
--			struct folio *folio = fbatch.folios[i];
-+			folio = fbatch.folios[i];
+Fix this by moving it under the respective ifdeffery.
+
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ kernel/locking/lockdep.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 2d8ec0351ef9..bb65abfcfa71 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -157,10 +157,12 @@ static inline void lockdep_unlock(void)
+ 	__this_cpu_dec(lockdep_recursion);
+ }
  
- 			doutc(cl, "? %p idx %lu\n", folio, folio->index);
- 			if (locked_pages == 0)
-@@ -1175,7 +1175,7 @@ static int ceph_writepages_start(struct address_space *mapping,
++#ifdef CONFIG_PROVE_LOCKING
+ static inline bool lockdep_assert_locked(void)
+ {
+ 	return DEBUG_LOCKS_WARN_ON(__owner != current);
+ }
++#endif
  
- 			if (IS_ENCRYPTED(inode)) {
- 				pages[locked_pages] =
--					fscrypt_encrypt_pagecache_blocks(page,
-+					fscrypt_encrypt_pagecache_blocks(&folio->page,
- 						PAGE_SIZE, 0,
- 						locked_pages ? GFP_NOWAIT : GFP_NOFS);
- 				if (IS_ERR(pages[locked_pages])) {
-@@ -1303,7 +1303,7 @@ static int ceph_writepages_start(struct address_space *mapping,
- 			/* writepages_finish() clears writeback pages
- 			 * according to the data length, so make sure
- 			 * data length covers all locked pages */
--			u64 min_len = len + 1 - thp_size(page);
-+			u64 min_len = len + 1 - folio_size(folio);
- 			len = get_writepages_data_length(inode, pages[i - 1],
- 							 offset);
- 			len = max(len, min_len);
+ static struct task_struct *lockdep_selftest_task_struct;
+ 
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
+
