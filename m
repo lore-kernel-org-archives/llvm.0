@@ -1,43 +1,64 @@
-Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2621D7984
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 07:59:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F721F943D
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 08:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733126344; cv=none; b=Do/emLZ4cMVQICvZGfrFyRabdg/AzNFCwVMZig4gPWc8ojKuAu6VnlwmPPGEGTyZrXiduLHJo5fzRRaCrN7CQvuX1fW3RER+q+fZWztxs3KpDCeJHXXO/nFiALFhPAj6vAYC18mdPB2qAijxIluAkoy9CmKiy5oU/MEualJbros=
+	t=1733127747; cv=none; b=f9/wPN4S6rQjG/Uim1TORbFO+ACoF+s2j+yL2mQku/f9vhlI9d9RgBsXlvnZvWLbJV+uK9BsLr7bfseF4qRL9vYlEOSTYheX2kbCXpgAft6WA4x/Q3AIl9CdEc9kBJOfgr2tcY26JcQR6qSGd2jynLEB1IyYfa4BxopM0cZXgr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733126344; c=relaxed/simple;
-	bh=lI5ecZrVKoDDzHzIcNve9oQyAaRZmoMQKc4D/2CelSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=q8v6PZBLTPRpo17XK9OgWf8jIK128yQKDxBLA725RYphj5DzNhhlGyp+n4v5iqSl2Wbb2OsVC/1gRs425qf47OUpgSE+EhcSslM6DWHDDCx9juoldf+IP3/jwEfTTs8RdS3if8gZeTWG68dhSJp4zogNG/V+UqHOePc3rebsot8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=oqIUdBdD; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=HGQs4v4Z; arc=none smtp.client-ip=89.207.88.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
+	s=arc-20240116; t=1733127747; c=relaxed/simple;
+	bh=o+x7UUeIse1yT2KW0S7eGdDE1k0Cu/ERp1FpaTouCzY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DRsgMOLYVCukLlxhDMunkwb0JqV9K0AgsUOwDC/DJkCZZBkKBI9BaoeV6O9vy44ZkUHsCWo7kGJit8TZ0dFRY0ULzBZEodE//4HoAkZaK+W5Gs7v0leN6ykhBL6BW6DAe0Cml4vAWmAmtRtPWRrrpeNN7Ku+OZcUfHhLGiSckKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Emawf8rY; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="oqIUdBdD";
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="HGQs4v4Z"
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 618B8E0002
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
-	t=1733126334; bh=FtA8nfMAc5D3CTIG0uNX1jurEbsjQmlpZP0LYJNrYJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=oqIUdBdD+IE9izN16sbYuKngFHY+B4IaNnQxY2W/hp7Edh5fehT/QYXgE1K9rJ0nv
-	 pwchwPh1STprgpXMw60f7WTs/Ur2hhi6TYFzy5uFhjAcJi3+F389uTqGa/as8/u84J
-	 PJe2ufKbtw7ZkYNV5ygIc77+BWUcJKPi4k1X+EE1JYzcNwTajkhukFgO/qS/OvwDoU
-	 nIqeLIwhSotPAgeRujwPCkvb29PkuJNmt3BkZ/erLVRkSxpmDbhsHSOMXxvP7lteXg
-	 1JyQeOzg8Xrqijc8kCawIIGwtqvJvzQ471IOGYTOfarN3ty/mZzpEnk6KQFiV/HNYb
-	 U5gGzm9c9wZuQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
-	t=1733126334; bh=FtA8nfMAc5D3CTIG0uNX1jurEbsjQmlpZP0LYJNrYJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=HGQs4v4Z5Rs9dryTvbgzi7WFSzX1HI+vdZCx2vFydmE05azEugTTrlAEkOhYjhz2o
-	 hdlV6C/Q4E4nB/IYwbHfzaxDZa7cWU4c84ErXlQ8dPPS9fYk3NGtGh2zplSDnd1DtC
-	 gVeKi9ZumoJUQcMrugR9ilegDW+6wZmUAYZK60MfHY8tM6+cxXqDzPA04TAYiKPx+u
-	 oaYgylq804G8cygCQB6iB0USueKAwDF/N4muvvFBm11XBqC6t6zXZsftxslCkhc90c
-	 WQuiQ89ENaGGLabVDY89y7j70htR7sCcvK6ttF3qCDgJJ71Xo7u8Ntfs5jd1do4muL
-	 rWlX98fEk1PMQ==
-Message-ID: <62f06687-a20d-4f55-b22d-52af707b528a@yadro.com>
-Date: Mon, 2 Dec 2024 10:58:51 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Emawf8rY"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53df19bf6a9so4390616e87.1
+        for <llvm@lists.linux.dev>; Mon, 02 Dec 2024 00:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733127744; x=1733732544; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YPWMgettyvx+9ptynz/I3mmqhxwTzOb8w8uMAYThgRU=;
+        b=Emawf8rYXYT//x84Qf6BrUlweO7ESi7s4HgOhPmbRlQMRbPrq/mO3BDNn3bghAsTV4
+         uvPuG8ZY2+Y7/A3pM4U/4pQNBop0qiC4Pf9+p0WABRWa+XsYI4PSnawm3isXeYn+rogW
+         dAcHy28DvcDQEQhmDithtvL2nK0Y2zPPH1OClozt5oUNf0mkE97x0PPmGqG5zwU8QtLw
+         Jw29lNPHe+7w0OGqVEDy4CEUw5bjt53IgLjEW0GHbeMJuD8fUmwr4F1zP2MkXkGkusLy
+         05/Wd3I5aXDXp6vhVVWG1iu2YQrCROdMba+t7y7+AjoMLGqOzP6AwVQXZkQaNbwQGduY
+         rW7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733127744; x=1733732544;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YPWMgettyvx+9ptynz/I3mmqhxwTzOb8w8uMAYThgRU=;
+        b=fS1HrwsgQ5BPNeHM0pOFjvK1GHg4fcJXqTaEbXKnLug70ey7txNQcsVgxg5ukPUpKH
+         hVaFQqZNvjQX5Vwn5mUx2WULVqqFmK4uS1H55xVqF+eAT7Lh4KAaEoKuVo53IbkmMKl8
+         tBGzg/7EFvmM+Dczp8N0FRQHLacTv9YRgvFiR/VmYv7pmtewULqxStPR7bhcCYlyipqK
+         VmgzTLHzTofVvc1w7VckxTxYarKmXrx7Y/Weo1RuQ8uDNwtV1mdvuEmQFU1qO7/vPsmV
+         0T8kUu7xXJNyzr7QMl9/MiQHakhnYgusN7DYjo8F6s+gTNXRkNerHZTRrCtBMQkMoi3H
+         zXRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDlIfjO0JxPcgwJev1kkygdjYN7mvn1JdQIaGorH4/UukzyWj3Kj4NJnNXT2J9YZq0vJFX@lists.linux.dev
+X-Gm-Message-State: AOJu0YwNJzLeOYLUuqb+dIKLpI6bhcHsez4gXDdf6q/Ka5UntiB90Cs1
+	AH8ozcj269mBqcLyMlsSqLlvvznQURVsAd9bgqOA7qhAojEw8rkD
+X-Gm-Gg: ASbGnctAmUMd4sEzkUHHLxYPBzvJfe08WlMvY1N6wa/068/C+ZRCAW4Acjl7U0SWkVT
+	G5B2lSlGmftp2QWC1J+9/wKYq+6GdGLDqdpge8hH0fKZRqJ1dJEi9pyk4CAM616qKLkUoE4vsG8
+	ex7JWNJRMfACKExifC3q/FSagG8s3OHEwY21AJe9mmBZ+SnMVKHI4gHFSssPc9LcMeq8w5U5rOz
+	VwDwI5AD2XxJs/djOQkgyx99wqDKTye94bbZV3n6T9p3jjzpQpkmqyrta2sHlSZiNXHrUBXfAyD
+	Ebmt4RYtws1Q4LBwOZe0jqlDDEVrF84=
+X-Google-Smtp-Source: AGHT+IGl+yCwdlz2rSpXO0UlWRXCUO/3cdmsZapEZ2aJOGm7mWsgD9ilm4c0fOahmXqaG90zEwVMmg==
+X-Received: by 2002:a05:6512:32c9:b0:52c:dc97:45d1 with SMTP id 2adb3069b0e04-53df00c789cmr10345737e87.10.1733127743618;
+        Mon, 02 Dec 2024 00:22:23 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53df6496551sm1376280e87.193.2024.12.02.00.22.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2024 00:22:21 -0800 (PST)
+Message-ID: <9d810e5c-c7a5-41e5-8073-b703717faf3d@gmail.com>
+Date: Mon, 2 Dec 2024 10:22:19 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,137 +66,157 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
- improvements
-To: Andy Chiu <andybnac@gmail.com>
-CC: Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>,
-	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<llvm@lists.linux.dev>, <bjorn@rivosinc.com>, <puranjay12@gmail.com>,
-	<alexghiti@rivosinc.com>, <yongxuan.wang@sifive.com>,
-	<greentime.hu@sifive.com>, <nick.hu@sifive.com>, <nylon.chen@sifive.com>,
-	<tommy.wu@sifive.com>, <eric.lin@sifive.com>, <viccent.chen@sifive.com>,
-	<zong.li@sifive.com>, <samuel.holland@sifive.com>, <linux@yadro.com>
-References: <20241127172908.17149-1-andybnac@gmail.com>
-Content-Language: en-US
-From: Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <20241127172908.17149-1-andybnac@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
+ driver
+To: Jonathan Cameron <jic23@kernel.org>,
+ Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Cc: Mikael Gonella-Bolduc via B4 Relay
+ <devnull+mgonellabolduc.dimonoff.com@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>
+References: <20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com>
+ <20241119-apds9160-driver-v1-2-fa00675b4ea4@dimonoff.com>
+ <20241124211545.194a9f87@jic23-huawei> <Z0eY+1X1ZSkNui9U@uva.nl>
+ <20241201132054.0c063a11@jic23-huawei>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20241201132054.0c063a11@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: T-EXCH-07.corp.yadro.com (172.17.11.57) To
- T-EXCH-10.corp.yadro.com (172.17.11.60)
 
-Hi,
+Hi Jonathan & Mikael,
 
-On 27.11.2024 20:29, Andy Chiu wrote:
-> This series makes atmoic code patching possible in riscv ftrace. A
-> direct benefit of this is that we can get rid of stop_machine() when
-> patching function entries. This also makes it possible to run ftrace
-> with full kernel preemption. Before this series, the kernel initializes
-> patchable function entries to NOP4 + NOP4. To start tracing, it updates
-> entries to AUIPC + JALR while holding other cores in stop_machine.
-> stop_machine() is required because it is impossible to update 2
-> instructions, and be seen atomically. And preemption must have to be
-> prevented, as kernel preemption allows process to be scheduled out while
-> executing on one of these instruction pairs.
+On 01/12/2024 15:20, Jonathan Cameron wrote:
 > 
-> This series addresses the problem by initializing the first NOP4 to
-> AUIPC. So, atmoic patching is possible because the kernel only has to
-> update one instruction. As long as the instruction is naturally aligned,
-> then it is expected to be updated atomically.
+>>>> +};
+>>>> +MODULE_DEVICE_TABLE(of, apds9160_of_match);
+>>>> +
+>>>> +static struct i2c_driver apds9160_driver = {
+>>>> +	.driver	  = {
+>>>> +		.name	= APDS9160_DRIVER_NAME,
+>>>> +		.owner = THIS_MODULE,
+>>>> +		.of_match_table = apds9160_of_match,
+>>>> +	},
+>>>> +	.probe    = apds9160_probe,
+>>>> +	.remove	  = apds9160_remove,
+>>>> +	.id_table = apds9160_id,
+>>>> +};
+>> First, regarding the integration time/gain/scale parameters. I took a look at the datasheet again as there is a table
+>> provided to get lux/count (scale?) for the ALS sensor depending on gain and integration time.
+>>
+>> It looks like the correlation in the table is almost linear but it's not as there is a loss of precision.
+>> For example, at 1x gain with integration time 100ms the lux/count is 0.819 but at 3x the table is stating 0.269 instead of exepected 0.273.
+>>
+>> Is it still possible to use the gts helpers in that case?
 > 
-> However, the address range of the ftrace trampoline is limited to +-2K
-> from ftrace_caller after appplying this series. This issue is expected
-> to be solved by Puranjay's CALL_OPS, where it adds 8B naturally align
-> data in front of pacthable functions and can  use it to direct execution
-> out to any custom trampolines.
+> Ah. Probably not if it goes non linear.  Matti? (+CC)
+
+Disclaimer - I didn't go through the patch and I just respond from the 
+top of my head :) So, please take my words with a pinch of salt.
+
+AFAIR, it is not required that the impact of integration time is 
+_linear_ through the range. The "multiplication factor" can be set for 
+each integration time separately. So, it is perfectly Ok to say:
+
+time 1 => multiply by 1
+time 2 => multiply by 2
+time 10 => multiply by 9 <= not linear, as linear would be 10.
+time 15 => multiply by 15
+
+...
+
+The notable limitation of _current_ implementation is that the 
+"multiplication factor" needs to be integer. So, this may result loss of 
+accuracy.
+
+>> Second, regarding the use of the IIO_CHAN_INFO_HARDWAREGAIN channel info.
+>> I took a look at a couple of recent drivers, some use the IIO_CHAN_INFO_SCALE to ajust gain type registers.
+>>
+>> In my use case, it feels like the scale is read-only as it is affected by the gain and integration time and both can be set independently
+>> with their respective available values. How should I handle this?
+> The general preference is for the scale to be the primary control.
+> For a light sensor assuming the device doesn't support very long integration times, the
+> trade off is normally set the integration time as high as possible (as that gives lowest
+> noise) then tune the gain as necessary.
 > 
-> The series is composed by three parts. The first part cleans up the
-> existing issues when the kernel is compiled with clang.The second part
-> modifies the ftrace code patching mechanism (2-4) as mentioned above.
-> Then prepare ftrace to be able to run with kernel preemption (5,6)
-> 
-> An ongoing fix:
-> 
-> Since there is no room for marking *kernel_text_address as notrace[1] at
-> source code level, there is a significant performance regression when
-> using function_graph with TRACE_IRQFLAGS enabled. There can be as much as
-> 8 graph handler being called in each function-entry. The current
-> workaround requires us echo "*kernel_text_address" into
-> set_ftrace_notrace before starting the trace. However, we observed that
-> the kernel still enables the patch site in some cases even with
-> *kernel_text_address properly added in the file While the root cause is
-> still under investagtion, we consider that it should not be the reason
-> for holding back the code patching, in order to unblock the call_ops
-> part.
-> 
-> [1]: https://lore.kernel.org/linux-riscv/20240613093233.0b349ed0@rorschach.local.home/
-> 
-> Changes in v3:
-> - Add a fix tag for patch 1
-> - Add a data fence before sending out remote fence.i (6)
-> - Link to v2: https://lore.kernel.org/all/20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com/
-> 
-> Changes in v2:
-> - Drop patch 1 as it is merged through fixes.
-> - Drop patch 2, which converts kernel_text_address into notrace. As
->    users can prevent tracing it by configuring the tracefs.
-> - Use a more generic way in kconfig to align functions.
-> - Link to v1: https://lore.kernel.org/r/20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com
-> 
-> 
-> Andy Chiu (7):
->    riscv: ftrace: support fastcc in Clang for WITH_ARGS
->    riscv: ftrace: align patchable functions to 4 Byte boundary
->    riscv: ftrace: prepare ftrace for atomic code patching
->    riscv: ftrace: do not use stop_machine to update code
->    riscv: vector: Support calling schedule() for preemptible Vector
->    riscv: add a data fence for CMODX in the kernel mode
->    riscv: ftrace: support PREEMPT
-> 
->   arch/riscv/Kconfig                 |   4 +-
->   arch/riscv/include/asm/ftrace.h    |  11 +++
->   arch/riscv/include/asm/processor.h |   5 ++
->   arch/riscv/include/asm/vector.h    |  22 ++++-
->   arch/riscv/kernel/asm-offsets.c    |   7 ++
->   arch/riscv/kernel/ftrace.c         | 133 ++++++++++++-----------------
->   arch/riscv/kernel/mcount-dyn.S     |  25 ++++--
->   arch/riscv/mm/cacheflush.c         |  15 +++-
->   8 files changed, 135 insertions(+), 87 deletions(-)
-> ---
-> base-commit: 0eb512779d642b21ced83778287a0f7a3ca8f2a1
-> --
-> 2.39.3 (Apple Git-145)
+> Another model is to let the integration time be controllable and then try and adjust
+> the gain to keep as close as possible to a requested scale.  Matti has spent more
+> brain power on this than anyone so I'll over to him for more precise suggestions!
 
-I have tested this series in a QEMU VM (-machine virt) with the 
-preemptible kernels, CONFIG_PREEMPT=y.
+This is the very reason why I wrote the gts helpers. The recently 
+removed rohm-bu27008.c light-sensor driver and the rohm-bu27034.c allow 
+setting integration time. When time is set the driver will also set the 
+gain, and does this so that the scale is maintained. (Eg, if gain caused 
+by time is doubled by the user request, the hw-gain is halved by the 
+driver).
 
-No issues have been revealed so far.
+For scale setting I used logic where the scale setting tries to maintain 
+the integration time when possible, and only set the hardware gain. 
+Ideology is that when the driver allows user to set the time, the user 
+is expected to know whether to prefer longer time (and typically better 
+accuracy), or faster measurement with more hw-gain.
 
-One of the kernels was built by GCC 13.2.0 (with the patch for minimum 
-alignment added on top of it), the other - with LLVM 17.0.6.
+There are still some corner cases in these drivers where the scale can't 
+be maintained when time is set, or time can't be maintained when scale 
+is set. AFAIR, These drivers chose to in any case set the requested 
+time/scale - which means the userland needs to be prepared to "pick up 
+the pieces" and deal with the other entity changing. Other option would 
+be to deny such changes, but it would limit the use of the hardware - 
+and I hate drivers trying to outsmart the users.
 
-In both cases, the basic boottime tests for Ftrace passed.
+Where this gets really hairy is when there are multiple channels and 
+some of the controls can be set per channel, and some are common for all 
+channels. As an example, I've faced sensors where gain can be set 
+separately for the channels but the time is common for all. Here we may 
+end up in situations where part of the channels can compensate the 
+changes while others can't. Furthermore, there were situations where 
+some of the scales could only be achieved with a specific integration 
+times. This can get very confusing for users.
 
-Switching tracers between nop, function, function_graph and blk in a 
-loop in parallel with stress-ng and with network load for several hours 
-did not reveal any problems either. Kernel crashes happened in this 
-scenario a year ago, but now it runs clean, good!
+In order to make it somehow tolerable the gts helpers support also 
+advertising only scales which can be supported with currently selected 
+integration time via the "available_scales". Also, I strongly recommend 
+having at least a read-only hardwaregain to help understanding which 
+part of the scale is contributed by time, and which by hardwaregain. I 
+think this is very helpful when debugging ;)
 
-Function redirection via Ftrace seems to work OK too.
+I know Jonathan (and maybe rest of the world :) ) prefers keeping the 
+scale as the single main way of changing the gain. Still, my personal 
+opinion on this is that there are cases, where having both the 
+hardwaregain and integration time directly changeable would be the 
+simplest and clearest solution.
 
-The size of .text section increased slightly after this series, by 0.35% 
-- 0.38%, probably because of function alignment:
-* 12075 KB => 12121 KB (GCC)
-* 12167 KB => 12209 KB (LLVM/clang)
+Putting my opinions aside (as this is not a battle I feel like fighting 
+- nor do I feel I am the best expert on this!), with the current 'one 
+scale to rule them all' approach, my recommendation is to consider if 
+always using largest integration time and smallest hardwaregain to 
+achieve the requested scale fits your users. (Also, I think your case 
+where the impact of integration time is not strictly linear will cause 
+some scales to be 'almost same' but not quite. I am not sure if it makes 
+sense to support all of these, or just always round to the scale where 
+the integration time is longest). If yes, then maybe do it.
 
-Not sure, how to test the vector-related part though, "[PATCH v3 5/7] 
-riscv: vector: Support calling schedule() for preemptible Vector"
+If you think the longest times may cause unacceptable wait times for 
+some users, or that the small scale differences really matter, then you 
+may want to go the route bu27008 / bu27034 drivers took - but it may get 
+hairy.
 
-For all other patches in the series:
-Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
+Finally, maybe taking a look if the integration time multiplier in gts 
+helpers could support fixed point wouldn't be completely futile(?) No 
+promises on that route though, I haven't considered this when writing 
+those so it may lead to dead end - but one never knows before taking a 
+look, right? :)
 
-Regards,
-Evgenii
+Ha. Looking all the letters I typed, I feel I helped really little while 
+being very verbose ... Sorry bout that but I really don't have a great 
+recommendation :(
+
+Yours,
+	-- Matti
