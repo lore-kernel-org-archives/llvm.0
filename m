@@ -1,103 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE7B33CA
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 02:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8315433F6
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 06:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733107930; cv=none; b=egNrvmlWp1oi+gbO5osJIvaxJd2Y3ZoImxMQZm+QJSi0OeW9am7E6OW4UdUiaBE0h4XGMr0+TtyZjYeGecVxC6VvBcG/f7Hlp+P5TokLt1ivnINH6ACwqY2IPVT2OiecyiTami8VLS6BJpnWPNRyBf4Mnk+vn5+YjQ+xM+rimxk=
+	t=1733121629; cv=none; b=ibfLIk7l6LL3BVTTEKu+FxqVodWd3LcIFHPTuCuMiNTMzjWZPdIit1ZYBGI6AkSYlVdd61H5hHady5+5uUaiY9Ql/w1D2q7SUmi/z1Mc4WuD4toL4CnjlNVqTP+OrIUwM4qczhjIMsGQ7t1+TTV12TyEDKHFgVIqPeYVJpUxdDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733107930; c=relaxed/simple;
-	bh=wlOaNxbhKUNNEgGk5HGi17GcwHHHMQ8FHv/ybX0cscA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=j3+jcJ/dka9STboajVCt6FdbrC6kpJfxGoA9153KHTuUJWCZXSzsFPk3KnB4XLdWuhrmqQXuEbaQB5knIJEbYq1dMhUaforjsCacLJV+4WiUDHTP0VkPUDhoTKuXW75tMo7OY+OwiBZNoZLL/pmXn9ze+u3PKSrnpvdcYD1+LGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LxN/XTcN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1733121629; c=relaxed/simple;
+	bh=P/Up/t2C443Woe5UzAIXl45/9+G7f8WfojtFfXf7EX8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NuTqRi4K7fmFdztRoBiLXKt7AGKgmpYystUrIS1C/xdamhtue96rc3noYaJpHmAF03LRUG+c/6qJt42UI/4x1V5draHgUi1vUn54PN/5D2B4smXKIgTyu8rZtnTKKowyQ2z3zEHPSrRopVQZ9+OQZPPBEnAIdFD5cdvX9r59XS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lv80Uf0J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LxN/XTcN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733107927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=l9CuIPQPqQbioLWKzPEayJU2he4tqhQ3YUVh5ncZ5K4=;
-	b=LxN/XTcNvMYswg1ZgpcEzGMrcWWzsrq1qcUrjc2ZAiVbfDVmO8Y4h5eWdi0PhWs4fCjS3I
-	xcjXKW0GVPntcrT4LK83+B6f/VWteAe06YIJm2QDfmfzykgXPnKk7J8QkHZl2IllyIpzKD
-	mbOIwGaJ8owzQDdfI+RGtUTjWKYltgo=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-682-tN1OwnmSM72kyPQp1CY6lA-1; Sun,
- 01 Dec 2024 21:52:06 -0500
-X-MC-Unique: tN1OwnmSM72kyPQp1CY6lA-1
-X-Mimecast-MFC-AGG-ID: tN1OwnmSM72kyPQp1CY6lA
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1574F1956046
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 02:52:05 +0000 (UTC)
-Received: from [172.64.12.14] (unknown [10.30.33.24])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9D5FA1955F41;
-	Mon,  2 Dec 2024 02:52:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc1,
- upstream-mainline, e70140ba)
-Date: Mon, 02 Dec 2024 02:52:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lv80Uf0J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F623C4CEDF
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 06:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733121629;
+	bh=P/Up/t2C443Woe5UzAIXl45/9+G7f8WfojtFfXf7EX8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Lv80Uf0JMRBKfyiSMht9pQhrhf+40aBwEKMVGp0MqU2hmhleHN6deZwnVzJMz2Z+h
+	 5l3bRQq+ZJwdZuu0aUMDpikzMFNohxBUJn1b9th+sXhNUVxssFmNw/HY57Bg7QovAT
+	 eQIcrFJEOhd0q3Jqa+zjRsG0DnFUKyEkJW2uMzMRG1eMf1zmKYZUng4wLLaQIFNZ5U
+	 lnVY5pm7wQqicJvFhcvufgoVgSeQIlrpwRo1ObJyV8xCawKdE0I7aOdgY3uBwL49Zw
+	 4CiWI7zgzSv4HB2CGKR+f5QlLEUuC9hY8XNdHqJSSaZ7BWyUMsOdrOikXbwd+I7UQV
+	 6Nx/1MWfo9pig==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53ded167ae3so4153016e87.0
+        for <llvm@lists.linux.dev>; Sun, 01 Dec 2024 22:40:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX0h00V0QXvAoZuq7LSwUvIOpOurPWq0HwiyIdmnRrGCyKKQ6sIsd5Mx8GjS94ytJxMOYuP@lists.linux.dev
+X-Gm-Message-State: AOJu0YwRauw07YTYjCEchWWK2RC5ISs8VKRci1/Hhaeuw/kjcdKu7aSc
+	wGraOm2mBIHHMYvt2SEBBoFhxLDR+o8dtd4XysrJe1xVSC26llq8ChWCZzaq9vWhU0KgixcMTWG
+	Ah3gcQW/WSS62g/R0zPw2CFIXMfs=
+X-Google-Smtp-Source: AGHT+IGq3TbC9zB6OHMWE5wRxb61lLhTxQ8/+n08QszowPRBZCUBlwcaxkbfgi3E63QW7qLB7OJxtrxmTZtYvl/OnbY=
+X-Received: by 2002:a05:6512:3c99:b0:53d:e8f5:f98a with SMTP id
+ 2adb3069b0e04-53df0106bb9mr10206071e87.46.1733121627698; Sun, 01 Dec 2024
+ 22:40:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <99029.124120121520600129@us-mta-682.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: x72DBV7sYTtIvXBKOoj_6ZeRjxYikv2Oq_efPgeFBdo_1733107925
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-4-xur@google.com>
+ <5e032233-5b65-4ad5-ac50-d2eb6c00171c@roeck-us.net>
+In-Reply-To: <5e032233-5b65-4ad5-ac50-d2eb6c00171c@roeck-us.net>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 2 Dec 2024 15:39:51 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT-yG=jCPSfhmZM1N6Opfm70++hAby35ywpbaADMNHH2g@mail.gmail.com>
+Message-ID: <CAK7LNAT-yG=jCPSfhmZM1N6Opfm70++hAby35ywpbaADMNHH2g@mail.gmail.com>
+Subject: Re: [PATCH v7 3/7] Adjust symbol ordering in text output section
+ [openrisc boot failure]
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
+	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Juergen Gross <jgross@suse.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	linux-openrisc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Sun, Dec 1, 2024 at 11:31=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> Hi,
+>
+> On Sat, Nov 02, 2024 at 10:51:10AM -0700, Rong Xu wrote:
+> > When the -ffunction-sections compiler option is enabled, each function
+> > is placed in a separate section named .text.function_name rather than
+> > putting all functions in a single .text section.
+> >
+> ...
+> >
+> > Co-developed-by: Han Shen <shenhan@google.com>
+> > Signed-off-by: Han Shen <shenhan@google.com>
+> > Signed-off-by: Rong Xu <xur@google.com>
+> > Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> > Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> > Tested-by: Yonghong Song <yonghong.song@linux.dev>
+> > Tested-by: Yabin Cui <yabinc@google.com>
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > Reviewed-by: Kees Cook <kees@kernel.org>
+>
+> With this patch in the tree, the openrisck qemu emulation using
+> or1ksim_defconfig fails to boot. There is no log output, even with
+> earlycon enabled.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Thanks for the report.
+I posted a fix.
+https://lore.kernel.org/all/20241202062909.2194341-1-masahiroy@kernel.org/T=
+/#u
 
 
-Kernel information:
-    Commit message: Get rid of 'remove_new' relic from platform driver stru=
-ct
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1568335452
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1568335452-ppc64le-kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1568335452-x86_64-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1568335452-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+Best Regards
+Masahiro Yamada
