@@ -1,45 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F75AD51;
-	Mon,  2 Dec 2024 16:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D2817A5A4;
+	Mon,  2 Dec 2024 16:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733156173; cv=none; b=NDfjiCF4ZU8yKKzFqGVDr17zKpR/85FWTRhh6nZVvAiTBa0BMqCJCc6bbXVbyv5Sy+bkb891qxpOB9+zxi8zVejiHguNFVG0wUD/aRtoUzjbL6fIPnr/+FtCtlCa7tiuCDpmqzGGmh+v/CK2+M8f7/BZqYioBFhcaaTDCdzpc9Y=
+	t=1733156293; cv=none; b=qAL6mZ6CdoqYR73imzyvjWogTjqjx6pWXOWs5R86KJ5ZwaslHgFf7NyiWEQ4cogNG6wAg2j+g93MDCzs84bWbJrNql0388cOZtSr9bIwchN+8L5+tczhBTF7JxZxudYUQKfkZqdMpJ8gi38tnAKQGW0QPLe4o6swFvcH2QCnBg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733156173; c=relaxed/simple;
-	bh=xlQywIlZNQT5qCo7G3nLeY962rjjbO5Mq7s9hOqzSTg=;
+	s=arc-20240116; t=1733156293; c=relaxed/simple;
+	bh=K9RvKaeGIZciK0oc/lzLsRgwO2mx9HYeWzJYKl3YzOY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ot4eBzmD8mZ+3Q8KbdXoVR0Cifc3qHC4N6G4FBjzE7GGelK1JMlwCLrZrlN1VuNUpGGMC+a7y7S/DQbu8eyOoCbHkahMfHIb/0ewlDQO8ksg/oA1FLOxAv8zcCj5hldnrjeItdxgAWEvf4Cr90ZVjTnptN/OXhwjWe9pTAnTjuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AM3jWJZp; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nfHuqBF0r9JTnqmTg3XpWdDxbaVECmVJxMH2okkVXVtNWeEjRAzUKrPBVyiCfKrPSKnEXL3O7FreMaiUQJnl1rtAeXxYrxauxEHjTWLMVsRtWImwmHII4EdfE6GfqGe/hpFciHPHmMFZM/ZqOzUtt73G6NXwRHVirUtF/V3JaXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0IQbRZ4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AM3jWJZp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41270C4CED1;
-	Mon,  2 Dec 2024 16:16:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0IQbRZ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E249CC4CED1;
+	Mon,  2 Dec 2024 16:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733156172;
-	bh=xlQywIlZNQT5qCo7G3nLeY962rjjbO5Mq7s9hOqzSTg=;
+	s=k20201202; t=1733156293;
+	bh=K9RvKaeGIZciK0oc/lzLsRgwO2mx9HYeWzJYKl3YzOY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AM3jWJZp/CgkhVFK3t4ZwOl6h+mOxDJCQGTmx11N/Hf/ImgkXc1kb1eUP5yFTTFkj
-	 C542BBLgdoRljc3cFThdDsZ72G6r/Wt+ZH1IQ0idZd/D9REB3bX7SWEpc9Sd/kIzHD
-	 9LAH3oMX8fddnzb7a9+AAFjcVrMUX2A3zUUUo4ec8CCiOjAH/qlsIEPn+5yPXSFXDH
-	 ub4vRhdTZyhfDZGdmUIwXyWBgmFF1qIMNm2zk0nzZkXpRvLQyz13Re+7H5HqORoTMg
-	 wTfKHqx+3iafT5IrwnauhRgnYebgSmavAeFUPCkVaOr1VCOuP/iXxvcwW4NGGRMm6H
-	 inpEPVj9t2ItQ==
-Date: Mon, 2 Dec 2024 09:16:10 -0700
+	b=W0IQbRZ4jPpo06QjiIwmloNh4UewG8aKvF2ThywKR6IQS6bhcsV4hzxZydYAQ19G9
+	 TCipXDuc+2rEaaTGzVR35oiM1qj/2S1VHkU42GR0TAW5MiEOd8kzcIL5XYCxts82Rn
+	 A19cmZsrpQX0jlSQF1VzhhVeY/jhsAl/gP0zb66OvVr+qXrzx+bKEo0Fc8bRhGtdv5
+	 rZr2FPBO8Tp03LBSxSEOdoSRJRAoAjOUZPJI6IOaPgxYfx1QIlgW9X84Cd5DvlNpmA
+	 +3cg5xUXMkLfJbKXomHP8AEuH/IbB1EYleNJ9VKheCBEpMx6KDl2Up1LWz0Fm5jcw+
+	 DWMhucaJUJFHg==
+Date: Mon, 2 Dec 2024 09:18:11 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Aleksei Vetrov <vvvvvv@google.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: Move -Wenum-enum-conversion to W=2
-Message-ID: <20241202161610.GA2845796@thelio-3990X>
-References: <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] mm: vmstat.h: Annotate operations between enums
+Message-ID: <20241202161811.GA2843691@thelio-3990X>
+References: <20241202-fix-vmstat-v1-1-c995585b7df5@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,78 +44,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
+In-Reply-To: <20241202-fix-vmstat-v1-1-c995585b7df5@chromium.org>
 
-Masahiro, could you please pick this up? The lore link is below in case
-it is no longer in your inbox (or I can resend).
+Hi Ricardo,
+
+On Mon, Dec 02, 2024 at 04:02:19PM +0000, Ricardo Ribalda wrote:
+> Compiler is confused when we do arithmetic operations between two
+> different enum types.
+> In this case NR_VM_STAT_ITEMS and NR_LRU_BASE are not actual
+> enumerators, they are used to find the first and the count of the
+> enumerator.
+> 
+> Add a casting to int, to avoid the following llvm 9 warning:
+> ./include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>   505 |                            item];
+>       |                            ~~~~
+> ./include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>       |                            ~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>       |                               ~~~~~~~~~~~ ^ ~~~
+> ./include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>       |                            ~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+I think it is just better to disable this specific warning for normal
+and W=1 builds so that it is not visible for people, as this objectively
+makes the code uglier:
+
+https://lore.kernel.org/20241008005136.GA241099@thelio-3990X/
 
 https://lore.kernel.org/20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org/
 
-On Thu, Oct 17, 2024 at 10:09:22AM -0700, Nathan Chancellor wrote:
-> -Wenum-enum-conversion was strengthened in clang-19 to warn for C, which
-> caused the kernel to move it to W=1 in commit 75b5ab134bb5 ("kbuild:
-> Move -Wenum-{compare-conditional,enum-conversion} into W=1") because
-> there were numerous instances that would break builds with -Werror.
-> Unfortunately, this is not a full solution, as more and more developers,
-> subsystems, and distributors are building with W=1 as well, so they
-> continue to see the numerous instances of this warning.
-> 
-> Since the move to W=1, there have not been many new instances that have
-> appeared through various build reports and the ones that have appeared
-> seem to be following similar existing patterns, suggesting that most
-> instances of this warning will not be real issues. The only alternatives
-> for silencing this warning are adding casts (which is generally seen as
-> an ugly practice) or refactoring the enums to macro defines or a unified
-> enum (which may be undesirable because of type safety in other parts of
-> the code).
-> 
-> Move the warning to W=2, where warnings that occur frequently but may be
-> relevant should reside.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 75b5ab134bb5 ("kbuild: Move -Wenum-{compare-conditional,enum-conversion} into W=1")
-> Link: https://lore.kernel.org/ZwRA9SOcOjjLJcpi@google.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+I have just pinged that patch for acceptance.
+
+Cheers,
+Nathan
+
 > ---
-> Changes in v2:
-> - Move -Wenum-enum-conversion to W=2, instead of disabling it
->   outright (Arnd)
-> - Leave -Wenum-compare-conditional in W=1, as there are not that
->   many instances, so it can be turned on fully at some point (Arnd)
-> - Link to v1: https://lore.kernel.org/r/20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org
-> ---
->  scripts/Makefile.extrawarn | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  include/linux/vmstat.h | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 1d13cecc7cc7808610e635ddc03476cf92b3a8c1..04faf15ed316a9c291dc952b6cc40fb6c8c330cf 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -130,7 +130,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
->  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
->  KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
->  KBUILD_CFLAGS += -Wno-enum-compare-conditional
-> -KBUILD_CFLAGS += -Wno-enum-enum-conversion
->  endif
+> diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
+> index d2761bf8ff32..32c641d25bea 100644
+> --- a/include/linux/vmstat.h
+> +++ b/include/linux/vmstat.h
+> @@ -501,27 +501,26 @@ static inline const char *zone_stat_name(enum zone_stat_item item)
+>  #ifdef CONFIG_NUMA
+>  static inline const char *numa_stat_name(enum numa_stat_item item)
+>  {
+> -	return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+> -			   item];
+> +	return vmstat_text[(int)NR_VM_ZONE_STAT_ITEMS + item];
+>  }
+>  #endif /* CONFIG_NUMA */
 >  
->  endif
-> @@ -154,6 +153,10 @@ KBUILD_CFLAGS += -Wno-missing-field-initializers
->  KBUILD_CFLAGS += -Wno-type-limits
->  KBUILD_CFLAGS += -Wno-shift-negative-value
+>  static inline const char *node_stat_name(enum node_stat_item item)
+>  {
+> -	return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+> +	return vmstat_text[(int)NR_VM_ZONE_STAT_ITEMS +
+>  			   NR_VM_NUMA_EVENT_ITEMS +
+>  			   item];
+>  }
 >  
-> +ifdef CONFIG_CC_IS_CLANG
-> +KBUILD_CFLAGS += -Wno-enum-enum-conversion
-> +endif
-> +
->  ifdef CONFIG_CC_IS_GCC
->  KBUILD_CFLAGS += -Wno-maybe-uninitialized
->  endif
+>  static inline const char *lru_list_name(enum lru_list lru)
+>  {
+> -	return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+> +	return node_stat_name((int)NR_LRU_BASE + lru) + 3; // skip "nr_"
+>  }
+>  
+>  #if defined(CONFIG_VM_EVENT_COUNTERS) || defined(CONFIG_MEMCG)
+>  static inline const char *vm_event_name(enum vm_event_item item)
+>  {
+> -	return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+> +	return vmstat_text[(int)NR_VM_ZONE_STAT_ITEMS +
+>  			   NR_VM_NUMA_EVENT_ITEMS +
+>  			   NR_VM_NODE_STAT_ITEMS +
+>  			   NR_VM_STAT_ITEMS +
 > 
 > ---
-> base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
-> change-id: 20241016-disable-two-clang-enum-warnings-e7994d44f948
+> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+> change-id: 20241202-fix-vmstat-88968bcaa955
 > 
 > Best regards,
 > -- 
-> Nathan Chancellor <nathan@kernel.org>
+> Ricardo Ribalda <ribalda@chromium.org>
 > 
