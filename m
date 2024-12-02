@@ -1,62 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFE517C215;
-	Mon,  2 Dec 2024 16:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F75AD51;
+	Mon,  2 Dec 2024 16:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733156085; cv=none; b=C/1vhMvrEFTFYN/BsslTqc0R9RlA9jsuJeMqCdypppxX120TZa+3DUQRtXC5PmbmVY8MBxs8MtpiSufwspeVwkFxsuynIYUDrEe3jcHnAUk9LBxjXnxskS9YsNzJCH5aJktfpKIeRkZqWsfU0WNU5pFlkLqMAbW7Oo3WYCkwnw0=
+	t=1733156173; cv=none; b=NDfjiCF4ZU8yKKzFqGVDr17zKpR/85FWTRhh6nZVvAiTBa0BMqCJCc6bbXVbyv5Sy+bkb891qxpOB9+zxi8zVejiHguNFVG0wUD/aRtoUzjbL6fIPnr/+FtCtlCa7tiuCDpmqzGGmh+v/CK2+M8f7/BZqYioBFhcaaTDCdzpc9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733156085; c=relaxed/simple;
-	bh=v1Hx6Kf34Um/vEhgVQ34LyNEJEbqTYzx6TgGdRu2Sis=;
+	s=arc-20240116; t=1733156173; c=relaxed/simple;
+	bh=xlQywIlZNQT5qCo7G3nLeY962rjjbO5Mq7s9hOqzSTg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WIBu5LUOAHfl+BlzRvbuIYJKl3klhteGlAOZUADWHbZFoX8j99eRzoZafsxpYTX0qr9RC8PASKjMTa5k71DlpPPcRoeKE01XR+/QC3Qhk37ZQywCeiInop8nmlKQ+qdzNVw4VXhDT/RLZPOHq/3hZ2xG3mfS4MNF7RvKAuhqNo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: 55FP6Q/pRWyBmx9xD3FOrg==
-X-CSE-MsgGUID: g0HXBtoXSYyNj6ObtQCORA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="43942117"
-X-IronPort-AV: E=Sophos;i="6.12,202,1728975600"; 
-   d="scan'208";a="43942117"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 08:14:42 -0800
-X-CSE-ConnectionGUID: vjG8tfL3ShOB4efcJxu2NA==
-X-CSE-MsgGUID: K3lM3hHaQ8ClrOhRcJhPSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,202,1728975600"; 
-   d="scan'208";a="93976735"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 08:14:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andy@kernel.org>)
-	id 1tI94E-00000003BnJ-1QEb;
-	Mon, 02 Dec 2024 18:14:34 +0200
-Date: Mon, 2 Dec 2024 18:14:33 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=ot4eBzmD8mZ+3Q8KbdXoVR0Cifc3qHC4N6G4FBjzE7GGelK1JMlwCLrZrlN1VuNUpGGMC+a7y7S/DQbu8eyOoCbHkahMfHIb/0ewlDQO8ksg/oA1FLOxAv8zcCj5hldnrjeItdxgAWEvf4Cr90ZVjTnptN/OXhwjWe9pTAnTjuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AM3jWJZp; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AM3jWJZp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41270C4CED1;
+	Mon,  2 Dec 2024 16:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733156172;
+	bh=xlQywIlZNQT5qCo7G3nLeY962rjjbO5Mq7s9hOqzSTg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AM3jWJZp/CgkhVFK3t4ZwOl6h+mOxDJCQGTmx11N/Hf/ImgkXc1kb1eUP5yFTTFkj
+	 C542BBLgdoRljc3cFThdDsZ72G6r/Wt+ZH1IQ0idZd/D9REB3bX7SWEpc9Sd/kIzHD
+	 9LAH3oMX8fddnzb7a9+AAFjcVrMUX2A3zUUUo4ec8CCiOjAH/qlsIEPn+5yPXSFXDH
+	 ub4vRhdTZyhfDZGdmUIwXyWBgmFF1qIMNm2zk0nzZkXpRvLQyz13Re+7H5HqORoTMg
+	 wTfKHqx+3iafT5IrwnauhRgnYebgSmavAeFUPCkVaOr1VCOuP/iXxvcwW4NGGRMm6H
+	 inpEPVj9t2ItQ==
+Date: Mon, 2 Dec 2024 09:16:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-staging@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 2/3] media: atomisp: Use the actual value of the enum
- instead of the enum
-Message-ID: <Z03c6ZHOP9rUFtP_@smile.fi.intel.com>
-References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
- <20241202-fix-llvm9-v1-2-2a50f5acfd0b@chromium.org>
+	Arnd Bergmann <arnd@arndb.de>, Aleksei Vetrov <vvvvvv@google.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: Move -Wenum-enum-conversion to W=2
+Message-ID: <20241202161610.GA2845796@thelio-3990X>
+References: <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,39 +48,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241202-fix-llvm9-v1-2-2a50f5acfd0b@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org>
 
-On Mon, Dec 02, 2024 at 03:47:16PM +0000, Ricardo Ribalda wrote:
-> hrt_isp_css_irq_sw_pin_0 has a different enum type than
-> irq_sw_channel_id_t.
+Masahiro, could you please pick this up? The lore link is below in case
+it is no longer in your inbox (or I can resend).
+
+https://lore.kernel.org/20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org/
+
+On Thu, Oct 17, 2024 at 10:09:22AM -0700, Nathan Chancellor wrote:
+> -Wenum-enum-conversion was strengthened in clang-19 to warn for C, which
+> caused the kernel to move it to W=1 in commit 75b5ab134bb5 ("kbuild:
+> Move -Wenum-{compare-conditional,enum-conversion} into W=1") because
+> there were numerous instances that would break builds with -Werror.
+> Unfortunately, this is not a full solution, as more and more developers,
+> subsystems, and distributors are building with W=1 as well, so they
+> continue to see the numerous instances of this warning.
 > 
-> Replace it with the actual value of hrt_isp_css_irq_sw_pin_0 to avoid
-> arithmetic operations between different enum types (and make the
-> compiler happy).
+> Since the move to W=1, there have not been many new instances that have
+> appeared through various build reports and the ones that have appeared
+> seem to be following similar existing patterns, suggesting that most
+> instances of this warning will not be real issues. The only alternatives
+> for silencing this warning are adding casts (which is generally seen as
+> an ugly practice) or refactoring the enums to macro defines or a unified
+> enum (which may be undesirable because of type safety in other parts of
+> the code).
 > 
-> It is required to build with llvm 9 without these warnings:
-
-9?! Maybe 19?
-
-> drivers/staging/media/atomisp/pci/sh_css_hrt.c:68:19: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-> drivers/staging/media/atomisp/pci/sh_css.c:1233:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-> drivers/staging/media/atomisp/pci/sh_css.c:1237:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-> ro
-
-You can make the above lines shorter by dropping the obvious an duplicated (in
-other places) part, i.e.  drivers/staging/media/atomisp/. I usually replace
-this with "...".
-
-.../pci/sh_css_hrt.c:68:19: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-.../pci/sh_css.c:1233:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-.../pci/sh_css.c:1237:40: warning: arithmetic between different enumeration types ('irq_sw_channel_id_t' and 'enum hrt_isp_css_irq') [-Wenum-enum-conversion]
-
-Otherwise LGTM,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Move the warning to W=2, where warnings that occur frequently but may be
+> relevant should reside.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 75b5ab134bb5 ("kbuild: Move -Wenum-{compare-conditional,enum-conversion} into W=1")
+> Link: https://lore.kernel.org/ZwRA9SOcOjjLJcpi@google.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Changes in v2:
+> - Move -Wenum-enum-conversion to W=2, instead of disabling it
+>   outright (Arnd)
+> - Leave -Wenum-compare-conditional in W=1, as there are not that
+>   many instances, so it can be turned on fully at some point (Arnd)
+> - Link to v1: https://lore.kernel.org/r/20241016-disable-two-clang-enum-warnings-v1-1-ae886d7a0269@kernel.org
+> ---
+>  scripts/Makefile.extrawarn | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 1d13cecc7cc7808610e635ddc03476cf92b3a8c1..04faf15ed316a9c291dc952b6cc40fb6c8c330cf 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -130,7 +130,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+>  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+>  KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+>  KBUILD_CFLAGS += -Wno-enum-compare-conditional
+> -KBUILD_CFLAGS += -Wno-enum-enum-conversion
+>  endif
+>  
+>  endif
+> @@ -154,6 +153,10 @@ KBUILD_CFLAGS += -Wno-missing-field-initializers
+>  KBUILD_CFLAGS += -Wno-type-limits
+>  KBUILD_CFLAGS += -Wno-shift-negative-value
+>  
+> +ifdef CONFIG_CC_IS_CLANG
+> +KBUILD_CFLAGS += -Wno-enum-enum-conversion
+> +endif
+> +
+>  ifdef CONFIG_CC_IS_GCC
+>  KBUILD_CFLAGS += -Wno-maybe-uninitialized
+>  endif
+> 
+> ---
+> base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
+> change-id: 20241016-disable-two-clang-enum-warnings-e7994d44f948
+> 
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
