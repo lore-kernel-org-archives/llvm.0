@@ -1,115 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8315433F6
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 06:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2621D7984
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 07:59:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733121629; cv=none; b=ibfLIk7l6LL3BVTTEKu+FxqVodWd3LcIFHPTuCuMiNTMzjWZPdIit1ZYBGI6AkSYlVdd61H5hHady5+5uUaiY9Ql/w1D2q7SUmi/z1Mc4WuD4toL4CnjlNVqTP+OrIUwM4qczhjIMsGQ7t1+TTV12TyEDKHFgVIqPeYVJpUxdDc=
+	t=1733126344; cv=none; b=Do/emLZ4cMVQICvZGfrFyRabdg/AzNFCwVMZig4gPWc8ojKuAu6VnlwmPPGEGTyZrXiduLHJo5fzRRaCrN7CQvuX1fW3RER+q+fZWztxs3KpDCeJHXXO/nFiALFhPAj6vAYC18mdPB2qAijxIluAkoy9CmKiy5oU/MEualJbros=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733121629; c=relaxed/simple;
-	bh=P/Up/t2C443Woe5UzAIXl45/9+G7f8WfojtFfXf7EX8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NuTqRi4K7fmFdztRoBiLXKt7AGKgmpYystUrIS1C/xdamhtue96rc3noYaJpHmAF03LRUG+c/6qJt42UI/4x1V5draHgUi1vUn54PN/5D2B4smXKIgTyu8rZtnTKKowyQ2z3zEHPSrRopVQZ9+OQZPPBEnAIdFD5cdvX9r59XS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lv80Uf0J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733126344; c=relaxed/simple;
+	bh=lI5ecZrVKoDDzHzIcNve9oQyAaRZmoMQKc4D/2CelSE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=q8v6PZBLTPRpo17XK9OgWf8jIK128yQKDxBLA725RYphj5DzNhhlGyp+n4v5iqSl2Wbb2OsVC/1gRs425qf47OUpgSE+EhcSslM6DWHDDCx9juoldf+IP3/jwEfTTs8RdS3if8gZeTWG68dhSJp4zogNG/V+UqHOePc3rebsot8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=oqIUdBdD; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=HGQs4v4Z; arc=none smtp.client-ip=89.207.88.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lv80Uf0J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F623C4CEDF
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 06:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733121629;
-	bh=P/Up/t2C443Woe5UzAIXl45/9+G7f8WfojtFfXf7EX8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Lv80Uf0JMRBKfyiSMht9pQhrhf+40aBwEKMVGp0MqU2hmhleHN6deZwnVzJMz2Z+h
-	 5l3bRQq+ZJwdZuu0aUMDpikzMFNohxBUJn1b9th+sXhNUVxssFmNw/HY57Bg7QovAT
-	 eQIcrFJEOhd0q3Jqa+zjRsG0DnFUKyEkJW2uMzMRG1eMf1zmKYZUng4wLLaQIFNZ5U
-	 lnVY5pm7wQqicJvFhcvufgoVgSeQIlrpwRo1ObJyV8xCawKdE0I7aOdgY3uBwL49Zw
-	 4CiWI7zgzSv4HB2CGKR+f5QlLEUuC9hY8XNdHqJSSaZ7BWyUMsOdrOikXbwd+I7UQV
-	 6Nx/1MWfo9pig==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53ded167ae3so4153016e87.0
-        for <llvm@lists.linux.dev>; Sun, 01 Dec 2024 22:40:29 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX0h00V0QXvAoZuq7LSwUvIOpOurPWq0HwiyIdmnRrGCyKKQ6sIsd5Mx8GjS94ytJxMOYuP@lists.linux.dev
-X-Gm-Message-State: AOJu0YwRauw07YTYjCEchWWK2RC5ISs8VKRci1/Hhaeuw/kjcdKu7aSc
-	wGraOm2mBIHHMYvt2SEBBoFhxLDR+o8dtd4XysrJe1xVSC26llq8ChWCZzaq9vWhU0KgixcMTWG
-	Ah3gcQW/WSS62g/R0zPw2CFIXMfs=
-X-Google-Smtp-Source: AGHT+IGq3TbC9zB6OHMWE5wRxb61lLhTxQ8/+n08QszowPRBZCUBlwcaxkbfgi3E63QW7qLB7OJxtrxmTZtYvl/OnbY=
-X-Received: by 2002:a05:6512:3c99:b0:53d:e8f5:f98a with SMTP id
- 2adb3069b0e04-53df0106bb9mr10206071e87.46.1733121627698; Sun, 01 Dec 2024
- 22:40:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="oqIUdBdD";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="HGQs4v4Z"
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 618B8E0002
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
+	t=1733126334; bh=FtA8nfMAc5D3CTIG0uNX1jurEbsjQmlpZP0LYJNrYJM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+	b=oqIUdBdD+IE9izN16sbYuKngFHY+B4IaNnQxY2W/hp7Edh5fehT/QYXgE1K9rJ0nv
+	 pwchwPh1STprgpXMw60f7WTs/Ur2hhi6TYFzy5uFhjAcJi3+F389uTqGa/as8/u84J
+	 PJe2ufKbtw7ZkYNV5ygIc77+BWUcJKPi4k1X+EE1JYzcNwTajkhukFgO/qS/OvwDoU
+	 nIqeLIwhSotPAgeRujwPCkvb29PkuJNmt3BkZ/erLVRkSxpmDbhsHSOMXxvP7lteXg
+	 1JyQeOzg8Xrqijc8kCawIIGwtqvJvzQ471IOGYTOfarN3ty/mZzpEnk6KQFiV/HNYb
+	 U5gGzm9c9wZuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
+	t=1733126334; bh=FtA8nfMAc5D3CTIG0uNX1jurEbsjQmlpZP0LYJNrYJM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
+	b=HGQs4v4Z5Rs9dryTvbgzi7WFSzX1HI+vdZCx2vFydmE05azEugTTrlAEkOhYjhz2o
+	 hdlV6C/Q4E4nB/IYwbHfzaxDZa7cWU4c84ErXlQ8dPPS9fYk3NGtGh2zplSDnd1DtC
+	 gVeKi9ZumoJUQcMrugR9ilegDW+6wZmUAYZK60MfHY8tM6+cxXqDzPA04TAYiKPx+u
+	 oaYgylq804G8cygCQB6iB0USueKAwDF/N4muvvFBm11XBqC6t6zXZsftxslCkhc90c
+	 WQuiQ89ENaGGLabVDY89y7j70htR7sCcvK6ttF3qCDgJJ71Xo7u8Ntfs5jd1do4muL
+	 rWlX98fEk1PMQ==
+Message-ID: <62f06687-a20d-4f55-b22d-52af707b528a@yadro.com>
+Date: Mon, 2 Dec 2024 10:58:51 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-4-xur@google.com>
- <5e032233-5b65-4ad5-ac50-d2eb6c00171c@roeck-us.net>
-In-Reply-To: <5e032233-5b65-4ad5-ac50-d2eb6c00171c@roeck-us.net>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 2 Dec 2024 15:39:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT-yG=jCPSfhmZM1N6Opfm70++hAby35ywpbaADMNHH2g@mail.gmail.com>
-Message-ID: <CAK7LNAT-yG=jCPSfhmZM1N6Opfm70++hAby35ywpbaADMNHH2g@mail.gmail.com>
-Subject: Re: [PATCH v7 3/7] Adjust symbol ordering in text output section
- [openrisc boot failure]
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
-	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Juergen Gross <jgross@suse.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
-	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Jonas Bonn <jonas@southpole.se>, 
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
-	linux-openrisc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
+ improvements
+To: Andy Chiu <andybnac@gmail.com>
+CC: Justin Stitt <justinstitt@google.com>, Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor
+	<nathan@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<llvm@lists.linux.dev>, <bjorn@rivosinc.com>, <puranjay12@gmail.com>,
+	<alexghiti@rivosinc.com>, <yongxuan.wang@sifive.com>,
+	<greentime.hu@sifive.com>, <nick.hu@sifive.com>, <nylon.chen@sifive.com>,
+	<tommy.wu@sifive.com>, <eric.lin@sifive.com>, <viccent.chen@sifive.com>,
+	<zong.li@sifive.com>, <samuel.holland@sifive.com>, <linux@yadro.com>
+References: <20241127172908.17149-1-andybnac@gmail.com>
+Content-Language: en-US
+From: Evgenii Shatokhin <e.shatokhin@yadro.com>
+In-Reply-To: <20241127172908.17149-1-andybnac@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: T-EXCH-07.corp.yadro.com (172.17.11.57) To
+ T-EXCH-10.corp.yadro.com (172.17.11.60)
 
-On Sun, Dec 1, 2024 at 11:31=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> Hi,
->
-> On Sat, Nov 02, 2024 at 10:51:10AM -0700, Rong Xu wrote:
-> > When the -ffunction-sections compiler option is enabled, each function
-> > is placed in a separate section named .text.function_name rather than
-> > putting all functions in a single .text section.
-> >
-> ...
-> >
-> > Co-developed-by: Han Shen <shenhan@google.com>
-> > Signed-off-by: Han Shen <shenhan@google.com>
-> > Signed-off-by: Rong Xu <xur@google.com>
-> > Suggested-by: Sriraman Tallam <tmsriram@google.com>
-> > Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
-> > Tested-by: Yonghong Song <yonghong.song@linux.dev>
-> > Tested-by: Yabin Cui <yabinc@google.com>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Kees Cook <kees@kernel.org>
->
-> With this patch in the tree, the openrisck qemu emulation using
-> or1ksim_defconfig fails to boot. There is no log output, even with
-> earlycon enabled.
+Hi,
 
-Thanks for the report.
-I posted a fix.
-https://lore.kernel.org/all/20241202062909.2194341-1-masahiroy@kernel.org/T=
-/#u
+On 27.11.2024 20:29, Andy Chiu wrote:
+> This series makes atmoic code patching possible in riscv ftrace. A
+> direct benefit of this is that we can get rid of stop_machine() when
+> patching function entries. This also makes it possible to run ftrace
+> with full kernel preemption. Before this series, the kernel initializes
+> patchable function entries to NOP4 + NOP4. To start tracing, it updates
+> entries to AUIPC + JALR while holding other cores in stop_machine.
+> stop_machine() is required because it is impossible to update 2
+> instructions, and be seen atomically. And preemption must have to be
+> prevented, as kernel preemption allows process to be scheduled out while
+> executing on one of these instruction pairs.
+> 
+> This series addresses the problem by initializing the first NOP4 to
+> AUIPC. So, atmoic patching is possible because the kernel only has to
+> update one instruction. As long as the instruction is naturally aligned,
+> then it is expected to be updated atomically.
+> 
+> However, the address range of the ftrace trampoline is limited to +-2K
+> from ftrace_caller after appplying this series. This issue is expected
+> to be solved by Puranjay's CALL_OPS, where it adds 8B naturally align
+> data in front of pacthable functions and can  use it to direct execution
+> out to any custom trampolines.
+> 
+> The series is composed by three parts. The first part cleans up the
+> existing issues when the kernel is compiled with clang.The second part
+> modifies the ftrace code patching mechanism (2-4) as mentioned above.
+> Then prepare ftrace to be able to run with kernel preemption (5,6)
+> 
+> An ongoing fix:
+> 
+> Since there is no room for marking *kernel_text_address as notrace[1] at
+> source code level, there is a significant performance regression when
+> using function_graph with TRACE_IRQFLAGS enabled. There can be as much as
+> 8 graph handler being called in each function-entry. The current
+> workaround requires us echo "*kernel_text_address" into
+> set_ftrace_notrace before starting the trace. However, we observed that
+> the kernel still enables the patch site in some cases even with
+> *kernel_text_address properly added in the file While the root cause is
+> still under investagtion, we consider that it should not be the reason
+> for holding back the code patching, in order to unblock the call_ops
+> part.
+> 
+> [1]: https://lore.kernel.org/linux-riscv/20240613093233.0b349ed0@rorschach.local.home/
+> 
+> Changes in v3:
+> - Add a fix tag for patch 1
+> - Add a data fence before sending out remote fence.i (6)
+> - Link to v2: https://lore.kernel.org/all/20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com/
+> 
+> Changes in v2:
+> - Drop patch 1 as it is merged through fixes.
+> - Drop patch 2, which converts kernel_text_address into notrace. As
+>    users can prevent tracing it by configuring the tracefs.
+> - Use a more generic way in kconfig to align functions.
+> - Link to v1: https://lore.kernel.org/r/20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com
+> 
+> 
+> Andy Chiu (7):
+>    riscv: ftrace: support fastcc in Clang for WITH_ARGS
+>    riscv: ftrace: align patchable functions to 4 Byte boundary
+>    riscv: ftrace: prepare ftrace for atomic code patching
+>    riscv: ftrace: do not use stop_machine to update code
+>    riscv: vector: Support calling schedule() for preemptible Vector
+>    riscv: add a data fence for CMODX in the kernel mode
+>    riscv: ftrace: support PREEMPT
+> 
+>   arch/riscv/Kconfig                 |   4 +-
+>   arch/riscv/include/asm/ftrace.h    |  11 +++
+>   arch/riscv/include/asm/processor.h |   5 ++
+>   arch/riscv/include/asm/vector.h    |  22 ++++-
+>   arch/riscv/kernel/asm-offsets.c    |   7 ++
+>   arch/riscv/kernel/ftrace.c         | 133 ++++++++++++-----------------
+>   arch/riscv/kernel/mcount-dyn.S     |  25 ++++--
+>   arch/riscv/mm/cacheflush.c         |  15 +++-
+>   8 files changed, 135 insertions(+), 87 deletions(-)
+> ---
+> base-commit: 0eb512779d642b21ced83778287a0f7a3ca8f2a1
+> --
+> 2.39.3 (Apple Git-145)
 
+I have tested this series in a QEMU VM (-machine virt) with the 
+preemptible kernels, CONFIG_PREEMPT=y.
 
---=20
-Best Regards
-Masahiro Yamada
+No issues have been revealed so far.
+
+One of the kernels was built by GCC 13.2.0 (with the patch for minimum 
+alignment added on top of it), the other - with LLVM 17.0.6.
+
+In both cases, the basic boottime tests for Ftrace passed.
+
+Switching tracers between nop, function, function_graph and blk in a 
+loop in parallel with stress-ng and with network load for several hours 
+did not reveal any problems either. Kernel crashes happened in this 
+scenario a year ago, but now it runs clean, good!
+
+Function redirection via Ftrace seems to work OK too.
+
+The size of .text section increased slightly after this series, by 0.35% 
+- 0.38%, probably because of function alignment:
+* 12075 KB => 12121 KB (GCC)
+* 12167 KB => 12209 KB (LLVM/clang)
+
+Not sure, how to test the vector-related part though, "[PATCH v3 5/7] 
+riscv: vector: Support calling schedule() for preemptible Vector"
+
+For all other patches in the series:
+Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
+
+Regards,
+Evgenii
