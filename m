@@ -1,159 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621B11DDC28;
-	Mon,  2 Dec 2024 17:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770041DBB21
+	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 17:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733160905; cv=none; b=i0OVKdbAwLnWB74D244LdFP6vzwPaemWCm2mEKGS19+3GbXIhiLpmKKe2k+R9kgTBsCgJK3WVOJyOrxn0Z3hyFNotMrvcXIWNAnMk++P2ZkdEejSmFkUDwT8hOMeBHJ/b1RMYOqxbcSpNa/MHV8gWybMJin3ZBvyNJN9wcASFUM=
+	t=1733160957; cv=none; b=PFEUI2oi+PxzSqFUg934ZAqjRUlzuOd1ljcDXuOO27OpGQZalqv3dXvjZKGFRXEHgjD3eDBOeefeZKiA9RrOFh5VabDQcab37OjMsXVFLU6x6SYWOxDpL1iw8qZz+FxHA7Q5hX2k4Ko/BcwVHdKXABN2Rbx1A9hYW3K4AG8+PzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733160905; c=relaxed/simple;
-	bh=uAZMv8YsD+O3wlShIE66KqQtYXWRRt5F/8DqFrLry7o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WYyBZRxQ3QlyoZtQmFc/K3S6ugFKs9ELIrYZ2MqnJJke3W55P8AGfdSGsjzRZWQllYcJSRMsim4NrCHsCvzy/nngLH0ydzdhr5NagfgiSOAmiRu2pvVfD6tJ11MjEcZq7cUTmFRyLTvUcVxqrdjrCYQwdm/XQCmAz/Cf/hJ15ME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bnpeLmKT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733160957; c=relaxed/simple;
+	bh=MbX83DaHTWn0NvefhN4LoZ8evHYijYUUe5JWuRqBz2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EClTQ8rqS+hrUA7rND6Z2nOeSNUWy3RskYOYzKZTGz0inDIXCU78YY+eeKTpdCnH7sewGk9wYJY3uHhzNe+9Etet7ZsQfP/pBVopldmoLxSDPYoUeYCloS9Rd3oc36CCW/O018L8OrInuwPSshujtp1pPX524duwDoadzpRzbVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nlZYm5ez; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bnpeLmKT"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EE828C4AF0C;
-	Mon,  2 Dec 2024 17:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733160905;
-	bh=uAZMv8YsD+O3wlShIE66KqQtYXWRRt5F/8DqFrLry7o=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=bnpeLmKTZ0P/1nIlgfq6P/89fGBp79XUw1RuAsTRlXRHCp2izeFvyG+TI1GSO6Kkj
-	 +vSOTNpWal9tOo9dbUTbh9ga3NCi42/NymrTLb22Q4h+u/cokTPsWtrlid/tRFM1T1
-	 6dV8OjkixQG4eXBo6SkrUV3AeE/R4D8dTZFDlu9F64ELfy0Kyibo9a/OngDbjQ2PZS
-	 fRCmDaWTk6tZnYjK8xTrQZoanmydKBBAOMVkExgd7RD1+VOe0fYp5Yw3cTebcM93v7
-	 5dsvx+CeiiRXTK43GkDDCdvLdYPnost8GIN8ypR562MwwNxO1YQn1QxI+326LAvREB
-	 1xToeg5fGWCxA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E082BD7833D;
-	Mon,  2 Dec 2024 17:35:04 +0000 (UTC)
-From: Vincent Mailhol via B4 Relay <devnull+mailhol.vincent.wanadoo.fr@kernel.org>
-Date: Tue, 03 Dec 2024 02:33:32 +0900
-Subject: [PATCH 10/10] compiler.h: remove __is_constexpr()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlZYm5ez"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733160957; x=1764696957;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MbX83DaHTWn0NvefhN4LoZ8evHYijYUUe5JWuRqBz2M=;
+  b=nlZYm5ez4w4EMl+IcAk1tSaBDz82FVUTPrm0MV+1YeScmrw1FjN/S1hP
+   /EE39uS+sigiHQjthQygTBlHqSNq2CFy/658U29k3ObmZn10tdKNZLeOo
+   q3et5vvqvLDSU/ETD8UYbtELcdutGIO+t1xRmwmAHg02BShiJQN6pfmz7
+   cReEpJ1oK17uEdYm6PKSodOQBcRgL3XPtAonkR/+kB8pDXpJvxGLm9sLg
+   Dtn8WdbOGk+9bz//j8/4Fll6ga7ltFyrYH5/fSfKUzhG1L7TrUQPA455t
+   Hw8EaS9fi8ZbarqbynOCx5ypU+KtFbbWyzKlbYC08oPVOkRLfRG5hXNGW
+   g==;
+X-CSE-ConnectionGUID: Xe4NXgIBT4iOCRN8LqX1tg==
+X-CSE-MsgGUID: l/TpBiEzQN6dMHwUHlg+bw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="37008719"
+X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
+   d="scan'208";a="37008719"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 09:35:56 -0800
+X-CSE-ConnectionGUID: yKEWunCTTbG/I+ZbzjsVhQ==
+X-CSE-MsgGUID: 2sPYZ2HPTAS9Y7gIS+EHvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
+   d="scan'208";a="94006627"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 02 Dec 2024 09:35:52 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id AFCEF3B2; Mon, 02 Dec 2024 19:35:50 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] sched/fair: Mark m*_vruntime() with __maybe_unused
+Date: Mon,  2 Dec 2024 19:35:30 +0200
+Message-ID: <20241202173546.634433-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241203-is_constexpr-refactor-v1-10-4e4cbaecc216@wanadoo.fr>
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
-In-Reply-To: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
- David Laight <David.Laight@aculab.com>, 
- Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Yury Norov <yury.norov@gmail.com>, 
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
- Jani Nikula <jani.nikula@linux.intel.com>, 
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
- Rodrigo Vivi <rodrigo.vivi@intel.com>, 
- Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
- Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
-Cc: linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3686;
- i=mailhol.vincent@wanadoo.fr; h=from:subject:message-id;
- bh=KhSEJ/z9NSPJazKznaA4eGwJC3/rNJqN3dS4dHFF/N0=;
- b=owGbwMvMwCV2McXO4Xp97WbG02pJDOm+7485PP/cFjpv4ddvR2VLOPkvvJfXCD3qLZ3Eld3nt
- LjUeklRRykLgxgXg6yYIsuyck5uhY5C77BDfy1h5rAygQxh4OIUgImY+zH8T7uwUoiP88gRLpWl
- X/NO/Lygvi6i7yFjyKWdpdGpMdvv/2P4H5bWr3/0ydJ1OX+dF13m2GEVIfQr88mHOomEbc+bzFv
- kGAE=
-X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp;
- fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
-X-Endpoint-Received: by B4 Relay for mailhol.vincent@wanadoo.fr/default
- with auth_id=291
-X-Original-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reply-To: mailhol.vincent@wanadoo.fr
+Content-Transfer-Encoding: 8bit
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+When max_vruntime() is unused, it prevents kernel builds with clang,
+`make W=1` and CONFIG_WERROR=y:
 
-Now that all the users of __is_constexpr() have been migrated to
-is_const() or one of its friends, remove it.
+kernel/sched/fair.c:526:19: error: unused function 'max_vruntime' [-Werror,-Wunused-function]
+  526 | static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
+      |                   ^~~~~~~~~~~~
 
-The homage to Martin Uecker's genius hack remains in the documentation
-of __is_const_zero().
+Fix this by marking them with __maybe_unused (all cases for the sake of
+symmetry).
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- include/linux/compiler.h | 47 -----------------------------------------------
- 1 file changed, 47 deletions(-)
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 165aa5b9bc484376087a130a1ac1f3edb50c983d..7ba75044828129cf1f81f458ade695786dbf132a 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -252,53 +252,6 @@ static inline void *offset_to_ptr(const int *off)
- #define __must_be_cstr(p) \
- 	__BUILD_BUG_ON_ZERO_MSG(__annotated(p, nonstring), "must be cstr (NUL-terminated)")
+v2: dropped applied pieces
+
+ kernel/sched/fair.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index fb4ffe27d117..f51a83ccef83 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -523,7 +523,7 @@ void account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec);
+  * Scheduling class tree data structure manipulation methods:
+  */
  
--/*
-- * This returns a constant expression while determining if an argument is
-- * a constant expression, most importantly without evaluating the argument.
-- * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
-- *
-- * Details:
-- * - sizeof() return an integer constant expression, and does not evaluate
-- *   the value of its operand; it only examines the type of its operand.
-- * - The results of comparing two integer constant expressions is also
-- *   an integer constant expression.
-- * - The first literal "8" isn't important. It could be any literal value.
-- * - The second literal "8" is to avoid warnings about unaligned pointers;
-- *   this could otherwise just be "1".
-- * - (long)(x) is used to avoid warnings about 64-bit types on 32-bit
-- *   architectures.
-- * - The C Standard defines "null pointer constant", "(void *)0", as
-- *   distinct from other void pointers.
-- * - If (x) is an integer constant expression, then the "* 0l" resolves
-- *   it into an integer constant expression of value 0. Since it is cast to
-- *   "void *", this makes the second operand a null pointer constant.
-- * - If (x) is not an integer constant expression, then the second operand
-- *   resolves to a void pointer (but not a null pointer constant: the value
-- *   is not an integer constant 0).
-- * - The conditional operator's third operand, "(int *)8", is an object
-- *   pointer (to type "int").
-- * - The behavior (including the return type) of the conditional operator
-- *   ("operand1 ? operand2 : operand3") depends on the kind of expressions
-- *   given for the second and third operands. This is the central mechanism
-- *   of the macro:
-- *   - When one operand is a null pointer constant (i.e. when x is an integer
-- *     constant expression) and the other is an object pointer (i.e. our
-- *     third operand), the conditional operator returns the type of the
-- *     object pointer operand (i.e. "int *"). Here, within the sizeof(), we
-- *     would then get:
-- *       sizeof(*((int *)(...))  == sizeof(int)  == 4
-- *   - When one operand is a void pointer (i.e. when x is not an integer
-- *     constant expression) and the other is an object pointer (i.e. our
-- *     third operand), the conditional operator returns a "void *" type.
-- *     Here, within the sizeof(), we would then get:
-- *       sizeof(*((void *)(...)) == sizeof(void) == 1
-- * - The equality comparison to "sizeof(int)" therefore depends on (x):
-- *     sizeof(int) == sizeof(int)     (x) was a constant expression
-- *     sizeof(int) != sizeof(void)    (x) was not a constant expression
-- */
--#define __is_constexpr(x) \
--	(sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
--
- /*
-  * Whether 'type' is a signed type or an unsigned type. Supports scalar types,
-  * bool and also pointer types.
-
+-static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
++static inline __maybe_unused u64 max_vruntime(u64 max_vruntime, u64 vruntime)
+ {
+ 	s64 delta = (s64)(vruntime - max_vruntime);
+ 	if (delta > 0)
+@@ -532,7 +532,7 @@ static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
+ 	return max_vruntime;
+ }
+ 
+-static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
++static inline __maybe_unused u64 min_vruntime(u64 min_vruntime, u64 vruntime)
+ {
+ 	s64 delta = (s64)(vruntime - min_vruntime);
+ 	if (delta < 0)
 -- 
-2.45.2
-
+2.43.0.rc1.1336.g36b5255a03ac
 
