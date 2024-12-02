@@ -1,222 +1,241 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2067.outbound.protection.outlook.com [40.107.102.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F721F943D
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 08:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733127747; cv=none; b=f9/wPN4S6rQjG/Uim1TORbFO+ACoF+s2j+yL2mQku/f9vhlI9d9RgBsXlvnZvWLbJV+uK9BsLr7bfseF4qRL9vYlEOSTYheX2kbCXpgAft6WA4x/Q3AIl9CdEc9kBJOfgr2tcY26JcQR6qSGd2jynLEB1IyYfa4BxopM0cZXgr4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733127747; c=relaxed/simple;
-	bh=o+x7UUeIse1yT2KW0S7eGdDE1k0Cu/ERp1FpaTouCzY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DRsgMOLYVCukLlxhDMunkwb0JqV9K0AgsUOwDC/DJkCZZBkKBI9BaoeV6O9vy44ZkUHsCWo7kGJit8TZ0dFRY0ULzBZEodE//4HoAkZaK+W5Gs7v0leN6ykhBL6BW6DAe0Cml4vAWmAmtRtPWRrrpeNN7Ku+OZcUfHhLGiSckKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Emawf8rY; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8511F9409;
+	Mon,  2 Dec 2024 08:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733128045; cv=fail; b=W+ghJ8QlCxdYIvNvP98DH0dUIHtJy+pSexxUIiIHtCNwfpt+V23ZazOQWE8cMLVXuG9+YSFo/SE98UBZ5cOpVCIvvlBC76qEejXwlyH7Vvq7dOF7R7PQHs95WDhozD8C5TktqOJc/r+9GJobNYTVs1jx7TwI7gFUIXnhgEQbHZg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733128045; c=relaxed/simple;
+	bh=1eUR/FBS6ji/lHLY8MAHYzhgJgGyBgz3w/5+Ch/nH1w=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Jm4LSupjAqhHzMROrzgcUyhqltqq6M7IBuWQU7PF02obzZ8Wh7BeygxG+1bmcwxNdBBHAnbiBEt/sDLgRnJZhNDOzR2rGDajkS5UxUJE9GRlDPeMsOWSkx2gIqJdOskYbBnd4s7XaFuwowvaSmL6KlPzITL+c0mGboapP898rzA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=L0Zh+3N/; arc=fail smtp.client-ip=40.107.102.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Emawf8rY"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53df19bf6a9so4390616e87.1
-        for <llvm@lists.linux.dev>; Mon, 02 Dec 2024 00:22:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733127744; x=1733732544; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YPWMgettyvx+9ptynz/I3mmqhxwTzOb8w8uMAYThgRU=;
-        b=Emawf8rYXYT//x84Qf6BrUlweO7ESi7s4HgOhPmbRlQMRbPrq/mO3BDNn3bghAsTV4
-         uvPuG8ZY2+Y7/A3pM4U/4pQNBop0qiC4Pf9+p0WABRWa+XsYI4PSnawm3isXeYn+rogW
-         dAcHy28DvcDQEQhmDithtvL2nK0Y2zPPH1OClozt5oUNf0mkE97x0PPmGqG5zwU8QtLw
-         Jw29lNPHe+7w0OGqVEDy4CEUw5bjt53IgLjEW0GHbeMJuD8fUmwr4F1zP2MkXkGkusLy
-         05/Wd3I5aXDXp6vhVVWG1iu2YQrCROdMba+t7y7+AjoMLGqOzP6AwVQXZkQaNbwQGduY
-         rW7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733127744; x=1733732544;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YPWMgettyvx+9ptynz/I3mmqhxwTzOb8w8uMAYThgRU=;
-        b=fS1HrwsgQ5BPNeHM0pOFjvK1GHg4fcJXqTaEbXKnLug70ey7txNQcsVgxg5ukPUpKH
-         hVaFQqZNvjQX5Vwn5mUx2WULVqqFmK4uS1H55xVqF+eAT7Lh4KAaEoKuVo53IbkmMKl8
-         tBGzg/7EFvmM+Dczp8N0FRQHLacTv9YRgvFiR/VmYv7pmtewULqxStPR7bhcCYlyipqK
-         VmgzTLHzTofVvc1w7VckxTxYarKmXrx7Y/Weo1RuQ8uDNwtV1mdvuEmQFU1qO7/vPsmV
-         0T8kUu7xXJNyzr7QMl9/MiQHakhnYgusN7DYjo8F6s+gTNXRkNerHZTRrCtBMQkMoi3H
-         zXRA==
-X-Forwarded-Encrypted: i=1; AJvYcCXDlIfjO0JxPcgwJev1kkygdjYN7mvn1JdQIaGorH4/UukzyWj3Kj4NJnNXT2J9YZq0vJFX@lists.linux.dev
-X-Gm-Message-State: AOJu0YwNJzLeOYLUuqb+dIKLpI6bhcHsez4gXDdf6q/Ka5UntiB90Cs1
-	AH8ozcj269mBqcLyMlsSqLlvvznQURVsAd9bgqOA7qhAojEw8rkD
-X-Gm-Gg: ASbGnctAmUMd4sEzkUHHLxYPBzvJfe08WlMvY1N6wa/068/C+ZRCAW4Acjl7U0SWkVT
-	G5B2lSlGmftp2QWC1J+9/wKYq+6GdGLDqdpge8hH0fKZRqJ1dJEi9pyk4CAM616qKLkUoE4vsG8
-	ex7JWNJRMfACKExifC3q/FSagG8s3OHEwY21AJe9mmBZ+SnMVKHI4gHFSssPc9LcMeq8w5U5rOz
-	VwDwI5AD2XxJs/djOQkgyx99wqDKTye94bbZV3n6T9p3jjzpQpkmqyrta2sHlSZiNXHrUBXfAyD
-	Ebmt4RYtws1Q4LBwOZe0jqlDDEVrF84=
-X-Google-Smtp-Source: AGHT+IGl+yCwdlz2rSpXO0UlWRXCUO/3cdmsZapEZ2aJOGm7mWsgD9ilm4c0fOahmXqaG90zEwVMmg==
-X-Received: by 2002:a05:6512:32c9:b0:52c:dc97:45d1 with SMTP id 2adb3069b0e04-53df00c789cmr10345737e87.10.1733127743618;
-        Mon, 02 Dec 2024 00:22:23 -0800 (PST)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53df6496551sm1376280e87.193.2024.12.02.00.22.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2024 00:22:21 -0800 (PST)
-Message-ID: <9d810e5c-c7a5-41e5-8073-b703717faf3d@gmail.com>
-Date: Mon, 2 Dec 2024 10:22:19 +0200
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="L0Zh+3N/"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Iq+cV+tXVe+avuN26yDCl6bYuPvdF0kpcjoQOgivRgcQXK9hccwTUHow6RtUq50+H9w6Dh4yfTHZUQjhjdHF6sj+C2zKq1LVfkri0q50sN44HXq2WED9nlZzX5XnUxXRduuc0N6PGMDaoXGUoVtjUYEZ0ZQFX2f7DfbjKY0tlJ+VKc5+reTEsq0deRtl4KmH4luycgYSs9/uXqj1Vm7uTtJprdXC401nUWl/JVmdx4w3Zzkuka0WF80LpwNvmmAwvQxCW0cep9H7wDu1ijy0/wgVAnShcgyVrRjBOlThe9lxNwJGzhRUgntkfkas0u0BJEmo1WyR9xET4Y4/REDXOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2nc+FGNRZtozt0Tjle8fSEH5yG5hJ+lz2x8qW3vqJmA=;
+ b=fUuHFMnlN+ciDHRRtDExeEyTMvurBkOJ1vtU3VPld6VcsAF1YsqTYDiT77l1hawN0pXwU5muie7sTk8MIae1SCGr3vAlLdCQxl/My9BIosIw8i6z0DPA2M8onNu9HvGOTjyqLzsGYIF7WdQfbLg7A3mCsp4u5j1sYRa/4FJf6mfOLUz7Zcwh2NyeNtTlv727PFoqcexiHvuZIwDGkUSLhmPyYF6PSNHTafZDloq0gxG+vPOfvsusYj9Y4dZnkH4POvRcVUZQYXGSjh1DAHHYmiEJtI9UVzSUjZeOfD3iUl4toI1GvJD48TrcklOnzgTC7yMq3zG2d9VEiYG/WHxgnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2nc+FGNRZtozt0Tjle8fSEH5yG5hJ+lz2x8qW3vqJmA=;
+ b=L0Zh+3N/o0EeGyUFDrAmRTphOy7hXB1gfnu3sqOboYFFe75Ak1J3pFM5GmfWZ85FMf3jsoP4kyhuYIImBJ7CDgXZT2jm2ALbkVHi1W53PZxpYx+Fx7xOpD7IX+HVi98Xp4EkvNpHWolMZXKGVBTgA8Ol0nJS+FiXSBGQONVa+NE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5805.namprd12.prod.outlook.com (2603:10b6:510:1d1::13)
+ by PH7PR12MB8178.namprd12.prod.outlook.com (2603:10b6:510:2b3::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Mon, 2 Dec
+ 2024 08:27:21 +0000
+Received: from PH7PR12MB5805.namprd12.prod.outlook.com
+ ([fe80::11c7:4914:62f4:f4a3]) by PH7PR12MB5805.namprd12.prod.outlook.com
+ ([fe80::11c7:4914:62f4:f4a3%4]) with mapi id 15.20.8207.017; Mon, 2 Dec 2024
+ 08:27:20 +0000
+Message-ID: <434ab94c-d195-414a-a5b8-5f7979a057fc@amd.com>
+Date: Mon, 2 Dec 2024 13:57:14 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH V0 03/10] mm: Scan the mm and create a migration list
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <20241201153818.2633616-4-raghavendra.kt@amd.com>
+ <202412020401.kTXL2n6L-lkp@intel.com>
+Content-Language: en-US
+From: Raghavendra K T <raghavendra.kt@amd.com>
+In-Reply-To: <202412020401.kTXL2n6L-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN0PR01CA0010.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:4f::15) To PH7PR12MB5805.namprd12.prod.outlook.com
+ (2603:10b6:510:1d1::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
- driver
-To: Jonathan Cameron <jic23@kernel.org>,
- Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-Cc: Mikael Gonella-Bolduc via B4 Relay
- <devnull+mgonellabolduc.dimonoff.com@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
- linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Hugo Villeneuve <hvilleneuve@dimonoff.com>
-References: <20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com>
- <20241119-apds9160-driver-v1-2-fa00675b4ea4@dimonoff.com>
- <20241124211545.194a9f87@jic23-huawei> <Z0eY+1X1ZSkNui9U@uva.nl>
- <20241201132054.0c063a11@jic23-huawei>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20241201132054.0c063a11@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5805:EE_|PH7PR12MB8178:EE_
+X-MS-Office365-Filtering-Correlation-Id: 608f0b2a-0c70-44d9-2eae-08dd12ab2389
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?a0RQVDJpV2M3UjlxclA4a2tIcVllbnpubWdPOERsTS9SWVJXcFFEeGEwd3ps?=
+ =?utf-8?B?RHFTMkp4L3NvR1A0R0tTWWxJVG53eVZSTWhTZUgrZXBpV296a3ZkbXJxYko5?=
+ =?utf-8?B?NzRTdHdtTlkwRjd1V0pxYm5KT29nV2dlUnRwSElyTG5ObWNRZy9CT0kxVjFB?=
+ =?utf-8?B?VU44YWVQaDFaOVpZendYeHMyREp1ak10dUMrdGs0YzdZcmZUK1NKZWp1VlN0?=
+ =?utf-8?B?RlhrVExFVVZZT2d6eElCUUhQdm42WW9TWDdaU1h2TUlaYzlSbUJXd2pYeDRk?=
+ =?utf-8?B?QUJzYU9zWmJnNFlRdWw4bXRZMTdld1VFM2NOVWZGUkQ0MXVFUktSOGVGOUJy?=
+ =?utf-8?B?MVQ1Q1pabzZ4TFFXUXA4WXZpM3hpMGJNbHI5SGxBN3ZVdjJ6L0hvWWVYV2Vk?=
+ =?utf-8?B?RFRJQnpkUThGN1g0SFJuOGNDWVNUVVIySHNSOFJ3T2RNT3l2Kzg3YUVyb1ZC?=
+ =?utf-8?B?dGg5SCttUFA5OHZCTHlta05hbGZ1bU93bEQxdVV6aE5kNXRBdWlTVXgxZ0wr?=
+ =?utf-8?B?V0JYUG1XYi92WExEVllDYmNVTjl4QUNvT0xkbFVWM3hpK3RkNUtxc1k4bzhH?=
+ =?utf-8?B?d1QxdERhQU1oOVdOUDdxZ1d4RlJCRnROYzRzZmNoL1FTSVpDTWd2dEZxUURu?=
+ =?utf-8?B?Z0JRWHF3VVBJVCt1UVNLQkJwcUwvUk55K1NzdXlQQ295QURmaXcyVHJINUFT?=
+ =?utf-8?B?VFRIeGxBcWQwTzkzekNaaWFXd1hxcTE0RUI4aXNRSm12WU4xR2lvcVJkeGkr?=
+ =?utf-8?B?ZTlEbkxGUFZOMyt3VVQyUm52Yk1PWk4rZEhIbTVCK3lhamE0VGJsWElnU0R1?=
+ =?utf-8?B?L3BGSmFiemRSbURXU2xlb2pEQnFCOUhZYUpxSi90cFZaR3hWajhFNTFrZHBn?=
+ =?utf-8?B?ZjI0RUxQMnRoVVNFUkYyY3pRNWZvaWFQRW4xbStzN2dJMm4rWldpdlpKZUdm?=
+ =?utf-8?B?dTFGU1BsOWt1eHdCUWtvNmQ1K2VSTnNIMGZRLzd0UEdNaWRxYzRJYlAxRFVu?=
+ =?utf-8?B?dEI4cVBUbmtqOExoNlh4Q3BIenVmSy9WOE90VGpZVFNCRzN2RS9jTmJnam5W?=
+ =?utf-8?B?YjMvN2pZRElmNlFxY1hjRnNTR0ZDREFPZnVyV3g3bzZnaE8ySE5ieEVta2xt?=
+ =?utf-8?B?WmNCMFdvMFlQOVBNNEJJaExJRmlVSWJKTmloL2QxSlJnL2EzcjFhY2RybE43?=
+ =?utf-8?B?c1hMZ2YxRzJNdVlkd3JwY1pCVDZNeXU3M3pLblcwWHVYSGxVZnZKMmxpMWdN?=
+ =?utf-8?B?bWRnQmpGVUloZ3dPdkxqbCtOZkJYQkp2SW1pN29qWlUrdE9sc0R0S3Z6Umww?=
+ =?utf-8?B?UloxU0djUDlVSDJvOFVWM0I4NXdrMzRyMkZVUGZ4Y1pnTk82UEdCMEQvYjlk?=
+ =?utf-8?B?SmNlVFY1eHU2eTFSRmNTYW0wQ0JhbUZ6RUVSbnNJWjI2UXdubmU3anp6UXVm?=
+ =?utf-8?B?N1l3Uis1SGkwYTJpYVJiTVFzVHQxWUUzTTF2bWs5bG96OG51WFVkb1RTVWRy?=
+ =?utf-8?B?Q1kyclRaTVhYT0JGT25qUVFhSWhSai9HUm1UWXpKdWo3anJ1OWt5T0k1ZkJj?=
+ =?utf-8?B?NzRKZ1lxQStNbVQ1VWh3dHVNNi9JdWxUTXZjNkNEeUpzUHpRWFBWdm1RNEk4?=
+ =?utf-8?B?ME96QTJKZEJUdjhUY0dxQjlOTnFLdlBtcjdBMk5TMlJWUy9iTmYrQ1hnSUZq?=
+ =?utf-8?B?Z1Y5S2tOYndVU0FmUTZiSDh0bzJsbnU1VDNvV0M5bVVOdjJseEFwWUMxdEt4?=
+ =?utf-8?Q?BqOy3x1UXOe3TqdST8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5805.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QXFUOVVTQ2Qyb2FhR3dlYmVjMHNBcGlaSEtFT1NNSWpXdXIvTkF2UVhaSFhq?=
+ =?utf-8?B?cFhSbHRlOERWOGFCWWIxQWhUZTRuZnBHYng1bGtXRk95OE9xckg1dFE1RzFR?=
+ =?utf-8?B?ZGJOUHdQY3hwUGpnS0FFeEY3cTRMWTZpQjVYLzRsUmw4a2ZDazcyZXdxaUgz?=
+ =?utf-8?B?dldrL0gxTGxOeS9FRGJ5aS95YlRxQUVFWElsUGNGS0h6SHJRbCtIbG1iaDhv?=
+ =?utf-8?B?RW85dnQvdHhSSHNFc0ozTWFxeDJIVUkvNm5UK1pkNCtIM3VCSXVHaG1Vc2th?=
+ =?utf-8?B?eDlwZE1TN3FZV05JalE1RzFvKzdSdmtvOUk1LzZZZ1VSSWowSjlCUWwwY0tZ?=
+ =?utf-8?B?VDhMdGdyQm5pb3ZqWGl5TDhYcG5iWm56NFhyR3VRSXRRNmlBTSsxejVDdTN6?=
+ =?utf-8?B?azljUXNJSW1vcWZOeUdvcEM3N1Fyci8wVUZaNkQvNjRWck44ckNNcDVRZlph?=
+ =?utf-8?B?dEFkSmdUVUEzNXQrTncwb1hGSmhmQWxWbmpEMm1UOXRlWU5LVUNuZFhxbnBT?=
+ =?utf-8?B?T1VPTnBTY0diVHpaUWZUbjVxd2t5U3lsZ2s0WDBxaGlremRNU0NJNnhrQ2RP?=
+ =?utf-8?B?QU1BQ1gzdmFpUWlpZ1ZJZ2JVQytsYWZEZ0IzcjF0TWUyTnpOc2ptalFXeGFt?=
+ =?utf-8?B?d3U3Q2lZL3grOFNlMUFPNHF1OE1abUtKU0RLVXJWaE1RbWkzeDFodHBsd2lK?=
+ =?utf-8?B?QnFNclE1blV0WGlDdWNhUWhiMmZLUmdhSFVwVWJQZVVYS3lSQ0M0UjFwT1BK?=
+ =?utf-8?B?cmNaT2FKOGZPL3pDSWJVRHFqVFhOUml0QlNDdTZZTThwVFAwcFE3NXZETXhm?=
+ =?utf-8?B?Y1VCbW1mS25pRkZ3WktoeTlLclhORVY2RUdwd1JiV29IQm55NDhBdThlYS9y?=
+ =?utf-8?B?Ulh3TUg4bkF6dEpzeWhETDBTSkU0L0JIOWtmeXI2S2hSc1JRNmlTclAvUVln?=
+ =?utf-8?B?VFdPb0hiMUZXQ1RwVlB1RjVBOWlMMlpmanFmK0k2Q1U2dU5XSHhKZjh4Mnll?=
+ =?utf-8?B?ZlgzanRSSDllQjB2R0V3VWg0b0k4dzBVT2tuUDhRV1QwbDkzUWdyeG9mVzBh?=
+ =?utf-8?B?UE5XcW5MaVpsdHN6bGVmcWQ3a2pYUFN2N2wzaStMTVhZR2JuMzRLa0l5QSsw?=
+ =?utf-8?B?Y2IxNTRleG1nQyszVlZsYm5DMVdsbzRIc1JUS0RidGg2U0FuWCtLVUdaSFdp?=
+ =?utf-8?B?eVNmSEpkdUd5Rm5pSElhYlN3a1MyMWpiZzB3clRMcXdkakh2SzVVK1FsaWhU?=
+ =?utf-8?B?LzVvK3hzTGZQL2dnblRZNG00aFFILy9OMGNLL0dKdm1Ld0IvajB5cDZOUHls?=
+ =?utf-8?B?RzVLR3haQlhObFVmWEdCWEdTOFgrL0QzTTFOT2NJWThjUVhoTFpubGM0S0Qx?=
+ =?utf-8?B?TDgyUUVQZ0paZERpdHc3MlJ0MTBmbFVqMXlmcnpENXI5aStXU3REMEhzaWtm?=
+ =?utf-8?B?QkNRT3ZKSjgwYnlkRTFZSlYwVDgzVEI3U0lNWDdOVzBaMnVIYURySkcrR2pw?=
+ =?utf-8?B?VUx5bXhrRWEzblVDOEY3YWQwQmYyMWVEcXg5Y2FLRmI5Q3R2aXR1ejQyMmdQ?=
+ =?utf-8?B?TDF2Qm91Y0RXdDNITm8xZ0JWVHJLeVo2bjczc0JobExEeFJpS3luSkJFeTZq?=
+ =?utf-8?B?czB5NXJWd1FMWnhjSWluNWJNS3pmSVJtd2pRdjFhMWFWNkpFNmVZTDlQenJD?=
+ =?utf-8?B?S3FLbXY3RHVOd1JDK0RZei9kRkw0dVk5ZVFrRkdCc0p1QzlUTjBaRnkvTDVW?=
+ =?utf-8?B?WXVjWkhjMGt4T1NtVkhnd25NeDVOVGIxbEh6ZFZGTEhhRk9QbXpzWHorSFVR?=
+ =?utf-8?B?bkVmTW9XQTJIdFA4djNKcTQvR2FMeEpKdnZtd2FldlI2SnA0ZmdZamU5YStL?=
+ =?utf-8?B?RWMxOWlQNTQ0MXJCbE4zU2xjL1NTNENHWExqMUZyYWJWdGVUV2ZVbGF1RXJo?=
+ =?utf-8?B?WUFxTUdpY3VBQzh3V09HT1p6SUhsWlNaWWZJd2RkQ2ZhSGNFTDFNQWhTczdZ?=
+ =?utf-8?B?L2krZHF2cXhGSFRMT3V2NmNJZGpuZEQ2R3M2cXlIN3FOc05kYnVaaFg0Zjcr?=
+ =?utf-8?B?enRtVzduRDlVd3dIbkp6bjBZZnpacVFqZkxyT0ROVDNkRG5raFRhdHdVbmJF?=
+ =?utf-8?Q?iHLHia4B6nz5dKsQaubdLa4QE?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 608f0b2a-0c70-44d9-2eae-08dd12ab2389
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5805.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 08:27:20.5338
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +dGGHImUebEQHSPCroLFfMhvIUKQvv3O4ZrVs/ADD5GO81+9Z9mlyEgC+H5FhixWfp6Y85G1h5MAi3TAZ0Dslw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8178
 
-Hi Jonathan & Mikael,
 
-On 01/12/2024 15:20, Jonathan Cameron wrote:
+
+On 12/2/2024 2:35 AM, kernel test robot wrote:
+> Hi Raghavendra,
 > 
->>>> +};
->>>> +MODULE_DEVICE_TABLE(of, apds9160_of_match);
->>>> +
->>>> +static struct i2c_driver apds9160_driver = {
->>>> +	.driver	  = {
->>>> +		.name	= APDS9160_DRIVER_NAME,
->>>> +		.owner = THIS_MODULE,
->>>> +		.of_match_table = apds9160_of_match,
->>>> +	},
->>>> +	.probe    = apds9160_probe,
->>>> +	.remove	  = apds9160_remove,
->>>> +	.id_table = apds9160_id,
->>>> +};
->> First, regarding the integration time/gain/scale parameters. I took a look at the datasheet again as there is a table
->> provided to get lux/count (scale?) for the ALS sensor depending on gain and integration time.
->>
->> It looks like the correlation in the table is almost linear but it's not as there is a loss of precision.
->> For example, at 1x gain with integration time 100ms the lux/count is 0.819 but at 3x the table is stating 0.269 instead of exepected 0.273.
->>
->> Is it still possible to use the gts helpers in that case?
+> [This is a private test report for your RFC patch.]
+> kernel test robot noticed the following build errors:
 > 
-> Ah. Probably not if it goes non linear.  Matti? (+CC)
-
-Disclaimer - I didn't go through the patch and I just respond from the 
-top of my head :) So, please take my words with a pinch of salt.
-
-AFAIR, it is not required that the impact of integration time is 
-_linear_ through the range. The "multiplication factor" can be set for 
-each integration time separately. So, it is perfectly Ok to say:
-
-time 1 => multiply by 1
-time 2 => multiply by 2
-time 10 => multiply by 9 <= not linear, as linear would be 10.
-time 15 => multiply by 15
-
-...
-
-The notable limitation of _current_ implementation is that the 
-"multiplication factor" needs to be integer. So, this may result loss of 
-accuracy.
-
->> Second, regarding the use of the IIO_CHAN_INFO_HARDWAREGAIN channel info.
->> I took a look at a couple of recent drivers, some use the IIO_CHAN_INFO_SCALE to ajust gain type registers.
->>
->> In my use case, it feels like the scale is read-only as it is affected by the gain and integration time and both can be set independently
->> with their respective available values. How should I handle this?
-> The general preference is for the scale to be the primary control.
-> For a light sensor assuming the device doesn't support very long integration times, the
-> trade off is normally set the integration time as high as possible (as that gives lowest
-> noise) then tune the gain as necessary.
+> [auto build test ERROR on bcc8eda6d34934d80b96adb8dc4ff5dfc632a53a]
 > 
-> Another model is to let the integration time be controllable and then try and adjust
-> the gain to keep as close as possible to a requested scale.  Matti has spent more
-> brain power on this than anyone so I'll over to him for more precise suggestions!
+> url:    https://github.com/intel-lab-lkp/linux/commits/Raghavendra-K-T/mm-Add-kmmscand-kernel-daemon/20241201-234153
+> base:   bcc8eda6d34934d80b96adb8dc4ff5dfc632a53a
+> patch link:    https://lore.kernel.org/r/20241201153818.2633616-4-raghavendra.kt%40amd.com
+> patch subject: [RFC PATCH V0 03/10] mm: Scan the mm and create a migration list
+> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241202/202412020401.kTXL2n6L-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241202/202412020401.kTXL2n6L-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412020401.kTXL2n6L-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     In file included from mm/kmmscand.c:2:
+>     In file included from include/linux/mm.h:2223:
+>     include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>       504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>       505 |                            item];
+>           |                            ~~~~
+>     include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>       511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>       512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~~
+>     include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>       518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>           |                               ~~~~~~~~~~~ ^ ~~~
+>     include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>       524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>       525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~~
+>     In file included from mm/kmmscand.c:14:
+>     include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>        47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+>           |                                    ~~~~~~~~~~~ ^ ~~~
+>     include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>        49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+>           |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>>> mm/kmmscand.c:159:36: error: use of undeclared identifier 'vma'
+>       159 |         VM_BUG_ON_VMA(address == -EFAULT, vma);
+>           |                                           ^
+>     6 warnings and 1 error generated.
+> 
+> 
+> vim +/vma +159 mm/kmmscand.c
+> 
+>     145	
+>     146	static void page_idle_clear_pte_refs(struct page *page, pte_t *pte, struct mm_walk *walk)
+>     147	{
+>     148		bool need_lock;
+>     149		struct folio *folio =  page_folio(page);
+>     150		unsigned long address;
+>     151	
+>     152		if (!folio_mapped(folio) || !folio_raw_mapping(folio))
+>     153			return;
+>     154	
+>     155		need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+>     156		if (need_lock && !folio_trylock(folio))
+>     157			return;
+>     158		address = vma_address(walk->vma, page_pgoff(folio, page), compound_nr(page));
+>   > 159		VM_BUG_ON_VMA(address == -EFAULT, vma);
 
-This is the very reason why I wrote the gts helpers. The recently 
-removed rohm-bu27008.c light-sensor driver and the rohm-bu27034.c allow 
-setting integration time. When time is set the driver will also set the 
-gain, and does this so that the scale is maintained. (Eg, if gain caused 
-by time is doubled by the user request, the hw-gain is halved by the 
-driver).
+Thanks .. will fix in next version..  vma ==> walk->vma. Normal config
+did not get this error.
 
-For scale setting I used logic where the scale setting tries to maintain 
-the integration time when possible, and only set the hardware gain. 
-Ideology is that when the driver allows user to set the time, the user 
-is expected to know whether to prefer longer time (and typically better 
-accuracy), or faster measurement with more hw-gain.
+>     160		folio_idle_clear_pte_refs_one(folio, walk->vma, address, pte);
+>     161	
+>     162		if (need_lock)
+>     163			folio_unlock(folio);
+>     164	}
+>     165	
+> 
 
-There are still some corner cases in these drivers where the scale can't 
-be maintained when time is set, or time can't be maintained when scale 
-is set. AFAIR, These drivers chose to in any case set the requested 
-time/scale - which means the userland needs to be prepared to "pick up 
-the pieces" and deal with the other entity changing. Other option would 
-be to deny such changes, but it would limit the use of the hardware - 
-and I hate drivers trying to outsmart the users.
-
-Where this gets really hairy is when there are multiple channels and 
-some of the controls can be set per channel, and some are common for all 
-channels. As an example, I've faced sensors where gain can be set 
-separately for the channels but the time is common for all. Here we may 
-end up in situations where part of the channels can compensate the 
-changes while others can't. Furthermore, there were situations where 
-some of the scales could only be achieved with a specific integration 
-times. This can get very confusing for users.
-
-In order to make it somehow tolerable the gts helpers support also 
-advertising only scales which can be supported with currently selected 
-integration time via the "available_scales". Also, I strongly recommend 
-having at least a read-only hardwaregain to help understanding which 
-part of the scale is contributed by time, and which by hardwaregain. I 
-think this is very helpful when debugging ;)
-
-I know Jonathan (and maybe rest of the world :) ) prefers keeping the 
-scale as the single main way of changing the gain. Still, my personal 
-opinion on this is that there are cases, where having both the 
-hardwaregain and integration time directly changeable would be the 
-simplest and clearest solution.
-
-Putting my opinions aside (as this is not a battle I feel like fighting 
-- nor do I feel I am the best expert on this!), with the current 'one 
-scale to rule them all' approach, my recommendation is to consider if 
-always using largest integration time and smallest hardwaregain to 
-achieve the requested scale fits your users. (Also, I think your case 
-where the impact of integration time is not strictly linear will cause 
-some scales to be 'almost same' but not quite. I am not sure if it makes 
-sense to support all of these, or just always round to the scale where 
-the integration time is longest). If yes, then maybe do it.
-
-If you think the longest times may cause unacceptable wait times for 
-some users, or that the small scale differences really matter, then you 
-may want to go the route bu27008 / bu27034 drivers took - but it may get 
-hairy.
-
-Finally, maybe taking a look if the integration time multiplier in gts 
-helpers could support fixed point wouldn't be completely futile(?) No 
-promises on that route though, I haven't considered this when writing 
-those so it may lead to dead end - but one never knows before taking a 
-look, right? :)
-
-Ha. Looking all the letters I typed, I feel I helped really little while 
-being very verbose ... Sorry bout that but I really don't have a great 
-recommendation :(
-
-Yours,
-	-- Matti
