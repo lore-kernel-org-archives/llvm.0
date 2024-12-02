@@ -1,190 +1,117 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82461D63CA
-	for <llvm@lists.linux.dev>; Mon,  2 Dec 2024 17:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C6FE1D90B3;
+	Mon,  2 Dec 2024 17:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733160485; cv=none; b=rEuuMnS5vVq4kWtVfPqozWXmq4SeItO5XOpzbM7YEUQdCg1k6SVfcdINwDs7R3KPykEFFnDUspgz5JbuQC11JvaYj9rrFpxLHt/y1KkUyW5vAdnwSn5u+2/iUSTwDBuRMKUfEBvH3+ADqLlUkJxN1Um6O98Sa2EcG0wHuTWVWTU=
+	t=1733160904; cv=none; b=hnyINPmjWfycBzQGJe8VPx1ae7P7YpRPojJr3ELsEa2fiGHrrXCcL5yJJdMb9gyvcEVHz13embUNO3QW5YMd/5jBQtNYPHV+C1bvVe9of/Np1JAAp8Qp8oI5UBgjAKc2lPvVNxD5RFFyjmJJIhvt4cbTe+5zOyS8JjZByVNDt/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733160485; c=relaxed/simple;
-	bh=r/3/WvrUYpNr+tcjXSjzxvxpguA79BHRy4L5fPvtBqs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lVvZcWAuAFYpoCqTfgfiGLpM8sP6PC6QSSug7vhXLxVFHaqDrHAH7SRF1nsaxNNTNgtCxYekoSSoZWFEGqpdsgnyhFmAz0HS3Yk6JdHb5riW2WzfTZCW8oIjHjWsUQdUxXPFWwZQ0/2r4pIwETGeMKhva0x5Tv7n8gCMRpmroKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DYlZuBhN; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1733160904; c=relaxed/simple;
+	bh=5SkdVpyxMkwcefHUvrmeRmooVspzWLLjyCNkLAyYF/4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JlYSDkUvLpeILBF+771Th+HASIVKqkavtmXhk0lskC5/c7TAzlz1H41IWjBOoiuTIqP8hkcC8tXAcm961M0aC8P7aCxR0wCvXmOO0hj5i0hEDparm7DRjnEpdRKEj6paLzyIlSMzIlNxFBrIqut93Hk+fP8gLvgrTwdOFd+sNzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=krYcOchp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DYlZuBhN"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7fc99fc2b16so2562050a12.3
-        for <llvm@lists.linux.dev>; Mon, 02 Dec 2024 09:28:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733160483; x=1733765283; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zV7VHVGHL7Rl9Gp4X03jHFgxr0pgqWsD/7qzPnBvxDs=;
-        b=DYlZuBhNNN0fIau0wbzEZPHjrLfsAGLwf6+rYQ1yJyruUA2LhG9h4kmx4/0hXqK9qM
-         lo007pflB+W4yk6GZACITCLdfpGdf1Cd7Z/lcyDwNn0JrNNFLSuPaNg1HQbQTVRnwogp
-         Dyjt5qlest2COgGdiQnANhLV8ctH+2jKMuiig=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733160483; x=1733765283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zV7VHVGHL7Rl9Gp4X03jHFgxr0pgqWsD/7qzPnBvxDs=;
-        b=KYH9wZQDj78yX3qyi+I2IgMyAB1YIScBi5+fDIIpna4w2VcFl8tWyg1yJala44SaUc
-         DmuRxlqOF/mFGiyRtUnc7bm4Jf+0oGWShHUiimMw4/zzZ2ncV4wwwO6dQkxzWxp0PSA9
-         XdT/oLdPZfkbjAhGnc/N+eMReRb8K8svpFv/CxmeU2jcFtJjt2thZIXjQ6W2usUdQhvK
-         brtzYWNv9dIGfbzjXBZnIlR4c6/XUo9mn6/Uh1gaUaajbRFVw5pT2hIB+GtHM8BZAGQz
-         mvvhRDzhfseWa95rCF+i3SLGJ7iCZzIkPvqAAgDIlshNJNxXrrIhD9rIv8RAsK68tA3t
-         bHSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOvpns5dWtLeblAZu5ub2BvxJx/AuuEwaFMFuqeo5WLadOtWJDbrMbNlhBl3G7Mfq5BY0S@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3gNB5zQmw+3NfYVaRB5sd3YUn1165I/i9qryFbEm5IsNfW/Wv
-	A76/SEpg5UAoQInGCu6cJYiLcTHhda/iJNCM3LsYpP/30suNL3IwxS0hsaos+LZFTu5BvcFOlIk
-	=
-X-Gm-Gg: ASbGncuEhWd0orVkep3y9fZpv1oMuwqoeYrhyqQgSq9nkbKxSwLemhyufyKInE5nQ+E
-	26peYBIlAhZsJCif1QzW4CyhdMw8Nv/e8gc539kGNBBfaZvO1uxdHgkrdWDpbP5fz0fsorcv4kC
-	yril0+548Qp5EABJrGmKSURbLgkf4TKupCc2lMW/MojczFehhrEqjuNnxRtiCwbxzTULfWEHs19
-	+Lt6/BR4tv6IqrMCbZkjKXePiJeDq5Gm6eKIXHeBPZd90yEiMDVx0uVUtiScB4X7LhIoBBGRyvl
-	kVvRZ9MpCdkBFpS2
-X-Google-Smtp-Source: AGHT+IE1wMktysdl6EdA45kXAUIA16hdhR2CO9bQf3Vk0Bhg7CZgzKURDJU44PywXT4e0vk1O6enCA==
-X-Received: by 2002:a05:6a20:9144:b0:1e0:c50c:9842 with SMTP id adf61e73a8af0-1e0e0b5cc99mr39791914637.31.1733160482664;
-        Mon, 02 Dec 2024 09:28:02 -0800 (PST)
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com. [209.85.210.169])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7254176148csm8776164b3a.19.2024.12.02.09.28.00
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2024 09:28:00 -0800 (PST)
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7256dc42176so1410613b3a.3
-        for <llvm@lists.linux.dev>; Mon, 02 Dec 2024 09:28:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU37cS9sokkPjTa2c7YDeopz5DZO+Fn23l/EQ42+vEFCafmknENI/3IGIIg2+K5kstdEj6Y@lists.linux.dev
-X-Received: by 2002:a05:6a00:1390:b0:71e:5a1d:ecdc with SMTP id
- d2e1a72fcca58-7253012f56dmr32940878b3a.17.1733160480025; Mon, 02 Dec 2024
- 09:28:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="krYcOchp"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EB054C4CED6;
+	Mon,  2 Dec 2024 17:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733160904;
+	bh=5SkdVpyxMkwcefHUvrmeRmooVspzWLLjyCNkLAyYF/4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=krYcOchpdZfTOGmmZmYXGkkzng0VBYzBaTIPS/JdWNiJdmt/4S7+V2deZeuJtDiHJ
+	 5bOfjWx9PMCJkw4vWMJA+j7RGJgyQT3MCvZz+ywWGgXkUPQ1I8zhp2RRNDd7wmPgUC
+	 KVr3TdRx7r3vS7sNZQQ4VuZSeMJ1Co4MyFc7SbZRWDfa4cIk4lQ19T0FRsrpwOa17T
+	 JopKvCO/OnNKT3V7n07PfE9Ll3My7kWEoWbthp4JMgarfO7M35ovTZ+SUQIDeAkdh8
+	 VxQs0KDQFLoqYMNE9XZ9vIlYg+Eia5POewyoXqK+ltXanlAIbCfNk8+zvx51tcJKic
+	 OeLS9BafEnm7Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2CC9D7833C;
+	Mon,  2 Dec 2024 17:35:03 +0000 (UTC)
+From: Vincent Mailhol via B4 Relay <devnull+mailhol.vincent.wanadoo.fr@kernel.org>
+Date: Tue, 03 Dec 2024 02:33:23 +0900
+Subject: [PATCH 01/10] compiler.h: add statically_false()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241202-fix-vmstat-v1-1-c995585b7df5@chromium.org> <20241202161811.GA2843691@thelio-3990X>
-In-Reply-To: <20241202161811.GA2843691@thelio-3990X>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 2 Dec 2024 18:27:48 +0100
-X-Gmail-Original-Message-ID: <CANiDSCt_RALHi4O313bzi=Grr=sCV+Y8WmHmOF8JpttHw6nFpA@mail.gmail.com>
-Message-ID: <CANiDSCt_RALHi4O313bzi=Grr=sCV+Y8WmHmOF8JpttHw6nFpA@mail.gmail.com>
-Subject: Re: [PATCH] mm: vmstat.h: Annotate operations between enums
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241203-is_constexpr-refactor-v1-1-4e4cbaecc216@wanadoo.fr>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+In-Reply-To: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+To: Linus Torvalds <torvalds@linux-foundation.org>, 
+ David Laight <David.Laight@aculab.com>, 
+ Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Yury Norov <yury.norov@gmail.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Jani Nikula <jani.nikula@linux.intel.com>, 
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
+ Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+Cc: linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org, 
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1089;
+ i=mailhol.vincent@wanadoo.fr; h=from:subject:message-id;
+ bh=MUJOQQOOJL9dYDVaPT65KhZRSmD+ZVJ1pjvxSAixArY=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDOm+74/KH7/U7qegXjXTofXb3TYljXrmuVYbMjW/tLXe4
+ w0P49vQUcrCIMbFICumyLKsnJNboaPQO+zQX0uYOaxMIEMYuDgFYCKiExj+h59n32w4XUS9Q6Hd
+ rUTL9LrKv/cufhltT6M9vi38WfriOSPDth1s9Y4XTgudV69oFplrmhzR2RRm0jljjlHtl08TxWX
+ ZAQ==
+X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp;
+ fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+X-Endpoint-Received: by B4 Relay for mailhol.vincent@wanadoo.fr/default
+ with auth_id=291
+X-Original-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Reply-To: mailhol.vincent@wanadoo.fr
 
-On Mon, 2 Dec 2024 at 17:18, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Ricardo,
->
-> On Mon, Dec 02, 2024 at 04:02:19PM +0000, Ricardo Ribalda wrote:
-> > Compiler is confused when we do arithmetic operations between two
-> > different enum types.
-> > In this case NR_VM_STAT_ITEMS and NR_LRU_BASE are not actual
-> > enumerators, they are used to find the first and the count of the
-> > enumerator.
-> >
-> > Add a casting to int, to avoid the following llvm 9 warning:
-> > ./include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >   505 |                            item];
-> >       |                            ~~~~
-> > ./include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >   512 |                            NR_VM_NUMA_EVENT_ITEMS +
-> >       |                            ~~~~~~~~~~~~~~~~~~~~~~
-> > ./include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-> >   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> >       |                               ~~~~~~~~~~~ ^ ~~~
-> > ./include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-> >   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> >       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-> >   525 |                            NR_VM_NUMA_EVENT_ITEMS +
-> >       |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->
-> I think it is just better to disable this specific warning for normal
-> and W=1 builds so that it is not visible for people, as this objectively
-> makes the code uglier:
->
-> https://lore.kernel.org/20241008005136.GA241099@thelio-3990X/
->
-> https://lore.kernel.org/20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org/
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Thanks for the heads-up.
+For completion, add statically_false() which is the equivalent of
+statically_true() except that it will return true only if the input is
+known to be false at compile time.
 
-Either disabling the config or this patch will work for my usecase (media-ci).
+The == operator is used instead of the ! negation to prevent a
+-Wint-in-bool-context compiler warning when the argument is not a
+boolean. For example:
 
-FWIW, we only need 3 patches (plus this) to build media with W=1 and llvm19....
+  statically_false(var * 0)
 
-I do not think that this patch is very ugly :P
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ include/linux/compiler.h | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> I have just pinged that patch for acceptance.
->
-> Cheers,
-> Nathan
->
-> > ---
-> >  include/linux/vmstat.h | 9 ++++-----
-> >  1 file changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
-> > index d2761bf8ff32..32c641d25bea 100644
-> > --- a/include/linux/vmstat.h
-> > +++ b/include/linux/vmstat.h
-> > @@ -501,27 +501,26 @@ static inline const char *zone_stat_name(enum zone_stat_item item)
-> >  #ifdef CONFIG_NUMA
-> >  static inline const char *numa_stat_name(enum numa_stat_item item)
-> >  {
-> > -     return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> > -                        item];
-> > +     return vmstat_text[(int)NR_VM_ZONE_STAT_ITEMS + item];
-> >  }
-> >  #endif /* CONFIG_NUMA */
-> >
-> >  static inline const char *node_stat_name(enum node_stat_item item)
-> >  {
-> > -     return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> > +     return vmstat_text[(int)NR_VM_ZONE_STAT_ITEMS +
-> >                          NR_VM_NUMA_EVENT_ITEMS +
-> >                          item];
-> >  }
-> >
-> >  static inline const char *lru_list_name(enum lru_list lru)
-> >  {
-> > -     return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> > +     return node_stat_name((int)NR_LRU_BASE + lru) + 3; // skip "nr_"
-> >  }
-> >
-> >  #if defined(CONFIG_VM_EVENT_COUNTERS) || defined(CONFIG_MEMCG)
-> >  static inline const char *vm_event_name(enum vm_event_item item)
-> >  {
-> > -     return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-> > +     return vmstat_text[(int)NR_VM_ZONE_STAT_ITEMS +
-> >                          NR_VM_NUMA_EVENT_ITEMS +
-> >                          NR_VM_NODE_STAT_ITEMS +
-> >                          NR_VM_STAT_ITEMS +
-> >
-> > ---
-> > base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
-> > change-id: 20241202-fix-vmstat-88968bcaa955
-> >
-> > Best regards,
-> > --
-> > Ricardo Ribalda <ribalda@chromium.org>
-> >
-
-
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 469a64dd6495fefab2c85ffc279568a657b72660..a2a56a50dd85227a4fdc62236a2710ca37c5ba52 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -314,6 +314,7 @@ static inline void *offset_to_ptr(const int *off)
+  * values to determine that the condition is statically true.
+  */
+ #define statically_true(x) (__builtin_constant_p(x) && (x))
++#define statically_false(x) (__builtin_constant_p(x) && (x) == 0)
+ 
+ /*
+  * This is needed in functions which generate the stack canary, see
 
 -- 
-Ricardo Ribalda
+2.45.2
+
+
