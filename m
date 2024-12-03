@@ -1,43 +1,25 @@
-Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA68A1F76A8
-	for <llvm@lists.linux.dev>; Tue,  3 Dec 2024 15:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993EB646;
+	Tue,  3 Dec 2024 15:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733238570; cv=none; b=W9e9OpfM6axCa9dhRm/NZdgtdr6BiBZ5g8EasPSnmdBt5rA96zDC2vW/0SycoVSQPWRkg0w2IuuCGdjiKWgeFNhNifBOtSjuQyV2E7I6hIJFeC/bS0rqor0ksLNf4Zg3umnXf/fZdhJrjMp/G8L2XL4sQe69nJdR4lehzM8NXlY=
+	t=1733239850; cv=none; b=jv8KDvtDb+dGpJqezPPEZUNJ5ijr2LftDuGzrZOgdyQ2bv+B6h1LRMYrS1LgXRIVji2OKnWOhaECPGcTmcwdyMgM1mqxvs8lsKyH7xRC8+Dk1wcFHDglfKgycZPWoHIbKxVruSNLH3FD3hpXSB1BfrlhRR1vnXIKULsTkPiIbQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733238570; c=relaxed/simple;
-	bh=sB7bGshRXluI0jR7pLuSjiwGvmpeRBcbuL6zGU+klIA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=dJM0Q7VaIZvH4X/+c/URwCT56+o9zIEHYCxrmkT/+/MZ8rzXi4hbJxDAPj4RIUcN3250leSqoJj9ZI8ZCD2WCHCVb2RWlD0iY8pLDJ6PZSDCc+MHCE7tUAOwKxhcIyjBkpJ9l2TOZHWzmMfPNbyT/SvYcApN/qayFoqUyGVlkv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=llHi3zmx; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=m5S6eSbu; arc=none smtp.client-ip=89.207.88.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="llHi3zmx";
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="m5S6eSbu"
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 557CDE000C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
-	t=1733238564; bh=KVf8hUXjuSbpowAqOIXHXS+rzS1wgLVqN7lbHQj+6/k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=llHi3zmx7xcvhjyT89cZ2koxmci/3H0mU5tImgKXosoBVk7NUx1KTsYI1ab1FsxTt
-	 DT+foFkWPf2/WYAzP2bbUy2zxZOqZ1oYjHg/IvEu2gfNYKk/uVkdThv2ZIi5HcS9us
-	 ucAtBJRRMQrajTP9grIZfw2tDXHOmIYT6iRuQPpJaqSxLT7idu1BKB++/JxwwkkacN
-	 7Ribugnj+ALzHJCQMgjWR0okLR4Y1I/rVJ0VHDpLEIqllJD0veIIp6ExCXv+ynkOHR
-	 LwPaPa0YbiuJBNGm/m9GCe1OcnUFoDvaZ8LfQhv9X0qCg/QN/VqQkdhlsaxq54NMav
-	 bKvk0r1BFOvbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
-	t=1733238564; bh=KVf8hUXjuSbpowAqOIXHXS+rzS1wgLVqN7lbHQj+6/k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=m5S6eSbuDOMCFjzdM3z0oVwZE6BnHmcMVD0V+Aky94CumetunpIgGS8DuW61OO+6s
-	 EyFiQsejo+6bFTCTuZMqnisJezak/5+TPqxROaP/qfKLQYZ8gCdNLk6HZlzHbGrlmB
-	 EoN31rvuM4IP2Gs+M1/WErfcLKqCKHsr/JTHSJZ7TaSHy/J7Tv0iaCyn1/3XLKEXhj
-	 IkMkZKpbVRi8PxsDaV7QFocUFJy22wo/u5TrkdTO5Yizk3GXfuJywA4RvIahwG+7r2
-	 MczUiRj9Lgnn0+aImev/go4OcZipcyP1WMZJZ/y0RH8vXmlK6aqytl8tQLXMh0t/9h
-	 etVYJbKG1XYQA==
-Message-ID: <990b942d-fe91-4bda-a38e-1eb47f2f6086@yadro.com>
-Date: Tue, 3 Dec 2024 18:09:22 +0300
+	s=arc-20240116; t=1733239850; c=relaxed/simple;
+	bh=sWHs7nX7SOc89lcoKsFsoe9Ki9Vx7/l7ucI/NQ4jw1Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iYTlwxjbTpniZbcnS4IU1aXKhbG3zmQ+IGvtKsmniB4YtouUxRvm0Xl7Fk2cGMO0LPF+6yUt6pVGG2zwBD6vvUxM4hvoe2duRf96ZmKfc7w8cX7+odEuXDVZDtxwY+9ftKUSWOoFCFP6WOjIm/U2r1BZIMN9D7HMvufs69JWfGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB204FEC;
+	Tue,  3 Dec 2024 07:31:15 -0800 (PST)
+Received: from [192.168.20.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26B2B3F71E;
+	Tue,  3 Dec 2024 07:30:44 -0800 (PST)
+Message-ID: <a64a21cc-6d10-4e8f-9ab9-87aca44ca858@arm.com>
+Date: Tue, 3 Dec 2024 09:30:43 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,77 +27,114 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
- improvements
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Andy Chiu
-	<andybnac@gmail.com>
-CC: Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor
-	<nathan@kernel.org>, Justin Stitt <justinstitt@google.com>, Bill Wendling
-	<morbo@google.com>, Nick Desaulniers <ndesaulniers@google.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Paul Walmsley <paul.walmsley@sifive.com>,
-	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<llvm@lists.linux.dev>, <bjorn@rivosinc.com>, <puranjay12@gmail.com>,
-	<alexghiti@rivosinc.com>, <yongxuan.wang@sifive.com>,
-	<greentime.hu@sifive.com>, <nick.hu@sifive.com>, <nylon.chen@sifive.com>,
-	<tommy.wu@sifive.com>, <eric.lin@sifive.com>, <viccent.chen@sifive.com>,
-	<zong.li@sifive.com>, <samuel.holland@sifive.com>
-References: <20241127172908.17149-1-andybnac@gmail.com>
- <87ldwxot7i.fsf@all.your.base.are.belong.to.us>
+Subject: Re: [PATCH v2 1/1] arm64: rsi: Add automatic arm-cca-guest module
+ loading
+To: Gavin Shan <gshan@redhat.com>, kernel test robot <lkp@intel.com>,
+ linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ steven.price@arm.com, sami.mujawar@arm.com, suzuki.poulose@arm.com,
+ will@kernel.org, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+References: <20241203000156.72451-2-jeremy.linton@arm.com>
+ <202412031348.bp5i3ws2-lkp@intel.com>
+ <b1923d68-726a-4864-8661-54588a634d95@redhat.com>
 Content-Language: en-US
-From: Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <87ldwxot7i.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <b1923d68-726a-4864-8661-54588a634d95@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: T-EXCH-10.corp.yadro.com (172.17.11.60) To
- T-EXCH-10.corp.yadro.com (172.17.11.60)
 
-On 03.12.2024 15:18, Björn Töpel wrote:
-> Andy!
+On 12/3/24 2:56 AM, Gavin Shan wrote:
 > 
-> "atomic" spelling in the Subject line.
 > 
-> Andy Chiu <andybnac@gmail.com> writes:
+> On 12/3/24 4:03 PM, kernel test robot wrote:
+>> Hi Jeremy,
+>>
+>> kernel test robot noticed the following build warnings:
+>>
+>> [auto build test WARNING on arm64/for-next/core]
+>> [also build test WARNING on linus/master v6.13-rc1 next-20241128]
+>> [cannot apply to kvmarm/next soc/for-next arm/for-next arm/fixes]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ 
+>> arm64-rsi-Add-automatic-arm-cca-guest-module-loading/20241203-080347
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/ 
+>> linux.git for-next/core
+>> patch link:    https://lore.kernel.org/r/20241203000156.72451-2- 
+>> jeremy.linton%40arm.com
+>> patch subject: [PATCH v2 1/1] arm64: rsi: Add automatic arm-cca-guest 
+>> module loading
+>> config: arm64-randconfig-004-20241203 (https://download.01.org/0day- 
+>> ci/archive/20241203/202412031348.bp5i3ws2-lkp@intel.com/config)
+>> compiler: clang version 20.0.0git (https://github.com/llvm/llvm- 
+>> project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ 
+>> archive/20241203/202412031348.bp5i3ws2-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new 
+>> version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202412031348.bp5i3ws2- 
+>> lkp@intel.com/
+>>
+>> All warnings (new ones prefixed by >>):
+>>
+>>>> drivers/virt/coco/arm-cca-guest/arm-cca-guest.c:224:21: warning: 
+>>>> attribute declaration must precede definition [-Wignored-attributes]
+>>       224 | static const struct __maybe_unused platform_device_id 
+>> arm_cca_match[] = {
+>>           |                     ^
+>>     include/linux/compiler_attributes.h:356:56: note: expanded from 
+>> macro '__maybe_unused'
+>>       356 | #define __maybe_unused                  
+>> __attribute__((__unused__))
+>>           |                                                        ^
+>>     include/linux/mod_devicetable.h:607:8: note: previous definition 
+>> is here
+>>       607 | struct platform_device_id {
+>>           |        ^
+>>>> drivers/virt/coco/arm-cca-guest/arm-cca-guest.c:224:55: warning: 
+>>>> unused variable 'arm_cca_match' [-Wunused-const-variable]
+>>       224 | static const struct __maybe_unused platform_device_id 
+>> arm_cca_match[] = {
+>>           |                                                       
+>> ^~~~~~~~~~~~~
+>>     2 warnings generated.
+>>
+>>
+>> vim +224 drivers/virt/coco/arm-cca-guest/arm-cca-guest.c
+>>
+>>     222
+>>     223    /* modalias, so userspace can autoload this module when RSI 
+>> is available */
+>>   > 224    static const struct __maybe_unused platform_device_id 
+>> arm_cca_match[] = {
+>>     225        { RSI_PDEV_NAME, 0},
+>>     226        { }
+>>     227    };
+>>     228
+>>
 > 
->> Changes in v3:
->> - Add a fix tag for patch 1
->> - Add a data fence before sending out remote fence.i (6)
->> - Link to v2: https://lore.kernel.org/all/20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com/
+> The definition may have to be something like below, to avoid the 
+> compiling warning.
 > 
-> Hmm, the fixes tag was not included.
-> 
-> Also, there was a lot of comments from v2 that was not addressed:
-> 
->   * Minor spelling nits
->   * Breaking DIRECT_CALL, and include Puranjay's CALL_OPS work in the
->     same series for DIRECT_CALL, to avoid breakage.
+> static const struct platform_device_id __maybe_unused arm_cca_match[] = {
 
-Yes, FTRACE_WITH_DIRECT_CALLS is currently broken. If I try to insmod 
-samples/ftrace/ftrace-direct.ko, it reports a failure:
+I should have tested this with clang rather than copy/pasting the 
+utilization from somewhere else! It looks like a number of other kernel 
+users are putting it before the '=', but its sorta annoying because it 
+seems like the kind of warning that should be suppressed globally for 
+this case (module device description in module that can be built in).
 
 
-[  179.531472] ------------[ ftrace bug ]------------
-[  179.531761] ftrace failed to modify
-[  179.531786] [<ffffffff8005f9ac>] wake_up_process+0x0/0x24
-[  179.532577]  actual:   97:e2:fa:ff:13:00:00:00
-[  179.533211] Setting ftrace call site to call ftrace function
-[  179.534409] ftrace record flags: 99980001
-[  179.534692]  (1)     tramp: ftrace_caller+0x0/0x34 
-(call_direct_funcs+0x0/0x14)
-[  179.534692]  expected tramp: ffffffff01b0d000
-...
 
+>         ...
+> };
 > 
-> I'll have a look at the barriers (which came up at plumbers)!
-
-Thank you!
-After this series and the CALL_OPS work are done, dynamic Ftrace for 
-RISC-V will be even more valuable in production use cases.
-
-> 
-> 
-> Cheers,
-> Björn
+> Thanks,
+> Gavin
 > 
 
-Regards,
-Evgenii
