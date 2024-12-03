@@ -1,208 +1,180 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023092.outbound.protection.outlook.com [40.107.44.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0261126C16;
-	Tue,  3 Dec 2024 02:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733192102; cv=none; b=Ta4H8InxC2Q6OBucaSujxek3mztUA0F3Th4SzCCmZxC6V0qnhoTzw83tkokTvYBkzk2d3QgVj+I66VZJrUAsqC5eH/hJSttWBimbNx+4OSnWce2l5pd6BPHG2IfiTKtWxn9xF9jcpT+OukH+zXjop7Wa2pxQPnUid6JbtSUT7Ug=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733192102; c=relaxed/simple;
-	bh=KMl61z9tsvm3GrPnsl3tt1vpi0kGYRETOOyBfgEWcZo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=osevCd5CcKkrrJC4UXcL5/XKRmq0h3o3l+JJmHK/zn+tZPGjx6c5fP9/EWSfL+3RVTnSFGqsplCre1d0tqakm4LaQ6wNcN7VPaE1aA/ilT4aaKqKS5q+IHZkpurVrNf+gnJoh1c1C4GE0eB/mvmsqbcYdjEHVB74dqm8pMfg5LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j/hdNtaI; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7629817555
+	for <llvm@lists.linux.dev>; Tue,  3 Dec 2024 02:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733193388; cv=fail; b=juQZY98/Z+xbmyhZ3Z8BTILufBUu3p3wWm52HgWVBEdDsytsUYnEEJ1DT5WTuSgzBaF7AsgVtPFJlwOpYUhLLZJEbytEZy8j1TzUDmca3Tn1ljtfe3QomYXbBuLLQdIPTvK2U8ll2H5DNj63HApY340Ee0PllyWfWXGASk9vbhA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733193388; c=relaxed/simple;
+	bh=z+aCgE/vr9Q++2MmGL2m7ElnSHnEHn+3/bzvgfy6rho=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=HzISjYr3fkSZCyDbdxUrTJNh1gnRzJ+f1khbnrPwhExxWJDdJUq+jokHjcKAo0kxHKWnw6zFr89lOK5bPhONRtmjLeiq0yis5H2iNFF8KTFZM30l0cXcQmc92BAKJCKGa4twni0fj/gvZhf0jelQIc3O1WtWDEys+pueGrt8Be8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jaguarmicro.com; spf=pass smtp.mailfrom=jaguarmicro.com; dkim=pass (2048-bit key) header.d=jaguarmicro.com header.i=@jaguarmicro.com header.b=iiDqgpec; arc=fail smtp.client-ip=40.107.44.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jaguarmicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jaguarmicro.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j/hdNtaI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733192100; x=1764728100;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KMl61z9tsvm3GrPnsl3tt1vpi0kGYRETOOyBfgEWcZo=;
-  b=j/hdNtaIcReJq7FPrcFo/ADKrlQRP2d8H0nhADMV1FLxTCwhIEZUO0hf
-   zdBFQFmRwZSCAVhzciUtcwR86bnML0rLrsIZpmWleXxKOI7m9z1p8ncSd
-   uypznVOASuo4kN58TS0XCWsnr/oBHACOq0HhShTv8Q3VpS2e0XkJSNUc8
-   /q6zv/o7ZbWhVO8bFnbiWWUIDAsoQdI/wk/Z4JmWVSL5OVmzPaGC7GDaT
-   jvJKxOMIqsSqTcc3aCbqbo5g4vS+6uSwCLwdZwCRMXCgiLE9v8p5Y4pnG
-   5yzdFvC6wW1QgynFGvwZWQV+7cYNDNoAlU+WzE81bb+xKczRRqg5dREbg
-   A==;
-X-CSE-ConnectionGUID: +mejQq+pQCeHNFdvUHn9EA==
-X-CSE-MsgGUID: S7R/0ntaRZ6kFOxmm6xX/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="36242356"
-X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="36242356"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 18:14:59 -0800
-X-CSE-ConnectionGUID: OlUF1z+yR1uiRGntj/TXVQ==
-X-CSE-MsgGUID: HH3AAsiUT/yQ8lvZl+QkBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="93693481"
-Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 02 Dec 2024 18:14:56 -0800
-Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIIRB-0003AP-17;
-	Tue, 03 Dec 2024 02:14:53 +0000
-Date: Tue, 3 Dec 2024 10:14:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gabriele Monaco <gmonaco@redhat.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gabriele Monaco <gmonaco@redhat.com>
-Subject: Re: [PATCH 1/2] sched: Optimise task_mm_cid_work duration
-Message-ID: <202412031029.B7lLh63F-lkp@intel.com>
-References: <20241202140735.56368-2-gmonaco@redhat.com>
+	dkim=pass (2048-bit key) header.d=jaguarmicro.com header.i=@jaguarmicro.com header.b="iiDqgpec"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OGvagOEMzkLnRkUzCgbiQkD31Zh03TLHqDBZZou2/kFjgh7KdpYDejaSuKOYS2lZAaGCdXy7IX1NwMX5ei2/4H6VuVxVmmuStXymQlxGRHObIwr1hoEJMUTR1GQcGKJijhCEEMCCGKMuYbJZD5eBTB9BjRrZKqch9KHq5kPP5/v/WqA7lcuySkatThOq93w+utupCp8NQEKJBTZzqhJS3quI6O+o9yylpUiwuKkrQpayJRBQ3gY4uQJ3q/c9FN6d5b0D4QlQlzpKcQA67Rw4G3M22+ubYm/vZtTVU+aQ2U6gGKiHrT9S1tea9K/fx2L0srON0dPVGYsIshr3A/midw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3NlcPSssFiT/Xbd9EZOQilwl4flvU6ARypuFSQmmKnQ=;
+ b=TkXWONyb+l4svDBGXPyXvmqld2Anl2PD+SxJQcoPsxskPgBrzdgRLTpTG+nDyICORZg4X5BqOwTf86ruI93sxPTwSC/1ftuwKKqXuixV2+Yey2lBH7VciR+xOgWd3RWC04i5cZDN3uNnRbK5WhKBx6xWTb7t36eqM5oT/5bNRuC4Td5itGTvSoAwmwhC4kXa+vtH978cCJQ+SAhhFPTxfpQpBIeSyNEWo6BoghY/WvKO8PRkb24uySXLsLz2PQznuxhX6LWamK4TVu/bBdXKhC2FiAYsx8toFOFiLpGGV+n9+46ktW11B/lD+sJH2Oxf7ng/tboe7BENGYWaw5qmYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
+ header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3NlcPSssFiT/Xbd9EZOQilwl4flvU6ARypuFSQmmKnQ=;
+ b=iiDqgpecueLOmfsSslobHXWEYUepc8MXLDhBynOpPnWWNk/g+o7qBKmfcwz2I/NhPtZr+iDroNCyZDeAUXhqZmYiukrwWKDqYgYVLO/tMkHh08TvgoVMThUixjuqhjGFN+YQfik40iw1sdiWwKYR+wK0zA+XDVZTN0z5LBl/5PSIMUlJqyD2bQWZzD9Y0Ltj/34OhZDHAWm5mGAHZOetDPWF1Im2Wr2ndq1yq3SVWO8HzpJU9Yh5opa4Icl8ZJgu54zdjxIIl4DdRMbmpdNMwqMfyMUy4jxf5K9gi8RHvoOJpqJMqoVhC+MIF3hbJ+SnEB9Eu5DO8Yr2+/q1SyrXtg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
+Received: from SEYPR06MB6756.apcprd06.prod.outlook.com (2603:1096:101:165::11)
+ by SEZPR06MB5764.apcprd06.prod.outlook.com (2603:1096:101:aa::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.6; Tue, 3 Dec
+ 2024 02:36:17 +0000
+Received: from SEYPR06MB6756.apcprd06.prod.outlook.com
+ ([fe80::922f:a649:adbf:6634]) by SEYPR06MB6756.apcprd06.prod.outlook.com
+ ([fe80::922f:a649:adbf:6634%5]) with mapi id 15.20.8230.008; Tue, 3 Dec 2024
+ 02:36:17 +0000
+From: "Yuxue Liu yuxue.liu@jaguarmicro.com" <yuxue.liu@jaguarmicro.com>
+To: llvm@lists.linux.dev
+Cc: yuxue.liu@jaguarmicro.com
+Subject: [PATCH v2] vdpa/vp_vdpa: implement kick_vq_with_data callback
+Date: Tue,  3 Dec 2024 10:36:18 +0800
+Message-Id: <20241203023618.1743-1-yuxue.liu@jaguarmicro.com>
+X-Mailer: git-send-email 2.33.0.windows.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0130.apcprd03.prod.outlook.com
+ (2603:1096:4:91::34) To SEYPR06MB6756.apcprd06.prod.outlook.com
+ (2603:1096:101:165::11)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241202140735.56368-2-gmonaco@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEYPR06MB6756:EE_|SEZPR06MB5764:EE_
+X-MS-Office365-Filtering-Correlation-Id: b34a1b68-21ff-4dcd-442d-08dd13434340
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|1800799024|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?SuX0L6KtakwInBxcFAPf7DNxAUz6NqzbZXzOZeCiB7EnYi3+QzmY2CsGCTSy?=
+ =?us-ascii?Q?bHYRoHk0O15q1OLqdSK5kfrZUF1MrDiVsM/0sTEZ3TcQBzzYV42LAGQZraYo?=
+ =?us-ascii?Q?OjV7bQgr9UhRuTn5eybmDeHNC1K0hDvmk8F5d9MMF0emIcfimxB02ucsKGXL?=
+ =?us-ascii?Q?32onXNX47jzAdmeNFa5+pEa4r8+l6iI0s6au2WIP378FImLJMnK1GRQVxs8K?=
+ =?us-ascii?Q?CCgUGsqQPWdCfYaoCMFQ+b3tMhLida/e75b7cIk0DzbcH9G4xF3WQdqmjxeX?=
+ =?us-ascii?Q?1S5qzw+SUy1RYIpY9S/cxqMh8siaMDRQlNVDjaVamRA0uaZqZNcKy3qwNvTn?=
+ =?us-ascii?Q?63KK0BIa0+fhUEw6dGT3NRwgViNmrysHU41BfyFdAOruM7QXYaUG6ksBL+ex?=
+ =?us-ascii?Q?fjFtXQyJNzH0mHPnZiJz1UTz3Sn2xVJdtXbFPldHykQzS7flPYGzgpkeOotj?=
+ =?us-ascii?Q?YiNB28z+IpVlJcU2/joKsPu79y0wXzIWCZ4A2tdSH4ZtnKmwIwflN88rKLXr?=
+ =?us-ascii?Q?Dpd5XP1tnzUnxlUZZMy9CNwMrG4ByOnHW1XfCr+oTPWJBgAK1syNyjxSwVk9?=
+ =?us-ascii?Q?ELZIgPLup8lnaF3/XQ/2JD9hN5H2nj/piUxz86dY4GoOFc66UvBHyqE6UKSl?=
+ =?us-ascii?Q?2014+1md52fDFsLzdftJVb9o6xUT7XuWixMDzTBv/ns6qZH580BvcZHl931N?=
+ =?us-ascii?Q?+53SUcnkNV0CjrGfhSniV/L0DZUBKCQsLU1tqw90JvKP2kPIR6ROn9Ck4kjU?=
+ =?us-ascii?Q?CuJt2ibW06dnfsxn7mwuqOCQJVCXfix6q+MEXqe9n9Ycfg16wkqUBde4LNtD?=
+ =?us-ascii?Q?OGKtzJQUBhuKpi775pU/U8W3LFeBDNL6Y82dNwz7KtmJWLykNSsqmiei02qH?=
+ =?us-ascii?Q?UmHNnd3K8Hbk5TOgkhQ3jGcJ5VNRots/dj/s2Hx0+J7t7lHoND+vdtTf4drb?=
+ =?us-ascii?Q?i7YLBleZTeNm1GcNM5wfFCQEbpUfVgANdRC3u+txXHsEZ0ABHZQt61p2S4tf?=
+ =?us-ascii?Q?5ZEfmAdWHuQEeAmCe1xy3MadcQ043yEmAQlw6rGBcz6YoqWJ2dSPD1HPE2b1?=
+ =?us-ascii?Q?t9HrJ5oDMrVCFB5pTWFJ+3pYIP5C0WFf1UY9bLH9bRyczIJhckIsFs7XlqgR?=
+ =?us-ascii?Q?Qchm+59d1eBcHzXaXvENhm0nekwnLvVPul22+VfxsRM2t9s8jzbdY50vaCXw?=
+ =?us-ascii?Q?XX2UYNPDKRqNJqdrg4rdor1YwDi1KIqop1cH4AZVboEhRBa8/IIkquKUjFDJ?=
+ =?us-ascii?Q?1qdxbZkMZi+KHMuNllbGjdrgXrMFd22JPW6BTsxrW/FcvbNUiukQJ4KtXqTK?=
+ =?us-ascii?Q?b/N6TEDNAmXfRCMrF//aBhvrJIb/Zyj0N1AwFxI4BoRETnZ7Hdik2Xt6JANz?=
+ =?us-ascii?Q?P+4/pP1w0ioyZc6chGtXekqa1xaT9OcZQ2wk6b0RAdNKJ5Shgw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR06MB6756.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Lu+3ahd1eR3xKtUDLXiY4SqMM8PbJVz/xvyMYOizuZy/mGWw3NOWUzAAn+5q?=
+ =?us-ascii?Q?pUCmD/PnNUp9tL8HOokuQ6I3ZDZM+bd7VatR2eisB6qu9oNIbxCBtX/P+NvN?=
+ =?us-ascii?Q?0Ijf6JAIQ2tVjW3+Mm943RBhpu77kB3GRJKh2m5NWnSF+R8kE7EPg5BElvIa?=
+ =?us-ascii?Q?swQKts/dJfvHWpz4s4WnmbIKuYr9uwYAr/8qzUGusD3KvNK30W5pPxv9FUcA?=
+ =?us-ascii?Q?1wAoccLwhY4J/NPkJr/wQ8RJsDyOofNHaHHy7+jAngk8mUdl400H0oyPLMwC?=
+ =?us-ascii?Q?5U8X+NKtClooCFB1PAqaO5u2Sq0K7OIqtwaIk5J5NmKTUBWqIekrUhJ4KgQa?=
+ =?us-ascii?Q?yz+480gAnjUBt89eWCowan3VfOf+Qa3Df+3DAs9vpDGowyO5OCZlQu5TglqQ?=
+ =?us-ascii?Q?GlMW4/mkD40Dt2rH0zN7EtHVCjsCWZ2OieOsHBLBywsSkCWz/b0B/WYmllCB?=
+ =?us-ascii?Q?rLvrIE/D7RP4vxFvQZEtr9S9Lo71d7JqZTIsst1Y6emTHNGQjKbI1HxiDG7b?=
+ =?us-ascii?Q?laTGMG5Zj8uadv/s0EPJW9kMNJuKFTM6sKibtPBcNXHzFyZA1eLKcZ3P9gGE?=
+ =?us-ascii?Q?YTE4O+I7bnQeC0hwVlS5IJTuIJAW9C7df/hgmumU4G2kVtxtlhBYsIO0xhEh?=
+ =?us-ascii?Q?aa49RhlWsFqIpw2r7JzNhzric1yCcOEyMmEG94FAhkVJ4bSOLwdLZLHgkYsg?=
+ =?us-ascii?Q?eBVsDr/Bq48idCLQQC7ys3M6CEIz/n3eTX6BFJhEx92pVQOjBXxj//VR7ZbH?=
+ =?us-ascii?Q?3h28n9If6Nypf/Dc1MuUdAljsKpoY7ilakCV9RXhHHlvCj4Le/XjC1DLZTSZ?=
+ =?us-ascii?Q?f1qkU4ZHLUSCf1YxB41d/g9MNnz5mA9yhLBJ8KC3IktE1gGl7hODFSXGMwVV?=
+ =?us-ascii?Q?q8jptTgx+qSBWPkGlfUBxxYQ1pnQzAK3s6XE0x+GPbiIcBK6jRv3qdvepdTS?=
+ =?us-ascii?Q?WspS0Rot9cbCf5nldZ8K2fCB/NsBmxKy7MwfolP1R/Sd/uQo4dYVpYUMhuYt?=
+ =?us-ascii?Q?FPctMysTB/TAgwMTbUfitz7jw1dAV8+qNDPW7+V2qMi6g2U0bb+aA6xoz5GD?=
+ =?us-ascii?Q?wC1219wbl2BHRXwX2sUFgGQuEqc1v2Zp23aBhGGRwQHtuUPs3BSyY2rqe3OG?=
+ =?us-ascii?Q?Re8CLC696oBZWAZyt6GNqbeBvc9k86ZcM97wYiWKs6a5ENk2JYYArRZLKN29?=
+ =?us-ascii?Q?W/UFTtMwjX8Eb4dFS44dCgzWz3YbpWnA7bbg/qBBg+MCzOG3oFVbGyD82vhp?=
+ =?us-ascii?Q?4EZP82sa8jTCzz4wrxMJzc3ot3FCZAkfjjG98uONGLM1SWZOB+Oujj7M/UmV?=
+ =?us-ascii?Q?s75Hw6hZN+Ugg1zjMW40T9oMWHDKyJ87GJmJAV8L+uQU6j9jTJMgbVOSG7aD?=
+ =?us-ascii?Q?dwxfwBt61Ssg52N4PucR+FzijbON+ZB+8HPzOph595CLUHM5syoqVCU/HP/4?=
+ =?us-ascii?Q?sQ6lU6cr+MmWZNsscpqZPYRnIVpERyJ/8xDP7nz3kNaCfdkghShe0fF3NQh4?=
+ =?us-ascii?Q?OXfMVgz6qJeZkWxGhE1LQnqZaiWeOdcpmCJiBzvg2b6ubVu35Z/vValcd3fc?=
+ =?us-ascii?Q?sHHylOVrnbmTEvooCyBIXYq2KlNIdCRd7wBuTl7moh98YdPPiangGriKst0v?=
+ =?us-ascii?Q?Og=3D=3D?=
+X-OriginatorOrg: jaguarmicro.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b34a1b68-21ff-4dcd-442d-08dd13434340
+X-MS-Exchange-CrossTenant-AuthSource: SEYPR06MB6756.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2024 02:36:17.0843
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SLIa2umoZItIcQp3Ivp91Q+0SiNs8ZGI9H4TR5DIchVHOESi5qP1E/17N+kdFG0YgJTNLtyJDt2fvck00ERz4N5Yx0r3ilhd1Z0wmdtVfqs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5764
 
-Hi Gabriele,
+From: Yuxue Liu <yuxue.liu@jaguarmicro.com>
 
-kernel test robot noticed the following build warnings:
+Implement the kick_vq_with_data vDPA callback.
+On kick, we pass the next available data to the hardware by writing it in
+the kick offset.
 
-[auto build test WARNING on e70140ba0d2b1a30467d4af6bcfe761327b9ec95]
+Signed-off-by: Yuxue Liu <yuxue.liu@jaguarmicro.com>
+---
+v2: fix build error for kernel test robot
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gabriele-Monaco/sched-Optimise-task_mm_cid_work-duration/20241203-003033
-base:   e70140ba0d2b1a30467d4af6bcfe761327b9ec95
-patch link:    https://lore.kernel.org/r/20241202140735.56368-2-gmonaco%40redhat.com
-patch subject: [PATCH 1/2] sched: Optimise task_mm_cid_work duration
-config: arm64-randconfig-004-20241203 (https://download.01.org/0day-ci/archive/20241203/202412031029.B7lLh63F-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241203/202412031029.B7lLh63F-lkp@intel.com/reproduce)
+ drivers/vdpa/virtio_pci/vp_vdpa.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412031029.B7lLh63F-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/sched/core.c:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> kernel/sched/core.c:10552:6: warning: variable 'cpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    10552 |         if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
-          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:10556:20: note: uninitialized use occurs here
-    10556 |         for_each_cpu_from(cpu, cidmask)
-          |                           ^~~
-   include/linux/cpumask.h:391:24: note: expanded from macro 'for_each_cpu_from'
-     391 |         for_each_set_bit_from(cpu, cpumask_bits(mask), small_cpumask_bits)
-         |                               ^~~
-   include/linux/find.h:605:48: note: expanded from macro 'for_each_set_bit_from'
-     605 |         for (; (bit) = find_next_bit((addr), (size), (bit)), (bit) < (size); (bit)++)
-         |                                                       ^~~
-   kernel/sched/core.c:10552:2: note: remove the 'if' if its condition is always true
-    10552 |         if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
-          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    10553 |                 return;
-   kernel/sched/core.c:10529:17: note: initialize the variable 'cpu' to silence this warning
-    10529 |         int weight, cpu;
-          |                        ^
-          |                         = 0
-   kernel/sched/core.c:1809:1: warning: unused function 'uclamp_update_active' [-Wunused-function]
-    1809 | uclamp_update_active(struct task_struct *p)
-         | ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:6430:1: warning: unused function 'class_core_lock_lock_ptr' [-Wunused-function]
-    6430 | DEFINE_LOCK_GUARD_1(core_lock, int,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6431 |                     sched_core_lock(*_T->lock, &_T->flags),
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6432 |                     sched_core_unlock(*_T->lock, &_T->flags),
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    6433 |                     unsigned long flags)
-         |                     ~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:416:49: note: expanded from macro 'DEFINE_LOCK_GUARD_1'
-     416 | __DEFINE_CLASS_IS_CONDITIONAL(_name, false);                            \
-         |                                                                         ^
-     417 | __DEFINE_UNLOCK_GUARD(_name, _type, _unlock, __VA_ARGS__)               \
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cleanup.h:392:21: note: expanded from macro '\
-   __DEFINE_UNLOCK_GUARD'
-     392 | static inline void *class_##_name##_lock_ptr(class_##_name##_t *_T)     \
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:63:1: note: expanded from here
-      63 | class_core_lock_lock_ptr
-         | ^~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
-
-
-vim +10552 kernel/sched/core.c
-
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10522  
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10523  static void task_mm_cid_work(struct callback_head *work)
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10524  {
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10525  	unsigned long now = jiffies, old_scan, next_scan;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10526  	struct task_struct *t = current;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10527  	struct cpumask *cidmask;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10528  	struct mm_struct *mm;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10529  	int weight, cpu;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10530  
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10531  	SCHED_WARN_ON(t != container_of(work, struct task_struct, cid_work));
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10532  
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10533  	work->next = work;	/* Prevent double-add */
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10534  	if (t->flags & PF_EXITING)
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10535  		return;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10536  	mm = t->mm;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10537  	if (!mm)
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10538  		return;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10539  	old_scan = READ_ONCE(mm->mm_cid_next_scan);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10540  	next_scan = now + msecs_to_jiffies(MM_CID_SCAN_DELAY);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10541  	if (!old_scan) {
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10542  		unsigned long res;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10543  
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10544  		res = cmpxchg(&mm->mm_cid_next_scan, old_scan, next_scan);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10545  		if (res != old_scan)
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10546  			old_scan = res;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10547  		else
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10548  			old_scan = next_scan;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10549  	}
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10550  	if (time_before(now, old_scan))
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10551  		return;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20 @10552  	if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10553  		return;
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10554  	cidmask = mm_cidmask(mm);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10555  	/* Clear cids that were not recently used. */
-2909dedb7586e2c Gabriele Monaco   2024-12-02  10556  	for_each_cpu_from(cpu, cidmask)
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10557  		sched_mm_cid_remote_clear_old(mm, cpu);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10558  	weight = cpumask_weight(cidmask);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10559  	/*
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10560  	 * Clear cids that are greater or equal to the cidmask weight to
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10561  	 * recompact it.
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10562  	 */
-2909dedb7586e2c Gabriele Monaco   2024-12-02  10563  	for_each_cpu_from(cpu, cidmask)
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10564  		sched_mm_cid_remote_clear_weight(mm, cpu, weight);
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10565  }
-223baf9d17f25e2 Mathieu Desnoyers 2023-04-20  10566  
-
+diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+index 16380764275e..8787407f75b0 100644
+--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
++++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+@@ -367,6 +367,14 @@ static void vp_vdpa_kick_vq(struct vdpa_device *vdpa, u16 qid)
+ 	vp_iowrite16(qid, vp_vdpa->vring[qid].notify);
+ }
+ 
++static void vp_vdpa_kick_vq_with_data(struct vdpa_device *vdpa, u32 data)
++{
++	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
++	u16 qid = data & 0xFFFF;
++
++	vp_iowrite32(data, vp_vdpa->vring[qid].notify);
++}
++
+ static u32 vp_vdpa_get_generation(struct vdpa_device *vdpa)
+ {
+ 	struct virtio_pci_modern_device *mdev = vdpa_to_mdev(vdpa);
+@@ -472,6 +480,7 @@ static const struct vdpa_config_ops vp_vdpa_ops = {
+ 	.get_vq_size	= vp_vdpa_get_vq_size,
+ 	.set_vq_address	= vp_vdpa_set_vq_address,
+ 	.kick_vq	= vp_vdpa_kick_vq,
++	.kick_vq_with_data      = vp_vdpa_kick_vq_with_data,
+ 	.get_generation	= vp_vdpa_get_generation,
+ 	.get_device_id	= vp_vdpa_get_device_id,
+ 	.get_vendor_id	= vp_vdpa_get_vendor_id,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
