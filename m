@@ -1,61 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438C2A954;
-	Tue,  3 Dec 2024 00:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E6E8F6C;
+	Tue,  3 Dec 2024 00:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733185964; cv=none; b=Jtrv/SljyeOVtmjvN7fWP0WgBwhVypqPq4QWBTBS0lLVJ+3DVrkgpVJq382Qm6ZyKgpNxnF2bKR+oDUrfWzLj691w/NVyqxoE0EZPIooHHmZsssRtomIDEKBczc5I5gL2noobvGi6cJJrKBt2RmMebrtb6akV5PFn0qU02tywYo=
+	t=1733185994; cv=none; b=hYVkaSrpXSQPnwrcLnoZnenFQujSWsaP4TrL6uNANxNjbVZlzx7DEf6evzA+o5YGI/iL52f3YwXVW1tyUmJQJ2DXvxkB5PZ4w9mubJSwAZ5Q++7VosowCgJjXSOIHJfzQQ0nqOnQLBRS3BwA/1KsA0WU4eYeN3i3WLnl3zGFTmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733185964; c=relaxed/simple;
-	bh=tc4KuYkMaQjD8Yv6z+HG3OsdK2KxchFXkKiWS7msvBc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sx8Itd4MCj5RxLXg84CTdmCpeomu0BHNrWH0ypWOZEaGXvZ17oT9qZ43Pc1FXfL304VkE87WpSng6PdtxkRXh2oaxTH4QOUfTASodlgpbRgN8wmhCloY0VhpgPpFwW7X2gKS0GyFuTqdliSS6SIM/5UP+H54kIV+zbZ2Tt/1foY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EdDp+Mfr; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1733185994; c=relaxed/simple;
+	bh=GX9Qy5BGeWyg6vob/RxOIajuIQafKFCDfCZsVSFEJ4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Sa1SJuHnfhqbYo4Kw/DLNmBszJTX1sIiDaAa4j8bgaNVBPuqTFEy0jwSFeG0iHJ42KhsuOI5VxRmyL8ntiZOF86xGEOFarciGQSpz7Z1m8BwzjbYCQMXTzUH8wICPvJkiax5pZ9dzNeiZrEiD0NzAOapvvYGnSQ+bakOoeLLP2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YSfpHIG6; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EdDp+Mfr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YSfpHIG6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733185961; x=1764721961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tc4KuYkMaQjD8Yv6z+HG3OsdK2KxchFXkKiWS7msvBc=;
-  b=EdDp+MfrpvC4pcfpTgkjGSuNWQCvMrovF4jWO1txYoXK/scbb3VRg/fY
-   amCuOt/zX3lwu2uskL8yeSr4dLXQmA2am/uSxhVFFpfEoa8bHpRj3Pux8
-   K1263yvHsxU+UWhfleyW5p/8QOEtZSvKjIwP1rRcCWrlUQJosytaX+4Bo
-   81lQyiR9d2ePDO6DIILaxA9h9RU16CfeKMzHBYnDd0JKoPkhGAb/VwH+q
-   MHu7sEu9ZEP3l6mKj9mJ3utLxVBhJlSSxBCA+tvUY+ICacADA3TMZ/LOk
-   n88zSu8PM/p1Ztqcj7WtB9X92LyODds+7qrQmtkmTE7kFT3PKJTPNuIqP
-   Q==;
-X-CSE-ConnectionGUID: kcHQi4WjSBuNxBWOnXXzBg==
-X-CSE-MsgGUID: AB+BdaVHSEmM6AgEjMQrpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="33126956"
+  t=1733185993; x=1764721993;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GX9Qy5BGeWyg6vob/RxOIajuIQafKFCDfCZsVSFEJ4E=;
+  b=YSfpHIG6B0Uo2GgoScuR+p1uY05l8hr/wJL3F8BfQL4QCkUbtGnzD7Zj
+   OcaXlisE8agleEQHiY5/C3/mAxlkWn3Oe2SD41QE62M7DalxdBx/YwTSw
+   MmycrfZfQGli0PAT2qyAjqDbBD/kygXb5AqlkSRVkn8zBiiL4rqcFHkTQ
+   dub/OQG4jGKkl4jFRYO0OTHi03wG6hBpMXYBIElaK8eH9RQ9AhwTwbiTI
+   MJyrZ4ldd0B/P7+2bimztcWPT4rNcgA6VozwWiGKPMynssq/C1L9+6IBt
+   XlCWLWCow1u7u+DghV57qmqIaMtiawVzkyLGow6Oy44NWVRfM5tpwFVP+
+   g==;
+X-CSE-ConnectionGUID: zqccIdFdTVawi2wgIXhxiw==
+X-CSE-MsgGUID: SdRjDKAnSACF66tAWcRDKA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="44765858"
 X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
-   d="scan'208";a="33126956"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 16:32:41 -0800
-X-CSE-ConnectionGUID: S6x7zoaRQWGs8momJ4WX9A==
-X-CSE-MsgGUID: ZzfdE6t9SR+rHau2C58lfw==
+   d="scan'208";a="44765858"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 16:33:12 -0800
+X-CSE-ConnectionGUID: RvaT9BKjR0WufqMAds7lTw==
+X-CSE-MsgGUID: WnjEUOpUQaiHM0hpiX9NZw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,203,1728975600"; 
-   d="scan'208";a="93157503"
+   d="scan'208";a="93731475"
 Received: from lkp-server02.sh.intel.com (HELO 36a1563c48ff) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 02 Dec 2024 16:32:39 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 02 Dec 2024 16:33:09 -0800
 Received: from kbuild by 36a1563c48ff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tIGq1-00034n-1g;
-	Tue, 03 Dec 2024 00:32:32 +0000
-Date: Tue, 3 Dec 2024 08:31:34 +0800
+	id 1tIGqb-000350-00;
+	Tue, 03 Dec 2024 00:33:03 +0000
+Date: Tue, 3 Dec 2024 08:31:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nathan Fontenot <nathan.fontenot@amd.com>, alison.schofield@intel.com,
-	dan.j.williams@intel.com
+To: Quinn Tran <qutran@marvell.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-cxl@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] cxl: Update Soft Reserved resources upon region creation
-Message-ID: <202412030858.l8DbOnRQ-lkp@intel.com>
-References: <20241202155542.22111-1-nathan.fontenot@amd.com>
+	linux-kernel@vger.kernel.org,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Himanshu Madhani <himanshu.madhani@oracle.com>,
+	Nilesh Javali <njavali@marvell.com>
+Subject: drivers/scsi/qla2xxx/qla_isr.c:3724: warning: Function parameter or
+ member 'rsp_q_in' not described in 'qla_chk_cont_iocb_avail'
+Message-ID: <202412030821.oJA3KV4d-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,95 +65,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241202155542.22111-1-nathan.fontenot@amd.com>
 
-Hi Nathan,
+Hi Quinn,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on cxl/next]
-[also build test ERROR on tip/x86/core]
-[cannot apply to linus/master cxl/pending v6.13-rc1 next-20241128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nathan-Fontenot/cxl-Update-Soft-Reserved-resources-upon-region-creation/20241202-235757
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
-patch link:    https://lore.kernel.org/r/20241202155542.22111-1-nathan.fontenot%40amd.com
-patch subject: [PATCH] cxl: Update Soft Reserved resources upon region creation
-config: arm-randconfig-004-20241203 (https://download.01.org/0day-ci/archive/20241203/202412030858.l8DbOnRQ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241203/202412030858.l8DbOnRQ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cdd30ebb1b9f36159d66f088b61aee264e649d7a
+commit: c019cd656e717349ff22d0c41d6fbfc773f48c52 scsi: qla2xxx: edif: Fix dropped IKE message
+date:   2 years, 5 months ago
+config: i386-buildonly-randconfig-001-20240107 (https://download.01.org/0day-ci/archive/20241203/202412030821.oJA3KV4d-lkp@intel.com/config)
+compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241203/202412030821.oJA3KV4d-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412030858.l8DbOnRQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412030821.oJA3KV4d-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/resource.c:21:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:33:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> kernel/resource.c:1183:36: warning: declaration of 'union acpi_subtable_headers' will not be visible outside of this function [-Wvisibility]
-    1183 | static int srmem_parse_cfmws(union acpi_subtable_headers *hdr,
-         |                                    ^
->> kernel/resource.c:1212:2: error: call to undeclared function 'acpi_table_parse_cedt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1212 |         acpi_table_parse_cedt(ACPI_CEDT_TYPE_CFMWS, srmem_parse_cfmws, &arg);
-         |         ^
-   kernel/resource.c:1212:2: note: did you mean 'acpi_table_parse'?
-   include/linux/acpi.h:914:19: note: 'acpi_table_parse' declared here
-     914 | static inline int acpi_table_parse(char *id,
-         |                   ^
-   2 warnings and 1 error generated.
+>> drivers/scsi/qla2xxx/qla_isr.c:3724: warning: Function parameter or member 'rsp_q_in' not described in 'qla_chk_cont_iocb_avail'
 
 
-vim +/acpi_table_parse_cedt +1212 kernel/resource.c
+vim +3724 drivers/scsi/qla2xxx/qla_isr.c
 
-  1182	
-> 1183	static int srmem_parse_cfmws(union acpi_subtable_headers *hdr,
-  1184				     void *arg, const unsigned long unused)
-  1185	{
-  1186		struct acpi_cedt_cfmws *cfmws;
-  1187		struct srmem_arg *args = arg;
-  1188		struct resource cfmws_res;
-  1189		struct resource *res;
-  1190	
-  1191		res = args->res;
-  1192	
-  1193		cfmws = (struct acpi_cedt_cfmws *)hdr;
-  1194		cfmws_res = DEFINE_RES_MEM(cfmws->base_hpa,
-  1195					   cfmws->base_hpa + cfmws->window_size);
-  1196	
-  1197		if (resource_overlaps(&cfmws_res, res)) {
-  1198			args->overlaps += 1;
-  1199			return 1;
-  1200		}
-  1201	
-  1202		return 0;
-  1203	}
-  1204	
-  1205	static bool resource_overlaps_cfmws(struct resource *res)
-  1206	{
-  1207		struct srmem_arg arg = {
-  1208			.res = res,
-  1209			.overlaps = 0
-  1210		};
-  1211	
-> 1212		acpi_table_parse_cedt(ACPI_CEDT_TYPE_CFMWS, srmem_parse_cfmws, &arg);
-  1213	
-  1214		if (arg.overlaps)
-  1215			return true;
-  1216	
-  1217		return false;
-  1218	}
-  1219	
+e84067d7430107 Duane Grigsby 2017-06-21  3713  
+fac2807946c10b Quinn Tran    2021-06-23  3714  /**
+fac2807946c10b Quinn Tran    2021-06-23  3715   * qla_chk_cont_iocb_avail - check for all continuation iocbs are available
+fac2807946c10b Quinn Tran    2021-06-23  3716   *   before iocb processing can start.
+fac2807946c10b Quinn Tran    2021-06-23  3717   * @vha: host adapter pointer
+fac2807946c10b Quinn Tran    2021-06-23  3718   * @rsp: respond queue
+fac2807946c10b Quinn Tran    2021-06-23  3719   * @pkt: head iocb describing how many continuation iocb
+fac2807946c10b Quinn Tran    2021-06-23  3720   * Return: 0 all iocbs has arrived, xx- all iocbs have not arrived.
+fac2807946c10b Quinn Tran    2021-06-23  3721   */
+fac2807946c10b Quinn Tran    2021-06-23  3722  static int qla_chk_cont_iocb_avail(struct scsi_qla_host *vha,
+c019cd656e7173 Quinn Tran    2022-07-12  3723  	struct rsp_que *rsp, response_t *pkt, u32 rsp_q_in)
+fac2807946c10b Quinn Tran    2021-06-23 @3724  {
+c019cd656e7173 Quinn Tran    2022-07-12  3725  	int start_pkt_ring_index;
+c019cd656e7173 Quinn Tran    2022-07-12  3726  	u32 iocb_cnt = 0;
+fac2807946c10b Quinn Tran    2021-06-23  3727  	int rc = 0;
+fac2807946c10b Quinn Tran    2021-06-23  3728  
+fac2807946c10b Quinn Tran    2021-06-23  3729  	if (pkt->entry_count == 1)
+fac2807946c10b Quinn Tran    2021-06-23  3730  		return rc;
+fac2807946c10b Quinn Tran    2021-06-23  3731  
+fac2807946c10b Quinn Tran    2021-06-23  3732  	/* ring_index was pre-increment. set it back to current pkt */
+fac2807946c10b Quinn Tran    2021-06-23  3733  	if (rsp->ring_index == 0)
+fac2807946c10b Quinn Tran    2021-06-23  3734  		start_pkt_ring_index = rsp->length - 1;
+fac2807946c10b Quinn Tran    2021-06-23  3735  	else
+fac2807946c10b Quinn Tran    2021-06-23  3736  		start_pkt_ring_index = rsp->ring_index - 1;
+fac2807946c10b Quinn Tran    2021-06-23  3737  
+c019cd656e7173 Quinn Tran    2022-07-12  3738  	if (rsp_q_in < start_pkt_ring_index)
+c019cd656e7173 Quinn Tran    2022-07-12  3739  		/* q in ptr is wrapped */
+c019cd656e7173 Quinn Tran    2022-07-12  3740  		iocb_cnt = rsp->length - start_pkt_ring_index + rsp_q_in;
+fac2807946c10b Quinn Tran    2021-06-23  3741  	else
+c019cd656e7173 Quinn Tran    2022-07-12  3742  		iocb_cnt = rsp_q_in - start_pkt_ring_index;
+fac2807946c10b Quinn Tran    2021-06-23  3743  
+c019cd656e7173 Quinn Tran    2022-07-12  3744  	if (iocb_cnt < pkt->entry_count)
+fac2807946c10b Quinn Tran    2021-06-23  3745  		rc = -EIO;
+fac2807946c10b Quinn Tran    2021-06-23  3746  
+c019cd656e7173 Quinn Tran    2022-07-12  3747  	ql_dbg(ql_dbg_init, vha, 0x5091,
+c019cd656e7173 Quinn Tran    2022-07-12  3748  	       "%s - ring %p pkt %p entry count %d iocb_cnt %d rsp_q_in %d rc %d\n",
+c019cd656e7173 Quinn Tran    2022-07-12  3749  	       __func__, rsp->ring, pkt, pkt->entry_count, iocb_cnt, rsp_q_in, rc);
+fac2807946c10b Quinn Tran    2021-06-23  3750  
+fac2807946c10b Quinn Tran    2021-06-23  3751  	return rc;
+fac2807946c10b Quinn Tran    2021-06-23  3752  }
+fac2807946c10b Quinn Tran    2021-06-23  3753  
+
+:::::: The code at line 3724 was first introduced by commit
+:::::: fac2807946c10b9a509b9c348afd442fa823c5f7 scsi: qla2xxx: edif: Add extraction of auth_els from the wire
+
+:::::: TO: Quinn Tran <qutran@marvell.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
 -- 
 0-DAY CI Kernel Test Service
