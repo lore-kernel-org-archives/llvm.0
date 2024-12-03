@@ -1,140 +1,65 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993EB646;
-	Tue,  3 Dec 2024 15:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BE42500D3;
+	Tue,  3 Dec 2024 20:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733239850; cv=none; b=jv8KDvtDb+dGpJqezPPEZUNJ5ijr2LftDuGzrZOgdyQ2bv+B6h1LRMYrS1LgXRIVji2OKnWOhaECPGcTmcwdyMgM1mqxvs8lsKyH7xRC8+Dk1wcFHDglfKgycZPWoHIbKxVruSNLH3FD3hpXSB1BfrlhRR1vnXIKULsTkPiIbQg=
+	t=1733257718; cv=none; b=KsKfSbAwjg6qrryd8lR7whasGTb1TqwAy9Ag0DSmU7KBJobepRGsZW59RmrVHX2lIXwUFJEBqbJzqjvzAV9/tI9ckkzBf1UZvHx2juVpf+Jz4SdBOpzH8jPGOf5Viba1nnCaPEUb40ulkPnEVji8mEn9xIR5BHQTjTocjZWv3PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733239850; c=relaxed/simple;
-	bh=sWHs7nX7SOc89lcoKsFsoe9Ki9Vx7/l7ucI/NQ4jw1Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iYTlwxjbTpniZbcnS4IU1aXKhbG3zmQ+IGvtKsmniB4YtouUxRvm0Xl7Fk2cGMO0LPF+6yUt6pVGG2zwBD6vvUxM4hvoe2duRf96ZmKfc7w8cX7+odEuXDVZDtxwY+9ftKUSWOoFCFP6WOjIm/U2r1BZIMN9D7HMvufs69JWfGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB204FEC;
-	Tue,  3 Dec 2024 07:31:15 -0800 (PST)
-Received: from [192.168.20.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26B2B3F71E;
-	Tue,  3 Dec 2024 07:30:44 -0800 (PST)
-Message-ID: <a64a21cc-6d10-4e8f-9ab9-87aca44ca858@arm.com>
-Date: Tue, 3 Dec 2024 09:30:43 -0600
+	s=arc-20240116; t=1733257718; c=relaxed/simple;
+	bh=BEX7Kxvtvd4L1WIdBYb0kjHAXUavUgl4UJxK6TD4XkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uDjnjGvtf5DxQRglo1QAKHyHxnSJ9OTr8s4yt2ND5i6VPJLDAE7Yq7WIXXw9mF5JP+N5FXQDBPdDUD7beeTzvPucPN1vUmSq3oM+Hl+IJC0tE0n/SKGWP1FtDwmn+kxptxGYvsv3eEuSIFBnjGicfiGlehVpt6NYspWl5EVVSQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcLQnY6Q; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcLQnY6Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE29C4CECF;
+	Tue,  3 Dec 2024 20:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733257718;
+	bh=BEX7Kxvtvd4L1WIdBYb0kjHAXUavUgl4UJxK6TD4XkA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jcLQnY6QIjBSDQezhlXcnZoJE7epPYszOztDr0QavO8N+xFQLXMWJAmch56InNnKo
+	 N6oFkEeqkN2zzSzq2G6XWUohsp8mCNzh2+Fh76ugPzi67jjoMzmxD3i2JPrNBAxil0
+	 kqDqCqUS6CFGWY8tt9Pg+TkWbnCHixBc8SDnC72q7h3Ibaa5uOhHB5bnSoAYWpRiMT
+	 6+VkhXcG0KkGRuWdwYwPXncvxHyj1O2SSzE7FVQ+bL+dcSWtrfuWm8p2VpTTUyRzUr
+	 rcwe9XUXNKK55sBhcYBI4rPnxW48tw0rn/aJhdcXR49GMFrj5gYWQEv1egglfMItUR
+	 0EhkPpEVG8ArQ==
+Date: Tue, 3 Dec 2024 10:28:36 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Honglei Wang <jameshongleiwang@126.com>
+Cc: void@manifault.com, nathan@kernel.org, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, haoluo@google.com,
+	brho@google.com, joshdon@google.com, vishalc@linux.ibm.com,
+	hongyan.xia2@arm.com, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] sched_ext: Add __weak to fix the build errors
+Message-ID: <Z09p9BhM6ZGGd3zP@slm.duckdns.org>
+References: <20241129091003.87716-1-jameshongleiwang@126.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] arm64: rsi: Add automatic arm-cca-guest module
- loading
-To: Gavin Shan <gshan@redhat.com>, kernel test robot <lkp@intel.com>,
- linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- steven.price@arm.com, sami.mujawar@arm.com, suzuki.poulose@arm.com,
- will@kernel.org, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
-References: <20241203000156.72451-2-jeremy.linton@arm.com>
- <202412031348.bp5i3ws2-lkp@intel.com>
- <b1923d68-726a-4864-8661-54588a634d95@redhat.com>
-Content-Language: en-US
-From: Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <b1923d68-726a-4864-8661-54588a634d95@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241129091003.87716-1-jameshongleiwang@126.com>
 
-On 12/3/24 2:56 AM, Gavin Shan wrote:
+On Fri, Nov 29, 2024 at 05:10:03PM +0800, Honglei Wang wrote:
+> commit 5cbb302880f5 ("sched_ext: Rename
+> scx_bpf_dispatch[_vtime]_from_dsq*() -> scx_bpf_dsq_move[_vtime]*()")
+> introduced several new functions which caused compilation errors when
+> compiled with clang.
 > 
+> Let's fix this by adding __weak markers.
 > 
-> On 12/3/24 4:03 PM, kernel test robot wrote:
->> Hi Jeremy,
->>
->> kernel test robot noticed the following build warnings:
->>
->> [auto build test WARNING on arm64/for-next/core]
->> [also build test WARNING on linus/master v6.13-rc1 next-20241128]
->> [cannot apply to kvmarm/next soc/for-next arm/for-next arm/fixes]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>
->> url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ 
->> arm64-rsi-Add-automatic-arm-cca-guest-module-loading/20241203-080347
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/ 
->> linux.git for-next/core
->> patch link:    https://lore.kernel.org/r/20241203000156.72451-2- 
->> jeremy.linton%40arm.com
->> patch subject: [PATCH v2 1/1] arm64: rsi: Add automatic arm-cca-guest 
->> module loading
->> config: arm64-randconfig-004-20241203 (https://download.01.org/0day- 
->> ci/archive/20241203/202412031348.bp5i3ws2-lkp@intel.com/config)
->> compiler: clang version 20.0.0git (https://github.com/llvm/llvm- 
->> project 592c0fe55f6d9a811028b5f3507be91458ab2713)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ 
->> archive/20241203/202412031348.bp5i3ws2-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new 
->> version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202412031348.bp5i3ws2- 
->> lkp@intel.com/
->>
->> All warnings (new ones prefixed by >>):
->>
->>>> drivers/virt/coco/arm-cca-guest/arm-cca-guest.c:224:21: warning: 
->>>> attribute declaration must precede definition [-Wignored-attributes]
->>       224 | static const struct __maybe_unused platform_device_id 
->> arm_cca_match[] = {
->>           |                     ^
->>     include/linux/compiler_attributes.h:356:56: note: expanded from 
->> macro '__maybe_unused'
->>       356 | #define __maybe_unused                  
->> __attribute__((__unused__))
->>           |                                                        ^
->>     include/linux/mod_devicetable.h:607:8: note: previous definition 
->> is here
->>       607 | struct platform_device_id {
->>           |        ^
->>>> drivers/virt/coco/arm-cca-guest/arm-cca-guest.c:224:55: warning: 
->>>> unused variable 'arm_cca_match' [-Wunused-const-variable]
->>       224 | static const struct __maybe_unused platform_device_id 
->> arm_cca_match[] = {
->>           |                                                       
->> ^~~~~~~~~~~~~
->>     2 warnings generated.
->>
->>
->> vim +224 drivers/virt/coco/arm-cca-guest/arm-cca-guest.c
->>
->>     222
->>     223    /* modalias, so userspace can autoload this module when RSI 
->> is available */
->>   > 224    static const struct __maybe_unused platform_device_id 
->> arm_cca_match[] = {
->>     225        { RSI_PDEV_NAME, 0},
->>     226        { }
->>     227    };
->>     228
->>
-> 
-> The definition may have to be something like below, to avoid the 
-> compiling warning.
-> 
-> static const struct platform_device_id __maybe_unused arm_cca_match[] = {
+> Signed-off-by: Honglei Wang <jameshongleiwang@126.com>
 
-I should have tested this with clang rather than copy/pasting the 
-utilization from somewhere else! It looks like a number of other kernel 
-users are putting it before the '=', but its sorta annoying because it 
-seems like the kind of warning that should be suppressed globally for 
-this case (module device description in module that can be built in).
+Applied to sched_ext/for-6.13-fixes.
 
+Thanks.
 
-
->         ...
-> };
-> 
-> Thanks,
-> Gavin
-> 
-
+-- 
+tejun
