@@ -1,43 +1,43 @@
 Received: from mta-03.yadro.com (mta-03.yadro.com [89.207.88.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555DD1F7088
-	for <llvm@lists.linux.dev>; Tue,  3 Dec 2024 14:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA68A1F76A8
+	for <llvm@lists.linux.dev>; Tue,  3 Dec 2024 15:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.207.88.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733237080; cv=none; b=UpdiFLcXAs8jatm57B9pLNB8VS4LctEAmkaHyVwTSk/RNSxL8xZmVn9vCwB2P4A0cw54NwuwBjeDzInjCg+tBLOBnGtJmWcWo87eg7c/uIeiGkAMkVLOC3b4roqDAPdBS0QOONj/2AUjJ2TSa/nABJOoXmyEgM2L838KCpViado=
+	t=1733238570; cv=none; b=W9e9OpfM6axCa9dhRm/NZdgtdr6BiBZ5g8EasPSnmdBt5rA96zDC2vW/0SycoVSQPWRkg0w2IuuCGdjiKWgeFNhNifBOtSjuQyV2E7I6hIJFeC/bS0rqor0ksLNf4Zg3umnXf/fZdhJrjMp/G8L2XL4sQe69nJdR4lehzM8NXlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733237080; c=relaxed/simple;
-	bh=j+1Z523yN4c3k35sEz8WLWeR9a0Tote+0vlm4AhrGg4=;
+	s=arc-20240116; t=1733238570; c=relaxed/simple;
+	bh=sB7bGshRXluI0jR7pLuSjiwGvmpeRBcbuL6zGU+klIA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=MsmWp8Jyy/PsBn/LcvXMRTiygSxcw2YVlLCzFpLXZeg45Xo3lSLkMwuq+OAUNL4S6vCm4yyQnX+WueiNrdQzxhrJ4lYFI0guAMOoksDQkV8zeaZg2t0f9N3CIknHPF5dOuNGhjlzBQTWZvll7tB6ZCLOnjS8GJOYkPKm3IYH7GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=F/xs/DWx; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=fWTohsPr; arc=none smtp.client-ip=89.207.88.253
+	 In-Reply-To:Content-Type; b=dJM0Q7VaIZvH4X/+c/URwCT56+o9zIEHYCxrmkT/+/MZ8rzXi4hbJxDAPj4RIUcN3250leSqoJj9ZI8ZCD2WCHCVb2RWlD0iY8pLDJ6PZSDCc+MHCE7tUAOwKxhcIyjBkpJ9l2TOZHWzmMfPNbyT/SvYcApN/qayFoqUyGVlkv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com; spf=pass smtp.mailfrom=yadro.com; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=llHi3zmx; dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b=m5S6eSbu; arc=none smtp.client-ip=89.207.88.253
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yadro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yadro.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="F/xs/DWx";
-	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="fWTohsPr"
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 47C23E0002
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="llHi3zmx";
+	dkim=pass (2048-bit key) header.d=yadro.com header.i=@yadro.com header.b="m5S6eSbu"
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-03.yadro.com 557CDE000C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
-	t=1733237067; bh=yZe/rHto/yJINXzpM0VYaXBnEXiTAtPyuKao0ifLMUM=;
+	t=1733238564; bh=KVf8hUXjuSbpowAqOIXHXS+rzS1wgLVqN7lbHQj+6/k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=F/xs/DWxB9Q2xFJTiRE+BRDiKHj8Xg2JNDNpNKatEFAPn6Sq07CSqnIlkmho4PfwY
-	 i4n8ckL5a3UEcYTNOdpkqLXDKZBfkd7+wWE0mfifon8WjKC8MyRJDp03drsPHit5qs
-	 YQ9JnPohpFjFSsvMm/cRC4ssbK1H5e16wHHOhNFvdjZdWNGq1Um3S0RFtcZhc9MLLx
-	 JI6jMOpobs78O2XmE6kLtD4ZuLeOTprjTa1H/Bj57GLN36L35e6RvCsN1uEfiK+MmH
-	 xw0PDm5poqRVGxc5JxpvzQd/rZMdMmLU2C+NBl1lHNHgIe0+HD+RrzjY70tqcVWiiQ
-	 4I9yvZTO/OnBQ==
+	b=llHi3zmx7xcvhjyT89cZ2koxmci/3H0mU5tImgKXosoBVk7NUx1KTsYI1ab1FsxTt
+	 DT+foFkWPf2/WYAzP2bbUy2zxZOqZ1oYjHg/IvEu2gfNYKk/uVkdThv2ZIi5HcS9us
+	 ucAtBJRRMQrajTP9grIZfw2tDXHOmIYT6iRuQPpJaqSxLT7idu1BKB++/JxwwkkacN
+	 7Ribugnj+ALzHJCQMgjWR0okLR4Y1I/rVJ0VHDpLEIqllJD0veIIp6ExCXv+ynkOHR
+	 LwPaPa0YbiuJBNGm/m9GCe1OcnUFoDvaZ8LfQhv9X0qCg/QN/VqQkdhlsaxq54NMav
+	 bKvk0r1BFOvbg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
-	t=1733237067; bh=yZe/rHto/yJINXzpM0VYaXBnEXiTAtPyuKao0ifLMUM=;
+	t=1733238564; bh=KVf8hUXjuSbpowAqOIXHXS+rzS1wgLVqN7lbHQj+6/k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-	b=fWTohsPr10f9KWPbfxCVvIwt69HevffSbsXqEZwu0WmT/iJSr6Wx4XOMh6Tw4Ad+T
-	 q5eZ4Qizq7Ej1Yh2GCmzHd3vuVmhdLUhUkUpFEGb1BNl1+/gC7sjTpWuMv1FRKZXEk
-	 lvtHtuet3zGS8CLJjXx3dc/4KJ1DhZTBy7XOFhii3mdZNcrDl+JORThtZRey7sxPIa
-	 ElFPQLxavdFMRreKNyLlsIV+jRBOXPYHkmHEGB2PyhLbKxMQihpOo+SnmtNBOSg7a3
-	 SjEGQJVx/l1YViUNgBV2f9s43som2T4UPePX0ueYyz1oFITpw/l1a2GcyHg2MwNnAg
-	 Cx9inGVCixcLg==
-Message-ID: <7e5ce1ce-e30a-46c5-80fb-eb52e59e4dc2@yadro.com>
-Date: Tue, 3 Dec 2024 17:44:25 +0300
+	b=m5S6eSbuDOMCFjzdM3z0oVwZE6BnHmcMVD0V+Aky94CumetunpIgGS8DuW61OO+6s
+	 EyFiQsejo+6bFTCTuZMqnisJezak/5+TPqxROaP/qfKLQYZ8gCdNLk6HZlzHbGrlmB
+	 EoN31rvuM4IP2Gs+M1/WErfcLKqCKHsr/JTHSJZ7TaSHy/J7Tv0iaCyn1/3XLKEXhj
+	 IkMkZKpbVRi8PxsDaV7QFocUFJy22wo/u5TrkdTO5Yizk3GXfuJywA4RvIahwG+7r2
+	 MczUiRj9Lgnn0+aImev/go4OcZipcyP1WMZJZ/y0RH8vXmlK6aqytl8tQLXMh0t/9h
+	 etVYJbKG1XYQA==
+Message-ID: <990b942d-fe91-4bda-a38e-1eb47f2f6086@yadro.com>
+Date: Tue, 3 Dec 2024 18:09:22 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,70 +45,77 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Re: [PATCH v3 1/7] riscv: ftrace: support fastcc in Clang for
- WITH_ARGS
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-CC: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor
-	<nathan@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, Mark Rutland
-	<mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, Steven
- Rostedt <rostedt@goodmis.org>, Andy Chiu <andybnac@gmail.com>,
-	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <llvm@lists.linux.dev>,
-	<bjorn@rivosinc.com>, <puranjay12@gmail.com>, <alexghiti@rivosinc.com>,
-	<yongxuan.wang@sifive.com>, <greentime.hu@sifive.com>, <nick.hu@sifive.com>,
-	<nylon.chen@sifive.com>, <tommy.wu@sifive.com>, <eric.lin@sifive.com>,
-	<viccent.chen@sifive.com>, <zong.li@sifive.com>, <samuel.holland@sifive.com>
+Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
+ improvements
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Andy Chiu
+	<andybnac@gmail.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor
+	<nathan@kernel.org>, Justin Stitt <justinstitt@google.com>, Bill Wendling
+	<morbo@google.com>, Nick Desaulniers <ndesaulniers@google.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Paul Walmsley <paul.walmsley@sifive.com>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<llvm@lists.linux.dev>, <bjorn@rivosinc.com>, <puranjay12@gmail.com>,
+	<alexghiti@rivosinc.com>, <yongxuan.wang@sifive.com>,
+	<greentime.hu@sifive.com>, <nick.hu@sifive.com>, <nylon.chen@sifive.com>,
+	<tommy.wu@sifive.com>, <eric.lin@sifive.com>, <viccent.chen@sifive.com>,
+	<zong.li@sifive.com>, <samuel.holland@sifive.com>
 References: <20241127172908.17149-1-andybnac@gmail.com>
- <20241127172908.17149-2-andybnac@gmail.com>
- <87wmghotth.fsf@all.your.base.are.belong.to.us>
+ <87ldwxot7i.fsf@all.your.base.are.belong.to.us>
 Content-Language: en-US
 From: Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <87wmghotth.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87ldwxot7i.fsf@all.your.base.are.belong.to.us>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: T-Exch-05.corp.yadro.com (172.17.10.109) To
+X-ClientProxiedBy: T-EXCH-10.corp.yadro.com (172.17.11.60) To
  T-EXCH-10.corp.yadro.com (172.17.11.60)
 
-Hi,
-
-On 03.12.2024 15:05, Björn Töpel wrote:
+On 03.12.2024 15:18, Björn Töpel wrote:
+> Andy!
+> 
+> "atomic" spelling in the Subject line.
 > 
 > Andy Chiu <andybnac@gmail.com> writes:
 > 
->> From: Andy Chiu <andy.chiu@sifive.com>
->>
->> Some caller-saved registers which are not defined as function arguments
->> in the ABI can still be passed as arguments when the kernel is compiled
->> with Clang. As a result, we must save and restore those registers to
->> prevent ftrace from clobbering them.
->>
->> - [1]: https://reviews.llvm.org/D68559
->>
->> Reported-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
->> Closes: https://lore.kernel.org/linux-riscv/7e7c7914-445d-426d-89a0-59a9199c45b1@yadro.com/
->> Acked-by: Nathan Chancellor <nathan@kernel.org>
->> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+>> Changes in v3:
+>> - Add a fix tag for patch 1
+>> - Add a data fence before sending out remote fence.i (6)
+>> - Link to v2: https://lore.kernel.org/all/20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com/
 > 
-> Fixes tag?
+> Hmm, the fixes tag was not included.
+> 
+> Also, there was a lot of comments from v2 that was not addressed:
+> 
+>   * Minor spelling nits
+>   * Breaking DIRECT_CALL, and include Puranjay's CALL_OPS work in the
+>     same series for DIRECT_CALL, to avoid breakage.
 
-As far as I understand it, Ftrace for RISC-V has had this problem since 
-support for FTRACE_WITH_REGS was added. FTRACE_WITH_ARGS inherited it.
+Yes, FTRACE_WITH_DIRECT_CALLS is currently broken. If I try to insmod 
+samples/ftrace/ftrace-direct.ko, it reports a failure:
 
-So, it should probably be as follows:
 
-Fixes: aea4c671fb98 ("riscv/ftrace: Add DYNAMIC_FTRACE_WITH_REGS support")
-
-It is more of a workaround rather than a fix though, because it is still 
-undecided where the problem is, in the kernel or in LLVM/clang. That 
-discussion went nowhere, unfortunately, so it is better to use a 
-workaround and move on, IMO.
+[  179.531472] ------------[ ftrace bug ]------------
+[  179.531761] ftrace failed to modify
+[  179.531786] [<ffffffff8005f9ac>] wake_up_process+0x0/0x24
+[  179.532577]  actual:   97:e2:fa:ff:13:00:00:00
+[  179.533211] Setting ftrace call site to call ftrace function
+[  179.534409] ftrace record flags: 99980001
+[  179.534692]  (1)     tramp: ftrace_caller+0x0/0x34 
+(call_direct_funcs+0x0/0x14)
+[  179.534692]  expected tramp: ffffffff01b0d000
+...
 
 > 
-> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> I'll have a look at the barriers (which came up at plumbers)!
+
+Thank you!
+After this series and the CALL_OPS work are done, dynamic Ftrace for 
+RISC-V will be even more valuable in production use cases.
+
+> 
+> 
+> Cheers,
+> Björn
 > 
 
 Regards,
 Evgenii
-
