@@ -1,238 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F5D19CC26;
-	Tue,  3 Dec 2024 07:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44493F8F7;
+	Tue,  3 Dec 2024 08:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733212324; cv=none; b=WDu1+HnLoWjuxF5f4YJ6saKBQVdJKxkTBti7j+3IIarBZZ7C/MH25KZFpk84z5UpJuTPuAYrYb0zbQpr5Ajs6OsXTMWy2d2SYWQ56Qje2iKs7IB0VSTrDPgQMjqWs48oqtsefkaIcXLd1dNHa4f5fkSfxy+BQUYcO+l5BXclTic=
+	t=1733214687; cv=none; b=dZYPzyAHJ4FWR3wCZeRpkQrBPqR1nOXT8WKoobanIrWjNopblw1x8T1WbPPIcLTyaKk+n08sxo+29CayJP1oNmUJyQFOtbhujvkvUTL1xBAcDKEB3lfnXaMNhLRZIlkxgFIrxYGpVa0S+fsAWbaH7FvUpAbEB3m1DFZbjsy8BiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733212324; c=relaxed/simple;
-	bh=W0Jaz9INALtwh/ErCteAIm7+OyhZb5AaC2v2rjP+znA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fv6MvKP+VagF0qAsR9EIb/CKQ5MZ6TpntMFbqM2/U4qiwhnl5QwfxazHSY/RU0JG6vj8OcQqEFD7lTJQynbWA0NhF7kceVEdunS3TVuow4VoIHYETMyleSvTbQx/8a5BXAr8xy9Oy75H8U9yHYeg0lQkPnIM4Lpq7fu/wJ/d324=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lNEj0sHa; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733214687; c=relaxed/simple;
+	bh=x3znFn98rErh2FCBpaz9WvVdlFADMKizJofigQdXDp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l3kLVX/U9xiYckieQtGNch/NDntMhEZliBmTUKbL0Q5k46C8QTC2kod7jwwn2RBOcAWNvqKqDfyxA8bW436BoAPxqltiUcYNjXkR0PdhlsueZGSyumG0G63rKld3/Zhh9EjygzT/xUqJ/ku0kwSJ+CkkdeneToXvtLOI5cSl+/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t42RLmlH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lNEj0sHa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733212322; x=1764748322;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=W0Jaz9INALtwh/ErCteAIm7+OyhZb5AaC2v2rjP+znA=;
-  b=lNEj0sHanxOLKsrxjr9LKYKp790wxFE+sXxFO9FKFFtb350/UyeW/iZI
-   RYnnX+2bxyjeMr6BpkXng6/4U2wU1gcTnAy9fQ+QHu8g1vZlFAuWU/GKY
-   7G9JK5nuqh3jFfK81rhl2VSZ+rINdkEoUInbw/eE05OIOYEwgz4A9Wulz
-   gDfpWGXdv5gtTZY0u1ne48QWd5inGKAAauhlH+5yRdE9hgUPMY+QQq3Rs
-   /TBTAgaqV1dAOoYoNetmi+LTdQG2UiXESCZ8DWt5cbBLU40N4nuwTqi3N
-   xy1T60JMvSBj2Q3BMqP+XUxnheeHmf799U6BbY3ur3sjYUJhUNSLzdmrb
-   Q==;
-X-CSE-ConnectionGUID: A5cq4IX8QEGEh5uXa4cSsg==
-X-CSE-MsgGUID: kaST2qM+RkSgNOKFfe9Y4g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11274"; a="44078332"
-X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="44078332"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2024 23:52:00 -0800
-X-CSE-ConnectionGUID: sYZ6+XY+SrSEjEzw9bgPGA==
-X-CSE-MsgGUID: QArBVMU1Rn26UCarJpJ3tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,204,1728975600"; 
-   d="scan'208";a="98362206"
-Received: from lkp-server01.sh.intel.com (HELO 388c121a226b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 02 Dec 2024 23:51:59 -0800
-Received: from kbuild by 388c121a226b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tINhM-0000JH-2B;
-	Tue, 03 Dec 2024 07:51:56 +0000
-Date: Tue, 3 Dec 2024 15:50:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Himanshu Chauhan <hchauhan@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_defconfig_v1 45/50] include/linux/riscv_sse.h:65:10:
- error: use of undeclared identifier 'EOPNOTSUPP'
-Message-ID: <202412031551.3L3nXryz-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t42RLmlH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D21C4CECF;
+	Tue,  3 Dec 2024 08:31:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733214687;
+	bh=x3znFn98rErh2FCBpaz9WvVdlFADMKizJofigQdXDp4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=t42RLmlHAIcnhWWs3lUH+Bz88axkSdXYA8oFKDhpTWmLJHGdOlM3M1LManNS0sdvT
+	 YyxMTDDBXmLm3kC1Yw5PE7dyA6cSk5+RZIQxCcK4nWi0SbYwcTeZyzfi1GRftNKStm
+	 HcI8vkNtiQ8vl60KrSkfL5kKNxd7VGn93wDeV5NnnmFqXPBBLN7lmBfTRJzkQlJCvV
+	 jCxUI33Qq3dZ/VJqyzHbe0sbLXuZyuimDzJ3kzaPYEBZfv9XwwfRg/hs0gNjqfCFGV
+	 n2opd19xlVIJFgdwMd7/IXO1V80184HNi1YJSli5Yk7HGx59K4q8kagHj+mWlZjxvP
+	 KCjGBGozwZpKw==
+Date: Tue, 3 Dec 2024 09:31:20 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Hans de
+ Goede <hdegoede@redhat.com>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Andy Shevchenko <andy@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Tiffany Lin <tiffany.lin@mediatek.com>,
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>, Yunfei Dong
+ <yunfei.dong@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-staging@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/3] media: cx231xx: Convert enum into a define
+Message-ID: <20241203093114.0ca49c01@foz.lan>
+In-Reply-To: <20241202-fix-llvm9-v1-1-2a50f5acfd0b@chromium.org>
+References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
+	<20241202-fix-llvm9-v1-1-2a50f5acfd0b@chromium.org>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=unknown-8bit
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/avpatel/linux.git riscv_defconfig_v1
-head:   69e36e8d70c1833ff8d80418017c13c8267e2c74
-commit: cd5254a9040cbe3d816613c0bb2ff72add5b78b6 [45/50] riscv: Introduce HEST SSE notification handlers
-config: x86_64-buildonly-randconfig-003-20241203 (https://download.01.org/0day-ci/archive/20241203/202412031551.3L3nXryz-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241203/202412031551.3L3nXryz-lkp@intel.com/reproduce)
+Em Mon, 02 Dec 2024 15:47:15 +0000
+Ricardo Ribalda <ribalda@chromium.org> escreveu:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412031551.3L3nXryz-lkp@intel.com/
+> The code is running arithmentics with the enum, which when not done with
+> care makes the compiler a bit nervous.
+> 
+> Because those enums are only used as defines (no argument or variable
+> from that enumeration type), convert it into a define and move on.
+> 
+> It is required to build with llvm 9 without these warnings:
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:673:17: warning: bitwise operation between different enumeration types ('enum TS_PORT' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:680:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:687:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:702:17: warning: bitwise operation between different enumeration types ('enum TS_PORT' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:709:21: warning: bitwise operation between different enumeration types ('enum TS_PORT' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:718:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum POWE_TYPE') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:727:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum TS_PORT') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:737:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum TS_PORT') [-Wenum-enum-conversion]
+> drivers/media/usb/cx231xx/cx231xx-pcb-cfg.c:749:21: warning: bitwise operation between different enumeration types ('enum AVDEC_STATUS' and 'enum TS_PORT') [-Wenum-enum-conversion]
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h | 18 +++++++-----------
+>  1 file changed, 7 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h b/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h
+> index 5bc44f194d0a..62ffa16bb82c 100644
+> --- a/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h
+> +++ b/drivers/media/usb/cx231xx/cx231xx-pcb-cfg.h
+> @@ -57,19 +57,17 @@ enum USB_SPEED{
+>  };
+>  
+>  #define TS_MASK         0x6
+> -enum TS_PORT{
+> -	NO_TS_PORT = 0x0,	/* 2'b00: Neither port used. PCB not a Hybrid,
+> +#define NO_TS_PORT	0x0	/* 2'b00: Neither port used. PCB not a Hybrid,
+>  				   only offers Analog TV or Video */
+> -	TS1_PORT = 0x4,		/* 2'b10: TS1 Input (Hybrid mode :
+> +#define TS1_PORT	0x4	/* 2'b10: TS1 Input (Hybrid mode :
+>  				Digital or External Analog/Compressed source) */
+> -	TS1_TS2_PORT = 0x6,	/* 2'b11: TS1 & TS2 Inputs
+> +#define TS1_TS2_PORT	0x6	/* 2'b11: TS1 & TS2 Inputs
+>  				(Dual inputs from Digital and/or
+>  				External Analog/Compressed sources) */
+> -	TS1_EXT_CLOCK = 0x6,	/* 2'b11: TS1 & TS2 as selector
+> +#define TS1_EXT_CLOCK	0x6	/* 2'b11: TS1 & TS2 as selector
+>  						to external clock */
+> -	TS1VIP_TS2_PORT = 0x2	/* 2'b01: TS1 used as 656/VIP Output,
+> +#define TS1VIP_TS2_PORT 0x2	/* 2'b01: TS1 used as 656/VIP Output,
+>  				   TS2 Input (from Compressor) */
+> -};
+>  
+>  #define EAVP_MASK       0x8
+>  enum EAV_PRESENT{
+> @@ -89,10 +87,8 @@ enum AT_MODE{
+>  };
+>  
+>  #define PWR_SEL_MASK    0x40
+> -enum POWE_TYPE{
+> -	SELF_POWER = 0x0,	/* 0: self power */
+> -	BUS_POWER = 0x40	/* 1: bus power */
+> -};
+> +#define SELF_POWER	0x0	/* 0: self power */
+> +#define BUS_POWER	0x40	/* 1: bus power */
+>  
+>  enum USB_POWE_TYPE{
+>  	USB_SELF_POWER = 0,
+> 
 
-All error/warnings (new ones prefixed by >>):
+IMO keeping them into enums are a lot better than defines.
 
-   In file included from drivers/acpi/apei/ghes.c:20:
->> include/linux/riscv_sse.h:65:10: error: use of undeclared identifier 'EOPNOTSUPP'
-      65 |         return -EOPNOTSUPP;
-         |                 ^
-   include/linux/riscv_sse.h:73:10: error: use of undeclared identifier 'EOPNOTSUPP'
-      73 |         return -EOPNOTSUPP;
-         |                 ^
-   include/linux/riscv_sse.h:78:10: error: use of undeclared identifier 'EOPNOTSUPP'
-      78 |         return -EOPNOTSUPP;
-         |                 ^
->> include/linux/riscv_sse.h:83:44: warning: declaration of 'struct ghes' will not be visible outside of this function [-Wvisibility]
-      83 | static inline int sse_register_ghes(struct ghes *ghes, sse_event_handler *lo_cb,
-         |                                            ^
-   include/linux/riscv_sse.h:86:10: error: use of undeclared identifier 'EOPNOTSUPP'
-      86 |         return -EOPNOTSUPP;
-         |                 ^
-   include/linux/riscv_sse.h:89:46: warning: declaration of 'struct ghes' will not be visible outside of this function [-Wvisibility]
-      89 | static inline int sse_unregister_ghes(struct ghes *ghes)
-         |                                              ^
-   include/linux/riscv_sse.h:91:10: error: use of undeclared identifier 'EOPNOTSUPP'
-      91 |         return -EOPNOTSUPP;
-         |                 ^
-   In file included from drivers/acpi/apei/ghes.c:21:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:10:
-   In file included from include/linux/cper.h:13:
-   In file included from include/linux/trace_seq.h:5:
-   In file included from include/linux/seq_buf.h:7:
-   In file included from include/linux/seq_file.h:11:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/acpi/apei/ghes.c:21:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:10:
-   In file included from include/linux/cper.h:13:
-   In file included from include/linux/trace_seq.h:5:
-   In file included from include/linux/seq_buf.h:7:
-   In file included from include/linux/seq_file.h:11:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/acpi/apei/ghes.c:21:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:10:
-   In file included from include/linux/cper.h:13:
-   In file included from include/linux/trace_seq.h:5:
-   In file included from include/linux/seq_buf.h:7:
-   In file included from include/linux/seq_file.h:11:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/acpi/apei/ghes.c:21:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:10:
-   In file included from include/linux/cper.h:13:
-   In file included from include/linux/trace_seq.h:5:
-   In file included from include/linux/seq_buf.h:7:
-   In file included from include/linux/seq_file.h:11:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/acpi/apei/ghes.c:21:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:10:
-   In file included from include/linux/cper.h:13:
-   In file included from include/linux/trace_seq.h:5:
-   In file included from include/linux/seq_buf.h:7:
-   In file included from include/linux/seq_file.h:11:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
+Perhaps the right thing would be to join both enums here.
 
 
-vim +/EOPNOTSUPP +65 include/linux/riscv_sse.h
-
-bf7506e7bec204 Clément Léger    2023-06-13  57  
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  58  int sse_register_ghes(struct ghes *ghes, sse_event_handler *lo_cb,
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  59  		      sse_event_handler *hi_cb);
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  60  int sse_unregister_ghes(struct ghes *ghes);
-bf7506e7bec204 Clément Léger    2023-06-13  61  #else
-bf7506e7bec204 Clément Léger    2023-06-13  62  static inline int sse_event_register(struct sse_event *evt, u32 priority,
-bf7506e7bec204 Clément Léger    2023-06-13  63  				     sse_event_handler *handler, void *arg)
-bf7506e7bec204 Clément Léger    2023-06-13  64  {
-bf7506e7bec204 Clément Léger    2023-06-13 @65  	return -EOPNOTSUPP;
-bf7506e7bec204 Clément Léger    2023-06-13  66  }
-bf7506e7bec204 Clément Léger    2023-06-13  67  
-bf7506e7bec204 Clément Léger    2023-06-13  68  static inline void sse_event_unregister(struct sse_event *evt) {}
-bf7506e7bec204 Clément Léger    2023-06-13  69  
-bf7506e7bec204 Clément Léger    2023-06-13  70  static inline int sse_event_set_target_cpu(struct sse_event *sse_evt,
-bf7506e7bec204 Clément Léger    2023-06-13  71  					   unsigned int cpu)
-bf7506e7bec204 Clément Léger    2023-06-13  72  {
-bf7506e7bec204 Clément Léger    2023-06-13  73  	return -EOPNOTSUPP;
-bf7506e7bec204 Clément Léger    2023-06-13  74  }
-bf7506e7bec204 Clément Léger    2023-06-13  75  
-bf7506e7bec204 Clément Léger    2023-06-13  76  static inline int sse_event_enable(struct sse_event *sse_evt)
-bf7506e7bec204 Clément Léger    2023-06-13  77  {
-bf7506e7bec204 Clément Léger    2023-06-13  78  	return -EOPNOTSUPP;
-bf7506e7bec204 Clément Léger    2023-06-13  79  }
-bf7506e7bec204 Clément Léger    2023-06-13  80  
-bf7506e7bec204 Clément Léger    2023-06-13  81  static inline void sse_event_disable(struct sse_event *sse_evt) {}
-bf7506e7bec204 Clément Léger    2023-06-13  82  
-2d29b532eb5886 Himanshu Chauhan 2023-10-26 @83  static inline int sse_register_ghes(struct ghes *ghes, sse_event_handler *lo_cb,
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  84  				    sse_event_handler *hi_cb)
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  85  {
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  86  	return -EOPNOTSUPP;
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  87  }
-2d29b532eb5886 Himanshu Chauhan 2023-10-26  88  
-
-:::::: The code at line 65 was first introduced by commit
-:::::: bf7506e7bec204376453e68c7d7c3ab7ff37dcaf riscv: add support for SBI Supervisor Software Events extension
-
-:::::: TO: Clément Léger <cleger@rivosinc.com>
-:::::: CC: Anup Patel <anup@brainfault.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Mauro
