@@ -1,194 +1,183 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA3318C903
-	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 21:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F89418732E;
+	Wed,  4 Dec 2024 21:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733347246; cv=none; b=bn5+eTFSDiH3/ZhTodTFsC+jav/qn96r1wpQ0Pm28iU/8SHB3vkkobDnJG/yWy7vB6cHToEfmiakWwa3mb2aZK2LWQ3rA5YtvCLgYladCrJ+EHuQOwwcdkjINLMBw/mznp+8VRjMDeC0RY85uFyAQIekOZmxyemnAc/I5Tqf3+o=
+	t=1733347428; cv=none; b=bBhmLfxDainZnqk7Vux3035luGd2u33qTVXqhqdi0v8zc1W8OtntWQaNluX2kSZD/sCwTb0VVZMhhmSbL3TXjGdjnrTLX1VXcU+1BybILLRqMpn0Hhg1bzuwBnpo1jLBUhfv+88apyt+hx8iR0rR5H7BuYgJTPRUSnwhe+bNfek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733347246; c=relaxed/simple;
-	bh=DmTd11zWX81WQA+LHno3MSUDiBFXhLbTtvsyV8RhXqg=;
+	s=arc-20240116; t=1733347428; c=relaxed/simple;
+	bh=SYresexVuihEbtFpKspS20LpBlURd+mfZxrEx78+LYw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QiJYXntGWi+P+xJkanmEvPFRfkaDBqN7er08Xmk0/uyQ1TprteHoJFFXEgN4Fp7BVJ36R7BMpwZvp85t4RL5HYwlr9Z1PccO8Ep7lHI+o03gi+CJexG86ZivgE1qIw6l5n93/SxzC5optP1ZXEVPEap6u6qmefBXraLRcIogBsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HKxPio5W; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=k91dpjaTFxiWGk/8btwHSgytgYX/7Cn+QdGyHcFwfWMEy6yRupAiRy/kfgeHvNpQCKKWtZNgdmFNi6DypffC51jCk4+ecfSPmPSBa53tlw14I/1O+O6VhYLvAkbzeBqtrUmpz4V0F5xaoTSgdRS1g4SRVdcUNZDM6/27fvvm22M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iI8k5VCd; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKxPio5W"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7258cf2975fso255542b3a.0
-        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 13:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733347244; x=1733952044; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BNA1GsPxilVJChqzg/IHgUeCWNBJYbUvWL6MaZGSVcI=;
-        b=HKxPio5WoPRheXMOAhhXdL1hb33lGv88Y58m007lDKXvFoHvW7bAo9r7FmxVGmi3X7
-         E3YmkEbJDhnTxF9XxrUdLsnWcFGrhlYziX3Dw+6zwFq7CCG5CRZcpa+4nUJOsRod8epb
-         LT4axpai9fiGML8WOkrZGcReErKvClU0czvsYZqqcLv6kzu7FWB/AMSfWwI+d4Txm0Ew
-         d2it5tEj7QmsGaNnvmYRHu3EYhdInjdlpE+QjL31ZS1UU8CFyYm36nxkB6bgzbDpqrAI
-         MFUOja50USKeKMTmjOmystaVD+NfEsQlYCCAlTqieZqpjTHPcS65W44Gi9RHgrNiAmmD
-         qe1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733347244; x=1733952044;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BNA1GsPxilVJChqzg/IHgUeCWNBJYbUvWL6MaZGSVcI=;
-        b=kuO+seADFUeEz9JAqZ2YklNDtK9zvd/YkMpoKxZgjygqCMyJUJxKpvkbrjGPSgZmQt
-         tZBKY1dBkwzIeYFxmIzVuz1ILn3UGlykbqfqfhAFHBR8rBaxkpYtn0odHJuDWk2N5YPk
-         rZwtjLIb65GD/EUpOBXAGlilG58NPS47a8CsPSvtSLje9nVrcjdUguVhtKc41RdrTnfD
-         Dva2GMC6EiFCHckVMl8pbXIjFINe6gkiIAlxWXFc4daWU8CQNYAxDCvmRXswY43Cuu55
-         AMPrwF04ViEqPlBiLiaNtOdK9okZzdFkD7NV/hnAAYxpoliF49B+5Ro47BNIu9ImH17s
-         EOMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVErj7gLk4rKrKqusEIZerGARXtfhgDDJ3G7SwxDDEdlk3MCg0ahRIJmdQi4AmXl3/RqXrk@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyep4AAsJEDA/OaSZDpc3x0yDwl6I36CxlZQmBzlu0Rus4hiBEB
-	kW+HvRlVruxyYtzkDkmo0Zgj8HI683KUxaTEQVPAgF7KHLD5EHENW5ENOA==
-X-Gm-Gg: ASbGncs5DuubuB6UYRWCTukWj+FTeoO6dQFIjgaH/fwHRU1jhIflHYVPjEBxUhj2ura
-	ASEHpObk3FyPUFybllQknyTREbxzh/4tRiFVbKgrfuUvnIAdu8dRD+qpv6bzp9yDiX7kWxbZ0Vx
-	+Vl+m8aKxsdDlGA7MYsXUgPUMqgDDewNqFWBC30+L8JWvTHcJqgiJSpicOhK51RgSNxu/FZ6qC2
-	nC0O6ZgGx4gbZKnC+S2dR6+MwcAqx5dsGrjqLzcvUtUSRCwUA==
-X-Google-Smtp-Source: AGHT+IFEmSUNzGrT5DnfoRZVH+SQ2pUXxmGmw+aJzGPI7oEZwncOxNonhADpq7F5PtDa6Cd2EgQG5g==
-X-Received: by 2002:a05:6a00:3022:b0:725:9202:6731 with SMTP id d2e1a72fcca58-72592026879mr4620300b3a.13.1733347244177;
-        Wed, 04 Dec 2024 13:20:44 -0800 (PST)
-Received: from localhost ([216.228.125.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7258b2e79d3sm2235622b3a.67.2024.12.04.13.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 13:20:43 -0800 (PST)
-Date: Wed, 4 Dec 2024 13:20:39 -0800
-From: Yury Norov <yury.norov@gmail.com>
-To: David Laight <David.Laight@aculab.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@linaro.org>,
-	James Clark <james.clark@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-	Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
- __is_constexpr()
-Message-ID: <Z1DHp34fyyhtLEV0@yury-ThinkPad>
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
- <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
- <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iI8k5VCd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733347426; x=1764883426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SYresexVuihEbtFpKspS20LpBlURd+mfZxrEx78+LYw=;
+  b=iI8k5VCdrVALVmh8ipk/gwwJaHA+NvFLtGEx4rigfV6wZ0qjrqQ5IBtq
+   yWKl/GJMyyY7/Vd0VlrTauKEnLqZdNeiRFrneIstt/P5t255PPMhEqPGz
+   Mzan/+cwsI5t48jL8WOSfKwCZdnNXs6nx6KEqqr2lrcn7ZTMqcEXHeUCX
+   9l9/UTM9JHLDOR/ta2WfgnbI2f3gTm4YI6jPxXwjxbl2IogfCwRrrsSTP
+   KC2hoByHsoZSC7tdZ2FAfXQOVcdGpe0kIlBIU7xkSefRbUH/NWK/XOFcl
+   1nIrgnvUefi/ltWeqgHnPWWL9MrH2KEVaa7XTtcJzJesaGQs4l/yQgua5
+   g==;
+X-CSE-ConnectionGUID: 8EQXHuk+TlOAhPQpkkHakw==
+X-CSE-MsgGUID: hT2KQFGeRum/hdUI+qCGEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="36480156"
+X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
+   d="scan'208";a="36480156"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 13:23:45 -0800
+X-CSE-ConnectionGUID: I5msKDoLTuiUgPkb0enNRw==
+X-CSE-MsgGUID: +kYhVszvTda+p8e150Savg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
+   d="scan'208";a="93783615"
+Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 04 Dec 2024 13:23:39 -0800
+Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tIwqJ-0003Vq-1m;
+	Wed, 04 Dec 2024 21:23:32 +0000
+Date: Thu, 5 Dec 2024 05:22:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+	andersson@kernel.org, konradybcio@kernel.org,
+	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	=quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Subject: Re: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE
+ Firmware via Linux subsystem
+Message-ID: <202412050408.rTlLBe7e-lkp@intel.com>
+References: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+In-Reply-To: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
 
-> > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> > index a2a56a50dd85227a4fdc62236a2710ca37c5ba52..30ce06df4153cfdc0fad9bc7bffab9097f8b0450 100644
-> > --- a/include/linux/compiler.h
-> > +++ b/include/linux/compiler.h
-> > @@ -316,6 +316,47 @@ static inline void *offset_to_ptr(const int *off)
-> >  #define statically_true(x) (__builtin_constant_p(x) && (x))
-> >  #define statically_false(x) (__builtin_constant_p(x) && (x) == 0)
-> > 
-> > +/*
-> > + * Whether x is the integer constant expression 0 or something else.
-> > + *
-> > + * Details:
-> > + *   - The C11 standard defines in §6.3.2.3.3
-> > + *       (void *)<integer constant expression with the value 0>
-> > + *     as a null pointer constant (c.f. the NULL macro).
-> > + *   - If x evaluates to the integer constant expression 0,
-> > + *       (void *)(x)
-> > + *     is a null pointer constant. Else, it is a void * expression.
-> > + *   - In a ternary expression:
-> > + *       condition ? operand1 : operand2
-> > + *     if one of the two operands is of type void * and the other one
-> > + *     some other pointer type, the C11 standard defines in §6.5.15.6
-> > + *     the resulting type as below:
-> > + *       if one operand is a null pointer constant, the result has the
-> > + *       type of the other operand; otherwise [...] the result type is
-> > + *       a pointer to an appropriately qualified version of void.
-> > + *   - As such, in
-> > + *       0 ? (void *)(x) : (char *)0
-> > + *     if x is the integer constant expression 0, operand1 is a null
-> > + *     pointer constant and the resulting type is that of operand2:
-> > + *     char *. If x is anything else, the type is void *.
-> > + *   - The (long) cast silences a compiler warning for when x is not 0.
-> > + *   - Finally, the _Generic() dispatches the resulting type into a
-> > + *     Boolean.
-> 
-> The comment is absolutely excessive.
+Hi Viken,
 
-I like this comment. Particularly I like the references to the standard
-followed by a step-by-step explanation of how the macro is built.
+kernel test robot noticed the following build errors:
 
-> I'm sure I managed about 2 lines in one of the patches I did.
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.13-rc1 next-20241204]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sorry, don't understand this.
+url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-i2c-qcom-i2c-geni-Document-DT-properties-for-QUP-firmware-loading/20241204-230736
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20241204150326.1470749-5-quic_vdadhani%40quicinc.com
+patch subject: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux subsystem
+config: x86_64-buildonly-randconfig-003-20241205 (https://download.01.org/0day-ci/archive/20241205/202412050408.rTlLBe7e-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050408.rTlLBe7e-lkp@intel.com/reproduce)
 
-Thanks,
-Yury
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412050408.rTlLBe7e-lkp@intel.com/
 
-> > + *
-> > + * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
-> 
-> IIRC Martin has agreed in the past that the accreditation can
-> be removed - especially since it refers to the 'sizeof (void)' trick.
-> 
-> > + */
-> > +#define __is_const_zero(x) \
-> > +	_Generic(0 ? (void *)(long)(x) : (char *)0, char *: 1, void *: 0)
-> > +
-> > +/*
-> > + * Returns a constant expression while determining if its argument is a
-> > + * constant expression, most importantly without evaluating the argument.
-> 
-> You need to differentiate between a 'constant integer expression'
-> and a 'compile time constant'.
->  
-> > + *
-> > + * If getting a constant expression is not relevant to you, use the more
-> > + * powerful __builtin_constant_p() instead.
-> 
-> __builtin_constant_p() is not 'more powerful' it is testing for
-> something different.
-> 
-> 	David
-> 
-> > + */
-> > +#define is_const(x) __is_const_zero(0 * (x))
-> > +
-> >  /*
-> >   * This is needed in functions which generate the stack canary, see
-> >   * arch/x86/kernel/smpboot.c::start_secondary() for an example.
-> > 
-> > --
-> > 2.45.2
-> > 
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/soc/qcom/qcom-geni-se.c:11:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/soc/qcom/qcom-geni-se.c:975:9: error: assigning to 'struct elf32_phdr *' from 'const struct elf32_phdr *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     975 |                 *phdr = &phdrs[i];
+         |                       ^ ~~~~~~~~~
+>> drivers/soc/qcom/qcom-geni-se.c:1182:2: warning: variable 'reg_value' is uninitialized when used here [-Wuninitialized]
+    1182 |         reg_value |= DMA_GENERAL_CFG_AHB_SEC_SLV_CLK_CGC_ON_BMSK |
+         |         ^~~~~~~~~
+   drivers/soc/qcom/qcom-geni-se.c:1136:18: note: initialize the variable 'reg_value' to silence this warning
+    1136 |         u32 i, reg_value, mask, ramn_cnt;
+         |                         ^
+         |                          = 0
+   drivers/soc/qcom/qcom-geni-se.c:1268:5: warning: no previous prototype for function 'qup_fw_load' [-Wmissing-prototypes]
+    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
+         |     ^
+   drivers/soc/qcom/qcom-geni-se.c:1268:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
+         | ^
+         | static 
+   3 warnings and 1 error generated.
+
+
+vim +975 drivers/soc/qcom/qcom-geni-se.c
+
+   946	
+   947	/**
+   948	 * read_elf: Function to read elf file.
+   949	 * @rsc: A pointer to SE resources structure.
+   950	 * @fw: A pointer to the fw buffer.
+   951	 * @pelfseg: A pointer to SE specific elf header.
+   952	 * @phdr: pointer to one of the valid headers from list from fw buffer.
+   953	 *
+   954	 * This function reads the ELF file and outputs the pointer to header
+   955	 * data which contains the FW data and any other details.
+   956	 *
+   957	 * return: Return 0 if no error, else return error value.
+   958	 */
+   959	static int read_elf(struct qup_se_rsc *rsc, const struct firmware *fw,
+   960			    struct elf_se_hdr **pelfseg, struct elf32_phdr **phdr)
+   961	{
+   962		const struct elf32_phdr *phdrs;
+   963		const struct elf32_hdr *ehdr;
+   964		const u8 *addr;
+   965		int i;
+   966	
+   967		ehdr = (struct elf32_hdr *)fw->data;
+   968	
+   969		if (ehdr->e_phnum < 2)
+   970			return -EINVAL;
+   971	
+   972		phdrs = (struct elf32_phdr *)(ehdr + 1);
+   973	
+   974		for (i = 0; i < ehdr->e_phnum; i++) {
+ > 975			*phdr = &phdrs[i];
+   976			if (!elf_phdr_valid(*phdr))
+   977				continue;
+   978	
+   979			if ((*phdr)->p_filesz >= sizeof(struct elf_se_hdr)) {
+   980				addr =  fw->data + (*phdr)->p_offset;
+   981				*pelfseg = (struct elf_se_hdr *)addr;
+   982	
+   983				if ((*pelfseg)->magic == MAGIC_NUM_SE &&
+   984				    (*pelfseg)->version == 1 &&
+   985				    valid_seg_size(*pelfseg, (*phdr)->p_filesz))
+   986					if ((*pelfseg)->serial_protocol == rsc->protocol &&
+   987					    (*pelfseg)->serial_protocol != GENI_SE_NONE)
+   988						return 0;
+   989			}
+   990		}
+   991		return -EINVAL;
+   992	}
+   993	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
