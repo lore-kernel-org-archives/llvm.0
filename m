@@ -1,70 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F89418732E;
-	Wed,  4 Dec 2024 21:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00630191F7E;
+	Wed,  4 Dec 2024 22:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733347428; cv=none; b=bBhmLfxDainZnqk7Vux3035luGd2u33qTVXqhqdi0v8zc1W8OtntWQaNluX2kSZD/sCwTb0VVZMhhmSbL3TXjGdjnrTLX1VXcU+1BybILLRqMpn0Hhg1bzuwBnpo1jLBUhfv+88apyt+hx8iR0rR5H7BuYgJTPRUSnwhe+bNfek=
+	t=1733349899; cv=none; b=ivPpFtOJ8kWYss3fQ9PfVmBM0b/kdY7/cHAO6sQNfZaBGSUAziABZ5hgXoEVdWaPH1x8dvz+xAuOaX1Mnd+MqOXKa3RDjIwWLVr44GRfOthn0s3+v3Ylc1INJZcJTTR2rIdC0QjWRRbr5bsHyFT5sxHNt8UzKovGN0UAqCbjEzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733347428; c=relaxed/simple;
-	bh=SYresexVuihEbtFpKspS20LpBlURd+mfZxrEx78+LYw=;
+	s=arc-20240116; t=1733349899; c=relaxed/simple;
+	bh=yjtLRtRCKWAPsgc1vT8YYp8ipR0xLKwjHOr2+Rn5rZw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k91dpjaTFxiWGk/8btwHSgytgYX/7Cn+QdGyHcFwfWMEy6yRupAiRy/kfgeHvNpQCKKWtZNgdmFNi6DypffC51jCk4+ecfSPmPSBa53tlw14I/1O+O6VhYLvAkbzeBqtrUmpz4V0F5xaoTSgdRS1g4SRVdcUNZDM6/27fvvm22M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iI8k5VCd; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=uqdRP7bLlEeMudxAU5SHtR6bz6HvLYuRwoOFZHMcV2mDGVRQ1eFNLfDClOZ7AvT5+NjNVmbrFV1FzYURkhEu4w+8DjXOj9kZL0h6BZ8yV7muvp9Rlg5M9YbitrV08WHr6Yi1rvscJMxoiUiO3aBja7zNzd3Ldx68qzqcrYOgbT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d0sEMyxy; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iI8k5VCd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d0sEMyxy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733347426; x=1764883426;
+  t=1733349897; x=1764885897;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=SYresexVuihEbtFpKspS20LpBlURd+mfZxrEx78+LYw=;
-  b=iI8k5VCdrVALVmh8ipk/gwwJaHA+NvFLtGEx4rigfV6wZ0qjrqQ5IBtq
-   yWKl/GJMyyY7/Vd0VlrTauKEnLqZdNeiRFrneIstt/P5t255PPMhEqPGz
-   Mzan/+cwsI5t48jL8WOSfKwCZdnNXs6nx6KEqqr2lrcn7ZTMqcEXHeUCX
-   9l9/UTM9JHLDOR/ta2WfgnbI2f3gTm4YI6jPxXwjxbl2IogfCwRrrsSTP
-   KC2hoByHsoZSC7tdZ2FAfXQOVcdGpe0kIlBIU7xkSefRbUH/NWK/XOFcl
-   1nIrgnvUefi/ltWeqgHnPWWL9MrH2KEVaa7XTtcJzJesaGQs4l/yQgua5
-   g==;
-X-CSE-ConnectionGUID: 8EQXHuk+TlOAhPQpkkHakw==
-X-CSE-MsgGUID: hT2KQFGeRum/hdUI+qCGEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="36480156"
+  bh=yjtLRtRCKWAPsgc1vT8YYp8ipR0xLKwjHOr2+Rn5rZw=;
+  b=d0sEMyxyxY86A3DXBkExC64VyEtwvJn53bmWYaIK9JaoA00gfx750KVO
+   +LZJq3CLPwlMxP7axaBNPtS/TtiR8jfr9tqpq5BZqVlAgZ3o4GgWwCzaR
+   +9d56+LgnWtBQRQdMRw21Iv2TE/VUc2VJsRZ2bQnG3kiz/K/03GfioV3d
+   QWY5p6/oVu2OGkp2IemSBD9iyfGX0QVsHsPzflYhO+sDKBitwneThC8BE
+   64JSFmSyN8WMYSAUv9ugXeEpjI6vlpYkbG/NMPP05JPzOBik6s+hC6dcs
+   CDKZZdt9l0aj7/Pk8JYq8Ny3ifeIerQRZYvBo9KKxo4+vECKuVns2ewhs
+   w==;
+X-CSE-ConnectionGUID: w+ho3wupQFebU1ujF//Mjw==
+X-CSE-MsgGUID: DcxpFjmEQE2j9M8D0qyvfw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33558911"
 X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="36480156"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 13:23:45 -0800
-X-CSE-ConnectionGUID: I5msKDoLTuiUgPkb0enNRw==
-X-CSE-MsgGUID: +kYhVszvTda+p8e150Savg==
+   d="scan'208";a="33558911"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 14:04:56 -0800
+X-CSE-ConnectionGUID: 3jwPoGqFTvO0TbolozmAfA==
+X-CSE-MsgGUID: gLTI/H5tTDC51CHZk4Mscg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="93783615"
+   d="scan'208";a="124711614"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 04 Dec 2024 13:23:39 -0800
+  by orviesa002.jf.intel.com with ESMTP; 04 Dec 2024 14:04:52 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tIwqJ-0003Vq-1m;
-	Wed, 04 Dec 2024 21:23:32 +0000
-Date: Thu, 5 Dec 2024 05:22:07 +0800
+	id 1tIxUH-0003XN-0w;
+	Wed, 04 Dec 2024 22:04:49 +0000
+Date: Thu, 5 Dec 2024 06:03:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
-	andersson@kernel.org, konradybcio@kernel.org,
-	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+To: Nikolaus Voss <nv@vosn.de>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Liu Ying <victor.liu@nxp.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Fabio Estevam <festevam@denx.de>, Marek Vasut <marex@denx.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	miquel.raynal@bootlin.com, nikolaus.voss@haag-streit.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	=quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE
- Firmware via Linux subsystem
-Message-ID: <202412050408.rTlLBe7e-lkp@intel.com>
-References: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm: bridge: fsl-ldb: fixup mode on freq mismatch
+Message-ID: <202412050521.d87GwldA-lkp@intel.com>
+References: <20241203191111.47B56F7@mail.steuer-voss.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,110 +75,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
+In-Reply-To: <20241203191111.47B56F7@mail.steuer-voss.de>
 
-Hi Viken,
+Hi Nikolaus,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on andi-shyti/i2c/i2c-host]
-[also build test ERROR on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.13-rc1 next-20241204]
+[auto build test WARNING on linus/master]
+[also build test WARNING on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.13-rc1 next-20241204]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-i2c-qcom-i2c-geni-Document-DT-properties-for-QUP-firmware-loading/20241204-230736
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241204150326.1470749-5-quic_vdadhani%40quicinc.com
-patch subject: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux subsystem
-config: x86_64-buildonly-randconfig-003-20241205 (https://download.01.org/0day-ci/archive/20241205/202412050408.rTlLBe7e-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050408.rTlLBe7e-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nikolaus-Voss/drm-bridge-fsl-ldb-fixup-mode-on-freq-mismatch/20241204-115306
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241203191111.47B56F7%40mail.steuer-voss.de
+patch subject: [PATCH v2] drm: bridge: fsl-ldb: fixup mode on freq mismatch
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241205/202412050521.d87GwldA-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050521.d87GwldA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050408.rTlLBe7e-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412050521.d87GwldA-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/soc/qcom/qcom-geni-se.c:11:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from drivers/gpu/drm/bridge/fsl-ldb.c:9:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/soc/qcom/qcom-geni-se.c:975:9: error: assigning to 'struct elf32_phdr *' from 'const struct elf32_phdr *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     975 |                 *phdr = &phdrs[i];
-         |                       ^ ~~~~~~~~~
->> drivers/soc/qcom/qcom-geni-se.c:1182:2: warning: variable 'reg_value' is uninitialized when used here [-Wuninitialized]
-    1182 |         reg_value |= DMA_GENERAL_CFG_AHB_SEC_SLV_CLK_CGC_ON_BMSK |
-         |         ^~~~~~~~~
-   drivers/soc/qcom/qcom-geni-se.c:1136:18: note: initialize the variable 'reg_value' to silence this warning
-    1136 |         u32 i, reg_value, mask, ramn_cnt;
-         |                         ^
-         |                          = 0
-   drivers/soc/qcom/qcom-geni-se.c:1268:5: warning: no previous prototype for function 'qup_fw_load' [-Wmissing-prototypes]
-    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
-         |     ^
-   drivers/soc/qcom/qcom-geni-se.c:1268:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
-         | ^
-         | static 
-   3 warnings and 1 error generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/bridge/fsl-ldb.c:125:30: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     125 |                                 struct drm_bridge_state *,
+         |                                                          ^
+   drivers/gpu/drm/bridge/fsl-ldb.c:127:33: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+     127 |                                 struct drm_connector_state *)
+         |                                                             ^
+   6 warnings generated.
 
 
-vim +975 drivers/soc/qcom/qcom-geni-se.c
+vim +125 drivers/gpu/drm/bridge/fsl-ldb.c
 
-   946	
-   947	/**
-   948	 * read_elf: Function to read elf file.
-   949	 * @rsc: A pointer to SE resources structure.
-   950	 * @fw: A pointer to the fw buffer.
-   951	 * @pelfseg: A pointer to SE specific elf header.
-   952	 * @phdr: pointer to one of the valid headers from list from fw buffer.
-   953	 *
-   954	 * This function reads the ELF file and outputs the pointer to header
-   955	 * data which contains the FW data and any other details.
-   956	 *
-   957	 * return: Return 0 if no error, else return error value.
-   958	 */
-   959	static int read_elf(struct qup_se_rsc *rsc, const struct firmware *fw,
-   960			    struct elf_se_hdr **pelfseg, struct elf32_phdr **phdr)
-   961	{
-   962		const struct elf32_phdr *phdrs;
-   963		const struct elf32_hdr *ehdr;
-   964		const u8 *addr;
-   965		int i;
-   966	
-   967		ehdr = (struct elf32_hdr *)fw->data;
-   968	
-   969		if (ehdr->e_phnum < 2)
-   970			return -EINVAL;
-   971	
-   972		phdrs = (struct elf32_phdr *)(ehdr + 1);
-   973	
-   974		for (i = 0; i < ehdr->e_phnum; i++) {
- > 975			*phdr = &phdrs[i];
-   976			if (!elf_phdr_valid(*phdr))
-   977				continue;
-   978	
-   979			if ((*phdr)->p_filesz >= sizeof(struct elf_se_hdr)) {
-   980				addr =  fw->data + (*phdr)->p_offset;
-   981				*pelfseg = (struct elf_se_hdr *)addr;
-   982	
-   983				if ((*pelfseg)->magic == MAGIC_NUM_SE &&
-   984				    (*pelfseg)->version == 1 &&
-   985				    valid_seg_size(*pelfseg, (*phdr)->p_filesz))
-   986					if ((*pelfseg)->serial_protocol == rsc->protocol &&
-   987					    (*pelfseg)->serial_protocol != GENI_SE_NONE)
-   988						return 0;
-   989			}
-   990		}
-   991		return -EINVAL;
-   992	}
-   993	
+   123	
+   124	static int fsl_ldb_atomic_check(struct drm_bridge *bridge,
+ > 125					struct drm_bridge_state *,
+   126					struct drm_crtc_state *crtc_state,
+   127					struct drm_connector_state *)
+   128	{
+   129		struct fsl_ldb *fsl_ldb = to_fsl_ldb(bridge);
+   130		const struct drm_display_mode *mode = &crtc_state->mode;
+   131		unsigned long requested_link_freq =
+   132			fsl_ldb_link_frequency(fsl_ldb, mode->clock);
+   133		unsigned long freq = clk_round_rate(fsl_ldb->clk, requested_link_freq);
+   134	
+   135		if (freq != requested_link_freq) {
+   136			/*
+   137			 * this will lead to flicker and incomplete lines on
+   138			 * the attached display, adjust the CRTC clock
+   139			 * accordingly.
+   140			 */
+   141			struct drm_display_mode *adjusted_mode = &crtc_state->adjusted_mode;
+   142			int pclk = freq / fsl_ldb_link_frequency(fsl_ldb, 1);
+   143	
+   144			if (adjusted_mode->clock != pclk) {
+   145				dev_warn(fsl_ldb->dev, "Adjusted pixel clk to match LDB clk (%d kHz -> %d kHz)!\n",
+   146					 adjusted_mode->clock, pclk);
+   147	
+   148				adjusted_mode->clock = pclk;
+   149				adjusted_mode->crtc_clock = pclk;
+   150			}
+   151		}
+   152	
+   153		return 0;
+   154	}
+   155	
 
 -- 
 0-DAY CI Kernel Test Service
