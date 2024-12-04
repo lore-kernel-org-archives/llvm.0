@@ -1,55 +1,62 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4CD1A8F7A
-	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 18:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9947F185B54
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 18:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733336826; cv=none; b=setXiE9b3nnj6gNGGfupSMpPfJsKY/B5G26XnEXDy/e22LZaKGgBR8z4pdjZzR8kTcqSts4ABwtrWekMx99LCgRnq8qR5rP5liFOkuYEltM39H00xP7+Zdlsbi9QeU2sgkPbenJTx4TCw+NOLXINem6fpZkkGsKnybuamTdaAnQ=
+	t=1733337084; cv=none; b=WyrBWA6D9ZenAx9lqEPwBfQXgo/V+XOBoOXjN4tTUiVfs1fn/e62Pd7X0awaOF+O/8s2k2kwiVhS6OEmqIPABrngxSK9xjN7mmZ/Iy7D7Vpm/Tkx7Xe7poMKH2Sw6DlFYdzkfptIQdYC7mZ4vhHptIUJpxxLlOgsMyQTZ3GccCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733336826; c=relaxed/simple;
-	bh=LfnACZY+IGBSKQrkb+/ytdtTyFyom5OHVAQ3TPIPS3I=;
+	s=arc-20240116; t=1733337084; c=relaxed/simple;
+	bh=fhrL0uncEcrQ3AECIN+oYBnEJDHoGLltvd2rhDn6Kww=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=MqNMaNd9ik866j89PFoCZx26j2ya1tn2ysQcxQ4K4MwON+jr90imdiwCG6b4MVRD0DxZcelTu6Ba5DQLk4Dt1x6ebiqQkXWO1jrGI7WORhzBUhh+MXyAO4/TAqb1LKkmthgFexFosx+YNOrmoIMR0ZEtFcxeZ9N3Mbwss4uvEFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+	 MIME-Version:Content-Type; b=V0/BhPxlvC+fo024Vxz1xoObB4cWxxbN82igCD1MZ8EKGFMVW69/RDW8Tvdj8SltXfEJfdu1U0GcNihFiyn2o3cAT01yFTW+Y3r0LfzSbQkh68KH5OxhkIXwrI+7LRBvvHRMbkv6qV0XADYfIiIZm5havytsjNBpoVAU8ho4pMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
  relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-232-kuq-hB3BMVmopGaamRm1bQ-1; Wed, 04 Dec 2024 18:26:55 +0000
-X-MC-Unique: kuq-hB3BMVmopGaamRm1bQ-1
-X-Mimecast-MFC-AGG-ID: kuq-hB3BMVmopGaamRm1bQ
+ uk-mta-227-kUr0Et9cOBasZhKmceyLzw-1; Wed, 04 Dec 2024 18:31:19 +0000
+X-MC-Unique: kUr0Et9cOBasZhKmceyLzw-1
+X-Mimecast-MFC-AGG-ID: kUr0Et9cOBasZhKmceyLzw
 Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
  (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 4 Dec
- 2024 18:26:16 +0000
+ 2024 18:30:40 +0000
 Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 4 Dec 2024 18:26:16 +0000
+ id 15.00.1497.048; Wed, 4 Dec 2024 18:30:40 +0000
 From: David Laight <David.Laight@ACULAB.COM>
-To: 'Tejun Heo' <tj@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>
-CC: Naresh Kamboju <naresh.kamboju@linaro.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
-	linux-block <linux-block@vger.kernel.org>, open list
-	<linux-kernel@vger.kernel.org>, "lkft-triage@lists.linaro.org"
-	<lkft-triage@lists.linaro.org>, Linux Regressions
-	<regressions@lists.linux.dev>, Anders Roxell <anders.roxell@linaro.org>,
-	"Arnd Bergmann" <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Jens
- Axboe <axboe@kernel.dk>
-Subject: RE: s390: block/blk-iocost.c:1101:11: error: call to
- '__compiletime_assert_557' declared with 'error' attribute: clamp() low limit
- 1 greater than high limit active
-Thread-Topic: s390: block/blk-iocost.c:1101:11: error: call to
- '__compiletime_assert_557' declared with 'error' attribute: clamp() low limit
- 1 greater than high limit active
-Thread-Index: AQHbRlpA05groSrCOUKR/Ly6shl2PrLWPxCwgAAbZJCAAAuyAA==
-Date: Wed, 4 Dec 2024 18:26:16 +0000
-Message-ID: <be025b385bb94e0c92cd02ab57dc984b@AcuMS.aculab.com>
-References: <CA+G9fYsD7mw13wredcZn0L-KBA3yeoVSTuxnss-AEWMN3ha0cA@mail.gmail.com>
- <5ffa868f-cbf0-42ae-ae10-5c39b0de05e7@stanley.mountain>
- <7920126775c74fa5915afbeedcfe2058@AcuMS.aculab.com>
- <c795c090-430a-45a6-88b2-94033d50dea2@stanley.mountain>
- <Z1CUIT8zAqWOnot-@slm.duckdns.org>
-In-Reply-To: <Z1CUIT8zAqWOnot-@slm.duckdns.org>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Linus Torvalds
+	<torvalds@linux-foundation.org>, Luc Van Oostenryck
+	<luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
+	<rikard.falkeborn@gmail.com>, Martin Uecker
+	<Martin.Uecker@med.uni-goettingen.de>
+CC: "linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 01/10] compiler.h: add statically_false()
+Thread-Topic: [PATCH 01/10] compiler.h: add statically_false()
+Thread-Index: AQHbROCIk5mOE+KmUE+HEr8z57N8IbLWaz+w
+Date: Wed, 4 Dec 2024 18:30:40 +0000
+Message-ID: <e115a4245e5342a994a7e596cc6357fa@AcuMS.aculab.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-1-4e4cbaecc216@wanadoo.fr>
+In-Reply-To: <20241203-is_constexpr-refactor-v1-1-4e4cbaecc216@wanadoo.fr>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -61,58 +68,37 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: tN62r2oBUrVJb2Yl4sz4HCBI-BRg1VFKK9WkHOywwGg_1733336814
+X-Mimecast-MFC-PROC-ID: KROWy9RpClrGvOiLnT65-9ji7RriKSl7sMz0D4ED0DI_1733337078
 X-Mimecast-Originator: aculab.com
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 
-From: Tejun Heo
-> Sent: 04 December 2024 17:41
->=20
-> Hello,
->=20
-> On Wed, Dec 04, 2024 at 07:50:14PM +0300, Dan Carpenter wrote:
-> > Tejun probably reads everything to linux-block, but let's CC him explic=
-itly.
->=20
-> Oh, I'm not. Thanks for cc'ing.
->=20
-> > block/blk-iocost.c
-> >   2222                          TRACE_IOCG_PATH(iocg_idle, iocg, now,
-> >   2223                                          atomic64_read(&iocg->ac=
-tive_period),
-> >   2224                                          atomic64_read(&ioc->cur=
-_period), vtime);
-> >   2225                          __propagate_weights(iocg, 0, 0, false, =
-now);
-> >                                                           ^
-> > Why is "active" zero?  __propagate_weights() does a clamp() to 1 as min=
-imum and
-> > we've added new build time asserts so this breaks the build.
-> >
-> >   2226                          list_del_init(&iocg->active_list);
-> >
-...
->=20
-> This is a good catch. It's impressive that this can be caught at compile
-> time. The upper limit can become zero but the lower limit should win as
-> that's there to protect against divide by zero, so I think the right thin=
-ig
-> to do is replacing clamp() with max(min()). Is someone interested in writ=
-ing
-> up the patch and sending it Jens' way?
-
-Perhaps if written as:
-=09inuse =3D min(inuse, active) ?: 1;
-it might stop someone changing it back.
-
-=09David
-
-=09
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+RnJvbTogVmluY2VudCBNYWlsaG9sDQo+IFNlbnQ6IDAyIERlY2VtYmVyIDIwMjQgMTc6MzMNCj4g
+DQo+IEZyb206IFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+DQo+
+IA0KPiBGb3IgY29tcGxldGlvbiwgYWRkIHN0YXRpY2FsbHlfZmFsc2UoKSB3aGljaCBpcyB0aGUg
+ZXF1aXZhbGVudCBvZg0KPiBzdGF0aWNhbGx5X3RydWUoKSBleGNlcHQgdGhhdCBpdCB3aWxsIHJl
+dHVybiB0cnVlIG9ubHkgaWYgdGhlIGlucHV0IGlzDQo+IGtub3duIHRvIGJlIGZhbHNlIGF0IGNv
+bXBpbGUgdGltZS4NCg0KVGhpcyBpcyBwcmV0dHkgbXVjaCBwb2ludGxlc3MuDQpJdCBpcyBqdXN0
+IGFzIGVhc3kgdG8gaW52ZXJ0IHRoZSBjb25kaXRpb24gYXQgdGhlIGNhbGwgc2l0ZS4NCg0KCURh
+dmlkDQoNCj4gDQo+IFRoZSA9PSBvcGVyYXRvciBpcyB1c2VkIGluc3RlYWQgb2YgdGhlICEgbmVn
+YXRpb24gdG8gcHJldmVudCBhDQo+IC1XaW50LWluLWJvb2wtY29udGV4dCBjb21waWxlciB3YXJu
+aW5nIHdoZW4gdGhlIGFyZ3VtZW50IGlzIG5vdCBhDQo+IGJvb2xlYW4uIEZvciBleGFtcGxlOg0K
+PiANCj4gICBzdGF0aWNhbGx5X2ZhbHNlKHZhciAqIDApDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBW
+aW5jZW50IE1haWxob2wgPG1haWxob2wudmluY2VudEB3YW5hZG9vLmZyPg0KPiAtLS0NCj4gIGlu
+Y2x1ZGUvbGludXgvY29tcGlsZXIuaCB8IDEgKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9jb21waWxlci5oIGIvaW5j
+bHVkZS9saW51eC9jb21waWxlci5oDQo+IGluZGV4IDQ2OWE2NGRkNjQ5NWZlZmFiMmM4NWZmYzI3
+OTU2OGE2NTdiNzI2NjAuLmEyYTU2YTUwZGQ4NTIyN2E0ZmRjNjIyMzZhMjcxMGNhMzdjNWJhNTIg
+MTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgvY29tcGlsZXIuaA0KPiArKysgYi9pbmNsdWRl
+L2xpbnV4L2NvbXBpbGVyLmgNCj4gQEAgLTMxNCw2ICszMTQsNyBAQCBzdGF0aWMgaW5saW5lIHZv
+aWQgKm9mZnNldF90b19wdHIoY29uc3QgaW50ICpvZmYpDQo+ICAgKiB2YWx1ZXMgdG8gZGV0ZXJt
+aW5lIHRoYXQgdGhlIGNvbmRpdGlvbiBpcyBzdGF0aWNhbGx5IHRydWUuDQo+ICAgKi8NCj4gICNk
+ZWZpbmUgc3RhdGljYWxseV90cnVlKHgpIChfX2J1aWx0aW5fY29uc3RhbnRfcCh4KSAmJiAoeCkp
+DQo+ICsjZGVmaW5lIHN0YXRpY2FsbHlfZmFsc2UoeCkgKF9fYnVpbHRpbl9jb25zdGFudF9wKHgp
+ICYmICh4KSA9PSAwKQ0KPiANCj4gIC8qDQo+ICAgKiBUaGlzIGlzIG5lZWRlZCBpbiBmdW5jdGlv
+bnMgd2hpY2ggZ2VuZXJhdGUgdGhlIHN0YWNrIGNhbmFyeSwgc2VlDQo+IA0KPiAtLQ0KPiAyLjQ1
+LjINCj4gDQo+IA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9h
+ZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBO
+bzogMTM5NzM4NiAoV2FsZXMpDQo=
 
