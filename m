@@ -1,197 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA5E18FC7B;
-	Wed,  4 Dec 2024 21:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA3318C903
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 21:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733346090; cv=none; b=gO4EFUFtEppyls50mLuW4HrpUqEXGsMeqBzYWj9TJM8lgwLh9oaKl4/AhY6qsOfFccUa76zYxTxLzJLcogwn5r7bYOvJkyqtH8HF7Ww0n7+GtO657p+sqwUdiakAIgFMyxeDKwKlIPuyy+dW+8BZckbeesOGcl63ockopy92hB4=
+	t=1733347246; cv=none; b=bn5+eTFSDiH3/ZhTodTFsC+jav/qn96r1wpQ0Pm28iU/8SHB3vkkobDnJG/yWy7vB6cHToEfmiakWwa3mb2aZK2LWQ3rA5YtvCLgYladCrJ+EHuQOwwcdkjINLMBw/mznp+8VRjMDeC0RY85uFyAQIekOZmxyemnAc/I5Tqf3+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733346090; c=relaxed/simple;
-	bh=YYisex5fANxvp1J7FXSt2wFTYyLxl4fy8A9aDQDg1FQ=;
+	s=arc-20240116; t=1733347246; c=relaxed/simple;
+	bh=DmTd11zWX81WQA+LHno3MSUDiBFXhLbTtvsyV8RhXqg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zu82s5yC9IJ4wbIiA2rutz9yBXwyKRA0tKLcUL/dzP7oiYiouVF5BJIdE7g4e6VWKmE/m9VOP45xXIkGGEURBhHnz1PG0oF6xBJoDr26HeW+fAR7H3q5Bu14Yncljti44F75F3h/HunQh/bRzT5RgDRJYmq8+rJfrgfvf1IORnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QCFt4JeZ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=QiJYXntGWi+P+xJkanmEvPFRfkaDBqN7er08Xmk0/uyQ1TprteHoJFFXEgN4Fp7BVJ36R7BMpwZvp85t4RL5HYwlr9Z1PccO8Ep7lHI+o03gi+CJexG86ZivgE1qIw6l5n93/SxzC5optP1ZXEVPEap6u6qmefBXraLRcIogBsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HKxPio5W; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QCFt4JeZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733346089; x=1764882089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YYisex5fANxvp1J7FXSt2wFTYyLxl4fy8A9aDQDg1FQ=;
-  b=QCFt4JeZ6/2Q4MJssAH8pIyjXoo529CBj5IMfn4dFtPV4FCVuFETu3BQ
-   1rKjz5CL9+/53KYqftcqQ/xHRiZdiZA55vWsI5zmQN2tqUol1KB5crSMm
-   fpis/UZMw6JWRHrv2n6mSIquLEnojoYcLrgjgk0IBwp8k1U70vRMzeA6e
-   6INSZE/+npoqKXd1ciSDywFdVkW2A4unz/qnin3MoQdUdoOf1zt9JsBxw
-   kEb/djk8+FWY+9j1z/DT/auLLRiHt4V95VucIM/hivx/qhLdN1s2vvgYg
-   aKVYGS42vQmkbaHpPXjably/ExAiuLMQUraXRA7AXFTvphBlUM/9F/Enk
-   g==;
-X-CSE-ConnectionGUID: ESJa+yBeRSGfNjX2TE8Kvg==
-X-CSE-MsgGUID: 0XBtZlfkSx6ammeG6kSEaw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33376976"
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="33376976"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 13:01:25 -0800
-X-CSE-ConnectionGUID: QWS2hJyNQWOxHgI42sEvdA==
-X-CSE-MsgGUID: 21i45RZzRYqLQ7OlhLyg3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="97937245"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Dec 2024 13:01:21 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIwUo-0003UD-2j;
-	Wed, 04 Dec 2024 21:01:18 +0000
-Date: Thu, 5 Dec 2024 05:00:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tariq Toukan <tariqt@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
-	linux-rdma@vger.kernel.org, Carolina Jubran <cjubran@nvidia.com>,
-	Cosmin Ratiu <cratiu@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH net-next V4 07/11] devlink: Extend devlink rate API with
- traffic classes bandwidth management
-Message-ID: <202412050416.e7egEz4f-lkp@intel.com>
-References: <20241203202924.228440-8-tariqt@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKxPio5W"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7258cf2975fso255542b3a.0
+        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 13:20:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733347244; x=1733952044; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BNA1GsPxilVJChqzg/IHgUeCWNBJYbUvWL6MaZGSVcI=;
+        b=HKxPio5WoPRheXMOAhhXdL1hb33lGv88Y58m007lDKXvFoHvW7bAo9r7FmxVGmi3X7
+         E3YmkEbJDhnTxF9XxrUdLsnWcFGrhlYziX3Dw+6zwFq7CCG5CRZcpa+4nUJOsRod8epb
+         LT4axpai9fiGML8WOkrZGcReErKvClU0czvsYZqqcLv6kzu7FWB/AMSfWwI+d4Txm0Ew
+         d2it5tEj7QmsGaNnvmYRHu3EYhdInjdlpE+QjL31ZS1UU8CFyYm36nxkB6bgzbDpqrAI
+         MFUOja50USKeKMTmjOmystaVD+NfEsQlYCCAlTqieZqpjTHPcS65W44Gi9RHgrNiAmmD
+         qe1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733347244; x=1733952044;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BNA1GsPxilVJChqzg/IHgUeCWNBJYbUvWL6MaZGSVcI=;
+        b=kuO+seADFUeEz9JAqZ2YklNDtK9zvd/YkMpoKxZgjygqCMyJUJxKpvkbrjGPSgZmQt
+         tZBKY1dBkwzIeYFxmIzVuz1ILn3UGlykbqfqfhAFHBR8rBaxkpYtn0odHJuDWk2N5YPk
+         rZwtjLIb65GD/EUpOBXAGlilG58NPS47a8CsPSvtSLje9nVrcjdUguVhtKc41RdrTnfD
+         Dva2GMC6EiFCHckVMl8pbXIjFINe6gkiIAlxWXFc4daWU8CQNYAxDCvmRXswY43Cuu55
+         AMPrwF04ViEqPlBiLiaNtOdK9okZzdFkD7NV/hnAAYxpoliF49B+5Ro47BNIu9ImH17s
+         EOMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVErj7gLk4rKrKqusEIZerGARXtfhgDDJ3G7SwxDDEdlk3MCg0ahRIJmdQi4AmXl3/RqXrk@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyep4AAsJEDA/OaSZDpc3x0yDwl6I36CxlZQmBzlu0Rus4hiBEB
+	kW+HvRlVruxyYtzkDkmo0Zgj8HI683KUxaTEQVPAgF7KHLD5EHENW5ENOA==
+X-Gm-Gg: ASbGncs5DuubuB6UYRWCTukWj+FTeoO6dQFIjgaH/fwHRU1jhIflHYVPjEBxUhj2ura
+	ASEHpObk3FyPUFybllQknyTREbxzh/4tRiFVbKgrfuUvnIAdu8dRD+qpv6bzp9yDiX7kWxbZ0Vx
+	+Vl+m8aKxsdDlGA7MYsXUgPUMqgDDewNqFWBC30+L8JWvTHcJqgiJSpicOhK51RgSNxu/FZ6qC2
+	nC0O6ZgGx4gbZKnC+S2dR6+MwcAqx5dsGrjqLzcvUtUSRCwUA==
+X-Google-Smtp-Source: AGHT+IFEmSUNzGrT5DnfoRZVH+SQ2pUXxmGmw+aJzGPI7oEZwncOxNonhADpq7F5PtDa6Cd2EgQG5g==
+X-Received: by 2002:a05:6a00:3022:b0:725:9202:6731 with SMTP id d2e1a72fcca58-72592026879mr4620300b3a.13.1733347244177;
+        Wed, 04 Dec 2024 13:20:44 -0800 (PST)
+Received: from localhost ([216.228.125.129])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7258b2e79d3sm2235622b3a.67.2024.12.04.13.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 13:20:43 -0800 (PST)
+Date: Wed, 4 Dec 2024 13:20:39 -0800
+From: Yury Norov <yury.norov@gmail.com>
+To: David Laight <David.Laight@aculab.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+	Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"coresight@lists.linaro.org" <coresight@lists.linaro.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+Message-ID: <Z1DHp34fyyhtLEV0@yury-ThinkPad>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+ <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20241203202924.228440-8-tariqt@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
 
-Hi Tariq,
+> > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> > index a2a56a50dd85227a4fdc62236a2710ca37c5ba52..30ce06df4153cfdc0fad9bc7bffab9097f8b0450 100644
+> > --- a/include/linux/compiler.h
+> > +++ b/include/linux/compiler.h
+> > @@ -316,6 +316,47 @@ static inline void *offset_to_ptr(const int *off)
+> >  #define statically_true(x) (__builtin_constant_p(x) && (x))
+> >  #define statically_false(x) (__builtin_constant_p(x) && (x) == 0)
+> > 
+> > +/*
+> > + * Whether x is the integer constant expression 0 or something else.
+> > + *
+> > + * Details:
+> > + *   - The C11 standard defines in §6.3.2.3.3
+> > + *       (void *)<integer constant expression with the value 0>
+> > + *     as a null pointer constant (c.f. the NULL macro).
+> > + *   - If x evaluates to the integer constant expression 0,
+> > + *       (void *)(x)
+> > + *     is a null pointer constant. Else, it is a void * expression.
+> > + *   - In a ternary expression:
+> > + *       condition ? operand1 : operand2
+> > + *     if one of the two operands is of type void * and the other one
+> > + *     some other pointer type, the C11 standard defines in §6.5.15.6
+> > + *     the resulting type as below:
+> > + *       if one operand is a null pointer constant, the result has the
+> > + *       type of the other operand; otherwise [...] the result type is
+> > + *       a pointer to an appropriately qualified version of void.
+> > + *   - As such, in
+> > + *       0 ? (void *)(x) : (char *)0
+> > + *     if x is the integer constant expression 0, operand1 is a null
+> > + *     pointer constant and the resulting type is that of operand2:
+> > + *     char *. If x is anything else, the type is void *.
+> > + *   - The (long) cast silences a compiler warning for when x is not 0.
+> > + *   - Finally, the _Generic() dispatches the resulting type into a
+> > + *     Boolean.
+> 
+> The comment is absolutely excessive.
 
-kernel test robot noticed the following build warnings:
+I like this comment. Particularly I like the references to the standard
+followed by a step-by-step explanation of how the macro is built.
 
-[auto build test WARNING on net-next/main]
+> I'm sure I managed about 2 lines in one of the patches I did.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/net-mlx5-ifc-Reorganize-mlx5_ifc_flow_table_context_bits/20241204-124235
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241203202924.228440-8-tariqt%40nvidia.com
-patch subject: [PATCH net-next V4 07/11] devlink: Extend devlink rate API with traffic classes bandwidth management
-config: x86_64-buildonly-randconfig-001-20241205 (https://download.01.org/0day-ci/archive/20241205/202412050416.e7egEz4f-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050416.e7egEz4f-lkp@intel.com/reproduce)
+Sorry, don't understand this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050416.e7egEz4f-lkp@intel.com/
+Thanks,
+Yury
 
-All warnings (new ones prefixed by >>):
-
-   In file included from net/devlink/rate.c:7:
-   In file included from net/devlink/devl_internal.h:7:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/devlink/rate.c:7:
-   net/devlink/devl_internal.h:29:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      29 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:26:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      26 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:30:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      30 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:26:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      26 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/devlink/rate.c:403:4: warning: 'snprintf' will always be truncated; specified size is 80, but format string expands to at least 83 [-Wformat-truncation]
-     403 |                         NL_SET_ERR_MSG_FMT(info->extack,
-         |                         ^
-   include/linux/netlink.h:116:6: note: expanded from macro 'NL_SET_ERR_MSG_FMT'
-     116 |         if (snprintf(__extack->_msg_buf, NETLINK_MAX_FMTMSG_LEN,               \
-         |             ^
-   7 warnings generated.
-
-
-vim +/snprintf +403 net/devlink/rate.c
-
-   381	
-   382	static int devlink_nl_rate_tc_bw_set(struct devlink_rate *devlink_rate,
-   383					     struct genl_info *info)
-   384	{
-   385		DECLARE_BITMAP(bitmap, IEEE_8021QAZ_MAX_TCS) = {};
-   386		struct devlink *devlink = devlink_rate->devlink;
-   387		const struct devlink_ops *ops = devlink->ops;
-   388		u32 tc_bw[IEEE_8021QAZ_MAX_TCS] = {};
-   389		int rem, err = -EOPNOTSUPP, i;
-   390		struct nlattr *attr;
-   391	
-   392		nla_for_each_attr(attr, genlmsg_data(info->genlhdr),
-   393				  genlmsg_len(info->genlhdr), rem) {
-   394			if (nla_type(attr) == DEVLINK_ATTR_RATE_TC_BWS) {
-   395				err = devlink_nl_rate_tc_bw_parse(attr, tc_bw, bitmap, info->extack);
-   396				if (err)
-   397					return err;
-   398			}
-   399		}
-   400	
-   401		for (i = 0; i < IEEE_8021QAZ_MAX_TCS; i++) {
-   402			if (!test_bit(i, bitmap)) {
- > 403				NL_SET_ERR_MSG_FMT(info->extack,
-   404						   "Incomplete traffic class bandwidth values, all %u traffic classes must be specified",
-   405						   IEEE_8021QAZ_MAX_TCS);
-   406				return -EINVAL;
-   407			}
-   408		}
-   409	
-   410		if (devlink_rate_is_leaf(devlink_rate))
-   411			err = ops->rate_leaf_tc_bw_set(devlink_rate, devlink_rate->priv, tc_bw,
-   412						       info->extack);
-   413		else if (devlink_rate_is_node(devlink_rate))
-   414			err = ops->rate_node_tc_bw_set(devlink_rate, devlink_rate->priv, tc_bw,
-   415						       info->extack);
-   416	
-   417		if (err)
-   418			return err;
-   419	
-   420		memcpy(devlink_rate->tc_bw, tc_bw, sizeof(tc_bw));
-   421	
-   422		return 0;
-   423	}
-   424	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > + *
+> > + * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+> 
+> IIRC Martin has agreed in the past that the accreditation can
+> be removed - especially since it refers to the 'sizeof (void)' trick.
+> 
+> > + */
+> > +#define __is_const_zero(x) \
+> > +	_Generic(0 ? (void *)(long)(x) : (char *)0, char *: 1, void *: 0)
+> > +
+> > +/*
+> > + * Returns a constant expression while determining if its argument is a
+> > + * constant expression, most importantly without evaluating the argument.
+> 
+> You need to differentiate between a 'constant integer expression'
+> and a 'compile time constant'.
+>  
+> > + *
+> > + * If getting a constant expression is not relevant to you, use the more
+> > + * powerful __builtin_constant_p() instead.
+> 
+> __builtin_constant_p() is not 'more powerful' it is testing for
+> something different.
+> 
+> 	David
+> 
+> > + */
+> > +#define is_const(x) __is_const_zero(0 * (x))
+> > +
+> >  /*
+> >   * This is needed in functions which generate the stack canary, see
+> >   * arch/x86/kernel/smpboot.c::start_secondary() for an example.
+> > 
+> > --
+> > 2.45.2
+> > 
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
