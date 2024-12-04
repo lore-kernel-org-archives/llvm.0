@@ -1,77 +1,77 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2649209F5B
-	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 14:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903731FECCF;
+	Wed,  4 Dec 2024 15:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733323176; cv=none; b=usjYPkSAFU8DGvoqtJ9cfhW1rNZOzB7MkUYjvr11dIQ+8kUor+gyYshtKAreBbBJ3sW5YoZd715wEghQoYKBdSTLCFC1T8D6ZoQN9sdYuXnSfuwZpTmBoJc7/9EeV9jbPYFvDwXpINuEIWHrjaLY/bVcXbZWCQOxIf4KTYVaBa8=
+	t=1733325231; cv=none; b=cf8D42aQkGgqX9E+XNBGGM2wRew4RK9oPPp6lpWXJG7rm8KZsNcs9B8KzrA886ECElIE/qz8qYIU0jHtaANUotKCQqKEJVfHK4p4+XEavY5g2OaGRj7piH1gjV0yRQ90YR//u+U0C39Zae/0Z/0dHQDQfUEG4P2CI6Er8C4RqE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733323176; c=relaxed/simple;
-	bh=7vm+GgU7IzYoJVoPQmQEkbgSGw3DdebIEtgOIlj7sr4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TIxAOg3tTV4HXzli3C3M+cNcsFl+4GhFdzFZKOqmR0kWzYJBBzL3w1HLW1Eddc+3NIfxtrcM7oS6aRYZ/tE6kTMx5pqMgmXjziPd4u/jcB5WsVazbsZPpL14LHhUKiY7ppMgKgPfJO+7hDcOMInFPB9S0neq2/Pnkmzls3lk6Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nZWoaJBj; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1733325231; c=relaxed/simple;
+	bh=EEf76SgX/3puazt8ufia4uZKilO394GYwACgLeP/Df8=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ns/YOO+lGL3fL4XOAMKOJuHGe7pd5jirrZxMG2LbbRkE/qhPNzoDXeI5qbKEFBEGcuSW/49//dxtAKw6rkV9igHUur0hwN1Ul7Ao7mO5JIntvEtnqpfwD3PNT8by1v2ixeiJEkLq0M6X1D404j1fyYnzoBsVBdj7fD1Smsi9u2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UfVmNZ32; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nZWoaJBj"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434a1833367so6178195e9.1
-        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 06:39:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UfVmNZ32"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-434ab938e37so45425435e9.0;
+        Wed, 04 Dec 2024 07:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733323173; x=1733927973; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7Deb6ozPBCd5HaUFhdz6hCVVIOvpic/u3v2HTGhW9U=;
-        b=nZWoaJBjL7LstkzmXqUUJkeB5L7A8MfEtoYgRJYnZL9l8DE8FXigFzgwFWbmhcmM8E
-         uzmXoTRm2bo6a4Z26awUK/ckOpfz+JOCG/pTk6K63mfk+dMM2ZfR93UMsiqNYDLARGHr
-         3vf9fQ5nLEMKrYc6rQt9ufMupwZ/k22L3FztIpCNN4mmvRHITD59GvkvgpnMBghCgck6
-         CK/c9BRJAfILJqgVfHDDGXgKrHAxixpATX84sVMHh9qVMFCwyg9tZVpOm7QOmc2i160o
-         0S0Msefzz55kRxMPmg4eTMRfxMZ0/cHnIT1XaKB0KATg+FsT23tJefnNtrxAJmPsO+Ce
-         OMig==
+        d=gmail.com; s=20230601; t=1733325228; x=1733930028; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=K67aLAUzSfbUuMMVxrZ7xG6js3aZNsZytWIuEf4fsUo=;
+        b=UfVmNZ32EOhGI3nXcfeBr6GS/9CRDmZLU0ainoucRUNbud1APQdtMW2vkUMa0qkQQc
+         6PkOby0OIq9Nmsvux92RqG0bwzZbmbNT5nJZAmlsn6RSS9PMYDW/k/DE3BfmuoYPp27n
+         VltMvWvhzB6d9WAJocywFw9G/pkeX7q2jrsQDwIqBbGHdk/Hziwp2kb4PwreIghHQzbF
+         zeHEEiDJUb5OGSCBJH1o1Rqo9lTj6KLtd1VZ64PNqSWWo1ph9G4KFQJZX4e9MB7gfQlm
+         Cxo4RqfnGuhHE1XcRiwOfdA80Jczqbw12vn5i2OKjGmXIfC5SsxnH7oJE1xPcBuBmxAA
+         j1mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733323173; x=1733927973;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1733325228; x=1733930028;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u7Deb6ozPBCd5HaUFhdz6hCVVIOvpic/u3v2HTGhW9U=;
-        b=SCfxN8rbgAWScXye5rDvpJ5y2DrQ6s3UKfOkliK3z8i46o49rydhHfxl3gyczdRMfw
-         mHOROehkATjkaKJsklxk/nq9tAKvWE7vOcuzj8i+z6A0O5OBsKQsEwfVGwCf/Jszq9Zz
-         Jvv/QeJ2Vo0yL7lCnw/hcnKjA5pv4LstWpXjyxP+Le5pASGbIPt9PqkciMRDk6Hhkpm6
-         PND5xybZ/SVXMukLv9B5blktFq7a2hNAuREHoBn3PvFu8SgXoWXZyr0qFK/T9rVUF1WG
-         N88iErgt/TRAsKhlHrqP52r5YkK2Ge6uU7vJ8Fj1BnaJW4b5dv9wpLw1lpz2OmoU6eAW
-         JLjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVAnB6Hx9rkeaAKk/hQhiKC8PmRtnxzcYKWczIkdk9UTD1ZzoUSkZ+JUtczT011txD7GUAh@lists.linux.dev
-X-Gm-Message-State: AOJu0YxoXpMzjhofIyC1I5Z62a69f+lteKPEM8nM0c1tGN0ews0Ucuyz
-	vD6JSLuxCkBquShRa8SBpGzG2PGNAcaLGyReBaEnAXJEYnKAyg1+fun2FeL4uX4=
-X-Gm-Gg: ASbGncvzz+4h/K1YOYM8LcKD317ZcRHCYdvnI9UU4WYKClMkHY2qHzLJ+cWTzTIYcwL
-	4TQkg0599rqV2HCkjCpWgYX9mN00H2r1N4dJN0CVUDQiN17G+rh39BF/ZpqiXLreNDC6GEvyoPv
-	9rmwOS5MiGIJk0QUYAsr0oYAoO2XL9koO3NnKaZqtakyK6ilLoR3N3QQCN/DLtJeFvhuNgt2UWL
-	PQOoagWsf8ma+cnrZcOo1kg44qAOEg+ajKdd+CE0UCtrYGwp2pzkj8=
-X-Google-Smtp-Source: AGHT+IFgNAhlHmTZM9dIRgErvl8+0lGzD3UNMNEnIcEA1d5Rnbb0Ap2o8TKx3zX6wtjKyR3FwkoocA==
-X-Received: by 2002:a05:600c:198e:b0:434:9cf6:a2a5 with SMTP id 5b1f17b1804b1-434afb9ecc7mr229792735e9.8.1733323173202;
-        Wed, 04 Dec 2024 06:39:33 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434d528ab4esm26074105e9.26.2024.12.04.06.39.32
+        bh=K67aLAUzSfbUuMMVxrZ7xG6js3aZNsZytWIuEf4fsUo=;
+        b=ekazySlaHFIE6cmVWlodvVmsmz8FsCiZuO2KKAMT4jHSJfQx9z05UxYHln7n0DDLx8
+         m6CCGArOTk+ZggQfxtchG6chDOodBeJ6qoqBpX2tNSpzYUxLI2znw7k3rsTLt16IFS9g
+         1Gc2l+Te7fTvBFKnjpjPdxIpqSVb3HcNXV51hWP71cw5WUaUL1ltIBPr+eXK9Nyk8jRF
+         hMbTdbni59tpyRjLH+0zn1+MuSZXesLIWSwf0Fh21N9RMFo4/TOy6+GR0Df1cP9iLAQz
+         nqnNzco83tYvkddRWUINifMbsbKAjl2VhEbBinfy9iu5RuYmPeR9NPeU3Qv4s1/SIEas
+         mJtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWFSPDpnUp+aj59S29iIWSPUjfyp4tFPF7qCHNfGm5/FC2Xr1XXwVGXOqEtwTNwo3QeEGPR@lists.linux.dev, AJvYcCXb2TFktw4jXirKK/t0yTxRIlddkiFlyFrdqttEtV6Zl2fIq74A4yzgbO8Ly791utwxdHbTHXFtPpRtS9El7Q==@lists.linux.dev
+X-Gm-Message-State: AOJu0YzLe8CqCzsytDnANWgULqAbwBCRqcKrDScOw/6oTyMkznCMNjkQ
+	zq2qo+mtePDnDOl2y1Hd/QIqqESHi9vEDaPTmjR5TjLBxBmAx7H2
+X-Gm-Gg: ASbGncvmz5ZZ2aC3TACRG70ujHrNP2LJrxGOyUrrAqxIxzHzLt4KMev9+6If2lLBciA
+	+ulz4TPT5WBofnprQjbnLflYDQ56vc8YbuEtnyyph/Yk9oYXgOvjokvqe64YPoX8qgrle7zAufm
+	viirh0utTQQNmjwjbjdGi0jFCA0DhkBFF4S1SP9dFnJUcupLtj8DIGGfA41iHlLRi5aaiL+8LJB
+	cCb7XBsn/xz9x0yOnBGjL//QyzQijEUtibUqo1KtpJWIyU7LA+ByFVl+QaC/ShwAzCxK7QYqvb3
+	6hM7ug==
+X-Google-Smtp-Source: AGHT+IGZWimo8j6jMFRask/atuO/zxTgFDYDzsdxIc9v2gqFWxahTgIfn6oEZjIvWK770r9mpIOd6Q==
+X-Received: by 2002:a05:600c:1c1d:b0:434:932b:a44c with SMTP id 5b1f17b1804b1-434d3fe339emr38546645e9.27.1733325227755;
+        Wed, 04 Dec 2024 07:13:47 -0800 (PST)
+Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434d5288e02sm27431415e9.20.2024.12.04.07.13.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 06:39:32 -0800 (PST)
-Date: Wed, 4 Dec 2024 17:39:29 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	David Laight <David.Laight@aculab.com>
-Cc: linux-s390@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>,
-	linux-block <linux-block@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Subject: Re: s390: block/blk-iocost.c:1101:11: error: call to
- '__compiletime_assert_557' declared with 'error' attribute: clamp() low
- limit 1 greater than high limit active
-Message-ID: <5ffa868f-cbf0-42ae-ae10-5c39b0de05e7@stanley.mountain>
-References: <CA+G9fYsD7mw13wredcZn0L-KBA3yeoVSTuxnss-AEWMN3ha0cA@mail.gmail.com>
+        Wed, 04 Dec 2024 07:13:47 -0800 (PST)
+Message-ID: <675071ab.7b0a0220.183cea.8610@mx.google.com>
+X-Google-Original-Message-ID: <Z1Bxp0xQYLa6G0a6@Ansuel-XPS.>
+Date: Wed, 4 Dec 2024 16:13:43 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+References: <20241203163158.580-2-ansuelsmth@gmail.com>
+ <202412041929.8aCqrGnO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,119 +80,94 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsD7mw13wredcZn0L-KBA3yeoVSTuxnss-AEWMN3ha0cA@mail.gmail.com>
+In-Reply-To: <202412041929.8aCqrGnO-lkp@intel.com>
 
-Let's add David to the Cc list because he's the expert on clamp().
+On Wed, Dec 04, 2024 at 07:22:41PM +0800, kernel test robot wrote:
+> Hi Christian,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on rafael-pm/linux-next]
+> [also build test ERROR on rafael-pm/bleeding-edge robh/for-next linus/master v6.13-rc1 next-20241203]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/cpufreq-airoha-Add-EN7581-CPUFreq-SMCCC-driver/20241204-113105
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+> patch link:    https://lore.kernel.org/r/20241203163158.580-2-ansuelsmth%40gmail.com
+> patch subject: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+> config: arm-randconfig-003 (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412041929.8aCqrGnO-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/cpufreq/airoha-cpufreq.c:41:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
+>       41 |         const struct arm_smccc_1_2_regs args = {
+>          |                                         ^
+>    drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       41 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+> >> drivers/cpufreq/airoha-cpufreq.c:45:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
+>       45 |         struct arm_smccc_1_2_regs res;
+>          |                                   ^
+>    drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       41 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+> >> drivers/cpufreq/airoha-cpufreq.c:47:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>       47 |         arm_smccc_1_2_smc(&args, &res);
+>          |         ^
+>    drivers/cpufreq/airoha-cpufreq.c:81:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
+>       81 |         const struct arm_smccc_1_2_regs args = {
+>          |                                         ^
+>    drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       81 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+>    drivers/cpufreq/airoha-cpufreq.c:86:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
+>       86 |         struct arm_smccc_1_2_regs res;
+>          |                                   ^
+>    drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
+>       81 |         const struct arm_smccc_1_2_regs args = {
+>          |                      ^
+>    drivers/cpufreq/airoha-cpufreq.c:88:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>       88 |         arm_smccc_1_2_smc(&args, &res);
+>          |         ^
+>    6 errors generated.
+> 
+> 
+> vim +41 drivers/cpufreq/airoha-cpufreq.c
+> 
+>     37	
+>     38	static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
+>     39						    unsigned long parent_rate)
+>     40	{
+>   > 41		const struct arm_smccc_1_2_regs args = {
+>     42			.a0 = AIROHA_SIP_AVS_HANDLE,
+>     43			.a1 = AIROHA_AVS_OP_GET_FREQ,
+>     44		};
+>   > 45		struct arm_smccc_1_2_regs res;
+>     46	
+>   > 47		arm_smccc_1_2_smc(&args, &res);
+>     48	
+>     49		/* SMCCC returns freq in MHz */
+>     50		return (int)(res.a0 * 1000 * 1000);
+>     51	}
+>     52	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-regards,
-dan carpenter
+False positive or better say my error in the kconfig depends logic
 
-On Wed, Dec 04, 2024 at 04:01:09PM +0530, Naresh Kamboju wrote:
-> The s390 builds failed with clang-19 with defconfig on the
-> Linux next-20241203 tag due to following build warnings / errors.
-> Build pass with gcc-13 defconfig for s390.
-> 
-> First seen on Linux next-20241203 tag
-> GOOD: Linux next-20241128 tag
-> BAD: Linux next-20241203 tag
-> 
-> List of arch and toolchains :
->   s390 defconfig with clang-19
-> 
-> s390:
->   build:
->     * clang-19-defconfig
->     * korg-clang-19-lkftconfig-lto-full
->     * korg-clang-19-lkftconfig-hardening
->     * korg-clang-19-lkftconfig-lto-thing
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build log:
-> ===========
-> block/blk-iocost.c:1101:11: error: call to '__compiletime_assert_557'
-> declared with 'error' attribute: clamp() low limit 1 greater than high
-> limit active
->  1101 |                 inuse = clamp_t(u32, inuse, 1, active);
->       |                         ^
-> include/linux/minmax.h:218:36: note: expanded from macro 'clamp_t'
->   218 | #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
->       |                                    ^
-> include/linux/minmax.h:195:2: note: expanded from macro '__careful_clamp'
->   195 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_),
-> __UNIQUE_ID(l_), __UNIQUE_ID(h_))
->       |         ^
-> include/linux/minmax.h:188:2: note: expanded from macro '__clamp_once'
->   188 |         BUILD_BUG_ON_MSG(statically_true(ulo > uhi),
->                  \
->       |         ^
-> note: (skipping 2 expansions in backtrace; use
-> -fmacro-backtrace-limit=0 to see all)
-> include/linux/compiler_types.h:530:2: note: expanded from macro
-> '_compiletime_assert'
->   530 |         __compiletime_assert(condition, msg, prefix, suffix)
->       |         ^
-> include/linux/compiler_types.h:523:4: note: expanded from macro
-> '__compiletime_assert'
->   523 |                         prefix ## suffix();
->          \
->       |                         ^
-> <scratch space>:38:1: note: expanded from here
->    38 | __compiletime_assert_557
->       | ^
-> block/blk-iocost.c:1101:11: error: call to '__compiletime_assert_557'
-> declared with 'error' attribute: clamp() low limit 1 greater than high
-> limit active
-> include/linux/minmax.h:218:36: note: expanded from macro 'clamp_t'
->   218 | #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
->       |                                    ^
-> include/linux/minmax.h:195:2: note: expanded from macro '__careful_clamp'
->   195 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_),
-> __UNIQUE_ID(l_), __UNIQUE_ID(h_))
->       |         ^
-> include/linux/minmax.h:188:2: note: expanded from macro '__clamp_once'
->   188 |         BUILD_BUG_ON_MSG(statically_true(ulo > uhi),
->                  \
->       |         ^
-> note: (skipping 2 expansions in backtrace; use
-> -fmacro-backtrace-limit=0 to see all)
-> include/linux/compiler_types.h:530:2: note: expanded from macro
-> '_compiletime_assert'
->   530 |         __compiletime_assert(condition, msg, prefix, suffix)
->       |         ^
-> include/linux/compiler_types.h:523:4: note: expanded from macro
-> '__compiletime_assert'
->   523 |                         prefix ## suffix();
->          \
->       |                         ^
-> <scratch space>:38:1: note: expanded from here
->    38 | __compiletime_assert_557
->       | ^
-> 2 errors generated.
-> 
-> Links:
-> ---
-> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241203/testrun/26188938/suite/build/test/clang-19-defconfig/log
-> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241203/testrun/26188938/suite/build/test/clang-19-defconfig/history/
-> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241203/testrun/26188938/suite/build/test/clang-19-defconfig/details/
-> 
-> Steps to reproduce:
-> ------------
-> # tuxmake --runtime podman --target-arch s390 --toolchain clang-19
-> --kconfig defconfig LLVM_IAS=1
-> 
-> metadata:
-> ----
->   git describe: next-20241203
->   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->   git sha: c245a7a79602ccbee780c004c1e4abcda66aec32
->   kernel config:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2pjAPS9UrJkbAKFHktQei7eqW4Y/config
->   build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2pjAPS9UrJkbAKFHktQei7eqW4Y/
->   toolchain: clang-19
->   config: clang-19-defconfig
->   arch: s390
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+This driver REQUIRE ARM64 bit for smccc and the target SoC is 64bit
+only. The randconfig catch a situation with ARCH_AIROHA and 32bit.
+
+-- 
+	Ansuel
