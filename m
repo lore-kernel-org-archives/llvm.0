@@ -1,137 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B21156997;
-	Wed,  4 Dec 2024 18:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4CD1A8F7A
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 18:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733336201; cv=none; b=Fc4dBnSRv9tZDygxD67Tmz9SqNH97+2QUzEXbMPW1Nr0z+yiFME4kN7wERzrrxQOnIht11Kn2o0ptuwrIOS7SDxXH8hGinZFLZs3zGoqtlWqL18IVqP+f0Ls/2KCo0yw1swGLugZulFcNw4eFPOXb2qPIEOFQFx/YmIfCYvwwFI=
+	t=1733336826; cv=none; b=setXiE9b3nnj6gNGGfupSMpPfJsKY/B5G26XnEXDy/e22LZaKGgBR8z4pdjZzR8kTcqSts4ABwtrWekMx99LCgRnq8qR5rP5liFOkuYEltM39H00xP7+Zdlsbi9QeU2sgkPbenJTx4TCw+NOLXINem6fpZkkGsKnybuamTdaAnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733336201; c=relaxed/simple;
-	bh=YKOza2Vwkc0Vz8h47QH3KaQnEXcATfJSp4Fyg1Wes4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=r0yq+j5zvicGjxtJoB2SFpGwlCVcwymzFUXVYm0xVeqkwzn/fu6i0K3EIjEN1t9Mi7b/BMFUUTNONeHcmpqBH7q4MO3V6g8V/XOhZSxA05cOGHcTfWtpvqfBrm2HiKuEc70UCrT3F+wjM961VbfupVfLbomwfiaXMJJKHFAe7zE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jYZ2l8gz; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jYZ2l8gz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733336200; x=1764872200;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YKOza2Vwkc0Vz8h47QH3KaQnEXcATfJSp4Fyg1Wes4w=;
-  b=jYZ2l8gzqX1ivnQ2dmcO5+XOhbvD6HEidBWYacfNnNs4i2tzLwqdHlDO
-   XGHc1ItWh1F8DI0ySzNPlsh5E5AD6jVssVh5uM4tm692/6L76dIOPpyYr
-   GGhuiP9tkHfG1jGHbo2oW2/b+xc6tHJPFHIjFF832p+GkjSGKL66PqgPE
-   Utd1VwbHLCFlP1KEypFVuoJ9apDzRuhHlTCYTQcnBYjr8eQQl8IyZDcVu
-   Yv/8BermZlYp8Z7aFEeJ0mrtyo4AdLKvjARzqcBWQrtvnhN/HFptEWPMd
-   3FzAhf7Hjfc+zFv7O5CHfHlr0gI5kcQAQS1UXBc6xDnVToOfuDjahddAi
-   g==;
-X-CSE-ConnectionGUID: DBGYlI/BRqKYJOWF8EWA1Q==
-X-CSE-MsgGUID: ox8uhFbsSDOE7bt2tfZE5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="32959914"
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="32959914"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 10:16:40 -0800
-X-CSE-ConnectionGUID: +nltSXxHS/yiQLXtLl6WhA==
-X-CSE-MsgGUID: ILSiU2pTT/OSFOwDYM9RUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="98818562"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 04 Dec 2024 10:16:38 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tItvP-0003NR-1H;
-	Wed, 04 Dec 2024 18:16:35 +0000
-Date: Thu, 5 Dec 2024 02:15:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/usb/renesas_usbhs/mod.c:195:6: warning: variable 'intenb0'
- set but not used
-Message-ID: <202412050247.vVthPDpE-lkp@intel.com>
+	s=arc-20240116; t=1733336826; c=relaxed/simple;
+	bh=LfnACZY+IGBSKQrkb+/ytdtTyFyom5OHVAQ3TPIPS3I=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=MqNMaNd9ik866j89PFoCZx26j2ya1tn2ysQcxQ4K4MwON+jr90imdiwCG6b4MVRD0DxZcelTu6Ba5DQLk4Dt1x6ebiqQkXWO1jrGI7WORhzBUhh+MXyAO4/TAqb1LKkmthgFexFosx+YNOrmoIMR0ZEtFcxeZ9N3Mbwss4uvEFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-232-kuq-hB3BMVmopGaamRm1bQ-1; Wed, 04 Dec 2024 18:26:55 +0000
+X-MC-Unique: kuq-hB3BMVmopGaamRm1bQ-1
+X-Mimecast-MFC-AGG-ID: kuq-hB3BMVmopGaamRm1bQ
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 4 Dec
+ 2024 18:26:16 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 4 Dec 2024 18:26:16 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Tejun Heo' <tj@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>
+CC: Naresh Kamboju <naresh.kamboju@linaro.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
+	linux-block <linux-block@vger.kernel.org>, open list
+	<linux-kernel@vger.kernel.org>, "lkft-triage@lists.linaro.org"
+	<lkft-triage@lists.linaro.org>, Linux Regressions
+	<regressions@lists.linux.dev>, Anders Roxell <anders.roxell@linaro.org>,
+	"Arnd Bergmann" <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Jens
+ Axboe <axboe@kernel.dk>
+Subject: RE: s390: block/blk-iocost.c:1101:11: error: call to
+ '__compiletime_assert_557' declared with 'error' attribute: clamp() low limit
+ 1 greater than high limit active
+Thread-Topic: s390: block/blk-iocost.c:1101:11: error: call to
+ '__compiletime_assert_557' declared with 'error' attribute: clamp() low limit
+ 1 greater than high limit active
+Thread-Index: AQHbRlpA05groSrCOUKR/Ly6shl2PrLWPxCwgAAbZJCAAAuyAA==
+Date: Wed, 4 Dec 2024 18:26:16 +0000
+Message-ID: <be025b385bb94e0c92cd02ab57dc984b@AcuMS.aculab.com>
+References: <CA+G9fYsD7mw13wredcZn0L-KBA3yeoVSTuxnss-AEWMN3ha0cA@mail.gmail.com>
+ <5ffa868f-cbf0-42ae-ae10-5c39b0de05e7@stanley.mountain>
+ <7920126775c74fa5915afbeedcfe2058@AcuMS.aculab.com>
+ <c795c090-430a-45a6-88b2-94033d50dea2@stanley.mountain>
+ <Z1CUIT8zAqWOnot-@slm.duckdns.org>
+In-Reply-To: <Z1CUIT8zAqWOnot-@slm.duckdns.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: tN62r2oBUrVJb2Yl4sz4HCBI-BRg1VFKK9WkHOywwGg_1733336814
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lad,
+From: Tejun Heo
+> Sent: 04 December 2024 17:41
+>=20
+> Hello,
+>=20
+> On Wed, Dec 04, 2024 at 07:50:14PM +0300, Dan Carpenter wrote:
+> > Tejun probably reads everything to linux-block, but let's CC him explic=
+itly.
+>=20
+> Oh, I'm not. Thanks for cc'ing.
+>=20
+> > block/blk-iocost.c
+> >   2222                          TRACE_IOCG_PATH(iocg_idle, iocg, now,
+> >   2223                                          atomic64_read(&iocg->ac=
+tive_period),
+> >   2224                                          atomic64_read(&ioc->cur=
+_period), vtime);
+> >   2225                          __propagate_weights(iocg, 0, 0, false, =
+now);
+> >                                                           ^
+> > Why is "active" zero?  __propagate_weights() does a clamp() to 1 as min=
+imum and
+> > we've added new build time asserts so this breaks the build.
+> >
+> >   2226                          list_del_init(&iocg->active_list);
+> >
+...
+>=20
+> This is a good catch. It's impressive that this can be caught at compile
+> time. The upper limit can become zero but the lower limit should win as
+> that's there to protect against divide by zero, so I think the right thin=
+ig
+> to do is replacing clamp() with max(min()). Is someone interested in writ=
+ing
+> up the patch and sending it Jens' way?
 
-FYI, the error/warning still remains.
+Perhaps if written as:
+=09inuse =3D min(inuse, active) ?: 1;
+it might stop someone changing it back.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   feffde684ac29a3b7aec82d2df850fbdbdee55e4
-commit: 22ae6415c702680b1d3170717ce34ee31656f8b6 usb: renesas_usbhs: Use platform_get_irq() to get the interrupt
-date:   2 years, 11 months ago
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241205/202412050247.vVthPDpE-lkp@intel.com/config)
-compiler: ClangBuiltLinux clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050247.vVthPDpE-lkp@intel.com/reproduce)
+=09David
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050247.vVthPDpE-lkp@intel.com/
+=09
 
-All warnings (new ones prefixed by >>):
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
 
->> drivers/usb/renesas_usbhs/mod.c:195:6: warning: variable 'intenb0' set but not used [-Wunused-but-set-variable]
-     195 |         u16 intenb0, intenb1;
-         |             ^
-   1 warning generated.
-
-
-vim +/intenb0 +195 drivers/usb/renesas_usbhs/mod.c
-
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  190  
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20  191  static int usbhs_status_get_each_irq(struct usbhs_priv *priv,
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  192  				     struct usbhs_irq_state *state)
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  193  {
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  194  	struct usbhs_mod *mod = usbhs_mod_get_current(priv);
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20 @195  	u16 intenb0, intenb1;
-c4d8199ba1a7aa3 Yoshihiro Shimoda  2014-08-22  196  	unsigned long flags;
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  197  
-c4d8199ba1a7aa3 Yoshihiro Shimoda  2014-08-22  198  	/********************  spin lock ********************/
-c4d8199ba1a7aa3 Yoshihiro Shimoda  2014-08-22  199  	usbhs_lock(priv, flags);
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  200  	state->intsts0 = usbhs_read(priv, INTSTS0);
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20  201  	intenb0 = usbhs_read(priv, INTENB0);
-88a25e02f35e56a Nobuhiro Iwamatsu  2015-01-09  202  
-88a25e02f35e56a Nobuhiro Iwamatsu  2015-01-09  203  	if (usbhs_mod_is_host(priv)) {
-88a25e02f35e56a Nobuhiro Iwamatsu  2015-01-09  204  		state->intsts1 = usbhs_read(priv, INTSTS1);
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20  205  		intenb1 = usbhs_read(priv, INTENB1);
-672bfdaa3100043 Arnd Bergmann      2015-05-22  206  	} else {
-672bfdaa3100043 Arnd Bergmann      2015-05-22  207  		state->intsts1 = intenb1 = 0;
-88a25e02f35e56a Nobuhiro Iwamatsu  2015-01-09  208  	}
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20  209  
-5ea68d541df200d Kuninori Morimoto  2011-04-28  210  	/* mask */
-5ea68d541df200d Kuninori Morimoto  2011-04-28  211  	if (mod) {
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  212  		state->brdysts = usbhs_read(priv, BRDYSTS);
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  213  		state->nrdysts = usbhs_read(priv, NRDYSTS);
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  214  		state->bempsts = usbhs_read(priv, BEMPSTS);
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  215  
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  216  		state->bempsts &= mod->irq_bempsts;
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  217  		state->brdysts &= mod->irq_brdysts;
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  218  	}
-c4d8199ba1a7aa3 Yoshihiro Shimoda  2014-08-22  219  	usbhs_unlock(priv, flags);
-c4d8199ba1a7aa3 Yoshihiro Shimoda  2014-08-22  220  	/********************  spin unlock ******************/
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20  221  
-697d5c004e39010 Shimoda, Yoshihiro 2012-08-20  222  	return 0;
-5ea68d541df200d Kuninori Morimoto  2011-04-28  223  }
-f1407d5c66240b3 Kuninori Morimoto  2011-04-04  224  
-
-:::::: The code at line 195 was first introduced by commit
-:::::: 697d5c004e390102efbf9320a5416873679bea81 usb: renesas_usbhs: modify the irq handler for sharing irq
-
-:::::: TO: Shimoda, Yoshihiro <yoshihiro.shimoda.uh@renesas.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
