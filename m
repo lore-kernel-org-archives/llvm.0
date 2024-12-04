@@ -1,175 +1,281 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584B515B10D;
-	Wed,  4 Dec 2024 16:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EF720C02E
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 16:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733328752; cv=none; b=f7HpfbYq7l8e6+R1oqnyy6n7Nhg4sAgXkrhMAlDUlOzOQPNaAMHPLn270KRWAopBeyozgoocy8DSU1l22ozAjB3roiTW8sTccLO6mqE0PrJRkwIzhZAyW8nb17F8p+eXZR/TEk2KAiPnlZBliDybsAauQCXKLw1Jc/XW4pmBgrY=
+	t=1733329974; cv=none; b=PwImvZBZ1S5Mvppw1M58+jerYuomevCKvwc02A4jI2Q+GfkdR9VM9ddgRQB1R+47lbkOdOVZ0ves1/aJk8WS5PAJlpB/lQUwFioy2FkbSGeWUKYy8C5I1348DddkK5Gs6Uypanxtmu0OHlaBOLzmNZamKUEtSnCHO0vYIVbv3nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733328752; c=relaxed/simple;
-	bh=A0mWy9FBXqC8mM3bOixPp1DSyoXn/b8myrlBMw7cjk8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=to01NgnDINat5RuFnn0NYsBNpQWMIZr+lkLe9LYB9aVfkOQGhVnID9u61lyrxaFMNhIc3L5B0nM+rvfyMZja9MyOOEYErtbPv3BI5zxeCbsP0zeADhR5869e3CinnarlOkyxatp6LjjQ5Efc4NKAQ3ysPcw9Zucv4ADemlBHAUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VACpi4+8; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733329974; c=relaxed/simple;
+	bh=Z0dYTEMwvs7EPeBramaT98wi9z6hwRDhzo523x4GzXQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lfYTLbyFKlKJibYcl11lpJtyxQ3f5cj3gAftPKD2H1CqJ3l3uNK0RJKNGCZYEXYRw/wXW6sfSHbORH3+fgSG/SVT81PaQkN4339uvymgqWp2ul7ub6Bhoy0UkEIy8Qe6dm5XhpFFLCFpuugwpyJTxPR8j3la8J9OK/9F+c4L7UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=fOgQQxqE; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VACpi4+8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733328751; x=1764864751;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A0mWy9FBXqC8mM3bOixPp1DSyoXn/b8myrlBMw7cjk8=;
-  b=VACpi4+8EvOzjnAYaEFylDGV1OHMpoxqigbSTZ1rPU1WVbSr49MLzF+4
-   Wj8DOaWTLLptR12iLinvPWsXdd3bO1GN6VCoJjYYU2s3DSC+sIA5H8Epr
-   Fiu0CjaUUnihiylmsM5qr9xR6t9H7N4ktK9OHOdUhOE8HdZ3o/1S449Xu
-   ofege1YRkFXuZMDY3IpCQEJmAFuk5qFGywgLaJEW1WhsdeG8u9zy77Tjl
-   spElzbaBcS2yF8KNTm4RmQglsCBdz2IEugz7097RbBCADVNAKsw0zTA34
-   tsMkVJZsxZ2F90m6QoNvMAYYfhaZHb2U79zN1w5KJD5tDHQvWuWakhC5+
-   A==;
-X-CSE-ConnectionGUID: AlcpLiIHTqq6TUD4S6MsLQ==
-X-CSE-MsgGUID: NHQHxCQiQf23ZO4lsLdpgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="56086851"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="56086851"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 08:12:30 -0800
-X-CSE-ConnectionGUID: oPcqAMprTyyDLeolDmCVjw==
-X-CSE-MsgGUID: wWI8fBZTQnizCoRB3Fxq8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="131254580"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 04 Dec 2024 08:12:28 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIrzG-0003FR-1J;
-	Wed, 04 Dec 2024 16:12:26 +0000
-Date: Thu, 5 Dec 2024 00:11:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 176/180]
- fs/bcachefs/inode.c:959:2: warning: label followed by a declaration is a C23
- extension
-Message-ID: <202412050055.F6gaGrvq-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="fOgQQxqE"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7fc93152edcso19554a12.0
+        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 08:32:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1733329972; x=1733934772; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9F2gbv4yEGv6FWimwcogNz/DAberMpNHKWgDCnbd2w=;
+        b=fOgQQxqEMOWRb2rVTQvO3cEqAsh5Xoe6nHR9PGUbblgSRPW+GX3N9Px2/lLM6YIDws
+         E0QwSrrVp5VcimqLbKVSt9rWbm2aIv7Oc600iKIi+3PM1xu2FqABrfmwgJnzAAwlmptl
+         kkfZ9d9nUOc6sB9szKmuS1Y8PGneYUL4/3+3w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733329972; x=1733934772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B9F2gbv4yEGv6FWimwcogNz/DAberMpNHKWgDCnbd2w=;
+        b=Kbm+a1VGkNxptmDVbXDNT91N9x3Zf/5o5fTuET0VGKsrnwX8ELlCU6QegXIpn3GU9b
+         2O6VMeJsSGB6bV+PfO5AiTjiIE6PS2OYEiz6NAIsMGuwxTYaLWcfbzCeJ4Vaaj4tG4LX
+         6VWu39iIUSS+giHQUfErzx8z3MRXxN5n+pMYybz05hJcs1J5ogOAYBh1bbyK9Je5MLlI
+         mOAioi5cD9gHlbUECwfbxS5g2ULjgLM24bLgb1oSs5rcXRR3Fow2/VMSrelVQQGG3CYK
+         JX+Bf7VZ7F7zWR2xLAQXD+f6/+QN/ksE9LxlqfIzqkHR35HfyFFWZVqEk/xGGYS4uJLv
+         yIKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWbey8Yemm05jAPMBGG5d35F3aPALt2TaQqqO+pC2eG8Aj7W455Oaj4sTEicoWJhpeBl7fK@lists.linux.dev
+X-Gm-Message-State: AOJu0YyvhBPCRhzUH+6yVcHCEacdugvB47JgMmgliudAJtJ3Xo/0/nuG
+	lwN4HCwEx9drqC/2ep+P2rLRB0TXBVUwAOXYwiC5SzRs/e5zNfyiAj66wIzO/Sc=
+X-Gm-Gg: ASbGncs05h4+nOWjhsTfQXlqklwuNWmVduuNwUDk51qgVXt31fmpqGU0DciCcjx7+Fa
+	RL8qaxfWCmM5S5sdZnEExz6CuVY6+vx5bThQhSTeYwUiw6loghZ24f/YUU/sFbVBsgPqT2IgSCR
+	03GFwUUfUKeQHkQwmcDI9Zu06WzKgn1bpmyKmvI6UBV6LH70lVos3P+tsaELNyeulwHeJ/cPd2A
+	dMuJ7SQ4F1MZC0s5yJ70n4gBlZXiEf6xH9G1rBiGmVNblW0uXrR5pXijQ==
+X-Google-Smtp-Source: AGHT+IH+E1gXaxMcRBNlIPPX1i+yJ6kT0s/1DKSFVWFhZ1hgmYUfBlH8N4Ve1euLnBgvSAii6npH/w==
+X-Received: by 2002:a17:902:f64d:b0:215:8fd3:d1b6 with SMTP id d9443c01a7336-215be6fca4fmr115273835ad.23.1733329970689;
+        Wed, 04 Dec 2024 08:32:50 -0800 (PST)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215884744e6sm60591775ad.174.2024.12.04.08.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 08:32:49 -0800 (PST)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: pabeni@redhat.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	mkarsten@uwaterloo.ca,
+	stfomichev@gmail.com,
+	Joe Damato <jdamato@fastly.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH net-next v2] selftests: net: cleanup busy_poller.c
+Date: Wed,  4 Dec 2024 16:32:39 +0000
+Message-Id: <20241204163239.294123-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   24ae9afb293a4cbfc4c2bd727c956f16d2db072b
-commit: 7b158984d408fc2ee75b7877b1ef37ef496ef8ea [176/180] bcachefs: bcachefs_metadata_version_persistent_inode_cursors
-config: i386-buildonly-randconfig-002-20241204 (https://download.01.org/0day-ci/archive/20241205/202412050055.F6gaGrvq-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050055.F6gaGrvq-lkp@intel.com/reproduce)
+Fix various integer type conversions by using strtoull and a temporary
+variable which is bounds checked before being casted into the
+appropriate cfg_* variable for use by the test program.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050055.F6gaGrvq-lkp@intel.com/
+While here:
+  - free the strdup'd cfg string for overall hygenie.
+  - initialize napi_id = 0 in setup_queue to avoid warnings on some
+    compilers.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Joe Damato <jdamato@fastly.com>
+---
+ v2:
+   - initialize napi_id to 0 in setup_queue to avoid clang warning as
+     suggested by Stanislav. Tested with clang 10.0.0 and 18.1.8
 
-   In file included from fs/bcachefs/inode.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/bcachefs/inode.c:959:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     959 |         struct bkey_s_c k;
-         |         ^
-   fs/bcachefs/inode.c:871:19: warning: unused function 'bkey_generation' [-Wunused-function]
-     871 | static inline u32 bkey_generation(struct bkey_s_c k)
-         |                   ^~~~~~~~~~~~~~~
-   3 warnings generated.
+ tools/testing/selftests/net/busy_poller.c | 88 +++++++++++++----------
+ 1 file changed, 50 insertions(+), 38 deletions(-)
 
+diff --git a/tools/testing/selftests/net/busy_poller.c b/tools/testing/selftests/net/busy_poller.c
+index 99b0e8c17fca..04c7ff577bb8 100644
+--- a/tools/testing/selftests/net/busy_poller.c
++++ b/tools/testing/selftests/net/busy_poller.c
+@@ -54,16 +54,16 @@ struct epoll_params {
+ #define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
+ #endif
+ 
+-static uint32_t cfg_port = 8000;
++static uint16_t cfg_port = 8000;
+ static struct in_addr cfg_bind_addr = { .s_addr = INADDR_ANY };
+ static char *cfg_outfile;
+ static int cfg_max_events = 8;
+-static int cfg_ifindex;
++static uint32_t cfg_ifindex;
+ 
+ /* busy poll params */
+ static uint32_t cfg_busy_poll_usecs;
+-static uint32_t cfg_busy_poll_budget;
+-static uint32_t cfg_prefer_busy_poll;
++static uint16_t cfg_busy_poll_budget;
++static uint8_t cfg_prefer_busy_poll;
+ 
+ /* IRQ params */
+ static uint32_t cfg_defer_hard_irqs;
+@@ -79,6 +79,7 @@ static void usage(const char *filepath)
+ 
+ static void parse_opts(int argc, char **argv)
+ {
++	unsigned long long tmp;
+ 	int ret;
+ 	int c;
+ 
+@@ -86,31 +87,40 @@ static void parse_opts(int argc, char **argv)
+ 		usage(argv[0]);
+ 
+ 	while ((c = getopt(argc, argv, "p:m:b:u:P:g:o:d:r:s:i:")) != -1) {
++		/* most options take integer values, except o and b, so reduce
++		 * code duplication a bit for the common case by calling
++		 * strtoull here and leave bounds checking and casting per
++		 * option below.
++		 */
++		if (c != 'o' && c != 'b')
++			tmp = strtoull(optarg, NULL, 0);
++
+ 		switch (c) {
+ 		case 'u':
+-			cfg_busy_poll_usecs = strtoul(optarg, NULL, 0);
+-			if (cfg_busy_poll_usecs == ULONG_MAX ||
+-			    cfg_busy_poll_usecs > UINT32_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT32_MAX)
+ 				error(1, ERANGE, "busy_poll_usecs too large");
++
++			cfg_busy_poll_usecs = (uint32_t)tmp;
+ 			break;
+ 		case 'P':
+-			cfg_prefer_busy_poll = strtoul(optarg, NULL, 0);
+-			if (cfg_prefer_busy_poll == ULONG_MAX ||
+-			    cfg_prefer_busy_poll > 1)
++			if (tmp == ULLONG_MAX || tmp > 1)
+ 				error(1, ERANGE,
+ 				      "prefer busy poll should be 0 or 1");
++
++			cfg_prefer_busy_poll = (uint8_t)tmp;
+ 			break;
+ 		case 'g':
+-			cfg_busy_poll_budget = strtoul(optarg, NULL, 0);
+-			if (cfg_busy_poll_budget == ULONG_MAX ||
+-			    cfg_busy_poll_budget > UINT16_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT16_MAX)
+ 				error(1, ERANGE,
+ 				      "busy poll budget must be [0, UINT16_MAX]");
++
++			cfg_busy_poll_budget = (uint16_t)tmp;
+ 			break;
+ 		case 'p':
+-			cfg_port = strtoul(optarg, NULL, 0);
+-			if (cfg_port > UINT16_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT16_MAX)
+ 				error(1, ERANGE, "port must be <= 65535");
++
++			cfg_port = (uint16_t)tmp;
+ 			break;
+ 		case 'b':
+ 			ret = inet_aton(optarg, &cfg_bind_addr);
+@@ -124,41 +134,39 @@ static void parse_opts(int argc, char **argv)
+ 				error(1, 0, "outfile invalid");
+ 			break;
+ 		case 'm':
+-			cfg_max_events = strtol(optarg, NULL, 0);
+-
+-			if (cfg_max_events == LONG_MIN ||
+-			    cfg_max_events == LONG_MAX ||
+-			    cfg_max_events <= 0)
++			if (tmp == ULLONG_MAX || tmp > INT_MAX)
+ 				error(1, ERANGE,
+-				      "max events must be > 0 and < LONG_MAX");
++				      "max events must be > 0 and <= INT_MAX");
++
++			cfg_max_events = (int)tmp;
+ 			break;
+ 		case 'd':
+-			cfg_defer_hard_irqs = strtoul(optarg, NULL, 0);
+-
+-			if (cfg_defer_hard_irqs == ULONG_MAX ||
+-			    cfg_defer_hard_irqs > INT32_MAX)
++			if (tmp == ULLONG_MAX || tmp > INT32_MAX)
+ 				error(1, ERANGE,
+ 				      "defer_hard_irqs must be <= INT32_MAX");
++
++			cfg_defer_hard_irqs = (uint32_t)tmp;
+ 			break;
+ 		case 'r':
+-			cfg_gro_flush_timeout = strtoull(optarg, NULL, 0);
+-
+-			if (cfg_gro_flush_timeout == ULLONG_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT64_MAX)
+ 				error(1, ERANGE,
+-				      "gro_flush_timeout must be < ULLONG_MAX");
++				      "gro_flush_timeout must be < UINT64_MAX");
++
++			cfg_gro_flush_timeout = (uint64_t)tmp;
+ 			break;
+ 		case 's':
+-			cfg_irq_suspend_timeout = strtoull(optarg, NULL, 0);
+-
+-			if (cfg_irq_suspend_timeout == ULLONG_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT64_MAX)
+ 				error(1, ERANGE,
+ 				      "irq_suspend_timeout must be < ULLONG_MAX");
++
++			cfg_irq_suspend_timeout = (uint64_t)tmp;
+ 			break;
+ 		case 'i':
+-			cfg_ifindex = strtoul(optarg, NULL, 0);
+-			if (cfg_ifindex == ULONG_MAX)
++			if (tmp == ULLONG_MAX || tmp > INT_MAX)
+ 				error(1, ERANGE,
+-				      "ifindex must be < ULONG_MAX");
++				      "ifindex must be <= INT_MAX");
++
++			cfg_ifindex = (int)tmp;
+ 			break;
+ 		}
+ 	}
+@@ -215,7 +223,7 @@ static void setup_queue(void)
+ 	struct netdev_napi_set_req *set_req = NULL;
+ 	struct ynl_sock *ys;
+ 	struct ynl_error yerr;
+-	uint32_t napi_id;
++	uint32_t napi_id = 0;
+ 
+ 	ys = ynl_sock_create(&ynl_netdev_family, &yerr);
+ 	if (!ys)
+@@ -277,8 +285,8 @@ static void run_poller(void)
+ 	 * here
+ 	 */
+ 	epoll_params.busy_poll_usecs = cfg_busy_poll_usecs;
+-	epoll_params.busy_poll_budget = (uint16_t)cfg_busy_poll_budget;
+-	epoll_params.prefer_busy_poll = (uint8_t)cfg_prefer_busy_poll;
++	epoll_params.busy_poll_budget = cfg_busy_poll_budget;
++	epoll_params.prefer_busy_poll = cfg_prefer_busy_poll;
+ 	epoll_params.__pad = 0;
+ 
+ 	val = 1;
+@@ -342,5 +350,9 @@ int main(int argc, char *argv[])
+ 	parse_opts(argc, argv);
+ 	setup_queue();
+ 	run_poller();
++
++	if (cfg_outfile)
++		free(cfg_outfile);
++
+ 	return 0;
+ }
 
-vim +959 fs/bcachefs/inode.c
-
-   936	
-   937	/*
-   938	 * This just finds an empty slot:
-   939	 */
-   940	int bch2_inode_create(struct btree_trans *trans,
-   941			      struct btree_iter *iter,
-   942			      struct bch_inode_unpacked *inode_u,
-   943			      u32 snapshot, u64 cpu)
-   944	{
-   945		u64 min, max;
-   946		struct bkey_i_inode_alloc_cursor *cursor =
-   947			bch2_inode_alloc_cursor_get(trans, cpu, &min, &max);
-   948		int ret = PTR_ERR_OR_ZERO(cursor);
-   949		if (ret)
-   950			return ret;
-   951	
-   952		u64 start = le64_to_cpu(cursor->v.idx);
-   953		u64 pos = start;
-   954	
-   955		bch2_trans_iter_init(trans, iter, BTREE_ID_inodes, POS(0, pos),
-   956				     BTREE_ITER_all_snapshots|
-   957				     BTREE_ITER_intent);
-   958	again:
- > 959		struct bkey_s_c k;
-   960		while ((k = bch2_btree_iter_peek(iter)).k &&
-   961		       !(ret = bkey_err(k)) &&
-   962		       bkey_lt(k.k->p, POS(0, max))) {
-   963			if (pos < iter->pos.offset)
-   964				goto found_slot;
-   965	
-   966			/*
-   967			 * We don't need to iterate over keys in every snapshot once
-   968			 * we've found just one:
-   969			 */
-   970			pos = iter->pos.offset + 1;
-   971			bch2_btree_iter_set_pos(iter, POS(0, pos));
-   972		}
-   973	
-   974		if (!ret && pos < max)
-   975			goto found_slot;
-   976	
-   977		if (!ret && start == min)
-   978			ret = -BCH_ERR_ENOSPC_inode_create;
-   979	
-   980		if (ret) {
-   981			bch2_trans_iter_exit(trans, iter);
-   982			return ret;
-   983		}
-   984	
-   985		/* Retry from start */
-   986		pos = start = min;
-   987		bch2_btree_iter_set_pos(iter, POS(0, pos));
-   988		le32_add_cpu(&cursor->v.gen, 1);
-   989		goto again;
-   990	found_slot:
-   991		bch2_btree_iter_set_pos(iter, SPOS(0, pos, snapshot));
-   992		k = bch2_btree_iter_peek_slot(iter);
-   993		ret = bkey_err(k);
-   994		if (ret) {
-   995			bch2_trans_iter_exit(trans, iter);
-   996			return ret;
-   997		}
-   998	
-   999		inode_u->bi_inum	= k.k->p.offset;
-  1000		inode_u->bi_generation	= le64_to_cpu(cursor->v.gen);
-  1001		cursor->v.idx		= cpu_to_le64(k.k->p.offset + 1);
-  1002		return 0;
-  1003	}
-  1004	
-
+base-commit: e8e7be7d212dc2bc83b8151e51088666a6c42092
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
