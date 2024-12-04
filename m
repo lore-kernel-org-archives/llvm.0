@@ -1,144 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9791922F5;
-	Wed,  4 Dec 2024 22:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BFF193091
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 23:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733351097; cv=none; b=DfflIBI01UJ3UDx7WNZ6xLZlVoaLoHhYT/XD54iPjbKYb4Fr9EymvNo8SbcxCYpPeuQYvo0oIidcN2m8hAg/Ewhq+E31L3C7s42rAACynNoClmtVm+fjU9GcRXPs6TrFSuSoRlH0ifrSlTWloyYMBuXBEkQbfDkRIDG7e6iNvFQ=
+	t=1733356577; cv=none; b=tvgUP/5k0Pokujigq7z35YLH0UTlBS2loM1muZwYzdO47OH4jZjR8w5/LcEZPDp8LQ5Z3zWgqTS7VhDSfH1fqokOnH3l5niCkVh/Jd2EO6PEA2PZKHooHrxDHy/jD3m46WZib10MBmm+xSxw3fzbXs4zXtJmi4fivAmtoAHWD8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733351097; c=relaxed/simple;
-	bh=wDCyRjRlNwi0gFjffrrek/qm8c7CiXnouzdY5r6Ca6I=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HLcD9odjAJFjwmNPj1Z9JIK85YMegtiha8n5dXhCRCyMpp3NLjxS7REaTtY131W5zFLgBPHgA+hzWxqBzaS1act9i2ZdLV8Aw5LvpC+7rKm9bcuxqi9MRFovmsYwCInF95RKWDrY8pf2RkLIXCvJNtrF1LXZG8p8za+EhgJoj9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EmnyYZpu; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733356577; c=relaxed/simple;
+	bh=l3U0yJJE36QRWVI/0Ef+4QhRMoufGHj2/nrmEhWmea0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KA/NgHimHF9U66zsGIp/s3PxjHOh0Dk+mNkb5nKKF9iV1czuj+LBkBzwQeAE9Bb6bn3O024pIAwxBwee4fSpjal/d1dV9gIbSuw/1mYX3r17VTHCc8Rn5wyJDfMqNrNCt08jwIc3qPRlzXVEbmijByxr+GZr8QLO6z+2JUGiMY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wiKa4HcP; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EmnyYZpu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733351095; x=1764887095;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=wDCyRjRlNwi0gFjffrrek/qm8c7CiXnouzdY5r6Ca6I=;
-  b=EmnyYZpufgwkDcqlDYUMSncjSE6jLN1/tFJgX6BovZzFF2e+s7ia/gt7
-   yTr84IDpWYzAq82nkG09/qIgp3xHyzLO1rombl6U9k8KsvpNItNAePMoT
-   Xz33KuGalJ0p4VEYB4bAXGB3vxDY6TsvgFaecEN7p0sak5DKg8vPFTI5f
-   ewAQ8cS9t/drj/RrAyh1d5wVJ4umOdO24Q2QMZ2Po0lMz2V4+qw78ieXf
-   g6gc5YBkdke/xSzuBdRHdcgi0d9sXGUJuqDghpv2tAaA5XuW8p5Cu8uWC
-   BjvUWcuPMgoY57oyN0qvRmz3pgL5NOuBKjito1QX8ZIGHlYfTW0xxGKo8
-   Q==;
-X-CSE-ConnectionGUID: poo7/fygTvWrTCA+mNHGIA==
-X-CSE-MsgGUID: 7ICpVhpfT1aAuaeH9OyepQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33383048"
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="33383048"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 14:24:54 -0800
-X-CSE-ConnectionGUID: hSIM79c0TW+odudmU09N7Q==
-X-CSE-MsgGUID: /PgKl1PHTQiAJuLGvSnSSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="94257169"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 04 Dec 2024 14:24:53 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIxne-0003YT-2x;
-	Wed, 04 Dec 2024 22:24:50 +0000
-Date: Thu, 5 Dec 2024 06:24:15 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH] staging: gpib: Workaround for ppc build failure
-Message-ID: <202412050600.DxKMdqyT-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wiKa4HcP"
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3a7bc2d7608so22335ab.0
+        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 15:56:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1733356575; x=1733961375; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R8Q+F6en17eJQgfw76pO4T5MKRbHqUZjXgG7qVMS2IU=;
+        b=wiKa4HcP79sZ8cCmsSwo1y5wDwI8FfG/6J52Pcma88MuoHw/YH0BENe/T1izgkGEpg
+         yCIzVokGvqeXOxA6ba6r9dbmgVUcLoyr13VDBxlERc3Sg5TG2R0dYi2RN4I1vAb4xZHN
+         1VKIh0G03rVn68a8mIcu6vUwBAdILUK1+tGqTDSJFE1SYWa6urDr6i3eTyE+t+uY+i1x
+         ynG6IH4m2HEsOKramHbY5jy5UCd7ASU6xpdxtMSEBxF3m7IEWt9Do8Qwb9I8ObEY2U/Z
+         G75cLUEB04brNVvYbdW1R3FAfdGleHpTdp0dUrb530i98DYiqso6pgj3qk8d8CRJ9qIh
+         Yfnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733356575; x=1733961375;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R8Q+F6en17eJQgfw76pO4T5MKRbHqUZjXgG7qVMS2IU=;
+        b=nSCHCuyaQg1BPWHafIC/JiDz6ovpPDDsgbebu0f//AdJayqGDzsya+l5fZEshH40a9
+         GB8zBBDKuxjJUI1iE2aNXetwLW6gLTTrzZr3F/iRAUMlgfZpzq11OtKDC2JFT3Irlal4
+         9thoBGwexmoUmGftiJYqSHOYA0bxFRx2uJIc2IxyXKBd/ZtPbOUjXETOhb9d/qcHRv72
+         1vnMoEEURpIE+uFaoYD4wWZ9mPR2gCB2hiQ1vUwBPk/+Kn4hzDxMQHopohmgkK5YcZZf
+         K2oC2Mmczs9AeI75yT6kyhcUw4XdWZLjqSHyL+C5W1CDjZEGReJfOkz3bC4hxZl0rRyH
+         fWJg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5G/5KkIkA/nSB7LcQYKJqBuxOVltRrzoxYaic7IlZO8T5wOnVN6augFDRr61dpMJXWPsi@lists.linux.dev
+X-Gm-Message-State: AOJu0YzrMzB1shbJCuHGw/1VnZcrQ5l0LgUTAiUHz724gDSCkAcPk7ZY
+	QNNYOlO1cz/P3B55RqVD5K8/8fxsq5LjiRDrgck6S6E76ve6Hsz0ERAoBi+qWV8oR2Zti3fTMAF
+	Ye8b2Bri6BrJYStC22p7d4gQHt2dBe7JR9f/7
+X-Gm-Gg: ASbGnctXt6egk0LGfZzCMUp2AtTodSE2KJ1emmWmEcZvLnFt6/O5Nbgh4rNl5Rrqzye
+	KJEaiNG5DrZF/DFNdvnN+W3hLG09Dy34V
+X-Google-Smtp-Source: AGHT+IHRiOICm/Y/IPwvPUgx3E/i5KvQt+b8VmnQpipO1sGUnM5NcQm+mIVfODWSKuu/gQnH8obw8GpXOkA4UKKZxJQ=
+X-Received: by 2002:a05:6e02:3693:b0:3a7:5cf1:8a5f with SMTP id
+ e9e14a558f8ab-3a80933c362mr625605ab.13.1733356574602; Wed, 04 Dec 2024
+ 15:56:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241202182815.639124-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20241202182815.639124-1-andriy.shevchenko@linux.intel.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 4 Dec 2024 15:56:03 -0800
+Message-ID: <CAP-5=fXbjvsmuKrNe1uAOYLV0k5U9OBuHV+drSs_5JyUuXQ9SQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] pref/x86/rapl: Remove unused function
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In-Reply-To: <20241204134736.6660-1-dpenkler@gmail.com>
-References: <20241204134736.6660-1-dpenkler@gmail.com>
-TO: Dave Penkler <dpenkler@gmail.com>
+On Mon, Dec 2, 2024 at 10:28=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> get_rapl_pmu_cpumask() is unused, it prevents kernel builds
+> with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
+>
+>   arch/x86/events/rapl.c:165:37: error: unused function 'get_rapl_pmu_cpu=
+mask' [-Werror,-Wunused-function]
+>
+> Fix this by removing unused function.
+>
+> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> inline functions for W=3D1 build").
+>
+> Fixes: 9e9af8bbb5f9 ("perf/x86/rapl: Clean up cpumask and hotplug")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Hi Dave,
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-kernel test robot noticed the following build warnings:
+nit: s/pref/perf/ in the commit message title
 
-[auto build test WARNING on staging/staging-testing]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Penkler/staging-gpib-Workaround-for-ppc-build-failure/20241204-220307
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20241204134736.6660-1-dpenkler%40gmail.com
-patch subject: [PATCH] staging: gpib: Workaround for ppc build failure
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241205/202412050600.DxKMdqyT-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050600.DxKMdqyT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050600.DxKMdqyT-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/staging/gpib/fmh_gpib/fmh_gpib.c:15:
-   In file included from drivers/staging/gpib/fmh_gpib/fmh_gpib.h:9:
-   In file included from include/linux/dmaengine.h:8:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/gpib/fmh_gpib/fmh_gpib.c:162:45: warning: bitwise operation between different enumeration types ('enum fmh_gpib_auxmr_bits' and 'enum aux_reg_i_bits') [-Wenum-enum-conversion]
-     162 |                 write_byte(&priv->nec7210_priv, AUX_I_REG | LOCAL_PPOLL_MODE_BIT, AUXMR);
-         |                                                 ~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
-
-
-vim +162 drivers/staging/gpib/fmh_gpib/fmh_gpib.c
-
-8e4841a0888c74 Dave Penkler 2024-09-18  156  
-8e4841a0888c74 Dave Penkler 2024-09-18  157  static void fmh_gpib_local_parallel_poll_mode(gpib_board_t *board, int local)
-8e4841a0888c74 Dave Penkler 2024-09-18  158  {
-8e4841a0888c74 Dave Penkler 2024-09-18  159  	struct fmh_priv *priv = board->private_data;
-8e4841a0888c74 Dave Penkler 2024-09-18  160  
-8e4841a0888c74 Dave Penkler 2024-09-18  161  	if (local) {
-8e4841a0888c74 Dave Penkler 2024-09-18 @162  		write_byte(&priv->nec7210_priv, AUX_I_REG | LOCAL_PPOLL_MODE_BIT, AUXMR);
-8e4841a0888c74 Dave Penkler 2024-09-18  163  	} else	{
-8e4841a0888c74 Dave Penkler 2024-09-18  164  		/* For fmh_gpib_core, remote parallel poll config mode is unaffected by the
-8e4841a0888c74 Dave Penkler 2024-09-18  165  		 * state of the disable bit of the parallel poll register (unlike the tnt4882).
-8e4841a0888c74 Dave Penkler 2024-09-18  166  		 * So, we don't need to worry about that.
-8e4841a0888c74 Dave Penkler 2024-09-18  167  		 */
-8e4841a0888c74 Dave Penkler 2024-09-18  168  		write_byte(&priv->nec7210_priv, AUX_I_REG | 0x0, AUXMR);
-8e4841a0888c74 Dave Penkler 2024-09-18  169  	}
-8e4841a0888c74 Dave Penkler 2024-09-18  170  }
-8e4841a0888c74 Dave Penkler 2024-09-18  171  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  arch/x86/events/rapl.c | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index a8defc813c36..3ed5ea2aa867 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -162,12 +162,6 @@ static inline unsigned int get_rapl_pmu_idx(int cpu)
+>                                          topology_logical_die_id(cpu);
+>  }
+>
+> -static inline const struct cpumask *get_rapl_pmu_cpumask(int cpu)
+> -{
+> -       return rapl_pmu_is_pkg_scope() ? topology_core_cpumask(cpu) :
+> -                                        topology_die_cpumask(cpu);
+> -}
+> -
+>  static inline struct rapl_pmu *cpu_to_rapl_pmu(unsigned int cpu)
+>  {
+>         unsigned int rapl_pmu_idx =3D get_rapl_pmu_idx(cpu);
+> --
+> 2.43.0.rc1.1336.g36b5255a03ac
+>
