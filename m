@@ -1,160 +1,301 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705431ABEDC;
-	Wed,  4 Dec 2024 13:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0EF1B87E5
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 13:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733317893; cv=none; b=SWiE0DUrOzmwL/5aoRSJt6zYdMqI75Z5Gxlysrpxgu0z8vJQuXzkcfLqZmHLxd6aG7SE10eHre0opGgJEi9WWXCAn838XtkBhDPXiPGx0O/6rars1n15X47i1CGqVRKNZ4MwCHwfy/31YvXgt0kd5lqWGquy000OyfyR09F22d4=
+	t=1733318714; cv=none; b=hjckplsoWjTzohNzTCGx0r+HZ+1v+DV9BQXx+Yw5+5BFRlD9j7Ard3GCvNd0hBOsZpewAsxgVwv+9ytF98D6bfacgayaXN8tTaz99YT3pQCWd7zW5omEKgwWx5jz1ESqrJaZ8rm8UlD4bOkzIUBz7SegW22CBe2oYbr8soeOlQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733317893; c=relaxed/simple;
-	bh=Vu1spLItqbI54j3jY+8nhm980fsaFpZxxjIUEgPzQMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oqucndGHHtl0/PdU6eEqtZZOOxQoOaDfHimjEa7QQFwoDwbftKVKAVFTGZU9wDV0YIRu4HSs7n4JXll6YDqXLbou1kRRbNCjWo/0lXOcXX4UK1XJe8lFz210M5U3BeHAX9vd4/h+To/1DIVOC89H7vEbFqN0glhLXoMDmb6IKFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WmY3tuxj; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733318714; c=relaxed/simple;
+	bh=heJcFJZ6wGpaq7N/UtzOsXHKhH2gA7eWMGRP8CzCx6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kzHAoETKNWbsl6d3HFPeqy4Y1qu7AQ2XRSYbI2GdR3wVoKQgOqO1QXkU7VNuIHw/tVH6zz7Kbsp4kP1b1LfRfWjEia2hibzfd84NbWIgBXKZa2RNHjOVfNDcRYsHx8fhJFBE+5DJMksVsx0G0Pcbq3WnM7ze0Xjq54VOLIBFwOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vrtGstiz; arc=none smtp.client-ip=209.85.222.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WmY3tuxj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733317892; x=1764853892;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vu1spLItqbI54j3jY+8nhm980fsaFpZxxjIUEgPzQMk=;
-  b=WmY3tuxj8WHEUUZwFgbUfZgCfyk2cw0vUE0/6zJ6uqSNAxcAYGkDUJh/
-   ZNygpPEITIFoMSJosq3D4vvhPG6o1StslUgxcAEK+zQWeWBFtG/uYkokg
-   PiYE28/bUzmEPyOploQ9GiJa0TuvwZ1EeJnxOGYJhc39NdH6tcWbai3MO
-   NS84jC+Iaz476FQYbsfirqlGEG6ug75zhweL55aehc1sNMPAMNU4Afaeq
-   DRFnx9HOsDNwOLlv6wCX4o8n7oQBi5xLtnxtUYLgoN0dCguNuanKhYB7k
-   xphUXcMLU+KhvZV2tNy1IqocELgL414n0S0hMFOtRqugDv17bZuDux9T1
-   g==;
-X-CSE-ConnectionGUID: kEScHuo3S+Gp0sIypTR5sg==
-X-CSE-MsgGUID: p8HlqRjlTXKElIdhhaNdoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33500210"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="33500210"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 05:11:31 -0800
-X-CSE-ConnectionGUID: c6O5TtqUR1qGHA1NVLvCYQ==
-X-CSE-MsgGUID: uDu8waGPSginu1eCy+T4ew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="93610486"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 04 Dec 2024 05:11:27 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIpA4-00032v-2e;
-	Wed, 04 Dec 2024 13:11:24 +0000
-Date: Wed, 4 Dec 2024 21:10:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] mm/vma: move brk() internals to mm/vma.c
-Message-ID: <202412042012.zymuBpfD-lkp@intel.com>
-References: <3d24b9e67bb0261539ca921d1188a10a1b4d4357.1733248985.git.lorenzo.stoakes@oracle.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vrtGstiz"
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-85ba8b1c7b9so491768241.1
+        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 05:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733318712; x=1733923512; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yyRVQVb/zI9kJmYn91wAT9zCQ5BG7fVZIEQs7VqoMNo=;
+        b=vrtGstizYto49smj6SELgzoQtOZl6pumBovTcBtuFr2rVUyQ4amHCFSJ/7RARft52l
+         6WZYPNILxvz+rl2A02pivbrekUdMQaOOnMMG/VTsS5ZsWTEGgNMeNnv7TPG2nXjNz+vS
+         oD7kZrMI45375b2PIZIzJndjyExgKK6DZrzO/rOJflOx64ltpwSm5k1gkrQa6RLJthF8
+         A9HRxsFK5tvgzfRoTBfxFIQG92O4jXTzwjzHN/vO9hUbqM2dzvP6SIGg53BR9bnCG8Xa
+         9qT/qZK1Qb5ydipveYTnk9cGiZNcOVxFE6IXgB7fufhjBL8k++ZRCqJfyn4Nn/8pOKRS
+         CVIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733318712; x=1733923512;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yyRVQVb/zI9kJmYn91wAT9zCQ5BG7fVZIEQs7VqoMNo=;
+        b=iYCePMrNPW+Lq7GIDU8wyfGv28BmgdpkL+8o8z/kGz+V5ZdBcOvBDlhOkZNVvOz20m
+         eIdoJV9z6scMDMAd0D/s9XWNYH8s+/951s4z7/2knKADZf20NQXHHoyhwpncbvflKayv
+         c4jXSj+6PLZrtDrlJFogzO8GZw/ovwk953HHSgl1/eMIQiSFI9CuZ7yvicUIcLUG79jD
+         TcksyOU2nkCyc91HKXSlOhJ3A7HFgsc7KVnmmvGIM7L306AkrLL1S25OTMKdmUY1i8+Z
+         71UISviecWt73S6JU0kzVZBCw2OFEFarczHkBGAKznvuVFk2og7s96Y/cfBwLqVkZ5Ql
+         2lBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXk+ha7GVNpE0wtrFMjxGrK4vJtSj+GO4uyPH7GNYwQ4+ZVwr41fJNl+Vrq9fm4PSDf4c8G@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxl3EYSRUcFCGjVzf40LQDTUAGVp0MlgGjsDc2ooZeycsF8c0mQ
+	mOMqmoEJo/74ywOPzmU28hqR+b2n8QXhJV7AUV7DH1wi0S0g2LhS8HvW2WUyEn2QxKGK7O56m6+
+	4zYlnOqIJfQDLO1JVFE+2XN4uDuEduzkLoNuYHA==
+X-Gm-Gg: ASbGnctt4Ci8t2cJ6VKWijI4QTYhRG9kvLN8SoCfad53VjndMNJgC9Zp0KeB1hquWKo
+	G5zd6Nmh7nbFkW/psUC4nmqEgymEZRx95
+X-Google-Smtp-Source: AGHT+IF5Gr6rLMtOlq5rot61HhOPOQXJX5OJ6mgM08z0lylqA8xx32FyRxPhrJvcFQTp4nhCNYedeZJgiB8KDOM4SZ0=
+X-Received: by 2002:a05:6122:620d:20b0:515:1fde:1cb1 with SMTP id
+ 71dfb90a1353d-5156a8e0b02mr24861742e0c.3.1733318711875; Wed, 04 Dec 2024
+ 05:25:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d24b9e67bb0261539ca921d1188a10a1b4d4357.1733248985.git.lorenzo.stoakes@oracle.com>
+References: <20241203143955.605130076@linuxfoundation.org>
+In-Reply-To: <20241203143955.605130076@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 4 Dec 2024 18:55:00 +0530
+Message-ID: <CA+G9fYtNvEDcUEuv=QFC84y+pXY1UszoRYOitJztCApLV7-psg@mail.gmail.com>
+Subject: Re: [PATCH 6.11 000/817] 6.11.11-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
+	broonie@kernel.org, Anders Roxell <anders.roxell@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, Michal Suchanek <msuchanek@suse.de>, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lorenzo,
+On Tue, 3 Dec 2024 at 20:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> -----------
+> Note, this is will probably be the last 6.11.y kernel to be released.
+> Please move to the 6.12.y branch at this time.
+> -----------
+>
+> This is the start of the stable review cycle for the 6.11.11 release.
+> There are 817 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 05 Dec 2024 14:36:47 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.11.11-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.11.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-kernel test robot noticed the following build errors:
+Results from Linaro=E2=80=99s test farm.
+Regressions on arm64, arm, x86_64, riscv and powerpc.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-vma-move-brk-internals-to-mm-vma-c/20241204-115150
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/3d24b9e67bb0261539ca921d1188a10a1b4d4357.1733248985.git.lorenzo.stoakes%40oracle.com
-patch subject: [PATCH 1/5] mm/vma: move brk() internals to mm/vma.c
-config: mips-ath25_defconfig (https://download.01.org/0day-ci/archive/20241204/202412042012.zymuBpfD-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412042012.zymuBpfD-lkp@intel.com/reproduce)
+The listed below errors are the same as reported on stable-rc linux-6.12.y
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412042012.zymuBpfD-lkp@intel.com/
+1) The allmodconfig builds failed on arm64, arm, riscv and x86_64 due
+to following build warnings / errors.
 
-All errors (new ones prefixed by >>):
-
-   In file included from mm/vma.c:7:
-   In file included from mm/vma_internal.h:12:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/mips/include/asm/cacheflush.h:13:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/vma.c:7:
-   In file included from mm/vma_internal.h:29:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/vma.c:2503:11: error: use of undeclared identifier 'READ_IMPLIES_EXEC'
-    2503 |         flags |= VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
-         |                  ^
-   arch/mips/include/asm/page.h:215:31: note: expanded from macro 'VM_DATA_DEFAULT_FLAGS'
-     215 | #define VM_DATA_DEFAULT_FLAGS   VM_DATA_FLAGS_TSK_EXEC
-         |                                 ^
-   include/linux/mm.h:453:54: note: expanded from macro 'VM_DATA_FLAGS_TSK_EXEC'
-     453 | #define VM_DATA_FLAGS_TSK_EXEC  (VM_READ | VM_WRITE | TASK_EXEC | \
-         |                                                       ^
-   include/linux/mm.h:450:44: note: expanded from macro 'TASK_EXEC'
-     450 | #define TASK_EXEC ((current->personality & READ_IMPLIES_EXEC) ? VM_EXEC : 0)
-         |                                            ^
-   3 warnings and 1 error generated.
+Build error allmodconfig:
+------------------------
+/drivers/gpu/drm/imx/ipuv3/parallel-display.c:75:3: error: variable
+'num_modes' is uninitialized when used here [-Werror,-Wuninitialized]
+   75 |                 num_modes++;
+      |                 ^~~~~~~~~
+/drivers/gpu/drm/imx/ipuv3/parallel-display.c:55:15: note: initialize
+the variable 'num_modes' to silence this warning
+   55 |         int num_modes;
+      |                      ^
+      |                       =3D 0
+1 error generated.
+make[8]: *** [/scripts/Makefile.build:244:
+drivers/gpu/drm/imx/ipuv3/parallel-display.o] Error 1
+/drivers/gpu/drm/imx/ipuv3/imx-ldb.c:143:3: error: variable
+'num_modes' is uninitialized when used here [-Werror,-Wuninitialized]
+  143 |                 num_modes++;
+      |                 ^~~~~~~~~
+/drivers/gpu/drm/imx/ipuv3/imx-ldb.c:133:15: note: initialize the
+variable 'num_modes' to silence this warning
+  133 |         int num_modes;
+      |                      ^
+      |                       =3D 0
+1 error generated.
 
 
-vim +/READ_IMPLIES_EXEC +2503 mm/vma.c
+2) The powerpc builds failed due to these build warnings / errors.
+Build errors on powerpc:
+---------------
+ERROR: modpost: "gcm_update"
+[arch/powerpc/crypto/aes-gcm-p10-crypto.ko] undefined!
 
-  2481	
-  2482	/*
-  2483	 * do_brk_flags() - Increase the brk vma if the flags match.
-  2484	 * @vmi: The vma iterator
-  2485	 * @addr: The start address
-  2486	 * @len: The length of the increase
-  2487	 * @vma: The vma,
-  2488	 * @flags: The VMA Flags
-  2489	 *
-  2490	 * Extend the brk VMA from addr to addr + len.  If the VMA is NULL or the flags
-  2491	 * do not match then create a new anonymous VMA.  Eventually we may be able to
-  2492	 * do some brk-specific accounting here.
-  2493	 */
-  2494	int do_brk_flags(struct vma_iterator *vmi, struct vm_area_struct *vma,
-  2495			 unsigned long addr, unsigned long len, unsigned long flags)
-  2496	{
-  2497		struct mm_struct *mm = current->mm;
-  2498	
-  2499		/*
-  2500		 * Check against address space limits by the changed size
-  2501		 * Note: This happens *after* clearing old mappings in some code paths.
-  2502		 */
-> 2503		flags |= VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
+3) As other reported perf build failures
+Build errors perf:
+----------------------
+   util/stat-display.c: In function 'uniquify_event_name':
+   util/stat-display.c:895:45: error: 'struct evsel' has no member
+named 'alternate_hw_config'
+     895 |         if (counter->pmu->is_core &&
+counter->alternate_hw_config !=3D PERF_COUNT_HW_MAX)
+      |                                             ^~
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+## Build
+* kernel: 6.11.11-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git commit: 57f39ce086c9b727df2d92ea7ab7cc80e89d7ed2
+* git describe: v6.11.10-818-g57f39ce086c9
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.11.y/build/v6.11=
+.10-818-g57f39ce086c9
+
+## Test Regressions (compared to v6.11.9-108-gc9b39c48bf4a)
+* arm, build
+  - gcc-13-lkftconfig-perf
+
+* arm64, build
+  - clang-19-allmodconfig
+  - gcc-13-lkftconfig-perf
+
+* i386, build
+  - gcc-13-lkftconfig-perf
+
+* powerpc, build
+  - clang-19-defconfig
+  - clang-nightly-defconfig
+  - gcc-13-defconfig
+  - gcc-8-defconfig
+
+* riscv, build
+  - clang-19-allmodconfig
+
+* x86_64, build
+  - clang-19-allmodconfig
+  - gcc-13-lkftconfig-perf
+
+
+## Metric Regressions (compared to v6.11.9-108-gc9b39c48bf4a)
+
+## Test Fixes (compared to v6.11.9-108-gc9b39c48bf4a)
+
+## Metric Fixes (compared to v6.11.9-108-gc9b39c48bf4a)
+
+## Test result summary
+total: 130907, pass: 108166, fail: 1524, skip: 21217, xfail: 0
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 130 total, 127 passed, 3 failed
+* arm64: 42 total, 40 passed, 2 failed
+* i386: 18 total, 15 passed, 3 failed
+* mips: 26 total, 25 passed, 1 failed
+* parisc: 4 total, 4 passed, 0 failed
+* powerpc: 32 total, 27 passed, 5 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 14 total, 13 passed, 1 failed
+* sh: 5 total, 5 passed, 0 failed
+* sparc: 4 total, 3 passed, 1 failed
+* x86_64: 34 total, 32 passed, 2 failed
+
+## Test suites summary
+* boot
+* commands
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-filesystems-epoll
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-mptcp
+* kselftest-openat2
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-rust
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-tc-testing
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-hugetlb
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* rcutorture
+
+--
+Linaro LKFT
+https://lkft.linaro.org
