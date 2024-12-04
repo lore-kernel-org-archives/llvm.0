@@ -1,72 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDC51B87C9;
-	Wed,  4 Dec 2024 12:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705431ABEDC;
+	Wed,  4 Dec 2024 13:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733316572; cv=none; b=q+cgMBbBmqLPyZ+f0Ss/lOHFKNh8IQlRdGu+AN6m4i0y/ffcHGcBREQr2pavj6IKW5WbLwJe2n1jbhRaRntaVURcLaTW2PaMnq7Kra/49SwzT1MxlM8am9qhY8NHwxa3MUp7HG3rSV21qgDN2egPsTwEXuLscalNPOn0Q+0dljc=
+	t=1733317893; cv=none; b=SWiE0DUrOzmwL/5aoRSJt6zYdMqI75Z5Gxlysrpxgu0z8vJQuXzkcfLqZmHLxd6aG7SE10eHre0opGgJEi9WWXCAn838XtkBhDPXiPGx0O/6rars1n15X47i1CGqVRKNZ4MwCHwfy/31YvXgt0kd5lqWGquy000OyfyR09F22d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733316572; c=relaxed/simple;
-	bh=6RdyS6rQi6HSm5hdOEW2RdWv0FYXX5MAP73uG4z69M8=;
+	s=arc-20240116; t=1733317893; c=relaxed/simple;
+	bh=Vu1spLItqbI54j3jY+8nhm980fsaFpZxxjIUEgPzQMk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iViOTtj18UnRYh86K3KejBtnZASlASJw4ftmcSQXgrxHrFAdZhM1MlmLgEQuL4L5H8WckpPC6HUWvfqp0EjLn6OFXSGTbABAdI8RCEnFp0qAzxKqJNEokaCJro7mj/s/htq83D9YaDNYmwn3tRmFWUp4gsHd/B8Uxeik/Em4ii8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C8He2pH3; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=oqucndGHHtl0/PdU6eEqtZZOOxQoOaDfHimjEa7QQFwoDwbftKVKAVFTGZU9wDV0YIRu4HSs7n4JXll6YDqXLbou1kRRbNCjWo/0lXOcXX4UK1XJe8lFz210M5U3BeHAX9vd4/h+To/1DIVOC89H7vEbFqN0glhLXoMDmb6IKFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WmY3tuxj; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C8He2pH3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WmY3tuxj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733316571; x=1764852571;
+  t=1733317892; x=1764853892;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=6RdyS6rQi6HSm5hdOEW2RdWv0FYXX5MAP73uG4z69M8=;
-  b=C8He2pH3IsMl9/VmyiQQeKsDmvglEOV6U/4IVaDvi3hzIFW5rzoZwjfH
-   py6S77rGlX+r4if0pdpougGLfTCXSjsZOHpjmUUah1tU5ewwDkoSOD4Un
-   XgyKX+h9UN7CqtHmPL3lxrOWr20wLSd7ZAkUf21jz2IiglCW7E1PTlmxP
-   RU4BwZ4AJBFSCor33OQslWIZZo/0PkJEE7i5LezE5ERBwhejbtw27ag/Z
-   n/KT/fdg/hJXvpTs3dvsV8TrRf9m/EYAXneE5u0n7d/oMM0QJwAOFeoZW
-   26N5z9XfkaVOGW17A+LLgij03wzvgldb4LEu3I0Xzzpf6D9vOxp1UldId
+  bh=Vu1spLItqbI54j3jY+8nhm980fsaFpZxxjIUEgPzQMk=;
+  b=WmY3tuxj8WHEUUZwFgbUfZgCfyk2cw0vUE0/6zJ6uqSNAxcAYGkDUJh/
+   ZNygpPEITIFoMSJosq3D4vvhPG6o1StslUgxcAEK+zQWeWBFtG/uYkokg
+   PiYE28/bUzmEPyOploQ9GiJa0TuvwZ1EeJnxOGYJhc39NdH6tcWbai3MO
+   NS84jC+Iaz476FQYbsfirqlGEG6ug75zhweL55aehc1sNMPAMNU4Afaeq
+   DRFnx9HOsDNwOLlv6wCX4o8n7oQBi5xLtnxtUYLgoN0dCguNuanKhYB7k
+   xphUXcMLU+KhvZV2tNy1IqocELgL414n0S0hMFOtRqugDv17bZuDux9T1
    g==;
-X-CSE-ConnectionGUID: spUi5dL5TKaKaG3OGNwPTg==
-X-CSE-MsgGUID: vpW6SduWSTqiU6rKN8kj2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="44244724"
+X-CSE-ConnectionGUID: kEScHuo3S+Gp0sIypTR5sg==
+X-CSE-MsgGUID: p8HlqRjlTXKElIdhhaNdoQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33500210"
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="44244724"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 04:49:30 -0800
-X-CSE-ConnectionGUID: rmifMeztTJu8VWydzNTOuA==
-X-CSE-MsgGUID: 0d0rjvzHS06nxW5aiZeqpA==
+   d="scan'208";a="33500210"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 05:11:31 -0800
+X-CSE-ConnectionGUID: c6O5TtqUR1qGHA1NVLvCYQ==
+X-CSE-MsgGUID: uDu8waGPSginu1eCy+T4ew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="94213756"
+   d="scan'208";a="93610486"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Dec 2024 04:49:25 -0800
+  by orviesa010.jf.intel.com with ESMTP; 04 Dec 2024 05:11:27 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tIooJ-00031v-1D;
-	Wed, 04 Dec 2024 12:49:07 +0000
-Date: Wed, 4 Dec 2024 20:48:23 +0800
+	id 1tIpA4-00032v-2e;
+	Wed, 04 Dec 2024 13:11:24 +0000
+Date: Wed, 4 Dec 2024 21:10:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nikolaus Voss <nv@vosn.de>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Liu Ying <victor.liu@nxp.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Fabio Estevam <festevam@denx.de>, Marek Vasut <marex@denx.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	miquel.raynal@bootlin.com, nikolaus.voss@haag-streit.com
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm: bridge: fsl-ldb: fixup mode on freq mismatch
-Message-ID: <202412042024.4mJmO3sM-lkp@intel.com>
-References: <20241203191111.47B56F7@mail.steuer-voss.de>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] mm/vma: move brk() internals to mm/vma.c
+Message-ID: <202412042012.zymuBpfD-lkp@intel.com>
+References: <3d24b9e67bb0261539ca921d1188a10a1b4d4357.1733248985.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,77 +70,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241203191111.47B56F7@mail.steuer-voss.de>
+In-Reply-To: <3d24b9e67bb0261539ca921d1188a10a1b4d4357.1733248985.git.lorenzo.stoakes@oracle.com>
 
-Hi Nikolaus,
+Hi Lorenzo,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.13-rc1 next-20241203]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikolaus-Voss/drm-bridge-fsl-ldb-fixup-mode-on-freq-mismatch/20241204-115306
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241203191111.47B56F7%40mail.steuer-voss.de
-patch subject: [PATCH v2] drm: bridge: fsl-ldb: fixup mode on freq mismatch
-config: arm-randconfig-003-20241204 (https://download.01.org/0day-ci/archive/20241204/202412042024.4mJmO3sM-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412042024.4mJmO3sM-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-vma-move-brk-internals-to-mm-vma-c/20241204-115150
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/3d24b9e67bb0261539ca921d1188a10a1b4d4357.1733248985.git.lorenzo.stoakes%40oracle.com
+patch subject: [PATCH 1/5] mm/vma: move brk() internals to mm/vma.c
+config: mips-ath25_defconfig (https://download.01.org/0day-ci/archive/20241204/202412042012.zymuBpfD-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412042012.zymuBpfD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412042024.4mJmO3sM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412042012.zymuBpfD-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/bridge/fsl-ldb.c:125:30: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-                                   struct drm_bridge_state *,
-                                                            ^
-   drivers/gpu/drm/bridge/fsl-ldb.c:127:33: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-                                   struct drm_connector_state *)
-                                                               ^
-   2 warnings generated.
+   In file included from mm/vma.c:7:
+   In file included from mm/vma_internal.h:12:
+   In file included from include/linux/backing-dev.h:16:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/mips/include/asm/cacheflush.h:13:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vma.c:7:
+   In file included from mm/vma_internal.h:29:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/vma.c:2503:11: error: use of undeclared identifier 'READ_IMPLIES_EXEC'
+    2503 |         flags |= VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
+         |                  ^
+   arch/mips/include/asm/page.h:215:31: note: expanded from macro 'VM_DATA_DEFAULT_FLAGS'
+     215 | #define VM_DATA_DEFAULT_FLAGS   VM_DATA_FLAGS_TSK_EXEC
+         |                                 ^
+   include/linux/mm.h:453:54: note: expanded from macro 'VM_DATA_FLAGS_TSK_EXEC'
+     453 | #define VM_DATA_FLAGS_TSK_EXEC  (VM_READ | VM_WRITE | TASK_EXEC | \
+         |                                                       ^
+   include/linux/mm.h:450:44: note: expanded from macro 'TASK_EXEC'
+     450 | #define TASK_EXEC ((current->personality & READ_IMPLIES_EXEC) ? VM_EXEC : 0)
+         |                                            ^
+   3 warnings and 1 error generated.
 
 
-vim +125 drivers/gpu/drm/bridge/fsl-ldb.c
+vim +/READ_IMPLIES_EXEC +2503 mm/vma.c
 
-   123	
-   124	static int fsl_ldb_atomic_check(struct drm_bridge *bridge,
- > 125					struct drm_bridge_state *,
-   126					struct drm_crtc_state *crtc_state,
-   127					struct drm_connector_state *)
-   128	{
-   129		struct fsl_ldb *fsl_ldb = to_fsl_ldb(bridge);
-   130		const struct drm_display_mode *mode = &crtc_state->mode;
-   131		unsigned long requested_link_freq =
-   132			fsl_ldb_link_frequency(fsl_ldb, mode->clock);
-   133		unsigned long freq = clk_round_rate(fsl_ldb->clk, requested_link_freq);
-   134	
-   135		if (freq != requested_link_freq) {
-   136			/*
-   137			 * this will lead to flicker and incomplete lines on
-   138			 * the attached display, adjust the CRTC clock
-   139			 * accordingly.
-   140			 */
-   141			struct drm_display_mode *adjusted_mode = &crtc_state->adjusted_mode;
-   142			int pclk = freq / fsl_ldb_link_frequency(fsl_ldb, 1);
-   143	
-   144			if (adjusted_mode->clock != pclk) {
-   145				dev_warn(fsl_ldb->dev, "Adjusted pixel clk to match LDB clk (%d kHz -> %d kHz)!\n",
-   146					 adjusted_mode->clock, pclk);
-   147	
-   148				adjusted_mode->clock = pclk;
-   149				adjusted_mode->crtc_clock = pclk;
-   150			}
-   151		}
-   152	
-   153		return 0;
-   154	}
-   155	
+  2481	
+  2482	/*
+  2483	 * do_brk_flags() - Increase the brk vma if the flags match.
+  2484	 * @vmi: The vma iterator
+  2485	 * @addr: The start address
+  2486	 * @len: The length of the increase
+  2487	 * @vma: The vma,
+  2488	 * @flags: The VMA Flags
+  2489	 *
+  2490	 * Extend the brk VMA from addr to addr + len.  If the VMA is NULL or the flags
+  2491	 * do not match then create a new anonymous VMA.  Eventually we may be able to
+  2492	 * do some brk-specific accounting here.
+  2493	 */
+  2494	int do_brk_flags(struct vma_iterator *vmi, struct vm_area_struct *vma,
+  2495			 unsigned long addr, unsigned long len, unsigned long flags)
+  2496	{
+  2497		struct mm_struct *mm = current->mm;
+  2498	
+  2499		/*
+  2500		 * Check against address space limits by the changed size
+  2501		 * Note: This happens *after* clearing old mappings in some code paths.
+  2502		 */
+> 2503		flags |= VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
 
 -- 
 0-DAY CI Kernel Test Service
