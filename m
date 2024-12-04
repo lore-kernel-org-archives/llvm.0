@@ -1,172 +1,178 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D88481732;
-	Wed,  4 Dec 2024 04:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0727F1DACA9
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 10:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733287719; cv=none; b=g4DIO0NCcIfF9rQmVqJwtRcYyjDHG6MvnKjSbO2eN5e4j1aXjuj79rDNTZM5owvrqOGXwOzysD7tUhFIQXD1pRBn4TfzAHeGXh7MkD+WZbhKERclK09x2bKrgpLIVn+TxkS09mbGM0jpqRNhWe66t1OWjCt4X1WUAPgSiVnYw1E=
+	t=1733308286; cv=none; b=IEHziCR665RUFqicdAvcguLyxtSxwYnGXfdSU6ZCofmKooro7AtELyt7Nf1ixbYhKuuOluKqh0O6qHlI5j+9cI3A+hLriEjgoTCC+DY6no3ZcGuMzX8/lfA713mrOdo9cxSEfuf77wVnGtSNnUkuEvs3Tgba6Y3LSaS9D00JmQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733287719; c=relaxed/simple;
-	bh=hxH3Ca85gKY3h+glCmXY6pry3O7lllgZ7KRXnLA6w8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=feWkWEFgldioLsp9O/YVnnuG5c7OoeCaJ8dc1MO72dNXm3ow72xRey/wYWig5lK10vRraigJ6OAh932Mfhn4na5hr5GVrw5PNAcoEkVJ3LoPvF1lLE5EzPrFFtEssrirA3UdqtdASz/RUe6EkZnSSt04v2fmlQe0wGGbI9TDa5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AcvFX56B; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733308286; c=relaxed/simple;
+	bh=vAsH6MnaEk9q60JG7f9rI5ko+v1PT6qYTJsjyeNqYbI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=aeV5kDT/YiPgVLQdLKPSnBlB1aVinDI/JANXRggk4SzyUZSr4JU/EVHStru9g4vj61okuKXFllai0+hxlQkFQOZAODO5hQGSQLjhvC9W0uchCO9NMjiZ0XOk135FfOvnd1fTfB47QrnJl5oMypxhJS70qZrfuA2MrIfVhCInq2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=W8RAVC6X; arc=none smtp.client-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AcvFX56B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733287717; x=1764823717;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hxH3Ca85gKY3h+glCmXY6pry3O7lllgZ7KRXnLA6w8U=;
-  b=AcvFX56B5Zzw3hvJ+RA9YiJ49RrpTbZuDhQd9YBCiaOeL2WF9GONEJjX
-   RiA0jxOwfGpl5lJstFrbgxEjT8PF0UnNN9LcmlJ1CjPlFXhiohnWzxXsZ
-   u4oh848DFLoiUr1Aa9OXHxmm7VTCJeuR6OrcxznXtt8JUHyAWxIfrezHR
-   ohp9vuocIJcacErxSpPl0pEFYQj22PNzfn49U1rBEm4LSvUrp1GdTp7/R
-   IAP+OIpxkKeTnlg3I0Buq/W7/qNwZ2PCz5GNJzXZcrBkKdABr9h9SdXr2
-   9XABrimV7mblG5rdLIOIMiPbTRNcXCutKS00AztJmAcDiCXRuf/bx8XDK
-   Q==;
-X-CSE-ConnectionGUID: dupyx2GYRuiSKdmviz6AAA==
-X-CSE-MsgGUID: uutI3M3QTauQtkRoMUL3gA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="33670016"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="33670016"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 20:48:36 -0800
-X-CSE-ConnectionGUID: qfPjScBATOugZ76VSQroDA==
-X-CSE-MsgGUID: mpEKrRGgTNCsCC+pHq9aQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="98454788"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 03 Dec 2024 20:48:33 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIhJO-0002az-39;
-	Wed, 04 Dec 2024 04:48:30 +0000
-Date: Wed, 4 Dec 2024 12:47:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhiyuan Wan <kmlinuxm@gmail.com>, andrew@lunn.ch
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	willy.liu@realtek.com, Zhiyuan Wan <kmlinuxm@gmail.com>
-Subject: Re: [PATCH net-next] net: phy: realtek: disable broadcast address
- feature of rtl8211f
-Message-ID: <202412041255.6r9ogs5i-lkp@intel.com>
-References: <20241203125430.2078090-1-kmlinuxm@gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="W8RAVC6X"
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-85b95896cefso985699241.2
+        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 02:31:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733308282; x=1733913082; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MHZqGoUWlClziZon67vL+ZIDd0uUbSc5vRlqScvdhAg=;
+        b=W8RAVC6XO1Y86SZI+OoDPrKrLCeqM/oebwelYFppFkxFembHME1rUOsTAqTvW17M64
+         RlupFbAlPesHoVfabxJhudzYspa0XYPqwgNfNlRnCPd+uw08dCbQ1NOuHFmPLF4xN7yX
+         N1StaHOiiVpP8SrBqBoz52gN1uawd62OV0/Jt8/TfHyzhLg2XHperYvgS8VRWRIoitiv
+         tgvjjBHyJ2EAeYGJfAWnKquXzj52PzZlgECGI6QMrstRz7/lq5PBLXxVfD1akNArSwQa
+         DnqeXHGdIh70LfhxzwI5gugl1mGCsCbN4Yq0cPODXnYG0SxGxHeRfGvMm8NXyjhPMiCF
+         dI8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733308282; x=1733913082;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHZqGoUWlClziZon67vL+ZIDd0uUbSc5vRlqScvdhAg=;
+        b=dmrIdiLEI3UHwGdvtdoyy473B3fyWsVfyezRWBgZSvDjuVL4DgTlf/fvBwBC7mkfIr
+         3Ju/Ct4MGMUbZ0eeneS9g1hO8F1ZsjqYQ9WK+pK8XduRMADHw3KWFXbepLY5F5/g0qLP
+         BzHzvsTJ3cUnT9KX/cAsmceBQnIfI/jZG7fpgiP3odKfLwqT9Vj5W8B2W3Z9zRi2uKYQ
+         kGrA4J53Se+MJ1Yv3DxDd/QyuVaNnfPGoxB5U/NYZ16eFadlEbnP+6sFRw9YOCrIBm9W
+         eXisPnZwHxLQFGJzLvepoillxuYxv+L/FUsHmmY7l70x3NB2z8sK330KzCIjRxXS9qYy
+         wKVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZ/bfpFQfTl7BTgOsanQONlU20HF14RxGRHRxFuciuq0vGpucjKbhfLNFAreE4Plr1muSC@lists.linux.dev
+X-Gm-Message-State: AOJu0YxBxc0WTPP7mBUPhD9qP1A5ZWT0N6MHVNcVHcuA0IWsNQJbLBmB
+	41LP8AsYhGqyx/ewJ3542o2lcu7WePzcDd3KM7Nk+FBellg9rV7lc4d87mxmRAMsHcu5HYZ3NxR
+	2el8/mlpmCz87rmXu3mx8rIogiY4dctkj2LM97w==
+X-Gm-Gg: ASbGnctjjsevolKOc/E0KQIHR27UYt09iFrt/26L6heSXESMTFvq//PMj0xuFf7V5Vx
+	9RL4no1PxheAg8gu2MRiRwLD8cZVbBaTz
+X-Google-Smtp-Source: AGHT+IGzmWUJVmPN1eOgu9kN8rAcGofAl+lpuZp+XiCWblexF4Qy5RN+9yN7Hxl4Y5rZ7gNdO/a89AZ+ZMppZu2Bfcc=
+X-Received: by 2002:a05:6102:26d5:b0:4af:3fc1:e02 with SMTP id
+ ada2fe7eead31-4af973825d7mr6798788137.27.1733308281831; Wed, 04 Dec 2024
+ 02:31:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203125430.2078090-1-kmlinuxm@gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 4 Dec 2024 16:01:09 +0530
+Message-ID: <CA+G9fYsD7mw13wredcZn0L-KBA3yeoVSTuxnss-AEWMN3ha0cA@mail.gmail.com>
+Subject: s390: block/blk-iocost.c:1101:11: error: call to '__compiletime_assert_557'
+ declared with 'error' attribute: clamp() low limit 1 greater than high limit active
+To: linux-s390@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	linux-block <linux-block@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>
+Cc: Anders Roxell <anders.roxell@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Zhiyuan,
+The s390 builds failed with clang-19 with defconfig on the
+Linux next-20241203 tag due to following build warnings / errors.
+Build pass with gcc-13 defconfig for s390.
 
-kernel test robot noticed the following build errors:
+First seen on Linux next-20241203 tag
+GOOD: Linux next-20241128 tag
+BAD: Linux next-20241203 tag
 
-[auto build test ERROR on net-next/main]
+List of arch and toolchains :
+  s390 defconfig with clang-19
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhiyuan-Wan/net-phy-realtek-disable-broadcast-address-feature-of-rtl8211f/20241203-205751
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241203125430.2078090-1-kmlinuxm%40gmail.com
-patch subject: [PATCH net-next] net: phy: realtek: disable broadcast address feature of rtl8211f
-config: arm-randconfig-002-20241204 (https://download.01.org/0day-ci/archive/20241204/202412041255.6r9ogs5i-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041255.6r9ogs5i-lkp@intel.com/reproduce)
+s390:
+  build:
+    * clang-19-defconfig
+    * korg-clang-19-lkftconfig-lto-full
+    * korg-clang-19-lkftconfig-hardening
+    * korg-clang-19-lkftconfig-lto-thing
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412041255.6r9ogs5i-lkp@intel.com/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-All errors (new ones prefixed by >>):
+Build log:
+===========
+block/blk-iocost.c:1101:11: error: call to '__compiletime_assert_557'
+declared with 'error' attribute: clamp() low limit 1 greater than high
+limit active
+ 1101 |                 inuse = clamp_t(u32, inuse, 1, active);
+      |                         ^
+include/linux/minmax.h:218:36: note: expanded from macro 'clamp_t'
+  218 | #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
+      |                                    ^
+include/linux/minmax.h:195:2: note: expanded from macro '__careful_clamp'
+  195 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_),
+__UNIQUE_ID(l_), __UNIQUE_ID(h_))
+      |         ^
+include/linux/minmax.h:188:2: note: expanded from macro '__clamp_once'
+  188 |         BUILD_BUG_ON_MSG(statically_true(ulo > uhi),
+                 \
+      |         ^
+note: (skipping 2 expansions in backtrace; use
+-fmacro-backtrace-limit=0 to see all)
+include/linux/compiler_types.h:530:2: note: expanded from macro
+'_compiletime_assert'
+  530 |         __compiletime_assert(condition, msg, prefix, suffix)
+      |         ^
+include/linux/compiler_types.h:523:4: note: expanded from macro
+'__compiletime_assert'
+  523 |                         prefix ## suffix();
+         \
+      |                         ^
+<scratch space>:38:1: note: expanded from here
+   38 | __compiletime_assert_557
+      | ^
+block/blk-iocost.c:1101:11: error: call to '__compiletime_assert_557'
+declared with 'error' attribute: clamp() low limit 1 greater than high
+limit active
+include/linux/minmax.h:218:36: note: expanded from macro 'clamp_t'
+  218 | #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
+      |                                    ^
+include/linux/minmax.h:195:2: note: expanded from macro '__careful_clamp'
+  195 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_),
+__UNIQUE_ID(l_), __UNIQUE_ID(h_))
+      |         ^
+include/linux/minmax.h:188:2: note: expanded from macro '__clamp_once'
+  188 |         BUILD_BUG_ON_MSG(statically_true(ulo > uhi),
+                 \
+      |         ^
+note: (skipping 2 expansions in backtrace; use
+-fmacro-backtrace-limit=0 to see all)
+include/linux/compiler_types.h:530:2: note: expanded from macro
+'_compiletime_assert'
+  530 |         __compiletime_assert(condition, msg, prefix, suffix)
+      |         ^
+include/linux/compiler_types.h:523:4: note: expanded from macro
+'__compiletime_assert'
+  523 |                         prefix ## suffix();
+         \
+      |                         ^
+<scratch space>:38:1: note: expanded from here
+   38 | __compiletime_assert_557
+      | ^
+2 errors generated.
 
-   In file included from drivers/net/phy/realtek.c:12:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/net/phy/realtek.c:147:37: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
-     147 |                 return dev_err_probe(dev, PTR_ERR(ret),
-         |                                                   ^~~
-   include/linux/err.h:52:61: note: passing argument to parameter 'ptr' here
-      52 | static inline long __must_check PTR_ERR(__force const void *ptr)
-         |                                                             ^
-   1 warning and 1 error generated.
+Links:
+---
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241203/testrun/26188938/suite/build/test/clang-19-defconfig/log
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241203/testrun/26188938/suite/build/test/clang-19-defconfig/history/
+- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241203/testrun/26188938/suite/build/test/clang-19-defconfig/details/
 
+Steps to reproduce:
+------------
+# tuxmake --runtime podman --target-arch s390 --toolchain clang-19
+--kconfig defconfig LLVM_IAS=1
 
-vim +147 drivers/net/phy/realtek.c
+metadata:
+----
+  git describe: next-20241203
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git sha: c245a7a79602ccbee780c004c1e4abcda66aec32
+  kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2pjAPS9UrJkbAKFHktQei7eqW4Y/config
+  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2pjAPS9UrJkbAKFHktQei7eqW4Y/
+  toolchain: clang-19
+  config: clang-19-defconfig
+  arch: s390
 
-   126	
-   127	static int rtl821x_probe(struct phy_device *phydev)
-   128	{
-   129		struct device *dev = &phydev->mdio.dev;
-   130		struct rtl821x_priv *priv;
-   131		u32 phy_id = phydev->drv->phy_id;
-   132		int ret;
-   133	
-   134		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   135		if (!priv)
-   136			return -ENOMEM;
-   137	
-   138		priv->clk = devm_clk_get_optional_enabled(dev, NULL);
-   139		if (IS_ERR(priv->clk))
-   140			return dev_err_probe(dev, PTR_ERR(priv->clk),
-   141					     "failed to get phy clock\n");
-   142	
-   143		dev_dbg(dev, "disabling MDIO address 0 for this phy");
-   144		ret = phy_modify_paged(phydev, 0xa43, RTL8211F_PHYCR1,
-   145					       RTL8211F_PHYAD0_EN, 0);
-   146		if (ret < 0) {
- > 147			return dev_err_probe(dev, PTR_ERR(ret),
-   148					     "disabling MDIO address 0 failed\n");
-   149		}
-   150		/* Deny broadcast address as PHY address */
-   151		if (phydev->mdio.addr == 0)
-   152			return -ENODEV;
-   153	
-   154		ret = phy_read_paged(phydev, 0xa43, RTL8211F_PHYCR1);
-   155		if (ret < 0)
-   156			return ret;
-   157	
-   158		priv->phycr1 = ret & (RTL8211F_ALDPS_PLL_OFF | RTL8211F_ALDPS_ENABLE | RTL8211F_ALDPS_XTAL_OFF);
-   159		if (of_property_read_bool(dev->of_node, "realtek,aldps-enable"))
-   160			priv->phycr1 |= RTL8211F_ALDPS_PLL_OFF | RTL8211F_ALDPS_ENABLE | RTL8211F_ALDPS_XTAL_OFF;
-   161	
-   162		priv->has_phycr2 = !(phy_id == RTL_8211FVD_PHYID);
-   163		if (priv->has_phycr2) {
-   164			ret = phy_read_paged(phydev, 0xa43, RTL8211F_PHYCR2);
-   165			if (ret < 0)
-   166				return ret;
-   167	
-   168			priv->phycr2 = ret & RTL8211F_CLKOUT_EN;
-   169			if (of_property_read_bool(dev->of_node, "realtek,clkout-disable"))
-   170				priv->phycr2 &= ~RTL8211F_CLKOUT_EN;
-   171		}
-   172	
-   173		phydev->priv = priv;
-   174	
-   175		return 0;
-   176	}
-   177	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Linaro LKFT
+https://lkft.linaro.org
