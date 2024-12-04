@@ -1,77 +1,56 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903731FECCF;
-	Wed,  4 Dec 2024 15:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB602182D9;
+	Wed,  4 Dec 2024 15:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733325231; cv=none; b=cf8D42aQkGgqX9E+XNBGGM2wRew4RK9oPPp6lpWXJG7rm8KZsNcs9B8KzrA886ECElIE/qz8qYIU0jHtaANUotKCQqKEJVfHK4p4+XEavY5g2OaGRj7piH1gjV0yRQ90YR//u+U0C39Zae/0Z/0dHQDQfUEG4P2CI6Er8C4RqE8=
+	t=1733326217; cv=none; b=TkRk9C26JSNu+FcvFGmhnHrLvqFPH7aEPQNcoQ5WrdV4ov0Si6SDUu5J7A6vJ6RtKNFrrBp0E1eLNGg4WaqIQ7DkGs5JLzvEA9uZIZ3+lSXsZhmxIFejXM1SFnUID5WIHqDKuaWSov9GXi5U6p9QVbjnZKN30/YoTuThgYah1Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733325231; c=relaxed/simple;
-	bh=EEf76SgX/3puazt8ufia4uZKilO394GYwACgLeP/Df8=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ns/YOO+lGL3fL4XOAMKOJuHGe7pd5jirrZxMG2LbbRkE/qhPNzoDXeI5qbKEFBEGcuSW/49//dxtAKw6rkV9igHUur0hwN1Ul7Ao7mO5JIntvEtnqpfwD3PNT8by1v2ixeiJEkLq0M6X1D404j1fyYnzoBsVBdj7fD1Smsi9u2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UfVmNZ32; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733326217; c=relaxed/simple;
+	bh=sqwV7krO8QQpt0gIpdeqn+4ELfbYilvQVrkrTPkOFiI=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LAX2QQt3sjDV5Ln5Nooxx5kx0u5I9zOo4ESN2E/tCPfsaCJDyyEKB7hAJeC7fa9GSFkTPoWrlY4cVq47QHaJeYfC0kKyV3FIai2ZI9bzOfU8Z19F+yWB9iTcvw/Vsy6tS/OnScavwu3vlEQVqsWe0DynVoKtxKuHeMYH8IuXDI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zpy817P/; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UfVmNZ32"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-434ab938e37so45425435e9.0;
-        Wed, 04 Dec 2024 07:13:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733325228; x=1733930028; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=K67aLAUzSfbUuMMVxrZ7xG6js3aZNsZytWIuEf4fsUo=;
-        b=UfVmNZ32EOhGI3nXcfeBr6GS/9CRDmZLU0ainoucRUNbud1APQdtMW2vkUMa0qkQQc
-         6PkOby0OIq9Nmsvux92RqG0bwzZbmbNT5nJZAmlsn6RSS9PMYDW/k/DE3BfmuoYPp27n
-         VltMvWvhzB6d9WAJocywFw9G/pkeX7q2jrsQDwIqBbGHdk/Hziwp2kb4PwreIghHQzbF
-         zeHEEiDJUb5OGSCBJH1o1Rqo9lTj6KLtd1VZ64PNqSWWo1ph9G4KFQJZX4e9MB7gfQlm
-         Cxo4RqfnGuhHE1XcRiwOfdA80Jczqbw12vn5i2OKjGmXIfC5SsxnH7oJE1xPcBuBmxAA
-         j1mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733325228; x=1733930028;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K67aLAUzSfbUuMMVxrZ7xG6js3aZNsZytWIuEf4fsUo=;
-        b=ekazySlaHFIE6cmVWlodvVmsmz8FsCiZuO2KKAMT4jHSJfQx9z05UxYHln7n0DDLx8
-         m6CCGArOTk+ZggQfxtchG6chDOodBeJ6qoqBpX2tNSpzYUxLI2znw7k3rsTLt16IFS9g
-         1Gc2l+Te7fTvBFKnjpjPdxIpqSVb3HcNXV51hWP71cw5WUaUL1ltIBPr+eXK9Nyk8jRF
-         hMbTdbni59tpyRjLH+0zn1+MuSZXesLIWSwf0Fh21N9RMFo4/TOy6+GR0Df1cP9iLAQz
-         nqnNzco83tYvkddRWUINifMbsbKAjl2VhEbBinfy9iu5RuYmPeR9NPeU3Qv4s1/SIEas
-         mJtg==
-X-Forwarded-Encrypted: i=1; AJvYcCWFSPDpnUp+aj59S29iIWSPUjfyp4tFPF7qCHNfGm5/FC2Xr1XXwVGXOqEtwTNwo3QeEGPR@lists.linux.dev, AJvYcCXb2TFktw4jXirKK/t0yTxRIlddkiFlyFrdqttEtV6Zl2fIq74A4yzgbO8Ly791utwxdHbTHXFtPpRtS9El7Q==@lists.linux.dev
-X-Gm-Message-State: AOJu0YzLe8CqCzsytDnANWgULqAbwBCRqcKrDScOw/6oTyMkznCMNjkQ
-	zq2qo+mtePDnDOl2y1Hd/QIqqESHi9vEDaPTmjR5TjLBxBmAx7H2
-X-Gm-Gg: ASbGncvmz5ZZ2aC3TACRG70ujHrNP2LJrxGOyUrrAqxIxzHzLt4KMev9+6If2lLBciA
-	+ulz4TPT5WBofnprQjbnLflYDQ56vc8YbuEtnyyph/Yk9oYXgOvjokvqe64YPoX8qgrle7zAufm
-	viirh0utTQQNmjwjbjdGi0jFCA0DhkBFF4S1SP9dFnJUcupLtj8DIGGfA41iHlLRi5aaiL+8LJB
-	cCb7XBsn/xz9x0yOnBGjL//QyzQijEUtibUqo1KtpJWIyU7LA+ByFVl+QaC/ShwAzCxK7QYqvb3
-	6hM7ug==
-X-Google-Smtp-Source: AGHT+IGZWimo8j6jMFRask/atuO/zxTgFDYDzsdxIc9v2gqFWxahTgIfn6oEZjIvWK770r9mpIOd6Q==
-X-Received: by 2002:a05:600c:1c1d:b0:434:932b:a44c with SMTP id 5b1f17b1804b1-434d3fe339emr38546645e9.27.1733325227755;
-        Wed, 04 Dec 2024 07:13:47 -0800 (PST)
-Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434d5288e02sm27431415e9.20.2024.12.04.07.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 07:13:47 -0800 (PST)
-Message-ID: <675071ab.7b0a0220.183cea.8610@mx.google.com>
-X-Google-Original-Message-ID: <Z1Bxp0xQYLa6G0a6@Ansuel-XPS.>
-Date: Wed, 4 Dec 2024 16:13:43 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@airoha.com, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-References: <20241203163158.580-2-ansuelsmth@gmail.com>
- <202412041929.8aCqrGnO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zpy817P/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733326215; x=1764862215;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=sqwV7krO8QQpt0gIpdeqn+4ELfbYilvQVrkrTPkOFiI=;
+  b=Zpy817P/wuB3B4n/7f+mdeGaxgxax417bQK5Of05J9K/Z6N9hcW07VA5
+   OL9PuDeRqyeAcWaXYLbizkcAHEITgWc5oXW5LHZVbTbVUZVoj7VVw//CL
+   6lDfHQBTz6bWCEOlXEoT10UJdyV5T54LLZpygqnpdQz6wZUSixkd4S1eV
+   6Wia0mX8mbriMRgL8idixSRpuOTEUM4Lrz/5H7TcYeJNX/MNQ3498ORuO
+   xIwnY71TECSUftSBOvesmDv+1W/D/bpNhtarTJAdBH8o8aRqFgRVzjTUx
+   WtESuWl2uAwTrd9glOyOExu2F2TYAIwYCfT0zhB4Na27gbGo0kYTZ/eDp
+   Q==;
+X-CSE-ConnectionGUID: dmp116DAS32ovMlQRE4j3w==
+X-CSE-MsgGUID: YIG7dvbVTSqwgJYnNntP3A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="44989738"
+X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
+   d="scan'208";a="44989738"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 07:30:14 -0800
+X-CSE-ConnectionGUID: ivzYvinoQ7qofhHBqMpX6g==
+X-CSE-MsgGUID: SlyuRd03QMOeAomhf7C3+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
+   d="scan'208";a="94258192"
+Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 04 Dec 2024 07:30:13 -0800
+Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tIrKN-0003D7-01;
+	Wed, 04 Dec 2024 15:30:11 +0000
+Date: Wed, 4 Dec 2024 23:30:06 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 4/4] powerpc/static_call: Implement inline static calls
+Message-ID: <202412042329.3iSFKUe8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,94 +59,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202412041929.8aCqrGnO-lkp@intel.com>
 
-On Wed, Dec 04, 2024 at 07:22:41PM +0800, kernel test robot wrote:
-> Hi Christian,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on rafael-pm/linux-next]
-> [also build test ERROR on rafael-pm/bleeding-edge robh/for-next linus/master v6.13-rc1 next-20241203]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/cpufreq-airoha-Add-EN7581-CPUFreq-SMCCC-driver/20241204-113105
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-> patch link:    https://lore.kernel.org/r/20241203163158.580-2-ansuelsmth%40gmail.com
-> patch subject: [PATCH v5 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-> config: arm-randconfig-003 (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041929.8aCqrGnO-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202412041929.8aCqrGnO-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/cpufreq/airoha-cpufreq.c:41:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
->       41 |         const struct arm_smccc_1_2_regs args = {
->          |                                         ^
->    drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
->       41 |         const struct arm_smccc_1_2_regs args = {
->          |                      ^
-> >> drivers/cpufreq/airoha-cpufreq.c:45:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
->       45 |         struct arm_smccc_1_2_regs res;
->          |                                   ^
->    drivers/cpufreq/airoha-cpufreq.c:41:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
->       41 |         const struct arm_smccc_1_2_regs args = {
->          |                      ^
-> >> drivers/cpufreq/airoha-cpufreq.c:47:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->       47 |         arm_smccc_1_2_smc(&args, &res);
->          |         ^
->    drivers/cpufreq/airoha-cpufreq.c:81:34: error: variable has incomplete type 'const struct arm_smccc_1_2_regs'
->       81 |         const struct arm_smccc_1_2_regs args = {
->          |                                         ^
->    drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
->       81 |         const struct arm_smccc_1_2_regs args = {
->          |                      ^
->    drivers/cpufreq/airoha-cpufreq.c:86:28: error: variable has incomplete type 'struct arm_smccc_1_2_regs'
->       86 |         struct arm_smccc_1_2_regs res;
->          |                                   ^
->    drivers/cpufreq/airoha-cpufreq.c:81:15: note: forward declaration of 'struct arm_smccc_1_2_regs'
->       81 |         const struct arm_smccc_1_2_regs args = {
->          |                      ^
->    drivers/cpufreq/airoha-cpufreq.c:88:2: error: call to undeclared function 'arm_smccc_1_2_smc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->       88 |         arm_smccc_1_2_smc(&args, &res);
->          |         ^
->    6 errors generated.
-> 
-> 
-> vim +41 drivers/cpufreq/airoha-cpufreq.c
-> 
->     37	
->     38	static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
->     39						    unsigned long parent_rate)
->     40	{
->   > 41		const struct arm_smccc_1_2_regs args = {
->     42			.a0 = AIROHA_SIP_AVS_HANDLE,
->     43			.a1 = AIROHA_AVS_OP_GET_FREQ,
->     44		};
->   > 45		struct arm_smccc_1_2_regs res;
->     46	
->   > 47		arm_smccc_1_2_smc(&args, &res);
->     48	
->     49		/* SMCCC returns freq in MHz */
->     50		return (int)(res.a0 * 1000 * 1000);
->     51	}
->     52	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+In-Reply-To: <3dbd0b2ba577c942729235d0211d04a406653d81.1733245362.git.christophe.leroy@csgroup.eu>
+References: <3dbd0b2ba577c942729235d0211d04a406653d81.1733245362.git.christophe.leroy@csgroup.eu>
+TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+TO: Shrikanth Hegde <sshegde@linux.ibm.com>
+TO: Peter Zijlstra <peterz@infradead.org>
+TO: Josh Poimboeuf <jpoimboe@kernel.org>
+TO: Jason Baron <jbaron@akamai.com>
+TO: Steven Rostedt <rostedt@goodmis.org>
+TO: Ard Biesheuvel <ardb@kernel.org>
+TO: Thomas Gleixner <tglx@linutronix.de>
+TO: Ingo Molnar <mingo@redhat.com>
+TO: Borislav Petkov <bp@alien8.de>
+TO: Dave Hansen <dave.hansen@linux.intel.com>
+TO: x86@kernel.org
+TO: "H. Peter Anvin" <hpa@zytor.com>
+TO: Michael Ellerman <mpe@ellerman.id.au>
+TO: Nicholas Piggin <npiggin@gmail.com>
+TO: Naveen N Rao <naveen@kernel.org>
+TO: Madhavan Srinivasan <maddy@linux.ibm.com>
+CC: Christophe Leroy <christophe.leroy@csgroup.eu>
+CC: linux-kernel@vger.kernel.org
+CC: linuxppc-dev@lists.ozlabs.org
 
-False positive or better say my error in the kconfig depends logic
+Hi Christophe,
 
-This driver REQUIRE ARM64 bit for smccc and the target SoC is 64bit
-only. The randconfig catch a situation with ARCH_AIROHA and 32bit.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on powerpc/fixes linus/master v6.13-rc1 next-20241203]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/static_call_inline-Provide-trampoline-address-when-updating-sites/20241204-120612
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/3dbd0b2ba577c942729235d0211d04a406653d81.1733245362.git.christophe.leroy%40csgroup.eu
+patch subject: [PATCH v4 4/4] powerpc/static_call: Implement inline static calls
+config: powerpc-linkstation_defconfig (https://download.01.org/0day-ci/archive/20241204/202412042329.3iSFKUe8-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412042329.3iSFKUe8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412042329.3iSFKUe8-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/powerpc/kernel/prom_init.c:24:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:24:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   arch/powerpc/kernel/prom_init.c:666:26: warning: unused function 'prom_getproplen' [-Wunused-function]
+     666 | static inline int __init prom_getproplen(phandle node, const char *pname)
+         |                          ^~~~~~~~~~~~~~~
+   2 warnings generated.
+>> arch/powerpc/kernel/prom_init.o: warning: objtool: prom_init+0x34: unannotated intra-function call
 
 -- 
-	Ansuel
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
