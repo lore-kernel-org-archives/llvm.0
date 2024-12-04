@@ -1,132 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB602182D9;
-	Wed,  4 Dec 2024 15:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484EA14F9F7
+	for <llvm@lists.linux.dev>; Wed,  4 Dec 2024 16:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733326217; cv=none; b=TkRk9C26JSNu+FcvFGmhnHrLvqFPH7aEPQNcoQ5WrdV4ov0Si6SDUu5J7A6vJ6RtKNFrrBp0E1eLNGg4WaqIQ7DkGs5JLzvEA9uZIZ3+lSXsZhmxIFejXM1SFnUID5WIHqDKuaWSov9GXi5U6p9QVbjnZKN30/YoTuThgYah1Rk=
+	t=1733328742; cv=none; b=Z6HKnfTwiiN0LX45StYRuzAZ8s33DGLJQMiHRja6J02ov3D25aAp5OajLDgtMYzqEWC3j/MO2Od9OJU2daHkky3WCtuK/4UBQbGDke70yKGkMSVZ0jNulRAwfMtUdqv6OBrTfXDQeK427dd1O88S8FYewTgDWNoViRQ07I0ZsWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733326217; c=relaxed/simple;
-	bh=sqwV7krO8QQpt0gIpdeqn+4ELfbYilvQVrkrTPkOFiI=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LAX2QQt3sjDV5Ln5Nooxx5kx0u5I9zOo4ESN2E/tCPfsaCJDyyEKB7hAJeC7fa9GSFkTPoWrlY4cVq47QHaJeYfC0kKyV3FIai2ZI9bzOfU8Z19F+yWB9iTcvw/Vsy6tS/OnScavwu3vlEQVqsWe0DynVoKtxKuHeMYH8IuXDI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zpy817P/; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zpy817P/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733326215; x=1764862215;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=sqwV7krO8QQpt0gIpdeqn+4ELfbYilvQVrkrTPkOFiI=;
-  b=Zpy817P/wuB3B4n/7f+mdeGaxgxax417bQK5Of05J9K/Z6N9hcW07VA5
-   OL9PuDeRqyeAcWaXYLbizkcAHEITgWc5oXW5LHZVbTbVUZVoj7VVw//CL
-   6lDfHQBTz6bWCEOlXEoT10UJdyV5T54LLZpygqnpdQz6wZUSixkd4S1eV
-   6Wia0mX8mbriMRgL8idixSRpuOTEUM4Lrz/5H7TcYeJNX/MNQ3498ORuO
-   xIwnY71TECSUftSBOvesmDv+1W/D/bpNhtarTJAdBH8o8aRqFgRVzjTUx
-   WtESuWl2uAwTrd9glOyOExu2F2TYAIwYCfT0zhB4Na27gbGo0kYTZ/eDp
-   Q==;
-X-CSE-ConnectionGUID: dmp116DAS32ovMlQRE4j3w==
-X-CSE-MsgGUID: YIG7dvbVTSqwgJYnNntP3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="44989738"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="44989738"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 07:30:14 -0800
-X-CSE-ConnectionGUID: ivzYvinoQ7qofhHBqMpX6g==
-X-CSE-MsgGUID: SlyuRd03QMOeAomhf7C3+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="94258192"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Dec 2024 07:30:13 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tIrKN-0003D7-01;
-	Wed, 04 Dec 2024 15:30:11 +0000
-Date: Wed, 4 Dec 2024 23:30:06 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 4/4] powerpc/static_call: Implement inline static calls
-Message-ID: <202412042329.3iSFKUe8-lkp@intel.com>
+	s=arc-20240116; t=1733328742; c=relaxed/simple;
+	bh=oPJAZmjGz3hig5ERXVpw1rcG2SyM62QcVUOtlyK08xs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=hXJfuUL4a4PsYBP1NwXvMVJOr+P0YXsX0rsXG7c5e209clOpO3SImwFQdn4KRYwT+GBysTj8wZfe+7N+vyJ1Hl8eUCHZGzPKDLvbUwk9oelHCehPzjAt/65kthgQq6mLs1die8oAZd8gau6w0ikU6KDTfW3U7Q0SW0CXbUMTudg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-155-GqQcbuu3MrGacAW_QlZAsw-1; Wed, 04 Dec 2024 16:12:11 +0000
+X-MC-Unique: GqQcbuu3MrGacAW_QlZAsw-1
+X-Mimecast-MFC-AGG-ID: GqQcbuu3MrGacAW_QlZAsw
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 4 Dec
+ 2024 16:11:33 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 4 Dec 2024 16:11:33 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Dan Carpenter' <dan.carpenter@linaro.org>, Naresh Kamboju
+	<naresh.kamboju@linaro.org>
+CC: "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>, linux-block
+	<linux-block@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+	"lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>, "Linux
+ Regressions" <regressions@lists.linux.dev>, Anders Roxell
+	<anders.roxell@linaro.org>, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor
+	<nathan@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Subject: RE: s390: block/blk-iocost.c:1101:11: error: call to
+ '__compiletime_assert_557' declared with 'error' attribute: clamp() low limit
+ 1 greater than high limit active
+Thread-Topic: s390: block/blk-iocost.c:1101:11: error: call to
+ '__compiletime_assert_557' declared with 'error' attribute: clamp() low limit
+ 1 greater than high limit active
+Thread-Index: AQHbRlpA05groSrCOUKR/Ly6shl2PrLWPxCw
+Date: Wed, 4 Dec 2024 16:11:33 +0000
+Message-ID: <7920126775c74fa5915afbeedcfe2058@AcuMS.aculab.com>
+References: <CA+G9fYsD7mw13wredcZn0L-KBA3yeoVSTuxnss-AEWMN3ha0cA@mail.gmail.com>
+ <5ffa868f-cbf0-42ae-ae10-5c39b0de05e7@stanley.mountain>
+In-Reply-To: <5ffa868f-cbf0-42ae-ae10-5c39b0de05e7@stanley.mountain>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: mAaOf3C8AAJ4chziSKC2pgHK0xqZOBSxS97bMHS8DKY_1733328730
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-In-Reply-To: <3dbd0b2ba577c942729235d0211d04a406653d81.1733245362.git.christophe.leroy@csgroup.eu>
-References: <3dbd0b2ba577c942729235d0211d04a406653d81.1733245362.git.christophe.leroy@csgroup.eu>
-TO: Christophe Leroy <christophe.leroy@csgroup.eu>
-TO: Shrikanth Hegde <sshegde@linux.ibm.com>
-TO: Peter Zijlstra <peterz@infradead.org>
-TO: Josh Poimboeuf <jpoimboe@kernel.org>
-TO: Jason Baron <jbaron@akamai.com>
-TO: Steven Rostedt <rostedt@goodmis.org>
-TO: Ard Biesheuvel <ardb@kernel.org>
-TO: Thomas Gleixner <tglx@linutronix.de>
-TO: Ingo Molnar <mingo@redhat.com>
-TO: Borislav Petkov <bp@alien8.de>
-TO: Dave Hansen <dave.hansen@linux.intel.com>
-TO: x86@kernel.org
-TO: "H. Peter Anvin" <hpa@zytor.com>
-TO: Michael Ellerman <mpe@ellerman.id.au>
-TO: Nicholas Piggin <npiggin@gmail.com>
-TO: Naveen N Rao <naveen@kernel.org>
-TO: Madhavan Srinivasan <maddy@linux.ibm.com>
-CC: Christophe Leroy <christophe.leroy@csgroup.eu>
-CC: linux-kernel@vger.kernel.org
-CC: linuxppc-dev@lists.ozlabs.org
+From: Dan Carpenter <dan.carpenter@linaro.org>
+> Sent: 04 December 2024 14:39
+>=20
+> Let's add David to the Cc list because he's the expert on clamp().
 
-Hi Christophe,
+The traceback info misses the important point.
+I can't see the 'inlined from line 2225' message.
 
-kernel test robot noticed the following build warnings:
+We have (line 1084):
+static void __propagate_weights(struct ioc_gq *iocg, u32 active, u32 inuse,
+=09=09=09=09bool save, struct ioc_now *now)
+followed by:
+=09=09inuse =3D clamp_t(u32, inuse, 1, active);
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes linus/master v6.13-rc1 next-20241203]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But line 2225 has:
+=09__propagate_weights(iocg, 0, 0, false, now);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/static_call_inline-Provide-trampoline-address-when-updating-sites/20241204-120612
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/3dbd0b2ba577c942729235d0211d04a406653d81.1733245362.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH v4 4/4] powerpc/static_call: Implement inline static calls
-config: powerpc-linkstation_defconfig (https://download.01.org/0day-ci/archive/20241204/202412042329.3iSFKUe8-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412042329.3iSFKUe8-lkp@intel.com/reproduce)
+With aggressive inlining the compiler sees 'active =3D=3D 0'
+and the lo > hi test correctly triggers.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412042329.3iSFKUe8-lkp@intel.com/
+The previous version only verified 'lo <=3D hi' if it was a constant
+integer expression - which it isn't here.
 
-All warnings (new ones prefixed by >>):
+No idea what the code is trying to do, nor what value it expects
+clamp(val, 1, 0) to generate - likely to be 0 or 1 depending on
+the order of the comparisons.
 
-   In file included from arch/powerpc/kernel/prom_init.c:24:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/powerpc/include/asm/io.h:24:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   arch/powerpc/kernel/prom_init.c:666:26: warning: unused function 'prom_getproplen' [-Wunused-function]
-     666 | static inline int __init prom_getproplen(phandle node, const char *pname)
-         |                          ^~~~~~~~~~~~~~~
-   2 warnings generated.
->> arch/powerpc/kernel/prom_init.o: warning: objtool: prom_init+0x34: unannotated intra-function call
+=09David
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
