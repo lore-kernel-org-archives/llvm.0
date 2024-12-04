@@ -1,64 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A2A3D0D5;
-	Wed,  4 Dec 2024 20:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA5E18FC7B;
+	Wed,  4 Dec 2024 21:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733344222; cv=none; b=EYTcw9x+0Z1Q5cRcgnfjb042O1Jl62jkJpE30mFdci6da21xZus3zcsRPsqj8UJdkF3CCdhWG53ue6GB2XtZ4jh13SeKG44xHGsSKv0YgZIjrkbQqz+s3qc0tV305T2fIhr62DTJskqtlo/yiK++BqtWal0PLgRlY1wuIcDwrls=
+	t=1733346090; cv=none; b=gO4EFUFtEppyls50mLuW4HrpUqEXGsMeqBzYWj9TJM8lgwLh9oaKl4/AhY6qsOfFccUa76zYxTxLzJLcogwn5r7bYOvJkyqtH8HF7Ww0n7+GtO657p+sqwUdiakAIgFMyxeDKwKlIPuyy+dW+8BZckbeesOGcl63ockopy92hB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733344222; c=relaxed/simple;
-	bh=Hqvk2t+BsLSphs4WfQUre5lwOKVlFGQ6Nxe5CPShoMA=;
+	s=arc-20240116; t=1733346090; c=relaxed/simple;
+	bh=YYisex5fANxvp1J7FXSt2wFTYyLxl4fy8A9aDQDg1FQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i/sFRCEeOr//XzHWq8Wk2MBsyn+1M+SR9hiYWx+h1+HrkBT6ZXHUkatP89z09nivlYKlj7A7Doetv2ze1SNam7a2QtMEXZzUFVnLzkAqKFDQe3ijEMcrNa5WtiIzQWO9vBOS665NiHHxV6oBO2OifQY+H9cyO8yx4Fq2l8s2Nek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nC6RrKHz; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zu82s5yC9IJ4wbIiA2rutz9yBXwyKRA0tKLcUL/dzP7oiYiouVF5BJIdE7g4e6VWKmE/m9VOP45xXIkGGEURBhHnz1PG0oF6xBJoDr26HeW+fAR7H3q5Bu14Yncljti44F75F3h/HunQh/bRzT5RgDRJYmq8+rJfrgfvf1IORnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QCFt4JeZ; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nC6RrKHz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QCFt4JeZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733344220; x=1764880220;
+  t=1733346089; x=1764882089;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Hqvk2t+BsLSphs4WfQUre5lwOKVlFGQ6Nxe5CPShoMA=;
-  b=nC6RrKHzVubJUglLj+0DqckszGyN5hubIROfoScUgpTfOEZK5q3TnWoS
-   nTluqMFiYjnE+4oUkfgDXWUWMCIzYpf57NQnYAoyVcMDrDkgvcRSJ0UbC
-   ljwTJLyVoPQAmyDl5HTNuqza7r5owbpAidVnLV3uq6HOp5xs55wu0AGFe
-   vHCJSfpNPbPTtxtU0fczZmYBT24MCmyZhxJkYf8Lcn6/sz+Zlq55m8kyr
-   A6wdXL9Gi6M4lt3mECyLNBhEpDX1Prxpj7F0mWqzAPT4LY46rx12sZXsg
-   QK8EGYEvFr1aNGCn5TcFP/zfwAaGukIQJKuIU6BLax1aL4sLdKecONRAl
+  bh=YYisex5fANxvp1J7FXSt2wFTYyLxl4fy8A9aDQDg1FQ=;
+  b=QCFt4JeZ6/2Q4MJssAH8pIyjXoo529CBj5IMfn4dFtPV4FCVuFETu3BQ
+   1rKjz5CL9+/53KYqftcqQ/xHRiZdiZA55vWsI5zmQN2tqUol1KB5crSMm
+   fpis/UZMw6JWRHrv2n6mSIquLEnojoYcLrgjgk0IBwp8k1U70vRMzeA6e
+   6INSZE/+npoqKXd1ciSDywFdVkW2A4unz/qnin3MoQdUdoOf1zt9JsBxw
+   kEb/djk8+FWY+9j1z/DT/auLLRiHt4V95VucIM/hivx/qhLdN1s2vvgYg
+   aKVYGS42vQmkbaHpPXjably/ExAiuLMQUraXRA7AXFTvphBlUM/9F/Enk
    g==;
-X-CSE-ConnectionGUID: bN56ab6NS9WlByzV0EcZRA==
-X-CSE-MsgGUID: SKNrjnRKQ3yczcI6VMH4PA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33550823"
+X-CSE-ConnectionGUID: ESJa+yBeRSGfNjX2TE8Kvg==
+X-CSE-MsgGUID: 0XBtZlfkSx6ammeG6kSEaw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33376976"
 X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="33550823"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 12:30:20 -0800
-X-CSE-ConnectionGUID: IrFc6JW0RjSOHUrx4Mgv3w==
-X-CSE-MsgGUID: adn2N2IWTPuik/VHoASs1Q==
+   d="scan'208";a="33376976"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 13:01:25 -0800
+X-CSE-ConnectionGUID: QWS2hJyNQWOxHgI42sEvdA==
+X-CSE-MsgGUID: 21i45RZzRYqLQ7OlhLyg3A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,208,1728975600"; 
-   d="scan'208";a="93951250"
+   d="scan'208";a="97937245"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 04 Dec 2024 12:30:19 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 04 Dec 2024 13:01:21 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tIw0m-0003Sf-0y;
-	Wed, 04 Dec 2024 20:30:16 +0000
-Date: Thu, 5 Dec 2024 04:29:39 +0800
+	id 1tIwUo-0003UD-2j;
+	Wed, 04 Dec 2024 21:01:18 +0000
+Date: Thu, 5 Dec 2024 05:00:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Piotr Kwapulinski <piotr.kwapulinski@intel.com>,
-	intel-wired-lan@lists.osuosl.org
+To: Tariq Toukan <tariqt@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org,
-	Piotr Kwapulinski <piotr.kwapulinski@intel.com>,
-	Stefan Wegrzyn <stefan.wegrzyn@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH iwl-next v11 5/8] ixgbe: Add support
- for EEPROM dump in E610 device
-Message-ID: <202412050450.s26ZxK1U-lkp@intel.com>
-References: <20241204143112.29411-6-piotr.kwapulinski@intel.com>
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
+	linux-rdma@vger.kernel.org, Carolina Jubran <cjubran@nvidia.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH net-next V4 07/11] devlink: Extend devlink rate API with
+ traffic classes bandwidth management
+Message-ID: <202412050416.e7egEz4f-lkp@intel.com>
+References: <20241203202924.228440-8-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,67 +72,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241204143112.29411-6-piotr.kwapulinski@intel.com>
+In-Reply-To: <20241203202924.228440-8-tariqt@nvidia.com>
 
-Hi Piotr,
+Hi Tariq,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on tnguy-next-queue/dev-queue]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Piotr-Kwapulinski/ixgbe-Add-support-for-E610-FW-Admin-Command-Interface/20241204-223603
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20241204143112.29411-6-piotr.kwapulinski%40intel.com
-patch subject: [Intel-wired-lan] [PATCH iwl-next v11 5/8] ixgbe: Add support for EEPROM dump in E610 device
-config: i386-buildonly-randconfig-003 (https://download.01.org/0day-ci/archive/20241205/202412050450.s26ZxK1U-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/net-mlx5-ifc-Reorganize-mlx5_ifc_flow_table_context_bits/20241204-124235
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241203202924.228440-8-tariqt%40nvidia.com
+patch subject: [PATCH net-next V4 07/11] devlink: Extend devlink rate API with traffic classes bandwidth management
+config: x86_64-buildonly-randconfig-001-20241205 (https://download.01.org/0day-ci/archive/20241205/202412050416.e7egEz4f-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050450.s26ZxK1U-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050416.e7egEz4f-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050450.s26ZxK1U-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412050416.e7egEz4f-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/ixgbe/ixgbe_e610.c:2083: warning: expecting prototype for ixgbe_init_eeprom_params_E610(). Prototype was for ixgbe_init_eeprom_params_e610() instead
+   In file included from net/devlink/rate.c:7:
+   In file included from net/devlink/devl_internal.h:7:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/devlink/rate.c:7:
+   net/devlink/devl_internal.h:29:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
+      29 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/devlink/devl_internal.h:26:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
+      26 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/devlink/devl_internal.h:30:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
+      30 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/devlink/devl_internal.h:26:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
+      26 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/devlink/rate.c:403:4: warning: 'snprintf' will always be truncated; specified size is 80, but format string expands to at least 83 [-Wformat-truncation]
+     403 |                         NL_SET_ERR_MSG_FMT(info->extack,
+         |                         ^
+   include/linux/netlink.h:116:6: note: expanded from macro 'NL_SET_ERR_MSG_FMT'
+     116 |         if (snprintf(__extack->_msg_buf, NETLINK_MAX_FMTMSG_LEN,               \
+         |             ^
+   7 warnings generated.
 
 
-vim +2083 drivers/net/ethernet/intel/ixgbe/ixgbe_e610.c
+vim +/snprintf +403 net/devlink/rate.c
 
-  2072	
-  2073	/**
-  2074	 * ixgbe_init_eeprom_params_E610 - Initialize EEPROM params
-  2075	 * @hw: pointer to hardware structure
-  2076	 *
-  2077	 * Initialize the EEPROM parameters ixgbe_eeprom_info within the ixgbe_hw
-  2078	 * struct in order to set up EEPROM access.
-  2079	 *
-  2080	 * Return: the operation exit code
-  2081	 */
-  2082	int ixgbe_init_eeprom_params_e610(struct ixgbe_hw *hw)
-> 2083	{
-  2084		struct ixgbe_eeprom_info *eeprom = &hw->eeprom;
-  2085		u32 gens_stat;
-  2086		u8 sr_size;
-  2087	
-  2088		if (eeprom->type != ixgbe_eeprom_uninitialized)
-  2089			return 0;
-  2090	
-  2091		eeprom->type = ixgbe_flash;
-  2092	
-  2093		gens_stat = IXGBE_READ_REG(hw, GLNVM_GENS);
-  2094		sr_size = FIELD_GET(GLNVM_GENS_SR_SIZE_M, gens_stat);
-  2095	
-  2096		/* Switching to words (sr_size contains power of 2). */
-  2097		eeprom->word_size = BIT(sr_size) * IXGBE_SR_WORDS_IN_1KB;
-  2098	
-  2099		hw_dbg(hw, "Eeprom params: type = %d, size = %d\n", eeprom->type,
-  2100		       eeprom->word_size);
-  2101	
-  2102		return 0;
-  2103	}
-  2104	
+   381	
+   382	static int devlink_nl_rate_tc_bw_set(struct devlink_rate *devlink_rate,
+   383					     struct genl_info *info)
+   384	{
+   385		DECLARE_BITMAP(bitmap, IEEE_8021QAZ_MAX_TCS) = {};
+   386		struct devlink *devlink = devlink_rate->devlink;
+   387		const struct devlink_ops *ops = devlink->ops;
+   388		u32 tc_bw[IEEE_8021QAZ_MAX_TCS] = {};
+   389		int rem, err = -EOPNOTSUPP, i;
+   390		struct nlattr *attr;
+   391	
+   392		nla_for_each_attr(attr, genlmsg_data(info->genlhdr),
+   393				  genlmsg_len(info->genlhdr), rem) {
+   394			if (nla_type(attr) == DEVLINK_ATTR_RATE_TC_BWS) {
+   395				err = devlink_nl_rate_tc_bw_parse(attr, tc_bw, bitmap, info->extack);
+   396				if (err)
+   397					return err;
+   398			}
+   399		}
+   400	
+   401		for (i = 0; i < IEEE_8021QAZ_MAX_TCS; i++) {
+   402			if (!test_bit(i, bitmap)) {
+ > 403				NL_SET_ERR_MSG_FMT(info->extack,
+   404						   "Incomplete traffic class bandwidth values, all %u traffic classes must be specified",
+   405						   IEEE_8021QAZ_MAX_TCS);
+   406				return -EINVAL;
+   407			}
+   408		}
+   409	
+   410		if (devlink_rate_is_leaf(devlink_rate))
+   411			err = ops->rate_leaf_tc_bw_set(devlink_rate, devlink_rate->priv, tc_bw,
+   412						       info->extack);
+   413		else if (devlink_rate_is_node(devlink_rate))
+   414			err = ops->rate_node_tc_bw_set(devlink_rate, devlink_rate->priv, tc_bw,
+   415						       info->extack);
+   416	
+   417		if (err)
+   418			return err;
+   419	
+   420		memcpy(devlink_rate->tc_bw, tc_bw, sizeof(tc_bw));
+   421	
+   422		return 0;
+   423	}
+   424	
 
 -- 
 0-DAY CI Kernel Test Service
