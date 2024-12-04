@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A0C1AE863;
-	Wed,  4 Dec 2024 11:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D301B4F3A;
+	Wed,  4 Dec 2024 12:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733312033; cv=none; b=BWlTGrDqKnBSks6F8coFWLxPHWJGfPN7P+KTNV0LSytGjqwy+ADUUklweV+snLeuZ+gugtjo616lekaGqNvtIIACzl3PhhDbiAcNSOF0FTszjsJAiF1cCCqdLM96QQ8Q3fi82jmdaNzk5FmXXOHrc+98pXZA3PQfUJyuK4vU0IA=
+	t=1733315224; cv=none; b=NyDF+3MvGT9FxI+KNddFgpVb5pgFzJX9hG4uVLsb9UsOmJOz8F3sjychnd264ADVgn7oB//9NKexjzE2BdOHXz7Iw0SCAXSNSM9xcgQGBQpOX3yZWe+mIaZiday8py2UdzKMXKY+RvWR5iYqaa1duWkCuQSUFLCXdPGqSR5PmN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733312033; c=relaxed/simple;
-	bh=icNQ1hK/KEU+ydk3SKlmtjZgJ3jM4g14xAoPkqOL7KQ=;
+	s=arc-20240116; t=1733315224; c=relaxed/simple;
+	bh=LYYCIj0NL0rTx72/1sxRiv5FXsD1F+nydLeDSXsUxdI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jw/kse7/gObNWA0P4OARwzkVJRVqkPO4aZwiKRso0VW6CyZ1flPk/Mo0nLnvAu0KsNK+5PlRv59jHePX0C81IyumdiEzesXm3sDqY95WQj8gLpxNzLy2iaaqGIqL0DMWDiLT96YvDUUVL135o3xFRybFMtAoMQIWZkS3T7gn/80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jf6XkKmj; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=p6+aG0Eq72bPNkBGA4FLX1g2u49MGK+hHsowyjrLS70NudVMfs6HYmS0k4TXTa0fjP5A5D0+/SyUq1Ic7Dz4l2CSDkxHFan7YCba7URXWhABEADGb0Y77gEuKPjD//td/FT3+JSMwYQigE15GcwJxazRVy4touFBec5rF7GhzVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hsAux2YV; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jf6XkKmj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hsAux2YV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733312030; x=1764848030;
+  t=1733315223; x=1764851223;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=icNQ1hK/KEU+ydk3SKlmtjZgJ3jM4g14xAoPkqOL7KQ=;
-  b=Jf6XkKmjX+UtWZz64oqL9eQsq02ZVEgMztXCJKxtq/3SKiDKQdKFtA9t
-   jNbiWl3KX0LP3RE4rChmZPeo+MFyy5ppfCYilh9nwmDj5PkJlWdFN+6Vj
-   VGyAFIj9hwkebh2WA61aqjwbWhesXkuAbfXJ/z7UryRlCWgckU1FncEgk
-   tux3kzFiOGCJT/+duMUt6YOauonUlI5MUcj6Sru6YE2Wu54d+K9myMu85
-   TYR5Io26GSOwVE50Pvo69qA5i56vmbI2Pi/tDTteaBtsw3JGr2yL6B/xQ
-   XwXDgyDxHxVtAVt7z/rn7Ks6+u0LjKjctcktjUKGj2Pwcm4T+3K4y0VXS
-   Q==;
-X-CSE-ConnectionGUID: QBBKeb4WTDSbWZfjRSclRQ==
-X-CSE-MsgGUID: L76J86EBS3mYHe3NV1JDOg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="21155295"
+  bh=LYYCIj0NL0rTx72/1sxRiv5FXsD1F+nydLeDSXsUxdI=;
+  b=hsAux2YVjYKrVVZWEmbdX/DD0uwpudVVoyY9Om01HyQs0YDmB0tTeqvS
+   xYxqyFHHsL6FZjAfNhbT3TjKs0eTlv6vgvRZrTvh6zJz+rr8Xe2dGtFkv
+   tXaO9C+mVngxr7KQ443NLHemrW/SdG/ddl4ToFUQ0UdNf3UambK85eiZU
+   aOuu11hSmNSzQQjtYnkKg5koDEXUSNA91ySc2KJWaOgbyg86dx1jrlqAb
+   axgp+LwjhSRKxW4aVa5XqI9+ZCAXid48kj5B9g+v1IIZT7PuU3UEW6fOq
+   /77DxiiPPntCdjfBItiuCoQynt+O1c0ovs95pNw+RJr335vt+/jNsGLDU
+   g==;
+X-CSE-ConnectionGUID: 2YmXY5QNTlez6yrpE48LPA==
+X-CSE-MsgGUID: Vd57qqgxTfavFvHBDJeAUQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="44954198"
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="21155295"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 03:33:50 -0800
-X-CSE-ConnectionGUID: q+vr65RRTaSzksH6y/BXFQ==
-X-CSE-MsgGUID: TgHUJz4/SpCVjX0z0bEIKQ==
+   d="scan'208";a="44954198"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 04:27:03 -0800
+X-CSE-ConnectionGUID: 6gRbt8nvS6OfoB7VXbkZ5g==
+X-CSE-MsgGUID: 3RyWak2fSx201/pQ5cSdfg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="98766291"
+X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
+   d="scan'208";a="93614813"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 04 Dec 2024 03:33:47 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 04 Dec 2024 04:27:00 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tIndZ-0002xZ-0a;
-	Wed, 04 Dec 2024 11:33:45 +0000
-Date: Wed, 4 Dec 2024 19:32:59 +0800
+	id 1tIoT3-00030n-2v;
+	Wed, 04 Dec 2024 12:26:57 +0000
+Date: Wed, 4 Dec 2024 20:26:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+To: NeilBrown <neilb@suse.de>, Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 3/4] iio: afe: rescale: Re-use generic struct s32_fract
-Message-ID: <202412041908.UaZf89I0-lkp@intel.com>
-References: <20241204013620.862943-4-andriy.shevchenko@linux.intel.com>
+	David Disseldorp <ddiss@suse.com>, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH 2/2] NFS: move _maxsz and _sz #defines to the function
+ which they describe.
+Message-ID: <202412042050.xy58M3zN-lkp@intel.com>
+References: <20241204025703.2662394-3-neilb@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,81 +65,127 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241204013620.862943-4-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20241204025703.2662394-3-neilb@suse.de>
 
-Hi Andy,
+Hi NeilBrown,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.13-rc1 next-20241203]
+[auto build test WARNING on trondmy-nfs/linux-next]
+[also build test WARNING on linus/master v6.13-rc1 next-20241203]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/iio-afe-rescale-Don-t-use-for-booleans/20241204-124353
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20241204013620.862943-4-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 3/4] iio: afe: rescale: Re-use generic struct s32_fract
-config: arm-randconfig-003 (https://download.01.org/0day-ci/archive/20241204/202412041908.UaZf89I0-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/NFS-fix-open_owner_id_maxsz-and-related-fields/20241204-124433
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20241204025703.2662394-3-neilb%40suse.de
+patch subject: [PATCH 2/2] NFS: move _maxsz and _sz #defines to the function which they describe.
+config: powerpc-linkstation_defconfig (https://download.01.org/0day-ci/archive/20241204/202412042050.xy58M3zN-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041908.UaZf89I0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412042050.xy58M3zN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412041908.UaZf89I0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412042050.xy58M3zN-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/test/iio-test-rescale.c:655:10: error: no member named 'numerator' in 'struct rescale'
-     655 |         rescale.numerator = t->numerator;
-         |         ~~~~~~~ ^
->> drivers/iio/test/iio-test-rescale.c:656:10: error: no member named 'denominator' in 'struct rescale'
-     656 |         rescale.denominator = t->denominator;
-         |         ~~~~~~~ ^
-   drivers/iio/test/iio-test-rescale.c:684:10: error: no member named 'numerator' in 'struct rescale'
-     684 |         rescale.numerator = t->numerator;
-         |         ~~~~~~~ ^
-   drivers/iio/test/iio-test-rescale.c:685:10: error: no member named 'denominator' in 'struct rescale'
-     685 |         rescale.denominator = t->denominator;
-         |         ~~~~~~~ ^
-   4 errors generated.
+   In file included from fs/nfs/nfs4xdr.c:40:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/nfs/nfs4xdr.c:3040:9: warning: 'decode_sequence_maxsz' macro redefined [-Wmacro-redefined]
+    3040 | #define decode_sequence_maxsz   (op_decode_hdr_maxsz + \
+         |         ^
+   fs/nfs/nfs4xdr.c:135:9: note: previous definition is here
+     135 | #define decode_sequence_maxsz   0
+         |         ^
+>> fs/nfs/nfs4xdr.c:6068:9: warning: 'encode_sequence_maxsz' macro redefined [-Wmacro-redefined]
+    6068 | #define encode_sequence_maxsz   (op_encode_hdr_maxsz + \
+         |         ^
+   fs/nfs/nfs4xdr.c:134:9: note: previous definition is here
+     134 | #define encode_sequence_maxsz   0
+         |         ^
+   3 warnings generated.
 
 
-vim +655 drivers/iio/test/iio-test-rescale.c
+vim +/decode_sequence_maxsz +3040 fs/nfs/nfs4xdr.c
 
-8e74a48d17d509 Liam Beguin 2022-02-12  645  
-8e74a48d17d509 Liam Beguin 2022-02-12  646  static void iio_rescale_test_scale(struct kunit *test)
-8e74a48d17d509 Liam Beguin 2022-02-12  647  {
-8e74a48d17d509 Liam Beguin 2022-02-12  648  	struct rescale_tc_data *t = (struct rescale_tc_data *)test->param_value;
-8e74a48d17d509 Liam Beguin 2022-02-12  649  	char *buff = kunit_kmalloc(test, PAGE_SIZE, GFP_KERNEL);
-8e74a48d17d509 Liam Beguin 2022-02-12  650  	struct rescale rescale;
-8e74a48d17d509 Liam Beguin 2022-02-12  651  	int values[2];
-8e74a48d17d509 Liam Beguin 2022-02-12  652  	int rel_ppm;
-8e74a48d17d509 Liam Beguin 2022-02-12  653  	int ret;
-8e74a48d17d509 Liam Beguin 2022-02-12  654  
-8e74a48d17d509 Liam Beguin 2022-02-12 @655  	rescale.numerator = t->numerator;
-8e74a48d17d509 Liam Beguin 2022-02-12 @656  	rescale.denominator = t->denominator;
-8e74a48d17d509 Liam Beguin 2022-02-12  657  	rescale.offset = t->offset;
-8e74a48d17d509 Liam Beguin 2022-02-12  658  	values[0] = t->schan_val;
-8e74a48d17d509 Liam Beguin 2022-02-12  659  	values[1] = t->schan_val2;
-8e74a48d17d509 Liam Beguin 2022-02-12  660  
-8e74a48d17d509 Liam Beguin 2022-02-12  661  	ret = rescale_process_scale(&rescale, t->schan_scale_type,
-8e74a48d17d509 Liam Beguin 2022-02-12  662  				    &values[0], &values[1]);
-8e74a48d17d509 Liam Beguin 2022-02-12  663  
-8e74a48d17d509 Liam Beguin 2022-02-12  664  	ret = iio_format_value(buff, ret, 2, values);
-8e74a48d17d509 Liam Beguin 2022-02-12  665  	KUNIT_EXPECT_EQ(test, (int)strlen(buff), ret);
-8e74a48d17d509 Liam Beguin 2022-02-12  666  
-8e74a48d17d509 Liam Beguin 2022-02-12  667  	rel_ppm = iio_test_relative_error_ppm(buff, t->expected);
-8e74a48d17d509 Liam Beguin 2022-02-12  668  	KUNIT_EXPECT_GE_MSG(test, rel_ppm, 0, "failed to compute ppm\n");
-8e74a48d17d509 Liam Beguin 2022-02-12  669  
-8e74a48d17d509 Liam Beguin 2022-02-12  670  	KUNIT_EXPECT_EQ_MSG(test, rel_ppm, 0,
-8e74a48d17d509 Liam Beguin 2022-02-12  671  			    "\t    real=%s"
-8e74a48d17d509 Liam Beguin 2022-02-12  672  			    "\texpected=%s\n",
-8e74a48d17d509 Liam Beguin 2022-02-12  673  			    buff, t->expected);
-8e74a48d17d509 Liam Beguin 2022-02-12  674  }
-8e74a48d17d509 Liam Beguin 2022-02-12  675  
+  3039	
+> 3040	#define decode_sequence_maxsz	(op_decode_hdr_maxsz + \
+  3041					XDR_QUADLEN(NFS4_MAX_SESSIONID_LEN) + 5)
+  3042	static int decode_sequence(struct xdr_stream *xdr,
+  3043				   struct nfs4_sequence_res *res,
+  3044				   struct rpc_rqst *rqstp)
+  3045	{
+  3046	#if defined(CONFIG_NFS_V4_1)
+  3047		struct nfs4_session *session;
+  3048		struct nfs4_sessionid id;
+  3049		u32 dummy;
+  3050		int status;
+  3051		__be32 *p;
+  3052	
+  3053		if (res->sr_slot == NULL)
+  3054			return 0;
+  3055		if (!res->sr_slot->table->session)
+  3056			return 0;
+  3057	
+  3058		status = decode_op_hdr(xdr, OP_SEQUENCE);
+  3059		if (!status)
+  3060			status = decode_sessionid(xdr, &id);
+  3061		if (unlikely(status))
+  3062			goto out_err;
+  3063	
+  3064		/*
+  3065		 * If the server returns different values for sessionID, slotID or
+  3066		 * sequence number, the server is looney tunes.
+  3067		 */
+  3068		status = -EREMOTEIO;
+  3069		session = res->sr_slot->table->session;
+  3070	
+  3071		if (memcmp(id.data, session->sess_id.data,
+  3072			   NFS4_MAX_SESSIONID_LEN)) {
+  3073			dprintk("%s Invalid session id\n", __func__);
+  3074			goto out_err;
+  3075		}
+  3076	
+  3077		p = xdr_inline_decode(xdr, 20);
+  3078		if (unlikely(!p))
+  3079			goto out_overflow;
+  3080	
+  3081		/* seqid */
+  3082		dummy = be32_to_cpup(p++);
+  3083		if (dummy != res->sr_slot->seq_nr) {
+  3084			dprintk("%s Invalid sequence number\n", __func__);
+  3085			goto out_err;
+  3086		}
+  3087		/* slot id */
+  3088		dummy = be32_to_cpup(p++);
+  3089		if (dummy != res->sr_slot->slot_nr) {
+  3090			dprintk("%s Invalid slot id\n", __func__);
+  3091			goto out_err;
+  3092		}
+  3093		/* highest slot id */
+  3094		res->sr_highest_slotid = be32_to_cpup(p++);
+  3095		/* target highest slot id */
+  3096		res->sr_target_highest_slotid = be32_to_cpup(p++);
+  3097		/* result flags */
+  3098		res->sr_status_flags = be32_to_cpup(p);
+  3099		status = 0;
+  3100	out_err:
+  3101		res->sr_status = status;
+  3102		return status;
+  3103	out_overflow:
+  3104		status = -EIO;
+  3105		goto out_err;
+  3106	#else  /* CONFIG_NFS_V4_1 */
+  3107		return 0;
+  3108	#endif /* CONFIG_NFS_V4_1 */
+  3109	}
+  3110	
 
 -- 
 0-DAY CI Kernel Test Service
