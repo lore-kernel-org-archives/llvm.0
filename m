@@ -1,223 +1,238 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-14.smtpout.orange.fr [193.252.22.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EAE21D595;
-	Thu,  5 Dec 2024 15:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97F51E492
+	for <llvm@lists.linux.dev>; Thu,  5 Dec 2024 19:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733414270; cv=none; b=MUK7OkciwRo7TiUGuko6OrAj+4iQtTuPsXcZuXQN4EaQ5vKpF7vUEsnb6UVF6J+bluOabtxx/ubHceE7LSvm0Vjk136jzqYPXr4+FwhBilpxQLhAVowZk9W1gKjC6vzyvC70KRvlswoJQ157M6ru5Zuo6RmlOeMGvqrlXgtnM3c=
+	t=1733427135; cv=none; b=cgzztu6IbYQpQBamQXcYcqK2Q6K2ZxbQdmn3OQTKHioPNnbtcl2Rc5Pe/5tpzqlT9GErapzZGbE8bY00ZL9T2GfQYOuBriDK5rC+zSOgOf2chaTLCc8RUxM0oipBUVgG43ZM6MCcxlHSqUffzLcLFS/DhXCykepR9y2UpVEQkdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733414270; c=relaxed/simple;
-	bh=gYj2Cn0A25p30ukJU5NirjJCGlV3C1DFe68Dw8RwYzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ICjPiYn3lAUM17WsxJmsr6NT01FzKcbxSuK6MkvL36/40DY2O8e69Zed6N1vdhlgsPHfQ732nOoxZOF1Z6pD/VvCixXZBIrUC3ZXtV90eiOJgMdgmAyyWDBsGoKsdhWbVCMBqxEyp1AC/GPF4BKHILpVCWMkiTMPdNaa23MYgco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YQhiQmso; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733427135; c=relaxed/simple;
+	bh=SqA1jjBHk63XFY9uhyM2rQ0mOc7qaMSdPBDp2d0vQWM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QfNm8yokpkfdHoeZNxfIfTSNtdhki/lrtIVTlTURB6uv2qFNHdNT8HK738aEHPx4Js9/YekyB1od5ERWD19hbEJynkc6+2nW/g0RVmjyuPvN6oY8HSkN9Dcjm++SAdO+tgGKa99jd4tFZ7WWpUjn1eVgoCTsFOR6Yg8EH1bxzxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=LnxZ5uUL; arc=none smtp.client-ip=193.252.22.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YQhiQmso"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733414268; x=1764950268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gYj2Cn0A25p30ukJU5NirjJCGlV3C1DFe68Dw8RwYzg=;
-  b=YQhiQmsoZ/QxyEPuWYE4/OhF3iD4jL0hYs9pMxtZgJsV3v1SbAtBYBpK
-   KCvaQCgU5FDBH23mumIZQ/HA0pKMZDHXUTpqISXX3zRPMt6PrgeHVdUlY
-   bjG4ls2Kl/7v2kiCOF8/IDRmwWfOmifhJz+IHOqvsoOCdXGQAQakkZSmD
-   EKbrt6QrzQgfpCnO3utv6/a6YlSZrxwm5OqWFi+M5O0iuijZ6b56KsBCQ
-   9ywQcE9EloWmzPZp7mXxUZ2PAs09JjbCV0X+Ir+jBKUP8gKMSK0tTOFjZ
-   9MS8zjRCIaVSuOM5D4L0sS6iv7c60ZMmiG51GTNZziXQYfDw6/0Q++mF4
-   g==;
-X-CSE-ConnectionGUID: gsupaPHLRvquGaizY7Btsw==
-X-CSE-MsgGUID: w45mip0UTAyYvsg8kbkZ/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="33976410"
-X-IronPort-AV: E=Sophos;i="6.12,210,1728975600"; 
-   d="scan'208";a="33976410"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 07:57:45 -0800
-X-CSE-ConnectionGUID: LVDT7OZJSRue19ygkYAYkQ==
-X-CSE-MsgGUID: dipDvXyMRlmwYrpo1fVt4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,210,1728975600"; 
-   d="scan'208";a="93959166"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 05 Dec 2024 07:57:43 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJEEW-0000AG-31;
-	Thu, 05 Dec 2024 15:57:40 +0000
-Date: Thu, 5 Dec 2024 23:57:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sricharan R <quic_srichara@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 2/2] mailbox: tmelite-qmp: Introduce QCOM TMEL QMP
- mailbox driver
-Message-ID: <202412052337.B1J3nB8v-lkp@intel.com>
-References: <20241205080633.2623142-3-quic_srichara@quicinc.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="LnxZ5uUL"
+Received: from mail-wr1-f44.google.com ([209.85.221.44])
+	by smtp.orange.fr with ESMTPSA
+	id JHZxtDamerVFvJHZxtiART; Thu, 05 Dec 2024 20:32:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1733427122;
+	bh=gOoooPhx/l7HLxvA2brAhQv1Lnc9qpuTdTl2b6/0YwM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=LnxZ5uULgpeCn4bLl596NWBgzELl9RQyvFVyObznmI630KRfkBp7jKfVQ/uFMBgl5
+	 IrjMa5MEn6CjWX/tGr3fzwI2PTpkyKsCQTLYOLWgxC6CIUrRysgec7cDqyL+869e1J
+	 Elc0xwm654zb+vS+vOp/VE9UjzfT5Arr6ab0H+j258GETmKL0CjW70Dd49hVhj8Rim
+	 FS+29HAOc8vZVUFm9kdzSbKk23O2PHd4ZeE2tTCPb8V6/hJTbeMFkmUr9+KvWBw9ff
+	 LaO3+tOWJph1l2SFU1Up5qJsW0FYLbkXLCWgabPX+kQhwbrXZ0cXsKGZRN/dNP1FyP
+	 QIVPuvJrOKIVw==
+X-ME-Helo: mail-wr1-f44.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 05 Dec 2024 20:32:02 +0100
+X-ME-IP: 209.85.221.44
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-385ea29eee1so976002f8f.3
+        for <llvm@lists.linux.dev>; Thu, 05 Dec 2024 11:32:01 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV3To5TB0eyXwokzk3TuTESuwm8uPS1BNit4JvFxWHZhIQrHM6PJSwUEt6KeSLU+DJh5cau@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx/mVF/efVjwWTksRS42tFvaGXaz+HNQ0EqD1Rh4aNnHN+G1KxK
+	35VfJhk2fkreYrfAeWsTBniTRvcjqRYzulp/cpvI7kmbOnFbOoIPmKz+zP5TBJGd2uwzfeOHA/k
+	XMslWjxFHs18MOWHWVMtsMnupMBI=
+X-Google-Smtp-Source: AGHT+IFEdpgbM9v1hEJyP58q1rp9/ynE8X6JLZXjVWzmdZJjAWTc9kp//N1g8Aq1Xn7w0wSLoLE1A73y8EJUIxU21wE=
+X-Received: by 2002:a17:906:319a:b0:aa5:f288:e7e3 with SMTP id
+ a640c23a62f3a-aa5f7d15684mr942250466b.15.1733412700594; Thu, 05 Dec 2024
+ 07:31:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241205080633.2623142-3-quic_srichara@quicinc.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr> <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+In-Reply-To: <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Fri, 6 Dec 2024 00:31:29 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+Message-ID: <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of __is_constexpr()
+To: David Laight <David.Laight@aculab.com>, Martin Uecker <muecker@gwdg.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"coresight@lists.linaro.org" <coresight@lists.linaro.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sricharan,
+-CC: Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
++CC: Martin Uecker <muecker@gwdg.de>
+(seems that Martin changed his address)
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+On Thu. 5 Dec. 2024 at 03:39, David Laight <David.Laight@aculab.com> wrote:
+> > Sent: 02 December 2024 17:33
+> >
+> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >
+> > __is_constexpr(), while being one of the most glorious one liner hack
+> > ever witnessed by mankind, is overly complex. Following the adoption
+> > of C11 in the kernel, this macro can be simplified through the use of
+> > a _Generic() selection.
+>
+> You should give credit to some of the earlier patches that do the same.
+> I'm sure there were some related ones from Linus - not applied yet.
 
-[auto build test WARNING on v6.12]
-[cannot apply to robh/for-next linus/master v6.13-rc1 next-20241205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ACK. Would adding a suggested--by Linus tag solve your concern?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sricharan-R/dt-bindings-mailbox-qcom-Document-qcom-tmelite-qmp/20241205-161122
-base:   v6.12
-patch link:    https://lore.kernel.org/r/20241205080633.2623142-3-quic_srichara%40quicinc.com
-patch subject: [PATCH RFC 2/2] mailbox: tmelite-qmp: Introduce QCOM TMEL QMP mailbox driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20241205/202412052337.B1J3nB8v-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412052337.B1J3nB8v-lkp@intel.com/reproduce)
+> > First, split the macro in two:
+> >
+> >   - __is_const_zero(x): an helper macro; tells whether x is the
+> >     integer constant expression 0 or something else.
+> >
+> >   - is_const(x): replacement of __is_constexpr(); tells whether x is a
+> >     integer constant expression.
+> >
+> > The split serves two purposes: first make it easier to understand;
+> > second, __is_const_zero() will be reused as a building block for other
+> > is_const_*() macros that will be introduced later on.
+> >
+> > The core principle of __is_constexpr() to abuse the return type of the
+> > ternary operator remains, but all the surrounding sizeof() hack
+> > disappear.
+> >
+> > On a side note, while not relevant to the kernel, __is_constexpr()
+> > relied on the GNU extension that sizeof(void) is 1. const_expr() does
+> > not use any GNU extensions, making it ISO C compliant.
+> >
+> > __is_constexpr() is temporarily kept and will be removed once all its
+> > users get migrated to is_const() (or one of its friend).
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  include/linux/compiler.h | 41 ++++++++++++++++++++++++++++++++++++++++=
++
+> >  1 file changed, 41 insertions(+)
+> >
+> > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> > index a2a56a50dd85227a4fdc62236a2710ca37c5ba52..30ce06df4153cfdc0fad9bc=
+7bffab9097f8b0450 100644
+> > --- a/include/linux/compiler.h
+> > +++ b/include/linux/compiler.h
+> > @@ -316,6 +316,47 @@ static inline void *offset_to_ptr(const int *off)
+> >  #define statically_true(x) (__builtin_constant_p(x) && (x))
+> >  #define statically_false(x) (__builtin_constant_p(x) && (x) =3D=3D 0)
+> >
+> > +/*
+> > + * Whether x is the integer constant expression 0 or something else.
+> > + *
+> > + * Details:
+> > + *   - The C11 standard defines in =C2=A76.3.2.3.3
+> > + *       (void *)<integer constant expression with the value 0>
+> > + *     as a null pointer constant (c.f. the NULL macro).
+> > + *   - If x evaluates to the integer constant expression 0,
+> > + *       (void *)(x)
+> > + *     is a null pointer constant. Else, it is a void * expression.
+> > + *   - In a ternary expression:
+> > + *       condition ? operand1 : operand2
+> > + *     if one of the two operands is of type void * and the other one
+> > + *     some other pointer type, the C11 standard defines in =C2=A76.5.=
+15.6
+> > + *     the resulting type as below:
+> > + *       if one operand is a null pointer constant, the result has the
+> > + *       type of the other operand; otherwise [...] the result type is
+> > + *       a pointer to an appropriately qualified version of void.
+> > + *   - As such, in
+> > + *       0 ? (void *)(x) : (char *)0
+> > + *     if x is the integer constant expression 0, operand1 is a null
+> > + *     pointer constant and the resulting type is that of operand2:
+> > + *     char *. If x is anything else, the type is void *.
+> > + *   - The (long) cast silences a compiler warning for when x is not 0=
+.
+> > + *   - Finally, the _Generic() dispatches the resulting type into a
+> > + *     Boolean.
+>
+> The comment is absolutely excessive.
+> I'm sure I managed about 2 lines in one of the patches I did.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412052337.B1J3nB8v-lkp@intel.com/
+I think that Linus made it  clear in:
 
-All warnings (new ones prefixed by >>):
+  https://lore.kernel.org/all/CAHk-=3DwgfpLdt7SFFGcByTfHdkvv7AEa3MDu_s_W1kf=
+OxQs49pw@mail.gmail.com/
 
-   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/mailbox/qcom-tmelite-qmp.c:303:55: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     303 |                 dev_err(mdev->dev, "Unsupported packet size %lu\n", pkt->iov_len);
-         |                                                             ~~~     ^~~~~~~~~~~~
-         |                                                             %zu
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/mailbox/qcom-tmelite-qmp.c:705:10: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     704 |                 pr_err("Invalid pkt.size received size: %lu, expected: %zu\n",
-         |                                                         ~~~
-         |                                                         %zu
-     705 |                        tdev->pkt.iov_len, sizeof(struct tmel_ipc_pkt));
-         |                        ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:533:33: note: expanded from macro 'pr_err'
-     533 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:490:60: note: expanded from macro 'printk'
-     490 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:462:19: note: expanded from macro 'printk_index_wrap'
-     462 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   9 warnings generated.
+that this deserves a detailed comment.
+
+The details block in the current __is_constexpr() is 37 lines long,
+the details block in __is_const_zero() takes 22 lines. So I would
+argue that I made things better.
+
+Unless more people share your concern, I am planning to keep this comment a=
+s-is.
+
+> > + *
+> > + * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+>
+> IIRC Martin has agreed in the past that the accreditation can
+> be removed - especially since it refers to the 'sizeof (void)' trick.
+
+I tried to look for such message:
+
+  https://lore.kernel.org/all/?q=3Df%3A%22martin+uecker%22+__is_constexpr
+
+but couldn't find it. Do you have the link?
+
+@Martin, do you agree that I remove the accreditation?
+
+> > + */
+> > +#define __is_const_zero(x) \
+> > +     _Generic(0 ? (void *)(long)(x) : (char *)0, char *: 1, void *: 0)
+> > +
+> > +/*
+> > + * Returns a constant expression while determining if its argument is =
+a
+> > + * constant expression, most importantly without evaluating the argume=
+nt.
+>
+> You need to differentiate between a 'constant integer expression'
+> and a 'compile time constant'.
+
+OK. This one was just copied from the previous __is_constexpr(). I will app=
+ly
+"s/constant expression/constant integer expression/g" in v2.
+
+> > + *
+> > + * If getting a constant expression is not relevant to you, use the mo=
+re
+> > + * powerful __builtin_constant_p() instead.
+>
+> __builtin_constant_p() is not 'more powerful' it is testing for
+> something different.
+
+I meant to say that __builtin_constant_p() is more powerful at
+constant folding. But I agree that the comment is not clear.
+
+What about this?
+
+  If getting a constant integer expression is not relevant to you, use
+  __builtin_constant_p() which not only returns true if the argument
+  is an integer constant expression, but also if it is a compile time
+  constant.
 
 
-vim +303 drivers/mailbox/qcom-tmelite-qmp.c
-
-   281	
-   282	/**
-   283	 * qmp_send_data() - Copy the data to the channel's mailbox and notify
-   284	 *		     remote subsystem of new data. This function will
-   285	 *		     return an error if the previous message sent has
-   286	 *		     not been read. Cannot Sleep.
-   287	 * @chan:	mailbox channel that data is to be sent over.
-   288	 * @data:	Data to be sent to remote processor, should be in the format of
-   289	 *		a kvec.
-   290	 *
-   291	 * Return: 0 on succes or standard Linux error code.
-   292	 */
-   293	static int qmp_send_data(struct qmp_device *mdev, void *data)
-   294	{
-   295		struct kvec *pkt = (struct kvec *)data;
-   296		void __iomem *addr;
-   297		unsigned long flags;
-   298	
-   299		if (!mdev || !data || !completion_done(&mdev->ch_complete))
-   300			return -EINVAL;
-   301	
-   302		if (pkt->iov_len > QMP_MAX_PKT_SIZE) {
- > 303			dev_err(mdev->dev, "Unsupported packet size %lu\n", pkt->iov_len);
-   304			return -EINVAL;
-   305		}
-   306	
-   307		spin_lock_irqsave(&mdev->tx_lock, flags);
-   308		if (mdev->tx_sent) {
-   309			spin_unlock_irqrestore(&mdev->tx_lock, flags);
-   310			return -EAGAIN;
-   311		}
-   312	
-   313		dev_dbg(mdev->dev, "%s: mcore 0x%x ucore 0x%x", __func__,
-   314			mdev->mcore.val, mdev->ucore.val);
-   315	
-   316		addr = mdev->mcore_desc + QMP_CTRL_DATA_SIZE;
-   317		memcpy_toio(addr, pkt->iov_base, pkt->iov_len);
-   318	
-   319		mdev->mcore.bits.frag_size = pkt->iov_len;
-   320		mdev->mcore.bits.rem_frag_count = 0;
-   321	
-   322		dev_dbg(mdev->dev, "Copied buffer to mbox, sz: %d",
-   323			mdev->mcore.bits.frag_size);
-   324	
-   325		mdev->tx_sent = true;
-   326		QMP_MCORE_CH_VAR_TOGGLE(mdev, tx);
-   327		send_irq(mdev);
-   328		qmp_schedule_tx_timeout(mdev);
-   329		spin_unlock_irqrestore(&mdev->tx_lock, flags);
-   330	
-   331		return 0;
-   332	}
-   333	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yours sincerely,
+Vincent Mailhol
