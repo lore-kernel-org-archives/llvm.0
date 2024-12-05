@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B05B8192D7C;
-	Thu,  5 Dec 2024 05:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA291A8F77;
+	Thu,  5 Dec 2024 07:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733376587; cv=none; b=siQDuITfn4u3B76R5La+SSaqY9+bqT7Owx52pBcoT/Xmk9R8jhKLyI0U/BoBBYvFHm6A096jvSLJ4PSm/dKZq/kzGPD1zhmz3GgjVwuc8Rj/qZAgKof+TtPOX37wcIpx6w9spNhxJa07MWc2eHIqRofAGtgH1z5pdPcTidUqtOY=
+	t=1733382350; cv=none; b=aV+G8/AWD06IkT4bLwrc1UBhe4elDV5FiculA+hruge41l4S7l8yU2nXo2t2I+MRKKcJGzGrPKv9d7QxskDuHFT1XfSvbEBFWFlo8FrQ4XU0vnQIg7AKUci9u9tXh1QgmQouPm0y1kmdBvXJs9m6CDoxTAtCuguSJ2rdRPe0kN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733376587; c=relaxed/simple;
-	bh=oOQHJVhCmVCN8C34/xA1CD1/NI9aI/LIgzIvpWecc/A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ygjwb7F4GWSKsFNkeMgHz60bRoMRLBuUgQweWkxAtJRIANlz1e6T2KS/DqpfE3szuBvv2f5Vk7s7rz0jaI63Ld+R6aPyRK/ETfoN7vt3bcjuE5MuJ7vv8TfLfM/MoXDKqmMFJg6OrTN4Q9HQT0RHfYo/bpVdb7+kaL/mZHltClA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N65ueyjJ; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1733382350; c=relaxed/simple;
+	bh=s+aYMHHJ8wuTeVRxlKHDW0XZRBovFWgf3na/Vvfs+fY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LJTiNKMtoHXg3jy6rv9UTzp7+5vunEF1TvI/0opyloU2aYij3bsoexMp90AKFT7r3CsptZt4hdX4g5u2egzCWWYJHQXbJ0lqsMlN8fMdt2KnLVqY9urEQdrDVfb+SJ9JMuEX+FUNnn4kJuorBcfD6mVhrmt15hniQ90t/2mP7vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qx8GKW9n; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N65ueyjJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qx8GKW9n"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733376585; x=1764912585;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oOQHJVhCmVCN8C34/xA1CD1/NI9aI/LIgzIvpWecc/A=;
-  b=N65ueyjJRZrcRNLjY9++H5UGA1PNJWgqtOwdxdwUeytEutwvQlrx8TNC
-   MIFSnmwuHkGBEXTXiCT+kgRKreiQaeosxdKodhTtB06q5wIBilUQtVyaF
-   Pl3SpneW7Fk/gXYdZOmoNuBL68xf/JeZGlm/Sp+4tPeZtY7AWI8QGQotx
-   zgqebDAuWSnhVQ0VXkRypKHXh6z588UgtoMiSNxjggEbjIg+4qdhpQ6vp
-   AlEdDAcLaH5jMNbldAd+/CmaSWDbxL2euqAwpIYsWprweB82hzjFkfM4b
-   +bYhEc7b+6WM302YOB+nYCC8X5erBDiV4xoTHXKyB389a4Mws7za6dSi2
-   g==;
-X-CSE-ConnectionGUID: JKZ6LbMxRCeEDuz4kLkdew==
-X-CSE-MsgGUID: qU3GVmc+QdilVCitNBVKBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="56147751"
+  t=1733382348; x=1764918348;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s+aYMHHJ8wuTeVRxlKHDW0XZRBovFWgf3na/Vvfs+fY=;
+  b=Qx8GKW9n41FKKezzMctc6ddOhZWOuaZv+muaedebjqQe0sa0XMkE+VtW
+   Okprgmhl+XMXbc83PW8Ae+I7qvEKxGtlew4LlbdmcHuENLUnNi33dswhQ
+   hBeo7piCUxCi2IxyIjCIz7UPMIWLk/5CObLOmCDfNy+MJLnO91JtZ65PM
+   46IadGaG2LjJQeSB/HJNqbv1D4KBgZG7LD9CPuoJc04A1j8Xm90XQmtC4
+   fN8wsOOSw+KP7SKKBN03jsfr+BK9HssjbHnsbrK7DG9kCkfVZJ/KyO6BB
+   47Sz1132Z20xZcFE4sdItV54utk1t9eKkYXgYSUfzgjgTiCtAdD0TUAEL
+   Q==;
+X-CSE-ConnectionGUID: DG087+eCQ0qGhw0rcTfwYw==
+X-CSE-MsgGUID: GBij/8SxRV2L6VXdGfwLuw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="45054703"
 X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="56147751"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 21:29:42 -0800
-X-CSE-ConnectionGUID: /nqlIDobRZeABnYCAHWw7Q==
-X-CSE-MsgGUID: ZL1LBvM9SFGbm8fPGRVOwQ==
+   d="scan'208";a="45054703"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 23:05:47 -0800
+X-CSE-ConnectionGUID: UakgS2diSHWOqbGXFnxltQ==
+X-CSE-MsgGUID: HArFaIXhQOq9wXry2bxXjQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="124904039"
+   d="scan'208";a="93690738"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 04 Dec 2024 21:29:42 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 04 Dec 2024 23:05:46 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tJ4Ql-0003qL-1a;
-	Thu, 05 Dec 2024 05:29:39 +0000
-Date: Thu, 5 Dec 2024 13:29:39 +0800
+	id 1tJ5vk-0003vV-1X;
+	Thu, 05 Dec 2024 07:05:44 +0000
+Date: Thu, 5 Dec 2024 15:04:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Tobias Huschle <huschle@linux.ibm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arnd-playground:8250-cleanup 13/13]
- drivers/tty/serial/8250/8250_isa.c:109:6: warning: attribute declaration
- must precede definition
-Message-ID: <202412051310.6e6KaJ2Y-lkp@intel.com>
+Subject: Re: [RFC PATCH 2/2] s390/topology: Add initial implementation for
+ selection of parked CPUs
+Message-ID: <202412051415.gGx8svUs-lkp@intel.com>
+References: <20241204112149.25872-3-huschle@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,80 +63,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241204112149.25872-3-huschle@linux.ibm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git 8250-cleanup
-head:   babed7b34c5946d07f915c7e4aab26fa2470ff86
-commit: babed7b34c5946d07f915c7e4aab26fa2470ff86 [13/13] serial: 8250: split out legacy isa driver
-config: mips-rb532_defconfig (https://download.01.org/0day-ci/archive/20241205/202412051310.6e6KaJ2Y-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412051310.6e6KaJ2Y-lkp@intel.com/reproduce)
+Hi Tobias,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on s390/features]
+[also build test ERROR on tip/sched/core linus/master v6.13-rc1 next-20241204]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tobias-Huschle/sched-fair-introduce-new-scheduler-group-type-group_parked/20241204-192421
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git features
+patch link:    https://lore.kernel.org/r/20241204112149.25872-3-huschle%40linux.ibm.com
+patch subject: [RFC PATCH 2/2] s390/topology: Add initial implementation for selection of parked CPUs
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241205/202412051415.gGx8svUs-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412051415.gGx8svUs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412051310.6e6KaJ2Y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412051415.gGx8svUs-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/8250/8250_isa.c:109:6: warning: attribute declaration must precede definition [-Wignored-attributes]
-     109 | void __init serial8250_isa_init_ports(void)
-         |      ^
-   include/linux/init.h:52:17: note: expanded from macro '__init'
-      52 | #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-         |                         ^
-   include/linux/compiler_attributes.h:321:56: note: expanded from macro '__section'
-     321 | #define __section(section)              __attribute__((__section__(section)))
-         |                                                        ^
-   drivers/tty/serial/8250/8250.h:129:20: note: previous definition is here
-     129 | static inline void serial8250_isa_init_ports(void) {}
-         |                    ^
->> drivers/tty/serial/8250/8250_isa.c:109:6: warning: attribute declaration must precede definition [-Wignored-attributes]
-     109 | void __init serial8250_isa_init_ports(void)
-         |      ^
-   include/linux/init.h:52:41: note: expanded from macro '__init'
-      52 | #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-         |                                                 ^
-   include/linux/compiler_types.h:113:34: note: expanded from macro '__cold'
-     113 | #define __cold                          __attribute__((__cold__))
-         |                                                        ^
-   drivers/tty/serial/8250/8250.h:129:20: note: previous definition is here
-     129 | static inline void serial8250_isa_init_ports(void) {}
-         |                    ^
-   drivers/tty/serial/8250/8250_isa.c:109:13: error: redefinition of 'serial8250_isa_init_ports'
-     109 | void __init serial8250_isa_init_ports(void)
-         |             ^
-   drivers/tty/serial/8250/8250.h:129:20: note: previous definition is here
-     129 | static inline void serial8250_isa_init_ports(void) {}
-         |                    ^
-   2 warnings and 1 error generated.
-
-
-vim +109 drivers/tty/serial/8250/8250_isa.c
-
-   108	
- > 109	void __init serial8250_isa_init_ports(void)
-   110	{
-   111		int i;
-   112	
-   113		if (nr_uarts > UART_NR)
-   114			nr_uarts = UART_NR;
-   115	
-   116		for (i = 0; i < ARRAY_SIZE(old_serial_port) && i < nr_uarts; i++) {
-   117			struct uart_8250_port *up = serial8250_get_port(i);
-   118	
-   119			old_serial_port[i].line = i;
-   120			old_serial_port[i].irqflags = share_irqs ? IRQF_SHARED : 0;
-   121	
-   122			early_serial_setup(&old_serial_port[i]);
-   123	
-   124			serial8250_set_defaults(up);
-   125	
-   126			/* Allow Intel CE4100 and jailhouse to override defaults */
-   127			if (serial8250_isa_config != NULL)
-   128				serial8250_isa_config(i, &up->port, &up->capabilities);
-   129		}
-   130	}
-   131	
+   s390x-linux-ld: kernel/sched/core.o: in function `ttwu_queue_wakelist':
+>> core.c:(.text+0x2d66): undefined reference to `cpu_parked'
+   s390x-linux-ld: kernel/sched/core.o: in function `select_task_rq':
+   core.c:(.text+0x2f3e): undefined reference to `cpu_parked'
+>> s390x-linux-ld: core.c:(.text+0x2f82): undefined reference to `cpu_parked'
+   s390x-linux-ld: kernel/sched/core.o: in function `select_fallback_rq':
+   core.c:(.text+0x5d02): undefined reference to `cpu_parked'
+   s390x-linux-ld: core.c:(.text+0x5d50): undefined reference to `cpu_parked'
+   s390x-linux-ld: kernel/sched/core.o:core.c:(.text+0x5e16): more undefined references to `cpu_parked' follow
 
 -- 
 0-DAY CI Kernel Test Service
