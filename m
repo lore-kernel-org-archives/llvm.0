@@ -1,110 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-12.smtpout.orange.fr [193.252.22.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CD41AAD7;
-	Fri,  6 Dec 2024 00:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB262AE9A
+	for <llvm@lists.linux.dev>; Fri,  6 Dec 2024 02:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733443999; cv=none; b=ZPG00DnPn2DoJr3kO7dDy/y6Pipr2ammVMDb46WnEBaPTU76lCHeSDxH/BD5X/lTX9Agv/02BKat0tcTEVYKmiKgFfVemRTZsKIwpQSwZbJLcAOaQaUVqBiGhNPb+qY38C8C8v3wvhC/XaDcmwn6wQ918s3PYYB0RKe1oRWTT/o=
+	t=1733451527; cv=none; b=ZrXaRTb4RFa9WpIGOgEUorWCHFPV+GWug00bmxfkS2quTNefv6ai6rIBkGzQVyOJOm2uRrX+DQ4yV9HaG9+s+LK4PM60GtCo487esyZ+tNya3eWKr9v+XQMKJahosLyvrjrUyCz/LsQO3H2HoWUT2CTFPjTVxV8UOeyuYjTQPjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733443999; c=relaxed/simple;
-	bh=G3k5kdpZDzPR2z4Kv8oYbTAM4x/lxykBvWDQ8XU9s/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fE2fsU1CGUrmW0gkSVjju8Ja5DAfY9zKagjyZ31vmIMreRcUj2glSITfOCJoay5tURi4/ECIYDC6y48kjZHRAPHAwaAwfFK7fHEuQSVFzRuPOmhFw/VZaxzBRqrsKHLrBVknaSBCeJNYwBLDnKS8D3n9OwggJwzwKdq/gfruNhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7kEMBmh; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733451527; c=relaxed/simple;
+	bh=NZeAZdy0kgd/dGmfPWI7u/7Zhfjo+XjptjUslO06J9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lsIUFQA0pASkTp1qIeg9x0pQ+YToaJAtr0WL9XWB8DLTXJFQEy2ukS+TjjyNKK1ca5ZBmPDaUA4hcjBV5tsbYIi5EAULQE6hdVoet9ziaehiQoWyyat+JRCY7w1YnoziShlmip6q2wT4qtxyeqaajtWCbBKoYuVC0OKQWSSm5fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=o4APNw5e; arc=none smtp.client-ip=193.252.22.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7kEMBmh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733443998; x=1764979998;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G3k5kdpZDzPR2z4Kv8oYbTAM4x/lxykBvWDQ8XU9s/Q=;
-  b=h7kEMBmhmSzvYzDbIxqH6kmPwCh/opjTYIE85qX0O4fjVgzYEKxVxUVn
-   3wxXTd0WbML/26ZJrBnQwe3WNy5MgjCU9lcMOhD2ThV6w+7ZkTT4UX8qW
-   j6RrIWZv4ah3PvbRUGhV9vYx5s65OkAVlRP9enmOZgYzOSk1M3WtQLLp7
-   a3OOa4dZq/MtKXeugMhCFE4NtfoCGJLJ3ilRnKJKa5zse8FbB5gAOVx2/
-   KhrByeEW+kWAOqctft4+OxmWSkARBPA8l6kbtjJHOjGFK8+jWVjKHQVtp
-   LV/m0aBFEloot2+3IIYLLQrgeozf127Q+f6nOae2MeoUNiqNgit+mY+/c
-   w==;
-X-CSE-ConnectionGUID: /4rCYfqmS5ysQ8Mr7sYVBw==
-X-CSE-MsgGUID: 4L+KuEmRSO2ljX1fWqTtkQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="37567903"
-X-IronPort-AV: E=Sophos;i="6.12,211,1728975600"; 
-   d="scan'208";a="37567903"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 16:13:17 -0800
-X-CSE-ConnectionGUID: xsOsT0DTRYmP2Xhx+3wfHA==
-X-CSE-MsgGUID: KZRQUGdxR9qVfBXCLAARKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,211,1728975600"; 
-   d="scan'208";a="117498516"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Dec 2024 16:13:15 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJLy4-0000Vz-2k;
-	Fri, 06 Dec 2024 00:13:12 +0000
-Date: Fri, 6 Dec 2024 08:12:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dan Williams <dan.j.williams@intel.com>, linux-coco@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bjorn Helgaas <helgaas@kernel.org>, Lukas Wunner <lukas@wunner.de>,
-	Samuel Ortiz <sameo@rivosinc.com>,
-	Alexey Kardashevskiy <aik@amd.com>,
-	Xu Yilun <yilun.xu@linux.intel.com>, linux-pci@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Subject: Re: [PATCH 09/11] PCI/IDE: Report available IDE streams
-Message-ID: <202412060733.L2zUE7gx-lkp@intel.com>
-References: <173343744869.1074769.12345445223792172558.stgit@dwillia2-xfh.jf.intel.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="o4APNw5e"
+Received: from mail-ej1-f53.google.com ([209.85.218.53])
+	by smtp.orange.fr with ESMTPSA
+	id JNuOt7d9w32OGJNuOtEdCY; Fri, 06 Dec 2024 03:17:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1733451452;
+	bh=fohnIjaGXi4erexWkQR0Ki8fkQHzJ2JQlgx+0ILcUhI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=o4APNw5e7jBAhAU0TLAXoAdF68Xe9jVD6RrNXDJrRiNJ/y/4CD0gGgqoX+PQNOxHa
+	 2uBy8JSZ7idDCIHCOU9eTJ38L1jHQgY6n+j7ws5L/8zDU2C5009HOeevJqtPOa088h
+	 Uy1JjHv71aqH05f2S9nV6Eg2WMBI16n2zpqcr4aP13xNhjx2DuoqC8HsCM95C9HW0m
+	 NT2Avnes9rwiNClBtBMj5YAwDLPugasd2r4/MAanr+hiyF2MqJECoS0OHytP90v/U9
+	 PYuK5bCHzjDCfvdUGyyZuva1rCjG12rOFsbf/0mrtYqqa9aHSIg52/P2vb/sAkLXrB
+	 8s0bmv1u6UEeA==
+X-ME-Helo: mail-ej1-f53.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 06 Dec 2024 03:17:32 +0100
+X-ME-IP: 209.85.218.53
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aa531a70416so247914366b.0
+        for <llvm@lists.linux.dev>; Thu, 05 Dec 2024 18:17:32 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVSAul+xDXfxF/MR//FA3FbP3DtioGShU3qgd185N+gn8oi91AZh56WvoMrgO6tjmRs57P+@lists.linux.dev
+X-Gm-Message-State: AOJu0YyvgszDC+jRUJHoiuoHus0JI6oouOoV4O/TlwhEXFjcJfdzDVp4
+	XEVjJsOGwbKqWHF8S6c2FrIuGL7bBFl3xm/1Cmeu1msRMoAj03KxdGFj4NJGdxDheqOyHMGoDgU
+	y7/BVQ71EjYuroGwbDaCWYZLYMJo=
+X-Google-Smtp-Source: AGHT+IF7fNOJRtWBE8J5EkTB8RHD/J+PNwJHWESTQDWwz7k7Xwis6ssZjGPrSAnluvbW+xerUjreaR05tr055MdLvCI=
+X-Received: by 2002:a05:6000:1a88:b0:385:df73:2f42 with SMTP id
+ ffacd0b85a97d-385fd3f2e65mr9440939f8f.32.1733412345020; Thu, 05 Dec 2024
+ 07:25:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <173343744869.1074769.12345445223792172558.stgit@dwillia2-xfh.jf.intel.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-1-4e4cbaecc216@wanadoo.fr> <e115a4245e5342a994a7e596cc6357fa@AcuMS.aculab.com>
+In-Reply-To: <e115a4245e5342a994a7e596cc6357fa@AcuMS.aculab.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Fri, 6 Dec 2024 00:25:34 +0900
+X-Gmail-Original-Message-ID: <CAMZ6Rq+n0vG9zObF-kY-Xo+iP_Y3P8A6_nEfB8F=UhqeQBepRw@mail.gmail.com>
+Message-ID: <CAMZ6Rq+n0vG9zObF-kY-Xo+iP_Y3P8A6_nEfB8F=UhqeQBepRw@mail.gmail.com>
+Subject: Re: [PATCH 01/10] compiler.h: add statically_false()
+To: David Laight <David.Laight@aculab.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
+	Martin Uecker <Martin.Uecker@med.uni-goettingen.de>, 
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"coresight@lists.linaro.org" <coresight@lists.linaro.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Dan,
+On Thu. 5 Dec 2024 at 03:30, David Laight <David.Laight@aculab.com> wrote:
+> From: Vincent Mailhol
+> > Sent: 02 December 2024 17:33
+> >
+> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >
+> > For completion, add statically_false() which is the equivalent of
+> > statically_true() except that it will return true only if the input is
+> > known to be false at compile time.
+>
+> This is pretty much pointless.
+> It is just as easy to invert the condition at the call site.
 
-kernel test robot noticed the following build warnings:
+To start with, I will argue that:
 
-[auto build test WARNING on 40384c840ea1944d7c5a392e8975ed088ecf0b37]
+  statically_false(foo)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Williams/configfs-tsm-Namespace-TSM-report-symbols/20241206-064224
-base:   40384c840ea1944d7c5a392e8975ed088ecf0b37
-patch link:    https://lore.kernel.org/r/173343744869.1074769.12345445223792172558.stgit%40dwillia2-xfh.jf.intel.com
-patch subject: [PATCH 09/11] PCI/IDE: Report available IDE streams
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20241206/202412060733.L2zUE7gx-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412060733.L2zUE7gx-lkp@intel.com/reproduce)
+is more pretty than
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412060733.L2zUE7gx-lkp@intel.com/
+  statically_true(!(foo))
 
-All warnings (new ones prefixed by >>):
+In addition, the simple negation !(foo) only works if foo is a
+boolean. If it is an integer, you would get the -Wint-in-bool-context
+warning. Thus you would have to write:
 
->> drivers/pci/probe.c:597:33: warning: unused variable 'pci_host_bridge_type' [-Wunused-const-variable]
-   static const struct device_type pci_host_bridge_type = {
-                                   ^
-   1 warning generated.
+  statically_true((foo) == 0)
+
+Anyone using this in a global header basically does not know what type
+of argument they are getting. So, the (foo) == 0 trick is a must. But
+because it is ugly, better to encapsulate it once for all. The
+statically_false() is just cleaner and less error prone.
+
+That said, I am not strongly opposed to removing statically_false(),
+but in that case, I would also remove is_const_false(). For me, these
+come as a pair, either we have both or we have none. Only having one
+of these looked unbalanced.
 
 
-vim +/pci_host_bridge_type +597 drivers/pci/probe.c
-
-   596	
- > 597	static const struct device_type pci_host_bridge_type = {
-   598		.groups = pci_host_bridge_groups,
-   599		.release = pci_release_host_bridge_dev,
-   600	};
-   601	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yours sincerely,
+Vincent Mailhol
