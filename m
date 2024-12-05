@@ -1,141 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68E11A260;
-	Thu,  5 Dec 2024 02:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796D54C96
+	for <llvm@lists.linux.dev>; Thu,  5 Dec 2024 02:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733364382; cv=none; b=s4FSCZnp1Nc8vUjdSyaZK+te4JlZj+8+IE19VRFJuWGJfJhSYArFcnvck/ZOTSOtYNgABQIMvcDWkcvwjswV/agDnCg65WuEPN7OcFzt5+mTKhtcMI9e/RkblsMtl10ui2D0OyM3LM5ZaGbPqqYWyPECJOIlaDR68oo5HcIByd8=
+	t=1733364524; cv=none; b=GmIgoppouT0MeY7UUe8H6rHodweEVvoNOMCGwXvr7SUc+ZiX0gIbG9Mr3RfElLwf8AxdKGPiXOs0bqSfxQOEay2huSwHf8mP5ofs0qwK7h1WCxLE8eVe0CZNjVfavSzL+Zh8WIFFFolWtA8RL9Jc+LtgU0NCvteZ/UfbFXQsQH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733364382; c=relaxed/simple;
-	bh=bBY4+YZT8ykO/aVTUVMWrYWcrY+HmAwOx3LiCluiIkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=drgbAE4zBMJnv/gVUiilVbAQDOurhJlUD8at7sUJGFfDELL2xXUbHn2MvQ+Ztp2uABGg82Mr4ZZJ05QzI4HXfCoX4eA9vg8XpD86SoeMYMWdw6mQNguB8pkFJTp3cpSobMZ72kArsyPGP+siJzU7wIXR2X2JzVeEgKf06CUciAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QY2lPp7H; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733364524; c=relaxed/simple;
+	bh=nDG+8aYIZ9QraJqVa/t4IK73vfVfRB0gjgR7+D/q0ro=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fg8y0Y/cXATn/eD3z0o05jNUf4OjttQkorXVZPLQanKrAQz7GnmckyAnrQCFoMGm1kZ09uEw3SYuNHDxm49hI3ZL4KgXB1KBfYJjWQblOz5Z9R9FbVrWkjRZr3jmm7Dx5n9rklIoYDd7n1aBYxsGhTqOrl3KNSzqYQScpC3XkIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NSHH9TdY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QY2lPp7H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733364380; x=1764900380;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bBY4+YZT8ykO/aVTUVMWrYWcrY+HmAwOx3LiCluiIkI=;
-  b=QY2lPp7Huj2e3eYqf46YJexckE605E+xKPX/tIvBgf5vql7yhod6qiNf
-   XoVj1k12BUOBOhYL/9BAi0DtDCKV1/90okp6Ukj6NanndS6DPIsofc42I
-   NpQnHAo978+vLkziaaPmgZ4KCAE57yjavuexkKmLCwjD3+9U+EkzCk1RX
-   kfxh+HY0AcjGFMnCRMakqE6IkAsdpOjQD4W32MA4jJsLIL6u2Uwc1mOLT
-   7vhGXDEkGSjR9SJvNiWEOsHQvjzjCxFE7+ybbuAe8bJUHZuD0fOGhjfDq
-   XfNJNAHFUu8fZ6DKbHTPZMilJLDewl00AAwNAAr/GDhW+3VH36OE+4WUS
-   Q==;
-X-CSE-ConnectionGUID: bMtU0tRlT3i52dsy8WMPKw==
-X-CSE-MsgGUID: BujHHcPJTB2WfGaFYKB29g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="37595889"
-X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="37595889"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 18:06:19 -0800
-X-CSE-ConnectionGUID: GMx1CLYlQ/6HEfeM3/7vdA==
-X-CSE-MsgGUID: B52RsMKzTAOeoBgAyJJMXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="93818258"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Dec 2024 18:06:16 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJ1FY-0003fl-0y;
-	Thu, 05 Dec 2024 02:05:55 +0000
-Date: Thu, 5 Dec 2024 10:05:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guillaume Morin <guillaume@morinfr.org>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	guillaume@morinfr.org, Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-	Eric Hagberg <ehagberg@janestreet.com>
-Subject: Re: [PATCH v1] hugetlb: support FOLL_FORCE|FOLL_WRITE
-Message-ID: <202412050943.6b8BLXfY-lkp@intel.com>
-References: <Z1Ce6j5WiBE3kaGf@bender.morinfr.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NSHH9TdY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733364520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=e6Gw0AX39hZKgDHXxv9Qp3FDLeF0px+FhZ38A7wP9Z8=;
+	b=NSHH9TdY57qgqkjT+Iw2NXZeL50/85hh8ULP/wGbtSFz/m83bmomFfWOYC98aqTFvAwkT9
+	v8Bb4EHjN22BPu4YKOWw//UmYFRsBhZD/H40kiLiquM+bYDIP8YnNOS3MSINJxskBV2kak
+	mfitjfjsQ4IcIIzH0yBYNY30ZwJopEo=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-367-3CGfhExXPvWyc_RIAFTKtA-1; Wed, 04 Dec 2024 21:08:39 -0500
+X-MC-Unique: 3CGfhExXPvWyc_RIAFTKtA-1
+X-Mimecast-MFC-AGG-ID: 3CGfhExXPvWyc_RIAFTKtA
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-7ee3c2a2188so374210a12.3
+        for <llvm@lists.linux.dev>; Wed, 04 Dec 2024 18:08:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733364518; x=1733969318;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e6Gw0AX39hZKgDHXxv9Qp3FDLeF0px+FhZ38A7wP9Z8=;
+        b=btl4FIj0vd/Iba2Q1LNlNyjKQ6pNM4ftaQTnmSYTwnIfbVPq8R9qg+l+Rc38zhpXvA
+         dP/pQ3NY842bJUXoa35QaWkU9sNeLd7JGffEGCI7BkCUn2YZdMBwOi1vIWeYkHDgzevD
+         lLAxZ1WyMyJtFsFE6/sb2UAA1Ap6m1zZAUXuyOn7ysGw1qE+vCwb4rtm4WNjAqoznJnq
+         tCp+CpZLlxsKb1nfvBytunWYsG6HFJjDet9z8/0UpM7Xkn5SU18VEyLx6vaUAQdNHUmc
+         e25YN4Ur+2FFOJ9scQlZSEwlM4YFFtAMb/vK2LZ+GglQ1pPhyuqIOC4a/kJcD5EWbtZr
+         lRsQ==
+X-Gm-Message-State: AOJu0YzWleXQ0nKfZTWTe/113CJjxtEq78NfM0++h34I0LUudkI0qZxe
+	f36rrat5C147g7Fe3dnmSZdAZiEKW/zD8z6/7QSY4HCzZb9ax9SOEw1A39LXJZSA49jgl15g8wt
+	c8kGXRYvFGGKQkoyq/e7FlUHQnfpn1I7wiFCnm0Jzv/33BmfHDRQfhwILhx2jxQ==
+X-Gm-Gg: ASbGnctCjR6HW5Ps5ft5hF+durn2pcZpdBHaj4oCqaqzV2yVKQ613JRg5eqOyuno+LN
+	SUuTFuJQwU/xoGcWYKbwMqjoVRJqq53oy8JTFtJ/sAEJXiotLl4uIPELT+Ue+c7CRKs9FZyUXx5
+	imyRlQI9Mub0ww67pgdfedvdvDAWDWxbYYmLDEk7YWriYu/X0jv2o1/A7rqYPGmn82QJ8czsydA
+	Mjhvy62nEMW8guqO63vQ6cYN0Yw6O45BP5iBy5KxKgo6Izgfd0=
+X-Received: by 2002:a05:6a20:3d85:b0:1e0:ca95:2de8 with SMTP id adf61e73a8af0-1e16542f2b2mr12982087637.46.1733364518043;
+        Wed, 04 Dec 2024 18:08:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHhDcSGGSElTLYdqdAj3uX++CbDOTLqJIwBzBiZJs+d3G5x5Z329XdRGvzzx2G+x78WocvU2w==
+X-Received: by 2002:a05:6a20:3d85:b0:1e0:ca95:2de8 with SMTP id adf61e73a8af0-1e16542f2b2mr12982041637.46.1733364517252;
+        Wed, 04 Dec 2024 18:08:37 -0800 (PST)
+Received: from [10.72.112.152] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a29c5ccesm172907b3a.12.2024.12.04.18.08.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Dec 2024 18:08:36 -0800 (PST)
+Message-ID: <60ab506d-5374-484d-906e-3561fc895a6d@redhat.com>
+Date: Thu, 5 Dec 2024 12:08:29 +1000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z1Ce6j5WiBE3kaGf@bender.morinfr.org>
-
-Hi Guillaume,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.13-rc1 next-20241204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Guillaume-Morin/hugetlb-support-FOLL_FORCE-FOLL_WRITE/20241205-022843
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/Z1Ce6j5WiBE3kaGf%40bender.morinfr.org
-patch subject: [PATCH v1] hugetlb: support FOLL_FORCE|FOLL_WRITE
-config: i386-buildonly-randconfig-002 (https://download.01.org/0day-ci/archive/20241205/202412050943.6b8BLXfY-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050943.6b8BLXfY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050943.6b8BLXfY-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/gup.c:7:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/gup.c:20:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/gup.c:665:41: error: call to undeclared function 'pud_soft_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     665 |         return !vma_soft_dirty_enabled(vma) || pud_soft_dirty(pud);
-         |                                                ^
-   mm/gup.c:665:41: note: did you mean 'pmd_soft_dirty'?
-   include/linux/pgtable.h:1427:19: note: 'pmd_soft_dirty' declared here
-    1427 | static inline int pmd_soft_dirty(pmd_t pmd)
-         |                   ^
-   3 warnings and 1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] arm64: rsi: Add automatic arm-cca-guest module
+ loading
+To: Jeremy Linton <jeremy.linton@arm.com>, kernel test robot <lkp@intel.com>,
+ linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ steven.price@arm.com, sami.mujawar@arm.com, suzuki.poulose@arm.com,
+ will@kernel.org, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+References: <20241203000156.72451-2-jeremy.linton@arm.com>
+ <202412031348.bp5i3ws2-lkp@intel.com>
+ <b1923d68-726a-4864-8661-54588a634d95@redhat.com>
+ <a64a21cc-6d10-4e8f-9ab9-87aca44ca858@arm.com>
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <a64a21cc-6d10-4e8f-9ab9-87aca44ca858@arm.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: pFrJbydQwudA_nMK30qQaFgxQAXnASeXqW0t3Fwzy_M_1733364518
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +/pud_soft_dirty +665 mm/gup.c
+On 12/4/24 1:30 AM, Jeremy Linton wrote:
+> On 12/3/24 2:56 AM, Gavin Shan wrote:
+>> On 12/3/24 4:03 PM, kernel test robot wrote:
+>>> Hi Jeremy,
+>>>
+>>> kernel test robot noticed the following build warnings:
+>>>
+>>> [auto build test WARNING on arm64/for-next/core]
+>>> [also build test WARNING on linus/master v6.13-rc1 next-20241128]
+>>> [cannot apply to kvmarm/next soc/for-next arm/for-next arm/fixes]
+>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>> And when submitting patch, we suggest to use '--base' as documented in
+>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
+>>> url:    https://github.com/intel-lab-lkp/linux/commits/Jeremy-Linton/ arm64-rsi-Add-automatic-arm-cca-guest-module-loading/20241203-080347
+>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/ linux.git for-next/core
+>>> patch link:    https://lore.kernel.org/r/20241203000156.72451-2- jeremy.linton%40arm.com
+>>> patch subject: [PATCH v2 1/1] arm64: rsi: Add automatic arm-cca-guest module loading
+>>> config: arm64-randconfig-004-20241203 (https://download.01.org/0day- ci/archive/20241203/202412031348.bp5i3ws2-lkp@intel.com/config)
+>>> compiler: clang version 20.0.0git (https://github.com/llvm/llvm- project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+>>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/ archive/20241203/202412031348.bp5i3ws2-lkp@intel.com/reproduce)
+>>>
+>>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>>> the same patch/commit), kindly add following tags
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Closes: https://lore.kernel.org/oe-kbuild-all/202412031348.bp5i3ws2- lkp@intel.com/
+>>>
+>>> All warnings (new ones prefixed by >>):
+>>>
+>>>>> drivers/virt/coco/arm-cca-guest/arm-cca-guest.c:224:21: warning: attribute declaration must precede definition [-Wignored-attributes]
+>>>       224 | static const struct __maybe_unused platform_device_id arm_cca_match[] = {
+>>>           |                     ^
+>>>     include/linux/compiler_attributes.h:356:56: note: expanded from macro '__maybe_unused'
+>>>       356 | #define __maybe_unused __attribute__((__unused__))
+>>>           |                                                        ^
+>>>     include/linux/mod_devicetable.h:607:8: note: previous definition is here
+>>>       607 | struct platform_device_id {
+>>>           |        ^
+>>>>> drivers/virt/coco/arm-cca-guest/arm-cca-guest.c:224:55: warning: unused variable 'arm_cca_match' [-Wunused-const-variable]
+>>>       224 | static const struct __maybe_unused platform_device_id arm_cca_match[] = {
+>>>           | ^~~~~~~~~~~~~
+>>>     2 warnings generated.
+>>>
+>>>
+>>> vim +224 drivers/virt/coco/arm-cca-guest/arm-cca-guest.c
+>>>
+>>>     222
+>>>     223    /* modalias, so userspace can autoload this module when RSI is available */
+>>>   > 224    static const struct __maybe_unused platform_device_id arm_cca_match[] = {
+>>>     225        { RSI_PDEV_NAME, 0},
+>>>     226        { }
+>>>     227    };
+>>>     228
+>>>
+>>
+>> The definition may have to be something like below, to avoid the compiling warning.
+>>
+>> static const struct platform_device_id __maybe_unused arm_cca_match[] = {
+> 
+> I should have tested this with clang rather than copy/pasting the utilization from somewhere else! It looks like a number of other kernel users are putting it before the '=', but its sorta annoying because it seems like the kind of warning that should be suppressed globally for this case (module device description in module that can be built in).
+> 
+> 
 
-   650	
-   651	#ifdef CONFIG_PGTABLE_HAS_HUGE_LEAVES
-   652	/* FOLL_FORCE can write to even unwritable PUDs in COW mappings. */
-   653	static inline bool can_follow_write_pud(pud_t pud, struct page *page,
-   654						struct vm_area_struct *vma,
-   655						unsigned int flags)
-   656	{
-   657		/* If the pud is writable, we can write to the page. */
-   658		if (pud_write(pud))
-   659			return true;
-   660	
-   661		if (!can_follow_write_common(page, vma, flags))
-   662			return false;
-   663	
-   664		/* ... and a write-fault isn't required for other reasons. */
- > 665		return !vma_soft_dirty_enabled(vma) || pud_soft_dirty(pud);
-   666	}
-   667	
+I think it also work by putting '__maybe_unused' before '='. It's also my personaly preferred style.
+However, I don't see how the pattern 'struct __maybe_unused platform_device_id arm_cca_match[]' can
+work because the affective scope of '__maybe_unused' is ambiguous to the compiler: 'struct platform_device_id'
+or 'arm_cca_match[]'.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+>>         ...
+>> };
+>>
+
+Thanks,
+Gavin
+
+
