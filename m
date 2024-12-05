@@ -1,136 +1,163 @@
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA94B1E492
-	for <llvm@lists.linux.dev>; Thu,  5 Dec 2024 19:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450F8222574;
+	Thu,  5 Dec 2024 19:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733427194; cv=none; b=IQPLf4G0hTwTz0Z0Y9Rjmx7km7iXR2EKM74QEZuQ96AMa6ll2AhrqOItSs7zdPEF1jneVT0kgdoVlj8mJglLaRMLuNqSacGwOSVlm5FF5H25O4SVXO9ao9JRl5Np5sYVsCuq4x5lz0TZuqhrfTHpuhrItRFKeMyaatKIf4D9G4Y=
+	t=1733428030; cv=none; b=m+rdW6WTIf6v8mGTkun5Uvsp9HO3HqR+eNvPmhWJyiZaXGYT8AjXvhKE+UpGJ7sJE2saBuQIwHTswOscpxlcXsLnjzwXeZWXujmt6wercCHVNcDPNUWMd7Rlc6mmwcl1fadUBShEGrR1ZPrjhjUvAMrUxE1gEZeptqot03wljZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733427194; c=relaxed/simple;
-	bh=l03ckjiHPorjA8gus97LZ3ryPn3/bYJ9+uD0vBgzyho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uTYGaNV0/uOzpJGMLCpwwbq+igLcV3JlwOhsqoqYvSGuCezPhZpYG3FBvi+yr8IJFgRinQWSBiUwPHhVysEbq8FqZkfGaAsMP+rU88VbVOqYj0LNSPvmJs7RzQ8HUBdFI59Y4BeibWekKohP4FY4oaLCj3AwJZoTs2+5D1M5sN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=SaNEtFsa; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1733428030; c=relaxed/simple;
+	bh=QqlgZE8RlKz7xWmkcH5pd+rdj9sDEzNrROCTwezFM1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mCOPcyVHtelh5lH0wcLbbCVC/nvQEcbvEoc/vc5gx9Hjn9aFOzjYsNCFn5q1udDbgYVtVAe0EUeoz7kX+7uErc7YXrtO47bmA33t8EJPVtjkINhsCOouzzwHEyRzNHGccBdOKLkSJCGnbAJe7axm/9GcziLychrpWQ9I6AT45PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FjsVlHTK; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="SaNEtFsa"
-Received: from mail-lf1-f44.google.com ([209.85.167.44])
-	by smtp.orange.fr with ESMTPSA
-	id JHZvtr79J25GjJHZvtPVN1; Thu, 05 Dec 2024 20:32:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733427120;
-	bh=L5clrau1lRtsXlazqJvRaiJm9ebUB3H7RT0weXhH8So=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=SaNEtFsaZEehRMC8knbZs7mNf+vPqbynAxC8+onlfzw5TpsOPnULLAdgBujDXNBAa
-	 dhqs3GkRTs7Vu0Gz//eWqu0V3Br2FBKxRHLO5N+KId27fF2eITxw2rX81YNFJ6A2U2
-	 vDGk5Q2p/zLKaDv0B8eW+biUqywYJb/ozFX8/wQZixvDRXQ7Myhe6GL/A9onDjx3X/
-	 CYfNkp7718NoU95UWksdOezpvzvU02i8Xava+yyvlTOv7AjKczYjYm17oc+WRUZbJC
-	 1klfU/ZjOb/HuCIfDipwwxqWrNEStrb+s4hpL0OfBhMfzw9SQYANCLr1JSLftfs8vK
-	 eOaOiO86YgAAg==
-X-ME-Helo: mail-lf1-f44.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 05 Dec 2024 20:32:00 +0100
-X-ME-IP: 209.85.167.44
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53e152731d0so2121855e87.0
-        for <llvm@lists.linux.dev>; Thu, 05 Dec 2024 11:31:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX115zCkX0yObdbU7wzyFWstgqNZLvjbN2qY5wz3W+vnF1Pd43GwwcByU2gm+hz8umBAVFJ@lists.linux.dev
-X-Gm-Message-State: AOJu0YyMP2p2y43KXlHUR8odFvnc/CJdY9YP3li5ertb37HYCXvB3VX2
-	a5nW1sZf3yrfTGbvFmFP11rGhPmApjrDSGefViYJPoFP4+GsG9obdNw06rgGkC4vVlo87DeDmO1
-	xrQ1PaOagKFIbFpbWMEMAaX6KZCI=
-X-Google-Smtp-Source: AGHT+IH7WYy/8Hc8H+vVCwhqalxjzlWUoqcEyoqkjWQBBxloHACrRQF+5k7EKnQaTMOmRJCyI12iNEP09nDvxOtT4aY=
-X-Received: by 2002:a05:6402:358f:b0:5d0:fc12:79e3 with SMTP id
- 4fb4d7f45d1cf-5d125063c34mr3565576a12.15.1733414047033; Thu, 05 Dec 2024
- 07:54:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FjsVlHTK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733428028; x=1764964028;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QqlgZE8RlKz7xWmkcH5pd+rdj9sDEzNrROCTwezFM1o=;
+  b=FjsVlHTKByOYY2s0dzPqHoQyd9Gqo4XyNGLzuxq2SEOuQn7e5nvRsvlb
+   L73pMCKyu1zR4T7kKBR5xd4QtNG5/IiQW1p7b2I/SRsEY56yetun99kVY
+   iUnGhYYtnaW3fa/b3G/dPhePl1/1Kv0+kx6JZ8rXWFvqtjlNeTlWCgY5i
+   vp4jkTXvXGf3EBIGJkivWT5tmNxAt9X2zSV3pjNS5k7zDwxUaGHUN7Fl7
+   d3bqbeC8j+V8M2J/f5USKF9zsIBlgaHVwWv/3tz8jWUFIb+TZ8yrb9+Gk
+   o1bGxqWggjEiToYZ2ur9AB54jkeJrwPqKGxPEJJTd+gxDPpVM35bOyp+E
+   w==;
+X-CSE-ConnectionGUID: SVthfW2sSmKkuJU+nHy07w==
+X-CSE-MsgGUID: irqlieDmQWaU4SRJ96MvuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="33090598"
+X-IronPort-AV: E=Sophos;i="6.12,211,1728975600"; 
+   d="scan'208";a="33090598"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 11:47:07 -0800
+X-CSE-ConnectionGUID: bjCsJD1nRQqYgod01zmogg==
+X-CSE-MsgGUID: TV8cOcFCT1mLqa+CYxqzEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,211,1728975600"; 
+   d="scan'208";a="94011189"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 05 Dec 2024 11:47:07 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tJHoV-0000Lf-27;
+	Thu, 05 Dec 2024 19:47:03 +0000
+Date: Fri, 6 Dec 2024 03:46:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:arm64-pa-simplify-v2 6/6] mm/zsmalloc.c:226:21: error: fields
+ must have a constant size: 'variable length array in structure' extension
+ will never be supported
+Message-ID: <202412060342.UW8hjGgA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
- <20241203-is_constexpr-refactor-v1-6-4e4cbaecc216@wanadoo.fr> <ad4482cc835543578862051431f5174f@AcuMS.aculab.com>
-In-Reply-To: <ad4482cc835543578862051431f5174f@AcuMS.aculab.com>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Fri, 6 Dec 2024 00:53:56 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqJMXKaa_xDcyweGwb+FqvANrpvrkRvnjh6_s-J1ApVmaA@mail.gmail.com>
-Message-ID: <CAMZ6RqJMXKaa_xDcyweGwb+FqvANrpvrkRvnjh6_s-J1ApVmaA@mail.gmail.com>
-Subject: Re: [PATCH 06/10] fortify: replace __is_constexpr() by is_const() in strlen()
-To: David Laight <David.Laight@aculab.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
-	Martin Uecker <Martin.Uecker@med.uni-goettingen.de>, 
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"coresight@lists.linaro.org" <coresight@lists.linaro.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu. 5 Dec. 2024 at 03:58, David Laight <David.Laight@aculab.com> wrote:
-> From: Vincent Mailhol
-> > Sent: 02 December 2024 17:33
-> >
-> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >
-> > is_const() is a one to one replacement of __is_constexpr(). Do the
-> > replacement so that __is_constexpr() can be removed.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  include/linux/fortify-string.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-> > index 0d99bf11d260a3482bbe46e35c7553c0ccfb8b94..e3f2f772c5439ef71eb4a904b4ce27956bc69743 100644
-> > --- a/include/linux/fortify-string.h
-> > +++ b/include/linux/fortify-string.h
-> > @@ -254,8 +254,8 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
-> >   * Returns number of characters in @p (NOT including the final NUL).
-> >   *
-> >   */
-> > -#define strlen(p)                                                    \
-> > -     __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),      \
-> > +#define strlen(p)                                            \
-> > +     __builtin_choose_expr(is_const(__builtin_strlen(p)),    \
-> >               __builtin_strlen(p), __fortify_strlen(p))
->
-> I'm sure Linus suggested a way of doing that without replicating
-> the __builtin_strlen().
->
-> Indeed it may be valid to do:
->         len = __builtin_strlen(p);
->         __builtin_constant_p(len) ? len : __fortify_strlen(p);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-pa-simplify-v2
+head:   4ff764446e134bc58fc769d9b853e6a4a83b91bb
+commit: bcfbf7864146aa0d5e9a75a4bddbb014f78f6af3 [6/6] arm64/mm: Drop configurable 48-bit physical address space limit
+config: arm64-randconfig-003-20241206 (https://download.01.org/0day-ci/archive/20241206/202412060342.UW8hjGgA-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412060342.UW8hjGgA-lkp@intel.com/reproduce)
 
-Then, wouldn't it be better for strlen() to be an inline function
-instead of a macro?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412060342.UW8hjGgA-lkp@intel.com/
 
-  __FORTIFY_INLINE __kernel_size_t strlen(const char *p)
-  {
-          __kernel_size_t ret = __builtin_strlen(p);
+All error/warnings (new ones prefixed by >>):
 
-          if (__builtin_constant_p(ret))
-                  return ret;
-          return __fortify_strlen(p);
-  }
-
-I tested it and it worked on an allyesconfig. So if I receive no
-objections, strlen() will become an inline function in v2.
+   In file included from mm/zsmalloc.c:49:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm64/include/asm/cacheflush.h:11:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> mm/zsmalloc.c:226:32: warning: variable length array used [-Wvla]
+     226 |         struct size_class *size_class[ZS_SIZE_CLASSES];
+         |                                       ^~~~~~~~~~~~~~~
+   mm/zsmalloc.c:148:59: note: expanded from macro 'ZS_SIZE_CLASSES'
+     148 | #define ZS_SIZE_CLASSES (DIV_ROUND_UP(ZS_MAX_ALLOC_SIZE - ZS_MIN_ALLOC_SIZE, \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+     149 |                                       ZS_SIZE_CLASS_DELTA) + 1)
+         |                                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/zsmalloc.c:130:52: note: expanded from macro 'ZS_MIN_ALLOC_SIZE'
+     130 |         MAX(32, (ZS_MAX_PAGES_PER_ZSPAGE << PAGE_SHIFT >> OBJ_INDEX_BITS))
+         |                                                           ^
+   mm/zsmalloc.c:118:41: note: expanded from macro 'OBJ_INDEX_BITS'
+     118 | #define OBJ_INDEX_BITS  (BITS_PER_LONG - _PFN_BITS)
+         |                                          ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/minmax.h:330:30: note: expanded from macro 'MAX'
+     330 | #define MAX(a,b) __cmp(max,a,b)
+         |                              ^
+   include/linux/minmax.h:90:45: note: expanded from macro '__cmp'
+      90 | #define __cmp(op, x, y) ((x) __cmp_op_##op (y) ? (x) : (y))
+         |                                             ^
+   include/uapi/linux/const.h:51:40: note: expanded from macro '__KERNEL_DIV_ROUND_UP'
+      51 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
+         |                                        ^
+>> mm/zsmalloc.c:226:21: error: fields must have a constant size: 'variable length array in structure' extension will never be supported
+     226 |         struct size_class *size_class[ZS_SIZE_CLASSES];
+         |                            ^
+   5 warnings and 1 error generated.
 
 
-Yours sincerely,
-Vincent Mailhol
+vim +226 mm/zsmalloc.c
+
+0959c63f11c3bbe drivers/staging/zsmalloc/zsmalloc-main.c Seth Jennings      2012-08-08  222  
+0959c63f11c3bbe drivers/staging/zsmalloc/zsmalloc-main.c Seth Jennings      2012-08-08  223  struct zs_pool {
+6f3526d6db7cbe8 mm/zsmalloc.c                            Sergey SENOZHATSKY 2015-11-06  224  	const char *name;
+0f050d997e275cf mm/zsmalloc.c                            Ganesh Mahendran   2015-02-12  225  
+cf8e0fedf0784ef mm/zsmalloc.c                            Jerome Marchand    2017-07-10 @226  	struct size_class *size_class[ZS_SIZE_CLASSES];
+2e40e163a25af3b mm/zsmalloc.c                            Minchan Kim        2015-04-15  227  	struct kmem_cache *handle_cachep;
+3783689a1aa82ef mm/zsmalloc.c                            Minchan Kim        2016-07-26  228  	struct kmem_cache *zspage_cachep;
+0959c63f11c3bbe drivers/staging/zsmalloc/zsmalloc-main.c Seth Jennings      2012-08-08  229  
+13de8933c96b455 mm/zsmalloc.c                            Minchan Kim        2014-10-09  230  	atomic_long_t pages_allocated;
+0f050d997e275cf mm/zsmalloc.c                            Ganesh Mahendran   2015-02-12  231  
+7d3f3938236b4bb mm/zsmalloc.c                            Sergey Senozhatsky 2015-09-08  232  	struct zs_pool_stats stats;
+ab9d306d9c3bf64 mm/zsmalloc.c                            Sergey Senozhatsky 2015-09-08  233  
+ab9d306d9c3bf64 mm/zsmalloc.c                            Sergey Senozhatsky 2015-09-08  234  	/* Compact classes */
+c19b548b493455c mm/zsmalloc.c                            Qi Zheng           2023-09-11  235  	struct shrinker *shrinker;
+93144ca35041b05 mm/zsmalloc.c                            Aliaksei Karaliou  2018-01-31  236  
+
+:::::: The code at line 226 was first introduced by commit
+:::::: cf8e0fedf0784ef4bc1889380b09eda295e3d109 mm/zsmalloc: simplify zs_max_alloc_size handling
+
+:::::: TO: Jerome Marchand <jmarchan@redhat.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
