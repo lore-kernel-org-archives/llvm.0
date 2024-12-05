@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83DD6193;
-	Thu,  5 Dec 2024 03:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0662119;
+	Thu,  5 Dec 2024 04:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733369586; cv=none; b=Uj9D1W+BjktwJcNTJtIjL/ly01YcnmV7YTwNWKebNleS5QP1T0af/IZyrRa9ZPVZtq5quMJBaf9IfaAj2eKB3nJV2kOK5FlUBw3togV2/7kghkxb7mAsOuKr/3fuZ8p3KBb47nYID8eMyNagmP+fcu8OFWX4veBTtq/N+5zAhOQ=
+	t=1733373339; cv=none; b=EJGKakulHKBbGl4lmjJSGI5AUoVegypNKHyf5bl1HJPnTXgympr1QNfEca1siPJ5FGsat2NndQYOeXATXwc//aU8qheVK6LKoqgtMCx9i0M+S8LbMydwGdHL/jHUcbU8FmkWkEnzuonkX6uTlZwdfm1UTg6xQOjEqe/c60iQna8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733369586; c=relaxed/simple;
-	bh=oqfb1IBF3kOL1oS8VEYHyenvAf5wr2SPCSsm8Kw7dNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kQmGc9EZvXW0AicrQYY0eVtk0TC44gxGJ8ClAsnnuMrAbItDWVX+quB8nzNNe8xK4g1mD+LJMOXGuW5HBIkgFyO/v8ctuXe3MyikRuJuq9k12742Cp3By2RtWlnBkSqwB2OITt7dlSDyswDcRwNahhkBvYr699XislXIgjYd7VM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TKvC76Q4; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1733373339; c=relaxed/simple;
+	bh=YJLuSWlKXsp5PArq37cSpwXznXtH+Dp/EPn1ijws56g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JgyFOs9hpaKl2iu75X/vIt9BliiuPE3O8M+3zteyKs9MwzjyoI/ycNngBqLGK0PFzRmp/HKDInjy5nir7LGfoxGCATG0koBWahW2CXALSFZ5z0AAsOHJ4BOapv9kIlgbZnIzmZLoA6ZNNuf7Sno4qXQE9CtNRClD9hT54QcUl+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OGkot9Eh; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TKvC76Q4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OGkot9Eh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733369584; x=1764905584;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oqfb1IBF3kOL1oS8VEYHyenvAf5wr2SPCSsm8Kw7dNY=;
-  b=TKvC76Q4vX0K7QzrE4Vm0LR8cH6w9o1cfwlX0jF4M83nGSAsvwqFxmvx
-   8rbUnWB4mEZhjVLVGj/qwRtRx2qPYN+QM2xDGzgYBsSHhWu1NGjGr1Ebt
-   E2Sq4ckwwhH9NkmLIGMCExzMWKt7kIJIS1ZZaMtHMY8hJzco72SxxkkjA
-   VSsYvPoN/1O4Icln2AODk/ePrgbu0MQ7JcGjF8Qk0LTTeClMPxYiLS8OP
-   fZory+Ey7wacGeCLqQaefUOWEE41KLhFCVUWjV4PnGHoCsqoc6LryOQeK
-   8bTFXYZiH2tUtX5uFkiPQDnLzoBsoiAIVoUqydJYYeyYw/+BgqYa17mvU
-   w==;
-X-CSE-ConnectionGUID: iqyoRNefQKGGdITxt/UMDg==
-X-CSE-MsgGUID: vCGhRKkWS6uY94Ddn3xTVw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33546112"
+  t=1733373338; x=1764909338;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YJLuSWlKXsp5PArq37cSpwXznXtH+Dp/EPn1ijws56g=;
+  b=OGkot9Ehi3AhSCK2ZlQbUNH0MII85ZSnILBqZLYgovPycab+1Ke4on1F
+   vYz9BvRbWItYiURR0JnDqjLg3Pp6DanyxE4vu16cOGkds2+hXbxnx0+71
+   cStJ08AO2Rpk0JmcJZPPm4z3MdocKQZqNyFuyFj61t3vhJhMTwMefaC/Y
+   R/SPE77zbddwLN2HA5ou+0LzQkA79QOjCeTU3CFy3J8KM6qmMd1bHf7wU
+   C85+QKHQiqhZ/Mtg+KxO5GPkWQxpM8Iqlahs33o5LPGCl3SLJ10tjCnC1
+   27f8yMQgX4uqNaPKox2yktgc1ZEi2Rz3bkvSDekc7Q7WGIq9SXpKZySDQ
+   A==;
+X-CSE-ConnectionGUID: RLkQoX9hRYOzA4ChFYyxFQ==
+X-CSE-MsgGUID: 72Xu0828R2epAzu5Vy0Ozw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="37332316"
 X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="33546112"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 19:33:04 -0800
-X-CSE-ConnectionGUID: fGP8O5YDTDu6uUU7c+Vumw==
-X-CSE-MsgGUID: /RthLQKMRtGyboQ0y4yiPQ==
+   d="scan'208";a="37332316"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 20:35:37 -0800
+X-CSE-ConnectionGUID: Al/vxB16RmaBIFnJc5IXtA==
+X-CSE-MsgGUID: aAvwhhuVR2evXM/SrTZgog==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="99042794"
+   d="scan'208";a="98433245"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 04 Dec 2024 19:33:02 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 04 Dec 2024 20:35:36 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tJ2bs-0003kN-0x;
-	Thu, 05 Dec 2024 03:33:00 +0000
-Date: Thu, 5 Dec 2024 11:32:11 +0800
+	id 1tJ3aP-0003mz-2B;
+	Thu, 05 Dec 2024 04:35:33 +0000
+Date: Thu, 5 Dec 2024 12:34:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oliver Upton <oliver.upton@linux.dev>
+To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 01/14] drivers/perf: apple_m1: Refactor event
- select/filter configuration
-Message-ID: <202412051149.fwutWibd-lkp@intel.com>
-References: <20241203193220.1070811-2-oliver.upton@linux.dev>
+Subject: [jgunthorpe:for-nicolin 2/3] drivers/iommu/dma-iommu.c:1811:23:
+ error: call to undeclared function 'msi_desc_to_dev'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202412051216.fEjzk4X5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,165 +62,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241203193220.1070811-2-oliver.upton@linux.dev>
 
-Hi Oliver,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 40384c840ea1944d7c5a392e8975ed088ecf0b37]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Upton/drivers-perf-apple_m1-Refactor-event-select-filter-configuration/20241204-123047
-base:   40384c840ea1944d7c5a392e8975ed088ecf0b37
-patch link:    https://lore.kernel.org/r/20241203193220.1070811-2-oliver.upton%40linux.dev
-patch subject: [RFC PATCH 01/14] drivers/perf: apple_m1: Refactor event select/filter configuration
-config: arm64-randconfig-001-20241205 (https://download.01.org/0day-ci/archive/20241205/202412051149.fwutWibd-lkp@intel.com/config)
+tree:   https://github.com/jgunthorpe/linux for-nicolin
+head:   0e29e6b0fc354c5123d013751f75aedb565ffa86
+commit: f4c17c72b6d21df5fa405ad0924fc298debd1b09 [2/3] iommu: Make iommu_dma_prepare/compose_msi() into a generic operation
+config: arm64-randconfig-001-20241205 (https://download.01.org/0day-ci/archive/20241205/202412051216.fEjzk4X5-lkp@intel.com/config)
 compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412051149.fwutWibd-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412051216.fEjzk4X5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412051149.fwutWibd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412051216.fEjzk4X5-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-                                                                     ^~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:27:22: note: expanded from macro 'ONLY_2_4_6'
-   #define ONLY_2_4_6                      (BIT(2) | BIT(4) | BIT(6))
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
-           [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
-                                                                     ^~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
-   #define ANY_BUT_0_1                     GENMASK(9, 2)
-                                           ^~~~~~~~~~~~~
-   include/linux/bits.h:35:2: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:161:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [M1_PMU_PERFCTR_UNKNOWN_f6]                             = ONLY_2_4_6,
-                                                                     ^~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:27:22: note: expanded from macro 'ONLY_2_4_6'
-   #define ONLY_2_4_6                      (BIT(2) | BIT(4) | BIT(6))
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
-           [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
-                                                                     ^~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
-   #define ANY_BUT_0_1                     GENMASK(9, 2)
-                                           ^~~~~~~~~~~~~
-   include/linux/bits.h:35:2: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:162:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [M1_PMU_PERFCTR_UNKNOWN_f7]                             = ONLY_2_4_6,
-                                                                     ^~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:27:22: note: expanded from macro 'ONLY_2_4_6'
-   #define ONLY_2_4_6                      (BIT(2) | BIT(4) | BIT(6))
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
-           [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
-                                                                     ^~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
-   #define ANY_BUT_0_1                     GENMASK(9, 2)
-                                           ^~~~~~~~~~~~~
-   include/linux/bits.h:35:2: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:163:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [M1_PMU_PERFCTR_UNKNOWN_f8]                             = ONLY_2_TO_7,
-                                                                     ^~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:26:23: note: expanded from macro 'ONLY_2_TO_7'
-   #define ONLY_2_TO_7                     GENMASK(7, 2)
-                                           ^~~~~~~~~~~~~
-   include/linux/bits.h:35:2: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
-           [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
-                                                                     ^~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
-   #define ANY_BUT_0_1                     GENMASK(9, 2)
-                                           ^~~~~~~~~~~~~
-   include/linux/bits.h:35:2: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:164:35: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [M1_PMU_PERFCTR_UNKNOWN_fd]                             = ONLY_2_4_6,
-                                                                     ^~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:27:22: note: expanded from macro 'ONLY_2_4_6'
-   #define ONLY_2_4_6                      (BIT(2) | BIT(4) | BIT(6))
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:132:35: note: previous initialization is here
-           [0 ... M1_PMU_PERFCTR_LAST]                             = ANY_BUT_0_1,
-                                                                     ^~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:25:23: note: expanded from macro 'ANY_BUT_0_1'
-   #define ANY_BUT_0_1                     GENMASK(9, 2)
-                                           ^~~~~~~~~~~~~
-   include/linux/bits.h:35:2: note: expanded from macro 'GENMASK'
-           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:169:32: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [PERF_COUNT_HW_CPU_CYCLES]              = M1_PMU_PERFCTR_CORE_ACTIVE_CYCLE,
-                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:168:2: note: previous initialization is here
-           PERF_MAP_ALL_UNSUPPORTED,
-           ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:44:34: note: expanded from macro 'PERF_MAP_ALL_UNSUPPORTED'
-           [0 ... PERF_COUNT_HW_MAX - 1] = HW_OP_UNSUPPORTED
-                                           ^~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:39:28: note: expanded from macro 'HW_OP_UNSUPPORTED'
-   #define HW_OP_UNSUPPORTED               0xFFFF
-                                           ^~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:170:34: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [PERF_COUNT_HW_INSTRUCTIONS]            = M1_PMU_PERFCTR_INST_ALL,
-                                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/perf/apple_m1_cpu_pmu.c:168:2: note: previous initialization is here
-           PERF_MAP_ALL_UNSUPPORTED,
-           ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:44:34: note: expanded from macro 'PERF_MAP_ALL_UNSUPPORTED'
-           [0 ... PERF_COUNT_HW_MAX - 1] = HW_OP_UNSUPPORTED
-                                           ^~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:39:28: note: expanded from macro 'HW_OP_UNSUPPORTED'
-   #define HW_OP_UNSUPPORTED               0xFFFF
-                                           ^~~~~~
->> drivers/perf/apple_m1_cpu_pmu.c:402:13: warning: variable 'kernel' set but not used [-Wunused-but-set-variable]
-           bool user, kernel;
-                      ^
->> drivers/perf/apple_m1_cpu_pmu.c:402:7: warning: variable 'user' set but not used [-Wunused-but-set-variable]
-           bool user, kernel;
-                ^
->> drivers/perf/apple_m1_cpu_pmu.c:403:5: warning: variable 'evt' set but not used [-Wunused-but-set-variable]
-           u8 evt;
-              ^
-   37 warnings generated.
+>> drivers/iommu/dma-iommu.c:1811:23: error: call to undeclared function 'msi_desc_to_dev'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           struct device *dev = msi_desc_to_dev(desc);
+                                ^
+   drivers/iommu/dma-iommu.c:1811:17: error: incompatible integer to pointer conversion initializing 'struct device *' with an expression of type 'int' [-Wint-conversion]
+           struct device *dev = msi_desc_to_dev(desc);
+                          ^     ~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/dma-iommu.c:1815:7: error: incomplete definition of type 'struct msi_desc'
+                   desc->iommu_cookie = NULL;
+                   ~~~~^
+   include/linux/irq.h:129:8: note: forward declaration of 'struct msi_desc'
+   struct msi_desc;
+          ^
+>> drivers/iommu/dma-iommu.c:1821:14: error: call to undeclared function 'msi_desc_get_iommu_cookie'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   msi_page = msi_desc_get_iommu_cookie(desc);
+                              ^
+   drivers/iommu/dma-iommu.c:1821:12: error: incompatible integer to pointer conversion assigning to 'const struct iommu_dma_msi_page *' from 'int' [-Wint-conversion]
+                   msi_page = msi_desc_get_iommu_cookie(desc);
+                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/dma-iommu.c:1826:6: error: incomplete definition of type 'struct msi_msg'
+                   msg->address_hi = upper_32_bits(msi_page->iova);
+                   ~~~^
+   include/linux/irq.h:29:8: note: forward declaration of 'struct msi_msg'
+   struct msi_msg;
+          ^
+   drivers/iommu/dma-iommu.c:1827:6: error: incomplete definition of type 'struct msi_msg'
+                   msg->address_lo &= cookie_msi_granule(domain->iova_cookie) - 1;
+                   ~~~^
+   include/linux/irq.h:29:8: note: forward declaration of 'struct msi_msg'
+   struct msi_msg;
+          ^
+   drivers/iommu/dma-iommu.c:1828:6: error: incomplete definition of type 'struct msi_msg'
+                   msg->address_lo += lower_32_bits(msi_page->iova);
+                   ~~~^
+   include/linux/irq.h:29:8: note: forward declaration of 'struct msi_msg'
+   struct msi_msg;
+          ^
+>> drivers/iommu/dma-iommu.c:1835:2: error: call to undeclared function 'msi_desc_set_iommu_cookie'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           msi_desc_set_iommu_cookie(desc, msi_page);
+           ^
+   9 errors generated.
 
 
-vim +/kernel +402 drivers/perf/apple_m1_cpu_pmu.c
+vim +/msi_desc_to_dev +1811 drivers/iommu/dma-iommu.c
 
-36f48213b772df Oliver Upton 2024-12-03  398  
-a639027a1be1d6 Marc Zyngier 2022-02-08  399  /* arm_pmu backend */
-a639027a1be1d6 Marc Zyngier 2022-02-08  400  static void m1_pmu_enable_event(struct perf_event *event)
-a639027a1be1d6 Marc Zyngier 2022-02-08  401  {
-a639027a1be1d6 Marc Zyngier 2022-02-08 @402  	bool user, kernel;
-a639027a1be1d6 Marc Zyngier 2022-02-08 @403  	u8 evt;
-a639027a1be1d6 Marc Zyngier 2022-02-08  404  
-a639027a1be1d6 Marc Zyngier 2022-02-08  405  	evt = event->hw.config_base & M1_PMU_CFG_EVENT;
-a639027a1be1d6 Marc Zyngier 2022-02-08  406  	user = event->hw.config_base & M1_PMU_CFG_COUNT_USER;
-a639027a1be1d6 Marc Zyngier 2022-02-08  407  	kernel = event->hw.config_base & M1_PMU_CFG_COUNT_KERNEL;
-a639027a1be1d6 Marc Zyngier 2022-02-08  408  
-a639027a1be1d6 Marc Zyngier 2022-02-08  409  	m1_pmu_disable_counter_interrupt(event->hw.idx);
-a639027a1be1d6 Marc Zyngier 2022-02-08  410  	m1_pmu_disable_counter(event->hw.idx);
-a639027a1be1d6 Marc Zyngier 2022-02-08  411  	isb();
-a639027a1be1d6 Marc Zyngier 2022-02-08  412  
-36f48213b772df Oliver Upton 2024-12-03  413  	m1_pmu_configure_counter(event->hw.idx, event->hw.config_base);
-a639027a1be1d6 Marc Zyngier 2022-02-08  414  	m1_pmu_enable_counter(event->hw.idx);
-a639027a1be1d6 Marc Zyngier 2022-02-08  415  	m1_pmu_enable_counter_interrupt(event->hw.idx);
-a639027a1be1d6 Marc Zyngier 2022-02-08  416  	isb();
-a639027a1be1d6 Marc Zyngier 2022-02-08  417  }
-a639027a1be1d6 Marc Zyngier 2022-02-08  418  
+44bb7e243bd4b4 Robin Murphy      2016-09-12  1807  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1808  static int iommu_dma_sw_msi(struct iommu_domain *domain, struct msi_desc *desc,
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1809  			    phys_addr_t msi_addr, struct msi_msg *msg)
+44bb7e243bd4b4 Robin Murphy      2016-09-12  1810  {
+ece6e6f0218b77 Julien Grall      2019-05-01 @1811  	struct device *dev = msi_desc_to_dev(desc);
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1812  	const struct iommu_dma_msi_page *msi_page;
+44bb7e243bd4b4 Robin Murphy      2016-09-12  1813  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1814  	if (!domain->iova_cookie) {
+ece6e6f0218b77 Julien Grall      2019-05-01  1815  		desc->iommu_cookie = NULL;
+ece6e6f0218b77 Julien Grall      2019-05-01  1816  		return 0;
+ece6e6f0218b77 Julien Grall      2019-05-01  1817  	}
+44bb7e243bd4b4 Robin Murphy      2016-09-12  1818  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1819  	/* Compose an already prepared mapping */
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1820  	if (msg) {
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03 @1821  		msi_page = msi_desc_get_iommu_cookie(desc);
+44bb7e243bd4b4 Robin Murphy      2016-09-12  1822  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1823  		if (!domain->iova_cookie || WARN_ON(!msi_page))
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1824  			return 0;
+ece6e6f0218b77 Julien Grall      2019-05-01  1825  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1826  		msg->address_hi = upper_32_bits(msi_page->iova);
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1827  		msg->address_lo &= cookie_msi_granule(domain->iova_cookie) - 1;
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1828  		msg->address_lo += lower_32_bits(msi_page->iova);
+ece6e6f0218b77 Julien Grall      2019-05-01  1829  		return 0;
+ece6e6f0218b77 Julien Grall      2019-05-01  1830  	}
+ece6e6f0218b77 Julien Grall      2019-05-01  1831  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1832  	iommu_group_mutex_assert(dev);
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1833  	msi_page = iommu_dma_get_msi_page(dev, msi_addr, domain);
+ece6e6f0218b77 Julien Grall      2019-05-01  1834  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03 @1835  	msi_desc_set_iommu_cookie(desc, msi_page);
+ece6e6f0218b77 Julien Grall      2019-05-01  1836  
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1837  	if (!msi_page)
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1838  		return -ENOMEM;
+f4c17c72b6d21d Jason Gunthorpe   2024-12-03  1839  	return 0;
+44bb7e243bd4b4 Robin Murphy      2016-09-12  1840  }
+06d60728ff5c01 Christoph Hellwig 2019-05-20  1841  
+
+:::::: The code at line 1811 was first introduced by commit
+:::::: ece6e6f0218b7777e650bf93728130ae6f4feb7d iommu/dma-iommu: Split iommu_dma_map_msi_msg() in two parts
+
+:::::: TO: Julien Grall <julien.grall@arm.com>
+:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
 
 -- 
 0-DAY CI Kernel Test Service
