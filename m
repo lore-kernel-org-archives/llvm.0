@@ -1,129 +1,223 @@
-Received: from out.smtpout.orange.fr (out-17.smtpout.orange.fr [193.252.22.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBB6219A6C
-	for <llvm@lists.linux.dev>; Thu,  5 Dec 2024 15:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EAE21D595;
+	Thu,  5 Dec 2024 15:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733412116; cv=none; b=fWWBAuuCfaA/fF29NiPqC9qeOqUyHPMkOogbfRy98xArz19hpMOdydkWNvH2kI8ib5oXWz0GuVnHm7neUnTpvmOCluePjNIS28/wQjHAm/0VHprc6hjjx1/Blv1dzJjpbN1woHAtqTA8k5AXeuKx1qtLG0UaVmGOUR5PDgwDV7g=
+	t=1733414270; cv=none; b=MUK7OkciwRo7TiUGuko6OrAj+4iQtTuPsXcZuXQN4EaQ5vKpF7vUEsnb6UVF6J+bluOabtxx/ubHceE7LSvm0Vjk136jzqYPXr4+FwhBilpxQLhAVowZk9W1gKjC6vzyvC70KRvlswoJQ157M6ru5Zuo6RmlOeMGvqrlXgtnM3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733412116; c=relaxed/simple;
-	bh=GC3WGrIayaFhbnkEoyvU2eOpxkJNP8G3yldJihZbihU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=crsX5DApWyIpWjRYrM8E1EmSOHAB1nSyJzsCgsfbIw+GyhujnreyHi1gbhEprvZqgVT+2BzlGSDrA8/hmd6MLZA+QUcbC+M+AGqGRabynTvMbpRGrG9k3S81vfPnx0fKsXlFuB3Xlfe8Qf232ISMd/hX+w41J4XMqmodbJOJ8zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=aVzGogmc; arc=none smtp.client-ip=193.252.22.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1733414270; c=relaxed/simple;
+	bh=gYj2Cn0A25p30ukJU5NirjJCGlV3C1DFe68Dw8RwYzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ICjPiYn3lAUM17WsxJmsr6NT01FzKcbxSuK6MkvL36/40DY2O8e69Zed6N1vdhlgsPHfQ732nOoxZOF1Z6pD/VvCixXZBIrUC3ZXtV90eiOJgMdgmAyyWDBsGoKsdhWbVCMBqxEyp1AC/GPF4BKHILpVCWMkiTMPdNaa23MYgco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YQhiQmso; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="aVzGogmc"
-Received: from mail-lf1-f47.google.com ([209.85.167.47])
-	by smtp.orange.fr with ESMTPSA
-	id JDfrt7qC2tmosJDfrtqvEn; Thu, 05 Dec 2024 16:21:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1733412112;
-	bh=5Sob8jML2a9sfY47l90QZhBAyozcID3U7Li8+UA7roI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To;
-	b=aVzGogmcTPRdjLpDdU/7wCOIlxa/3k9MfUx9oXxURMDPjn98fuB0PLDwBo5NAqUUU
-	 ZCyRgBXKhOh1O1qV3BMRpAN8iX0SOL8sy7M4kmTBCfkEY01ELS6vc+SCyaJ2oTaFJG
-	 WY5QTjECwGMTPjnZCaf6e8NMnhANiAArbAsiy7I6tepSRZ9vh5GW4O3M9R5yWzqRI3
-	 tuOZ/8tEzxmX9Nu4g0gnT+I9PfENnOe4KxABB2icpuwPl0uP4VG2UjXVmfJk04vrwP
-	 0c1o4j7/O5xytJ5pDDfI3rVf6kTcCCJVQXxcAtrAED3p7DpAAG66pUYEOxoBvx+WNV
-	 rZjURcMV9HxiA==
-X-ME-Helo: mail-lf1-f47.google.com
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 05 Dec 2024 16:21:52 +0100
-X-ME-IP: 209.85.167.47
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53df119675dso1418173e87.0
-        for <llvm@lists.linux.dev>; Thu, 05 Dec 2024 07:21:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU8GuyZumydFdi8h8NnfPn2yWYL+hFv7bghgR1JNiv8ExutI7YbKUoUpxTrf0ruJdPA+FoC@lists.linux.dev
-X-Gm-Message-State: AOJu0YwX4B/d6uB5XsoTOTAXW4GuEyPXcCwqw2dr/N502Iwp51LdqSHV
-	i5IRUwKpT6G01eSJM4UNQHcYAaAMedUdiyBgWS0FBF7W3fq98xI+S9+Eh71SgctCrDWUraGfrm7
-	epnulxakI+yqmyOSW8aex5zmnSmA=
-X-Google-Smtp-Source: AGHT+IFTPODU6RGdJMXff+75tOD6Nj3x2Mn/gdl5NWtqQnJzhnFZgI0m0ZroaJ8Q+jvxJuILOkW0ziN/Pe9Qt29xALE=
-X-Received: by 2002:a05:6512:32c8:b0:53e:28dd:a9d1 with SMTP id
- 2adb3069b0e04-53e28ddb7bcmr693951e87.24.1733412111008; Thu, 05 Dec 2024
- 07:21:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YQhiQmso"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733414268; x=1764950268;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gYj2Cn0A25p30ukJU5NirjJCGlV3C1DFe68Dw8RwYzg=;
+  b=YQhiQmsoZ/QxyEPuWYE4/OhF3iD4jL0hYs9pMxtZgJsV3v1SbAtBYBpK
+   KCvaQCgU5FDBH23mumIZQ/HA0pKMZDHXUTpqISXX3zRPMt6PrgeHVdUlY
+   bjG4ls2Kl/7v2kiCOF8/IDRmwWfOmifhJz+IHOqvsoOCdXGQAQakkZSmD
+   EKbrt6QrzQgfpCnO3utv6/a6YlSZrxwm5OqWFi+M5O0iuijZ6b56KsBCQ
+   9ywQcE9EloWmzPZp7mXxUZ2PAs09JjbCV0X+Ir+jBKUP8gKMSK0tTOFjZ
+   9MS8zjRCIaVSuOM5D4L0sS6iv7c60ZMmiG51GTNZziXQYfDw6/0Q++mF4
+   g==;
+X-CSE-ConnectionGUID: gsupaPHLRvquGaizY7Btsw==
+X-CSE-MsgGUID: w45mip0UTAyYvsg8kbkZ/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="33976410"
+X-IronPort-AV: E=Sophos;i="6.12,210,1728975600"; 
+   d="scan'208";a="33976410"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 07:57:45 -0800
+X-CSE-ConnectionGUID: LVDT7OZJSRue19ygkYAYkQ==
+X-CSE-MsgGUID: dipDvXyMRlmwYrpo1fVt4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,210,1728975600"; 
+   d="scan'208";a="93959166"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 05 Dec 2024 07:57:43 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tJEEW-0000AG-31;
+	Thu, 05 Dec 2024 15:57:40 +0000
+Date: Thu, 5 Dec 2024 23:57:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sricharan R <quic_srichara@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 2/2] mailbox: tmelite-qmp: Introduce QCOM TMEL QMP
+ mailbox driver
+Message-ID: <202412052337.B1J3nB8v-lkp@intel.com>
+References: <20241205080633.2623142-3-quic_srichara@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr> <FBEB24FF-5885-4938-8D1C-9B7BA9071FB9@kernel.org>
-In-Reply-To: <FBEB24FF-5885-4938-8D1C-9B7BA9071FB9@kernel.org>
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Fri, 6 Dec 2024 00:21:35 +0900
-X-Gmail-Original-Message-ID: <CAMZ6RqLSiTfTNQrcje06MbSxvM2k16MgqG1YTCufe6j9FhupEw@mail.gmail.com>
-Message-ID: <CAMZ6RqLSiTfTNQrcje06MbSxvM2k16MgqG1YTCufe6j9FhupEw@mail.gmail.com>
-Subject: Re: [PATCH 00/10] compiler.h: refactor __is_constexpr() into is_const{,_true,_false}()
-To: Kees Cook <kees@kernel.org>
-Cc: Vincent Mailhol via B4 Relay <devnull+mailhol.vincent.wanadoo.fr@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, David Laight <David.Laight@aculab.com>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
-	Martin Uecker <Martin.Uecker@med.uni-goettingen.de>, linux-sparse@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, intel-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, coresight@lists.linaro.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241205080633.2623142-3-quic_srichara@quicinc.com>
 
-On Thu. 5 Dec. 2024 at 08:58, Kees Cook <kees@kernel.org> wrote:
-> On December 3, 2024 3:33:22 AM GMT+10:00, Vincent Mailhol via B4 Relay <devnull+mailhol.vincent.wanadoo.fr@kernel.org> wrote:
-> >This series is the spiritual successor of [1] which introduced
-> >const_true(). In [1], following a comment from David Laight, Linus
-> >came with a suggestion to simplify __is_constexpr() and its derived
-> >macros using a _Generic() selection. Because of the total change of
-> >scope, I am starting a new series.
-> >
-> >The goal is to introduce a set of three macros:
-> >
-> >  - is_const(): a one to one replacement of __is_constexpr() in term
-> >    of features but written in a less hacky way thanks to _Generic().
-> >
-> >  - is_const_true(): tells whether or not the argument is a true
-> >    integer constant expression.
-> >
-> >  - is_const_false(): tells whether or not the argument is a false
-> >    integer constant expression.
->
-> But why make this change? Is something broken? Does it make builds faster?
->
-> > 7 files changed, 97 insertions(+), 84 deletions(-)
->
-> It makes the code larger too. I don't see what the benefit is, and given how much time has been spent making sure the existing stuff works correctly, I feel like we should have a clear benefit to replacing it all.
+Hi Sricharan,
 
-It makes the "code" larger because patch 3 ("compiler.h: add
-is_const_true() and is_const_false()") adds two new macros with 20
-lines of comments to explain the pros and cons. So the added "code" is
-only comments. If you ignore the comments, you can see that I am
-actually removing a few lines of code.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-As for the clear benefit, sorry, but I have nothing more to offer
-other than code simplification. The reason why a lot of time was spent
-to make __is_constexpr() work correctly is just a testimony of how
-complex the thing is. That alone can be a reason to simplify it, now
-that new tools (_Generic()) are available.
+[auto build test WARNING on v6.12]
+[cannot apply to robh/for-next linus/master v6.13-rc1 next-20241205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Of course, modifying __is_constexpr() is not strictly needed to
-introduce the new is_const_expr(). My previous series:
+url:    https://github.com/intel-lab-lkp/linux/commits/Sricharan-R/dt-bindings-mailbox-qcom-Document-qcom-tmelite-qmp/20241205-161122
+base:   v6.12
+patch link:    https://lore.kernel.org/r/20241205080633.2623142-3-quic_srichara%40quicinc.com
+patch subject: [PATCH RFC 2/2] mailbox: tmelite-qmp: Introduce QCOM TMEL QMP mailbox driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20241205/202412052337.B1J3nB8v-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412052337.B1J3nB8v-lkp@intel.com/reproduce)
 
-  https://lore.kernel.org/all/20241113172939.747686-4-mailhol.vincent@wanadoo.fr/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412052337.B1J3nB8v-lkp@intel.com/
 
- did it that way. But I was rightfully pointed out for my macro being
-ugly. Maybe I can suggest that you give a look to the above thread and
-tell me if you still disagree with David and Linus's comments after
-reading it?
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/mailbox/qcom-tmelite-qmp.c:10:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/mailbox/qcom-tmelite-qmp.c:303:55: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     303 |                 dev_err(mdev->dev, "Unsupported packet size %lu\n", pkt->iov_len);
+         |                                                             ~~~     ^~~~~~~~~~~~
+         |                                                             %zu
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/mailbox/qcom-tmelite-qmp.c:705:10: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     704 |                 pr_err("Invalid pkt.size received size: %lu, expected: %zu\n",
+         |                                                         ~~~
+         |                                                         %zu
+     705 |                        tdev->pkt.iov_len, sizeof(struct tmel_ipc_pkt));
+         |                        ^~~~~~~~~~~~~~~~~
+   include/linux/printk.h:533:33: note: expanded from macro 'pr_err'
+     533 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                                ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:490:60: note: expanded from macro 'printk'
+     490 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:462:19: note: expanded from macro 'printk_index_wrap'
+     462 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   9 warnings generated.
 
 
-Yours sincerely,
-Vincent Mailhol
+vim +303 drivers/mailbox/qcom-tmelite-qmp.c
+
+   281	
+   282	/**
+   283	 * qmp_send_data() - Copy the data to the channel's mailbox and notify
+   284	 *		     remote subsystem of new data. This function will
+   285	 *		     return an error if the previous message sent has
+   286	 *		     not been read. Cannot Sleep.
+   287	 * @chan:	mailbox channel that data is to be sent over.
+   288	 * @data:	Data to be sent to remote processor, should be in the format of
+   289	 *		a kvec.
+   290	 *
+   291	 * Return: 0 on succes or standard Linux error code.
+   292	 */
+   293	static int qmp_send_data(struct qmp_device *mdev, void *data)
+   294	{
+   295		struct kvec *pkt = (struct kvec *)data;
+   296		void __iomem *addr;
+   297		unsigned long flags;
+   298	
+   299		if (!mdev || !data || !completion_done(&mdev->ch_complete))
+   300			return -EINVAL;
+   301	
+   302		if (pkt->iov_len > QMP_MAX_PKT_SIZE) {
+ > 303			dev_err(mdev->dev, "Unsupported packet size %lu\n", pkt->iov_len);
+   304			return -EINVAL;
+   305		}
+   306	
+   307		spin_lock_irqsave(&mdev->tx_lock, flags);
+   308		if (mdev->tx_sent) {
+   309			spin_unlock_irqrestore(&mdev->tx_lock, flags);
+   310			return -EAGAIN;
+   311		}
+   312	
+   313		dev_dbg(mdev->dev, "%s: mcore 0x%x ucore 0x%x", __func__,
+   314			mdev->mcore.val, mdev->ucore.val);
+   315	
+   316		addr = mdev->mcore_desc + QMP_CTRL_DATA_SIZE;
+   317		memcpy_toio(addr, pkt->iov_base, pkt->iov_len);
+   318	
+   319		mdev->mcore.bits.frag_size = pkt->iov_len;
+   320		mdev->mcore.bits.rem_frag_count = 0;
+   321	
+   322		dev_dbg(mdev->dev, "Copied buffer to mbox, sz: %d",
+   323			mdev->mcore.bits.frag_size);
+   324	
+   325		mdev->tx_sent = true;
+   326		QMP_MCORE_CH_VAR_TOGGLE(mdev, tx);
+   327		send_irq(mdev);
+   328		qmp_schedule_tx_timeout(mdev);
+   329		spin_unlock_irqrestore(&mdev->tx_lock, flags);
+   330	
+   331		return 0;
+   332	}
+   333	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
