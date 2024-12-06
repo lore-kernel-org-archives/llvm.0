@@ -1,331 +1,117 @@
-Received: from mx-2023-1.gwdg.de (mx-2023-1.gwdg.de [134.76.10.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC801CB51B;
-	Fri,  6 Dec 2024 07:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.76.10.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225ED1DE4F6;
+	Fri,  6 Dec 2024 07:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733469375; cv=none; b=ujuIfmYcqnpLdDxCcap4BG8+eThXP9mnTzGPC9sBWVb1jyBF1tFFRHvM7XGiOHPEfUbRak8khEbWliFohsDlaYkyJRTNaDoljGSzSArYFF5nSEo9j9MxbwlOqk7J+65jTrgfnScqIGHiLVcnBD3Fcyj0/lxFJmet9/uGTG3mVcw=
+	t=1733471948; cv=none; b=UcqaXR44xvoJRF8sVWOMQ+Be0CmB3/KKrGqgV8nq81IG4ULLPv2qiUcbYFfMjUMLHqtIgutNKzwqKqw3pLFJw2WsWBySk1h5BHNctlV6WFXGbTSJd/GTVz1z/d2pNcgZmnuQ9WAQEoev8FfeybJ8AoPwE+1Vk8wiTKYR99keI6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733469375; c=relaxed/simple;
-	bh=GNu0V6q0o0w32+408jO2ovaIQ6lcAc1UgQqx/K7EmHo=;
-	h=Message-ID:Subject:From:To:CC:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=himsO3922wOyKnuASBOuMVA+AdsSDNo9BuA485ELl9uMEo9Xhyx3vIx36Uvxgp80LE6oCn5R8j+mWn7PGy9V84WYI52hob9mFQu3vgOqvL5aYVidX1LwVbo2Y8GbNmhQWSwNff1oScG35kW8cWOHMtrpPlLw+Cza0+JS/9p0WIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de; spf=pass smtp.mailfrom=gwdg.de; dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b=QIuEFM5T; arc=none smtp.client-ip=134.76.10.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gwdg.de
+	s=arc-20240116; t=1733471948; c=relaxed/simple;
+	bh=uh1GtNgeJXD3jjxW/WbErm5HG89T+2j4ihV8ipDenzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DrG2yGaYf4lXU9YnARgGVpqoZU0CyHrGqqvl/CxQz7z6IkYqKIBt3h8XacpypqwkD2ourMRuGdhXfvs8TnWBtFewSva6xip6vsYgzcd6QUhcr7zi/HVOvQpUxOJlAWwpCPkAp8Q33GH2gdT6UODLULzwN7rycjOHK1zJ3O74DBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kf10tiZj; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b="QIuEFM5T"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gwdg.de;
-	s=2023-rsa; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
-	In-Reply-To:Date:CC:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Cn/mEteP39h7mG9+aXdZN/tTfaU/U5YGN1nxsLlnwXQ=; b=QIuEFM5T0FLtiEdDVaCUTynHbc
-	a3zmimEUtLd/4jb8a077kuj6t5Z1EudBlrkT12B2MBGOIwTrIpHJGw3Pk6iKOpO6TtYMuo4JiWtSe
-	FALBY7LUEVLwAAmC+Ce1w4h4KJ1Q2urw4zmYWkyBBzLGfosCtmeVjXhaA8OjAaqeQV2RnqsiVCy8m
-	7awRl+GwnnpkJjPVI4EbRQMiIMkDU4bc3J9mK7PKsqdbKi7W+7pUlBzCRs/m7RKmjvy3jv/GZxiaF
-	qizFSXH5UYZwccUBvg+by18Y9rZX4pnr/B+RuHQJtZemMZiqWS+sQHHLpwRFb7mmbtt58Ow1VWUYu
-	sAyfaCaw==;
-Received: from xmailer.gwdg.de ([134.76.10.29]:37823)
-	by mailer.gwdg.de with esmtp (GWDG Mailer)
-	(envelope-from <muecker@gwdg.de>)
-	id 1tJS0h-003tPL-1m;
-	Fri, 06 Dec 2024 07:40:19 +0100
-Received: from mbx19-fmz-06.um.gwdg.de ([10.108.142.65] helo=email.gwdg.de)
-	by mailer.gwdg.de with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-	(GWDG Mailer)
-	(envelope-from <muecker@gwdg.de>)
-	id 1tJS0h-000D3F-1M;
-	Fri, 06 Dec 2024 07:40:19 +0100
-Received: from [192.168.0.221] (10.250.9.200) by MBX19-FMZ-06.um.gwdg.de
- (10.108.142.65) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.14; Fri, 6 Dec
- 2024 07:40:17 +0100
-Message-ID: <abdd7862f136aa676b2d2c324369f4a43ff9909c.camel@gwdg.de>
-Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
- __is_constexpr()
-From: Martin Uecker <muecker@gwdg.de>
-To: David Laight <David.Laight@ACULAB.COM>, 'Vincent Mailhol'
-	<mailhol.vincent@wanadoo.fr>
-CC: Linus Torvalds <torvalds@linux-foundation.org>, Luc Van Oostenryck
-	<luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Joonas Lahtinen
-	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
-	<rikard.falkeborn@gmail.com>, "linux-sparse@vger.kernel.org"
-	<linux-sparse@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
-	<linux-hardening@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
-	<intel-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "coresight@lists.linaro.org"
-	<coresight@lists.linaro.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>
-Date: Fri, 6 Dec 2024 07:40:17 +0100
-In-Reply-To: <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
-	 <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
-	 <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
-	 <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
-	 <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kf10tiZj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733471947; x=1765007947;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uh1GtNgeJXD3jjxW/WbErm5HG89T+2j4ihV8ipDenzw=;
+  b=kf10tiZjl6IxDl/yTFUpvOa83oYPJWIpizA/buJvsVpm4omcT1m9rzm/
+   WrRdWc7tDjvj0CMuavvFzVVn9O/qwPBnnd90iqmbLLg361Fv4ewJTZHFD
+   yVvCQqbPgJuqYYnMpB9k6HfPdjOYvWVDrlAPmQWrw9dr8d1m4BKCLrKAI
+   rI+XO/3IQYWwnWHPW+Q/M92LUfps8CtjVXxo0STt9JJQYz092l/Mp1WkW
+   63SNKejb68ZZ7BKfFNRnaGeRNWp9BHAT3GliXBPLvN8cF8JhZv1h1kV5h
+   FEfV6avNqL4xU8x3A+kqHs7gFEKaW5sgU/PaudEKAb6vdhRdM/QYJBjRl
+   w==;
+X-CSE-ConnectionGUID: ss08mlhoQY6e8wdLAwFIyw==
+X-CSE-MsgGUID: mYK6oQ6xQ5+d/dk6L0vXag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="45192760"
+X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
+   d="scan'208";a="45192760"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 23:59:06 -0800
+X-CSE-ConnectionGUID: JvQ4gwdtSrS4ez3aatitGA==
+X-CSE-MsgGUID: tB2L8oKAREmMv3tfZ4NGxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
+   d="scan'208";a="94144258"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 05 Dec 2024 23:59:03 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tJTEq-0000pj-1e;
+	Fri, 06 Dec 2024 07:59:00 +0000
+Date: Fri, 6 Dec 2024 15:58:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Igor Belwon <igor.belwon@mentallysanemainliners.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] clk: samsung: Introduce Exynos990 clock
+ controller driver
+Message-ID: <202412061549.wyFF9u8X-lkp@intel.com>
+References: <20241205193423.783815-4-igor.belwon@mentallysanemainliners.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ClientProxiedBy: MBX19-GWD-08.um.gwdg.de (10.108.142.61) To
- MBX19-FMZ-06.um.gwdg.de (10.108.142.65)
-X-EndpointSecurity-0xde81-EV: v:7.9.17.458, d:out, a:y, w:t, t:6, sv:1733449028, ts:1733467219
-X-Virus-Scanned: (clean) by clamav
-X-Spam-Level: -
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241205193423.783815-4-igor.belwon@mentallysanemainliners.org>
 
-Am Freitag, dem 06.12.2024 um 02:25 +0000 schrieb David Laight:
-> From: Vincent Mailhol
-> > Sent: 05 December 2024 15:31
-> >=20
-> > -CC: Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
-> > +CC: Martin Uecker <muecker@gwdg.de>
-> > (seems that Martin changed his address)
+Hi Igor,
 
-My current one is this: uecker@tugraz.at
+kernel test robot noticed the following build errors:
 
-Martin
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on krzk-dt/for-next clk/clk-next linus/master v6.13-rc1 next-20241205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> >=20
-> > On Thu. 5 Dec. 2024 at 03:39, David Laight <David.Laight@aculab.com> wr=
-ote:
-> > > > Sent: 02 December 2024 17:33
-> > > >=20
-> > > > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > >=20
-> > > > __is_constexpr(), while being one of the most glorious one liner ha=
-ck
-> > > > ever witnessed by mankind, is overly complex. Following the adoptio=
-n
-> > > > of C11 in the kernel, this macro can be simplified through the use =
-of
-> > > > a _Generic() selection.
-> > >=20
-> > > You should give credit to some of the earlier patches that do the sam=
-e.
-> > > I'm sure there were some related ones from Linus - not applied yet.
-> >=20
-> > ACK. Would adding a suggested--by Linus tag solve your concern?
->=20
-> I actually suspect the first patches to change __is_constexpr() to
-> use _Generic were from myself.
-> I've found a patch I send in November 2023.
->=20
-> >=20
-> > > > First, split the macro in two:
-> > > >=20
-> > > >   - __is_const_zero(x): an helper macro; tells whether x is the
-> > > >     integer constant expression 0 or something else.
-> > > >=20
-> > > >   - is_const(x): replacement of __is_constexpr(); tells whether x i=
-s a
-> > > >     integer constant expression.
-> > > >=20
-> > > > The split serves two purposes: first make it easier to understand;
-> > > > second, __is_const_zero() will be reused as a building block for ot=
-her
-> > > > is_const_*() macros that will be introduced later on.
-> > > >=20
-> > > > The core principle of __is_constexpr() to abuse the return type of =
-the
-> > > > ternary operator remains, but all the surrounding sizeof() hack
-> > > > disappear.
-> > > >=20
-> > > > On a side note, while not relevant to the kernel, __is_constexpr()
-> > > > relied on the GNU extension that sizeof(void) is 1. const_expr() do=
-es
-> > > > not use any GNU extensions, making it ISO C compliant.
-> > > >=20
-> > > > __is_constexpr() is temporarily kept and will be removed once all i=
-ts
-> > > > users get migrated to is_const() (or one of its friend).
-> > > >=20
-> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > > ---
-> > > >  include/linux/compiler.h | 41 ++++++++++++++++++++++++++++++++++++=
-+++++
-> > > >  1 file changed, 41 insertions(+)
-> > > >=20
-> > > > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-> > > > index a2a56a50dd85227a4fdc62236a2710ca37c5ba52..30ce06df4153cfdc0fa=
-d9bc7bffab9097f8b0450 100644
-> > > > --- a/include/linux/compiler.h
-> > > > +++ b/include/linux/compiler.h
-> > > > @@ -316,6 +316,47 @@ static inline void *offset_to_ptr(const int *o=
-ff)
-> > > >  #define statically_true(x) (__builtin_constant_p(x) && (x))
-> > > >  #define statically_false(x) (__builtin_constant_p(x) && (x) =3D=3D=
- 0)
-> > > >=20
-> > > > +/*
-> > > > + * Whether x is the integer constant expression 0 or something els=
-e.
-> > > > + *
-> > > > + * Details:
-> > > > + *   - The C11 standard defines in =C2=A76.3.2.3.3
-> > > > + *       (void *)<integer constant expression with the value 0>
-> > > > + *     as a null pointer constant (c.f. the NULL macro).
-> > > > + *   - If x evaluates to the integer constant expression 0,
-> > > > + *       (void *)(x)
-> > > > + *     is a null pointer constant. Else, it is a void * expression=
-.
-> > > > + *   - In a ternary expression:
-> > > > + *       condition ? operand1 : operand2
-> > > > + *     if one of the two operands is of type void * and the other =
-one
-> > > > + *     some other pointer type, the C11 standard defines in =C2=A7=
-6.5.15.6
-> > > > + *     the resulting type as below:
-> > > > + *       if one operand is a null pointer constant, the result has=
- the
-> > > > + *       type of the other operand; otherwise [...] the result typ=
-e is
-> > > > + *       a pointer to an appropriately qualified version of void.
-> > > > + *   - As such, in
-> > > > + *       0 ? (void *)(x) : (char *)0
-> > > > + *     if x is the integer constant expression 0, operand1 is a nu=
-ll
-> > > > + *     pointer constant and the resulting type is that of operand2=
-:
-> > > > + *     char *. If x is anything else, the type is void *.
-> > > > + *   - The (long) cast silences a compiler warning for when x is n=
-ot 0.
-> > > > + *   - Finally, the _Generic() dispatches the resulting type into =
-a
-> > > > + *     Boolean.
-> > >=20
-> > > The comment is absolutely excessive.
-> > > I'm sure I managed about 2 lines in one of the patches I did.
-> >=20
-> > I think that Linus made it  clear in:
-> >=20
-> >   https://lore.kernel.org/all/CAHk-=3DwgfpLdt7SFFGcByTfHdkvv7AEa3MDu_s_=
-W1kfOxQs49pw@mail.gmail.com/
-> >=20
-> > that this deserves a detailed comment.
->=20
-> And he wrote one in https://lore.kernel.org/all/CAHk-=3Dwiq=3DGUNWJwWh1CR=
-AYchW73UmOaSkaCovLatfDKeveZctA@mail.gmail.com/
->=20
->    /*
->     * iff 'x' is a non-zero constant integer expression,
->     * then '!(x)' will be a zero constant integer expression,
->     * and casting that to 'void *' will result in a NULL pointer.
->     * Otherwise casting it to 'void *' will be just a regular 'void *'.
->     *
->     * The type of '0 ? NULL : (char *)' is 'char *'
->     * The type of '0 ? (void *) : (char *) is 'void *'
->     */
->     #define const_true(x) \
->         _Generic(0 ? (void *)((long)!(x)) : (char *)0, char *: 1, void *:=
- 0)
->=20
->=20
->=20
-> >=20
-> > The details block in the current __is_constexpr() is 37 lines long,
-> > the details block in __is_const_zero() takes 22 lines. So I would
-> > argue that I made things better.
->=20
-> The old block was too long :-)
->=20
-> >=20
-> > Unless more people share your concern, I am planning to keep this comme=
-nt as-is.
-> >=20
-> > > > + *
-> > > > + * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
-> > >=20
-> > > IIRC Martin has agreed in the past that the accreditation can
-> > > be removed - especially since it refers to the 'sizeof (void)' trick.
-> >=20
-> > I tried to look for such message:
-> >=20
-> >   https://lore.kernel.org/all/?q=3Df%3A%22martin+uecker%22+__is_constex=
-pr
-> >=20
-> > but couldn't find it. Do you have the link?
-> >=20
-> > @Martin, do you agree that I remove the accreditation?
-> >=20
-> > > > + */
-> > > > +#define __is_const_zero(x) \
-> > > > +     _Generic(0 ? (void *)(long)(x) : (char *)0, char *: 1, void *=
-: 0)
-> > > > +
-> > > > +/*
-> > > > + * Returns a constant expression while determining if its argument=
- is a
-> > > > + * constant expression, most importantly without evaluating the ar=
-gument.
-> > >=20
-> > > You need to differentiate between a 'constant integer expression'
-> > > and a 'compile time constant'.
-> >=20
-> > OK. This one was just copied from the previous __is_constexpr(). I will=
- apply
-> > "s/constant expression/constant integer expression/g" in v2.
-> >=20
-> > > > + *
-> > > > + * If getting a constant expression is not relevant to you, use th=
-e more
-> > > > + * powerful __builtin_constant_p() instead.
-> > >=20
-> > > __builtin_constant_p() is not 'more powerful' it is testing for
-> > > something different.
-> >=20
-> > I meant to say that __builtin_constant_p() is more powerful at
-> > constant folding. But I agree that the comment is not clear.
-> >=20
-> > What about this?
-> >=20
-> >   If getting a constant integer expression is not relevant to you, use
-> >   __builtin_constant_p() which not only returns true if the argument
-> >   is an integer constant expression, but also if it is a compile time
-> >   constant.
->=20
-> Complete f***ed tense.
->=20
-> It's not about 'constant folding' and 'powerful' isn't the correct word.
-> They are checking for two different things.
->=20
-> A 'constant integer expression' is defined by the C language, and is
-> basically something that is constant when first parsed by the compiler
-> (my definition) so it can pretty much only contain constants, sizeof()
-> and offsetof().
->=20
-> __builtin_constant_p() is true if the compiler decides that an expression=
- is
-> constant. This can track values through inlined function calls and can
-> change from 'unknown' to 'true' late in the compilation.
->=20
-> 	David
->=20
-> >=20
-> >=20
-> > Yours sincerely,
-> > Vincent Mailhol
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
+url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Belwon/clk-samsung-clk-pll-Add-support-for-pll_-0717x-0718x-0732x/20241206-043559
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20241205193423.783815-4-igor.belwon%40mentallysanemainliners.org
+patch subject: [PATCH v1 3/3] clk: samsung: Introduce Exynos990 clock controller driver
+config: arm64-randconfig-004-20241206 (https://download.01.org/0day-ci/archive/20241206/202412061549.wyFF9u8X-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061549.wyFF9u8X-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412061549.wyFF9u8X-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/samsung/clk-exynos990.c:13:10: fatal error: 'dt-bindings/clock/exynos990.h' file not found
+      13 | #include <dt-bindings/clock/exynos990.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +13 drivers/clk/samsung/clk-exynos990.c
+
+    12	
+  > 13	#include <dt-bindings/clock/exynos990.h>
+    14	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
