@@ -1,81 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-14.smtpout.orange.fr [193.252.22.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3CF130AF6;
-	Sat,  7 Dec 2024 02:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C9228F5
+	for <llvm@lists.linux.dev>; Sat,  7 Dec 2024 05:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733536830; cv=none; b=CT5oD/jVjI4n5raUBt1fDVpQDXGMdrOxVasjIA1tSZGmKe1wgmRJNgd/sDPmi7Loq4dRXHCE5nhbODk7akemGHxWaV70OuVYsWp3fuiy0At/LvQungVLYzltxZF5WL8GnO6GY6crwQUwqF25QTkdDf9kZ/BReJBK2dnc37OiVpc=
+	t=1733550071; cv=none; b=RxQhg1gIATxH/xHeGtSBINDZTOuqPk+IGS2l6fgSdvNqIc4uWRnyTwNAOFZDmOfRyfJjkPPP1sxEGWnID8yf6S581SQxBsM4Pp7eZcB1DVgXJgAY80Lq2YbJDCtIYFKdV6ALhVohW5EvLFE5g07fhUCA6lsBu6XXDZ22VPQ5sVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733536830; c=relaxed/simple;
-	bh=5ha6nkkbEeq3rO8ZskOBiwxD1BarT7Ii+yQ8VmzXvhM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Vj67oLwq7jyk31aavpwO09mUN87NK4LM8fTYYqLv6VwTa+3ZKbX0aHjCuMtOE3upzQ3Pck1iUAItLJWTcXkPZBzAmPVI3HtJzUdXU3l/qL5CGbppjtqZqU/mE66WAnrdbCszCnXcHrVFO+0bEcBaiaGQB8iCoFvUI5nKB2dvg/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJAGdEh+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733550071; c=relaxed/simple;
+	bh=0q7ZFLwW9rU2S2ohh1blu7RzwrYq7HPnLQWJ4LGS+aM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MXFSjDWAhu3hTbHZnkR666UX6A3b4gHfu1fxAInIlGY06l0CvDPtHs2M648b4Tf87wBM2G7uzenZBtnKALc34BegABA48KjCkbPF0Hlr3jqe7xRM36SX9uU4zlTEOe30iefdJ/YNzws0iFfgs5Rl0Li9O4M4OVs6e4QWxmq2S7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ar5xiuG5; arc=none smtp.client-ip=193.252.22.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJAGdEh+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F96C4CEDD;
-	Sat,  7 Dec 2024 02:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733536830;
-	bh=5ha6nkkbEeq3rO8ZskOBiwxD1BarT7Ii+yQ8VmzXvhM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LJAGdEh+3ahpU2rykg4v7l0fpLrOgFkydvyBi6pQd4ZKxHAd/KfCu+bjEaNjZTw57
-	 X0Vwm3aSMB9DTsiw5dCuqaugPUCBngbfCnSjOnA2UFkq62YS+zeM9cYphabbGy1iom
-	 i8MUs0qxqztpa3pscMEC+BXvnCih2ZulSV+B32nflnQvc2g+hjwIzGcJENbQVxMz1b
-	 hK5Y4/ZjZCPRQNlfmKW9kfGvKLTdjVIxZAm8cxic8aNKexOVWbPGxJN6pRa4x8V11k
-	 i0SouNaSZB5CBDvAzUQcoy39/CD6Iezs0GBNRd3RpUQyJabjHDQOwuoRsS/2BQ8Xwt
-	 UaqWyQtHg9SrQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C2C380A95C;
-	Sat,  7 Dec 2024 02:00:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ar5xiuG5"
+Received: from mail-ej1-f49.google.com ([209.85.218.49])
+	by smtp.orange.fr with ESMTPSA
+	id JnYwtd1LpxaSQJnYwtRToW; Sat, 07 Dec 2024 06:41:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1733550067;
+	bh=5FIX3GE2Cphszv8rtvt9crE9ghdCcm+668GDkaRhBU4=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=ar5xiuG5M7VFtUY2XYcm6W8HQy/UAp484HEh9iDqX1yYP8by57gj9Q48VN8C2ZffX
+	 /V17jNnG/WLO0o1pzV4NNU9/NlegIzYHbuJjeESOKRjmCNijvcq/Tj98IVPPCkao+y
+	 MIBjzlaRS6F4HFenRsNJy5kwDg8nX4lGY/qVqSrp86E84XV4joayHQCpPxMy/+73Xo
+	 aZ1KCDAmHfzk1O0bB9975/5f89o8Gt7DQbekABf5UOoCIUJGjK4k9MZGM6yN1lYt3Y
+	 1eyAme8H9Z3bsA8eoptza42bWl+W1Ns38xcNB8t3jMPuDVBk6tK9KwMSUA6NPZUed3
+	 GRlUeEyTGKyKQ==
+X-ME-Helo: mail-ej1-f49.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 07 Dec 2024 06:41:07 +0100
+X-ME-IP: 209.85.218.49
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a9f1d76dab1so158754666b.0
+        for <llvm@lists.linux.dev>; Fri, 06 Dec 2024 21:41:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXSRBMsw/Cf/7C6wIyrdjDNBkXox5vy10xL51HiXYEd26e/IqpE7entr33OcOh7Re2SFHIx@lists.linux.dev
+X-Gm-Message-State: AOJu0YyJqlOquheb1SJjnNAEL6TOEYke+BciO1GHVkkZPeTzJL1as3Ug
+	k24+hIVk2k+m8Xm0vjRJXtnH+Yzry1X7y/VH8CkqmBEaqpayLXwiznSAICvz4CVV59XwGfbIcpW
+	n30JFX7IMb/VqRGn91t6eFRUS6NE=
+X-Google-Smtp-Source: AGHT+IHtHlVyoW+nRFmP2KVhABtFl5ikoWMC68HCGMKZEPnxOyfyDUMalss4BKk3XOGNHnTjXwFKxuaBrlfCMkC7FxE=
+X-Received: by 2002:a17:906:9895:b0:a9a:238a:381d with SMTP id
+ a640c23a62f3a-aa63a2c64eamr136036766b.52.1733469982863; Thu, 05 Dec 2024
+ 23:26:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] selftests: net: cleanup busy_poller.c
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173353684499.2872036.3731628087494846225.git-patchwork-notify@kernel.org>
-Date: Sat, 07 Dec 2024 02:00:44 +0000
-References: <20241204163239.294123-1-jdamato@fastly.com>
-In-Reply-To: <20241204163239.294123-1-jdamato@fastly.com>
-To: Joe Damato <jdamato@fastly.com>
-Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
- kuba@kernel.org, mkarsten@uwaterloo.ca, stfomichev@gmail.com,
- davem@davemloft.net, horms@kernel.org, shuah@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+ <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com> <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+ <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com> <abdd7862f136aa676b2d2c324369f4a43ff9909c.camel@gwdg.de>
+In-Reply-To: <abdd7862f136aa676b2d2c324369f4a43ff9909c.camel@gwdg.de>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Fri, 6 Dec 2024 16:26:11 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqKzGiRNMeLsQKRNrxvW_bXB-kEi11udQ82kKX6tGCrqcg@mail.gmail.com>
+Message-ID: <CAMZ6RqKzGiRNMeLsQKRNrxvW_bXB-kEi11udQ82kKX6tGCrqcg@mail.gmail.com>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of __is_constexpr()
+To: uecker@tugraz.at
+Cc: David Laight <David.Laight@aculab.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"coresight@lists.linaro.org" <coresight@lists.linaro.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, Martin Uecker <muecker@gwdg.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+On Fri. 6 Dec. 2024 at 15:40, Martin Uecker <muecker@gwdg.de> wrote:
+> Am Freitag, dem 06.12.2024 um 02:25 +0000 schrieb David Laight:
+> > From: Vincent Mailhol
+> > > Sent: 05 December 2024 15:31
+> > >
+> > > -CC: Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+> > > +CC: Martin Uecker <muecker@gwdg.de>
+> > > (seems that Martin changed his address)
+>
+> My current one is this: uecker@tugraz.at
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Ack
 
-On Wed,  4 Dec 2024 16:32:39 +0000 you wrote:
-> Fix various integer type conversions by using strtoull and a temporary
-> variable which is bounds checked before being casted into the
-> appropriate cfg_* variable for use by the test program.
-> 
-> While here:
->   - free the strdup'd cfg string for overall hygenie.
->   - initialize napi_id = 0 in setup_queue to avoid warnings on some
->     compilers.
-> 
-> [...]
+(...)
 
-Here is the summary with links:
-  - [net-next,v2] selftests: net: cleanup busy_poller.c
-    https://git.kernel.org/netdev/net-next/c/48697bdfb65d
+> > > > > + *
+> > > > > + * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+> > > >
+> > > > IIRC Martin has agreed in the past that the accreditation can
+> > > > be removed - especially since it refers to the 'sizeof (void)' trick.
+> > >
+> > > I tried to look for such message:
+> > >
+> > >   https://lore.kernel.org/all/?q=f%3A%22martin+uecker%22+__is_constexpr
+> > >
+> > > but couldn't find it. Do you have the link?
+> > >
+> > > @Martin, do you agree that I remove the accreditation?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+So, do you agree to have the accreditation removed in compiler.h?
+Personally, I do not mind. I am also OK to remove you from the
+documentation and add you to the CREDITS file if you'd like to.
 
 
+Yours sincerely,
+Vincent Mailhol
