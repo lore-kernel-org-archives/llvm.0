@@ -1,66 +1,57 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB325146A87
-	for <llvm@lists.linux.dev>; Fri,  6 Dec 2024 19:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7F7201023;
+	Fri,  6 Dec 2024 20:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733514945; cv=none; b=tKvujPnGuYCLkhXwM2r7a/VrnRnQ94hZSXTmGrXTnVpFNj+2zWeVx7oSHCEhVt1VeGMJiQQmdfTpBnPI9+8fwh5R0+F6Yug7QyUj0pL4tE2I4V6bPo24Orv+JwKHMCdG+/rJT9ZIyb3th6kUcEbZNWxUH78VIRiTV5g7is7j1r8=
+	t=1733515278; cv=none; b=O2UHWw90wUmtT1xoLoGzG7tQZz4K6L+gXG/ftmTYEOyfb5Q+mgksvDMrXpr22aFzaB1x4aH+hfL1Y1aj1qSZ+XJMxP79PntYNBXIigfi5MGg2RDuw8T8T2dg+dAmgGlwu4GQqQaW46Br8zdSky0ZLbBaCBNhIjSQRyzZ2vQjZiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733514945; c=relaxed/simple;
-	bh=al8af9LUoZpdbTVawRb9oJInscz4Tf9QiIkefhSAAfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fFBlNLYOUi1sOQf2F0LxOa4VrTYOR/pR2eQJ91eMvUOowaWjGpxIeFG5+VgPsWGi2R53gBGQtI087M+iqoczmdZEIN8pWJAElZeRonJCPqsochC6FrPBwkFdoPcQX/RvZ8QRVWrQBB1+p1z1xIxSeXcaaxOuLno3PPsZffmf1uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 4B6JcarQ027033;
-	Fri, 6 Dec 2024 20:38:36 +0100
-Date: Fri, 6 Dec 2024 20:38:36 +0100
-From: Willy Tarreau <w@1wt.eu>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Laight <David.Laight@aculab.com>,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        James Clark <james.clark@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        "linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "uecker@tugraz.at" <uecker@tugraz.at>
-Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
- __is_constexpr()
-Message-ID: <20241206193836.GA26860@1wt.eu>
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
- <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
- <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
- <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
- <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
- <CAHk-=wjmeU6ahyuwAymqkSpxX-gCNa3Qc70UXjgnxNiC8eiyOw@mail.gmail.com>
- <CAMZ6Rq+SzTA25XcMZnMnOJcrrq1VZpeT1xceinarqbXgDDo8VA@mail.gmail.com>
- <CAHk-=wiP8111QZZJNbcDNsYQ_JC-xvwRKr0qV9UdKn3HKK+-4Q@mail.gmail.com>
- <d23fe8a5dbe84bfeb18097fdef7aa4c4@AcuMS.aculab.com>
- <CAHk-=win8afdcergvJ6f2=rRrff8giGUW62qmYs9Ae6aw=wcnA@mail.gmail.com>
+	s=arc-20240116; t=1733515278; c=relaxed/simple;
+	bh=PT8Zu+LQ/3FUAhxfk2myO0kHZ+qh01CerhSCfKXkmDU=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pLMkiDLkh1X+gymDen+eqS8UpK8pcaD1iJL+/gB1IvMTZIUk6OzAKUm0xUvqLaaVomj99iwUqu14KHhx+YFqQI4ehE9UoMPZ3sZeuaCeB/Mie+u9BsoDIOczeP8OG3d1my09o1gt3uypYuHTC+/1YSyIISjhyCnm4ZLvqZqthz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q3fWCzZ1; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q3fWCzZ1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733515277; x=1765051277;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=PT8Zu+LQ/3FUAhxfk2myO0kHZ+qh01CerhSCfKXkmDU=;
+  b=Q3fWCzZ1wUPYCTF8bRp0s9bfSGYQzan582FkP+LtxbxxJ+MYvTzV5sq6
+   jt/FBA/WYNqAQMtYWax6y3usW2BrPVNJEG4h2QN7tCHz1KKhOmLppC+J1
+   K8+16hPex5fvsGaJkVyerkt0JEfk1YmVvyBvv5LEsIpS554VK26/lvxVv
+   8Y+uKBqh97B8WGVvBJVYbR/DmrGCT19YjskvnjVowr1silNxKiHXjQ/ic
+   QI9AbzU8/y5b/ywpI/cI/6Lhv1vP1GG96sayuSkOHIz6OL7Q//SuPXkjH
+   q9aXRr1+bIy4lMgJS9lsJDSdPZqADDZZgEvMDCGN3WdE6CWkJRgY+LYIq
+   Q==;
+X-CSE-ConnectionGUID: Alq0Diq0TcqEfzHWLXnZMw==
+X-CSE-MsgGUID: OFDhRPt/Q1axJKL3Pnmeyg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="34123444"
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="34123444"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2024 12:01:16 -0800
+X-CSE-ConnectionGUID: R4y373hHST2QoIJjv90vbg==
+X-CSE-MsgGUID: Tiep4SaWTfOoUFQ7Lp2rWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="99558106"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 06 Dec 2024 12:01:15 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tJeVk-0002Dl-1V;
+	Fri, 06 Dec 2024 20:01:12 +0000
+Date: Sat, 7 Dec 2024 04:00:37 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: sound/core/seq/seq_ump_convert.o: warning: objtool:
+ cc_ev_to_ump_midi2+0x589: return with modified stack frame
+Message-ID: <202412070334.qukIwQDe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,61 +60,37 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=win8afdcergvJ6f2=rRrff8giGUW62qmYs9Ae6aw=wcnA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Dec 06, 2024 at 11:15:20AM -0800, Linus Torvalds wrote:
-> On Fri, 6 Dec 2024 at 11:07, David Laight <David.Laight@aculab.com> wrote:
-> >
-> > I'm missing the compiler version and options to generate the error.
-> 
-> Just -Wall with most recent gcc versions seems to do it. At least I
-> can repro it with gcc-14.2.1 and something silly like this:
-> 
->   $ cat t.c
->   int fn(int a) { return (a<<2)?1:2; }
->   $ gcc -Wall -S t.c
->   t.c: In function 'fn':
->   t.c:1:26: warning: '<<' in boolean context, did you mean '<'?
-> [-Wint-in-bool-context]
-> 
-> > Does a '+ 0' help?  "(var << 2) + 0 ? 0 : 0"
-> 
-> Yeah, that actually works.
-> 
-> And "+0" is nice in that it should work in any context.
+CC: linux-kernel@vger.kernel.org
+TO: Takashi Iwai <tiwai@suse.de>
 
-I've already used "+0" to shut certain warnings, I don't really remember
-which one, but also remember it was OK everywhere I needed.
+Hi Takashi,
 
-Another trick I've been using to shut up the compiler is a cast via typeof
-and an intermediary variable:
+FYI, the error/warning still remains.
 
-  #define shut_up(expr)                           \
-          ({                                      \
-                  typeof(expr) _expr_ = expr;     \
-                  _expr_;                         \
-                  })
-  
-  int fn1(int a)
-  {
-          return shut_up(a << 2) ? 1 : 2;
-  }
-  
-  int fn2(int a)
-  {
-          return (a << 2) ? 1 : 2;
-  }
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b8f52214c61a5b99a54168145378e91b40d10c90
+commit: a4ff92ff0bdd731eca9f0b50b1cbb5aba89be4b2 ALSA: seq: ump: Transmit RPN/NRPN message at each MSB/LSB data reception
+date:   4 months ago
+config: x86_64-randconfig-001-20241206 (https://download.01.org/0day-ci/archive/20241207/202412070334.qukIwQDe-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070334.qukIwQDe-lkp@intel.com/reproduce)
 
-  $ gcc -Wall -S t2.c
-  t2.c: In function 'fn2':
-  t2.c:15:19: warning: '<<' in boolean context, did you mean '<'? [-Wint-in-bool-context]
-     15 |         return (a << 2) ? 1 : 2;
-        |                ~~~^~~~~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412070334.qukIwQDe-lkp@intel.com/
 
-See ? It only complains on fn2() but not fn1(). Similarly I found it
-to be quite portable (at least I don't remember seeing it fail on me).
-It produces the exact same code, except at -O0 where it does really
-create a local variable.
+All warnings (new ones prefixed by >>):
 
-Willy
+   In file included from sound/core/seq/seq_ump_convert.c:8:
+   In file included from include/linux/string.h:374:
+   include/linux/fortify-string.h:580:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+     580 |                         __read_overflow2_field(q_size_field, size);
+         |                         ^
+   1 warning generated.
+>> sound/core/seq/seq_ump_convert.o: warning: objtool: cc_ev_to_ump_midi2+0x589: return with modified stack frame
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
