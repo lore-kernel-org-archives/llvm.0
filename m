@@ -1,117 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mx-2023-1.gwdg.de (mx-2023-1.gwdg.de [134.76.10.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225ED1DE4F6;
-	Fri,  6 Dec 2024 07:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56BCE1DFE0F;
+	Fri,  6 Dec 2024 08:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.76.10.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733471948; cv=none; b=UcqaXR44xvoJRF8sVWOMQ+Be0CmB3/KKrGqgV8nq81IG4ULLPv2qiUcbYFfMjUMLHqtIgutNKzwqKqw3pLFJw2WsWBySk1h5BHNctlV6WFXGbTSJd/GTVz1z/d2pNcgZmnuQ9WAQEoev8FfeybJ8AoPwE+1Vk8wiTKYR99keI6k=
+	t=1733473786; cv=none; b=sWLkROE7uI1oVALnfYmkFxS0vl1mwzI0JHWZqxc7GBzyUK3d9wsvM6onAdDRyMpV5zBXudDtWs14P0+QUGZnSjTCZ5Rr5oiuAT4A/9D5HqHTSyGrYtB8EgY8ahSps45gtki87YvexWVPgsEMqtfHl+RgEf2BVfPkk1Y6hdPeqPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733471948; c=relaxed/simple;
-	bh=uh1GtNgeJXD3jjxW/WbErm5HG89T+2j4ihV8ipDenzw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DrG2yGaYf4lXU9YnARgGVpqoZU0CyHrGqqvl/CxQz7z6IkYqKIBt3h8XacpypqwkD2ourMRuGdhXfvs8TnWBtFewSva6xip6vsYgzcd6QUhcr7zi/HVOvQpUxOJlAWwpCPkAp8Q33GH2gdT6UODLULzwN7rycjOHK1zJ3O74DBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kf10tiZj; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733473786; c=relaxed/simple;
+	bh=7eAUW6a/olG++bhgHKSC5iyoylyINeHYjTshxuRb6IA=;
+	h=Message-ID:Subject:From:To:CC:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cf1fG5Ujw8BE36pm7ZIe+at8BHsmSP0dUTQTEEse62WrzR6Dt/I58BWxVHJst5Kfv96Bv90BlfblfR/XGc26w8IrZPZPLaDXxG4KiBFbirn8c73jzR0yqnSFkMJS+sAbQC4H83p8x7QZ7h4iYr4pawyS8GqdZhRT6oFr9lpiGls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de; spf=pass smtp.mailfrom=gwdg.de; dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b=KWJu4wXD; arc=none smtp.client-ip=134.76.10.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gwdg.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kf10tiZj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733471947; x=1765007947;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uh1GtNgeJXD3jjxW/WbErm5HG89T+2j4ihV8ipDenzw=;
-  b=kf10tiZjl6IxDl/yTFUpvOa83oYPJWIpizA/buJvsVpm4omcT1m9rzm/
-   WrRdWc7tDjvj0CMuavvFzVVn9O/qwPBnnd90iqmbLLg361Fv4ewJTZHFD
-   yVvCQqbPgJuqYYnMpB9k6HfPdjOYvWVDrlAPmQWrw9dr8d1m4BKCLrKAI
-   rI+XO/3IQYWwnWHPW+Q/M92LUfps8CtjVXxo0STt9JJQYz092l/Mp1WkW
-   63SNKejb68ZZ7BKfFNRnaGeRNWp9BHAT3GliXBPLvN8cF8JhZv1h1kV5h
-   FEfV6avNqL4xU8x3A+kqHs7gFEKaW5sgU/PaudEKAb6vdhRdM/QYJBjRl
-   w==;
-X-CSE-ConnectionGUID: ss08mlhoQY6e8wdLAwFIyw==
-X-CSE-MsgGUID: mYK6oQ6xQ5+d/dk6L0vXag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="45192760"
-X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="45192760"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 23:59:06 -0800
-X-CSE-ConnectionGUID: JvQ4gwdtSrS4ez3aatitGA==
-X-CSE-MsgGUID: tB2L8oKAREmMv3tfZ4NGxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="94144258"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 05 Dec 2024 23:59:03 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJTEq-0000pj-1e;
-	Fri, 06 Dec 2024 07:59:00 +0000
-Date: Fri, 6 Dec 2024 15:58:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Igor Belwon <igor.belwon@mentallysanemainliners.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] clk: samsung: Introduce Exynos990 clock
- controller driver
-Message-ID: <202412061549.wyFF9u8X-lkp@intel.com>
-References: <20241205193423.783815-4-igor.belwon@mentallysanemainliners.org>
+	dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b="KWJu4wXD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gwdg.de;
+	s=2023-rsa; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
+	In-Reply-To:Date:CC:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=WmL6atBY7nBTDEYe5VOTVwrRPR/hjoSKjtcblrbJp48=; b=KWJu4wXDZw+s4IkELcE+exNIeZ
+	SSo0m2yaeNsmhbPZ/oLP7GOATxwz7756YrzY/6ZzOA5zBYnOlu2Yu36iTkpnzVQWMtsW6/+cxzj2L
+	hg8YLCgjuS/cDVZrBtXMwChRB4vNOv9dB6kbl0VmRdwGodFNdR7dZ3QfjkFhS6wwqFo5atfqdn5R0
+	mbT2KC1xNWSUYVxPBPlvRqs+9FV5mVo5p3a4bxxzy39ysEiDj/Zx2O5MN/KXu6KVUO2Q8obIYG4ie
+	t2ujGmBVLU95hhmHHIiTp3CUnhGeCaBw7BPwKVyaaRchWBvpNHsXLVIInXkY10ea1lCpbW0ze0sQr
+	TniQO75Q==;
+Received: from xmailer.gwdg.de ([134.76.10.29]:54345)
+	by mailer.gwdg.de with esmtp (GWDG Mailer)
+	(envelope-from <muecker@gwdg.de>)
+	id 1tJTiS-003wlj-1W;
+	Fri, 06 Dec 2024 09:29:36 +0100
+Received: from mbx19-fmz-06.um.gwdg.de ([10.108.142.65] helo=email.gwdg.de)
+	by mailer.gwdg.de with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+	(GWDG Mailer)
+	(envelope-from <muecker@gwdg.de>)
+	id 1tJTiS-000Hhh-1B;
+	Fri, 06 Dec 2024 09:29:36 +0100
+Received: from vra-171-192.tugraz.at (10.250.9.200) by MBX19-FMZ-06.um.gwdg.de
+ (10.108.142.65) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.14; Fri, 6 Dec
+ 2024 09:29:34 +0100
+Message-ID: <c5e037ab5a5718dfba9d1c8c8b57ee53765a851b.camel@gwdg.de>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+From: Martin Uecker <muecker@gwdg.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>, David Laight
+	<David.Laight@aculab.com>
+CC: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, Luc Van Oostenryck
+	<luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
+	<rikard.falkeborn@gmail.com>, "linux-sparse@vger.kernel.org"
+	<linux-sparse@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
+	<intel-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, "coresight@lists.linaro.org"
+	<coresight@lists.linaro.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Date: Fri, 6 Dec 2024 09:29:28 +0100
+In-Reply-To: <CAHk-=wjmeU6ahyuwAymqkSpxX-gCNa3Qc70UXjgnxNiC8eiyOw@mail.gmail.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+	 <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+	 <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+	 <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+	 <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+	 <CAHk-=wjmeU6ahyuwAymqkSpxX-gCNa3Qc70UXjgnxNiC8eiyOw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241205193423.783815-4-igor.belwon@mentallysanemainliners.org>
+X-ClientProxiedBy: MBX19-GWD-06.um.gwdg.de (10.108.142.59) To
+ MBX19-FMZ-06.um.gwdg.de (10.108.142.65)
+X-EndpointSecurity-0xde81-EV: v:7.9.17.458, d:out, a:y, w:t, t:5, sv:1733459541, ts:1733473776
+X-Virus-Scanned: (clean) by clamav
+X-Spam-Level: -
 
-Hi Igor,
+Am Donnerstag, dem 05.12.2024 um 22:14 -0800 schrieb Linus Torvalds:
+> On Thu, 5 Dec 2024 at 18:26, David Laight <David.Laight@aculab.com> wrote=
+:
+> >=20
+> > From: Vincent Mailhol
+> > > ACK. Would adding a suggested--by Linus tag solve your concern?
+>=20
+> I'm genberally the one person who doesn't need any more credit ;)
+>=20
+> > I actually suspect the first patches to change __is_constexpr() to
+> > use _Generic were from myself.
+>=20
+> Yes. And David was also I think the one who suggested something else
+> than "!!" originally too.
+>=20
+> I may have liked "!!" for being very idiomatic and traditional C, but
+> there were those pesky compilers that warn about "integer in bool
+> context" or whatever the annoying warning was when then doing the
+> "multiply by zero" to turn a constant expression into a constant zero
+> expression.
+>=20
+> So that
+>=20
+>   #define is_const(x) __is_const_zero(0 * (x))
+>=20
+> causes issues when 'x' is not an integer expression (think
+> "is_const(NULL)" or "is_const(1 =3D=3D 2)".
+>=20
+> Side note: I think "(x) =3D=3D 0" will make sparse unhappy when 'x' is a
+> pointer, because it results that horrid "use integer zero as NULL
+> without a cast" thing when the plain zero gets implicitly cast to a
+> pointer. Which is a really nasty and broken C pattern and should never
+> have been silent.
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on krzk/for-next]
-[also build test ERROR on krzk-dt/for-next clk/clk-next linus/master v6.13-rc1 next-20241205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+BTW: I added '-Wzero-as-null-pointer-constant' to GCC 15.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Belwon/clk-samsung-clk-pll-Add-support-for-pll_-0717x-0718x-0732x/20241206-043559
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
-patch link:    https://lore.kernel.org/r/20241205193423.783815-4-igor.belwon%40mentallysanemainliners.org
-patch subject: [PATCH v1 3/3] clk: samsung: Introduce Exynos990 clock controller driver
-config: arm64-randconfig-004-20241206 (https://download.01.org/0day-ci/archive/20241206/202412061549.wyFF9u8X-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061549.wyFF9u8X-lkp@intel.com/reproduce)
+Hopefully we can also remove / deprecate this for C2Y.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412061549.wyFF9u8X-lkp@intel.com/
+Martin
 
-All errors (new ones prefixed by >>):
-
->> drivers/clk/samsung/clk-exynos990.c:13:10: fatal error: 'dt-bindings/clock/exynos990.h' file not found
-      13 | #include <dt-bindings/clock/exynos990.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>=20
+> I think David suggested using ((x)?0:0) at some point. Silly
+> nonsensical and complex expression, but maybe that finally gets rid of
+> all the warnings:
+>=20
+>      #define is_const(x) __is_const_zero((x)?0:0)
+>=20
+> might work regardless of the type of 'x'.
+>=20
+> Or does that trigger some odd case too?
 
 
-vim +13 drivers/clk/samsung/clk-exynos990.c
-
-    12	
-  > 13	#include <dt-bindings/clock/exynos990.h>
-    14	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
