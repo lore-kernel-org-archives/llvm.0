@@ -1,62 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC2E1953BA;
-	Fri,  6 Dec 2024 05:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D695F18B09;
+	Fri,  6 Dec 2024 05:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733462876; cv=none; b=QhrDlbHq5U89wevGPAXKXQHUZxZLyjbvQGoBIYtjewzqY8wrtW5g41wrORkfmj0CkDRu2yJSrTXjvt1NXw6RiQNiXoyoJXFW8UjThbjqVEE+ZyeFE3bsTT5dkQtfnpOfXzut6pRsMcohgUzLcXPMgSSotXIC4N0U13uMzFv9ECA=
+	t=1733464142; cv=none; b=q2j7ZHftoqMKuXmiCQbsZANG5VHwiKy/vb3cpM4v8eERhI2f6jZmwMQYvzqyXWQiHuKfKyDAJHEIBulp55HLxtcB8X0sVROHRVFG4sR8BjPahTKrjfFWtziVm0wJOAJrP+D3zU2UcD6u5pO08n5G06GxhJ1UrI0Ay+Q7zfItKXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733462876; c=relaxed/simple;
-	bh=X9VFMKr7/fJOGLXPS8atTYCy0j+P7k6TXaVhXB6yhIM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H8Ez+OB+2tAm3bAmpNY/4X4SiKffB8HMIvUBQjmHSBPmJHk9oLLU36yl64FrQgQx/NBWpQzipYKtj41G7LW9uYkgxV3m9Y+6CHjTm+ZD5belssJ9CzTHno4h0CEq785o9NIEN2E2OBibrZCA67GkqmNSIUiu9DOfFtzf1lU7XUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=by6NMBS3; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1733464142; c=relaxed/simple;
+	bh=E3ayomosilyDrGtBMNJbLAT6n6Lo0y8Rr90cf2wKQgY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PzQmSKrpnZ8Ksp4htWxAQC5Ynab0mI6s4jcBhiMiiTKTCS0AXAUu2Md7TUEilYBxohkoswHbRiFkGMZJ2xclEdI2kuqcNGFsL8pKr6FjsJEh3V5mi5z3bKMXNR1MRe/9aCkRQdwHG+yWjiXTouJqfAGVOsUFIIYfdXZK+1iDpuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KkaKkDrU; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="by6NMBS3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KkaKkDrU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733462871; x=1764998871;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X9VFMKr7/fJOGLXPS8atTYCy0j+P7k6TXaVhXB6yhIM=;
-  b=by6NMBS3uuoSS7jABjt9Zm3SNEQdWKKljeRvA2gA5evSGQVa+tuRN77R
-   E+FmhGtvHfLck/XXpnliXxwOep7ut6Oti0NmIF2zrSn3BFofTrHro9Hy9
-   b3M6oeU2hXU/JRV5yuutDkrlRavEEppee1yGMbqz1ymoEPmJWTGmk+W0n
-   DmN2OeIc0Ct6h4LLss1B8zmCbe1mkqxaBsV0LwZnir1md/5xJcf2Xb4XH
-   9ywufUdn6dwbQusn1Ukfo79lzwSf8SFUur/h1xG4NZHLwlYhEqXHlyLUi
-   S2F4fd0xg/+oTAfYuW4YkI/cVDIz6N1KCiyQaBMgSoGPC3Lh9//r7RDn4
-   g==;
-X-CSE-ConnectionGUID: fUPictq2Ti6bMjcTungBWg==
-X-CSE-MsgGUID: h/0DfSn4TK6BqhzlvysFXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="56299062"
+  t=1733464141; x=1765000141;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E3ayomosilyDrGtBMNJbLAT6n6Lo0y8Rr90cf2wKQgY=;
+  b=KkaKkDrUgYfRwcZ8pEzvFgd9FCXU0qNI606FFuezF1cZC0pl6MJSWZo7
+   QhtQZxLQfBBuaIq4VsR2njOb6IBc1/acidGy4YBMPjEnkzE1Y8ug+yoZu
+   UwLz1L2rBX8wd0LqUU3b0ElbkEYSngVDlWIodjivK6TlgmJLFSeAuF3UO
+   YOBQA0E7UwkcxKcnoOzhOQIUCNwZdkMYTsIYCr7nO8a08G8EjaTquUw56
+   UPxmj2YZDhI9Y3m7/cZaRakANvNOLWkvxGEx9iaT6N7C+KxVNkjHidFN3
+   mQYFMQgGFrwuCCTcRogjhLUaMZjmm8y6cj0HuP3AWC1+fCVMPItTsx/et
+   A==;
+X-CSE-ConnectionGUID: 5X2aBQs8SJ2iE1pa0GGp0w==
+X-CSE-MsgGUID: 6N/Tcrn5TdWlcRDOekJliw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="33955747"
 X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="56299062"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 21:27:50 -0800
-X-CSE-ConnectionGUID: 46M0KqbPSFGW7xrYdXXJNA==
-X-CSE-MsgGUID: DsKRuo40THuu3yk9bYd+6w==
+   d="scan'208";a="33955747"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 21:48:56 -0800
+X-CSE-ConnectionGUID: AM975iG8TiqF8dxspPwtfA==
+X-CSE-MsgGUID: rzyXA9fNTS+GlSL+fq98BA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="131724228"
+   d="scan'208";a="94186423"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 Dec 2024 21:27:48 -0800
+  by orviesa009.jf.intel.com with ESMTP; 05 Dec 2024 21:48:52 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tJQsT-0000jD-1x;
-	Fri, 06 Dec 2024 05:27:45 +0000
-Date: Fri, 6 Dec 2024 13:26:59 +0800
+	id 1tJRCp-0000jw-0t;
+	Fri, 06 Dec 2024 05:48:47 +0000
+Date: Fri, 6 Dec 2024 13:48:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>, axboe@kernel.dk, hch@lst.de,
-	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, sagi@grimberg.me,
-	asml.silence@gmail.com, Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv11 09/10] nvme: register fdp queue limits
-Message-ID: <202412061328.YMG9MZn5-lkp@intel.com>
-References: <20241206015308.3342386-10-kbusch@meta.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:arm/brbe 21/21] drivers/perf/arm_pmuv3.c:1125:16: error: too
+ few arguments to function call, single argument 'arm_pmu' was not specified
+Message-ID: <202412061343.k45SlH84-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,108 +61,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241206015308.3342386-10-kbusch@meta.com>
 
-Hi Keith,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on next-20241205]
-[cannot apply to brauner-vfs/vfs.all hch-configfs/for-next linus/master v6.13-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/fs-add-a-write-stream-field-to-the-kiocb/20241206-095707
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20241206015308.3342386-10-kbusch%40meta.com
-patch subject: [PATCHv11 09/10] nvme: register fdp queue limits
-config: i386-buildonly-randconfig-003 (https://download.01.org/0day-ci/archive/20241206/202412061328.YMG9MZn5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061328.YMG9MZn5-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git arm/brbe
+head:   fa9b8a09d450379420af38cd2daf4a7dd247fd63
+commit: fa9b8a09d450379420af38cd2daf4a7dd247fd63 [21/21] arm_pmuv3: Just disable brbe on reset
+config: arm64-randconfig-003 (https://download.01.org/0day-ci/archive/20241206/202412061343.k45SlH84-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061343.k45SlH84-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412061328.YMG9MZn5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412061343.k45SlH84-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/nvme/host/core.c:8:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/nvme/host/core.c:2178:18: warning: variable 'h' is uninitialized when used here [-Wuninitialized]
-    2178 |         n = le16_to_cpu(h->numfdpc) + 1;
-         |                         ^
-   include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
-      91 | #define le16_to_cpu __le16_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   drivers/nvme/host/core.c:2157:36: note: initialize the variable 'h' to silence this warning
-    2157 |         struct nvme_fdp_config_log hdr, *h;
-         |                                           ^
-         |                                            = NULL
-   2 warnings generated.
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:149:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:134:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD                         0x004E
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:150:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR,
+                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:135:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR                         0x004F
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:151:42: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_READ)][C(RESULT_MISS)]   = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:132:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD                  0x004C
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:152:43: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]  = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:133:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR'
+   #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR                  0x004D
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:154:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(NODE)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD,
+                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:149:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD'
+   #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD                      0x0060
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+   drivers/perf/arm_pmuv3.c:155:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [C(NODE)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR,
+                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:150:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR'
+   #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR                      0x0061
+                                                                   ^~~~~~
+   drivers/perf/arm_pmuv3.c:142:2: note: previous initialization is here
+           PERF_CACHE_MAP_ALL_UNSUPPORTED,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:49:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+                   [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+                                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:41:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+   #define CACHE_OP_UNSUPPORTED            0xFFFF
+                                           ^~~~~~
+>> drivers/perf/arm_pmuv3.c:1125:16: error: too few arguments to function call, single argument 'arm_pmu' was not specified
+                   brbe_disable();
+                   ~~~~~~~~~~~~ ^
+   drivers/perf/arm_brbe.h:19:6: note: 'brbe_disable' declared here
+   void brbe_disable(struct arm_pmu *arm_pmu);
+        ^
+   55 warnings and 1 error generated.
 
 
-vim +/h +2178 drivers/nvme/host/core.c
+vim +/arm_pmu +1125 drivers/perf/arm_pmuv3.c
 
-  2153	
-  2154	static int nvme_check_fdp(struct nvme_ns *ns, struct nvme_ns_info *info,
-  2155				  u8 fdp_idx)
-  2156	{
-  2157		struct nvme_fdp_config_log hdr, *h;
-  2158		size_t size = sizeof(hdr);
-  2159		int i, n, ret;
-  2160		void *log;
-  2161	
-  2162		info->runs = 0;
-  2163		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIG, 0, NVME_CSI_NVM,
-  2164				   (void *)&hdr, size, 0, info->endgid);
-  2165		if (ret)
-  2166			return ret;
-  2167	
-  2168		size = le32_to_cpu(hdr.sze);
-  2169		log = kzalloc(size, GFP_KERNEL);
-  2170		if (!log)
-  2171			return 0;
-  2172	
-  2173		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIG, 0, NVME_CSI_NVM,
-  2174				   log, size, 0, info->endgid);
-  2175		if (ret)
-  2176			goto out;
-  2177	
-> 2178		n = le16_to_cpu(h->numfdpc) + 1;
-  2179		if (fdp_idx > n)
-  2180			goto out;
-  2181	
-  2182		h = log;
-  2183		log = h->configs;
-  2184		for (i = 0; i < n; i++) {
-  2185			struct nvme_fdp_config_desc *config = log;
-  2186	
-  2187			if (i == fdp_idx) {
-  2188				info->runs = le64_to_cpu(config->runs);
-  2189				break;
-  2190			}
-  2191			log += le16_to_cpu(config->size);
-  2192		}
-  2193	out:
-  2194		kfree(h);
-  2195		return ret;
-  2196	}
-  2197	
+  1097	
+  1098	static void armv8pmu_reset(void *info)
+  1099	{
+  1100		struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
+  1101		u64 pmcr, mask;
+  1102	
+  1103		bitmap_to_arr64(&mask, cpu_pmu->cntr_mask, ARMPMU_MAX_HWEVENTS);
+  1104	
+  1105		/* The counter and interrupt enable registers are unknown at reset. */
+  1106		armv8pmu_disable_counter(mask);
+  1107		armv8pmu_disable_intens(mask);
+  1108	
+  1109		/* Clear the counters we flip at guest entry/exit */
+  1110		kvm_clr_pmu_events(mask);
+  1111	
+  1112		/*
+  1113		 * Initialize & Reset PMNC. Request overflow interrupt for
+  1114		 * 64 bit cycle counter but cheat in armv8pmu_write_counter().
+  1115		 */
+  1116		pmcr = ARMV8_PMU_PMCR_P | ARMV8_PMU_PMCR_C | ARMV8_PMU_PMCR_LC;
+  1117	
+  1118		/* Enable long event counter support where available */
+  1119		if (armv8pmu_has_long_event(cpu_pmu))
+  1120			pmcr |= ARMV8_PMU_PMCR_LP;
+  1121	
+  1122		armv8pmu_pmcr_write(pmcr);
+  1123	
+  1124		if (cpu_pmu->num_branch_records > 0)
+> 1125			brbe_disable();
+  1126	}
+  1127	
 
 -- 
 0-DAY CI Kernel Test Service
