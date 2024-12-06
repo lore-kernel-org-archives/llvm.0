@@ -1,67 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B1E52F9B;
-	Fri,  6 Dec 2024 04:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC2E1953BA;
+	Fri,  6 Dec 2024 05:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733460952; cv=none; b=Mh+9smrvL8LScJ1Y8q6hyj1JCx2oYkTEcmTcKZtOs3xDRPOm4mbOvPbAeZXaIjjy1iifvZL0yx94hUU3MENW7jlxj3MKP9ZgZDJE/+D7QuoRKPf9AD1lmN9gnF9XEhcy+oKe0vfpZCRbCmvFTTXoyLtdDTk+vGsX/dDPzfbpwcc=
+	t=1733462876; cv=none; b=QhrDlbHq5U89wevGPAXKXQHUZxZLyjbvQGoBIYtjewzqY8wrtW5g41wrORkfmj0CkDRu2yJSrTXjvt1NXw6RiQNiXoyoJXFW8UjThbjqVEE+ZyeFE3bsTT5dkQtfnpOfXzut6pRsMcohgUzLcXPMgSSotXIC4N0U13uMzFv9ECA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733460952; c=relaxed/simple;
-	bh=AmLWblXxxrtbKW+nU/XBqH+Po3pZ7cYVz5x5QTefPso=;
+	s=arc-20240116; t=1733462876; c=relaxed/simple;
+	bh=X9VFMKr7/fJOGLXPS8atTYCy0j+P7k6TXaVhXB6yhIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V8TaVc/bD7iXSpTtAy7gUll6LsqP7AVZqOahlLsEoiupeiCOkDIxZjB1GZAKYiT06+Z7xS0Q9TF4848zsLGhtjJVFJzF6SCYFlp/j1N5G/pzHX7/Ckt7AAaLd9KmcXlnYeKiqAX8FjRYjLeo7vVJxZ1Nqo8faH/w+/NnlhRalAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VJrw1aoU; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=H8Ez+OB+2tAm3bAmpNY/4X4SiKffB8HMIvUBQjmHSBPmJHk9oLLU36yl64FrQgQx/NBWpQzipYKtj41G7LW9uYkgxV3m9Y+6CHjTm+ZD5belssJ9CzTHno4h0CEq785o9NIEN2E2OBibrZCA67GkqmNSIUiu9DOfFtzf1lU7XUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=by6NMBS3; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VJrw1aoU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="by6NMBS3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733460950; x=1764996950;
+  t=1733462871; x=1764998871;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AmLWblXxxrtbKW+nU/XBqH+Po3pZ7cYVz5x5QTefPso=;
-  b=VJrw1aoUUN339RAP8sB+TXs+QrpadzoTFUH0yPngW0zN/SFfhjACZ1Lc
-   JqUnjDaz0Q1wzGy8Ist+RQ9g0rDrp7ttcAjuwf93ecImeGuJQQt2IRnKX
-   gzWBxJAwaFqyjphKTJJiNZfcgH6Iwx4a9AY1PyBJp42Rfsv9gLE+/ETjR
-   REJNx/uQd+Z3d5ctLmBT6NpuFHqTX8cRQ0A0lLH3J9gghJQSpaQNJTUT0
-   wIvqcRpxnDeyBl2+eeVxpjX48mT4Rn7Ph3OPyCGL63uS60w+fYRNOUL0u
-   soLA29h8hCRiMCmYHmHFPY0bSe3v7EXp/mr8NGubockmdsZrTe/2hdGyA
-   A==;
-X-CSE-ConnectionGUID: TRKkt6nSTWGzSxY9eZpA8A==
-X-CSE-MsgGUID: YSiNwFsdSLisrgU6yyXrPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="56296862"
+  bh=X9VFMKr7/fJOGLXPS8atTYCy0j+P7k6TXaVhXB6yhIM=;
+  b=by6NMBS3uuoSS7jABjt9Zm3SNEQdWKKljeRvA2gA5evSGQVa+tuRN77R
+   E+FmhGtvHfLck/XXpnliXxwOep7ut6Oti0NmIF2zrSn3BFofTrHro9Hy9
+   b3M6oeU2hXU/JRV5yuutDkrlRavEEppee1yGMbqz1ymoEPmJWTGmk+W0n
+   DmN2OeIc0Ct6h4LLss1B8zmCbe1mkqxaBsV0LwZnir1md/5xJcf2Xb4XH
+   9ywufUdn6dwbQusn1Ukfo79lzwSf8SFUur/h1xG4NZHLwlYhEqXHlyLUi
+   S2F4fd0xg/+oTAfYuW4YkI/cVDIz6N1KCiyQaBMgSoGPC3Lh9//r7RDn4
+   g==;
+X-CSE-ConnectionGUID: fUPictq2Ti6bMjcTungBWg==
+X-CSE-MsgGUID: h/0DfSn4TK6BqhzlvysFXA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="56299062"
 X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="56296862"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 20:55:50 -0800
-X-CSE-ConnectionGUID: V0ByfAr8Rbm8yd//5J+6Rg==
-X-CSE-MsgGUID: qMY21bOjTaSKQohmsjCShw==
+   d="scan'208";a="56299062"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 21:27:50 -0800
+X-CSE-ConnectionGUID: 46M0KqbPSFGW7xrYdXXJNA==
+X-CSE-MsgGUID: DsKRuo40THuu3yk9bYd+6w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="125205266"
+   d="scan'208";a="131724228"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Dec 2024 20:55:44 -0800
+  by orviesa001.jf.intel.com with ESMTP; 05 Dec 2024 21:27:48 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tJQNS-0000i7-0t;
-	Fri, 06 Dec 2024 04:55:42 +0000
-Date: Fri, 6 Dec 2024 12:54:51 +0800
+	id 1tJQsT-0000jD-1x;
+	Fri, 06 Dec 2024 05:27:45 +0000
+Date: Fri, 6 Dec 2024 13:26:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zaid Alali <zaidal@os.amperecomputing.com>, rafael@kernel.org,
-	lenb@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-	bp@alien8.de, robert.moore@intel.com, dan.j.williams@intel.com,
-	Jonathan.Cameron@huawei.com, Benjamin.Cheatham@amd.com,
-	Avadhut.Naik@amd.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
-	ira.weiny@intel.com, dave.jiang@intel.com,
-	sthanneeru.opensrc@micron.com, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 5/9] ACPI: APEI: EINJ: Enable the discovery of EINJv2
- capabilities
-Message-ID: <202412061210.H6R0JvCL-lkp@intel.com>
-References: <20241205211854.43215-6-zaidal@os.amperecomputing.com>
+To: Keith Busch <kbusch@meta.com>, axboe@kernel.dk, hch@lst.de,
+	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, sagi@grimberg.me,
+	asml.silence@gmail.com, Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCHv11 09/10] nvme: register fdp queue limits
+Message-ID: <202412061328.YMG9MZn5-lkp@intel.com>
+References: <20241206015308.3342386-10-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,101 +65,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241205211854.43215-6-zaidal@os.amperecomputing.com>
+In-Reply-To: <20241206015308.3342386-10-kbusch@meta.com>
 
-Hi Zaid,
+Hi Keith,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.13-rc1 next-20241205]
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on next-20241205]
+[cannot apply to brauner-vfs/vfs.all hch-configfs/for-next linus/master v6.13-rc1]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zaid-Alali/ACPICA-Update-values-to-hex-to-follow-ACPI-specs/20241206-052420
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20241205211854.43215-6-zaidal%40os.amperecomputing.com
-patch subject: [PATCH v2 5/9] ACPI: APEI: EINJ: Enable the discovery of EINJv2 capabilities
-config: i386-buildonly-randconfig-005-20241206 (https://download.01.org/0day-ci/archive/20241206/202412061210.H6R0JvCL-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/fs-add-a-write-stream-field-to-the-kiocb/20241206-095707
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20241206015308.3342386-10-kbusch%40meta.com
+patch subject: [PATCHv11 09/10] nvme: register fdp queue limits
+config: i386-buildonly-randconfig-003 (https://download.01.org/0day-ci/archive/20241206/202412061328.YMG9MZn5-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061210.H6R0JvCL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061328.YMG9MZn5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412061210.H6R0JvCL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412061328.YMG9MZn5-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/acpi/apei/einj-core.c:23:
+   In file included from drivers/nvme/host/core.c:8:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
    In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   drivers/acpi/apei/einj-core.c:342:6: warning: variable 'p' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     342 |         if (!r) {
-         |             ^~
-   drivers/acpi/apei/einj-core.c:440:6: note: uninitialized use occurs here
-     440 |         if (p)
-         |             ^
-   drivers/acpi/apei/einj-core.c:342:2: note: remove the 'if' if its condition is always false
-     342 |         if (!r) {
-         |         ^~~~~~~~~
-     343 |                 pr_err("Can not request [mem %#010llx-%#010llx] for Trigger table\n",
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     344 |                        (unsigned long long)trigger_paddr,
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     345 |                        (unsigned long long)trigger_paddr +
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     346 |                             sizeof(*trigger_tab) - 1);
-         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     347 |                 goto out;
-         |                 ~~~~~~~~~
-     348 |         }
-         |         ~
-   drivers/acpi/apei/einj-core.c:338:17: note: initialize the variable 'p' to silence this warning
-     338 |         void __iomem *p;
-         |                        ^
-         |                         = NULL
->> drivers/acpi/apei/einj-core.c:728:29: warning: 'memset' call operates on objects of type 'char' while the size is based on a different type 'char *' [-Wsizeof-pointer-memaccess]
-     728 |         memset(einj_buf, 0, sizeof(einj_buf));
-         |                ~~~~~~~~            ^~~~~~~~
-   drivers/acpi/apei/einj-core.c:728:29: note: did you mean to provide an explicit length?
-     728 |         memset(einj_buf, 0, sizeof(einj_buf));
-         |                                    ^~~~~~~~
-   3 warnings generated.
+>> drivers/nvme/host/core.c:2178:18: warning: variable 'h' is uninitialized when used here [-Wuninitialized]
+    2178 |         n = le16_to_cpu(h->numfdpc) + 1;
+         |                         ^
+   include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
+      91 | #define le16_to_cpu __le16_to_cpu
+         |                     ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   drivers/nvme/host/core.c:2157:36: note: initialize the variable 'h' to silence this warning
+    2157 |         struct nvme_fdp_config_log hdr, *h;
+         |                                           ^
+         |                                            = NULL
+   2 warnings generated.
 
 
-vim +728 drivers/acpi/apei/einj-core.c
+vim +/h +2178 drivers/nvme/host/core.c
 
-   721	
-   722	static ssize_t error_type_set(struct file *file, const char __user *buf,
-   723					size_t count, loff_t *ppos)
-   724	{
-   725		int rc;
-   726		u64 val;
-   727	
- > 728		memset(einj_buf, 0, sizeof(einj_buf));
-   729		if (copy_from_user(einj_buf, buf, count))
-   730			return -EFAULT;
-   731	
-   732		if (strncmp(einj_buf, "V2_", 3) == 0) {
-   733			if (!sscanf(einj_buf, "V2_%llx", &val))
-   734				return -EINVAL;
-   735		} else
-   736			if (!sscanf(einj_buf, "%llx", &val))
-   737				return -EINVAL;
-   738	
-   739		rc = einj_validate_error_type(val);
-   740		if (rc)
-   741			return rc;
-   742	
-   743		error_type = val;
-   744	
-   745		return count;
-   746	}
-   747	
+  2153	
+  2154	static int nvme_check_fdp(struct nvme_ns *ns, struct nvme_ns_info *info,
+  2155				  u8 fdp_idx)
+  2156	{
+  2157		struct nvme_fdp_config_log hdr, *h;
+  2158		size_t size = sizeof(hdr);
+  2159		int i, n, ret;
+  2160		void *log;
+  2161	
+  2162		info->runs = 0;
+  2163		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIG, 0, NVME_CSI_NVM,
+  2164				   (void *)&hdr, size, 0, info->endgid);
+  2165		if (ret)
+  2166			return ret;
+  2167	
+  2168		size = le32_to_cpu(hdr.sze);
+  2169		log = kzalloc(size, GFP_KERNEL);
+  2170		if (!log)
+  2171			return 0;
+  2172	
+  2173		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIG, 0, NVME_CSI_NVM,
+  2174				   log, size, 0, info->endgid);
+  2175		if (ret)
+  2176			goto out;
+  2177	
+> 2178		n = le16_to_cpu(h->numfdpc) + 1;
+  2179		if (fdp_idx > n)
+  2180			goto out;
+  2181	
+  2182		h = log;
+  2183		log = h->configs;
+  2184		for (i = 0; i < n; i++) {
+  2185			struct nvme_fdp_config_desc *config = log;
+  2186	
+  2187			if (i == fdp_idx) {
+  2188				info->runs = le64_to_cpu(config->runs);
+  2189				break;
+  2190			}
+  2191			log += le16_to_cpu(config->size);
+  2192		}
+  2193	out:
+  2194		kfree(h);
+  2195		return ret;
+  2196	}
+  2197	
 
 -- 
 0-DAY CI Kernel Test Service
