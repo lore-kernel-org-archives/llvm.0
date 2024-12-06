@@ -1,221 +1,280 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F3415B102
-	for <llvm@lists.linux.dev>; Fri,  6 Dec 2024 02:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157A9186E2F;
+	Fri,  6 Dec 2024 03:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733452006; cv=none; b=DEdnOuBTbjDc9C4wLJdqMz1XsNASCyLXbeomr3f7aautPaEfaNr4r32qH2Rj0z7UwefW1QVnJ28NyOGqO14sbEtvUGeyNSEr1MAc2v+Lht/YZv6MFN4YpOHLaC7Lrm7cVjw4T6zqaOTyHx975epcPrE4GOZKIytDSPkaQyfvmiw=
+	t=1733455366; cv=none; b=qtFexY+Mmmma+lDUqIKdwGiArb16MV8yqbkzELoz7YAsMbMA4mALqLYctoTFA7UtJtEvZsBhHGYpwH7aKU220/T5x66Q06q1m9KMSBCOikZnggCN0hPdnkNHoVo9C6VW4HqwZ0wzrbTbs0PPlxQ7v8iORlwSVtahDksPorwDujI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733452006; c=relaxed/simple;
-	bh=hjSOdBAGjRYtd19kTCSDVxBHy68XeacLNUM/c2v9Qe8=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=l+mdUL6gj6xYuoO1cBLfM1GAbT0I64ZMJSJ3WlXsn1xOX52S8TnQNFMcElZcm/NK4Kr7XGsn7uL/FgUGZU2S8tWw3n86/Zo3img4aLEcFC5KrD6JwXM9+J9LuwAIO9xdFXHSVfLHd2kzvxhVXzsTMzaQ7af+o5bJmesypjQknuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-37-EYoVmcl7Mfq8sA-jep8eag-1; Fri, 06 Dec 2024 02:26:35 +0000
-X-MC-Unique: EYoVmcl7Mfq8sA-jep8eag-1
-X-Mimecast-MFC-AGG-ID: EYoVmcl7Mfq8sA-jep8eag
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 6 Dec
- 2024 02:25:50 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 6 Dec 2024 02:25:50 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Vincent Mailhol' <mailhol.vincent@wanadoo.fr>, Martin Uecker
-	<muecker@gwdg.de>
-CC: Linus Torvalds <torvalds@linux-foundation.org>, Luc Van Oostenryck
-	<luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula
-	<jani.nikula@linux.intel.com>, Joonas Lahtinen
-	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
-	<rikard.falkeborn@gmail.com>, "linux-sparse@vger.kernel.org"
-	<linux-sparse@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
-	<linux-hardening@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
-	<intel-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "coresight@lists.linaro.org"
-	<coresight@lists.linaro.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 02/10] compiler.h: add is_const() as a replacement of
- __is_constexpr()
-Thread-Topic: [PATCH 02/10] compiler.h: add is_const() as a replacement of
- __is_constexpr()
-Thread-Index: AQHbROFPJXcuwP9wN0+yRzIQ2cx/pbLWa+gggAFf14CAACMqUA==
-Date: Fri, 6 Dec 2024 02:25:50 +0000
-Message-ID: <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
- <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
- <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
- <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
-In-Reply-To: <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1733455366; c=relaxed/simple;
+	bh=5yfacooh1q8ddkvqfVkRI63lg/jowgqtpCOcaQCWDoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fjf4pwLcqhdr6F6gt44KaaovwfVa9vpprTSputSLBzj+azxzrmNJOCghwodu/zJcHtqGmuf0h37q8kW6T70S6oXFRcWicGspGAIomYao0/A4cFhoChuyFXvbvwPHZ7KnGYLtZbTipLRIysYSywOB70kIqBt3YiZTwYpKse9G5i4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuHv+89v; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuHv+89v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733455363; x=1764991363;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=5yfacooh1q8ddkvqfVkRI63lg/jowgqtpCOcaQCWDoU=;
+  b=FuHv+89vbj5noqfWZVINtuGgamqfhd6og0Z4traa1ztgZH2fsW1hn4o3
+   ltw4VQpOQXFcyfW8+vzg8SqEAGseNJRlEUpKSxpn4lbysVO31eTleqMt4
+   hcwvv6ow5mgYFtF4/m+h/qSu3dVmz5pSTr+RykwWKsk3a4gPW8ksZK8QT
+   USFgrOS5ZvPF3hCa4gW7tg3lLEOoxV0fT5EtLwyYT+1/0C8QDjC8cEBoG
+   nyB+UbdozVO3tmLv23fZmkdsPyMG8hTtJgro8UtJuf2mC6lehOszXgALM
+   CZb0KkR0MQex9r2hsWe8E2cgMHk3cY/d/ChCnh2SwzNbT2jEofhT/LUMM
+   A==;
+X-CSE-ConnectionGUID: eepTBzkVTS6W/QsVbAsANQ==
+X-CSE-MsgGUID: rPmZt8TKRBChIVKqFfiK9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="33680607"
+X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
+   d="scan'208";a="33680607"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 19:22:42 -0800
+X-CSE-ConnectionGUID: FuKTYfqxQA2rmsNE8xvOtQ==
+X-CSE-MsgGUID: BHRpg1JRTZqQnLRl1XS4LA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
+   d="scan'208";a="131700249"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 05 Dec 2024 19:22:37 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tJOvK-0000et-0k;
+	Fri, 06 Dec 2024 03:22:34 +0000
+Date: Fri, 6 Dec 2024 11:21:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zaid Alali <zaidal@os.amperecomputing.com>, rafael@kernel.org,
+	lenb@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+	bp@alien8.de, robert.moore@intel.com, dan.j.williams@intel.com,
+	Jonathan.Cameron@huawei.com, Benjamin.Cheatham@amd.com,
+	Avadhut.Naik@amd.com, viro@zeniv.linux.org.uk, arnd@arndb.de,
+	ira.weiny@intel.com, dave.jiang@intel.com,
+	sthanneeru.opensrc@micron.com, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, acpica-devel@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 3/9] ACPI: APEI: EINJ: Fix kernel test robot sparse
+ warning
+Message-ID: <202412061152.Zar8cGxV-lkp@intel.com>
+References: <20241205211854.43215-4-zaidal@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 3-RuNbVwj6DuLexi8b5UgCryESH5Lws7qE5oJQ4_bvw_1733451993
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=unknown-8bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241205211854.43215-4-zaidal@os.amperecomputing.com>
 
-RnJvbTogVmluY2VudCBNYWlsaG9sDQo+IFNlbnQ6IDA1IERlY2VtYmVyIDIwMjQgMTU6MzENCj4g
-DQo+IC1DQzogTWFydGluIFVlY2tlciA8TWFydGluLlVlY2tlckBtZWQudW5pLWdvZXR0aW5nZW4u
-ZGU+DQo+ICtDQzogTWFydGluIFVlY2tlciA8bXVlY2tlckBnd2RnLmRlPg0KPiAoc2VlbXMgdGhh
-dCBNYXJ0aW4gY2hhbmdlZCBoaXMgYWRkcmVzcykNCj4gDQo+IE9uIFRodS4gNSBEZWMuIDIwMjQg
-YXQgMDM6MzksIERhdmlkIExhaWdodCA8RGF2aWQuTGFpZ2h0QGFjdWxhYi5jb20+IHdyb3RlOg0K
-PiA+ID4gU2VudDogMDIgRGVjZW1iZXIgMjAyNCAxNzozMw0KPiA+ID4NCj4gPiA+IEZyb206IFZp
-bmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+DQo+ID4gPg0KPiA+ID4g
-X19pc19jb25zdGV4cHIoKSwgd2hpbGUgYmVpbmcgb25lIG9mIHRoZSBtb3N0IGdsb3Jpb3VzIG9u
-ZSBsaW5lciBoYWNrDQo+ID4gPiBldmVyIHdpdG5lc3NlZCBieSBtYW5raW5kLCBpcyBvdmVybHkg
-Y29tcGxleC4gRm9sbG93aW5nIHRoZSBhZG9wdGlvbg0KPiA+ID4gb2YgQzExIGluIHRoZSBrZXJu
-ZWwsIHRoaXMgbWFjcm8gY2FuIGJlIHNpbXBsaWZpZWQgdGhyb3VnaCB0aGUgdXNlIG9mDQo+ID4g
-PiBhIF9HZW5lcmljKCkgc2VsZWN0aW9uLg0KPiA+DQo+ID4gWW91IHNob3VsZCBnaXZlIGNyZWRp
-dCB0byBzb21lIG9mIHRoZSBlYXJsaWVyIHBhdGNoZXMgdGhhdCBkbyB0aGUgc2FtZS4NCj4gPiBJ
-J20gc3VyZSB0aGVyZSB3ZXJlIHNvbWUgcmVsYXRlZCBvbmVzIGZyb20gTGludXMgLSBub3QgYXBw
-bGllZCB5ZXQuDQo+IA0KPiBBQ0suIFdvdWxkIGFkZGluZyBhIHN1Z2dlc3RlZC0tYnkgTGludXMg
-dGFnIHNvbHZlIHlvdXIgY29uY2Vybj8NCg0KSSBhY3R1YWxseSBzdXNwZWN0IHRoZSBmaXJzdCBw
-YXRjaGVzIHRvIGNoYW5nZSBfX2lzX2NvbnN0ZXhwcigpIHRvDQp1c2UgX0dlbmVyaWMgd2VyZSBm
-cm9tIG15c2VsZi4NCkkndmUgZm91bmQgYSBwYXRjaCBJIHNlbmQgaW4gTm92ZW1iZXIgMjAyMy4N
-Cg0KPiANCj4gPiA+IEZpcnN0LCBzcGxpdCB0aGUgbWFjcm8gaW4gdHdvOg0KPiA+ID4NCj4gPiA+
-ICAgLSBfX2lzX2NvbnN0X3plcm8oeCk6IGFuIGhlbHBlciBtYWNybzsgdGVsbHMgd2hldGhlciB4
-IGlzIHRoZQ0KPiA+ID4gICAgIGludGVnZXIgY29uc3RhbnQgZXhwcmVzc2lvbiAwIG9yIHNvbWV0
-aGluZyBlbHNlLg0KPiA+ID4NCj4gPiA+ICAgLSBpc19jb25zdCh4KTogcmVwbGFjZW1lbnQgb2Yg
-X19pc19jb25zdGV4cHIoKTsgdGVsbHMgd2hldGhlciB4IGlzIGENCj4gPiA+ICAgICBpbnRlZ2Vy
-IGNvbnN0YW50IGV4cHJlc3Npb24uDQo+ID4gPg0KPiA+ID4gVGhlIHNwbGl0IHNlcnZlcyB0d28g
-cHVycG9zZXM6IGZpcnN0IG1ha2UgaXQgZWFzaWVyIHRvIHVuZGVyc3RhbmQ7DQo+ID4gPiBzZWNv
-bmQsIF9faXNfY29uc3RfemVybygpIHdpbGwgYmUgcmV1c2VkIGFzIGEgYnVpbGRpbmcgYmxvY2sg
-Zm9yIG90aGVyDQo+ID4gPiBpc19jb25zdF8qKCkgbWFjcm9zIHRoYXQgd2lsbCBiZSBpbnRyb2R1
-Y2VkIGxhdGVyIG9uLg0KPiA+ID4NCj4gPiA+IFRoZSBjb3JlIHByaW5jaXBsZSBvZiBfX2lzX2Nv
-bnN0ZXhwcigpIHRvIGFidXNlIHRoZSByZXR1cm4gdHlwZSBvZiB0aGUNCj4gPiA+IHRlcm5hcnkg
-b3BlcmF0b3IgcmVtYWlucywgYnV0IGFsbCB0aGUgc3Vycm91bmRpbmcgc2l6ZW9mKCkgaGFjaw0K
-PiA+ID4gZGlzYXBwZWFyLg0KPiA+ID4NCj4gPiA+IE9uIGEgc2lkZSBub3RlLCB3aGlsZSBub3Qg
-cmVsZXZhbnQgdG8gdGhlIGtlcm5lbCwgX19pc19jb25zdGV4cHIoKQ0KPiA+ID4gcmVsaWVkIG9u
-IHRoZSBHTlUgZXh0ZW5zaW9uIHRoYXQgc2l6ZW9mKHZvaWQpIGlzIDEuIGNvbnN0X2V4cHIoKSBk
-b2VzDQo+ID4gPiBub3QgdXNlIGFueSBHTlUgZXh0ZW5zaW9ucywgbWFraW5nIGl0IElTTyBDIGNv
-bXBsaWFudC4NCj4gPiA+DQo+ID4gPiBfX2lzX2NvbnN0ZXhwcigpIGlzIHRlbXBvcmFyaWx5IGtl
-cHQgYW5kIHdpbGwgYmUgcmVtb3ZlZCBvbmNlIGFsbCBpdHMNCj4gPiA+IHVzZXJzIGdldCBtaWdy
-YXRlZCB0byBpc19jb25zdCgpIChvciBvbmUgb2YgaXRzIGZyaWVuZCkuDQo+ID4gPg0KPiA+ID4g
-U2lnbmVkLW9mZi1ieTogVmluY2VudCBNYWlsaG9sIDxtYWlsaG9sLnZpbmNlbnRAd2FuYWRvby5m
-cj4NCj4gPiA+IC0tLQ0KPiA+ID4gIGluY2x1ZGUvbGludXgvY29tcGlsZXIuaCB8IDQxICsrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gPiAgMSBmaWxlIGNoYW5n
-ZWQsIDQxIGluc2VydGlvbnMoKykNCj4gPiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9s
-aW51eC9jb21waWxlci5oIGIvaW5jbHVkZS9saW51eC9jb21waWxlci5oDQo+ID4gPiBpbmRleCBh
-MmE1NmE1MGRkODUyMjdhNGZkYzYyMjM2YTI3MTBjYTM3YzViYTUyLi4zMGNlMDZkZjQxNTNjZmRj
-MGZhZDliYzdiZmZhYjkwOTdmOGIwNDUwIDEwMDY0NA0KPiA+ID4gLS0tIGEvaW5jbHVkZS9saW51
-eC9jb21waWxlci5oDQo+ID4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2NvbXBpbGVyLmgNCj4gPiA+
-IEBAIC0zMTYsNiArMzE2LDQ3IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCAqb2Zmc2V0X3RvX3B0cihj
-b25zdCBpbnQgKm9mZikNCj4gPiA+ICAjZGVmaW5lIHN0YXRpY2FsbHlfdHJ1ZSh4KSAoX19idWls
-dGluX2NvbnN0YW50X3AoeCkgJiYgKHgpKQ0KPiA+ID4gICNkZWZpbmUgc3RhdGljYWxseV9mYWxz
-ZSh4KSAoX19idWlsdGluX2NvbnN0YW50X3AoeCkgJiYgKHgpID09IDApDQo+ID4gPg0KPiA+ID4g
-Ky8qDQo+ID4gPiArICogV2hldGhlciB4IGlzIHRoZSBpbnRlZ2VyIGNvbnN0YW50IGV4cHJlc3Np
-b24gMCBvciBzb21ldGhpbmcgZWxzZS4NCj4gPiA+ICsgKg0KPiA+ID4gKyAqIERldGFpbHM6DQo+
-ID4gPiArICogICAtIFRoZSBDMTEgc3RhbmRhcmQgZGVmaW5lcyBpbiDCpzYuMy4yLjMuMw0KPiA+
-ID4gKyAqICAgICAgICh2b2lkICopPGludGVnZXIgY29uc3RhbnQgZXhwcmVzc2lvbiB3aXRoIHRo
-ZSB2YWx1ZSAwPg0KPiA+ID4gKyAqICAgICBhcyBhIG51bGwgcG9pbnRlciBjb25zdGFudCAoYy5m
-LiB0aGUgTlVMTCBtYWNybykuDQo+ID4gPiArICogICAtIElmIHggZXZhbHVhdGVzIHRvIHRoZSBp
-bnRlZ2VyIGNvbnN0YW50IGV4cHJlc3Npb24gMCwNCj4gPiA+ICsgKiAgICAgICAodm9pZCAqKSh4
-KQ0KPiA+ID4gKyAqICAgICBpcyBhIG51bGwgcG9pbnRlciBjb25zdGFudC4gRWxzZSwgaXQgaXMg
-YSB2b2lkICogZXhwcmVzc2lvbi4NCj4gPiA+ICsgKiAgIC0gSW4gYSB0ZXJuYXJ5IGV4cHJlc3Np
-b246DQo+ID4gPiArICogICAgICAgY29uZGl0aW9uID8gb3BlcmFuZDEgOiBvcGVyYW5kMg0KPiA+
-ID4gKyAqICAgICBpZiBvbmUgb2YgdGhlIHR3byBvcGVyYW5kcyBpcyBvZiB0eXBlIHZvaWQgKiBh
-bmQgdGhlIG90aGVyIG9uZQ0KPiA+ID4gKyAqICAgICBzb21lIG90aGVyIHBvaW50ZXIgdHlwZSwg
-dGhlIEMxMSBzdGFuZGFyZCBkZWZpbmVzIGluIMKnNi41LjE1LjYNCj4gPiA+ICsgKiAgICAgdGhl
-IHJlc3VsdGluZyB0eXBlIGFzIGJlbG93Og0KPiA+ID4gKyAqICAgICAgIGlmIG9uZSBvcGVyYW5k
-IGlzIGEgbnVsbCBwb2ludGVyIGNvbnN0YW50LCB0aGUgcmVzdWx0IGhhcyB0aGUNCj4gPiA+ICsg
-KiAgICAgICB0eXBlIG9mIHRoZSBvdGhlciBvcGVyYW5kOyBvdGhlcndpc2UgWy4uLl0gdGhlIHJl
-c3VsdCB0eXBlIGlzDQo+ID4gPiArICogICAgICAgYSBwb2ludGVyIHRvIGFuIGFwcHJvcHJpYXRl
-bHkgcXVhbGlmaWVkIHZlcnNpb24gb2Ygdm9pZC4NCj4gPiA+ICsgKiAgIC0gQXMgc3VjaCwgaW4N
-Cj4gPiA+ICsgKiAgICAgICAwID8gKHZvaWQgKikoeCkgOiAoY2hhciAqKTANCj4gPiA+ICsgKiAg
-ICAgaWYgeCBpcyB0aGUgaW50ZWdlciBjb25zdGFudCBleHByZXNzaW9uIDAsIG9wZXJhbmQxIGlz
-IGEgbnVsbA0KPiA+ID4gKyAqICAgICBwb2ludGVyIGNvbnN0YW50IGFuZCB0aGUgcmVzdWx0aW5n
-IHR5cGUgaXMgdGhhdCBvZiBvcGVyYW5kMjoNCj4gPiA+ICsgKiAgICAgY2hhciAqLiBJZiB4IGlz
-IGFueXRoaW5nIGVsc2UsIHRoZSB0eXBlIGlzIHZvaWQgKi4NCj4gPiA+ICsgKiAgIC0gVGhlIChs
-b25nKSBjYXN0IHNpbGVuY2VzIGEgY29tcGlsZXIgd2FybmluZyBmb3Igd2hlbiB4IGlzIG5vdCAw
-Lg0KPiA+ID4gKyAqICAgLSBGaW5hbGx5LCB0aGUgX0dlbmVyaWMoKSBkaXNwYXRjaGVzIHRoZSBy
-ZXN1bHRpbmcgdHlwZSBpbnRvIGENCj4gPiA+ICsgKiAgICAgQm9vbGVhbi4NCj4gPg0KPiA+IFRo
-ZSBjb21tZW50IGlzIGFic29sdXRlbHkgZXhjZXNzaXZlLg0KPiA+IEknbSBzdXJlIEkgbWFuYWdl
-ZCBhYm91dCAyIGxpbmVzIGluIG9uZSBvZiB0aGUgcGF0Y2hlcyBJIGRpZC4NCj4gDQo+IEkgdGhp
-bmsgdGhhdCBMaW51cyBtYWRlIGl0ICBjbGVhciBpbjoNCj4gDQo+ICAgaHR0cHM6Ly9sb3JlLmtl
-cm5lbC5vcmcvYWxsL0NBSGstPXdnZnBMZHQ3U0ZGR2NCeVRmSGRrdnY3QUVhM01EdV9zX1cxa2ZP
-eFFzNDlwd0BtYWlsLmdtYWlsLmNvbS8NCj4gDQo+IHRoYXQgdGhpcyBkZXNlcnZlcyBhIGRldGFp
-bGVkIGNvbW1lbnQuDQoNCkFuZCBoZSB3cm90ZSBvbmUgaW4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvYWxsL0NBSGstPXdpcT1HVU5XSndXaDFDUkFZY2hXNzNVbU9hU2thQ292TGF0ZkRLZXZlWmN0
-QUBtYWlsLmdtYWlsLmNvbS8NCg0KICAgLyoNCiAgICAqIGlmZiAneCcgaXMgYSBub24temVybyBj
-b25zdGFudCBpbnRlZ2VyIGV4cHJlc3Npb24sDQogICAgKiB0aGVuICchKHgpJyB3aWxsIGJlIGEg
-emVybyBjb25zdGFudCBpbnRlZ2VyIGV4cHJlc3Npb24sDQogICAgKiBhbmQgY2FzdGluZyB0aGF0
-IHRvICd2b2lkIConIHdpbGwgcmVzdWx0IGluIGEgTlVMTCBwb2ludGVyLg0KICAgICogT3RoZXJ3
-aXNlIGNhc3RpbmcgaXQgdG8gJ3ZvaWQgKicgd2lsbCBiZSBqdXN0IGEgcmVndWxhciAndm9pZCAq
-Jy4NCiAgICAqDQogICAgKiBUaGUgdHlwZSBvZiAnMCA/IE5VTEwgOiAoY2hhciAqKScgaXMgJ2No
-YXIgKicNCiAgICAqIFRoZSB0eXBlIG9mICcwID8gKHZvaWQgKikgOiAoY2hhciAqKSBpcyAndm9p
-ZCAqJw0KICAgICovDQogICAgI2RlZmluZSBjb25zdF90cnVlKHgpIFwNCiAgICAgICAgX0dlbmVy
-aWMoMCA/ICh2b2lkICopKChsb25nKSEoeCkpIDogKGNoYXIgKikwLCBjaGFyICo6IDEsIHZvaWQg
-KjogMCkNCg0KDQoNCj4gDQo+IFRoZSBkZXRhaWxzIGJsb2NrIGluIHRoZSBjdXJyZW50IF9faXNf
-Y29uc3RleHByKCkgaXMgMzcgbGluZXMgbG9uZywNCj4gdGhlIGRldGFpbHMgYmxvY2sgaW4gX19p
-c19jb25zdF96ZXJvKCkgdGFrZXMgMjIgbGluZXMuIFNvIEkgd291bGQNCj4gYXJndWUgdGhhdCBJ
-IG1hZGUgdGhpbmdzIGJldHRlci4NCg0KVGhlIG9sZCBibG9jayB3YXMgdG9vIGxvbmcgOi0pDQoN
-Cj4gDQo+IFVubGVzcyBtb3JlIHBlb3BsZSBzaGFyZSB5b3VyIGNvbmNlcm4sIEkgYW0gcGxhbm5p
-bmcgdG8ga2VlcCB0aGlzIGNvbW1lbnQgYXMtaXMuDQo+IA0KPiA+ID4gKyAqDQo+ID4gPiArICog
-R2xvcnkgdG8gTWFydGluIFVlY2tlciA8TWFydGluLlVlY2tlckBtZWQudW5pLWdvZXR0aW5nZW4u
-ZGU+DQo+ID4NCj4gPiBJSVJDIE1hcnRpbiBoYXMgYWdyZWVkIGluIHRoZSBwYXN0IHRoYXQgdGhl
-IGFjY3JlZGl0YXRpb24gY2FuDQo+ID4gYmUgcmVtb3ZlZCAtIGVzcGVjaWFsbHkgc2luY2UgaXQg
-cmVmZXJzIHRvIHRoZSAnc2l6ZW9mICh2b2lkKScgdHJpY2suDQo+IA0KPiBJIHRyaWVkIHRvIGxv
-b2sgZm9yIHN1Y2ggbWVzc2FnZToNCj4gDQo+ICAgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxs
-Lz9xPWYlM0ElMjJtYXJ0aW4rdWVja2VyJTIyK19faXNfY29uc3RleHByDQo+IA0KPiBidXQgY291
-bGRuJ3QgZmluZCBpdC4gRG8geW91IGhhdmUgdGhlIGxpbms/DQo+IA0KPiBATWFydGluLCBkbyB5
-b3UgYWdyZWUgdGhhdCBJIHJlbW92ZSB0aGUgYWNjcmVkaXRhdGlvbj8NCj4gDQo+ID4gPiArICov
-DQo+ID4gPiArI2RlZmluZSBfX2lzX2NvbnN0X3plcm8oeCkgXA0KPiA+ID4gKyAgICAgX0dlbmVy
-aWMoMCA/ICh2b2lkICopKGxvbmcpKHgpIDogKGNoYXIgKikwLCBjaGFyICo6IDEsIHZvaWQgKjog
-MCkNCj4gPiA+ICsNCj4gPiA+ICsvKg0KPiA+ID4gKyAqIFJldHVybnMgYSBjb25zdGFudCBleHBy
-ZXNzaW9uIHdoaWxlIGRldGVybWluaW5nIGlmIGl0cyBhcmd1bWVudCBpcyBhDQo+ID4gPiArICog
-Y29uc3RhbnQgZXhwcmVzc2lvbiwgbW9zdCBpbXBvcnRhbnRseSB3aXRob3V0IGV2YWx1YXRpbmcg
-dGhlIGFyZ3VtZW50Lg0KPiA+DQo+ID4gWW91IG5lZWQgdG8gZGlmZmVyZW50aWF0ZSBiZXR3ZWVu
-IGEgJ2NvbnN0YW50IGludGVnZXIgZXhwcmVzc2lvbicNCj4gPiBhbmQgYSAnY29tcGlsZSB0aW1l
-IGNvbnN0YW50Jy4NCj4gDQo+IE9LLiBUaGlzIG9uZSB3YXMganVzdCBjb3BpZWQgZnJvbSB0aGUg
-cHJldmlvdXMgX19pc19jb25zdGV4cHIoKS4gSSB3aWxsIGFwcGx5DQo+ICJzL2NvbnN0YW50IGV4
-cHJlc3Npb24vY29uc3RhbnQgaW50ZWdlciBleHByZXNzaW9uL2ciIGluIHYyLg0KPiANCj4gPiA+
-ICsgKg0KPiA+ID4gKyAqIElmIGdldHRpbmcgYSBjb25zdGFudCBleHByZXNzaW9uIGlzIG5vdCBy
-ZWxldmFudCB0byB5b3UsIHVzZSB0aGUgbW9yZQ0KPiA+ID4gKyAqIHBvd2VyZnVsIF9fYnVpbHRp
-bl9jb25zdGFudF9wKCkgaW5zdGVhZC4NCj4gPg0KPiA+IF9fYnVpbHRpbl9jb25zdGFudF9wKCkg
-aXMgbm90ICdtb3JlIHBvd2VyZnVsJyBpdCBpcyB0ZXN0aW5nIGZvcg0KPiA+IHNvbWV0aGluZyBk
-aWZmZXJlbnQuDQo+IA0KPiBJIG1lYW50IHRvIHNheSB0aGF0IF9fYnVpbHRpbl9jb25zdGFudF9w
-KCkgaXMgbW9yZSBwb3dlcmZ1bCBhdA0KPiBjb25zdGFudCBmb2xkaW5nLiBCdXQgSSBhZ3JlZSB0
-aGF0IHRoZSBjb21tZW50IGlzIG5vdCBjbGVhci4NCj4gDQo+IFdoYXQgYWJvdXQgdGhpcz8NCj4g
-DQo+ICAgSWYgZ2V0dGluZyBhIGNvbnN0YW50IGludGVnZXIgZXhwcmVzc2lvbiBpcyBub3QgcmVs
-ZXZhbnQgdG8geW91LCB1c2UNCj4gICBfX2J1aWx0aW5fY29uc3RhbnRfcCgpIHdoaWNoIG5vdCBv
-bmx5IHJldHVybnMgdHJ1ZSBpZiB0aGUgYXJndW1lbnQNCj4gICBpcyBhbiBpbnRlZ2VyIGNvbnN0
-YW50IGV4cHJlc3Npb24sIGJ1dCBhbHNvIGlmIGl0IGlzIGEgY29tcGlsZSB0aW1lDQo+ICAgY29u
-c3RhbnQuDQoNCkNvbXBsZXRlIGYqKiplZCB0ZW5zZS4NCg0KSXQncyBub3QgYWJvdXQgJ2NvbnN0
-YW50IGZvbGRpbmcnIGFuZCAncG93ZXJmdWwnIGlzbid0IHRoZSBjb3JyZWN0IHdvcmQuDQpUaGV5
-IGFyZSBjaGVja2luZyBmb3IgdHdvIGRpZmZlcmVudCB0aGluZ3MuDQoNCkEgJ2NvbnN0YW50IGlu
-dGVnZXIgZXhwcmVzc2lvbicgaXMgZGVmaW5lZCBieSB0aGUgQyBsYW5ndWFnZSwgYW5kIGlzDQpi
-YXNpY2FsbHkgc29tZXRoaW5nIHRoYXQgaXMgY29uc3RhbnQgd2hlbiBmaXJzdCBwYXJzZWQgYnkg
-dGhlIGNvbXBpbGVyDQoobXkgZGVmaW5pdGlvbikgc28gaXQgY2FuIHByZXR0eSBtdWNoIG9ubHkg
-Y29udGFpbiBjb25zdGFudHMsIHNpemVvZigpDQphbmQgb2Zmc2V0b2YoKS4NCg0KX19idWlsdGlu
-X2NvbnN0YW50X3AoKSBpcyB0cnVlIGlmIHRoZSBjb21waWxlciBkZWNpZGVzIHRoYXQgYW4gZXhw
-cmVzc2lvbiBpcw0KY29uc3RhbnQuIFRoaXMgY2FuIHRyYWNrIHZhbHVlcyB0aHJvdWdoIGlubGlu
-ZWQgZnVuY3Rpb24gY2FsbHMgYW5kIGNhbg0KY2hhbmdlIGZyb20gJ3Vua25vd24nIHRvICd0cnVl
-JyBsYXRlIGluIHRoZSBjb21waWxhdGlvbi4NCg0KCURhdmlkDQoNCj4gDQo+IA0KPiBZb3VycyBz
-aW5jZXJlbHksDQo+IFZpbmNlbnQgTWFpbGhvbA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFr
-ZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwg
-VUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Hi Zaid,
 
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.13-rc1 next-20241205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zaid-Alali/ACPICA-Update-values-to-hex-to-follow-ACPI-specs/20241206-052420
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20241205211854.43215-4-zaidal%40os.amperecomputing.com
+patch subject: [PATCH v2 3/9] ACPI: APEI: EINJ: Fix kernel test robot sparse warning
+config: i386-buildonly-randconfig-005-20241206 (https://download.01.org/0day-ci/archive/20241206/202412061152.Zar8cGxV-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061152.Zar8cGxV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412061152.Zar8cGxV-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/acpi/apei/einj-core.c:23:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/acpi/apei/einj-core.c:338:6: warning: variable 'p' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     338 |         if (!r) {
+         |             ^~
+   drivers/acpi/apei/einj-core.c:436:6: note: uninitialized use occurs here
+     436 |         if (p)
+         |             ^
+   drivers/acpi/apei/einj-core.c:338:2: note: remove the 'if' if its condition is always false
+     338 |         if (!r) {
+         |         ^~~~~~~~~
+     339 |                 pr_err("Can not request [mem %#010llx-%#010llx] for Trigger table\n",
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     340 |                        (unsigned long long)trigger_paddr,
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     341 |                        (unsigned long long)trigger_paddr +
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     342 |                             sizeof(*trigger_tab) - 1);
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     343 |                 goto out;
+         |                 ~~~~~~~~~
+     344 |         }
+         |         ~
+   drivers/acpi/apei/einj-core.c:334:17: note: initialize the variable 'p' to silence this warning
+     334 |         void __iomem *p;
+         |                        ^
+         |                         = NULL
+   2 warnings generated.
+
+
+vim +338 drivers/acpi/apei/einj-core.c
+
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  301  
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  302  static struct acpi_generic_address *einj_get_trigger_parameter_region(
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  303  	struct acpi_einj_trigger *trigger_tab, u64 param1, u64 param2)
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  304  {
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  305  	int i;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  306  	struct acpi_whea_header *entry;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  307  
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  308  	entry = (struct acpi_whea_header *)
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  309  		((char *)trigger_tab + sizeof(struct acpi_einj_trigger));
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  310  	for (i = 0; i < trigger_tab->entry_count; i++) {
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  311  		if (entry->action == ACPI_EINJ_TRIGGER_ERROR &&
+1d5d820b8fe83b5 drivers/acpi/apei/einj.c      Yazen Ghannam    2017-08-28  312  		entry->instruction <= ACPI_EINJ_WRITE_REGISTER_VALUE &&
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  313  		entry->register_region.space_id ==
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  314  			ACPI_ADR_SPACE_SYSTEM_MEMORY &&
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  315  		(entry->register_region.address & param2) == (param1 & param2))
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  316  			return &entry->register_region;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  317  		entry++;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  318  	}
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  319  
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  320  	return NULL;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  321  }
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  322  /* Execute instructions in trigger error action table */
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  323  static int __einj_error_trigger(u64 trigger_paddr, u32 type,
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  324  				u64 param1, u64 param2)
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  325  {
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  326  	struct acpi_einj_trigger *trigger_tab = NULL;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  327  	struct apei_exec_context trigger_ctx;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  328  	struct apei_resources trigger_resources;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  329  	struct acpi_whea_header *trigger_entry;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  330  	struct resource *r;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  331  	u32 table_size;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  332  	int rc = -EIO;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  333  	struct acpi_generic_address *trigger_param_region = NULL;
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  334  	void __iomem *p;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  335  
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  336  	r = request_mem_region(trigger_paddr, sizeof(*trigger_tab),
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  337  			       "APEI EINJ Trigger Table");
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18 @338  	if (!r) {
+b2f740baa421525 drivers/acpi/apei/einj.c      Borislav Petkov  2016-05-23  339  		pr_err("Can not request [mem %#010llx-%#010llx] for Trigger table\n",
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  340  		       (unsigned long long)trigger_paddr,
+46b91e379f7180b drivers/acpi/apei/einj.c      Bjorn Helgaas    2011-12-08  341  		       (unsigned long long)trigger_paddr +
+46b91e379f7180b drivers/acpi/apei/einj.c      Bjorn Helgaas    2011-12-08  342  			    sizeof(*trigger_tab) - 1);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  343  		goto out;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  344  	}
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  345  	p = ioremap_cache(trigger_paddr, sizeof(*trigger_tab));
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  346  	if (!p) {
+b2f740baa421525 drivers/acpi/apei/einj.c      Borislav Petkov  2016-05-23  347  		pr_err("Failed to map trigger table!\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  348  		goto out_rel_header;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  349  	}
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  350  	trigger_tab = __io_virt(p);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  351  	rc = einj_check_trigger_header(trigger_tab);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  352  	if (rc) {
+933ca4e323de777 drivers/acpi/apei/einj.c      Kefeng Wang      2019-10-18  353  		pr_warn(FW_BUG "Invalid trigger error action table.\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  354  		goto out_rel_header;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  355  	}
+4c40aed869a200a drivers/acpi/apei/einj.c      Niklas Söderlund 2012-01-09  356  
+4c40aed869a200a drivers/acpi/apei/einj.c      Niklas Söderlund 2012-01-09  357  	/* No action structures in the TRIGGER_ERROR table, nothing to do */
+4c40aed869a200a drivers/acpi/apei/einj.c      Niklas Söderlund 2012-01-09  358  	if (!trigger_tab->entry_count)
+4c40aed869a200a drivers/acpi/apei/einj.c      Niklas Söderlund 2012-01-09  359  		goto out_rel_header;
+4c40aed869a200a drivers/acpi/apei/einj.c      Niklas Söderlund 2012-01-09  360  
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  361  	rc = -EIO;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  362  	table_size = trigger_tab->table_size;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  363  	r = request_mem_region(trigger_paddr + sizeof(*trigger_tab),
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  364  			       table_size - sizeof(*trigger_tab),
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  365  			       "APEI EINJ Trigger Table");
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  366  	if (!r) {
+b2f740baa421525 drivers/acpi/apei/einj.c      Borislav Petkov  2016-05-23  367  		pr_err("Can not request [mem %#010llx-%#010llx] for Trigger Table Entry\n",
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  368  		       (unsigned long long)trigger_paddr + sizeof(*trigger_tab),
+46b91e379f7180b drivers/acpi/apei/einj.c      Bjorn Helgaas    2011-12-08  369  		       (unsigned long long)trigger_paddr + table_size - 1);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  370  		goto out_rel_header;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  371  	}
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  372  	iounmap(p);
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  373  	p = ioremap_cache(trigger_paddr, table_size);
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  374  	if (!p) {
+b2f740baa421525 drivers/acpi/apei/einj.c      Borislav Petkov  2016-05-23  375  		pr_err("Failed to map trigger table!\n");
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  376  		goto out_rel_entry;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  377  	}
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  378  	trigger_tab = __io_virt(p);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  379  	trigger_entry = (struct acpi_whea_header *)
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  380  		((char *)trigger_tab + sizeof(struct acpi_einj_trigger));
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  381  	apei_resources_init(&trigger_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  382  	apei_exec_ctx_init(&trigger_ctx, einj_ins_type,
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  383  			   ARRAY_SIZE(einj_ins_type),
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  384  			   trigger_entry, trigger_tab->entry_count);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  385  	rc = apei_exec_collect_resources(&trigger_ctx, &trigger_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  386  	if (rc)
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  387  		goto out_fini;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  388  	rc = apei_resources_sub(&trigger_resources, &einj_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  389  	if (rc)
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  390  		goto out_fini;
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  391  	/*
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  392  	 * Some firmware will access target address specified in
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  393  	 * param1 to trigger the error when injecting memory error.
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  394  	 * This will cause resource conflict with regular memory.  So
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  395  	 * remove it from trigger table resources.
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  396  	 */
+c5a130325f13b21 drivers/acpi/apei/einj.c      Chen Gong        2013-06-06  397  	if ((param_extension || acpi5) && (type & MEM_ERROR_MASK) && param2) {
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  398  		struct apei_resources addr_resources;
+37ea9693869627d drivers/acpi/apei/einj.c      Jay Lu           2022-12-06  399  
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  400  		apei_resources_init(&addr_resources);
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  401  		trigger_param_region = einj_get_trigger_parameter_region(
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  402  			trigger_tab, param1, param2);
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  403  		if (trigger_param_region) {
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  404  			rc = apei_resources_add(&addr_resources,
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  405  				trigger_param_region->address,
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  406  				trigger_param_region->bit_width/8, true);
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  407  			if (rc)
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  408  				goto out_fini;
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  409  			rc = apei_resources_sub(&trigger_resources,
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  410  					&addr_resources);
+b4e008dc53a31cb drivers/acpi/apei/einj.c      Xiao, Hui        2011-12-08  411  		}
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  412  		apei_resources_fini(&addr_resources);
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  413  		if (rc)
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  414  			goto out_fini;
+fdea163d8c17ba0 drivers/acpi/apei/einj.c      Huang Ying       2011-12-08  415  	}
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  416  	rc = apei_resources_request(&trigger_resources, "APEI EINJ Trigger");
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  417  	if (rc)
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  418  		goto out_fini;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  419  	rc = apei_exec_pre_map_gars(&trigger_ctx);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  420  	if (rc)
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  421  		goto out_release;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  422  
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  423  	rc = apei_exec_run(&trigger_ctx, ACPI_EINJ_TRIGGER_ERROR);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  424  
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  425  	apei_exec_post_unmap_gars(&trigger_ctx);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  426  out_release:
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  427  	apei_resources_release(&trigger_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  428  out_fini:
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  429  	apei_resources_fini(&trigger_resources);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  430  out_rel_entry:
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  431  	release_mem_region(trigger_paddr + sizeof(*trigger_tab),
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  432  			   table_size - sizeof(*trigger_tab));
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  433  out_rel_header:
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  434  	release_mem_region(trigger_paddr, sizeof(*trigger_tab));
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  435  out:
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  436  	if (p)
+37dbc95939d19c3 drivers/acpi/apei/einj-core.c Zaid Alali       2024-12-05  437  		iounmap(p);
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  438  
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  439  	return rc;
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  440  }
+e40213450b53157 drivers/acpi/apei/einj.c      Huang Ying       2010-05-18  441  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
