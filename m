@@ -1,212 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975E91F9AA0;
-	Fri,  6 Dec 2024 09:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453041FA164
+	for <llvm@lists.linux.dev>; Fri,  6 Dec 2024 09:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733477693; cv=none; b=sE9r4hRD1/I0ZTdrg/qYwRTr0rITkX6hm13tRymn6AS62eQho7Jf1EIkRZvTGTzOScC0u69prkmgSkFxJk/clHD6EWJcrd7IrQVeHB2XpV1xlLRxNTTvhcTrrUiy7K0PJAhV1OXUu2wDV0+G1z59oNfaKUoh/PUQTc/dKz+J4k0=
+	t=1733477706; cv=none; b=oMymNDf8QDXDDrmR3UcnwjorvyHbOYcOK510PuSkJFbzpa8pch4oAj7PcNZ6TR331brzXdVcWVb4i9MQx3gWqJr7JrDkRhVdnBi821tLvqKYijU0nmm/G4nNw5pwAxsy25SChS6si6VRDyoFvZ433i7w7xdJVlTpIJrResR/7H4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733477693; c=relaxed/simple;
-	bh=OJ93jc/8CZFppiW918L6py9OvpQK5u6KGpuiynWLkNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JF9NBfxbJjK4ONbN/S7USAr23YOElx9wHuFZmOmRylPTi4BFmfGhy4eaGWUAq61yvAQ7np6GiOIYzd4cskm1mpmB9cG+tCsquolw2+ZLAyUOh+nRXPahjSEorsaYTmFlX1oz7v76jy24E1DHg39AfIKyavUlI8jyQyLixpYksfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ixpjQq3C; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ixpjQq3C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733477691; x=1765013691;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OJ93jc/8CZFppiW918L6py9OvpQK5u6KGpuiynWLkNw=;
-  b=ixpjQq3C40hhjfbV9FTzGnyR0lcaA5ZDu4htNd/loqZj0UWmFZ4Ug9YZ
-   qmqCmpQ1ybRsVmFFNIhztb+mwq9JSdHUIE1EfF9rF75k5ro374/fb4Vvy
-   LOKtwrBt/lU7k6IZHcv8iUtcnvOBZFDHOYHqsdoNu0otWOFMfXomEyC16
-   bQ/hrsQtNY0d4FUzGH+JqOPau3QCEFRZK/0JEOQ1dv/YEt6J0MNN/NH70
-   Xm4roOpSHHUT1TomSZo1JErcvG4JdOXQyVUzxwSi2C5hjNG/cPMpsc8Hi
-   JxaKV6vPzNx5OgCFgSSit5hF2S5jcAE/wwgKFMwV0MY0wh5i2eERuOtmD
-   g==;
-X-CSE-ConnectionGUID: MdLXS8HCR02E27gJiLuFsg==
-X-CSE-MsgGUID: peQ35EvZSUuUlvURbs4rSw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="51239648"
-X-IronPort-AV: E=Sophos;i="6.12,213,1728975600"; 
-   d="scan'208";a="51239648"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2024 01:34:48 -0800
-X-CSE-ConnectionGUID: QF6IMCYJSiq07fjoGsKgHQ==
-X-CSE-MsgGUID: nmcOZkqGRXitfBLanw/sHQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,213,1728975600"; 
-   d="scan'208";a="98426320"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Dec 2024 01:34:47 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJUjV-0000tv-0M;
-	Fri, 06 Dec 2024 09:34:45 +0000
-Date: Fri, 6 Dec 2024 17:33:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Philipp Stanner <pstanner@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/3] ata: Allocate PCI iomap table statically
-Message-ID: <202412061718.1SLkj1kZ-lkp@intel.com>
-References: <20241204171033.86804-3-pstanner@redhat.com>
+	s=arc-20240116; t=1733477706; c=relaxed/simple;
+	bh=SFQA6iOLYo0SCjZeL+gF6rG0AM1b70ICi54Jp/cd2fY=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=Fk6aFCpw7JVbncNcwyl0KY5yk7WrCkmCEe2Pzo4k/Hm81HcZPpIyNN08yBy54FITxa6heQUYRe3RguLqmy1oJCDOmzaWDnhfRMPU17sLYoSTHpjohQ5Ds23bWPn63LS5RaIdPoFz9v8o7mgxKud5UuJJWYetpx0d6mcyYHDPDbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-315-JT-U8hVaNj28TFwmYvvp_A-1; Fri, 06 Dec 2024 09:35:01 +0000
+X-MC-Unique: JT-U8hVaNj28TFwmYvvp_A-1
+X-Mimecast-MFC-AGG-ID: JT-U8hVaNj28TFwmYvvp_A
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 6 Dec
+ 2024 09:34:15 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 6 Dec 2024 09:34:15 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Vincent Mailhol' <mailhol.vincent@wanadoo.fr>, 'Martin Uecker'
+	<muecker@gwdg.de>
+CC: 'Linus Torvalds' <torvalds@linux-foundation.org>, 'Luc Van Oostenryck'
+	<luc.vanoostenryck@gmail.com>, 'Nathan Chancellor' <nathan@kernel.org>,
+	"'Nick Desaulniers'" <ndesaulniers@google.com>, 'Bill Wendling'
+	<morbo@google.com>, 'Justin Stitt' <justinstitt@google.com>, 'Yury Norov'
+	<yury.norov@gmail.com>, 'Rasmus Villemoes' <linux@rasmusvillemoes.dk>, 'Kees
+ Cook' <kees@kernel.org>, "'Gustavo A. R. Silva'" <gustavoars@kernel.org>,
+	'Jani Nikula' <jani.nikula@linux.intel.com>, 'Joonas Lahtinen'
+	<joonas.lahtinen@linux.intel.com>, 'Rodrigo Vivi' <rodrigo.vivi@intel.com>,
+	'Tvrtko Ursulin' <tursulin@ursulin.net>, 'David Airlie' <airlied@gmail.com>,
+	'Simona Vetter' <simona@ffwll.ch>, 'Suzuki K Poulose'
+	<suzuki.poulose@arm.com>, 'Mike Leach' <mike.leach@linaro.org>, 'James Clark'
+	<james.clark@linaro.org>, 'Alexander Shishkin'
+	<alexander.shishkin@linux.intel.com>, 'Rikard Falkeborn'
+	<rikard.falkeborn@gmail.com>, "'linux-sparse@vger.kernel.org'"
+	<linux-sparse@vger.kernel.org>, "'linux-kernel@vger.kernel.org'"
+	<linux-kernel@vger.kernel.org>, "'llvm@lists.linux.dev'"
+	<llvm@lists.linux.dev>, "'linux-hardening@vger.kernel.org'"
+	<linux-hardening@vger.kernel.org>, "'intel-gfx@lists.freedesktop.org'"
+	<intel-gfx@lists.freedesktop.org>, "'dri-devel@lists.freedesktop.org'"
+	<dri-devel@lists.freedesktop.org>, "'coresight@lists.linaro.org'"
+	<coresight@lists.linaro.org>, "'linux-arm-kernel@lists.infradead.org'"
+	<linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+Thread-Topic: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+Thread-Index: AQHbROFPJXcuwP9wN0+yRzIQ2cx/pbLWa+gggAFf14CAACMqUIABAFYQ
+Date: Fri, 6 Dec 2024 09:34:15 +0000
+Message-ID: <6576cf10fc424eab874a31714e60474b@AcuMS.aculab.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+ <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+ <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+ <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+In-Reply-To: <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241204171033.86804-3-pstanner@redhat.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: QVY4XYSLGPeUhSO_nO_QDikZXOCCKJbOH4HDn4hcrjA_1733477699
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Hi Philipp,
+RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDA2IERlY2VtYmVyIDIwMjQgMDI6MjYNCg0KKG5v
+dyBpdCBpcyBubyBsb25nZXIgMmFtLi4uKQ0KDQpMaW51cyBzdWdnZXN0ZWQgdGhpcyBhIHdoaWxl
+IGJhY2s6DQoNCj4gIGluIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC9DQUhrLT13aXE9R1VO
+V0p3V2gxQ1JBWWNoVzczVW1PYVNrYUNvdkxhdGZES2V2ZVpjdEFAbWFpbC5nbWFpbC5jb20vDQo+
+IA0KPiAgICAvKg0KPiAgICAgKiBpZmYgJ3gnIGlzIGEgbm9uLXplcm8gY29uc3RhbnQgaW50ZWdl
+ciBleHByZXNzaW9uLA0KPiAgICAgKiB0aGVuICchKHgpJyB3aWxsIGJlIGEgemVybyBjb25zdGFu
+dCBpbnRlZ2VyIGV4cHJlc3Npb24sDQo+ICAgICAqIGFuZCBjYXN0aW5nIHRoYXQgdG8gJ3ZvaWQg
+Kicgd2lsbCByZXN1bHQgaW4gYSBOVUxMIHBvaW50ZXIuDQo+ICAgICAqIE90aGVyd2lzZSBjYXN0
+aW5nIGl0IHRvICd2b2lkIConIHdpbGwgYmUganVzdCBhIHJlZ3VsYXIgJ3ZvaWQgKicuDQo+ICAg
+ICAqDQo+ICAgICAqIFRoZSB0eXBlIG9mICcwID8gTlVMTCA6IChjaGFyICopJyBpcyAnY2hhciAq
+Jw0KPiAgICAgKiBUaGUgdHlwZSBvZiAnMCA/ICh2b2lkICopIDogKGNoYXIgKikgaXMgJ3ZvaWQg
+KicNCj4gICAgICovDQo+ICAgICAjZGVmaW5lIGNvbnN0X3RydWUoeCkgXA0KPiAgICAgICAgIF9H
+ZW5lcmljKDAgPyAodm9pZCAqKSgobG9uZykhKHgpKSA6IChjaGFyICopMCwgY2hhciAqOiAxLCB2
+b2lkICo6IDApDQoNCkJ1dCBzb21lIG9mIHRoZSB0aGluZ3MgYnVpbHQgb24gaXQgaGFzIGlzc3Vl
+cyB3aXRoIGNvbXBpbGVyIHdhcm5pbmdzLg0KSSB0aGluayB0aGVyZSBoYXZlIHNldmVyYWwgdmFy
+aWF0aW9ucyBiZWZvcmUgYW5kIHNpbmNlIHdpdGggc3VidGxlIGRpZmZlcmVuY2VzLg0KUHJvYmFi
+bHkgY29uc3RfemVybygpIGNvbnN0X3RydWUoKSBjb25zdF9mYWxzZSgpIGFuZCBjb25zdF9leHBy
+KCkuDQoNCldoaWxlIHRoZSAnYmFzZScgZGVmaW5lIGlzIHJlYWxseSBjb25zdF96ZXJvKCkgd2l0
+aCBqdXN0IChsb25nKSh4KSB0aGF0DQp3aWxsIG1hc2sgaGlnaCBiaXRzIG9mZiAnbG9uZyBsb25n
+Jy4gDQpBIGNvbnN0X2ZhbHNlKCkgY291bGQgJ2ZpeCcgdGhhdCB1c2luZyAobG9uZykhISh4KSBi
+dXQgZXZlbiAhKHgpIHN0YXJ0cw0KZ2l2aW5nIGNvbXBpbGUgZXJyb3JzLg0KDQpJZiBjYWxsZWQg
+Zm9yIHBvaW50ZXJzIChsb25nKSgoeCkgPT0gMCkgaXMgYWxzbyBwcm9ibGVtYXRpYy4NCihQZXJo
+YXBzIHRoaXMgaXMgbGVzcyBsaWtlbHkgbm93IHRoYXQgbWluL21heCBkb24ndCB1c2UgaXQuKQ0K
+DQpTbyB3ZSBtYXkgZW5kIHVwIHdpdGggKGxvbmcpKCh4KSA/IDAgOiAxKSB3aGljaCByZWFsbHkg
+bWlnaHQgYXMNCndlbGwgYmUgd3JpdHRlbiAoKHgpID8gMEwgOiAxTCkuDQoNClRoZSB1c2UgaXMg
+bGlrZWx5IHRvIGJlIGNvbnN0X3RydWUoeCA+IHkpIHNvIHBlcmhhcHMgdGhlcmUgaXNuJ3QgYQ0K
+cmVhc29uIHRvIGhhdmUgY29uc3RfZmFsc2UoKSBzaW5jZSB0aGUgYm9vbGVhbiBvcGVyYXRvciBj
+YW4gYmUgaW52ZXJ0ZWQuDQoNCmNvbnN0X2V4cHIoKSBoYXMgcmVsaWVkIG9uICcqIDAnIHRvIG1h
+a2UgYWxsIGNvbnN0YW50IGV4cHJlc3Npb25zIHplcm8uDQpCdXQgaXQgaGFzIHRvIGhhbmRsZSBw
+b2ludGVycyAtIHNvIG5lZWRzIGEgY29uZGl0aW9uYWwuDQpTaW5jZSBpdCBpcyBvbmx5IG9uZSBs
+aW5lLCBtYXliZSBqdXN0IHJlcGxpY2F0ZSB0aGUgd2hvbGUgdGhpbmcgYXM6DQoNCiNkZWZpbmUg
+Y29uc3RfdHJ1ZSh4KSBfR2VuZXJpYygwID8gKHZvaWQgKikoKHgpID8gMEwgOiAxTCkgOiAoY2hh
+ciAqKTAsIGNoYXIgKjogMSwgdm9pZCAqOiAwKQ0KI2RlZmluZSBjb25zdF9leHByKHgpIF9HZW5l
+cmljKDAgPyAodm9pZCAqKSgoeCkgPyAwTCA6IDBMKSA6IChjaGFyICopMCwgY2hhciAqOiAxLCB2
+b2lkICo6IDApDQoNCk9yIG1heWJlIChtb3N0bHkgYmVjYXVzZSB0aGUgbGluZXMgYXJlIHNob3J0
+ZXIpOg0KI2RlZmluZSBjb25zdF9OVUxMKHgpIF9HZW5lcmljKDAgPyAoeCkgOiAoY2hhciAqKTAs
+IGNoYXIgKjogMSwgdm9pZCAqOiAwKQ0KI2RlZmluZSBjb25zdF90cnVlKHgpIGNvbnN0X05VTEwo
+KHZvaWQgKikoeCkgPyAwTCA6IDFMKSkNCiNkZWZpbmUgY29uc3RfZXhwcih4KSBjb25zdF9OVUxM
+KCh2b2lkICopKHgpID8gMEwgOiAwTCkpDQoNCk9yIGV2ZW46DQojZGVmaW5lIGNvbnN0X3RydWUo
+eCkgY29uc3RfTlVMTCgoeCkgPyBOVUxMIDogKHZvaWQgKikxTCkpDQojZGVmaW5lIGNvbnN0X2V4
+cHIoeCkgY29uc3RfTlVMTCgoeCkgPyBOVUxMIDogTlVMTCkpDQoNCglEYXZpZA0KDQotDQpSZWdp
+c3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9u
+IEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.13-rc1 next-20241205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Stanner/ata-Allocate-PCI-iomap-table-statically/20241205-014059
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20241204171033.86804-3-pstanner%40redhat.com
-patch subject: [RFC PATCH 1/3] ata: Allocate PCI iomap table statically
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20241206/202412061718.1SLkj1kZ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061718.1SLkj1kZ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412061718.1SLkj1kZ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/ata/pata_macio.c:18:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/ata/pata_macio.c:1089:20: error: array type 'void *[6]' is not assignable
-    1089 |         priv->host->iomap = &priv->tfregs;
-         |         ~~~~~~~~~~~~~~~~~ ^
-   4 warnings and 1 error generated.
-
-
-vim +1089 drivers/ata/pata_macio.c
-
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1048  
-0ec24914675c482 Greg Kroah-Hartman     2012-12-21  1049  static int pata_macio_common_init(struct pata_macio_priv *priv,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1050  				  resource_size_t tfregs,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1051  				  resource_size_t dmaregs,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1052  				  resource_size_t fcregs,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1053  				  unsigned long irq)
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1054  {
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1055  	struct ata_port_info		pinfo;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1056  	const struct ata_port_info	*ppi[] = { &pinfo, NULL };
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1057  	void __iomem			*dma_regs = NULL;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1058  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1059  	/* Fill up privates with various invariants collected from the
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1060  	 * device-tree
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1061  	 */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1062  	pata_macio_invariants(priv);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1063  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1064  	/* Make sure we have sane initial timings in the cache */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1065  	pata_macio_default_timings(priv);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1066  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1067  	/* Allocate libata host for 1 port */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1068  	memset(&pinfo, 0, sizeof(struct ata_port_info));
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1069  	pmac_macio_calc_timing_masks(priv, &pinfo);
-9cbe056f6c467e7 Sergei Shtylyov        2011-02-04  1070  	pinfo.flags		= ATA_FLAG_SLAVE_POSS;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1071  	pinfo.port_ops		= &pata_macio_ops;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1072  	pinfo.private_data	= priv;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1073  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1074  	priv->host = ata_host_alloc_pinfo(priv->dev, ppi, 1);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1075  	if (priv->host == NULL) {
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1076  		dev_err(priv->dev, "Failed to allocate ATA port structure\n");
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1077  		return -ENOMEM;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1078  	}
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1079  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1080  	/* Setup the private data in host too */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1081  	priv->host->private_data = priv;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1082  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1083  	/* Map base registers */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1084  	priv->tfregs = devm_ioremap(priv->dev, tfregs, 0x100);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1085  	if (priv->tfregs == NULL) {
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1086  		dev_err(priv->dev, "Failed to map ATA ports\n");
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1087  		return -ENOMEM;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1088  	}
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01 @1089  	priv->host->iomap = &priv->tfregs;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1090  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1091  	/* Map DMA regs */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1092  	if (dmaregs != 0) {
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1093  		dma_regs = devm_ioremap(priv->dev, dmaregs,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1094  					sizeof(struct dbdma_regs));
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1095  		if (dma_regs == NULL)
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1096  			dev_warn(priv->dev, "Failed to map ATA DMA registers\n");
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1097  	}
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1098  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1099  	/* If chip has local feature control, map those regs too */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1100  	if (fcregs != 0) {
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1101  		priv->kauai_fcr = devm_ioremap(priv->dev, fcregs, 4);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1102  		if (priv->kauai_fcr == NULL) {
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1103  			dev_err(priv->dev, "Failed to map ATA FCR register\n");
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1104  			return -ENOMEM;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1105  		}
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1106  	}
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1107  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1108  	/* Setup port data structure */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1109  	pata_macio_setup_ios(&priv->host->ports[0]->ioaddr,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1110  			     priv->tfregs, dma_regs);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1111  	priv->host->ports[0]->private_data = priv;
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1112  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1113  	/* hard-reset the controller */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1114  	pata_macio_reset_hw(priv, 0);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1115  	pata_macio_apply_timings(priv->host->ports[0], 0);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1116  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1117  	/* Enable bus master if necessary */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1118  	if (priv->pdev && dma_regs)
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1119  		pci_set_master(priv->pdev);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1120  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1121  	dev_info(priv->dev, "Activating pata-macio chipset %s, Apple bus ID %d\n",
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1122  		 macio_ata_names[priv->kind], priv->aapl_bus_id);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1123  
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1124  	/* Start it up */
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1125  	priv->irq = irq;
-c3b2889424c26f3 Tejun Heo              2010-05-19  1126  	return ata_host_activate(priv->host, irq, ata_bmdma_interrupt, 0,
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1127  				 &pata_macio_sht);
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1128  }
-88358ab08944da7 Benjamin Herrenschmidt 2009-12-01  1129  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
