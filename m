@@ -1,63 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E668822C6C0;
-	Fri,  6 Dec 2024 21:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E81722C6C1;
+	Fri,  6 Dec 2024 22:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733521406; cv=none; b=Bq7Ans9cOng3q2TMmzyfMlOdBWlMnib/h/U1tfMLelLOGJoogSKhKNC2ffmYmTJCa+VND3PeY6d7RAoI8v07R6MYzCvZFTMMNSKDQJKqKr1Cf++fth1oFrWAw7GCvf4Uwl0CzS9Z03gf66MUm0hUWKVRJiYFFzHiHK2ltQQQ6+U=
+	t=1733523933; cv=none; b=ZgI+eJC+GfYh9qMSqQuftw3RMuuNhJYdhQEFbrLLJR50v3o6lMWKz7yZqt2vN6/AIxgV9DUlw/TUa9hvlfz5rFTaDaGj0g/0UA20pyuMAkoZP53TH0Gc7tUOenOIM76D3RFjpj/edtbNIJX9mIPTbpS9gGntdd8l+MOoFS0vMRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733521406; c=relaxed/simple;
-	bh=03PJh/ck6Oij4S/+gjwuYJH+/iN5eJyRrxHvrQa3O+0=;
+	s=arc-20240116; t=1733523933; c=relaxed/simple;
+	bh=bCffiw8OTwFgkjUxdoGc91mQ61iZQnE3xHFFCbqUAlY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CvEY7mm21ddwILcWWp0Sa2a4ouaYp351ZmDvmZUCIiD7cxt+30OpFTMFveBGgW5iqgBajrH+10nsr3V3CNrZP2JyOx9p/XUTtmL0lQorTf9QcqYrFRT1Yxa1+3OUgtH9xQxPet3TcdHRC0oEUAOKr9nJ+BE/C9dPw4kv06/tyFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z8aSPbvo; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=t55td2gel9rPoyZK67IzKWBzPgKEzJXCHugoIQXmZksxOxUxF+j7gc8XCCdi+1iFWO4ClVICPv1hbnus6h5iIuQvaGxoO+GYf78iQDJUR7AYcSzjwws2EmUlVjL8CsKbtlCQDOYoCVqhVGENPnH5rYNsyAIYL3vd++41dgfMAAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PDve/uQ6; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8aSPbvo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PDve/uQ6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733521406; x=1765057406;
+  t=1733523931; x=1765059931;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=03PJh/ck6Oij4S/+gjwuYJH+/iN5eJyRrxHvrQa3O+0=;
-  b=Z8aSPbvowRxIVIHBOiOOcOSmScv+sZ+WHmKQLW1WXSFqkzOsnWGjpuf9
-   BVkGb4Yt1UJ7H82gFiHUQq7XSUDmiuJOTb5YQ/u462tjCjj2sl/136hyS
-   9LFBEc6tSgCwWbloTEwT9EPQyOkQONC0RQpCVTtncFc0rL8l4gVgQCBWv
-   xgH+AlXntQXw2+CO5ayaapGrz3DDcsU27r/FV2sDEjvgdgQPCo8TdLBsa
-   gxwE815YtGK/PEuDsUQV+37ecNRizVIO4Mu3WvpE4gZGpjWsGihxU+5Qr
-   UO0NM/AHmoBUSalqfpyjxAQdplKbow0D2pA0TdpGMWWLzd0uIMb0+ZR77
-   w==;
-X-CSE-ConnectionGUID: 6NdnfAeMSOyHzmkgj4ffqg==
-X-CSE-MsgGUID: MliERNBhT0m6I4DTsom9zA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45265267"
+  bh=bCffiw8OTwFgkjUxdoGc91mQ61iZQnE3xHFFCbqUAlY=;
+  b=PDve/uQ6pyPsz5bg+8xXP3pG6Bq74p9M/GHdgH7VtZLCLY3HjDHJy4zP
+   8SxqMa8Kw+MwDcec8fH6iDLZyepo5T8tDciB1AeTfm7LYWkinxFK97zR4
+   fDtDRcf9cN2aVIfZWSNlxVCHN4TVYHzPwfB1gsaxF5vYscFx4wG3OLllF
+   NGXjrel3qb6aHlDCj7CqiAmC8zw2T3aYlsw7JRb+P6oDjtsECIdqfKTZj
+   Yot14mYUZPvYc/aL7zdzd5xeSn6W+xzOtxQcddIP+DaNUo8cYtF+ck02g
+   LOCkY7ur9Y0/q/aODpmPIRqu7GomDRHINBler71QX9dWrE0TBBdb/mpKT
+   Q==;
+X-CSE-ConnectionGUID: yuT5AdOVS92rMnqQnL062A==
+X-CSE-MsgGUID: Zv8O2YtqSmmALOGtGHbArw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="44565160"
 X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="45265267"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2024 13:43:25 -0800
-X-CSE-ConnectionGUID: vusUvBAWTNeDb+fheG24pQ==
-X-CSE-MsgGUID: Q7HjNLTHTbC5z5ANl21tIw==
+   d="scan'208";a="44565160"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2024 14:25:31 -0800
+X-CSE-ConnectionGUID: YiK7CDGQR8Kyz3eZXpGVJQ==
+X-CSE-MsgGUID: NLDm8aHvRMWdUqnSlq2szA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="94385064"
+   d="scan'208";a="95009660"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 06 Dec 2024 13:43:23 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 06 Dec 2024 14:25:26 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tJg6Z-0002H3-2X;
-	Fri, 06 Dec 2024 21:43:19 +0000
-Date: Sat, 7 Dec 2024 05:43:05 +0800
+	id 1tJglH-0002J7-1P;
+	Fri, 06 Dec 2024 22:25:23 +0000
+Date: Sat, 7 Dec 2024 06:24:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: Re: [PATCH v1 net-next 08/15] socket: Pass hold_net to sk_alloc().
-Message-ID: <202412070526.FhqWmbBo-lkp@intel.com>
-References: <20241206075504.24153-9-kuniyu@amazon.com>
+To: Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v2 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
+ driver
+Message-ID: <202412070600.aufBle2b-lkp@intel.com>
+References: <20241206-apds9160-driver-v2-2-be2cb72ef8f4@dimonoff.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,115 +77,160 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241206075504.24153-9-kuniyu@amazon.com>
+In-Reply-To: <20241206-apds9160-driver-v2-2-be2cb72ef8f4@dimonoff.com>
 
-Hi Kuniyuki,
+Hi Mikael,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on 5de07b8a24cf44cdb78adeab790704bf577c2c1d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/socket-Un-export-__sock_create/20241206-160139
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241206075504.24153-9-kuniyu%40amazon.com
-patch subject: [PATCH v1 net-next 08/15] socket: Pass hold_net to sk_alloc().
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241207/202412070526.FhqWmbBo-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070526.FhqWmbBo-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Mikael-Gonella-Bolduc-via-B4-Relay/dt-bindings-iio-light-Add-APDS9160-binding/20241207-001144
+base:   5de07b8a24cf44cdb78adeab790704bf577c2c1d
+patch link:    https://lore.kernel.org/r/20241206-apds9160-driver-v2-2-be2cb72ef8f4%40dimonoff.com
+patch subject: [PATCH v2 2/2] iio: light: Add APDS9160 ALS & Proximity sensor driver
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241207/202412070600.aufBle2b-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070600.aufBle2b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412070526.FhqWmbBo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412070600.aufBle2b-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from net/iucv/af_iucv.c:16:
-   In file included from include/linux/filter.h:9:
-   In file included from include/linux/bpf.h:20:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> net/iucv/af_iucv.c:455:59: error: too few arguments to function call, expected 6, have 5
-     455 |         sk = sk_alloc(&init_net, PF_IUCV, prio, &iucv_proto, kern);
-         |              ~~~~~~~~                                            ^
-   include/net/sock.h:1745:14: note: 'sk_alloc' declared here
-    1745 | struct sock *sk_alloc(struct net *net, int family, gfp_t priority,
-         |              ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1746 |                       struct proto *prot, bool kern, bool hold_net);
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 1 error generated.
+   drivers/iio/light/apds9160.c: In function 'apds9160_read_raw':
+>> drivers/iio/light/apds9160.c:911:32: error: implicit declaration of function 'FIELD_GET' [-Wimplicit-function-declaration]
+     911 |                         *val = FIELD_GET(APDS9160_PS_DATA_MASK, *val);
+         |                                ^~~~~~~~~
+   drivers/iio/light/apds9160.c: At top level:
+>> drivers/iio/light/apds9160.c:256:18: warning: 'apds9160_als_gain_avail' defined but not used [-Wunused-const-variable=]
+     256 | static const int apds9160_als_gain_avail[] = {
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +455 net/iucv/af_iucv.c
+vim +/FIELD_GET +911 drivers/iio/light/apds9160.c
 
-eac3731bd04c713 Jennifer Hunt     2007-02-08  448  
-8424c284851b97e Kuniyuki Iwashima 2024-12-06  449  static struct sock *iucv_sock_alloc(struct socket *sock, int proto, gfp_t prio,
-8424c284851b97e Kuniyuki Iwashima 2024-12-06  450  				    bool kern, bool hold_net)
-eac3731bd04c713 Jennifer Hunt     2007-02-08  451  {
-eac3731bd04c713 Jennifer Hunt     2007-02-08  452  	struct sock *sk;
-493d3971a65c921 Ursula Braun      2011-08-08  453  	struct iucv_sock *iucv;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  454  
-11aa9c28b420924 Eric W. Biederman 2015-05-08 @455  	sk = sk_alloc(&init_net, PF_IUCV, prio, &iucv_proto, kern);
-eac3731bd04c713 Jennifer Hunt     2007-02-08  456  	if (!sk)
-eac3731bd04c713 Jennifer Hunt     2007-02-08  457  		return NULL;
-493d3971a65c921 Ursula Braun      2011-08-08  458  	iucv = iucv_sk(sk);
-eac3731bd04c713 Jennifer Hunt     2007-02-08  459  
-eac3731bd04c713 Jennifer Hunt     2007-02-08  460  	sock_init_data(sock, sk);
-493d3971a65c921 Ursula Braun      2011-08-08  461  	INIT_LIST_HEAD(&iucv->accept_q);
-493d3971a65c921 Ursula Braun      2011-08-08  462  	spin_lock_init(&iucv->accept_q_lock);
-493d3971a65c921 Ursula Braun      2011-08-08  463  	skb_queue_head_init(&iucv->send_skb_q);
-493d3971a65c921 Ursula Braun      2011-08-08  464  	INIT_LIST_HEAD(&iucv->message_q.list);
-493d3971a65c921 Ursula Braun      2011-08-08  465  	spin_lock_init(&iucv->message_q.lock);
-493d3971a65c921 Ursula Braun      2011-08-08  466  	skb_queue_head_init(&iucv->backlog_skb_q);
-493d3971a65c921 Ursula Braun      2011-08-08  467  	iucv->send_tag = 0;
-3881ac441f642d5 Ursula Braun      2011-08-08  468  	atomic_set(&iucv->pendings, 0);
-493d3971a65c921 Ursula Braun      2011-08-08  469  	iucv->flags = 0;
-3881ac441f642d5 Ursula Braun      2011-08-08  470  	iucv->msglimit = 0;
-ef6af7bdb9e6c14 Julian Wiedmann   2021-01-28  471  	atomic_set(&iucv->skbs_in_xmit, 0);
-3881ac441f642d5 Ursula Braun      2011-08-08  472  	atomic_set(&iucv->msg_sent, 0);
-3881ac441f642d5 Ursula Braun      2011-08-08  473  	atomic_set(&iucv->msg_recv, 0);
-493d3971a65c921 Ursula Braun      2011-08-08  474  	iucv->path = NULL;
-3881ac441f642d5 Ursula Braun      2011-08-08  475  	iucv->sk_txnotify = afiucv_hs_callback_txnotify;
-b5d8cf0af167f3a Kees Cook         2021-11-18  476  	memset(&iucv->init, 0, sizeof(iucv->init));
-3881ac441f642d5 Ursula Braun      2011-08-08  477  	if (pr_iucv)
-3881ac441f642d5 Ursula Braun      2011-08-08  478  		iucv->transport = AF_IUCV_TRANS_IUCV;
-3881ac441f642d5 Ursula Braun      2011-08-08  479  	else
-3881ac441f642d5 Ursula Braun      2011-08-08  480  		iucv->transport = AF_IUCV_TRANS_HIPER;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  481  
-eac3731bd04c713 Jennifer Hunt     2007-02-08  482  	sk->sk_destruct = iucv_sock_destruct;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  483  	sk->sk_sndtimeo = IUCV_CONN_TIMEOUT;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  484  
-eac3731bd04c713 Jennifer Hunt     2007-02-08  485  	sock_reset_flag(sk, SOCK_ZAPPED);
-eac3731bd04c713 Jennifer Hunt     2007-02-08  486  
-eac3731bd04c713 Jennifer Hunt     2007-02-08  487  	sk->sk_protocol = proto;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  488  	sk->sk_state	= IUCV_OPEN;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  489  
-eac3731bd04c713 Jennifer Hunt     2007-02-08  490  	iucv_sock_link(&iucv_sk_list, sk);
-eac3731bd04c713 Jennifer Hunt     2007-02-08  491  	return sk;
-eac3731bd04c713 Jennifer Hunt     2007-02-08  492  }
-eac3731bd04c713 Jennifer Hunt     2007-02-08  493  
+   889	
+   890	static int apds9160_read_raw(struct iio_dev *indio_dev,
+   891				     struct iio_chan_spec const *chan, int *val,
+   892				     int *val2, long mask)
+   893	{
+   894		struct apds9160_chip *data = iio_priv(indio_dev);
+   895		int ret = -EINVAL;
+   896	
+   897		switch (mask) {
+   898		case IIO_CHAN_INFO_RAW:
+   899			switch (chan->type) {
+   900			case IIO_PROXIMITY: {
+   901				__le16 buf;
+   902	
+   903				ret = regmap_bulk_read(data->regmap, chan->address,
+   904						       &buf, 2);
+   905				if (ret)
+   906					return ret;
+   907	
+   908				ret = IIO_VAL_INT;
+   909				*val = le16_to_cpu(buf);
+   910				/* Remove overflow bits from result */
+ > 911				*val = FIELD_GET(APDS9160_PS_DATA_MASK, *val);
+   912			} break;
+   913			case IIO_LIGHT:
+   914			case IIO_INTENSITY: {
+   915				u8 buf[3];
+   916	
+   917				ret = regmap_bulk_read(data->regmap, chan->address,
+   918						       &buf, 3);
+   919				if (ret)
+   920					return ret;
+   921	
+   922				ret = IIO_VAL_INT;
+   923				*val = get_unaligned_le24(buf);
+   924			} break;
+   925			case IIO_CURRENT:
+   926				ret = IIO_VAL_INT;
+   927				*val = data->ps_current;
+   928				break;
+   929			default:
+   930				break;
+   931			}
+   932			break;
+   933		case IIO_CHAN_INFO_HARDWAREGAIN:
+   934			switch (chan->type) {
+   935			case IIO_LIGHT:
+   936				ret = IIO_VAL_INT;
+   937				*val = data->als_hwgain;
+   938				break;
+   939			case IIO_PROXIMITY:
+   940				ret = IIO_VAL_INT;
+   941				*val = data->ps_gain;
+   942				break;
+   943			default:
+   944				break;
+   945			}
+   946			break;
+   947		case IIO_CHAN_INFO_INT_TIME:
+   948			switch (chan->type) {
+   949			case IIO_LIGHT:
+   950				ret = IIO_VAL_INT;
+   951				*val = data->als_itime;
+   952				break;
+   953			default:
+   954				break;
+   955			}
+   956			break;
+   957		case IIO_CHAN_INFO_SAMP_FREQ:
+   958			switch (chan->type) {
+   959			case IIO_PROXIMITY:
+   960				ret = IIO_VAL_INT;
+   961				*val = data->ps_rate;
+   962				break;
+   963			default:
+   964				break;
+   965			}
+   966			break;
+   967		case IIO_CHAN_INFO_CALIBSCALE:
+   968			switch (chan->type) {
+   969			case IIO_PROXIMITY:
+   970				ret = IIO_VAL_INT;
+   971				*val = data->ps_cancellation_level;
+   972				break;
+   973			default:
+   974				break;
+   975			}
+   976			break;
+   977		case IIO_CHAN_INFO_CALIBBIAS:
+   978			switch (chan->type) {
+   979			case IIO_PROXIMITY:
+   980				ret = IIO_VAL_INT;
+   981				*val = data->ps_cancellation_analog;
+   982				break;
+   983			case IIO_CURRENT:
+   984				ret = IIO_VAL_INT;
+   985				*val = data->ps_cancellation_current;
+   986			default:
+   987				break;
+   988			}
+   989			break;
+   990		case IIO_CHAN_INFO_SCALE:
+   991			switch (chan->type) {
+   992			case IIO_LIGHT:
+   993				ret = IIO_VAL_INT_PLUS_MICRO;
+   994				*val = data->als_scale1;
+   995				*val2 = data->als_scale2;
+   996				break;
+   997			default:
+   998				break;
+   999			}
+  1000			break;
+  1001		default:
+  1002			break;
+  1003		}
+  1004	
+  1005		return ret;
+  1006	};
+  1007	
 
 -- 
 0-DAY CI Kernel Test Service
