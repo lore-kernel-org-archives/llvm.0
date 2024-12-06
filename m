@@ -1,103 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD11213E7C
-	for <llvm@lists.linux.dev>; Fri,  6 Dec 2024 21:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393E4213E64;
+	Fri,  6 Dec 2024 21:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733519589; cv=none; b=u8SknkvQgsavsCC4xzumtQA7MlJcddHxQCbQrCoWQxr2inWrDA4gSJ/LHlp7emQTbaKsEfh8hVCUwX50C4cmtrv72+6dP2g2mN5ZmHpfxu46GHRAmg4YKZOMgNem98zcTGS9BWZgaZlG3A3Ta8yAFNX7rvY/UMpvy6uF0YdzQec=
+	t=1733519606; cv=none; b=En0Fh3SJzOoPvpCAOF+Mor2q3tSdQLsTPsSiNdIFXUEbs/Engm+g5aTp+lUIitgKEYyip1kdO3rbYBu6khhJp0UJByz+0OxBRaq1hczliySxyOCG7i1qWc11j4Ap3tFdlhssnHHRzzHuMO7R8S+NQQLRqnbH+DguTWQ7CL5tCAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733519589; c=relaxed/simple;
-	bh=Q1zTeNdN2u/Iv8cNXMO5ATTtOkUNVeY+/E/LGhoSfqs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=NuoO/zQD3kdoAtWlbl6uX5DAJ9PF+B0NBVs2VQ+8KAFKNh+g5largKKrB9tLxulEsqmNVz1wAQXDYnSrKG6zRi6y17k+yKqZPxU1LOXQxjEQ0r1aAJ4DjSBkC1flGjHmu9DicelWoVoxJjo/4a3AjKs6bA2Rt3JuBkrSPADmUfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NlEvlGi7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1733519606; c=relaxed/simple;
+	bh=RZbPzw7WbfpgyKvzGUkCTiOA90u3s1h1g6SxzMS8IbQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TazOkaU+4+TuWfbNFGmo9+N4+OBN2cnQ/UqpO1dnmnYo9drgOI/ffJ6SFl1Fei26OhuuOBhDJPDY9ET/ln7WgORI6msZ23v5wjLitVBe7tDSNGpgNk2eaCAe6kTJl2RwfIwQuPiDdHERvsREPiszTwJOUm9Md62mNf4MemWxpUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k+mwafAM; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NlEvlGi7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733519586;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RfjriH/uPe5n+DT2kZUMYd95KRckJ33qa6Kzefqs/Nk=;
-	b=NlEvlGi7xkIEW2EPAlLAxVIcqah+7cSPGzqJvb7KaxSlf7FUlkj0Ug9IUsUglkNqOkwJ1Z
-	kohp0QHrXTOX8rYbO5OZvUufnXXTfy3yXKrKaxAN6URu77QdpU++s/wNSc1YDdrmE+cmoC
-	qHuSIdMzDAZNhZ07XUD0yjOIW8jkgds=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-454-iBDNjKmsM5uIkyNA89elOA-1; Fri,
- 06 Dec 2024 16:13:04 -0500
-X-MC-Unique: iBDNjKmsM5uIkyNA89elOA-1
-X-Mimecast-MFC-AGG-ID: iBDNjKmsM5uIkyNA89elOA
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C0EFC1956054
-	for <llvm@lists.linux.dev>; Fri,  6 Dec 2024 21:13:03 +0000 (UTC)
-Received: from [172.64.3.41] (unknown [10.30.32.189])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6B43B300019E;
-	Fri,  6 Dec 2024 21:13:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc1,
- upstream-mainline, 9a6e8c7c)
-Date: Fri, 06 Dec 2024 21:13:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k+mwafAM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733519605; x=1765055605;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RZbPzw7WbfpgyKvzGUkCTiOA90u3s1h1g6SxzMS8IbQ=;
+  b=k+mwafAM98IEUskbiUeKC2S/VD4CjXzrP5QkxRtSo3Jj/8ziquJv/2U7
+   LCuHsWgixbAKPXDzs58QfdYLGN0RlqeVMyClHpTOQD7mOe4lOtbGxb50F
+   rhlOaI5ZYG4wGLDIUEwukiBt1MYo25OGF/PF1wGGfdgWjz0B9xzxhGOam
+   G5M4Ti3wfBv7VLtZxHWiU/NY8BS43H3XsQI8pyBS/oOhnSe8qsHrmRWjO
+   BGLJ4HVIhPSNOKd3Mkg+FW/PGVPMOy+8dM+a7/Pk36zFLbHlmg67DLTCt
+   ssvkvgY6vfeJadyTJxK+7EmyogOtrYm0+yXFIVQB1uNdXln2oiq7ehlJy
+   Q==;
+X-CSE-ConnectionGUID: TV83oqErTBKVzmkOPWddQg==
+X-CSE-MsgGUID: /8FFIcCZS7OyV6A9rAYueg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="34017908"
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="34017908"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2024 13:13:24 -0800
+X-CSE-ConnectionGUID: g/T+e8lQTUC77Zz/w+oudA==
+X-CSE-MsgGUID: TC2avendRH2fEKIjXG26jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="99572100"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 06 Dec 2024 13:13:21 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tJfdV-0002GD-3D;
+	Fri, 06 Dec 2024 21:13:17 +0000
+Date: Sat, 7 Dec 2024 05:12:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v2 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
+ driver
+Message-ID: <202412070552.HvBGzx9l-lkp@intel.com>
+References: <20241206-apds9160-driver-v2-2-be2cb72ef8f4@dimonoff.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <09107.124120616130500144@us-mta-454.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: kxjN_bPNgPkcM7eBqIb9-m0luY9xaloLRsoS21F5U5k_1733519584
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241206-apds9160-driver-v2-2-be2cb72ef8f4@dimonoff.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Mikael,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on 5de07b8a24cf44cdb78adeab790704bf577c2c1d]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2024-12-07' of https://gitlab.free=
-desktop.org/drm/kernel
+url:    https://github.com/intel-lab-lkp/linux/commits/Mikael-Gonella-Bolduc-via-B4-Relay/dt-bindings-iio-light-Add-APDS9160-binding/20241207-001144
+base:   5de07b8a24cf44cdb78adeab790704bf577c2c1d
+patch link:    https://lore.kernel.org/r/20241206-apds9160-driver-v2-2-be2cb72ef8f4%40dimonoff.com
+patch subject: [PATCH v2 2/2] iio: light: Add APDS9160 ALS & Proximity sensor driver
+reproduce: (https://download.01.org/0day-ci/archive/20241207/202412070552.HvBGzx9l-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1577438461
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412070552.HvBGzx9l-lkp@intel.com/
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1577438461-ppc64le-kernel
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1577438461-x86_64-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1577438461-x86_64-kernel-debug
+All warnings (new ones prefixed by >>):
 
+   Warning: Documentation/devicetree/bindings/nvmem/zii,rave-sp-eeprom.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/zii,rave-sp.yaml
+   Warning: Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+   Warning: Documentation/hwmon/g762.rst references a file that doesn't exist: Documentation/devicetree/bindings/hwmon/g762.txt
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/reserved-memory/qcom
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/iio/light/avago,apds9160.yaml
+   Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
+   Using alabaster theme
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
