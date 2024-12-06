@@ -1,159 +1,331 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mx-2023-1.gwdg.de (mx-2023-1.gwdg.de [134.76.10.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35FB1DC05F;
-	Fri,  6 Dec 2024 06:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC801CB51B;
+	Fri,  6 Dec 2024 07:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.76.10.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733467439; cv=none; b=o+vm/Z768JQCkX0TVB2MjrRgAQORjLzbE51KiIUe8a8e7FAdMUsBhG0FeIoAePAn2KDqXke1Da28McmYgMfDUnnSXyuNMMkMU4QSkCKbbRH/J0InvY4Vf2N+xXiSRqECPFOy19GN6OKQkLIwrYj1iCthHG4o/m0HWXzvY/PgEa0=
+	t=1733469375; cv=none; b=ujuIfmYcqnpLdDxCcap4BG8+eThXP9mnTzGPC9sBWVb1jyBF1tFFRHvM7XGiOHPEfUbRak8khEbWliFohsDlaYkyJRTNaDoljGSzSArYFF5nSEo9j9MxbwlOqk7J+65jTrgfnScqIGHiLVcnBD3Fcyj0/lxFJmet9/uGTG3mVcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733467439; c=relaxed/simple;
-	bh=0Wzq3s30M7mBhOjex7CeLonBMvfoRmCEsb6hkDU9AdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uLOnVXAAPYyfATYUSCUtuilYmMlTZo7md/E/edZlC97n/gpToHBjPkBx0XU2tb+3ln7qd7V95AYUNS3Jwqq1EmLal52Ld5kptGhIHi/Ry6RI+wxIutBeSfHnxGJ5ZN8rETs+SAJGurkSsZ8nP+IJXtdvvceNnJHJMGY3lassTSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eImL3Thw; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733469375; c=relaxed/simple;
+	bh=GNu0V6q0o0w32+408jO2ovaIQ6lcAc1UgQqx/K7EmHo=;
+	h=Message-ID:Subject:From:To:CC:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=himsO3922wOyKnuASBOuMVA+AdsSDNo9BuA485ELl9uMEo9Xhyx3vIx36Uvxgp80LE6oCn5R8j+mWn7PGy9V84WYI52hob9mFQu3vgOqvL5aYVidX1LwVbo2Y8GbNmhQWSwNff1oScG35kW8cWOHMtrpPlLw+Cza0+JS/9p0WIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de; spf=pass smtp.mailfrom=gwdg.de; dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b=QIuEFM5T; arc=none smtp.client-ip=134.76.10.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gwdg.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eImL3Thw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733467438; x=1765003438;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Wzq3s30M7mBhOjex7CeLonBMvfoRmCEsb6hkDU9AdI=;
-  b=eImL3ThwkVwYV66uKhiT9+znq5kNg9o425ho22SbVY6tOipBT49oYXe6
-   DfNyF+W4xBm4kIi0CbA3acmcSl1sVQkn1AjB3mpogVKrQYWonGbPumOBG
-   /+GDr2XQTmOYG2XcJeIkSK1TAFlGC5MrYdT/a3XXbAFn8fRWwh9acD9dp
-   oRL3JWeG/1lX3U371xK9kTZUW9kGU1bG/G/zKr3VuOH42OVXIC8HKHqAQ
-   2hwVo54K3pcCHaXrrR9qCphdOh2sPu2QsZVcGvhCTo2lf5sklXT3RPflU
-   1rIYne36ZKhaP9/qRBTgzLf3IynsPpdjAdc8v4iXlYeFWyeXPbf40egZc
-   Q==;
-X-CSE-ConnectionGUID: mVmGY7ObTDGQdEibQpnjKw==
-X-CSE-MsgGUID: PSIOMlpVT9W+npi9w0eH+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="56302933"
-X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="56302933"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 22:43:57 -0800
-X-CSE-ConnectionGUID: nupjY1A4Q7WaBpe4TvJISw==
-X-CSE-MsgGUID: xA+cNkmGSb6iLrQ5EVO5mw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="94199756"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 05 Dec 2024 22:43:56 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJS49-0000lt-11;
-	Fri, 06 Dec 2024 06:43:53 +0000
-Date: Fri, 6 Dec 2024 14:43:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCHv11 07/10] block: expose write streams for block device
- nodes
-Message-ID: <202412061434.7mqSO81h-lkp@intel.com>
-References: <20241206015308.3342386-8-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b="QIuEFM5T"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gwdg.de;
+	s=2023-rsa; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
+	In-Reply-To:Date:CC:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Cn/mEteP39h7mG9+aXdZN/tTfaU/U5YGN1nxsLlnwXQ=; b=QIuEFM5T0FLtiEdDVaCUTynHbc
+	a3zmimEUtLd/4jb8a077kuj6t5Z1EudBlrkT12B2MBGOIwTrIpHJGw3Pk6iKOpO6TtYMuo4JiWtSe
+	FALBY7LUEVLwAAmC+Ce1w4h4KJ1Q2urw4zmYWkyBBzLGfosCtmeVjXhaA8OjAaqeQV2RnqsiVCy8m
+	7awRl+GwnnpkJjPVI4EbRQMiIMkDU4bc3J9mK7PKsqdbKi7W+7pUlBzCRs/m7RKmjvy3jv/GZxiaF
+	qizFSXH5UYZwccUBvg+by18Y9rZX4pnr/B+RuHQJtZemMZiqWS+sQHHLpwRFb7mmbtt58Ow1VWUYu
+	sAyfaCaw==;
+Received: from xmailer.gwdg.de ([134.76.10.29]:37823)
+	by mailer.gwdg.de with esmtp (GWDG Mailer)
+	(envelope-from <muecker@gwdg.de>)
+	id 1tJS0h-003tPL-1m;
+	Fri, 06 Dec 2024 07:40:19 +0100
+Received: from mbx19-fmz-06.um.gwdg.de ([10.108.142.65] helo=email.gwdg.de)
+	by mailer.gwdg.de with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+	(GWDG Mailer)
+	(envelope-from <muecker@gwdg.de>)
+	id 1tJS0h-000D3F-1M;
+	Fri, 06 Dec 2024 07:40:19 +0100
+Received: from [192.168.0.221] (10.250.9.200) by MBX19-FMZ-06.um.gwdg.de
+ (10.108.142.65) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.14; Fri, 6 Dec
+ 2024 07:40:17 +0100
+Message-ID: <abdd7862f136aa676b2d2c324369f4a43ff9909c.camel@gwdg.de>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+From: Martin Uecker <muecker@gwdg.de>
+To: David Laight <David.Laight@ACULAB.COM>, 'Vincent Mailhol'
+	<mailhol.vincent@wanadoo.fr>
+CC: Linus Torvalds <torvalds@linux-foundation.org>, Luc Van Oostenryck
+	<luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
+	<rikard.falkeborn@gmail.com>, "linux-sparse@vger.kernel.org"
+	<linux-sparse@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
+	<intel-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, "coresight@lists.linaro.org"
+	<coresight@lists.linaro.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Date: Fri, 6 Dec 2024 07:40:17 +0100
+In-Reply-To: <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+	 <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+	 <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+	 <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+	 <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241206015308.3342386-8-kbusch@meta.com>
+X-ClientProxiedBy: MBX19-GWD-08.um.gwdg.de (10.108.142.61) To
+ MBX19-FMZ-06.um.gwdg.de (10.108.142.65)
+X-EndpointSecurity-0xde81-EV: v:7.9.17.458, d:out, a:y, w:t, t:6, sv:1733449028, ts:1733467219
+X-Virus-Scanned: (clean) by clamav
+X-Spam-Level: -
 
-Hi Keith,
+Am Freitag, dem 06.12.2024 um 02:25 +0000 schrieb David Laight:
+> From: Vincent Mailhol
+> > Sent: 05 December 2024 15:31
+> >=20
+> > -CC: Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+> > +CC: Martin Uecker <muecker@gwdg.de>
+> > (seems that Martin changed his address)
 
-kernel test robot noticed the following build errors:
+My current one is this: uecker@tugraz.at
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on next-20241205]
-[cannot apply to brauner-vfs/vfs.all hch-configfs/for-next linus/master v6.13-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Martin
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/fs-add-a-write-stream-field-to-the-kiocb/20241206-095707
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20241206015308.3342386-8-kbusch%40meta.com
-patch subject: [PATCHv11 07/10] block: expose write streams for block device nodes
-config: mips-loongson1b_defconfig (https://download.01.org/0day-ci/archive/20241206/202412061434.7mqSO81h-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061434.7mqSO81h-lkp@intel.com/reproduce)
+> >=20
+> > On Thu. 5 Dec. 2024 at 03:39, David Laight <David.Laight@aculab.com> wr=
+ote:
+> > > > Sent: 02 December 2024 17:33
+> > > >=20
+> > > > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > >=20
+> > > > __is_constexpr(), while being one of the most glorious one liner ha=
+ck
+> > > > ever witnessed by mankind, is overly complex. Following the adoptio=
+n
+> > > > of C11 in the kernel, this macro can be simplified through the use =
+of
+> > > > a _Generic() selection.
+> > >=20
+> > > You should give credit to some of the earlier patches that do the sam=
+e.
+> > > I'm sure there were some related ones from Linus - not applied yet.
+> >=20
+> > ACK. Would adding a suggested--by Linus tag solve your concern?
+>=20
+> I actually suspect the first patches to change __is_constexpr() to
+> use _Generic were from myself.
+> I've found a patch I send in November 2023.
+>=20
+> >=20
+> > > > First, split the macro in two:
+> > > >=20
+> > > >   - __is_const_zero(x): an helper macro; tells whether x is the
+> > > >     integer constant expression 0 or something else.
+> > > >=20
+> > > >   - is_const(x): replacement of __is_constexpr(); tells whether x i=
+s a
+> > > >     integer constant expression.
+> > > >=20
+> > > > The split serves two purposes: first make it easier to understand;
+> > > > second, __is_const_zero() will be reused as a building block for ot=
+her
+> > > > is_const_*() macros that will be introduced later on.
+> > > >=20
+> > > > The core principle of __is_constexpr() to abuse the return type of =
+the
+> > > > ternary operator remains, but all the surrounding sizeof() hack
+> > > > disappear.
+> > > >=20
+> > > > On a side note, while not relevant to the kernel, __is_constexpr()
+> > > > relied on the GNU extension that sizeof(void) is 1. const_expr() do=
+es
+> > > > not use any GNU extensions, making it ISO C compliant.
+> > > >=20
+> > > > __is_constexpr() is temporarily kept and will be removed once all i=
+ts
+> > > > users get migrated to is_const() (or one of its friend).
+> > > >=20
+> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > > ---
+> > > >  include/linux/compiler.h | 41 ++++++++++++++++++++++++++++++++++++=
++++++
+> > > >  1 file changed, 41 insertions(+)
+> > > >=20
+> > > > diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> > > > index a2a56a50dd85227a4fdc62236a2710ca37c5ba52..30ce06df4153cfdc0fa=
+d9bc7bffab9097f8b0450 100644
+> > > > --- a/include/linux/compiler.h
+> > > > +++ b/include/linux/compiler.h
+> > > > @@ -316,6 +316,47 @@ static inline void *offset_to_ptr(const int *o=
+ff)
+> > > >  #define statically_true(x) (__builtin_constant_p(x) && (x))
+> > > >  #define statically_false(x) (__builtin_constant_p(x) && (x) =3D=3D=
+ 0)
+> > > >=20
+> > > > +/*
+> > > > + * Whether x is the integer constant expression 0 or something els=
+e.
+> > > > + *
+> > > > + * Details:
+> > > > + *   - The C11 standard defines in =C2=A76.3.2.3.3
+> > > > + *       (void *)<integer constant expression with the value 0>
+> > > > + *     as a null pointer constant (c.f. the NULL macro).
+> > > > + *   - If x evaluates to the integer constant expression 0,
+> > > > + *       (void *)(x)
+> > > > + *     is a null pointer constant. Else, it is a void * expression=
+.
+> > > > + *   - In a ternary expression:
+> > > > + *       condition ? operand1 : operand2
+> > > > + *     if one of the two operands is of type void * and the other =
+one
+> > > > + *     some other pointer type, the C11 standard defines in =C2=A7=
+6.5.15.6
+> > > > + *     the resulting type as below:
+> > > > + *       if one operand is a null pointer constant, the result has=
+ the
+> > > > + *       type of the other operand; otherwise [...] the result typ=
+e is
+> > > > + *       a pointer to an appropriately qualified version of void.
+> > > > + *   - As such, in
+> > > > + *       0 ? (void *)(x) : (char *)0
+> > > > + *     if x is the integer constant expression 0, operand1 is a nu=
+ll
+> > > > + *     pointer constant and the resulting type is that of operand2=
+:
+> > > > + *     char *. If x is anything else, the type is void *.
+> > > > + *   - The (long) cast silences a compiler warning for when x is n=
+ot 0.
+> > > > + *   - Finally, the _Generic() dispatches the resulting type into =
+a
+> > > > + *     Boolean.
+> > >=20
+> > > The comment is absolutely excessive.
+> > > I'm sure I managed about 2 lines in one of the patches I did.
+> >=20
+> > I think that Linus made it  clear in:
+> >=20
+> >   https://lore.kernel.org/all/CAHk-=3DwgfpLdt7SFFGcByTfHdkvv7AEa3MDu_s_=
+W1kfOxQs49pw@mail.gmail.com/
+> >=20
+> > that this deserves a detailed comment.
+>=20
+> And he wrote one in https://lore.kernel.org/all/CAHk-=3Dwiq=3DGUNWJwWh1CR=
+AYchW73UmOaSkaCovLatfDKeveZctA@mail.gmail.com/
+>=20
+>    /*
+>     * iff 'x' is a non-zero constant integer expression,
+>     * then '!(x)' will be a zero constant integer expression,
+>     * and casting that to 'void *' will result in a NULL pointer.
+>     * Otherwise casting it to 'void *' will be just a regular 'void *'.
+>     *
+>     * The type of '0 ? NULL : (char *)' is 'char *'
+>     * The type of '0 ? (void *) : (char *) is 'void *'
+>     */
+>     #define const_true(x) \
+>         _Generic(0 ? (void *)((long)!(x)) : (char *)0, char *: 1, void *:=
+ 0)
+>=20
+>=20
+>=20
+> >=20
+> > The details block in the current __is_constexpr() is 37 lines long,
+> > the details block in __is_const_zero() takes 22 lines. So I would
+> > argue that I made things better.
+>=20
+> The old block was too long :-)
+>=20
+> >=20
+> > Unless more people share your concern, I am planning to keep this comme=
+nt as-is.
+> >=20
+> > > > + *
+> > > > + * Glory to Martin Uecker <Martin.Uecker@med.uni-goettingen.de>
+> > >=20
+> > > IIRC Martin has agreed in the past that the accreditation can
+> > > be removed - especially since it refers to the 'sizeof (void)' trick.
+> >=20
+> > I tried to look for such message:
+> >=20
+> >   https://lore.kernel.org/all/?q=3Df%3A%22martin+uecker%22+__is_constex=
+pr
+> >=20
+> > but couldn't find it. Do you have the link?
+> >=20
+> > @Martin, do you agree that I remove the accreditation?
+> >=20
+> > > > + */
+> > > > +#define __is_const_zero(x) \
+> > > > +     _Generic(0 ? (void *)(long)(x) : (char *)0, char *: 1, void *=
+: 0)
+> > > > +
+> > > > +/*
+> > > > + * Returns a constant expression while determining if its argument=
+ is a
+> > > > + * constant expression, most importantly without evaluating the ar=
+gument.
+> > >=20
+> > > You need to differentiate between a 'constant integer expression'
+> > > and a 'compile time constant'.
+> >=20
+> > OK. This one was just copied from the previous __is_constexpr(). I will=
+ apply
+> > "s/constant expression/constant integer expression/g" in v2.
+> >=20
+> > > > + *
+> > > > + * If getting a constant expression is not relevant to you, use th=
+e more
+> > > > + * powerful __builtin_constant_p() instead.
+> > >=20
+> > > __builtin_constant_p() is not 'more powerful' it is testing for
+> > > something different.
+> >=20
+> > I meant to say that __builtin_constant_p() is more powerful at
+> > constant folding. But I agree that the comment is not clear.
+> >=20
+> > What about this?
+> >=20
+> >   If getting a constant integer expression is not relevant to you, use
+> >   __builtin_constant_p() which not only returns true if the argument
+> >   is an integer constant expression, but also if it is a compile time
+> >   constant.
+>=20
+> Complete f***ed tense.
+>=20
+> It's not about 'constant folding' and 'powerful' isn't the correct word.
+> They are checking for two different things.
+>=20
+> A 'constant integer expression' is defined by the C language, and is
+> basically something that is constant when first parsed by the compiler
+> (my definition) so it can pretty much only contain constants, sizeof()
+> and offsetof().
+>=20
+> __builtin_constant_p() is true if the compiler decides that an expression=
+ is
+> constant. This can track values through inlined function calls and can
+> change from 'unknown' to 'true' late in the compilation.
+>=20
+> 	David
+>=20
+> >=20
+> >=20
+> > Yours sincerely,
+> > Vincent Mailhol
+>=20
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412061434.7mqSO81h-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> block/bdev.c:1299:22: error: use of undeclared identifier 'STATX_WRITE_STREAM'
-           if ((request_mask & STATX_WRITE_STREAM) &&
-                               ^
->> block/bdev.c:1301:9: error: no member named 'write_stream_max' in 'struct kstat'
-                   stat->write_stream_max = bdev_max_write_streams(bdev);
-                   ~~~~  ^
-   block/bdev.c:1302:24: error: use of undeclared identifier 'STATX_WRITE_STREAM'
-                   stat->result_mask |= STATX_WRITE_STREAM;
-                                        ^
-   3 errors generated.
-
-
-vim +/STATX_WRITE_STREAM +1299 block/bdev.c
-
-  1268	
-  1269	/*
-  1270	 * Handle STATX_{DIOALIGN, WRITE_ATOMIC} for block devices.
-  1271	 */
-  1272	void bdev_statx(struct path *path, struct kstat *stat,
-  1273			u32 request_mask)
-  1274	{
-  1275		struct inode *backing_inode;
-  1276		struct block_device *bdev;
-  1277	
-  1278		if (!(request_mask & (STATX_DIOALIGN | STATX_WRITE_ATOMIC)))
-  1279			return;
-  1280	
-  1281		backing_inode = d_backing_inode(path->dentry);
-  1282	
-  1283		/*
-  1284		 * Note that backing_inode is the inode of a block device node file,
-  1285		 * not the block device's internal inode.  Therefore it is *not* valid
-  1286		 * to use I_BDEV() here; the block device has to be looked up by i_rdev
-  1287		 * instead.
-  1288		 */
-  1289		bdev = blkdev_get_no_open(backing_inode->i_rdev);
-  1290		if (!bdev)
-  1291			return;
-  1292	
-  1293		if (request_mask & STATX_DIOALIGN) {
-  1294			stat->dio_mem_align = bdev_dma_alignment(bdev) + 1;
-  1295			stat->dio_offset_align = bdev_logical_block_size(bdev);
-  1296			stat->result_mask |= STATX_DIOALIGN;
-  1297		}
-  1298	
-> 1299		if ((request_mask & STATX_WRITE_STREAM) &&
-  1300		    bdev_max_write_streams(bdev)) {
-> 1301			stat->write_stream_max = bdev_max_write_streams(bdev);
-  1302			stat->result_mask |= STATX_WRITE_STREAM;
-  1303		}
-  1304	
-  1305		if (request_mask & STATX_WRITE_ATOMIC && bdev_can_atomic_write(bdev)) {
-  1306			struct request_queue *bd_queue = bdev->bd_queue;
-  1307	
-  1308			generic_fill_statx_atomic_writes(stat,
-  1309				queue_atomic_write_unit_min_bytes(bd_queue),
-  1310				queue_atomic_write_unit_max_bytes(bd_queue));
-  1311		}
-  1312	
-  1313		blkdev_put_no_open(bdev);
-  1314	}
-  1315	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
