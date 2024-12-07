@@ -1,139 +1,123 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8664822C6FA
-	for <llvm@lists.linux.dev>; Sat,  7 Dec 2024 20:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDCB155A21
+	for <llvm@lists.linux.dev>; Sat,  7 Dec 2024 20:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733603894; cv=none; b=sCL+z7IDzPX38FMOn20H5/0m79UjgioC0Zg7V0aKdkwCkt6KSWZfeIAMMIhZ6czQyjglkQB//AL0+aG5E0ls9BmNjBVRUDy2ABYndybJdNRgTSvEflmqzErZzQvl371DUEfQ+GtI16eFHCnOLTugNS+Y1eWBDzvZ7aKiel1meHg=
+	t=1733604938; cv=none; b=Al13kN8iHzTJKDm0eEmLn8QatfOadMaChbjLiGwDdEqCfXXce37MwoXpbqrQYaa1iaeseUumF/LirW0Zl5wvyanFiH+YkiQWpn+c67OY07kCQ3efAItop7l0BMrssLrKh+sq7xlLVGU2aKYFeGAIppNEyxW7uECv7bDRsICITcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733603894; c=relaxed/simple;
-	bh=ct+vM4e0Jtr5aDgyp/mMMW/kc2rgYH8fWmf1syFBJE4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=srNSYyj1grAEth6cxk3/ZWSsaUroU7At6uEl4YoIjcce5JQUH9dnhzwqqTJbwzhZfAN7s3qniKfyjEg3Rj6frnFUfcFWWH+J9rFp4m822rbEUZvZcI3Scizm+sAb6kOEThSyKh2jq52MQ8gSj2CMx7jnWF/BjQ/U+ROdhWkVnWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=UKTqQgKz; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="UKTqQgKz"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-385e3621518so2344894f8f.1
-        for <llvm@lists.linux.dev>; Sat, 07 Dec 2024 12:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1733603890; x=1734208690; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ms7Dj4PhpQjQO3I96MAeIgwapri0gFHpEAP0IFi7Ea0=;
-        b=UKTqQgKzBt4Je7G3HLxrbg+fKFH1Sdnca2MBs4tpliM5dGsBo/ae700Fk3PcT1tBhQ
-         SfP2WUjXBY0Sku8z6uCrJ/R53xzBDn7MRPoFO5f0Pl2RhuleMstYReCPlRD2V7cCO+3j
-         JeJa4kYmFNzKFwBXw6xeAybUE1mCBBvj/OYx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733603890; x=1734208690;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ms7Dj4PhpQjQO3I96MAeIgwapri0gFHpEAP0IFi7Ea0=;
-        b=pEWTb7fxxNizr6rnsaz3CDDg/bCFJ+on5GPPrqCCy9E+FmvtQ6UOZmu/Qbq36JgvAr
-         r4G1Lnlzak7GQdqzExAjgbxRRNbfpZIao9q13VQrGBsW647AwtVviKXOyR6ozGCGfVfs
-         eu05Ejm7l5pt63rMqoljw+xN0sDDzCXrktKtKy5bjbmv8zSwWdaznjBbNBGhSjnjKHqk
-         2CGL6uCfZB2dKwTn+JQsVFauCIVhfS3oLM9yh9Tm2rLIgoYbDy7kD/MLibLFGQ6rrZ7X
-         +3HfCCK3UvdLz3qm40JKkcii+hhPIIh7ZPiwVaqVOhpqeGjnUm2U3hEa/br9Bs1bs3q1
-         0+iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW/NilW3IhaiB0VhS57Yg4OKD1JrOHlDp9vHQaztt0G/kc7hOOWsmquOvRRH9fa31Mgwhyq@lists.linux.dev
-X-Gm-Message-State: AOJu0YzM12STxTlh9ECFRJV1DUyA9SWnBnMLCngWrHNjqrDpzsPKQ/97
-	CJqJvUmo6o+dTT3BOwAsVDPJJcRry6D9GmLwAm8EIzKueN3SADaXbtvuf+3oTloYhrCesu6wsUS
-	LLT0g2w==
-X-Gm-Gg: ASbGncviqrSh3VPxF537jYYHtIHOVsIv0gHWdci1lz83XQjHDJLFlnS1gh8Eo3teoF3
-	tI13NTMhRjGCNLXjVwyAwLbtfvj/NS7k+XMzFRqmD55qOKrxKMycnO9+p5crsnYu9//DAS2qoP/
-	+ekp/Ywx4vpfOQ6+srz4Lp1p3UxuySLulKn/Ei6sFFAnZYhJxb4y6fsBlDL1VbFdep663oyAYux
-	fujt3de4X4z/ecPAYRdpWxZvZUg+PeYT1s91pZTUnpWdzWiW3tI9uxQz0ZBtK/22gyeDBzrfL4M
-	tVH2bzcXCRIMJ1FQAJ+vOnIM
-X-Google-Smtp-Source: AGHT+IE/jWo8rBWpkPb9RRBXU6hjccwaCVP6r1iTs6M86ySL6v/z8+bG4I6Kbs8toq6aCOmkmExsOQ==
-X-Received: by 2002:a5d:47ac:0:b0:386:3262:7419 with SMTP id ffacd0b85a97d-386326275bemr3542773f8f.1.1733603890589;
-        Sat, 07 Dec 2024 12:38:10 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625e4dbacsm424868166b.16.2024.12.07.12.38.10
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 07 Dec 2024 12:38:10 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-385eed29d17so2457737f8f.0
-        for <llvm@lists.linux.dev>; Sat, 07 Dec 2024 12:38:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX/hke7VpoDqXTpA4RZkgZLnFz7gZdIECL/9pzkEjEtVFcP9hbbBbCFC0TRO5BvaUAMQRJh@lists.linux.dev
-X-Received: by 2002:a17:906:328b:b0:aa6:326a:bcb9 with SMTP id
- a640c23a62f3a-aa63a10fe42mr541173966b.33.1733603485779; Sat, 07 Dec 2024
- 12:31:25 -0800 (PST)
+	s=arc-20240116; t=1733604938; c=relaxed/simple;
+	bh=e/uQG0RrQKiCa4soxG4iPB9nEUqMrZOwm6qD+LoByhQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=VCtxj9ffC6T90/X6zyo1y7ZXP1X2uFOr9UyFMQqaaJ/UFWrI5+yj8qP6nDwWaC0gO8oXRkr1V7quLqYkNa+Ry6fDPFbrn2afS7PLt8yylYSXYndPPmfaDtWA7W+7daaCrsWE/C+Hpnr4nlLj1Wv3Af2BKOMZZFI4WoTj+yregpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-29-1K7yAWunPEWHerYqwBNUTg-1; Sat, 07 Dec 2024 20:55:27 +0000
+X-MC-Unique: 1K7yAWunPEWHerYqwBNUTg-1
+X-Mimecast-MFC-AGG-ID: 1K7yAWunPEWHerYqwBNUTg
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 7 Dec
+ 2024 20:54:36 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 7 Dec 2024 20:54:36 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Linus Torvalds' <torvalds@linux-foundation.org>, Martin Uecker
+	<muecker@gwdg.de>
+CC: Vincent Mailhol <vincent.mailhol@gmail.com>, "w@1wt.eu" <w@1wt.eu>, "Luc
+ Van Oostenryck" <luc.vanoostenryck@gmail.com>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Yury
+ Norov" <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
+	<rikard.falkeborn@gmail.com>, "linux-sparse@vger.kernel.org"
+	<linux-sparse@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
+	<intel-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, "coresight@lists.linaro.org"
+	<coresight@lists.linaro.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+Thread-Topic: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+Thread-Index: AQHbROFPJXcuwP9wN0+yRzIQ2cx/pbLWa+gggAFf14CAACMqUIABpzoGgAAClHCAAAPoAIAAAwjggAANnsCAAMAogIAAM0ZwgACjWkOAAAJUsA==
+Date: Sat, 7 Dec 2024 20:54:35 +0000
+Message-ID: <6b05ec695abc465e9b221fb1180a0fa1@AcuMS.aculab.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+ <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+ <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+ <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+ <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+ <CAHk-=wjmeU6ahyuwAymqkSpxX-gCNa3Qc70UXjgnxNiC8eiyOw@mail.gmail.com>
+ <CAMZ6Rq+SzTA25XcMZnMnOJcrrq1VZpeT1xceinarqbXgDDo8VA@mail.gmail.com>
+ <CAHk-=wiP8111QZZJNbcDNsYQ_JC-xvwRKr0qV9UdKn3HKK+-4Q@mail.gmail.com>
+ <d23fe8a5dbe84bfeb18097fdef7aa4c4@AcuMS.aculab.com>
+ <CAHk-=win8afdcergvJ6f2=rRrff8giGUW62qmYs9Ae6aw=wcnA@mail.gmail.com>
+ <0f5c07b827c3468c8fa3928a93a98bfa@AcuMS.aculab.com>
+ <e806dd51b1ac4e289131297fbf30fc37@AcuMS.aculab.com>
+ <CAMZ6RqLOR3aCRW_js2agV+VFiHdazb4S2+NdT5G4=WbDKNB8bA@mail.gmail.com>
+ <b1ff4a65594a4d39b2e9b8b44770214e@AcuMS.aculab.com>
+ <CAMZ6RqJFReLJTd-O8s02oQNeB0SPQh3C-Mg+Nif5vMB9gFtQww@mail.gmail.com>
+ <CAHk-=wjpN4GWtnsWQ8XJvf=gBQ3UvBk512xK1S35=nGXA6yTiw@mail.gmail.com>
+ <6b8c9b942ba6e85a3f1e4eef65a9916333502881.camel@gwdg.de>
+ <CAHk-=whzFAaksqMdYeYC=T82tny1HnGGcYu_xJTXZF1OZwVziQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whzFAaksqMdYeYC=T82tny1HnGGcYu_xJTXZF1OZwVziQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
- <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
- <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com> <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
- <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com> <CAHk-=wjmeU6ahyuwAymqkSpxX-gCNa3Qc70UXjgnxNiC8eiyOw@mail.gmail.com>
- <CAMZ6Rq+SzTA25XcMZnMnOJcrrq1VZpeT1xceinarqbXgDDo8VA@mail.gmail.com>
- <CAHk-=wiP8111QZZJNbcDNsYQ_JC-xvwRKr0qV9UdKn3HKK+-4Q@mail.gmail.com>
- <d23fe8a5dbe84bfeb18097fdef7aa4c4@AcuMS.aculab.com> <CAHk-=win8afdcergvJ6f2=rRrff8giGUW62qmYs9Ae6aw=wcnA@mail.gmail.com>
- <0f5c07b827c3468c8fa3928a93a98bfa@AcuMS.aculab.com> <e806dd51b1ac4e289131297fbf30fc37@AcuMS.aculab.com>
- <CAMZ6RqLOR3aCRW_js2agV+VFiHdazb4S2+NdT5G4=WbDKNB8bA@mail.gmail.com>
- <b1ff4a65594a4d39b2e9b8b44770214e@AcuMS.aculab.com> <CAMZ6RqJFReLJTd-O8s02oQNeB0SPQh3C-Mg+Nif5vMB9gFtQww@mail.gmail.com>
- <CAHk-=wjpN4GWtnsWQ8XJvf=gBQ3UvBk512xK1S35=nGXA6yTiw@mail.gmail.com> <6b8c9b942ba6e85a3f1e4eef65a9916333502881.camel@gwdg.de>
-In-Reply-To: <6b8c9b942ba6e85a3f1e4eef65a9916333502881.camel@gwdg.de>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 7 Dec 2024 12:31:09 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whzFAaksqMdYeYC=T82tny1HnGGcYu_xJTXZF1OZwVziQ@mail.gmail.com>
-Message-ID: <CAHk-=whzFAaksqMdYeYC=T82tny1HnGGcYu_xJTXZF1OZwVziQ@mail.gmail.com>
-Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of __is_constexpr()
-To: Martin Uecker <muecker@gwdg.de>
-Cc: Vincent Mailhol <vincent.mailhol@gmail.com>, David Laight <David.Laight@aculab.com>, 
-	"w@1wt.eu" <w@1wt.eu>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"coresight@lists.linaro.org" <coresight@lists.linaro.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: dNkimRe77T0idPyOIXJhCnX7paNk_wPv94Di_6ynMuI_1733604926
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-On Sat, 7 Dec 2024 at 11:51, Martin Uecker <muecker@gwdg.de> wrote:
->
-> Am Samstag, dem 07.12.2024 um 10:19 -0800 schrieb Linus Torvalds:
-> >
-> > If there is one feature of C I would have liked it is "allow inline
-> > functions and statement expressions with constant arguments as
-> > constant expressions".
->
-> There exist proposals along those lines for C2Y.
->
-> From a more near-term solution, I wonder if making it possible (or
-> easier) to return integer constant expressions from statement
-> expressions and allowing a restricted form of statement expressions
-> at file scope would help?
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMDcgRGVjZW1iZXIgMjAyNCAyMDozMQ0KLi4u
+DQo+IFdlJ3JlIGN1cnJlbnRseSBzdGlsbCBhY2NlcHRpbmcgZ2NjLTUuMSBhcyBhIGNvbXBpbGVy
+LCBhbHRob3VnaCBpdCdzDQo+IHRpbWUgdG8gbG9vayBhdCB0aGF0IGFuZCBwcm9iYWJseSAoanVk
+Z2luZyBieSB3aGF0IHN0YWJsZSBkaXN0cm9zIHVzZSkNCj4gdXBncmFkZSB0byBzb21ldGhpbmcg
+bGlrZSBnY2MtOC4xIGFzIHRoZSBtaW5pbXVtIHN1cHBvcnRlZCBjb21waWxlcg0KPiB2ZXJzaW9u
+Lg0KDQpUaGF0J3MgZ29pbmcgdG8gYW5ub3kgbWUuDQpUaGUgc3lzdGVtIGRpc2sgaW4gdGhlIHN5
+c3RlbSBJIHRlc3QgYnVpbGQga2VybmVsIG9uIGlzIGFjdHVhbGx5IG9sZGVyDQp0aGFuIHRoZSBt
+YWNoaW5lISAobm90IGJ5IG11Y2gpLg0KQW5kIFVidW50dSAxOC4wNCAoc3RpbGwgZ2V0dGluZyBz
+b21lIGZpeGVzKSBoYXMgZ2NjIDcuNS4wLg0KDQpJdCBpc24ndCBhcyB0aG91Z2ggdGhlIDguMSB1
+cGRhdGUgaXMgYW55dGhpbmcgcmVhbGx5IG1ham9yLg0KRGlzYWJsaW5nIHN0YWNrIGNhbmFyaWVz
+IHdvdWxkIGxldCBhbiBvbGRlciBjb21waWxlciBiZSB1c2VkLg0KKGFuZCBJIG1pZ2h0IGNoYW5n
+ZSB0aGUgdGVzdHMuLi4pDQoNCk11Y2ggbW9yZSB1c2VmdWwgd291bGQgYmUgbWFuZGF0aW5nICdh
+c20gZ28gd2l0aCBvdXRwdXRzJyB3aGljaA0Kd291bGQgY3V0IG91dCBhIHdob2xlIGxvYWQgaG9y
+cmlkIGFsdGVybmF0aXZlcy4NCg0KQnV0IHRoYXQgd291bGQgbWFrZSBpdCBwcmV0dHkgY29tbW9u
+IHRoYXQgYSBrZXJuZWwgYnVpbGQgd291bGQNCm5lZWQgYSBsYXRlciBjb21waWxlciB0aGFuIHRo
+ZSBvbmUgdGhlIGRpc3RyaWJ1dGlvbiBpbnN0YWxsZWQuDQoNCkl0IG1heWJlIHRpbWUgdG8gY29u
+c2lkZXIgZGlyZWN0bHkgc3VwcG9ydGluZyBkb3dubG9hZGluZyBhbmQNCmJ1aWxkaW5nIHRoZSBy
+ZXF1aXJlZCBjb21waWxlciBhcyBwYXJ0IG9mIGEgbm9ybWFsIGtlcm5lbCBidWlsZC4NClRoYXQg
+d291bGQgYWxsb3cgdGhlIG1pbmltdW0gdmVyc2lvbiB0byBiZSBzZXQgdG8gYSB2ZXJ5IHJlY2Vu
+dA0KYnVpbGQgYW5kIGFsc28gbWFrZSBjcm9zcyBhcmNoaXRlY3R1cmUgYnVpbGQgZWFzaWVyLg0K
+KEluIGVmZmVjdCBhbGwgYnVpbGRzIGJlY29tZSBjcm9zcyBidWlsZHMuKQ0KDQpOZXRCU0QgdXNl
+ZCB0byAobWF5IHN0aWxsIGRvKSBpbXBvcnQgZ2NjIGludG8gaXRzIENWUyByZXBvc2l0b3J5Lg0K
+U28gdGhhdCBldmVyeXRoaW5nIHdhcyBidWlsdCB3aXRoIGEgJ2tub3duJyBjb21waWxlci4NCg0K
+SXQgaXMgKHByb2JhYmx5KSBsZXNzIG9mIGEgcHJvYmxlbSB3aXRoIGNsYW5nLg0KUGVvcGxlIHVz
+aW5nIGNsYW5nIGFyZSBsaWtlbHkgdG8gaGF2ZSBleHBsaWNpdGx5IGRvd25sb2FkZWQgaXQuDQoN
+CglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwg
+TW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzog
+MTM5NzM4NiAoV2FsZXMpDQo=
 
-Even a more limited form of this would have been useful several times,
-but as mentioned, the problem tends to be that we end up supporting
-compilers for many years.
-
-So then we end up having to work with older compilers without that
-feature, and can't actually clean stuff up until many years after the
-fact.
-
-We're currently still accepting gcc-5.1 as a compiler, although it's
-time to look at that and probably (judging by what stable distros use)
-upgrade to something like gcc-8.1 as the minimum supported compiler
-version.
-
-            Linus
