@@ -1,139 +1,197 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx-2023-1.gwdg.de (mx-2023-1.gwdg.de [134.76.10.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8AE13C690
-	for <llvm@lists.linux.dev>; Sat,  7 Dec 2024 12:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5CBBA49;
+	Sat,  7 Dec 2024 13:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.76.10.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733575520; cv=none; b=Lfn7KYXZuIz12tVB1VuIsr1wr91PH+jFVlmjY1yBKQ+AHh09HAJHx+rd08fYYU8Bm50dXQvWv4QNVhgpztb6+zs5gBpRtElU2hSqvXhBRqL/XWsW5G6jDMAm3Skh1Xna6w1BFVjTFx12vdN3vCwB+FQFeqq9Qu9XNh2J4MGjlkY=
+	t=1733576850; cv=none; b=UX7CDvvQiBilQZ+EgMtgRu+2HBnmgqk1vP0SxnfOsOPqVBUlaZKwyzR8UtkAjXPXkEeSyZgnG1Ont1ULoATWKv1PFZprXhsaKBZvtWHYWJhyFtZKS1cJbSR019gZk813dvnZsSOFIm86It4an0Z7H+lxOBFe+LIR6axFUPRTL5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733575520; c=relaxed/simple;
-	bh=WM9dhS+XJ8Y/DlkDR1zqqAPj4j/n4NFEAeMDfBwNaZw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DLu0RGhOMhgU5i2IFROuPOpG/cCmuE48jJV+HPwvQJaPtuaHwubgxnTGqihDNs+6tFmpSqSlBoUCRP2Tw9X7oKW65dh5lYFsdIVmymrw7gEH7NWZ0Rf6JGVx4gmiVXCpZe0KkpPBxyUArStCTkQmusrfIF1dPbReBD7qoyaMP0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IpTE1XkT; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733576850; c=relaxed/simple;
+	bh=fOYGJZfgk0YynlbEA5Sp+VYIW2sBwcX+hdhV7N1wLtQ=;
+	h=Message-ID:Subject:From:To:CC:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G0RMBLVSn0VADt87k4dV+UwhU4u3hOAtDv/vsqVjwNjhmj1Vs5Mz0eFArk85RhM5uoWpc+Rhb3NNASfdYXQJzzQXTi7+Z1c7ed1QYazbVJe1HvpbcWZAPSX2nqIj1AldYBsAFWNypZU8D781kqhZlTnpG9M/p6ZoZuPo5t17yqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de; spf=pass smtp.mailfrom=gwdg.de; dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b=e2Qd1tAB; arc=none smtp.client-ip=134.76.10.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gwdg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gwdg.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IpTE1XkT"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a9a0ec0a94fso372288166b.1
-        for <llvm@lists.linux.dev>; Sat, 07 Dec 2024 04:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733575517; x=1734180317; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wGQkzKFSDY9TmwP9AaO3pZHfF41YjBH8/yCe8njtTKs=;
-        b=IpTE1XkTIf7uKXI1+m40gTMIDskxYyIj+k+h4j8O/gqlnhUZVdYaSvT6MpwddXugx3
-         htJ6oKOBiuBp3+Ba9hsXW4Fs20Zw1X9es1YSxn/r5gIDy897HRSKVSsLyq+ajfgR2qpC
-         YwKBhmHMwG2oEASYqMF9jGdJf8TN3qITsh+IZveGPEIKbLZxBAB99ed7rQZAyGOHVSti
-         Z97gRz/a2p+tFghdc9VDI3O8v6j7fgXTCE4NlZnouL0ohEbmekh6v56kdFE7IFE12vFx
-         hI1HldjTsVM7Rq47AXZdNtQaNMDMBx60cd0iSepMGwTKrr5HpPQWN+vtsEFgXjiq/I0t
-         pOzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733575517; x=1734180317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wGQkzKFSDY9TmwP9AaO3pZHfF41YjBH8/yCe8njtTKs=;
-        b=PLRSGI99yvSwt+FGTcb5YPUSBwWKKszXE80mWL33sjVUI/pCW6kqFe7yVBu9zoVI/4
-         DMBfrQUYz+33quVf0Im0ft+CjqcJZVA7iAhPRu9JClYkSCtBuO4FCN8Jm81Cngo75mTf
-         oWzGTmB4WQhG4jSquhdc3qmgMVzZZWeYOAF7s7EHyySMl6rAWlvV7GSBBYLHFKR70wrc
-         mPPXvTsDp9dn4uw2kZn6jJeuX4ilqloPYLu/k29T2HcL33fBuG94FLocqMbtQWZtrosH
-         DIWUJfIGDpV3TYZJ6Gfv5fHcK/Ce+kyOezs6lRiAJZtRQFZKJcQUPdzq1N6WnDW77R8z
-         06OA==
-X-Forwarded-Encrypted: i=1; AJvYcCWnRl3UrRpKbysoye0bVO6mBgTQHS93bTOHh4KrDgWD4/sp3VZ++CObMze+brICl9+YjZuK@lists.linux.dev
-X-Gm-Message-State: AOJu0YzIxXipE5eOyKb6AGzHMfdP/wUyV7kRbovCLCLgk6+ciHq0gP/y
-	6kLc337SBRHXK1HOABelPyKPa3H81wyGBx0S8ROmWLc44FO2OR7UrTV5dCE7RXPadDuEoNDzbfV
-	sh9EbCTeCycRpkuqlw30vlZwrvy8=
-X-Gm-Gg: ASbGncsfFmqUOxpfU78PbT68JOcTpH5vwA0DtSZ6yJxZEPq2CA7ybxL7+hG014ic+9c
-	1NC8VqonRfpTgNT3nusNT8mFXLNvNKqA=
-X-Google-Smtp-Source: AGHT+IFKLT/0vBLq8e4+Q9cBsFCmjYKYarCQPpvMXUHvXes9qzmJwCAEBQoHpEZanqb6oPfHlcskXKrazzFRS2f9zhw=
-X-Received: by 2002:a17:907:9516:b0:aa6:1ee0:c111 with SMTP id
- a640c23a62f3a-aa63a33cbf7mr437084566b.42.1733575517044; Sat, 07 Dec 2024
- 04:45:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gwdg.de header.i=@gwdg.de header.b="e2Qd1tAB"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gwdg.de;
+	s=2023-rsa; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
+	In-Reply-To:Date:CC:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=/uO1DmifJTy9zLn5kLoz0yWzTcVA7p32pVfQJYIukvo=; b=e2Qd1tABJB3so0uW5yOeFNTh2m
+	bAgdqHapE4ARaSqoPh0wuuYfkFJiN6fzQw25oMXqezvMZhvs8kwWkdhWJqA9wx2m+4uh5kl3iXXWR
+	qD1BX8N+9Bgie0PF2OleNUfi3Pzu330Smp9qtupvT+WFdjA4vpNd3x/Xo+pidd75LM2IrPPoiH1GB
+	j1+KANv8/8ZEscTVeL/Qrri3V1yz1nuRxuKe1Po4Gs3OK6ceQg9+p8OdFsiFDULdOuMsi2j2hC3oZ
+	Kfqzp1Os0LeI/3TSUiX2jy6rjZ0u8HpCdthdsHmWuIN/14fGhDhA8pFyO8Q9kdyTPMQYM4NuQwuzi
+	mi5Ys46A==;
+Received: from xmailer.gwdg.de ([134.76.10.29]:50730)
+	by mailer.gwdg.de with esmtp (GWDG Mailer)
+	(envelope-from <muecker@gwdg.de>)
+	id 1tJuWk-004M5Z-0k;
+	Sat, 07 Dec 2024 14:07:18 +0100
+Received: from mbx19-fmz-06.um.gwdg.de ([10.108.142.65] helo=email.gwdg.de)
+	by mailer.gwdg.de with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+	(GWDG Mailer)
+	(envelope-from <muecker@gwdg.de>)
+	id 1tJuWk-000UX0-0P;
+	Sat, 07 Dec 2024 14:07:18 +0100
+Received: from [192.168.0.221] (10.250.9.200) by MBX19-FMZ-06.um.gwdg.de
+ (10.108.142.65) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1544.14; Sat, 7 Dec
+ 2024 14:07:16 +0100
+Message-ID: <9a0c041b6143ba07c2b3e524572fccd841f5374b.camel@gwdg.de>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+From: Martin Uecker <muecker@gwdg.de>
+To: David Laight <David.Laight@ACULAB.COM>, Vincent Mailhol
+	<mailhol.vincent@wanadoo.fr>
+CC: Linus Torvalds <torvalds@linux-foundation.org>, Luc Van Oostenryck
+	<luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Rikard Falkeborn
+	<rikard.falkeborn@gmail.com>, "linux-sparse@vger.kernel.org"
+	<linux-sparse@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, "linux-hardening@vger.kernel.org"
+	<linux-hardening@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
+	<intel-gfx@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, "coresight@lists.linaro.org"
+	<coresight@lists.linaro.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Date: Sat, 7 Dec 2024 14:07:08 +0100
+In-Reply-To: <344b4cf41a474377b3d2cbf6302de703@AcuMS.aculab.com>
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+	 <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+	 <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+	 <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+	 <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+	 <abdd7862f136aa676b2d2c324369f4a43ff9909c.camel@gwdg.de>
+	 <CAMZ6RqKzGiRNMeLsQKRNrxvW_bXB-kEi11udQ82kKX6tGCrqcg@mail.gmail.com>
+	 <9607300dfca5d71ca9570b1e1de0864e524f356b.camel@gwdg.de>
+	 <344b4cf41a474377b3d2cbf6302de703@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
- <20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
- <1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com> <CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
- <9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com> <abdd7862f136aa676b2d2c324369f4a43ff9909c.camel@gwdg.de>
- <CAMZ6RqKzGiRNMeLsQKRNrxvW_bXB-kEi11udQ82kKX6tGCrqcg@mail.gmail.com> <9607300dfca5d71ca9570b1e1de0864e524f356b.camel@gwdg.de>
-In-Reply-To: <9607300dfca5d71ca9570b1e1de0864e524f356b.camel@gwdg.de>
-From: Vincent Mailhol <vincent.mailhol@gmail.com>
-Date: Sat, 7 Dec 2024 21:45:05 +0900
-Message-ID: <CAMZ6RqJGqBqvgxzp5yPFY1pk0WkkwEMM34qU-dZ3kXfsnKaqEg@mail.gmail.com>
-Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of __is_constexpr()
-To: Martin Uecker <muecker@gwdg.de>
-Cc: David Laight <David.Laight@aculab.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@linaro.org>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Rikard Falkeborn <rikard.falkeborn@gmail.com>, 
-	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, 
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>, 
-	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"coresight@lists.linaro.org" <coresight@lists.linaro.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: MBX19-FMZ-04.um.gwdg.de (10.108.142.63) To
+ MBX19-FMZ-06.um.gwdg.de (10.108.142.65)
+X-EndpointSecurity-0xde81-EV: v:7.9.17.458, d:out, a:y, w:t, t:5, sv:1733541190, ts:1733576838
+X-Virus-Scanned: (clean) by clamav
+X-Spam-Level: -
 
-On Sat. 7 Dec. 2024 at 17:39, Martin Uecker <muecker@gwdg.de> wrote:
-> Am Freitag, dem 06.12.2024 um 16:26 +0900 schrieb Vincent Mailhol:
-> > > On Fri. 6 Dec. 2024 at 15:40, Martin Uecker <muecker@gwdg.de> wrote:
-> > > > > Am Freitag, dem 06.12.2024 um 02:25 +0000 schrieb David Laight:
-> > > > > > > From: Vincent Mailhol
-> > > > > > > > > Sent: 05 December 2024 15:31
+Am Samstag, dem 07.12.2024 um 10:33 +0000 schrieb David Laight:
+> From: Martin Uecker
+> > Sent: 07 December 2024 08:40
+> ...
+> > I find it amazing how much time the Linux kernel community spends
+> > revising code to make it work perfectly.
+> >=20
+> > Still, I am wondering whether some of this time and effort should not
+> > be targeted at C compilers and language work to make these macro
+> > hacks unnecessary?
+>=20
+> I'm probably not alone in thinking that sometimes the compiler writers
+> are doing their hardest to make life hard for people writing low level co=
+de.
 
-(...)
+GCC and Clang are open-source projects just like the kernel. One can=C2=A0
+go there and contribute.  I am not saying that it is always easy to
+find consensus and there also projects that have other requirements
+than the kernel. But I started to contribute to GCC (with very limited
+time) to address some of my own issues, and I found the community very
+welcoming.
 
-> > > > > > > > > @Martin, do you agree that I remove the accreditation?
-> > >
-> > > So, do you agree to have the accreditation removed in compiler.h?
-> > > Personally, I do not mind. I am also OK to remove you from the
-> > > documentation and add you to the CREDITS file if you'd like to.
+>=20
+> > I already found the original motivation for these macros very questiona=
+ble.
+> > Removing VLAs at the cost having imprecise worst-case bounds strikes
+> > me as fundamentally misguided - at least if security is the motivation.
+>=20
+> VLA basically cannot be allowed because of the very limited stack space.
+> Even the per-frame limits aren't a real solution - they just catch the
+> places that most likely to cause issues. Very deep call chains and any
+> recursion (that isn't tightly bounded) can cause grief.
+
+VLA use *less* stack than a fixed size arrays with fixed bound.
+>=20
+> > So maybe there are other good reasons for this, e.g. bad code
+> > for VLAs or risk of jumping the guard page if the attacker can somehow
+> > influence its size (but for this there is -Wvla-larger-than). But even =
+then,
+> > wouldn't it be a more worthwhile and interesting investment of engineer=
+ing
+> > resources to improving code generation / warnings at the compiler level=
+?
+>=20
+> This is kernel code, any access into a stack guard page is basically
+> unrecoverable for the entire system - a kernel lock/mutex could be held.
 >
-> Sorry, I somehow didn't read this part. Please do whatever you think is
-> most appropriate (but please update my email to the new above if it
-> still appears anywhere).
+> With a list of (calling_fn, called_fn, stack_offset) it is possible
+> calculate an accurate maximum stack usage.
+> Indirect calls would need to use the (IIRC) FINE_IBT hashes to identify
+> the possible functions (and I'm not sure than has an attribute for a 'see=
+d'
+> so that 'int (*)(void *)' functions can be separated into groups.
+> I've not looked at whether objtool could generate the output - but is has
+> to be easier for the compiler to do it.
+>=20
+> I have done that calculation in the past (parsing a compiler listing file=
+)
+> and basically discovered the system didn't actually have enough memory
+> to allocate 'safe' stacks! The max stack was pretty much always (the
+> equivalent of) printf() inside an error path that never happens.
+> It might be interesting to see how bad linux is (after sorting out
+> how to handle recursive calls - hopefully there won't be too many
+> unexpected ones.
 
-OK. Then I will remove the accreditation from the  compiler.h
-documentation and instead add an entry in the CREDITS file in a
-separate patch. I think this is the most appropriate way.
+Compiler and ISO C language support to guarantee bounded stack usage
+would indeed be a very interesting feature.
 
-> I find it amazing how much time the Linux kernel community spends
-> revising code to make it work perfectly.
->
-> Still, I am wondering whether some of this time and effort should not
-> be targeted at C compilers and language work to make these macro
-> hacks unnecessary?
+>=20
+> > Also the fortification of strlen and co seems something which could be
+> > much better solved with annotations and proper compiler support.
+>=20
+> That might be nice, but kernel have to be buildable with relatively
+> old compilers.
 
-It seems to me that the long term solution to this problem are the
-constexpr functions.
+Yes, but it could make use of it at some point in the future (or
+optionally).
 
-But the core issue is that before getting this support in Linux, we
-have to wait for this to be added to the C2Y draft, then implemented
-in the compilers (probably just reusing the C++ constexpr functions)
-and finally wait maybe one more decade for the C2Y support to reach
-the kernel. For reference the kernel supports C11 only from 2022=E2=80=A6 S=
-o
-maybe we will see those in the kernel around 2037? Meanwhile, we have
-to deal with those hacks.
+> Some things might need language/ABI changes to better handle ptr+size.
+> The ability to return such a pair in registers would probably be useful
+> (without doing horrid games with a union and __int128).
+
+ptr + size is something we are looking into.
+
+You can already do quite a bit by using C99's syntax for variably modified
+types. For example, you would get UBSan trap for the following OOB access:
+
+int foo(int n, char (*buf)[n])
+{
+  (*buf)[n] =3D 1;
+}
+
+This does not require an ABI change.=20
+
+Martin
 
 
-Yours sincerely,
-Vincent Mailhol
+
+
