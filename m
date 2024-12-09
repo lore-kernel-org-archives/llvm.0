@@ -1,61 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8291915AD9C;
-	Mon,  9 Dec 2024 05:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C6A155C96;
+	Mon,  9 Dec 2024 05:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733720867; cv=none; b=o2/eDklOX6fRTl5ZUKe8SSgIQstUU0KlfaFMKq90TSd3ZZmH5Sio88YHeEqY8s8fIF2uvBwHoYX7JnycsaQbFWuxzEUzlWh1WM9VgBiPnhLLugXEy/Hiy33dk9YSlu4QpcgZuUoz07E9EKWhtSkxKf/Q5wLsi3aAzcr/L3NHrjo=
+	t=1733720949; cv=none; b=RRTJUmoBuaCSUx2mmMUITLXARcEwNMuB3m65nAJf3wYL77r6YrxuVe0zFSqrFExE+iR0TKjH+KCI704Hevqb8TLWRk8+5fTOCDvmdBF9FfXydOoPnugfhBEv4MVWDE1mEMCfNMvSe1RAWQDKjvcHuVF7sgSTW0i4cSKtWzAszDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733720867; c=relaxed/simple;
-	bh=NKS66/pv9MPAa4a7cogZwjps/rvPn2fzeRcXPCeCwTo=;
+	s=arc-20240116; t=1733720949; c=relaxed/simple;
+	bh=jYILTV6MefuoCzDE2iYdlbJRzhBEhk1oamLG9PPaW0E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y3ieZ0ec9oaAnW+s/PhxyeuubUfP/iSVzaGbat242Zsg9mc4VOVKBYyReKnEPOhkPXyMvdlBH51SwYw+Tzn1USMoO2ObyTOvjA2GaVlj9UhAPjbEj13TL9htnURLGNh19uXH45KML2alPDovMGhhOYQ57+EKaLmxskvTLvs+T9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MmRlf6bj; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=CzrImGNSY9NIg74IDAtSDqjS4KdbuSrpnronR1V8xXJuySZTXIFFaC165T8qrBGnROn8BU1NN+24gUDw4RM3pxhAVHvFejOVIXcA9ItKEaPRhSvsyuWF7l1hIUlpHRrkseXSrvMliZbn/7gVWjw53ZFuGyYSUqIqaZOXPZv2kUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AVJZ4SE8; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MmRlf6bj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AVJZ4SE8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733720865; x=1765256865;
+  t=1733720948; x=1765256948;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NKS66/pv9MPAa4a7cogZwjps/rvPn2fzeRcXPCeCwTo=;
-  b=MmRlf6bjM7jll8BbhWwo3j3px47uor89z6DV3XuXhS0GOJ5+0EP1YbKU
-   VDIJMftQXdNJRac705iZRW+Y1wKBB3IE+O1KZGhPG9X9/VaT9uXu9glZi
-   LSsHXH+PhJotC7B/ZgC+PzsRtdI09ZcGoflKibk+QYH39aVNR+GabpyNE
-   fmTTpfxeeCVIJzlDb/2G1o5mGL7iZLxZRRwK01JWPTSYFWsVgaw+KhkwM
-   I6b/00NhER/PCQwjo4MxjL2ZEKUWM9jMY+yfY1vby90D1s2e347ldkdeX
-   8sXa0mucyhllr9M0hxmAeFov1JNDUojF4pVzNl8HLT6QJEdHN+CKKwdeb
+  bh=jYILTV6MefuoCzDE2iYdlbJRzhBEhk1oamLG9PPaW0E=;
+  b=AVJZ4SE8jWEt+gyIKVZgGA/Dius7IqrVjoaRrZVQ3dns06hw2Bp/UU1k
+   X16eFLQFTyjK96pHI9gwQwH4IHbU2ZIuuOhyplUF8bHTrTgCT/F4ATpB2
+   3RGmjIGJlli2Uj3G6AuF93imbX6MJ8cccdEZkpc1eoVBSnPj7ma9U3x0i
+   y1r0m6uGR9DiLmRyvopHFz2Wd22PV8A9U+y+09+TQml7OOD6fJQmzbjvQ
+   /eP5HiR9NcNlyPM5M4QbDPLlia5hOVkKnNcj1ScFGJJa0C681bRYUnsVi
+   aBM8cJqzBndHLDjfLF4jRhRE2ChZFjtSHI/2rh1sKQ+FRvzeEaCtBGC2Y
    w==;
-X-CSE-ConnectionGUID: MePXUrY8RCekghzW1ZUpIA==
-X-CSE-MsgGUID: 7wWrqAxDSTa84T/1qz6Viw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45383406"
-X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="45383406"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 21:07:43 -0800
-X-CSE-ConnectionGUID: rw/ar4JQQViLXsOymxmTew==
-X-CSE-MsgGUID: txE7/nD1RQWVaIWJ7jr1nw==
+X-CSE-ConnectionGUID: iUxZNw7yTpeS1jP4BTIBaw==
+X-CSE-MsgGUID: pTvucPmRQkqVQSAPB4ZEhw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34140459"
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="34140459"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 21:08:47 -0800
+X-CSE-ConnectionGUID: lUrmVs9+S32ILcjk2EmyFg==
+X-CSE-MsgGUID: pVjykfr5TqWACXgcvzUnQw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="95053462"
+   d="scan'208";a="99413803"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 08 Dec 2024 21:07:42 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 08 Dec 2024 21:08:44 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKVzf-0003xh-1R;
-	Mon, 09 Dec 2024 05:07:39 +0000
-Date: Mon, 9 Dec 2024 13:07:31 +0800
+	id 1tKW0f-0003xt-2P;
+	Mon, 09 Dec 2024 05:08:41 +0000
+Date: Mon, 9 Dec 2024 13:08:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Roger L. Beckermeyer III" <beckerlee3@gmail.com>,
-	linux-btrfs@vger.kernel.org
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Roger L. Beckermeyer III" <beckerlee3@gmail.com>
-Subject: Re: [PATCH] btrfs: edit __btrfs_add_delayed_item() to use rb helper
-Message-ID: <202412091036.JGaCqbvL-lkp@intel.com>
-References: <9b85bdbc269d20886590f0a70de66c602d72aa9d.1733695544.git.beckerlee3@gmail.com>
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 1/2] HID: input: fix test for CONFIG_HID_KUNIT_TEST=m
+Message-ID: <202412091018.qz83ukPy-lkp@intel.com>
+References: <20241208-hid-ifdef-kunit-v1-1-cbea6077a233@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,76 +67,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9b85bdbc269d20886590f0a70de66c602d72aa9d.1733695544.git.beckerlee3@gmail.com>
+In-Reply-To: <20241208-hid-ifdef-kunit-v1-1-cbea6077a233@weissschuh.net>
 
-Hi Roger,
+Hi Thomas,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on linus/master v6.13-rc2 next-20241206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 7503345ac5f5e82fd9a36d6e6b447c016376403a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roger-L-Beckermeyer-III/btrfs-edit-__btrfs_add_delayed_item-to-use-rb-helper/20241209-064154
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/9b85bdbc269d20886590f0a70de66c602d72aa9d.1733695544.git.beckerlee3%40gmail.com
-patch subject: [PATCH] btrfs: edit __btrfs_add_delayed_item() to use rb helper
-config: arm-randconfig-001-20241209 (https://download.01.org/0day-ci/archive/20241209/202412091036.JGaCqbvL-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091036.JGaCqbvL-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/HID-input-fix-test-for-CONFIG_HID_KUNIT_TEST-m/20241208-200350
+base:   7503345ac5f5e82fd9a36d6e6b447c016376403a
+patch link:    https://lore.kernel.org/r/20241208-hid-ifdef-kunit-v1-1-cbea6077a233%40weissschuh.net
+patch subject: [PATCH 1/2] HID: input: fix test for CONFIG_HID_KUNIT_TEST=m
+config: i386-randconfig-012-20241209 (https://download.01.org/0day-ci/archive/20241209/202412091018.qz83ukPy-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091018.qz83ukPy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412091036.JGaCqbvL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412091018.qz83ukPy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/btrfs/delayed-inode.c:9:
-   In file included from fs/btrfs/ctree.h:10:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/btrfs/delayed-inode.c:392:10: error: call to undeclared function 'rb_find_add_cached'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     392 |         exist = rb_find_add_cached(&ins->rb_node, root, btrfs_add_delayed_item_cmp);
-         |                 ^
->> fs/btrfs/delayed-inode.c:392:8: error: incompatible integer to pointer conversion assigning to 'struct rb_node *' from 'int' [-Wint-conversion]
-     392 |         exist = rb_find_add_cached(&ins->rb_node, root, btrfs_add_delayed_item_cmp);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
-
-
-vim +/rb_find_add_cached +392 fs/btrfs/delayed-inode.c
-
-   380	
-   381	static int __btrfs_add_delayed_item(struct btrfs_delayed_node *delayed_node,
-   382					    struct btrfs_delayed_item *ins)
-   383	{
-   384		struct rb_root_cached *root;
-   385		struct rb_node *exist;
-   386	
-   387		if (ins->type == BTRFS_DELAYED_INSERTION_ITEM)
-   388			root = &delayed_node->ins_root;
-   389		else
-   390			root = &delayed_node->del_root;
-   391	
- > 392		exist = rb_find_add_cached(&ins->rb_node, root, btrfs_add_delayed_item_cmp);
-   393		if (exist != NULL)
-   394			return -EEXIST;
-   395	
-   396		if (ins->type == BTRFS_DELAYED_INSERTION_ITEM &&
-   397		    ins->index >= delayed_node->index_cnt)
-   398			delayed_node->index_cnt = ins->index + 1;
-   399	
-   400		delayed_node->count++;
-   401		atomic_inc(&delayed_node->root->fs_info->delayed_root->items);
-   402		return 0;
-   403	}
-   404	
+>> ld.lld: error: undefined symbol: kunit_kmalloc_array
+   >>> referenced by test.h:447 (include/kunit/test.h:447)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by test.h:447 (include/kunit/test.h:447)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_get_battery_property) in archive vmlinux.a
+   >>> referenced by test.h:447 (include/kunit/test.h:447)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_get_battery_property) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: kunit_binary_assert_format
+   >>> referenced by hid-input-test.c:20 (drivers/hid/hid-input-test.c:20)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:24 (drivers/hid/hid-input-test.c:24)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:28 (drivers/hid/hid-input-test.c:28)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced 6 more times
+--
+>> ld.lld: error: undefined symbol: __kunit_do_failed_assertion
+   >>> referenced by hid-input-test.c:20 (drivers/hid/hid-input-test.c:20)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:24 (drivers/hid/hid-input-test.c:24)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:28 (drivers/hid/hid-input-test.c:28)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced 9 more times
+--
+>> ld.lld: error: undefined symbol: kunit_ptr_not_err_assert_format
+   >>> referenced by hid-input-test.c:16 (drivers/hid/hid-input-test.c:16)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:39 (drivers/hid/hid-input-test.c:39)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_get_battery_property) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:43 (drivers/hid/hid-input-test.c:43)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_get_battery_property) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: __kunit_abort
+   >>> referenced by hid-input-test.c:16 (drivers/hid/hid-input-test.c:16)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_set_battery_charge_status) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:39 (drivers/hid/hid-input-test.c:39)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_get_battery_property) in archive vmlinux.a
+   >>> referenced by hid-input-test.c:43 (drivers/hid/hid-input-test.c:43)
+   >>>               drivers/hid/hid-input.o:(hid_test_input_get_battery_property) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
