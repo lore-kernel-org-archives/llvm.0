@@ -1,66 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92247288CC
-	for <llvm@lists.linux.dev>; Mon,  9 Dec 2024 17:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E539155345;
+	Mon,  9 Dec 2024 18:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733764098; cv=none; b=bVv/TqE4FGyNgZgj++y91YytBVc1gvojlzXijvyaLxnzT0nk/oRO4WeD/NZ1C2tLFnpR0yT42rUzaAXww4Cxk8uoYZ+gzCI7EDX6UPu7qR3ZBaxf5rTIQ+rzxOu03tQGG/fNAWE7Nklb7Yixc5sy4izs2sueOX2KWCNV4dGmSKg=
+	t=1733768829; cv=none; b=YieHbMwqd4DkQ2xlyGpKokb9iL4vmEURkbKevvaAII/p+FFYPM6QjDKkdu+ibQUSQWp7AD8Om1RunEqXDE+yX8uSWdcIrRwfpKJ/j0Jv0gS4/u1cl/ajtJGbzAkxGOH9iHC9nYNBbUi0Squ65O9MiiRl+fAelY6jJEfOzSxffKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733764098; c=relaxed/simple;
-	bh=+nYjogMqNb5pAlS2lqBICVPaY4egCS2awGI36Tub0mc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SYWEsiPjk2Vp8LfYBtKUUqV2vClpKtcvcaaX2jyjLMIibSqnanPrNmfh/seBecH3cpa3TuXh9QSellON0vHfMZLzK4RwHRhK/HwgEprCV5Ni4oP16u0KECSzHM6RcEqlWR66jCHju158Rbq2H5bkBDa9owIwbCV3BwIIhv0OaFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cVU8bpCX; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1733768829; c=relaxed/simple;
+	bh=f9qJTFyXFyyNKKG3cYnLGjDTXRWksWJ5bSdnCn8V8zo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eluIxJIdNYFQr3I1CRrCI69UIxRvUZSufPXdrAKc3E9s/fNRORghwloiWA5Gt7eptyxXN1Mk8I9vjDgwZVyDCZRsoWefrTtSSk6e/5IsElHzMP48k99iXWI+/IuhBidKT2xTP0wuFR0tHe0FiHmrRuGSItFZPvFiwECxDEZeQMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8iTdejB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cVU8bpCX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733764097; x=1765300097;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+nYjogMqNb5pAlS2lqBICVPaY4egCS2awGI36Tub0mc=;
-  b=cVU8bpCXpxJAUWZUUM2hMezoLwx0yxfWllk0Z8wZAd2yMSmRkyFTrr4l
-   7oMCyHu6RI2DWlMQ6waGbFGTBA1p+KXNMt6+ItCuAXDnb4Y1yN3HSez/g
-   sbjZwsaxHPGUrdVZc8roTyioiB/KS7L5ING9hjtSLUIUQPz7zyOz5vKYK
-   rHhR6a/bMtE5pRDUDGhubM0FAn+oBFszBC0boNdeQixYUc6S4eIbOcoea
-   4iIx7EZ/n/f7NYNx46S5TDtFIozUNyV7QYQ9QTJVEdHipHCOyPFJpje7j
-   Naxp0w3Lc76xkLxkceSBJ+dd535Pp7ix6/MBpP4nUVlJ7ONIIDIImMWQh
-   w==;
-X-CSE-ConnectionGUID: /Exk3CHnT0mC5CMO4F1wgg==
-X-CSE-MsgGUID: wcc4047CRVmS5kG1KdOVaQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="33964385"
-X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
-   d="scan'208";a="33964385"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 09:08:17 -0800
-X-CSE-ConnectionGUID: xKaIGYAqR5mcNHCvIZYz9g==
-X-CSE-MsgGUID: AeGALsELSXybbf0Cxeg0/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
-   d="scan'208";a="95610182"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 09 Dec 2024 09:08:13 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B63C144B; Mon, 09 Dec 2024 19:08:11 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] lockdep: Mark chain_hlock_class_idx() with __maybe_unused
-Date: Mon,  9 Dec 2024 19:08:10 +0200
-Message-ID: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8iTdejB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F7F4C4CED1;
+	Mon,  9 Dec 2024 18:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733768828;
+	bh=f9qJTFyXFyyNKKG3cYnLGjDTXRWksWJ5bSdnCn8V8zo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=I8iTdejBzdvu/wVU9GQDf821juswSbAj+Kfty+fr+4OzKsrJMZ9YRNXO3iQbzuQfj
+	 mZfFYNYf0FtEGlIbXlwbLIqZeELF6wUKmBg0fRQwn0+y4U/jPJFUVwqZxrn31EIB8E
+	 LwQLak6Tqlj7R/aPkX3aQijB484s1iCbBaALj/Ql1SmwprhUZ/DD3WHs0AAj3K/FEQ
+	 0q6bvO70Yo6FV/tJHqSzroTSQoFbaQrEdNzZpE9LzIpWiniyfEc5Bss3IhUg4ocfxa
+	 35eApdPBewEEA+tWGhI6P7RzDyzb7KiVtEdkvfX6RW6qqRxJEwAE4Aa7+M3mt3zcfX
+	 z9YUeH/bUtGUA==
+From: SeongJae Park <sj@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [sj:damon/next 76/76] mm/damon/paddr.c:493:3: warning: variable 'applied' is uninitialized when used here
+Date: Mon,  9 Dec 2024 10:27:05 -0800
+Message-Id: <20241209182705.10593-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <202412071433.DgqslKRN-lkp@intel.com>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,34 +45,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When chain_hlock_class_idx() is unused, it prevents kernel builds with clang,
-`make W=1` and CONFIG_WERROR=y:
+On Mon, 9 Dec 2024 12:10:42 +0800 kernel test robot <lkp@intel.com> wrote:
 
-kernel/locking/lockdep.c:435:28: error: unused function 'chain_hlock_class_idx' [-Werror,-Wunused-function]
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+> head:   25b6468a712e65fa59ad8724e87ed32fb3e1d0c3
+> commit: 25b6468a712e65fa59ad8724e87ed32fb3e1d0c3 [76/76] mm/damon: add a new DAMOS action for fine-grained filter-aware stat
+> config: i386-buildonly-randconfig-004-20241207 (https://download.01.org/0day-ci/archive/20241207/202412071433.DgqslKRN-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412071433.DgqslKRN-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412071433.DgqslKRN-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from mm/damon/paddr.c:12:
+>    In file included from include/linux/pagemap.h:8:
+>    In file included from include/linux/mm.h:2223:
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    In file included from mm/damon/paddr.c:17:
+>    include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>       47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+>          |                                    ~~~~~~~~~~~ ^ ~~~
+>    include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>       49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+>          |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+> >> mm/damon/paddr.c:493:3: warning: variable 'applied' is uninitialized when used here [-Wuninitialized]
+>      493 |                 applied += folio_size(folio);
+>          |                 ^~~~~~~
+>    mm/damon/paddr.c:482:29: note: initialize the variable 'applied' to silence this warning
+>      482 |         unsigned long addr, applied;
+>          |                                    ^
+>          |                                     = 0
+>    4 warnings generated.
 
-Fix this by marking it with __maybe_unused.
+Thank you for this kind report!  Just pushed a fix:
+https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/commit/?h=damon/next&id=48b4e032de1655313ff3cdf08d36bd6633993f93
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- kernel/locking/lockdep.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+SJ
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index bb65abfcfa71..29acd238dad7 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -432,7 +432,7 @@ static inline u16 hlock_id(struct held_lock *hlock)
- 	return (hlock->class_idx | (hlock->read << MAX_LOCKDEP_KEYS_BITS));
- }
- 
--static inline unsigned int chain_hlock_class_idx(u16 hlock_id)
-+static inline __maybe_unused unsigned int chain_hlock_class_idx(u16 hlock_id)
- {
- 	return hlock_id & (MAX_LOCKDEP_KEYS - 1);
- }
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+[...]
