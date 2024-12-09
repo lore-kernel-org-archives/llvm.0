@@ -1,67 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDCA155C83;
-	Mon,  9 Dec 2024 04:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFEB156885;
+	Mon,  9 Dec 2024 04:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733716809; cv=none; b=eVsegkA78r/h2f+uNSFCew+vuk+wynNaYzQTTVNLwr6TW3CZDhODTwD0NQ2HFZUtX6SFk4hXGfWFurJxqVRJsH+z+VruJmN7BqCctOIBZ/ccRnhZOdFThDBnB+tow+UjUc2Yte1L+iWbPca9MpGQz5Bssv1Zyq91iL+Q0DxLAxM=
+	t=1733717171; cv=none; b=QXNsTAx4zOzzYQhPccT+cC+Kv48A6xF6/Jixn+kz21H2SiE6yR17ZQt/0gZpLl1ABLhgEr19PSBG7ISl2sF2Kr78GXCUh9IasFk7eVY3e5gcpa8CklJcPKTPAfR9QIc9/yZHWfwdA1h2vDdyg1Jp2mdeEHnGog2W8MCSVaQx+zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733716809; c=relaxed/simple;
-	bh=WNEas8Hd0kCg0TuHhDIksZRzyXXnu3pos7fWYEIX5bc=;
+	s=arc-20240116; t=1733717171; c=relaxed/simple;
+	bh=9BZ3Vp8ClbzYwVR5+MOqxWZF2tgpKKxLlNgbbyHpqPA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mavWuerPX/UXtnpH9jOblHVBc5xVT3Qh6Aytf4nGowr0mjGiWirEoVd2iBr4+m2YMDVK+uTQMBFpyVEql93N0G50z8P/suSS8dsa2wY5lDOG7vtmvzCtsFTqH5+pV5bqI59NjuObzqt58s19PZwvffTo5fJhehVHa2xaplUEOtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AaXPR2j6; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=kuGboMIpl1W7Frzi6C0s/J3WXhoDy7mCkntLBUP3EMh+wN+erBkjTCooI7JIoR+yyXS7PkjXPfFApfWqGlTk7j0FfsICEEwgm2qg4K013n/M5kd/ZEIAhU134lYMhWkJ9oPiAWF+E7bZTvUkH/tleoyGfODPBf9x10z4Glfu5g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HYLWPxpX; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AaXPR2j6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HYLWPxpX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733716807; x=1765252807;
+  t=1733717170; x=1765253170;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WNEas8Hd0kCg0TuHhDIksZRzyXXnu3pos7fWYEIX5bc=;
-  b=AaXPR2j65iTnsBcpiJEQwmg6ZwlxguW4t7AfJZI8rQzw0f+wZqlYZk8M
-   4g38vio0VWhp+x8/n8n95QVGZ+iW2ahaoyHGe3KFuXRkcpNvRVdM7p2zC
-   S+E/wGgYn1qeC2NmWFOEe7+ZswdAPxAsjRVYZ+OB5UfTGpRD3XMx/yHw6
-   t30hMBYRA3zdjPuSHpu7DQ0gHwzdVtSXksLsGtmlLxLSnOrHUUbDL0EL/
-   UMbdO4erWrm2tyTQoPWcdwE2p4NQ0d6u/IBdPuQMQFiiR6PtBBs6eJ7hJ
-   TIHbNehcFID7GrrvE2wAMVKlZ7aLTsAS3GP6dash3LcpA3FAswW1NQ3K1
+  bh=9BZ3Vp8ClbzYwVR5+MOqxWZF2tgpKKxLlNgbbyHpqPA=;
+  b=HYLWPxpXiwR7um1UPu/Gxd3AerTs1P5IQ1E977k68orInXag3sYTKRIH
+   zPkR7CNEPZJtvOEPm+FW7JiJJu0HmWBBVDaN9LlyjTHXbTaljBsDs1ZxG
+   y98QiqE70vQIx2KooGKuGtgmAB+3DaxGCqvR/umg8kJWMFpMuBVhDV7MP
+   XVVtEbquvWUy5SbDN3Hrx/HyCDWn/4BtT4LotRAUHGylxk5mU2VAB8WTO
+   BFAzulqHmpTqjuE/nm+J69zzl4+rlxt5rVvu3AAonV9CIlWfFZ7eADAx/
+   IESZu1z7TREx4/4Z7m6c/AzGjp1iF3r3q7HRuzzpT6qjusIMC9RRS7S0U
    A==;
-X-CSE-ConnectionGUID: p6WXgro/QW6FltVFC4c7sQ==
-X-CSE-MsgGUID: A9it8Oo1SW2L0CXetLmsgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="21589705"
+X-CSE-ConnectionGUID: VvyQVBJvQg6PT4kchaDGAw==
+X-CSE-MsgGUID: TX9OangsRRmk2penIkFIRA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="59402296"
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="21589705"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:00:07 -0800
-X-CSE-ConnectionGUID: Gon/eu4CSfC5ALYwPCukZg==
-X-CSE-MsgGUID: BL9350XAQGaIfv28LiNq/g==
+   d="scan'208";a="59402296"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:06:08 -0800
+X-CSE-ConnectionGUID: 5VScRe/8TWaEic8tbsZI0A==
+X-CSE-MsgGUID: 0aG8DFmkSZ6aaWljP+LPYg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="125839273"
+   d="scan'208";a="100003027"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Dec 2024 20:00:03 -0800
+  by orviesa004.jf.intel.com with ESMTP; 08 Dec 2024 20:06:05 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKUwD-0003ln-1K;
-	Mon, 09 Dec 2024 04:00:01 +0000
-Date: Mon, 9 Dec 2024 11:59:22 +0800
+	id 1tKV22-0003mr-0s;
+	Mon, 09 Dec 2024 04:06:02 +0000
+Date: Mon, 9 Dec 2024 12:05:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-	Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-	Isaac Manjarres <isaacmanjarres@google.com>,
-	Kalesh Singh <kaleshsingh@google.com>
-Subject: Re: [PATCH] mm: perform all memfd seal checks in a single place
-Message-ID: <202412070908.wNlwD8Sk-lkp@intel.com>
-References: <20241206212846.210835-1-lorenzo.stoakes@oracle.com>
+To: Keith Busch <kbusch@meta.com>, axboe@kernel.dk, hch@lst.de,
+	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, sagi@grimberg.me,
+	asml.silence@gmail.com, anuj20.g@samsung.com, joshi.k@samsung.com,
+	Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCHv12 11/12] nvme: register fdp parameters with the block
+ layer
+Message-ID: <202412071144.9uXFLnls-lkp@intel.com>
+References: <20241206221801.790690-12-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,46 +67,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241206212846.210835-1-lorenzo.stoakes@oracle.com>
+In-Reply-To: <20241206221801.790690-12-kbusch@meta.com>
 
-Hi Lorenzo,
+Hi Keith,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on next-20241206]
+[cannot apply to brauner-vfs/vfs.all hch-configfs/for-next linus/master v6.13-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-perform-all-memfd-seal-checks-in-a-single-place/20241207-053020
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241206212846.210835-1-lorenzo.stoakes%40oracle.com
-patch subject: [PATCH] mm: perform all memfd seal checks in a single place
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241207/202412070908.wNlwD8Sk-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/fs-add-write-stream-information-to-statx/20241207-063826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20241206221801.790690-12-kbusch%40meta.com
+patch subject: [PATCHv12 11/12] nvme: register fdp parameters with the block layer
+config: i386-buildonly-randconfig-001-20241207 (https://download.01.org/0day-ci/archive/20241207/202412071144.9uXFLnls-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070908.wNlwD8Sk-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412071144.9uXFLnls-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412070908.wNlwD8Sk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412071144.9uXFLnls-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
-   >>> defined at gup.c
-   >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
-   >>> defined at mmap.c
-   >>>            mm/mmap.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
-   >>> defined at gup.c
-   >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
-   >>> defined at secretmem.c
-   >>>            mm/secretmem.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
-   >>> defined at gup.c
-   >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
-   >>> defined at fcntl.c
-   >>>            fs/fcntl.o:(.text+0x0) in archive vmlinux.a
+   In file included from drivers/nvme/host/core.c:8:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/nvme/host/core.c:2187:11: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+    2187 |         } while (i++ < fdp_idx);
+         |                  ^
+   drivers/nvme/host/core.c:2160:7: note: initialize the variable 'i' to silence this warning
+    2160 |         int i, n, ret;
+         |              ^
+         |               = 0
+   2 warnings generated.
+
+
+vim +/i +2187 drivers/nvme/host/core.c
+
+  2153	
+  2154	static int nvme_check_fdp(struct nvme_ns *ns, struct nvme_ns_info *info,
+  2155				  u8 fdp_idx)
+  2156	{
+  2157		struct nvme_fdp_config_log hdr, *h;
+  2158		struct nvme_fdp_config_desc *desc;
+  2159		size_t size = sizeof(hdr);
+  2160		int i, n, ret;
+  2161		void *log;
+  2162	
+  2163		info->runs = 0;
+  2164		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIGS, 0, NVME_CSI_NVM,
+  2165				   (void *)&hdr, size, 0, info->endgid);
+  2166		if (ret)
+  2167			return ret;
+  2168	
+  2169		size = le32_to_cpu(hdr.sze);
+  2170		h = kzalloc(size, GFP_KERNEL);
+  2171		if (!h)
+  2172			return 0;
+  2173	
+  2174		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIGS, 0, NVME_CSI_NVM,
+  2175				   h, size, 0, info->endgid);
+  2176		if (ret)
+  2177			goto out;
+  2178	
+  2179		n = le16_to_cpu(h->numfdpc) + 1;
+  2180		if (fdp_idx > n)
+  2181			goto out;
+  2182	
+  2183		log = h + 1;
+  2184		do {
+  2185			desc = log;
+  2186			log += le16_to_cpu(desc->dsze);
+> 2187		} while (i++ < fdp_idx);
+  2188	
+  2189		info->runs = le64_to_cpu(desc->runs);
+  2190	out:
+  2191		kfree(h);
+  2192		return ret;
+  2193	}
+  2194	
 
 -- 
 0-DAY CI Kernel Test Service
