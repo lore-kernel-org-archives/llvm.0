@@ -1,153 +1,265 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2042.outbound.protection.outlook.com [40.107.249.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA9720FA99;
-	Mon,  9 Dec 2024 05:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733723460; cv=none; b=mszJs5DPLkGV4yKqjADkyi0YUb93KJmf546S8Ox90+IOu6fDIWDgVhVfukcePtjUIu6UlJn+OzNdOHvUlQdH6AErJ1PudA6KWUGbrE4LOPHxwDcgbaPTKfp6QCJUH0AKOUK+WmS+Q0P1lqhjYsp5u/sO+yAQjZyRyXkhWI2HOUA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733723460; c=relaxed/simple;
-	bh=3bH83qn7I2EaQcJW+jlGfspn/KSUVZt+At8nB/YEfRs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TXwOFuf5duzZfwaX4CKJuauh9jSYvrd9mJEY0W8yKrZbk7W6pp4JJRvftnuxnvDmCojs1Mj+GvRaDZ9F7ubK6IdN0c6VsfDwainSLX1L2GZarEcrgoWrck0XBOW/bVYkya/mU5ynRATQS39lB/Cx/0HdX1qjX1SufRstOMIuc4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=auEMp1c/; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5428D339A0
+	for <llvm@lists.linux.dev>; Mon,  9 Dec 2024 10:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733738434; cv=fail; b=rny4fZG6S75UqnR3wrVqVC2Sxbu0CGwpwlS/yiAbz2K7zGsDGqCQh7IDlb7ZYN2v6zLM6eWqCzMn8WiBAk7MpKzz9xrZdovUqnwo+y4z662K0Cd4zSR22olbhHsAVohGX4WhuV7hKuaA16SF7NrhRjn9r6gewvu7tChRte/vp3A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733738434; c=relaxed/simple;
+	bh=21JQldRCAZbgIEFvA1i75PdFqKp48m/YOIPa6d9CI1c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=IxWH6rgv3nj6JPERc1ZQgkjrRYcmzWlHXgj/en6PRylTzJJUYKbV27KGNFX/N90GyFxl59vkL43AwaaZ8Qw6pEQeOozbJe0xhoHNBPSk6IRf5pWYhvDNyk5VBHX6+4sSHggC5nfyq9iUcvlwdcEZAzotUWfvMammQXsP/RInAcU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=prevas.dk; spf=pass smtp.mailfrom=prevas.dk; dkim=pass (1024-bit key) header.d=prevas.dk header.i=@prevas.dk header.b=JmeIoc+N; arc=fail smtp.client-ip=40.107.249.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=prevas.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prevas.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="auEMp1c/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733723458; x=1765259458;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3bH83qn7I2EaQcJW+jlGfspn/KSUVZt+At8nB/YEfRs=;
-  b=auEMp1c/JjoN9FzNJMu9mbOW7qhbP96BOKGON9dhrUkhlGYRNxPNH6Z1
-   G5nw1nUHOgNRkcFAmyRHVj22vY2/iVROqvyXj6dGIVAYlEBhXWyAhm7cN
-   sH26oe2CXFCg6zvD9+ciQsbppIujNtF6zKlq0P0i2w0GOHoxWSTn15NfF
-   PHo+8y28uu2tSELFChJ6oYy/aqYU+a1vF8qFZQXNuiqNFSigvHv4cR8Cp
-   u4/+Iuyly/w5OGNi0zpK1QVyCN4vpLe4cfXhomV4IbuWtV8/mK+U8aaIM
-   uIxecbapnZmq+y7vbvuL97DG+HRG1kxJwBIAHB8NAZ6lmvh70VtuVn5+1
-   Q==;
-X-CSE-ConnectionGUID: yxM4qlR0SPq8bpgGtyWfAQ==
-X-CSE-MsgGUID: Pdvmn3riS/2ylEsVKngwmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="44687840"
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="44687840"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 21:50:57 -0800
-X-CSE-ConnectionGUID: mapl7kcMTcG0vIQ7EUfVBg==
-X-CSE-MsgGUID: x7/RxJCPRCyJ2og5uWt9/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="125814833"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 Dec 2024 21:50:57 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tKWfW-0003zh-0I;
-	Mon, 09 Dec 2024 05:50:54 +0000
-Date: Mon, 9 Dec 2024 13:50:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Wei Liu <wei.liu@kernel.org>, Michael Kelley <mhklinux@outlook.com>
-Subject: [hyperv:hyperv-fixes 5/11] drivers/hv/vmbus_drv.c:2510:45: error:
- call to undeclared function 'secs_to_jiffies'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202412091658.m9g4L9gw-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=prevas.dk header.i=@prevas.dk header.b="JmeIoc+N"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YUbou6e+sK+S2Yj2BgQe5wbPxIGCuI8n4jokB0CW4uxJspO810SKC3nNvIEX4Zx6bntq6Zuj27KeMr7G4JH1HUy9regRxdP/ECdl1dGltKn5kUEBe3EUlxYudXHXcP/mNX4ZNS1dLNfGwjduIEli3W+aLXK/Hcf9RDoWHZ6RjApXKlmhA/ClzcIP3fkcFlY2+7CFpTDcQm4jcahJq87gsEkeaF6G7MuCJevVzC3m6tdHYQrFtEYfcUlajmQZCRiowYv8taGSZFv2kppt9gPEWt6aZpgi6xgvMHdw1B8ZkRzQd3hiqUfTcqJedsIdFoVdKjAYiqdjdLIL11gfyyDDdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gKZ6DyLGscSAuAthfhVQuNWggzDufR5tnqxVrg3vmU8=;
+ b=NhMmy46po16F1eGYOvb3O6i5QDwLjVcf0RiVrvuDx0avPiA0gWjczh8F/+5uHK1k/mPTZHLgFQEL6OWoluBAyNwhAzQ73TQJwAUvijst79DP51YiJ0YzUK9BysxyrZhktDht78IEzs137I4WsSpCkISRYa16F3wcIOEXhfR7hElIGlUZgWuBZe7+RbTEoWC0kL5dRNAhCRrDqvzcOX7b0EOjcIRc74olzd87DyOHS++og61HpuCeYHhQam+e+28fy8WdOefjB6zpWvGRRw5AcEHZxhL0MMMIncotKt19Y9/mZHKCBnukoUztHyizt5w0h7Kvi5y/rKoRZdNa4DwgOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gKZ6DyLGscSAuAthfhVQuNWggzDufR5tnqxVrg3vmU8=;
+ b=JmeIoc+NiYCpj9lzPr7YzocWoOxlF8dVKSPacSd+t9z54gFX5bcdX+m1hyYGQ9v5nosNiZKa/jS91CCNNVt9kwA+SUpcZnbm7uVWWdteDeyAYHYcpO9+VgXMpBeiPMCvu7p1mbgLjv0IO14+eO8VrXN+2cSUmtTeDTHv4Vm5TwI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from DB7PR10MB2475.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:41::17)
+ by GVXPR10MB8863.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:1de::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.12; Mon, 9 Dec
+ 2024 09:59:48 +0000
+Received: from DB7PR10MB2475.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7e2c:5309:f792:ded4]) by DB7PR10MB2475.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7e2c:5309:f792:ded4%5]) with mapi id 15.20.8251.011; Mon, 9 Dec 2024
+ 09:59:47 +0000
+From: Rasmus Villemoes <ravi@prevas.dk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Vincent Mailhol <vincent.mailhol@gmail.com>,  David Laight
+ <David.Laight@aculab.com>,  "w@1wt.eu" <w@1wt.eu>,  Luc Van Oostenryck
+ <luc.vanoostenryck@gmail.com>,  Nathan Chancellor <nathan@kernel.org>,
+  Nick Desaulniers <ndesaulniers@google.com>,  Bill Wendling
+ <morbo@google.com>,  Justin Stitt <justinstitt@google.com>,  Yury Norov
+ <yury.norov@gmail.com>,  Kees Cook <kees@kernel.org>,  "Gustavo A. R.
+ Silva" <gustavoars@kernel.org>,  Jani Nikula
+ <jani.nikula@linux.intel.com>,  Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>,  Rodrigo Vivi <rodrigo.vivi@intel.com>,
+  Tvrtko Ursulin <tursulin@ursulin.net>,  David Airlie <airlied@gmail.com>,
+  Simona Vetter <simona@ffwll.ch>,  Suzuki K Poulose
+ <suzuki.poulose@arm.com>,  Mike Leach <mike.leach@linaro.org>,  James
+ Clark <james.clark@linaro.org>,  Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>,  Rikard Falkeborn
+ <rikard.falkeborn@gmail.com>,  "linux-sparse@vger.kernel.org"
+ <linux-sparse@vger.kernel.org>,  "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>,  "llvm@lists.linux.dev"
+ <llvm@lists.linux.dev>,  "linux-hardening@vger.kernel.org"
+ <linux-hardening@vger.kernel.org>,  "intel-gfx@lists.freedesktop.org"
+ <intel-gfx@lists.freedesktop.org>,  "dri-devel@lists.freedesktop.org"
+ <dri-devel@lists.freedesktop.org>,  "coresight@lists.linaro.org"
+ <coresight@lists.linaro.org>,  "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,  "uecker@tugraz.at"
+ <uecker@tugraz.at>
+Subject: Re: [PATCH 02/10] compiler.h: add is_const() as a replacement of
+ __is_constexpr()
+In-Reply-To: <CAHk-=wjpN4GWtnsWQ8XJvf=gBQ3UvBk512xK1S35=nGXA6yTiw@mail.gmail.com>
+	(Linus Torvalds's message of "Sat, 7 Dec 2024 10:19:34 -0800")
+References: <20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr>
+	<20241203-is_constexpr-refactor-v1-2-4e4cbaecc216@wanadoo.fr>
+	<1d807c7471b9434aa8807e6e86c964ec@AcuMS.aculab.com>
+	<CAMZ6RqLJLP+4d8f5gLfBdFeDVgqy23O+Eo8HRgKCthqBjSHaaw@mail.gmail.com>
+	<9ef03cebb4dd406885d8fdf79aaef043@AcuMS.aculab.com>
+	<CAHk-=wjmeU6ahyuwAymqkSpxX-gCNa3Qc70UXjgnxNiC8eiyOw@mail.gmail.com>
+	<CAMZ6Rq+SzTA25XcMZnMnOJcrrq1VZpeT1xceinarqbXgDDo8VA@mail.gmail.com>
+	<CAHk-=wiP8111QZZJNbcDNsYQ_JC-xvwRKr0qV9UdKn3HKK+-4Q@mail.gmail.com>
+	<d23fe8a5dbe84bfeb18097fdef7aa4c4@AcuMS.aculab.com>
+	<CAHk-=win8afdcergvJ6f2=rRrff8giGUW62qmYs9Ae6aw=wcnA@mail.gmail.com>
+	<0f5c07b827c3468c8fa3928a93a98bfa@AcuMS.aculab.com>
+	<e806dd51b1ac4e289131297fbf30fc37@AcuMS.aculab.com>
+	<CAMZ6RqLOR3aCRW_js2agV+VFiHdazb4S2+NdT5G4=WbDKNB8bA@mail.gmail.com>
+	<b1ff4a65594a4d39b2e9b8b44770214e@AcuMS.aculab.com>
+	<CAMZ6RqJFReLJTd-O8s02oQNeB0SPQh3C-Mg+Nif5vMB9gFtQww@mail.gmail.com>
+	<CAHk-=wjpN4GWtnsWQ8XJvf=gBQ3UvBk512xK1S35=nGXA6yTiw@mail.gmail.com>
+Date: Mon, 09 Dec 2024 10:59:44 +0100
+Message-ID: <87ldwpgorz.fsf@prevas.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Content-Type: text/plain
+X-ClientProxiedBy: MM0P280CA0066.SWEP280.PROD.OUTLOOK.COM (2603:10a6:190:8::9)
+ To DB7PR10MB2475.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:41::17)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR10MB2475:EE_|GVXPR10MB8863:EE_
+X-MS-Office365-Filtering-Correlation-Id: ea4590a2-863d-4110-87b1-08dd183836b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|52116014|376014|366016|1800799024|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?4B0ZrxED3OiHZsTFT9kC1l86G7YgQtZuDxnhH3SHqIIkVL03UDIURSkm+NNM?=
+ =?us-ascii?Q?U0RgsT8nvJ+7ajYSlvk5GFiaanv5I4p8bicbc95VliPxLEJplS3/2zgw6GJl?=
+ =?us-ascii?Q?hHMjSzgP7Jf6LB3gvQMeP05sIotkqeOI2MrqehGnwE0KnQXfjGHBydrIVdHA?=
+ =?us-ascii?Q?US2YhKqSPWIR27X9uQHAguBq8/pcClCYuq5KFpgkfWyhGrbmUW+CtV1BWZru?=
+ =?us-ascii?Q?lzJjwy/rDpOq4iYFqTHB/VxwH8lZkq10wUyUOo9Q6QZZZhqmDdvS9Q221iSY?=
+ =?us-ascii?Q?+kEWg8aq5gUUbd5fCzdVCdxCMrirdrJWM/jCh+/te5cTGRdt+ibTMYh0Cbs4?=
+ =?us-ascii?Q?MnlXevhVniSIPjC29PBM846Ue7Y2qdrFeBnpXFC0e8aijzZ28IaPKbVtbRa2?=
+ =?us-ascii?Q?g4ijCttNOTqu/NiYt7S9huvQUGWV7dVJx6HUmAGUOBfE65g4/AngFaoCnEny?=
+ =?us-ascii?Q?J8J4Aj7oNgWhE9PDZQYeMuI3SnoDpLCfcGit7GB0nCozGkBoMdHbuy6eQqao?=
+ =?us-ascii?Q?L9h2LunAfgYFGsYS8mA0sdPyrOhFzMtnv5evz7Bl0Ftt6ie1Gut2fDJKXmWM?=
+ =?us-ascii?Q?H0y8P9+3uEhoevDPWQmVWl7nJBjvB29LwQfS/d5qrOhbxeMyOAZQQkRBMHn3?=
+ =?us-ascii?Q?D1otU9/ParlT0/SIlycFw4Lq5UYJ5hWJ9Mr5bN5/xak0YffQxUaBp+y9VwDR?=
+ =?us-ascii?Q?Atl4h1DJrBPfYVWBLQ2inGW6J2whZzB4qaCqqSnjbzleX+ME9IkA2IWZrbZH?=
+ =?us-ascii?Q?RoYshuxL4Ol7ReLOKWLczJRWIayHanuBYJO6MEl1Q4ipAfIfo2/K9KC1lEhD?=
+ =?us-ascii?Q?TDfnU9NY6p0atFfoRxY63aRycLw6YvYQxUiaIt+k4+sZDlzaaX+CDUz5H8f0?=
+ =?us-ascii?Q?yMg2Z3j58E30X9iWagczOmiDPjqNYoFi5L4YLby7s14PmrT1PBAevHERDJ9k?=
+ =?us-ascii?Q?d4nXK9/YgSXUIO1NI+kKcDmcKp7bdOh3DjrkmMuwIrc4rK3zVDTnWiYgCybN?=
+ =?us-ascii?Q?HiizSJlUPCvDnRQ21aZbuL2xZ96MuqhmplrlLVTik5+z6pZJpl0ZiiVIQKUh?=
+ =?us-ascii?Q?2YtcC/n5HJA//zvx9VDXxMvezhV50sJOHh2dqMVpifCr3wXNgTMHnB1igOVB?=
+ =?us-ascii?Q?LqSVI0MEGtMkzoDeeEPHHKNsp9sPogv3wkQdeYLwzdVIZCAkXHEDBUYGlimO?=
+ =?us-ascii?Q?b/Yu9KldxrU4R/K5+DXwhvtXCkyUB2As9lW3pX4fzy31lKgKJ53x+9of9BnW?=
+ =?us-ascii?Q?A9juIdm/Aifv5TlLSAdlcawpjphaolFNTJOaM/lXBp6EXTszgJc5v/jmR2KT?=
+ =?us-ascii?Q?uDlbtTyQ2Q1oIOjmO0JSb3I4Nh3ULzFSyr8CtMsnkxhI7udqiofXwW+E94zk?=
+ =?us-ascii?Q?50EuZFlRnHty5I7gwQHe5VeIm9FgBUNC0oLn87HB3vFEsVDbXg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR10MB2475.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(52116014)(376014)(366016)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?IKHc/f15B2xAJZtBJJOOMaNPOtnBNo8MVKYk+1LOo03j7A121MwxPeNtfnIE?=
+ =?us-ascii?Q?DGWKjrilryPWn3POYUMa24MiElNyfk+kFiB/5mN2lSuBCC1gYbPlHPXsmPAw?=
+ =?us-ascii?Q?6b2qjD4DU0djhWygfIxMFJazrjGnS5Qrw5ijTx3XDVT0WEhRMaRsw9myj7mi?=
+ =?us-ascii?Q?EZY/fRBHigL4WXvwOmyTdzAMs2EUTezhFdqmCPvHxe8UVD4khLrxIFiyeUJ1?=
+ =?us-ascii?Q?5KSz9thjGsA/Zbw6DciOeGCSdFG5cJdIBoeMo/q8j7xLeybSGjQa778BtO9i?=
+ =?us-ascii?Q?sO+KkWxyqiE9s1OrJ7evONsyGk06nU9Ual1v4Ite0FRSR+1r2GJMlGyC/eje?=
+ =?us-ascii?Q?o2VtByIPoRP+6vyLhA+HIK9sMCDzV6HI/XO6QS+fwTGbgi7dudILKMeuli/x?=
+ =?us-ascii?Q?D/8Cm1xKHyOWaNoJIF1yxfVvrwilHa4aF/RGK2XgJ+34TRV+WSxXsvyN55Lm?=
+ =?us-ascii?Q?IHdCsFKTC++/p9DG3qLYF9zac0GkzzFBzsGOiWuExVvjpaXrQyS1GIacst4W?=
+ =?us-ascii?Q?d3NEzNOHNgFI5+dQ8OjjuLaiDfH/KVhoeDSCmnxe4UeLi/44NPvOdsQCohmO?=
+ =?us-ascii?Q?nnt4qjNF32jqVWJeWzbHguJPmeCmFUMTEIXnsLHZf3lbfchrebEu57PZQ20Y?=
+ =?us-ascii?Q?fATdNtaQzvb9sanLMc+x0F0w+xDoCzUsTVOSeNTkk9EKJYrDCg5w+GJGNy61?=
+ =?us-ascii?Q?L1NKlHEE0m7KIKRXAEo9bu8zHKUdyiQNm6gi9cLfGyIk6KaTsTtDfaT4JRK4?=
+ =?us-ascii?Q?JU3JpiZY88nm0EHqIBIQw5UNzp46RbDo0J5gVrSmPSIXv7Tl6KHtQfAq2xA0?=
+ =?us-ascii?Q?4GSQ/tJtx6gtXZxuy5Jj+5OK9wQkVQ7qU74Y0mW1MJDQ/Z+IPMrPpD16gog1?=
+ =?us-ascii?Q?o6Pi7x2tKL0ejdzSAMUsWheW5DeTY0d5OB+QzRlgVrGuHYpxEcoXCEQEW3Ky?=
+ =?us-ascii?Q?T5x3FxLvUvOqPWUcgIR8T9UXkVw3hkKrs9d7i+/2muTWxT403JX6WiXP3DBt?=
+ =?us-ascii?Q?+7W68ibymWlNyG12hAlNSUjoikRSFg6qUg1ZtAO/4kNrYT97UVozVNCVMVjj?=
+ =?us-ascii?Q?rDXSRdA3IwRisV44val9pB/2LSgYWIM5/nN1EYxbS9RXgF392bRjVp+y7AN8?=
+ =?us-ascii?Q?MrXvXyDUUf0TG/p3BrMG+Omy0wA6f1EQX/90wa+7qdoWQ/0S/IoqdUc/u9aM?=
+ =?us-ascii?Q?buktPtIjZqxOn0iLO+Z3VGzFhwzHAsot12eEFd2CuMuigc8dVzeLkZS3UKCd?=
+ =?us-ascii?Q?DVH1Fjm6IDnh44E6WSAOMaQjHRmewOH3mwV+w6fzCUzCScBU7V3U/teNfTdv?=
+ =?us-ascii?Q?rnoP+Ds8bCemevOsDlHHJnP/EvXhqQ6344alJK7Dn3trAxcgueYKfhuH4ZzF?=
+ =?us-ascii?Q?1fsY9PZdYboIOhKj39Jk2Q/BqoSUaqOP8hCSPakquraeM52BeHe7iProW/F4?=
+ =?us-ascii?Q?SiV+zbgJSffH1hl1ee6B/tj4YT3VFCOafcKWUBTi5//5tmmyGSIa70Tt59lA?=
+ =?us-ascii?Q?/c6WFa5G8sj7CL6aohz1MCH6AkmpQ4ghTDTxYe2fTnjl2fFIE/+lxZI7WC+j?=
+ =?us-ascii?Q?jTT/DhvY7Kcgafy+Hk3s1HSEjkdF7gv54dO4QVIk2vzDRTt41U8t2QsOpQYL?=
+ =?us-ascii?Q?bA=3D=3D?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea4590a2-863d-4110-87b1-08dd183836b6
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR10MB2475.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2024 09:59:47.8517
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YW4gvq7Lmc552Yrwl1NChpyOiYc0/58yyyNk1GNo7S5rdHRqd+2DnGiDF1w8ptFhsGgzYD2NIrrCgTy/NcsPNsU5Si+L2VunuBCKtSish8w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR10MB8863
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-fixes
-head:   b8ea8cd0fbd358feee3e9172c5ef8afd671e0d11
-commit: eced6df67f6b76889e80ded109a73ca5fac1e5cd [5/11] drivers: hv: Convert open-coded timeouts to secs_to_jiffies()
-config: i386-buildonly-randconfig-004-20241209 (https://download.01.org/0day-ci/archive/20241209/202412091658.m9g4L9gw-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091658.m9g4L9gw-lkp@intel.com/reproduce)
+On Sat, Dec 07 2024, Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412091658.m9g4L9gw-lkp@intel.com/
+> On Sat, 7 Dec 2024 at 04:24, Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
+>>
+>> > No good - expands everything twice.
+>>
+>> And? __is_const_zero() does not evaluate its arguments, so no side effect:
+>
+> No, the problem is literally the expansion.
+>
+> Double expansion of these fundamental helpers gets exponential,
+> because they are used in various nested ways in other fundamental
+> helpers.
+>
+> That's why we then spent so much effort on trying to clean up the
+> min/max macros, because a single line of code would expand to
+> literally tens of megabytes of horrific expansions.
+>
+> And the problem with these things is that you can't make them inline
+> functions, so they have to be macros, and then you build up other
+> macros using them (like that "clamp()" macro), and it really gets
+> horrendous and affects the build time.
+>
+> And yes, it is very sad. Particularly since a compiler would have a
+> really easy time with some nice helper builtins.
+>
+> Of course, often the compiler *does* have helper builtins, but we
+> can't use them, because they aren't *quite* the right thing.
 
-All errors (new ones prefixed by >>):
+One thing I've been thinking about when all this comes up is: What if
+the compilers gave us (and the same for _min):
 
-   In file included from drivers/hv/vmbus_drv.c:21:
-   In file included from include/linux/hyperv.h:17:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/hv/vmbus_drv.c:21:
-   include/linux/hyperv.h:646:2: warning: 'counted_by' should not be applied to an array with element of unknown size because 'struct gpa_range' is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
-     646 |         struct gpa_range range[] __counted_by(rangecount);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hv/vmbus_drv.c:2510:45: error: call to undeclared function 'secs_to_jiffies'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2510 |                 &vmbus_connection.ready_for_resume_event, secs_to_jiffies(10)) == 0)
-         |                                                           ^
-   2 warnings and 1 error generated.
+  __builtin_max(T, e1, e2, ...)
+  __builtin_max(e1, e2, ...)
 
+with T being a type, e1... expressions, the latter being the former with
+T being the result of usual promotion on the types of the expressions,
+and the former having these semantics:
 
-vim +/secs_to_jiffies +2510 drivers/hv/vmbus_drv.c
+(1) If all the expressions are ICE, so is the whole thing.
 
-  2472	
-  2473	static int vmbus_bus_resume(struct device *dev)
-  2474	{
-  2475		struct vmbus_channel_msginfo *msginfo;
-  2476		size_t msgsize;
-  2477		int ret;
-  2478	
-  2479		vmbus_connection.ignore_any_offer_msg = false;
-  2480	
-  2481		/*
-  2482		 * We only use the 'vmbus_proto_version', which was in use before
-  2483		 * hibernation, to re-negotiate with the host.
-  2484		 */
-  2485		if (!vmbus_proto_version) {
-  2486			pr_err("Invalid proto version = 0x%x\n", vmbus_proto_version);
-  2487			return -EINVAL;
-  2488		}
-  2489	
-  2490		msgsize = sizeof(*msginfo) +
-  2491			  sizeof(struct vmbus_channel_initiate_contact);
-  2492	
-  2493		msginfo = kzalloc(msgsize, GFP_KERNEL);
-  2494	
-  2495		if (msginfo == NULL)
-  2496			return -ENOMEM;
-  2497	
-  2498		ret = vmbus_negotiate_version(msginfo, vmbus_proto_version);
-  2499	
-  2500		kfree(msginfo);
-  2501	
-  2502		if (ret != 0)
-  2503			return ret;
-  2504	
-  2505		WARN_ON(atomic_read(&vmbus_connection.nr_chan_fixup_on_resume) == 0);
-  2506	
-  2507		vmbus_request_offers();
-  2508	
-  2509		if (wait_for_completion_timeout(
-> 2510			&vmbus_connection.ready_for_resume_event, secs_to_jiffies(10)) == 0)
-  2511			pr_err("Some vmbus device is missing after suspending?\n");
-  2512	
-  2513		/* Reset the event for the next suspend. */
-  2514		reinit_completion(&vmbus_connection.ready_for_suspend_event);
-  2515	
-  2516		return 0;
-  2517	}
-  2518	#else
-  2519	#define vmbus_bus_suspend NULL
-  2520	#define vmbus_bus_resume NULL
-  2521	#endif /* CONFIG_PM_SLEEP */
-  2522	
+(2) It's a compile-time error if the values of the expressions are not
+    guaranteed to fit in T (that also applies in case (1)), but this
+    should not be thrown by the front-end but only after optimizations
+    have had a chance.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+(3) Obviously: Every expression is evaluated exactly once and the result
+    is the maximum of those, of type T.
+
+For (2), I'd expect trivial value-range analysis to allow something like
+
+  int x;
+
+  ...
+  if (x < 0)
+    bail;
+  size_t y = max(x, sizeof(foo));
+
+Of course, specifying exactly which optimizations one can rely on having
+been applied is impossible, but it's the same with our current
+BUILD_BUG_ON() - many of them would trigger at -O0.
+
+Then we could just have _one_ simple #define max __builtin_max , which
+would work at file-scope, automatically have max3 etc. (because I'd
+imagine it would not be much harder for the compiler to just provide the
+variadic version if it has code to compute the max of two already), and
+none of the preprocessor issues would apply.
+
+Dear Santa: Pretty please?
+
+Rasmus
+
+Footnotes:
+
+This is of course very kernel-centric. A compiler developer
+doing this would probably have to think about "what if floating point
+types are in the mix". I wouldn't mind if that was just disallowed, but
+I can see how that might be a bit odd. I don't think it's hard to amend
+the rules to that case - rule 2 could probably be used as-is, and (3)
+could say "if any expr are NaN, so is the whole thing" (and if one cares
+which NaN, just the first among the expressions); inf values don't need
+special treatment wrt. min/max.
+
+With my math hat on, I'd want the zero-expressions variant
+__builtin_max(int) to evaluate to INT_MIN ('cause that's the neutral
+element for the binary max of two ints) and similarly for other types,
+but it's probably better to just require at least two expressions.
