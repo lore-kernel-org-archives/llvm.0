@@ -1,227 +1,145 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBCB12CD8B;
-	Mon,  9 Dec 2024 10:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733739113; cv=fail; b=mUyo65bLsonh5ORa3ceTh1ROxLkiaw+gM52pYXNRCfzQQ2UNm0A8QStlAnGin75GdmYNysCnvMkjtnD8aVQNc++rqyRuqxRCgOYkABm5p7Hu3B4E1QNr2y97zT3v5/mcXnAuR9YJZ3W/D2zDDSXYGUCGGAIVdP9ibGVsOwScrj8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733739113; c=relaxed/simple;
-	bh=I86mDn5Z4QtOcH80Zwoiu2WsFQtey3VsrqD+NGKb1TE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JMhX43dsED84a+ixOqoqeY7JoXuJts5L0aZgtRtp2CyfNn+WVPixNFLkOXPMq5XRbeuOa3eZv30733skf46byf8FvYH/o+LjSIvEu+0yZK7CLkHISi+JJafBiRbHjSCPHa1SMipIOO9ESYKBkZ4mgPBCpDp1oQh8rLFYfxDz5Vw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NSGWGday; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=hyA4hzJK; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C24216E00;
+	Mon,  9 Dec 2024 10:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733741170; cv=none; b=UXHVuXMfZdgBmcdv4yjG8xj6xbH/1gPa3a4mOgaP5uOv5EcdNSBb2Qs9zm4Q/TiN9PXmO1HiOtjpJGNrE1yEw/8610BVUUCSJpS7P0VCmSb2WKdyhYqRzT7xZh9Ukx8aaozyXknaNhtta4AGvLhLz+l7R1rp0uEdgKQxj71vctY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733741170; c=relaxed/simple;
+	bh=VyC2AO2ptJifB2t9y0d5AOOCdBn1ufw2ssCA/Q9f7kI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hTmudWZ9gQ18WttQ2s7aHzIDgLOmsyOGUr1XN+yvzoNP0pMNJOnjrbFMzMHxuRTadeJ4s5P21TXwqspAlWJ42lsSFkCyksNfOViJDaTOACg4U1D1vXfysgRRvo/nQYJRCsqanHtltGetfWEKvtpaBdwLmrjGgOxd+boc4fKyUTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A24zO1u2; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NSGWGday";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="hyA4hzJK"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B98frk0019828;
-	Mon, 9 Dec 2024 10:11:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=E3THQoch+NywudS7bE
-	7oxT1gS48ElAP3akND7zMtOLg=; b=NSGWGdayxWB6y/SuzIzx8BG5ud+XrR9YIx
-	ua8cS1ZCHgcnApxdWNcnW3PYhJ5ATy1eqZOdM/eFjgGxZLlGKUCb5bW7iaTqr8BX
-	RP3fBgBtuD2m1qkFv4zZKWGAv8hMueyJOGSZ6n01sY3ZMebWGKrB7GkUiAJRBD7Z
-	//2rT53QCtke3UwxhrJl7UorxB131QQYP8DnwqInJQ9SdXwOdoblGP6EoItp9Pme
-	zRjvlod+uZxw/sPGZJb98F79ATIWSuWX42QQ+iVkaLmJcwwS0xePfIJAsSABrUW1
-	bL+I4VroR0300h5IGbD6yK1Ams6C9DYenjqAwAec8ispZZrDBndg==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43cdystv9v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 09 Dec 2024 10:11:35 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4B99jb6S008814;
-	Mon, 9 Dec 2024 10:11:34 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2047.outbound.protection.outlook.com [104.47.58.47])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43cct6u82n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 09 Dec 2024 10:11:34 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e1a/A3BmfF9a/gwD58+Xs09+DjR4x+Nxp+GGSP9DwxeHcf1eExWK//qy5uWwy8r76GR/rxZv0QFRuSa+88JO9GQRU9OZNEkXkv9rLSqb2QG4jZyOXHzHgBLgH3LmSfuZtshHfsbYcLr4RIpyyLkuS+ADUuoiSOAL0oLWi4yE5kFcesIoYGbpghYD2cNtO+m/Pr2mH3bTcLLGku+YMp+Ozuyf5rAdnhikf3meJ7g5L5JOYwgr8HQlFSUR83iyfW7utwC93rYBefxy4vLwrnqkTxXMEJCyJLa/BEloVsoDMqlxkGaIW6PAQb6QVV5GktNFSbvwOoOoL3cLVRvyGBI0+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E3THQoch+NywudS7bE7oxT1gS48ElAP3akND7zMtOLg=;
- b=QItkZkSWvh+W1YmIjSGLqv1Ce+z2i0gmxtbug+PJSx1KTf3fEPtpL0zc+lZ0h4K2JewKaPNs92feK8AX0hOcfTp7+IYVozeIxW7FmyLwsOZ3y7MLQ1lvMGmcXCGWBjgr+u3lUiZq88wCmgsG6kYnfDYr4jpcnHtTliy00m9YQ5vbnL5lqXQ4qHFwjm3G7FpCSRsgcZoZBV9azRpZiSSLfA6ms/THhviN/Boo1H/fDIxNDWMin8U33e+JpfruwRiz6jh3VOJ+v0vM0JutCkqz2WfnFikSh4kF6+pS3vkkXjhjGeUQHO5XR/4MM/vvaGUUfgVqKLlKP5Z/qoJjWeM5dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E3THQoch+NywudS7bE7oxT1gS48ElAP3akND7zMtOLg=;
- b=hyA4hzJKTOHO5JVD7UbU7KwSEFP5yK7lPCUYUqC/WAfydSIJVedzlLbcbfbaBS6ixwDWftckKXpzseJW+F2rkeis2we8z/B5rhboPWEfttcGpV1AHZWcRcZO4iLigIl1t3RcrSho1MjnIbZ4/RWy2tUwSp9vT649jNZlFe7CjpY=
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
- by MN6PR10MB7544.namprd10.prod.outlook.com (2603:10b6:208:46c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Mon, 9 Dec
- 2024 10:11:26 +0000
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9%7]) with mapi id 15.20.8230.010; Mon, 9 Dec 2024
- 10:11:26 +0000
-Date: Mon, 9 Dec 2024 10:11:22 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>, Vlastimil Babka <vbabka@suse.cz>,
-        Jann Horn <jannh@google.com>, Hugh Dickins <hughd@google.com>,
-        linux-kernel@vger.kernel.org,
-        Isaac Manjarres <isaacmanjarres@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>
-Subject: Re: [PATCH] mm: perform all memfd seal checks in a single place
-Message-ID: <df83fdac-3d3a-44bd-9af7-e4cc61686ce0@lucifer.local>
-References: <20241206212846.210835-1-lorenzo.stoakes@oracle.com>
- <202412070908.wNlwD8Sk-lkp@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202412070908.wNlwD8Sk-lkp@intel.com>
-X-ClientProxiedBy: LO4P123CA0204.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a5::11) To BYAPR10MB3366.namprd10.prod.outlook.com
- (2603:10b6:a03:14f::25)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A24zO1u2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733741168; x=1765277168;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VyC2AO2ptJifB2t9y0d5AOOCdBn1ufw2ssCA/Q9f7kI=;
+  b=A24zO1u23lu1vlJm+1N0/PQ7ENfSSBC/esMHiiF3KzZ2SDjOpgWhA4OG
+   0swZ0VK0WqVsYNm5FMI6wS/i85nYs285ZQS1J481Vwn8B27ANWJpWWVOT
+   6UAWzvBLm4cfvvwEa/KaN72lnOyojouPfppAJe9QLfn9jMHUIgOk3deAO
+   E1gvp3RUREeCz/UhmBp5Wwwhh1CMnC2xs1dCRIVyscpYqK8iLViX18oHo
+   hMjlNJOUpYWeUWLe5+FqyyOPugEJzYlloM5hDUGAld9NXEtRDM83MJgva
+   BZA++BQClnrONzpoWno2p99es5jGJuwzkeIOOZhm8rzrbtTbB+8X6yw0g
+   g==;
+X-CSE-ConnectionGUID: Lh+nw+KoQE2OUAHqcsh15A==
+X-CSE-MsgGUID: OeFEQYIjTlanMc1IG9qirg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34166708"
+X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
+   d="scan'208";a="34166708"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 02:46:08 -0800
+X-CSE-ConnectionGUID: jYibagg4RlmRb+b4qukIcg==
+X-CSE-MsgGUID: rp031/jmR+yr0CWRKa+EXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
+   d="scan'208";a="95236333"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 Dec 2024 02:46:06 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tKbHA-0004E5-00;
+	Mon, 09 Dec 2024 10:46:04 +0000
+Date: Mon, 9 Dec 2024 18:45:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [bcachefs:bcachefs-testing 204/205] fs/bcachefs/str_hash.c:164:2:
+ warning: label followed by a declaration is a C23 extension
+Message-ID: <202412091807.8PJParb1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|MN6PR10MB7544:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3794b0df-9d91-40ad-1c7f-08dd1839d7bb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?eEj45lCRTmKBExcmjIsD20O3f0fKzHZKMIvS7yus3jP1qWHyJLCtl316Gw5Y?=
- =?us-ascii?Q?qr3A9ClHM9RNt1lwfumpZqW8pjEOJtNEotG2hCZicc2te92kmf/rXnspmS+A?=
- =?us-ascii?Q?Z5UvbI+ZBciAzpYGX4CmD8HOHz3lrt2ACOpZGP1d5CEuO/cA3e6SmcuL2NMM?=
- =?us-ascii?Q?//Spaegdlw8l/gaKn6Dn2sAv1CRImqMOyjyyiHErtz1CsijjYgaQUYobEEBO?=
- =?us-ascii?Q?/Asm7dGVY/LXL5x+BQ88PyGlh+sNmyS+XtzZQpWtKGuLfnvcZgoyXTlmZIR+?=
- =?us-ascii?Q?6OfPZDveVIbhxK9UlD8kNszf+pP6JAkEO+p/RNwrMnKoHNomO4yfLNU/9ABQ?=
- =?us-ascii?Q?F2WwEsFKTI8apNhaAXgG3EU9ySIxdJnk8Qc2/Exjc8qFsfZGOaEWRNfZiHvr?=
- =?us-ascii?Q?49EmQa9Kk2rO7uiM2+cAf47Zniisy9g+RcJy4tXJwTpcozMuIAVm5JstswDl?=
- =?us-ascii?Q?0pD2BlADMcrWDuxAgPwH5Fu9jkbdPsZt0eZ2lWn3dmpUo2WqJmfJ4Siv8SBG?=
- =?us-ascii?Q?mrvMBkAuEb9Q7irpXjlhaZhieHKeM6LuOO3FUzyDH9Vw7+EXOSLUU2k8jj0Z?=
- =?us-ascii?Q?cThcMBV6PNq1HqlRV96/8HmNNnZ4IuVRJyVS47Wt+m1+Q8eJyUwSf32ht9tV?=
- =?us-ascii?Q?rCSjLUGRwplTk3X7EiW3/MKJgHZHmt0gUMgMGOXEzbresrd09T68Vl+Es18H?=
- =?us-ascii?Q?wqZIN6cf0IfT6kEKZNz2AaAmF6tcFAudW+HkQRtjkN0rs7YZZ03dxGdGEUa0?=
- =?us-ascii?Q?UzBxm90XzQRI6pZc3/+vUE6mDhpQWvvZ+GXnCzhJZjp7VbSMDacEgvWsLk/d?=
- =?us-ascii?Q?LTjfYncHWkIOAgkjQRnXSXjlm1fqAoWZxpvIS8kJ/A4zAs+YdSSG/5lgX0P1?=
- =?us-ascii?Q?zB3h82dZDWWwPHk2C+2JyGGZcubioK2BNvxNjPn1NrSfUY/pEWV3eLcMCFMn?=
- =?us-ascii?Q?nXJUFU1x+siEA+EUUVFTfflrGUQUV4zl0ajeG7Tkn5LL5CdDSAj+Wj4ZN66R?=
- =?us-ascii?Q?EkpeEL3bd0hreWFT16TNIcc35mpcHsgeWbuP9Uen8X0MKtLF1737rieBG6I6?=
- =?us-ascii?Q?UNSfJ4MyTxed1cmJI6f2dlbTxoyQefm2Bo+qEyciNU+sX2D/HbUC/mrM8S8d?=
- =?us-ascii?Q?kJhinVrdNgYqf8crbuzAGGOFFjZgQ5SSxz3cbK49jVZKOlQzGy83XTSs7XhB?=
- =?us-ascii?Q?uAOkLwzDNlFsE/kxiMB7go0MAIgAxv7qYxVtrkwvvjWzGUVgAa4ZlJJDYLNe?=
- =?us-ascii?Q?Ug9mQcQid70uYBkod1mtuSWNv0y0lmXjnNdPlyYrXZ5R1lqnevUc42O1KsH/?=
- =?us-ascii?Q?ziA5KOa3jploCvOmg5fDeNZA?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?zTVCYMD10BnUxMgenNrYIme5cA4Q/kS1OC8elvrE1zxHlIVPZMUnhN79z8mP?=
- =?us-ascii?Q?VJ2gGW+yPYMBX/Oxy86AXr0ZSaKnl/q0JlndH3JMisNS2nF4DUp4tR99FxfP?=
- =?us-ascii?Q?Xk+SNMzybwLHBv7HwiZxtPT+qqbFTuytampRT01B0maYF4oWzmxWPz+FlZu9?=
- =?us-ascii?Q?6+Quz4pee1GG6F1urPfyMi7rHxgvabSjnEfDimljKUIrdmebnTro6IgQHsSw?=
- =?us-ascii?Q?WeeNG4f5vn88lJJ3DgGanmoxXz7eNuGKvCVvdMBJNN+DMj1JaozOpL21o9Lp?=
- =?us-ascii?Q?As7KUNXckFc/r6wWA948eMn1NiDJMVdwVmuwT+XB19qHYCtjiNE4wFL2y3DW?=
- =?us-ascii?Q?W3CbKOs4Uam3fG5HoVAOqaWtKPCA5DBCACDBzb1xfQYZApKbaMnPixczBI9E?=
- =?us-ascii?Q?U6D+Neqd2dw1yHscQZ+7ur+O0I1AL8vTgZftlS6ooATpNW8NuQGI6/iLrrYd?=
- =?us-ascii?Q?SQv3P2T2814rip+aUtnttNkEP9ZMXeDR0WFmVp9yeDls79Ur/GkhZ1yY6VT4?=
- =?us-ascii?Q?5EH9nuG1Yb9seO5h882TCglO2yeOYq6/EWScn7NCySwbG9TH/Nb28r/pkVAA?=
- =?us-ascii?Q?6xcP+5WxMI/yPdiw3Vo8cbesgFxOOKcUJ8n/5c9wcTJbHpSEEN5NLDvaKTtw?=
- =?us-ascii?Q?qJ0Ed7t1bm4HzoxILn1lcqt47uIpk3Il2D8RixDhuj3W+4FnzbY3Pu03/6Gl?=
- =?us-ascii?Q?iLRQ5uzfTANZ5wul/hZjM1hMXLc8Q8iEawTT4M2DJWgiXlOh5yBHDmJBBHqk?=
- =?us-ascii?Q?xr+eIrc15wcji/k/kHExT+h2RaWv79JxxZnLbGIFc02cRER50hzLJyO51bGH?=
- =?us-ascii?Q?MDVt7GrXf+1JUVB7MMrbyf8MraC0CmtzNb2nAXW4/YrZV/G/NuwsucQUsTy0?=
- =?us-ascii?Q?Zxrkg9LNY5qVjraZWPM2vazlJ/jFP+IVUUYZPbgpsoiDWpXv6Vm24gHXG6js?=
- =?us-ascii?Q?xkJqa0LV3501JDWD4wXQ25Ltl6T3IOd0ItAQrQQiOW22+JwItXu9qLQ5OJjq?=
- =?us-ascii?Q?XUj9if1U9kdKjQMIXidqSTxPJbRltccUl//eNl64iRYuTalyegdbw2GmMOB1?=
- =?us-ascii?Q?Ykv0E79UWiXda11N7D0ImDt+ts6wpBZMUHgVjzRcm08q1kRNpFwH5kSSx689?=
- =?us-ascii?Q?akWiuHblZ0AH34oIVHwmW6mmigb+NUcXXfNP689b3GFhCNZljjJ3z+SpkBZf?=
- =?us-ascii?Q?EBOvp5XsMrwrdabdjtLjiW9kaWVEJHPfvkOquVfkNaM7FVHEeU0Rt1j+szRL?=
- =?us-ascii?Q?kj/frs2mYH3iI4fwuJU1d8fGmvZ5mityT9F6lG4OJHG3/cpH4h7c26n3mUb0?=
- =?us-ascii?Q?7Zu6cUOvHY+JKT3cbYKaruQBWs2/u2MTrMtztH0ZJCi+u234w/FNbyp993oe?=
- =?us-ascii?Q?204Ib6jFvC7qKYvOTKjRsrIs7ppm9gaq4YYSFP2J4hVX5XkgpquEVZqn1TWI?=
- =?us-ascii?Q?Tji9ouG1gkTVe4AKc0rWeC2qaza+vrvc2NmTU2Ot12qUCC9U8rVrP8Us3S7M?=
- =?us-ascii?Q?dK5fWC7OtwQ2Q2CDW6fKTudANGwcXdrSHesB8Jo1KO85jbenPlow7kQy9JWJ?=
- =?us-ascii?Q?uLBqnr3QT2jLdyyUyBgwhAWYqBshZa+7h8foZ6As37/0nJ8HIqfHRc8/VSCt?=
- =?us-ascii?Q?Fg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	purBZ5QSjDOr6LMJqDTT0oe2CDyevCG1PyvKUjkDhrNwqf8T6lu9gGnZEGSICgekJgaDwNYv2Pyl1q7Ax+Ti1kbFrdUqLd6H19aKysK6Gvla4K7QK7t7taN8MMsGKTCv6pvwrD4lC45/wyUZOW9NQINldKbnLY4xx5cqYGHhTsTCdhPJAnne0SSw5swJJBpLSYAHVyXGdlOjcd0Ma0rnhVqsHQ5bj9FWHF0fOnfdVg1xZGaz4C1cug54HxUe++pXgVpKNEeLH/u1aSYoWtOcsNJMI41fqaX21IT3OnVIgVK/o4pvHim+42EsXyoA78SHNy8G5ih2/6+RfAj3j9NkziiA/iy67PQSU7x4He0MYcSf2Bl9BKZdP+RNEPhz8qi6Zczx6cisvJ2I2XHiGSSNHrN2TlBRKF3x3SPPshE2Qo73joF3w8QnlHbB7WW7aSkZXKMmZY8LvppJIEO3RroJtv5nI5aj5Xr9bg75mv7kpgfSWgsLiaJF+DZmyaBcDI+KXTg4CZAWIeOttOPBO1eJXs7lzKw+h1X4KG0Uw1Du2dzIpKcO5jOQ6SSG726xIXuVzcqIW2oReE6cNMX3fCwDaBqbkXkofr2VpdtFS+jLhpU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3794b0df-9d91-40ad-1c7f-08dd1839d7bb
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2024 10:11:26.9005
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: glIXLpipLWy2lWNKvoE2FJkTkqf/Hi5BqgNzZAZvaVFKLcQ3yNwKULPVPQnvoPhsjl/ou6E44nBL6TjbDvkP4kaxF0O6OgigL3ClSNyz/lg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7544
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-09_06,2024-12-09_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
- definitions=main-2412090079
-X-Proofpoint-ORIG-GUID: ZxDKKaA99X5HLuJasNU674V6lh6D6xo_
-X-Proofpoint-GUID: ZxDKKaA99X5HLuJasNU674V6lh6D6xo_
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Dec 09, 2024 at 11:59:22AM +0800, kernel test robot wrote:
-> Hi Lorenzo,
->
-> kernel test robot noticed the following build errors:
+tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
+head:   48016afd37223fa670a84272ebc9fa0d3122e207
+commit: 5ec57ef85d8cb570263a0b01befcd39377a82ade [204/205] bcachefs: bch2_str_hash_check_key() now checks inode hash info
+config: arm-randconfig-002-20241209 (https://download.01.org/0day-ci/archive/20241209/202412091807.8PJParb1-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091807.8PJParb1-lkp@intel.com/reproduce)
 
-Thanks for the report, I did a silly typo for which I'll send a fix-patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412091807.8PJParb1-lkp@intel.com/
 
->
-> [auto build test ERROR on akpm-mm/mm-everything]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-perform-all-memfd-seal-checks-in-a-single-place/20241207-053020
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20241206212846.210835-1-lorenzo.stoakes%40oracle.com
-> patch subject: [PATCH] mm: perform all memfd seal checks in a single place
-> config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241207/202412070908.wNlwD8Sk-lkp@intel.com/config)
-> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070908.wNlwD8Sk-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202412070908.wNlwD8Sk-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
->    >>> defined at gup.c
->    >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
->    >>> defined at mmap.c
->    >>>            mm/mmap.o:(.text+0x0) in archive vmlinux.a
-> --
-> >> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
->    >>> defined at gup.c
->    >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
->    >>> defined at secretmem.c
->    >>>            mm/secretmem.o:(.text+0x0) in archive vmlinux.a
-> --
-> >> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
->    >>> defined at gup.c
->    >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
->    >>> defined at fcntl.c
->    >>>            fs/fcntl.o:(.text+0x0) in archive vmlinux.a
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/bcachefs/str_hash.c:3:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/bcachefs/str_hash.c:164:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     164 |         struct bch_inode_unpacked inode;
+         |         ^
+   2 warnings generated.
+
+
+vim +164 fs/bcachefs/str_hash.c
+
+   140	
+   141	/*
+   142	 * All versions of the same inode in different snapshots must have the same hash
+   143	 * seed/type: verify that the hash info we're using matches the root
+   144	 */
+   145	static int check_inode_hash_info_matches_root(struct btree_trans *trans, u64 inum,
+   146						      struct bch_hash_info *hash_info)
+   147	{
+   148		struct bch_fs *c = trans->c;
+   149		struct btree_iter iter;
+   150		struct bkey_s_c k;
+   151		int ret = 0;
+   152	
+   153		for_each_btree_key_reverse_norestart(trans, iter, BTREE_ID_inodes, SPOS(0, inum, U32_MAX),
+   154						     BTREE_ITER_all_snapshots, k, ret) {
+   155			if (k.k->p.offset != inum)
+   156				break;
+   157			if (bkey_is_inode(k.k))
+   158				goto found;
+   159		}
+   160		bch_err(c, "%s(): inum %llu not found", __func__, inum);
+   161		ret = -BCH_ERR_fsck_repair_unimplemented;
+   162		goto err;
+   163	found:
+ > 164		struct bch_inode_unpacked inode;
+   165		ret = bch2_inode_unpack(k, &inode);
+   166		if (ret)
+   167			goto err;
+   168	
+   169		struct bch_hash_info hash2 = bch2_hash_info_init(c, &inode);
+   170		if (memcmp(hash_info, &hash2, sizeof(hash2))) {
+   171			ret = repair_inode_hash_info(trans, &inode);
+   172			if (!ret) {
+   173				bch_err(c, "inode hash info mismatch with root, but mismatch not found");
+   174				ret = -BCH_ERR_fsck_repair_unimplemented;
+   175			}
+   176		}
+   177	err:
+   178		bch2_trans_iter_exit(trans, &iter);
+   179		return ret;
+   180	}
+   181	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
