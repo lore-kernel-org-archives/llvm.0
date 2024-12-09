@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C24216E00;
-	Mon,  9 Dec 2024 10:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF9321767A;
+	Mon,  9 Dec 2024 11:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733741170; cv=none; b=UXHVuXMfZdgBmcdv4yjG8xj6xbH/1gPa3a4mOgaP5uOv5EcdNSBb2Qs9zm4Q/TiN9PXmO1HiOtjpJGNrE1yEw/8610BVUUCSJpS7P0VCmSb2WKdyhYqRzT7xZh9Ukx8aaozyXknaNhtta4AGvLhLz+l7R1rp0uEdgKQxj71vctY=
+	t=1733742432; cv=none; b=uhnf0IHRs4CijpNF1L954dVkJvEVNE841KQRwu93/l2KzF8hUTcmALlptAey0kSXM60vtZTKe74tOasPW/wFGrA4OmL/P0eUa2u9dX0erUx3R4Lh1hxerT+DkMVDrx43sGEU7XZqhuQ2NkfGtDSS47LvY3I68lJKuykZ/lpWY7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733741170; c=relaxed/simple;
-	bh=VyC2AO2ptJifB2t9y0d5AOOCdBn1ufw2ssCA/Q9f7kI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hTmudWZ9gQ18WttQ2s7aHzIDgLOmsyOGUr1XN+yvzoNP0pMNJOnjrbFMzMHxuRTadeJ4s5P21TXwqspAlWJ42lsSFkCyksNfOViJDaTOACg4U1D1vXfysgRRvo/nQYJRCsqanHtltGetfWEKvtpaBdwLmrjGgOxd+boc4fKyUTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A24zO1u2; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1733742432; c=relaxed/simple;
+	bh=rr4MabMmU3SNSOGESL6wcZs35bL3TYoh6pFGFWe65uw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XDYwsorbY9RorfeAwqlbSco2kINmGXw2bnEbT2benz81eTccOLxEWJ4QXMfjk2rq1TfAw5IGeFikpzMLkYypHGF810F0QUCuQfQuSKADZ1jk5We9Ob6C1E7sWEK02/w3S5PUzFUaLvvz3OV2cX+8aXoJofQrA6jH8hrc65ZC3Ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fiDE7Nno; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A24zO1u2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fiDE7Nno"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733741168; x=1765277168;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VyC2AO2ptJifB2t9y0d5AOOCdBn1ufw2ssCA/Q9f7kI=;
-  b=A24zO1u23lu1vlJm+1N0/PQ7ENfSSBC/esMHiiF3KzZ2SDjOpgWhA4OG
-   0swZ0VK0WqVsYNm5FMI6wS/i85nYs285ZQS1J481Vwn8B27ANWJpWWVOT
-   6UAWzvBLm4cfvvwEa/KaN72lnOyojouPfppAJe9QLfn9jMHUIgOk3deAO
-   E1gvp3RUREeCz/UhmBp5Wwwhh1CMnC2xs1dCRIVyscpYqK8iLViX18oHo
-   hMjlNJOUpYWeUWLe5+FqyyOPugEJzYlloM5hDUGAld9NXEtRDM83MJgva
-   BZA++BQClnrONzpoWno2p99es5jGJuwzkeIOOZhm8rzrbtTbB+8X6yw0g
+  t=1733742431; x=1765278431;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rr4MabMmU3SNSOGESL6wcZs35bL3TYoh6pFGFWe65uw=;
+  b=fiDE7NnolFlI4fv8fZrW0dmwlZ+MtgnYso6wRDO49prNrIDu8z/G0YbQ
+   6t88oNFvTMr4L68oybBlNNH1d4JEBZVn3pn3MFLaBcVhGDe9N5JRftdYh
+   PG1LSsW0c78eyvikX6tS7cbClaIav71gJPT0bILzpABeUoFzjZv9puAB0
+   nisFfvILWp878iHp4LKrjyAHs5QdnZiVTyRs4wU1KlehxCJm0nYdR03QQ
+   UEpKS+9igfJ7IAfbnfCntY9PvABbS6fIEZzZ6gl8VAhu7o844WVyjncrt
+   80QSVfEn/5h3+eeVqfHoNE5rSEDBkUazOcmmF+JqTACSaMxuGu283UQQN
    g==;
-X-CSE-ConnectionGUID: Lh+nw+KoQE2OUAHqcsh15A==
-X-CSE-MsgGUID: OeFEQYIjTlanMc1IG9qirg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34166708"
+X-CSE-ConnectionGUID: heVP3ieWS6CanaOcaMhP5g==
+X-CSE-MsgGUID: FFRMACgRTImb1vsnoW/m9g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="36869910"
 X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
-   d="scan'208";a="34166708"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 02:46:08 -0800
-X-CSE-ConnectionGUID: jYibagg4RlmRb+b4qukIcg==
-X-CSE-MsgGUID: rp031/jmR+yr0CWRKa+EXQ==
+   d="scan'208";a="36869910"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 03:07:10 -0800
+X-CSE-ConnectionGUID: F4G7TCtNTvWkinMtblaYCQ==
+X-CSE-MsgGUID: BiyAjTrJTOaGfMSY7famkQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
-   d="scan'208";a="95236333"
+   d="scan'208";a="125918147"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Dec 2024 02:46:06 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 09 Dec 2024 03:07:08 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKbHA-0004E5-00;
-	Mon, 09 Dec 2024 10:46:04 +0000
-Date: Mon, 9 Dec 2024 18:45:34 +0800
+	id 1tKbbW-0004Ez-1e;
+	Mon, 09 Dec 2024 11:07:06 +0000
+Date: Mon, 9 Dec 2024 19:06:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 204/205] fs/bcachefs/str_hash.c:164:2:
- warning: label followed by a declaration is a C23 extension
-Message-ID: <202412091807.8PJParb1-lkp@intel.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 09/11] iommu/intel: Convert to
+ msi_create_parent_irq_domain() helper
+Message-ID: <202412091735.fpwp7CRG-lkp@intel.com>
+References: <20241204124549.607054-10-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,83 +63,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241204124549.607054-10-maz@kernel.org>
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   48016afd37223fa670a84272ebc9fa0d3122e207
-commit: 5ec57ef85d8cb570263a0b01befcd39377a82ade [204/205] bcachefs: bch2_str_hash_check_key() now checks inode hash info
-config: arm-randconfig-002-20241209 (https://download.01.org/0day-ci/archive/20241209/202412091807.8PJParb1-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091807.8PJParb1-lkp@intel.com/reproduce)
+Hi Marc,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/irq/core]
+[also build test ERROR on pci/next pci/for-linus linus/master v6.13-rc2 next-20241206]
+[cannot apply to joro-iommu/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Marc-Zyngier/irqchip-Make-irq-msi-lib-h-globally-available/20241204-204904
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20241204124549.607054-10-maz%40kernel.org
+patch subject: [PATCH 09/11] iommu/intel: Convert to msi_create_parent_irq_domain() helper
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241209/202412091735.fpwp7CRG-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091735.fpwp7CRG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412091807.8PJParb1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412091735.fpwp7CRG-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/str_hash.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2213:
+   In file included from drivers/iommu/intel/irq_remapping.c:11:
+   In file included from include/linux/pci.h:1644:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> fs/bcachefs/str_hash.c:164:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     164 |         struct bch_inode_unpacked inode;
-         |         ^
-   2 warnings generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/iommu/intel/irq_remapping.c:1520:3: error: field designator 'bus_token' does not refer to any field in type 'const struct msi_parent_ops'
+    1520 |         .bus_token              = DOMAIN_BUS_DMAR,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 1 error generated.
 
 
-vim +164 fs/bcachefs/str_hash.c
+vim +1520 drivers/iommu/intel/irq_remapping.c
 
-   140	
-   141	/*
-   142	 * All versions of the same inode in different snapshots must have the same hash
-   143	 * seed/type: verify that the hash info we're using matches the root
-   144	 */
-   145	static int check_inode_hash_info_matches_root(struct btree_trans *trans, u64 inum,
-   146						      struct bch_hash_info *hash_info)
-   147	{
-   148		struct bch_fs *c = trans->c;
-   149		struct btree_iter iter;
-   150		struct bkey_s_c k;
-   151		int ret = 0;
-   152	
-   153		for_each_btree_key_reverse_norestart(trans, iter, BTREE_ID_inodes, SPOS(0, inum, U32_MAX),
-   154						     BTREE_ITER_all_snapshots, k, ret) {
-   155			if (k.k->p.offset != inum)
-   156				break;
-   157			if (bkey_is_inode(k.k))
-   158				goto found;
-   159		}
-   160		bch_err(c, "%s(): inum %llu not found", __func__, inum);
-   161		ret = -BCH_ERR_fsck_repair_unimplemented;
-   162		goto err;
-   163	found:
- > 164		struct bch_inode_unpacked inode;
-   165		ret = bch2_inode_unpack(k, &inode);
-   166		if (ret)
-   167			goto err;
-   168	
-   169		struct bch_hash_info hash2 = bch2_hash_info_init(c, &inode);
-   170		if (memcmp(hash_info, &hash2, sizeof(hash2))) {
-   171			ret = repair_inode_hash_info(trans, &inode);
-   172			if (!ret) {
-   173				bch_err(c, "inode hash info mismatch with root, but mismatch not found");
-   174				ret = -BCH_ERR_fsck_repair_unimplemented;
-   175			}
-   176		}
-   177	err:
-   178		bch2_trans_iter_exit(trans, &iter);
-   179		return ret;
-   180	}
-   181	
+  1517	
+  1518	static const struct msi_parent_ops dmar_msi_parent_ops = {
+  1519		.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED | MSI_FLAG_MULTI_PCI_MSI,
+> 1520		.bus_token		= DOMAIN_BUS_DMAR,
+  1521		.prefix			= "IR-",
+  1522		.init_dev_msi_info	= msi_parent_init_dev_msi_info,
+  1523	};
+  1524	
 
 -- 
 0-DAY CI Kernel Test Service
