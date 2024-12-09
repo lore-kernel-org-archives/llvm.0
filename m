@@ -1,71 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E242156C74;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657D8156C6F;
 	Mon,  9 Dec 2024 04:12:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733717535; cv=none; b=jH/NYwPfXDAKathVox3jojzNj9CXv7qbWOUFz6Jc9k1/bgpjPF/RfvamR5D/PfiM8wlmy41kAE+EWZVqiX+zAerFPSHk/cf7yvOKHcyeNWS023/MxZkmJ0n00jCx1iE505KDsznwuRVudrpzGGZZOfGArW8X3T6T63HDGa21iBo=
+	t=1733717535; cv=none; b=H+c5vsN8jO08Rygvl67sx1BrHqetIJnfuP8k/KZnysl8iKZ9RfZ9jyn2vowWwkHMmRNPQ0jVbS/ZmhwxcgxNZ73x8s19fS+KWhK3LAIZJaurQ0ziLIjI3nRn+HbjRV/U7mAjGOmUsJ8Yu2xr27qvTTJYTnHw8t1TiZONoGpNnm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733717535; c=relaxed/simple;
-	bh=jeaU5cD30qq8KgLp1vwHXVGn1Sa67LzrXjtJZtFG+ds=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V2S1duesyEPObLwi5sGyZns/6/LUorg/DNAnjpvkcrknsRXP2epAFhkuT/mN6QUgPS1m2HWFKj4noCWGCHqAAjL86nZsICgMlnXJ876prlP3dgoDoo12Rw3tifc3E5fKzzQmOmnfMxjJRH4/dou9Gj1Wb4OdlYTOCdliDgEXt5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l13mMJLk; arc=none smtp.client-ip=198.175.65.19
+	bh=xlAmvJY1EcCAH273GfroIocGNxG++mVZRPCJKDMo4T0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Na7esQHNFQPOk4iWuHFizUGZsxg54HMITZL6uj+Fqoy1643keKXZul1efHgGvk6PM96jQpgzHp+3KcO+HTNCv7uUVGizuLHT6KtHutdYfTL5zE793DJOMmF9riNMkGH4EJqz4ygpgnOs4rao7q57+3AFqaqErEfcrKGKpFQllF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hVzhjvPm; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l13mMJLk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVzhjvPm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1733717534; x=1765253534;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jeaU5cD30qq8KgLp1vwHXVGn1Sa67LzrXjtJZtFG+ds=;
-  b=l13mMJLk0oVWgbbFuZWhUftuXQqIdqrZjIVw2tbkB8sRA/gjMmifOFDk
-   jRjHaR2YUO3W+QhhnovhWSPCm0CxsEqp9lkhm+uC/dbo8tJmKcmhurZFd
-   9rLukXBWZj+7yY5lc6CufsMa6bJqYgGdTOwHbHDzszd4CyWcPhTgba6o0
-   kxKSQp3BZ7u50gdRB54/FKZx1t3HoRcXayxc2sanpdjvsf/ol13J+QI6n
-   xTfGZq74lCaeX2Oa0ylq3MDnNffxsPh+0ndFSpDiprw+88GL7HQWb20fz
-   noSDI9JZ1fGRnv1RczGaBIcMt0aLTxMztC//0zxPg3YNogb2NVYwgjj33
-   A==;
-X-CSE-ConnectionGUID: S+0ISvT+Qnm7tK0aI//QAA==
-X-CSE-MsgGUID: gf4TV7sGR1uyzixdXYwQ6Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="33891404"
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xlAmvJY1EcCAH273GfroIocGNxG++mVZRPCJKDMo4T0=;
+  b=hVzhjvPm7wpV5r70lkxNRRSAGSp7QTl/y5MNEvKJqEEfT7fWWVpX1Ubo
+   u1YsJz76CTFsLz1s9AVAGTACz0P4LFOAzJN69W9fnFes8Bc8oA5skYcjY
+   a1xzqQ8cS+S4jAG1sbW6e1P/G3w7Gxb8zkC+TzdceZ/RQJswI7OpWkmrW
+   NuNgN73ADgw6lcVEsQ1avQ1gGlKQqbQPyj6tqMHArLie/CSKrpR5CgC56
+   3ZinGTuWBtVFcH5hbwer/pGA1mkgncbYoowlBN5t4vWBw1jJKZRIWTaee
+   lCQ8JQyg2d8oGATie5WTar5yS7oB7hNMjta85Sg3BZ2hre8PGx8ciQr3P
+   g==;
+X-CSE-ConnectionGUID: 7NenelXFRd2LwzfLE8olrA==
+X-CSE-MsgGUID: ztOfvt1US8GYKEOEt6gUDw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="33891396"
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="33891404"
+   d="scan'208";a="33891396"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:12:13 -0800
-X-CSE-ConnectionGUID: 15WYhjCEQKy/SNHF2n3+uA==
-X-CSE-MsgGUID: VqFIhV3CSNK1s0SWk9lplw==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:12:11 -0800
+X-CSE-ConnectionGUID: TW3lUvx1Rz+4a/JS+jsx0w==
+X-CSE-MsgGUID: BjzqgKb/ROOBP1ZTL9tv4Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="99004598"
+   d="scan'208";a="99004596"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
   by fmviesa003.fm.intel.com with ESMTP; 08 Dec 2024 20:12:08 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKV7t-0003oD-1u;
+	id 1tKV7t-0003oH-2G;
 	Mon, 09 Dec 2024 04:12:05 +0000
-Date: Mon, 9 Dec 2024 12:11:39 +0800
+Date: Mon, 9 Dec 2024 12:11:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Taniya Das <quic_tdas@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ajit Pandey <quic_ajipan@quicinc.com>,
-	Imran Shaik <quic_imrashai@quicinc.com>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	Taniya Das <quic_tdas@quicinc.com>
-Subject: Re: [PATCH 3/3] clk: qcom: videocc-sm8750: Add video clock
- controller driver for SM8750
-Message-ID: <202412071654.X0lSg9EN-lkp@intel.com>
-References: <20241206-sm8750_videocc-v1-3-5da6e7eea2bd@quicinc.com>
+	linux-pm@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+	Chen-Yu Tsai <wens@csie.org>
+Subject: [chanwoo:devfreq-next 4/4] drivers/devfreq/sun8i-a33-mbus.c:384:50:
+ error: too few arguments to function call, expected 2, have 1
+Message-ID: <202412071628.eroJDpgX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,36 +63,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241206-sm8750_videocc-v1-3-5da6e7eea2bd@quicinc.com>
 
-Hi Taniya,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on af2ea8ab7a546b430726183458da0a173d331272]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Taniya-Das/clk-qcom-branch-Extend-invert-logic-for-branch2-mem-clocks/20241207-015655
-base:   af2ea8ab7a546b430726183458da0a173d331272
-patch link:    https://lore.kernel.org/r/20241206-sm8750_videocc-v1-3-5da6e7eea2bd%40quicinc.com
-patch subject: [PATCH 3/3] clk: qcom: videocc-sm8750: Add video clock controller driver for SM8750
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241207/202412071654.X0lSg9EN-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-next
+head:   27d1a5d95c5202f927f1155ad8f919778cd9f155
+commit: 27d1a5d95c5202f927f1155ad8f919778cd9f155 [4/4] PM / devfreq: sun8i-a33-mbus: Simplify by using more devm functions
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241207/202412071628.eroJDpgX-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412071654.X0lSg9EN-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412071628.eroJDpgX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412071654.X0lSg9EN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412071628.eroJDpgX-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/clk/qcom/videocc-sm8750.c:8:
+   In file included from drivers/devfreq/sun8i-a33-mbus.c:7:
+   In file included from include/linux/devfreq.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
    In file included from include/linux/module.h:19:
    In file included from include/linux/elf.h:6:
    In file included from arch/s390/include/asm/elf.h:181:
    In file included from arch/s390/include/asm/mmu_context.h:11:
    In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2223:
+   In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
@@ -122,50 +106,188 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/clk/qcom/videocc-sm8750.c:56:29: error: use of undeclared identifier 'CLK_ALPHA_PLL_TYPE_TAYCAN_ELU'; did you mean 'CLK_ALPHA_PLL_TYPE_RIVIAN_EVO'?
-      56 |         .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_TAYCAN_ELU],
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                    CLK_ALPHA_PLL_TYPE_RIVIAN_EVO
-   drivers/clk/qcom/clk-alpha-pll.h:30:2: note: 'CLK_ALPHA_PLL_TYPE_RIVIAN_EVO' declared here
-      30 |         CLK_ALPHA_PLL_TYPE_RIVIAN_EVO,
-         |         ^
->> drivers/clk/qcom/videocc-sm8750.c:64:12: error: use of undeclared identifier 'clk_alpha_pll_taycan_elu_ops'; did you mean 'clk_alpha_pll_rivian_evo_ops'?
-      64 |                         .ops = &clk_alpha_pll_taycan_elu_ops,
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                 clk_alpha_pll_rivian_evo_ops
-   drivers/clk/qcom/clk-alpha-pll.h:195:29: note: 'clk_alpha_pll_rivian_evo_ops' declared here
-     195 | extern const struct clk_ops clk_alpha_pll_rivian_evo_ops;
-         |                             ^
->> drivers/clk/qcom/videocc-sm8750.c:426:2: error: call to undeclared function 'clk_taycan_elu_pll_configure'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     426 |         clk_taycan_elu_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
-         |         ^
-   drivers/clk/qcom/videocc-sm8750.c:426:2: note: did you mean 'clk_rivian_evo_pll_configure'?
-   drivers/clk/qcom/clk-alpha-pll.h:221:6: note: 'clk_rivian_evo_pll_configure' declared here
-     221 | void clk_rivian_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
-         |      ^
-   4 warnings and 3 errors generated.
+   In file included from drivers/devfreq/sun8i-a33-mbus.c:9:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/devfreq/sun8i-a33-mbus.c:9:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/devfreq/sun8i-a33-mbus.c:9:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:95:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/devfreq/sun8i-a33-mbus.c:384:50: error: too few arguments to function call, expected 2, have 1
+     384 |         ret = devm_clk_rate_exclusive_get(priv->clk_mbus);
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~               ^
+   include/linux/clk.h:214:5: note: 'devm_clk_rate_exclusive_get' declared here
+     214 | int devm_clk_rate_exclusive_get(struct device *dev, struct clk *clk);
+         |     ^                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   16 warnings and 1 error generated.
 
 
-vim +56 drivers/clk/qcom/videocc-sm8750.c
+vim +384 drivers/devfreq/sun8i-a33-mbus.c
 
-    51	
-    52	static struct clk_alpha_pll video_cc_pll0 = {
-    53		.offset = 0x0,
-    54		.vco_table = taycan_elu_vco,
-    55		.num_vco = ARRAY_SIZE(taycan_elu_vco),
-  > 56		.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_TAYCAN_ELU],
-    57		.clkr = {
-    58			.hw.init = &(const struct clk_init_data) {
-    59				.name = "video_cc_pll0",
-    60				.parent_data = &(const struct clk_parent_data) {
-    61					.index = DT_BI_TCXO,
-    62				},
-    63				.num_parents = 1,
-  > 64				.ops = &clk_alpha_pll_taycan_elu_ops,
-    65			},
-    66		},
-    67	};
-    68	
+   330	
+   331	static int sun8i_a33_mbus_probe(struct platform_device *pdev)
+   332	{
+   333		const struct sun8i_a33_mbus_variant *variant;
+   334		struct device *dev = &pdev->dev;
+   335		struct sun8i_a33_mbus *priv;
+   336		unsigned long base_freq;
+   337		unsigned int max_state;
+   338		const char *err;
+   339		int i, ret;
+   340	
+   341		variant = device_get_match_data(dev);
+   342		if (!variant)
+   343			return -EINVAL;
+   344	
+   345		max_state = variant->max_dram_divider - variant->min_dram_divider + 1;
+   346	
+   347		priv = devm_kzalloc(dev, struct_size(priv, freq_table, max_state), GFP_KERNEL);
+   348		if (!priv)
+   349			return -ENOMEM;
+   350	
+   351		platform_set_drvdata(pdev, priv);
+   352	
+   353		priv->variant = variant;
+   354	
+   355		priv->reg_dram = devm_platform_ioremap_resource_byname(pdev, "dram");
+   356		if (IS_ERR(priv->reg_dram))
+   357			return PTR_ERR(priv->reg_dram);
+   358	
+   359		priv->reg_mbus = devm_platform_ioremap_resource_byname(pdev, "mbus");
+   360		if (IS_ERR(priv->reg_mbus))
+   361			return PTR_ERR(priv->reg_mbus);
+   362	
+   363		priv->clk_bus = devm_clk_get_enabled(dev, "bus");
+   364		if (IS_ERR(priv->clk_bus))
+   365			return dev_err_probe(dev, PTR_ERR(priv->clk_bus),
+   366					     "failed to get bus clock\n");
+   367	
+   368		priv->clk_dram = devm_clk_get(dev, "dram");
+   369		if (IS_ERR(priv->clk_dram))
+   370			return dev_err_probe(dev, PTR_ERR(priv->clk_dram),
+   371					     "failed to get dram clock\n");
+   372	
+   373		priv->clk_mbus = devm_clk_get(dev, "mbus");
+   374		if (IS_ERR(priv->clk_mbus))
+   375			return dev_err_probe(dev, PTR_ERR(priv->clk_mbus),
+   376					     "failed to get mbus clock\n");
+   377	
+   378		/* Lock the DRAM clock rate to keep priv->nominal_bw in sync. */
+   379		ret = devm_clk_rate_exclusive_get(dev, priv->clk_dram);
+   380		if (ret)
+   381			return dev_err_probe(dev, ret, "failed to lock dram clock rate\n");
+   382	
+   383		/* Lock the MBUS clock rate to keep MBUS_TMR_PERIOD in sync. */
+ > 384		ret = devm_clk_rate_exclusive_get(priv->clk_mbus);
+   385		if (ret)
+   386			return dev_err_probe(dev, ret, "failed to lock mbus clock rate\n");
+   387	
+   388		priv->gov_data.upthreshold	= 10;
+   389		priv->gov_data.downdifferential	=  5;
+   390	
+   391		priv->profile.initial_freq	= clk_get_rate(priv->clk_dram);
+   392		priv->profile.polling_ms	= 1000;
+   393		priv->profile.target		= sun8i_a33_mbus_set_dram_target;
+   394		priv->profile.get_dev_status	= sun8i_a33_mbus_get_dram_status;
+   395		priv->profile.freq_table	= priv->freq_table;
+   396		priv->profile.max_state		= max_state;
+   397	
+   398		ret = devm_pm_opp_set_clkname(dev, "dram");
+   399		if (ret)
+   400			return dev_err_probe(dev, ret, "failed to add OPP table\n");
+   401	
+   402		base_freq = clk_get_rate(clk_get_parent(priv->clk_dram));
+   403		for (i = 0; i < max_state; ++i) {
+   404			unsigned int div = variant->max_dram_divider - i;
+   405	
+   406			priv->freq_table[i] = base_freq / div;
+   407	
+   408			ret = dev_pm_opp_add(dev, priv->freq_table[i], 0);
+   409			if (ret) {
+   410				err = "failed to add OPPs\n";
+   411				goto err_remove_opps;
+   412			}
+   413		}
+   414	
+   415		ret = sun8i_a33_mbus_hw_init(dev, priv, priv->profile.initial_freq);
+   416		if (ret) {
+   417			err = "failed to init hardware\n";
+   418			goto err_remove_opps;
+   419		}
+   420	
+   421		priv->devfreq_dram = devfreq_add_device(dev, &priv->profile,
+   422							DEVFREQ_GOV_SIMPLE_ONDEMAND,
+   423							&priv->gov_data);
+   424		if (IS_ERR(priv->devfreq_dram)) {
+   425			ret = PTR_ERR(priv->devfreq_dram);
+   426			err = "failed to add devfreq device\n";
+   427			goto err_remove_opps;
+   428		}
+   429	
+   430		/*
+   431		 * This must be set manually after registering the devfreq device,
+   432		 * because there is no way to select a dynamic OPP as the suspend OPP.
+   433		 */
+   434		priv->devfreq_dram->suspend_freq = priv->freq_table[0];
+   435	
+   436		return 0;
+   437	
+   438	err_remove_opps:
+   439		dev_pm_opp_remove_all_dynamic(dev);
+   440	
+   441		return dev_err_probe(dev, ret, err);
+   442	}
+   443	
 
 -- 
 0-DAY CI Kernel Test Service
