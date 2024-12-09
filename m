@@ -1,67 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6B015383A;
-	Mon,  9 Dec 2024 19:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E52915665C;
+	Mon,  9 Dec 2024 20:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733773027; cv=none; b=BFO1jQahjc5MEE99lokZfagEEVbY7sJtfYVWisF5S09NHaXtAXEs8q+lC0fDZ/qfDKyWf2E5qCdGI2l+J8Yd5I9MZfA6b46jkoVt2ouVyItgvTNOGDovw8Iz3R7SWPlVWwDalpE8+zoICU0Yi7yM6xzEWMXtXvBQXzHS8H8nkOg=
+	t=1733775609; cv=none; b=pOCyyPz5SBadNAyDqKiwUN75Fn69c4OZf8yP7X8+tpvyBxc2yh94IiMtCQSI8Ehw8EVh1TI+Xo2FJx1NzHemAydm1sKyeioaLrNS2SJJ6asDi883QwtBbcXK9GsJZe8h0czGdJ220tXr/rg0DpA2IqhqpxQxWipJ5rZXdQftvhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733773027; c=relaxed/simple;
-	bh=MReSg/ADihE6zgaGj+frthB/C+MsbysHrihWVPpu0pI=;
+	s=arc-20240116; t=1733775609; c=relaxed/simple;
+	bh=GJDYzecw9+kg0f2BbCimIJg24vXPiI1qTudUw3MYAX0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d9O36nJ0uutAVB+Jw77WfQvxgkAm8shNyoeABlyylHLOhbi4dlu+WvWUNOyVRCOUA6ubYkbbmmetwcAnl3JVDUE54bw5SN7pS26Yxw2hgRVpNbefvQGwpcBMnPMZTLQWcRkskviB3hW/w6wZ4lrCDWBJKAVcWiVtszO8HFcIPLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mluxOS7G; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=kmUeQx+LDlpLW9r+T7GKKvw6YEm+UsjKoU2re4mBOs6eqDx5IfwbTjTLj2XKcHfM4X7o0PAGga9Rup2ngt4oCtn6nzwVg00eneR4+T9ZJbVhHbhNWZgEwmKMPXWj1BdemidF4VKTPV6fiG0tGSG4tS3s3L7yhDw8XXHutwk6lzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZMKRbR6N; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mluxOS7G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZMKRbR6N"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733773026; x=1765309026;
+  t=1733775606; x=1765311606;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MReSg/ADihE6zgaGj+frthB/C+MsbysHrihWVPpu0pI=;
-  b=mluxOS7GgtJbWRZ6N4zprTgJRNwOTsjNqBbo1GwJZWfWth990NgNxutb
-   hFskKazNuEWOrwzS/dAZs9CwMY2ujoDJLRLFaQsa2ZVqV1YOzIloRbZEV
-   IslcDo5RTt2/Un2BzpNL459/vUNQsDmLLfw9eSN4Zc27cob3gsHjZ8NT6
-   QududXF/PmZ9RCMtFA7YxY7RPdlO3MvqhDR9qN07rUza2RXjg3Mvgrh+2
-   oD7g20O3GKB03DbmJECwN8LmVQn3Rf349HbOrB8ewaLs6Yqnxkv/4k2jW
-   E64eHEoxMKStgrUmTg3bKJKtJvCwwy/EgYif68wdmbmSO2Vbg2MC/c206
-   w==;
-X-CSE-ConnectionGUID: y9inSXdmQ5GL5VpNTsAIDQ==
-X-CSE-MsgGUID: i+PEMkOCSdOT64UW4j30xg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="44770054"
+  bh=GJDYzecw9+kg0f2BbCimIJg24vXPiI1qTudUw3MYAX0=;
+  b=ZMKRbR6Nn7/1DAub9UKldSltYN5+U6xU2kJJPyja2G9Gc+nGoux7KHXh
+   lTjrfw5Uqag6Sw6E7wuljvLmncWBU5fPEbIuL3Z1/EZbvev3CmFWEF5hd
+   FHlVjtj+rO/M8PNKn75N0UK4Rlb0c93n1Ckr8O1pBkK9tYgPJXtsFAVKE
+   io6p1sqOF++EGubdctr3i1ppXS0bvCMPrXWqWlf3clXnguRRCkLFIVjgg
+   TEG7ygIkK/t6UL2GDABDw6S92z8dOoDLGW2/zDNiTKxgqWlYYiC8r/En1
+   HAPGK7CvO6xQlvXjzjKfbGhJqUmUHo2EEwBLNcAFNz8G9EYr4nLIEX6de
+   A==;
+X-CSE-ConnectionGUID: FKvzLSvrTemQOeyP9L/7Tg==
+X-CSE-MsgGUID: VAvwvCAWR96hNCfUCqfR5g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="34219132"
 X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
-   d="scan'208";a="44770054"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 11:37:02 -0800
-X-CSE-ConnectionGUID: ewzXBMAaRu+nvLnpHzj5Lw==
-X-CSE-MsgGUID: XfCJLZL/SWKU4aZ9z8kW3A==
+   d="scan'208";a="34219132"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 12:20:05 -0800
+X-CSE-ConnectionGUID: JctBITyFRKix385v2WUzBQ==
+X-CSE-MsgGUID: ueSQwyrZS6mbHdLASr1aBA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
-   d="scan'208";a="126004877"
+   d="scan'208";a="95665180"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 09 Dec 2024 11:36:58 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 09 Dec 2024 12:20:03 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKjYt-0004lJ-1X;
-	Mon, 09 Dec 2024 19:36:55 +0000
-Date: Tue, 10 Dec 2024 03:36:09 +0800
+	id 1tKkEb-0004mn-0K;
+	Mon, 09 Dec 2024 20:20:01 +0000
+Date: Tue, 10 Dec 2024 04:18:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-	kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, maz@kernel.org,
-	oliver.upton@linux.dev, christoffer.dall@arm.com,
-	suzuki.poulose@arm.com, will@kernel.org, catalin.marinas@arm.com,
-	coltonlewis@google.com, joey.gouly@arm.com, yuzenghui@huawei.com,
-	darren@os.amperecomputing.com, gankulkarni@os.amperecomputing.com,
-	vishnu@os.amperecomputing.com
-Subject: Re: [PATCH] KVM: arm64: nv: Set ISTATUS for emulated timers, If
- timer expired
-Message-ID: <202412100311.HEYAT0bx-lkp@intel.com>
-References: <20241209053201.339939-1-gankulkarni@os.amperecomputing.com>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, dmitry.torokhov@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Frank.Li@nxp.com,
+	ping.bai@nxp.com, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH V3] Input: bbnsm_pwrkey - add remove hook
+Message-ID: <202412100332.9Mo5ZFrm-lkp@intel.com>
+References: <20241209075733.2504229-1-peng.fan@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,78 +65,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241209053201.339939-1-gankulkarni@os.amperecomputing.com>
+In-Reply-To: <20241209075733.2504229-1-peng.fan@oss.nxp.com>
 
-Hi Ganapatrao,
+Hi Peng,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on kvmarm/next]
-[also build test WARNING on arm64/for-next/core soc/for-next linus/master arm/for-next arm/fixes v6.13-rc2 next-20241209]
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on linus/master v6.13-rc2 next-20241209]
+[cannot apply to dtor-input/for-linus]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ganapatrao-Kulkarni/KVM-arm64-nv-Set-ISTATUS-for-emulated-timers-If-timer-expired/20241209-133651
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git next
-patch link:    https://lore.kernel.org/r/20241209053201.339939-1-gankulkarni%40os.amperecomputing.com
-patch subject: [PATCH] KVM: arm64: nv: Set ISTATUS for emulated timers, If timer expired
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241210/202412100311.HEYAT0bx-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412100311.HEYAT0bx-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/Input-bbnsm_pwrkey-add-remove-hook/20241209-160051
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20241209075733.2504229-1-peng.fan%40oss.nxp.com
+patch subject: [PATCH V3] Input: bbnsm_pwrkey - add remove hook
+config: i386-buildonly-randconfig-001-20241209 (https://download.01.org/0day-ci/archive/20241210/202412100332.9Mo5ZFrm-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412100332.9Mo5ZFrm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412100311.HEYAT0bx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412100332.9Mo5ZFrm-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm64/kvm/arch_timer.c:1202:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-    1202 |                 struct timer_map map;
-         |                 ^
+>> drivers/input/misc/nxp-bbnsm-pwrkey.c:192:23: warning: unused variable 'bbnsm' [-Wunused-variable]
+     192 |         struct bbnsm_pwrkey *bbnsm = platform_get_drvdata(pdev);
+         |                              ^~~~~
    1 warning generated.
 
 
-vim +1202 arch/arm64/kvm/arch_timer.c
+vim +/bbnsm +192 drivers/input/misc/nxp-bbnsm-pwrkey.c
 
-  1190	
-  1191	static void kvm_arm_timer_write(struct kvm_vcpu *vcpu,
-  1192					struct arch_timer_context *timer,
-  1193					enum kvm_arch_timer_regs treg,
-  1194					u64 val)
-  1195	{
-  1196		switch (treg) {
-  1197		case TIMER_REG_TVAL:
-  1198			timer_set_cval(timer, kvm_phys_timer_read() - timer_get_offset(timer) + (s32)val);
-  1199			break;
-  1200	
-  1201		case TIMER_REG_CTL:
-> 1202			struct timer_map map;
-  1203	
-  1204			val &= ~ARCH_TIMER_CTRL_IT_STAT;
-  1205			get_timer_map(vcpu, &map);
-  1206			/* Set ISTATUS bit for emulated timers, if timer expired. */
-  1207			if (timer == map.emul_vtimer || timer == map.emul_ptimer) {
-  1208				if (!kvm_timer_compute_delta(timer))
-  1209					val |= ARCH_TIMER_CTRL_IT_STAT;
-  1210			}
-  1211			timer_set_ctl(timer, val);
-  1212			break;
-  1213	
-  1214		case TIMER_REG_CVAL:
-  1215			timer_set_cval(timer, val);
-  1216			break;
-  1217	
-  1218		case TIMER_REG_VOFF:
-  1219			*timer->offset.vcpu_offset = val;
-  1220			break;
-  1221	
-  1222		default:
-  1223			BUG();
-  1224		}
-  1225	}
-  1226	
+   189	
+   190	static void bbnsm_pwrkey_remove(struct platform_device *pdev)
+   191	{
+ > 192		struct bbnsm_pwrkey *bbnsm = platform_get_drvdata(pdev);
+   193	
+   194		dev_pm_clear_wake_irq(&pdev->dev);
+   195		device_init_wakeup(&pdev->dev, false);
+   196	}
+   197	
 
 -- 
 0-DAY CI Kernel Test Service
