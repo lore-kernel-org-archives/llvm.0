@@ -1,44 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C901917E4;
-	Mon,  9 Dec 2024 18:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6B015383A;
+	Mon,  9 Dec 2024 19:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733769502; cv=none; b=kN5ioK3c6GEIAi/BzmaUZjeTxZRW5SjDWhNi1V5s0P2xX7yl/LM2jqSWnseTrTWj2qdMybHi++aYUYbj6/ElN9A5ciycB9hLmK/0IU9157hsmvsRC8Xy3D5jOc7FUxQOsLDVv7MZpJZ6+OqDNOG9eDX4LuJN0ASeJGoRphzo47o=
+	t=1733773027; cv=none; b=BFO1jQahjc5MEE99lokZfagEEVbY7sJtfYVWisF5S09NHaXtAXEs8q+lC0fDZ/qfDKyWf2E5qCdGI2l+J8Yd5I9MZfA6b46jkoVt2ouVyItgvTNOGDovw8Iz3R7SWPlVWwDalpE8+zoICU0Yi7yM6xzEWMXtXvBQXzHS8H8nkOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733769502; c=relaxed/simple;
-	bh=BbA4t37gNDuPaVp+phA5si3yZnk3BtKkyG3dbN7F6lY=;
+	s=arc-20240116; t=1733773027; c=relaxed/simple;
+	bh=MReSg/ADihE6zgaGj+frthB/C+MsbysHrihWVPpu0pI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NgTB8+I6QMTUJaQRnWzx+LI6cFjiTUEArl1fiN2+/JAUNVWVwdD0pH6mKuBE0XONIyRSNmRtM9Ta+8FEmgFMIHWutMwQE2YeeKwiCxlniKp8PibX5+sXdYiRYtBVrJEWu1yKVaWxjusaYb3ubZnPjpODHcnYSmBajSbxB1Tee+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LEQXEGrr; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=d9O36nJ0uutAVB+Jw77WfQvxgkAm8shNyoeABlyylHLOhbi4dlu+WvWUNOyVRCOUA6ubYkbbmmetwcAnl3JVDUE54bw5SN7pS26Yxw2hgRVpNbefvQGwpcBMnPMZTLQWcRkskviB3hW/w6wZ4lrCDWBJKAVcWiVtszO8HFcIPLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mluxOS7G; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LEQXEGrr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8216BC4CEDF;
-	Mon,  9 Dec 2024 18:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733769502;
-	bh=BbA4t37gNDuPaVp+phA5si3yZnk3BtKkyG3dbN7F6lY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LEQXEGrr9QDBONh4Ctq6YL0U8KHT9HaXGr1gSHgekHVEJr6T5DcDmD7SpTZ/20azn
-	 vGZJzP96pQkxzNbKkwcqY42hVSd8PxSY0v2aBF2QEIt2ktd1uy9Ec/Tsgknt8P28uU
-	 1yKBGL9lndSRfMg5Pbbs6GAHqusCWHSSu0Gh/URt2V+PovrtIvp/b+yR1Z1d7RCLRv
-	 H89mSeNPW5Euh62hBEgCs/jeplHbt++9sgV31sJQp8n8Y1ppq/9s5J6rZRrNSOpJDn
-	 Y1Y415UC0/5PF879/PUPOd4b70sIGhetmTe2nEqAhnsoLJZZxDtvfEBNRftnwdZO1p
-	 ITMx4aIJoo1yg==
-Date: Mon, 9 Dec 2024 18:38:21 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Wei Liu <wei.liu@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Michael Kelley <mhklinux@outlook.com>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [hyperv:hyperv-fixes 5/11] drivers/hv/vmbus_drv.c:2510:45:
- error: call to undeclared function 'secs_to_jiffies'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <Z1c5HfhCCd44LntZ@liuwe-devbox-debian-v2>
-References: <202412091658.m9g4L9gw-lkp@intel.com>
- <fba68cce-2445-4a1d-a609-b6308a62c1b3@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mluxOS7G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733773026; x=1765309026;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MReSg/ADihE6zgaGj+frthB/C+MsbysHrihWVPpu0pI=;
+  b=mluxOS7GgtJbWRZ6N4zprTgJRNwOTsjNqBbo1GwJZWfWth990NgNxutb
+   hFskKazNuEWOrwzS/dAZs9CwMY2ujoDJLRLFaQsa2ZVqV1YOzIloRbZEV
+   IslcDo5RTt2/Un2BzpNL459/vUNQsDmLLfw9eSN4Zc27cob3gsHjZ8NT6
+   QududXF/PmZ9RCMtFA7YxY7RPdlO3MvqhDR9qN07rUza2RXjg3Mvgrh+2
+   oD7g20O3GKB03DbmJECwN8LmVQn3Rf349HbOrB8ewaLs6Yqnxkv/4k2jW
+   E64eHEoxMKStgrUmTg3bKJKtJvCwwy/EgYif68wdmbmSO2Vbg2MC/c206
+   w==;
+X-CSE-ConnectionGUID: y9inSXdmQ5GL5VpNTsAIDQ==
+X-CSE-MsgGUID: i+PEMkOCSdOT64UW4j30xg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="44770054"
+X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
+   d="scan'208";a="44770054"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 11:37:02 -0800
+X-CSE-ConnectionGUID: ewzXBMAaRu+nvLnpHzj5Lw==
+X-CSE-MsgGUID: XfCJLZL/SWKU4aZ9z8kW3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
+   d="scan'208";a="126004877"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 09 Dec 2024 11:36:58 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tKjYt-0004lJ-1X;
+	Mon, 09 Dec 2024 19:36:55 +0000
+Date: Tue, 10 Dec 2024 03:36:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, maz@kernel.org,
+	oliver.upton@linux.dev, christoffer.dall@arm.com,
+	suzuki.poulose@arm.com, will@kernel.org, catalin.marinas@arm.com,
+	coltonlewis@google.com, joey.gouly@arm.com, yuzenghui@huawei.com,
+	darren@os.amperecomputing.com, gankulkarni@os.amperecomputing.com,
+	vishnu@os.amperecomputing.com
+Subject: Re: [PATCH] KVM: arm64: nv: Set ISTATUS for emulated timers, If
+ timer expired
+Message-ID: <202412100311.HEYAT0bx-lkp@intel.com>
+References: <20241209053201.339939-1-gankulkarni@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,31 +70,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fba68cce-2445-4a1d-a609-b6308a62c1b3@linux.microsoft.com>
+In-Reply-To: <20241209053201.339939-1-gankulkarni@os.amperecomputing.com>
 
-On Mon, Dec 09, 2024 at 08:52:27AM -0800, Easwar Hariharan wrote:
-> On 12/8/2024 9:50 PM, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git hyperv-fixes
-> > head:   b8ea8cd0fbd358feee3e9172c5ef8afd671e0d11
-> > commit: eced6df67f6b76889e80ded109a73ca5fac1e5cd [5/11] drivers: hv: Convert open-coded timeouts to secs_to_jiffies()
-> > config: i386-buildonly-randconfig-004-20241209 (https://download.01.org/0day-ci/archive/20241209/202412091658.m9g4L9gw-lkp@intel.com/config)
-> > compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412091658.m9g4L9gw-lkp@intel.com/reproduce)
-> > 
-> 
-> Hi Wei,
-> 
-> It appears hyperv-fixes needs to be rebased on 6.13-rc1 to provide
-> secs_to_jiffies() from commit b35108a51cf7bab58d7eace1267d7965978bcdb8
-> (jiffies: Define secs_to_jiffies()). I suppose you'll do that before
-> sending the PR to Linus.
+Hi Ganapatrao,
 
-Yes. I will fix that up.
+kernel test robot noticed the following build warnings:
 
-I originally based it on 6.13-rc1, but that tag was broken. Now that
-6.13-rc2 is out, I'll rebase on that.
+[auto build test WARNING on kvmarm/next]
+[also build test WARNING on arm64/for-next/core soc/for-next linus/master arm/for-next arm/fixes v6.13-rc2 next-20241209]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ganapatrao-Kulkarni/KVM-arm64-nv-Set-ISTATUS-for-emulated-timers-If-timer-expired/20241209-133651
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git next
+patch link:    https://lore.kernel.org/r/20241209053201.339939-1-gankulkarni%40os.amperecomputing.com
+patch subject: [PATCH] KVM: arm64: nv: Set ISTATUS for emulated timers, If timer expired
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241210/202412100311.HEYAT0bx-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412100311.HEYAT0bx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412100311.HEYAT0bx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kvm/arch_timer.c:1202:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+    1202 |                 struct timer_map map;
+         |                 ^
+   1 warning generated.
 
 
-> 
-> Thanks,
-> Easwar
+vim +1202 arch/arm64/kvm/arch_timer.c
+
+  1190	
+  1191	static void kvm_arm_timer_write(struct kvm_vcpu *vcpu,
+  1192					struct arch_timer_context *timer,
+  1193					enum kvm_arch_timer_regs treg,
+  1194					u64 val)
+  1195	{
+  1196		switch (treg) {
+  1197		case TIMER_REG_TVAL:
+  1198			timer_set_cval(timer, kvm_phys_timer_read() - timer_get_offset(timer) + (s32)val);
+  1199			break;
+  1200	
+  1201		case TIMER_REG_CTL:
+> 1202			struct timer_map map;
+  1203	
+  1204			val &= ~ARCH_TIMER_CTRL_IT_STAT;
+  1205			get_timer_map(vcpu, &map);
+  1206			/* Set ISTATUS bit for emulated timers, if timer expired. */
+  1207			if (timer == map.emul_vtimer || timer == map.emul_ptimer) {
+  1208				if (!kvm_timer_compute_delta(timer))
+  1209					val |= ARCH_TIMER_CTRL_IT_STAT;
+  1210			}
+  1211			timer_set_ctl(timer, val);
+  1212			break;
+  1213	
+  1214		case TIMER_REG_CVAL:
+  1215			timer_set_cval(timer, val);
+  1216			break;
+  1217	
+  1218		case TIMER_REG_VOFF:
+  1219			*timer->offset.vcpu_offset = val;
+  1220			break;
+  1221	
+  1222		default:
+  1223			BUG();
+  1224		}
+  1225	}
+  1226	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
