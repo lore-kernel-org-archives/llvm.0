@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA487BB1D;
-	Mon,  9 Dec 2024 05:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D4C155C96;
+	Mon,  9 Dec 2024 05:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733720746; cv=none; b=YBB9X2HGl7TFa/9SBJqPf6XYxOfJydKuXEe4aIkyQyVE7pOQ+Vz5yPykaRtP+4fVv4XIo9xwHt2b07IBQDENLu+xv/n9fP1pqnguxyB2F08BWbFD80m8UEypvhMI8wdzyM3jMqe2DQyxrhtV6ATCSaubLTI9PFS4fSRCHOzAqhY=
+	t=1733720865; cv=none; b=CTFvifAdFTycMaargT3LHTFzMSdi8ovhXEgaEcvt6f6a+4rXv6DBJ8CkG7FCxhvZ7H6QLTyYIGAaEhI4Hd5MBfHOoWE7ddWVrhDQpvQGZfF1MXODdIXligdduNKx/72siARiQrth0t/LR8afc6IBQCZifTsLloELhSTefMncK7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733720746; c=relaxed/simple;
-	bh=rKUj0aBTI0ZfKatutdv9ouSsWdAn3pRG3PywUXBeT7Y=;
+	s=arc-20240116; t=1733720865; c=relaxed/simple;
+	bh=v3HN4qqQI50dFLz716eyFD44vj5iRz15aeCSa1nCqdk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cPId/wRxeJ3R2BX43hdFaKobzMndP6nR7TZdz4QpI+B2uOMWltpMiw4BBYW/YmsndNuzwd6WetGwK+hgXNGrItFmCqxolwitSSMzyXAmMwRKtC6ghgWgeGXFNO4OG0soFNy8bvJcxWHQgGQTz1sr5FeN/ua+Ia8ftsayWX819kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IW4EXCxR; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=umhG5Iv+j5sFqtfYXEXUWsxHJK2STMxk06dt8mnHz2hTbT+Cp18GDDV4/QnBxxZ7tVshT65Q74DVzah+6PS+1MT4kNNBmhV41xd5s1Lra4V/Iv/R+jicYvedOoACxdYDG76dsSA+Psl1d1AjWFRWqx+o6lssuRz45NZnfdK1ciA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lTMpEXR4; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IW4EXCxR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lTMpEXR4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733720744; x=1765256744;
+  t=1733720864; x=1765256864;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rKUj0aBTI0ZfKatutdv9ouSsWdAn3pRG3PywUXBeT7Y=;
-  b=IW4EXCxRz6Sp/JuMA51oTdkx8zTvTGswKORCTAtgsNLuXWqFwa/BEniq
-   syMF1VALOck//P+yIuFaqjmA+ZlFFqu/Y66Dye1XfUC3L1z7DQJUuAFhn
-   EgDZCIIRnwboYrveXuzmMV5/3dK0QtnUD/dAPJYFHiSd9l3EdkNu2MsEk
-   zpnfu8MIOXbExHrcEMDZJh1DtxSK6dRZgJUVp1QAp4JaUcB158FNinGnA
-   GqTTsKrwRSIl2h/f0dTATnmzhw7yMIqXCvXztATUIdU2G/tw/QrmK58bl
-   GbGh0pD7RHmQCbNYkw0JDKxhj8nauzLXaQ9hoQjc8wzvidxjeZm5pJrtU
-   g==;
-X-CSE-ConnectionGUID: HTN8ACE9RKuQWjVz+Y2H3w==
-X-CSE-MsgGUID: eWbWNcTcTj2lYNpQCgGCJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="33894018"
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="33894018"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 21:05:43 -0800
-X-CSE-ConnectionGUID: ADfjMYPmQ6+AEcHPxwGpJg==
-X-CSE-MsgGUID: jLoC4unPQfWTQMslKptsmA==
+  bh=v3HN4qqQI50dFLz716eyFD44vj5iRz15aeCSa1nCqdk=;
+  b=lTMpEXR40pGvjFh+iE93n82zRI9MNoKe54OeO/NVxFWK+UeV//IMYQXh
+   Anfsrjd4XsdJ5GWBf/epio/HbJzZeg9akH+ULluf579Yv/83b6Dm5Y+zb
+   WPC9XupmZpdnqs1AUwHUesiGFqAzsG1/tiKt36s5yUR9AeZ2lJERPgGLs
+   WnIeJv5QZ7oT1XerHbJXYoH3BemZ5QJzk55LgrtZ4S/yPPOdSJKHGPW4v
+   By/LhGSlZpfq8S/P3DRcKWiPhvwtuLgIWGGypvxCyK1j+CqRJKw9IkP3k
+   bxhGW04SFt8ediQSfQ3EGqsFY2HeImdSEkeZO7miPiu4CEIe+ooJg8xjW
+   A==;
+X-CSE-ConnectionGUID: Bs/MTfGBTsmOarHLKzCwMg==
+X-CSE-MsgGUID: ekqTPyWVRLW/QE7j9Qf0Qg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45383400"
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="45383400"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 21:07:43 -0800
+X-CSE-ConnectionGUID: RFCBbniIR9mQRFtIPHZ9Kw==
+X-CSE-MsgGUID: moDFsaVCT5Gwk4Pav9zpgw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="95308500"
+   d="scan'208";a="95053461"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Dec 2024 21:05:41 -0800
+  by orviesa006.jf.intel.com with ESMTP; 08 Dec 2024 21:07:42 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKVxj-0003xR-0g;
-	Mon, 09 Dec 2024 05:05:39 +0000
-Date: Mon, 9 Dec 2024 13:05:06 +0800
+	id 1tKVzf-0003xl-1a;
+	Mon, 09 Dec 2024 05:07:39 +0000
+Date: Mon, 9 Dec 2024 13:06:49 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Roger L. Beckermeyer III" <beckerlee3@gmail.com>,
 	linux-btrfs@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	"Roger L. Beckermeyer III" <beckerlee3@gmail.com>
-Subject: Re: [PATCH] btrfs: edit btrfs_add_chunk_map() to use rb helpers
-Message-ID: <202412090922.LHCgRc17-lkp@intel.com>
-References: <3d4e17f44bafeb7e83d2fdfb50ac4e0c3ce2d23e.1733695544.git.beckerlee3@gmail.com>
+Subject: Re: [PATCH] btrfs: edit prelim_ref_insert() to use rb helpers
+Message-ID: <202412090958.CtUdYRwP-lkp@intel.com>
+References: <8201f6ae724c5dbc7c82f2ed294d457db208b2fa.1733695544.git.beckerlee3@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3d4e17f44bafeb7e83d2fdfb50ac4e0c3ce2d23e.1733695544.git.beckerlee3@gmail.com>
+In-Reply-To: <8201f6ae724c5dbc7c82f2ed294d457db208b2fa.1733695544.git.beckerlee3@gmail.com>
 
 Hi Roger,
 
@@ -76,59 +76,90 @@ kernel test robot noticed the following build errors:
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roger-L-Beckermeyer-III/btrfs-edit-btrfs_add_chunk_map-to-use-rb-helpers/20241209-064330
+url:    https://github.com/intel-lab-lkp/linux/commits/Roger-L-Beckermeyer-III/btrfs-edit-prelim_ref_insert-to-use-rb-helpers/20241209-064043
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/3d4e17f44bafeb7e83d2fdfb50ac4e0c3ce2d23e.1733695544.git.beckerlee3%40gmail.com
-patch subject: [PATCH] btrfs: edit btrfs_add_chunk_map() to use rb helpers
-config: arm-randconfig-001-20241209 (https://download.01.org/0day-ci/archive/20241209/202412090922.LHCgRc17-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/8201f6ae724c5dbc7c82f2ed294d457db208b2fa.1733695544.git.beckerlee3%40gmail.com
+patch subject: [PATCH] btrfs: edit prelim_ref_insert() to use rb helpers
+config: arm-randconfig-001-20241209 (https://download.01.org/0day-ci/archive/20241209/202412090958.CtUdYRwP-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412090922.LHCgRc17-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412090958.CtUdYRwP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412090922.LHCgRc17-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412090958.CtUdYRwP-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/btrfs/volumes.c:16:
-   In file included from fs/btrfs/ctree.h:10:
-   In file included from include/linux/pagemap.h:8:
+   In file included from fs/btrfs/backref.c:6:
    In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> fs/btrfs/volumes.c:5534:10: error: call to undeclared function 'rb_find_add_cached'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    5534 |         exist = rb_find_add_cached(&map->rb_node, &fs_info->mapping_tree, btrfs_chunk_map_cmp);
+>> fs/btrfs/backref.c:302:10: error: call to undeclared function 'rb_find_add_cached'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     302 |         exist = rb_find_add_cached(&newref->rbnode, root, prelim_ref_cmp);
          |                 ^
->> fs/btrfs/volumes.c:5534:8: error: incompatible integer to pointer conversion assigning to 'struct rb_node *' from 'int' [-Wint-conversion]
-    5534 |         exist = rb_find_add_cached(&map->rb_node, &fs_info->mapping_tree, btrfs_chunk_map_cmp);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/btrfs/backref.c:302:8: error: incompatible integer to pointer conversion assigning to 'struct rb_node *' from 'int' [-Wint-conversion]
+     302 |         exist = rb_find_add_cached(&newref->rbnode, root, prelim_ref_cmp);
+         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    1 warning and 2 errors generated.
 
 
-vim +/rb_find_add_cached +5534 fs/btrfs/volumes.c
+vim +/rb_find_add_cached +302 fs/btrfs/backref.c
 
-  5527	
-  5528	EXPORT_FOR_TESTS
-  5529	int btrfs_add_chunk_map(struct btrfs_fs_info *fs_info, struct btrfs_chunk_map *map)
-  5530	{
-  5531		struct rb_node *exist;
-  5532	
-  5533		write_lock(&fs_info->mapping_tree_lock);
-> 5534		exist = rb_find_add_cached(&map->rb_node, &fs_info->mapping_tree, btrfs_chunk_map_cmp);
-  5535	
-  5536		if (exist != NULL) {
-  5537			write_unlock(&fs_info->mapping_tree_lock);
-  5538			return -EEXIST;
-  5539		}
-  5540		chunk_map_device_set_bits(map, CHUNK_ALLOCATED);
-  5541		chunk_map_device_clear_bits(map, CHUNK_TRIMMED);
-  5542		write_unlock(&fs_info->mapping_tree_lock);
-  5543	
-  5544		return 0;
-  5545	}
-  5546	
+   280	
+   281	/*
+   282	 * Add @newref to the @root rbtree, merging identical refs.
+   283	 *
+   284	 * Callers should assume that newref has been freed after calling.
+   285	 */
+   286	static void prelim_ref_insert(const struct btrfs_fs_info *fs_info,
+   287				      struct preftree *preftree,
+   288				      struct prelim_ref *newref,
+   289				      struct share_check *sc)
+   290	{
+   291		struct rb_root_cached *root;
+   292		struct rb_node **p;
+   293		struct rb_node *parent = NULL;
+   294		struct prelim_ref *ref;
+   295		struct rb_node *exist;
+   296	
+   297		root = &preftree->root;
+   298		p = &root->rb_root.rb_node;
+   299		parent = *p;
+   300		ref = rb_entry(parent, struct prelim_ref, rbnode);
+   301	
+ > 302		exist = rb_find_add_cached(&newref->rbnode, root, prelim_ref_cmp);
+   303		if (exist != NULL) {
+   304			/* Identical refs, merge them and free @newref */
+   305			struct extent_inode_elem *eie = ref->inode_list;
+   306	
+   307			while (eie && eie->next)
+   308				eie = eie->next;
+   309	
+   310			if (!eie)
+   311				ref->inode_list = newref->inode_list;
+   312			else
+   313				eie->next = newref->inode_list;
+   314			trace_btrfs_prelim_ref_merge(fs_info, ref, newref,
+   315								preftree->count);
+   316			/*
+   317			 * A delayed ref can have newref->count < 0.
+   318			 * The ref->count is updated to follow any
+   319			 * BTRFS_[ADD|DROP]_DELAYED_REF actions.
+   320			 */
+   321			update_share_count(sc, ref->count,
+   322						ref->count + newref->count, newref);
+   323			ref->count += newref->count;
+   324			free_pref(newref);
+   325			return;
+   326		}
+   327	
+   328		update_share_count(sc, 0, newref->count, newref);
+   329		preftree->count++;
+   330		trace_btrfs_prelim_ref_insert(fs_info, newref, NULL, preftree->count);
+   331	}
+   332	
 
 -- 
 0-DAY CI Kernel Test Service
