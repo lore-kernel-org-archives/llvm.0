@@ -1,93 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1BA14AD22;
-	Mon,  9 Dec 2024 17:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92247288CC
+	for <llvm@lists.linux.dev>; Mon,  9 Dec 2024 17:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733763963; cv=none; b=rSwWHyJXMXS8Vj/eJHF4+qjD2RAHw3qaXtNmeJ+yaP2X6tVt1k2/XR1J5ZOA+2r4wFM+tt84vSnhLAIS8Q/guOLg5mk/mmVzbd9In7vuEM+zmDdX622ZMdl2b0mkQQgHQPSrMZXdRp+3rIxhSLwDqCLU72S/IynzvvCcBCZXuMo=
+	t=1733764098; cv=none; b=bVv/TqE4FGyNgZgj++y91YytBVc1gvojlzXijvyaLxnzT0nk/oRO4WeD/NZ1C2tLFnpR0yT42rUzaAXww4Cxk8uoYZ+gzCI7EDX6UPu7qR3ZBaxf5rTIQ+rzxOu03tQGG/fNAWE7Nklb7Yixc5sy4izs2sueOX2KWCNV4dGmSKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733763963; c=relaxed/simple;
-	bh=tk78KDuHOa/sqaRSeNjA7K/YjzQk0tS59Phe41D4EHE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nOZjes5mIwJDa4+1ns+FM44PActyiDRsTAMdcn255ka5rVWlzrK9H7uqZXj0SLFCnkdC6FEuKYiIzI3MkaYEUgBxZ46FwSwAYWflNaboCCW1EB1Z999ymqaVFXmTGGb8bm0wAy9HPlRI9ZuMUTyKq+Rh5le11h8/RAq1DEVrnYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uf7WqEz8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733764098; c=relaxed/simple;
+	bh=+nYjogMqNb5pAlS2lqBICVPaY4egCS2awGI36Tub0mc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SYWEsiPjk2Vp8LfYBtKUUqV2vClpKtcvcaaX2jyjLMIibSqnanPrNmfh/seBecH3cpa3TuXh9QSellON0vHfMZLzK4RwHRhK/HwgEprCV5Ni4oP16u0KECSzHM6RcEqlWR66jCHju158Rbq2H5bkBDa9owIwbCV3BwIIhv0OaFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cVU8bpCX; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uf7WqEz8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7CE0C4CED1;
-	Mon,  9 Dec 2024 17:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733763963;
-	bh=tk78KDuHOa/sqaRSeNjA7K/YjzQk0tS59Phe41D4EHE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uf7WqEz8xWAkbrSTsIs789CjOJo//drHCAuS0YczcNy3z5pIryY2KRmgAvLPJGRVk
-	 rmsLLBXGVpiqnFg7lftlth4mUt10A4otOxZgNRjtdXXxrzu7e/lK1QIXyl0+gDftvq
-	 u11CnzfUFONXm+HfdFcTi3Xichs0tY3lxkoayXTblCU4uANZQYBle/ogzKcMn2r8u3
-	 4vKIBknhzL5Jy//uemNIU8j+0pUZwzexal2TSJBCWqTOFmpvVZNZbkkm+6H3RD3OXG
-	 xFAWZYaNU9/+yVXdQfaVz/faAX5WKE175KyoIWC88Mh1FRdW7pUG6WH+wSWGBKKb+t
-	 6Rd6KnvjLxHaA==
-Message-ID: <98c2ad67-2672-4eef-b952-18e6ad28a027@kernel.org>
-Date: Mon, 9 Dec 2024 17:05:57 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cVU8bpCX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733764097; x=1765300097;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+nYjogMqNb5pAlS2lqBICVPaY4egCS2awGI36Tub0mc=;
+  b=cVU8bpCXpxJAUWZUUM2hMezoLwx0yxfWllk0Z8wZAd2yMSmRkyFTrr4l
+   7oMCyHu6RI2DWlMQ6waGbFGTBA1p+KXNMt6+ItCuAXDnb4Y1yN3HSez/g
+   sbjZwsaxHPGUrdVZc8roTyioiB/KS7L5ING9hjtSLUIUQPz7zyOz5vKYK
+   rHhR6a/bMtE5pRDUDGhubM0FAn+oBFszBC0boNdeQixYUc6S4eIbOcoea
+   4iIx7EZ/n/f7NYNx46S5TDtFIozUNyV7QYQ9QTJVEdHipHCOyPFJpje7j
+   Naxp0w3Lc76xkLxkceSBJ+dd535Pp7ix6/MBpP4nUVlJ7ONIIDIImMWQh
+   w==;
+X-CSE-ConnectionGUID: /Exk3CHnT0mC5CMO4F1wgg==
+X-CSE-MsgGUID: wcc4047CRVmS5kG1KdOVaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="33964385"
+X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
+   d="scan'208";a="33964385"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 09:08:17 -0800
+X-CSE-ConnectionGUID: xKaIGYAqR5mcNHCvIZYz9g==
+X-CSE-MsgGUID: AeGALsELSXybbf0Cxeg0/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,220,1728975600"; 
+   d="scan'208";a="95610182"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa009.fm.intel.com with ESMTP; 09 Dec 2024 09:08:13 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id B63C144B; Mon, 09 Dec 2024 19:08:11 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] lockdep: Mark chain_hlock_class_idx() with __maybe_unused
+Date: Mon,  9 Dec 2024 19:08:10 +0200
+Message-ID: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] bpftool: Probe for ISA v4 instruction set
- extension
-To: Simone Magnani <simone.magnani@isovalent.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20241209102644.29880-1-simone.magnani@isovalent.com>
- <20241209145439.336362-1-simone.magnani@isovalent.com>
- <11d588c2-febe-46c4-ab49-8fb0ed80faac@kernel.org>
- <ca871055-0b4c-4380-8f32-a4a7152345c6@isovalent.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <ca871055-0b4c-4380-8f32-a4a7152345c6@isovalent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-2024-12-09 18:01 UTC+0100 ~ Simone Magnani <simone.magnani@isovalent.com>
-> On 09/12/24 16:20, Quentin Monnet wrote:
->> Looking again at the probe itself, does the second instruction serve any
->> practical purpose here? Don't you just need to test the BPF_JMP32_A?
->>
->> Looks good otherwise, thank you!
->>
->> Reviewed-by: Quentin Monnet <qmo@kernel.org>
-> 
-> I wanted to keep probes similar to the previous ones (especially v3
-> and v2), despite we never check their return codes. This means
-> having as 4th instruction `BPF_MOV64_IMM(BPF_REG_0, 1)`. However,
-> to do so, I also need the 2nd instruction, otherwise I'd hit an
-> `Invalid Argument` error while calling `bpf_prog_load()`: I think
-> that would be due to the fact that no execution paths would
-> execute that instruction otherwise.
+When chain_hlock_class_idx() is unused, it prevents kernel builds with clang,
+`make W=1` and CONFIG_WERROR=y:
 
+kernel/locking/lockdep.c:435:28: error: unused function 'chain_hlock_class_idx' [-Werror,-Wunused-function]
 
-Right, that's what I missed.
+Fix this by marking it with __maybe_unused.
 
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
 
-> 
-> An alternative approach less consistent with the others would be:
-> 
-> struct bpf_insn insns[3] = {
-> 		BPF_MOV64_IMM(BPF_REG_0, 0),
-> 		BPF_JMP32_A(0),
-> 		BPF_EXIT_INSN()
-> 	};
-> 
-> Please let me know if you have any further questions, need
-> additional information, or if I could improve the patch.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ kernel/locking/lockdep.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index bb65abfcfa71..29acd238dad7 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -432,7 +432,7 @@ static inline u16 hlock_id(struct held_lock *hlock)
+ 	return (hlock->class_idx | (hlock->read << MAX_LOCKDEP_KEYS_BITS));
+ }
+ 
+-static inline unsigned int chain_hlock_class_idx(u16 hlock_id)
++static inline __maybe_unused unsigned int chain_hlock_class_idx(u16 hlock_id)
+ {
+ 	return hlock_id & (MAX_LOCKDEP_KEYS - 1);
+ }
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-No it's all good to me in that case, thank you!
-
-Quentin
