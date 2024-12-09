@@ -1,70 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0A1199FB2;
-	Mon,  9 Dec 2024 03:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDCA155C83;
+	Mon,  9 Dec 2024 04:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733715728; cv=none; b=Oilv2s3F4kmcyO7eE79bwEjFxl+bcOoYUjQKH7VTScARWRVeKbvjW0loFmYpzIMPOdq8ZeqYWcqCwggnDSK476ADgv5oK/Hxc9LtEHOo25ScfRP3iaekcicb+BjkcvpE7w4HGAaRJAZo9kjPMIU1SKMBEy4TIoYCJQhYrqthd10=
+	t=1733716809; cv=none; b=eVsegkA78r/h2f+uNSFCew+vuk+wynNaYzQTTVNLwr6TW3CZDhODTwD0NQ2HFZUtX6SFk4hXGfWFurJxqVRJsH+z+VruJmN7BqCctOIBZ/ccRnhZOdFThDBnB+tow+UjUc2Yte1L+iWbPca9MpGQz5Bssv1Zyq91iL+Q0DxLAxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733715728; c=relaxed/simple;
-	bh=jjCNDzZlfiFPST1Vis/4xXYsOg56hSTf+XAT+Z9Q2rE=;
+	s=arc-20240116; t=1733716809; c=relaxed/simple;
+	bh=WNEas8Hd0kCg0TuHhDIksZRzyXXnu3pos7fWYEIX5bc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QRZ/8ndxest00FWpPydw3HCsu0WLS0XdPBgc6b/zMoQMQkVAT511xi9AoUpjQ0lHE6vdKy8Oe1GnJu6157wxmZmhnYszG5SRONcjL4itUd3erCAve1rle2nhOkvWj1m2M16s8wbWlKv0sQigq08OSBQEPLy2hLUF+++mCp+Qw/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ci4UOFuZ; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=mavWuerPX/UXtnpH9jOblHVBc5xVT3Qh6Aytf4nGowr0mjGiWirEoVd2iBr4+m2YMDVK+uTQMBFpyVEql93N0G50z8P/suSS8dsa2wY5lDOG7vtmvzCtsFTqH5+pV5bqI59NjuObzqt58s19PZwvffTo5fJhehVHa2xaplUEOtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AaXPR2j6; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ci4UOFuZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AaXPR2j6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733715727; x=1765251727;
+  t=1733716807; x=1765252807;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jjCNDzZlfiFPST1Vis/4xXYsOg56hSTf+XAT+Z9Q2rE=;
-  b=ci4UOFuZPSPrUPphy43bBdegj5Jo88zPorw/shgi5NDnvRymnI1/UbhZ
-   PA0qVeW+HdsHDcHrssfSL3nbC0D7cfaz2UoPsMtHq8PMXXZlc0wE917Z4
-   64+qgL3Sbx4tVHQq2oZwZ8jX1R5XulHWMWLN6M+vl5N8RuOJPnjwBC2fj
-   Q4CsX2DQiJ961pk9RRGvtwyWl60vGB2qzyFUYToxpkMK63e9dBp9U3s0J
-   QfPMYdTDt5X83/Ui4GHknQOKQurWfL8KyEhUf5cV8IstHVpaGS9qMyslc
-   BVX/dpypmTD2FH5Z5uS+6uIhouRdB4ENejnHkgdf1HE7KDQL0silYO0jd
+  bh=WNEas8Hd0kCg0TuHhDIksZRzyXXnu3pos7fWYEIX5bc=;
+  b=AaXPR2j65iTnsBcpiJEQwmg6ZwlxguW4t7AfJZI8rQzw0f+wZqlYZk8M
+   4g38vio0VWhp+x8/n8n95QVGZ+iW2ahaoyHGe3KFuXRkcpNvRVdM7p2zC
+   S+E/wGgYn1qeC2NmWFOEe7+ZswdAPxAsjRVYZ+OB5UfTGpRD3XMx/yHw6
+   t30hMBYRA3zdjPuSHpu7DQ0gHwzdVtSXksLsGtmlLxLSnOrHUUbDL0EL/
+   UMbdO4erWrm2tyTQoPWcdwE2p4NQ0d6u/IBdPuQMQFiiR6PtBBs6eJ7hJ
+   TIHbNehcFID7GrrvE2wAMVKlZ7aLTsAS3GP6dash3LcpA3FAswW1NQ3K1
    A==;
-X-CSE-ConnectionGUID: eX71qfsISm2NNWAf1Bs8rQ==
-X-CSE-MsgGUID: KaDCIlISRRyVfkJNv9Vp5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34135604"
+X-CSE-ConnectionGUID: p6WXgro/QW6FltVFC4c7sQ==
+X-CSE-MsgGUID: A9it8Oo1SW2L0CXetLmsgA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="21589705"
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="34135604"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 19:42:07 -0800
-X-CSE-ConnectionGUID: Hbvqi3ZbQg6aI6/GpXdtlQ==
-X-CSE-MsgGUID: 0/36i1gHQEmF+PLe0iTyfg==
+   d="scan'208";a="21589705"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:00:07 -0800
+X-CSE-ConnectionGUID: Gon/eu4CSfC5ALYwPCukZg==
+X-CSE-MsgGUID: BL9350XAQGaIfv28LiNq/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="94752221"
+   d="scan'208";a="125839273"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 08 Dec 2024 19:42:02 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 08 Dec 2024 20:00:03 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKUel-0003kL-0f;
-	Mon, 09 Dec 2024 03:41:59 +0000
-Date: Mon, 9 Dec 2024 11:41:11 +0800
+	id 1tKUwD-0003ln-1K;
+	Mon, 09 Dec 2024 04:00:01 +0000
+Date: Mon, 9 Dec 2024 11:59:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nick Chan <towinchenmi@gmail.com>, Lee Jones <lee@kernel.org>,
-	Daniel Thompson <danielt@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Helge Deller <deller@gmx.de>,
-	Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/3] backlight: dwi_bl: Add Apple DWI backlight driver
-Message-ID: <202412070752.4Q1AOuGo-lkp@intel.com>
-References: <20241206172735.4310-3-towinchenmi@gmail.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+	Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+	Isaac Manjarres <isaacmanjarres@google.com>,
+	Kalesh Singh <kaleshsingh@google.com>
+Subject: Re: [PATCH] mm: perform all memfd seal checks in a single place
+Message-ID: <202412070908.wNlwD8Sk-lkp@intel.com>
+References: <20241206212846.210835-1-lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,67 +70,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241206172735.4310-3-towinchenmi@gmail.com>
+In-Reply-To: <20241206212846.210835-1-lorenzo.stoakes@oracle.com>
 
-Hi Nick,
+Hi Lorenzo,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 40384c840ea1944d7c5a392e8975ed088ecf0b37]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Chan/dt-bindings-leds-backlight-apple-dwi-bl-Add-bindings-for-Apple-DWI-backlight/20241207-013254
-base:   40384c840ea1944d7c5a392e8975ed088ecf0b37
-patch link:    https://lore.kernel.org/r/20241206172735.4310-3-towinchenmi%40gmail.com
-patch subject: [PATCH 2/3] backlight: dwi_bl: Add Apple DWI backlight driver
-config: hexagon-randconfig-001-20241207 (https://download.01.org/0day-ci/archive/20241207/202412070752.4Q1AOuGo-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070752.4Q1AOuGo-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-perform-all-memfd-seal-checks-in-a-single-place/20241207-053020
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241206212846.210835-1-lorenzo.stoakes%40oracle.com
+patch subject: [PATCH] mm: perform all memfd seal checks in a single place
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241207/202412070908.wNlwD8Sk-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241207/202412070908.wNlwD8Sk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412070752.4Q1AOuGo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412070908.wNlwD8Sk-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/video/backlight/dwi_bl.c:46:9: error: implicit declaration of function 'FIELD_PREP' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           cmd |= FIELD_PREP(DWI_BL_CMD_DATA, brightness);
-                  ^
->> drivers/video/backlight/dwi_bl.c:61:9: error: implicit declaration of function 'FIELD_GET' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return FIELD_GET(DWI_BL_CMD_DATA, cmd);
-                  ^
-   2 errors generated.
-
-
-vim +/FIELD_PREP +46 drivers/video/backlight/dwi_bl.c
-
-    37	
-    38	static int dwi_bl_update_status(struct backlight_device *bl)
-    39	{
-    40		struct apple_dwi_bl *dwi_bl = bl_get_data(bl);
-    41	
-    42		int brightness = backlight_get_brightness(bl);
-    43	
-    44		u32 cmd = 0;
-    45	
-  > 46		cmd |= FIELD_PREP(DWI_BL_CMD_DATA, brightness);
-    47		cmd |= FIELD_PREP(DWI_BL_CMD_TYPE, DWI_BL_CMD_TYPE_SET_BRIGHTNESS);
-    48	
-    49		writel(cmd, dwi_bl->base + DWI_BL_CMD);
-    50		writel(DWI_BL_CTL_SEND, dwi_bl->base + DWI_BL_CTL);
-    51	
-    52		return 0;
-    53	}
-    54	
-    55	static int dwi_bl_get_brightness(struct backlight_device *bl)
-    56	{
-    57		struct apple_dwi_bl *dwi_bl = bl_get_data(bl);
-    58	
-    59		u32 cmd = readl(dwi_bl->base + DWI_BL_CMD);
-    60	
-  > 61		return FIELD_GET(DWI_BL_CMD_DATA, cmd);
-    62	}
-    63	
+>> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
+   >>> defined at gup.c
+   >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
+   >>> defined at mmap.c
+   >>>            mm/mmap.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
+   >>> defined at gup.c
+   >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
+   >>> defined at secretmem.c
+   >>>            mm/secretmem.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: memfd_check_seals_mmap
+   >>> defined at gup.c
+   >>>            mm/gup.o:(memfd_check_seals_mmap) in archive vmlinux.a
+   >>> defined at fcntl.c
+   >>>            fs/fcntl.o:(.text+0x0) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
