@@ -1,34 +1,76 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26539184545;
-	Mon,  9 Dec 2024 12:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7FA233D65;
+	Mon,  9 Dec 2024 12:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733748272; cv=none; b=ohfX2YqTf7YS2qYYWk5dGPa1h88iX2lOA/Oq8bSjl+hmqaWJok6L1j7UjvMNGJf4vR8jo8AvEwCAN7g3uRDirfGcEFT6wubbeAOeJc0s8W7N+dcGemq3R0coQa2HFgiipvV+qo8itpMMKnqw7gXzSGM8b3VL6QFuEke5S489fMc=
+	t=1733749063; cv=none; b=OfMKKgURf1hrJcN5TWoPRdSHAmx9ArmL3QsC68PtAmkFg2Gnp0YD6LBBd5AwVBKLTRE4TUrob7+idG1MJ86oHZ+lgQpAXYzpVmqJVV/RJJ/vlyd15kCoB3QKYKu9JkXipbmkKgco+XiKCu6DWInM28Y5qoLTM6l/VOhsvDPCL84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733748272; c=relaxed/simple;
-	bh=/LfXVqgbf3ucFNgzXBGj/R4r0+6y9xamFU2lQ/HfMWI=;
+	s=arc-20240116; t=1733749063; c=relaxed/simple;
+	bh=EbuJhA4qQx4XDk7llJVA7OD1EXIiE7sPMPIq2v+X2vY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bDRllUm2iJM4QyWlCWySH0JxMWD+5UdUgxYY33BsdJBnQ7mDBJGt4ZGXuUwv54XdtVLFVWXKhpVOLtewNQ3GTvecqR68VZr+ihE5ETNGUuvAey5KCWcVeUHvJ4Iq8XtJcMNvbb3Ep2ilYaU9IKX80q8qyoGnlKSmMcO22kflVfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id BB39C68D09; Mon,  9 Dec 2024 13:44:25 +0100 (CET)
-Date: Mon, 9 Dec 2024 13:44:25 +0100
-From: Christoph Hellwig <hch@lst.de>
-To: kernel test robot <lkp@intel.com>
-Cc: Keith Busch <kbusch@meta.com>, axboe@kernel.dk, hch@lst.de,
-	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	sagi@grimberg.me, asml.silence@gmail.com, anuj20.g@samsung.com,
-	joshi.k@samsung.com, Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv12 11/12] nvme: register fdp parameters with the block
- layer
-Message-ID: <20241209124425.GA14066@lst.de>
-References: <20241206221801.790690-12-kbusch@meta.com> <202412071144.9uXFLnls-lkp@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=paaRHUqN8c7v40MmlTm7InfNjglb1bRqTUXLxUiywJxuQDMAvnqsZYYDMHS7ZnrPmqvNv0i5ix+CvxPlm7ZuwWjiPJYVGfLu3FX28iKzAACsk5avUJIE1mW6q8Ht3M4IuVx01VNGC/aKrAfoLkC+1XoI9K13aOlo3vpuNagWR44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vzdzqi5m; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vzdzqi5m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733749061; x=1765285061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EbuJhA4qQx4XDk7llJVA7OD1EXIiE7sPMPIq2v+X2vY=;
+  b=Vzdzqi5ms05ZpYaxjjWHKAjfwi/49DG1RAOz7RpMpfwZhgOKi57+/OId
+   hTbTbKWbKRwbGP3YX67L1P3BgyZHNI0g+bU21oTNyaIzxFC0418qboL4G
+   JfDpdTdIG7PKUy23JcTXa1VAlsvhWQ7nZSOsXxU/61gCeA7w5m0yBlEiK
+   wvRchB06fOUBBPTkWGaVGv+fA3c0LtOJef6JHUjmKjatA9Xt4dsaIQIXD
+   ZcVTCsoQ3qikVa5LXOaIhMwi4+pwMNMvcDM8DQoVpk4755Vp+P8b/mLQF
+   2ePLYRHzG8tRtykkNZoh9i3MW3A4pCwZ0M2GusXTnVlQYv+r4SPlKMftB
+   Q==;
+X-CSE-ConnectionGUID: 7v5u3K4oQauB3CUgpepPgA==
+X-CSE-MsgGUID: VsT21/rPTP2ZGf2vaWBngg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="21632650"
+X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
+   d="scan'208";a="21632650"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 04:57:37 -0800
+X-CSE-ConnectionGUID: U8+Nfyd1TY6n08jUrXsG2Q==
+X-CSE-MsgGUID: Ptj6aMXxQvqLGUEjw6vqGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,219,1728975600"; 
+   d="scan'208";a="100023631"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 09 Dec 2024 04:57:32 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tKdKL-0004LJ-0i;
+	Mon, 09 Dec 2024 12:57:29 +0000
+Date: Mon, 9 Dec 2024 20:57:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
+	linux-fscrypt@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Gaurav Kashyap <quic_gaurkash@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v9 04/12] mmc: sdhci-msm: convert to use custom crypto
+ profile
+Message-ID: <202412092047.I2fWyclK-lkp@intel.com>
+References: <20241209045530.507833-5-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -37,20 +79,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202412071144.9uXFLnls-lkp@intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20241209045530.507833-5-ebiggers@kernel.org>
 
-On Mon, Dec 09, 2024 at 12:05:27PM +0800, kernel test robot wrote:
-> >> drivers/nvme/host/core.c:2187:11: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
->     2187 |         } while (i++ < fdp_idx);
->          |                  ^
->    drivers/nvme/host/core.c:2160:7: note: initialize the variable 'i' to silence this warning
->     2160 |         int i, n, ret;
->          |              ^
->          |               = 0
->    2 warnings generated.
+Hi Eric,
 
-Yeah, looks like this is uninitialized.  Did I mention I hate these
-variable length log entries in nvme?  They've already been a major
-pain in ANA before..
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on f486c8aa16b8172f63bddc70116a0c897a7f3f02]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Biggers/ufs-crypto-add-ufs_hba_from_crypto_profile/20241209-130301
+base:   f486c8aa16b8172f63bddc70116a0c897a7f3f02
+patch link:    https://lore.kernel.org/r/20241209045530.507833-5-ebiggers%40kernel.org
+patch subject: [PATCH v9 04/12] mmc: sdhci-msm: convert to use custom crypto profile
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241209/202412092047.I2fWyclK-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412092047.I2fWyclK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412092047.I2fWyclK-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/mmc/host/cqhci-crypto.c:8:
+   In file included from include/linux/blk-crypto.h:72:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/cqhci-crypto.c:176:6: warning: variable 'num_keyslots' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     176 |         if (cq_host->ops->uses_custom_crypto_profile)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/cqhci-crypto.c:230:24: note: uninitialized use occurs here
+     230 |         for (slot = 0; slot < num_keyslots; slot++)
+         |                               ^~~~~~~~~~~~
+   drivers/mmc/host/cqhci-crypto.c:176:2: note: remove the 'if' if its condition is always false
+     176 |         if (cq_host->ops->uses_custom_crypto_profile)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     177 |                 goto profile_initialized;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/cqhci-crypto.c:166:27: note: initialize the variable 'num_keyslots' to silence this warning
+     166 |         unsigned int num_keyslots;
+         |                                  ^
+         |                                   = 0
+   5 warnings generated.
+
+
+vim +176 drivers/mmc/host/cqhci-crypto.c
+
+   147	
+   148	/**
+   149	 * cqhci_crypto_init - initialize CQHCI crypto support
+   150	 * @cq_host: a cqhci host
+   151	 *
+   152	 * If the driver previously set MMC_CAP2_CRYPTO and the CQE declares
+   153	 * CQHCI_CAP_CS, initialize the crypto support.  This involves reading the
+   154	 * crypto capability registers, initializing the blk_crypto_profile, clearing
+   155	 * all keyslots, and enabling 128-bit task descriptors.
+   156	 *
+   157	 * Return: 0 if crypto was initialized or isn't supported; whether
+   158	 *	   MMC_CAP2_CRYPTO remains set indicates which one of those cases it is.
+   159	 *	   Also can return a negative errno value on unexpected error.
+   160	 */
+   161	int cqhci_crypto_init(struct cqhci_host *cq_host)
+   162	{
+   163		struct mmc_host *mmc = cq_host->mmc;
+   164		struct device *dev = mmc_dev(mmc);
+   165		struct blk_crypto_profile *profile = &mmc->crypto_profile;
+   166		unsigned int num_keyslots;
+   167		unsigned int cap_idx;
+   168		enum blk_crypto_mode_num blk_mode_num;
+   169		unsigned int slot;
+   170		int err = 0;
+   171	
+   172		if (!(mmc->caps2 & MMC_CAP2_CRYPTO) ||
+   173		    !(cqhci_readl(cq_host, CQHCI_CAP) & CQHCI_CAP_CS))
+   174			goto out;
+   175	
+ > 176		if (cq_host->ops->uses_custom_crypto_profile)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
