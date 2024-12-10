@@ -1,40 +1,42 @@
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EAC2046B8
-	for <llvm@lists.linux.dev>; Tue, 10 Dec 2024 18:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9480E21420C;
+	Tue, 10 Dec 2024 18:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733856306; cv=none; b=W7kRtVnXF8acxH+kYxMxsBGpHNdKsTVEMPvQO+Piviv86Fs93n2NyNIlGUG5y5qB0Q0lHLu+Z0/zv6j99ieZq2up8dITbkZq5aJgYwYdg1JS54GX00kmNwrr2HTdKfUetlDM+azs6HHYKn0rHsAwB6ggD46fiZ+NP3heWW4TZ7o=
+	t=1733856442; cv=none; b=u+GJfJPTttCGKma+K+cDnvIYsGbYVeLpGwlVIH7E1qUeK5kG96Mx9wWjxbrpGZFRfRe2+6ZlkQBdG0zqwAH/0xG6x3t0InCo0DD/5KY27meovclBGvuTi/Vnz7eJNmrwQor/FGdKTUUkZ3Q0IO8x2ck+s7NaxPqFawomYMSVjx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733856306; c=relaxed/simple;
-	bh=j+Z1qvM5ugs6/4cGw47Qw9wyUTYQHQGjrgLVpwHAnWM=;
+	s=arc-20240116; t=1733856442; c=relaxed/simple;
+	bh=y8uKWPvlyJNbRagu/YscB/1CDFK+0rKVSfUZVfmYDKk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mf3v/dB9bJcomS9KASkOLd/EqnNbZwhEE2FWz59GZItbd559iPdvrhUwU0GKtr91smF6x/5KaB7umymaEc+cGZBKqVwnZFt9smxqIaLcUOmsVaWUHhv4r0wZYxE3gxsaf0iKo/QplnSKXkkDo2ETmg0r8CZiCMqUhNkgK1Kog8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I6FRQRAU; arc=none smtp.client-ip=95.215.58.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=am8ZFwnZztCvROmOhp0VMQaP0IRcrWjha21+PuwuCwCgCmDckZxRBMIfEG81BM7DFPn/XWdcTjIO7v8eJoX3wXUlB5Wu/dd43m8wEMdTH2ZpmrtWXxqKKMxogSM4C0VM/cD5GGt5VZ1ACT8QhQnYybcCebNKq4/xI6oMzTe9vME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BU+l7QRX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I6FRQRAU"
-Date: Tue, 10 Dec 2024 13:44:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1733856301;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ilz04oS/JfHaPRfW+yjAezYUtWHIZRjfnXEUvByXN4I=;
-	b=I6FRQRAUef0SbSJ2zYdP1i5mfSM0/LuBOLJKnrpkdd/iNdHF8ffacVHW8ZsCMbt7w6Vq+5
-	8Vl6A1oCZrdP0HR/54vGSkzE4/UZK6bLKpV5L7nmSNloh7aO5XBp6Dd7PjKyeKPg+vNIf9
-	WomVJYTYpyXH+VALEXQt3P50TgJT8fM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linux-bcachefs@vger.kernel.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] bcachefs: Add empty statement between label and
- declaration in check_inode_hash_info_matches_root()
-Message-ID: <qnfn3xzh6ve5cukeugxucloynbstf2itos3ddlmzu2w4sp7md7@7bkk2byif2ja>
-References: <20241210-bcachefs-fix-declaration-after-label-err-v1-1-22c705fc47e8@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BU+l7QRX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72EC2C4CED6;
+	Tue, 10 Dec 2024 18:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733856442;
+	bh=y8uKWPvlyJNbRagu/YscB/1CDFK+0rKVSfUZVfmYDKk=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=BU+l7QRXUYvJ9aqWAUO+iB1N9VA1mkpSZry7QOObnFw8cWOHCvFXMt/hwCWdGWQ/J
+	 bI6ujpF3SFCmhl885WjhwXGl1LQpTskXla0WOGJeuW2Fgi3icqfRBowP4pT3VktRB9
+	 b577OI6jx2uyjAueszsEYVean0bWcqnOGt7/tBwzf9F+yFPbgopinGmZel+ArssO0I
+	 stNRVsOPJAztlIgeSXnv4uwg1mnUiAIckCd8ZqkCQVGmVkJjj7z26rh27guUmaBon3
+	 KmfyUuvNdlEgpJdrsBwaiSEW4Y31+Ua2iQ+7gnIZ0xkM3A7kHnRDduVmQyTKQ+KX/9
+	 xqnIPUe4WwRKw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 1D3FBCE0E79; Tue, 10 Dec 2024 10:47:22 -0800 (PST)
+Date: Tue, 10 Dec 2024 10:47:22 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [paulmckrcu:dev 47/49] ERROR: modpost:
+ "rcutorture_format_gp_seqs" [kernel/rcu/rcutorture.ko] undefined!
+Message-ID: <41482ec9-5048-46ea-9c8b-9d33a05ea2a6@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202412041204.ys3dSglL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,67 +45,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241210-bcachefs-fix-declaration-after-label-err-v1-1-22c705fc47e8@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <202412041204.ys3dSglL-lkp@intel.com>
 
-On Tue, Dec 10, 2024 at 11:12:07AM -0700, Nathan Chancellor wrote:
-> Clang 18 and newer warns (or errors with CONFIG_WERROR=y):
+On Wed, Dec 04, 2024 at 12:04:15PM +0800, kernel test robot wrote:
+> tree:   https://github.com/paulmckrcu/linux dev
+> head:   48ca997e8632db65609dcc6a715207a1b6dded57
+> commit: 13e3224fa73ec6c7dfeda04b2741c95787196588 [47/49] rcutorture: Include grace-period sequence numbers in failure/close-call
+> config: arm-randconfig-001-20241203 (https://download.01.org/0day-ci/archive/20241204/202412041204.ys3dSglL-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041204.ys3dSglL-lkp@intel.com/reproduce)
 > 
->   fs/bcachefs/str_hash.c:164:2: error: label followed by a declaration is a C23 extension [-Werror,-Wc23-extensions]
->     164 |         struct bch_inode_unpacked inode;
->         |         ^
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412041204.ys3dSglL-lkp@intel.com/
 > 
-> In Clang 17 and prior, this is an unconditional hard error:
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
 > 
->   fs/bcachefs/str_hash.c:164:2: error: expected expression
->     164 |         struct bch_inode_unpacked inode;
->         |         ^
->   fs/bcachefs/str_hash.c:165:30: error: use of undeclared identifier 'inode'
->     165 |         ret = bch2_inode_unpack(k, &inode);
->         |                                     ^
->   fs/bcachefs/str_hash.c:169:55: error: use of undeclared identifier 'inode'
->     169 |         struct bch_hash_info hash2 = bch2_hash_info_init(c, &inode);
->         |                                                              ^
->   fs/bcachefs/str_hash.c:171:40: error: use of undeclared identifier 'inode'
->     171 |                 ret = repair_inode_hash_info(trans, &inode);
->         |                                                      ^
-> 
-> Add an empty statement between the label and the declaration to fix the
-> warning/error without disturbing the code too much.
+> ERROR: modpost: "rcutorture_gather_gp_seqs" [kernel/rcu/rcutorture.ko] undefined!
+> >> ERROR: modpost: "rcutorture_format_gp_seqs" [kernel/rcu/rcutorture.ko] undefined!
 
-This is different than what I would have done, and I like it :)
+This commit has EXPORT_SYMBOL_GPL() for both the Tree and Tiny definitions
+of both of these functions.  What am I missing here?
 
-> 
-> Fixes: 2519d3b0d656 ("bcachefs: bch2_str_hash_check_key() now checks inode hash info")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202412092339.QB7hffGC-lkp@intel.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> If you would prefer to fix this in a different way, just consider this
-> an additional report.
-> ---
->  fs/bcachefs/str_hash.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/bcachefs/str_hash.c b/fs/bcachefs/str_hash.c
-> index ed3c852fc0befa69fabe90ab83d439986be36b42..f5977c5c67430688c8a2a31fa39115f231d5a167 100644
-> --- a/fs/bcachefs/str_hash.c
-> +++ b/fs/bcachefs/str_hash.c
-> @@ -160,7 +160,7 @@ static int check_inode_hash_info_matches_root(struct btree_trans *trans, u64 inu
->  	bch_err(c, "%s(): inum %llu not found", __func__, inum);
->  	ret = -BCH_ERR_fsck_repair_unimplemented;
->  	goto err;
-> -found:
-> +found:;
->  	struct bch_inode_unpacked inode;
->  	ret = bch2_inode_unpack(k, &inode);
->  	if (ret)
-> 
-> ---
-> base-commit: dd7d7f29a7c77d02264097e7b42073a902765c49
-> change-id: 20241210-bcachefs-fix-declaration-after-label-err-b16b57d634fb
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+							Thanx, Paul
