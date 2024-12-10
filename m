@@ -1,70 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6222E13D509;
-	Tue, 10 Dec 2024 14:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602671A9B40;
+	Tue, 10 Dec 2024 14:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733842009; cv=none; b=nRZiAocabQs0qlee34m/G6NwoSBAYaJ1MJh+cT0lBRwJrjr51KNwATWPK8ZfJaz6MnxP5WLkTe3aivQWLRHogDSJuKM/YYrFDUDJSfY5qttP/yGHYWyd3502UXXz0Ek1typAZ2et7fbB0GzlAnLCZbt4qUEGdXiPs9FbZi7NzQg=
+	t=1733842682; cv=none; b=PTfX+j/q8EqtQpJbctuEM9NGT0XaZMQygAQUiuk5CmrBFQrBHEkbukMQgrSpTay8QCxsTsXvb9wAiZh5yjRTNE6dduwZc/wqks2yiIG730t43KE2ndgbndUUTDpROd3zyKt2p5MPTMR6nGOOD79vTIG/7HWV0grJnv2SYBnTPtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733842009; c=relaxed/simple;
-	bh=Do7dwzzjllAqqtvBa73eePMIDuR9IMn0/w3h50zwnJw=;
+	s=arc-20240116; t=1733842682; c=relaxed/simple;
+	bh=PXdRxS8VDAc9k4peB8AhqHweam9Zn73N/eoOrtwukBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iiiPaHPtGzVPeCKcW2VhBy1nHzsYqyKrqRwRpxooDShnLPPf5cpl/cnDmXqiOuOARW9QxQMP8P3y7hg7MibfwSyXLuRo3wYwc6ZCtw+2n0Qhkk+GvRk1MYm8J5qwODu6EPFSDZjCvSIpk8/JbjOqnMRVSvKo+T64vkNpo125Rvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RRcwoQvv; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=AKR2oLb4oRo6+pvhP+GpQ5unAoXEk16hhb81L3lvKLbT5po3EU6qoARhMZahzByykGKtCpWWVxSqp+XOKg7JbKT5XN2A7y/mOrn9Yfc03H8E/MZSBVTOI+q87dcb3SLtaiVv6r9/cNEbUJhrtM+gsi+D96DmZG8bteQsWWJ4R6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zlc5DFbp; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RRcwoQvv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zlc5DFbp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733842007; x=1765378007;
+  t=1733842680; x=1765378680;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Do7dwzzjllAqqtvBa73eePMIDuR9IMn0/w3h50zwnJw=;
-  b=RRcwoQvvLca5ZxaYH/uhB+nQEIRxcAMKLP0qDA8jXDzvwaZZidj/4vCE
-   oWWC8Q5gOOQZ80mwmgt94bluBIKbN7KTAwp2BnuQcsBKyuhn3JDCR0VEa
-   bk4IZMbN1lbrq4S6mPTwW/lGMIjJ7d49np5PKuOKJmRlNK2DRV0Vh4VVk
-   K8BQ/cMo9tuujYDmqhEVpc5Q/PwJhzGDAeAQ0SNZDKD44I+9mnCw/MLmO
-   gl10EFTdQgiCFKA+AYNTQJF/h9qU8crDjQEinousQ+e47Var3Xg7wdDqy
-   N2PyzqpBklrD+n8BNL8WhXTfR1/DxED6YLHyE5c7673Mqi8scNezJznuh
+  bh=PXdRxS8VDAc9k4peB8AhqHweam9Zn73N/eoOrtwukBE=;
+  b=Zlc5DFbpoChPkIevQH+wRPvpJwDnq9RTyH4I4UbIrFafttpvd6F/i3id
+   nN/tw15hAIQvobKKUIIS621kI9D89MfOJw4+Sm5ihKBpjZ/3jeHFtqY+e
+   aG9rU47iQ33hh/6sQwOwNObF57whxXFW/57RdlP5wMMhuUJwmmGseUqUJ
+   JYN/qwkO0Nmsn5muwMqOLDfaIMatywz1xgM1iCO2iL5zlTiC0zGcR/rce
+   +xtk/zX8PRthU8VFw7FdjjtRw4uf1KcHsg01vq3b7mWywcTQ95NQA8tL8
+   TJ8L6Ki+7A0psEUpV58nOcOX0NuYvms1fF9eDMxthFkN2RFJWgI/+oHQ7
    Q==;
-X-CSE-ConnectionGUID: r1uau2x1QtiMfccb7M/jtw==
-X-CSE-MsgGUID: y3AbouJ4TpmeB6JsqBkrSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="33918591"
+X-CSE-ConnectionGUID: FNkWv0ipSUOWZ//7dlZGUA==
+X-CSE-MsgGUID: lh2e/OYgQFq1+M7N5M6rIw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45201933"
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="33918591"
+   d="scan'208";a="45201933"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 06:46:47 -0800
-X-CSE-ConnectionGUID: 8UXF8N9lQmy0iqLdrqk76A==
-X-CSE-MsgGUID: dgzL6dt7ThijvCzrvWlGLA==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 06:57:48 -0800
+X-CSE-ConnectionGUID: 5LBUTF+xQhSAfCnDfNa3tQ==
+X-CSE-MsgGUID: TuqROZKoQuubn19k1IK4wA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="95264819"
+   d="scan'208";a="95267738"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Dec 2024 06:46:44 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 10 Dec 2024 06:57:45 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tL1VZ-0005fp-2N;
-	Tue, 10 Dec 2024 14:46:41 +0000
-Date: Tue, 10 Dec 2024 22:45:42 +0800
+	id 1tL1gF-0005gT-08;
+	Tue, 10 Dec 2024 14:57:43 +0000
+Date: Tue, 10 Dec 2024 22:57:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Douglas Anderson <dianders@chromium.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Julius Werner <jwerner@chromium.org>,
-	Jeffrey Hugo <quic_jhugo@quicinc.com>,
-	Roxana Bradescu <roxabee@google.com>,
-	bjorn.andersson@oss.qualcomm.com,
-	linux-arm-kernel@lists.infradead.org,
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-arm-msm@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] arm64: errata: Add QCOM_KRYO_5XX_GOLD to the
- spectre_bhb_k24_list
-Message-ID: <202412102224.bmEeK15u-lkp@intel.com>
-References: <20241209094310.5.I41e227ed809ea607114027209b57d02dc0e98384@changeid>
+	Bryan Whitehead <bryan.whitehead@microchip.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Marcin Wojtas <marcin.s.wojtas@gmail.com>, netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next 10/10] net: lan743x: convert to phylink managed
+ EEE
+Message-ID: <202412102203.FVir20i4-lkp@intel.com>
+References: <E1tKeg8-006SNJ-4Q@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,120 +70,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241209094310.5.I41e227ed809ea607114027209b57d02dc0e98384@changeid>
+In-Reply-To: <E1tKeg8-006SNJ-4Q@rmk-PC.armlinux.org.uk>
 
-Hi Douglas,
+Hi Russell,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on arm-perf/for-next/perf kvmarm/next soc/for-next arm/for-next arm/fixes linus/master v6.13-rc2 next-20241210]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/arm64-errata-Add-QCOM_KRYO_4XX_GOLD-to-the-spectre_bhb_k24_list/20241210-014833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20241209094310.5.I41e227ed809ea607114027209b57d02dc0e98384%40changeid
-patch subject: [PATCH 5/6] arm64: errata: Add QCOM_KRYO_5XX_GOLD to the spectre_bhb_k24_list
-config: arm64-randconfig-002-20241210 (https://download.01.org/0day-ci/archive/20241210/202412102224.bmEeK15u-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-mdio-add-definition-for-clock-stop-capable-bit/20241210-022608
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1tKeg8-006SNJ-4Q%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH net-next 10/10] net: lan743x: convert to phylink managed EEE
+config: powerpc-randconfig-002-20241210 (https://download.01.org/0day-ci/archive/20241210/202412102203.FVir20i4-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412102224.bmEeK15u-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412102203.FVir20i4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412102224.bmEeK15u-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412102203.FVir20i4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/proton-pack.c:21:
-   In file included from include/linux/bpf.h:21:
-   In file included from include/linux/kallsyms.h:13:
+   In file included from drivers/net/ethernet/microchip/lan743x_main.c:5:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:24:
    In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/kernel/proton-pack.c:870:22: error: use of undeclared identifier 'MIDR_QCOM_KRYO_5XX_GOLD'
-     870 |                         MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_5XX_GOLD),
-         |                                           ^
-   4 warnings and 1 error generated.
+>> drivers/net/ethernet/microchip/lan743x_main.c:3078:25: error: use of undeclared identifier 'adapter'
+    3078 |         lan743x_mac_eee_enable(adapter, false);
+         |                                ^
+   drivers/net/ethernet/microchip/lan743x_main.c:3089:20: error: use of undeclared identifier 'adapter'
+    3089 |         lan743x_csr_write(adapter, MAC_EEE_TX_LPI_REQ_DLY_CNT, timer);
+         |                           ^
+   drivers/net/ethernet/microchip/lan743x_main.c:3090:25: error: use of undeclared identifier 'adapter'
+    3090 |         lan743x_mac_eee_enable(adapter, true);
+         |                                ^
+>> drivers/net/ethernet/microchip/lan743x_main.c:3097:24: error: use of undeclared identifier 'lan743x_mac_disable_tx_lpi'; did you mean 'mac_disable_tx_lpi'?
+    3097 |         .mac_disable_tx_lpi = lan743x_mac_disable_tx_lpi,
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                               mac_disable_tx_lpi
+   drivers/net/ethernet/microchip/lan743x_main.c:3076:13: note: 'mac_disable_tx_lpi' declared here
+    3076 | static void mac_disable_tx_lpi(struct phylink_config *config)
+         |             ^
+>> drivers/net/ethernet/microchip/lan743x_main.c:3098:23: error: use of undeclared identifier 'lan743x_mac_enable_tx_lpi'; did you mean 'mac_enable_tx_lpi'?
+    3098 |         .mac_enable_tx_lpi = lan743x_mac_enable_tx_lpi,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                              mac_enable_tx_lpi
+   drivers/net/ethernet/microchip/lan743x_main.c:3081:13: note: 'mac_enable_tx_lpi' declared here
+    3081 | static void mac_enable_tx_lpi(struct phylink_config *config, u32 timer,
+         |             ^
+>> drivers/net/ethernet/microchip/lan743x_main.c:3113:26: error: no member named 'lpi_timer_max' in 'struct phylink_config'
+    3113 |         adapter->phylink_config.lpi_timer_max = U32_MAX;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~ ^
+   1 warning and 6 errors generated.
 
 
-vim +/MIDR_QCOM_KRYO_5XX_GOLD +870 arch/arm64/kernel/proton-pack.c
+vim +/adapter +3078 drivers/net/ethernet/microchip/lan743x_main.c
 
-   843	
-   844	/*
-   845	 * This must be called with SCOPE_LOCAL_CPU for each type of CPU, before any
-   846	 * SCOPE_SYSTEM call will give the right answer.
-   847	 */
-   848	u8 spectre_bhb_loop_affected(int scope)
-   849	{
-   850		u8 k = 0;
-   851		static u8 max_bhb_k;
-   852	
-   853		if (scope == SCOPE_LOCAL_CPU) {
-   854			static const struct midr_range spectre_bhb_k32_list[] = {
-   855				MIDR_ALL_VERSIONS(MIDR_CORTEX_A78),
-   856				MIDR_ALL_VERSIONS(MIDR_CORTEX_A78AE),
-   857				MIDR_ALL_VERSIONS(MIDR_CORTEX_A78C),
-   858				MIDR_ALL_VERSIONS(MIDR_CORTEX_X1),
-   859				MIDR_ALL_VERSIONS(MIDR_CORTEX_A710),
-   860				MIDR_ALL_VERSIONS(MIDR_CORTEX_X2),
-   861				MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N2),
-   862				MIDR_ALL_VERSIONS(MIDR_NEOVERSE_V1),
-   863				{},
-   864			};
-   865			static const struct midr_range spectre_bhb_k24_list[] = {
-   866				MIDR_ALL_VERSIONS(MIDR_CORTEX_A76),
-   867				MIDR_ALL_VERSIONS(MIDR_CORTEX_A77),
-   868				MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N1),
-   869				MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_4XX_GOLD),
- > 870				MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_5XX_GOLD),
-   871				{},
-   872			};
-   873			static const struct midr_range spectre_bhb_k11_list[] = {
-   874				MIDR_ALL_VERSIONS(MIDR_AMPERE1),
-   875				{},
-   876			};
-   877			static const struct midr_range spectre_bhb_k8_list[] = {
-   878				MIDR_ALL_VERSIONS(MIDR_CORTEX_A72),
-   879				MIDR_ALL_VERSIONS(MIDR_CORTEX_A57),
-   880				{},
-   881			};
-   882	
-   883			if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k32_list))
-   884				k = 32;
-   885			else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k24_list))
-   886				k = 24;
-   887			else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k11_list))
-   888				k = 11;
-   889			else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k8_list))
-   890				k =  8;
-   891	
-   892			max_bhb_k = max(max_bhb_k, k);
-   893		} else {
-   894			k = max_bhb_k;
-   895		}
-   896	
-   897		return k;
-   898	}
-   899	
+  3075	
+  3076	static void mac_disable_tx_lpi(struct phylink_config *config)
+  3077	{
+> 3078		lan743x_mac_eee_enable(adapter, false);
+  3079	}
+  3080	
+  3081	static void mac_enable_tx_lpi(struct phylink_config *config, u32 timer,
+  3082				      bool tx_clk_stop)
+  3083	{
+  3084		/* Software should only change this field when Energy Efficient
+  3085		 * Ethernet Enable (EEEEN) is cleared. We ensure that by clearing
+  3086		 * EEEEN during probe, and phylink itself guarantees that
+  3087		 * mac_disable_tx_lpi() will have been previously called.
+  3088		 */
+  3089		lan743x_csr_write(adapter, MAC_EEE_TX_LPI_REQ_DLY_CNT, timer);
+  3090		lan743x_mac_eee_enable(adapter, true);
+  3091	}
+  3092	
+  3093	static const struct phylink_mac_ops lan743x_phylink_mac_ops = {
+  3094		.mac_config = lan743x_phylink_mac_config,
+  3095		.mac_link_down = lan743x_phylink_mac_link_down,
+  3096		.mac_link_up = lan743x_phylink_mac_link_up,
+> 3097		.mac_disable_tx_lpi = lan743x_mac_disable_tx_lpi,
+> 3098		.mac_enable_tx_lpi = lan743x_mac_enable_tx_lpi,
+  3099	};
+  3100	
+  3101	static int lan743x_phylink_create(struct lan743x_adapter *adapter)
+  3102	{
+  3103		struct net_device *netdev = adapter->netdev;
+  3104		struct phylink *pl;
+  3105	
+  3106		adapter->phylink_config.dev = &netdev->dev;
+  3107		adapter->phylink_config.type = PHYLINK_NETDEV;
+  3108		adapter->phylink_config.mac_managed_pm = false;
+  3109	
+  3110		adapter->phylink_config.mac_capabilities = MAC_ASYM_PAUSE |
+  3111			MAC_SYM_PAUSE | MAC_10 | MAC_100 | MAC_1000FD;
+  3112		adapter->phylink_config.lpi_capabilities = MAC_100FD | MAC_1000FD;
+> 3113		adapter->phylink_config.lpi_timer_max = U32_MAX;
+  3114		adapter->phylink_config.lpi_timer_default =
+  3115			lan743x_csr_read(adapter, MAC_EEE_TX_LPI_REQ_DLY_CNT);
+  3116	
+  3117		lan743x_phy_interface_select(adapter);
+  3118	
+  3119		switch (adapter->phy_interface) {
+  3120		case PHY_INTERFACE_MODE_SGMII:
+  3121			__set_bit(PHY_INTERFACE_MODE_SGMII,
+  3122				  adapter->phylink_config.supported_interfaces);
+  3123			__set_bit(PHY_INTERFACE_MODE_1000BASEX,
+  3124				  adapter->phylink_config.supported_interfaces);
+  3125			__set_bit(PHY_INTERFACE_MODE_2500BASEX,
+  3126				  adapter->phylink_config.supported_interfaces);
+  3127			adapter->phylink_config.mac_capabilities |= MAC_2500FD;
+  3128			break;
+  3129		case PHY_INTERFACE_MODE_GMII:
+  3130			__set_bit(PHY_INTERFACE_MODE_GMII,
+  3131				  adapter->phylink_config.supported_interfaces);
+  3132			break;
+  3133		case PHY_INTERFACE_MODE_MII:
+  3134			__set_bit(PHY_INTERFACE_MODE_MII,
+  3135				  adapter->phylink_config.supported_interfaces);
+  3136			break;
+  3137		default:
+  3138			phy_interface_set_rgmii(adapter->phylink_config.supported_interfaces);
+  3139		}
+  3140	
+  3141		memcpy(adapter->phylink_config.lpi_interfaces,
+  3142		       adapter->phylink_config.supported_interfaces,
+  3143		       sizeof(adapter->phylink_config.lpi_interfaces));
+  3144	
+  3145		pl = phylink_create(&adapter->phylink_config, NULL,
+  3146				    adapter->phy_interface, &lan743x_phylink_mac_ops);
+  3147	
+  3148		if (IS_ERR(pl)) {
+  3149			netdev_err(netdev, "Could not create phylink (%pe)\n", pl);
+  3150			return PTR_ERR(pl);
+  3151		}
+  3152	
+  3153		adapter->phylink = pl;
+  3154		netdev_dbg(netdev, "lan743x phylink created");
+  3155	
+  3156		return 0;
+  3157	}
+  3158	
 
 -- 
 0-DAY CI Kernel Test Service
