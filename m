@@ -1,60 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8421623DE80;
-	Tue, 10 Dec 2024 10:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1999B19E96A
+	for <llvm@lists.linux.dev>; Tue, 10 Dec 2024 11:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733824906; cv=none; b=Ccvapr5OfecnbFZco4PEJyDIHEDsY4FBEWh6Zqwzr9+CzGcH0gR2pS2JK3EOaM2Wo4ddBsqcg7L7VzrEFdK6ko0ET63AEUyYdBCwsykGDE/gnLosjdv0yGBIsV6Ts6wHa8rSxDRcvGXVW8UQa9P8OsL+5h0XplgihyPYQ06ePSg=
+	t=1733831711; cv=none; b=upQr6XqkuY/X3SRK8oDjPzO8U5BzQsvFwR0hEmYOcBu0wD/UEEtAIcBu17NDlW39hJmobU8GXyYXqjijqilDZTqKIbqlPWO7XeMcAltHoLf4SFHm6jzeiv5WhJR5ySE2aOyq8qFkBUwo/ylodP0+GS8aGTyFTUTD0EkNaMLGG9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733824906; c=relaxed/simple;
-	bh=UxNGTFxLzH5h1Q1qNa96VXFgW2TmHFKNGLlWyoa7Vy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=k3X5k76pWzqP2dnrYFTFydEUfAHFq8H9ebihSymY06dsxHrnWUsJ1vcuuGniIGnMB/VBt9JrvdMo4g1FHJSgDvzY3aChKQWjGXlpAyPx4o+x0BWMcmVAEy5avHqjmI4ykFJNOPoJIC/giH1yGcKwLE4ja3xNJUNOvwM5DEcaOM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gjVcVm1c; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733831711; c=relaxed/simple;
+	bh=FFYRaVt398kWlY3AcePts9f2SooVUww1t10zGlceo8M=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K/CKsc0itaT5uHK0duc/ma4vLDDgCyM6mg4dtEhvgWpB5trkjz9zyUQSEQzP7ail3sxCIFTT1ojXuRXRbJeUugpxbCyClhri4XoSbTtI5QZo2ah4AIGhKcTwZaAt86C5POF5KX4pTYwdVTewl31ZuSQeNgm4XlCMa8LLLW9jx/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahklGbLV; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gjVcVm1c"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733824904; x=1765360904;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UxNGTFxLzH5h1Q1qNa96VXFgW2TmHFKNGLlWyoa7Vy4=;
-  b=gjVcVm1cQoZvXOwk7v9K11U9s713wOoNNIZPOi2RxwpNFjFJRjY3DHAW
-   qeoF6HZ/KaVZUZqNKLFPLlt07j/i1SU40DMjLcINSB1tsUHIcshH+xgBs
-   VXrxv2pcKtlDSnpYxsK7EOwTqpl5f8LJQZL+ez8rUO67Kcmm/3KfTnOQS
-   5pFWaz5MYqC7p4TXlxycXzfcZ9+Ug/mPNBrf7DzByyz9/yKTJs782+TdK
-   d+ksysNXuKwtIyVmW90JjOBJn6GQKnA1pKwCWsC0E1NZB6AGnvqf9V80r
-   Z7bqLIUY8lFqadtur4RxCI/3mx5hsujxb1WC9gfrtyS3du9EcSkYTkY4n
-   g==;
-X-CSE-ConnectionGUID: Odc7SuVaQVa3X1b4IuGOiA==
-X-CSE-MsgGUID: plJF/2jrTMGkN+IGC95RBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="33496480"
-X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="33496480"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 02:01:44 -0800
-X-CSE-ConnectionGUID: B9ayLaQ6RNOVAX+XyLV+DA==
-X-CSE-MsgGUID: u18wOnXHTYOIuzqcp+PPJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="100399525"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 10 Dec 2024 02:01:42 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tKx3j-0005N7-2O;
-	Tue, 10 Dec 2024 10:01:39 +0000
-Date: Tue, 10 Dec 2024 18:00:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm-platforms:pci/xgene-fixes-6.13 8/18]
- drivers/iommu/amd/iommu.c:3810:3: error: field designator 'bus_token' does
- not refer to any field in type 'const struct msi_parent_ops'
-Message-ID: <202412101701.Uu0dEEE7-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahklGbLV"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-434e9716feaso18211615e9.3
+        for <llvm@lists.linux.dev>; Tue, 10 Dec 2024 03:55:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733831708; x=1734436508; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GxtTqQBTIL8qkdLSUdzE6PIJ9G6FWWi9p3lyqXCUMq0=;
+        b=ahklGbLVbaslfsiLJ2HOlmgRXYYocmR4cyuz9RIMVnmAsbcRFGauMvvicMJd6oE+ZM
+         TYgDMP3IDdB/h9rbJhk8/dFshEGE5FnZfACIHBbh3UYYR6f4ArdLV5jE6UcP/e7l5Mun
+         KbWuRG2UAkR+e4yFwltmXU2+9iHmgZCH4CsjqQFM5nVOcaAsVElstUv4bQy3unmyIqqq
+         qDelVaSsrc2PhsBqFT6/FjGP7ZdihGC9Gf9UnZr26Q/vMkGhfyzv4rjwwctZqouxM18G
+         nkfut4QpUJNE2XyPQJiT9FZn/0RQcytkjEgaGY/QqlFlpZ58GmwZ++UG9eF06IbuunIq
+         3d8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733831708; x=1734436508;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GxtTqQBTIL8qkdLSUdzE6PIJ9G6FWWi9p3lyqXCUMq0=;
+        b=XfEO3e9yEZ85kIJFGOOxRuH49y+BNVCaBndeoVs9H+LRTD8o4gDlj80NcZMhlgr/Hy
+         DGiCjSj4glFbkWXqvPfuYL+TXnLPVB0IK7JLuLvWATyimCpu2FihYDVzcR7398AMCytK
+         j+r6ZzExu38NdGMjrfNJfjkccYJCyyrz0IHDAhJ8OhovmqQn2rmZp0jNlL1WI68TPrqQ
+         phD/Lcn3Z1swrV5aWBVDovnVjznmqhwKmcTnqbk/7cRPSD1yK/1dwdReb7YqM12EFQI6
+         sATmYM78WgrEgZqfl3xFlGiCuYTX5utHTXIaltKiVYFkHoZ4SnDEfjYMcTi5gkIeXcu6
+         zTyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWC0w9z6bv8/jIEcPpPO+Gn/pYyXYOMCrPhFd9QDFjX/12UpF6JBH56B0cp9WVbOSv8/4kD@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw1M+BOXkPIxBtVIeoR15ur4JirHGkBD2rJr6qp+YiESwmONaX0
+	bLYfC1Y+7JxfFth0hOBsOXHMUAkpRX63vovUfb9+d/OXf4QChqYH
+X-Gm-Gg: ASbGncvgUIgqxKFDsxMgQU+F5Dd3IpwOxFJ89mQqe6HjosPesche22cDCH/BE/aWoW2
+	D2bqCaaCMJWNkxCBQ+VNNhPqYkjr0h1XujRAI77CZx8lbnckL2Sts3puwzkwXbaj8UEER2i3K2P
+	PIbvRp2KUBFkJk5KY1N7lrUR6yYDvO8rJ29W9qusdoGIw/cR+p4d37Vj8Wrj0tFPNAW0LcYrPLQ
+	E3bkg8ROH9GLS8ao0lq9HGnOxbUBbamASeDinrSHX9GEt5hY8IoQXybdJpqutQmkqCPDjpO6Xfb
+	qbJ6LQn0aw==
+X-Google-Smtp-Source: AGHT+IEqPyQZxvaTdaCGPBbnnyYvA3iFt3x9GqsjfxRLDxoVwreBtdhs6qFT0if4l4gCopK2n/CUaQ==
+X-Received: by 2002:a5d:6d86:0:b0:386:378c:b7ec with SMTP id ffacd0b85a97d-386378cb923mr8329503f8f.58.1733831708190;
+        Tue, 10 Dec 2024 03:55:08 -0800 (PST)
+Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-386329a15b0sm11246137f8f.45.2024.12.10.03.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2024 03:55:07 -0800 (PST)
+Message-ID: <67582c1b.050a0220.83ef5.c8df@mx.google.com>
+X-Google-Original-Message-ID: <Z1gsFv24WRhhdqlb@Ansuel-XPS.>
+Date: Tue, 10 Dec 2024 12:55:02 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v7 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
+ engine support
+References: <20241112015920.22564-1-ansuelsmth@gmail.com>
+ <20241112015920.22564-4-ansuelsmth@gmail.com>
+ <Z1e0LHycNGcWqd2q@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,61 +88,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Z1e0LHycNGcWqd2q@gondor.apana.org.au>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git pci/xgene-fixes-6.13
-head:   32627e010975ae9817552c5e21d1860ce9c9bdfa
-commit: 3c9773aab9b801ba71766b264e859785309b13ba [8/18] iommu/amd: Convert to msi_create_parent_irq_domain() helper
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20241210/202412101701.Uu0dEEE7-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412101701.Uu0dEEE7-lkp@intel.com/reproduce)
+On Tue, Dec 10, 2024 at 11:23:24AM +0800, Herbert Xu wrote:
+> On Tue, Nov 12, 2024 at 02:59:00AM +0100, Christian Marangi wrote:
+> >
+> > +static int eip93_hash_export(struct ahash_request *req, void *out)
+> > +{
+> > +	struct eip93_hash_reqctx *rctx = ahash_request_ctx(req);
+> > +	struct eip93_hash_export_state *state = out;
+> > +	DECLARE_CRYPTO_WAIT(wait);
+> > +	int ret;
+> > +
+> > +	crypto_init_wait(&wait);
+> > +	/* Set the req callback for hash_partial_final wait */
+> > +	ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
+> > +				   crypto_req_done, &wait);
+> > +
+> > +	/* Set for partial hash generation */
+> > +	rctx->partial_hash = true;
+> > +	rctx->export_state = true;
+> > +	rctx->state = state;
+> > +
+> > +	/* Save the first block in state data */
+> > +	if (rctx->left_last || rctx->len) {
+> > +		struct mkt_hash_block *block;
+> > +
+> > +		block = list_first_entry(&rctx->blocks,
+> > +					 struct mkt_hash_block,
+> > +					 list);
+> > +
+> > +		memcpy(state->data, block->data,
+> > +		       SHA256_BLOCK_SIZE - rctx->left_last);
+> > +	}
+> > +
+> > +	/* Call hash_partial_final.
+> > +	 * This will send a dummpy 0 length packet. This is done to
+> > +	 * wait for every descriptor to being handled and sync the sa_state
+> > +	 * from the host. Partial hash and any other data will be copied in
+> > +	 * eip93_hash_handle_result()
+> > +	 */
+> > +	ret = crypto_wait_req(eip93_hash_partial_final(req), &wait);
+> 
+> Sorry, you can't do that here.  Your hash state should have been
+> exported when the request previously completed.  The export function
+> must not sleep.
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412101701.Uu0dEEE7-lkp@intel.com/
+Ah that unfortunate but doesn't that goes against the async idea of ahash
+OPs? Anyway is busy loop acceptable here?
 
-All errors (new ones prefixed by >>):
+The main problem here is that .update only enqueue packet to be
+processed and we don't wait for it to finish as that would result in
+really bad performance.
 
-   In file included from drivers/iommu/amd/iommu.c:12:
-   In file included from include/linux/pci.h:1644:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iommu/amd/iommu.c:3810:3: error: field designator 'bus_token' does not refer to any field in type 'const struct msi_parent_ops'
-    3810 |         .bus_token              = DOMAIN_BUS_AMDVI,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 1 error generated.
+To export the state with the previous request (.update) we would have to
+wait for each packet to complete or we would export the wrong partial
+hash.
 
+The process is fast enough so busy loop here should not be problematic
+but waiting for every packet sent to .update on being processed might
+introduce big performance regression.
 
-vim +3810 drivers/iommu/amd/iommu.c
-
-  3807	
-  3808	static const struct msi_parent_ops amdvi_msi_parent_ops = {
-  3809		.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED | MSI_FLAG_MULTI_PCI_MSI,
-> 3810		.bus_token		= DOMAIN_BUS_AMDVI,
-  3811		.prefix			= "IR-",
-  3812		.init_dev_msi_info	= msi_parent_init_dev_msi_info,
-  3813	};
-  3814	
+Thanks for checking this hope you can help me understand this.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Ansuel
