@@ -1,58 +1,70 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB6E4A04;
-	Tue, 10 Dec 2024 14:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6222E13D509;
+	Tue, 10 Dec 2024 14:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733842007; cv=none; b=aBVwqSDYHYoMNdtWRxs0vWUr1Jky16HD+q0F3O2WMhvisoh+NBz9rarDIntBlVET+pQLZjQ1aPI6nGK5W2vkebj3rstYQ/a1lEv+UmUpPi7so5uAujEGsqBMSzus62BVlyERTKmdKAIOfP0NIqgkteqWvRDNDudyZkkrWxyIerU=
+	t=1733842009; cv=none; b=nRZiAocabQs0qlee34m/G6NwoSBAYaJ1MJh+cT0lBRwJrjr51KNwATWPK8ZfJaz6MnxP5WLkTe3aivQWLRHogDSJuKM/YYrFDUDJSfY5qttP/yGHYWyd3502UXXz0Ek1typAZ2et7fbB0GzlAnLCZbt4qUEGdXiPs9FbZi7NzQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733842007; c=relaxed/simple;
-	bh=KEuX9yO3Tlg2T6IyBe07R2Ir2smZ7skmsXi+epUPdVE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kHLByDhb+7RfW+BumhiAX3OoDQdb8zkV+Jew/ER/sZscOeKXDZiWvv9xI3CoVBeA+WEkRE/knqGYW3dhIIPD+Uz/li1x/HYT4IfGIamuPpfDd2jhOg/XFek0AO6ILBRsE95tbSQ8mvTMJyRDMomcbDshnP90OR/D8mGGSNsidHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQOqBtj3; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1733842009; c=relaxed/simple;
+	bh=Do7dwzzjllAqqtvBa73eePMIDuR9IMn0/w3h50zwnJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iiiPaHPtGzVPeCKcW2VhBy1nHzsYqyKrqRwRpxooDShnLPPf5cpl/cnDmXqiOuOARW9QxQMP8P3y7hg7MibfwSyXLuRo3wYwc6ZCtw+2n0Qhkk+GvRk1MYm8J5qwODu6EPFSDZjCvSIpk8/JbjOqnMRVSvKo+T64vkNpo125Rvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RRcwoQvv; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQOqBtj3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RRcwoQvv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733842006; x=1765378006;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KEuX9yO3Tlg2T6IyBe07R2Ir2smZ7skmsXi+epUPdVE=;
-  b=BQOqBtj36Yba/9ikrBQEfpn8k5/jTm2sGUoTIS/XxN20PRqzG0HfiLQC
-   ouESYKza2B2Barj/keV7WHfBAQPmXXybu+KoMGYgte8WEb7B67QDaNAl0
-   Mbl8xC3xM48rp3jpeON7wu0yvfpU2IZxIdINBkJaDT/yb/0gmNGURB4MV
-   /Fs980TIDA8BBE3T4UjippRzz6n+mZPBeJliRMO4LJ3AHRro+Kanqr250
-   hILdlYPFgB5Ip4F7YTr2oE4CalEEz/u/Xe5X3gnuQtpqbKJ5/epmz5zQs
-   ru6cT7mMMetB7nyq7doKliyV3K3AqgIod/fjihmQslwCUucBE8h577uAH
-   w==;
-X-CSE-ConnectionGUID: /Zqp0ytBRrmDmT2GP/sliQ==
-X-CSE-MsgGUID: WKH40IUHSHSfvjaXEreZtw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="33918590"
+  t=1733842007; x=1765378007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Do7dwzzjllAqqtvBa73eePMIDuR9IMn0/w3h50zwnJw=;
+  b=RRcwoQvvLca5ZxaYH/uhB+nQEIRxcAMKLP0qDA8jXDzvwaZZidj/4vCE
+   oWWC8Q5gOOQZ80mwmgt94bluBIKbN7KTAwp2BnuQcsBKyuhn3JDCR0VEa
+   bk4IZMbN1lbrq4S6mPTwW/lGMIjJ7d49np5PKuOKJmRlNK2DRV0Vh4VVk
+   K8BQ/cMo9tuujYDmqhEVpc5Q/PwJhzGDAeAQ0SNZDKD44I+9mnCw/MLmO
+   gl10EFTdQgiCFKA+AYNTQJF/h9qU8crDjQEinousQ+e47Var3Xg7wdDqy
+   N2PyzqpBklrD+n8BNL8WhXTfR1/DxED6YLHyE5c7673Mqi8scNezJznuh
+   Q==;
+X-CSE-ConnectionGUID: r1uau2x1QtiMfccb7M/jtw==
+X-CSE-MsgGUID: y3AbouJ4TpmeB6JsqBkrSQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="33918591"
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="33918590"
+   d="scan'208";a="33918591"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 06:46:45 -0800
-X-CSE-ConnectionGUID: stHi8GtPQyekD/04BO+EOw==
-X-CSE-MsgGUID: xndMboYESWm7EQ3rbsisLg==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 06:46:47 -0800
+X-CSE-ConnectionGUID: 8UXF8N9lQmy0iqLdrqk76A==
+X-CSE-MsgGUID: dgzL6dt7ThijvCzrvWlGLA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="95264820"
+   d="scan'208";a="95264819"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
   by fmviesa007.fm.intel.com with ESMTP; 10 Dec 2024 06:46:44 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tL1VZ-0005ft-2V;
+	id 1tL1VZ-0005fp-2N;
 	Tue, 10 Dec 2024 14:46:41 +0000
-Date: Tue, 10 Dec 2024 22:46:04 +0800
+Date: Tue, 10 Dec 2024 22:45:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 2346/2656] fs/bcachefs/str_hash.c:182:5: warning:
- stack frame size (1072) exceeds limit (1024) in '__bch2_str_hash_check_key'
-Message-ID: <202412102226.7MkGocdP-lkp@intel.com>
+To: Douglas Anderson <dianders@chromium.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Julius Werner <jwerner@chromium.org>,
+	Jeffrey Hugo <quic_jhugo@quicinc.com>,
+	Roxana Bradescu <roxabee@google.com>,
+	bjorn.andersson@oss.qualcomm.com,
+	linux-arm-kernel@lists.infradead.org,
+	Trilok Soni <quic_tsoni@quicinc.com>, linux-arm-msm@vger.kernel.org,
+	Douglas Anderson <dianders@chromium.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] arm64: errata: Add QCOM_KRYO_5XX_GOLD to the
+ spectre_bhb_k24_list
+Message-ID: <202412102224.bmEeK15u-lkp@intel.com>
+References: <20241209094310.5.I41e227ed809ea607114027209b57d02dc0e98384@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,104 +73,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241209094310.5.I41e227ed809ea607114027209b57d02dc0e98384@changeid>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1b2ab8149928c1cea2d7eca30cd35bb7fe014053
-commit: 2519d3b0d656d1a3106bc2c1f23c178f83570607 [2346/2656] bcachefs: bch2_str_hash_check_key() now checks inode hash info
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241210/202412102226.7MkGocdP-lkp@intel.com/config)
+Hi Douglas,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on arm-perf/for-next/perf kvmarm/next soc/for-next arm/for-next arm/fixes linus/master v6.13-rc2 next-20241210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/arm64-errata-Add-QCOM_KRYO_4XX_GOLD-to-the-spectre_bhb_k24_list/20241210-014833
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20241209094310.5.I41e227ed809ea607114027209b57d02dc0e98384%40changeid
+patch subject: [PATCH 5/6] arm64: errata: Add QCOM_KRYO_5XX_GOLD to the spectre_bhb_k24_list
+config: arm64-randconfig-002-20241210 (https://download.01.org/0day-ci/archive/20241210/202412102224.bmEeK15u-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412102226.7MkGocdP-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412102224.bmEeK15u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412102226.7MkGocdP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412102224.bmEeK15u-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/bcachefs/str_hash.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2213:
+   In file included from arch/arm64/kernel/proton-pack.c:21:
+   In file included from include/linux/bpf.h:21:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from fs/bcachefs/str_hash.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/bcachefs/str_hash.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/bcachefs/str_hash.c:3:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   fs/bcachefs/str_hash.c:164:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     164 |         struct bch_inode_unpacked inode;
-         |         ^
->> fs/bcachefs/str_hash.c:182:5: warning: stack frame size (1072) exceeds limit (1024) in '__bch2_str_hash_check_key' [-Wframe-larger-than]
-     182 | int __bch2_str_hash_check_key(struct btree_trans *trans,
-         |     ^
-   9 warnings generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kernel/proton-pack.c:870:22: error: use of undeclared identifier 'MIDR_QCOM_KRYO_5XX_GOLD'
+     870 |                         MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_5XX_GOLD),
+         |                                           ^
+   4 warnings and 1 error generated.
 
 
-vim +/__bch2_str_hash_check_key +182 fs/bcachefs/str_hash.c
+vim +/MIDR_QCOM_KRYO_5XX_GOLD +870 arch/arm64/kernel/proton-pack.c
 
-   181	
- > 182	int __bch2_str_hash_check_key(struct btree_trans *trans,
+   843	
+   844	/*
+   845	 * This must be called with SCOPE_LOCAL_CPU for each type of CPU, before any
+   846	 * SCOPE_SYSTEM call will give the right answer.
+   847	 */
+   848	u8 spectre_bhb_loop_affected(int scope)
+   849	{
+   850		u8 k = 0;
+   851		static u8 max_bhb_k;
+   852	
+   853		if (scope == SCOPE_LOCAL_CPU) {
+   854			static const struct midr_range spectre_bhb_k32_list[] = {
+   855				MIDR_ALL_VERSIONS(MIDR_CORTEX_A78),
+   856				MIDR_ALL_VERSIONS(MIDR_CORTEX_A78AE),
+   857				MIDR_ALL_VERSIONS(MIDR_CORTEX_A78C),
+   858				MIDR_ALL_VERSIONS(MIDR_CORTEX_X1),
+   859				MIDR_ALL_VERSIONS(MIDR_CORTEX_A710),
+   860				MIDR_ALL_VERSIONS(MIDR_CORTEX_X2),
+   861				MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N2),
+   862				MIDR_ALL_VERSIONS(MIDR_NEOVERSE_V1),
+   863				{},
+   864			};
+   865			static const struct midr_range spectre_bhb_k24_list[] = {
+   866				MIDR_ALL_VERSIONS(MIDR_CORTEX_A76),
+   867				MIDR_ALL_VERSIONS(MIDR_CORTEX_A77),
+   868				MIDR_ALL_VERSIONS(MIDR_NEOVERSE_N1),
+   869				MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_4XX_GOLD),
+ > 870				MIDR_ALL_VERSIONS(MIDR_QCOM_KRYO_5XX_GOLD),
+   871				{},
+   872			};
+   873			static const struct midr_range spectre_bhb_k11_list[] = {
+   874				MIDR_ALL_VERSIONS(MIDR_AMPERE1),
+   875				{},
+   876			};
+   877			static const struct midr_range spectre_bhb_k8_list[] = {
+   878				MIDR_ALL_VERSIONS(MIDR_CORTEX_A72),
+   879				MIDR_ALL_VERSIONS(MIDR_CORTEX_A57),
+   880				{},
+   881			};
+   882	
+   883			if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k32_list))
+   884				k = 32;
+   885			else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k24_list))
+   886				k = 24;
+   887			else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k11_list))
+   888				k = 11;
+   889			else if (is_midr_in_range_list(read_cpuid_id(), spectre_bhb_k8_list))
+   890				k =  8;
+   891	
+   892			max_bhb_k = max(max_bhb_k, k);
+   893		} else {
+   894			k = max_bhb_k;
+   895		}
+   896	
+   897		return k;
+   898	}
+   899	
 
 -- 
 0-DAY CI Kernel Test Service
