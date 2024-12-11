@@ -1,300 +1,139 @@
-Received: from smtp1.cs.Stanford.EDU (smtp1.cs.stanford.edu [171.64.64.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BED61DE4C1
-	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 17:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=171.64.64.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D221FF1C7;
+	Wed, 11 Dec 2024 17:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733938237; cv=none; b=kNYm+cQCaNdyqcIa5K8cb1oneW6+9SEomVmb8WsyBCdUTpckdjGvr2V+eHmjZtlqg9xRVIVFgkvXapJJUG6gt7pERpj5VgaVXM2aQ55sVM+QPA/xiZMAVK6ZcuQ8vTXEyHNNL5LH2jGB6LYSHv8emF9hZwIrXtMEQvX3lUuK5TI=
+	t=1733939289; cv=none; b=HzQLI3LYV6rjTZp3yApnl3gX0H0b+Y9Ean4/z4zQ9Yrn9U73B5Xjdt2mEsP66IwL4Bvy1NtxZIcDuBl31wo5qf8KUGQDxPlM+Z8DSCTnHld6HaWQk34VEJX8nhXgZjbT7ZX7Kj2AV8nJx5EaWkz0W1rFedoPa6/mX2RDdrS5Y6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733938237; c=relaxed/simple;
-	bh=NUi/YIiJU2699Nw6gn48AB1Fxc2a1kNriBkg6y7AheA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mvRGdraCJmXUoZpu2cH3NunCyCqe7GtMzCpmA+TJhjbH0+yW6nMmeWrMG+onxPCnNe334QjwshvQhxODVXdjsHtl3s7xQy5GPzIXxohMy9JQqdrAaTmoglB7mnwTsfGrGQC/BSvhR0qh+5l0OMdAj8/2QMkTVLvKDwvbr7h4hQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cs.stanford.edu; spf=pass smtp.mailfrom=cs.stanford.edu; dkim=pass (2048-bit key) header.d=cs.stanford.edu header.i=@cs.stanford.edu header.b=C7/kTYrT; arc=none smtp.client-ip=171.64.64.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cs.stanford.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.stanford.edu
+	s=arc-20240116; t=1733939289; c=relaxed/simple;
+	bh=10mTZ6Baz1w4vZT0DsoF5FMFN4WwL6kq6s4V2xKqoBc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FCyWr8iG69pZZBp0mu0KKl/VjNEncJ29P+W98KdSueQ251fmUcb+x2r1EvheG08/X5sBVQPAuo2MQxq5WyzV29eSnJ34txAgtCyhwvSE5D1qtRwVh2pEUED4XndYLYAE6MeGCJ/j6UmcaSGdVgvFIsLceDcLqVcFr1uNVzDD/x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bNWFan3Q; arc=none smtp.client-ip=209.85.166.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cs.stanford.edu header.i=@cs.stanford.edu header.b="C7/kTYrT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=cs.stanford.edu; s=cs2308; h=Content-Transfer-Encoding:Content-Type:Cc:To:
-	Subject:Message-ID:Date:From:In-Reply-To:References:MIME-Version:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WGqb2BlZ4Dq0QvIzemY0BUwW2/Ji9LXM1Y+iYBbQ59E=; t=1733938235; x=1734802235; 
-	b=C7/kTYrTuV3JaUuGcIbXZfma39r5hpTK6rs8qxdWpV8mDr1Q8tPxZc92L2AlbcVRfFCKTxJ7IkX
-	ztGbWdIXxC5BDcFda3YPhlW+2bVunelxrqI+PA1yUF9+Csd6V5CdUlJho76Zxn2Yfq1/RQTMhboXZ
-	W3q7IyFhUm6Vc5XXsQ7HOq2xZeT1H3NY0bFfonsDA21LhtSQv9OrFNLNkkXYbNop0tOA/z21Ei/Yv
-	XDDhD8vNZCJ4yvtBQ50meS/1mA+0R7m2HRdcFHtVJd5/berBcOKT6NvK8W9Y7fsijCPdBfK7mKwAd
-	vPIv3eRM6bk/5iDiqIwiBsLUNXxBE3fUJ+8Q==;
-Received: from mail-oa1-f47.google.com ([209.85.160.47]:58782)
-	by smtp1.cs.Stanford.EDU with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.94.2)
-	(envelope-from <ouster@cs.stanford.edu>)
-	id 1tLQXg-0004uG-CJ; Wed, 11 Dec 2024 09:30:34 -0800
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-29fad34bb62so1840085fac.1;
-        Wed, 11 Dec 2024 09:30:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWM7EWb9EvPRcT4j7MLxdCPg7lySpH1Y9jEAB4jK3dVYA8FYhJsQ85IqrAddDAbjmoL/N4d@lists.linux.dev, AJvYcCWmv4eZDpFQMD1O8M+6PuFyVLq4HvlELYWrJoQCQsxbIrq91dsvbeOWmMfwycn7uvJFJNzBmYaba/e+IUTVEw==@lists.linux.dev
-X-Gm-Message-State: AOJu0YzjWF85+ZIgjN8kc/in5+ZyG15HXJN59npv5RPBpyd+Ln50A56C
-	+YSI7AFb5JgEn1nN1/T8iqk0jgutYAFrJGeJ1m4Yt1Jl3w690BxJUhHoG24I4ZzEh3tgG6nXYQN
-	Wv2Kffwz+BUQFz/ZfsBZoROFuAjo=
-X-Google-Smtp-Source: AGHT+IGxkxXs8YZX33MkQ2ii2o46QxXMXXz0HOMnDww6voQQ4hoIceFuxqn6e2DeX92iO1zE4nHvrp/hCDLA/liPKPw=
-X-Received: by 2002:a05:6870:7a0a:b0:29d:c764:70e1 with SMTP id
- 586e51a60fabf-2a3823e4d8bmr474329fac.17.1733938231618; Wed, 11 Dec 2024
- 09:30:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bNWFan3Q"
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-844d54c3eb6so14412439f.0;
+        Wed, 11 Dec 2024 09:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733939287; x=1734544087; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FoQjUEiKcHT4k34GxlmM0v6sAaxxYb6I9s5NiJskeoc=;
+        b=bNWFan3QhTPBXWuRnEnOrFzQ/BCxPAqHLc7jw60VUQ+BVCnJ/TJ61jZ7kWy+CQg5WK
+         O0brbn1ADtqh225sI6BQu5DMdu9l9mnkEgJxSLkBg4F9wvxy3a6qvjmwjUdd/ZgjNr0T
+         xn/t+z/o3gvhARnftHAy/W/S5OVKQu4rhD0S7VDj07HSVzOURcYfTniNakSwK5k30vox
+         kAoxdVrjqX7wVjjsKk7t247qccjRm1MfFudNlYHb9zTEzAGyxG1t6gsZ7vCk729boUEG
+         xi1Dx2g9Mi4A30lpQBYNo4CJHeWpQNMoXyS/zWMIK0jgC6MtGOOetK3N+kNxiTJdwcFu
+         pQ5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733939287; x=1734544087;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FoQjUEiKcHT4k34GxlmM0v6sAaxxYb6I9s5NiJskeoc=;
+        b=lAtS5bNfwM2wFbdyCoJqMZNEok/dgke+8+qBd+faNGRlFNruZdyiYK6mZIGarsp6E1
+         Nr4a9CaWKdRZn6MtAb+6LR2epSaF00cOMmyc55gwPd2Wwjq2ExKKHHYaxX11mYYHPQIc
+         6PjOWT+I2TY1478Uev43LN7mgIosTGZp1VPOEdCrOUsjkJSSo/bGSll1SwJS+FTN9glq
+         EwvJJMlEGYE4aI4c1VTlxJ5zMZ0poiBj6u9SlBKgGKhr6+kMO7uklCcBwui3e5YtU+Ke
+         WabXci/Cky7kmCUYVebXChRQTeznZfonbubnxZhclLNAcfuB6e1CM3Ys5KfJia9ZzSgR
+         A5jg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcalBdiSfnMUDbh+8GyCjWiihlUmGMyOVA8Fbs8G9bilmxhoWYmdAJ+TS4pi9GmNRI2vVZhGonyhyXhlzngg==@lists.linux.dev, AJvYcCXd7rOF59ENXLBNiSmbjBFK9T8D9k8ViaTaRVHBSqMk+Pd333cWwGX7x+NZp1PFD5kJcQjL@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHnUIu8rSafdvCebqaxnYHGA1+EMFkylQ/JzQyZRvnvZp0PWEp
+	qnqxLowbkeGtCoCbMbsugvJ/Xfxz4fP7JaxRQGJk1y4oR/CpYh9R
+X-Gm-Gg: ASbGnctv3a1UAEsPxartsb3NW7Ncg6fvcmyRhFDbgfJPfTBbt3JcVbscU31A4gPJ9o7
+	sS1jRWPQ1KTyRCbMO+djlPMq4fp/6dolz7dHWVm7yNkTK6atw9tILxeU4LfCSr82sgG+508vCII
+	zBctphKW3w8+WX+Km0m07JI3mNh0f4MJ6bmfUvTWCJcmqAploRudcqkgrC7iCzv2HbwHHUm/YBh
+	i4+kSbM/74p3LYXhKxLJNwGIhERJ3SFU1g5+NWKhlKe9ZL1Ncf/aV6Zi8t+oc8=
+X-Google-Smtp-Source: AGHT+IH69BOOoy2fz1wD9KgMNdJfrwJoVi/CrO8K0VgYeuPucjqk60n4YgQMAYpD19ZYyBWYgImzlQ==
+X-Received: by 2002:a05:6602:6c05:b0:83a:9820:f26b with SMTP id ca18e2360f4ac-844d741e564mr64441639f.2.1733939286658;
+        Wed, 11 Dec 2024 09:48:06 -0800 (PST)
+Received: from LeeDev.lee.dev ([2600:8804:1a84:2a00:be24:11ff:fe2b:2474])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-844c317e930sm77069139f.41.2024.12.11.09.48.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 09:48:05 -0800 (PST)
+From: "Roger L. Beckermeyer III" <beckerlee3@gmail.com>
+To: lkp@intel.com
+Cc: beckerlee3@gmail.com,
+	linux-btrfs@vger.kernel.org,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Josef Bacik <josef@toxicpanda.com>
+Subject: [PATCH 1/6] rbtree: add rb_find_add_cached() to rbtree.h
+Date: Wed, 11 Dec 2024 11:47:54 -0600
+Message-ID: <4768e17a808c754748ac9264b5de9e8f00f22380.1733850317.git.beckerlee3@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <cover.1733850317.git.beckerlee3@gmail.com>
+References: <cover.1733850317.git.beckerlee3@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241209175131.3839-14-ouster@cs.stanford.edu> <202412110709.Kdjua3Pc-lkp@intel.com>
-In-Reply-To: <202412110709.Kdjua3Pc-lkp@intel.com>
-From: John Ousterhout <ouster@cs.stanford.edu>
-Date: Wed, 11 Dec 2024 09:29:55 -0800
-X-Gmail-Original-Message-ID: <CAGXJAmxvs3mhqw0xWiy6ppzNE+r9wJbrBjYa+_ZoRXJuh5oRNg@mail.gmail.com>
-Message-ID: <CAGXJAmxvs3mhqw0xWiy6ppzNE+r9wJbrBjYa+_ZoRXJuh5oRNg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 12/12] net: homa: create Makefile and Kconfig
-To: kernel test robot <lkp@intel.com>
-Cc: netdev@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0
-X-Spam-Level: 
-X-Scan-Signature: 056db2312ab85a437fb45f547310e25c
+Content-Transfer-Encoding: 8bit
 
-I have now fixed the problems found by the test robot.
+Adds rb_find_add_cached() as a helper function for use with
+red-black trees. Used in btrfs to reduce boilerplate code.
 
--John-
+Suggested-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: Roger L. Beckermeyer III <beckerlee3@gmail.com>
+---
+ include/linux/rbtree.h | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
+diff --git a/include/linux/rbtree.h b/include/linux/rbtree.h
+index 7c173aa64e1e..0d4444c0cfb3 100644
+--- a/include/linux/rbtree.h
++++ b/include/linux/rbtree.h
+@@ -210,6 +210,43 @@ rb_add(struct rb_node *node, struct rb_root *tree,
+ 	rb_insert_color(node, tree);
+ }
+ 
++/**
++ * rb_find_add_cached() - find equivalent @node in @tree, or add @node
++ * @node: node to look-for / insert
++ * @tree: tree to search / modify
++ * @cmp: operator defining the node order
++ *
++ * Returns the rb_node matching @node, or NULL when no match is found and @node
++ * is inserted.
++ */
++static __always_inline struct rb_node *
++rb_find_add_cached(struct rb_node *node, struct rb_root_cached *tree,
++	    int (*cmp)(struct rb_node *, const struct rb_node *))
++{
++	bool leftmost = true;
++	struct rb_node **link = &tree->rb_root.rb_node;
++	struct rb_node *parent = NULL;
++	int c;
++
++	while (*link) {
++		parent = *link;
++		c = cmp(node, parent);
++
++		if (c < 0) {
++			link = &parent->rb_left;
++		} else if (c > 0) {
++			link = &parent->rb_right;
++			leftmost = false;
++		} else {
++			return parent;
++		}
++	}
++
++	rb_link_node(node, parent, link);
++	rb_insert_color_cached(node, tree, leftmost);
++	return NULL;
++}
++
+ /**
+  * rb_find_add() - find equivalent @node in @tree, or add @node
+  * @node: node to look-for / insert
+-- 
+2.45.2
 
-On Tue, Dec 10, 2024 at 4:32=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi John,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on net-next/main]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/John-Ousterhout/in=
-et-homa-define-user-visible-API-for-Homa/20241210-055415
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20241209175131.3839-14-ouster%40=
-cs.stanford.edu
-> patch subject: [PATCH net-next v3 12/12] net: homa: create Makefile and K=
-config
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/2024=
-1211/202412110709.Kdjua3Pc-lkp@intel.com/config)
-> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51=
-eccf88f5321e7c60591c5546b254b6afab99)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20241211/202412110709.Kdjua3Pc-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202412110709.Kdjua3Pc-lkp=
-@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from net/homa/homa_outgoing.c:7:
->    In file included from net/homa/homa_impl.h:12:
->    In file included from include/linux/audit.h:13:
->    In file included from include/linux/ptrace.h:10:
->    In file included from include/linux/pid_namespace.h:7:
->    In file included from include/linux/mm.h:2223:
->    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      505 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      512 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
-numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
-onversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
-"nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      525 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >> net/homa/homa_outgoing.c:809:6: warning: variable 'checks' set but not=
- used [-Wunused-but-set-variable]
->      809 |         int checks =3D 0;
->          |             ^
->    5 warnings generated.
-> --
->    In file included from net/homa/homa_sock.c:5:
->    In file included from net/homa/homa_impl.h:12:
->    In file included from include/linux/audit.h:13:
->    In file included from include/linux/ptrace.h:10:
->    In file included from include/linux/pid_namespace.h:7:
->    In file included from include/linux/mm.h:2223:
->    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      505 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      512 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
-numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
-onversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
-"nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      525 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >> net/homa/homa_sock.c:224:6: warning: variable 'i' set but not used [-W=
-unused-but-set-variable]
->      224 |         int i;
->          |             ^
->    5 warnings generated.
-> --
->    In file included from net/homa/homa_timer.c:7:
->    In file included from net/homa/homa_impl.h:12:
->    In file included from include/linux/audit.h:13:
->    In file included from include/linux/ptrace.h:10:
->    In file included from include/linux/pid_namespace.h:7:
->    In file included from include/linux/mm.h:2223:
->    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      505 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      512 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
-numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
-onversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
-"nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      525 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >> net/homa/homa_timer.c:106:6: warning: variable 'total_rpcs' set but no=
-t used [-Wunused-but-set-variable]
->      106 |         int total_rpcs =3D 0;
->          |             ^
->    5 warnings generated.
->
->
-> vim +/checks +809 net/homa/homa_outgoing.c
->
-> 537f41147b3131 John Ousterhout 2024-12-09  796
-> 537f41147b3131 John Ousterhout 2024-12-09  797  /**
-> 537f41147b3131 John Ousterhout 2024-12-09  798   * homa_add_to_throttled(=
-) - Make sure that an RPC is on the throttled list
-> 537f41147b3131 John Ousterhout 2024-12-09  799   * and wake up the pacer =
-thread if necessary.
-> 537f41147b3131 John Ousterhout 2024-12-09  800   * @rpc:     RPC with out=
-bound packets that have been granted but can't be
-> 537f41147b3131 John Ousterhout 2024-12-09  801   *           sent because=
- of NIC queue restrictions. Must be locked by caller.
-> 537f41147b3131 John Ousterhout 2024-12-09  802   */
-> 537f41147b3131 John Ousterhout 2024-12-09  803  void homa_add_to_throttle=
-d(struct homa_rpc *rpc)
-> 537f41147b3131 John Ousterhout 2024-12-09  804          __must_hold(&rpc-=
->bucket->lock)
-> 537f41147b3131 John Ousterhout 2024-12-09  805  {
-> 537f41147b3131 John Ousterhout 2024-12-09  806          struct homa *homa=
- =3D rpc->hsk->homa;
-> 537f41147b3131 John Ousterhout 2024-12-09  807          struct homa_rpc *=
-candidate;
-> 537f41147b3131 John Ousterhout 2024-12-09  808          int bytes_left;
-> 537f41147b3131 John Ousterhout 2024-12-09 @809          int checks =3D 0;
-> 537f41147b3131 John Ousterhout 2024-12-09  810          __u64 now;
-> 537f41147b3131 John Ousterhout 2024-12-09  811
-> 537f41147b3131 John Ousterhout 2024-12-09  812          if (!list_empty(&=
-rpc->throttled_links))
-> 537f41147b3131 John Ousterhout 2024-12-09  813                  return;
-> 537f41147b3131 John Ousterhout 2024-12-09  814          now =3D sched_clo=
-ck();
-> 537f41147b3131 John Ousterhout 2024-12-09  815          homa->throttle_ad=
-d =3D now;
-> 537f41147b3131 John Ousterhout 2024-12-09  816          bytes_left =3D rp=
-c->msgout.length - rpc->msgout.next_xmit_offset;
-> 537f41147b3131 John Ousterhout 2024-12-09  817          homa_throttle_loc=
-k(homa);
-> 537f41147b3131 John Ousterhout 2024-12-09  818          list_for_each_ent=
-ry_rcu(candidate, &homa->throttled_rpcs,
-> 537f41147b3131 John Ousterhout 2024-12-09  819                           =
-       throttled_links) {
-> 537f41147b3131 John Ousterhout 2024-12-09  820                  int bytes=
-_left_cand;
-> 537f41147b3131 John Ousterhout 2024-12-09  821
-> 537f41147b3131 John Ousterhout 2024-12-09  822                  checks++;
-> 537f41147b3131 John Ousterhout 2024-12-09  823
-> 537f41147b3131 John Ousterhout 2024-12-09  824                  /* Watch =
-out: the pacer might have just transmitted the last
-> 537f41147b3131 John Ousterhout 2024-12-09  825                   * packet=
- from candidate.
-> 537f41147b3131 John Ousterhout 2024-12-09  826                   */
-> 537f41147b3131 John Ousterhout 2024-12-09  827                  bytes_lef=
-t_cand =3D candidate->msgout.length -
-> 537f41147b3131 John Ousterhout 2024-12-09  828                           =
-       candidate->msgout.next_xmit_offset;
-> 537f41147b3131 John Ousterhout 2024-12-09  829                  if (bytes=
-_left_cand > bytes_left) {
-> 537f41147b3131 John Ousterhout 2024-12-09  830                          l=
-ist_add_tail_rcu(&rpc->throttled_links,
-> 537f41147b3131 John Ousterhout 2024-12-09  831                           =
-                 &candidate->throttled_links);
-> 537f41147b3131 John Ousterhout 2024-12-09  832                          g=
-oto done;
-> 537f41147b3131 John Ousterhout 2024-12-09  833                  }
-> 537f41147b3131 John Ousterhout 2024-12-09  834          }
-> 537f41147b3131 John Ousterhout 2024-12-09  835          list_add_tail_rcu=
-(&rpc->throttled_links, &homa->throttled_rpcs);
-> 537f41147b3131 John Ousterhout 2024-12-09  836  done:
-> 537f41147b3131 John Ousterhout 2024-12-09  837          homa_throttle_unl=
-ock(homa);
-> 537f41147b3131 John Ousterhout 2024-12-09  838          wake_up_process(h=
-oma->pacer_kthread);
-> 537f41147b3131 John Ousterhout 2024-12-09  839  }
-> 537f41147b3131 John Ousterhout 2024-12-09  840
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
