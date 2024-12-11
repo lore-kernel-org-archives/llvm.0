@@ -1,207 +1,302 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744551C245C;
-	Wed, 11 Dec 2024 19:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FACEC148;
+	Wed, 11 Dec 2024 19:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733945747; cv=none; b=CcZzwzOtOpG60Y9qWE/j7mc3cKkFBN+5QwBuWSG0YdxLfwfIqcNG8yxx1PphNUnvJ28cLo0TR9/19NUXiGN2HZAceoMc8jotIRk9/dExIpzoNpCGIe4WheWgX+srBtQU33xjJrxjVLAgL9Ygle1l4UXMGEk0kYswn3FBCeOVlvk=
+	t=1733946470; cv=none; b=L/5jYu+oKNC51QQ0lsnwsgfqR9RBNY5t+gTjmkd+ausn9mJ8o67Wzvsoa5/jrfpBO4MI5z74N2zDypqEpC/gs+IWseDQy7w5+l1IOWCPm1aD2unNFclbrvntFhOXF7R1BXIPoyiqTGFZvNc67XV9WENQZ/lCTH7Afe0F6WihJ4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733945747; c=relaxed/simple;
-	bh=rAWTaFvq5MIpa9rJe2/Ev2vblQZ6ykreEvwH2RKsHEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hdn09+BHY8Zd66VD1JXAr4ASEhd6zsg/QAFlHCw4rCrs7Z3Sk21BB26ectadDOg00vr0fB4e1VWYb0aWwQTslOUc3aJUT0eDldTz5Vkc5O7HSTmVHGIdgl2466/AApYiP17ONjOPrBPHB4RainoMaShfCu6ngRMnb2RG9GNEhQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WsST7ebq; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733946470; c=relaxed/simple;
+	bh=O87OApdluPfit8r/CJr1WPF4/bZoMzP/ml/FN4G03Z0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ErLgS1ps69HPqa9SqP0Zc3brtNKqQp2YVVFUiIanZAUJNNOdTP6ezeEkTWorua6Ly/7SA73yOzPqj1ai6Vb6HyImIpbphppbAhTmyxSQZivo/Hfa6qLYN5tSU/myPrvqCgDAGAZNmU+y3G3ARKMh1LJeCB/FOUC2EVxIIW55xZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com; spf=pass smtp.mailfrom=gmx.com; dkim=pass (2048-bit key) header.d=gmx.com header.i=quwenruo.btrfs@gmx.com header.b=tuSfg0xq; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WsST7ebq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733945745; x=1765481745;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rAWTaFvq5MIpa9rJe2/Ev2vblQZ6ykreEvwH2RKsHEA=;
-  b=WsST7ebqIC82CjUNh82mtqH255c3pRzdXP7/ADyhcZcH/CJEv4x6MdS7
-   EFVT5RQn9egI3hEg1QTmmvYfWbSeCH4lEJJIUr7TQIn5E/XhSR2Tk1VRy
-   Nb+3wzlyGPCTcW21YpreMZaw0wavABbEOuPebTQ8EAbQl8Tk+FJZFl5O1
-   4WoKCNRe8UErYZbyPX9VT7/q7/XLeZ//GUOtYPLk/7edSXuYW8pAc/QYq
-   BeUWNejJ2Ii6YGOAqR0SlHro/PWvpFjtn7u0Tr4dHdg68zgkrHwviAw4k
-   xAouycxspSAnkzNwzh4DfFbOQmpWSv4ZTqJkw/hzJGG2fWuI8oG/FTC+N
-   Q==;
-X-CSE-ConnectionGUID: uSaGBd4lRN6sM8f5iBdbLg==
-X-CSE-MsgGUID: H3xfVvKJT5GsUygabGS5CA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="34471959"
-X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
-   d="scan'208";a="34471959"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 11:35:45 -0800
-X-CSE-ConnectionGUID: E5lzs75VQjenbl16v6Cmyg==
-X-CSE-MsgGUID: g6VEbvrkTai79NfI9ODwVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="100999199"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Dec 2024 11:35:43 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tLSUm-00071s-3D;
-	Wed, 11 Dec 2024 19:35:40 +0000
-Date: Thu, 12 Dec 2024 03:35:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Laight <David.Laight@aculab.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 1948/2656] block/blk-iocost.c:1101:11: error:
- call to __compiletime_assert_560 declared with 'error' attribute: clamp()
- low limit 1 greater than high limit active
-Message-ID: <202412120322.3GfVe3vF-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmx.com header.i=quwenruo.btrfs@gmx.com header.b="tuSfg0xq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.com;
+	s=s31663417; t=1733946462; x=1734551262; i=quwenruo.btrfs@gmx.com;
+	bh=EYqCeMOXsv9Y/tMm5/9JHlRgVKtJXXu+vaSzJwPZ/co=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=tuSfg0xqmGapNW7mTumOpZqfohdFjTzzGjNtbFAK14Ih2sFDqsWtCfvOLDucBXj8
+	 xJr4ZiKgE9BfbP0382FNG3QtuV2tUFLaaC6TzKEcuFyptN38BpkRhHLxO0fgU+bR6
+	 Y8nC8IiZZE6L5Zy4wwcTgLtp4WWVbpKuRnIJ256qTGiF5uzfCoqL6H3JGztlVQR2k
+	 nWO4a2RPMcNIK9vPlYWc3SrWWzEvCAT5yIH3IxplovF1/jlChsnWT8TcFiOJ/Vq0H
+	 Mfq4W32ip+Hd/Ap2c7xqPzWJJo8YloCqIYH84edMSmbziU9FntnW2ve0vAyTaBXH3
+	 qdWRx7lehoiDdyPqNA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [172.16.0.191] ([159.196.52.54]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MvsJ5-1teEDh0U5P-011qpF; Wed, 11
+ Dec 2024 20:47:42 +0100
+Message-ID: <2e8ec0ba-aaa8-4107-9fbe-b3288a45f5a6@gmx.com>
+Date: Thu, 12 Dec 2024 06:17:37 +1030
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] btrfs: enhance ordered extent double freeing detection
+To: kernel test robot <lkp@intel.com>, Qu Wenruo <wqu@suse.com>,
+ linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <53b793f2e7a7788f89cda97de565cfc1577cbf75.1733890357.git.wqu@suse.com>
+ <202412120136.6OwbbtZf-lkp@intel.com>
+Content-Language: en-US
+From: Qu Wenruo <quwenruo.btrfs@gmx.com>
+Autocrypt: addr=quwenruo.btrfs@gmx.com; keydata=
+ xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
+ 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
+ 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
+ 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
+ gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
+ AAHNIlF1IFdlbnJ1byA8cXV3ZW5ydW8uYnRyZnNAZ214LmNvbT7CwJQEEwEIAD4CGwMFCwkI
+ BwIGFQgJCgsCBBYCAwECHgECF4AWIQQt33LlpaVbqJ2qQuHCPZHzoSX+qAUCZxF1YAUJEP5a
+ sQAKCRDCPZHzoSX+qF+mB/9gXu9C3BV0omDZBDWevJHxpWpOwQ8DxZEbk9b9LcrQlWdhFhyn
+ xi+l5lRziV9ZGyYXp7N35a9t7GQJndMCFUWYoEa+1NCuxDs6bslfrCaGEGG/+wd6oIPb85xo
+ naxnQ+SQtYLUFbU77WkUPaaIU8hH2BAfn9ZSDX9lIxheQE8ZYGGmo4wYpnN7/hSXALD7+oun
+ tZljjGNT1o+/B8WVZtw/YZuCuHgZeaFdhcV2jsz7+iGb+LsqzHuznrXqbyUQgQT9kn8ZYFNW
+ 7tf+LNxXuwedzRag4fxtR+5GVvJ41Oh/eygp8VqiMAtnFYaSlb9sjia1Mh+m+OBFeuXjgGlG
+ VvQFzsBNBFnVga8BCACqU+th4Esy/c8BnvliFAjAfpzhI1wH76FD1MJPmAhA3DnX5JDORcga
+ CbPEwhLj1xlwTgpeT+QfDmGJ5B5BlrrQFZVE1fChEjiJvyiSAO4yQPkrPVYTI7Xj34FnscPj
+ /IrRUUka68MlHxPtFnAHr25VIuOS41lmYKYNwPNLRz9Ik6DmeTG3WJO2BQRNvXA0pXrJH1fN
+ GSsRb+pKEKHKtL1803x71zQxCwLh+zLP1iXHVM5j8gX9zqupigQR/Cel2XPS44zWcDW8r7B0
+ q1eW4Jrv0x19p4P923voqn+joIAostyNTUjCeSrUdKth9jcdlam9X2DziA/DHDFfS5eq4fEv
+ ABEBAAHCwHwEGAEIACYCGwwWIQQt33LlpaVbqJ2qQuHCPZHzoSX+qAUCZxF1gQUJEP5a0gAK
+ CRDCPZHzoSX+qHGpB/kB8A7M7KGL5qzat+jBRoLwB0Y3Zax0QWuANVdZM3eJDlKJKJ4HKzjo
+ B2Pcn4JXL2apSan2uJftaMbNQbwotvabLXkE7cPpnppnBq7iovmBw++/d8zQjLQLWInQ5kNq
+ Vmi36kmq8o5c0f97QVjMryHlmSlEZ2Wwc1kURAe4lsRG2dNeAd4CAqmTw0cMIrR6R/Dpt3ma
+ +8oGXJOmwWuDFKNV4G2XLKcghqrtcRf2zAGNogg3KulCykHHripG3kPKsb7fYVcSQtlt5R6v
+ HZStaZBzw4PcDiaAF3pPDBd+0fIKS6BlpeNRSFG94RYrt84Qw77JWDOAZsyNfEIEE0J6LSR/
+In-Reply-To: <202412120136.6OwbbtZf-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:mt8qBO4LpHgNWd55sWnGsk/ujCTW9PCwaLsp/jlRPnowevLQWQk
+ w5zEjNcgWZgWZW4ji6l+NL9iVWEL15TnIg6QaZ4uXJhVauO9u8lqSGS46cE9gFhohSyCcx/
+ Fj+zX2D9PQ1EwViqoEk5rYMcfZdlBbqRczQDwTSDwoe/H+zT1WUiBCwB+CJWxVWElyOVFvd
+ pslRPClYBD8i3r4IrRtZg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:nCcuJwAlm5w=;eWWwPMIsKjxwgRfhM5sO+2J0HZU
+ kfPe5LAYxwnVYHuol3HiAIyqton9W0efB/T33y7InCdqCmtxNpgrUTEtC+MBKDd+aFA2V8dfM
+ CONuOqHKzyhBHKE5SlyqJOdE2KIIbBv9kavGpBUOiZZjXl7GGDCq/Wk3HfK2em8UWmTHy7/YU
+ hOSjpX6+FpFeenqZBGJ7jU4e6OwGh7XRoWfHL0SzVnnVV6taN0h1aHR7VAdwIAhIzqJcYzMZs
+ 6quGNQFHbkbfg8g6Y9boBWhMAuuWv8SK0EeNR2TJr82EEfCSAv3+h2mElj0gwj9AytYlGgjHQ
+ unJLA+b2Pqx9Zvj50ucZqHNBCcfhfSrjxynDmhOhr4ZC+2QdZdqn1V6TYLSUYcHa6mjkJ9TMj
+ qo/6/Uq3KD3dqu4wBHgfkM1nGZDpPbzX1lOsubeQBy8bYJnCSYv7kzHQ9yt3AUVhDeSdKk11P
+ Vj0+kyduTT10pypfUv61pYPD72ftB3MjlGprgiLR09nyQsu4XEywjdhn1kW/In6VNrvhEcA/+
+ 9s8CbyUI2BmI5EC8mLb72hJ/zPhgz1vtAM/uW5aYl/uMr8ZoQC5xR/up4SWFGj48SoLOlOTiw
+ kb/EsA8d797AVwIxXA06en4EalUriTltP3v3gVp0E13iA/7OoDoYRImgz04/TYVP9/UoUVEsb
+ J5C9vY7WDRA3hF+STlg5zmA7qrJ6VTlKpxRdGcWBIqc8cbqZSpBzIf/ums5H5VB7VpDgZCaam
+ 4aBEGHg1HyBfbNewwySixfuiwYXzifjs/Q0+1DQ2I9Vn/69CpN/58V/mYMYvm++wnikJdjui1
+ a7iZhtgZyIljgVbM22dODk6DEe7HSjSTSUGYE5RA/9Qxq8HnEvp/rkiSDFHgnIYYwJLDIoo51
+ MfXHyKUcV8DwO0lekCXXtLnBQaIRN1RINSHsjFEqxf3FHA/OlFIf1ycO/QRaCEpLTNiFpMPAX
+ wT4s8DMGbmoVVYItSkJ2GURjVbqVWOViFtvFrrmIOUU87Ckuhm7s13BDGOe1cewCMH/B+hjm7
+ 9NsKLQEFCfJUi5iNgd86As56wJmgYZwYCJZUAr/iMOQnrIKA8h2365OJmvSeozJlPVDGcPwEl
+ VThHG2H48h0QCo8dUOk3YB0RCDctGjAA76V/fWl6hDH7dH9Tr7fEDuLqsppIL420PgwQ3ayb4
+ =
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   91e71d606356e50f238d7a87aacdee4abc427f07
-commit: 212fe932ee57ec4a0f41bdc42b58c64fe3062147 [1948/2656] minmax.h: simplify the variants of clamp()
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20241212/202412120322.3GfVe3vF-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412120322.3GfVe3vF-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412120322.3GfVe3vF-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> block/blk-iocost.c:1101:11: error: call to __compiletime_assert_560 declared with 'error' attribute: clamp() low limit 1 greater than high limit active
-                   inuse = clamp_t(u32, inuse, 1, active);
-                           ^
-   include/linux/minmax.h:220:36: note: expanded from macro 'clamp_t'
-   #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
-                                      ^
-   include/linux/minmax.h:197:2: note: expanded from macro '__careful_clamp'
-           __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
-           ^
-   include/linux/minmax.h:190:2: note: expanded from macro '__clamp_once'
-           BUILD_BUG_ON_MSG(statically_true(ulo > uhi),                            \
-           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:530:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:523:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:24:1: note: expanded from here
-   __compiletime_assert_560
-   ^
->> block/blk-iocost.c:1101:11: error: call to __compiletime_assert_560 declared with 'error' attribute: clamp() low limit 1 greater than high limit active
-   include/linux/minmax.h:220:36: note: expanded from macro 'clamp_t'
-   #define clamp_t(type, val, lo, hi) __careful_clamp(type, val, lo, hi)
-                                      ^
-   include/linux/minmax.h:197:2: note: expanded from macro '__careful_clamp'
-           __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
-           ^
-   include/linux/minmax.h:190:2: note: expanded from macro '__clamp_once'
-           BUILD_BUG_ON_MSG(statically_true(ulo > uhi),                            \
-           ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:530:2: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ^
-   include/linux/compiler_types.h:523:4: note: expanded from macro '__compiletime_assert'
-                           prefix ## suffix();                             \
-                           ^
-   <scratch space>:24:1: note: expanded from here
-   __compiletime_assert_560
-   ^
-   2 errors generated.
 
 
-vim +/error +1101 block/blk-iocost.c
+=E5=9C=A8 2024/12/12 04:41, kernel test robot =E5=86=99=E9=81=93:
+> Hi Qu,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on kdave/for-next]
+> [also build test ERROR on linus/master v6.13-rc2 next-20241211]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-e=
+nhance-ordered-extent-double-freeing-detection/20241211-121647
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git =
+for-next
+> patch link:    https://lore.kernel.org/r/53b793f2e7a7788f89cda97de565cfc=
+1577cbf75.1733890357.git.wqu%40suse.com
+> patch subject: [PATCH] btrfs: enhance ordered extent double freeing dete=
+ction
+> config: i386-buildonly-randconfig-003-20241211 (https://download.01.org/=
+0day-ci/archive/20241212/202412120136.6OwbbtZf-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab5=
+1eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arch=
+ive/20241212/202412120136.6OwbbtZf-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new ver=
+sion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412120136.6OwbbtZf-lk=
+p@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>     In file included from fs/btrfs/ordered-data.c:7:
+>     In file included from include/linux/blkdev.h:9:
+>     In file included from include/linux/blk_types.h:10:
+>     In file included from include/linux/bvec.h:10:
+>     In file included from include/linux/highmem.h:8:
+>     In file included from include/linux/cacheflush.h:5:
+>     In file included from arch/x86/include/asm/cacheflush.h:5:
+>     In file included from include/linux/mm.h:2223:
+>     include/linux/vmstat.h:518:36: warning: arithmetic between different=
+ enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enu=
+m-conversion]
+>       518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // ski=
+p "nr_"
+>           |                               ~~~~~~~~~~~ ^ ~~~
+>>> fs/btrfs/ordered-data.c:200:10: error: no member named 'finished_bitma=
+p' in 'struct btrfs_ordered_extent'
+>       200 |                 entry->finished_bitmap =3D bitmap_zalloc(
+>           |                 ~~~~~  ^
 
-7caa47151ab2e64 Tejun Heo   2019-08-28  1078  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1079  /*
-7caa47151ab2e64 Tejun Heo   2019-08-28  1080   * Update @iocg's `active` and `inuse` to @active and @inuse, update level
-b0853ab4a238c54 Tejun Heo   2020-09-01  1081   * weight sums and propagate upwards accordingly. If @save, the current margin
-b0853ab4a238c54 Tejun Heo   2020-09-01  1082   * is saved to be used as reference for later inuse in-period adjustments.
-7caa47151ab2e64 Tejun Heo   2019-08-28  1083   */
-b0853ab4a238c54 Tejun Heo   2020-09-01  1084  static void __propagate_weights(struct ioc_gq *iocg, u32 active, u32 inuse,
-b0853ab4a238c54 Tejun Heo   2020-09-01  1085  				bool save, struct ioc_now *now)
-7caa47151ab2e64 Tejun Heo   2019-08-28  1086  {
-7caa47151ab2e64 Tejun Heo   2019-08-28  1087  	struct ioc *ioc = iocg->ioc;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1088  	int lvl;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1089  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1090  	lockdep_assert_held(&ioc->lock);
-7caa47151ab2e64 Tejun Heo   2019-08-28  1091  
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1092  	/*
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1093  	 * For an active leaf node, its inuse shouldn't be zero or exceed
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1094  	 * @active. An active internal node's inuse is solely determined by the
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1095  	 * inuse to active ratio of its children regardless of @inuse.
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1096  	 */
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1097  	if (list_empty(&iocg->active_list) && iocg->child_active_sum) {
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1098  		inuse = DIV64_U64_ROUND_UP(active * iocg->child_inuse_sum,
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1099  					   iocg->child_active_sum);
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1100  	} else {
-db84a72af6be422 Tejun Heo   2020-09-01 @1101  		inuse = clamp_t(u32, inuse, 1, active);
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1102  	}
-db84a72af6be422 Tejun Heo   2020-09-01  1103  
-b0853ab4a238c54 Tejun Heo   2020-09-01  1104  	iocg->last_inuse = iocg->inuse;
-b0853ab4a238c54 Tejun Heo   2020-09-01  1105  	if (save)
-b0853ab4a238c54 Tejun Heo   2020-09-01  1106  		iocg->saved_margin = now->vnow - atomic64_read(&iocg->vtime);
-b0853ab4a238c54 Tejun Heo   2020-09-01  1107  
-db84a72af6be422 Tejun Heo   2020-09-01  1108  	if (active == iocg->active && inuse == iocg->inuse)
-db84a72af6be422 Tejun Heo   2020-09-01  1109  		return;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1110  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1111  	for (lvl = iocg->level - 1; lvl >= 0; lvl--) {
-7caa47151ab2e64 Tejun Heo   2019-08-28  1112  		struct ioc_gq *parent = iocg->ancestors[lvl];
-7caa47151ab2e64 Tejun Heo   2019-08-28  1113  		struct ioc_gq *child = iocg->ancestors[lvl + 1];
-7caa47151ab2e64 Tejun Heo   2019-08-28  1114  		u32 parent_active = 0, parent_inuse = 0;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1115  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1116  		/* update the level sums */
-7caa47151ab2e64 Tejun Heo   2019-08-28  1117  		parent->child_active_sum += (s32)(active - child->active);
-7caa47151ab2e64 Tejun Heo   2019-08-28  1118  		parent->child_inuse_sum += (s32)(inuse - child->inuse);
-e9f4eee9a0023ba Tejun Heo   2021-05-11  1119  		/* apply the updates */
-7caa47151ab2e64 Tejun Heo   2019-08-28  1120  		child->active = active;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1121  		child->inuse = inuse;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1122  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1123  		/*
-7caa47151ab2e64 Tejun Heo   2019-08-28  1124  		 * The delta between inuse and active sums indicates that
-5ba1add216fe822 Baolin Wang 2020-11-26  1125  		 * much of weight is being given away.  Parent's inuse
-7caa47151ab2e64 Tejun Heo   2019-08-28  1126  		 * and active should reflect the ratio.
-7caa47151ab2e64 Tejun Heo   2019-08-28  1127  		 */
-7caa47151ab2e64 Tejun Heo   2019-08-28  1128  		if (parent->child_active_sum) {
-7caa47151ab2e64 Tejun Heo   2019-08-28  1129  			parent_active = parent->weight;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1130  			parent_inuse = DIV64_U64_ROUND_UP(
-7caa47151ab2e64 Tejun Heo   2019-08-28  1131  				parent_active * parent->child_inuse_sum,
-7caa47151ab2e64 Tejun Heo   2019-08-28  1132  				parent->child_active_sum);
-7caa47151ab2e64 Tejun Heo   2019-08-28  1133  		}
-7caa47151ab2e64 Tejun Heo   2019-08-28  1134  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1135  		/* do we need to keep walking up? */
-7caa47151ab2e64 Tejun Heo   2019-08-28  1136  		if (parent_active == parent->active &&
-7caa47151ab2e64 Tejun Heo   2019-08-28  1137  		    parent_inuse == parent->inuse)
-7caa47151ab2e64 Tejun Heo   2019-08-28  1138  			break;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1139  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1140  		active = parent_active;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1141  		inuse = parent_inuse;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1142  	}
-7caa47151ab2e64 Tejun Heo   2019-08-28  1143  
-7caa47151ab2e64 Tejun Heo   2019-08-28  1144  	ioc->weights_updated = true;
-7caa47151ab2e64 Tejun Heo   2019-08-28  1145  }
-7caa47151ab2e64 Tejun Heo   2019-08-28  1146  
+I don't know why but it looks like IS_ENABLED() is not exactly doing the
+#ifdef #endif, thus those checks are not fully skipped in this case.
 
-:::::: The code at line 1101 was first introduced by commit
-:::::: db84a72af6be422abf2089a5896293590dda5066 blk-iocost: clamp inuse and skip noops in __propagate_weights()
+Anyway I'll change it to the more traditional #ifdef #endif instead.
 
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+Thanks for the report.
+Qu
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>     fs/btrfs/ordered-data.c:202:15: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       202 |                 if (!entry->finished_bitmap) {
+>           |                      ~~~~~  ^
+>     fs/btrfs/ordered-data.c:380:38: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       380 |                 nr_set =3D bitmap_count_set(ordered->finishe=
+d_bitmap, start_bit, nbits);
+>           |                                           ~~~~~~~  ^
+>     fs/btrfs/ordered-data.c:388:17: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       388 |                                    ordered->finished_bitmap)=
+;
+>           |                                    ~~~~~~~  ^
+>     fs/btrfs/messages.h:44:41: note: expanded from macro 'btrfs_crit'
+>        44 |         btrfs_printk(fs_info, KERN_CRIT fmt, ##args)
+>           |                                                ^~~~
+>     fs/btrfs/messages.h:27:32: note: expanded from macro 'btrfs_printk'
+>        27 |         _btrfs_printk(fs_info, fmt, ##args)
+>           |                                       ^~~~
+>     fs/btrfs/ordered-data.c:390:23: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       390 |                 bitmap_set(ordered->finished_bitmap, start_b=
+it, nbits);
+>           |                            ~~~~~~~  ^
+>     fs/btrfs/ordered-data.c:418:37: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       418 |                 if (WARN_ON(!bitmap_full(ordered->finished_b=
+itmap,
+>           |                                          ~~~~~~~  ^
+>     include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON=
+'
+>       123 |         int __ret_warn_on =3D !!(condition);                =
+              \
+>           |                                ^~~~~~~~~
+>     fs/btrfs/ordered-data.c:426:14: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       426 |                                 ordered->finished_bitmap);
+>           |                                 ~~~~~~~  ^
+>     fs/btrfs/messages.h:44:41: note: expanded from macro 'btrfs_crit'
+>        44 |         btrfs_printk(fs_info, KERN_CRIT fmt, ##args)
+>           |                                                ^~~~
+>     fs/btrfs/messages.h:27:32: note: expanded from macro 'btrfs_printk'
+>        27 |         _btrfs_printk(fs_info, fmt, ##args)
+>           |                                       ^~~~
+>     fs/btrfs/ordered-data.c:675:23: error: no member named 'finished_bit=
+map' in 'struct btrfs_ordered_extent'
+>       675 |                         bitmap_free(entry->finished_bitmap);
+>           |                                     ~~~~~  ^
+>     1 warning and 8 errors generated.
+>
+>
+> vim +200 fs/btrfs/ordered-data.c
+>
+>     147
+>     148	static struct btrfs_ordered_extent *alloc_ordered_extent(
+>     149				struct btrfs_inode *inode, u64 file_offset, u64 num_bytes,
+>     150				u64 ram_bytes, u64 disk_bytenr, u64 disk_num_bytes,
+>     151				u64 offset, unsigned long flags, int compress_type)
+>     152	{
+>     153		struct btrfs_ordered_extent *entry;
+>     154		int ret;
+>     155		u64 qgroup_rsv =3D 0;
+>     156
+>     157		if (flags &
+>     158		    ((1 << BTRFS_ORDERED_NOCOW) | (1 << BTRFS_ORDERED_PREALLOC)=
+)) {
+>     159			/* For nocow write, we can release the qgroup rsv right now */
+>     160			ret =3D btrfs_qgroup_free_data(inode, NULL, file_offset, num_b=
+ytes, &qgroup_rsv);
+>     161			if (ret < 0)
+>     162				return ERR_PTR(ret);
+>     163		} else {
+>     164			/*
+>     165			 * The ordered extent has reserved qgroup space, release now
+>     166			 * and pass the reserved number for qgroup_record to free.
+>     167			 */
+>     168			ret =3D btrfs_qgroup_release_data(inode, file_offset, num_byte=
+s, &qgroup_rsv);
+>     169			if (ret < 0)
+>     170				return ERR_PTR(ret);
+>     171		}
+>     172		entry =3D kmem_cache_zalloc(btrfs_ordered_extent_cache, GFP_NOF=
+S);
+>     173		if (!entry)
+>     174			return ERR_PTR(-ENOMEM);
+>     175
+>     176		entry->file_offset =3D file_offset;
+>     177		entry->num_bytes =3D num_bytes;
+>     178		entry->ram_bytes =3D ram_bytes;
+>     179		entry->disk_bytenr =3D disk_bytenr;
+>     180		entry->disk_num_bytes =3D disk_num_bytes;
+>     181		entry->offset =3D offset;
+>     182		entry->bytes_left =3D num_bytes;
+>     183		entry->inode =3D BTRFS_I(igrab(&inode->vfs_inode));
+>     184		entry->compress_type =3D compress_type;
+>     185		entry->truncated_len =3D (u64)-1;
+>     186		entry->qgroup_rsv =3D qgroup_rsv;
+>     187		entry->flags =3D flags;
+>     188		refcount_set(&entry->refs, 1);
+>     189		init_waitqueue_head(&entry->wait);
+>     190		INIT_LIST_HEAD(&entry->list);
+>     191		INIT_LIST_HEAD(&entry->log_list);
+>     192		INIT_LIST_HEAD(&entry->root_extent_list);
+>     193		INIT_LIST_HEAD(&entry->work_list);
+>     194		INIT_LIST_HEAD(&entry->bioc_list);
+>     195		init_completion(&entry->completion);
+>     196
+>     197		if (IS_ENABLED(CONFIG_BTRFS_DEBUG)) {
+>     198			struct btrfs_fs_info *fs_info =3D inode->root->fs_info;
+>     199
+>   > 200			entry->finished_bitmap =3D bitmap_zalloc(
+>     201				num_bytes >> fs_info->sectorsize_bits, GFP_NOFS);
+>     202			if (!entry->finished_bitmap) {
+>     203				kmem_cache_free(btrfs_ordered_extent_cache, entry);
+>     204				return ERR_PTR(-ENOMEM);
+>     205			}
+>     206		}
+>     207		/*
+>     208		 * We don't need the count_max_extents here, we can assume that=
+ all of
+>     209		 * that work has been done at higher layers, so this is truly t=
+he
+>     210		 * smallest the extent is going to get.
+>     211		 */
+>     212		spin_lock(&inode->lock);
+>     213		btrfs_mod_outstanding_extents(inode, 1);
+>     214		spin_unlock(&inode->lock);
+>     215
+>     216		return entry;
+>     217	}
+>     218
+>
+
