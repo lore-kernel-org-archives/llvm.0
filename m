@@ -1,206 +1,300 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp1.cs.Stanford.EDU (smtp1.cs.stanford.edu [171.64.64.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4571DE4EB;
-	Wed, 11 Dec 2024 17:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BED61DE4C1
+	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 17:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=171.64.64.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733937539; cv=none; b=SEwhuwkAqGIvYALy6f8WQbS0jf5a+PMf1D0mzbEaEkQH3Ylk58JzkbjW1e/kcy2J/IamyDgAj+IppVlcdaH6rxK06NwbVAvgvOscU9H/TIxVq1fUAftt8ySgLzzYjcAiwibs9oz8Fm04F8DScj88kw+onKkfBcUPx8E58RFNrsY=
+	t=1733938237; cv=none; b=kNYm+cQCaNdyqcIa5K8cb1oneW6+9SEomVmb8WsyBCdUTpckdjGvr2V+eHmjZtlqg9xRVIVFgkvXapJJUG6gt7pERpj5VgaVXM2aQ55sVM+QPA/xiZMAVK6ZcuQ8vTXEyHNNL5LH2jGB6LYSHv8emF9hZwIrXtMEQvX3lUuK5TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733937539; c=relaxed/simple;
-	bh=cO5FxiswgNGKsLtgOEU4kMDK52juWwgnR3QMy56n1mk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oSQ4NL6CPx4ySLW83KbZxgAwLQ5hOb4jOoX9gmEX1f+z5yzSQcaYvioJUTJv+OTA2zxTTOwBgKfvJA/7GKACs9p5GIFXIp6d90UEB4v507LAFKWI6EA3eseobep2E41NkYNNcXJ0EgMGeXK4Oh3C+/wJRAGQ5uG9d3/MjG1JYYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kqn0tjPp; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733938237; c=relaxed/simple;
+	bh=NUi/YIiJU2699Nw6gn48AB1Fxc2a1kNriBkg6y7AheA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mvRGdraCJmXUoZpu2cH3NunCyCqe7GtMzCpmA+TJhjbH0+yW6nMmeWrMG+onxPCnNe334QjwshvQhxODVXdjsHtl3s7xQy5GPzIXxohMy9JQqdrAaTmoglB7mnwTsfGrGQC/BSvhR0qh+5l0OMdAj8/2QMkTVLvKDwvbr7h4hQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cs.stanford.edu; spf=pass smtp.mailfrom=cs.stanford.edu; dkim=pass (2048-bit key) header.d=cs.stanford.edu header.i=@cs.stanford.edu header.b=C7/kTYrT; arc=none smtp.client-ip=171.64.64.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cs.stanford.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.stanford.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kqn0tjPp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733937538; x=1765473538;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cO5FxiswgNGKsLtgOEU4kMDK52juWwgnR3QMy56n1mk=;
-  b=Kqn0tjPpKCUb7uhaNy8Z/aYRdF0Ob64XHBqa9pxREUUrjVrUe6KTB9pA
-   GL3Icx6H9SxUQcDKqLH+JG1FY/tyq9CVR02FjTksVzpN1/6mBTzJBp3jP
-   wgYZhfs6k51p3nnzY6lDLNT/FkD0cD/YCtnj+DFJLPYbZg0jn5c+VHy4h
-   9lgCypll3e9M14QrMBPHEbHlOlMQ5iVO+UOR1ZMYVupRm88DgZHPC3m99
-   F1CpowxvgsSUqwjK7GAh8wPQso0fZkWTeKEjMk6h25wGWH8nKyjUUf8eL
-   oiFxk8pYrG2RNlaLHEACJ2Ci7Yf94UXsB4Q5y4XVR+EbPF/ThfrZMCzOI
-   Q==;
-X-CSE-ConnectionGUID: /SOwXPk0SEeS5n+cFCOa0g==
-X-CSE-MsgGUID: SHlJoIcAQJ2mctbH2AdLiw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="34203271"
-X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
-   d="scan'208";a="34203271"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 09:18:55 -0800
-X-CSE-ConnectionGUID: z2OexCP9RDOTZne8onaveA==
-X-CSE-MsgGUID: oWzO42XQRZuwPgcrWQNuAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="126824514"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 11 Dec 2024 09:18:52 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tLQML-0006vh-22;
-	Wed, 11 Dec 2024 17:18:49 +0000
-Date: Thu, 12 Dec 2024 01:18:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>, axboe@kernel.dk, hch@lst.de,
-	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, sagi@grimberg.me,
-	asml.silence@gmail.com, anuj20.g@samsung.com, joshi.k@samsung.com,
-	Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv13 10/11] nvme: register fdp parameters with the block
- layer
-Message-ID: <202412120111.L2w9GCZd-lkp@intel.com>
-References: <20241210194722.1905732-11-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=cs.stanford.edu header.i=@cs.stanford.edu header.b="C7/kTYrT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=cs.stanford.edu; s=cs2308; h=Content-Transfer-Encoding:Content-Type:Cc:To:
+	Subject:Message-ID:Date:From:In-Reply-To:References:MIME-Version:Sender:
+	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
+	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=WGqb2BlZ4Dq0QvIzemY0BUwW2/Ji9LXM1Y+iYBbQ59E=; t=1733938235; x=1734802235; 
+	b=C7/kTYrTuV3JaUuGcIbXZfma39r5hpTK6rs8qxdWpV8mDr1Q8tPxZc92L2AlbcVRfFCKTxJ7IkX
+	ztGbWdIXxC5BDcFda3YPhlW+2bVunelxrqI+PA1yUF9+Csd6V5CdUlJho76Zxn2Yfq1/RQTMhboXZ
+	W3q7IyFhUm6Vc5XXsQ7HOq2xZeT1H3NY0bFfonsDA21LhtSQv9OrFNLNkkXYbNop0tOA/z21Ei/Yv
+	XDDhD8vNZCJ4yvtBQ50meS/1mA+0R7m2HRdcFHtVJd5/berBcOKT6NvK8W9Y7fsijCPdBfK7mKwAd
+	vPIv3eRM6bk/5iDiqIwiBsLUNXxBE3fUJ+8Q==;
+Received: from mail-oa1-f47.google.com ([209.85.160.47]:58782)
+	by smtp1.cs.Stanford.EDU with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.94.2)
+	(envelope-from <ouster@cs.stanford.edu>)
+	id 1tLQXg-0004uG-CJ; Wed, 11 Dec 2024 09:30:34 -0800
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-29fad34bb62so1840085fac.1;
+        Wed, 11 Dec 2024 09:30:32 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWM7EWb9EvPRcT4j7MLxdCPg7lySpH1Y9jEAB4jK3dVYA8FYhJsQ85IqrAddDAbjmoL/N4d@lists.linux.dev, AJvYcCWmv4eZDpFQMD1O8M+6PuFyVLq4HvlELYWrJoQCQsxbIrq91dsvbeOWmMfwycn7uvJFJNzBmYaba/e+IUTVEw==@lists.linux.dev
+X-Gm-Message-State: AOJu0YzjWF85+ZIgjN8kc/in5+ZyG15HXJN59npv5RPBpyd+Ln50A56C
+	+YSI7AFb5JgEn1nN1/T8iqk0jgutYAFrJGeJ1m4Yt1Jl3w690BxJUhHoG24I4ZzEh3tgG6nXYQN
+	Wv2Kffwz+BUQFz/ZfsBZoROFuAjo=
+X-Google-Smtp-Source: AGHT+IGxkxXs8YZX33MkQ2ii2o46QxXMXXz0HOMnDww6voQQ4hoIceFuxqn6e2DeX92iO1zE4nHvrp/hCDLA/liPKPw=
+X-Received: by 2002:a05:6870:7a0a:b0:29d:c764:70e1 with SMTP id
+ 586e51a60fabf-2a3823e4d8bmr474329fac.17.1733938231618; Wed, 11 Dec 2024
+ 09:30:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241210194722.1905732-11-kbusch@meta.com>
+References: <20241209175131.3839-14-ouster@cs.stanford.edu> <202412110709.Kdjua3Pc-lkp@intel.com>
+In-Reply-To: <202412110709.Kdjua3Pc-lkp@intel.com>
+From: John Ousterhout <ouster@cs.stanford.edu>
+Date: Wed, 11 Dec 2024 09:29:55 -0800
+X-Gmail-Original-Message-ID: <CAGXJAmxvs3mhqw0xWiy6ppzNE+r9wJbrBjYa+_ZoRXJuh5oRNg@mail.gmail.com>
+Message-ID: <CAGXJAmxvs3mhqw0xWiy6ppzNE+r9wJbrBjYa+_ZoRXJuh5oRNg@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 12/12] net: homa: create Makefile and Kconfig
+To: kernel test robot <lkp@intel.com>
+Cc: netdev@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -1.0
+X-Spam-Level: 
+X-Scan-Signature: 056db2312ab85a437fb45f547310e25c
 
-Hi Keith,
+I have now fixed the problems found by the test robot.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on next-20241211]
-[cannot apply to brauner-vfs/vfs.all hch-configfs/for-next linus/master v6.13-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/fs-add-a-write-stream-field-to-the-kiocb/20241211-080803
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20241210194722.1905732-11-kbusch%40meta.com
-patch subject: [PATCHv13 10/11] nvme: register fdp parameters with the block layer
-config: arm-randconfig-003-20241211 (https://download.01.org/0day-ci/archive/20241212/202412120111.L2w9GCZd-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412120111.L2w9GCZd-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412120111.L2w9GCZd-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/nvme/host/core.c:8:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/nvme/host/core.c:2177:5: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    2176 |                          "failed to allocate %lu bytes for FDP config log\n",
-         |                                              ~~~
-         |                                              %zu
-    2177 |                          size);
-         |                          ^~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/nvme/host/core.c:2255:5: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    2254 |                          "failed to allocate %lu bytes for FDP io-mgmt\n",
-         |                                              ~~~
-         |                                              %zu
-    2255 |                          size);
-         |                          ^~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   3 warnings generated.
+-John-
 
 
-vim +2177 drivers/nvme/host/core.c
-
-  2153	
-  2154	static int nvme_query_fdp_granularity(struct nvme_ctrl *ctrl,
-  2155					      struct nvme_ns_info *info, u8 fdp_idx)
-  2156	{
-  2157		struct nvme_fdp_config_log hdr, *h;
-  2158		struct nvme_fdp_config_desc *desc;
-  2159		size_t size = sizeof(hdr);
-  2160		int i, n, ret;
-  2161		void *log;
-  2162	
-  2163		ret = nvme_get_log_lsi(ctrl, 0, NVME_LOG_FDP_CONFIGS, 0,
-  2164				       NVME_CSI_NVM, &hdr, size, 0, info->endgid);
-  2165		if (ret) {
-  2166			dev_warn(ctrl->device,
-  2167				 "FDP configs log header status:0x%x endgid:%x\n", ret,
-  2168				 info->endgid);
-  2169			return ret;
-  2170		}
-  2171	
-  2172		size = le32_to_cpu(hdr.sze);
-  2173		h = kzalloc(size, GFP_KERNEL);
-  2174		if (!h) {
-  2175			dev_warn(ctrl->device,
-  2176				 "failed to allocate %lu bytes for FDP config log\n",
-> 2177				 size);
-  2178			return -ENOMEM;
-  2179		}
-  2180	
-  2181		ret = nvme_get_log_lsi(ctrl, 0, NVME_LOG_FDP_CONFIGS, 0,
-  2182				       NVME_CSI_NVM, h, size, 0, info->endgid);
-  2183		if (ret) {
-  2184			dev_warn(ctrl->device,
-  2185				 "FDP configs log status:0x%x endgid:%x\n", ret,
-  2186				 info->endgid);
-  2187			goto out;
-  2188		}
-  2189	
-  2190		n = le16_to_cpu(h->numfdpc) + 1;
-  2191		if (fdp_idx > n) {
-  2192			dev_warn(ctrl->device, "FDP index:%d out of range:%d\n",
-  2193				 fdp_idx, n);
-  2194			/* Proceed without registering FDP streams */
-  2195			ret = 0;
-  2196			goto out;
-  2197		}
-  2198	
-  2199		log = h + 1;
-  2200		desc = log;
-  2201		for (i = 0; i < fdp_idx; i++) {
-  2202			log += le16_to_cpu(desc->dsze);
-  2203			desc = log;
-  2204		}
-  2205	
-  2206		if (le32_to_cpu(desc->nrg) > 1) {
-  2207			dev_warn(ctrl->device, "FDP NRG > 1 not supported\n");
-  2208			ret = 0;
-  2209			goto out;
-  2210		}
-  2211	
-  2212		info->runs = le64_to_cpu(desc->runs);
-  2213	out:
-  2214		kfree(h);
-  2215		return ret;
-  2216	}
-  2217	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Tue, Dec 10, 2024 at 4:32=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi John,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on net-next/main]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/John-Ousterhout/in=
+et-homa-define-user-visible-API-for-Homa/20241210-055415
+> base:   net-next/main
+> patch link:    https://lore.kernel.org/r/20241209175131.3839-14-ouster%40=
+cs.stanford.edu
+> patch subject: [PATCH net-next v3 12/12] net: homa: create Makefile and K=
+config
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/2024=
+1211/202412110709.Kdjua3Pc-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51=
+eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20241211/202412110709.Kdjua3Pc-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412110709.Kdjua3Pc-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from net/homa/homa_outgoing.c:7:
+>    In file included from net/homa/homa_impl.h:12:
+>    In file included from include/linux/audit.h:13:
+>    In file included from include/linux/ptrace.h:10:
+>    In file included from include/linux/pid_namespace.h:7:
+>    In file included from include/linux/mm.h:2223:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
+numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
+onversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
+"nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+> >> net/homa/homa_outgoing.c:809:6: warning: variable 'checks' set but not=
+ used [-Wunused-but-set-variable]
+>      809 |         int checks =3D 0;
+>          |             ^
+>    5 warnings generated.
+> --
+>    In file included from net/homa/homa_sock.c:5:
+>    In file included from net/homa/homa_impl.h:12:
+>    In file included from include/linux/audit.h:13:
+>    In file included from include/linux/ptrace.h:10:
+>    In file included from include/linux/pid_namespace.h:7:
+>    In file included from include/linux/mm.h:2223:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
+numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
+onversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
+"nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+> >> net/homa/homa_sock.c:224:6: warning: variable 'i' set but not used [-W=
+unused-but-set-variable]
+>      224 |         int i;
+>          |             ^
+>    5 warnings generated.
+> --
+>    In file included from net/homa/homa_timer.c:7:
+>    In file included from net/homa/homa_impl.h:12:
+>    In file included from include/linux/audit.h:13:
+>    In file included from include/linux/ptrace.h:10:
+>    In file included from include/linux/pid_namespace.h:7:
+>    In file included from include/linux/mm.h:2223:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
+numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
+onversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
+"nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+>    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
+numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
+enum-conversion]
+>      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+> >> net/homa/homa_timer.c:106:6: warning: variable 'total_rpcs' set but no=
+t used [-Wunused-but-set-variable]
+>      106 |         int total_rpcs =3D 0;
+>          |             ^
+>    5 warnings generated.
+>
+>
+> vim +/checks +809 net/homa/homa_outgoing.c
+>
+> 537f41147b3131 John Ousterhout 2024-12-09  796
+> 537f41147b3131 John Ousterhout 2024-12-09  797  /**
+> 537f41147b3131 John Ousterhout 2024-12-09  798   * homa_add_to_throttled(=
+) - Make sure that an RPC is on the throttled list
+> 537f41147b3131 John Ousterhout 2024-12-09  799   * and wake up the pacer =
+thread if necessary.
+> 537f41147b3131 John Ousterhout 2024-12-09  800   * @rpc:     RPC with out=
+bound packets that have been granted but can't be
+> 537f41147b3131 John Ousterhout 2024-12-09  801   *           sent because=
+ of NIC queue restrictions. Must be locked by caller.
+> 537f41147b3131 John Ousterhout 2024-12-09  802   */
+> 537f41147b3131 John Ousterhout 2024-12-09  803  void homa_add_to_throttle=
+d(struct homa_rpc *rpc)
+> 537f41147b3131 John Ousterhout 2024-12-09  804          __must_hold(&rpc-=
+>bucket->lock)
+> 537f41147b3131 John Ousterhout 2024-12-09  805  {
+> 537f41147b3131 John Ousterhout 2024-12-09  806          struct homa *homa=
+ =3D rpc->hsk->homa;
+> 537f41147b3131 John Ousterhout 2024-12-09  807          struct homa_rpc *=
+candidate;
+> 537f41147b3131 John Ousterhout 2024-12-09  808          int bytes_left;
+> 537f41147b3131 John Ousterhout 2024-12-09 @809          int checks =3D 0;
+> 537f41147b3131 John Ousterhout 2024-12-09  810          __u64 now;
+> 537f41147b3131 John Ousterhout 2024-12-09  811
+> 537f41147b3131 John Ousterhout 2024-12-09  812          if (!list_empty(&=
+rpc->throttled_links))
+> 537f41147b3131 John Ousterhout 2024-12-09  813                  return;
+> 537f41147b3131 John Ousterhout 2024-12-09  814          now =3D sched_clo=
+ck();
+> 537f41147b3131 John Ousterhout 2024-12-09  815          homa->throttle_ad=
+d =3D now;
+> 537f41147b3131 John Ousterhout 2024-12-09  816          bytes_left =3D rp=
+c->msgout.length - rpc->msgout.next_xmit_offset;
+> 537f41147b3131 John Ousterhout 2024-12-09  817          homa_throttle_loc=
+k(homa);
+> 537f41147b3131 John Ousterhout 2024-12-09  818          list_for_each_ent=
+ry_rcu(candidate, &homa->throttled_rpcs,
+> 537f41147b3131 John Ousterhout 2024-12-09  819                           =
+       throttled_links) {
+> 537f41147b3131 John Ousterhout 2024-12-09  820                  int bytes=
+_left_cand;
+> 537f41147b3131 John Ousterhout 2024-12-09  821
+> 537f41147b3131 John Ousterhout 2024-12-09  822                  checks++;
+> 537f41147b3131 John Ousterhout 2024-12-09  823
+> 537f41147b3131 John Ousterhout 2024-12-09  824                  /* Watch =
+out: the pacer might have just transmitted the last
+> 537f41147b3131 John Ousterhout 2024-12-09  825                   * packet=
+ from candidate.
+> 537f41147b3131 John Ousterhout 2024-12-09  826                   */
+> 537f41147b3131 John Ousterhout 2024-12-09  827                  bytes_lef=
+t_cand =3D candidate->msgout.length -
+> 537f41147b3131 John Ousterhout 2024-12-09  828                           =
+       candidate->msgout.next_xmit_offset;
+> 537f41147b3131 John Ousterhout 2024-12-09  829                  if (bytes=
+_left_cand > bytes_left) {
+> 537f41147b3131 John Ousterhout 2024-12-09  830                          l=
+ist_add_tail_rcu(&rpc->throttled_links,
+> 537f41147b3131 John Ousterhout 2024-12-09  831                           =
+                 &candidate->throttled_links);
+> 537f41147b3131 John Ousterhout 2024-12-09  832                          g=
+oto done;
+> 537f41147b3131 John Ousterhout 2024-12-09  833                  }
+> 537f41147b3131 John Ousterhout 2024-12-09  834          }
+> 537f41147b3131 John Ousterhout 2024-12-09  835          list_add_tail_rcu=
+(&rpc->throttled_links, &homa->throttled_rpcs);
+> 537f41147b3131 John Ousterhout 2024-12-09  836  done:
+> 537f41147b3131 John Ousterhout 2024-12-09  837          homa_throttle_unl=
+ock(homa);
+> 537f41147b3131 John Ousterhout 2024-12-09  838          wake_up_process(h=
+oma->pacer_kthread);
+> 537f41147b3131 John Ousterhout 2024-12-09  839  }
+> 537f41147b3131 John Ousterhout 2024-12-09  840
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
