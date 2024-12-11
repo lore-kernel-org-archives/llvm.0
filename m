@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B8C1D63E3;
-	Wed, 11 Dec 2024 08:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF661A83E9;
+	Wed, 11 Dec 2024 09:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733905225; cv=none; b=cNn6nS1KN4ZWnOz5Gdl609NlBipMomzY6kupT26hu9KhCX/XW4aN1kZZ35lrh2Lw+W7EEG6c1RB3sUZE7Ue2pX2VRNSF5zCSi0yB5SW+Xoyxa4vnkwoZ4/By12GXLYji8EvWNev26AeD5VBgB06RRaF00SeeWFbi0ki1/ThBT8E=
+	t=1733909493; cv=none; b=DzrSZqhe+UKeSeEcIr0GqIP5244E9miHimEBos0o0ej6eMQtrcyQKDH8wg/jV8Ne5n2pRm/AX5ZmBzZd9AoRJfxQh921gIjLoD2fJjRMfbESJ3b+Rd1Zog8t8QYQ9Kk8SBFlVvsDXINfIHRacIAhUCEAB7jWieGh/pphvnASWJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733905225; c=relaxed/simple;
-	bh=zXMCh5sqct9h/IPu7Bf0WTK+X+p590u/gwwEPWr8FQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=miGiDvBN3IbODlXPEQ02im0OBWYo+oUdk1Wwkj7FhHFqDPqeLS+sb2AcvC/0JnEtAtA2YXoQXpHLxcZsgAuOIbI67i4duiGmIbYfiyWsjaQTLN6Ev84BuFBqRc1SK8ajyuqrgCA3Rchh9E//cSPDxdl+MvtxCv3/soh5YBIa3p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NxvYBSWX; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733909493; c=relaxed/simple;
+	bh=n5YgshR1sFfXUiS//KEredRhU0DpugW9DrAjNrcfVvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VnlE9XRywsBmyfvb0Quh6p4GverWV73+oAsSTzFEzKJTWhQAcXkxiHTQQ+kMRIz6Jyf3+nyOwHrwjd2ugTXhAtA8M1Np0SbGQSKSwFEcgE/E2XG9kYSxn/rwBBcPNTLGFbxmBL2zb8DlCUraG77HfkXuTE7+lCFcPe41sPXItIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=ih91x07p; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NxvYBSWX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733905224; x=1765441224;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zXMCh5sqct9h/IPu7Bf0WTK+X+p590u/gwwEPWr8FQQ=;
-  b=NxvYBSWXYcO8shRx4GBX6lTpPLUPzxYfK3j8PsVbUJySTav6NAWlHENm
-   IimBZOpRJNWL+e5bAq8F2CXx7MplSQkQY+Zrx/XJd45+aTv2HTeWhUu31
-   rCbscIhgYLEBRMI3x+6p3Vi0FX6G6gYFMDKQRO4NUELzU6fJCLGEYG2cm
-   +XPWSOO7ce3Z7KQQUf1Gyk3Ui9o2BDneLI34wY6gnqZlYpTE8NDN1w9lX
-   CGgSbqRHiPxU9TiCsv3Gavw0DAF123NmEPv3IlFpo4QWgCf7B2CSQiEVt
-   MsanZjvgeo5+OjVItVoEf68VEP7N008f8p7Pr+q9tMcf0aKkcW30yRlF5
-   Q==;
-X-CSE-ConnectionGUID: +3ZGhQogSMWCa0FccLX4KA==
-X-CSE-MsgGUID: Npvgu7UhS9uXCPlLB37jnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="37961065"
-X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
-   d="scan'208";a="37961065"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 00:20:23 -0800
-X-CSE-ConnectionGUID: XXOiYFkQSWmcmLkRqjy+8A==
-X-CSE-MsgGUID: UbbBLE++TOWEjKd+GDYYqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118954187"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Dec 2024 00:20:21 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tLHxD-0006R1-1E;
-	Wed, 11 Dec 2024 08:20:19 +0000
-Date: Wed, 11 Dec 2024 16:19:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	Boqun Feng <boqun.feng@gmail.com>
-Subject: error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in
- crate `$crate::bindings`
-Message-ID: <202412111617.7lVvmoPB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="ih91x07p"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=fEl58DL4MAFxwTJpgb3U+ILMMojCdQUomfAFX9LGcFA=; b=ih91x07ptKzgvYvaZFqB8HkGp0
+	S3jxXecIsMf8iPyMFc1jli0GDmZBr3S8IDuY3/RrzuhQzzE0vuFQXnBm9ptKMVD6RbIfXDjr04OHW
+	+sGtLQudD91dYkQ5MCBnIemPulnRszwNSGQnSMSapehxH7rubyqEfSJ//Eq7pAQFltq4qIXESOlFe
+	Qp2GhLRc6LwKkk9NVVVmTZhRqWw8qm+jCN4BMuBI/Krq8+HkadFPGWVGSHi5xbAPVxmweeSU2+3ns
+	WnraUcKtzmmK1P6GTLHRIfKVgHju4tyY9OC0bOWnEM9Fo28w00N7FZm/TMCDQkiT2wZ2c0dtajH2M
+	JLOkT+3g==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1tLIqe-000iLO-0Q;
+	Wed, 11 Dec 2024 17:30:57 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 11 Dec 2024 17:30:56 +0800
+Date: Wed, 11 Dec 2024 17:30:56 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v8 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
+ engine support
+Message-ID: <Z1lb0ImxhhFs4Kuz@gondor.apana.org.au>
+References: <20241210204853.18765-1-ansuelsmth@gmail.com>
+ <20241210204853.18765-4-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,48 +63,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241210204853.18765-4-ansuelsmth@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f92f4749861b06fed908d336b4dee1326003291b
-commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 rust: samples: add tracepoint to Rust sample
-date:   5 weeks ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20241211/202412111617.7lVvmoPB-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241211/202412111617.7lVvmoPB-lkp@intel.com/reproduce)
+On Tue, Dec 10, 2024 at 09:48:33PM +0100, Christian Marangi wrote:
+>
+> +	/*
+> +	 * Consume remaining data.
+> +	 * 1. Loop until we consume all the data in block of 64bytes
+> +	 * 2. Send full block of 64bytes
+> +	 * 3. Skip sending last block for future update() or for final() to
+> +	 *    enable HASH_FINALIZE bit.
+> +	 */
+> +	while (to_consume > 0) {
+> +		int to_read = min(to_consume, SHA256_BLOCK_SIZE);
+> +
+> +		block = kzalloc(sizeof(*block), GFP_KERNEL);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412111617.7lVvmoPB-lkp@intel.com/
+You should avoid allocating memory.  If you really must do it,
+then it needs to be GFP_ATOMIC, and your algorithm needs to set
+CRYPTO_ALG_ALLOCATES_MEMORY which means that it won't be used
+by the storage layer as memory allocations may lead to dead-lock.
 
-All errors (new ones prefixed by >>):
+The preferred way to access extra memory is through the request
+context structure.
 
->> error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in crate `$crate::bindings`
-   --> samples/rust/rust_print.rs:87:5
-   |
-   87 | /     kernel::declare_trace! {
-   88 | |         /// # Safety
-   89 | |         ///
-   90 | |         /// Always safe to call.
-   91 | |         unsafe fn rust_sample_loaded(magic: c_int);
-   92 | |     }
-   | |_____^ not found in `$crate::bindings`
-   |
-   = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` in crate `$crate::bindings`
-   --> samples/rust/rust_print.rs:87:5
-   |
-   87 | /     kernel::declare_trace! {
-   88 | |         /// # Safety
-   89 | |         ///
-   90 | |         /// Always safe to call.
-   91 | |         unsafe fn rust_sample_loaded(magic: c_int);
-   92 | |     }
-   | |_____^ not found in `$crate::bindings`
-   |
-   = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
-
+Cheers,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
