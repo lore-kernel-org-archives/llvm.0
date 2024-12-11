@@ -1,133 +1,150 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B394A2210F7
-	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 11:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D33238E23;
+	Wed, 11 Dec 2024 12:32:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733917757; cv=none; b=lXRIu0RjgebQ8mLGgFgWYQvJXjRne/itdz8uFBMHt1V1hh6fvurOLwLcY3lt7sJ6Tbk6oIi6mlpcNHE7twqgrVuEbUvi1+VnsdEudQeoChd808upzPLcSHQ68ubdPXRvu65euyhPiZn5vkN9UfzHLSkqIAPvu4pKBX7+clutyAc=
+	t=1733920356; cv=none; b=nC8a+lcOOrlD0oHhA+M4zPqD2NAiYiaIpMQbiEssz9hPq1jnxQKqggfKV+n/W+DJX2KZzIgf4v72Q1mwiiPWsOuZGXyhPvouRcctlYNUrZ3xabFbUaiuc2NdilNst6vh55uuvMTgnyIeVgweTveBbF6ErDw4nj5rQT1SDjgQX8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733917757; c=relaxed/simple;
-	bh=Afz7Md+4SGxygkYzcj/QROHNaaIWlCVNEawMwRt3y44=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H4IdhZkyxc+TyTSzrlAq6HO+Gna60Ji4deVBeiqS5NdkU+qhHGbIf1uHR+6yFY1/qz4FBGbl6690uVIdeNuVl4dQPxTrTd0fDkNPJpR39UGxGryJSwsEgHU/FYfqnTpT75auCziiE7ErIIqlBrjEDE0k64DgZYiFLpXqfjvqM2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KfZSD0Xb; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1733920356; c=relaxed/simple;
+	bh=71wI1DFvaEWtKNoUNXYVXtT26U3V83DpBv8RT4vrESo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OKnbgHAuFR4kzEtbvOKHOvKM71OGRNooG1IgY4I9rj7RbXkBKUQLb7qyb9aAn1R5T8N7mbhPrvTvy0parunOcMeG+YZzpHTxsY/PCr++hVvNyLbWEXF2ExkldG+mOPxW1dPziLpUWQyFab9KtPeGs1csErSoWnOkHUgw3jhxtQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T3/A7cS4; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KfZSD0Xb"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4361c705434so4314555e9.3
-        for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 03:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733917753; x=1734522553; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F2EqaIbo3wdkBMFqNSfSBUJWTerrNTKyiQvdFD0aob0=;
-        b=KfZSD0XbQaid/TWdvKR+Cg/8MHc14QMkn06lILTl2B5eBl6CB7mUGf9CGDpA3A2xwy
-         vEx8U3t38GV4l9ep4cKAO0+972E/FiGBQ82B08WASpSok4mHeO9r3+nxqdJYCh+99Q8W
-         y36QwaG6GD13vb3SXt022XZoibDinK8TpWeygnG741Ce0wiwyozt9tQfBPS47Z9aZeJO
-         5pPS3ZSOS592t+c0niEIqNpRLfnvkVyfwDCxRPyebHNgP5Ri0B77wCWhzNl4zEOF+L/8
-         JJv6UYYaEeWucaR6IpQjegVBkjHjE9ztscV7EktSLB177vH8vmIbrNhYHlVMV2R+Uith
-         3OFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733917753; x=1734522553;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F2EqaIbo3wdkBMFqNSfSBUJWTerrNTKyiQvdFD0aob0=;
-        b=ZlCo0f0S/qBgR5kaWjzKy9ULG+hONOzOnRETNe5LoW4zE4ViR0V7KLU83X7zFuLWLO
-         fschJ8Vz1qiDiOe9dg7knI9c2m3CieS3HaceqqyARnOaTb9n+w2yKGcHO7sR5acVCXCI
-         KN+d1xTpfQ7Nek6AP7Wk3tRXxCKbyt1loK20v36ouxuDcrXXGrsJCMLdvPs4co/BblSD
-         D+hkI7I96oAkLQmNQ1/J1wY8vaTzhKHXlKyYnLgs5S4qo/D4LjvIU51JRxBdCjag0f1Z
-         mYa5Wsn2R2qfDjoAgCUozwNGlew2yISS9q4Wi9OG8nImD2ywdnC75QIMtCfPmmblVJZZ
-         +Nug==
-X-Gm-Message-State: AOJu0Yz7ICTXdDqJhTke2DJvKKpKNqOL0n0VwoiFSmNSgNhvTusGnI97
-	WVJXzv08RcmfnLivefh9rKeKXLHLJlD55dBmFeq0vKGzyZMOnFycc0mRAz8WtD30u5JQGZCo/bS
-	QCfdNl0z/pfl70AZgYldtPCoam+/n+y5GRmx5
-X-Gm-Gg: ASbGnctGNZSmtfCwHkaY5xwIRKLfIaGisY579wrSLwFXXsW5to8Xdw3XvBxPCCV915d
-	JZjVFGP+tm3lgcosz6kmfZcr0P803o6RbGCAI1bXFZJkzaY1jRFA1dy4pOQY7ivt8AA==
-X-Google-Smtp-Source: AGHT+IEgqLUMUT+juj9Mz/4TVFLG854CMxmP4SkHc3G7aR8QuFtzd3qYLUl66jeKf0yyTAiDhmt6EUqT8QmMjt4DZac=
-X-Received: by 2002:a5d:64aa:0:b0:385:e0d6:fb48 with SMTP id
- ffacd0b85a97d-3864ce894b6mr2199747f8f.7.1733917752950; Wed, 11 Dec 2024
- 03:49:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T3/A7cS4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733920354; x=1765456354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=71wI1DFvaEWtKNoUNXYVXtT26U3V83DpBv8RT4vrESo=;
+  b=T3/A7cS4rJTu7zNAd5NIQXEtPg3jbRPKW1MmphqEM2lA/EC1fgCSw4vm
+   VFMZrSBKf2wIukVQVy60s/4iah6TIDTWCckwqVjFJUGpsr5dJGIKwGUfg
+   SJOfBIsCEnEtDwKJjEBRjL0HRh7VyvXQaSvIQ7tZ/4ADsRd3RzlN6LyY+
+   gcEr6mVHwc49uSNlVA+eAnNO3LEGxQemyJ1Jzz09WBTgqqH4tgdJF551K
+   QH5Mm59jmIGhcJHUbaaEerFpCIWEWVjaVff8nbstSYJ2WjZnLq5wMQeZu
+   XyprFrBEk4v2n3/Jd2q4Azj9MsBcHCy15DwceYRKzm0ByV4rG63G5N4sd
+   g==;
+X-CSE-ConnectionGUID: rwMteYHOQbaLgt7+aPMMoA==
+X-CSE-MsgGUID: Z7ztWFZ9QZO5QjF+NYt/fA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="34197457"
+X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
+   d="scan'208";a="34197457"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 04:32:33 -0800
+X-CSE-ConnectionGUID: UDtcslNASIWMgW0uxxZpQg==
+X-CSE-MsgGUID: xxzsp89jQZOVGtVWxIutiA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
+   d="scan'208";a="95856342"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 11 Dec 2024 04:32:29 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tLLtD-0006dx-13;
+	Wed, 11 Dec 2024 12:32:27 +0000
+Date: Wed, 11 Dec 2024 20:32:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Damien Le Moal <dlemoal@kernel.org>, linux-nvme@lists.infradead.org,
+	Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>, linux-pci@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+	Niklas Cassel <cassel@kernel.org>
+Subject: Re: [PATCH v3 16/17] nvmet: New NVMe PCI endpoint target driver
+Message-ID: <202412112016.qpAKrNxI-lkp@intel.com>
+References: <20241210093408.105867-17-dlemoal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202412111617.7lVvmoPB-lkp@intel.com>
-In-Reply-To: <202412111617.7lVvmoPB-lkp@intel.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 11 Dec 2024 12:49:01 +0100
-Message-ID: <CAH5fLgjmtuZ7Sxp49GoGC079sXqS4wmsEmZKM-T4Mh9FycDYGQ@mail.gmail.com>
-Subject: Re: error[E0425]: cannot find value `__tracepoint_rust_sample_loaded`
- in crate `$crate::bindings`
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
-	Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241210093408.105867-17-dlemoal@kernel.org>
 
-On Wed, Dec 11, 2024 at 9:20=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   f92f4749861b06fed908d336b4dee1326003291b
-> commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 rust: samples: add trace=
-point to Rust sample
-> date:   5 weeks ago
-> config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/202=
-41211/202412111617.7lVvmoPB-lkp@intel.com/config)
-> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51=
-eccf88f5321e7c60591c5546b254b6afab99)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20241211/202412111617.7lVvmoPB-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202412111617.7lVvmoPB-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in c=
-rate `$crate::bindings`
->    --> samples/rust/rust_print.rs:87:5
->    |
->    87 | /     kernel::declare_trace! {
->    88 | |         /// # Safety
->    89 | |         ///
->    90 | |         /// Always safe to call.
->    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
->    92 | |     }
->    | |_____^ not found in `$crate::bindings`
->    |
->    =3D note: this error originates in the macro `kernel::declare_trace` (=
-in Nightly builds, run with -Z macro-backtrace for more info)
-> --
-> >> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` =
-in crate `$crate::bindings`
->    --> samples/rust/rust_print.rs:87:5
->    |
->    87 | /     kernel::declare_trace! {
->    88 | |         /// # Safety
->    89 | |         ///
->    90 | |         /// Always safe to call.
->    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
->    92 | |     }
->    | |_____^ not found in `$crate::bindings`
->    |
->    =3D note: this error originates in the macro `kernel::declare_trace` (=
-in Nightly builds, run with -Z macro-backtrace for more info)
+Hi Damien,
 
-Would it be possible to update the bindgen version used by this robot?
-See commit b2603f8ac821 ("rust: warn on bindgen < 0.69.5 and libclang
->=3D 19.1") for details on why.
+kernel test robot noticed the following build errors:
 
-Alice
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v6.13-rc2 next-20241211]
+[cannot apply to hch-configfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Le-Moal/nvmet-Add-vendor_id-and-subsys_vendor_id-subsystem-attributes/20241210-174321
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20241210093408.105867-17-dlemoal%40kernel.org
+patch subject: [PATCH v3 16/17] nvmet: New NVMe PCI endpoint target driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241211/202412112016.qpAKrNxI-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241211/202412112016.qpAKrNxI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412112016.qpAKrNxI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/nvme/target/pci-ep.c:11:
+   In file included from include/linux/dmaengine.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/nvme/target/pci-ep.c:658:9: error: call to undeclared function 'nvme_opcode_str'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     658 |         return nvme_opcode_str(iod->sq->qid, iod->cmd.common.opcode);
+         |                ^
+>> drivers/nvme/target/pci-ep.c:658:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'const char *' [-Wint-conversion]
+     658 |         return nvme_opcode_str(iod->sq->qid, iod->cmd.common.opcode);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 2 errors generated.
+
+
+vim +/nvme_opcode_str +658 drivers/nvme/target/pci-ep.c
+
+   655	
+   656	static inline const char *nvmet_pciep_iod_name(struct nvmet_pciep_iod *iod)
+   657	{
+ > 658		return nvme_opcode_str(iod->sq->qid, iod->cmd.common.opcode);
+   659	}
+   660	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
