@@ -1,59 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DB81A2872;
-	Wed, 11 Dec 2024 21:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0281A841F;
+	Wed, 11 Dec 2024 22:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733954173; cv=none; b=rdd0QWZqf5BqnFjLJdxo/wOlxsiCZMG0xqFyT/Na2hFtzB0UMR4wHJXrVIiZepPiNknX00/yuOvAgx0w9l16iP1vd1hUl0UMw1U3rfxEdXwW88LjBk/PQHeBi43WlO8S+7xT0Vh/OOlYWR9kVB2h/5C8bHtK2la6zM8pjNVCvGo=
+	t=1733955442; cv=none; b=CfhbYESaN4WPhrz3nmEKHXFhZnrnBUYS4akkbzgNiTanELBvfo1SyU3tcnl6ZBgEJ4I7+SrdPibYnSu6Tr/H36907ch77UQ2sy6iKx0OMhbj6yNKWvNHBKnYVYFfSk86yP1QoWZ57Ljw0yPy1XITuiOP1l6F5AOHRlZnbg9VYrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733954173; c=relaxed/simple;
-	bh=PxkaDCI1QYgQbqTeAqt2TX6uojv6WPrRZRKP4ilPtog=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lsnd3bPOR6nrF64S7V74IlNEGgCnwK/lfpcRswbsbkSziQnWRjyxmp7BZBKFMYSTrStoIcZ76jb+A+GIY3CRNEMUhY7XmE42eoswyHLThFG9tw39+HfHHQGpYzI6BTxSmopFKsysKAQ2ko8NxY1nJrqGQ87/JdIyeU6PJrYJGHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IDMrGWNs; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1733955442; c=relaxed/simple;
+	bh=E5xbxd34Ap4a+5uIuZu8Xvnmg/2vPzv6AOe5ovtfTok=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nXeT2YsYhD73CSPic8oka0s4dt/LNKLVQoX3z4727YXBmpWfn0Fv+fLOoWBuB6HVCioe1AMn4MPOZIKyZkqKBqJ8ZAN9kxPafQBQ9Bc8+JfqGqtz/SKfFhz64tT57U/MQ4fek9tdIFs32cZU42gibZ5t5XVN9VRTvKzkP8dFccE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZwsfuX0Z; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IDMrGWNs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZwsfuX0Z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733954171; x=1765490171;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PxkaDCI1QYgQbqTeAqt2TX6uojv6WPrRZRKP4ilPtog=;
-  b=IDMrGWNsEuP/hQiUawejFlpEPcIasA0lsyEchOHCPFWS8jnnX1ig9BK2
-   MVv9dHC2LbcDnyp6VTNbqXGFHjCd9HhYv/He2aHa2FYBxyDwI3s90z690
-   TY0hVEhOT94W8p78ZERu3sqxMiutIUux1bpyNoKliYDCCCAOENZOA9sVx
-   UxewxuAWHeEK+DGqx2NMnksZilYfgo9aET5UjEpBJQQ82GjUOYmS0devd
-   8fRGrpcb412u6Px3YAdF+n3J6pdHxFlkaIwDjhCLkgYlA7Fk+gTBKNlOn
-   T1BuwaYGyOWan2jQZDYz1NHiIWScTCb8NwXlx6upKWWTTPJGYDIApN8D4
-   A==;
-X-CSE-ConnectionGUID: b6BEGdJCReC5Y15hsiOxBA==
-X-CSE-MsgGUID: FXvOvbH+SYSTP67AXJKodg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="34272972"
+  t=1733955440; x=1765491440;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E5xbxd34Ap4a+5uIuZu8Xvnmg/2vPzv6AOe5ovtfTok=;
+  b=ZwsfuX0Zx1x/sMerkCWj2fz75n5Jcvx3Yg6EDDyUeA7seqCnPz1BiS8e
+   GaEJRot7ZM3ZjWtK7cW9wde5tIHDep1l13IlkXp+UwXyAMRFF+WSM6Ng/
+   fHOMn2zKQmIMRXS3tyfd6mmUxuBhL1xu0D+XdyiZ7JAjzaVnW0O/U/w4G
+   XtD7X1tVZz52pZmPfD/AMgXhm/hHr53GP1h5gWwO1eXSSEefVWEy3rdEk
+   /F52A3+IeTQncNp6qhwHBo+6VLUyhfSluY9HUsvnop4OQRjQVAxqF9JvJ
+   QnkXSoA9sb8wmvoHUaPJ0R2RKVtWMGIVYoUU3GwBMIF6C3I1Fj8SnZKNV
+   Q==;
+X-CSE-ConnectionGUID: Kc1PHuj4TGem2O6Tf5a/sg==
+X-CSE-MsgGUID: 7Bp5j63vTP24H6kPf9JAzw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="38140539"
 X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
-   d="scan'208";a="34272972"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 13:56:11 -0800
-X-CSE-ConnectionGUID: WfWj9JQXTjW74FrreRXB6A==
-X-CSE-MsgGUID: kQUzB44TRFuxjoPfcSxB1Q==
+   d="scan'208";a="38140539"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 14:17:19 -0800
+X-CSE-ConnectionGUID: AT3Hk9oUSrusHkEf1nvC6Q==
+X-CSE-MsgGUID: cUCNiLnYTqSryOfw+1Kqww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
-   d="scan'208";a="96473421"
+   d="scan'208";a="95731762"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 11 Dec 2024 13:56:09 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 11 Dec 2024 14:17:16 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tLUgh-000781-0J;
-	Wed, 11 Dec 2024 21:56:07 +0000
-Date: Thu, 12 Dec 2024 05:55:32 +0800
+	id 1tLV18-00079F-1F;
+	Wed, 11 Dec 2024 22:17:14 +0000
+Date: Thu, 12 Dec 2024 06:17:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:bpf/optimized_usdt 3/12]
- arch/arm/probes/uprobes/core.c:33:42: error: too few arguments to function
- call, expected 5, have 4
-Message-ID: <202412120551.c2u7Wttu-lkp@intel.com>
+To: "Roger L. Beckermeyer III" <beckerlee3@gmail.com>,
+	linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Roger L. Beckermeyer III" <beckerlee3@gmail.com>
+Subject: Re: [PATCH] btrfs: edits tree_insert() to use rb helpers
+Message-ID: <202412120640.485KsaTz-lkp@intel.com>
+References: <5e023dcf8f086296da987f8ba2b43be0aca15b86.1733695544.git.beckerlee3@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,77 +64,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <5e023dcf8f086296da987f8ba2b43be0aca15b86.1733695544.git.beckerlee3@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/optimized_usdt
-head:   71a73540cd512eab6cdd0aad1711b3a76e86e76d
-commit: b67b8b3af4cc6776e68fe57b357e5ba4015747d8 [3/12] uprobes: Add nbytes argument to uprobe_write_opcode
-config: arm-randconfig-003-20241211 (https://download.01.org/0day-ci/archive/20241212/202412120551.c2u7Wttu-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412120551.c2u7Wttu-lkp@intel.com/reproduce)
+Hi Roger,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on linus/master v6.13-rc2 next-20241211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Roger-L-Beckermeyer-III/btrfs-edits-tree_insert-to-use-rb-helpers/20241209-104108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/5e023dcf8f086296da987f8ba2b43be0aca15b86.1733695544.git.beckerlee3%40gmail.com
+patch subject: [PATCH] btrfs: edits tree_insert() to use rb helpers
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20241212/202412120640.485KsaTz-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412120640.485KsaTz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412120551.c2u7Wttu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412120640.485KsaTz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm/probes/uprobes/core.c:9:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> arch/arm/probes/uprobes/core.c:33:42: error: too few arguments to function call, expected 5, have 4
-      32 |         return uprobe_write_opcode(auprobe, mm, vaddr,
-         |                ~~~~~~~~~~~~~~~~~~~
-      33 |                    __opcode_to_mem_arm(auprobe->bpinsn));
-         |                                                        ^
-   include/linux/uprobes.h:184:12: note: 'uprobe_write_opcode' declared here
-     184 | extern int uprobe_write_opcode(struct arch_uprobe *auprobe, struct mm_struct *mm, unsigned long vaddr,
-         |            ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     185 |                                uprobe_opcode_t *insn, int nbytes);
-         |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+>> fs/btrfs/delayed-ref.c:342:10: error: call to undeclared function 'rb_find_add_cached'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           exist = rb_find_add_cached(node, root, comp_refs_node);
+                   ^
+   fs/btrfs/delayed-ref.c:342:8: error: incompatible integer to pointer conversion assigning to 'struct rb_node *' from 'int' [-Wint-conversion]
+           exist = rb_find_add_cached(node, root, comp_refs_node);
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +33 arch/arm/probes/uprobes/core.c
+vim +/rb_find_add_cached +342 fs/btrfs/delayed-ref.c
 
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  @9  #include <linux/highmem.h>
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  10  #include <linux/sched.h>
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  11  #include <linux/uprobes.h>
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  12  #include <linux/notifier.h>
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  13  
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  14  #include <asm/opcodes.h>
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  15  #include <asm/traps.h>
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  16  
-fca08f326ae0423 arch/arm/probes/uprobes/core.c Wang Nan      2015-01-09  17  #include "../decode.h"
-fca08f326ae0423 arch/arm/probes/uprobes/core.c Wang Nan      2015-01-09  18  #include "../decode-arm.h"
-fca08f326ae0423 arch/arm/probes/uprobes/core.c Wang Nan      2015-01-09  19  #include "core.h"
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  20  
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  21  #define UPROBE_TRAP_NR	UINT_MAX
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  22  
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  23  bool is_swbp_insn(uprobe_opcode_t *insn)
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  24  {
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  25  	return (__mem_to_opcode_arm(*insn) & 0x0fffffff) ==
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  26  		(UPROBE_SWBP_ARM_INSN & 0x0fffffff);
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  27  }
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  28  
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  29  int set_swbp(struct arch_uprobe *auprobe, struct mm_struct *mm,
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  30  	     unsigned long vaddr)
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  31  {
-6d43743e9079ac0 arch/arm/probes/uprobes/core.c Ravi Bangoria 2018-08-09  32  	return uprobe_write_opcode(auprobe, mm, vaddr,
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07 @33  		   __opcode_to_mem_arm(auprobe->bpinsn));
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  34  }
-c7edc9e326d53ca arch/arm/kernel/uprobes.c      David A. Long 2014-03-07  35  
-
-:::::: The code at line 33 was first introduced by commit
-:::::: c7edc9e326d53ca5ef9bed82de0740c6b107d55b ARM: add uprobes support
-
-:::::: TO: David A. Long <dave.long@linaro.org>
-:::::: CC: David A. Long <dave.long@linaro.org>
+   334	
+   335	static struct btrfs_delayed_ref_node* tree_insert(struct rb_root_cached *root,
+   336			struct btrfs_delayed_ref_node *ins)
+   337	{
+   338		struct rb_node *node = &ins->ref_node;
+   339		struct rb_node *exist;
+   340		struct btrfs_delayed_ref_node *entry;
+   341	
+ > 342		exist = rb_find_add_cached(node, root, comp_refs_node);
+   343		if (exist != NULL) {
+   344			entry = rb_entry(exist, struct btrfs_delayed_ref_node, ref_node);
+   345			return entry;
+   346		}
+   347		return NULL;
+   348	}
+   349	
 
 -- 
 0-DAY CI Kernel Test Service
