@@ -1,168 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B35259498;
-	Wed, 11 Dec 2024 20:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A9F1C3038;
+	Wed, 11 Dec 2024 21:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733950394; cv=none; b=Uke/0wt4baFOUDxMefEsxkmqxAbcJqNMZ+hYU9trtrQdlAPVCA3pajYpc1fA7gAEQoBiuvX9u9OBxLe+TVb6mXHnw2AnFosqy8KtUcEDuFePKlZUpZ6GimMizith5DQ2Y//tfCcqe3GZ7jmGga4/U9rZndYmKDeaqeriFtyKVNk=
+	t=1733952383; cv=none; b=UsKIjBJenRNfcAanhe+xn1bB8w9LLS/n6aWGrrtLUjO2S8RqorYVVyDOr6DRAbmQp3JFuiHQREm2Sdf+U3mkKhXvgsdWfJftqFzF8JXzROjVFOxba3VMkD0aRFkSUo22JZXgyh/kNLGZl6Gho0J7FwC51SY0OTyz62yaPoDpK7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733950394; c=relaxed/simple;
-	bh=h5MY6n9s52R9K4S4G1UuwM6yzSqhfXepqx5616VdQqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DP3iunav920+eYe6nA4N4b1C8aFqR3gnbk96i6862+pVFFtkdd/gyvfYaBV9NYY4vCG/8L3kP0Zn2aazlpr3KAGEESyId18/M+wG+Uj37Cm8doagyhozOxV0zZpQ8yqt5GPRw9xFFPGXC+iwqCCJikQe8FBJCbr/yBDocyKSvEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jF9IlOcV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733952383; c=relaxed/simple;
+	bh=Ml9pOMh14snCpL3/AxJPY0pPoQz+ajNxV4vAOphsCaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BPD7hMVL+6DMwhmrPk8OH/UupdMajzcWeZHv5/1w5sSykbtkzGKt6cr+JRYIzYcVd7lUxl3a//tmahapst4l/W26pTA31ufJp2j+xJJHUbRbvledNCKN9B1nSn1jxoI7UyrmDrz+Z3RvQ6ZV8cK5RW8E+FBUZHWBuWxUmo7B+go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Nrv0FbFu; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=V2MaSrnc; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Nrv0FbFu; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=V2MaSrnc; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jF9IlOcV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3A0C4CED2;
-	Wed, 11 Dec 2024 20:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733950394;
-	bh=h5MY6n9s52R9K4S4G1UuwM6yzSqhfXepqx5616VdQqM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jF9IlOcVZ7CnGk+pLzx3qeNz2UQWzdj4Cq+PAIz6vAYiLBosddkGHEpY2oHZlWhzR
-	 VwlJNbOjH1DLckuLuFBbq58vZJVSnRlcW4RoR6RQpilBd+/qyrZrAo0ZnoMaPHgq6O
-	 BQ9mtKv7GclkmrGiOoisQkbRwirDaKcfO+FqVQMSlyJ+5X2msBsnqNhAz/TScksqiL
-	 Pz+SqKitWfIFec/2yEQ0ILs2VEQL4ZqZUkbWuKGkXBumtHFr6Mu9o38sCdDnTYMXJq
-	 sZixnWZ3JUmlP/QEqDD4TxBVzDwf3GdpkyE4VLIT9LgzzsqFrElfu6ZHYCeatsfcRY
-	 6SZ1SvnBVqE6A==
-Date: Wed, 11 Dec 2024 20:53:02 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-Cc: Mikael Gonella-Bolduc via B4 Relay
- <devnull+mgonellabolduc.dimonoff.com@kernel.org>, Lars-Peter Clausen
- <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Mikael
- Gonella-Bolduc <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v2 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
- driver
-Message-ID: <20241211205302.2ba32a4a@jic23-huawei>
-In-Reply-To: <Z1dl2C9/BYoeyudu@uva.nl>
-References: <20241206-apds9160-driver-v2-0-be2cb72ef8f4@dimonoff.com>
-	<20241206-apds9160-driver-v2-2-be2cb72ef8f4@dimonoff.com>
-	<20241208122038.18cf7db8@jic23-huawei>
-	<Z1dl2C9/BYoeyudu@uva.nl>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Nrv0FbFu";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="V2MaSrnc";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Nrv0FbFu";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="V2MaSrnc"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 850D521168;
+	Wed, 11 Dec 2024 21:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1733952379;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9t52aNN1WA38YeqAzxTq1mhfjrN7Dt0kB/Wf/DtE4A=;
+	b=Nrv0FbFuI+O+SGHfAysYzS82JodrYMzFynAecDKT0MlSo37AmLRp6cpkqxaXCq/TG0fq9w
+	qZZZSZP3ORzaxRaRqIe9Ob7CO2QVLz+R27lfp9JW0JXK36mLPc3VNZ1dq9+RKdbDJ89vwG
+	PUIqGqqJVq5yxsJVaNaOVzrYZ18AW5c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1733952379;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9t52aNN1WA38YeqAzxTq1mhfjrN7Dt0kB/Wf/DtE4A=;
+	b=V2MaSrncSy+tj4q/ywEQZbr04qsuwTy/xy9IRTHOoHPQcveHDnrOgGfqBL7qLiDoCexSFP
+	w2cJ+1DzSvWfG5DQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Nrv0FbFu;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=V2MaSrnc
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1733952379;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9t52aNN1WA38YeqAzxTq1mhfjrN7Dt0kB/Wf/DtE4A=;
+	b=Nrv0FbFuI+O+SGHfAysYzS82JodrYMzFynAecDKT0MlSo37AmLRp6cpkqxaXCq/TG0fq9w
+	qZZZSZP3ORzaxRaRqIe9Ob7CO2QVLz+R27lfp9JW0JXK36mLPc3VNZ1dq9+RKdbDJ89vwG
+	PUIqGqqJVq5yxsJVaNaOVzrYZ18AW5c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1733952379;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9t52aNN1WA38YeqAzxTq1mhfjrN7Dt0kB/Wf/DtE4A=;
+	b=V2MaSrncSy+tj4q/ywEQZbr04qsuwTy/xy9IRTHOoHPQcveHDnrOgGfqBL7qLiDoCexSFP
+	w2cJ+1DzSvWfG5DQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 689C11344A;
+	Wed, 11 Dec 2024 21:26:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id /PBAGXsDWmfcLAAAD6G6ig
+	(envelope-from <dsterba@suse.cz>); Wed, 11 Dec 2024 21:26:19 +0000
+Date: Wed, 11 Dec 2024 22:26:14 +0100
+From: David Sterba <dsterba@suse.cz>
+To: Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc: kernel test robot <lkp@intel.com>, Qu Wenruo <wqu@suse.com>,
+	linux-btrfs@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] btrfs: enhance ordered extent double freeing detection
+Message-ID: <20241211212614.GV31418@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <53b793f2e7a7788f89cda97de565cfc1577cbf75.1733890357.git.wqu@suse.com>
+ <202412120136.6OwbbtZf-lkp@intel.com>
+ <2e8ec0ba-aaa8-4107-9fbe-b3288a45f5a6@gmx.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e8ec0ba-aaa8-4107-9fbe-b3288a45f5a6@gmx.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Rspamd-Queue-Id: 850D521168
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.21 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FREEMAIL_ENVRCPT(0.00)[gmx.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FREEMAIL_TO(0.00)[gmx.com];
+	ARC_NA(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.21
+X-Spam-Flag: NO
 
-On Mon, 9 Dec 2024 16:49:12 -0500
-Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com> wrote:
-
-> On Sun, Dec 08, 2024 at 12:20:38PM +0000, Jonathan Cameron wrote:
-> > On Fri, 06 Dec 2024 11:09:57 -0500
-> > Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org> wrote:
-> >   
-> > > From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-> > > 
-> > > APDS9160 is a combination of ALS and proximity sensors.
-> > > 
-> > > This patch add supports for:
-> > >     - Intensity clear data and illuminance data
-> > >     - Proximity data
-> > >     - Gain control, rate control
-> > >     - Event thresholds
-> > > 
-> > > Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>  
-> > 
-> > Hi Mikael,
-> > 
-> > As the bots noted, the maintainers entry has the wrong vendor prefix,
-> > or the binding does.
-> > 
-> > Also the issue with missing include of linux/bitfield.h
-> > 
-> > Unused gain table is less obvious. Not sure what intent was on that one.
-> > 
-> > Given the discussion with Matti about how to do the gain control, please add
-> > some description here of the outcome.  The control scheme is not particularly
-> > obvious and is the key bit we should be reviewing.  It feels like you've
-> > applied the feedback on v1 to the light channel but it is equally applicable
-> > to proximity channels when they are just measures of reflected light intensity.
-> > 
-> > Various other minor things inline.
-> > 
-> > Thanks,
-> > 
-> > 
-> > Jonathan  
+On Thu, Dec 12, 2024 at 06:17:37AM +1030, Qu Wenruo wrote:
+> >>> fs/btrfs/ordered-data.c:200:10: error: no member named 'finished_bitmap' in 'struct btrfs_ordered_extent'
+> >       200 |                 entry->finished_bitmap = bitmap_zalloc(
+> >           |                 ~~~~~  ^
 > 
-> Hi Jonathan,
-> 
-> I will fix the warnings the bots noted and other inline comments for v3, sorry about that.
-> Regarding gain control for ALS, I kept the non-linear table provided in the datasheet.
-> The user can adjust the integration time and the available scales will update
-> depending on the value.
-> For example, at 100ms, you have possible scales of 0.819, 0.269, 0.131, etc. (lux/count).
-> The hardware gain and other relevant registers gets adjusted by the driver depending on selected scale.
-> The attribute is kept as read-only as Matti suggested.
-> 
-> Now, for proximity, again I'm confused. Please bear with me a little.
-> The only "scale" I see in the datasheet is that the proximity sensor is for a short distance of under 70mm.
+> I don't know why but it looks like IS_ENABLED() is not exactly doing the
+> #ifdef #endif, thus those checks are not fully skipped in this case.
 
-That sounds like a design point for sensitivity of sensor vs light source brightness.
-
-> There's nothing provided in the datasheet to convert the proximity ADC count to a distance or to anything meaningful like standard units.
-> I don't feel like this is really precise and the intended use case is probably like mine where you can use this to detect
-> if there's something covering the sensor or not.
-> 
-> I took a look at other light/proximity sensors, again, it's not clear for me how to handle this.
-> It seems that some drivers just directly control the hardware gain register with the scale even if it's not really a scale.
-Typical case is that it is a scale, just not of distance.  But rather controls an amplifier on the light sensor,
-so same as for the ambient light sensor.
-
-The ABI docs are a little vague on this Documentation/ABI/testing/sysfs-bus-iio
-has
-What:		/sys/.../iio:deviceX/in_proximity_raw
-What:		/sys/.../iio:deviceX/in_proximity_input
-What:		/sys/.../iio:deviceX/in_proximityY_raw
-KernelVersion:	3.4
-Contact:	linux-iio@vger.kernel.org
-Description:
-		Proximity measurement indicating that some
-		object is near the sensor, usually by observing
-		reflectivity of infrared or ultrasound emitted.
-
-		Often these sensors are unit less and as such conversion
-		to SI units is not possible. Higher proximity measurements
-		indicate closer objects, and vice versa. Units after
-		application of scale and offset are meters.
-
-So it kind of says we can't relate them to real units, but then we provide
-a unit. Hmm, not our finest and clearest documentation.
-
-Probably best bet is to follow precedence as even if we haven't tightly defined
-it that is what any userspace tuning these value will be using.
-
-Given inverse square law and different characteristics of reflective surfaces
-I think it is normally a case of crank the gain up until the signal is good.
-
-In most cases these proximity sensors aren't much more than fancy switches
-though can be used for approaching vs moving away detection.
-
-Anyhow, I haven't checked all the precedence in existing drivers but from
-memory scale is the standard choice.
-
-Hardware gain as a writable control is just rarely used and only in devices where
-it doesn't affect what we are measuring. In proximity that means time of flight
-sensors, not ones based on reflected intensity.
-
-Jonathan
-
-> 
-> What should I do?
-> 
-> Best regards,
-> Mikael
-
+It's never been equvalent to ifdef/endif, it evaluates to 0 or 1 if the
+config option is enabled or not but otherwise the source code is still
+compiled. The compiler then finds out it's dead code and eliminates it.
