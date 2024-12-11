@@ -1,141 +1,133 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C231238E27
-	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 11:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B394A2210F7
+	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 11:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733917218; cv=none; b=UlpgkZ1EXvFFfj6DNB3872gKZ+MjFFGtMwQg0051XBjf6VczVZku3afgi7jO1RcuvARtRVWHJ3rg3uI2lv1wDQNu3Q20vK3DmZ6PSHSvoHZ/q/nGkLTG8l3xEtTMtp5ipwwxCSU/Sz+8YNSZNIdujOlBUFPm+6THsGJErzG0pjE=
+	t=1733917757; cv=none; b=lXRIu0RjgebQ8mLGgFgWYQvJXjRne/itdz8uFBMHt1V1hh6fvurOLwLcY3lt7sJ6Tbk6oIi6mlpcNHE7twqgrVuEbUvi1+VnsdEudQeoChd808upzPLcSHQ68ubdPXRvu65euyhPiZn5vkN9UfzHLSkqIAPvu4pKBX7+clutyAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733917218; c=relaxed/simple;
-	bh=VHGL3u0EdA+ohBMKTYCA0Q8nxt8Cql2CiG/tIRN+9OE=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tlQPhytARtdHt2x/Y1iV+Ydx3gIHRFuV9gqAECDLVVH/mMZiGo9R9OiVMTYANPnoc9tnJEOgUcW/16dAIxBPO9brmwx5TgqfCXSUNz9ISrl7cupNoCUKA/vAzgVYXmcnbde/XC7fWPrQJMMTAoh4LBJcl+5Q7TNfICodFE02tpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dwpqIZ2u; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733917757; c=relaxed/simple;
+	bh=Afz7Md+4SGxygkYzcj/QROHNaaIWlCVNEawMwRt3y44=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H4IdhZkyxc+TyTSzrlAq6HO+Gna60Ji4deVBeiqS5NdkU+qhHGbIf1uHR+6yFY1/qz4FBGbl6690uVIdeNuVl4dQPxTrTd0fDkNPJpR39UGxGryJSwsEgHU/FYfqnTpT75auCziiE7ErIIqlBrjEDE0k64DgZYiFLpXqfjvqM2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KfZSD0Xb; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dwpqIZ2u"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38633b5dbcfso3833587f8f.2
-        for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 03:40:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KfZSD0Xb"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4361c705434so4314555e9.3
+        for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 03:49:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733917215; x=1734522015; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qlvml2G4Xi5ig1v0QjPfVDw4ozpGhiPCOsava1Ml8Js=;
-        b=dwpqIZ2uwm89PMBxsPphhjlWm7LAS8hP36cYqBm9FfyyZzzbcMRLKLzQWYWiUtGlIE
-         is7spxybwaTRrfWeu5xAtK/PprEJAmdHJMJRz5FDXBI/o75tV16WZsDRyCAEW/0NpiMT
-         kxapydlb0ca0lBnYgU1HYC7gNIyZDFuTPIGgZyyQCaNqVf3j70wRZ7l/ZHUZLWr3QLKI
-         T28F1vr4gP9c0BRXrDF20yLWQu+dvVgwoNzQwpOCA4YXj2bL5uP4duxc4D8is3mGwgWg
-         m/2WCaR+AFEcgzk+WhWQ5MJ6ma5CsclOj0noDJP8sSl2qMn5jIobfk1vCvyniTD0w2GM
-         8xEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733917215; x=1734522015;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1733917753; x=1734522553; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qlvml2G4Xi5ig1v0QjPfVDw4ozpGhiPCOsava1Ml8Js=;
-        b=RpNZjTAUyHjMkx8Sa9RS+oR/lKuxaCmLTSfCij7/p9eAUzxU2GZW3Trek2FwfhS2ix
-         vP5qw6+EvPVR6vIUZ20UCcugpD3gLlkTIrzuA5QpRER8fRB35obIIT9hLd47MLTPNSer
-         xMwIviFQ7YTJoUsPAHqD/r8d4j6AhGyo1Y1o8gwwttJKAu8D4cor3HI+p70OvZlmhssk
-         vqvIi885HODo0nkue1dniC91/9j1bOJvNvX57S4cQDNc3TWOoaCraC0dLbGhfqaQMBAY
-         L6mgtLL/kCxc8ERvzJYqm95ORwouq/LDJEt2Bk+XcwMmZ7+1jCYMwlhCuPfZgQaxnuPz
-         kAKA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHMxi057cpaja2rkUWIS/1AeaOHh5RlnFzHjwlKn39dV9HY0eQQ8OOGWXOeIKPf+5h6YZ4@lists.linux.dev
-X-Gm-Message-State: AOJu0YzTdzT3nLU6Qb6bn2z9jporSxas1JsG/sCod/mSKtHqpcGfckBg
-	7/EEjRFkUPHLY8xDHN3dByceDyxIKMdXVQhdIuIEnRdVtG/40hfB
-X-Gm-Gg: ASbGncvtarBTvv2+//DG1BO27GmDT1zyMub5U0Niupn0Rucz7/PkcMG3Tea8OOgGspO
-	5gXkD3GEYXRhUDPpECng9oPiUBShNwX4eT5RghVAV1oRqpOCYQeTdhe2y/R7htxRmw23C4H0y4H
-	VFvWd7NL19VODwYr/mdELhuTVaGnKzYR2+oOIcqrbnNghnTj2mKNqpDTF1XerQR/z3Fg2+2p+t/
-	tNxs1EItfuDd1hlk4yRDGtpDx19Oc+y6krhjlg7qiYsXPrrDo/y1evlJC4a4JIUPzRgxo87eMDY
-	31nP7QdwOw==
-X-Google-Smtp-Source: AGHT+IFiA1Xf7QFgwYwlmpgBDu0fCeGNMpapKx4zkoOoVFH/jisTnTeHhTBy5KZBO/+3QOQXv20ouQ==
-X-Received: by 2002:a5d:6d03:0:b0:385:e4a7:df09 with SMTP id ffacd0b85a97d-3864cec7063mr2403857f8f.44.1733917214360;
-        Wed, 11 Dec 2024 03:40:14 -0800 (PST)
-Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-387824c2bf2sm1079314f8f.55.2024.12.11.03.40.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 03:40:14 -0800 (PST)
-Message-ID: <67597a1e.5d0a0220.9b04.2bef@mx.google.com>
-X-Google-Original-Message-ID: <Z1l6GYZY1dHMKb2S@Ansuel-XPS.>
-Date: Wed, 11 Dec 2024 12:40:09 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Antoine Tenart <atenart@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, upstream@airoha.com,
-	Richard van Schagen <vschagen@icloud.com>
-Subject: Re: [PATCH v8 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
- engine support
-References: <20241210204853.18765-1-ansuelsmth@gmail.com>
- <20241210204853.18765-4-ansuelsmth@gmail.com>
- <Z1ldzyPKgoD8GZfx@gondor.apana.org.au>
+        bh=F2EqaIbo3wdkBMFqNSfSBUJWTerrNTKyiQvdFD0aob0=;
+        b=KfZSD0XbQaid/TWdvKR+Cg/8MHc14QMkn06lILTl2B5eBl6CB7mUGf9CGDpA3A2xwy
+         vEx8U3t38GV4l9ep4cKAO0+972E/FiGBQ82B08WASpSok4mHeO9r3+nxqdJYCh+99Q8W
+         y36QwaG6GD13vb3SXt022XZoibDinK8TpWeygnG741Ce0wiwyozt9tQfBPS47Z9aZeJO
+         5pPS3ZSOS592t+c0niEIqNpRLfnvkVyfwDCxRPyebHNgP5Ri0B77wCWhzNl4zEOF+L/8
+         JJv6UYYaEeWucaR6IpQjegVBkjHjE9ztscV7EktSLB177vH8vmIbrNhYHlVMV2R+Uith
+         3OFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733917753; x=1734522553;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F2EqaIbo3wdkBMFqNSfSBUJWTerrNTKyiQvdFD0aob0=;
+        b=ZlCo0f0S/qBgR5kaWjzKy9ULG+hONOzOnRETNe5LoW4zE4ViR0V7KLU83X7zFuLWLO
+         fschJ8Vz1qiDiOe9dg7knI9c2m3CieS3HaceqqyARnOaTb9n+w2yKGcHO7sR5acVCXCI
+         KN+d1xTpfQ7Nek6AP7Wk3tRXxCKbyt1loK20v36ouxuDcrXXGrsJCMLdvPs4co/BblSD
+         D+hkI7I96oAkLQmNQ1/J1wY8vaTzhKHXlKyYnLgs5S4qo/D4LjvIU51JRxBdCjag0f1Z
+         mYa5Wsn2R2qfDjoAgCUozwNGlew2yISS9q4Wi9OG8nImD2ywdnC75QIMtCfPmmblVJZZ
+         +Nug==
+X-Gm-Message-State: AOJu0Yz7ICTXdDqJhTke2DJvKKpKNqOL0n0VwoiFSmNSgNhvTusGnI97
+	WVJXzv08RcmfnLivefh9rKeKXLHLJlD55dBmFeq0vKGzyZMOnFycc0mRAz8WtD30u5JQGZCo/bS
+	QCfdNl0z/pfl70AZgYldtPCoam+/n+y5GRmx5
+X-Gm-Gg: ASbGnctGNZSmtfCwHkaY5xwIRKLfIaGisY579wrSLwFXXsW5to8Xdw3XvBxPCCV915d
+	JZjVFGP+tm3lgcosz6kmfZcr0P803o6RbGCAI1bXFZJkzaY1jRFA1dy4pOQY7ivt8AA==
+X-Google-Smtp-Source: AGHT+IEgqLUMUT+juj9Mz/4TVFLG854CMxmP4SkHc3G7aR8QuFtzd3qYLUl66jeKf0yyTAiDhmt6EUqT8QmMjt4DZac=
+X-Received: by 2002:a5d:64aa:0:b0:385:e0d6:fb48 with SMTP id
+ ffacd0b85a97d-3864ce894b6mr2199747f8f.7.1733917752950; Wed, 11 Dec 2024
+ 03:49:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z1ldzyPKgoD8GZfx@gondor.apana.org.au>
+References: <202412111617.7lVvmoPB-lkp@intel.com>
+In-Reply-To: <202412111617.7lVvmoPB-lkp@intel.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 11 Dec 2024 12:49:01 +0100
+Message-ID: <CAH5fLgjmtuZ7Sxp49GoGC079sXqS4wmsEmZKM-T4Mh9FycDYGQ@mail.gmail.com>
+Subject: Re: error[E0425]: cannot find value `__tracepoint_rust_sample_loaded`
+ in crate `$crate::bindings`
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
+	Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 11, 2024 at 05:39:27PM +0800, Herbert Xu wrote:
-> On Tue, Dec 10, 2024 at 09:48:33PM +0100, Christian Marangi wrote:
-> >
-> > +static int eip93_hash_export(struct ahash_request *req, void *out)
-> > +{
-> > +	struct eip93_hash_reqctx *rctx = ahash_request_ctx(req);
-> > +	struct eip93_hash_export_state *state = out;
-> > +
-> > +	/* Save the first block in state data */
-> > +	if (rctx->len) {
-> > +		struct mkt_hash_block *block;
-> > +
-> > +		block = list_first_entry(&rctx->blocks,
-> > +					 struct mkt_hash_block,
-> > +					 list);
-> > +
-> > +		memcpy(state->data, block->data,
-> > +		       SHA256_BLOCK_SIZE - rctx->left_last);
-> > +	}
-> > +
-> > +	eip93_hash_export_sa_state(req, state);
-> > +
-> > +	eip93_hash_free_data_blocks(req);
-> > +	eip93_hash_free_sa_state(req);
-> > +	eip93_hash_free_sa_record(req);
-> 
-> The export function should be idempotent so it shouldn't be freeing
-> anything.
-> 
-> In fact this indicates a bigger problem with how DMA is being used
-> in the driver.  You shouldn't be leaving DMA memory mapped after
-> the init (or update) function completes.  It is perfectly legal
-> for a user to call init and then abandon the request by freeing it
-> directly without ever calling final.  In that case you will be
-> leaking the DMA mappings.
-> 
-> So make sure that DMA is mapped only when needed, and freed before
-> you call the user callback.
-> 
-> The import/export functions should only be touching kernel memory,
-> not DMA.
-> 
+On Wed, Dec 11, 2024 at 9:20=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   f92f4749861b06fed908d336b4dee1326003291b
+> commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 rust: samples: add trace=
+point to Rust sample
+> date:   5 weeks ago
+> config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/202=
+41211/202412111617.7lVvmoPB-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51=
+eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20241211/202412111617.7lVvmoPB-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412111617.7lVvmoPB-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in c=
+rate `$crate::bindings`
+>    --> samples/rust/rust_print.rs:87:5
+>    |
+>    87 | /     kernel::declare_trace! {
+>    88 | |         /// # Safety
+>    89 | |         ///
+>    90 | |         /// Always safe to call.
+>    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
+>    92 | |     }
+>    | |_____^ not found in `$crate::bindings`
+>    |
+>    =3D note: this error originates in the macro `kernel::declare_trace` (=
+in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+> >> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` =
+in crate `$crate::bindings`
+>    --> samples/rust/rust_print.rs:87:5
+>    |
+>    87 | /     kernel::declare_trace! {
+>    88 | |         /// # Safety
+>    89 | |         ///
+>    90 | |         /// Always safe to call.
+>    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
+>    92 | |     }
+>    | |_____^ not found in `$crate::bindings`
+>    |
+>    =3D note: this error originates in the macro `kernel::declare_trace` (=
+in Nightly builds, run with -Z macro-backtrace for more info)
 
-Just to make sure, this is only limited to DMA or it's also problematic
-to the block list? Aka NO FREE should be done in export or NO DMA FREE
-should be done in export?
+Would it be possible to update the bindgen version used by this robot?
+See commit b2603f8ac821 ("rust: warn on bindgen < 0.69.5 and libclang
+>=3D 19.1") for details on why.
 
--- 
-	Ansuel
+Alice
