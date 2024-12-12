@@ -1,134 +1,96 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C62F20E339
-	for <llvm@lists.linux.dev>; Thu, 12 Dec 2024 09:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6210920E6E8;
+	Thu, 12 Dec 2024 10:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733996423; cv=none; b=Oem9tYllWiqW7JCKyZK1cwB08RrsQNZQERvpgDa2joeuEQGC+0EjZ0BEduPZ/Ah5nI/UWnucLFnz2VuHcN5VZg/kCSM5vR43cvw6P+gAYY3dkSh5x4YbT6BimJT1BWzQboP4jyMUEww0OTzVTrmHMvTeTlADebyUIteZQQ8XaNc=
+	t=1733998715; cv=none; b=tDJd0Hru5MT1aT46SqYA37rF/XWGsZqqhxq25mkGbeKBLUBjyXa/JrvoEr8rselkP8cl4Ni2jA46ew0U9J9pj5WAX4wKOBpEs9diARjZZVxq9MO6E/nCVw10N3jZ5uABB4o9jRHQibgxsm6FGWsQiEI/h4MoaQitsYUDXwNKuzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733996423; c=relaxed/simple;
-	bh=3kiLqS4a1/6z0Lpovs5bIGDCbmoYe7j4L+HDdPQbnTY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=qMx6gO3+qoPPf0NWaDoMCCf5BxImmC6wAorUPOEHVPfgSyVbkl02wAZXrgbh24pnA4u06ic1n5QROG1Aq37uw0SyoCR9r/wmK8Dx6XrDZRoGH54GUUx6BcpdPEi4pbXHjJzTkHZ8A9aH/n0Sw7hZeo46Jil0Ij0SBSNIU14+s6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-148-GZbhliAwNcyb9MfIhgZ_9w-1; Thu, 12 Dec 2024 09:40:18 +0000
-X-MC-Unique: GZbhliAwNcyb9MfIhgZ_9w-1
-X-Mimecast-MFC-AGG-ID: GZbhliAwNcyb9MfIhgZ_9w
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 12 Dec
- 2024 09:39:22 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 12 Dec 2024 09:39:22 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'kernel test robot' <lkp@intel.com>
-CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, "Andrew
- Morton" <akpm@linux-foundation.org>, Linux Memory Management List
-	<linux-mm@kvack.org>
-Subject: RE: [linux-next:master 1948/2656] block/blk-iocost.c:1101:11: error:
- call to __compiletime_assert_560 declared with 'error' attribute: clamp() low
- limit 1 greater than high limit active
-Thread-Topic: [linux-next:master 1948/2656] block/blk-iocost.c:1101:11: error:
- call to __compiletime_assert_560 declared with 'error' attribute: clamp() low
- limit 1 greater than high limit active
-Thread-Index: AQHbTAO/LBVwjhcfokKsJgYDzh99oLLiWwfQ
-Date: Thu, 12 Dec 2024 09:39:22 +0000
-Message-ID: <b7cc2610a9cf40a8a33a203f533ad9a5@AcuMS.aculab.com>
-References: <202412120322.3GfVe3vF-lkp@intel.com>
-In-Reply-To: <202412120322.3GfVe3vF-lkp@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1733998715; c=relaxed/simple;
+	bh=FjuuzfzNMu01EF+jfJ9izyVgRWwg2v9gh8hjBXrYgp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ljVvneMhJEzKLGom/awQRt27pOWAQM+qGMT77e8QCMDRx8eHa9r5C3apuLc5xNBnMUX90Ye185CP/YhQ8x3JeMmOKYIICZqYJOg/4yDMEL6H6cWwIPZHSDflOJeFOgRiLGuCa2lXPbgGQf5qP5p0gKsu/NT0DJ+h1IIphugOg6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iCM5om0j; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iCM5om0j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733998714; x=1765534714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FjuuzfzNMu01EF+jfJ9izyVgRWwg2v9gh8hjBXrYgp0=;
+  b=iCM5om0jbK3050PZOnZ9vC93jCx3BTbxKiTdfgxVkT36h3+r06FulR/5
+   hV/t1nu10VaNaTtRgSOkcNzaz8uDSSgs0OnivomYk8Sy32SThbnegFzWT
+   rsdvks/SoXdZWEnOBX3XdtmqXSiVpxdbjtuOV85F7BFi2EwpI5IQri25Y
+   wMc7pRJunl4fuHnzQUOWBgg0bth7RMKyc5msqSRnfR4XzvEVaFZ4wRw2X
+   +gV6+2AbxeHRrv6BCTZE1n1ZlTSC5yHz+zjDtZ0FRNDHs68Gst3uiPcR6
+   NIT5pvnefjPTuTerEG8Rgx9vren/ONhK2vC/zXsrxFeHYKx2Sl8WUK62Z
+   Q==;
+X-CSE-ConnectionGUID: HoZuAhsNTQe8xOEWf9J5AQ==
+X-CSE-MsgGUID: 7DFSsJkmRjiOdNN5ecKazQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="34135090"
+X-IronPort-AV: E=Sophos;i="6.12,228,1728975600"; 
+   d="scan'208";a="34135090"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 02:18:32 -0800
+X-CSE-ConnectionGUID: WyigCFPBTiaAqJSxl1GARg==
+X-CSE-MsgGUID: YJ+5P5JLSaOYPXBTbKtkxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="96984938"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 12 Dec 2024 02:18:30 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tLgH5-0007iT-1g;
+	Thu, 12 Dec 2024 10:18:27 +0000
+Date: Thu, 12 Dec 2024 18:18:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arun R Murthy <arun.r.murthy@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 04/10] drm/i915/histogram: Add support for histogram
+Message-ID: <202412121843.XSGtBYyD-lkp@intel.com>
+References: <20241209162504.2146697-5-arun.r.murthy@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ZNBrhdbeudrCTckVSC7wGw-z71wY03w9iH8ZuReab3k_1733996417
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241209162504.2146697-5-arun.r.murthy@intel.com>
 
-From: kernel test robot
-> Sent: 11 December 2024 19:35
->=20
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it master
-> head:   91e71d606356e50f238d7a87aacdee4abc427f07
-> commit: 212fe932ee57ec4a0f41bdc42b58c64fe3062147 [1948/2656] minmax.h: si=
-mplify the variants of
-> clamp()
-> config: s390-defconfig (https://download.01.org/0day-ci/archive/20241212/=
-202412120322.3GfVe3vF-
-> lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project
-> 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-
-> ci/archive/20241212/202412120322.3GfVe3vF-lkp@intel.com/reproduce)
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202412120322.3GfVe3vF-lkp=
-@intel.com/
->=20
-...
-> b0853ab4a238c54 Tejun Heo   2020-09-01  1084  static void __propagate_wei=
-ghts(struct ioc_gq *iocg, u32
-> active, u32 inuse,
-> b0853ab4a238c54 Tejun Heo   2020-09-01  1085  =09=09=09=09bool save, stru=
-ct ioc_now *now)
-> 7caa47151ab2e64 Tejun Heo   2019-08-28  1086  {
-> 7caa47151ab2e64 Tejun Heo   2019-08-28  1087  =09struct ioc *ioc =3D iocg=
-->ioc;
-> 7caa47151ab2e64 Tejun Heo   2019-08-28  1088  =09int lvl;
-> 7caa47151ab2e64 Tejun Heo   2019-08-28  1089
-> 7caa47151ab2e64 Tejun Heo   2019-08-28  1090  =09lockdep_assert_held(&ioc=
-->lock);
-> 7caa47151ab2e64 Tejun Heo   2019-08-28  1091
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1092  =09/*
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1093  =09 * For an active leaf no=
-de, its inuse shouldn't be
-> zero or exceed
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1094  =09 * @active. An active in=
-ternal node's inuse is solely
-> determined by the
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1095  =09 * inuse to active ratio=
- of its children regardless of
-> @inuse.
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1096  =09 */
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1097  =09if (list_empty(&iocg->ac=
-tive_list) && iocg-
-> >child_active_sum) {
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1098  =09=09inuse =3D DIV64_U64_R=
-OUND_UP(active * iocg-
-> >child_inuse_sum,
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1099  =09=09=09=09=09   iocg->chi=
-ld_active_sum);
-> e9f4eee9a0023ba Tejun Heo   2021-05-11  1100  =09} else {
-> db84a72af6be422 Tejun Heo   2020-09-01 @1101  =09=09inuse =3D clamp_t(u32=
-, inuse, 1, active);
-...
+Hi Arun,
 
-Duplicate - there is an inlined call that passes 'active =3D 0'.
-IIRC the clamp() is there to avoid a divide by zero later.
-The code is buggy and I think there is a fix pending.
+kernel test robot noticed the following build errors:
 
-=09David
+[auto build test ERROR on linus/master]
+[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.13-rc2 next-20241212]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
-PT, UK
-Registration No: 1397386 (Wales)
+url:    https://github.com/intel-lab-lkp/linux/commits/Arun-R-Murthy/drm-crtc-Add-histogram-properties/20241210-003717
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241209162504.2146697-5-arun.r.murthy%40intel.com
+patch subject: [PATCH 04/10] drm/i915/histogram: Add support for histogram
+config: i386-buildonly-randconfig-005-20241210 (https://download.01.org/0day-ci/archive/20241212/202412121843.XSGtBYyD-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412121843.XSGtBYyD-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412121843.XSGtBYyD-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__udivdi3" [drivers/gpu/drm/i915/i915.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
