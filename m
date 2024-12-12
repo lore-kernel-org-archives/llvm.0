@@ -1,109 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913081C173C
-	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 23:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A794932C85;
+	Thu, 12 Dec 2024 01:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733959989; cv=none; b=Dk5nanD6qX0Lz3kxQbXq0xPvlxHt7d/c7+FCUo3ahqxj+gGiFr8iXYRix8hr4S+zfFlSOLPmJdrH7V5jAnw3R99wiFJOINbedU1i5uLsQl+5vg7UEsAp57DxReMgoTYlm91elJ+vh7jBIgUAbGJwROXlAwDRQXyXZX1SHWeKD6E=
+	t=1733966359; cv=none; b=GRUjHF2oJ6ZpRn8J+13/tbwNsrahNUvxkiSKF13fisqle2KcsLDPrapT3irxKHqlny+/1gL7EdVSMz3tHob0IeuhvhTJO0cWntOjb8voclC6lP63FCZdSFSseqMAEOAcwT01d6hy9O/k7mkNr+/SmdOov65ymyr+tATkhxX+pW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733959989; c=relaxed/simple;
-	bh=73VTOqnu3bnyKjZkR8cyuthvIq6ceBRmnVYhKo6fRv0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=m4FWml0My6ZBCwECpWrw3TzbG7OMeQQ5c/zcNui4rF2Ml5TnkwolBmTlLgtZ1ggRM6uPha0fcau5DwoN0SEd//dJ/eWw2HzhUf0VDPsLzJCFffhLjh7l90jVIrF4zNrlsJoaCQwdOVHSc/5JrGArPdJAZa0BofZ9o6xzoTxrp9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dgDMJsz9; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1733966359; c=relaxed/simple;
+	bh=SUvPk8jDBgmSsgdUZODT3DlXcip3GbyUYCxyAPF398w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CEYUn1SFGGi5lcY0ZSqM/r4tw3srFIX6Ij/MLbLCIkUI+LQ2hiudYMqx0B9RVNDEyzskQYykSCQdInFj85dtoLRxAjZpfKOaGfrYlHz6D+MOCEEcA1yN7zX/NHJ7leG8pmiWfkxZBKBQPVKTNBtDHUaAOJCW107lOZB65uGvJkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nqOfWzo4; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dgDMJsz9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733959985;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Sw16+vUmukigxIn1TzNT5L9UTpTvdAolFHqE//mOdrY=;
-	b=dgDMJsz9JTOvpTPl0bli7m8mRdkq6daoHhIy1bqvSmFX8dXSBR7SPBfrA9HGABX0GoMxQQ
-	iwoNCJwpkBs6dlifrpGNP7sQ8xvuauMUt0Y5nAd7OKNX3QuGiPwFKiH+wohpkjJwKOStIy
-	2PA5HcDTAms/aWc5AlDJm8/UEL9MRO0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-26-8tBAlNmbPQWr0JrU1n7-uA-1; Wed,
- 11 Dec 2024 18:33:04 -0500
-X-MC-Unique: 8tBAlNmbPQWr0JrU1n7-uA-1
-X-Mimecast-MFC-AGG-ID: 8tBAlNmbPQWr0JrU1n7-uA
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8BA571955F40
-	for <llvm@lists.linux.dev>; Wed, 11 Dec 2024 23:33:03 +0000 (UTC)
-Received: from [172.64.12.26] (unknown [10.30.33.24])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 13D9E195605A;
-	Wed, 11 Dec 2024 23:33:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc2,
- upstream-mainline, 231825b2)
-Date: Wed, 11 Dec 2024 23:33:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nqOfWzo4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733966358; x=1765502358;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SUvPk8jDBgmSsgdUZODT3DlXcip3GbyUYCxyAPF398w=;
+  b=nqOfWzo4YDK4CfYymTwByH4qclcEYPZxpbPKuH64D4LbuvAZdoyCOKee
+   fQg29eojzldcGbjRHy8yx9FetsVD3L7tP7qxyq/Peog08VwC3P56L0AY0
+   HNrTabhbMVJjbxXxF5apFiI5LSXqQUoHaDqNlWHmpBz4mIdUE/9sgiGE1
+   gzQC1Brw3dbO9wWw/YISIjIzuzHmFcbpvFAUOQAPMPINPD9DjmFDHgCRY
+   3KMOXTzDqk6HIkpjrmJiyMp+KvLRR+MN4vv+5NrxqyqaafUQTSG/sRJ5p
+   FhperSeYHl6rpjycfek+w6AdxiYV8tanDSFoYx+XW6HTDvx9erNf8tmzM
+   g==;
+X-CSE-ConnectionGUID: svfsQYPcStSJQw00UMk+QQ==
+X-CSE-MsgGUID: xoKjmR1hQ1qc20UciUfVlg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="33699090"
+X-IronPort-AV: E=Sophos;i="6.12,227,1728975600"; 
+   d="scan'208";a="33699090"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 17:19:17 -0800
+X-CSE-ConnectionGUID: cy5apSg4RZiXMmeSfpBTHQ==
+X-CSE-MsgGUID: 9gWnfv01R7KwxltFpsjBkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,227,1728975600"; 
+   d="scan'208";a="96451175"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 11 Dec 2024 17:19:15 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tLXrF-0007Hh-2U;
+	Thu, 12 Dec 2024 01:19:13 +0000
+Date: Thu, 12 Dec 2024 09:18:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Roger L. Beckermeyer III" <beckerlee3@gmail.com>,
+	linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Roger L. Beckermeyer III" <beckerlee3@gmail.com>
+Subject: Re: [PATCH] btrfs: edit __btrfs_add_delayed_item() to use rb helper
+Message-ID: <202412120959.0utuK69J-lkp@intel.com>
+References: <9b85bdbc269d20886590f0a70de66c602d72aa9d.1733695544.git.beckerlee3@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <78202.124121118330400333@us-mta-26.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: s0sCLKT9dmWV096O6yyCI7uY8tCQHpUMlNLVYTEVQp8_1733959983
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b85bdbc269d20886590f0a70de66c602d72aa9d.1733695544.git.beckerlee3@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Roger,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on linus/master v6.13-rc2 next-20241211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Roger-L-Beckermeyer-III/btrfs-edit-__btrfs_add_delayed_item-to-use-rb-helper/20241209-104443
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/9b85bdbc269d20886590f0a70de66c602d72aa9d.1733695544.git.beckerlee3%40gmail.com
+patch subject: [PATCH] btrfs: edit __btrfs_add_delayed_item() to use rb helper
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20241212/202412120959.0utuK69J-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412120959.0utuK69J-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412120959.0utuK69J-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/btrfs/delayed-inode.c:392:10: error: call to undeclared function 'rb_find_add_cached'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           exist = rb_find_add_cached(&ins->rb_node, root, btrfs_add_delayed_item_cmp);
+                   ^
+   fs/btrfs/delayed-inode.c:392:8: error: incompatible integer to pointer conversion assigning to 'struct rb_node *' from 'int' [-Wint-conversion]
+           exist = rb_find_add_cached(&ins->rb_node, root, btrfs_add_delayed_item_cmp);
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Revert "unicode: Don't special case ignorable code poin=
-ts"
+vim +/rb_find_add_cached +392 fs/btrfs/delayed-inode.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1584809238
+   380	
+   381	static int __btrfs_add_delayed_item(struct btrfs_delayed_node *delayed_node,
+   382					    struct btrfs_delayed_item *ins)
+   383	{
+   384		struct rb_root_cached *root;
+   385		struct rb_node *exist;
+   386	
+   387		if (ins->type == BTRFS_DELAYED_INSERTION_ITEM)
+   388			root = &delayed_node->ins_root;
+   389		else
+   390			root = &delayed_node->del_root;
+   391	
+ > 392		exist = rb_find_add_cached(&ins->rb_node, root, btrfs_add_delayed_item_cmp);
+   393		if (exist != NULL)
+   394			return -EEXIST;
+   395	
+   396		if (ins->type == BTRFS_DELAYED_INSERTION_ITEM &&
+   397		    ins->index >= delayed_node->index_cnt)
+   398			delayed_node->index_cnt = ins->index + 1;
+   399	
+   400		delayed_node->count++;
+   401		atomic_inc(&delayed_node->root->fs_info->delayed_root->items);
+   402		return 0;
+   403	}
+   404	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1584809238-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1584809238-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1584809238-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/ClangBuiltLinux/linux/issues/2=
-060
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
