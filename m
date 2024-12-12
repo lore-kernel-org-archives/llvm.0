@@ -1,115 +1,103 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05FA8195;
-	Thu, 12 Dec 2024 04:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A121420A8;
+	Thu, 12 Dec 2024 04:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733979193; cv=none; b=I0FRzbMofLj2WWpIliX/z25VYfN+IUZQQ69cbZDFUaej5rmzDqHsbVlcMmDAIxizHoUh1h+PgfykOjxEC3mXyBElA9cDwzlM1KOFu7NKcRHN+PbAWxAFJjsbsmDE/tOiPadTLvwmkBALb+FWqiiYMnr9vVsclH0te1vGMpn3Cs8=
+	t=1733979194; cv=none; b=buChp+4tN8NeI7RrWk/AqRc8WrA/Wp+vk8ayINF72uJd22mVunu3Bl/egZY5qQp3TTyN0Y8pbqzRSe5EWlJADRqJLe4VL/lpp8t4sEZ1M77yrRtopxzwQAx4wG0DLWhqvNTcQbbIzsFDNEkTJuAk04ASvN1W4xlqf9f7uTar+F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733979193; c=relaxed/simple;
-	bh=Sn2rTke51HuMjyP2NfyLpdqoNyG31WMOGhltFNqVVF4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mlGnxiTyK5NrMogcIbf8Pdl/AFciub/Yi6EguO0IL5aC18PfC6jM396pT4ranUygUE9HSxw7T2d0f0O6PxL1suNbk7tOvtNtYi2n1qbG0KCbJYSxOYmnn/zORl5FYBkokHPXLgDPvcLZ56AMSKPkEGNdua0qcy14V27OMXaL344=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CpeKgP64; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1733979194; c=relaxed/simple;
+	bh=zjOKo7X1WIM6wbB1lJ8RKKq+iVqK9Xjvj89egCgASEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qWx14YifeTReEOQkU2R1/gFbvADnMtNTxPdhYpOD7q2O/EoU4pdy+O2NIdsFIHuZcQWV2CT5c8AAhW4cz6JvKvBgSNCkdKhTHNh4lRumSDSxx6UiROR7OSuZRCqFeuhiPr1LPXID2KYK8/hGlIKsPr4cQbUe3m1MENm7WZT8tMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T3KiGUwl; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CpeKgP64"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T3KiGUwl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733979191; x=1765515191;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Sn2rTke51HuMjyP2NfyLpdqoNyG31WMOGhltFNqVVF4=;
-  b=CpeKgP64JFn0HR7AUhHuiSCIYCgoBcqvxxCqzpvKRzd/bww0YrdbR9f1
-   dKBIiWkh+MgegWPTOLkaW3GUO1zmRKSzOQEKnJ9N7fV2pAaKBHwDZEuxN
-   yKrLbkru8trWvFAYSK6BUr6Cs/INC5QNbENKhJ75ZT7Ou2Q5cbtg6dAHg
-   8YC/GrVTyEytvPm3wdko4vq1t9NwL5Ya3SZC+A0scsTCC1fz6RLdMgCMQ
-   UROb/wMkhjx7/eY7uvbYf03W20h5OKqZWXqhUpBWpbMhnV2x3XMPTS6O2
-   /Jov72Q80gsn+hPGcTMQvqan23yAZ3Btr4D+cod4rvYQLzwhmArcara0i
-   A==;
-X-CSE-ConnectionGUID: rYtIxFI7Rj+SVmvcOoeWGg==
-X-CSE-MsgGUID: soxUvKRoTomx+tZHUm9DiA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45765782"
+  t=1733979192; x=1765515192;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zjOKo7X1WIM6wbB1lJ8RKKq+iVqK9Xjvj89egCgASEk=;
+  b=T3KiGUwljQ28JBsY80Vfg2btqMySP+idLAj3sd80YRgbcAsEX66gAZgE
+   idvAc4FccTTRP6tGIa8MzWwInD34Fp+RKgfaXKTZB01IDUDNiszuZQN73
+   JM1l5cdCnVJcQdnJTjZrCNbKIyZQB45hwDI775YChS5bXk4a4I8qOzLkU
+   yzdHJh9WYsbtbpNI9Gu1HXqCYgwKNq59zEumGcvl7V3nGNZoaEkmedAld
+   KcG7IzCKULFh5LQoPLq0653lLm1UnMz9Fl2twcvNN3xT4lWaLK8cPBNKa
+   P8poX7aJ+4dJHRamTAYtO+XdmK6NpKyYB4yBKk77aC+yUV3MHEHS1UhNS
+   Q==;
+X-CSE-ConnectionGUID: NdQBZCnhTj2X0t3ttNVabA==
+X-CSE-MsgGUID: Y+V2GNXCTHaqzV/al5quDw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45765785"
 X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="45765782"
+   d="scan'208";a="45765785"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 20:53:09 -0800
-X-CSE-ConnectionGUID: W/KkfvfQQ8S1+Kv8IMbQOQ==
-X-CSE-MsgGUID: WA3uF2YnSP62mID6apOcjw==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 20:53:11 -0800
+X-CSE-ConnectionGUID: +rugh9WjSH+JrBIWnRnsdA==
+X-CSE-MsgGUID: BF3cQvgFS2qxjoUB8kTOPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="95947180"
+   d="scan'208";a="95947179"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
   by orviesa010.jf.intel.com with ESMTP; 11 Dec 2024 20:53:09 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tLbCD-0007S1-2l;
+	id 1tLbCD-0007Rx-2e;
 	Thu, 12 Dec 2024 04:53:05 +0000
-Date: Thu, 12 Dec 2024 12:52:54 +0800
+Date: Thu, 12 Dec 2024 12:53:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/sysfs-const-bin_attr-s390 6/7]
- drivers/s390/cio/chp.c:221:1: error: initializing 'struct bin_attribute **'
- with an expression of type 'const struct bin_attribute *const[5]' discards
- qualifiers in nested pointer types
-Message-ID: <202412121231.DvDDVbb9-lkp@intel.com>
+To: ot907280 <ot_cathy.xu@mediatek.com>, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, sean.wang@kernel.org,
+	linus.walleij@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Guodong Liu <guodong.liu@mediatek.corp-partner.google.com>,
+	ot907280 <ot_cathy.xu@mediatek.com>
+Subject: Re: [PATCH] pinctrl: mediatek: Add support for MT8196
+Message-ID: <202412121226.WW9Airfh-lkp@intel.com>
+References: <20241211055454.17120-3-ot_cathy.xu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241211055454.17120-3-ot_cathy.xu@mediatek.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/sysfs-const-bin_attr-s390
-head:   8ae8d30bac9709d7b1824ebe3a28cc6f3017cd79
-commit: 269b60415552dd90b391ef9ca088b2ee00497c03 [6/7] s390/cio/chp: Constify 'struct bin_attribute'
-config: s390-randconfig-001-20241212 (https://download.01.org/0day-ci/archive/20241212/202412121231.DvDDVbb9-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412121231.DvDDVbb9-lkp@intel.com/reproduce)
+Hi ot907280,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next linus/master v6.13-rc2 next-20241211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/ot907280/pinctrl-mediatek-Add-support-for-MT8196/20241211-140107
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20241211055454.17120-3-ot_cathy.xu%40mediatek.com
+patch subject: [PATCH] pinctrl: mediatek: Add support for MT8196
+config: arm64-randconfig-002-20241212 (https://download.01.org/0day-ci/archive/20241212/202412121226.WW9Airfh-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412121226.WW9Airfh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412121231.DvDDVbb9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412121226.WW9Airfh-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/s390/cio/chp.c:221:1: error: initializing 'struct bin_attribute **' with an expression of type 'const struct bin_attribute *const[5]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     221 | BIN_ATTRIBUTE_GROUPS(measurement);
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/sysfs.h:296:15: note: expanded from macro 'BIN_ATTRIBUTE_GROUPS'
-     296 |         .bin_attrs = _name##_attrs,                             \
-         |                      ^~~~~~~~~~~~~
-   <scratch space>:24:1: note: expanded from here
-      24 | measurement_attrs
-         | ^~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +221 drivers/s390/cio/chp.c
-
-2dc8903af775ecd Peter Oberparleiter 2024-03-26  213  
-269b60415552dd9 Thomas Weiﬂschuh    2024-12-11  214  static const struct bin_attribute *const measurement_attrs[] = {
-b4691baaeef07bd Peter Oberparleiter 2024-03-26  215  	&bin_attr_measurement_chars,
-2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  216  	&bin_attr_measurement_chars_full,
-b4691baaeef07bd Peter Oberparleiter 2024-03-26  217  	&bin_attr_measurement,
-2dc8903af775ecd Peter Oberparleiter 2024-03-26  218  	&bin_attr_ext_measurement,
-b4691baaeef07bd Peter Oberparleiter 2024-03-26  219  	NULL,
-e6b6e10ac1de116 Peter Oberparleiter 2007-04-27  220  };
-b4691baaeef07bd Peter Oberparleiter 2024-03-26 @221  BIN_ATTRIBUTE_GROUPS(measurement);
-e6b6e10ac1de116 Peter Oberparleiter 2007-04-27  222  
-
-:::::: The code at line 221 was first introduced by commit
-:::::: b4691baaeef07bdc4c3524a0702d7dd6899610b4 s390/cio: simplify measurement attribute registration
-
-:::::: TO: Peter Oberparleiter <oberpar@linux.ibm.com>
-:::::: CC: Alexander Gordeev <agordeev@linux.ibm.com>
+>> ld.lld: error: undefined symbol: mtk_paris_pinctrl_pm_ops
+   >>> referenced by pinctrl-mt8196.c
+   >>>               drivers/pinctrl/mediatek/pinctrl-mt8196.o:(mt8196_pinctrl_driver) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
