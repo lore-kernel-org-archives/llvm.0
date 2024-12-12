@@ -1,73 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280D61DACA7;
-	Thu, 12 Dec 2024 21:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3451F1DB375;
+	Thu, 12 Dec 2024 21:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734039293; cv=none; b=eBriHIzDvWeZAOfdxhMs0Y/6Ad87eZpntBWBklAZwfFtgbqN8dCAxyB+50SJ+odTEM62P7bBkJYtd9hK9++FqNhPhS1BEjXMu/Wc9z4kGBU5vm3Ac/7aI3RNJqfUFfTUQL4/0eWE/m+e7prAuruO3hnMhzQyrCTGpGnXiG8xpeA=
+	t=1734039526; cv=none; b=NDYhEmo+5gZ8JponzZp07je8z0I8qayXfiFRuDrFp0YmQq/j9vF9c70slU8TyzDSc2r7aTh2YG8QZnl4U/LarDWr05ZOfl+9tr8Sa/PmiGlALgrT1i9H+ek+EYPawE4BCX99DNsl3xKQ3F+1H2Qi2MD0AIDu5kiQ7G1sqTitNm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734039293; c=relaxed/simple;
-	bh=4LkxwGqf00KAkhuSMledCldtKtbR6Iw+UH0KM4N3Uc0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GF+pYLsRJM+X4+QiNR9DiQjmFWgyKiJTkxqTxcRp8kAblzVSbhanvWnGsYX4wpMm3JrowG/ASDaEJVkcgOXwlSAndMhdEyjI019ojwz1y915lQ68TufCtXhPZVelZZfnNv4WtqAhAjtMrWsfqItQmAWeUI/KUmDzQbcKz5khBdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WbPAyHGG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734039526; c=relaxed/simple;
+	bh=e9DmC62DGQBYREdykpzBJfhhRg8VjFjNDnxf8thgKnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WowT9vmXvboOotB7KXn3K3sYzkRpyAbT5utzjDDD4kVvTj5Td+y4jytCW4nq19hESngfCne02sqCNfkfo3wayPVLcHiI0ZeDsGMbc0LvyW2+Ljqdrg+UFDoLQ+64e05AIG75QML0XSqcKXQ3SNKTwi76FuE5p7z+X73WNuO/IdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OYQ1jhkk; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WbPAyHGG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E685C4CECE;
-	Thu, 12 Dec 2024 21:34:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734039292;
-	bh=4LkxwGqf00KAkhuSMledCldtKtbR6Iw+UH0KM4N3Uc0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WbPAyHGGWrZOMtIFlaC+ZA5ToBZoyVOIzH7lc6Ue+xzf2hvvAdTkzYYjrfmIoNo2U
-	 0i7WoJzxbWimE7i8m81s40n/tClhXoceBcNzGNcLHT82EeESj3XsYEFpgfAfsYJKBj
-	 Blm+py40ucS82FdaPIHjJohGYGDnk3udhhHN0eIcgdzw+Btf2/sHfgJSxqlRhne3mu
-	 bB9WEukKV71nOY95/3nunnVFfA7weaToPqepzGiA3ZjSCBeravZn/ppwGYjPckMsmy
-	 5eilvbFn79v3v3/UJEiCta/HvHqCiKJnyQu9n/JXZ4bfFx0CXLq3NN1eug6P+7VLgI
-	 qU7267NR6CK5w==
-Date: Thu, 12 Dec 2024 14:34:48 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Rong Xu <xur@google.com>, Alice Ryhl <aliceryhl@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
-	Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Maksim Panchenko <max4bolt@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Yabin Cui <yabinc@google.com>,
-	Krzysztof Pszeniczny <kpszeniczny@google.com>,
-	Sriraman Tallam <tmsriram@google.com>,
-	Stephane Eranian <eranian@google.com>, x86@kernel.org,
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Peter Jung <ptr1337@cachyos.org>
-Subject: Re: [PATCH v7 7/7] Add Propeller configuration for kernel build
-Message-ID: <20241212213448.GA865755@thelio-3990X>
-References: <20241102175115.1769468-1-xur@google.com>
- <20241102175115.1769468-8-xur@google.com>
- <c0a6ae91-c925-40d6-8f95-59a9144d203b@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OYQ1jhkk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734039525; x=1765575525;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=e9DmC62DGQBYREdykpzBJfhhRg8VjFjNDnxf8thgKnM=;
+  b=OYQ1jhkkaqkwNM/MNAN1kMMtm+JRnN4lJPzx6bJy17KVb/rSe6AXW3sb
+   s41BOZju9w3ttmKiQSlIgYJd8p/Tm2FmT8Q+MljJm/fGn7KppI4EkDOVh
+   o4+DEVbfVr2qoYRk+Y1/PPZIsrMwyJrN5sLMg5OWz12UsemxkH7ep6Rte
+   be3NsmzMbxSwj20zylNED91jCObtiY3t7e7JIsIysMJUy1AxlWPzIepLQ
+   l2HVWaxt3M4HOjDzh3VCSIlqcrWka6LqcdN0z/O6IHme4oOvagbjqCPN+
+   bR3QGauNiTRGoRPyCa4ReAZkogGFUYeWYGZHK38Iha5j/D0ZPckr8sX8g
+   Q==;
+X-CSE-ConnectionGUID: eguHgTvPSTyNGgffwduuNQ==
+X-CSE-MsgGUID: Ex2qXqiFSNOVkuzU/vyskw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="44953365"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="44953365"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2024 13:38:44 -0800
+X-CSE-ConnectionGUID: QjLruauJRySxbtoKn5n+wQ==
+X-CSE-MsgGUID: jWPKtU2/SvWXx4Hm7AzVjw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="133726788"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 12 Dec 2024 13:38:42 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tLqtL-000BOX-2S;
+	Thu, 12 Dec 2024 21:38:39 +0000
+Date: Fri, 13 Dec 2024 05:38:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Subject: [rust:staging/rust-pci 7/11] rust/helpers/io.c:12:17: error: passing
+ 'volatile void *' to parameter of type 'void *' discards qualifiers
+Message-ID: <202412130534.HFYPTOBJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,74 +63,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c0a6ae91-c925-40d6-8f95-59a9144d203b@linux.dev>
 
-On Thu, Dec 12, 2024 at 01:20:46PM -0800, Yonghong Song wrote:
-...
-> > +5) Use the create_llvm_prof tool (https://github.com/google/autofdo) to
-> > +   generate Propeller profile. ::
-> > +
-> > +      $ create_llvm_prof --binary=<vmlinux> --profile=<perf_file>
-> > +                         --format=propeller --propeller_output_module_name
-> > +                         --out=<propeller_profile_prefix>_cc_profile.txt
-> > +                         --propeller_symorder=<propeller_profile_prefix>_ld_profile.txt
-> 
-> Prevously I am using perf-6.8.5-0.hs1.hsx.el9.x86_64 and it works fine.
-> Now in my system, the perf is upgraded to 6.12.gadc218676eef
-> 
-> [root@twshared7248.15.atn5 ~]# perf --version
-> perf version 6.12.gadc218676eef
-> 
-> and create_llvm_prof does not work any more.
-> 
-> The command to collect sampling data:
-> 
-> # perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c 500009 -- stress --cpu 36 --io 36 --vm 36 --vm-bytes 128M --timeout 300s
-> stress: info: [536354] dispatching hogs: 36 cpu, 36 io, 36 vm, 0 hdd
-> stress: info: [536354] successful run completed in 300s
-> [ perf record: Woken up 2210 times to write data ]
-> [ perf record: Captured and wrote 562.529 MB perf.data (701971 samples) ]
-> # uname -r
-> 6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39
-> 
-> The kernel is a 6.11 lto kernel.
-> 
-> I then run the following command:
-> $ cat ../run.sh
-> # perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c 500009 \
-> #       -- stress --cpu 36 --io 36 --vm 36 --vm-bytes 128M --timeout 300s
-> # good: perf-6.8.5-0.hs1.hsx.el9.x86_64
-> 
-> # <propeller_profile_prefix>: /tmp/propeller
-> ./create_llvm_prof --binary=vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39 \
->          --profile=perf.data \
->          --format=propeller --propeller_output_module_name \
->          --out=/tmp/propeller_cc_profile.txt \
->          --propeller_symorder=/tmp/propeller_ld_profile.txt
-> 
-> $ ./run.sh
-> WARNING: Logging before InitGoogleLogging() is written to STDERR
-> I20241212 13:12:18.401772 463318 llvm_propeller_binary_content.cc:376] 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is PIE: 0
-> I20241212 13:12:18.403692 463318 llvm_propeller_binary_content.cc:380] 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is relocatable: 0
-> I20241212 13:12:18.404873 463318 llvm_propeller_binary_content.cc:388] Build Id found in 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39': eaacd5a14abc48cf832b3ad0fa6c64635ab569a8
-> I20241212 13:12:18.521499 463318 llvm_propeller_binary_content.cc:376] 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is PIE: 0
-> I20241212 13:12:18.521530 463318 llvm_propeller_binary_content.cc:380] 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is relocatable: 0
-> I20241212 13:12:18.521553 463318 llvm_propeller_binary_content.cc:388] Build Id found in 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39': eaacd5a14abc48cf832b3ad0fa6c64635ab569a8
-> I20241212 13:12:18.521611 463318 llvm_propeller_perf_lbr_aggregator.cc:51] Parsing [1/1] perf.data ...
-> [ERROR:/home/runner/work/autofdo/autofdo/third_party/perf_data_converter/src/quipper/perf_reader.cc:1386] Event size 132 after uint64_t alignment of the filename length is greater than event size 128 reported by perf for the buildid event of type 0
-> W20241212 13:12:18.521708 463318 llvm_propeller_perf_lbr_aggregator.cc:55] Skipped profile [1/1] perf.data: FAILED_PRECONDITION: Failed to read perf data file: [1/1] perf.data
-> W20241212 13:12:18.521718 463318 llvm_propeller_perf_lbr_aggregator.cc:67] Too few branch records in perf data.
-> E20241212 13:12:18.554437 463318 create_llvm_prof.cc:238] FAILED_PRECONDITION: No perf file is parsed, cannot proceed.
-> 
-> 
-> Could you help take a look why perf 12 does not work with create_llvm_prof?
-> The create_llvm_prof is downloaded from https://github.com/google/autofdo/releases/tag/v0.30.1.
+tree:   https://github.com/Rust-for-Linux/linux staging/rust-pci
+head:   255cfcd4635cfca2732843557eace438918e6bec
+commit: 685c3110658f6b63d93efbcab74763b7e486a333 [7/11] rust: add `io::{Io, IoRaw}` base types
+config: um-randconfig-002-20241213 (https://download.01.org/0day-ci/archive/20241213/202412130534.HFYPTOBJ-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241213/202412130534.HFYPTOBJ-lkp@intel.com/reproduce)
 
-I think Peter may have reported the same issue on GitHub?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412130534.HFYPTOBJ-lkp@intel.com/
 
-https://github.com/google/autofdo/issues/233
+All errors (new ones prefixed by >>):
 
-I wonder if this is a kernel side or perf tool regression?
+   In file included from rust/helpers/helpers.c:17:
+>> rust/helpers/io.c:12:17: error: passing 'volatile void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           return iounmap(addr);
+                          ^~~~
+   arch/um/include/asm/io.h:19:42: note: passing argument to parameter 'addr' here
+   static inline void iounmap(void __iomem *addr)
+                                            ^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:194: rust/helpers/helpers.o] Error 1 shuffle=3716242076
+>> rust/helpers/io.c:12:17: error: passing 'volatile void *' to parameter of type 'void *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+   arch/um/include/asm/io.h:19:42: note: passing argument to parameter 'addr' here
+   make[3]: *** [rust/Makefile:317: rust/bindings/bindings_helpers_generated.rs] Error 101 shuffle=3716242076
+   make[3]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
+   make[3]: Target 'rust/' not remade because of errors.
+   make[2]: *** [Makefile:1269: prepare] Error 2 shuffle=3716242076
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=3716242076
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=3716242076
+   make: Target 'prepare' not remade because of errors.
 
-Cheers,
-Nathan
+
+vim +12 rust/helpers/io.c
+
+     9	
+    10	void rust_helper_iounmap(volatile void __iomem *addr)
+    11	{
+  > 12		return iounmap(addr);
+    13	}
+    14	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
