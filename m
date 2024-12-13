@@ -1,229 +1,214 @@
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FAF18DF73;
-	Fri, 13 Dec 2024 20:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7421B81B2
+	for <llvm@lists.linux.dev>; Fri, 13 Dec 2024 23:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734121731; cv=none; b=JIZhQtm3tZ54b5TJpM9BYdwK9iG9uzr1yUfxJgN7HflQ8XFgVCKRUBzh8CSW6dmxtarXtD4B28Niqq2HWG0oafv4/A5cHnT3Z6hl8rl9hD2j1YUPA+NJrLj3CIMQqJrR62lrjRJ9ZaMToEDGUASXZUQePm5GwDcTc1LmH6Lv/4k=
+	t=1734132957; cv=none; b=jfqIuYp1L6SUvXux+1wTUqa6DrcJWKy0BygA+kLgxrNBlpQSmHhtSMmw6m11C/mKYSjLV7aLK0LHOazofSwai5uLJou+ASiDs2sCTUzlf47Yz+XHPZLK9oowzAYJxKuBS3/FcvUQBbNjCLmK3vwIms2w+6GvIeU4QpOe1aOLH9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734121731; c=relaxed/simple;
-	bh=5bn8oXNQA2053l7zQok4dmxpsp3aILhYx8v20d7OHts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bmnY5jyWKrhPsbc/tErS6mlCVHIjjzosb7zP6IGLZa7Btb2ECqwmyUsqnlH7hdkV9U4Rieh6IGUt0qYylsMlAJONPtBvd69rECF+ZA+8wf10KE9ZuUk7Q3+QnvCbRUVTdWHWLrP8nzF9fr9SS/7mUOM8UWedXEK2QcmHAXSIkaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZTGOmBxG; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734132957; c=relaxed/simple;
+	bh=0j+16PpN+91mUK3wyIrIzkLt+SoJgk/lLKUzYw0f3S4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TEKDOWR5zRr+qCS4k4iZqJsnNLSGfFX9DCuydVCBMdlC+O9pNOJeVBdsHJqNnJSiMKtcc3nc8olmT/x2uJJD2iPOKqR6vMZJTbZ9E+dieX/uDD5b82U9YvMB07oVdQaWTvMnk9DW8/I/Xlk0wB9sZj3pbT/8sGarhl4YWzbHI9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Fsi/OekS; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZTGOmBxG"
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6d89dc50927so16241206d6.3;
-        Fri, 13 Dec 2024 12:28:49 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Fsi/OekS"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7fd49d85f82so1844493a12.3
+        for <llvm@lists.linux.dev>; Fri, 13 Dec 2024 15:35:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734121729; x=1734726529; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oy+g6CCR8H9z+qQ9IKAP5iLictR2vzTnBiPMNSCfde4=;
-        b=ZTGOmBxG/O3W5VnIUDXsdxFDpKwXcjJ2IzyYLDePTl5PuqARN5C4JxJjT8hyUdxkc5
-         OEjhICbaUgc7OMPCWmJcksdz3qQM3UeINvsudooZhWc0xqJGj9Sq82Si4JFy76pZyumA
-         GHmBM9sDTXRu4C7EKgoKCTiwvm505Uvr9y40936/HAGpUI9+Z5AwXrM7YUi3GPs/P8Dk
-         xoiVM3BYHP+CSAekLOyA8Qv0z+cuhN9JvD+33mfdklR4Nx79wZZr3H1sVOiYV++XdH/p
-         wV/xgS73pKqT4lBiXMAiF6lC2nmrM6Vc0m+uPeWH5OSwLapV/mdsob9XYzk8uzCUVelm
-         JKmQ==
+        d=chromium.org; s=google; t=1734132954; x=1734737754; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PTFT9yz4pM1OFjc+buOwPNQT6jdZkXPwXL3n28Tfbzs=;
+        b=Fsi/OekS4SHUH9KLBvFPHin7pFvxyQ4RLHtur7mO32TI37ZCdOo5AdqE6C63vfqhYI
+         amJbk3MupddeadTT5fmKcM8O4WLXRO57wqGbzXYRc3OiYHsD5pVZvpQYP0bky2RNcVAE
+         ykDmFQwbjwIb6kmeGiC2u56lKUWnQV8pW4CSA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734121729; x=1734726529;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oy+g6CCR8H9z+qQ9IKAP5iLictR2vzTnBiPMNSCfde4=;
-        b=P+7bi9j8ZHOu8B9u+PqTeGalFLaWcwAsCXIyH7OHTYiMphb9OR7694/f/4siY4iMmP
-         F5NzLyhFPgNcTQoVpr7TePw3WUmJic0U3KzI46PRMl1oKxbuvlJkZAENOK0OltwtxnVt
-         9WUzxiqhXwb07vC8UcVovI1Nutti1I1iAotSK4+saw52MvpOkfiQiBM6z7SrvN1TCIIi
-         8cQK9u/IFrr95K61nvhNNlXM8LGv7Hjxu2uIBkN4eAhdyYZf1YNpS3ftKD2yUtp2Smd4
-         USeUMxGJf4MNWp1nUbNAzLctzlodu1b7FakiJCcOqCrzQMi8PzZ4uK4v1wR7gIg7uywx
-         ScXA==
-X-Forwarded-Encrypted: i=1; AJvYcCVf16jhW5VwTbYeQi2QPCyuRX6T+/y/3IdoJCbEjSQjbJ8iTWWi3axFbhkw2RrlnmlO44LGfQ==@lists.linux.dev, AJvYcCW1/8rmP/xOCdNHc1ofzvs/veynWSiJZoRe92cfguIjTuHNeGoI1TTq2zO1rO6y6sOSOyH6@lists.linux.dev
-X-Gm-Message-State: AOJu0YzZgvwGZmNSBXPpgqoB3UrIaRuH5eJo1oE45CPVkcDtGCi1zul1
-	XkW2PEGBU/vZ0eIHRGO7v5MHmlecsZZrTTiJx6y9LcsM5euZmpfZ
-X-Gm-Gg: ASbGncvqku+kj2RcWvf6Ku19VKq+owJzqZFc8XcizAewGWJhlM5KZD2K45xmZp8LI27
-	5IIdzj4rNS8JjA4ZEvSIqRRYf3RBXYM5OynKsBlEsapazIV1XZCboOsjNAY3QKMW9N6AAeb2Ouu
-	6E8r9QVyyI8QqP/BwWRlm9T+7r799EzWvFGbj57gGGljoZk/Cj+bwEueEn828Y9TirArpXfSb0y
-	HQWT00wh8FMcVtE1E7uA7P/uo8mevZl8/aPkaEuffeUsodlrwQigLEzLev/9x5uVTBhCp2+LETm
-	9AIFMt2deMNDhVAAyXwZdK/tB1w4b4h41vttxTuyq6IiAjo=
-X-Google-Smtp-Source: AGHT+IE2tKNH2SwdPs6Zkn1SWo3BZBrlDL+pJUKK8ffETsaGO4d5bvz342opBhZTwO6vfAdVJSMQ5A==
-X-Received: by 2002:ad4:5dcb:0:b0:6d8:e641:da29 with SMTP id 6a1803df08f44-6dc8ca44819mr70587316d6.6.1734121728937;
-        Fri, 13 Dec 2024 12:28:48 -0800 (PST)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dccd3805e5sm789776d6.114.2024.12.13.12.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 12:28:48 -0800 (PST)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id B8C611200066;
-	Fri, 13 Dec 2024 15:28:47 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Fri, 13 Dec 2024 15:28:47 -0500
-X-ME-Sender: <xms:_5hcZ52D0Txfq3afYHx_FbgTtmEk_XFYGdsCxZrFemGViQYgimNBIw>
-    <xme:_5hcZwE0JuQpAx-sNtF1T4lNVXCTxpu8QQK39LNMwvRar7kPxKYKGILxZCLuwVeiw
-    JqiJqyI3iHFHYZ3VA>
-X-ME-Received: <xmr:_5hcZ55iST0Ld5UtgJO19PFmYPPES1IEZQ5fvzsB0A8k-EhTnaQH_VgICyoU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeejgddufeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
-    ucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrd
-    gtohhmqeenucggtffrrghtthgvrhhnpefftdeihfeigedtvdeuueffieetvedtgeejuefh
-    hffgudfgfeeggfeftdeigeehvdenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdo
-    mhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejke
-    ehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgr
-    mhgvpdhnsggprhgtphhtthhopeehjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
-    eprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprhhushhtqdhf
-    ohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgtuh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgv
-    lhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhgthh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehllhhvmheslhhishhtshdr
-    lhhinhhugidruggvvhdprhgtphhtthhopehlkhhmmheslhhishhtshdrlhhinhhugidrug
-    gvvhdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegr
-    lhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:_5hcZ21dZDlSFPHhJ-hR_xqZ1E0rep-r4WrXiwUQyM1nizooQS9AnA>
-    <xmx:_5hcZ8F5a37Iksgu8azbe4LtJh86oPlDtiIZrtuMnU4PwfLQHgkdaA>
-    <xmx:_5hcZ3_Z-H-jUwynNjV6TS1Q48CIKGofI_-xcmhDLwS-hAy2MJ1wxA>
-    <xmx:_5hcZ5lGDiaKlmxar7Ng2QGY3xkyj4bsqNu3LdLxBbywFujFVq5mLg>
-    <xmx:_5hcZwFSPtMAKsGOW-8Vmvi_oCQ7KHZB-ZN7yeYoB03uVjiO-lIrMZ-I>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Dec 2024 15:28:45 -0500 (EST)
-Date: Fri, 13 Dec 2024 12:28:45 -0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, lkmm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
+        d=1e100.net; s=20230601; t=1734132954; x=1734737754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PTFT9yz4pM1OFjc+buOwPNQT6jdZkXPwXL3n28Tfbzs=;
+        b=hrOsau2lFtuK0H3TDTrkVy/zQdCtDKqm7qp4tmcaBKHGJzd3arieNXg4+iegbWna1j
+         ugmL3bm2YQ85a4CRUSAydmcitPmk1rUct1Ag/vz2203uNKxRwk22Q62Rsj8ZlRTTavnE
+         PmYSqLQk0WqPrpvjQJ6G5AqrYrcUyd3R0awWVZHUsPT9aM6esRznlwj/me5W4C5u5mu3
+         ZBZe5wn9yM2k6GtIN+PAZJ2w9Lbikm9jVKVlQdhKdo3Ivz1uMR0cw/RK1PjdRHcgR1wT
+         djoFBtcy2QuClujmprNbqL+QRTXdmaa+i7n6tCIPIe1OVXAEdHLrSx7fmUQo9fyxEvPL
+         K8AA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdhgASDpL0CcgWmekKF4DuetgJiWw4uqFIjstTr71Orw2yh6fwuKBylbAe4Nd//ij7wEd5@lists.linux.dev
+X-Gm-Message-State: AOJu0YxNQtcxwMB3V2cWpInyemOO6HAXmnY+AMs/0KfwjPYo6iNmDskw
+	GaIpwFGPvaKu7j4Js5EalWNrW8wlasYXWIXl5fCzv0OJVfaO2uNlELUN2L2jeA==
+X-Gm-Gg: ASbGnct2xq2DPTPap7Dd3MWIv9C3BVtAeKp8wAVmCQ4p4sxkx08GUVGV2MghW4SLo9+
+	EdDWrZz4fIIE4YELU6EhShSScKTbD9GVKB/9G9ffSslGMEFYF+Q8vNRA/IUH32jefeRHQg9hCWq
+	sILVkgAkxzI0NO4aTBXiAwPeSTZ6bMRdrX+QZ4wrsZA5OX5WazR8RJhI1cjkDTxKEo3ZD2va3Ml
+	Z/rS10rim4oVR1d8fIIBpfqrjqQ0KT7tOy9zX584GaodoxaNMQgs1WzDBkSspcBo/+YQwKAjfbt
+	wEEG1SNMbfQq6isfJTJEUJqLJWcCDLs=
+X-Google-Smtp-Source: AGHT+IG5j4AMarUnG2ZSC8v4QEARGsFW4ax9MqO8wiJjh8pP/1TphunmTJECxAqe49LgP2wG4I0BzA==
+X-Received: by 2002:a17:902:e542:b0:211:3275:3fe with SMTP id d9443c01a7336-21892a22a56mr48820505ad.17.1734132954576;
+        Fri, 13 Dec 2024 15:35:54 -0800 (PST)
+Received: from localhost (227.180.227.35.bc.googleusercontent.com. [35.227.180.227])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-218a1dcb1c0sm3024755ad.65.2024.12.13.15.35.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2024 15:35:54 -0800 (PST)
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+To: heikki.krogerus@linux.intel.com,
+	tzungbi@kernel.org,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: akuchynski@google.com,
+	sboyd@kernel.org,
+	pmalani@chromium.org,
+	badhri@google.com,
+	rdbabiera@google.com,
+	dmitry.baryshkov@linaro.org,
+	jthies@google.com,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Bill Wendling <morbo@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com,
- Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
- linux-riscv@lists.infradead.org
-Subject: Re: [RFC v2 02/13] rust: sync: Add basic atomic operation mapping
- framework
-Message-ID: <Z1yY_Yr0B6KpWLmJ@tardis.local>
-References: <20241101060237.1185533-1-boqun.feng@gmail.com>
- <20241101060237.1185533-3-boqun.feng@gmail.com>
- <CAH5fLghYjcb-mpR_rr2aC_W8rRb6g8jCFxgky7iEqVgmpHjf=Q@mail.gmail.com>
- <Z1sYNOYJPzQmJXn6@boqun-archlinux>
- <CAH5fLgidmY7FtKLKR-Yxb6U-mQvsyatGRToqSHHRACfTdiAtUA@mail.gmail.com>
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 0/8] Thunderbolt and DP altmode support for cros-ec-typec
+Date: Fri, 13 Dec 2024 15:35:41 -0800
+Message-ID: <20241213233552.451927-1-abhishekpandit@chromium.org>
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH5fLgidmY7FtKLKR-Yxb6U-mQvsyatGRToqSHHRACfTdiAtUA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 13, 2024 at 03:37:13PM +0100, Alice Ryhl wrote:
-[...]
-> > > > @@ -0,0 +1,19 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +
-> > > > +//! Atomic primitives.
-> > > > +//!
-> > > > +//! These primitives have the same semantics as their C counterparts: and the precise definitions of
-> > > > +//! semantics can be found at [`LKMM`]. Note that Linux Kernel Memory (Consistency) Model is the
-> > > > +//! only model for Rust code in kernel, and Rust's own atomics should be avoided.
-> > > > +//!
-> > > > +//! # Data races
-> > > > +//!
-> > > > +//! [`LKMM`] atomics have different rules regarding data races:
-> > > > +//!
-> > > > +//! - A normal read doesn't data-race with an atomic read.
-> > >
-> > > This was fixed:
-> > > https://github.com/rust-lang/rust/pull/128778
-> > >
-> >
-> > Yeah, I was aware of that effort, and good to know it's finally merged.
-> > Thanks!
-> >
-> > This will be in 1.83, right? If so, we will still need the above until
-> > we bump up the minimal rustc version to 1.83 or beyond. I will handle
-> > this properly with the minimal rustc 1.83 (i.e. if this goes in first,
-> > will send a follow up patch). I will also mention in the above that this
-> > has been changed in 1.83.
-> >
-> > This also reminds that I should add that LKMM allows mixed-size atomic
-> > accesses (as non data race), I will add that in the version.
-> 
-> This is just documentation. I don't think you need to do any special
 
-The PR also contained miri changes, so the same code will be reported
-differently by miri. That was what I was thinking of. However, now think
-about it, we are not going to use Rust atomics, so this difference
-shouldn't affect us. Therefore I agree, I will drop this.
+Hi Heikki, Tzung-Bi et al,
 
-> MSRV handling.
-> 
-> > > > +mod private {
-> > > > +    /// Sealed trait marker to disable customized impls on atomic implementation traits.
-> > > > +    pub trait Sealed {}
-> > > > +}
-> > >
-> > > Just make the trait unsafe?
-> > >
-> >
-> > And make the safety requirement of `AtomicImpl` something like:
-> >
-> >     The type must have the implementation for atomic operations.
-> >
-> > ? Hmm.. I don't think that's a good safety requirement TBH. Actually the
-> > reason that we need to restrict `AtomicImpl` types is more of an
-> > iplementation issue (the implementation need to be done if we want to
-> > support i8 or i16) rather than safety issue. So a sealed trait is proper
-> > here. Does this make sense? Or am I missing something?
-> 
-> Where is the AtomicImpl trait used?
-> 
+This patch series adds support for alternate mode entry for the
+cros-ec-typec driver for Displayport and Thunderbolt.
 
-It's used when `impl`ing an `AllowAtomic` type, `AllowAtomic` has an
-associate type named `Repr` which must be an `AtomicImpl`, i.e. each
-type that has atomic operation support must select the underlying
-implementation types (currently we only have i32 and i64 from C side
-APIs). Using a sealed trait is appropriate in this case, because unless
-you are adding atomic support for different sizes of data, you shouldn't
-impl `AtomicImpl`.
+Thunderbolt support is added by adapting an RFC Heikki had posted
+previously:
 
-Regards,
-Boqun
+https://lore.kernel.org/linux-usb/20191230152857.43917-1-heikki.krogerus@linux.intel.com/
 
-> Alice
+A few comments on the series:
+
+* The cros-ec interface will not accept any VDOs/VDMs so we simply
+  ignore any configurations we are passed (i.e. DPConfigure). This means
+  the sysfs control of DP lanes won't work.
+* ChromeOS has two modes of operation for alt-modes: entirely EC driven
+  or AP-driven from userspace (via the typec daemon). Thus, we don't
+  expect the kernel alt-mode drivers to auto-enter modes in all cases.
+  This series allows auto-enter for displayport but disables it for TBT
+  for this reason.
+
+This was tested with a ChromeOS Brya device using kernel 6.6 and built
+with allmodconfig for linux-usb.
+
+Thanks,
+Abhishek
+
+Changes in v5:
+- Rebase with module_alias_printf
+- Add lockdep, missing includes and fix up block comment style.
+- Extract port altmode ".active" changes to its own patch
+- Put dev_err on single line.
+- Slip clang-format a washington to look the other way.
+- Use list_for_each_entry and simplify conditional statement within
+- Include missing headers for altmodes
+- Consistent use of `adata` for altmode data
+- Fix incorrect alloc size of dp_data
+
+Changes in v4:
+- Large refactor to use cable_altmodes
+- Fixed ordering of cable mode enter/exit (SOP', SOP", then port for
+  enter; reverse order for exit)
+- Other small fixes from v3 feedback
+- memset struct typec_altmode_desc
+- Add CONFIG_CROS_EC_TYPEC_ALTMODES for Makefile use
+- Move ap_driven_altmode check to common vdm function
+- Add locking to protect shared data
+- Update enter/exit error messages
+- Update Makefile + Kconfig to use CONFIG_CROS_EC_TYPEC_ALTMODES
+- Add locking in vdm function
+
+Changes in v3:
+- Removed mode from altmode device ids
+- Updated modalias for typecd bus to remove mode
+- Re-ordered to start of series
+- Revert rename of TYPEC_TBT_MODE
+- Remove mode from typec_device_id
+- Refactored typec_altmode_dp_data per review request
+- Removed unused vdm operations during altmode registration
+- Fix usage of TBT sid and mode.
+- Removed unused vdm operations during altmode registration
+- Set port.inactive = true instead of auto-enter.
+
+Changes in v2:
+- Update altmode_match to ignore mode entirely
+- Also apply the same behavior to typec_match
+- Use <linux/usb/typec_tbt.h> and add missing TBT_CABLE_ROUNDED
+- Pass struct typec_thunderbolt_data to typec_altmode_notify
+- Rename TYPEC_TBT_MODE to USB_TYPEC_TBT_MODE
+- Use USB_TYPEC_TBT_SID and USB_TYPEC_TBT_MODE for device id
+- Change module license to GPL due to checkpatch warning
+- Refactored displayport into cros_typec_altmode.c to extract common
+  implementation between altmodes
+- Refactored thunderbolt support into cros_typec_altmode.c
+- Only disable auto-enter for Thunderbolt
+- Update commit message to clearly indicate the need for userspace
+  intervention to enter TBT mode
+
+Changes in v1:
+- Delay cable + plug checks so that the module doesn't fail to probe
+  if cable + plug information isn't available by the time the partner
+  altmode is registered.
+- Remove unncessary brace after if (IS_ERR(plug))
+
+Abhishek Pandit-Subedi (7):
+  usb: typec: Only use SVID for matching altmodes
+  usb: typec: Make active on port altmode writable
+  usb: typec: Print err when displayport fails to enter
+  platform/chrome: cros_ec_typec: Update partner altmode active
+  platform/chrome: cros_ec_typec: Displayport support
+  platform/chrome: cros_ec_typec: Thunderbolt support
+  platform/chrome: cros_ec_typec: Disable tbt on port
+
+Heikki Krogerus (1):
+  usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+
+ MAINTAINERS                                  |   3 +
+ drivers/platform/chrome/Kconfig              |   7 +
+ drivers/platform/chrome/Makefile             |   4 +
+ drivers/platform/chrome/cros_ec_typec.c      |  46 ++-
+ drivers/platform/chrome/cros_ec_typec.h      |   1 +
+ drivers/platform/chrome/cros_typec_altmode.c | 373 ++++++++++++++++++
+ drivers/platform/chrome/cros_typec_altmode.h |  51 +++
+ drivers/usb/typec/altmodes/Kconfig           |   9 +
+ drivers/usb/typec/altmodes/Makefile          |   2 +
+ drivers/usb/typec/altmodes/displayport.c     |   4 +-
+ drivers/usb/typec/altmodes/nvidia.c          |   2 +-
+ drivers/usb/typec/altmodes/thunderbolt.c     | 388 +++++++++++++++++++
+ drivers/usb/typec/bus.c                      |   6 +-
+ drivers/usb/typec/class.c                    |   9 +-
+ include/linux/usb/typec.h                    |   2 +
+ include/linux/usb/typec_tbt.h                |   1 +
+ scripts/mod/devicetable-offsets.c            |   1 -
+ scripts/mod/file2alias.c                     |   9 +-
+ 18 files changed, 885 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_typec_altmode.c
+ create mode 100644 drivers/platform/chrome/cros_typec_altmode.h
+ create mode 100644 drivers/usb/typec/altmodes/thunderbolt.c
+
+-- 
+2.47.1.613.gc27f4b7a9f-goog
+
