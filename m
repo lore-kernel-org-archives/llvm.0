@@ -1,119 +1,153 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4991E501C
-	for <llvm@lists.linux.dev>; Fri, 13 Dec 2024 23:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B9316419;
+	Sat, 14 Dec 2024 01:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734132961; cv=none; b=iAESwjLJv76nuyUKuehcoWQkHssUS1NtqQHEGTX3ZRfnaatyJqAUOs54cV0pyDu8JpgfRErKr08HEt/e5A+kET51cc+Wwv1lk9Q8e+xcDKHqaq2/CM6hv5bthMbwJrd509Ddr39IBmVESblbUMDCiYI7XGYP83NF/LkRinw++u4=
+	t=1734141303; cv=none; b=gTxKiCcgxFZizVN0WS0vestq3vQl5Bg7icbMfGb01mLpfw1mNaKpye42dFXTizHHweJ7QB1TtVxBdWw7Y+bqQnJyzC5tjZoImfnFmhNx+5OMQk1RA+vKcADUQ+HAX50eTb4sAUsp0t62nNQujTHu5AaFgAUR98dh8Io4D6nAdbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734132961; c=relaxed/simple;
-	bh=At4yxUXPC5gCISpGbj4Jh8y2nbyqYWKzXfcEq34ABtI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V3DPjSxbrwLejSh1fG0oqfnWQ/6qisvpqAcwsWbj5LAdxDkgXVis22FZBhi+ALvAUQ1En7Q8tkeqv6UFIDf4FoP5iB6YAp3mRaHXMO00oH95ec4ovff/iRIJ3FJuoHBJZHiV9DEdbfyAg6NQENEYYXAob9CmwhrxzYfzN2uQ4Nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AitfKkkS; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1734141303; c=relaxed/simple;
+	bh=WsuA/3SXhnUfAIbjS7t3Vzhd4swMzfCSnp/biatW1ow=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tw9BT0nLm/le9wGpq6Uba9adRnXI6SKw9ZYGyQb0kxYICPInXcYBNwwXXLasXZWBG81qk0ojbhdazyO9RwimA75QLjXnRQ6DB3GZskQS8je8/YXV4bCSYpWnkfnYLlZGTGm+AqKbYKvFdsU6ZuJLA4F9vX0nWHaSl4BP3K75c2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlMuDkyt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AitfKkkS"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-728e1799d95so2767771b3a.2
-        for <llvm@lists.linux.dev>; Fri, 13 Dec 2024 15:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1734132958; x=1734737758; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6aNEDHH4018fnzzsqut871HqEVIOaY/MIH7LrGllh5I=;
-        b=AitfKkkSbJ43t8gd0igm3LR9kJp35XkhfZD3AiBqfld+ohmk0VKAkC48LCvsyrtQL4
-         LJ4aklfdMH212nZ298wbDYeqUX5Fi5gOCHbrXlRg2z3bB7AQoGo7h9YA6b4LzwAaC147
-         iD7VlnKgcOdgRCGKPj5Vshc2bVLACWRW3v2Lk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734132958; x=1734737758;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6aNEDHH4018fnzzsqut871HqEVIOaY/MIH7LrGllh5I=;
-        b=cJUGWFJMsEed4LeiIzlKfTeSnT6M2MMKXnYAtuJf//2412xR7xWMs+s4RqSrHvUKqn
-         Jz9Hz5d0C5FDvC1JgQz3Ci1zHXXBsmmdI3w0tAlELLXlVJ6pZqZMFD/iiubNGpIbUMhp
-         lqQgde37pqKxfJ3bW9/Lt86ZHJKBaW2wQmn0apTu9zDon4E69yl2deGQHdKYz0bI7O7K
-         lkNVCX+8Q8Y8MwkvH+GumfaXkAzRkKuSQf3KrU2mUgd1tcIL18QbeU2dyqmvjyY1Mym2
-         5pbpvZI3uFJ3fg9wJqDeYH0mA1Bunuvm8y5bEFH1l/37AGBjDzP4keYTUmHoomi2hNvF
-         xdhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUUgWFOvif8pvC0joR+b2Vk44OvN0ITxITDhl8l1QeEepnXQ0BNwqpJRhyqQ2CMhnCbVBYi@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxhbo2zRytM9JDCH3F4oTDv0kfffWNoj55G5zcqX1uxhjoO2sto
-	XFCBEbZQuxLDlCaKgFibCcpJDX/3Ktpi3oBYF0KhYQKJifJVnL/ss9XP/QTYjg==
-X-Gm-Gg: ASbGncuoYathwtzeKow98lnO00PSwTdaUTo5d4exW7ADNPCw5yxE5lXB/wTiYfvbyKC
-	JnJ7OAKYf44Tms/LRQ6c9c1aq74wZv7EiMpiOS+Y/0d4kduOfPGDQoD/iIT9tlTOYCsr2aTM2m/
-	0gVZZ31jsva1YF6JaAKTmVf52wYyRSbxmNJTC2KTvQO/LVoksYsHEbv34m4Q8uqcnzeWVwsd1Sl
-	3Cb4if39/tpSVuj8f/HY5yTQzdip+uJLDEBDziqXC1eqsd5Brdwlkw+SFm2Fkk2z4fUnKJ0p+cz
-	0MfIfH6EfFNgY4ZJcf/W7NQV9fl9Puk=
-X-Google-Smtp-Source: AGHT+IGuN3bapepIPxR4xf+sjr97DT0siePvsa4ASfkZeWVposaJaxMdiFV3aR4FrmX3VtJTvm6U/w==
-X-Received: by 2002:a05:6a00:f8a:b0:724:f10b:e663 with SMTP id d2e1a72fcca58-7290be74313mr6956527b3a.0.1734132958609;
-        Fri, 13 Dec 2024 15:35:58 -0800 (PST)
-Received: from localhost (227.180.227.35.bc.googleusercontent.com. [35.227.180.227])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-72918bad896sm336267b3a.143.2024.12.13.15.35.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2024 15:35:58 -0800 (PST)
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To: heikki.krogerus@linux.intel.com,
-	tzungbi@kernel.org,
-	linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: akuchynski@google.com,
-	sboyd@kernel.org,
-	pmalani@chromium.org,
-	badhri@google.com,
-	rdbabiera@google.com,
-	dmitry.baryshkov@linaro.org,
-	jthies@google.com,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Bill Wendling <morbo@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v5 4/8] usb: typec: Print err when displayport fails to enter
-Date: Fri, 13 Dec 2024 15:35:45 -0800
-Message-ID: <20241213153543.v5.4.I6cff9d767b0f8ab6458d8940941e42c920902d49@changeid>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-In-Reply-To: <20241213233552.451927-1-abhishekpandit@chromium.org>
-References: <20241213233552.451927-1-abhishekpandit@chromium.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlMuDkyt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC42C4CED0;
+	Sat, 14 Dec 2024 01:55:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734141303;
+	bh=WsuA/3SXhnUfAIbjS7t3Vzhd4swMzfCSnp/biatW1ow=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ZlMuDkytgSwnAN2EGUERMIPMSeRHXRocBhhzF3a1ZReeifq/TTgCV1UpR25TLO4c6
+	 qT30AjmdzmFrnF1PWupwGfkT8aZmiK3U4jXXjM2cltmJMp6Dgj+5YKmrNtIAWHz1ND
+	 zaIIu3+23HZc14a9knXcz/V6T7VN/4HSyds1ezKZ9gFvQprgx9NMo6+EiD0MI897Gh
+	 pfMpF8hU6VzpwMvorNafetw4qiNVQqzpbm+FpgecMIuwbnzYpAUKtFWNJ/0uoXHxy0
+	 WN5Sz/CE3+O9oroZhlLErUGawTUVBq2uKBAtjCdnmB1nGroQqIN5ZiQeTaVo4tWQRc
+	 UQVr+b7Tc+z4A==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 13 Dec 2024 18:54:53 -0700
+Subject: [PATCH] x86/kexec: Fix location of relocate_kernel with
+ -ffunction-sections
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241213-kexec-fix-section-name-for-ffunction-sections-v1-1-1ae6050f6a15@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGzlXGcC/y2NTQrCQAyFr1KyNtBJq4hXERftzBsN4lQmVQqld
+ zeoy+/9rmSoCqNTs1LFW02n4hB2DcXbUK5gTc4krfRBQsd3LIicdWFDnD3NZXiA81Q551f5SX/
+ LWNp+7OSYDmnck28+K7z6/Ttftu0DZ04KRX8AAAA=
+X-Change-ID: 20241213-kexec-fix-section-name-for-ffunction-sections-204b328d6db5
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ David Woodhouse <dwmw@amazon.co.uk>, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3896; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=WsuA/3SXhnUfAIbjS7t3Vzhd4swMzfCSnp/biatW1ow=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOkxT0vC97QeWij/RqAxe4/Lap4Gj5sX5qyfUDIxnrWLh
+ WHqm0nfO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEplkyMsyIf9BuyLJY9saa
+ JImTpZkPn5QW7Ql3EY77XpI1e+1GuQmMDKdLHMoS0rfmHJjRoxSTE5fiXaelvCJSjW2f5EpTwVs
+ sXAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Print the error reason for typec_altmode_enter so users can understand
-why displayport failed to enter.
+After commit cb33ff9e063c ("x86/kexec: Move relocate_kernel to kernel
+.data section"), kernels configured with an option that uses
+-ffunction-sections, such as CONFIG_LTO_CLANG, crash when kexecing
+because the value of relocate_kernel does not match the value of
+__relocate_kernel_start so incorrect code gets copied via
+machine_kexec_prepare().
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+  $ llvm-nm good-vmlinux &| rg relocate_kernel
+  ffffffff83280d41 T __relocate_kernel_end
+  ffffffff83280b00 T __relocate_kernel_start
+  ffffffff83280b00 T relocate_kernel
+
+  $ llvm-nm bad-vmlinux &| rg relocate_kernel
+  ffffffff83266100 D __relocate_kernel_end
+  ffffffff83266100 D __relocate_kernel_start
+  ffffffff8120b0d8 T relocate_kernel
+
+When -ffunction-sections is enabled, TEXT_MAIN matches on
+'.text.[0-9a-zA-Z_]*' to coalesce the function specific functions back
+into .text during link time after they have been optimized. Due to the
+placement of TEXT_TEXT before KEXEC_RELOCATE_KERNEL in the x86 linker
+script, the .text.relocate_kernel section ends up in .text instead of
+.data.
+
+Use a second dot in the relocate_kernel section name to avoid matching
+on TEXT_MAIN, which matches a similar situation that happened in
+commit 79cd2a11224e ("x86/retpoline,kprobes: Fix position of thunk
+sections with CONFIG_LTO_CLANG"), which allows kexec to function
+properly.
+
+While .data.relocate_kernel still ends up in the .data section via
+DATA_MAIN -> DATA_DATA, ensure it is located with the
+.text.relocate_kernel section as intended by performing the same
+transformation.
+
+Fixes: cb33ff9e063c ("x86/kexec: Move relocate_kernel to kernel .data section")
+Fixes: 8dbec5c77bc3 ("x86/kexec: Add data section to relocate_kernel")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
+ arch/x86/kernel/relocate_kernel_64.S | 6 +++---
+ arch/x86/kernel/vmlinux.lds.S        | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Changes in v5:
-- Put dev_err on single line.
-- Slip clang-format a washington to look the other way.
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index 484e8a13bf98399107f00dfb057b908e330c1a2d..38c90a14fc1b4c7d423a4decd227c7584bdfcee2 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -24,11 +24,11 @@
+ #define PAGE_ATTR (_PAGE_PRESENT | _PAGE_RW | _PAGE_ACCESSED | _PAGE_DIRTY)
+ 
+ /*
+- * The .text.relocate_kernel and .data.relocate_kernel sections are copied
++ * The .text..relocate_kernel and .data..relocate_kernel sections are copied
+  * into the control page, and the remainder of the page is used as the stack.
+  */
+ 
+-	.section .data.relocate_kernel,"a";
++	.section .data..relocate_kernel,"a";
+ /* Minimal CPU state */
+ SYM_DATA_LOCAL(saved_rsp, .quad 0)
+ SYM_DATA_LOCAL(saved_cr0, .quad 0)
+@@ -40,7 +40,7 @@ SYM_DATA(kexec_pa_table_page, .quad 0)
+ SYM_DATA(kexec_pa_swap_page, .quad 0)
+ SYM_DATA_LOCAL(pa_backup_pages_map, .quad 0)
+ 
+-	.section .text.relocate_kernel,"ax";
++	.section .text..relocate_kernel,"ax";
+ 	.code64
+ SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	UNWIND_HINT_END_OF_STACK
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 0c893997f023627dd1f3187200d3609b234f98d1..63ff60a11be58132435e2ca8424ce31747d86c8c 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -100,8 +100,8 @@ const_pcpu_hot = pcpu_hot;
+ #define KEXEC_RELOCATE_KERNEL					\
+ 	. = ALIGN(0x100);					\
+ 	__relocate_kernel_start = .;				\
+-	*(.text.relocate_kernel);				\
+-	*(.data.relocate_kernel);				\
++	*(.text..relocate_kernel);				\
++	*(.data..relocate_kernel);				\
+ 	__relocate_kernel_end = .;
+ 
+ ASSERT(__relocate_kernel_end - __relocate_kernel_start <= KEXEC_CONTROL_CODE_MAX_SIZE,
 
- drivers/usb/typec/altmodes/displayport.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+---
+base-commit: 7e39d667b06c0849ab9cec1c96e2dc253a57310b
+change-id: 20241213-kexec-fix-section-name-for-ffunction-sections-204b328d6db5
 
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 3245e03d59e6..ac84a6d64c2f 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -252,7 +252,7 @@ static void dp_altmode_work(struct work_struct *work)
- 	case DP_STATE_ENTER:
- 		ret = typec_altmode_enter(dp->alt, NULL);
- 		if (ret && ret != -EBUSY)
--			dev_err(&dp->alt->dev, "failed to enter mode\n");
-+			dev_err(&dp->alt->dev, "failed to enter mode: %d\n", ret);
- 		break;
- 	case DP_STATE_ENTER_PRIME:
- 		ret = typec_cable_altmode_enter(dp->alt, TYPEC_PLUG_SOP_P, NULL);
+Best regards,
 -- 
-2.47.1.613.gc27f4b7a9f-goog
+Nathan Chancellor <nathan@kernel.org>
 
