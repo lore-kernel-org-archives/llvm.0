@@ -1,66 +1,57 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C56354782
-	for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 21:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031811AA78E
+	for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 22:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734210646; cv=none; b=asItRZqeDPPOZ3aJVN6ovnArsHNFzdzLervjTd438bB3G4nBKtjgnI8ZnAEWuT3i9qZjN+6UuB1zTrXfUJsWnLSTPB3/sDdAzKOOyGSQsihkuOhabyTXh1ddEI7S84IuPx0qzFqG9pog1y5MGY6rvdHDnmTqq/Sb3LxguhwyEsY=
+	t=1734216510; cv=none; b=ljl/+TqANBbftywXyRqxxdLTlrZwAQleU6oOJNWsdWFof+R4+Z25dk0p6jT7iwSzsLT1RPoaFZaFUvpU4UWzglSMlBC0ghY0XJ3ns1ypeWgCJ0A7TJCXGwIocb2HBZu3NZfMZdW7HR8pRXRWzImcCA7kWhyXhPLbITEq5WFFPEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734210646; c=relaxed/simple;
-	bh=dizETgqchOGN9znBptIwYYp5DcUVnRRkyxawE40hqy8=;
+	s=arc-20240116; t=1734216510; c=relaxed/simple;
+	bh=mN/QbefYvgqpNikuORpa9UwnpfDph9udgK3kqfaxc6s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dsWbCwie4U1KwrAe4HnjWLvN2vYEl+qtytA4m/wvCClq7WYMCmDEZ98fo4EJ3cnUV0jlLtW07jRnaBL2A8fgDBAY0hnliOmvH5Utu9uogpTNXQOIcogcO9CIX/QumF4PHMoXtYiBMHx9pfDEUMY3DGvNeMBlHLxk6js8utL2etE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QyoH50bf; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 To:Cc:Content-Type; b=Y1j5H5kHScKm9DeFgGyvpSyI1+YLEPJffarwPOPv8Z1ipH+AjLd6u0q+qprS3VGpO9DFrf9ySH/sKirjRWT76MvNnkGt39F8KjfPvzAqmdD3W0fVACr4AxidqSGbZLBK9DZSfrVPB847+EnwOQqXSilcSDWvZFLtxpLHOlJCShM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ETp0Q/jU; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QyoH50bf"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso3449173a12.0
-        for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 13:10:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ETp0Q/jU"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6f29aa612fbso2491307b3.0
+        for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 14:48:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1734210642; x=1734815442; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WY4ZfJ2+ctfZ1Zv59YN+ivx3+dAJ3DnG8Iv2rYTKPj8=;
-        b=QyoH50bfN9kmrnlep87J7WSN3I1BfuutMfjNwziRrmVP6iE55iOLw9v4SlI51Uoido
-         Ajw7lM3dF5SFzdqz+uYlTxZcAa7b99vZ6sW1MNeqby1RNi4XGgMugFPToCmfF6BTT8Ya
-         6hpT4BRwtkssMd8lqvtoLEeKOztyC6sdeQ66g=
+        d=paul-moore.com; s=google; t=1734216507; x=1734821307; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rZJ4scXTRmS7RPf8oo625k7m0SKrT5j5fYdKEOC7Hfo=;
+        b=ETp0Q/jU+MXcCTiXZkrcB4Oxf0H9nAenTIDxOf7sYimjOOdfv1eoCFosgdzkPtuJlg
+         TZpWULAEB3AyPLqsq2cUUp23qDKb3MxTDjlj7gxPnA7d3uuiSpx/oP1wy3fut6CrieGd
+         V1NWEIox91rYZ8E/rdnEn7QkVVUNU1OInR/LOqzDKQK+FtuGrCa9fgAIFor80LCW4Du/
+         lfV46eHSeisMu2G2oU/ESG9UKkeJstDVi/t6CFVqHb/Wse/seSudrH1905dPwSAiwCvp
+         hICw8VtOGnf5TkjF00NYEckU5XbUJYNguuMa0pRFc4r6uYMUTr6h82y1+YNs7pPXW11I
+         L5/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734210642; x=1734815442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WY4ZfJ2+ctfZ1Zv59YN+ivx3+dAJ3DnG8Iv2rYTKPj8=;
-        b=gkEVWiRjJLDJS8pUWYiDJDhhW3CRCLfs+0egm1RQ6P/+X/tub5LymfsuYFU3+wuw4n
-         OEdlsVFeINJt89tNT7+9VyJCPDFJYNYDIaI91bQFGMrro0tnz5PGzQzQbPAY1IsiUadi
-         uFTCN/i4OIVLD9eKhLin07k5SzWPlG+jl2jedtHbkTA9ajbi/jAJs/i72wjof4dkI8j4
-         3CYPL7qG333K01B8LVo/FNqSaBuUZB5RHp8yQ0FjjnvHb9qMekEPLZzSka/ccjUtrxKs
-         DgALbGf1aEhk69iiinkrHou6fJka+Nqtpp52x6dn1ExkyPF0bnyU1PjQ0X3aXfPK3ojH
-         UlWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVaAi++PKlJB98nCg1Y2SiwQuCCzP/GQCYgQPL6Vjf0tMnuerAY3jIWhyVUWciZq4nPW37j@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz+InCR591WpjTOLxJKk3pRrKaS+Ry4iy3ZY0noBRN9Bixo+3lW
-	SiE73fUk2MpQqpYlgyLaxWcyvfDlmSyGYa2Z1ffd0MRCAc95e3kQWFxc9cuQ/tN3pDxlGrZl89W
-	iIMU=
-X-Gm-Gg: ASbGncvtAdmrYPoSBeB7rkI+ttv/oBldz4YGvMKqP8SE4nEHelzBoJEx3pS1II4F9O1
-	uBYOFy0UndCGDmBI3XXwbnqWNjxaw6dTsvy83PgTrvigWmXgE61UUVsFeaPOgXMw814ULZEJXC6
-	gMk8mAc4DKxdlbGDl3H3r4Ws2YlDTdr4vYlEKv5LYJce0t1+/4twqfD4yTewiqsIXFlrbPjTHPP
-	K6BRy1XHASGrUt3llWzJXv6q/Rhte5GX2W1UaLP+EbGJUM8iZ1KKaaTfuRstt6vvxupZP8zB+Vw
-	qVeVdAtnUq/vmlHYOltiYhtDwi3+znM=
-X-Google-Smtp-Source: AGHT+IFj0cVGh1DOnDt0NFUxGs5Lgoo5s+X8jQfwG3TDN0ir0WSz2F018WZEn4vc4U0Wm6WCga456Q==
-X-Received: by 2002:a05:6402:390a:b0:5d4:2ef7:1c with SMTP id 4fb4d7f45d1cf-5d63c3db8d9mr16470637a12.24.1734210642230;
-        Sat, 14 Dec 2024 13:10:42 -0800 (PST)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab963913d1sm132206066b.165.2024.12.14.13.10.41
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Dec 2024 13:10:41 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9a977d6cc7so369970866b.3
-        for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 13:10:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXMOqE0UDCEbgFK4UMJ/CySMo7ayJCciKf0JGWaetZEey9l/P6+1RAaEof/QCNVVPyUR7Km@lists.linux.dev
-X-Received: by 2002:a05:6402:35c2:b0:5d0:d3eb:a78f with SMTP id
- 4fb4d7f45d1cf-5d63c157955mr17026663a12.0.1734210641295; Sat, 14 Dec 2024
- 13:10:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734216507; x=1734821307;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rZJ4scXTRmS7RPf8oo625k7m0SKrT5j5fYdKEOC7Hfo=;
+        b=qw7ZN2wDpf8N0ZT/6sA2d3d8Yrw3P5RWyKEuxgOt11L95hT+JtBk4+Z56fPOI2XWCl
+         shaiXiAWgjymRGTc6+vO+mMyZTzG+kv1tP2xxEOPJzA2yEQ2Bx1n/66q8pSeJbgv5JFc
+         8UbOnZp7/vwcrZC6vcMTLZA/ZiP6FnJ4eD+MK5GVklBsjmSTP60+aPYcUlUAYb6hwueB
+         ADgO+PGJSjP+EWnKLZe854FbTUhQKvk9LxVRaZWUEJf4wYyh2hDUe6Fs/Ua2W4aSCklG
+         KHCVW24xNUfvWpNTVKXf3P1zRPRKUDSL5PGRrfM+ID59wCJr8RTpnBLawFp6C2UXAssK
+         pXcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDORDGoyhFkik+uhI7cwO/itCmYMzbx11Mz5Fm55U60VhrQI25KjJbWcAH244Yh5NX5Gsm@lists.linux.dev
+X-Gm-Message-State: AOJu0YznBPRCUF2rcUfQDxlyPHtzc0qIcAHXP+Jj/iSOocl/PYZCvjuf
+	584f9ZuJxOwLh2dv63y+hdN9aCY66VAM6HL/ISHABws+3vQpo+8VqNLjECXgUdSHjEx6YlHCJHM
+	AFbHqvlHFXx1nGpkzY3HyOH2l2nwrcbbk7CXo
+X-Gm-Gg: ASbGnctL65+uDigny3+10H1x3LdduE6i8v0Kq5fodxe7hWgmZIjLuOtqLQXF08yo9Kg
+	NfewEYtgbaWkQwY7sVi/5nU942BgT/YN488Rg
+X-Google-Smtp-Source: AGHT+IFbiM++nNw75ntI6RZMI+YfteGrryJVeEm71wShEK1qQgsUqDOT4fhaa7MESeCYL+h3/swZ5JktuRR/PL7IRDs=
+X-Received: by 2002:a05:690c:6388:b0:6ee:a70c:8727 with SMTP id
+ 00721157ae682-6f279b9df88mr69827557b3.41.1734216506880; Sat, 14 Dec 2024
+ 14:48:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,14 +60,15 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20241125110646.50799-1-cgoettsche@seltendoof.de>
  <e43da8418fc54a5eba7cdbb594b24bb9@paul-moore.com> <f7bfbf89d2ac4b929637bbb25f749c96@AcuMS.aculab.com>
-In-Reply-To: <f7bfbf89d2ac4b929637bbb25f749c96@AcuMS.aculab.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 14 Dec 2024 13:10:25 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgraNfcOCZ4n_C+ircQkD_AhsPM-=z7snt+eLgE-6otkg@mail.gmail.com>
-Message-ID: <CAHk-=wgraNfcOCZ4n_C+ircQkD_AhsPM-=z7snt+eLgE-6otkg@mail.gmail.com>
+ <CAHk-=wgraNfcOCZ4n_C+ircQkD_AhsPM-=z7snt+eLgE-6otkg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgraNfcOCZ4n_C+ircQkD_AhsPM-=z7snt+eLgE-6otkg@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Sat, 14 Dec 2024 17:48:16 -0500
+Message-ID: <CAHC9VhSDfn5QgQsF9qq6-k67bQB_M6UZoLODDYs4qkwHcr4-gw@mail.gmail.com>
 Subject: Re: [PATCH] selinux: use native iterator types
-To: David Laight <David.Laight@aculab.com>
-Cc: Paul Moore <paul@paul-moore.com>, =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, 
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: David Laight <David.Laight@aculab.com>, 
+	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, 
 	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
 	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
@@ -85,19 +77,31 @@ Cc: Paul Moore <paul@paul-moore.com>, =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgoet
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
 	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 14 Dec 2024 at 13:08, David Laight <David.Laight@aculab.com> wrote:
+On Sat, Dec 14, 2024 at 4:10=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Sat, 14 Dec 2024 at 13:08, David Laight <David.Laight@aculab.com> wrot=
+e:
+> >
+> > Isn't this an example of why -Wsign-compare is entirely stupid and isn'=
+t enabled
+> > in the normal kernel build?
 >
-> Isn't this an example of why -Wsign-compare is entirely stupid and isn't enabled
-> in the normal kernel build?
+> Yes. Please don't try to "fix" the warnings pointed out by that
+> completely broken warning.
+>
+> I don't understand why some people seem to think "more warnings good".
+>
+> -Wsign-compare is actively detrimental, and causes people to write
+> worse code (and often causes mindless type conversions that then
+> result in actual real bugs).
 
-Yes. Please don't try to "fix" the warnings pointed out by that
-completely broken warning.
+I'm not going to argue the usefulness of '-Wsign-compare' in a general
+sense, but I will say that in my opinion the changes proposed by
+Christian in this patch are correct and an improvement which is why I
+merged the code.  If anyone has an objection to this particular path,
+especially if you believe this introduces a bug, please let us know.
 
-I don't understand why some people seem to think "more warnings good".
-
--Wsign-compare is actively detrimental, and causes people to write
-worse code (and often causes mindless type conversions that then
-result in actual real bugs).
-
-            Linus
+--=20
+paul-moore.com
