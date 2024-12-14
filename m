@@ -1,61 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9313EA69;
-	Sat, 14 Dec 2024 06:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B43130A7D;
+	Sat, 14 Dec 2024 08:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734158063; cv=none; b=i0pY+myGef/DeqtQGJEfhD4Y9NPIHrb9p54uMa7czr6ji33r5Xbg0LgPW5MZUkKupvGHXxMrFtVrty11XqzXMIymrsCmw9eVh/Q5XAbf+PpmcJnT0CvHH9/6BLRWIB35dNHAYOooTM1bJfvJ5owXe4RvYZ/95x6DtUieuDf/nlA=
+	t=1734165789; cv=none; b=DV3E3lByE92KKmwHE2pwnRkJ2rSdzHcs3tE7q0rZKFfLQ+5h4VoAJvn9WJsHeMq5Ud+2jmuvbdIxbVSb6NW0D/LQ8DNrA+dNAEbjf+RF8vLimB2TdFVD3JYVuGe4ocdb1Pjd1LBojIVukY8iO+FG3AuAC/6PjxKAY59PmP2F5sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734158063; c=relaxed/simple;
-	bh=k4DJ8LRuXtVLm08GgGvMm0Y7lS275ENB+9d5Oo0dyvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GjhOIKNz55DXajRT3lEq6e5I+EnIyMeC/cLj3ZkttE/E+FcODDttaS3NXdBxp1eTc/rAKIEhJFQPEFV6fLi6GifoOA8oDaJFSR/S5FtG6l+gyFjPBsBPs0/COl9Pb1DXDpGNtG0vmFvzcKXaowB4URnq7v4gKkhKm/skFRtNBN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HEAqJJ0Y; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1734165789; c=relaxed/simple;
+	bh=oAbur0NdDLUwPPTQH0Iz3uP7gT3DeYfBeiGWJ61hrQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YqgsJAH0zu39E35poCG39g2+RSK71Zh3LdSo1ZC22/GxrVwCMupmxVJ7HuFPt++Cc7Qgn1N6vVpdLURtEOW7GE5d+Mr8/U+FdArUGUMY/iC6/drTpK7CxVeTeRt1P0Mtvpv8G0rT6kQrmX8q6tcOdlR57m5eRRc3CBK09Uur2UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dd8RJcie; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HEAqJJ0Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dd8RJcie"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734158061; x=1765694061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k4DJ8LRuXtVLm08GgGvMm0Y7lS275ENB+9d5Oo0dyvI=;
-  b=HEAqJJ0YpgW5UTOKtCbFEAtCJX5Z8XXVG7y97QJjN5aHg4uOCglXMXha
-   tWWuDSMhGMoD44L02T3fv3wd9s2+yO9nLmOzVUf27nYyHO4mb2baFfRqC
-   3SNjg4LIlsWIV0DqWrgvTn/rGk2rfrvv9NA5Kh1TSn8/tnVHUftHn/tIn
-   T/Tr42d2fPL+Go+Nl4RGbLRUxvGAF7s1TqcEa+JVheZBVi9DAPceWXE+o
-   /dYFYTvTHwoaif9canBEleMthe1fJTEFg/wyWYPcS1cKtP0SCrZoA2ecv
-   ZnNDbT13KijMtl/hOv96vgP3ZjMBbb87siMaG3PN6xbTtqLG/lkX6pRne
-   g==;
-X-CSE-ConnectionGUID: Lpcgo7J8S2OnNRZcrKZxZQ==
-X-CSE-MsgGUID: FxAzXuzmROy2BX4qEcZ9hg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="46007973"
-X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="46007973"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2024 22:34:21 -0800
-X-CSE-ConnectionGUID: OTWoneM7TLavY7bi0Z1F8A==
-X-CSE-MsgGUID: +FVkF5+9Ss+od3pWqTymUA==
-X-Ironport-Invalid-End-Of-Message: True
+  t=1734165787; x=1765701787;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oAbur0NdDLUwPPTQH0Iz3uP7gT3DeYfBeiGWJ61hrQU=;
+  b=dd8RJcieEsU3BdOi90g6aSE1ukvWa1bErXJA3Ped/ddmrZCaEK017I1S
+   g4I24BlNESyhdA5g7I1gNvsF0MGO6Eawd/xd6S91hAVTPhO9jxUMlGDmu
+   bRm5vKNkGJrEcnQ/SXyKUcQor23wyjqyTXCyxYAfsDA2/yO5T+brzcP1h
+   /yReJfc7gj+/O1i7vAWCFBEri+cOF+0ZQfz67+2co7kiJabadtS5AWwan
+   Zk454ER3oIFleT1aBXR1eYnOTn+EHMgASGj29RyLukFB66wBDXoSnYdUK
+   FnXXLDdO3j3PlkLX3iaI8FW97Ad2x3oMlvP5PYi3KCG8Xij7oazt+Ywje
+   A==;
+X-CSE-ConnectionGUID: SH6Nuf8qQ5CMoWGwMjDTpg==
+X-CSE-MsgGUID: EYmoHOmmRDuUWQasthey3A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45622957"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="45622957"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 00:43:07 -0800
+X-CSE-ConnectionGUID: vyAf/N2WRf6PYv/+UpbDTw==
+X-CSE-MsgGUID: +AlIJbwQQzuMdyONkPYNbg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,233,1728975600"; 
-   d="scan'208";a="97279507"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="100899794"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 13 Dec 2024 22:34:18 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 14 Dec 2024 00:43:05 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tMLjE-000Ckt-21;
-	Sat, 14 Dec 2024 06:34:16 +0000
-Date: Sat, 14 Dec 2024 14:33:41 +0800
+	id 1tMNjq-000Cnb-1W;
+	Sat, 14 Dec 2024 08:43:02 +0000
+Date: Sat, 14 Dec 2024 16:42:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gao Xiang <hsiangkao@linux.alibaba.com>
+To: Dave Jiang <dave.jiang@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 3/4] erofs: reference `struct erofs_device_info` for
- erofs_map_dev
-Message-ID: <202412141431.B33KpvxH-lkp@intel.com>
-References: <20241212133504.2047178-3-hsiangkao@linux.alibaba.com>
+Subject: [djiang:cxl/fwctl 24/28] drivers/cxl/features.c:162:12: warning:
+ variable 'out_size' is uninitialized when used here
+Message-ID: <202412141609.PvUKLbQO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,158 +61,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241212133504.2047178-3-hsiangkao@linux.alibaba.com>
 
-Hi Gao,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on xiang-erofs/dev]
-[also build test ERROR on linus/master v6.13-rc2 next-20241213]
-[cannot apply to xiang-erofs/dev-test xiang-erofs/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gao-Xiang/erofs-use-struct-erofs_device_info-for-the-primary-device/20241213-115709
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev
-patch link:    https://lore.kernel.org/r/20241212133504.2047178-3-hsiangkao%40linux.alibaba.com
-patch subject: [PATCH 3/4] erofs: reference `struct erofs_device_info` for erofs_map_dev
-config: riscv-randconfig-001-20241214 (https://download.01.org/0day-ci/archive/20241214/202412141431.B33KpvxH-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241214/202412141431.B33KpvxH-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
+head:   c3c1ca00092765212f4eb49d2aaffb2003beb33b
+commit: 2a47b406a8cd060676e6d34f7a21e486770a02a3 [24/28] cxl: Add support to handle user feature commands for get feature
+config: i386-buildonly-randconfig-004-20241214 (https://download.01.org/0day-ci/archive/20241214/202412141609.PvUKLbQO-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241214/202412141609.PvUKLbQO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412141431.B33KpvxH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412141609.PvUKLbQO-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:760:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     760 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from fs/erofs/fscache.c:6:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:769:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     769 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from fs/erofs/fscache.c:6:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:778:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from fs/erofs/fscache.c:6:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:787:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     787 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from fs/erofs/fscache.c:6:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1115:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1115 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> fs/erofs/fscache.c:201:25: error: no member named 'm_fscache' in 'struct erofs_map_dev'
-     201 |         io->io.private = mdev->m_fscache->cookie;
-         |                          ~~~~  ^
-   fs/erofs/fscache.c:319:41: error: no member named 'm_fscache' in 'struct erofs_map_dev'
-     319 |         ret = erofs_fscache_read_io_async(mdev.m_fscache->cookie,
-         |                                           ~~~~ ^
-   14 warnings and 2 errors generated.
+   In file included from drivers/cxl/features.c:5:
+   In file included from include/linux/pci.h:1650:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/cxl/features.c:60:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct cxl_feat_entry *' [-Wnon-literal-null-conversion]
+      60 |                 return false;
+         |                        ^~~~~
+   drivers/cxl/features.c:64:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct cxl_feat_entry *' [-Wnon-literal-null-conversion]
+      64 |                 return false;
+         |                        ^~~~~
+>> drivers/cxl/features.c:162:12: warning: variable 'out_size' is uninitialized when used here [-Wuninitialized]
+     162 |                 kvzalloc(out_size, GFP_KERNEL);
+         |                          ^~~~~~~~
+   include/linux/slab.h:1026:44: note: expanded from macro 'kvzalloc'
+    1026 | #define kvzalloc(_size, _flags)                 kvmalloc(_size, (_flags)|__GFP_ZERO)
+         |                                                          ^~~~~
+   include/linux/slab.h:1024:49: note: expanded from macro 'kvmalloc'
+    1024 | #define kvmalloc(_size, _flags)                 kvmalloc_node(_size, _flags, NUMA_NO_NODE)
+         |                                                               ^~~~~
+   include/linux/slab.h:1022:63: note: expanded from macro 'kvmalloc_node'
+    1022 | #define kvmalloc_node(...)                      alloc_hooks(kvmalloc_node_noprof(__VA_ARGS__))
+         |                                                                                  ^~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/slab.h:785:40: note: expanded from macro 'PASS_BUCKET_PARAMS'
+     785 | #define PASS_BUCKET_PARAMS(_size, _b)   (_size)
+         |                                          ^~~~~
+   include/linux/alloc_tag.h:214:31: note: expanded from macro 'alloc_hooks'
+     214 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
+         |                                      ^~~~~~~~~
+   include/linux/alloc_tag.h:206:27: note: expanded from macro 'alloc_hooks_tag'
+     206 |         typeof(_do_alloc) _res = _do_alloc;                             \
+         |                                  ^~~~~~~~~
+   drivers/cxl/features.c:145:17: note: initialize the variable 'out_size' to silence this warning
+     145 |         size_t out_size;
+         |                        ^
+         |                         = 0
+   4 warnings generated.
 
 
-vim +201 fs/erofs/fscache.c
+vim +/out_size +162 drivers/cxl/features.c
 
-a1bafc3109d713 Jingbo Xu 2024-03-08  194  
-a1bafc3109d713 Jingbo Xu 2024-03-08  195  struct bio *erofs_fscache_bio_alloc(struct erofs_map_dev *mdev)
-a1bafc3109d713 Jingbo Xu 2024-03-08  196  {
-a1bafc3109d713 Jingbo Xu 2024-03-08  197  	struct erofs_fscache_bio *io;
-a1bafc3109d713 Jingbo Xu 2024-03-08  198  
-a1bafc3109d713 Jingbo Xu 2024-03-08  199  	io = kmalloc(sizeof(*io), GFP_KERNEL | __GFP_NOFAIL);
-a1bafc3109d713 Jingbo Xu 2024-03-08  200  	bio_init(&io->bio, NULL, io->bvecs, BIO_MAX_VECS, REQ_OP_READ);
-a1bafc3109d713 Jingbo Xu 2024-03-08 @201  	io->io.private = mdev->m_fscache->cookie;
-a1bafc3109d713 Jingbo Xu 2024-03-08  202  	io->io.end_io = erofs_fscache_bio_endio;
-a1bafc3109d713 Jingbo Xu 2024-03-08  203  	refcount_set(&io->io.ref, 1);
-a1bafc3109d713 Jingbo Xu 2024-03-08  204  	return &io->bio;
-a1bafc3109d713 Jingbo Xu 2024-03-08  205  }
-a1bafc3109d713 Jingbo Xu 2024-03-08  206  
+   138	
+   139	static void *cxlctl_get_feature(struct cxl_features_state *cfs,
+   140					const struct fwctl_rpc_cxl *rpc_in,
+   141					size_t *out_len)
+   142	{
+   143		struct cxl_mbox_get_feat_in feat_in;
+   144		u16 offset, count, return_code;
+   145		size_t out_size;
+   146		void *feat_out;
+   147	
+   148		if (rpc_in->op_size != sizeof(feat_in))
+   149			return ERR_PTR(-EINVAL);
+   150	
+   151		if (copy_from_user(&feat_in, u64_to_user_ptr(rpc_in->in_payload),
+   152				   rpc_in->op_size))
+   153			return ERR_PTR(-EFAULT);
+   154	
+   155		offset = le16_to_cpu(feat_in.offset);
+   156		count = le16_to_cpu(feat_in.count);
+   157	
+   158		if (!count)
+   159			return ERR_PTR(-EINVAL);
+   160	
+   161		struct fwctl_rpc_cxl_out *rpc_out __free(kvfree) =
+ > 162			kvzalloc(out_size, GFP_KERNEL);
+   163		if (!rpc_out)
+   164			return ERR_PTR(-ENOMEM);
+   165	
+   166		feat_out = (void *)rpc_out->payload;
+   167		out_size = cxl_get_feature(cfs->features, feat_in.uuid,
+   168					   feat_in.selection, feat_out,
+   169					   count, offset, &return_code);
+   170		*out_len = sizeof(struct fwctl_rpc_cxl_out);
+   171		if (!out_size) {
+   172			rpc_out->size = 0;
+   173			rpc_out->retval = return_code;
+   174			return no_free_ptr(rpc_out);
+   175		}
+   176	
+   177		rpc_out->size = out_size;
+   178		rpc_out->retval = CXL_MBOX_CMD_RC_SUCCESS;
+   179		*out_len += out_size;
+   180	
+   181		return no_free_ptr(rpc_out);
+   182	}
+   183	
 
 -- 
 0-DAY CI Kernel Test Service
