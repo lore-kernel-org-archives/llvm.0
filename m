@@ -1,62 +1,59 @@
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72879EBE;
-	Sat, 14 Dec 2024 04:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5304C17BD6;
+	Sat, 14 Dec 2024 05:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734151074; cv=none; b=J6y+ExWn6bqYFHcgIgqgboUF/QiEyZ79hSZt6nJy3HR8OCjb/mUyWPJkWXY0NMUy0AEvPwLpocYBlomKB+tH21+jI+AhmB6BfEt+B5PbUYHB0nbz4viXTEA/fpHCdJrMjTuGLvqyk780jFyoNbhTcQmbI7qzi+OOxB9dQFjef2g=
+	t=1734153466; cv=none; b=tPSvg5J2PG4DnGuBSxr7HcG0VvfkKqz0WFR0o6/yComirzBeaT0mezF139N+I9AxOkxH3EdcrOn5Zli7JKt9tpfs46+XNoeKtCKC5NfQsRnbqla9c6QPSzQOo9YkD9GlhuZpdMG/A+i4YszbtohpSOJJ+3s/PH6CcuHfE1cAPxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734151074; c=relaxed/simple;
-	bh=0+CszUVADNAsoOvEKPdSsfEkhgw1MIeDvHs1+CbUzd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkedKtoxgE5W+O1rU+r+3hb9VkO/VGGNEdoJeHZtgiJRw4hh2FMwjmuwUZ6qquak7GKAEBSLaT+4wweh29OhbHpd7KazaEklHTNb+cQhVVZIt6Uk4xV1jedm7cyyBr6scKkPsfx94nACUJJsr9CbcT6VChi32SsJ3O0a2WAqRB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=rt1x09z8; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+	s=arc-20240116; t=1734153466; c=relaxed/simple;
+	bh=n0L/EzZ/fBUvD7PlZzH2BdiPBabHIzQn60JtVHuKSXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=D1D3/CeOFeRzaUEFa+2WRlm+0fBV5qwVmRSDW4NT7V7PHykmG02lfzixsI0037zkcGZixAjBO2o9RwbTtBXXW8AJNHXvnkgGdnQKHBO3Neh5m/A7WHAxRc8Dn/tkEDyL2xhm3dQA+g8plud7XZpQsTNBpMvMWp1TI1xzH9AA2p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FiYZU4gw; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="rt1x09z8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=6m5em2Z9V8ppDHMu5bgEkM80Ya1xpLt2NaP6Fd/8cn0=; b=rt1x09z8MKXqBmEEb07A/tn2we
-	pCn7KOkUHUaNrI3L8bn0QuS/ksCWMDqtnUJWSFTNpDP8S78EL9WtDoQtwbUiFlO2/cAQdnicW2BMu
-	pPwQOLqmMUe6kGPNyYcGTfGVXBtftA7sejIMO9gOslwZ8lk0YY9DA7Jx1e47fe/PHCcQA/90TDbDc
-	zXIj/DGFER8fPXl+g1N7o9bMZLz+/LTlTYrVYo2g33/DyOG6vXVxYLlsYuZ1SVWYA58vSBE7JUfh7
-	y3LaB3yk0fPfcGXBptwf9gLwbVHKLaArhV0EhG0s7tEQj6ksh41aGS5ZcIOlfZdsRGtl2gvG1mhdg
-	X3I8iRcA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1tMJhB-001RQ6-1k;
-	Sat, 14 Dec 2024 12:37:23 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 14 Dec 2024 12:37:22 +0800
-Date: Sat, 14 Dec 2024 12:37:22 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Antoine Tenart <atenart@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, upstream@airoha.com,
-	Richard van Schagen <vschagen@icloud.com>
-Subject: Re: [PATCH v8 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
- engine support
-Message-ID: <Z10LgtZm4-qCB2aL@gondor.apana.org.au>
-References: <20241210204853.18765-1-ansuelsmth@gmail.com>
- <20241210204853.18765-4-ansuelsmth@gmail.com>
- <Z1lb0ImxhhFs4Kuz@gondor.apana.org.au>
- <675979e5.5d0a0220.207826.2bf1@mx.google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FiYZU4gw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734153464; x=1765689464;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n0L/EzZ/fBUvD7PlZzH2BdiPBabHIzQn60JtVHuKSXs=;
+  b=FiYZU4gw0navvaJFjCatdBf2+D+C/zpJ2CZ1iVU8u1sBxPUySwwuqifA
+   hvaupZ7QeN5igLN7b2HDoHOtvsgNVJFm8zn52oAmJgPja9jM+GgedSr3I
+   BNIhDfMWsw9otpVl4X1uK0C/bY/BlT5Y49rt8dCtirPcMfVZcXx/+EzER
+   m5am1ictO36mhGOJ08rz7iGq9Jl9iF/fKhuu4NAhHxmSTPD39jGW8GV4c
+   EkjedjwKSbHsIsqdMxrD1bOU0e2M0aQeU4aKh9a2kPI33NRA2M7+oD+Xe
+   jRtFGlblP+46iQMNFClMwJD1QVzgDq7nBpopncKOxNHjKG91JWYxqxG4D
+   A==;
+X-CSE-ConnectionGUID: Ax2tkK4aT2Cec4h+NIDmqg==
+X-CSE-MsgGUID: 4R831HXdTxKgFmIPn3RHXw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45618523"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="45618523"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2024 21:17:44 -0800
+X-CSE-ConnectionGUID: L6DK/VMNTfShIqNJUZbJpQ==
+X-CSE-MsgGUID: sVLwHiPfR72GK1XSOqABaQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="100874120"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 13 Dec 2024 21:17:43 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tMKX6-000Cit-1i;
+	Sat, 14 Dec 2024 05:17:40 +0000
+Date: Sat, 14 Dec 2024 13:17:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [djiang:cxl/fwctl 23/28] drivers/cxl/features.c:60:10: warning:
+ expression which evaluates to zero treated as a null pointer constant of
+ type 'struct cxl_feat_entry *'
+Message-ID: <202412141339.84yarl3c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,21 +62,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <675979e5.5d0a0220.207826.2bf1@mx.google.com>
 
-On Wed, Dec 11, 2024 at 12:39:13PM +0100, Christian Marangi wrote:
->
-> Do you have quick example for this?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
+head:   c3c1ca00092765212f4eb49d2aaffb2003beb33b
+commit: 7f7c30b7dbd79802299899bb011fe4e37a30c12c [23/28] cxl: Add support for fwctl RPC command to enable CXL feature commands
+config: i386-buildonly-randconfig-004-20241214 (https://download.01.org/0day-ci/archive/20241214/202412141339.84yarl3c-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241214/202412141339.84yarl3c-lkp@intel.com/reproduce)
 
-Just search for crypto_ahash_set_reqsize in drivers/crypto and see
-how they use the reqctx to store temporary data.  For each request,
-you're guaranteed to have exclusive ownership of the reqctx.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412141339.84yarl3c-lkp@intel.com/
 
-If you wish to DMA into the reqctx, search for ahash_request_ctx_dma
-to see how you should set it up.
+All warnings (new ones prefixed by >>):
 
-Cheers,
+   In file included from drivers/cxl/features.c:5:
+   In file included from include/linux/pci.h:1650:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/cxl/features.c:60:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct cxl_feat_entry *' [-Wnon-literal-null-conversion]
+      60 |                 return false;
+         |                        ^~~~~
+   drivers/cxl/features.c:64:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct cxl_feat_entry *' [-Wnon-literal-null-conversion]
+      64 |                 return false;
+         |                        ^~~~~
+   3 warnings generated.
+
+
+vim +60 drivers/cxl/features.c
+
+    51	
+    52	static struct cxl_feat_entry *
+    53	get_support_feature_info(struct cxl_features_state *cfs,
+    54				 const struct fwctl_rpc_cxl *rpc_in)
+    55	{
+    56		struct cxl_feat_entry *feat;
+    57		uuid_t uuid;
+    58	
+    59		if (rpc_in->op_size < sizeof(uuid))
+  > 60			return false;
+    61	
+    62		if (copy_from_user(&uuid, u64_to_user_ptr(rpc_in->in_payload),
+    63				   sizeof(uuid)))
+    64			return false;
+    65	
+    66		for (int i = 0; i < cfs->num_features; i++) {
+    67			feat = &cfs->entries[i];
+    68			if (uuid_equal(&uuid, &feat->uuid))
+    69				return feat;
+    70		}
+    71	
+    72		return ERR_PTR(-ENOENT);
+    73	}
+    74	
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
