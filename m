@@ -1,173 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B43130A7D;
-	Sat, 14 Dec 2024 08:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C75817E015
+	for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 13:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734165789; cv=none; b=DV3E3lByE92KKmwHE2pwnRkJ2rSdzHcs3tE7q0rZKFfLQ+5h4VoAJvn9WJsHeMq5Ud+2jmuvbdIxbVSb6NW0D/LQ8DNrA+dNAEbjf+RF8vLimB2TdFVD3JYVuGe4ocdb1Pjd1LBojIVukY8iO+FG3AuAC/6PjxKAY59PmP2F5sQ=
+	t=1734182927; cv=none; b=aVwLNID2/PXIKbAfzsmJUzcV0NsACSWH3r6rJ50wjbDnjf7pSNZHdR9VWHL6CQJnTxBBcbdxGiqPFwSfIJQ9PnYjzYT4nAj2dH+kQy9tSOcy0Wdj9dczHzV7McexzYqcPREeHMTBv1Nvc/7hCe3/b39MrMQlpPHlchZJy+0YWfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734165789; c=relaxed/simple;
-	bh=oAbur0NdDLUwPPTQH0Iz3uP7gT3DeYfBeiGWJ61hrQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YqgsJAH0zu39E35poCG39g2+RSK71Zh3LdSo1ZC22/GxrVwCMupmxVJ7HuFPt++Cc7Qgn1N6vVpdLURtEOW7GE5d+Mr8/U+FdArUGUMY/iC6/drTpK7CxVeTeRt1P0Mtvpv8G0rT6kQrmX8q6tcOdlR57m5eRRc3CBK09Uur2UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dd8RJcie; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734182927; c=relaxed/simple;
+	bh=Wy+U/RXFyyNeT0tzJjPMpTteXWlnAz+YsoOZBCw4Rcc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=VbATrH56kkB//a6T2TIjP3ouH4QBIef/LfOFdmKs/ojzEsUbhyhopzhxZyQkjkgu+JEq0CH9RiVyLjFUL/WzrdPKe5/oRv3BQ9ValO9Eg3Dl9Y38q7vEFctOeaz7v5IgXKJMQKi1RkC+ICKHB0YCG17eNyShCYR8CwZQlC/7PLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYDvhD4K; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dd8RJcie"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734165787; x=1765701787;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oAbur0NdDLUwPPTQH0Iz3uP7gT3DeYfBeiGWJ61hrQU=;
-  b=dd8RJcieEsU3BdOi90g6aSE1ukvWa1bErXJA3Ped/ddmrZCaEK017I1S
-   g4I24BlNESyhdA5g7I1gNvsF0MGO6Eawd/xd6S91hAVTPhO9jxUMlGDmu
-   bRm5vKNkGJrEcnQ/SXyKUcQor23wyjqyTXCyxYAfsDA2/yO5T+brzcP1h
-   /yReJfc7gj+/O1i7vAWCFBEri+cOF+0ZQfz67+2co7kiJabadtS5AWwan
-   Zk454ER3oIFleT1aBXR1eYnOTn+EHMgASGj29RyLukFB66wBDXoSnYdUK
-   FnXXLDdO3j3PlkLX3iaI8FW97Ad2x3oMlvP5PYi3KCG8Xij7oazt+Ywje
-   A==;
-X-CSE-ConnectionGUID: SH6Nuf8qQ5CMoWGwMjDTpg==
-X-CSE-MsgGUID: EYmoHOmmRDuUWQasthey3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45622957"
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="45622957"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 00:43:07 -0800
-X-CSE-ConnectionGUID: vyAf/N2WRf6PYv/+UpbDTw==
-X-CSE-MsgGUID: +AlIJbwQQzuMdyONkPYNbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="100899794"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 14 Dec 2024 00:43:05 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tMNjq-000Cnb-1W;
-	Sat, 14 Dec 2024 08:43:02 +0000
-Date: Sat, 14 Dec 2024 16:42:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [djiang:cxl/fwctl 24/28] drivers/cxl/features.c:162:12: warning:
- variable 'out_size' is uninitialized when used here
-Message-ID: <202412141609.PvUKLbQO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYDvhD4K"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43628e97467so20738965e9.3
+        for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 05:28:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734182924; x=1734787724; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HO8HOTr8B5ah55ywq4xCweT5ljEIJFW9Gqnw5M3266I=;
+        b=UYDvhD4KVdWWFnED+GOLX0b7wJLvdurQADIrw7dqjABCfUwl5SzC3gZID2F/PwaMUX
+         DTyVfmydkVq6UAeD/UgUwiOZhlmP74uCRanu8MJAmqi4p7CASldv7tlohFvWUrmHVVrx
+         KVq1Fev2nOjufFevAW/kKBo9S8YosMXZ8C3831gToi/KQ3CIB4GNqZ/PO2crmytvjwbr
+         GxHuJAYLYwxRzfadcqB30/R0mJtSSerwuYsp6Q/HaZeAJRL79mHt/b2Qa33EUjlwna6i
+         P2ZwwdO0n2gz6pjT/M3zK2YlSE4NQj2GgoMtgjBJk+nMlYA1aHCHhu/WrEaKjXKP3Oxd
+         VYoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734182924; x=1734787724;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HO8HOTr8B5ah55ywq4xCweT5ljEIJFW9Gqnw5M3266I=;
+        b=fzwIjzCPm0l3T9Lt/a6eAvhN7TwZNA2og6Me5wFp2Rq1Tr2AtMtJYb5j+n5iu+RK4H
+         ZSc7Cp22OrC0gfabpA9DjFjcIdt7POKvmBVYbZcwzSRKS/mO0iBftbID5JBch/7QVLyd
+         GbW64hDsENLDn0+00WqYUpvHFuIhc9wO5cp2YpfYVuBVZdfxrh43aP+Y0ArxK/OAPhj3
+         uZEh/GsPm7hNoTdAOYc/QGqtI5/1tlyNr4Twntv6A6adpxkanjvmV8L3FP4p/Yxy0T13
+         GGxOAuiW4mOOkGsllEKDgRo47WKQquA0F/J2HxQevQTkRAJdmJwL5uBC2v97q30G16ee
+         xTLA==
+X-Forwarded-Encrypted: i=1; AJvYcCWtFnyKkf1Xg1udmMfeuEqZZziSYO5w4xtjMIhGU+J3PXJdxkuhcy1vN7OgsQODS4skEGB3@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzhjiiq9Qy15c1HnB6uCok24/vYGmZcIgaDoe8HyV0cteKN9reF
+	Unp522JVscKmPFhd1DCc40ZfBLzc2/eabrL1iWZz1HethnXfw62Z
+X-Gm-Gg: ASbGncsr4xvMpNVrpqxd3bJxbljYVuNXYt/0FE3UnPMa/PuI7YJDy5x8KlJWftIWf+7
+	nJQ0xlwuLDMC1bnUrwFcleL+BLeUaYNCflH3IhbczlyMRqowijAN3JH+KXyVz4ZngrFbfpw8IMO
+	LCFrUa8ektCqp7TePAaH2ouemHvXb0Nxs2aPbkrYfMWBKAJkovBd06X4tK/TXTIq4Istvgufo0i
+	HRpV59oGpaFS7chLCngnuYiubiJX3FXYfcTTIO4UTxhyfL+dZGbt3KNhLrz6ZjuU57LfbJKgqpD
+	2hA0EdfKjuhYt2U/AZ+Fe2Fgog==
+X-Google-Smtp-Source: AGHT+IFJVjWIIB5s39gUx1SvdqqGCesjab1llC/QPC5s1Cw1w7UwSrqeg1+KD36txuQBShLxIST56w==
+X-Received: by 2002:a05:6000:4b0c:b0:385:fd07:8616 with SMTP id ffacd0b85a97d-3886c7252f4mr5918505f8f.0.1734182923380;
+        Sat, 14 Dec 2024 05:28:43 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-388c80162a6sm2559850f8f.33.2024.12.14.05.28.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Dec 2024 05:28:43 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	upstream@airoha.com
+Subject: [PATCH v9 0/3] crypto: Add EIP-93 crypto engine support
+Date: Sat, 14 Dec 2024 14:27:51 +0100
+Message-ID: <20241214132808.19449-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
-head:   c3c1ca00092765212f4eb49d2aaffb2003beb33b
-commit: 2a47b406a8cd060676e6d34f7a21e486770a02a3 [24/28] cxl: Add support to handle user feature commands for get feature
-config: i386-buildonly-randconfig-004-20241214 (https://download.01.org/0day-ci/archive/20241214/202412141609.PvUKLbQO-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241214/202412141609.PvUKLbQO-lkp@intel.com/reproduce)
+This small series add support for the Inside Secure EIP-93.
+This is a predecessor of the current supported EIP197. It doesn't
+require a firmware but instead it's embedded in the SoC.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412141609.PvUKLbQO-lkp@intel.com/
+First patch extend guard for spinlock_bh.
 
-All warnings (new ones prefixed by >>):
+The other actually implement Documentation and Driver.
 
-   In file included from drivers/cxl/features.c:5:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   drivers/cxl/features.c:60:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct cxl_feat_entry *' [-Wnon-literal-null-conversion]
-      60 |                 return false;
-         |                        ^~~~~
-   drivers/cxl/features.c:64:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct cxl_feat_entry *' [-Wnon-literal-null-conversion]
-      64 |                 return false;
-         |                        ^~~~~
->> drivers/cxl/features.c:162:12: warning: variable 'out_size' is uninitialized when used here [-Wuninitialized]
-     162 |                 kvzalloc(out_size, GFP_KERNEL);
-         |                          ^~~~~~~~
-   include/linux/slab.h:1026:44: note: expanded from macro 'kvzalloc'
-    1026 | #define kvzalloc(_size, _flags)                 kvmalloc(_size, (_flags)|__GFP_ZERO)
-         |                                                          ^~~~~
-   include/linux/slab.h:1024:49: note: expanded from macro 'kvmalloc'
-    1024 | #define kvmalloc(_size, _flags)                 kvmalloc_node(_size, _flags, NUMA_NO_NODE)
-         |                                                               ^~~~~
-   include/linux/slab.h:1022:63: note: expanded from macro 'kvmalloc_node'
-    1022 | #define kvmalloc_node(...)                      alloc_hooks(kvmalloc_node_noprof(__VA_ARGS__))
-         |                                                                                  ^~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/slab.h:785:40: note: expanded from macro 'PASS_BUCKET_PARAMS'
-     785 | #define PASS_BUCKET_PARAMS(_size, _b)   (_size)
-         |                                          ^~~~~
-   include/linux/alloc_tag.h:214:31: note: expanded from macro 'alloc_hooks'
-     214 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |                                      ^~~~~~~~~
-   include/linux/alloc_tag.h:206:27: note: expanded from macro 'alloc_hooks_tag'
-     206 |         typeof(_do_alloc) _res = _do_alloc;                             \
-         |                                  ^~~~~~~~~
-   drivers/cxl/features.c:145:17: note: initialize the variable 'out_size' to silence this warning
-     145 |         size_t out_size;
-         |                        ^
-         |                         = 0
-   4 warnings generated.
+The Driver pass all the normal selft test for the supported
+algo and also pass the EXTRA test with fuzz_iterations set to 10000.
 
+Changes v9:
+- Rework hash code to alloc DMA only when needed
+- Rework hash code to only alloc needed blocks and use
+  local struct in req for everything else
+- Rework hash code to use GFP_ATOMIC
+- Simplify hash update function
+- Generalize hmac key set function
+Changes v8:
+- Rework export and update to not sleep on exporting state
+  (consume pending packet in update and return -EINPROGRESS)
+Changes v7:
+- Fix copypaste error in __eip93_hash_init
+- Rework import/export to actually export the partial hash
+  (we actually unmap DMA on export)
+- Rename no_finalize variable to better partial_hash
+- Rename 3rd commit title and drop Mediatek from title.
+- Add Cover Letter
+- Add Reviewed-by to DT commit
+(cumulative changes from old series that had changelog in each patch)
+Changes v6:
+- Add SoC specific compatible
+- Add now supported entry for compatible with no user
+Changes v5:
+- Add Ack tag to guard patch
+- Comment out compatible with no current user
+- Fix smatch warning (reported by Dan Carpenter)
+Changes v4:
+- Out of RFC
+- Add missing bitfield.h
+- Drop useless header
+Changes v3:
+- Mute warning from Clang about C23
+- Fix not inizialized err
+- Drop unused variable
+- Add SoC compatible with generic one
+Changes v2:
+- Rename all variables from mtk to eip93
+- Move to inside-secure directory
+- Check DMA map errors
+- Use guard API for spinlock
+- Minor improvements to code
+- Add guard patch
+- Change to better compatible
+- Add description for EIP93 models
 
-vim +/out_size +162 drivers/cxl/features.c
+Christian Marangi (3):
+  spinlock: extend guard with spinlock_bh variants
+  dt-bindings: crypto: Add Inside Secure SafeXcel EIP-93 crypto engine
+  crypto: Add Inside Secure SafeXcel EIP-93 crypto engine support
 
-   138	
-   139	static void *cxlctl_get_feature(struct cxl_features_state *cfs,
-   140					const struct fwctl_rpc_cxl *rpc_in,
-   141					size_t *out_len)
-   142	{
-   143		struct cxl_mbox_get_feat_in feat_in;
-   144		u16 offset, count, return_code;
-   145		size_t out_size;
-   146		void *feat_out;
-   147	
-   148		if (rpc_in->op_size != sizeof(feat_in))
-   149			return ERR_PTR(-EINVAL);
-   150	
-   151		if (copy_from_user(&feat_in, u64_to_user_ptr(rpc_in->in_payload),
-   152				   rpc_in->op_size))
-   153			return ERR_PTR(-EFAULT);
-   154	
-   155		offset = le16_to_cpu(feat_in.offset);
-   156		count = le16_to_cpu(feat_in.count);
-   157	
-   158		if (!count)
-   159			return ERR_PTR(-EINVAL);
-   160	
-   161		struct fwctl_rpc_cxl_out *rpc_out __free(kvfree) =
- > 162			kvzalloc(out_size, GFP_KERNEL);
-   163		if (!rpc_out)
-   164			return ERR_PTR(-ENOMEM);
-   165	
-   166		feat_out = (void *)rpc_out->payload;
-   167		out_size = cxl_get_feature(cfs->features, feat_in.uuid,
-   168					   feat_in.selection, feat_out,
-   169					   count, offset, &return_code);
-   170		*out_len = sizeof(struct fwctl_rpc_cxl_out);
-   171		if (!out_size) {
-   172			rpc_out->size = 0;
-   173			rpc_out->retval = return_code;
-   174			return no_free_ptr(rpc_out);
-   175		}
-   176	
-   177		rpc_out->size = out_size;
-   178		rpc_out->retval = CXL_MBOX_CMD_RC_SUCCESS;
-   179		*out_len += out_size;
-   180	
-   181		return no_free_ptr(rpc_out);
-   182	}
-   183	
+ .../crypto/inside-secure,safexcel-eip93.yaml  |  67 ++
+ MAINTAINERS                                   |   7 +
+ drivers/crypto/Kconfig                        |   1 +
+ drivers/crypto/Makefile                       |   1 +
+ drivers/crypto/inside-secure/eip93/Kconfig    |  20 +
+ drivers/crypto/inside-secure/eip93/Makefile   |   5 +
+ .../crypto/inside-secure/eip93/eip93-aead.c   | 711 ++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-aead.h   |  38 +
+ .../crypto/inside-secure/eip93/eip93-aes.h    |  16 +
+ .../crypto/inside-secure/eip93/eip93-cipher.c | 413 +++++++++
+ .../crypto/inside-secure/eip93/eip93-cipher.h |  60 ++
+ .../crypto/inside-secure/eip93/eip93-common.c | 816 +++++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-common.h |  24 +
+ .../crypto/inside-secure/eip93/eip93-des.h    |  16 +
+ .../crypto/inside-secure/eip93/eip93-hash.c   | 866 ++++++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-hash.h   |  82 ++
+ .../crypto/inside-secure/eip93/eip93-main.c   | 502 ++++++++++
+ .../crypto/inside-secure/eip93/eip93-main.h   | 152 +++
+ .../crypto/inside-secure/eip93/eip93-regs.h   | 335 +++++++
+ include/linux/spinlock.h                      |  13 +
+ 20 files changed, 4145 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+ create mode 100644 drivers/crypto/inside-secure/eip93/Kconfig
+ create mode 100644 drivers/crypto/inside-secure/eip93/Makefile
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aes.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-des.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-regs.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
