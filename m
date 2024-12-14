@@ -1,109 +1,85 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780C417579
-	for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 03:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72879EBE;
+	Sat, 14 Dec 2024 04:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734147133; cv=none; b=ByfaZsE4RHOtXEXtR8FByrKLhU1ZNJpKb936BEe9/HJQNyjf4XJ71pHd1NqwKSjGfKu4aNMBFDB5n9DWV8xxPA7DYtXLDRg3r/kI6PTwBGWn5mLUtSE36HBc2aSVzd7rOktlR36djLjxNTxMhajyYJ6MFWE/eGUiWp3tueTVGgI=
+	t=1734151074; cv=none; b=J6y+ExWn6bqYFHcgIgqgboUF/QiEyZ79hSZt6nJy3HR8OCjb/mUyWPJkWXY0NMUy0AEvPwLpocYBlomKB+tH21+jI+AhmB6BfEt+B5PbUYHB0nbz4viXTEA/fpHCdJrMjTuGLvqyk780jFyoNbhTcQmbI7qzi+OOxB9dQFjef2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734147133; c=relaxed/simple;
-	bh=ym9dLwOzcsXHiZLT8zcNyabp6RcZZUw49K8poCplbqM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ofYYRYvgsoRtmvrByUCdn97KwvXHgCxORg68oXJY5hrGAuIiXy7YJ/HZAfDucceDfXsKTp2yMhO8VWc44y4DSkX/bLJDOJFw5nlLkDFQocYeTGxivgSPnbqImxgu10ey79+C2N1Onh10z20khNnbHeEoOemUkJ/AbhhiKa13bBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fhqxnIMp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1734151074; c=relaxed/simple;
+	bh=0+CszUVADNAsoOvEKPdSsfEkhgw1MIeDvHs1+CbUzd0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mkedKtoxgE5W+O1rU+r+3hb9VkO/VGGNEdoJeHZtgiJRw4hh2FMwjmuwUZ6qquak7GKAEBSLaT+4wweh29OhbHpd7KazaEklHTNb+cQhVVZIt6Uk4xV1jedm7cyyBr6scKkPsfx94nACUJJsr9CbcT6VChi32SsJ3O0a2WAqRB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=rt1x09z8; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fhqxnIMp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734147130;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XIuA6XdFhEEf21p+9w4tZju/ThfLU9q5Dc49k/leOaE=;
-	b=fhqxnIMpkp41XzDcnUFZ690XkJWbadApm8938Kkm5DK15FwWnGipjPxKjD/Ov+ZqoaTMX/
-	71Dl2FkVg/30Pj7rMQmDsWmi4MvPK8dUG/Yr3EfJAMUtE2PkBw+jTU1D7FE2nnlUZyUSZS
-	N4PXP6cRZhQCBCXTZZSYGAohSwRY2PU=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-491-dW1OA1fMMhSqLZd_p0RDwQ-1; Fri,
- 13 Dec 2024 22:32:07 -0500
-X-MC-Unique: dW1OA1fMMhSqLZd_p0RDwQ-1
-X-Mimecast-MFC-AGG-ID: dW1OA1fMMhSqLZd_p0RDwQ
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5769319560B1
-	for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 03:32:06 +0000 (UTC)
-Received: from [172.64.12.26] (unknown [10.30.33.24])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E6D551956052;
-	Sat, 14 Dec 2024 03:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc2,
- upstream-mainline, f8613561)
-Date: Sat, 14 Dec 2024 03:32:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="rt1x09z8"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=6m5em2Z9V8ppDHMu5bgEkM80Ya1xpLt2NaP6Fd/8cn0=; b=rt1x09z8MKXqBmEEb07A/tn2we
+	pCn7KOkUHUaNrI3L8bn0QuS/ksCWMDqtnUJWSFTNpDP8S78EL9WtDoQtwbUiFlO2/cAQdnicW2BMu
+	pPwQOLqmMUe6kGPNyYcGTfGVXBtftA7sejIMO9gOslwZ8lk0YY9DA7Jx1e47fe/PHCcQA/90TDbDc
+	zXIj/DGFER8fPXl+g1N7o9bMZLz+/LTlTYrVYo2g33/DyOG6vXVxYLlsYuZ1SVWYA58vSBE7JUfh7
+	y3LaB3yk0fPfcGXBptwf9gLwbVHKLaArhV0EhG0s7tEQj6ksh41aGS5ZcIOlfZdsRGtl2gvG1mhdg
+	X3I8iRcA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1tMJhB-001RQ6-1k;
+	Sat, 14 Dec 2024 12:37:23 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 14 Dec 2024 12:37:22 +0800
+Date: Sat, 14 Dec 2024 12:37:22 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v8 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
+ engine support
+Message-ID: <Z10LgtZm4-qCB2aL@gondor.apana.org.au>
+References: <20241210204853.18765-1-ansuelsmth@gmail.com>
+ <20241210204853.18765-4-ansuelsmth@gmail.com>
+ <Z1lb0ImxhhFs4Kuz@gondor.apana.org.au>
+ <675979e5.5d0a0220.207826.2bf1@mx.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <29140.124121322320700100@us-mta-491.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: vbNmUdt2Tfzei8RkmNEU3BjJ6S46-KwFrBHz6F3a7b0_1734147126
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <675979e5.5d0a0220.207826.2bf1@mx.google.com>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Dec 11, 2024 at 12:39:13PM +0100, Christian Marangi wrote:
+>
+> Do you have quick example for this?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Just search for crypto_ahash_set_reqsize in drivers/crypto and see
+how they use the reqctx to store temporary data.  For each request,
+you're guaranteed to have exclusive ownership of the reqctx.
 
+If you wish to DMA into the reqctx, search for ahash_request_ctx_dma
+to see how you should set it up.
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6.13-rc2' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/broonie/spi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1588504184
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1588504184-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1588504184-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1588504184-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
