@@ -1,107 +1,94 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031811AA78E
-	for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 22:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31A317BD6;
+	Sat, 14 Dec 2024 23:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734216510; cv=none; b=ljl/+TqANBbftywXyRqxxdLTlrZwAQleU6oOJNWsdWFof+R4+Z25dk0p6jT7iwSzsLT1RPoaFZaFUvpU4UWzglSMlBC0ghY0XJ3ns1ypeWgCJ0A7TJCXGwIocb2HBZu3NZfMZdW7HR8pRXRWzImcCA7kWhyXhPLbITEq5WFFPEY=
+	t=1734220240; cv=none; b=jSEajz5QHh/9EUd7iJlYH2PjSJVk8cAxPw18ztWtU4cN39ioUyPN3h9skiaoRLJVVhlLayTt/jT5AfG5j/p6PCfiOjR/qnKEgr/9nRL1tNr2XD6CD48/RXwg2IB50EO3iqg/8PUVldI/sj4vxpo7RdC76ED3HvFtkqIkGUVwlYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734216510; c=relaxed/simple;
-	bh=mN/QbefYvgqpNikuORpa9UwnpfDph9udgK3kqfaxc6s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y1j5H5kHScKm9DeFgGyvpSyI1+YLEPJffarwPOPv8Z1ipH+AjLd6u0q+qprS3VGpO9DFrf9ySH/sKirjRWT76MvNnkGt39F8KjfPvzAqmdD3W0fVACr4AxidqSGbZLBK9DZSfrVPB847+EnwOQqXSilcSDWvZFLtxpLHOlJCShM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ETp0Q/jU; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1734220240; c=relaxed/simple;
+	bh=vII1euYZw+KTe0VGAi29QTWdnWnqz5U02OFIF/M/43U=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kfA01bqzaZ53yQnfD/b3g3mY9kDKuvfQlOFxYzvAzIVhOTXXoGUQoPaD2nHaqRYBSq89L4TkbIMe3kBtrteuKlzPVuALKNrKWmPEjXq4Sz7mAn3iNd05Kgu99aJ4HUYCR4JL3Ipf5zWtA9hzx6EB8u++4/ayx73gkyoTPniXrtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jQosTETr; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ETp0Q/jU"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6f29aa612fbso2491307b3.0
-        for <llvm@lists.linux.dev>; Sat, 14 Dec 2024 14:48:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1734216507; x=1734821307; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rZJ4scXTRmS7RPf8oo625k7m0SKrT5j5fYdKEOC7Hfo=;
-        b=ETp0Q/jU+MXcCTiXZkrcB4Oxf0H9nAenTIDxOf7sYimjOOdfv1eoCFosgdzkPtuJlg
-         TZpWULAEB3AyPLqsq2cUUp23qDKb3MxTDjlj7gxPnA7d3uuiSpx/oP1wy3fut6CrieGd
-         V1NWEIox91rYZ8E/rdnEn7QkVVUNU1OInR/LOqzDKQK+FtuGrCa9fgAIFor80LCW4Du/
-         lfV46eHSeisMu2G2oU/ESG9UKkeJstDVi/t6CFVqHb/Wse/seSudrH1905dPwSAiwCvp
-         hICw8VtOGnf5TkjF00NYEckU5XbUJYNguuMa0pRFc4r6uYMUTr6h82y1+YNs7pPXW11I
-         L5/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734216507; x=1734821307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rZJ4scXTRmS7RPf8oo625k7m0SKrT5j5fYdKEOC7Hfo=;
-        b=qw7ZN2wDpf8N0ZT/6sA2d3d8Yrw3P5RWyKEuxgOt11L95hT+JtBk4+Z56fPOI2XWCl
-         shaiXiAWgjymRGTc6+vO+mMyZTzG+kv1tP2xxEOPJzA2yEQ2Bx1n/66q8pSeJbgv5JFc
-         8UbOnZp7/vwcrZC6vcMTLZA/ZiP6FnJ4eD+MK5GVklBsjmSTP60+aPYcUlUAYb6hwueB
-         ADgO+PGJSjP+EWnKLZe854FbTUhQKvk9LxVRaZWUEJf4wYyh2hDUe6Fs/Ua2W4aSCklG
-         KHCVW24xNUfvWpNTVKXf3P1zRPRKUDSL5PGRrfM+ID59wCJr8RTpnBLawFp6C2UXAssK
-         pXcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDORDGoyhFkik+uhI7cwO/itCmYMzbx11Mz5Fm55U60VhrQI25KjJbWcAH244Yh5NX5Gsm@lists.linux.dev
-X-Gm-Message-State: AOJu0YznBPRCUF2rcUfQDxlyPHtzc0qIcAHXP+Jj/iSOocl/PYZCvjuf
-	584f9ZuJxOwLh2dv63y+hdN9aCY66VAM6HL/ISHABws+3vQpo+8VqNLjECXgUdSHjEx6YlHCJHM
-	AFbHqvlHFXx1nGpkzY3HyOH2l2nwrcbbk7CXo
-X-Gm-Gg: ASbGnctL65+uDigny3+10H1x3LdduE6i8v0Kq5fodxe7hWgmZIjLuOtqLQXF08yo9Kg
-	NfewEYtgbaWkQwY7sVi/5nU942BgT/YN488Rg
-X-Google-Smtp-Source: AGHT+IFbiM++nNw75ntI6RZMI+YfteGrryJVeEm71wShEK1qQgsUqDOT4fhaa7MESeCYL+h3/swZ5JktuRR/PL7IRDs=
-X-Received: by 2002:a05:690c:6388:b0:6ee:a70c:8727 with SMTP id
- 00721157ae682-6f279b9df88mr69827557b3.41.1734216506880; Sat, 14 Dec 2024
- 14:48:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jQosTETr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734220238; x=1765756238;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=vII1euYZw+KTe0VGAi29QTWdnWnqz5U02OFIF/M/43U=;
+  b=jQosTETrqaPop4pwZuEasxV8CpxOCBCuneuAiRy4n5q3Emm+NEXFS23w
+   xyIZdC//AwwmKm7e9HBqPxRG0uOhheMLdMG/UNR+D6CmhCwRXby8fXFVI
+   UzLsoxxaY6/MimifZk5o2yNEAFomV83DZDQnEXce7IIHJZxXwZt7rpWDV
+   i9OAFqiFWHTHctwrt9RN7PKJU0GeSrST9AXrhXESEErowUpjr/z8skM5o
+   bA+7t7yvqXxzEEuN0mZHsn/5wnXsTLy6BH2wmbA2MiobB3LjwDRGojD3z
+   auCMZn9snRN03NTCdivAi36V03AlqOrxrRThxy1w7ZQfqa2qLMOCYcq8t
+   g==;
+X-CSE-ConnectionGUID: A2E+SaSgQBin4pIOGvaYfA==
+X-CSE-MsgGUID: wVpKtynhQ4qa7/tHVFr/Kw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11286"; a="38327517"
+X-IronPort-AV: E=Sophos;i="6.12,235,1728975600"; 
+   d="scan'208";a="38327517"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 15:50:38 -0800
+X-CSE-ConnectionGUID: rrUWvhoQQQKNp2QkWfiKSw==
+X-CSE-MsgGUID: XpHUpAsdT2aS4FXoCC1DXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="96711397"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 14 Dec 2024 15:50:37 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tMbu6-000DK6-0t;
+	Sat, 14 Dec 2024 23:50:34 +0000
+Date: Sun, 15 Dec 2024 07:50:12 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: .text.amd_set_spi_freq: unexpected end
+ of section
+Message-ID: <202412150725.0tOrzlKf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241125110646.50799-1-cgoettsche@seltendoof.de>
- <e43da8418fc54a5eba7cdbb594b24bb9@paul-moore.com> <f7bfbf89d2ac4b929637bbb25f749c96@AcuMS.aculab.com>
- <CAHk-=wgraNfcOCZ4n_C+ircQkD_AhsPM-=z7snt+eLgE-6otkg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgraNfcOCZ4n_C+ircQkD_AhsPM-=z7snt+eLgE-6otkg@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sat, 14 Dec 2024 17:48:16 -0500
-Message-ID: <CAHC9VhSDfn5QgQsF9qq6-k67bQB_M6UZoLODDYs4qkwHcr4-gw@mail.gmail.com>
-Subject: Re: [PATCH] selinux: use native iterator types
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Laight <David.Laight@aculab.com>, 
-	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, 
-	=?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"selinux@vger.kernel.org" <selinux@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Dec 14, 2024 at 4:10=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Sat, 14 Dec 2024 at 13:08, David Laight <David.Laight@aculab.com> wrot=
-e:
-> >
-> > Isn't this an example of why -Wsign-compare is entirely stupid and isn'=
-t enabled
-> > in the normal kernel build?
->
-> Yes. Please don't try to "fix" the warnings pointed out by that
-> completely broken warning.
->
-> I don't understand why some people seem to think "more warnings good".
->
-> -Wsign-compare is actively detrimental, and causes people to write
-> worse code (and often causes mindless type conversions that then
-> result in actual real bugs).
+CC: linux-kernel@vger.kernel.org
+TO: Raju Rangoju <Raju.Rangoju@amd.com>
+CC: Mark Brown <broonie@kernel.org>
+CC: Krishnamoorthi M <krishnamoorthi.m@amd.com>
+CC: Akshata MukundShetty <akshata.mukundshetty@amd.com>
 
-I'm not going to argue the usefulness of '-Wsign-compare' in a general
-sense, but I will say that in my opinion the changes proposed by
-Christian in this patch are correct and an improvement which is why I
-merged the code.  If anyone has an objection to this particular path,
-especially if you believe this introduces a bug, please let us know.
+Hi Raju,
 
---=20
-paul-moore.com
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a0e3919a2df29b373b19a8fbd6e4c4c38fc10d87
+commit: 6defadbe6cbc3a87dc39c119a6748d19bfba0544 spi: spi_amd: Add support for SPI MEM framework
+date:   9 months ago
+config: x86_64-randconfig-071-20241214 (https://download.01.org/0day-ci/archive/20241215/202412150725.0tOrzlKf-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241215/202412150725.0tOrzlKf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412150725.0tOrzlKf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: .text.jffs2_erase_pending_blocks: unexpected end of section
+>> vmlinux.o: warning: objtool: .text.amd_set_spi_freq: unexpected end of section
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
