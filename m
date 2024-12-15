@@ -1,57 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372412FB6;
-	Sun, 15 Dec 2024 13:30:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773EF1487D5;
+	Sun, 15 Dec 2024 13:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734269444; cv=none; b=liuvcU3jEFhrMFqL7Kut63H1SpDxH7MsWF7Iy0vESgK5gBmqwbsjeuLCh6OSqKfMAgROsCtYldzLzvYOy6gLpk3XnwXrRF5Rzm7o29E/J6MfYzelWAWfnCfkq+5IxK60zqlxaemg+B69W3TB3f1N1z5aXbAF4KkxecYAaWSehuk=
+	t=1734270711; cv=none; b=cxND3HB04k5v0TWmoRN4ZZRoFLPvuBdrpUuFHz1f5QyhyxO1YwVjSieBlivE19miKkMtnTGpdtENlarLQaKxeGEil3DSpYaU7YBQXRcxL6IDBndUiashB2mwOl7W4HQHePMbGHwjcXhmx4NEItMmcNhxvf31TuKIxYjhej/Oe44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734269444; c=relaxed/simple;
-	bh=6cxYTr7imZ3Ti5WL+RygQOLamRFVZHcBTlOdk4tEH20=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=a5ZDbgKreyxqc08/b3NeBcyB6LasX0DBHstEkVLPK0MjXsR571a+dkC8hkXRWMjHBeV9Ym719RMMKgsMu9XSDySg3ICY4oPF/bTU09MdstlrkkSd2HNs4pvfjQZeJ1AuUgF3LT4XGnTiwEJvjML2sm12KQUbe6s0GXk1K1sGivQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HslJI1Yv; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1734270711; c=relaxed/simple;
+	bh=2LWjmtPJFDOKIXDan6DkpQm4ooohv4Sn4+uq85iaUG4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rQuOZ9eEEdkcfzGvVU86ZaRRyjY9hYklvQWcCog7tCCFTZJH3F2IWGEVbkl6D7mWMlEfgbT+A6CuLIlXhcKDC1syrZWe70nFrVS0jUFdsmRscSf9UTi9y5FnbV6+gpYPC3lSgT8uEw/sdriyUT+yXdyE4yFsYtto9CfMK/wWUHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g8KY3Eo5; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HslJI1Yv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g8KY3Eo5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734269442; x=1765805442;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=6cxYTr7imZ3Ti5WL+RygQOLamRFVZHcBTlOdk4tEH20=;
-  b=HslJI1YvEDgE+gkGegxzjNY/p2JthBKuundTYJcpMz42GyJPd2sD4TqB
-   E+Esbvrt8EFmSfDVAdh6GxEQ+sTNd+o5oddqT/jFHllYgFH1eZPGXTavH
-   HOH0Cv441xeKnO8BMSQgVDG2okx/bxyIrkw1TgFc+PKnvO80Hox1AMK7R
-   J9gcSlSRXxVLWCWmFXB22e6dWSH3t8WXZBPA6tQBLKUXcmwTPkqJVfWH9
-   qqKSGaf16qyYlfLCcZ2ctq+WCrTZmHU3Q359CKXgJxfEvUqzKjERtDovU
-   jwgJneVMe6UBPWOSqirZeMIBxxKIX6snb1PNhiMMD+XXh9qV3ORt/E7h+
+  t=1734270709; x=1765806709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2LWjmtPJFDOKIXDan6DkpQm4ooohv4Sn4+uq85iaUG4=;
+  b=g8KY3Eo5+NLSVGCZERuV5xTW+y4FlsutEfvEtwnbSxDfvbkckgJTjMSa
+   /LDj8tnY9ph/uThalRMDVYQKuC/bBDdE+BKlz1Fk/DnhMHYHCafWA/DUt
+   OqIMaJy1IhSlUZS3Go7HePkj85yuazZ1ZkhBHu2t5X5mYAItQuk7Nxkdt
+   8PC9deJX8gf/TcR7tBnkolkisT2+tMx89K9fjIydFpj4F3z/dTnADHgv7
+   6vXNzZrfPsVBGVN0F0lFwXS4rCYN2zET5P9PXR2qcZPOc3B2KxfeD5ocU
+   bdoEHeXjIoL6VjbE5j+E7r+kG1wJv7DwKC+fsOee/cuHw+HYDGz8E5c2y
    Q==;
-X-CSE-ConnectionGUID: iakEak+eQXCsDH2P30g83A==
-X-CSE-MsgGUID: 1ZtWkeqiT6SAh715vbjJNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11286"; a="45268868"
-X-IronPort-AV: E=Sophos;i="6.12,236,1728975600"; 
-   d="scan'208";a="45268868"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2024 05:30:41 -0800
-X-CSE-ConnectionGUID: mHeCiOgNQGyQgaEevaZLvw==
-X-CSE-MsgGUID: aBOcylA/Th+j49L9zz95Jg==
+X-CSE-ConnectionGUID: 34429VV9QBmQcIcaS75DfQ==
+X-CSE-MsgGUID: XwMoHuNcSH2fB8iiKs9LtQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="46061197"
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="46061197"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2024 05:51:49 -0800
+X-CSE-ConnectionGUID: mVxlGRFjR76uOYep9V2vew==
+X-CSE-MsgGUID: C2uK/3F0TXCdvEqBaL9gcg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,236,1728975600"; 
-   d="scan'208";a="96869889"
+   d="scan'208";a="101991422"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 15 Dec 2024 05:30:41 -0800
+  by orviesa004.jf.intel.com with ESMTP; 15 Dec 2024 05:51:42 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tMohi-000Dda-0z;
-	Sun, 15 Dec 2024 13:30:38 +0000
-Date: Sun, 15 Dec 2024 21:29:36 +0800
+	id 1tMp23-000Ddy-2A;
+	Sun, 15 Dec 2024 13:51:39 +0000
+Date: Sun, 15 Dec 2024 21:50:48 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [bcachefs:bcachefs-testing 10/232] fs/bcachefs/bcachefs.o: warning:
- objtool: bch2_check_alloc_hole_bucket_gens+0x507: unreachable instruction
-Message-ID: <202412152159.246eypZR-lkp@intel.com>
+To: Yafang Shao <laoar.shao@gmail.com>, mingo@redhat.com,
+	peterz@infradead.org, mkoutny@suse.com, hannes@cmpxchg.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, vschneid@redhat.com, surenb@google.com,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: Re: [PATCH v7 3/4] sched, psi: Don't account irq time if
+ sched_clock_irqtime is disabled
+Message-ID: <202412152115.zQ6k9tVk-lkp@intel.com>
+References: <20241215032315.43698-4-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,26 +69,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241215032315.43698-4-laoar.shao@gmail.com>
 
-CC: Kent Overstreet <kent.overstreet@linux.dev>
-TO: Alan Huang <mmpgouride@gmail.com>
-CC: Kent Overstreet <kent.overstreet@linux.dev>
+Hi Yafang,
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   ea71d92584522ac4a7b66ee9945556118b928ab9
-commit: 6952c5b0d70b70638a070f50668a614235a11175 [10/232] bcachefs: Delete dead code
-config: x86_64-randconfig-008-20241215 (https://download.01.org/0day-ci/archive/20241215/202412152159.246eypZR-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241215/202412152159.246eypZR-lkp@intel.com/reproduce)
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on peterz-queue/sched/core linus/master v6.13-rc2 next-20241213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/sched-Define-sched_clock_irqtime-as-static-key/20241215-112638
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20241215032315.43698-4-laoar.shao%40gmail.com
+patch subject: [PATCH v7 3/4] sched, psi: Don't account irq time if sched_clock_irqtime is disabled
+config: arm-randconfig-001-20241215 (https://download.01.org/0day-ci/archive/20241215/202412152115.zQ6k9tVk-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241215/202412152115.zQ6k9tVk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412152159.246eypZR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412152115.zQ6k9tVk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/bcachefs/bcachefs.o: warning: objtool: bch2_check_alloc_hole_bucket_gens+0x507: unreachable instruction
+   In file included from kernel/sched/build_utility.c:15:
+   In file included from include/linux/sched/isolation.h:5:
+   In file included from include/linux/cpuset.h:17:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/sched/build_utility.c:96:
+>> kernel/sched/psi.c:1243:35: error: use of undeclared identifier 'PSI_IRQ'; did you mean 'PSI_IO'?
+    1243 |         if (!irqtime_enabled() && res == PSI_IRQ)
+         |                                          ^~~~~~~
+         |                                          PSI_IO
+   include/linux/psi_types.h:42:2: note: 'PSI_IO' declared here
+      42 |         PSI_IO,
+         |         ^
+   1 warning and 1 error generated.
+
+
+vim +1243 kernel/sched/psi.c
+
+  1233	
+  1234	int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+  1235	{
+  1236		bool only_full = false;
+  1237		int full;
+  1238		u64 now;
+  1239	
+  1240		if (static_branch_likely(&psi_disabled))
+  1241			return -EOPNOTSUPP;
+  1242	
+> 1243		if (!irqtime_enabled() && res == PSI_IRQ)
+  1244			return -EOPNOTSUPP;
+  1245	
+  1246		/* Update averages before reporting them */
+  1247		mutex_lock(&group->avgs_lock);
+  1248		now = sched_clock();
+  1249		collect_percpu_times(group, PSI_AVGS, NULL);
+  1250		if (now >= group->avg_next_update)
+  1251			group->avg_next_update = update_averages(group, now);
+  1252		mutex_unlock(&group->avgs_lock);
+  1253	
 
 -- 
 0-DAY CI Kernel Test Service
