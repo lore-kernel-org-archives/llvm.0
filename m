@@ -1,109 +1,131 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504AB36C
-	for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 02:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D179450;
+	Sun, 15 Dec 2024 05:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734228130; cv=none; b=d8WFDL+aX1i4ESvtComLuC5bNhEwyJBTYJ/2BTNg3F68N0KSu0UZWyJ/Ebm+jA9tNM2cC0pRbva1sgaz94eesjnmVPMs7FHlfeStpEHLKjGzC6Qd8bC9G0GHJ50oYfew/iejWQOI1xKkhcEo7O9frag9O3UW6mWFVcOMwKStF80=
+	t=1734239528; cv=none; b=lX0/eaXrflHU6hmqYPwYd5VmuIWhjeeVmMH8nZnFQvh5ZFjGfoY4SJVqjDZvnesTc1CVayhNAHTpgzZaotjRKg4dHZWL3KCnz1SbDuJNXhrINP9rfmNcI3U+rz3ud9xTj77WjQ8FdhjvwOv9733tLLVXCBE8UI0Y0+NuNN9FENU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734228130; c=relaxed/simple;
-	bh=wUgYdChRwMJ9PbnQ6MLzCMrHgmNu9quWq0/mXf86ZAk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QHPDhKJI+mj+icL7p9duNn2yDdGOEEmtv3x86yG2z3hMKwryRNLIg4cj7GLyI7t79us2a6XnZHanL4H2R2sgOGuRPC84dlQD1CJ0gC3NnQ3ycOsdY6ezDjeQUg6QskDnXLz6fEXmCdv26SPluorV/8iQ2Nqe8xklxvckkTeThIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ikS8TsuH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1734239528; c=relaxed/simple;
+	bh=M874uceTCbBNZlkK86xJO6OodHH321Wxg3oIcq122rQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rj7ohqaU/TTkiBRnAt7cukB+gnVfgSJBXPEGY+ITRs8Vk6E0PnEEPDP1krl4A9mBGsA4lNweLDdkY4K0ZyFPUjDT8qgRmY3BV15RaQkk40VbITk0KbI6vVJXygBkxPBr2jTKsRCRG8PArR508Dug5xl1Rtfqsuh7NhQegCoX7N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T7zbmroI; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ikS8TsuH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734228127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=EoxnlXT05LkXbif0YSeOL1N+ltbxWq5RfQus5GDbVnM=;
-	b=ikS8TsuHKRW9G+m3dzTTzaABcMkeKHoT/9nrbKX/9T7VwxvMdRsopD/G8lareru2Rb9glG
-	ZXPP+iixFzR3vqgHu3y54J/KSclB6hbF7lRU8EuJszvgvFocCNxQTaVXf6E0awcIgDgIeg
-	F/ecMntYV8ZJl4DgVufoUmET9CXZr9U=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-126-qxBaTMphNRqf_rax5DQnFA-1; Sat,
- 14 Dec 2024 21:02:05 -0500
-X-MC-Unique: qxBaTMphNRqf_rax5DQnFA-1
-X-Mimecast-MFC-AGG-ID: qxBaTMphNRqf_rax5DQnFA
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BA37F19560B3
-	for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 02:02:04 +0000 (UTC)
-Received: from [172.64.12.26] (unknown [10.30.33.24])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6213B3000198;
-	Sun, 15 Dec 2024 02:02:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc2,
- upstream-mainline, 2d8308bf)
-Date: Sun, 15 Dec 2024 02:02:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T7zbmroI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734239526; x=1765775526;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M874uceTCbBNZlkK86xJO6OodHH321Wxg3oIcq122rQ=;
+  b=T7zbmroIKn6Z68zqpsEvksAVQaPVns20r0qo2dqO9ZwPa3NC+HeNo1pP
+   V+e8cTjLanIfeZAXNV9bjyz7viWFAxsrdpvfQV8kQXfeNUz84CCs1KsW8
+   VcU1+fl/6OuN8qLlNOqtfBp8bmB4d7GUlGaHRyJrjy5QY6XLlvF+1t/ez
+   29WOadcoND6qz5fl4/IIudgDUubNWrg74rWTvC0s/0fjO6Ih3yErIaiZs
+   aU2UTrwVZ20FB04YP3/EVSxUiNH9l8zUKMaFm79rZ+WMLmAL45W3hU936
+   iPy3cMjoS47/5qm13vYrxb5U4Uiq1JPy4w9A2gUsPD8a4mMSXHcZjsQif
+   g==;
+X-CSE-ConnectionGUID: E/7XOfHSSXWlGBFTDX0ypQ==
+X-CSE-MsgGUID: AeBblDlSQOaCvBRexfxS0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11286"; a="45339698"
+X-IronPort-AV: E=Sophos;i="6.12,235,1728975600"; 
+   d="scan'208";a="45339698"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 21:12:05 -0800
+X-CSE-ConnectionGUID: AUXLowasSOCO9nGm94JCBw==
+X-CSE-MsgGUID: il4/yOdrTzeAdx9rQ30W4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="97693867"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 14 Dec 2024 21:12:03 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tMgvA-000DRq-3A;
+	Sun, 15 Dec 2024 05:12:00 +0000
+Date: Sun, 15 Dec 2024 13:11:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liu Shixin <liushixin2@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kenneth W Chen <kenneth.w.chen@intel.com>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
+	Nanyong Sun <sunnanyong@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>
+Subject: Re: [PATCH] mm: hugetlb: independent PMD page table shared count
+Message-ID: <202412151253.G1eTYt78-lkp@intel.com>
+References: <20241214104401.1052550-1-liushixin2@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <23603.124121421020500435@us-mta-126.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: n0XIV8aiNGzpxwNb0ssZqgPGe4fUO-MRArcEC3b3Lto_1734228124
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241214104401.1052550-1-liushixin2@huawei.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Liu,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Shixin/mm-hugetlb-independent-PMD-page-table-shared-count/20241214-184912
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241214104401.1052550-1-liushixin2%40huawei.com
+patch subject: [PATCH] mm: hugetlb: independent PMD page table shared count
+config: i386-buildonly-randconfig-006-20241215 (https://download.01.org/0day-ci/archive/20241215/202412151253.G1eTYt78-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241215/202412151253.G1eTYt78-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412151253.G1eTYt78-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+>> include/linux/mm.h:3192:21: error: called object type 'void *' is not a function or function pointer
+    3192 |         ptdesc_pmd_pts_init(ptdesc);
+         |         ~~~~~~~~~~~~~~~~~~~^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=1966107866
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1263: prepare0] Error 2 shuffle=1966107866
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=1966107866
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=1966107866
+   make: Target 'prepare' not remade because of errors.
 
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+vim +3192 include/linux/mm.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1589382832
+  3184	
+  3185	static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
+  3186	{
+  3187		struct folio *folio = ptdesc_folio(ptdesc);
+  3188	
+  3189		if (!pmd_ptlock_init(ptdesc))
+  3190			return false;
+  3191		__folio_set_pgtable(folio);
+> 3192		ptdesc_pmd_pts_init(ptdesc);
+  3193		lruvec_stat_add_folio(folio, NR_PAGETABLE);
+  3194		return true;
+  3195	}
+  3196	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1589382832-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1589382832-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1589382832-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
