@@ -1,59 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD7414A4D4;
-	Sun, 15 Dec 2024 17:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D77143C69
+	for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 19:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734284467; cv=none; b=HygZNGPI+c/RtJprLXFHLWMULjJulZ31sFZhtRrQsTwA8EQ1h8h61ZtHlYngCMdFbvgmXcw3RdKCgI7AW7cgXkLFV0xBHcU86FvbC31Pv6cHSx7xSieAN39+7luqMbp9C5HUl2Ifr1ZemMbQCtzU/9GSDo6H0DgICZa8zrcfS9U=
+	t=1734292513; cv=none; b=d2ld8ccRaZpe6apxqz5sMsrS+moNlFc3Vk0p7v1d86jDhrtVVUOlq7Jb+JgKobmGHnErFT4tk0GaFyujhpYzmPtLqNnukbORiIT8rqwJ3Zjas7HwKrab1/kfaJe6+RLll5L8YUlG0c9WpT33nc6q8rC3/+QxNesEKTSwYEnoB4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734284467; c=relaxed/simple;
-	bh=7tDA5H+cwvbaWVaW5m9FX5ExmaT7XOiEDGdiohEY6fE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=G5TpZkO45JPkO1ogqRzFeaRSsw2KH+jDeZUSy0N4v5xGkMH/htqX8tvgtsessvxdjbsw6ryzWzlQ01uSpDfyiPetCTkzeLhX7pI2Xdfnc65XGJE2Mxlv/6V3rjtlytCFzowTSyJ2VgkT2B+QgIIOmtTIYFail/+JizonI93SpZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D+ol/PXr; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734292513; c=relaxed/simple;
+	bh=Ng0ihqJksultGRuuZdcU+Us0fVV6LYGGrSDynhO7HrU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=axFj42LGoXs2LV4q7LYTgBaqNNJ6DizrbWDthvGFIaDPOZcKKCXfBMZLCV8aPBhZNqhneY5Pm84Xb4Ya7WyVC36FVPlXADcPkg2H4j62oFzA8rV51PECbqsOi3ZwqTt+fqojWQh8TGB5gSjnb7k9ya/0thElze4bu9feZDaqqic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clLaHhxq; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D+ol/PXr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734284463; x=1765820463;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7tDA5H+cwvbaWVaW5m9FX5ExmaT7XOiEDGdiohEY6fE=;
-  b=D+ol/PXr5n4ioAIKJf2gl7+CCKWPOH03MGqAWqHHr5de5B4jrLu8abP5
-   p7qlQ+J+pvl051DMUIn/zkTP13ijq/B6lUAKuGFlfBFYkVpSY+3p1sRpp
-   NKaULtUCthLM4U4qe1yY22zYcIftcKPwmPeyQEgZbPP5u/FgeBCct2HsC
-   8n53K6EpdJ0R/jWan5t6/ssRGtc+dvOUnQujT5ecmOkKms4Q40dDdcfhu
-   ILKR6KlqwKeIcwvjxRe40TFScV57qrWRlHVskZz+AWkSfXWb8FP6eQ/MJ
-   2qMBYZdjvi4vdvu8dBupknIjgGs26KghBQfGsOwPtCtPnivKemUKzPMOd
-   A==;
-X-CSE-ConnectionGUID: 9T/ymEkBTGeKc9CH/2KZog==
-X-CSE-MsgGUID: WcdOoR7RTBG4mZU7b08TZg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11287"; a="33972498"
-X-IronPort-AV: E=Sophos;i="6.12,236,1728975600"; 
-   d="scan'208";a="33972498"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2024 09:41:02 -0800
-X-CSE-ConnectionGUID: RstT84m5SJGtNSNFlYQjCw==
-X-CSE-MsgGUID: dNNG7MpoQKSQ9i4xY5/vbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,236,1728975600"; 
-   d="scan'208";a="102024171"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 15 Dec 2024 09:41:01 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tMsbz-000Dlm-0C;
-	Sun, 15 Dec 2024 17:40:59 +0000
-Date: Mon, 16 Dec 2024 01:40:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:wip 18/20] fs/f2fs/inode.c:319:6: warning: format specifies
- type 'unsigned long' but the argument has type 'unsigned int'
-Message-ID: <202412160100.oeyMjZmI-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clLaHhxq"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-467a3f1e667so15683191cf.0
+        for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 11:55:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734292511; x=1734897311; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KutpQX//29f7Zqo+JdG0d9ubSIqFItXcJu0uFi63PTo=;
+        b=clLaHhxqjSOfklAYowWqqIRc6YgFjezuaBEU52y7mg2SneBniYGnXOnO5+dOm54zrM
+         Jm5SbjToKO/WYz/Uo+fqVSSwYAKZohD/Du27OUicNmmKgfmpZC6ldGy4SIKFaobD6A5b
+         RsJdUzvehjUfoLE9o7QpG7fYdUWt3I/05YIU44S+VmucvBIlsLZzHZOv9YsBjG5l0Xl/
+         PlUpwJgiGsn0lHFhISidMcTB5FOdWKt1Ya/eh6kjVCidz/1/l4TlBdM3CJNOnDX50tYO
+         upXlal1XueVYLSKjCOP0vjPwKHVcXpNpaKA4Kr75eqTgDe771gTlRexWCA6STzOfN/VZ
+         gJTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734292511; x=1734897311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KutpQX//29f7Zqo+JdG0d9ubSIqFItXcJu0uFi63PTo=;
+        b=OjBj0QhrsUxoIrHi+JvHi4FfPG7xBso+B6ebiuFYJ0rvrEipIYIwgQaBZalMRWD4qc
+         8NbEIOnGpgvzmfVzhx9P7LxzpRxMi++QlhoaP1JdNu8yckl4SUXbhuIu60pIxZhtu61k
+         CREfYwL/M1jk/T6+o1ayx7/dDsSK0uA+QZ6xTgbZr7bhYxUwX6Mx/JmI+j3BMHXFXtUM
+         /jZOLqnkc2ENKgLIiifY9PqWQp2pNb3cQsQ45APgJVWB2S0Ovh3GrkZnPCpcn2SCtuwo
+         f9kBGdgbK3thZ/xihQd4A/Mt00EIfMVXMAR81J01qjSgvU3JyeijXg3pO521UrSwv2ZV
+         zpEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+rUenuxDyx6pna9rHqddbumaI/LKz1iCVUsnXiQLvHaAnj+LeKHrlh7YeUkF47jnUxBF0@lists.linux.dev
+X-Gm-Message-State: AOJu0YxZebWzDMrjUI0AHByxZ4ROc/OOpgEnlS7vX0VBg9Quo8/gGyUV
+	uZfgS4CMkkrcfb98/mO1ZYjQSux60k6glBxPwuWH/mxeKDG1RQDJ
+X-Gm-Gg: ASbGnctpTGbXzBrYtQNIyqHqyB1Ekp9DTKmTnkz1IEBe/MCzZrFHLlZ0oIWx4cJ+rA/
+	va2pQfwb1Ia0zcaoc/PuCmz/yzKKJ3OIimXUwsASY85wxGKMJP8W3k155j1RxIv1EoT8wTaTrke
+	b3e7vNaT4RdWcElY98qba1Gbe824qXRShzDj+uJvEHFnl+YPxMbBNw6aF+harpfD8+QyOEOuMYf
+	XxFWf8GefMSMCEROv2fypJX0jFEGBXptwWn5JVVDd6BSt0AotwuUG8Y6Wy57+yUA/XcLYV0/p4X
+	IlgagGVZ0f/40+9rIwfwn2MlseD8OKiZ8gb0Yj2vbrPqgPM=
+X-Google-Smtp-Source: AGHT+IF7QGOrB10m8TSdkPb1lL5qpq+ISHcfE235eXXqPxvCD743BLg+mfmQ7wkjVK8VmGQYNle02g==
+X-Received: by 2002:ac8:7dd6:0:b0:458:5716:fbd8 with SMTP id d75a77b69052e-467a578fbe2mr211410361cf.32.1734292510865;
+        Sun, 15 Dec 2024 11:55:10 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2e83fe8sm19812841cf.65.2024.12.15.11.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Dec 2024 11:55:10 -0800 (PST)
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A5186120006E;
+	Sun, 15 Dec 2024 14:55:09 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Sun, 15 Dec 2024 14:55:09 -0500
+X-ME-Sender: <xms:HTRfZ-Jm6BvA1V7uv3nyV_-r07id1ZQaZe5ON0hCt7RkcHsndKWGFg>
+    <xme:HTRfZ2L2sMoyct16m5tAdGb34j7kAYmNTji9lueNFnjxcoFw_-Cz8tgWoCoXmC-XP
+    IPRTpciJ7ovN9tFeQ>
+X-ME-Received: <xmr:HTRfZ-tLbWAMgmQeipmzrM-46A0eavdPh1tHQB3_AAW2j-q1Hj645QvkbPbu>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrledugdduvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
+    ucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrd
+    gtohhmqeenucggtffrrghtthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleei
+    vedtgeeuhfegueevieduffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhi
+    thihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmh
+    grihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgspghrtghpthhtohepuddvpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhose
+    hlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghl
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrd
+    hlihhnuhigrdguvghvpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdho
+    rhhgpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtohepfi
+    hilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlohhnghhmrghnsehrvgguhhgr
+    thdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepnhguvghsrghulhhnihgvrhhssehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:HTRfZzbhRUzwzmrb59t6nrKR_67KK1EPCQQuVE6z69tLCi7rH_FLTA>
+    <xmx:HTRfZ1YsI_AMQuAv0T_tWUV7HXYPEH9a8TbbsU69aihW4PgWXv_xbg>
+    <xmx:HTRfZ_DA_cwJ6cr39moHoP72_WLIe-OpnNggUXN3Uo_ICc5olhtvdg>
+    <xmx:HTRfZ7ZXQLNuEnNhLsAG-ZBkFI8oIN818B219rY0qt5lTjqMHsBIEg>
+    <xmx:HTRfZ1qpq9lkYqpBRJYQKQiI2s10VuRBCg9X6Iy72q0SmBL8P_XVTKeO>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 15 Dec 2024 14:55:09 -0500 (EST)
+Date: Sun, 15 Dec 2024 11:55:08 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] lockdep: Mark chain_hlock_class_idx() with
+ __maybe_unused
+Message-ID: <Z180HFO6a61PtzYm@tardis.local>
+References: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,169 +115,51 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git wip
-head:   14a0b37677c60e56234bfdca48f2893895e751f3
-commit: 03605b8f85a900083d1f7f2d3d19fcd16cbcdd96 [18/20] f2fs: fix to do sanity check correctly on i_inline_xattr_size
-config: arm-randconfig-001-20241215 (https://download.01.org/0day-ci/archive/20241216/202412160100.oeyMjZmI-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241216/202412160100.oeyMjZmI-lkp@intel.com/reproduce)
+Hi Andy,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412160100.oeyMjZmI-lkp@intel.com/
+On Mon, Dec 09, 2024 at 07:08:10PM +0200, Andy Shevchenko wrote:
+> When chain_hlock_class_idx() is unused, it prevents kernel builds with clang,
+> `make W=1` and CONFIG_WERROR=y:
+> 
+> kernel/locking/lockdep.c:435:28: error: unused function 'chain_hlock_class_idx' [-Werror,-Wunused-function]
+> 
+> Fix this by marking it with __maybe_unused.
+> 
+> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> inline functions for W=1 build").
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-All warnings (new ones prefixed by >>):
+This looks fine to me, so I'm going to queue it, but could you do me
+favor if you could share the exact configs that would make
+chain_hlock_class_idx() an unused fuction in kernel/locking/lockdep.c ?
 
-   In file included from fs/f2fs/inode.c:9:
-   In file included from include/linux/f2fs_fs.h:11:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/f2fs/inode.c:319:6: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-     317 |                 f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, min: %lu, max: %lu",
-         |                                                                                                 ~~~
-         |                                                                                                 %u
-     318 |                           __func__, inode->i_ino, fi->i_inline_xattr_size,
-     319 |                           MIN_INLINE_XATTR_SIZE, MAX_INLINE_XATTR_SIZE);
-         |                           ^~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:1855:46: note: expanded from macro 'f2fs_warn'
-    1855 |         f2fs_printk(sbi, false, KERN_WARNING fmt, ##__VA_ARGS__)
-         |                                              ~~~    ^~~~~~~~~~~
-   fs/f2fs/xattr.h:86:31: note: expanded from macro 'MIN_INLINE_XATTR_SIZE'
-      86 | #define MIN_INLINE_XATTR_SIZE (sizeof(struct f2fs_xattr_header) / sizeof(__le32))
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+I might add these information in commit log.
 
+Thanks!
 
-vim +319 fs/f2fs/inode.c
+Regards,
+Boqun
 
-   269	
-   270	static bool sanity_check_inode(struct inode *inode, struct page *node_page)
-   271	{
-   272		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-   273		struct f2fs_inode_info *fi = F2FS_I(inode);
-   274		struct f2fs_inode *ri = F2FS_INODE(node_page);
-   275		unsigned long long iblocks;
-   276	
-   277		iblocks = le64_to_cpu(F2FS_INODE(node_page)->i_blocks);
-   278		if (!iblocks) {
-   279			f2fs_warn(sbi, "%s: corrupted inode i_blocks i_ino=%lx iblocks=%llu, run fsck to fix.",
-   280				  __func__, inode->i_ino, iblocks);
-   281			return false;
-   282		}
-   283	
-   284		if (ino_of_node(node_page) != nid_of_node(node_page)) {
-   285			f2fs_warn(sbi, "%s: corrupted inode footer i_ino=%lx, ino,nid: [%u, %u] run fsck to fix.",
-   286				  __func__, inode->i_ino,
-   287				  ino_of_node(node_page), nid_of_node(node_page));
-   288			return false;
-   289		}
-   290	
-   291		if (f2fs_has_extra_attr(inode)) {
-   292			if (!f2fs_sb_has_extra_attr(sbi)) {
-   293				f2fs_warn(sbi, "%s: inode (ino=%lx) is with extra_attr, but extra_attr feature is off",
-   294					  __func__, inode->i_ino);
-   295				return false;
-   296			}
-   297			if (fi->i_extra_isize > F2FS_TOTAL_EXTRA_ATTR_SIZE ||
-   298				fi->i_extra_isize < F2FS_MIN_EXTRA_ATTR_SIZE ||
-   299				fi->i_extra_isize % sizeof(__le32)) {
-   300				f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_extra_isize: %d, max: %zu",
-   301					  __func__, inode->i_ino, fi->i_extra_isize,
-   302					  F2FS_TOTAL_EXTRA_ATTR_SIZE);
-   303				return false;
-   304			}
-   305			if (f2fs_sb_has_compression(sbi) &&
-   306				fi->i_flags & F2FS_COMPR_FL &&
-   307				F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
-   308							i_compress_flag)) {
-   309				if (!sanity_check_compress_inode(inode, ri))
-   310					return false;
-   311			}
-   312		}
-   313	
-   314		if (f2fs_sb_has_flexible_inline_xattr(sbi) &&
-   315			(fi->i_inline_xattr_size < MIN_INLINE_XATTR_SIZE ||
-   316			fi->i_inline_xattr_size > MAX_INLINE_XATTR_SIZE)) {
-   317			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, min: %lu, max: %lu",
-   318				  __func__, inode->i_ino, fi->i_inline_xattr_size,
- > 319				  MIN_INLINE_XATTR_SIZE, MAX_INLINE_XATTR_SIZE);
-   320			return false;
-   321		}
-   322	
-   323		if (!f2fs_sb_has_extra_attr(sbi)) {
-   324			if (f2fs_sb_has_project_quota(sbi)) {
-   325				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   326					  __func__, inode->i_ino, F2FS_FEATURE_PRJQUOTA);
-   327				return false;
-   328			}
-   329			if (f2fs_sb_has_inode_chksum(sbi)) {
-   330				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   331					  __func__, inode->i_ino, F2FS_FEATURE_INODE_CHKSUM);
-   332				return false;
-   333			}
-   334			if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
-   335				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   336					  __func__, inode->i_ino, F2FS_FEATURE_FLEXIBLE_INLINE_XATTR);
-   337				return false;
-   338			}
-   339			if (f2fs_sb_has_inode_crtime(sbi)) {
-   340				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   341					  __func__, inode->i_ino, F2FS_FEATURE_INODE_CRTIME);
-   342				return false;
-   343			}
-   344			if (f2fs_sb_has_compression(sbi)) {
-   345				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   346					  __func__, inode->i_ino, F2FS_FEATURE_COMPRESSION);
-   347				return false;
-   348			}
-   349		}
-   350	
-   351		if (f2fs_sanity_check_inline_data(inode, node_page)) {
-   352			f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
-   353				  __func__, inode->i_ino, inode->i_mode);
-   354			return false;
-   355		}
-   356	
-   357		if (f2fs_has_inline_dentry(inode) && !S_ISDIR(inode->i_mode)) {
-   358			f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_dentry, run fsck to fix",
-   359				  __func__, inode->i_ino, inode->i_mode);
-   360			return false;
-   361		}
-   362	
-   363		if ((fi->i_flags & F2FS_CASEFOLD_FL) && !f2fs_sb_has_casefold(sbi)) {
-   364			f2fs_warn(sbi, "%s: inode (ino=%lx) has casefold flag, but casefold feature is off",
-   365				  __func__, inode->i_ino);
-   366			return false;
-   367		}
-   368	
-   369		if (fi->i_xattr_nid && f2fs_check_nid_range(sbi, fi->i_xattr_nid)) {
-   370			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_xattr_nid: %u, run fsck to fix.",
-   371				  __func__, inode->i_ino, fi->i_xattr_nid);
-   372			return false;
-   373		}
-   374	
-   375		if (IS_DEVICE_ALIASING(inode)) {
-   376			if (!f2fs_sb_has_device_alias(sbi)) {
-   377				f2fs_warn(sbi, "%s: inode (ino=%lx) has device alias flag, but the feature is off",
-   378					  __func__, inode->i_ino);
-   379				return false;
-   380			}
-   381			if (!f2fs_is_pinned_file(inode)) {
-   382				f2fs_warn(sbi, "%s: inode (ino=%lx) has device alias flag, but is not pinned",
-   383					  __func__, inode->i_ino);
-   384				return false;
-   385			}
-   386		}
-   387	
-   388		return true;
-   389	}
-   390	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  kernel/locking/lockdep.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index bb65abfcfa71..29acd238dad7 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -432,7 +432,7 @@ static inline u16 hlock_id(struct held_lock *hlock)
+>  	return (hlock->class_idx | (hlock->read << MAX_LOCKDEP_KEYS_BITS));
+>  }
+>  
+> -static inline unsigned int chain_hlock_class_idx(u16 hlock_id)
+> +static inline __maybe_unused unsigned int chain_hlock_class_idx(u16 hlock_id)
+>  {
+>  	return hlock_id & (MAX_LOCKDEP_KEYS - 1);
+>  }
+> -- 
+> 2.43.0.rc1.1336.g36b5255a03ac
+> 
