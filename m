@@ -1,63 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63BA79450;
-	Sun, 15 Dec 2024 05:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E408156CF;
+	Sun, 15 Dec 2024 07:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734240791; cv=none; b=n0/e3XmV2+/FB+qA+Nw6W8JTjydToyGtgpMumpEDZXwboYJWdqFf2Ka85dJ7CDxABo5ORTLuyd2gPCFksOWIMQ3h1BmPWHYQRhq9DuAQnnRhtUuREZjYNmQxxTwsrd79pX2Tz8Xw2Bape6ypSVLIOKO+jP+7qCK4yygzS0jPw/0=
+	t=1734248780; cv=none; b=Y5oElwBPRrMflzwCUZGCwp6QuVkboV8gpYq5R9jrsj4fjJ4C1iIUFM2wwPP7aELrDm6jxl5LSybgChHiCEQVJJ3ICovsT/i/hl9MxotRvQ4GtAxR+6Rssqcj6sVpmvM8nfhZn55XwA/yWR0noTjchIj/C09Vlj+tK0An7LPj2ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734240791; c=relaxed/simple;
-	bh=+fY9hEPSKJmOpv8MMFl4MGi9GJjNk1kJJuxIOhFcZ+s=;
+	s=arc-20240116; t=1734248780; c=relaxed/simple;
+	bh=fC4NPKnJJOUU2ysy6AcJTUfQFOtrN3dJ1Xe8LK0Xltg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PRydwd5Gf1c5ChE5DOvvz016r9x/7S9Z9UCMExo3nBmqhPySngABM82ANaMbg2KsW6zHu6qVUH9/NTIbbJ8iFckMyWsJi8vcWzvCgdH4hjO/JK0YJ+GR0SiZs7m7MGDIgIf1OQssSr0+kLXePs3MnzOBMhsTtK80EZ/Lusn1xZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=goTKoz3y; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=W9Qmwml7HqMXnnppDdC2jdt4CUJihO3QVg5wlzK40NuuHDEjd9FXOYH1fZ/IzDxGUP5hcNoRdgk3dlRmuUaROizl7M0NePQ28E7+MS8jkUuWJnvFJGFqr5FYKaW1Hc1qXYRQsi/FxVl3Z6HWZq1A+p/tpusoHaEN19vmq5iiFbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ckT5gaQ0; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="goTKoz3y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ckT5gaQ0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734240788; x=1765776788;
+  t=1734248778; x=1765784778;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+fY9hEPSKJmOpv8MMFl4MGi9GJjNk1kJJuxIOhFcZ+s=;
-  b=goTKoz3yKTt6kRx4m0U57AK2L2KuVO8u6Hpfj9FrpguHIN6YJojCIGj9
-   OIU6GlXxp23s9yQeblo5y1g2rqjN+sDiAh9H1lU4rUCuV1JyPk1mZFYPN
-   /rjidzOiZqLmDyA96z3STjJX7aLbY51VRx1VnQFrma9d6sjo/ue5/p0C5
-   gGloiyUzNroTMCepdAA2YI4DwcaV34fGJ26DuFD5zfdhpWSjaSnOrGKxs
-   6PEGGYRjfj6MoOJgeflqOVFNP/K4QvQD0UcQAA805TiEIoznlFjo894Yx
-   X6IU84wLCzGIPtDJGaHRbxF1v2Kp6f5cE+3Kbr+vFqBXWswa+nTAyJgEo
-   A==;
-X-CSE-ConnectionGUID: gl7zwOPvQtyKngY5FyMuNQ==
-X-CSE-MsgGUID: 1ZiTVybGTS+Z4BPtyreJEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11286"; a="22236792"
-X-IronPort-AV: E=Sophos;i="6.12,235,1728975600"; 
-   d="scan'208";a="22236792"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 21:33:07 -0800
-X-CSE-ConnectionGUID: jx8Wunj5QrGej9qdFuAyEw==
-X-CSE-MsgGUID: arxHAJamRTuuU+XVW7hbIA==
+  bh=fC4NPKnJJOUU2ysy6AcJTUfQFOtrN3dJ1Xe8LK0Xltg=;
+  b=ckT5gaQ0Q2hUPZcqiTpKcESHSb9b39tS74feSFZiuJoj3l+oIScHQ84Q
+   /pDU5l3Objs+wuKVLyvO8OImBszBUd71SxChdWZDE9nau8RYLDxgLxnnX
+   G93jzRr0cW04JaCenptF5iZeGh9bZzasOScsGOw+n1JWEHOQ9kvhMQlQ2
+   yT35yNzzPCmtEao5YODpC2A6EKaXoE2K1ZrHM413aEdAx+JgqVLtqNqZD
+   mKoGcxjGbE5UbCo7MuU+OTOY2sFarsfWuCf64HTRzUkDMY7xU5jz1xMVI
+   +AK/A1mgEzD6kAGNQ+FfhraQganSj00BMott5QtMr+aBqZlMq10RAcpXc
+   Q==;
+X-CSE-ConnectionGUID: Is7XFflmQMO2UGVhnJzYXg==
+X-CSE-MsgGUID: xAzQZ8hyTr6Ep0Tioj80lg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11286"; a="34563416"
+X-IronPort-AV: E=Sophos;i="6.12,236,1728975600"; 
+   d="scan'208";a="34563416"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2024 23:46:17 -0800
+X-CSE-ConnectionGUID: x12cjSA0RaaDKTopkm41FA==
+X-CSE-MsgGUID: fOAIFhkFTweeTrvjjotEkQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="127889575"
+X-IronPort-AV: E=Sophos;i="6.12,236,1728975600"; 
+   d="scan'208";a="97473203"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Dec 2024 21:33:05 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 14 Dec 2024 23:46:15 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tMhFW-000DSU-2o;
-	Sun, 15 Dec 2024 05:33:02 +0000
-Date: Sun, 15 Dec 2024 13:32:25 +0800
+	id 1tMjKO-000DVa-2o;
+	Sun, 15 Dec 2024 07:46:12 +0000
+Date: Sun, 15 Dec 2024 15:45:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: yangge1116@126.com, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	21cnbao@gmail.com, david@redhat.com, baolin.wang@linux.alibaba.com,
-	vbabka@suse.cz, liuzixing@hygon.cn, yangge <yangge1116@126.com>
-Subject: Re: [PATCH V2] mm, compaction: don't use ALLOC_CMA in long term GUP
- flow
-Message-ID: <202412151325.svvh8EAB-lkp@intel.com>
-References: <1734157420-31110-1-git-send-email-yangge1116@126.com>
+To: Liu Shixin <liushixin2@huawei.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Kenneth W Chen <kenneth.w.chen@intel.com>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
+	Nanyong Sun <sunnanyong@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, Liu Shixin <liushixin2@huawei.com>
+Subject: Re: [PATCH] mm: hugetlb: independent PMD page table shared count
+Message-ID: <202412151541.SQEZStgy-lkp@intel.com>
+References: <20241214104401.1052550-1-liushixin2@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,138 +69,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1734157420-31110-1-git-send-email-yangge1116@126.com>
+In-Reply-To: <20241214104401.1052550-1-liushixin2@huawei.com>
 
-Hi,
+Hi Liu,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/yangge1116-126-com/mm-compaction-don-t-use-ALLOC_CMA-in-long-term-GUP-flow/20241214-142453
+url:    https://github.com/intel-lab-lkp/linux/commits/Liu-Shixin/mm-hugetlb-independent-PMD-page-table-shared-count/20241214-184912
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/1734157420-31110-1-git-send-email-yangge1116%40126.com
-patch subject: [PATCH V2] mm, compaction: don't use ALLOC_CMA in long term GUP flow
-config: arm-randconfig-001-20241215 (https://download.01.org/0day-ci/archive/20241215/202412151325.svvh8EAB-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20241214104401.1052550-1-liushixin2%40huawei.com
+patch subject: [PATCH] mm: hugetlb: independent PMD page table shared count
+config: hexagon-randconfig-001-20241215 (https://download.01.org/0day-ci/archive/20241215/202412151541.SQEZStgy-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241215/202412151325.svvh8EAB-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241215/202412151541.SQEZStgy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412151325.svvh8EAB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412151541.SQEZStgy-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/vmscan.c:30:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   mm/vmscan.c:409:51: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     409 |                         size += zone_page_state(zone, NR_ZONE_LRU_BASE + lru);
-         |                                                       ~~~~~~~~~~~~~~~~ ^ ~~~
-   mm/vmscan.c:1773:4: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    1773 |                         __count_zid_vm_events(PGSCAN_SKIP, zid, nr_skipped[zid]);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
-     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   mm/vmscan.c:2279:51: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-    2279 |         inactive = lruvec_page_state(lruvec, NR_LRU_BASE + inactive_lru);
-         |                                              ~~~~~~~~~~~ ^ ~~~~~~~~~~~~
-   mm/vmscan.c:2280:49: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-    2280 |         active = lruvec_page_state(lruvec, NR_LRU_BASE + active_lru);
-         |                                            ~~~~~~~~~~~ ^ ~~~~~~~~~~
->> mm/vmscan.c:5822:61: error: too many arguments to function call, expected 3, have 4
-    5822 |                 if (compaction_suitable(zone, sc->order, sc->reclaim_idx, 0))
-         |                     ~~~~~~~~~~~~~~~~~~~                                   ^
-   include/linux/compaction.h:111:20: note: 'compaction_suitable' declared here
-     111 | static inline bool compaction_suitable(struct zone *zone, int order,
-         |                    ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     112 |                                                       int highest_zoneidx)
-         |                                                       ~~~~~~~~~~~~~~~~~~~
-   mm/vmscan.c:6050:61: error: too many arguments to function call, expected 3, have 4
-    6050 |         if (!compaction_suitable(zone, sc->order, sc->reclaim_idx, 0))
-         |              ~~~~~~~~~~~~~~~~~~~                                   ^
-   include/linux/compaction.h:111:20: note: 'compaction_suitable' declared here
-     111 | static inline bool compaction_suitable(struct zone *zone, int order,
-         |                    ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     112 |                                                       int highest_zoneidx)
-         |                                                       ~~~~~~~~~~~~~~~~~~~
-   mm/vmscan.c:6239:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    6239 |                 __count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
-     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   7 warnings and 2 errors generated.
+   In file included from kernel/dma/direct.c:7:
+   In file included from include/linux/memblock.h:12:
+   include/linux/mm.h:3192:21: error: called object type 'void *' is not a function or function pointer
+    3192 |         ptdesc_pmd_pts_init(ptdesc);
+         |         ~~~~~~~~~~~~~~~~~~~^
+>> kernel/dma/direct.c:147:20: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                 if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     147 |                     phys_limit < DMA_BIT_MASK(64) &&
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+     148 |                     !(gfp & (GFP_DMA32 | GFP_DMA))) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+>> kernel/dma/direct.c:147:20: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                 if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     147 |                     phys_limit < DMA_BIT_MASK(64) &&
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+     148 |                     !(gfp & (GFP_DMA32 | GFP_DMA))) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:61: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                             ^~~~
+>> kernel/dma/direct.c:147:20: warning: shift count >= width of type [-Wshift-count-overflow]
+     146 |                 if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     147 |                     phys_limit < DMA_BIT_MASK(64) &&
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+     148 |                     !(gfp & (GFP_DMA32 | GFP_DMA))) {
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:86: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                                     ~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/compiler.h:68:3: note: expanded from macro '__trace_if_value'
+      68 |         (cond) ?                                        \
+         |          ^~~~
+   3 warnings and 1 error generated.
 
 
-vim +5822 mm/vmscan.c
+vim +147 kernel/dma/direct.c
 
-  5778	
-  5779	/*
-  5780	 * Reclaim/compaction is used for high-order allocation requests. It reclaims
-  5781	 * order-0 pages before compacting the zone. should_continue_reclaim() returns
-  5782	 * true if more pages should be reclaimed such that when the page allocator
-  5783	 * calls try_to_compact_pages() that it will have enough free pages to succeed.
-  5784	 * It will give up earlier than that if there is difficulty reclaiming pages.
-  5785	 */
-  5786	static inline bool should_continue_reclaim(struct pglist_data *pgdat,
-  5787						unsigned long nr_reclaimed,
-  5788						struct scan_control *sc)
-  5789	{
-  5790		unsigned long pages_for_compaction;
-  5791		unsigned long inactive_lru_pages;
-  5792		int z;
-  5793	
-  5794		/* If not in reclaim/compaction mode, stop */
-  5795		if (!in_reclaim_compaction(sc))
-  5796			return false;
-  5797	
-  5798		/*
-  5799		 * Stop if we failed to reclaim any pages from the last SWAP_CLUSTER_MAX
-  5800		 * number of pages that were scanned. This will return to the caller
-  5801		 * with the risk reclaim/compaction and the resulting allocation attempt
-  5802		 * fails. In the past we have tried harder for __GFP_RETRY_MAYFAIL
-  5803		 * allocations through requiring that the full LRU list has been scanned
-  5804		 * first, by assuming that zero delta of sc->nr_scanned means full LRU
-  5805		 * scan, but that approximation was wrong, and there were corner cases
-  5806		 * where always a non-zero amount of pages were scanned.
-  5807		 */
-  5808		if (!nr_reclaimed)
-  5809			return false;
-  5810	
-  5811		/* If compaction would go ahead or the allocation would succeed, stop */
-  5812		for (z = 0; z <= sc->reclaim_idx; z++) {
-  5813			struct zone *zone = &pgdat->node_zones[z];
-  5814			if (!managed_zone(zone))
-  5815				continue;
-  5816	
-  5817			/* Allocation can already succeed, nothing to do */
-  5818			if (zone_watermark_ok(zone, sc->order, min_wmark_pages(zone),
-  5819					      sc->reclaim_idx, 0))
-  5820				return false;
-  5821	
-> 5822			if (compaction_suitable(zone, sc->order, sc->reclaim_idx, 0))
-  5823				return false;
-  5824		}
-  5825	
-  5826		/*
-  5827		 * If we have not reclaimed enough pages for compaction and the
-  5828		 * inactive lists are large enough, continue reclaiming
-  5829		 */
-  5830		pages_for_compaction = compact_gap(sc->order);
-  5831		inactive_lru_pages = node_page_state(pgdat, NR_INACTIVE_FILE);
-  5832		if (can_reclaim_anon_pages(NULL, pgdat->node_id, sc))
-  5833			inactive_lru_pages += node_page_state(pgdat, NR_INACTIVE_ANON);
-  5834	
-  5835		return inactive_lru_pages > pages_for_compaction;
-  5836	}
-  5837	
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  117  
+26749b3201ab05e kernel/dma/direct.c Christoph Hellwig      2020-06-15  118  static struct page *__dma_direct_alloc_pages(struct device *dev, size_t size,
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  119  		gfp_t gfp, bool allow_highmem)
+a8463d4b0e47d1f lib/dma-noop.c      Christian Borntraeger  2016-02-02  120  {
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  121  	int node = dev_to_node(dev);
+080321d3b3139b3 lib/dma-direct.c    Christoph Hellwig      2017-12-22  122  	struct page *page = NULL;
+a7ba70f1787f977 kernel/dma/direct.c Nicolas Saenz Julienne 2019-11-21  123  	u64 phys_limit;
+a8463d4b0e47d1f lib/dma-noop.c      Christian Borntraeger  2016-02-02  124  
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  125  	WARN_ON_ONCE(!PAGE_ALIGNED(size));
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  126  
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  127  	if (is_swiotlb_for_alloc(dev))
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  128  		return dma_direct_alloc_swiotlb(dev, size);
+aea7e2a86a94b25 kernel/dma/direct.c Christoph Hellwig      2021-10-21  129  
+25a4ce564921db0 kernel/dma/direct.c Petr Tesarik           2023-02-20  130  	gfp |= dma_direct_optimal_gfp_mask(dev, &phys_limit);
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  131  	page = dma_alloc_contiguous(dev, size, gfp);
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  132  	if (page) {
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  133  		if (!dma_coherent_ok(dev, page_to_phys(page), size) ||
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  134  		    (!allow_highmem && PageHighMem(page))) {
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  135  			dma_free_contiguous(dev, page, size);
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  136  			page = NULL;
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  137  		}
+92826e967535db2 kernel/dma/direct.c Christoph Hellwig      2022-04-23  138  	}
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  139  again:
+90ae409f9eb3bca kernel/dma/direct.c Christoph Hellwig      2019-08-20  140  	if (!page)
+633d5fce78a61e8 kernel/dma/direct.c David Rientjes         2020-06-11  141  		page = alloc_pages_node(node, gfp, get_order(size));
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  142  	if (page && !dma_coherent_ok(dev, page_to_phys(page), size)) {
+f689a3ab7b8ece9 kernel/dma/direct.c Chen Yu                2024-08-31  143  		__free_pages(page, get_order(size));
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  144  		page = NULL;
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  145  
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  146  		if (IS_ENABLED(CONFIG_ZONE_DMA32) &&
+a7ba70f1787f977 kernel/dma/direct.c Nicolas Saenz Julienne 2019-11-21 @147  		    phys_limit < DMA_BIT_MASK(64) &&
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  148  		    !(gfp & (GFP_DMA32 | GFP_DMA))) {
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  149  			gfp |= GFP_DMA32;
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  150  			goto again;
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  151  		}
+de7eab301de7886 lib/dma-direct.c    Takashi Iwai           2018-04-16  152  
+fbce251baa6e357 kernel/dma/direct.c Christoph Hellwig      2019-02-13  153  		if (IS_ENABLED(CONFIG_ZONE_DMA) && !(gfp & GFP_DMA)) {
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  154  			gfp = (gfp & ~GFP_DMA32) | GFP_DMA;
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  155  			goto again;
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  156  		}
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  157  	}
+95f183916d4b0bc lib/dma-direct.c    Christoph Hellwig      2018-01-09  158  
+b18814e767a4455 kernel/dma/direct.c Christoph Hellwig      2018-11-04  159  	return page;
+b18814e767a4455 kernel/dma/direct.c Christoph Hellwig      2018-11-04  160  }
+b18814e767a4455 kernel/dma/direct.c Christoph Hellwig      2018-11-04  161  
 
 -- 
 0-DAY CI Kernel Test Service
