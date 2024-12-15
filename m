@@ -1,72 +1,72 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D77143C69
-	for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 19:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6741991DD
+	for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 20:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734292513; cv=none; b=d2ld8ccRaZpe6apxqz5sMsrS+moNlFc3Vk0p7v1d86jDhrtVVUOlq7Jb+JgKobmGHnErFT4tk0GaFyujhpYzmPtLqNnukbORiIT8rqwJ3Zjas7HwKrab1/kfaJe6+RLll5L8YUlG0c9WpT33nc6q8rC3/+QxNesEKTSwYEnoB4E=
+	t=1734293304; cv=none; b=jQiH857JKtvO8GGXhrm+1YpJo1tH5uEj5uXWVmk07+LZTlC2+uTfZ7cN3VtQ7PyBxDlEodp7fb8leC9bE+rCL0JQD3CCshEL4IXK4kDELH93WZtlkXcpb1D+iPkf86qXIYEBR5D1TWvOiHMGz401EvYFSfQvBK8HKw020sql3Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734292513; c=relaxed/simple;
-	bh=Ng0ihqJksultGRuuZdcU+Us0fVV6LYGGrSDynhO7HrU=;
+	s=arc-20240116; t=1734293304; c=relaxed/simple;
+	bh=82lBQhfy4ugFlmtxzGDkFOfRQrea802BAqDqgjRI+Bk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=axFj42LGoXs2LV4q7LYTgBaqNNJ6DizrbWDthvGFIaDPOZcKKCXfBMZLCV8aPBhZNqhneY5Pm84Xb4Ya7WyVC36FVPlXADcPkg2H4j62oFzA8rV51PECbqsOi3ZwqTt+fqojWQh8TGB5gSjnb7k9ya/0thElze4bu9feZDaqqic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clLaHhxq; arc=none smtp.client-ip=209.85.160.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=MgwMjdnFul4/XEGnH0gOv7Uc8AHuxU4COjsoTldEqb+1PB/KN+cXuLBa0u4cxtpJJElwE8NjOCN+vJyGxX9S4E5YHvJ6whvgVnGtBDOY76F3f6mhkaLlQqYGGSQEZR5r2BFAtP3288NZbrvnQZwb8IMLs5B+vMs+stAaWDNOVpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E+KYHl8/; arc=none smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clLaHhxq"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-467a3f1e667so15683191cf.0
-        for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 11:55:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+KYHl8/"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-46792996074so42181381cf.0
+        for <llvm@lists.linux.dev>; Sun, 15 Dec 2024 12:08:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734292511; x=1734897311; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1734293302; x=1734898102; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KutpQX//29f7Zqo+JdG0d9ubSIqFItXcJu0uFi63PTo=;
-        b=clLaHhxqjSOfklAYowWqqIRc6YgFjezuaBEU52y7mg2SneBniYGnXOnO5+dOm54zrM
-         Jm5SbjToKO/WYz/Uo+fqVSSwYAKZohD/Du27OUicNmmKgfmpZC6ldGy4SIKFaobD6A5b
-         RsJdUzvehjUfoLE9o7QpG7fYdUWt3I/05YIU44S+VmucvBIlsLZzHZOv9YsBjG5l0Xl/
-         PlUpwJgiGsn0lHFhISidMcTB5FOdWKt1Ya/eh6kjVCidz/1/l4TlBdM3CJNOnDX50tYO
-         upXlal1XueVYLSKjCOP0vjPwKHVcXpNpaKA4Kr75eqTgDe771gTlRexWCA6STzOfN/VZ
-         gJTw==
+        bh=eDzgwa61e+om6LsGHubgAOxXOshOaf1zjEonOuJmqiA=;
+        b=E+KYHl8/2jUkusZj1Y8+ljcVmSl4/zJE56eFWOFzI/USQgDk5OVLzHL+sp8VQ6sIfG
+         hnIwYs8WNMBEVmcqDKFrd6WK7OOWEu+F/s+B2Lvk/Mef4n/nVsqd6I7U60uSKZQ7zjAF
+         WcjwT+zKtGRUxmLc4/c7XGABsPfPh2pkBaxbJxR2WJ6tO/ZkkTYNe/T37E2BxSlIuepK
+         FIRF+HtBgXfvPJRwDKvh3fUuSrMvdjoMI2WfMgAUzI4Eq36GYiPhwae19HCITZPgcelH
+         gjBTcscJH9Prsz6HrKZZZi8vPQPmSeILKGsWBaMX6BXflXH1IFJx6JhuL2598N2iB7zN
+         G13w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734292511; x=1734897311;
+        d=1e100.net; s=20230601; t=1734293302; x=1734898102;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KutpQX//29f7Zqo+JdG0d9ubSIqFItXcJu0uFi63PTo=;
-        b=OjBj0QhrsUxoIrHi+JvHi4FfPG7xBso+B6ebiuFYJ0rvrEipIYIwgQaBZalMRWD4qc
-         8NbEIOnGpgvzmfVzhx9P7LxzpRxMi++QlhoaP1JdNu8yckl4SUXbhuIu60pIxZhtu61k
-         CREfYwL/M1jk/T6+o1ayx7/dDsSK0uA+QZ6xTgbZr7bhYxUwX6Mx/JmI+j3BMHXFXtUM
-         /jZOLqnkc2ENKgLIiifY9PqWQp2pNb3cQsQ45APgJVWB2S0Ovh3GrkZnPCpcn2SCtuwo
-         f9kBGdgbK3thZ/xihQd4A/Mt00EIfMVXMAR81J01qjSgvU3JyeijXg3pO521UrSwv2ZV
-         zpEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+rUenuxDyx6pna9rHqddbumaI/LKz1iCVUsnXiQLvHaAnj+LeKHrlh7YeUkF47jnUxBF0@lists.linux.dev
-X-Gm-Message-State: AOJu0YxZebWzDMrjUI0AHByxZ4ROc/OOpgEnlS7vX0VBg9Quo8/gGyUV
-	uZfgS4CMkkrcfb98/mO1ZYjQSux60k6glBxPwuWH/mxeKDG1RQDJ
-X-Gm-Gg: ASbGnctpTGbXzBrYtQNIyqHqyB1Ekp9DTKmTnkz1IEBe/MCzZrFHLlZ0oIWx4cJ+rA/
-	va2pQfwb1Ia0zcaoc/PuCmz/yzKKJ3OIimXUwsASY85wxGKMJP8W3k155j1RxIv1EoT8wTaTrke
-	b3e7vNaT4RdWcElY98qba1Gbe824qXRShzDj+uJvEHFnl+YPxMbBNw6aF+harpfD8+QyOEOuMYf
-	XxFWf8GefMSMCEROv2fypJX0jFEGBXptwWn5JVVDd6BSt0AotwuUG8Y6Wy57+yUA/XcLYV0/p4X
-	IlgagGVZ0f/40+9rIwfwn2MlseD8OKiZ8gb0Yj2vbrPqgPM=
-X-Google-Smtp-Source: AGHT+IF7QGOrB10m8TSdkPb1lL5qpq+ISHcfE235eXXqPxvCD743BLg+mfmQ7wkjVK8VmGQYNle02g==
-X-Received: by 2002:ac8:7dd6:0:b0:458:5716:fbd8 with SMTP id d75a77b69052e-467a578fbe2mr211410361cf.32.1734292510865;
-        Sun, 15 Dec 2024 11:55:10 -0800 (PST)
+        bh=eDzgwa61e+om6LsGHubgAOxXOshOaf1zjEonOuJmqiA=;
+        b=DoQMPIYcorCfbwd2V/Ye/RqKUMXMhoQGjGsPoqOlXvQ5E5OXumQ7U4UmaMmUWmQg03
+         hkiD/HE+oCTeohbu4v+ubL208AeKckREioaE5tresSZkKUQfWILpAemhI87L5iSj9zQ3
+         5apd9iPsl5hiteH+3CvEOrqPfQeKSOCog9nDoj7juW+cYD0BGJt25wOLgM79F2/fSwD9
+         m949Wc3bMYyeOjpstm7OjNZq/gGhIx2ZSE+zTWN/rzM/rFgWn3aGkQV2E6tzpJdaFgST
+         yS0XHnKRviJ08uLzOZJeUVYzBk7u92AlTYB+1PuNFZ3/FYdS804L/qWRGzp+kF2WVPaw
+         GjSg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1ASlVLCEsajLhr5q4u5afRoImtJzp90sxkNsJXGeVvhJDT/94VabzVfy+upKVfuFOLtMl@lists.linux.dev
+X-Gm-Message-State: AOJu0YwOuc2ierODIRrRwIAqdZN4BuC7S1WIiubBQe17wRYTitnPRjIi
+	pNM6eD+Jk/XtS7am+etojaaVSG7vpIb7UeGtapGfZTSqOLmKQf/C
+X-Gm-Gg: ASbGnctJXlt+UXU7o4cfMAUVThGx9IfzNpg6g8hPr0FD+GYd/W8fXWoi0TCrXjvFVVx
+	wtHK2HFMAM+ry028j8/mBHE/oSfslPmcOphywn1USuW1hRzXjEFs33DUM2H706kUVRHp9LFMnKr
+	h7WlHyZRuDInqbnwxm2b4eoRjSA8GoGusYS+pg5bUQ6v6yGjnb3lfnQiB5iBd+V6dYLMvF6W4fc
+	F9wBU/6NNw/olp0Gjk1m0EhXrSSSz/8mTadN7hoBzwBfOF+9/RMVwoLVlPjEBsHrwxgdq/HQ9yj
+	GIKpM5A7HTL/YMZnFCmIjCdsB8a3nq68x4I9lTGpPOzpTO4=
+X-Google-Smtp-Source: AGHT+IFWjPE3ccC6zX44KQ1hRdtd3zkraAOtpY+wfSfEq+cGdymbOq9rpKWmdMj9cpaAjqf+tF5QLQ==
+X-Received: by 2002:ac8:7f52:0:b0:467:5462:4a10 with SMTP id d75a77b69052e-467a54bab28mr194892211cf.0.1734293302174;
+        Sun, 15 Dec 2024 12:08:22 -0800 (PST)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2e83fe8sm19812841cf.65.2024.12.15.11.55.09
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2ca087esm20073701cf.28.2024.12.15.12.08.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Dec 2024 11:55:10 -0800 (PST)
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id A5186120006E;
-	Sun, 15 Dec 2024 14:55:09 -0500 (EST)
+        Sun, 15 Dec 2024 12:08:21 -0800 (PST)
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 4C78F1200043;
+	Sun, 15 Dec 2024 15:08:21 -0500 (EST)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Sun, 15 Dec 2024 14:55:09 -0500
-X-ME-Sender: <xms:HTRfZ-Jm6BvA1V7uv3nyV_-r07id1ZQaZe5ON0hCt7RkcHsndKWGFg>
-    <xme:HTRfZ2L2sMoyct16m5tAdGb34j7kAYmNTji9lueNFnjxcoFw_-Cz8tgWoCoXmC-XP
-    IPRTpciJ7ovN9tFeQ>
-X-ME-Received: <xmr:HTRfZ-tLbWAMgmQeipmzrM-46A0eavdPh1tHQB3_AAW2j-q1Hj645QvkbPbu>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrledugdduvdekucetufdoteggodetrfdotf
+  by phl-compute-03.internal (MEProxy); Sun, 15 Dec 2024 15:08:21 -0500
+X-ME-Sender: <xms:NTdfZ2jAbtEli5nAm2pCSYWvaPoP2BY372qijFxRu3lCcsK0tE1HrQ>
+    <xme:NTdfZ3B424QQhvGYDchEqxWMhF6QM-U8JCu3Il3HPzMn0gg54L-wEpakjwJafujep
+    vaGTrrFig7WvENYag>
+X-ME-Received: <xmr:NTdfZ-E_R96XOSFuYYdMFYQPaiGt238hTN7WwP_YAFEtcf-0IBe9Ug3Sa0q2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrledugddufeduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
@@ -84,15 +84,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrledugdduvdekucetufdoteggod
     hilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlohhnghhmrghnsehrvgguhhgr
     thdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpth
     htohepnhguvghsrghulhhnihgvrhhssehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:HTRfZzbhRUzwzmrb59t6nrKR_67KK1EPCQQuVE6z69tLCi7rH_FLTA>
-    <xmx:HTRfZ1YsI_AMQuAv0T_tWUV7HXYPEH9a8TbbsU69aihW4PgWXv_xbg>
-    <xmx:HTRfZ_DA_cwJ6cr39moHoP72_WLIe-OpnNggUXN3Uo_ICc5olhtvdg>
-    <xmx:HTRfZ7ZXQLNuEnNhLsAG-ZBkFI8oIN818B219rY0qt5lTjqMHsBIEg>
-    <xmx:HTRfZ1qpq9lkYqpBRJYQKQiI2s10VuRBCg9X6Iy72q0SmBL8P_XVTKeO>
+X-ME-Proxy: <xmx:NTdfZ_TECe5bR4_1MpbNCsBpPxCSf6eu2aXCvI4QupWGW_yLzbYw_Q>
+    <xmx:NTdfZzzYT4blah1-18vms1xPqrQZR794NZiNIUtjatTrkcH7FhsNBA>
+    <xmx:NTdfZ96Ve8x6CZbjwvccK9iyVlSrsLwtyAKmhCzVkY1YQ7ebRdCbgg>
+    <xmx:NTdfZwzViTgonunbME11O_54ORvG3P5FvLPvyvKBRWHDV3zse8NYcQ>
+    <xmx:NTdfZ_hK2b9lmvtv1VF88AhC_boteAkrVH3VSUdRnFSNe1erabGeN6-H>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 15 Dec 2024 14:55:09 -0500 (EST)
-Date: Sun, 15 Dec 2024 11:55:08 -0800
+ 15 Dec 2024 15:08:20 -0500 (EST)
+Date: Sun, 15 Dec 2024 12:08:19 -0800
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
@@ -103,10 +103,10 @@ Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] lockdep: Mark chain_hlock_class_idx() with
- __maybe_unused
-Message-ID: <Z180HFO6a61PtzYm@tardis.local>
-References: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] lockdep: Move lockdep_assert_locked() under
+ #ifdef CONFIG_PROVE_LOCKING
+Message-ID: <Z183M9-JIH6mG3q9@tardis.local>
+References: <20241202193445.769567-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -115,51 +115,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20241202193445.769567-1-andriy.shevchenko@linux.intel.com>
 
-Hi Andy,
-
-On Mon, Dec 09, 2024 at 07:08:10PM +0200, Andy Shevchenko wrote:
-> When chain_hlock_class_idx() is unused, it prevents kernel builds with clang,
-> `make W=1` and CONFIG_WERROR=y:
+On Mon, Dec 02, 2024 at 09:34:45PM +0200, Andy Shevchenko wrote:
+> When lockdep_assert_locked() is unused, it prevents kernel builds
+> with clang, `make W=1` and CONFIG_WERROR=y:
 > 
-> kernel/locking/lockdep.c:435:28: error: unused function 'chain_hlock_class_idx' [-Werror,-Wunused-function]
+>   kernel/locking/lockdep.c:160:20: error: unused function 'lockdep_assert_locked' [-Werror,-Wunused-function]
 > 
-> Fix this by marking it with __maybe_unused.
+> Fix this by moving it under the respective ifdeffery.
 > 
 > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
 > inline functions for W=1 build").
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-This looks fine to me, so I'm going to queue it, but could you do me
-favor if you could share the exact configs that would make
-chain_hlock_class_idx() an unused fuction in kernel/locking/lockdep.c ?
-
-I might add these information in commit log.
-
-Thanks!
+Queued for more testing, thanks!
 
 Regards,
 Boqun
 
 > ---
->  kernel/locking/lockdep.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/locking/lockdep.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index bb65abfcfa71..29acd238dad7 100644
+> index 2d8ec0351ef9..bb65abfcfa71 100644
 > --- a/kernel/locking/lockdep.c
 > +++ b/kernel/locking/lockdep.c
-> @@ -432,7 +432,7 @@ static inline u16 hlock_id(struct held_lock *hlock)
->  	return (hlock->class_idx | (hlock->read << MAX_LOCKDEP_KEYS_BITS));
+> @@ -157,10 +157,12 @@ static inline void lockdep_unlock(void)
+>  	__this_cpu_dec(lockdep_recursion);
 >  }
 >  
-> -static inline unsigned int chain_hlock_class_idx(u16 hlock_id)
-> +static inline __maybe_unused unsigned int chain_hlock_class_idx(u16 hlock_id)
+> +#ifdef CONFIG_PROVE_LOCKING
+>  static inline bool lockdep_assert_locked(void)
 >  {
->  	return hlock_id & (MAX_LOCKDEP_KEYS - 1);
+>  	return DEBUG_LOCKS_WARN_ON(__owner != current);
 >  }
+> +#endif
+>  
+>  static struct task_struct *lockdep_selftest_task_struct;
+>  
 > -- 
 > 2.43.0.rc1.1336.g36b5255a03ac
 > 
