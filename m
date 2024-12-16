@@ -1,195 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8EE202C2A;
-	Mon, 16 Dec 2024 14:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B602B1C9B9B
+	for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 16:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734359177; cv=none; b=mU+wOdq9gjxmpsLpzg+w5sQxrnuzBsgVgVhHh9/eRgmdVwys/GPBF27roregOB/9Yalx7pK3l5r9tW+CfJwRL6wunMiscDGg1H/baYR1Td1A83HLUBhxYXB4qrmszMEvq04ONEBUkTbKCjyCSpAA0YjCN7ameHxIN9uwO7DBvj0=
+	t=1734366860; cv=none; b=kXN5JXyfsf6QQyc4Md2B/GxQB8NUaHGwQaD61IOv/7ovMc1HsZUcGGo9L5if0uJfhjPEOUfQb3i0PLgcsox4hfv6e9tK9vmXT4lHoWHJWJKo090VlxD8f2aqwLYRbNLzezQeeN83BcVXFRHrBMDDuqXd2TOmbwqDV/p+HRHNOvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734359177; c=relaxed/simple;
-	bh=sft5cwTzWGq8odCj7y1SQ/Itv2Uve4WrTFgtzG27/Mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iiVxlqiOlm/Is4mmQH1DnoNolYheyJ9lhgWdjyzHRw3xIzJfQTLOprtDsDb7AK2emKhzdrrnEsucMI4RFiXfDsFZYOP3dzumTZ/UJDs20J7N7H0ajr4z3PqIOc16tWtGZhS/q3pmsNZyRiH2V1QH6nFEJomK0Jso1Q3HawbUvZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iSAwtSyS; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734366860; c=relaxed/simple;
+	bh=J4P8Yn+HmBStOiyf7871d8RgqIDPsmAX5U/1I64nh6s=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=n4CBQ/+8mUPc5CsIKFzRf8Uqe3GRAjXobJ1+xf7TFrZmpwR7j6M68BbI4F0hIvIOFzemT/8NBKdV4FcmTN5MZtkjGGM5r0J9ooe+HNlx45vnpCagG4+1dxxdpA4Zkj09my2JGuUvnEbgvA1FeVm9WWrg95Q2bVOinA3QgZEItzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZcNpFABj; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iSAwtSyS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734359175; x=1765895175;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sft5cwTzWGq8odCj7y1SQ/Itv2Uve4WrTFgtzG27/Mo=;
-  b=iSAwtSyStkZ5qMGQdSeYRU+zBGrprooQOlc3v9QRQ8KnORHlui72+INZ
-   PC6mqrrMvWYjXhC0r1W5KnVTySi3zkkG+yCY53bnjv06Tq+mOPmEqF3cV
-   DRc0Ldjpa3/ljILVkBoSmm8uNa4H0sjNCYVqO6KM+8/JocgIaKdBg3XLc
-   k8bMY3v7kZfxhnuUPf6WadW2+e+yrBAvluq31ljUnEnir9n5xhTnxcm9J
-   Yz/qX1kRnVzS+K+D3NuWhmmUEHTxYpq/R9aIo6TDE6UjIEqvpaamFgDtu
-   0kmUEh3YObfjNDqg3zkXxh7s0IoyUIFEzHjR44uNCIl1TrrdFScuIZdJN
-   A==;
-X-CSE-ConnectionGUID: xYP2iUxHT7aa0sMIchlx2A==
-X-CSE-MsgGUID: 6yfxv2s2SwK2wci8gg5W2w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="34065634"
-X-IronPort-AV: E=Sophos;i="6.12,238,1728975600"; 
-   d="scan'208";a="34065634"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 06:26:15 -0800
-X-CSE-ConnectionGUID: PczZ55tGQOGUxSLC+ptRyg==
-X-CSE-MsgGUID: w7yX0mioQbaU69s0w4Jr0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="101355767"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 16 Dec 2024 06:26:12 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tNC2z-000EFc-1H;
-	Mon, 16 Dec 2024 14:26:09 +0000
-Date: Mon, 16 Dec 2024 22:25:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, pavan.chebbi@broadcom.com,
-	andrew.gospodarek@broadcom.com,
-	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-Subject: Re: [PATCH net-next 2/6] bnxt_en: Do not allow ethtool -m on an
- untrusted VF
-Message-ID: <202412162242.yQ3MVnZ5-lkp@intel.com>
-References: <20241215205943.2341612-3-michael.chan@broadcom.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZcNpFABj"
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-51640f7bbd3so1085728e0c.2
+        for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 08:34:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734366856; x=1734971656; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=voYB97BSoIttk6TNFpCBTpCkCub3HvTPki1P0fPd0XM=;
+        b=ZcNpFABj6LnPIUSUI27fEhdMmoRTlvg7wO5pcH8kSvUhR6RV+/Bf+KPxoZOpKOIm9i
+         Zox2nw5gtsDEPzPNQUAI1fwBj9AEEdRqbZxbGrsNaFWYWkM+3sheqcHyUuexLFyUDdiC
+         /SRZTRk7qDnnBzn+0JgHnxA9LbmemPqUIkX2/xZRSyr9kzaaZBXVK5vXkDWc9TUro2wX
+         dgNr5HVFHLC64POW5HCYs703QeHz7qAPOHe4uRUvxb3ATmI7sCP0UT+6ZOWPCG3ZqUOM
+         S/Z1hOrhaC02Ql5RTgmz8pmznQxcWX7CdjxHmKhLLkqZ5jF6HThbUALejVHu0elJG8Qa
+         1Idg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734366856; x=1734971656;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=voYB97BSoIttk6TNFpCBTpCkCub3HvTPki1P0fPd0XM=;
+        b=scTdaxeT0mNKDknj57YZXMqwJO96NhQO+KMkwbDKsta0kKZiUlYrCeybSlLekagL7y
+         6y4qmYjnfwmRxL0n0vGA/82TaPLygdvCSk6hfaMdXHlvRAWJlp7TLYEvoQ+TOV6QMiyh
+         fbYxzBRAvourCQ7KH/fBk8SigsVvPM8dbq4a4DCrK/w+8AqReISp2DHFrf4dxuK1FGRp
+         E/9r9GnLMHk/qDc91P13t+NTEPcHcGQ7NBuf7K32VfM55V+oUsluVEwGCGGSBA6N8vxS
+         cGZdfJTSdnRu+eRcZPt8vdhnm0UyZmTEdf1+4NPNNAYI9119iOJe2au7U4TKsctcXS9k
+         Im/g==
+X-Forwarded-Encrypted: i=1; AJvYcCUV0aIjBGkggNG3r+8FKcWWETV4jUr/nLY9XZ9XoJzWdaZdV6emQ1i7AW7oVEyC5P7njXZX@lists.linux.dev
+X-Gm-Message-State: AOJu0YxntgymgAUtBpit0VssAiqmRGD3LZwBkoYRpyK/3Zyr2hI9jWdH
+	gYw1FaMQHCdSwDj2nFgdNZhwrsV0xnx3Se1iu6cnBtKNRXHo+Iyhd0TdoXDKPDl4dmyZkybUtdU
+	TwhvcvGU0oSdwhSbydYkK/qrgYoAR8iny3c8+WA==
+X-Gm-Gg: ASbGncvN9xNic6pKzKkyIJhn//UEtQBsz4DnFNktFoaeaEMTSDnyAJ3ercMUpbKKpcC
+	4ye/RAArT3Tb2JGCazszEPIw0/rLx2SoArc7JA6hSV+TBUaJUMjHu6Yd59Q5t1iGCd+sg85Q=
+X-Google-Smtp-Source: AGHT+IHwcIqoyILkP+1sx25KZjFSaAGwKZBXcw1KXTOsA6DOwlBCczCOTJUK1dfVqLl4hiOpY/+Ngz4hZael7fpPyHY=
+X-Received: by 2002:a05:6122:1e01:b0:516:18cd:c1fc with SMTP id
+ 71dfb90a1353d-518ca30617amr12733009e0c.8.1734366856629; Mon, 16 Dec 2024
+ 08:34:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241215205943.2341612-3-michael.chan@broadcom.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 16 Dec 2024 22:04:05 +0530
+Message-ID: <CA+G9fYtpAwXa5mUQ5O7vDLK2xN4t-kJoxgUe1ZFRT=AGqmLSRA@mail.gmail.com>
+Subject: next-20241216: drivers/crypto/qce/sha.c:365:3: error: cannot jump
+ from this goto statement to its label
+To: open list <linux-kernel@vger.kernel.org>, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>
+Cc: thara gopinath <thara.gopinath@gmail.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Michael,
+The arm and arm64 builds failed on Linux next-20241216 due to following
+build warnings / errors with clang-19 and clang-nightly toolchain.
+Whereas the gcc-13 builds pass.
 
-kernel test robot noticed the following build warnings:
+arm, arm64:
+  * build/clang-19-defconfig
+  * build/clang-nightly-defconfig
 
-[auto build test WARNING on net-next/main]
+First seen on Linux next-20241216.
+  Good: next-20241216
+  Bad:  next-20241213
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Chan/bnxt_en-Use-FW-defined-resource-limits-for-RoCE/20241216-050303
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241215205943.2341612-3-michael.chan%40broadcom.com
-patch subject: [PATCH net-next 2/6] bnxt_en: Do not allow ethtool -m on an untrusted VF
-config: riscv-randconfig-002-20241216 (https://download.01.org/0day-ci/archive/20241216/202412162242.yQ3MVnZ5-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241216/202412162242.yQ3MVnZ5-lkp@intel.com/reproduce)
+Build log:
+-----------
+fs/netfs/read_retry.c:235:20: warning: variable 'subreq' is
+uninitialized when used here [-Wuninitialized]
+  235 |         if (list_is_last(&subreq->rreq_link, &stream->subrequests))
+      |                           ^~~~~~
+fs/netfs/read_retry.c:28:36: note: initialize the variable 'subreq' to
+silence this warning
+   28 |         struct netfs_io_subrequest *subreq;
+      |                                           ^
+      |                                            = NULL
+1 warning generated.
+drivers/crypto/qce/sha.c:365:3: error: cannot jump from this goto
+statement to its label
+  365 |                 goto err_free_ahash;
+      |                 ^
+drivers/crypto/qce/sha.c:373:6: note: jump bypasses initialization of
+variable with __attribute__((cleanup))
+  373 |         u8 *buf __free(kfree) = kzalloc(keylen + QCE_MAX_ALIGN_SIZE,
+      |             ^
+1 error generated.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412162242.yQ3MVnZ5-lkp@intel.com/
+Links:
+-------
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241216/testrun/26350650/suite/build/test/clang-19-defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241216/testrun/26350650/suite/build/test/clang-19-defconfig/history/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241216/testrun/26351207/suite/build/test/clang-19-defconfig/details/
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2qHsa6j5c1HY3GRZFGrxu2ELo3f/
 
-All warnings (new ones prefixed by >>):
+Steps to reproduce:
+------------
+# tuxmake --runtime podman --target-arch arm64 --toolchain clang-19
+--kconfig defconfig LLVM=1 LLVM_IAS=1
 
->> drivers/net/ethernet/broadcom/bnxt/bnxt.c:8287:7: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
-                   if (flags & FUNC_QCFG_RESP_FLAGS_TRUSTED_VF)
-                       ^~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:8269:11: note: initialize the variable 'flags' to silence this warning
-           u16 flags;
-                    ^
-                     = 0
-   1 warning generated.
+metadata:
+----
+  git describe: next-20241216
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git sha: e25c8d66f6786300b680866c0e0139981273feba
+  kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2qHsa8wFmfrlj0VdDqAG408o3l2/config
+  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2qHsa8wFmfrlj0VdDqAG408o3l2/
+  toolchain: clang-19
+  config: clang-19-defconfig
+  arch: arm64, arm
 
-
-vim +/flags +8287 drivers/net/ethernet/broadcom/bnxt/bnxt.c
-
-  8264	
-  8265	static int bnxt_hwrm_func_qcfg(struct bnxt *bp)
-  8266	{
-  8267		struct hwrm_func_qcfg_output *resp;
-  8268		struct hwrm_func_qcfg_input *req;
-  8269		u16 flags;
-  8270		int rc;
-  8271	
-  8272		rc = hwrm_req_init(bp, req, HWRM_FUNC_QCFG);
-  8273		if (rc)
-  8274			return rc;
-  8275	
-  8276		req->fid = cpu_to_le16(0xffff);
-  8277		resp = hwrm_req_hold(bp, req);
-  8278		rc = hwrm_req_send(bp, req);
-  8279		if (rc)
-  8280			goto func_qcfg_exit;
-  8281	
-  8282	#ifdef CONFIG_BNXT_SRIOV
-  8283		if (BNXT_VF(bp)) {
-  8284			struct bnxt_vf_info *vf = &bp->vf;
-  8285	
-  8286			vf->vlan = le16_to_cpu(resp->vlan) & VLAN_VID_MASK;
-> 8287			if (flags & FUNC_QCFG_RESP_FLAGS_TRUSTED_VF)
-  8288				vf->flags |= BNXT_VF_TRUST;
-  8289			else
-  8290				vf->flags &= ~BNXT_VF_TRUST;
-  8291		} else {
-  8292			bp->pf.registered_vfs = le16_to_cpu(resp->registered_vfs);
-  8293		}
-  8294	#endif
-  8295		flags = le16_to_cpu(resp->flags);
-  8296		if (flags & (FUNC_QCFG_RESP_FLAGS_FW_DCBX_AGENT_ENABLED |
-  8297			     FUNC_QCFG_RESP_FLAGS_FW_LLDP_AGENT_ENABLED)) {
-  8298			bp->fw_cap |= BNXT_FW_CAP_LLDP_AGENT;
-  8299			if (flags & FUNC_QCFG_RESP_FLAGS_FW_DCBX_AGENT_ENABLED)
-  8300				bp->fw_cap |= BNXT_FW_CAP_DCBX_AGENT;
-  8301		}
-  8302		if (BNXT_PF(bp) && (flags & FUNC_QCFG_RESP_FLAGS_MULTI_HOST))
-  8303			bp->flags |= BNXT_FLAG_MULTI_HOST;
-  8304	
-  8305		if (flags & FUNC_QCFG_RESP_FLAGS_RING_MONITOR_ENABLED)
-  8306			bp->fw_cap |= BNXT_FW_CAP_RING_MONITOR;
-  8307	
-  8308		if (flags & FUNC_QCFG_RESP_FLAGS_ENABLE_RDMA_SRIOV)
-  8309			bp->fw_cap |= BNXT_FW_CAP_ENABLE_RDMA_SRIOV;
-  8310	
-  8311		switch (resp->port_partition_type) {
-  8312		case FUNC_QCFG_RESP_PORT_PARTITION_TYPE_NPAR1_0:
-  8313		case FUNC_QCFG_RESP_PORT_PARTITION_TYPE_NPAR1_5:
-  8314		case FUNC_QCFG_RESP_PORT_PARTITION_TYPE_NPAR2_0:
-  8315			bp->port_partition_type = resp->port_partition_type;
-  8316			break;
-  8317		}
-  8318		if (bp->hwrm_spec_code < 0x10707 ||
-  8319		    resp->evb_mode == FUNC_QCFG_RESP_EVB_MODE_VEB)
-  8320			bp->br_mode = BRIDGE_MODE_VEB;
-  8321		else if (resp->evb_mode == FUNC_QCFG_RESP_EVB_MODE_VEPA)
-  8322			bp->br_mode = BRIDGE_MODE_VEPA;
-  8323		else
-  8324			bp->br_mode = BRIDGE_MODE_UNDEF;
-  8325	
-  8326		bp->max_mtu = le16_to_cpu(resp->max_mtu_configured);
-  8327		if (!bp->max_mtu)
-  8328			bp->max_mtu = BNXT_MAX_MTU;
-  8329	
-  8330		if (bp->db_size)
-  8331			goto func_qcfg_exit;
-  8332	
-  8333		bp->db_offset = le16_to_cpu(resp->legacy_l2_db_size_kb) * 1024;
-  8334		if (BNXT_CHIP_P5(bp)) {
-  8335			if (BNXT_PF(bp))
-  8336				bp->db_offset = DB_PF_OFFSET_P5;
-  8337			else
-  8338				bp->db_offset = DB_VF_OFFSET_P5;
-  8339		}
-  8340		bp->db_size = PAGE_ALIGN(le16_to_cpu(resp->l2_doorbell_bar_size_kb) *
-  8341					 1024);
-  8342		if (!bp->db_size || bp->db_size > pci_resource_len(bp->pdev, 2) ||
-  8343		    bp->db_size <= bp->db_offset)
-  8344			bp->db_size = pci_resource_len(bp->pdev, 2);
-  8345	
-  8346	func_qcfg_exit:
-  8347		hwrm_req_drop(bp, req);
-  8348		return rc;
-  8349	}
-  8350	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ --
+Linaro LKFT
+https://lkft.linaro.org
