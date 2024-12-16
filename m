@@ -1,158 +1,231 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E140E20765E
-	for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 18:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479AC207DF8;
+	Mon, 16 Dec 2024 19:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734374717; cv=none; b=QpVjD1sua9ipt1/nIfBkGraYr3w9Cry1acepmNWQ72qO2kMz0kimeD6COb9P4/T5DU+l1TUln4QlsHJeVwm1gK64PU8sgeC0X/f7kGWq66crqhBuQ6pw5XJupt/g8Us0hhA1tULnuSQRTxPplgs0vVzfya6YDC+jHmKDpP/hDfU=
+	t=1734377369; cv=none; b=Kh1DDbN5E1N9uoQOwDeSzYOYT/EbpRhLzhtYBU7cbUwz4HkaqU27+Zh1CJyzme2SjLQhFXqH8Z9qNL4PF4NHbfvEi+28aG/Kac6DODaaIegPo8HgSBo4GW+DcNQjYQXegNPzu93QwXibymydbtt9mR3LajhO3VoLqDKOloYAiQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734374717; c=relaxed/simple;
-	bh=wPhuadXVqq3NRot78X0jrmq9xXlKWbFpMlJqSo/gcfg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ObDn8CPLBHnQvgiHgVvDs6yX41VkOppzoPQ0M1bVOZHKdo6Lfq9id6iR2OmFajdYvj+1v9jkPAFoe/OwSdMTtEtbXb0yPyd6bKI7RkCNwoO0i0izElSHx8S9M08t/6cUoMegqDFg50DHbdTF2C9LmsBd5KQCY0bWY6Yq1fZTG/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ahlwQUXO; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1734377369; c=relaxed/simple;
+	bh=Y4wP87P71tdoiWCnmtg/+ZjLwEjQOC9YTZaUFZmggHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=IhW1pQGqlvRzR+mDJwxTwKA0vbi3v3gemWujUBO7WIx6FTdl5XUtE1QQhicmeRtmmP71R/ki4MUMILBu68QWZIqgAeGIHD+oZyQfZ1SNq8dxTcTSiwXMb+OA+5xL0o2OaaJ1Ny8uScRxsnWA+KUaEd2m3j599iNRV8frpjzbI9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UbNuynrm; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ahlwQUXO"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6ef7640e484so51054367b3.3
-        for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 10:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734374714; x=1734979514; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hho81fUxS1svxnIpTTMvF+QFJQ1gclraQmirxeDP/2A=;
-        b=ahlwQUXOOdc5jNYVb826MdNGawRznKlh3uQ1emZOpShY31jCeW2+7KFXhGR9ZuDsC5
-         uoUnDoAStd0tfO+tBqIPcM2hTkn09qSxDrnWP+aaoNGen23tG5pU051PnmZStXpkD4Sj
-         2tN+lvROLiuSMwD6A6hSbXhKyzNW0YadMDN2zqTzJKCLnvkDeJ3PcY/N37HBhZpKnIxv
-         c59lzwyR8VpZqJ6eYySfR2/AsFU77Br7rVJiVM2Tu06c5G2Kcj34KTA94lgaKMcWSUPE
-         4tLwXn8jKwLcTKW93R15j86IXgKZZv09ALhwYsGoJy8ci5nxSUtkewWaxmvxfkkPiWgd
-         IP8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734374714; x=1734979514;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hho81fUxS1svxnIpTTMvF+QFJQ1gclraQmirxeDP/2A=;
-        b=PSw7yVuRJNKDsiPjWR7Fbjed0CQmLmBMfGbjQGxIJkiilStCYfUQXvhBSWUNgDiOgW
-         O451mPC+EpLzCluU+u5rkxi23ogr8MSdxnRF6vPZtFc3Vxl0yahsH8GTmthy6ig5dVMn
-         /5gh4z9ZnjaOQ7DP5xNJfpy/iswvsX33Shn89TplqliJ1KbF1Eba1g7ywI0dq53hy+Wn
-         VKgwx1q6cEb4Cm4bMx6PXWyu4AXfkIQ+9AZH485SVgBQXFCgq5oNCHWoM/l6tjRmgviN
-         QuvcwTS7NAV3pprpl4k6lGjTg0Ob7vaTv3iSgHrCR+nX8hzNHaxmqCpnRDpJ0RJ/+fHS
-         3GTA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5J1Bz0fH70/of9s3T2axImiMhNAxLUK6QdC2Emr0AQciWYetvun0xykH26xBkANh4Pr2J@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy4hTaTYViS8ojg8aki976YVKtUitC5YjLcimVuebCjw7sqBKBw
-	OsLPxqLFGqS/rm2BsvlTJEvwwW1FYN8f5+t8wb6vxb4xiI+krrdBjCn50JKm43Fd0G1UG4Ylk96
-	R5ZUyr1vGuocKe4PC8DmJpYjqNK3OIVh0hMxsGQ==
-X-Gm-Gg: ASbGncuF7kawv1tLAnCBrkmTblNVu2619n7jTYz2RtgFw/I87tcMqdVHsUvaxupWzH+
-	24QCi5C4fKXx6II5cUroPOFe/cBR80yfttVAQS9ZQtouK8hAdgSKmGQLmjQW/MI/UhqZFiw==
-X-Google-Smtp-Source: AGHT+IEoWJcDKQv5iEmEVMq3EpzCtQ9Q1A7OeekLCcpaKrEW68EjTvVaw4TXtlFnG0gT2cPtGh8+n5e6AdoDQWuvyI4=
-X-Received: by 2002:a05:690c:7449:b0:6ef:8dd0:fff9 with SMTP id
- 00721157ae682-6f279ad163fmr123605197b3.8.1734374713861; Mon, 16 Dec 2024
- 10:45:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UbNuynrm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734377367; x=1765913367;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y4wP87P71tdoiWCnmtg/+ZjLwEjQOC9YTZaUFZmggHU=;
+  b=UbNuynrmc+i94B23fM7rfdoVvOzu2N6dy8miR8AY4uxm7er7gVCUhK1G
+   3rTbJNTohPoBWUqdrw6JBBx2HSS3ZRkq3M3o9+ql3xJ1U9H8BEwfMnEU4
+   n4BcLpqolzinJRUV3mXfgnQuP0WevDJcATOD1hiI5jP2LJatKU5JYqEJf
+   iTM9AzTvK0J/2QvysivX3xD5n7EtxPkEAaEBAp/7wKLYZH2o4k+icMr4a
+   J9+/wZJxUSo3bom2FMUblnAYZ2uAV+dfhVluKl/PrwQB+FEqkPPO/M8CX
+   pxKWPbkPKn6KxbWkwD8eba4+77rkT/bGwJIYCFtytXaQlRUUQBOBVWKjN
+   w==;
+X-CSE-ConnectionGUID: MA7Tb2OERUObJQ0TUc19Yw==
+X-CSE-MsgGUID: f25v+aAsS4elwr1EjtxQIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="34814666"
+X-IronPort-AV: E=Sophos;i="6.12,239,1728975600"; 
+   d="scan'208";a="34814666"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 11:29:27 -0800
+X-CSE-ConnectionGUID: oYgWapDhTKiSU6kSOpXMyw==
+X-CSE-MsgGUID: aMON/ZAYSQii6nXc5O5sXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,239,1728975600"; 
+   d="scan'208";a="97534071"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Dec 2024 11:29:25 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tNGmR-000ER2-05;
+	Mon, 16 Dec 2024 19:29:23 +0000
+Date: Tue, 17 Dec 2024 03:29:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:wip 13/20] fs/f2fs/inode.c:320:6: warning: format specifies
+ type 'unsigned int' but the argument has type 'unsigned long'
+Message-ID: <202412170323.3Lbfzgc4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYtpAwXa5mUQ5O7vDLK2xN4t-kJoxgUe1ZFRT=AGqmLSRA@mail.gmail.com>
- <20241216180231.GA1069997@ax162>
-In-Reply-To: <20241216180231.GA1069997@ax162>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Mon, 16 Dec 2024 19:45:03 +0100
-Message-ID: <CACMJSevssgFn6omKpV0rAMQKXpH__mmmkpdjUSYB7s2U=dsAEw@mail.gmail.com>
-Subject: Re: next-20241216: drivers/crypto/qce/sha.c:365:3: error: cannot jump
- from this goto statement to its label
-To: Nathan Chancellor <nathan@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, open list <linux-kernel@vger.kernel.org>, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, clang-built-linux <llvm@lists.linux.dev>, 
-	thara gopinath <thara.gopinath@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 16 Dec 2024 at 19:02, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Naresh,
->
-> Thanks for the report.
->
-> + Bartosz as author of ce8fd0500b74
->
-> On Mon, Dec 16, 2024 at 10:04:05PM +0530, Naresh Kamboju wrote:
-> > The arm and arm64 builds failed on Linux next-20241216 due to following
-> > build warnings / errors with clang-19 and clang-nightly toolchain.
-> > Whereas the gcc-13 builds pass.
-> >
-> > arm, arm64:
-> >   * build/clang-19-defconfig
-> >   * build/clang-nightly-defconfig
-> >
-> > First seen on Linux next-20241216.
-> >   Good: next-20241216
-> >   Bad:  next-20241213
-> >
-> > Build log:
-> > -----------
-> <trimmed irrelevant warning>
-> > drivers/crypto/qce/sha.c:365:3: error: cannot jump from this goto
-> > statement to its label
-> >   365 |                 goto err_free_ahash;
-> >       |                 ^
-> > drivers/crypto/qce/sha.c:373:6: note: jump bypasses initialization of
-> > variable with __attribute__((cleanup))
-> >   373 |         u8 *buf __free(kfree) = kzalloc(keylen + QCE_MAX_ALIGN_SIZE,
-> >       |             ^
-> > 1 error generated.
->
-> It is a bug to jump over the initialization of a cleanup variable
-> because the cleanup function will be called on an uninitialized pointer
-> in those cases. GCC does not catch this at compile time like clang does
-> (it would be nice if we could document this somewhere and really
-> encourage people doing cleanup annotations to ensure their patches pass
-> a clang build except in architecture code where clang does not support
-> that target):
->
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91951
->
-> It may be worth just reverting commit ce8fd0500b74 ("crypto: qce - use
-> __free() for a buffer that's always freed") since it seems like little
-> value in this case but if we want to forward fix it, I think we could
-> just mirror what the rest of the kernel does and keep the declaration at
-> the top of the function and initialize the pointer to NULL. The diff
-> below resolves the issue for me, which I don't mind sending as a formal
-> patch.
->
-> Cheers,
-> Nathan
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git wip
+head:   99c1b937f7efd14347261f99e40036e481c6cbc0
+commit: e958c55387d039b2804ceb0c38fb771a58874d0e [13/20] f2fs: fix to do sanity check correctly on i_inline_xattr_size
+config: x86_64-buildonly-randconfig-004-20241217 (https://download.01.org/0day-ci/archive/20241217/202412170323.3Lbfzgc4-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241217/202412170323.3Lbfzgc4-lkp@intel.com/reproduce)
 
-I'm fine with dropping that commit from next.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412170323.3Lbfzgc4-lkp@intel.com/
 
-Bartosz
+All warnings (new ones prefixed by >>):
 
->
-> diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
-> index c4ddc3b265ee..e251f0f9a4fd 100644
-> --- a/drivers/crypto/qce/sha.c
-> +++ b/drivers/crypto/qce/sha.c
-> @@ -337,6 +337,7 @@ static int qce_ahash_hmac_setkey(struct crypto_ahash *tfm, const u8 *key,
->         struct scatterlist sg;
->         unsigned int blocksize;
->         struct crypto_ahash *ahash_tfm;
-> +       u8 *buf __free(kfree) = NULL;
->         int ret;
->         const char *alg_name;
->
-> @@ -370,8 +371,7 @@ static int qce_ahash_hmac_setkey(struct crypto_ahash *tfm, const u8 *key,
->                                    crypto_req_done, &wait);
->         crypto_ahash_clear_flags(ahash_tfm, ~0);
->
-> -       u8 *buf __free(kfree) = kzalloc(keylen + QCE_MAX_ALIGN_SIZE,
-> -                                       GFP_KERNEL);
-> +       buf = kzalloc(keylen + QCE_MAX_ALIGN_SIZE, GFP_KERNEL);
->         if (!buf) {
->                 ret = -ENOMEM;
->                 goto err_free_req;
+   In file included from fs/f2fs/inode.c:9:
+   In file included from include/linux/f2fs_fs.h:11:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/f2fs/inode.c:320:6: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+     318 |                 f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, min: %u, max: %lu",
+         |                                                                                                 ~~
+         |                                                                                                 %lu
+     319 |                           __func__, inode->i_ino, fi->i_inline_xattr_size,
+     320 |                           MIN_INLINE_XATTR_SIZE, MAX_INLINE_XATTR_SIZE);
+         |                           ^~~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/f2fs.h:1855:46: note: expanded from macro 'f2fs_warn'
+    1855 |         f2fs_printk(sbi, false, KERN_WARNING fmt, ##__VA_ARGS__)
+         |                                              ~~~    ^~~~~~~~~~~
+   fs/f2fs/xattr.h:86:31: note: expanded from macro 'MIN_INLINE_XATTR_SIZE'
+      86 | #define MIN_INLINE_XATTR_SIZE (sizeof(struct f2fs_xattr_header) / sizeof(__le32))
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +320 fs/f2fs/inode.c
+
+   269	
+   270	static bool sanity_check_inode(struct inode *inode, struct page *node_page)
+   271	{
+   272		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+   273		struct f2fs_inode_info *fi = F2FS_I(inode);
+   274		struct f2fs_inode *ri = F2FS_INODE(node_page);
+   275		unsigned long long iblocks;
+   276	
+   277		iblocks = le64_to_cpu(F2FS_INODE(node_page)->i_blocks);
+   278		if (!iblocks) {
+   279			f2fs_warn(sbi, "%s: corrupted inode i_blocks i_ino=%lx iblocks=%llu, run fsck to fix.",
+   280				  __func__, inode->i_ino, iblocks);
+   281			return false;
+   282		}
+   283	
+   284		if (ino_of_node(node_page) != nid_of_node(node_page)) {
+   285			f2fs_warn(sbi, "%s: corrupted inode footer i_ino=%lx, ino,nid: [%u, %u] run fsck to fix.",
+   286				  __func__, inode->i_ino,
+   287				  ino_of_node(node_page), nid_of_node(node_page));
+   288			return false;
+   289		}
+   290	
+   291		if (f2fs_has_extra_attr(inode)) {
+   292			if (!f2fs_sb_has_extra_attr(sbi)) {
+   293				f2fs_warn(sbi, "%s: inode (ino=%lx) is with extra_attr, but extra_attr feature is off",
+   294					  __func__, inode->i_ino);
+   295				return false;
+   296			}
+   297			if (fi->i_extra_isize > F2FS_TOTAL_EXTRA_ATTR_SIZE ||
+   298				fi->i_extra_isize < F2FS_MIN_EXTRA_ATTR_SIZE ||
+   299				fi->i_extra_isize % sizeof(__le32)) {
+   300				f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_extra_isize: %d, max: %zu",
+   301					  __func__, inode->i_ino, fi->i_extra_isize,
+   302					  F2FS_TOTAL_EXTRA_ATTR_SIZE);
+   303				return false;
+   304			}
+   305			if (f2fs_sb_has_compression(sbi) &&
+   306				fi->i_flags & F2FS_COMPR_FL &&
+   307				F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
+   308							i_compress_flag)) {
+   309				if (!sanity_check_compress_inode(inode, ri))
+   310					return false;
+   311			}
+   312		}
+   313	
+   314		if (f2fs_sb_has_flexible_inline_xattr(sbi) &&
+   315			f2fs_has_inline_xattr(inode) &&
+   316			(fi->i_inline_xattr_size < MIN_INLINE_XATTR_SIZE ||
+   317			fi->i_inline_xattr_size > MAX_INLINE_XATTR_SIZE)) {
+   318			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, min: %u, max: %lu",
+   319				  __func__, inode->i_ino, fi->i_inline_xattr_size,
+ > 320				  MIN_INLINE_XATTR_SIZE, MAX_INLINE_XATTR_SIZE);
+   321			return false;
+   322		}
+   323	
+   324		if (!f2fs_sb_has_extra_attr(sbi)) {
+   325			if (f2fs_sb_has_project_quota(sbi)) {
+   326				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+   327					  __func__, inode->i_ino, F2FS_FEATURE_PRJQUOTA);
+   328				return false;
+   329			}
+   330			if (f2fs_sb_has_inode_chksum(sbi)) {
+   331				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+   332					  __func__, inode->i_ino, F2FS_FEATURE_INODE_CHKSUM);
+   333				return false;
+   334			}
+   335			if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
+   336				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+   337					  __func__, inode->i_ino, F2FS_FEATURE_FLEXIBLE_INLINE_XATTR);
+   338				return false;
+   339			}
+   340			if (f2fs_sb_has_inode_crtime(sbi)) {
+   341				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+   342					  __func__, inode->i_ino, F2FS_FEATURE_INODE_CRTIME);
+   343				return false;
+   344			}
+   345			if (f2fs_sb_has_compression(sbi)) {
+   346				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
+   347					  __func__, inode->i_ino, F2FS_FEATURE_COMPRESSION);
+   348				return false;
+   349			}
+   350		}
+   351	
+   352		if (f2fs_sanity_check_inline_data(inode, node_page)) {
+   353			f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
+   354				  __func__, inode->i_ino, inode->i_mode);
+   355			return false;
+   356		}
+   357	
+   358		if (f2fs_has_inline_dentry(inode) && !S_ISDIR(inode->i_mode)) {
+   359			f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_dentry, run fsck to fix",
+   360				  __func__, inode->i_ino, inode->i_mode);
+   361			return false;
+   362		}
+   363	
+   364		if ((fi->i_flags & F2FS_CASEFOLD_FL) && !f2fs_sb_has_casefold(sbi)) {
+   365			f2fs_warn(sbi, "%s: inode (ino=%lx) has casefold flag, but casefold feature is off",
+   366				  __func__, inode->i_ino);
+   367			return false;
+   368		}
+   369	
+   370		if (fi->i_xattr_nid && f2fs_check_nid_range(sbi, fi->i_xattr_nid)) {
+   371			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_xattr_nid: %u, run fsck to fix.",
+   372				  __func__, inode->i_ino, fi->i_xattr_nid);
+   373			return false;
+   374		}
+   375	
+   376		if (IS_DEVICE_ALIASING(inode)) {
+   377			if (!f2fs_sb_has_device_alias(sbi)) {
+   378				f2fs_warn(sbi, "%s: inode (ino=%lx) has device alias flag, but the feature is off",
+   379					  __func__, inode->i_ino);
+   380				return false;
+   381			}
+   382			if (!f2fs_is_pinned_file(inode)) {
+   383				f2fs_warn(sbi, "%s: inode (ino=%lx) has device alias flag, but is not pinned",
+   384					  __func__, inode->i_ino);
+   385				return false;
+   386			}
+   387		}
+   388	
+   389		return true;
+   390	}
+   391	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
