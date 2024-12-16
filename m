@@ -1,109 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A291D5CD1
-	for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 22:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76327143723;
+	Mon, 16 Dec 2024 22:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734389587; cv=none; b=rrlP2a8hoZEg5tBWmBV8GQK+HHsb0ufyQGF/ooSYm8WNmj/Owx47BkHOF8P4MMVc9ebHLeSZmS45lYuaAZhF/ZzJ+oDYE52w9xVSNZ+wD0Gixt1k1aoNvzOgJ47BWw0eEedgFYUgFFmrCxwXIXEmKBpCk9ZriPPTuOlE0ludr38=
+	t=1734389752; cv=none; b=eRf5uR+D2tvkQkZFWkY7gXpcqcBDkY0eVps0ydndY6VS79xf9aK0xQ5p8YEYKXejQFu6C9m9ptsHN/kgs61CZefvFyUdZhFyWApgt+VzNspCoa59BXtQ9CCmQ38rK2uimSZAS4qpGyT1VxuL5EssDdKpezpCWceejWNOV2aVsSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734389587; c=relaxed/simple;
-	bh=IbQCUCOQS3gUSfxMf0l//w/lHmALcR5/wRLnenKF4lM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=F1i8omCwIqT20Y+BLyzwD+5PJ11pzO8VsdPvfg0e1ljUoXPpdp5bUqgYkfBMEshfemR6sHKqUXRSyOw+1hG0ICYDWN7Yp3q540PU3KoPPjxzNEhXJv/Mm5np4+LivB5FuFJWezwY5cGQwDZbf6qHKcT4yIVn4oDAN34NW+/piT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dX4OBzbA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1734389752; c=relaxed/simple;
+	bh=HWkTxX+IpDGQNG52ogknWjClj9up9Mh0BRCF+szV+n0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=teqxbliCUsdL6zn3qEvrHcDjyiPBO0Rez8MhN8Jn6Ro9otsFT1n5/574elvI8TMDJzVSGcSVJJXYOxuIAQeE8g0gkFNcj4PFStBz2ToevymPD+RU1AM7ltyXzGqCOdCBLUkg//RwBi2s6xooAlL0NGRFP4wb2KbYxvXvftZM+4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRF0C3fH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dX4OBzbA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734389584;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GK1bKeEbHg4LCg8Pwu4vF/H+EJS53MlQ+2uf+/wxD7k=;
-	b=dX4OBzbA1Y8KfdALth451WZ9qm0EltI8CbBWCuMjC8hov4wfLWNanxAcxAUQnJ+ET2mF5w
-	VZQoChBz8bjPCQxsnv3ykw9MpekgTWqPQ3MaSvHnOtArxIyYGM0M808//73AFR/Yqr6Nzc
-	GVxw9vYt8Lv6vKZXnFtFKeFJMSLwhgE=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-453-DJDwVf-6N6awdqT75yH_ig-1; Mon,
- 16 Dec 2024 17:53:03 -0500
-X-MC-Unique: DJDwVf-6N6awdqT75yH_ig-1
-X-Mimecast-MFC-AGG-ID: DJDwVf-6N6awdqT75yH_ig
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 51929195608B
-	for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 22:53:02 +0000 (UTC)
-Received: from [172.64.12.26] (unknown [10.30.33.24])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D778A195605A;
-	Mon, 16 Dec 2024 22:53:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc3,
- upstream-mainline, f44d154d)
-Date: Mon, 16 Dec 2024 22:53:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRF0C3fH"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 19CECC4CED0;
+	Mon, 16 Dec 2024 22:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734389752;
+	bh=HWkTxX+IpDGQNG52ogknWjClj9up9Mh0BRCF+szV+n0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=mRF0C3fHlp/SR4oj0P+4VoJhIR4Mv79dx5EobhVgttY40OO+nZQu9FLRKe5n/XjaQ
+	 wIgQQvF0oEJplgB5McW4Vx5w0hFHhvjClUMMHv0jvF9vaRzqQyNht4qTZmC+8vFrXE
+	 lBGZBqe3zfpM7lN4fIOB8AuweQTQVIqGIr05+WuqpsRIDWY1qDnEe+doKQFuqLUvIR
+	 LMZFQFiq8dH0dI1IQKcLdRKCb3WBkTwlaM3HpkqAfmB73Azs1LCqGYhV/sjyP6q4L7
+	 AceratXQxEXQwJQUveVjuZJ/BRD/uR0ktdgy3Ox4hPXFHm4G+EM437oNyRc0KhR5nf
+	 +woo7/erKjDDg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBC3E7717F;
+	Mon, 16 Dec 2024 22:55:52 +0000 (UTC)
+From: Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org>
+Subject: [PATCH v3 0/2] Add support for Avago/Broadcom APDS9160
+Date: Mon, 16 Dec 2024 17:55:39 -0500
+Message-Id: <20241216-apds9160-driver-v3-0-c29f6c670bdb@dimonoff.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <25881.124121617530300473@us-mta-453.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: oJJ1eHWmGOOpZT4uIU4bf5fJZ3jW2EnwM_PXTXNyYZc_1734389582
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOuvYGcC/3XNTQ7CIBCG4as0rMUAbenPynsYFxRm7CxaGjBE0
+ /Tu0m5MNC7fL5lnVhYhEETWFysLkCiSn3OUp4LZ0cx34ORyMyVUJaXsuFlc7KQW3AVKEHirLdb
+ QagdlzfLVEgDpeYjXW+6R4sOH1/EgyX39byXJBUcjhG7qoQJTXRxNfvaIZ+sntnNJfQgl9C+hM
+ jGAskOjAFv8JrZtewM+W14D9AAAAA==
+X-Change-ID: 20241119-apds9160-driver-86cf5e86de35
+To: Jonathan Cameron <jic23@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>, 
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>, 
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734389751; l=2469;
+ i=mgonellabolduc@dimonoff.com; s=20241119; h=from:subject:message-id;
+ bh=HWkTxX+IpDGQNG52ogknWjClj9up9Mh0BRCF+szV+n0=;
+ b=+42sxzvfPl1eT5ll3dVLEOTAVpMhKjB+BIa9Hp1ShMspCQwr4MNjOmWpFBA4PV2ff65lJSQ69
+ li7jgfiYkhpAC6v6GDBLE+PgM85AeWASs1UeJObVqfu2R9IVyGtrDiV
+X-Developer-Key: i=mgonellabolduc@dimonoff.com; a=ed25519;
+ pk=p4tvPfGPfXRyChsgHc6s7HwB6YBl2JqqcP3BXtoDitE=
+X-Endpoint-Received: by B4 Relay for mgonellabolduc@dimonoff.com/20241119
+ with auth_id=279
+X-Original-From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Reply-To: mgonellabolduc@dimonoff.com
 
-Hi, we tested your kernel and here are the results:
+APDS9160 is an ALS and proximity sensor.
+https://www.broadcom.com/products/optical-sensors/integrated-ambient-light-and-proximity-sensors/apds-9160-003
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+---
+Changes in v3:
+- Updated maintainers file email and vendor
+- Corrected documentation file reference
+- dt-bindings: Changed commit message
+- driver: Added event and channel table when irq is not used
+- driver: Using int time instead of sampling freq for proximity channel
+- driver: Using scale instead of hardwaregain for proximity channel
+- driver: Dropped unused static variables
+- driver: Fixed switch fall-through
+- driver: Dropped explicit void pointer cast
+- driver: Dropped some less relevant comments
+- driver: Various code style related fix
+- Link to v2: https://lore.kernel.org/r/20241206-apds9160-driver-v2-0-be2cb72ef8f4@dimonoff.com
 
+Changes in v2:
+- Rebased on linux-iio 20fd1383
+- dt-bindings: Dropped the old Avago name and use the brcm vendor prefix
+- dt-bindings: Updated example node name with a generic name
+- dt-bindings: Updated example indentation to 4 spaces
+- dt-bindings: Fixed element ordering
+- KConfig: Dropped unsure sentences
+- KConfig: Dropped unused Kfifo buffer selection
+- driver: Use a more recent iio light driver as template
+- driver: Remove buffer declaration
+- driver: Use avail functions instead of custom iio attributes
+- driver: Use scale instead of hardware gain
+- driver: Removed unused members and unreachable statements
+- driver: Removed unnecessary info and debug prints
+- driver: Fix some coding style and line wrapping issues
+- driver: Reordering of functions
+- Link to v1: https://lore.kernel.org/r/20241119-apds9160-driver-v1-0-fa00675b4ea4@dimonoff.com
 
-Kernel information:
-    Commit message: Merge tag 'soc-fixes-6.13' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/soc/soc
+---
+Mikael Gonella-Bolduc (2):
+      dt-bindings: iio: light: Add APDS9160 binding
+      iio: light: Add APDS9160 ALS & Proximity sensor driver
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1591450380
+ .../bindings/iio/light/brcm,apds9160.yaml          |   51 +
+ MAINTAINERS                                        |    7 +
+ drivers/iio/light/Kconfig                          |   11 +
+ drivers/iio/light/Makefile                         |    1 +
+ drivers/iio/light/apds9160.c                       | 1581 ++++++++++++++++++++
+ 5 files changed, 1651 insertions(+)
+---
+base-commit: 5de07b8a24cf44cdb78adeab790704bf577c2c1d
+change-id: 20241119-apds9160-driver-86cf5e86de35
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1591450380-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1591450380-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1591450380-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+Best regards,
+-- 
+Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
