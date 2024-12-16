@@ -1,32 +1,35 @@
 Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D394A1531C2
-	for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 16:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924B21FFC44
+	for <llvm@lists.linux.dev>; Mon, 16 Dec 2024 16:41:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734367294; cv=none; b=kIMAWlbKtgX4AqaL5vqOX+pDju3U7G3nWksBMr5oaYYknnhXgDRq7M6ad8Wax+GpieCYWR2e1+dSqjjdo+yOunxUk0Ihhzm8fB8ZYwclXZOhFjgXkM6/E5t5BwDr79g/mca8PiUCesmngEglzqAmhHJAq0PgicoN0SkSRunN1mU=
+	t=1734367294; cv=none; b=dS/0Bat1W43hiaHXXB1N/GRjgqiQpD1/ThMWIRwFkOqP/1V+uezyJ3kVjXGgrqSuGaL6sjZahwlgUV8Q4Ll+13/DJNXR6w+rprkX8u1u7bJHtjUhYa/BWN7Ttq2QNHy96+T5F/jkbD0FgJmZhoPUnr9xsVx4+FNsW8G9Fz26jm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734367294; c=relaxed/simple;
-	bh=1m+nvSgHvdaEYj/voNaUnE4+rGXqHl0HcieaOtLwgFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HIcgLNTNvPZ/ydwNgZEkuZgPe01LlEffALMwv+Z1O/Kr9nUb/U+okAjjdB+B6MzsyvG3BlFfqt560U9ajtTSGs26cTdpQworKqcH/S439rq/Zs8MQt5b5k73U9567vFbEcFAHI5WvEkXeOtM6c7WjnPnO3oPo+c/9ciHhpPIKLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=cUkP4dKB; arc=none smtp.client-ip=168.119.48.163
+	bh=uAapJO9f5WIp0vG8iHGKY9a5LPw8uhA4byTpuXc1vok=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=vC5DDJG7teekQHo6dibGkplAebBIJZdpiM1c9pWowX3qytoZfGZo7OGbD3E/6kTxKfLokg8qbqrppMR1zHmxMs0mfOx72eAeuS6mlVgloK1Ct0I72blyPLXeGQMT1NFDMEIIDVmMT9PjmRN4Q+lZvWbfRsl6r9x1OWoKT62O/Ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=GhgjcsM1; arc=none smtp.client-ip=168.119.48.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="cUkP4dKB"
+	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="GhgjcsM1"
 From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1734367284;
+	s=2023072701; t=1734367290;
 	h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=2sfcmiY1kPIis/5wMAS0oN3KA0Tj2tVbF7n/o+i3T6M=;
-	b=cUkP4dKBBvSdjwWctzeJ02q/r5zP6CZ0yy1yHkP5zvOsVOcfWn5lmZS3MYBgnfR0t855kx
-	bQgBGedbAdf0gLcmOGvPg5NoOz080AkVwLO5Mq4beZjAvAtwljVW1VKZFBO+A2iwCBcLTE
-	mCUjl/QrMbPObElny1pXkjxTVedHq3qOwFxeJBhflQn1WT2UyxfuCFet8wHVKbgL3V73Po
-	07tjOI46kMRQsBlmCPP76/nxVA5sB7qrsNMA0P4tFMRRL5yq03e9WjWjkEWfWy3eTZhMeQ
-	mHwRflA9NX8GUnq2ZFQmz41062Fex2jqtAQpH3UucP08xIZRI8S47pOZ3q0gog==
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zWx/z0/7bycu6qAOJH4he8ulyETYX9kiEzi2aLNPf+0=;
+	b=GhgjcsM1Aza9bMf/z5P8NDuNta+/E9uY2T39ni5dCktO0xlPQpulRO/esFl+GdWx1szp3t
+	Z/1C7LCjNp8UHQubH/cQUu8e4maFM1Cja60N+SF6OFOxfwsk6Hv/g5LXK3f2UjtFbFjyNY
+	WCiwZ2+PAmJOXFDuS/22Lo9WDoqUnKd/CydP/jX716dj2gLUiV9S4NpmFx1vo1mG1yxlOx
+	dCeeqvhd3GIpnW2qjko9UQX8vDAm+zEJ1omN41Ew7rXZMZC09sQ02ZG5UxdnyhpdHRzd8Z
+	xw6Nygx04rPkfrLF6UmNKEHiht7XjT1/Tdupn+I5Siz3tMCuojVf8mqofv9LvQ==
 To: selinux@vger.kernel.org
 Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -41,9 +44,11 @@ Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
 	Masahiro Yamada <masahiroy@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [RFC PATCH v2 01/22] selinux: supply missing field initializers
-Date: Mon, 16 Dec 2024 17:39:59 +0100
-Message-ID: <20241216164055.96267-1-cgoettsche@seltendoof.de>
+Subject: [RFC PATCH v2 05/22] selinux: avoid nontransitive comparison
+Date: Mon, 16 Dec 2024 17:40:03 +0100
+Message-ID: <20241216164055.96267-5-cgoettsche@seltendoof.de>
+In-Reply-To: <20241216164055.96267-1-cgoettsche@seltendoof.de>
+References: <20241216164055.96267-1-cgoettsche@seltendoof.de>
 Reply-To: cgzones@googlemail.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -56,47 +61,81 @@ Content-Transfer-Encoding: 8bit
 
 From: Christian Göttsche <cgzones@googlemail.com>
 
-Please clang by supplying the missing field initializes:
-
-    security/selinux/selinuxfs.c:2004:21: warning: missing field 'ops' initializer [-Wmissing-field-initializers]
-     2004 |                 /* last one */ {""}
-          |                                   ^
-    ./security/selinux/include/classmap.h:182:9: warning: missing field 'perms' initializer [-Wmissing-field-initializers]
-      182 |         { NULL }
-          |                ^
+Avoid using nontransitive comparison to prevent unexpected sorting
+results due to (well-defined) overflows.
+See https://www.qualys.com/2024/01/30/qsort.txt for a related issue in
+glibc's qsort(3).
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- security/selinux/include/classmap.h | 2 +-
- security/selinux/selinuxfs.c        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ security/selinux/ss/policydb.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index 2bc20135324a..03e82477dce9 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -179,7 +179,7 @@ const struct security_class_mapping secclass_map[] = {
- 	{ "anon_inode", { COMMON_FILE_PERMS, NULL } },
- 	{ "io_uring", { "override_creds", "sqpoll", "cmd", NULL } },
- 	{ "user_namespace", { "create", NULL } },
--	{ NULL }
-+	/* last one */ { NULL, {} }
- };
+diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policydb.c
+index 3ba5506a3fff..eb944582d7a6 100644
+--- a/security/selinux/ss/policydb.c
++++ b/security/selinux/ss/policydb.c
+@@ -37,6 +37,8 @@
+ #include "mls.h"
+ #include "services.h"
  
- #ifdef __KERNEL__ /* avoid this check when building host programs */
-diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
-index 1efb9a57d181..47480eb2189b 100644
---- a/security/selinux/selinuxfs.c
-+++ b/security/selinux/selinuxfs.c
-@@ -2001,7 +2001,7 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
- 		[SEL_POLICY] = {"policy", &sel_policy_ops, S_IRUGO},
- 		[SEL_VALIDATE_TRANS] = {"validatetrans", &sel_transition_ops,
- 					S_IWUGO},
--		/* last one */ {""}
-+		/* last one */ {"", NULL, 0}
- 	};
++#define spaceship_cmp(a, b) (((a) > (b)) - ((a) < (b)))
++
+ #ifdef CONFIG_SECURITY_SELINUX_DEBUG
+ /* clang-format off */
+ static const char *const symtab_name[SYM_NUM] = {
+@@ -426,11 +428,11 @@ static int filenametr_cmp(const void *k1, const void *k2)
+ 	const struct filename_trans_key *ft2 = k2;
+ 	int v;
  
- 	ret = selinux_fs_info_create(sb);
+-	v = ft1->ttype - ft2->ttype;
++	v = spaceship_cmp(ft1->ttype, ft2->ttype);
+ 	if (v)
+ 		return v;
+ 
+-	v = ft1->tclass - ft2->tclass;
++	v = spaceship_cmp(ft1->tclass, ft2->tclass);
+ 	if (v)
+ 		return v;
+ 
+@@ -461,15 +463,15 @@ static int rangetr_cmp(const void *k1, const void *k2)
+ 	const struct range_trans *key1 = k1, *key2 = k2;
+ 	int v;
+ 
+-	v = key1->source_type - key2->source_type;
++	v = spaceship_cmp(key1->source_type, key2->source_type);
+ 	if (v)
+ 		return v;
+ 
+-	v = key1->target_type - key2->target_type;
++	v = spaceship_cmp(key1->target_type, key2->target_type);
+ 	if (v)
+ 		return v;
+ 
+-	v = key1->target_class - key2->target_class;
++	v = spaceship_cmp(key1->target_class, key2->target_class);
+ 
+ 	return v;
+ }
+@@ -498,15 +500,15 @@ static int role_trans_cmp(const void *k1, const void *k2)
+ 	const struct role_trans_key *key1 = k1, *key2 = k2;
+ 	int v;
+ 
+-	v = key1->role - key2->role;
++	v = spaceship_cmp(key1->role, key2->role);
+ 	if (v)
+ 		return v;
+ 
+-	v = key1->type - key2->type;
++	v = spaceship_cmp(key1->type, key2->type);
+ 	if (v)
+ 		return v;
+ 
+-	return key1->tclass - key2->tclass;
++	return spaceship_cmp(key1->tclass, key2->tclass);
+ }
+ 
+ static const struct hashtab_key_params roletr_key_params = {
 -- 
 2.45.2
 
