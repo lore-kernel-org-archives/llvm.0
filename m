@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479AC207DF8;
-	Mon, 16 Dec 2024 19:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0614313D29A;
+	Mon, 16 Dec 2024 20:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734377369; cv=none; b=Kh1DDbN5E1N9uoQOwDeSzYOYT/EbpRhLzhtYBU7cbUwz4HkaqU27+Zh1CJyzme2SjLQhFXqH8Z9qNL4PF4NHbfvEi+28aG/Kac6DODaaIegPo8HgSBo4GW+DcNQjYQXegNPzu93QwXibymydbtt9mR3LajhO3VoLqDKOloYAiQw=
+	t=1734380554; cv=none; b=AzSR78UqlI0pNfBNZw9zIuW0kq0IJNXWAYsDAtcBcPaTrV/d2T8BnXVZqwtDKWEq4Oj+EbuYoaGhs02DAH+fe6PQyjgyq1SGkdJY5uuH7Vd/0V14UYSrv1OlbD1ChCvulA084YWfErPDaZSNnJ6iA61S6rZiXCpl+xQIaRkBvpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734377369; c=relaxed/simple;
-	bh=Y4wP87P71tdoiWCnmtg/+ZjLwEjQOC9YTZaUFZmggHU=;
+	s=arc-20240116; t=1734380554; c=relaxed/simple;
+	bh=EeKTGiCqv8QdWwqNNszwwoZY0J8vzhskFJ5oRmo5akE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IhW1pQGqlvRzR+mDJwxTwKA0vbi3v3gemWujUBO7WIx6FTdl5XUtE1QQhicmeRtmmP71R/ki4MUMILBu68QWZIqgAeGIHD+oZyQfZ1SNq8dxTcTSiwXMb+OA+5xL0o2OaaJ1Ny8uScRxsnWA+KUaEd2m3j599iNRV8frpjzbI9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UbNuynrm; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=dIqVIvrhd/6vTOJDIAhg/5Cm5XAayuNeQ756UJDCODoJh4w1MOy2IXjqSfxo2uRJq9NZG914/13a/7owVWpy1RVo/CEh7Pfvt8WZticbU9vqKoGaeP5j4hzwi02Bd7ZQNeeO6K2A0HL4Jl1lkXm1QLtwAE7Ug+H2PjzHlvr0HAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dM7pViM4; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UbNuynrm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dM7pViM4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734377367; x=1765913367;
+  t=1734380553; x=1765916553;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y4wP87P71tdoiWCnmtg/+ZjLwEjQOC9YTZaUFZmggHU=;
-  b=UbNuynrmc+i94B23fM7rfdoVvOzu2N6dy8miR8AY4uxm7er7gVCUhK1G
-   3rTbJNTohPoBWUqdrw6JBBx2HSS3ZRkq3M3o9+ql3xJ1U9H8BEwfMnEU4
-   n4BcLpqolzinJRUV3mXfgnQuP0WevDJcATOD1hiI5jP2LJatKU5JYqEJf
-   iTM9AzTvK0J/2QvysivX3xD5n7EtxPkEAaEBAp/7wKLYZH2o4k+icMr4a
-   J9+/wZJxUSo3bom2FMUblnAYZ2uAV+dfhVluKl/PrwQB+FEqkPPO/M8CX
-   pxKWPbkPKn6KxbWkwD8eba4+77rkT/bGwJIYCFtytXaQlRUUQBOBVWKjN
-   w==;
-X-CSE-ConnectionGUID: MA7Tb2OERUObJQ0TUc19Yw==
-X-CSE-MsgGUID: f25v+aAsS4elwr1EjtxQIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="34814666"
+  bh=EeKTGiCqv8QdWwqNNszwwoZY0J8vzhskFJ5oRmo5akE=;
+  b=dM7pViM44QPLehMgcG7QQyh+i1COXHf6yPdsil7Nu25LJj31UN2U3p3x
+   6/Bpn8fzBcbXeDud2m88FzdZJLuvIT6/IG7tjvJhGk0FX/WN0NYtqkaER
+   EFavypJfhavWGbcnshuwa6nmSS/a5LHWXr7xhjqgPMz9j6bHFnRLiYuv3
+   RyY8BlIB1tyHrsNqU4TJ81APNyjVvck8qfIijbo6PETS4lC6jTwYDYyfj
+   JJhq8cYwZRsQ3Lqlm/gYfW6wUh5lJ+OhX3Nog3PG8QZ+rOz8W9R1J3WL2
+   v8eVN3nHQBf/+w6pPU4ragMGxgQaeS79/JEv9FDu3E0LNKJykGHwbZ3kU
+   A==;
+X-CSE-ConnectionGUID: WWA7Orb5ShWXykQRMyHcaA==
+X-CSE-MsgGUID: YzZF59FjRYCfSLO1X/++5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="38558508"
 X-IronPort-AV: E=Sophos;i="6.12,239,1728975600"; 
-   d="scan'208";a="34814666"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 11:29:27 -0800
-X-CSE-ConnectionGUID: oYgWapDhTKiSU6kSOpXMyw==
-X-CSE-MsgGUID: aMON/ZAYSQii6nXc5O5sXQ==
+   d="scan'208";a="38558508"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 12:22:32 -0800
+X-CSE-ConnectionGUID: mXOd39IrRiOmx5MnHvz71w==
+X-CSE-MsgGUID: S0RkYcbhTYWWngpuQj2BKg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,239,1728975600"; 
-   d="scan'208";a="97534071"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="97767036"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 16 Dec 2024 11:29:25 -0800
+  by orviesa007.jf.intel.com with ESMTP; 16 Dec 2024 12:22:31 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tNGmR-000ER2-05;
-	Mon, 16 Dec 2024 19:29:23 +0000
-Date: Tue, 17 Dec 2024 03:29:06 +0800
+	id 1tNHbo-000ESS-1k;
+	Mon, 16 Dec 2024 20:22:28 +0000
+Date: Tue, 17 Dec 2024 04:21:27 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
-Subject: [chao:wip 13/20] fs/f2fs/inode.c:320:6: warning: format specifies
- type 'unsigned int' but the argument has type 'unsigned long'
-Message-ID: <202412170323.3Lbfzgc4-lkp@intel.com>
+Subject: [chao:wip 19/20] fs/f2fs/segment.c:2891:4: error: call to undeclared
+ function 'reset_curseg_fields'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202412170421.kaVgRXyk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,166 +66,71 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git wip
 head:   99c1b937f7efd14347261f99e40036e481c6cbc0
-commit: e958c55387d039b2804ceb0c38fb771a58874d0e [13/20] f2fs: fix to do sanity check correctly on i_inline_xattr_size
-config: x86_64-buildonly-randconfig-004-20241217 (https://download.01.org/0day-ci/archive/20241217/202412170323.3Lbfzgc4-lkp@intel.com/config)
+commit: adf3b6b31460b800b74602a535414e50d1e761c5 [19/20] f2fs: fix to avoid panic once fallocation fails for pinfile
+config: x86_64-buildonly-randconfig-004-20241217 (https://download.01.org/0day-ci/archive/20241217/202412170421.kaVgRXyk-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241217/202412170323.3Lbfzgc4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241217/202412170421.kaVgRXyk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412170323.3Lbfzgc4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412170421.kaVgRXyk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/f2fs/inode.c:9:
+   In file included from fs/f2fs/segment.c:9:
    In file included from include/linux/f2fs_fs.h:11:
    In file included from include/linux/pagemap.h:8:
    In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> fs/f2fs/inode.c:320:6: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
-     318 |                 f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, min: %u, max: %lu",
-         |                                                                                                 ~~
-         |                                                                                                 %lu
-     319 |                           __func__, inode->i_ino, fi->i_inline_xattr_size,
-     320 |                           MIN_INLINE_XATTR_SIZE, MAX_INLINE_XATTR_SIZE);
-         |                           ^~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:1855:46: note: expanded from macro 'f2fs_warn'
-    1855 |         f2fs_printk(sbi, false, KERN_WARNING fmt, ##__VA_ARGS__)
-         |                                              ~~~    ^~~~~~~~~~~
-   fs/f2fs/xattr.h:86:31: note: expanded from macro 'MIN_INLINE_XATTR_SIZE'
-      86 | #define MIN_INLINE_XATTR_SIZE (sizeof(struct f2fs_xattr_header) / sizeof(__le32))
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+>> fs/f2fs/segment.c:2891:4: error: call to undeclared function 'reset_curseg_fields'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2891 |                         reset_curseg_fields(curseg);
+         |                         ^
+   fs/f2fs/segment.c:3671:13: error: static declaration of 'reset_curseg_fields' follows non-static declaration
+    3671 | static void reset_curseg_fields(struct curseg_info *curseg)
+         |             ^
+   fs/f2fs/segment.c:2891:4: note: previous implicit declaration is here
+    2891 |                         reset_curseg_fields(curseg);
+         |                         ^
+   1 warning and 2 errors generated.
 
 
-vim +320 fs/f2fs/inode.c
+vim +/reset_curseg_fields +2891 fs/f2fs/segment.c
 
-   269	
-   270	static bool sanity_check_inode(struct inode *inode, struct page *node_page)
-   271	{
-   272		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-   273		struct f2fs_inode_info *fi = F2FS_I(inode);
-   274		struct f2fs_inode *ri = F2FS_INODE(node_page);
-   275		unsigned long long iblocks;
-   276	
-   277		iblocks = le64_to_cpu(F2FS_INODE(node_page)->i_blocks);
-   278		if (!iblocks) {
-   279			f2fs_warn(sbi, "%s: corrupted inode i_blocks i_ino=%lx iblocks=%llu, run fsck to fix.",
-   280				  __func__, inode->i_ino, iblocks);
-   281			return false;
-   282		}
-   283	
-   284		if (ino_of_node(node_page) != nid_of_node(node_page)) {
-   285			f2fs_warn(sbi, "%s: corrupted inode footer i_ino=%lx, ino,nid: [%u, %u] run fsck to fix.",
-   286				  __func__, inode->i_ino,
-   287				  ino_of_node(node_page), nid_of_node(node_page));
-   288			return false;
-   289		}
-   290	
-   291		if (f2fs_has_extra_attr(inode)) {
-   292			if (!f2fs_sb_has_extra_attr(sbi)) {
-   293				f2fs_warn(sbi, "%s: inode (ino=%lx) is with extra_attr, but extra_attr feature is off",
-   294					  __func__, inode->i_ino);
-   295				return false;
-   296			}
-   297			if (fi->i_extra_isize > F2FS_TOTAL_EXTRA_ATTR_SIZE ||
-   298				fi->i_extra_isize < F2FS_MIN_EXTRA_ATTR_SIZE ||
-   299				fi->i_extra_isize % sizeof(__le32)) {
-   300				f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_extra_isize: %d, max: %zu",
-   301					  __func__, inode->i_ino, fi->i_extra_isize,
-   302					  F2FS_TOTAL_EXTRA_ATTR_SIZE);
-   303				return false;
-   304			}
-   305			if (f2fs_sb_has_compression(sbi) &&
-   306				fi->i_flags & F2FS_COMPR_FL &&
-   307				F2FS_FITS_IN_INODE(ri, fi->i_extra_isize,
-   308							i_compress_flag)) {
-   309				if (!sanity_check_compress_inode(inode, ri))
-   310					return false;
-   311			}
-   312		}
-   313	
-   314		if (f2fs_sb_has_flexible_inline_xattr(sbi) &&
-   315			f2fs_has_inline_xattr(inode) &&
-   316			(fi->i_inline_xattr_size < MIN_INLINE_XATTR_SIZE ||
-   317			fi->i_inline_xattr_size > MAX_INLINE_XATTR_SIZE)) {
-   318			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_inline_xattr_size: %d, min: %u, max: %lu",
-   319				  __func__, inode->i_ino, fi->i_inline_xattr_size,
- > 320				  MIN_INLINE_XATTR_SIZE, MAX_INLINE_XATTR_SIZE);
-   321			return false;
-   322		}
-   323	
-   324		if (!f2fs_sb_has_extra_attr(sbi)) {
-   325			if (f2fs_sb_has_project_quota(sbi)) {
-   326				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   327					  __func__, inode->i_ino, F2FS_FEATURE_PRJQUOTA);
-   328				return false;
-   329			}
-   330			if (f2fs_sb_has_inode_chksum(sbi)) {
-   331				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   332					  __func__, inode->i_ino, F2FS_FEATURE_INODE_CHKSUM);
-   333				return false;
-   334			}
-   335			if (f2fs_sb_has_flexible_inline_xattr(sbi)) {
-   336				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   337					  __func__, inode->i_ino, F2FS_FEATURE_FLEXIBLE_INLINE_XATTR);
-   338				return false;
-   339			}
-   340			if (f2fs_sb_has_inode_crtime(sbi)) {
-   341				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   342					  __func__, inode->i_ino, F2FS_FEATURE_INODE_CRTIME);
-   343				return false;
-   344			}
-   345			if (f2fs_sb_has_compression(sbi)) {
-   346				f2fs_warn(sbi, "%s: corrupted inode ino=%lx, wrong feature flag: %u, run fsck to fix.",
-   347					  __func__, inode->i_ino, F2FS_FEATURE_COMPRESSION);
-   348				return false;
-   349			}
-   350		}
-   351	
-   352		if (f2fs_sanity_check_inline_data(inode, node_page)) {
-   353			f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_data, run fsck to fix",
-   354				  __func__, inode->i_ino, inode->i_mode);
-   355			return false;
-   356		}
-   357	
-   358		if (f2fs_has_inline_dentry(inode) && !S_ISDIR(inode->i_mode)) {
-   359			f2fs_warn(sbi, "%s: inode (ino=%lx, mode=%u) should not have inline_dentry, run fsck to fix",
-   360				  __func__, inode->i_ino, inode->i_mode);
-   361			return false;
-   362		}
-   363	
-   364		if ((fi->i_flags & F2FS_CASEFOLD_FL) && !f2fs_sb_has_casefold(sbi)) {
-   365			f2fs_warn(sbi, "%s: inode (ino=%lx) has casefold flag, but casefold feature is off",
-   366				  __func__, inode->i_ino);
-   367			return false;
-   368		}
-   369	
-   370		if (fi->i_xattr_nid && f2fs_check_nid_range(sbi, fi->i_xattr_nid)) {
-   371			f2fs_warn(sbi, "%s: inode (ino=%lx) has corrupted i_xattr_nid: %u, run fsck to fix.",
-   372				  __func__, inode->i_ino, fi->i_xattr_nid);
-   373			return false;
-   374		}
-   375	
-   376		if (IS_DEVICE_ALIASING(inode)) {
-   377			if (!f2fs_sb_has_device_alias(sbi)) {
-   378				f2fs_warn(sbi, "%s: inode (ino=%lx) has device alias flag, but the feature is off",
-   379					  __func__, inode->i_ino);
-   380				return false;
-   381			}
-   382			if (!f2fs_is_pinned_file(inode)) {
-   383				f2fs_warn(sbi, "%s: inode (ino=%lx) has device alias flag, but is not pinned",
-   384					  __func__, inode->i_ino);
-   385				return false;
-   386			}
-   387		}
-   388	
-   389		return true;
-   390	}
-   391	
+  2872	
+  2873	/*
+  2874	 * Allocate a current working segment.
+  2875	 * This function always allocates a free segment in LFS manner.
+  2876	 */
+  2877	static int new_curseg(struct f2fs_sb_info *sbi, int type, bool new_sec)
+  2878	{
+  2879		struct curseg_info *curseg = CURSEG_I(sbi, type);
+  2880		unsigned int segno = curseg->segno;
+  2881		bool pinning = type == CURSEG_COLD_DATA_PINNED;
+  2882		int ret;
+  2883	
+  2884		if (curseg->inited)
+  2885			write_sum_page(sbi, curseg->sum_blk, GET_SUM_BLOCK(sbi, segno));
+  2886	
+  2887		segno = __get_next_segno(sbi, type);
+  2888		ret = get_new_segment(sbi, &segno, new_sec, pinning);
+  2889		if (ret) {
+  2890			if (ret == -ENOSPC)
+> 2891				reset_curseg_fields(curseg);
+  2892			return ret;
+  2893		}
+  2894	
+  2895		curseg->next_segno = segno;
+  2896		reset_curseg(sbi, type, 1);
+  2897		curseg->alloc_type = LFS;
+  2898		if (F2FS_OPTION(sbi).fs_mode == FS_MODE_FRAGMENT_BLK)
+  2899			curseg->fragment_remained_chunk =
+  2900					get_random_u32_inclusive(1, sbi->max_fragment_chunk);
+  2901		return 0;
+  2902	}
+  2903	
 
 -- 
 0-DAY CI Kernel Test Service
