@@ -1,61 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD115256E;
-	Mon, 16 Dec 2024 00:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645E66116;
+	Mon, 16 Dec 2024 00:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734309653; cv=none; b=UtRLzYj0OydgJkGU3X16hp/f1aCxUB/VWmY+6WSnQXAbH5+HvfF4prpplONgJvekbs8YFRpn7lF1vm72M1n3SF/e065qYb1vnl6RvhJlNcHco68QcyKXqrzyb6xuWNGwST/Da8n5+iACkWHowk3no8ptvEDaEqI8Y6SXJqzssV4=
+	t=1734309656; cv=none; b=Z/uO8APwTMaQ7iuhJXXCk8dlwAZOtxu/sfmoqBOtG1LCcZS48hM+Yj6U+WQwZF+yIlx6AwBVlE4PKyiu8IOP8R5M3ovo85msb8Smu9sXA4J1F1/LVfdL22rhX8JovKwDH5c5nF62BuaDAh8tDfZ2xn+ag5tvrb0XL5tifBO25q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734309653; c=relaxed/simple;
-	bh=H7QgqzQTLdyfSzdLspoiZFKaNSJFZNQq8zAXI6ifDXQ=;
+	s=arc-20240116; t=1734309656; c=relaxed/simple;
+	bh=PXHmvzghVjV467+BbboUjYJuieSNBfvameSpIxwSlKg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PgNgwWTDiQ/jSuCauSI5Q6gNUi4Bxwxj/dwtfikYvzbXkbUieNbOCUfd82JCKtAeuz25t5IQKGmTSgAnb7PXrhG3SsrQu0fc6rwK7peNU1b9omct1al9/JbpzlaSF5kqzuZWpBJObsDUgZjs9cyln1SZpE0Rso+IxZyOPCtbhqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jO0r1Vn2; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=RpB8rp0FBqToccaaJyfRvF4NOsKHVaqE4gvmIIV8i3DnXLMB7/GbjPFOSkK3Z2fyvM3CjEUVGI1w/vi3xHgTtBAMJ0C0FvhCXTThWuYIzglaIdoNsDGDtctWpKuKsvp+MOAcPRUBooOXEONH2mzjFWu3iflqnIskcZb0NpGbjLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YSz2HDD6; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jO0r1Vn2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YSz2HDD6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734309651; x=1765845651;
+  t=1734309653; x=1765845653;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=H7QgqzQTLdyfSzdLspoiZFKaNSJFZNQq8zAXI6ifDXQ=;
-  b=jO0r1Vn2K82H09cd+IyVLUmcJrEQHMYIj2+H1y85mEDHlePAdgH1QCrF
-   Kc5SdjW4gSYKoIhIqp74DEkL+e3JT980+C5VSvV6l6mkNIGPA4PZIPWQb
-   udc1Z/NbZwnkuhsjAt6+R4C0GCey7uvc+DE/hnPVRdiybYpxEHKseXYpE
-   NBMzYD/N3s2u5ErALI2rrxP2+i35KZ2pPKLoC5y2GXljLlrqpx6XOFcAe
-   FzQ3O2S1KiwnTTpctNFhJeI+k+qDniAadc2fPfzNfD8ZUAB8va50GWkHc
-   cpxC3MVebZSOyF72tOxs9ZsqVdvZp2FMH1HY1W6RW84i3s53dY50Ha0Eo
-   w==;
-X-CSE-ConnectionGUID: Uu3OG6zeSRu4Ba+99IBTJg==
-X-CSE-MsgGUID: B/PvxZWYQpG1PIkkR3docQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11287"; a="57166194"
+  bh=PXHmvzghVjV467+BbboUjYJuieSNBfvameSpIxwSlKg=;
+  b=YSz2HDD6n2De1+2hmZ6rkPCunfaxFuJJ3+9Q5Hnzh4Fj5vdRTMtajLg6
+   V8l7BgtmVNRLSuMFtKUe8QsCaLrqWg9yJrWL3wBeBSEZnduFmMxN/2nzA
+   r76T1o1/ArojC9n0nv9dITVMEWupVFYM6j4XYjRX848xQIRTS1ThQbD0b
+   5zO/m7TFFxj5mB1b93AC6sTxyv++FgjZhZGGFHTU++bsi+yVWEtT83LKM
+   v6vLtSTJM9MTyOnVgFOaNalJ8pX1VczihMqAb1pGVxsADABsIAI1eYbPt
+   aYDMpoFDbSj2QtogdZp0MSxmqQ35xUQqfKd9oc6nAoHoFu38YsnrvOMdF
+   g==;
+X-CSE-ConnectionGUID: jS4fDFnXQvilyWcko+aC6Q==
+X-CSE-MsgGUID: 5wNAlbi/RqSWZlGOmDU7DQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11287"; a="57166199"
 X-IronPort-AV: E=Sophos;i="6.12,237,1728975600"; 
-   d="scan'208";a="57166194"
+   d="scan'208";a="57166199"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2024 16:40:50 -0800
-X-CSE-ConnectionGUID: xOpOrJR0RQGNg2Llnc5dNQ==
-X-CSE-MsgGUID: xGWRpBL+R/yU6PEGPfkn0A==
+X-CSE-ConnectionGUID: LAZoIMgMTrewLAq0ZiYIkw==
+X-CSE-MsgGUID: 4k+M0+FRQouY5fQGyqqldQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,237,1728975600"; 
-   d="scan'208";a="96948416"
+   d="scan'208";a="96948415"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
   by orviesa009.jf.intel.com with ESMTP; 15 Dec 2024 16:40:48 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tMzAD-000Duw-0p;
+	id 1tMzAD-000Duy-19;
 	Mon, 16 Dec 2024 00:40:45 +0000
-Date: Mon, 16 Dec 2024 08:40:36 +0800
+Date: Mon, 16 Dec 2024 08:40:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
+To: Junjie Fu <fujunjie1@qq.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 56/239]
- drivers/gpu/drm/renesas/rcar-du/rcar_cmm.c:35:19: error: unused function
- 'rcar_cmm_read'
-Message-ID: <202412160831.5xPilPXv-lkp@intel.com>
+Subject: [linux-next:master 3078/3764] mm/z3fold.c:353:3: error: call to
+ undeclared function 'lock_page'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202412160820.Zivm9VbY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,40 +65,69 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   2563d17c641922648007b2abfe3406e2a9a7faf8
-commit: d39928f4ecbaf71fa2249fa75473f0349910d21c [56/239] mm/vmstat: fix a W=1 clang compiler warning
-config: powerpc-randconfig-002-20241216 (https://download.01.org/0day-ci/archive/20241216/202412160831.5xPilPXv-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241216/202412160831.5xPilPXv-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   4176cf5c5651c33769de83bb61b0287f4ec7719f
+commit: a6c37165ca40e362ec07d768ec418afb3c29e4ed [3078/3764] mempolicy.h: remove unnecessary header file inclusions with no test failure
+config: arm64-randconfig-004-20241216 (https://download.01.org/0day-ci/archive/20241216/202412160820.Zivm9VbY-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241216/202412160820.Zivm9VbY-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412160831.5xPilPXv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412160820.Zivm9VbY-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/renesas/rcar-du/rcar_cmm.c:35:19: error: unused function 'rcar_cmm_read' [-Werror,-Wunused-function]
-      35 | static inline int rcar_cmm_read(struct rcar_cmm *rcmm, u32 reg)
-         |                   ^~~~~~~~~~~~~
-   1 error generated.
+>> mm/z3fold.c:353:3: error: call to undeclared function 'lock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   lock_page(page);
+                   ^
+   mm/z3fold.c:353:3: note: did you mean 'copy_page'?
+   arch/arm64/include/asm/page.h:22:13: note: 'copy_page' declared here
+   extern void copy_page(void *to, const void *from);
+               ^
+>> mm/z3fold.c:355:3: error: call to undeclared function 'unlock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   unlock_page(page);
+                   ^
+   mm/z3fold.c:1052:3: error: call to undeclared function 'lock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   lock_page(page);
+                   ^
+   mm/z3fold.c:1054:3: error: call to undeclared function 'unlock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   unlock_page(page);
+                   ^
+>> mm/z3fold.c:1056:12: error: call to undeclared function 'trylock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   WARN_ON(!trylock_page(page));
+                            ^
+   mm/z3fold.c:1056:12: note: did you mean 'try_get_page'?
+   include/linux/mm.h:1527:33: note: 'try_get_page' declared here
+   static inline __must_check bool try_get_page(struct page *page)
+                                   ^
+   mm/z3fold.c:1058:3: error: call to undeclared function 'unlock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   unlock_page(page);
+                   ^
+   6 errors generated.
 
 
-vim +/rcar_cmm_read +35 drivers/gpu/drm/renesas/rcar-du/rcar_cmm.c
+vim +/lock_page +353 mm/z3fold.c
 
-e08e934d6c289ed drivers/gpu/drm/rcar-du/rcar_cmm.c Jacopo Mondi 2019-10-17  34  
-e08e934d6c289ed drivers/gpu/drm/rcar-du/rcar_cmm.c Jacopo Mondi 2019-10-17 @35  static inline int rcar_cmm_read(struct rcar_cmm *rcmm, u32 reg)
-e08e934d6c289ed drivers/gpu/drm/rcar-du/rcar_cmm.c Jacopo Mondi 2019-10-17  36  {
-e08e934d6c289ed drivers/gpu/drm/rcar-du/rcar_cmm.c Jacopo Mondi 2019-10-17  37  	return ioread32(rcmm->base + reg);
-e08e934d6c289ed drivers/gpu/drm/rcar-du/rcar_cmm.c Jacopo Mondi 2019-10-17  38  }
-e08e934d6c289ed drivers/gpu/drm/rcar-du/rcar_cmm.c Jacopo Mondi 2019-10-17  39  
+9a001fc19cccde Vitaly Wool 2016-05-20  348  
+9a001fc19cccde Vitaly Wool 2016-05-20  349  /* Resets the struct page fields and frees the page */
+1f862989b04ade Vitaly Wool 2019-05-13  350  static void free_z3fold_page(struct page *page, bool headless)
+9a001fc19cccde Vitaly Wool 2016-05-20  351  {
+1f862989b04ade Vitaly Wool 2019-05-13  352  	if (!headless) {
+1f862989b04ade Vitaly Wool 2019-05-13 @353  		lock_page(page);
+1f862989b04ade Vitaly Wool 2019-05-13  354  		__ClearPageMovable(page);
+1f862989b04ade Vitaly Wool 2019-05-13 @355  		unlock_page(page);
+1f862989b04ade Vitaly Wool 2019-05-13  356  	}
+5a27aa8220290b Vitaly Wool 2017-02-24  357  	__free_page(page);
+5a27aa8220290b Vitaly Wool 2017-02-24  358  }
+5a27aa8220290b Vitaly Wool 2017-02-24  359  
 
-:::::: The code at line 35 was first introduced by commit
-:::::: e08e934d6c289ed0d6bc222271f69dc35fb2caa5 drm: rcar-du: Add support for CMM
+:::::: The code at line 353 was first introduced by commit
+:::::: 1f862989b04ade61d3aab49184c50e9957f84c7d mm/z3fold.c: support page migration
 
-:::::: TO: Jacopo Mondi <jacopo+renesas@jmondi.org>
-:::::: CC: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+:::::: TO: Vitaly Wool <vitalywool@gmail.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
