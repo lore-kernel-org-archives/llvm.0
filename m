@@ -1,61 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645E66116;
-	Mon, 16 Dec 2024 00:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDDF7DA84;
+	Mon, 16 Dec 2024 03:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734309656; cv=none; b=Z/uO8APwTMaQ7iuhJXXCk8dlwAZOtxu/sfmoqBOtG1LCcZS48hM+Yj6U+WQwZF+yIlx6AwBVlE4PKyiu8IOP8R5M3ovo85msb8Smu9sXA4J1F1/LVfdL22rhX8JovKwDH5c5nF62BuaDAh8tDfZ2xn+ag5tvrb0XL5tifBO25q8=
+	t=1734321204; cv=none; b=pWXG1FzkammKH9sK7V4CQ1L7aFCTiBwJ1RGY4cNre2Il2DJ4Nn8qCx6HLRbsG6H705T6ZSugGkeg+68cV0Ybo1O6mdQ8SFmIr/97g/8zQasGi91eS24bkFqgXw7cn9N2wjzEsDUKltcyDuIe6oHU/Wa7tVTp/5x1eIW5UFL4E0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734309656; c=relaxed/simple;
-	bh=PXHmvzghVjV467+BbboUjYJuieSNBfvameSpIxwSlKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RpB8rp0FBqToccaaJyfRvF4NOsKHVaqE4gvmIIV8i3DnXLMB7/GbjPFOSkK3Z2fyvM3CjEUVGI1w/vi3xHgTtBAMJ0C0FvhCXTThWuYIzglaIdoNsDGDtctWpKuKsvp+MOAcPRUBooOXEONH2mzjFWu3iflqnIskcZb0NpGbjLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YSz2HDD6; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1734321204; c=relaxed/simple;
+	bh=EuDgEeuq7bKCQbRqoVECUPYsnCqFFn78qOqzqv/yoOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NibKZtIvQwGm5IhcaPSNK7YoQubfbzPYYDAWyeE1MHKVtJHo3Hz0cWuBwBPXPQ6s6wxJSwKNBBnr9HAte4ldEgIseyoMvCAk4GcRbJQ8nybUTLWybn0bAZTbB7daW3jUFMuL9EgGY/Kn+TEPt7BjbL9OwDLXnum8KBcfAJT6b8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gNgrfraE; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YSz2HDD6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gNgrfraE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734309653; x=1765845653;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PXHmvzghVjV467+BbboUjYJuieSNBfvameSpIxwSlKg=;
-  b=YSz2HDD6n2De1+2hmZ6rkPCunfaxFuJJ3+9Q5Hnzh4Fj5vdRTMtajLg6
-   V8l7BgtmVNRLSuMFtKUe8QsCaLrqWg9yJrWL3wBeBSEZnduFmMxN/2nzA
-   r76T1o1/ArojC9n0nv9dITVMEWupVFYM6j4XYjRX848xQIRTS1ThQbD0b
-   5zO/m7TFFxj5mB1b93AC6sTxyv++FgjZhZGGFHTU++bsi+yVWEtT83LKM
-   v6vLtSTJM9MTyOnVgFOaNalJ8pX1VczihMqAb1pGVxsADABsIAI1eYbPt
-   aYDMpoFDbSj2QtogdZp0MSxmqQ35xUQqfKd9oc6nAoHoFu38YsnrvOMdF
+  t=1734321202; x=1765857202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EuDgEeuq7bKCQbRqoVECUPYsnCqFFn78qOqzqv/yoOA=;
+  b=gNgrfraESubG/wGIT2NHELtpjeFMYk/1GsXjG3loJ6NcKgVGdYXvU3Yd
+   TojjJm9I+ThHyz+3yctsv1yNeD/GpOQQhArbuBjebE1tLDiXvO7bWtbQj
+   C8e20UUJssEOZc29Gdvb8ViAFma65qQwWhWnq4SlkrP6CwWvD+UQUnp6S
+   ERRkkiScSsWdL/+mQqu1Au5OtaGbLfm2KMfI5IvLJEZKHL/zPnh46qLtR
+   gNGDM3lwAWHBto5QcnVxKA4S8yZSR+LfeYjj1aJbzRuvpN8xeMvpEPzb9
+   SHHVeWawqwRkm2CDa743AZUKqzytXcYRC8xrYqA/p9sAg2VvXN244D+oV
    g==;
-X-CSE-ConnectionGUID: jS4fDFnXQvilyWcko+aC6Q==
-X-CSE-MsgGUID: 5wNAlbi/RqSWZlGOmDU7DQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11287"; a="57166199"
-X-IronPort-AV: E=Sophos;i="6.12,237,1728975600"; 
-   d="scan'208";a="57166199"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2024 16:40:50 -0800
-X-CSE-ConnectionGUID: LAZoIMgMTrewLAq0ZiYIkw==
-X-CSE-MsgGUID: 4k+M0+FRQouY5fQGyqqldQ==
+X-CSE-ConnectionGUID: FHs6jjKmSJ+9u+f6f3lB0Q==
+X-CSE-MsgGUID: Wr97aZp+TX6WOQayP4f78g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45178816"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="45178816"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2024 19:53:22 -0800
+X-CSE-ConnectionGUID: u7ZBo1V3Q3uiHJCRTvbpIA==
+X-CSE-MsgGUID: Q2QuIi9fSQiPYdSn7TWz5g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,237,1728975600"; 
-   d="scan'208";a="96948415"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="101648424"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 15 Dec 2024 16:40:48 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 15 Dec 2024 19:53:19 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tMzAD-000Duy-19;
-	Mon, 16 Dec 2024 00:40:45 +0000
-Date: Mon, 16 Dec 2024 08:40:37 +0800
+	id 1tN2AX-000E02-16;
+	Mon, 16 Dec 2024 03:53:17 +0000
+Date: Mon, 16 Dec 2024 11:52:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Junjie Fu <fujunjie1@qq.com>
+To: Zijun Hu <zijun_hu@icloud.com>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Grant Likely <grant.likely@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 3078/3764] mm/z3fold.c:353:3: error: call to
- undeclared function 'lock_page'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202412160820.Zivm9VbY-lkp@intel.com>
+	Zijun Hu <zijun_hu@icloud.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] of: Fix potential wrong MODALIAS uevent value
+Message-ID: <202412161149.xqUOFg3R-lkp@intel.com>
+References: <20241216-of_core_fix-v2-6-e69b8f60da63@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,70 +68,356 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241216-of_core_fix-v2-6-e69b8f60da63@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4176cf5c5651c33769de83bb61b0287f4ec7719f
-commit: a6c37165ca40e362ec07d768ec418afb3c29e4ed [3078/3764] mempolicy.h: remove unnecessary header file inclusions with no test failure
-config: arm64-randconfig-004-20241216 (https://download.01.org/0day-ci/archive/20241216/202412160820.Zivm9VbY-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241216/202412160820.Zivm9VbY-lkp@intel.com/reproduce)
+Hi Zijun,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 0f7ca6f69354e0c3923bbc28c92d0ecab4d50a3e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zijun-Hu/of-Fix-API-of_find_node_opts_by_path-finding-OF-device-node-failure/20241216-084408
+base:   0f7ca6f69354e0c3923bbc28c92d0ecab4d50a3e
+patch link:    https://lore.kernel.org/r/20241216-of_core_fix-v2-6-e69b8f60da63%40quicinc.com
+patch subject: [PATCH v2 6/7] of: Fix potential wrong MODALIAS uevent value
+config: x86_64-buildonly-randconfig-003-20241216 (https://download.01.org/0day-ci/archive/20241216/202412161149.xqUOFg3R-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241216/202412161149.xqUOFg3R-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412160820.Zivm9VbY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412161149.xqUOFg3R-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> mm/z3fold.c:353:3: error: call to undeclared function 'lock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   lock_page(page);
-                   ^
-   mm/z3fold.c:353:3: note: did you mean 'copy_page'?
-   arch/arm64/include/asm/page.h:22:13: note: 'copy_page' declared here
-   extern void copy_page(void *to, const void *from);
-               ^
->> mm/z3fold.c:355:3: error: call to undeclared function 'unlock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   unlock_page(page);
-                   ^
-   mm/z3fold.c:1052:3: error: call to undeclared function 'lock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   lock_page(page);
-                   ^
-   mm/z3fold.c:1054:3: error: call to undeclared function 'unlock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   unlock_page(page);
-                   ^
->> mm/z3fold.c:1056:12: error: call to undeclared function 'trylock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   WARN_ON(!trylock_page(page));
-                            ^
-   mm/z3fold.c:1056:12: note: did you mean 'try_get_page'?
-   include/linux/mm.h:1527:33: note: 'try_get_page' declared here
-   static inline __must_check bool try_get_page(struct page *page)
-                                   ^
-   mm/z3fold.c:1058:3: error: call to undeclared function 'unlock_page'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   unlock_page(page);
-                   ^
-   6 errors generated.
+   In file included from lib/genalloc.c:35:
+>> include/linux/of.h:764:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'char *' [-Wint-conversion]
+     764 |         return -ENODEV;
+         |                ^~~~~~~
+   In file included from lib/genalloc.c:37:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/genalloc.c:37:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/genalloc.c:37:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/genalloc.c:37:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/genalloc.c:37:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/genalloc.c:37:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+--
+   In file included from lib/devres.c:9:
+   In file included from include/linux/of_address.h:6:
+>> include/linux/of.h:764:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'char *' [-Wint-conversion]
+     764 |         return -ENODEV;
+         |                ^~~~~~~
+   1 error generated.
+--
+   In file included from lib/logic_pio.c:11:
+>> include/linux/of.h:764:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'char *' [-Wint-conversion]
+     764 |         return -ENODEV;
+         |                ^~~~~~~
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/logic_pio.c:14:
+   In file included from include/linux/mm.h:1120:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+--
+   In file included from lib/vsprintf.c:23:
+   In file included from include/linux/clk-provider.h:9:
+>> include/linux/of.h:764:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'char *' [-Wint-conversion]
+     764 |         return -ENODEV;
+         |                ^~~~~~~
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/x86/include/asm/elf.h:10:
+   In file included from arch/x86/include/asm/ia32.h:7:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from lib/vsprintf.c:25:
+   In file included from include/linux/module.h:19:
+..
 
 
-vim +/lock_page +353 mm/z3fold.c
+vim +764 include/linux/of.h
 
-9a001fc19cccde Vitaly Wool 2016-05-20  348  
-9a001fc19cccde Vitaly Wool 2016-05-20  349  /* Resets the struct page fields and frees the page */
-1f862989b04ade Vitaly Wool 2019-05-13  350  static void free_z3fold_page(struct page *page, bool headless)
-9a001fc19cccde Vitaly Wool 2016-05-20  351  {
-1f862989b04ade Vitaly Wool 2019-05-13  352  	if (!headless) {
-1f862989b04ade Vitaly Wool 2019-05-13 @353  		lock_page(page);
-1f862989b04ade Vitaly Wool 2019-05-13  354  		__ClearPageMovable(page);
-1f862989b04ade Vitaly Wool 2019-05-13 @355  		unlock_page(page);
-1f862989b04ade Vitaly Wool 2019-05-13  356  	}
-5a27aa8220290b Vitaly Wool 2017-02-24  357  	__free_page(page);
-5a27aa8220290b Vitaly Wool 2017-02-24  358  }
-5a27aa8220290b Vitaly Wool 2017-02-24  359  
-
-:::::: The code at line 353 was first introduced by commit
-:::::: 1f862989b04ade61d3aab49184c50e9957f84c7d mm/z3fold.c: support page migration
-
-:::::: TO: Vitaly Wool <vitalywool@gmail.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+bd69f73f2c81eed Grant Likely  2013-02-10  761  
+f1f6eae8bdfdfce Zijun Hu      2024-12-16  762  static inline char *of_modalias(const struct device_node *np, ssize_t *lenp)
+bd7a7ed774afd1a Miquel Raynal 2023-04-04  763  {
+bd7a7ed774afd1a Miquel Raynal 2023-04-04 @764  	return -ENODEV;
+bd7a7ed774afd1a Miquel Raynal 2023-04-04  765  }
+bd7a7ed774afd1a Miquel Raynal 2023-04-04  766  
 
 -- 
 0-DAY CI Kernel Test Service
