@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4571F63CB;
-	Tue, 17 Dec 2024 15:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B77161FF2;
+	Tue, 17 Dec 2024 15:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734448080; cv=none; b=FyC489/ndkdb7Tz0Kqq5k7phqbz9KCK4TLLIvjEwivjd+tXND5KCCRElnYXUkCvUg4bhwVPhHFRRUY+w0F2/lBC9pCR5Be0RZ9M04vCNpjin/bLtSgC1besa7kXJVzD/a32RhBj1vlk7wYuBFa3wIIdx0N1WV8fBRBky/C3YfJg=
+	t=1734450583; cv=none; b=RqRkVEJ6uEU3T6PkgZmeLoGTboPKETNYHsmJjhNf3as1yTXlQT5i7BaCFLSwA2gmxzge+xODL6xxGcG3CYmeet6R0tTm9UkzNPVjUq3xRLh79HZrXtm08pCSD5BGhnA0Sf2tYOMaZbni20OIm/r3i+4l/Q/wPPjgreoBTDjHXgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734448080; c=relaxed/simple;
-	bh=6eu60HxVjursrd590qttcgm8QLP91ovuo/9YZIq0Qv8=;
+	s=arc-20240116; t=1734450583; c=relaxed/simple;
+	bh=QkKB8/0Hksyr3Ur7YF+1udEcwQOMjSVbrOU8cUPns5Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CFbT83qD9KcQ0JAoYR6UZiBbz12rBwjn95o5sDxO8w6rat4BlIoP1SLA38ji1usbVkOmjaf2afpT2OSkjT/2nrbq9Lq8iFKhv20e7eDcxHMq6lloJMD7uswyK+8tsmMhsWm6i9VWt59v6p0C9P6kcN+gU5AKU6cBAaeTZr11CYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y45j/5BN; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=r3FaG6inE5FqlaJxs7DYyJr1bP1AVgw+qKKIDg6i+gSX99ehUIhtX7YjYFvp5dQqxp1VxAEviFv+CwYsStL1IYrpR++MEfnDB61Y8blezvYuSXtr46G9a00CBqKZB7rNGONVDcZd93D1lsyhClPhC4dG4zhc4u1w3kgg/9nTZQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iabd6okG; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y45j/5BN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iabd6okG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734448079; x=1765984079;
+  t=1734450581; x=1765986581;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6eu60HxVjursrd590qttcgm8QLP91ovuo/9YZIq0Qv8=;
-  b=Y45j/5BNadnxd2Zc+ger3RsCT1f1xri+GG9XQsGEu4vFnv3QPyWqPJVF
-   jphbjXmbqt7jKUodydp9f/eqfljdhZO7wPD9OBlEknVdp+RHtlHlSWdmq
-   LsuQ/vZDHf6iOz/DTSE31poKotArAtQNV5AX0/bYLkuMmlnZRg3tYdEbq
-   kbUWkqoNTTDE3YISgg8adom/lGAV0Woca5k1OEMoB4sI83D2rNaiFiu8T
-   mH5I+Uebil7aJg5FMc1T9l9RgsqqJ8vWg8dr4/oxT3q0xF+KpZ16OYy27
-   ZYJUxBttCC6imlo7FxOvvMq40XUcwqKojapE8sPFkylGaYFPzzsKgJAiU
+  bh=QkKB8/0Hksyr3Ur7YF+1udEcwQOMjSVbrOU8cUPns5Q=;
+  b=iabd6okGf+cFZlXlo3Ye+0zXvQ+7LvjIBWb+C2mu8lxFqVIUf7q55/3j
+   jDPg9UcplhL8x7yBw2J0cX8ydxcPUEItkFrReQqAHbS8j7nz/aieveZ1w
+   Qlj7aAk37hQAQJoZJZRJVKbx/Ey3lvP6PkDlslaNfKUyO4axRtw85hu6u
+   iiSuX8KdTvr9BhZur2lZ3pigfOqOXp+IwIONOW3Q3TbdogyIMVYIwkBUn
+   FbvhLpq/iATk5ZShYBuPiWrKfaaT2z72xf/Sdg+FxXFhRyic5J0ATINdg
+   pepLHBt9s8WhfJUYwBvkwjlsgAIaf5lz1pSxdUvCeqkyrsoK0SKYfLe+G
    w==;
-X-CSE-ConnectionGUID: V1quakOlR1OArkeI4tTxzQ==
-X-CSE-MsgGUID: YrCDhG5sRWikNG/a3UY+pA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="45884170"
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="45884170"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 07:07:37 -0800
-X-CSE-ConnectionGUID: keUFE/4dRaKl25uvnm+z4g==
-X-CSE-MsgGUID: QMpzPoltS7m7sPLiax3sow==
+X-CSE-ConnectionGUID: 6120uPV8QMq830wj9SXKDA==
+X-CSE-MsgGUID: WiRL+q6wTvC/AtAmzZT3JA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="34774634"
+X-IronPort-AV: E=Sophos;i="6.12,242,1728975600"; 
+   d="scan'208";a="34774634"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 07:49:40 -0800
+X-CSE-ConnectionGUID: 2nGF2eN4SxaBL9b07RIaTA==
+X-CSE-MsgGUID: yyZJI99+Rrqg9Q2l/IRanQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="134901881"
+X-IronPort-AV: E=Sophos;i="6.12,242,1728975600"; 
+   d="scan'208";a="98147156"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 17 Dec 2024 07:07:36 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 17 Dec 2024 07:49:39 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tNZAc-000F5V-0T;
-	Tue, 17 Dec 2024 15:07:34 +0000
-Date: Tue, 17 Dec 2024 23:06:51 +0800
+	id 1tNZpJ-000F6i-0C;
+	Tue, 17 Dec 2024 15:49:37 +0000
+Date: Tue, 17 Dec 2024 23:48:51 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Rob Herring (Arm)" <robh@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:dt/printf-modalias 1/1] lib/vsprintf.c:2230:4: error: expected
- expression
-Message-ID: <202412172335.n8VuKIwK-lkp@intel.com>
+Subject: [robh:dt/printf-modalias 1/1] lib/vsprintf.c:2230:4: warning: label
+ followed by a declaration is a C23 extension
+Message-ID: <202412172352.WPdTcXgW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,27 +65,35 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/printf-modalias
 head:   57a93c86e542d479453f704d4911118c678bf31a
 commit: 57a93c86e542d479453f704d4911118c678bf31a [1/1] of: Add printf '%pOFm' for generating modalias
-config: arm-randconfig-001-20241217 (https://download.01.org/0day-ci/archive/20241217/202412172335.n8VuKIwK-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241217/202412172335.n8VuKIwK-lkp@intel.com/reproduce)
+config: arm64-randconfig-001-20241217 (https://download.01.org/0day-ci/archive/20241217/202412172352.WPdTcXgW-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2dc22615fd46ab2566d0f26d5ba234ab12dc4bf8)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241217/202412172352.WPdTcXgW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412172335.n8VuKIwK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412172352.WPdTcXgW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> lib/vsprintf.c:2230:4: error: expected expression
-                           ssize_t len = of_modalias(dn, buf, end - buf);
-                           ^
->> lib/vsprintf.c:2231:8: error: use of undeclared identifier 'len'
-                           if (len > 0)
-                               ^
-   lib/vsprintf.c:2232:12: error: use of undeclared identifier 'len'
-                                   buf += len;
-                                          ^
-   3 errors generated.
+   In file included from lib/vsprintf.c:30:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from lib/vsprintf.c:50:
+   In file included from lib/../mm/internal.h:13:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> lib/vsprintf.c:2230:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+    2230 |                         ssize_t len = of_modalias(dn, buf, end - buf);
+         |                         ^
+   4 warnings generated.
 
 
 vim +2230 lib/vsprintf.c
@@ -175,7 +183,7 @@ vim +2230 lib/vsprintf.c
   2228				break;
   2229			case 'm':
 > 2230				ssize_t len = of_modalias(dn, buf, end - buf);
-> 2231				if (len > 0)
+  2231				if (len > 0)
   2232					buf += len;
   2233				break;
   2234			default:
