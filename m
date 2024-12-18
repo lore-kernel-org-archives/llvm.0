@@ -1,57 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E6B15C15C;
-	Wed, 18 Dec 2024 08:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C0715C15C;
+	Wed, 18 Dec 2024 08:33:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734510806; cv=none; b=CSp+o5gjypAm00bgcc0uhT6MsGcwYlSD5s5/OhucTRIeNdz/hS4m5B46wQ+P06hx9bIz6wE4d4EFVc3jX6dKyqXNhzWKb6tgy/9daxr5pqtyo3xljKEJtpfodGH42hoXhZjjH07yrcEmTtgS1y45xHaq9ve62lKF5BwOBOlX+qI=
+	t=1734510808; cv=none; b=goRWxf9Nr7BQKEYz3OfO1Qtsk+u75Je8kFZxcahglyhgzaZ0rKISVtlDy1ZvFgzveXv1xmcp25AeBLhDusyM11VttUEUd0KyZkb4ssf56/+1WZ6OsQ6XLGP6dQvlkeruM9mo8BI10mDnztf/vCcsefVmbNPC05IiDdF9iWSrbEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734510806; c=relaxed/simple;
-	bh=Ry7q31mgqgtXCefZQH3sjqVvO3JnB08nmuzE5txrfs0=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qPSmHGroTbgnOSms2j7VSHGhZx4h5jJSrGn1jv+IWIrAFVZ9nochsJO7jfrmqChG+jhJIZbgsPYjRpCpTMdVjNi9tIz455+0TlTiM3VbWF/lqRwY49bgXsd5xfxCyfouEucJD6ZGFlLU1o0WdHcDkPwujjTHXJ0Q9AFesYcgyKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MujnsnmF; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1734510808; c=relaxed/simple;
+	bh=awQyJfyXWCoQxbbBwzUfL+n7Fr+Crs0prjb5pWJy2KE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xc9iw3ZsFW53j6mHlYtvonO03HZx7b0NzMFh7n698pwKjN0dZM8Am5CC2E9IUkCiuFYjVXbUtn8j2ApGqMexGHU3QS1/fDqu2RCSWgHatOhzn09sb7YrzPJyC0TMw9i0J1DSrhECbHiy8SZuXbduDCLmU7T9TG1K0TWks5/cxaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fV2Jtolu; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MujnsnmF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fV2Jtolu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734510805; x=1766046805;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Ry7q31mgqgtXCefZQH3sjqVvO3JnB08nmuzE5txrfs0=;
-  b=MujnsnmF5LzckoBShGgYLJnR7/zzcNz78uBjX/H9YtqQ3rCk1QSU3ACw
-   kBoq5/hAxkMKxVJuXflAm7Iw+r9saRzDLIEq4I5XsMiwJjeabAlH7WNDg
-   R79jaaUccmxsxvU0+O5aYhZZ8a0b4zAc1SD79Mga1X6ZnKwpsBczzmGy8
-   DdI623kzkKzV4Bb8or1BoA1V3r9Z3y76gG6wE9ioZMqeVRb+77J5XDS68
-   NlD0ilEKPNPSlcQWNzg9SGHOy98mssJyKQogM0dr0FkeF3vsKuAzMl4v5
-   +xj6FjsrySftTKmDkicBIR1Bt1xW38ihljdIcad0nYJeELChNxp3CXkbp
-   A==;
-X-CSE-ConnectionGUID: XytA+uttTvSGRPMSsLPMnQ==
-X-CSE-MsgGUID: U+CBpqbyQv6+urJoOeOXZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11289"; a="45669657"
+  t=1734510807; x=1766046807;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=awQyJfyXWCoQxbbBwzUfL+n7Fr+Crs0prjb5pWJy2KE=;
+  b=fV2JtoluLweTblVE00eUlV++AXnIVHKqahNwfWDU3g8778/iQM8WhInz
+   3uNKSQXbKPFOi+oU5ONLleeDx4cGwzLKIBRmvzYd2hXOXH5g/MK6G2zMK
+   9hB2EhcTeVo0JY+1DfyYo2nxmpzVaf9xtTkjiHVhUCGo5DqvsNG8qgBW1
+   gbErGEsZ7MlTc8H3Te1jzP3PlZpszWUSFkcIuswMtA7OeQ14ZFtp9hTEk
+   EHYsYRxUxajzMFR2w91sOLBGgubOm6Fcb6T/QZR8AgyMr8ry157CxJkmZ
+   GL3hd7WRUkRzIo0b3kG4rVSP3jw9PIoaIcn8w6gBfHYRUDaeTLacTMf3q
+   Q==;
+X-CSE-ConnectionGUID: E7l8u22DQv+UfPMNoqFi5w==
+X-CSE-MsgGUID: sNn2jL2+TeGvN/5IW/9Gtg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11289"; a="45669660"
 X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
-   d="scan'208";a="45669657"
+   d="scan'208";a="45669660"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 00:33:24 -0800
-X-CSE-ConnectionGUID: +yiK0ToWSNiyxYQiysxH7Q==
-X-CSE-MsgGUID: CVCK6IjGSCekz7ddjuTnag==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 00:33:26 -0800
+X-CSE-ConnectionGUID: gktdEMQcS+erluuaSTQWpA==
+X-CSE-MsgGUID: /2v9EbPfRvmQX0pUpgabuQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
-   d="scan'208";a="97854970"
+   d="scan'208";a="97854971"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
   by orviesa006.jf.intel.com with ESMTP; 18 Dec 2024 00:33:23 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tNpUf-000GCe-0F;
+	id 1tNpUf-000GCc-09;
 	Wed, 18 Dec 2024 08:33:21 +0000
-Date: Wed, 18 Dec 2024 16:32:31 +0800
+Date: Wed, 18 Dec 2024 16:32:50 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [linux-next:master 3146/3192] drivers/gpu/drm/tiny/cirrus-qemu.o:
- warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
-Message-ID: <202412181637.Fha5A3SP-lkp@intel.com>
+To: Dimitri Fedrau <dima.fedrau@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dimitri Fedrau <dima.fedrau@gmail.com>
+Subject: Re: [PATCH net-next] net: phy: dp83822: Add support for PHY LEDs on
+ DP83822
+Message-ID: <202412181638.7XsHSwtp-lkp@intel.com>
+References: <20241217-dp83822-leds-v1-1-800b24461013@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,33 +70,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241217-dp83822-leds-v1-1-800b24461013@gmail.com>
 
-TO: Ingo Molnar <mingo@kernel.org>
+Hi Dimitri,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   7fa366f1b6e376c38966faa42da7f0f2e013fdab
-commit: a346a3280fbc15df5e1496cb0d4c9187d7faae0e [3146/3192] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-config: x86_64-randconfig-076-20241212 (https://download.01.org/0day-ci/archive/20241218/202412181637.Fha5A3SP-lkp@intel.com/config)
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on a14a429069bb1a18eb9fe63d68fcaa77dffe0e23]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dimitri-Fedrau/net-phy-dp83822-Add-support-for-PHY-LEDs-on-DP83822/20241217-172305
+base:   a14a429069bb1a18eb9fe63d68fcaa77dffe0e23
+patch link:    https://lore.kernel.org/r/20241217-dp83822-leds-v1-1-800b24461013%40gmail.com
+patch subject: [PATCH net-next] net: phy: dp83822: Add support for PHY LEDs on DP83822
+config: x86_64-buildonly-randconfig-002-20241218 (https://download.01.org/0day-ci/archive/20241218/202412181638.7XsHSwtp-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241218/202412181637.Fha5A3SP-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241218/202412181638.7XsHSwtp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412181637.Fha5A3SP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412181638.7XsHSwtp-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/tiny/cirrus-qemu.c:22:
-   In file included from include/linux/pci.h:1644:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2287:
+   In file included from drivers/net/phy/dp83822.c:7:
+   In file included from include/linux/ethtool.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/gpu/drm/tiny/cirrus-qemu.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/phy/dp83822.c:1029:39: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
+    1029 |         if (index == DP83822_LED_INDEX_LED_0 || DP83822_LED_INDEX_COL_GPIO2) {
+         |                                              ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/dp83822.c:1029:39: note: use '|' for a bitwise operation
+    1029 |         if (index == DP83822_LED_INDEX_LED_0 || DP83822_LED_INDEX_COL_GPIO2) {
+         |                                              ^~
+         |                                              |
+   5 warnings generated.
+
+
+vim +1029 drivers/net/phy/dp83822.c
+
+  1023	
+  1024	static int dp83822_led_hw_control_get(struct phy_device *phydev, u8 index,
+  1025					      unsigned long *rules)
+  1026	{
+  1027		int val;
+  1028	
+> 1029		if (index == DP83822_LED_INDEX_LED_0 || DP83822_LED_INDEX_COL_GPIO2) {
+  1030			val = phy_read_mmd(phydev, MDIO_MMD_VEND2, MII_DP83822_MLEDCR);
+  1031			if (val < 0)
+  1032				return val;
+  1033	
+  1034			val = FIELD_GET(DP83822_MLEDCR_CFG, val);
+  1035		} else {
+  1036			val = phy_read_mmd(phydev, MDIO_MMD_VEND2, MII_DP83822_LEDCFG1);
+  1037			if (val < 0)
+  1038				return val;
+  1039	
+  1040			if (index == DP83822_LED_INDEX_LED_1_GPIO1)
+  1041				val = FIELD_GET(DP83822_LEDCFG1_LED1_CTRL, val);
+  1042			else
+  1043				val = FIELD_GET(DP83822_LEDCFG1_LED3_CTRL, val);
+  1044		}
+  1045	
+  1046		switch (val) {
+  1047		case DP83822_LED_FN_LINK:
+  1048			*rules = BIT(TRIGGER_NETDEV_LINK);
+  1049			break;
+  1050		case DP83822_LED_FN_LINK_10_BT:
+  1051			*rules = BIT(TRIGGER_NETDEV_LINK_10);
+  1052			break;
+  1053		case DP83822_LED_FN_LINK_100_BTX:
+  1054			*rules = BIT(TRIGGER_NETDEV_LINK_100);
+  1055			break;
+  1056		case DP83822_LED_FN_FULL_DUPLEX:
+  1057			*rules = BIT(TRIGGER_NETDEV_FULL_DUPLEX);
+  1058			break;
+  1059		case DP83822_LED_FN_TX:
+  1060			*rules = BIT(TRIGGER_NETDEV_TX);
+  1061			break;
+  1062		case DP83822_LED_FN_RX:
+  1063			*rules = BIT(TRIGGER_NETDEV_RX);
+  1064			break;
+  1065		case DP83822_LED_FN_RX_TX:
+  1066			*rules = BIT(TRIGGER_NETDEV_TX) | BIT(TRIGGER_NETDEV_RX);
+  1067			break;
+  1068		case DP83822_LED_FN_RX_TX_ERR:
+  1069			*rules = BIT(TRIGGER_NETDEV_TX_ERR) | BIT(TRIGGER_NETDEV_RX_ERR);
+  1070			break;
+  1071		case DP83822_LED_FN_LINK_RX_TX:
+  1072			*rules = BIT(TRIGGER_NETDEV_LINK) | BIT(TRIGGER_NETDEV_TX) |
+  1073				 BIT(TRIGGER_NETDEV_RX);
+  1074			break;
+  1075		default:
+  1076			*rules = 0;
+  1077			break;
+  1078		}
+  1079	
+  1080		return 0;
+  1081	}
+  1082	
 
 -- 
 0-DAY CI Kernel Test Service
