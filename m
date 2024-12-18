@@ -1,67 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C0715C15C;
-	Wed, 18 Dec 2024 08:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E756917DFE3;
+	Wed, 18 Dec 2024 09:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734510808; cv=none; b=goRWxf9Nr7BQKEYz3OfO1Qtsk+u75Je8kFZxcahglyhgzaZ0rKISVtlDy1ZvFgzveXv1xmcp25AeBLhDusyM11VttUEUd0KyZkb4ssf56/+1WZ6OsQ6XLGP6dQvlkeruM9mo8BI10mDnztf/vCcsefVmbNPC05IiDdF9iWSrbEU=
+	t=1734515315; cv=none; b=LSFc9skMOf65PPhUO+4gzaAl16KG0f+FsDVrxVyfEZ1vvzoO1SwCnKy0A2gzSecocJtqXNPuynfOZsmKj9Jpkd/J+auvCcPYTco+v+V+YPUEiP8F0QpS+syFfdVawTY6kCf4A14Qng0itEG+5J9ZFr+3wF8OItTEDAAlG5hGhp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734510808; c=relaxed/simple;
-	bh=awQyJfyXWCoQxbbBwzUfL+n7Fr+Crs0prjb5pWJy2KE=;
+	s=arc-20240116; t=1734515315; c=relaxed/simple;
+	bh=t3VDoLQH/nwImVNxx8yKcxlYXpnZ/nRYCUG06H65KfI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xc9iw3ZsFW53j6mHlYtvonO03HZx7b0NzMFh7n698pwKjN0dZM8Am5CC2E9IUkCiuFYjVXbUtn8j2ApGqMexGHU3QS1/fDqu2RCSWgHatOhzn09sb7YrzPJyC0TMw9i0J1DSrhECbHiy8SZuXbduDCLmU7T9TG1K0TWks5/cxaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fV2Jtolu; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nL6yySAE8MZ8M+7L5ZnfyRynjhpNbcLlFcakku2dmtHyXNrO5JRMq2R8Fk/GLDl/UC2Y/cr0JFnzeCw/XXqH/7UmC+lI3cTqQzQhQucIjbAUeAU113crwpYzOwhDjn/oUTF2oy1l+UxDpnHw7O4ZyDzpga+E+oHYnfYmNKGIM44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K/DE74tS; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fV2Jtolu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K/DE74tS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734510807; x=1766046807;
+  t=1734515313; x=1766051313;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=awQyJfyXWCoQxbbBwzUfL+n7Fr+Crs0prjb5pWJy2KE=;
-  b=fV2JtoluLweTblVE00eUlV++AXnIVHKqahNwfWDU3g8778/iQM8WhInz
-   3uNKSQXbKPFOi+oU5ONLleeDx4cGwzLKIBRmvzYd2hXOXH5g/MK6G2zMK
-   9hB2EhcTeVo0JY+1DfyYo2nxmpzVaf9xtTkjiHVhUCGo5DqvsNG8qgBW1
-   gbErGEsZ7MlTc8H3Te1jzP3PlZpszWUSFkcIuswMtA7OeQ14ZFtp9hTEk
-   EHYsYRxUxajzMFR2w91sOLBGgubOm6Fcb6T/QZR8AgyMr8ry157CxJkmZ
-   GL3hd7WRUkRzIo0b3kG4rVSP3jw9PIoaIcn8w6gBfHYRUDaeTLacTMf3q
-   Q==;
-X-CSE-ConnectionGUID: E7l8u22DQv+UfPMNoqFi5w==
-X-CSE-MsgGUID: sNn2jL2+TeGvN/5IW/9Gtg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11289"; a="45669660"
+  bh=t3VDoLQH/nwImVNxx8yKcxlYXpnZ/nRYCUG06H65KfI=;
+  b=K/DE74tS6ebmT/xmOvfVRgAmZWQWnHJv2Hlxki0/7d+N3znUm+8PlnwR
+   tGp/I7VdOP4RAkdApXFgMOqYCXwv6tqHjZdDdLX5Q3jTMQlDwpIwAerlf
+   /KrxsxpgRKT9ysCfQgGcH0R9k/J1K3V6JlVyzQAL1/1WdFAqSNqeGmRO3
+   jdoVKAX4WwE28fxIYOxWSkZ+6BBUClb2Eps5iSFzOzzsEluq262SFrJMa
+   rNbeS8Lvzox+KBottWDQKyvn7/1AAtxnmkbiTpiLo598FHg09j+qpWatj
+   MJDOEc1l/kjA+gETIrMtVwVQphV6AyFo08T8QgAO2Fbhe/pPkJgdhStfA
+   w==;
+X-CSE-ConnectionGUID: ZokoNeLhReS5uOJPGcglhg==
+X-CSE-MsgGUID: H+ZPi+6rSFiOhgwrin05kA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11289"; a="46394607"
 X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
-   d="scan'208";a="45669660"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 00:33:26 -0800
-X-CSE-ConnectionGUID: gktdEMQcS+erluuaSTQWpA==
-X-CSE-MsgGUID: /2v9EbPfRvmQX0pUpgabuQ==
+   d="scan'208";a="46394607"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 01:48:32 -0800
+X-CSE-ConnectionGUID: PY7e+UdRSBOMlt4wrmcCrg==
+X-CSE-MsgGUID: 9PdEsYeDQlqeOM4IX1V0zg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
-   d="scan'208";a="97854971"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 18 Dec 2024 00:33:23 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tNpUf-000GCc-09;
-	Wed, 18 Dec 2024 08:33:21 +0000
-Date: Wed, 18 Dec 2024 16:32:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dimitri Fedrau <dima.fedrau@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dimitri Fedrau <dima.fedrau@gmail.com>
-Subject: Re: [PATCH net-next] net: phy: dp83822: Add support for PHY LEDs on
- DP83822
-Message-ID: <202412181638.7XsHSwtp-lkp@intel.com>
-References: <20241217-dp83822-leds-v1-1-800b24461013@gmail.com>
+   d="scan'208";a="97667605"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa007.fm.intel.com with SMTP; 18 Dec 2024 01:48:27 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Dec 2024 11:48:26 +0200
+Date: Wed, 18 Dec 2024 11:48:26 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev, akuchynski@google.com,
+	sboyd@kernel.org, pmalani@chromium.org, badhri@google.com,
+	rdbabiera@google.com, dmitry.baryshkov@linaro.org,
+	jthies@google.com, Bill Wendling <morbo@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 4/8] usb: typec: Print err when displayport fails to
+ enter
+Message-ID: <Z2KaajPTXyndS34i@kuha.fi.intel.com>
+References: <20241213233552.451927-1-abhishekpandit@chromium.org>
+ <20241213153543.v5.4.I6cff9d767b0f8ab6458d8940941e42c920902d49@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,129 +70,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241217-dp83822-leds-v1-1-800b24461013@gmail.com>
+In-Reply-To: <20241213153543.v5.4.I6cff9d767b0f8ab6458d8940941e42c920902d49@changeid>
 
-Hi Dimitri,
+On Fri, Dec 13, 2024 at 03:35:45PM -0800, Abhishek Pandit-Subedi wrote:
+> Print the error reason for typec_altmode_enter so users can understand
+> why displayport failed to enter.
+> 
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[auto build test WARNING on a14a429069bb1a18eb9fe63d68fcaa77dffe0e23]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dimitri-Fedrau/net-phy-dp83822-Add-support-for-PHY-LEDs-on-DP83822/20241217-172305
-base:   a14a429069bb1a18eb9fe63d68fcaa77dffe0e23
-patch link:    https://lore.kernel.org/r/20241217-dp83822-leds-v1-1-800b24461013%40gmail.com
-patch subject: [PATCH net-next] net: phy: dp83822: Add support for PHY LEDs on DP83822
-config: x86_64-buildonly-randconfig-002-20241218 (https://download.01.org/0day-ci/archive/20241218/202412181638.7XsHSwtp-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241218/202412181638.7XsHSwtp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412181638.7XsHSwtp-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/phy/dp83822.c:7:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/phy/dp83822.c:1029:39: warning: use of logical '||' with constant operand [-Wconstant-logical-operand]
-    1029 |         if (index == DP83822_LED_INDEX_LED_0 || DP83822_LED_INDEX_COL_GPIO2) {
-         |                                              ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/dp83822.c:1029:39: note: use '|' for a bitwise operation
-    1029 |         if (index == DP83822_LED_INDEX_LED_0 || DP83822_LED_INDEX_COL_GPIO2) {
-         |                                              ^~
-         |                                              |
-   5 warnings generated.
-
-
-vim +1029 drivers/net/phy/dp83822.c
-
-  1023	
-  1024	static int dp83822_led_hw_control_get(struct phy_device *phydev, u8 index,
-  1025					      unsigned long *rules)
-  1026	{
-  1027		int val;
-  1028	
-> 1029		if (index == DP83822_LED_INDEX_LED_0 || DP83822_LED_INDEX_COL_GPIO2) {
-  1030			val = phy_read_mmd(phydev, MDIO_MMD_VEND2, MII_DP83822_MLEDCR);
-  1031			if (val < 0)
-  1032				return val;
-  1033	
-  1034			val = FIELD_GET(DP83822_MLEDCR_CFG, val);
-  1035		} else {
-  1036			val = phy_read_mmd(phydev, MDIO_MMD_VEND2, MII_DP83822_LEDCFG1);
-  1037			if (val < 0)
-  1038				return val;
-  1039	
-  1040			if (index == DP83822_LED_INDEX_LED_1_GPIO1)
-  1041				val = FIELD_GET(DP83822_LEDCFG1_LED1_CTRL, val);
-  1042			else
-  1043				val = FIELD_GET(DP83822_LEDCFG1_LED3_CTRL, val);
-  1044		}
-  1045	
-  1046		switch (val) {
-  1047		case DP83822_LED_FN_LINK:
-  1048			*rules = BIT(TRIGGER_NETDEV_LINK);
-  1049			break;
-  1050		case DP83822_LED_FN_LINK_10_BT:
-  1051			*rules = BIT(TRIGGER_NETDEV_LINK_10);
-  1052			break;
-  1053		case DP83822_LED_FN_LINK_100_BTX:
-  1054			*rules = BIT(TRIGGER_NETDEV_LINK_100);
-  1055			break;
-  1056		case DP83822_LED_FN_FULL_DUPLEX:
-  1057			*rules = BIT(TRIGGER_NETDEV_FULL_DUPLEX);
-  1058			break;
-  1059		case DP83822_LED_FN_TX:
-  1060			*rules = BIT(TRIGGER_NETDEV_TX);
-  1061			break;
-  1062		case DP83822_LED_FN_RX:
-  1063			*rules = BIT(TRIGGER_NETDEV_RX);
-  1064			break;
-  1065		case DP83822_LED_FN_RX_TX:
-  1066			*rules = BIT(TRIGGER_NETDEV_TX) | BIT(TRIGGER_NETDEV_RX);
-  1067			break;
-  1068		case DP83822_LED_FN_RX_TX_ERR:
-  1069			*rules = BIT(TRIGGER_NETDEV_TX_ERR) | BIT(TRIGGER_NETDEV_RX_ERR);
-  1070			break;
-  1071		case DP83822_LED_FN_LINK_RX_TX:
-  1072			*rules = BIT(TRIGGER_NETDEV_LINK) | BIT(TRIGGER_NETDEV_TX) |
-  1073				 BIT(TRIGGER_NETDEV_RX);
-  1074			break;
-  1075		default:
-  1076			*rules = 0;
-  1077			break;
-  1078		}
-  1079	
-  1080		return 0;
-  1081	}
-  1082	
+> ---
+> 
+> Changes in v5:
+> - Put dev_err on single line.
+> - Slip clang-format a washington to look the other way.
+> 
+>  drivers/usb/typec/altmodes/displayport.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 3245e03d59e6..ac84a6d64c2f 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -252,7 +252,7 @@ static void dp_altmode_work(struct work_struct *work)
+>  	case DP_STATE_ENTER:
+>  		ret = typec_altmode_enter(dp->alt, NULL);
+>  		if (ret && ret != -EBUSY)
+> -			dev_err(&dp->alt->dev, "failed to enter mode\n");
+> +			dev_err(&dp->alt->dev, "failed to enter mode: %d\n", ret);
+>  		break;
+>  	case DP_STATE_ENTER_PRIME:
+>  		ret = typec_cable_altmode_enter(dp->alt, TYPEC_PLUG_SOP_P, NULL);
+> -- 
+> 2.47.1.613.gc27f4b7a9f-goog
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+heikki
