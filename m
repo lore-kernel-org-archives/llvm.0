@@ -1,143 +1,145 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A4378F55
-	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 04:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A954A78F4A;
+	Thu, 19 Dec 2024 04:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734581106; cv=none; b=hrjxuOVuwBCvLrzmSkQRdZIpyRij9E3c0YYYhlYZu/OkmOkE/silchk6Rm7HWIa+MO2y6LbcQFd+OeUtLdZ53qOA7/sifNUJE4Twn5YTWOCu0zkTQaGhIf7MkfXa7XJif4YQUYsZayGH6Pa86R/TAiIYWbcmylwfIkZ01BZfVY8=
+	t=1734583953; cv=none; b=rYiJFyI/j4UhVjqX3QUCmS4PidrD/EdzrSrFZo510CUtIc3G9KiPaWDJ10+vpaa+QFNTJ0TNXSa6MvmWpZKTh7yso4xGG6q7XJUaRUNOMUbWxL0v5ugOuFURK8BUllLq11bRDMdNmnQecvq6dAUDCtAncfI3aO8JODc51zYmy98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734581106; c=relaxed/simple;
-	bh=1g+eeXt6ljttSRBQ/TtKmda5V7vVXYPf7dt8NRAX5B0=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=aU/OZr5taQe3NdGZOye0souIJVNI/WsTD+KAiBesw+pUJjoDKxbu+6+3jDHzEukv2ejDAQnMj4oICFrNo0xoHPSGXlNqJiTQVUKvHpGCyj2tQQyWzjZ6GemP/Z2cgtgqZtdOSoXGIzuj4or5QtiwVepg92QQtMqpNc042Z8itsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ThvRp7P0; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1734583953; c=relaxed/simple;
+	bh=D9NDKzSqRkZ3wm9SEkwgjWnHhlIt+tQ39h55cIrZBM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aaoMGsUaYqTrYlKiNe0Jn4rhIBJWFSBvRQCtkBM6nDJuuq6OlwguuHo1HsYn6Z500aBTbjjHCsl9r8hwsYi4F4cq3MqL+JA5HFMZA/EUr1IDH1D/YXCyK86YrrWx3ZUtbzNpWX3dPFH1IZwHg3j6DuGODlLF+ZtC5KYawq+AGsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F6XwX07s; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ThvRp7P0"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aabbb507998so60258266b.2
-        for <llvm@lists.linux.dev>; Wed, 18 Dec 2024 20:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734581103; x=1735185903; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4NuEgkUXP57Xv8pN1PK8eLD8VkAGcA/jKz29Cr1hie4=;
-        b=ThvRp7P0aiEMLBcHlOGU+mvZG7GP4Dex2gJSKwTLOtsFovsByVcBBuSdZNjV/BiTsJ
-         Ju6zSM3SXJhpeVi6xl60fDUbgMat7ZzjI/u1oyb5GsUkWcDjeZlLAcEscpVXw4kLBQe+
-         SnPZPVmcDO/vaXxku/Sabiiri2pQvR7RVRYVmEwBsUQOy7zDBZq2+1JHqQwc8kuXQtNZ
-         WDFUst8bEfMbi54VVTwa7YSkV/I7fW1CDNvwGB0OljEU1AcYeG5HU00EecDmsuzIfR1O
-         lmLtWrgpD0NaWZQCcLNrYNifM37nGWpUIUfTGjslf6Y2ydTTUe1h51qLlAFqLsDI87/s
-         KBaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734581103; x=1735185903;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4NuEgkUXP57Xv8pN1PK8eLD8VkAGcA/jKz29Cr1hie4=;
-        b=RksUbguYshno+5m0fvXlAnxFgQrAjqJKCIq2ghNyQNpPNJBi3RX7QhrsOc9HsDScl/
-         akWIFP5HM81M44ZUr0069aLp2XyU3eU41ICx1rHWMxdWFDoJU886cUalB7zKxCwwiEXl
-         eEh7Yl8vQv6um1Jr0Ul43BaGcBH/Ml8oDvNjhAgAWaCVC1S6mhIpEzgC0OqNqyi77PDR
-         eUAVIaMVp1BZLuCiygitE8E6paSscS0uNd6NnemDj0KKCZrKX9mLzeaSPw38YYf6IeAR
-         t/1QlHGTGdVdwa0csf8mdKb33guiQinsXbjbcYq7dI16lTLaAVRQWT08YDL3pVuTz0im
-         IkBg==
-X-Gm-Message-State: AOJu0YwJWSuliXv6dMnVxQkhWx1SLWQ/1Nzdat3Q++UTaRanYJi8qIPL
-	HYlrwr/RF32A+HJ+AY2egISOZNQbeCmXEF0QBX1khVhZpuIX3GLeTGVU3+hgZwqLkjBB9Btn+Mf
-	C
-X-Gm-Gg: ASbGncspu+X/Gm77wJ4sinYy3gk2pr+xwd6sTPFtSTS6I071t10e9q1dTJ3eXUGEAIw
-	TV+priMhmxMxFMg1STeK0QZ/JsrSK51FTtN9+Qa4mUYJLaXzn/s9IS5FhcJQ3H85/We9iU5F75b
-	dT+uPbXyMkKUl7OdSOtAOYakdPclKB+xwNNtXlTRIpIMHfGRGvYdUcmOd1MVxZlF/8uIU8/mEkC
-	P8iqZZt7vhYx2Pc7q7g0XUo2lvgxcSNq7HoKnE3R3KDt+j8GJgpljFqFNckQJoCw6Q82zRdAauA
-	gjdoX5XoYbYLq2Iidj+mcCRkl9Mp
-X-Google-Smtp-Source: AGHT+IHWUqEzRaa95Rn3RbpzYk0G9K9TgjkIIJaeNrZVFUOAeoGQB4m0HT5IPl5dfU5kwZwI7C683w==
-X-Received: by 2002:a17:906:1346:b0:aa6:7588:cbeb with SMTP id a640c23a62f3a-aabf470b70cmr451390866b.11.1734581103004;
-        Wed, 18 Dec 2024 20:05:03 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e89887csm18975966b.80.2024.12.18.20.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 20:05:02 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Thu, 19 Dec 2024 04:05:00 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <289107071.93101.1734581102392@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.13-rc2-20-gce8fd0500b741: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F6XwX07s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734583951; x=1766119951;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D9NDKzSqRkZ3wm9SEkwgjWnHhlIt+tQ39h55cIrZBM8=;
+  b=F6XwX07s1AUHyTKsy4E6Z2lPNmHlyCGNKONyVBc4+mxvJKAY7WcWxs7d
+   9bXsK4bhjLoTNEMnj99x1OvXjQXcugrrO7qOQYThI0+aazx9/zJHbyJaR
+   5jg56yFQFA6Wv89wnaM5bDh1cEOHt5ZEK2d9f1uQ+09SIihYD2J2CAGzl
+   OoJ7y3Yf0UHrIBk1Q9td/gjee1QQUcsL1+LbX/hYjzCUmrf3N9/hM9VLt
+   6+p41hrTqb7TKJga1tVvtuWK5zra7zCfhc6zQBCW6fRYup9d+MvqvOntL
+   WcbgOZbI6xPQfxnkZjTpH1KDb3rcBkwbstxIH+a1/jQrfAO7BKsUji8ux
+   Q==;
+X-CSE-ConnectionGUID: EppA7je0QgiXeqYNQHjqlw==
+X-CSE-MsgGUID: PyxkiGjsS+C2A0cVWV/new==
+X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="57558132"
+X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
+   d="scan'208";a="57558132"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 20:52:30 -0800
+X-CSE-ConnectionGUID: ZJSFssVoQVCIoQmhA/ZL3w==
+X-CSE-MsgGUID: jhNVMjajSO+QoKD8nU3wdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
+   d="scan'208";a="98137320"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 18 Dec 2024 20:52:29 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tO8WQ-00003D-2j;
+	Thu, 19 Dec 2024 04:52:26 +0000
+Date: Thu, 19 Dec 2024 12:51:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: SeongJae Park <sj@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sj:damon/next 52/79] mm/damon/sysfs-schemes.c:2129: warning:
+ Function parameter or struct member 'sz_filter_passed' not described in
+ 'damos_sysfs_populate_region_dir'
+Message-ID: <202412191225.f6bEMRT2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_93100_1547369066.1734581100516"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-defconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_93100_1547369066.1734581100516
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+head:   acaaeb549248b361cb0586af34b317d05a61512b
+commit: d92ceeda1fde0fd17da7d3dfe5d51e6684e20c6c [52/79] mm/damon/sysfs-schemes: expose per-region filter-passed bytes
+config: arm-randconfig-001-20241219 (https://download.01.org/0day-ci/archive/20241219/202412191225.f6bEMRT2-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241219/202412191225.f6bEMRT2-lkp@intel.com/reproduce)
 
-Dear contributor,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412191225.f6bEMRT2-lkp@intel.com/
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+All warnings (new ones prefixed by >>):
 
-In tcwg_kernel/llvm-master-aarch64-next-defconfig, after:
-  | commit v6.13-rc2-20-gce8fd0500b741
-  | Author: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-  | Date:   Tue Dec 3 10:19:35 2024 +0100
-  | 
-  |     crypto: qce - use __free() for a buffer that's always freed
-  |     
-  |     The buffer allocated in qce_ahash_hmac_setkey is always freed before
-  |     returning to use __free() to automate it.
-  |     
-  | ... 3 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 8791
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 10114
-  | # linux build successful:
-  | all
-  | # linux boot successful:
-  | boot
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-defconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1485. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+>> mm/damon/sysfs-schemes.c:2129: warning: Function parameter or struct member 'sz_filter_passed' not described in 'damos_sysfs_populate_region_dir'
 
 
+vim +2129 mm/damon/sysfs-schemes.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-defconfig-build/205/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-defconfig-build/204/artifact/artifacts
+f1d13cacabe140 SeongJae Park 2022-11-01  2113  
+aa2ebc50289e65 SeongJae Park 2024-12-01  2114  /**
+aa2ebc50289e65 SeongJae Park 2024-12-01  2115   * damos_sysfs_populate_region_dir() - Populate a schemes tried region dir.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2116   * @sysfs_schemes:	Schemes directory to populate regions directory.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2117   * @ctx:		Corresponding DAMON context.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2118   * @t:			DAMON target of @r.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2119   * @r:			DAMON region to populate the directory for.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2120   * @s:			Corresponding scheme.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2121   * @total_bytes_only:	Whether the request is for bytes update only.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2122   *
+aa2ebc50289e65 SeongJae Park 2024-12-01  2123   * Called from DAMOS walk callback while holding damon_sysfs_lock.
+aa2ebc50289e65 SeongJae Park 2024-12-01  2124   */
+aa2ebc50289e65 SeongJae Park 2024-12-01  2125  void damos_sysfs_populate_region_dir(struct damon_sysfs_schemes *sysfs_schemes,
+aa2ebc50289e65 SeongJae Park 2024-12-01  2126  		struct damon_ctx *ctx, struct damon_target *t,
+d92ceeda1fde0f SeongJae Park 2024-12-16  2127  		struct damon_region *r, struct damos *s, bool total_bytes_only,
+d92ceeda1fde0f SeongJae Park 2024-12-16  2128  		unsigned long sz_filter_passed)
+aa2ebc50289e65 SeongJae Park 2024-12-01 @2129  {
+aa2ebc50289e65 SeongJae Park 2024-12-01  2130  	struct damos *scheme;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2131  	struct damon_sysfs_scheme_regions *sysfs_regions;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2132  	struct damon_sysfs_scheme_region *region;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2133  	int schemes_idx = 0;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2134  
+aa2ebc50289e65 SeongJae Park 2024-12-01  2135  	damon_for_each_scheme(scheme, ctx) {
+aa2ebc50289e65 SeongJae Park 2024-12-01  2136  		if (scheme == s)
+aa2ebc50289e65 SeongJae Park 2024-12-01  2137  			break;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2138  		schemes_idx++;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2139  	}
+aa2ebc50289e65 SeongJae Park 2024-12-01  2140  
+aa2ebc50289e65 SeongJae Park 2024-12-01  2141  	/* user could have removed the scheme sysfs dir */
+aa2ebc50289e65 SeongJae Park 2024-12-01  2142  	if (schemes_idx >= sysfs_schemes->nr)
+aa2ebc50289e65 SeongJae Park 2024-12-01  2143  		return;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2144  
+aa2ebc50289e65 SeongJae Park 2024-12-01  2145  	sysfs_regions = sysfs_schemes->schemes_arr[schemes_idx]->tried_regions;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2146  	sysfs_regions->total_bytes += r->ar.end - r->ar.start;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2147  	if (total_bytes_only)
+aa2ebc50289e65 SeongJae Park 2024-12-01  2148  		return;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2149  
+aa2ebc50289e65 SeongJae Park 2024-12-01  2150  	region = damon_sysfs_scheme_region_alloc(r);
+aa2ebc50289e65 SeongJae Park 2024-12-01  2151  	if (!region)
+aa2ebc50289e65 SeongJae Park 2024-12-01  2152  		return;
+d92ceeda1fde0f SeongJae Park 2024-12-16  2153  	region->sz_filter_passed = sz_filter_passed;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2154  	list_add_tail(&region->list, &sysfs_regions->regions_list);
+aa2ebc50289e65 SeongJae Park 2024-12-01  2155  	sysfs_regions->nr_regions++;
+aa2ebc50289e65 SeongJae Park 2024-12-01  2156  	if (kobject_init_and_add(&region->kobj,
+aa2ebc50289e65 SeongJae Park 2024-12-01  2157  				&damon_sysfs_scheme_region_ktype,
+aa2ebc50289e65 SeongJae Park 2024-12-01  2158  				&sysfs_regions->kobj, "%d",
+aa2ebc50289e65 SeongJae Park 2024-12-01  2159  				sysfs_regions->nr_regions++)) {
+aa2ebc50289e65 SeongJae Park 2024-12-01  2160  		kobject_put(&region->kobj);
+aa2ebc50289e65 SeongJae Park 2024-12-01  2161  	}
+aa2ebc50289e65 SeongJae Park 2024-12-01  2162  }
+aa2ebc50289e65 SeongJae Park 2024-12-01  2163  
 
-Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/ce8fd0500b741b3669c246cc604f1f2343cdd6fd/tcwg_kernel/llvm-master-aarch64-next-defconfig/reproduction_instructions.txt
+:::::: The code at line 2129 was first introduced by commit
+:::::: aa2ebc50289e6594cd72ec76b13f108d2cc33bed mm/damon/sysfs: use damos_walk() for update_schemes_tried_{bytes,regions}
 
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/ce8fd0500b741b3669c246cc604f1f2343cdd6fd
-------=_Part_93100_1547369066.1734581100516--
+:::::: TO: SeongJae Park <sj@kernel.org>
+:::::: CC: SeongJae Park <sj@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
