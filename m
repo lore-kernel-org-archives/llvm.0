@@ -1,231 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9291BDC3;
-	Wed, 18 Dec 2024 23:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073A13594B
+	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 01:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734564224; cv=none; b=kE2gGhjdv9/QI53umxbRBGTAwENkMVlPkltr9iPPmJE1BQHYsqkTDvtEyoPPRoWrBJzjuc8QLV50Pj1fcTsV4zEY/hvu7i7R3LGM16baA0AavVFc7cvmKZkt7gEGGWeDXs/qnSWcFFoNK6STVbWAOcgnUr3j/A0VVBliXBZGzAQ=
+	t=1734571557; cv=none; b=FjPb5MRZm0LrPonXFwDyalqHE2bvrdw4yJjrYRWZXDcGRRaW4BGAIvQPf1PoFTX0OWQjrPTQtYs/itWdpae5k+K91LLuCAZkEt8g79ubQkqn1GfSkiEkNSv8sh3KWAoHoHVYhykLFkhn1sR7IYTRDBOk/+GFUXgGpyV57t/EGQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734564224; c=relaxed/simple;
-	bh=qIRpEqM2whIgS+t+pxzqW0QabjeDe+qjaYmNNmfBzUA=;
+	s=arc-20240116; t=1734571557; c=relaxed/simple;
+	bh=2Dsf61/7CTSu04vldpJc6g9vN2n4R3Sf+/+qxTD4tfc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXRSUIkDMxgaFZ1MKJJM63Uo9R/lhby61GBB1kjwOXjgV+5HflgDIC1Vwpqh/GlqadnRXwB+2Uim4vQ/pw50vwpvA+ohmozas1dd+9eqLTyFIl1eYqM//2Q4C0b+QFhAXuwJqL2dshfQtocTVuLeejZGBFvuWo4IDtDoVMSzovc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TUY6ukcq; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=AynkaUNjvQH2Hu7Rfx98XyQxiUSGdmEctRfqFwe4/cd/VMgb44APVqN2rWhgWC5syFactksBiTC+CXZYaVKUkbe3pcCS8+p75HzcL85pgofI3ph6ufrKrN4GU7xBrDpamxe78VReN/ibUeJEPkAYKTM0kTlLWrAzHVqs6AV2PCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z0dP+5d3; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TUY6ukcq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734564222; x=1766100222;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qIRpEqM2whIgS+t+pxzqW0QabjeDe+qjaYmNNmfBzUA=;
-  b=TUY6ukcqVoBw9NTPegW2WRmeELDNH4KQAFmFEpR7Q6tjAP0staZITwjD
-   lSD8T/nwNui5bURLmMdU9nWnmtiaKfmuMZHWTQ9wI4NDMrOc14wqVg+qN
-   kaiZv2PzfxuXeagLx7bJKP3Jsker2H7vOGkRjTLbcmoKFVcgJviHbg3R8
-   OEhPKPDaBrbov93d01cGztE7MTB1aVdAwg65u5T7fgmyGWML/MArRCMEl
-   3z9ReOOfuogZ+LohSIRCv2p52SoF2Ei5u3d8AVXwwPuatBKfcJJfSmikI
-   tZTQ0kagxIYiDLASjJU3qM0h1ct0e2TCbLqwLre5vLfB8nU/ppFnICUU+
-   A==;
-X-CSE-ConnectionGUID: aQaHec0jTviPc5TgzE92Hw==
-X-CSE-MsgGUID: nSzRrLAoQd2NA28YVxCKQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="46070146"
-X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
-   d="scan'208";a="46070146"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 15:23:41 -0800
-X-CSE-ConnectionGUID: Set8+qouRRyNwdBWCJd6Xw==
-X-CSE-MsgGUID: 8cn4UoAHT3SdVWTtlbRu7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
-   d="scan'208";a="97902516"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 18 Dec 2024 15:23:37 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tO3OA-000GhW-1r;
-	Wed, 18 Dec 2024 23:23:34 +0000
-Date: Thu, 19 Dec 2024 07:23:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mingwei Zhang <mizhang@google.com>,
-	Colton Lewis <coltonlewis@google.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: [PATCH 09/18] KVM: arm64: Drop kvm_arm_pmu_available static key
-Message-ID: <202412190743.1bLEb7Ps-lkp@intel.com>
-References: <20241217212048.3709204-10-oliver.upton@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z0dP+5d3"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-725dc290c00so1159897b3a.0
+        for <llvm@lists.linux.dev>; Wed, 18 Dec 2024 17:25:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1734571555; x=1735176355; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ifr3ayHIXYnUY/bBziOfNp0H3xeqKGEAJL0/80vlIrs=;
+        b=z0dP+5d3NJqqFQrpFSYLpKjJsmbXe8spKYgUzcFjk3nhwYy6esSmGja/GNghdvzDzY
+         jOniC+i1lAZGgn+gKlDf8Tlq9Nc/vs7hIxBKm5RRn6Zrzz3yAp0EM3kEpi0SNAczqQb0
+         wocpg05d3MQlq3RlEXPlI30bmXTJSDeMvqxzIz5P7o2Yg1VnNSqpPPgvj3y8aIJmqPOI
+         BD+6b7REIlw/vvvjCzueTX9wJC0yxwLm4v3HPt3kyRbzjYvKUpEWvMTCNvxAFQnhQKvX
+         X/unAJDIr5Pto9vw7QRpYqJIzOgRP40LJC0uEZZqyvLAf4fY+X4jqxsluMdU/DNHKLKn
+         20nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734571555; x=1735176355;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ifr3ayHIXYnUY/bBziOfNp0H3xeqKGEAJL0/80vlIrs=;
+        b=RKTDGtyfcTdWARPuB/8YXoF/8ls0+YmgB0/gtu1FKAb8ADuPRwuBukoSX7+ONQ7afl
+         llK/Enx0EJo8skgWnOw2xmneOwNotyQAnjx35n6xRJb+C3cMUOQSvbuypP2xSzQ4CTsK
+         zlY9axtP6R2Zq3KUfyYYkySSE/hCnFLUx0srpZBNmggCC6wLyXey52vuIPJx4hpAJaFe
+         32ZW81GGuUt1ITwtafxMN4Kxytb0bcry9eND17v402AmzA55Z5rTSSAtHcL3AjULF/yq
+         5LTOO3sfGhuJoIa0bCaifErFx71Yd+K2vFkuB12Mcc2oW0OYWhV62CfjW2c1UknmViNp
+         3qfA==
+X-Forwarded-Encrypted: i=1; AJvYcCU1UfexR8NABiPP6b/G0eeE1egdFZEAvQ4pvHyveYWVyCunY0/k5S6JHqeBXAyVu+t3kFlx@lists.linux.dev
+X-Gm-Message-State: AOJu0YzC3+7ZjmdWmOwAlCVI3v1kIUmbKy7KudUgsGoCtJoiiR7DIHSb
+	/TCTJj5O1jeg+Q/Sr7uHOOU5cwDFYO8sM17BFncgmyU1mbWQ6tyOzTs+rOhujQ==
+X-Gm-Gg: ASbGncu8IJZZeCcutxOkx3l6i9Ie8qCTNvzsBfNyjraCpUVZooa8XbDrvzbHte60NXF
+	PL8ehKScp5r6IIaImYMzGd+aTa9ihRqhmvVO0jr5v0unv/sbHc4snEZPYaQFARKXkGB14K1sIPw
+	HTNHCg5AbLSN8rcUb86rYV60b7vfilPHBdkAvUo+WGIFWG5E1KJc+Kr6YxMNKNi1mfUe9bCm3tK
+	c+ONPctaiau3HbZ20trb1cduxC1Vvv7DaiEeN8aMFYe36kkshmgc/Lg8X3mn0HKIucMfBqUmTta
+	pGQ4DrQo4afNjNV3
+X-Google-Smtp-Source: AGHT+IHaUtXpvS/Hr2aDFT2gXzn/HZ2P+Vpy2i8XwtK/2MHIKvZk286tXxhVBHLLpf4XBoweUFYGfA==
+X-Received: by 2002:a05:6a21:3997:b0:1d9:a94:feec with SMTP id adf61e73a8af0-1e5c70190f7mr2478459637.2.1734571555057;
+        Wed, 18 Dec 2024 17:25:55 -0800 (PST)
+Received: from google.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad90c225sm111371b3a.197.2024.12.18.17.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 17:25:53 -0800 (PST)
+Date: Thu, 19 Dec 2024 01:25:49 +0000
+From: Benson Leung <bleung@google.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org,
+	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev,
+	akuchynski@google.com, sboyd@kernel.org, pmalani@chromium.org,
+	badhri@google.com, rdbabiera@google.com,
+	dmitry.baryshkov@linaro.org, jthies@google.com,
+	Bill Wendling <morbo@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 4/8] usb: typec: Print err when displayport fails to
+ enter
+Message-ID: <Z2N2HeljULoCsdAi@google.com>
+References: <20241213233552.451927-1-abhishekpandit@chromium.org>
+ <20241213153543.v5.4.I6cff9d767b0f8ab6458d8940941e42c920902d49@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="tnXtIProi7xyxxSe"
+Content-Disposition: inline
+In-Reply-To: <20241213153543.v5.4.I6cff9d767b0f8ab6458d8940941e42c920902d49@changeid>
+
+
+--tnXtIProi7xyxxSe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241217212048.3709204-10-oliver.upton@linux.dev>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Oliver,
+On Fri, Dec 13, 2024 at 03:35:45PM -0800, Abhishek Pandit-Subedi wrote:
+> Print the error reason for typec_altmode_enter so users can understand
+> why displayport failed to enter.
+>=20
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
-[auto build test ERROR on 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8]
+> ---
+>=20
+> Changes in v5:
+> - Put dev_err on single line.
+> - Slip clang-format a washington to look the other way.
+>=20
+>  drivers/usb/typec/altmodes/displayport.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec=
+/altmodes/displayport.c
+> index 3245e03d59e6..ac84a6d64c2f 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -252,7 +252,7 @@ static void dp_altmode_work(struct work_struct *work)
+>  	case DP_STATE_ENTER:
+>  		ret =3D typec_altmode_enter(dp->alt, NULL);
+>  		if (ret && ret !=3D -EBUSY)
+> -			dev_err(&dp->alt->dev, "failed to enter mode\n");
+> +			dev_err(&dp->alt->dev, "failed to enter mode: %d\n", ret);
+>  		break;
+>  	case DP_STATE_ENTER_PRIME:
+>  		ret =3D typec_cable_altmode_enter(dp->alt, TYPEC_PLUG_SOP_P, NULL);
+> --=20
+> 2.47.1.613.gc27f4b7a9f-goog
+>=20
+>=20
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Upton/drivers-perf-apple_m1-Refactor-event-select-filter-configuration/20241218-054416
-base:   78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
-patch link:    https://lore.kernel.org/r/20241217212048.3709204-10-oliver.upton%40linux.dev
-patch subject: [PATCH 09/18] KVM: arm64: Drop kvm_arm_pmu_available static key
-config: arm64-randconfig-001-20241219 (https://download.01.org/0day-ci/archive/20241219/202412190743.1bLEb7Ps-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241219/202412190743.1bLEb7Ps-lkp@intel.com/reproduce)
+--tnXtIProi7xyxxSe
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412190743.1bLEb7Ps-lkp@intel.com/
+-----BEGIN PGP SIGNATURE-----
 
-All errors (new ones prefixed by >>):
+iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ2N2HQAKCRBzbaomhzOw
+whX+AQDbKOoKjJw/ywfmFiIx+z/bwE9H8nxc+cnA77TQLewf/gD7BdIO9xpPe+WT
+6MxZLxwAWDTtUQuMW4ewsFAM/8ss4QQ=
+=LfMz
+-----END PGP SIGNATURE-----
 
->> arch/arm64/kvm/arm.c:394:7: error: call to undeclared function 'kvm_supports_guest_pmuv3'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   r = kvm_supports_guest_pmuv3();
-                       ^
-   arch/arm64/kvm/arm.c:1400:7: error: call to undeclared function 'kvm_supports_guest_pmuv3'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!kvm_supports_guest_pmuv3())
-                ^
-   2 errors generated.
-
-
-vim +/kvm_supports_guest_pmuv3 +394 arch/arm64/kvm/arm.c
-
-   309	
-   310	int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-   311	{
-   312		int r;
-   313	
-   314		if (kvm && kvm_vm_is_protected(kvm) && !pkvm_ext_allowed(kvm, ext))
-   315			return 0;
-   316	
-   317		switch (ext) {
-   318		case KVM_CAP_IRQCHIP:
-   319			r = vgic_present;
-   320			break;
-   321		case KVM_CAP_IOEVENTFD:
-   322		case KVM_CAP_USER_MEMORY:
-   323		case KVM_CAP_SYNC_MMU:
-   324		case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
-   325		case KVM_CAP_ONE_REG:
-   326		case KVM_CAP_ARM_PSCI:
-   327		case KVM_CAP_ARM_PSCI_0_2:
-   328		case KVM_CAP_READONLY_MEM:
-   329		case KVM_CAP_MP_STATE:
-   330		case KVM_CAP_IMMEDIATE_EXIT:
-   331		case KVM_CAP_VCPU_EVENTS:
-   332		case KVM_CAP_ARM_IRQ_LINE_LAYOUT_2:
-   333		case KVM_CAP_ARM_NISV_TO_USER:
-   334		case KVM_CAP_ARM_INJECT_EXT_DABT:
-   335		case KVM_CAP_SET_GUEST_DEBUG:
-   336		case KVM_CAP_VCPU_ATTRIBUTES:
-   337		case KVM_CAP_PTP_KVM:
-   338		case KVM_CAP_ARM_SYSTEM_SUSPEND:
-   339		case KVM_CAP_IRQFD_RESAMPLE:
-   340		case KVM_CAP_COUNTER_OFFSET:
-   341			r = 1;
-   342			break;
-   343		case KVM_CAP_SET_GUEST_DEBUG2:
-   344			return KVM_GUESTDBG_VALID_MASK;
-   345		case KVM_CAP_ARM_SET_DEVICE_ADDR:
-   346			r = 1;
-   347			break;
-   348		case KVM_CAP_NR_VCPUS:
-   349			/*
-   350			 * ARM64 treats KVM_CAP_NR_CPUS differently from all other
-   351			 * architectures, as it does not always bound it to
-   352			 * KVM_CAP_MAX_VCPUS. It should not matter much because
-   353			 * this is just an advisory value.
-   354			 */
-   355			r = min_t(unsigned int, num_online_cpus(),
-   356				  kvm_arm_default_max_vcpus());
-   357			break;
-   358		case KVM_CAP_MAX_VCPUS:
-   359		case KVM_CAP_MAX_VCPU_ID:
-   360			if (kvm)
-   361				r = kvm->max_vcpus;
-   362			else
-   363				r = kvm_arm_default_max_vcpus();
-   364			break;
-   365		case KVM_CAP_MSI_DEVID:
-   366			if (!kvm)
-   367				r = -EINVAL;
-   368			else
-   369				r = kvm->arch.vgic.msis_require_devid;
-   370			break;
-   371		case KVM_CAP_ARM_USER_IRQ:
-   372			/*
-   373			 * 1: EL1_VTIMER, EL1_PTIMER, and PMU.
-   374			 * (bump this number if adding more devices)
-   375			 */
-   376			r = 1;
-   377			break;
-   378		case KVM_CAP_ARM_MTE:
-   379			r = system_supports_mte();
-   380			break;
-   381		case KVM_CAP_STEAL_TIME:
-   382			r = kvm_arm_pvtime_supported();
-   383			break;
-   384		case KVM_CAP_ARM_EL1_32BIT:
-   385			r = cpus_have_final_cap(ARM64_HAS_32BIT_EL1);
-   386			break;
-   387		case KVM_CAP_GUEST_DEBUG_HW_BPS:
-   388			r = get_num_brps();
-   389			break;
-   390		case KVM_CAP_GUEST_DEBUG_HW_WPS:
-   391			r = get_num_wrps();
-   392			break;
-   393		case KVM_CAP_ARM_PMU_V3:
- > 394			r = kvm_supports_guest_pmuv3();
-   395			break;
-   396		case KVM_CAP_ARM_INJECT_SERROR_ESR:
-   397			r = cpus_have_final_cap(ARM64_HAS_RAS_EXTN);
-   398			break;
-   399		case KVM_CAP_ARM_VM_IPA_SIZE:
-   400			r = get_kvm_ipa_limit();
-   401			break;
-   402		case KVM_CAP_ARM_SVE:
-   403			r = system_supports_sve();
-   404			break;
-   405		case KVM_CAP_ARM_PTRAUTH_ADDRESS:
-   406		case KVM_CAP_ARM_PTRAUTH_GENERIC:
-   407			r = kvm_has_full_ptr_auth();
-   408			break;
-   409		case KVM_CAP_ARM_EAGER_SPLIT_CHUNK_SIZE:
-   410			if (kvm)
-   411				r = kvm->arch.mmu.split_page_chunk_size;
-   412			else
-   413				r = KVM_ARM_EAGER_SPLIT_CHUNK_SIZE_DEFAULT;
-   414			break;
-   415		case KVM_CAP_ARM_SUPPORTED_BLOCK_SIZES:
-   416			r = kvm_supported_block_sizes();
-   417			break;
-   418		case KVM_CAP_ARM_SUPPORTED_REG_MASK_RANGES:
-   419			r = BIT(0);
-   420			break;
-   421		default:
-   422			r = 0;
-   423		}
-   424	
-   425		return r;
-   426	}
-   427	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--tnXtIProi7xyxxSe--
