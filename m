@@ -1,109 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AE9190685
-	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 18:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E0C1A0B12;
+	Thu, 19 Dec 2024 18:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734631934; cv=none; b=DNh6TH/91gdQaPh2o+Za7sDWnMo/vT7NVab8PRNCN6EZhZcHdZQatoOl8KPhonj5NeEkAAn+mGDxHAp7bT8vwqaJMmeUqYY8cjmhufhecLfl780V3Ejd9tuF6A1a0NGOhP+wmg2sLE1h7pez0XItXVxSwpqc4gnrXhSDUx0yKiE=
+	t=1734632804; cv=none; b=ra3f+y5hasaC8OPx7xJEYeOe+9W03viVogMLgeRKOx8g59n3UwSrBrjt0bze0eKhjMvSMjdBhIUXfFfri886Y1yct/OM0Q1VuyFE4bzIvHAtPaujmx1tvi6RwZOPNEffC16r9S5j4HTOuTMeTsmkJqLftxl7QkiDR9fHNtEm5tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734631934; c=relaxed/simple;
-	bh=SOPzzFaWCXMoEFJPTJhZqocs5UW5p84QNzUoZs5Kq4k=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KssIiCQsDcYtcL1kGSe4jBdd2n59RFN4U4q08V6Poy4nJvYVQSMJIX+qJ/lMRuT2lCtZABgVhisRJn3uWfhe/Khl/6XiaaesNLX9p3Q4eQToXirrNbGntk2ZNIv/kfLTij0mbzAcBckMeFoXUYq/RYETfSDiKidZOzoQBO/Wzk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jUQLlKJn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1734632804; c=relaxed/simple;
+	bh=PXBsRxZhmi+gRU8Ewb3RrU6nlQeOo6CurTgsxR7ntTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j36GelxrQc6v4oYplJXZI/5+1dMdZ4CZr8L3Ihuz3lv9HjkFL9rGJwirbUuXcHXDxEgJjNpkGZoVp3CUkBCfaB/lVYZEDnEYHAqPtY1aYy8mm3JZkvLPLrgZGGvbRZI8CVHpuP48J3nmnCMxczHrL5hdGTm6wVEuN6FL9mnAwlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fyZO3JlG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jUQLlKJn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734631931;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/9UcL6l72mdoRAiqrjZF2T6BSFYpHgCxrSM0xG9jSI8=;
-	b=jUQLlKJnvFvw9EGWywwwSGu5M691F8CXI/Cxj6j4YRULOU9I0HteuHdqq5iBVumvCao1X4
-	5ofpYH0rnIB1btCwCne2G4FEv1Pq+G/PZoGiu9MINzbn7OM9zoaZIUPtn82R56kMmLxZFM
-	ygrljDCvDj/3dGo6BwZfigoLZoMkma4=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-400-YJiet6lCMIu0Na7E6GppTw-1; Thu,
- 19 Dec 2024 13:12:09 -0500
-X-MC-Unique: YJiet6lCMIu0Na7E6GppTw-1
-X-Mimecast-MFC-AGG-ID: YJiet6lCMIu0Na7E6GppTw
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70CDE1956061
-	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 18:12:08 +0000 (UTC)
-Received: from [172.64.13.20] (unknown [10.30.32.164])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DD9B195608A;
-	Thu, 19 Dec 2024 18:12:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc3,
- upstream-mainline, baaa2567)
-Date: Thu, 19 Dec 2024 18:12:07 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fyZO3JlG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B560C4CECE;
+	Thu, 19 Dec 2024 18:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734632804;
+	bh=PXBsRxZhmi+gRU8Ewb3RrU6nlQeOo6CurTgsxR7ntTs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fyZO3JlGB4XdVZoin2PD1zfI15ruJD5Y4jzefw/9UU6RMX4uh+PHVPYeFwLaEw9tF
+	 Uqa4EXB1bH+jJd5gwxlte+ADi0r1BNlxdu44NoW0n8cY/Q+PJTdQlOKRWFY/Cg4Tum
+	 Oe/D5eB+mcQpsj0bMHMT/jw3CnBdVuajA6g9cp+gaUpZcWDeZgWdS9msK/0gGr4jF4
+	 R+w7HV+vKXFAt28+ZOGsFedu9iKqwet9wETZip27i/Duhww7dUwLda2zzm7hTcj9aB
+	 Cb/7HDoLqlozsOmgDDPKmzyLKvL+ezl/gtyiNwtERJy0yVQcC9IcGVIgkLdFdc1IC8
+	 MVZPKdKbfMK7w==
+Date: Thu, 19 Dec 2024 18:26:38 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: mgonellabolduc@dimonoff.com, Lars-Peter Clausen <lars@metafoo.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: media: clarify stm32 csi & simplify
+ example
+Message-ID: <20241219-backspace-tameness-defc6e43cf52@spud>
+References: <20241216-apds9160-driver-v3-0-c29f6c670bdb@dimonoff.com>
+ <20241216-apds9160-driver-v3-1-c29f6c670bdb@dimonoff.com>
+ <20241217-brilliant-jubilance-54641c6ba990@spud>
+ <20241219153249.39b49561@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <98481.124121913120900840@us-mta-400.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: LrFBAHFnSPlUwClQIIcZwVblkA_istHIor0eN8BpXEQ_1734631928
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="PVdqPFf4XmF9Pl8z"
+Content-Disposition: inline
+In-Reply-To: <20241219153249.39b49561@jic23-huawei>
+
+
+--PVdqPFf4XmF9Pl8z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Thu, Dec 19, 2024 at 03:32:49PM +0000, Jonathan Cameron wrote:
+> On Tue, 17 Dec 2024 18:31:09 +0000
+> Conor Dooley <conor@kernel.org> wrote:
+>=20
+> > On Mon, Dec 16, 2024 at 05:55:40PM -0500, Mikael Gonella-Bolduc via B4 =
+Relay wrote:
+> > > From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+> > >=20
+> > > Add device tree bindings for APDS9160
+> > > Note: Using alternate email for maintainer
+> > >=20
+> > > Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com> =
+=20
+> >=20
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Conor, any idea how we got that title on a reply to a completely differen=
+t series?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+mutt bug? I actually noticed that the subject line was not correct when
+I sent the mail, but I thought it was a visual bug in mutt rather than
+one that affected the mail itself. mutt sometimes lags pretty badly for
+me, there's a good chance I queued up the actions required to delete
+the $subject thread, jump to this patch and initiate the reply-all
+process during one of these periods of lag? I'm not entirely sure of
+that, but I do know for sure that I saw the erroneous subject in mutt's
+"mail configuration" screen after I had hit y to send it.
 
+> Anyhow, I'll assume you intended to give RB to Mikael's patch!
 
-Kernel information:
-    Commit message: Merge tag 'mmc-v6.13-rc2' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/ulfh/mmc
+Ye, content of the mail is what's correct here.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1596460198
+--PVdqPFf4XmF9Pl8z
+Content-Type: application/pgp-signature; name="signature.asc"
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1596460198-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1596460198-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1596460198-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ2RlXgAKCRB4tDGHoIJi
+0nMqAQDqvugOEEgubwx8CJbxAlr1rQwGFWYqGyIkMYPXKGn2IAEA9cuJTXkb6s76
+a/oFGOgV+Iom8cwyo6UaoYwlRHc4agU=
+=1xX/
+-----END PGP SIGNATURE-----
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--PVdqPFf4XmF9Pl8z--
