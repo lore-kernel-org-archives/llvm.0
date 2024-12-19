@@ -1,73 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46A81D79A3;
-	Thu, 19 Dec 2024 22:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C18278F4A;
+	Thu, 19 Dec 2024 22:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734648672; cv=none; b=qMzcoQv9h8X5kvUN5+ksKHlcUfDC8xtojly5SGfyo3F1BHYczqiKNrFVgcKQzmUdZkB3JKniigr1sBFCJ8UFlXiDgpRuXJyQEX1FT6wZSHdCvi7I+VB/TIKazVOvKfqvVlWJvJPyXcY0tAhQIumELz4g5Ks2PHsjfoxycl3sWtM=
+	t=1734649004; cv=none; b=VCezI9tXEHw9eyJO/SBHqFRLyShdI/GXBsjaRQ5cCNPMDnjlN5RcJb5SEMRDV/oUybw/wu3DeKV2RmvJF+yZOilBsXV8xSPNBGHumqpBCOXG4CPSdKpIuHW3JO72yyT9v4acjP3p2EFu5LG0qWZENvawlsZlx+/Hsw0K7hBkaYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734648672; c=relaxed/simple;
-	bh=vn2Y7HOGnDiERqHrmWj9W5nFrgVwON2deCzXDJZ+tIw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Nte2wqMOU8bDneMdPdq2IiDrXtscWmHRYJRXFSv3nv5BSjfj4PMPBJnhPx1LpAqB2NSmPDE2uW8iZ3nFCjQjZgZPKL6cLM3QPtpp7NZdM5QsuQ4Q4o+fGlBCmyfs8OIrlHayVtXA/kz6G7G1Eul5ymdBSfSLf6LWUuiybFptUzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=t0rhhzjp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734649004; c=relaxed/simple;
+	bh=J2q1sa3skK2L8gyug4xknJ2l4Ih0hsNJ4Yx0LkevRQs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KHi0pxhFkNOftEwjuTwGdabY1NVEw52H8CXgtKzMcFwQbj5yLAtxgq4klVJMluf/Hz+n7LQBnnP5F8qqadFLJ2UsmfxJ3YDpYkDNeckAWMR/V1qM6TF85CqEMUqSv0F27fups7IuZL2NqSHt7qpUPobjHtE23q4Ac6SLmFY0pA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7xMpq1R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="t0rhhzjp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE18C4CECE;
-	Thu, 19 Dec 2024 22:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1734648671;
-	bh=vn2Y7HOGnDiERqHrmWj9W5nFrgVwON2deCzXDJZ+tIw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=t0rhhzjpz1vdogEA28Fuz6THqQkcz06UXa/pxjoJwkMHEOkW2Hoc0+OlDTF1h93YH
-	 kXPOg9U0/QVr1oW9unJNYie8W/5guioFlUO/vGigsJsCVETXNdy4yRVsOUoNUkUpAu
-	 H7efylqhoOToOqhPLENNK395OTBawe7wI9jBDNg8=
-Date: Thu, 19 Dec 2024 14:51:10 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: Gal Pressman <gal@nvidia.com>, Dennis Zhou <dennis@kernel.org>, Tejun
- Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- netdev@vger.kernel.org
-Subject: Re: [PATCH] percpu: Remove intermediate variable in PERCPU_PTR()
-Message-Id: <20241219145110.a4815019ca69d6d5c36f1fdf@linux-foundation.org>
-In-Reply-To: <CAFULd4ZcSY+1WPn2T9dHVJZyyg1p+YaexQMJzAXHnCDy90j2fA@mail.gmail.com>
-References: <20241219121828.2120780-1-gal@nvidia.com>
-	<CAFULd4YHFFKBzaF28f8n3z8WcOzom1WUe_hfRBx0ehhCpT9xnQ@mail.gmail.com>
-	<CAFULd4Z0PSzwvsFx_5deMKb7tV34uJWcHEadYGdk+D72QuHonA@mail.gmail.com>
-	<CAFULd4ZcSY+1WPn2T9dHVJZyyg1p+YaexQMJzAXHnCDy90j2fA@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7xMpq1R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CBEC4CECE;
+	Thu, 19 Dec 2024 22:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734649004;
+	bh=J2q1sa3skK2L8gyug4xknJ2l4Ih0hsNJ4Yx0LkevRQs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k7xMpq1R08NkbYvysDMk5hIjiXRPQPSqfw09+UiCVkpAoQ65qkCsGJk6AgSEQFHS3
+	 BEFAlHJRtA8wameoIzE+dkcGs2idcvRo4P31iQNJN8mBr0D+x5TV919U3NDSGG4tbD
+	 cBnEd+L63PRLo8dZngkhCvo6GyWz+gVBXtdxKMDlHzSUOutYLF9KRA07VeKpkOo2/A
+	 YojWb6d6/Fp+wDhZGoreE2tEv7n+HHWAIgWsfqHvs68xtni8L5NfyuKZrdXrmbYCJQ
+	 iTF0WuVqV8nhReaS4h91AJlwWHjsAmlvx8wrINWoOnEgPh739pi4eNmsJCGfu/3mYy
+	 TioCM8A0S1/Og==
+Date: Thu, 19 Dec 2024 14:56:42 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 0/2] objtool: Add option to fail build on vmlinux
+ warnings
+Message-ID: <20241219225642.ho42z3kgeuy5vq4v@jpoimboe>
+References: <20241218-objtool-strict-v2-0-a5297c961434@google.com>
+ <20241218160656.18cbdcbb93b0e0bcf28adf18@linux-foundation.org>
+ <20241219010054.pxcnejgkvy3g744k@jpoimboe>
+ <20241219221913.GA1259354@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241219221913.GA1259354@ax162>
 
-On Thu, 19 Dec 2024 18:03:47 +0100 Uros Bizjak <ubizjak@gmail.com> wrote:
+On Thu, Dec 19, 2024 at 03:19:13PM -0700, Nathan Chancellor wrote:
+> I do agree with you that figuring our the root problem and resolution to
+> some of these warnings is not always the easiest, especially when they
+> are on the toolchain side, so I have often kicked the can down the road.
+> I know there is some documentation in objtool.txt around various
+> warnings, is that pretty up to date/accurate? Are there any other
+> resources I could look at to help with this work?
 
-> > Actually, you can simplify the above a bit by writing it as:
-> >
-> > #define PERCPU_PTR(__p)                            \
-> >     ((typeof(*(__p)) __force __kernel *)(__force unsigned long)(__p)) \
-> 
-> Andrew, please find attached a substitute patch "[PATCH 4/6] percpu:
-> Use TYPEOF_UNQUAL() in *_cpu_ptr() accessors" for your MM tree
-> relative to the above hotfix. The whole patch series (+ hotfix) has
-> been re-tested against the current mainline defconfig (+ KASAN),
-> compiled once with gcc-11.4.1 and once with gcc-14.2.1.
+I think the document is pretty up to date.  Some warnings are self
+explanatory but others like "unreachable instruction" or "stack state
+mismatch" do require digging.
 
-Updated, thanks.
+One thing that can help is to "export OBJTOOL_VERBOSE=1", which will
+tell objtool to disassemble any affected functions and show a backtrace
+with all the taken branches leading up to the warning (if applicable).
+Maybe that should be the default for --Werror.
 
->  #define PERCPU_PTR(__p)							\
-> -	((typeof(*(__p)) __force __kernel *)(__force unsigned long)(__p)) \
-> +	((TYPEOF_UNQUAL(*(__p)) __force __kernel *)(__force unsigned long)(__p)) \
->
+I'd definitely like more people to be able to debug objtool warnings.
+Any ideas on making that easier or educating people or improving
+warnings are very welcome.  I'll be keeping that in mind when looking at
+the build errors over the holidays.
 
-I removed that final " \".
+> Some objtool reports get sent to only llvm@lists.linux.dev when clang is
+> involved (due to a historical filter IIRC, I cannot find the original
+> request), so you may want to glance at [2] to see if anything new pops
+> up.
 
+We need to figure out how to get that fixed, the commit author really
+needs to know if their code causes a warning/error.
+
+-- 
+Josh
