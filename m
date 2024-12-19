@@ -1,109 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCB619E7F8;
-	Thu, 19 Dec 2024 17:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AE9190685
+	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 18:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734628365; cv=none; b=siht+7SIvotaoFbhRuQkUVCURuxUXd0EcO4ts4goitleQahWAMVImWjx49bWUX9o/6okra6RML1PAEIlh8/r58to1n9hZDBA527w/92T66nBbDJgoEKAgI4Py+lMVHam9oIKKgBIQprIiJtCV3+CjdOq/h7eU20myvwUD/R4Yrg=
+	t=1734631934; cv=none; b=DNh6TH/91gdQaPh2o+Za7sDWnMo/vT7NVab8PRNCN6EZhZcHdZQatoOl8KPhonj5NeEkAAn+mGDxHAp7bT8vwqaJMmeUqYY8cjmhufhecLfl780V3Ejd9tuF6A1a0NGOhP+wmg2sLE1h7pez0XItXVxSwpqc4gnrXhSDUx0yKiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734628365; c=relaxed/simple;
-	bh=MpqPn06almC1w7AKhIWoa4Ja+d2HKNexfyEQuKVEwGA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lV2MhfWvZ6eTDlmb5Gc/Sn5SKEKtaGkb1EtX5XmZCgMmv8k8VVbtpzadzUjF33XT0j8F91lex61uwBjoOvrLXsZJcyK1jNt5QuVnFKtOUN4H2/n2VJQYAMyhYK2IEp/2jEy8jXAjxMMcodxD2tJjlul9TKqMFqhQETorBsTK6Ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M8VHGVs4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734631934; c=relaxed/simple;
+	bh=SOPzzFaWCXMoEFJPTJhZqocs5UW5p84QNzUoZs5Kq4k=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KssIiCQsDcYtcL1kGSe4jBdd2n59RFN4U4q08V6Poy4nJvYVQSMJIX+qJ/lMRuT2lCtZABgVhisRJn3uWfhe/Khl/6XiaaesNLX9p3Q4eQToXirrNbGntk2ZNIv/kfLTij0mbzAcBckMeFoXUYq/RYETfSDiKidZOzoQBO/Wzk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jUQLlKJn; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M8VHGVs4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AADC4CECE;
-	Thu, 19 Dec 2024 17:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734628364;
-	bh=MpqPn06almC1w7AKhIWoa4Ja+d2HKNexfyEQuKVEwGA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=M8VHGVs4H5v7Nfk8+7GME1RH4pX2cA6x5VJArmiYYpUzRuKMn384x8RKEFjFUZlZU
-	 wUnXWhGZ2LA8mEik95iGWk18wEjnjQn1nPsjHW1IodC10G/GD2SjqoRTirExpWD87F
-	 V2MJrjB95v9z1eUtmnUTHUJlJGR+ITe8/Q2Xn50jNCW2HSctPxr9JUiUIfib0W5rVE
-	 bQoIQMlpiAGxDEnCJddOFFl6CuBKMpYEkqBys63PYObgYuIV9YIQsfc4sqaP2ksQ+j
-	 TqnCvgaCSnmiaJjc7AV1+r47NEQwNpqryQdm60gk8nlQmosuNILzYhIeDmXvctwGrK
-	 u5xPk2TUZNQFA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 19 Dec 2024 10:12:31 -0700
-Subject: [PATCH] drm/amd/display: Disable -Wenum-float-conversion for
- dml2_dpmm_dcn4.c
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jUQLlKJn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734631931;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/9UcL6l72mdoRAiqrjZF2T6BSFYpHgCxrSM0xG9jSI8=;
+	b=jUQLlKJnvFvw9EGWywwwSGu5M691F8CXI/Cxj6j4YRULOU9I0HteuHdqq5iBVumvCao1X4
+	5ofpYH0rnIB1btCwCne2G4FEv1Pq+G/PZoGiu9MINzbn7OM9zoaZIUPtn82R56kMmLxZFM
+	ygrljDCvDj/3dGo6BwZfigoLZoMkma4=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-400-YJiet6lCMIu0Na7E6GppTw-1; Thu,
+ 19 Dec 2024 13:12:09 -0500
+X-MC-Unique: YJiet6lCMIu0Na7E6GppTw-1
+X-Mimecast-MFC-AGG-ID: YJiet6lCMIu0Na7E6GppTw
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70CDE1956061
+	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 18:12:08 +0000 (UTC)
+Received: from [172.64.13.20] (unknown [10.30.32.164])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DD9B195608A;
+	Thu, 19 Dec 2024 18:12:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc3,
+ upstream-mainline, baaa2567)
+Date: Thu, 19 Dec 2024 18:12:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <98481.124121913120900840@us-mta-400.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: LrFBAHFnSPlUwClQIIcZwVblkA_istHIor0eN8BpXEQ_1734631928
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241219-amdgpu-fix-enum-float-conversion-again-again-v1-1-ef2c619724b1@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAP5TZGcC/zWNQQrDIBBFrxJmnYEqbYq9SsliqqMZaDRoDIGQu
- 9cWuvnwFu/9Awpn4QKP7oDMmxRJsYHqO7ATxcAorjHoi74qrQzS7MJS0cuOHOuM/p1oRZvixvk
- rIwWS/9qXd0bdjL8PDlpyydzE391zPM8PilMQuH4AAAA=
-X-Change-ID: 20241219-amdgpu-fix-enum-float-conversion-again-again-cbfd9159f76d
-To: Chaitanya Dhere <chaitanya.dhere@amd.com>, Jun Lei <jun.lei@amd.com>, 
- Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
- Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, 
- Alex Deucher <alexander.deucher@amd.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Xinhui Pan <Xinhui.Pan@amd.com>, Austin Zheng <Austin.Zheng@amd.com>
-Cc: Dillon Varone <dillon.varone@amd.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, amd-gfx@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2673; i=nathan@kernel.org;
- h=from:subject:message-id; bh=MpqPn06almC1w7AKhIWoa4Ja+d2HKNexfyEQuKVEwGA=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOkpIZx5PxTOzXhyjTvigruC+UJfYYdX9hu+FZelS8o0/
- uoxz53RUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbyfw7D/7J75sm3tx6b9ts1
- Vpz//doP6hqmUZpFexgvvq056L/tcwDDP+NGvzVRfxNSHHZbzV/soVIk4jpPUO4aB6eZw+q9jGm
- 3OQA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: quoted-printable
 
-Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
-Fixes") blew away commit fdedd77b0eb3 ("drm/amd/display: Reapply
-2fde4fdddc1f"), which itself was a reapplication for the same reason,
-which results in that compiler warning returning:
+Hi, we tested your kernel and here are the results:
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.c:215:58: error: arithmetic between enumeration type 'enum dentist_divider_range' and floating-point type 'double' [-Werror,-Wenum-float-conversion]
-    215 |         divider = (unsigned int)(DFS_DIVIDER_RANGE_SCALE_FACTOR * (vco_freq_khz / clock_khz));
-        |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Just disable the warning for the whole file via Makefile to avoid having
-to reapply the same fix every time the code syncs from wherever it is
-actually maintained.
 
-Fixes: be4e3509314a ("drm/amd/display: DML21 Reintegration For Various Fixes")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-If you would prefer reapplying the local fix, feel free to do so, but I
-would like for it to be in the upstream source so it does not have to
-keep being applied.
----
- drivers/gpu/drm/amd/display/dc/dml2/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Kernel information:
+    Commit message: Merge tag 'mmc-v6.13-rc2' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/ulfh/mmc
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-index d9c27ebe12ee08d6330eb199cd8ca9c8489fa5b2..5c0f93644c5d43c8a0bc12713fc400712d8de50b 100644
---- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-@@ -78,7 +78,7 @@ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_top/dml2_top_soc15.o := $(dml2_ccfla
- CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4.o := $(dml2_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.o := $(dml2_ccflags) $(frame_warn_flag)
- CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_core/dml2_core_factory.o := $(dml2_ccflags)
--CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.o := $(dml2_ccflags)
-+CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.o := $(dml2_ccflags) $(call cc-disable-warning,enum-float-conversion)
- CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_factory.o := $(dml2_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_mcg/dml2_mcg_dcn4.o := $(dml2_ccflags)
- CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_mcg/dml2_mcg_factory.o := $(dml2_ccflags)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1596460198
 
----
-base-commit: 695c2c745e5dff201b75da8a1d237ce403600d04
-change-id: 20241219-amdgpu-fix-enum-float-conversion-again-again-cbfd9159f76d
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1596460198-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1596460198-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1596460198-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
