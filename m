@@ -1,145 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A954A78F4A;
-	Thu, 19 Dec 2024 04:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99006217671
+	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 08:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734583953; cv=none; b=rYiJFyI/j4UhVjqX3QUCmS4PidrD/EdzrSrFZo510CUtIc3G9KiPaWDJ10+vpaa+QFNTJ0TNXSa6MvmWpZKTh7yso4xGG6q7XJUaRUNOMUbWxL0v5ugOuFURK8BUllLq11bRDMdNmnQecvq6dAUDCtAncfI3aO8JODc51zYmy98=
+	t=1734595410; cv=none; b=ikqeBRcRXvbnm/hyFG+J4kZirJXpOq5G+O1e7Z49Ij0Zd5R4YagemVJP2LdA1kqKFV3u4qXYOsn+jUpk8x73u3MU6sNO25XPNFYHAG8zZDZobKq9cugLAGfIjCCinWBHGIhs2l+cQoEFQ65PbK5S+D0RpBP8/3VYzBTRFuU2ZRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734583953; c=relaxed/simple;
-	bh=D9NDKzSqRkZ3wm9SEkwgjWnHhlIt+tQ39h55cIrZBM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aaoMGsUaYqTrYlKiNe0Jn4rhIBJWFSBvRQCtkBM6nDJuuq6OlwguuHo1HsYn6Z500aBTbjjHCsl9r8hwsYi4F4cq3MqL+JA5HFMZA/EUr1IDH1D/YXCyK86YrrWx3ZUtbzNpWX3dPFH1IZwHg3j6DuGODlLF+ZtC5KYawq+AGsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F6XwX07s; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734595410; c=relaxed/simple;
+	bh=RgfHuGBXae1glgZFL17pBAgm97fYyxc7BJ/AXvBFTbQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=twgko4oqfMCUe4pDNUZlqTpBzehMNzR0lXPZRDW7X2GMjLL6M6PSaVy1NohWKPeO8sTN1jyMnz2dOpwICtX2QrQCSWCqC4MynASPUJXenlAahC6bVLc3Hke8m1WQu0g6AgzZt586pQvltW21vx0muAijeFUXruDanInlQqjNMsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Tvq/zfdn; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F6XwX07s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734583951; x=1766119951;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D9NDKzSqRkZ3wm9SEkwgjWnHhlIt+tQ39h55cIrZBM8=;
-  b=F6XwX07s1AUHyTKsy4E6Z2lPNmHlyCGNKONyVBc4+mxvJKAY7WcWxs7d
-   9bXsK4bhjLoTNEMnj99x1OvXjQXcugrrO7qOQYThI0+aazx9/zJHbyJaR
-   5jg56yFQFA6Wv89wnaM5bDh1cEOHt5ZEK2d9f1uQ+09SIihYD2J2CAGzl
-   OoJ7y3Yf0UHrIBk1Q9td/gjee1QQUcsL1+LbX/hYjzCUmrf3N9/hM9VLt
-   6+p41hrTqb7TKJga1tVvtuWK5zra7zCfhc6zQBCW6fRYup9d+MvqvOntL
-   WcbgOZbI6xPQfxnkZjTpH1KDb3rcBkwbstxIH+a1/jQrfAO7BKsUji8ux
-   Q==;
-X-CSE-ConnectionGUID: EppA7je0QgiXeqYNQHjqlw==
-X-CSE-MsgGUID: PyxkiGjsS+C2A0cVWV/new==
-X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="57558132"
-X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
-   d="scan'208";a="57558132"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 20:52:30 -0800
-X-CSE-ConnectionGUID: ZJSFssVoQVCIoQmhA/ZL3w==
-X-CSE-MsgGUID: jhNVMjajSO+QoKD8nU3wdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
-   d="scan'208";a="98137320"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 18 Dec 2024 20:52:29 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tO8WQ-00003D-2j;
-	Thu, 19 Dec 2024 04:52:26 +0000
-Date: Thu, 19 Dec 2024 12:51:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: SeongJae Park <sj@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sj:damon/next 52/79] mm/damon/sysfs-schemes.c:2129: warning:
- Function parameter or struct member 'sz_filter_passed' not described in
- 'damos_sysfs_populate_region_dir'
-Message-ID: <202412191225.f6bEMRT2-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Tvq/zfdn"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53ff1f7caaeso465179e87.0
+        for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 00:03:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1734595407; x=1735200207; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ugXH4+JF66LMJJim+wfATXqMioH1c19K+Z5j5LyswP8=;
+        b=Tvq/zfdnwtQ4Idpekh/jM1uNBeKAQsv3zCglvsf6uvZReHvAGVmbAr6nBXK2gkNq2c
+         b8hVKAeU9d77W2/iBchZawjN7iVMIW39XJavD0BysDIW+fGbrv42eN+rp+FHoQvXwZzb
+         dETvhx/Mj7m3kjCwz4UnSkYZlwBY3RgQ8kkNt57QhccktdwVTcyz/WvUHhaYOYzB8uqv
+         4X6/ns6oiZT3vA5R/jyqyF3V7/y/PNquBMxhpVuglSs3qDkhANV3b56ikZ0jiKuzb5jM
+         Z4JBfU9OKlplRySSvYwmr1E2DXTYU9yYilFQpRg0OqorSUDrbR//fR/FiPngbMR2wcKT
+         bJOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734595407; x=1735200207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ugXH4+JF66LMJJim+wfATXqMioH1c19K+Z5j5LyswP8=;
+        b=nVc8PG4p7juJxaWLZqOuYq8umZNeLdX7gXbrBUSkik+/4deMtgLrrgvRpSTlNKfSG6
+         Ka5kuQ+WURz5ZExanQ+CYYlop6hgkA2hHtWXByGoKAVekHikgSzKQdPOlmXi0vvRUgIx
+         Cezh7hpBw5pw5ZJrtLn0KvfLCNTxFoQtBwIQctDGuNmddKsGlKe1ne7UUoAqT5sPYaoU
+         Kr43ZWil6DN5TAryKXDhTZYEeAyKAzTHqsP+vyifwCC7K2yOh3vBbNu78EVF4JK+KKD/
+         30d5XbwVp6Mvs0zFUVoL+E0U1Y6Df79+Rvqk9Tlroxbt/R79ZivgWg/uLRoUjaBAl4op
+         ECsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWi9Zt6RBNAtlATKQP3OF6B+ZPrNcEIMk+ocsxo8fp+kNa2qN5O92m7Z7xuwaai4fTGZ35T@lists.linux.dev
+X-Gm-Message-State: AOJu0YxMIkIieEPH42nZX9QSHdioIYXa/IOpPUH7oDYC2x+bZkE9OrXA
+	NBe/p6eU2X3KFvs5mqzSnMSSd4ItsQs9ZNOeU5KnX8P69Z2Qmv1hcUinr9C9aNNMcFpbOm//R8q
+	b3A5Xnu8nnxcKPm3qCFP0H9DuSoetCnPHA56NWQ==
+X-Gm-Gg: ASbGncsRGF5/NH6idDubK4sVgpCKgKnEWwCN088gNyHGPKnOdKGYLjpdfEI0TbkmOfX
+	O6HfwjN2aHC9Rf/3/HKmpnadFYjTlE/mVuXeANi00MIdI21wdPCscahF/G1K4Yr/P3jJGjg==
+X-Google-Smtp-Source: AGHT+IFRKO+emIlNQZoyNcMhoAfze1VoczKB32ps+HArJ9oMB44xWoJtMbeHURhGT7AmeGiL5tKkxwjtS5FU/ZOAuic=
+X-Received: by 2002:a05:6512:33cf:b0:540:20f5:be77 with SMTP id
+ 2adb3069b0e04-54220fd29f2mr699782e87.3.1734595406555; Thu, 19 Dec 2024
+ 00:03:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241218-crypto-qce-sha-fix-clang-cleanup-error-v1-1-7e6c6dcca345@kernel.org>
+In-Reply-To: <20241218-crypto-qce-sha-fix-clang-cleanup-error-v1-1-7e6c6dcca345@kernel.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 19 Dec 2024 09:03:15 +0100
+Message-ID: <CAMRc=Md19mjs3J+RKTGg--bC+G6yFk5J00wCMohqtt2_O0k=9Q@mail.gmail.com>
+Subject: Re: [PATCH] crypto: qce - revert "use __free() for a buffer that's
+ always freed"
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-crypto@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-head:   acaaeb549248b361cb0586af34b317d05a61512b
-commit: d92ceeda1fde0fd17da7d3dfe5d51e6684e20c6c [52/79] mm/damon/sysfs-schemes: expose per-region filter-passed bytes
-config: arm-randconfig-001-20241219 (https://download.01.org/0day-ci/archive/20241219/202412191225.f6bEMRT2-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241219/202412191225.f6bEMRT2-lkp@intel.com/reproduce)
+On Wed, Dec 18, 2024 at 9:13=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Commit ce8fd0500b74 ("crypto: qce - use __free() for a buffer that's
+> always freed") introduced a buggy use of __free(), which clang
+> rightfully points out:
+>
+>   drivers/crypto/qce/sha.c:365:3: error: cannot jump from this goto state=
+ment to its label
+>     365 |                 goto err_free_ahash;
+>         |                 ^
+>   drivers/crypto/qce/sha.c:373:6: note: jump bypasses initialization of v=
+ariable with __attribute__((cleanup))
+>     373 |         u8 *buf __free(kfree) =3D kzalloc(keylen + QCE_MAX_ALIG=
+N_SIZE,
+>         |             ^
+>
+> Jumping over a variable declared with the cleanup attribute does not
+> prevent the cleanup function from running; instead, the cleanup function
+> is called with an uninitialized value.
+>
+> Moving the declaration back to the top function with __free() and a NULL
+> initialization would resolve the bug but that is really not much
+> different from the original code. Since the function is so simple and
+> there is no functional reason to use __free() here, just revert the
+> original change to resolve the issue.
+>
+> Fixes: ce8fd0500b74 ("crypto: qce - use __free() for a buffer that's alwa=
+ys freed")
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/CA+G9fYtpAwXa5mUQ5O7vDLK2xN4t-kJoxgUe1ZFR=
+T=3DAGqmLSRA@mail.gmail.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412191225.f6bEMRT2-lkp@intel.com/
+Yeah, that was probably overkill but I thought it makes sense if I'm
+reworking the driver anyway.
 
-All warnings (new ones prefixed by >>):
+Feel free to kill it.
 
->> mm/damon/sysfs-schemes.c:2129: warning: Function parameter or struct member 'sz_filter_passed' not described in 'damos_sysfs_populate_region_dir'
-
-
-vim +2129 mm/damon/sysfs-schemes.c
-
-f1d13cacabe140 SeongJae Park 2022-11-01  2113  
-aa2ebc50289e65 SeongJae Park 2024-12-01  2114  /**
-aa2ebc50289e65 SeongJae Park 2024-12-01  2115   * damos_sysfs_populate_region_dir() - Populate a schemes tried region dir.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2116   * @sysfs_schemes:	Schemes directory to populate regions directory.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2117   * @ctx:		Corresponding DAMON context.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2118   * @t:			DAMON target of @r.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2119   * @r:			DAMON region to populate the directory for.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2120   * @s:			Corresponding scheme.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2121   * @total_bytes_only:	Whether the request is for bytes update only.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2122   *
-aa2ebc50289e65 SeongJae Park 2024-12-01  2123   * Called from DAMOS walk callback while holding damon_sysfs_lock.
-aa2ebc50289e65 SeongJae Park 2024-12-01  2124   */
-aa2ebc50289e65 SeongJae Park 2024-12-01  2125  void damos_sysfs_populate_region_dir(struct damon_sysfs_schemes *sysfs_schemes,
-aa2ebc50289e65 SeongJae Park 2024-12-01  2126  		struct damon_ctx *ctx, struct damon_target *t,
-d92ceeda1fde0f SeongJae Park 2024-12-16  2127  		struct damon_region *r, struct damos *s, bool total_bytes_only,
-d92ceeda1fde0f SeongJae Park 2024-12-16  2128  		unsigned long sz_filter_passed)
-aa2ebc50289e65 SeongJae Park 2024-12-01 @2129  {
-aa2ebc50289e65 SeongJae Park 2024-12-01  2130  	struct damos *scheme;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2131  	struct damon_sysfs_scheme_regions *sysfs_regions;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2132  	struct damon_sysfs_scheme_region *region;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2133  	int schemes_idx = 0;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2134  
-aa2ebc50289e65 SeongJae Park 2024-12-01  2135  	damon_for_each_scheme(scheme, ctx) {
-aa2ebc50289e65 SeongJae Park 2024-12-01  2136  		if (scheme == s)
-aa2ebc50289e65 SeongJae Park 2024-12-01  2137  			break;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2138  		schemes_idx++;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2139  	}
-aa2ebc50289e65 SeongJae Park 2024-12-01  2140  
-aa2ebc50289e65 SeongJae Park 2024-12-01  2141  	/* user could have removed the scheme sysfs dir */
-aa2ebc50289e65 SeongJae Park 2024-12-01  2142  	if (schemes_idx >= sysfs_schemes->nr)
-aa2ebc50289e65 SeongJae Park 2024-12-01  2143  		return;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2144  
-aa2ebc50289e65 SeongJae Park 2024-12-01  2145  	sysfs_regions = sysfs_schemes->schemes_arr[schemes_idx]->tried_regions;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2146  	sysfs_regions->total_bytes += r->ar.end - r->ar.start;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2147  	if (total_bytes_only)
-aa2ebc50289e65 SeongJae Park 2024-12-01  2148  		return;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2149  
-aa2ebc50289e65 SeongJae Park 2024-12-01  2150  	region = damon_sysfs_scheme_region_alloc(r);
-aa2ebc50289e65 SeongJae Park 2024-12-01  2151  	if (!region)
-aa2ebc50289e65 SeongJae Park 2024-12-01  2152  		return;
-d92ceeda1fde0f SeongJae Park 2024-12-16  2153  	region->sz_filter_passed = sz_filter_passed;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2154  	list_add_tail(&region->list, &sysfs_regions->regions_list);
-aa2ebc50289e65 SeongJae Park 2024-12-01  2155  	sysfs_regions->nr_regions++;
-aa2ebc50289e65 SeongJae Park 2024-12-01  2156  	if (kobject_init_and_add(&region->kobj,
-aa2ebc50289e65 SeongJae Park 2024-12-01  2157  				&damon_sysfs_scheme_region_ktype,
-aa2ebc50289e65 SeongJae Park 2024-12-01  2158  				&sysfs_regions->kobj, "%d",
-aa2ebc50289e65 SeongJae Park 2024-12-01  2159  				sysfs_regions->nr_regions++)) {
-aa2ebc50289e65 SeongJae Park 2024-12-01  2160  		kobject_put(&region->kobj);
-aa2ebc50289e65 SeongJae Park 2024-12-01  2161  	}
-aa2ebc50289e65 SeongJae Park 2024-12-01  2162  }
-aa2ebc50289e65 SeongJae Park 2024-12-01  2163  
-
-:::::: The code at line 2129 was first introduced by commit
-:::::: aa2ebc50289e6594cd72ec76b13f108d2cc33bed mm/damon/sysfs: use damos_walk() for update_schemes_tried_{bytes,regions}
-
-:::::: TO: SeongJae Park <sj@kernel.org>
-:::::: CC: SeongJae Park <sj@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
