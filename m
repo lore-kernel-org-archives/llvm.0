@@ -1,123 +1,109 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1CA19DF6A
-	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 17:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCB619E7F8;
+	Thu, 19 Dec 2024 17:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734628118; cv=none; b=iK3ClVjExKpOMJ52mKCTVtC8TJLn+Cs3WWL5f5hkgiKoIR9qIkaK1f8vMGTjfoxR/qDDhd69CdVg5lxsEOuXqtAWFaIjVLPdMd64N4Wt9fSTJf9ooSpv1i4KsErNFuVk0ygPN5qJLh+RGBgn2hdZ27PWzJZBHvg3uZod6qC92C0=
+	t=1734628365; cv=none; b=siht+7SIvotaoFbhRuQkUVCURuxUXd0EcO4ts4goitleQahWAMVImWjx49bWUX9o/6okra6RML1PAEIlh8/r58to1n9hZDBA527w/92T66nBbDJgoEKAgI4Py+lMVHam9oIKKgBIQprIiJtCV3+CjdOq/h7eU20myvwUD/R4Yrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734628118; c=relaxed/simple;
-	bh=F+7dGP8vTLAPwakA/+BaZnuqyVBJdaIXxDi9OXgh5C8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YYNLffqC7sbi2AvpWTNeZv3he4ojLZJqM9uqVbfID4twQ2Y9zp42Bnc+2LZd/OmsIP0cT4ILu2Y6jD1JTxUI7xQIB0Lj6z5pSvu//ZRe8UV4BgrryXEFQsRzUvT/fL7AIFJRjttkFccX3i0EhmG5Mr/cAhS7EOyEMpc88E8HQpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ABlNKwfq; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734628365; c=relaxed/simple;
+	bh=MpqPn06almC1w7AKhIWoa4Ja+d2HKNexfyEQuKVEwGA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lV2MhfWvZ6eTDlmb5Gc/Sn5SKEKtaGkb1EtX5XmZCgMmv8k8VVbtpzadzUjF33XT0j8F91lex61uwBjoOvrLXsZJcyK1jNt5QuVnFKtOUN4H2/n2VJQYAMyhYK2IEp/2jEy8jXAjxMMcodxD2tJjlul9TKqMFqhQETorBsTK6Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M8VHGVs4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ABlNKwfq"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5401e6efffcso1052526e87.3
-        for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 09:08:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734628115; x=1735232915; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pOS/eMcaCDd8OiASZ9fXqKTBnFb+hPXU2FvmhB2krtI=;
-        b=ABlNKwfqVunxobgSAKSShvLAqtLitBM4JCWJ+DncdcXGarYFUvfwMRaYNRqgFoQ88P
-         e5ucSA/bIKm3mclrjC3NcMWCMgQz6gqHLq+w685YS24k+SC4p/M2LrvvK1TvD5BgdI2Y
-         sO+VImz7FqNeAPBsRuWVqFFYb2CUevPfLEqnIavSFgUSkNnr+fZeHyTtobUx2oCXvLxh
-         7gQxpGSnEC2Oqwl2oEZDHam31fDM1jz7kxfBFrPRvFOgCD+k8Z9bdMd3pEDjy+2Esl9t
-         kzUinguOXzPzAF12YIDUqbDHYPOhsmrYSKH+Ga36Yv1cNKXs8NavxL8Z09yU1u+SNW71
-         09zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734628115; x=1735232915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pOS/eMcaCDd8OiASZ9fXqKTBnFb+hPXU2FvmhB2krtI=;
-        b=ToRZA02xszyaR/zKvxwDNmzC2ciiHhgOPXoTFm/+aYxJ8y9Tmg9cb1TUDTKZJSjARK
-         w6hnIinB+sLuKWfg2TysPz5HTPn8heJrOrxTJLb39aEfBPZ14O0YtJF+jhtWRPYkEF3i
-         9WycdTy6/AHgkjT7qSGvwbp0jdJHK/EtMqIF292RMgZYXvnFBvIR/ZyNQxELJj2nSQJA
-         kHrJGCLTXeoCDhR6PZ/0BNk3LgWhjpRxFoOX/I+pSYv9+kqyLtZptBvmy0+sdIUEx3z5
-         xgHIBC7gBqydh4NVIiGfYBqpR27L9713acqKj/DWZ8rs3Txf/JMPTFc1e9W+ao1CVLgC
-         2nIA==
-X-Forwarded-Encrypted: i=1; AJvYcCV130smGkkXcjfqyfQ863Yl8uXJsgrDZVLhrH2RRUjCTlWvE8+vVb3b4ivpnI+DUVVoTkGW@lists.linux.dev
-X-Gm-Message-State: AOJu0YyWUZ/LB1kNA2G1qVYe9eDfLOM7yXmhQMfAxYDphZlS/bfEQUBd
-	GX/SlLaTiLiJw+cZLCIhGoH68wmHrhCvdz1O3Hs2qSRlYGldLjSNgrZA3qL0vgoHi/Zwz+Y9MIc
-	SuKq8xDTkiZOs5R1llP4p15/tDRQ=
-X-Gm-Gg: ASbGncuNeLE8dmGMx/HhRJNIKRzwpwCtFTfikJzAmev7N1hsohlaZQZUsCzELI8TC0u
-	YVv7CnOXFqRgqONMOdUJMtYoEEtMTbHgv+lfEuXd0GM5+9E5p9GjTrrOH+CNOFFGoCvD/
-X-Google-Smtp-Source: AGHT+IH1fPAWE9ZihXoqOyUcZLJ5ZMr0yMGqbJib9Q3iCHXC0iX4S0AxY1HTtW0ibC2C7611VDCclmJQ6jkesDK9qzM=
-X-Received: by 2002:a05:6512:1592:b0:53e:38fd:7518 with SMTP id
- 2adb3069b0e04-54220fd169fmr1693168e87.3.1734628114469; Thu, 19 Dec 2024
- 09:08:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M8VHGVs4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AADC4CECE;
+	Thu, 19 Dec 2024 17:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734628364;
+	bh=MpqPn06almC1w7AKhIWoa4Ja+d2HKNexfyEQuKVEwGA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=M8VHGVs4H5v7Nfk8+7GME1RH4pX2cA6x5VJArmiYYpUzRuKMn384x8RKEFjFUZlZU
+	 wUnXWhGZ2LA8mEik95iGWk18wEjnjQn1nPsjHW1IodC10G/GD2SjqoRTirExpWD87F
+	 V2MJrjB95v9z1eUtmnUTHUJlJGR+ITe8/Q2Xn50jNCW2HSctPxr9JUiUIfib0W5rVE
+	 bQoIQMlpiAGxDEnCJddOFFl6CuBKMpYEkqBys63PYObgYuIV9YIQsfc4sqaP2ksQ+j
+	 TqnCvgaCSnmiaJjc7AV1+r47NEQwNpqryQdm60gk8nlQmosuNILzYhIeDmXvctwGrK
+	 u5xPk2TUZNQFA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 19 Dec 2024 10:12:31 -0700
+Subject: [PATCH] drm/amd/display: Disable -Wenum-float-conversion for
+ dml2_dpmm_dcn4.c
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
- <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com>
-In-Reply-To: <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 19 Dec 2024 18:07:58 +0100
-Message-ID: <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241219-amdgpu-fix-enum-float-conversion-again-again-v1-1-ef2c619724b1@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAP5TZGcC/zWNQQrDIBBFrxJmnYEqbYq9SsliqqMZaDRoDIGQu
+ 9cWuvnwFu/9Awpn4QKP7oDMmxRJsYHqO7ATxcAorjHoi74qrQzS7MJS0cuOHOuM/p1oRZvixvk
+ rIwWS/9qXd0bdjL8PDlpyydzE391zPM8PilMQuH4AAAA=
+X-Change-ID: 20241219-amdgpu-fix-enum-float-conversion-again-again-cbfd9159f76d
+To: Chaitanya Dhere <chaitanya.dhere@amd.com>, Jun Lei <jun.lei@amd.com>, 
+ Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, 
+ Alex Deucher <alexander.deucher@amd.com>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Xinhui Pan <Xinhui.Pan@amd.com>, Austin Zheng <Austin.Zheng@amd.com>
+Cc: Dillon Varone <dillon.varone@amd.com>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, amd-gfx@lists.freedesktop.org, 
+ dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2673; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=MpqPn06almC1w7AKhIWoa4Ja+d2HKNexfyEQuKVEwGA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOkpIZx5PxTOzXhyjTvigruC+UJfYYdX9hu+FZelS8o0/
+ uoxz53RUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbyfw7D/7J75sm3tx6b9ts1
+ Vpz//doP6hqmUZpFexgvvq056L/tcwDDP+NGvzVRfxNSHHZbzV/soVIk4jpPUO4aB6eZw+q9jGm
+ 3OQA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Thu, Dec 19, 2024 at 5:44=E2=80=AFPM Andrew Cooper <andrew.cooper3@citri=
-x.com> wrote:
->
-> On 19/12/2024 4:14 pm, Sedat Dilek wrote:
-> > Hi,
-> >
-> > Linux v6.12.6 will include XEN CVE fixes from mainline.
-> >
-> > Here, I use Debian/unstable AMD64 and the SLIM LLVM toolchain 19.1.x
-> > from kernel.org.
-> >
-> > What does it mean in ISSUE DESCRIPTION...
-> >
-> > Furthermore, the hypercall page has no provision for Control-flow
-> > Integrity schemes (e.g. kCFI/CET-IBT/FineIBT), and will simply
-> > malfunction in such configurations.
-> >
-> > ...when someone uses Clang-kCFI?
->
-> The hypercall page has functions of the form:
->
->     MOV $x, %eax
->     VMCALL / VMMCALL / SYSCALL
->     RET
->
-> There are no ENDBR instructions, and no prologue/epilogue for hash-based
-> CFI schemes.
->
-> This is because it's code provided by Xen, not code provided by Linux.
->
-> The absence of ENDBR instructions will yield #CP when CET-IBT is active,
-> and the absence of hash prologue/epilogue lets the function be used in a
-> type-confused manor that CFI should have caught.
->
-> ~Andrew
+Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
+Fixes") blew away commit fdedd77b0eb3 ("drm/amd/display: Reapply
+2fde4fdddc1f"), which itself was a reapplication for the same reason,
+which results in that compiler warning returning:
 
-Thanks for the technical explanation, Andrew.
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.c:215:58: error: arithmetic between enumeration type 'enum dentist_divider_range' and floating-point type 'double' [-Werror,-Wenum-float-conversion]
+    215 |         divider = (unsigned int)(DFS_DIVIDER_RANGE_SCALE_FACTOR * (vco_freq_khz / clock_khz));
+        |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Hope that helps the folks of "CLANG CONTROL FLOW INTEGRITY SUPPORT".
+Just disable the warning for the whole file via Makefile to avoid having
+to reapply the same fix every time the code syncs from wherever it is
+actually maintained.
 
-I am not an active user of XEN in the Linux-kernel but I am willing to
-test when Linux v6.12.6 is officially released and give feedback.
+Fixes: be4e3509314a ("drm/amd/display: DML21 Reintegration For Various Fixes")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+If you would prefer reapplying the local fix, feel free to do so, but I
+would like for it to be in the upstream source so it does not have to
+keep being applied.
+---
+ drivers/gpu/drm/amd/display/dc/dml2/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+index d9c27ebe12ee08d6330eb199cd8ca9c8489fa5b2..5c0f93644c5d43c8a0bc12713fc400712d8de50b 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+@@ -78,7 +78,7 @@ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_top/dml2_top_soc15.o := $(dml2_ccfla
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4.o := $(dml2_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.o := $(dml2_ccflags) $(frame_warn_flag)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_core/dml2_core_factory.o := $(dml2_ccflags)
+-CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.o := $(dml2_ccflags)
++CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.o := $(dml2_ccflags) $(call cc-disable-warning,enum-float-conversion)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_factory.o := $(dml2_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_mcg/dml2_mcg_dcn4.o := $(dml2_ccflags)
+ CFLAGS_$(AMDDALPATH)/dc/dml2/dml21/src/dml2_mcg/dml2_mcg_factory.o := $(dml2_ccflags)
+
+---
+base-commit: 695c2c745e5dff201b75da8a1d237ce403600d04
+change-id: 20241219-amdgpu-fix-enum-float-conversion-again-again-cbfd9159f76d
 
 Best regards,
--Sedat-
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
