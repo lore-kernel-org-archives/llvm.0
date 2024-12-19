@@ -1,158 +1,181 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87860223E64
-	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 16:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527D219D8BE
+	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 17:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734626655; cv=none; b=V/uNKp8D3zMfnB5Jj66ESqmteJJ8khWJq1vlYxCscWSFyh47HFRtLxvjf20Z0L1lUbWjGiW7yCl6K/nAuhzuXSMzYlUkGBhfv6lU9K3ZfsdGRU4xuzBKtm960s3C0dGkeR4uefB4zkaZTxopOPvKFYh8XTmVRjak0vyx/PVsKJM=
+	t=1734627843; cv=none; b=a+t3fqlMq8UcasQyWPcvopK5QfELrVy7tmP3IBqqWWaU1wxzbanCxD1aGJrDN0bd2/BbEpv3vFU/rVcyx03VP3RLjaHaizntAwVSkUvXmw4Jf87ew3gvgB7q3rlu9XrbyNHw5LRyQeN2azcLTr7UOOxL1WtIE4305M9pMgPDRHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734626655; c=relaxed/simple;
-	bh=/WzK4ZNO7fuf8BvKKn1V0JJbMvcNr4d1yJhMfBFo2qQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r8A5Y0VcpJaqtxwzbnVwscx2WlqsRtPSOfOqDxr5F05oWg0PBu1Y0LQk5lPiQFnoKMKww5gASTc01X10PkSOY+oACs0nnI3i951+lSMhH475qQwjKUTniltROxOLeY0gF5pp/udvhTWUSrGs/L5Xpmd7KmnTd8/gMWBZmjRIUT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=PV6gzofV; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
+	s=arc-20240116; t=1734627843; c=relaxed/simple;
+	bh=Um6KpQMeUpI1o98cH9o1qH/UWhFM16FvOlogG0Gc6iI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e97CC9qFyVDnK0FAlYS0rQpvXnU+rVnJ/wzSMdzuxqW9Q4EbFX1+b1ALVd8AM0aKjrFQHeWbAd+UaG6/oo8/4IVWeaXQ1kIxHHLnpThQqU3XU8mhaS0rCKRIVq3Ga5SiB4Y7kTA/TeHwyCbMCO5aXJPa3tuPYWwzrWKsUevm758=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRvKvGB7; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="PV6gzofV"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-43635796b48so6843875e9.0
-        for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 08:44:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRvKvGB7"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-30229d5b229so11250071fa.0
+        for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 09:04:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citrix.com; s=google; t=1734626652; x=1735231452; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/WzK4ZNO7fuf8BvKKn1V0JJbMvcNr4d1yJhMfBFo2qQ=;
-        b=PV6gzofVrWUrl5igsba1Ef/pieZV8IbwIiVUfA3u62UZit9wFBGqiMFPZLXjbNl2BR
-         /gtX6UuE4dZxe5tewO1+dfNLZmNBBVdMsCpbg8zKJErdxqgMdiw/eBpNBs2iRv8EVgH5
-         yP86g0/Cqwie4MhxFLjYsJJn+0fqwo3Rukfyo=
+        d=gmail.com; s=20230601; t=1734627839; x=1735232639; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sur0OeWfd50x4tbBVyuDh7nPTJzAWoHCo8e3rWELqB4=;
+        b=mRvKvGB7X90+PDBboVHJHZiO32Tv84vVNIECZb7Zxb06dwSQh/tL4/aHaHAB+7CiQ9
+         aaEfg5DkrAtPo8ot+Dbo5/WpG2UZ9GJ2//QUso0IhymhwQjmpwv2DEcJxm8yea7/mrjf
+         Yr5DLLK1WlMdj3DRyFntOf/W0X74m/tnKisSaUlEpqY/o/9KokBjTm38h7zYHQAIQkGd
+         E4lBrG1lJyQBYdTWsmmhdO91R4djTR1gebcUMDEt0DtPuHpXvnGPJad5ZeSKSNuLTL6V
+         cqLWlKPCu80avnhyyZQPl3Y+6R5OKOv7ekplt/fKymHJ7Vr0dSSTXy4AE9gephke4UhA
+         khew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734626652; x=1735231452;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/WzK4ZNO7fuf8BvKKn1V0JJbMvcNr4d1yJhMfBFo2qQ=;
-        b=WbhxHeHh+lyBLsSziF8lHZrJh0CH8gCugfB0p36gUT/Tw948yEc2Gwdyy9853bZ7h7
-         wGSLl17IVKhd9u8Q3nD3cMPzsqqooYXgWpaD9WQemmgNg4xlFsY8nWyC7nBKEQB1MfUw
-         pThHXnUwfq9qz1d4oJFmT5poEbiaFNq9pIU2cJeQwwpqy43ca96YNAhs8BTMdO/W9p4Z
-         z+dxKS332xCuKHLRyoRx589sN22YbuDGG7z9bCKmUecargGVfHjmY8hkVenyM0W1JZja
-         2hoLzVZUoM0zvAVHHJX9IAQ1MSA2CsJOeweI7mWhyP/1mPqKFRMS7iN/xXIROncj+HEx
-         SL6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUOtFsF0guBuV4SEUryZ4K0QgytuYX2KFMlDPO2qF6fdpZ+a68sEU1Tyx0OErRK6Z8NKvU3@lists.linux.dev
-X-Gm-Message-State: AOJu0YyYj7b6u+pF0h6AClpncd4BkshVHd1l+guBpmVJge11st/yxsH8
-	Qg/8HsyfsaOjU0WZo7bxwVzc64SdQj7Z36W70+axtJ/us75i4svX5LinSuiSGdk=
-X-Gm-Gg: ASbGnct/1J5cKiXb3GHz5h1RTldRukytpvwqzTVniSRh1S9NDRh/wKfmnstDU/1bgIP
-	fr/oa+36XEuaMp2YPvVQjdLzJUQZvSxeaxY5OrEPQgjFr6HhJfqpySLYwK6S5xo8KMBhZGzv70v
-	uEgwFM0yFsrCb1fbIxp88YSFWFu6oTuAaGfzTIahnt1uEA5/pVJEsc75VzfvaZ6yt0OzFH/pS4/
-	7d/XBHfv8FMwTdV1I8kUAACuFauX7ik5HYPRDrG2FScOsYe1cQuvxjKuJ5hsi4APhTu9Ra4QLD3
-	5rBuJGXlACyL/+wZdJ8w
-X-Google-Smtp-Source: AGHT+IGEPE2HmFwQQoALSPufvuY9OcbgJ6yxjHc1zy4vQSlpAqsTcBReairPrxguFq2h8tr0xiiMgA==
-X-Received: by 2002:a05:600c:1d1c:b0:434:fddf:5c06 with SMTP id 5b1f17b1804b1-43662ca2232mr25073075e9.1.1734626651927;
-        Thu, 19 Dec 2024 08:44:11 -0800 (PST)
-Received: from [192.168.1.10] (host-92-26-98-202.as13285.net. [92.26.98.202])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c84ca21sm1951594f8f.63.2024.12.19.08.44.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2024 08:44:11 -0800 (PST)
-Message-ID: <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com>
-Date: Thu, 19 Dec 2024 16:44:10 +0000
+        d=1e100.net; s=20230601; t=1734627839; x=1735232639;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sur0OeWfd50x4tbBVyuDh7nPTJzAWoHCo8e3rWELqB4=;
+        b=Dblx7EyUSKyWswqkR81zmdG8FPHTtd/QvmHmZw3tP+l2YAvuYZhrBd7HwiE/HMWMA3
+         6i2We+LtYXIUKA0UJZEBBA4sjU/BeodqitiYdK2IIQfpvH1w/xR+P+8kY9R3mc+CoM+g
+         6njhYh9Luihvfh4gQECO2QFQv+2K9mGUkNmxkyHHyPAocTgQ2bfzjVY15tvIPkZzWu6a
+         0YcwnTkyNYUcM+CDY7NliFOlQ5P2ATU7LtxjSQQcgDXf6GLGNczQKuqzzs5W6P991qPp
+         bx3C0Z+xqgdbJvN0OJR3w2iGt1SnIgAL4smE4Cq/Jaz6dcpBLZh7n4dwyzC4AVmcqQka
+         pYzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ6J9JIyAWiL0FZ/Lr4P9s1wneP2B3azazx1cAkdgSytyrqc9DfJkflFeC5nB38avMhC59@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyyyf9ZSOm4Ma2ivrVCCiXxzUx4M5mzTABhMGbvZ34BydCj/cNC
+	FIMfj6gaUIBcT9qdyPweV6Bdvhba8/NJ6D28f8YnvOyA9HUP9Ex0/CwlsCuEkwSjl28tFfnJBe7
+	chhBcS+SDmgnF9QIkqOwnJwpAr8Y=
+X-Gm-Gg: ASbGnctXTtaEDhLfIIvxPka5Sj0d0MMxCeBw3PeGbawhMTdsSXnhI0KYVrHrWzKgYNx
+	arkistjUErT8h8zREhihiXSd5T88GuWQk14yyXQ==
+X-Google-Smtp-Source: AGHT+IEKsHKJaiNWPxarhgtnZN8O/nmNTDsV3KFFzk7Y+PV1ziPvwtrIF5ZsSH81W5pFevVXV3yL4kfI8HMNPd1vMi4=
+X-Received: by 2002:a2e:a710:0:b0:2fc:9869:2e19 with SMTP id
+ 38308e7fff4ca-3044db56bd0mr25595751fa.34.1734627839217; Thu, 19 Dec 2024
+ 09:03:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: sedat.dilek@gmail.com, Juergen Gross <jgross@suse.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>
-Cc: Jan Beulich <jbeulich@suse.com>, Josh Poimboeuf <jpoimboe@redhat.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, Kees Cook <kees@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
- 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
- 6+ahAA==
-In-Reply-To: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20241219121828.2120780-1-gal@nvidia.com> <CAFULd4YHFFKBzaF28f8n3z8WcOzom1WUe_hfRBx0ehhCpT9xnQ@mail.gmail.com>
+ <CAFULd4Z0PSzwvsFx_5deMKb7tV34uJWcHEadYGdk+D72QuHonA@mail.gmail.com>
+In-Reply-To: <CAFULd4Z0PSzwvsFx_5deMKb7tV34uJWcHEadYGdk+D72QuHonA@mail.gmail.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Thu, 19 Dec 2024 18:03:47 +0100
+Message-ID: <CAFULd4ZcSY+1WPn2T9dHVJZyyg1p+YaexQMJzAXHnCDy90j2fA@mail.gmail.com>
+Subject: Re: [PATCH] percpu: Remove intermediate variable in PERCPU_PTR()
+To: Gal Pressman <gal@nvidia.com>
+Cc: Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, netdev@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000002cb00e0629a28415"
 
-On 19/12/2024 4:14 pm, Sedat Dilek wrote:
-> Hi,
+--0000000000002cb00e0629a28415
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Dec 19, 2024 at 5:02=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> wro=
+te:
+
+> > > The intermediate variable in the PERCPU_PTR() macro results in a kern=
+el
+> > > panic on boot [1] due to a compiler bug seen when compiling the kerne=
+l
+> > > (+ KASAN) with gcc 11.3.1, but not when compiling with latest gcc
+> > > (v14.2)/clang(v18.1).
+> > >
+> > > To solve it, remove the intermediate variable (which is not needed) a=
+nd
+> > > keep the casting that resolves the address space checks.
+
+[...]
+
+> > >  include/linux/percpu-defs.h | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > >
+> > > diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.=
+h
+> > > index 35842d1e3879..573adb643d90 100644
+> > > --- a/include/linux/percpu-defs.h
+> > > +++ b/include/linux/percpu-defs.h
+> > > @@ -222,8 +222,7 @@ do {                                             =
+                           \
+> > >
+> > >  #define PERCPU_PTR(__p)                                             =
+           \
+> > >  ({                                                                  =
+   \
+> > > -       unsigned long __pcpu_ptr =3D (__force unsigned long)(__p);   =
+     \
+> > > -       (typeof(*(__p)) __force __kernel *)(__pcpu_ptr);             =
+   \
+> > > +       (typeof(*(__p)) __force __kernel *)((__force unsigned long)(_=
+_p)); \
+> > >  })
 >
-> Linux v6.12.6 will include XEN CVE fixes from mainline.
+> Actually, you can simplify the above a bit by writing it as:
 >
-> Here, I use Debian/unstable AMD64 and the SLIM LLVM toolchain 19.1.x
-> from kernel.org.
->
-> What does it mean in ISSUE DESCRIPTION...
->
-> Furthermore, the hypercall page has no provision for Control-flow
-> Integrity schemes (e.g. kCFI/CET-IBT/FineIBT), and will simply
-> malfunction in such configurations.
->
-> ...when someone uses Clang-kCFI?
+> #define PERCPU_PTR(__p)                            \
+>     ((typeof(*(__p)) __force __kernel *)(__force unsigned long)(__p)) \
 
-The hypercall page has functions of the form:
+Andrew, please find attached a substitute patch "[PATCH 4/6] percpu:
+Use TYPEOF_UNQUAL() in *_cpu_ptr() accessors" for your MM tree
+relative to the above hotfix. The whole patch series (+ hotfix) has
+been re-tested against the current mainline defconfig (+ KASAN),
+compiled once with gcc-11.4.1 and once with gcc-14.2.1.
 
-    MOV $x, %eax
-    VMCALL / VMMCALL / SYSCALL
-    RET
+Uros.
 
-There are no ENDBR instructions, and no prologue/epilogue for hash-based
-CFI schemes.
+--0000000000002cb00e0629a28415
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0004-percpu-Use-TYPEOF_UNQUAL-in-_cpu_ptr-accessors.patch"
+Content-Disposition: attachment; 
+	filename="0004-percpu-Use-TYPEOF_UNQUAL-in-_cpu_ptr-accessors.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m4vkkzvw0>
+X-Attachment-Id: f_m4vkkzvw0
 
-This is because it's code provided by Xen, not code provided by Linux.
-
-The absence of ENDBR instructions will yield #CP when CET-IBT is active,
-and the absence of hash prologue/epilogue lets the function be used in a
-type-confused manor that CFI should have caught.
-
-~Andrew
+RnJvbSBmYzkzM2M5Nzg0NDZkNmFhZTk3N2I1NDBmMDBjZmNmYmZjNjViNzU1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBVcm9zIEJpemphayA8dWJpempha0BnbWFpbC5jb20+CkRhdGU6
+IFR1ZSwgMjYgTm92IDIwMjQgMTY6NDY6NDIgKzAxMDAKU3ViamVjdDogW1BBVENIIDQvNl0gcGVy
+Y3B1OiBVc2UgVFlQRU9GX1VOUVVBTCgpIGluICpfY3B1X3B0cigpIGFjY2Vzc29ycwoKVXNlIFRZ
+UEVPRl9VTlFVQUwoKSBtYWNybyB0byBkZWNsYXJlIHRoZSByZXR1cm4gdHlwZSBvZiAqX2NwdV9w
+dHIoKQphY2Nlc3NvcnMgaW4gdGhlIGdlbmVyaWMgbmFtZWQgYWRkcmVzcyBzcGFjZSB0byBhdm9p
+ZCBhY2Nlc3MgdG8KZGF0YSBmcm9tIHBvaW50ZXIgdG8gbm9uLWVuY2xvc2VkIGFkZHJlc3Mgc3Bh
+Y2UgdHlwZSBvZiBlcnJvcnMuCgpTaWduZWQtb2ZmLWJ5OiBVcm9zIEJpemphayA8dWJpempha0Bn
+bWFpbC5jb20+CkFja2VkLWJ5OiBOYWRhdiBBbWl0IDxuYWRhdi5hbWl0QGdtYWlsLmNvbT4KQWNr
+ZWQtYnk6IENocmlzdG9waCBMYW1ldGVyIDxjbEBsaW51eC5jb20+CkNjOiBEZW5uaXMgWmhvdSA8
+ZGVubmlzQGtlcm5lbC5vcmc+CkNjOiBUZWp1biBIZW8gPHRqQGtlcm5lbC5vcmc+CkNjOiBUaG9t
+YXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4KQ2M6IEluZ28gTW9sbmFyIDxtaW5nb0Br
+ZXJuZWwub3JnPgpDYzogQm9yaXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+CkNjOiBEYXZlIEhh
+bnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tPgpDYzogIkguIFBldGVyIEFudmluIiA8
+aHBhQHp5dG9yLmNvbT4KQ2M6IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0
+aW9uLm9yZz4KQ2M6IEFuZHkgTHV0b21pcnNraSA8bHV0b0BrZXJuZWwub3JnPgpDYzogQnJpYW4g
+R2Vyc3QgPGJyZ2Vyc3RAZ21haWwuY29tPgpDYzogUGV0ZXIgWmlqbHN0cmEgPHBldGVyekBpbmZy
+YWRlYWQub3JnPgotLS0KIGFyY2gveDg2L2luY2x1ZGUvYXNtL3BlcmNwdS5oIHwgOCArKysrKyst
+LQogaW5jbHVkZS9saW51eC9wZXJjcHUtZGVmcy5oICAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQs
+IDcgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4Ni9p
+bmNsdWRlL2FzbS9wZXJjcHUuaCBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL3BlcmNwdS5oCmluZGV4
+IDY2NmU0MTM3YjA5Zi4uMjdmNjY4NjYwYWJlIDEwMDY0NAotLS0gYS9hcmNoL3g4Ni9pbmNsdWRl
+L2FzbS9wZXJjcHUuaAorKysgYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9wZXJjcHUuaApAQCAtNzMs
+MTAgKzczLDE0IEBACiAJdW5zaWduZWQgbG9uZyB0Y3BfcHRyX18gPSByYXdfY3B1X3JlYWRfbG9u
+Zyh0aGlzX2NwdV9vZmYpOwlcCiAJCQkJCQkJCQlcCiAJdGNwX3B0cl9fICs9IChfX2ZvcmNlIHVu
+c2lnbmVkIGxvbmcpKF9wdHIpOwkJCVwKLQkodHlwZW9mKCooX3B0cikpIF9fa2VybmVsIF9fZm9y
+Y2UgKil0Y3BfcHRyX187CQkJXAorCShUWVBFT0ZfVU5RVUFMKCooX3B0cikpIF9fZm9yY2UgX19r
+ZXJuZWwgKil0Y3BfcHRyX187CQlcCiB9KQogI2Vsc2UKLSNkZWZpbmUgYXJjaF9yYXdfY3B1X3B0
+cihfcHRyKSAoeyBCVUlMRF9CVUcoKTsgKHR5cGVvZihfcHRyKSkwOyB9KQorI2RlZmluZSBhcmNo
+X3Jhd19jcHVfcHRyKF9wdHIpCQkJCQkJXAorKHsJCQkJCQkJCQlcCisJQlVJTERfQlVHKCk7CQkJ
+CQkJCVwKKwkoVFlQRU9GX1VOUVVBTCgqKF9wdHIpKSBfX2ZvcmNlIF9fa2VybmVsICopMDsJCQlc
+Cit9KQogI2VuZGlmCiAKICNkZWZpbmUgUEVSX0NQVV9WQVIodmFyKQklX19wZXJjcHVfc2VnOih2
+YXIpX19wZXJjcHVfcmVsCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BlcmNwdS1kZWZzLmgg
+Yi9pbmNsdWRlL2xpbnV4L3BlcmNwdS1kZWZzLmgKaW5kZXggNGZkZTkzMzM0YWMzLi44YTdjOGQy
+ZDU3MGQgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvcGVyY3B1LWRlZnMuaAorKysgYi9pbmNs
+dWRlL2xpbnV4L3BlcmNwdS1kZWZzLmgKQEAgLTIyMSw3ICsyMjEsNyBAQCBkbyB7CQkJCQkJCQkJ
+XAogfSB3aGlsZSAoMCkKIAogI2RlZmluZSBQRVJDUFVfUFRSKF9fcCkJCQkJCQkJXAotCSgodHlw
+ZW9mKCooX19wKSkgX19mb3JjZSBfX2tlcm5lbCAqKShfX2ZvcmNlIHVuc2lnbmVkIGxvbmcpKF9f
+cCkpIFwKKwkoKFRZUEVPRl9VTlFVQUwoKihfX3ApKSBfX2ZvcmNlIF9fa2VybmVsICopKF9fZm9y
+Y2UgdW5zaWduZWQgbG9uZykoX19wKSkgXAogCiAjaWZkZWYgQ09ORklHX1NNUAogCi0tIAoyLjQy
+LjAKCg==
+--0000000000002cb00e0629a28415--
