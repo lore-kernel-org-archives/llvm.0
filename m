@@ -1,90 +1,105 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003461FC7F8;
-	Thu, 19 Dec 2024 11:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A09B222573
+	for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 11:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734606920; cv=none; b=ZUUk+/ZLTFX1EFr9RPtOvSmcEjU+PcN09PMHi3FHORaQ8u+7LwnmqSpXOqiTEfBcGpb+K9TN7pGsHR0ExJArYR4QJ2PvGH20DezhEx61fVGd+GWlEVLzMr7TMFDYehs7cmLYAFzeORa56YwXurXGk/Joe4wHCA5S2aRjG/oyuxQ=
+	t=1734609207; cv=none; b=t+ODFs6mzXPnwgJgc2/SdlNHhZpH1w3mFVU4ZdfHBJ1kw85hkqm9py0JpqzzxTPB2kXWdJVXXMRjOVEpbxziVlULr4Tdxl3zyX/WhVnyK4uyINi9b/KO2YOrtPtCeSU3zdGn2XMWOyGdC+MgamESTkUeke5AgQM9WW6hij8Y73k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734606920; c=relaxed/simple;
-	bh=asSLnhYiYuZZ58CWQC4gADux1+mDbx7KlVHObe9F1K0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IaNt4wYQxuDFBbanMRLsquFfukT+EdwyCGqO9XDcQasy92EbNRulUn5qJ8wzj6uEhWYGRLQ4Zee4S0G8Vtr1H3gdhI49VT+I3/5Aw/gq/t/rvcKdrbWapRigjLjKR7RmSWPoZGp/XGDuE3O/cve4NBtxE8R9fVTayIvCxuQ4pws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxUa89AGRn+IdYAA--.42957S3;
-	Thu, 19 Dec 2024 19:15:09 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMCxbcc7AGRndVQCAA--.14445S2;
-	Thu, 19 Dec 2024 19:15:08 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] selftests/bpf: Use asm constraint "m" for LoongArch
-Date: Thu, 19 Dec 2024 19:15:06 +0800
-Message-ID: <20241219111506.20643-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	s=arc-20240116; t=1734609207; c=relaxed/simple;
+	bh=7SYHZIs/WrMiFnJV+UNkilY+ZLz4Hxrf5N56/tTsSDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rr5k/6et5DJkrqmrQml7U3oRXocHH8S4+B6y9CvP4qU+xdA+nzAUrMZyIDgPo4xBzL1WDTAm+sRi97VApoJyYevm8/t7ICIG5Xa4ZxlSo0TJh/CZehEamYzOi1+1S6DLXzJ+gZAvJhGTXaviz6bDghXWWfWpJby3pjKmt5NxdpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C3EC1477;
+	Thu, 19 Dec 2024 03:53:53 -0800 (PST)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A4C173F720;
+	Thu, 19 Dec 2024 03:53:19 -0800 (PST)
+Date: Thu, 19 Dec 2024 11:53:13 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Juergen Gross <jgross@suse.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Keith Packard <keithp@keithp.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-efi@vger.kernel.org,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 02/28] Documentation: Bump minimum GCC version to 8.1
+Message-ID: <Z2QJKZBsgvPMgRo_@J2N7QTR9R3>
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-32-ardb+git@google.com>
+ <c4868f63-b688-4489-a112-05bf04280bde@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMCxbcc7AGRndVQCAA--.14445S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cr13urWxXw43tFW8GF13Jrc_yoW8Gr4kpw
-	18C3s5tFW5KFWav3WxKFW3Wa1fJrs3WrWIyayvvry3CF4DJw18JrWxKF45Wasxu3yftrWr
-	Aasaga4fua18JacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4868f63-b688-4489-a112-05bf04280bde@app.fastmail.com>
 
-Currently, LoongArch LLVM does not support the constraint "o" and no plan
-to support it, it only supports the similar constraint "m", so change the
-constraints from "nor" in the "else" case to arch-specific "nmr" to avoid
-the build error such as "unexpected asm memory constraint" for LoongArch.
+Hi Arnd,
 
-Cc: stable@vger.kernel.org
-Fixes: 630301b0d59d ("selftests/bpf: Add basic USDT selftests")
-Link: https://llvm.org/docs/LangRef.html#supported-constraint-code-list
-Link: https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/LoongArch/LoongArchISelDAGToDAG.cpp#L172
-Suggested-by: Weining Lu <luweining@loongson.cn>
-Suggested-by: Li Chen <chenli@loongson.cn>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/sdt.h | 2 ++
- 1 file changed, 2 insertions(+)
+On Wed, Sep 25, 2024 at 03:58:38PM +0000, Arnd Bergmann wrote:
+> On Wed, Sep 25, 2024, at 15:01, Ard Biesheuvel wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > Bump the minimum GCC version to 8.1 to gain unconditional support for
+> > referring to the per-task stack cookie using a symbol rather than
+> > relying on the fixed offset of 40 bytes from %GS, which requires
+> > elaborate hacks to support.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >  Documentation/admin-guide/README.rst | 2 +-
+> >  Documentation/process/changes.rst    | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> As we discussed during plumbers, I think this is reasonable,
+> both the gcc-8.1 version and the timing after the 6.12-LTS
+> kernel.
+> 
+> We obviously need to go through all the other version checks
+> to see what else can be cleaned up. I would suggest we also
+> raise the binutils version to 2.30+, which is what RHEL8
+> shipped alongside gcc-8. I have not found other distros that
+> use older binutils in combination with gcc-8 or higher,
+> Debian 10 uses binutils-2.31.
+> I don't think we want to combine the additional cleanup with
+> your series, but if we can agree on the version, we can do that
+> in parallel.
 
-diff --git a/tools/testing/selftests/bpf/sdt.h b/tools/testing/selftests/bpf/sdt.h
-index ca0162b4dc57..1fcfa5160231 100644
---- a/tools/testing/selftests/bpf/sdt.h
-+++ b/tools/testing/selftests/bpf/sdt.h
-@@ -102,6 +102,8 @@
- # define STAP_SDT_ARG_CONSTRAINT        nZr
- # elif defined __arm__
- # define STAP_SDT_ARG_CONSTRAINT        g
-+# elif defined __loongarch__
-+# define STAP_SDT_ARG_CONSTRAINT        nmr
- # else
- # define STAP_SDT_ARG_CONSTRAINT        nor
- # endif
--- 
-2.42.0
+Were you planning to send patches to that effect, or did you want
+someone else to do that? I think we were largely agreed on making those
+changes, but it wasn't clear to me who was actually going to send
+patches, and I couldn't spot a subsequent thread on LKML.
 
+Mark.
