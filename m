@@ -1,62 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF37221451;
-	Fri, 20 Dec 2024 20:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2BE223E78;
+	Fri, 20 Dec 2024 22:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734726197; cv=none; b=Z0eWBfDfIXXaVtUkVOBogZJCXF1LtxnPIE8rEnLjuUF9pQUVGZHc68gwr0h+0YK/oaHWRZ1OKv20DUf8LKewgFd7EJh7iCaO7uNScxdkC6WXyLAWpm5cY0zUNrEGUzZ5KtQ7BvGz9r76Mp9I2ODNnZZNdH5kRuXE9TGBVMxwyik=
+	t=1734733225; cv=none; b=jR60Ep2FNHJrxxgys9Wpj/KdI+3N1V9f1fAYDzYU2to/70wubq8HmRIlW/mD0yuxPZTcZuPly0zqG5F2LyvGdtA7lvF8MoizwULlly7RkPLpM5vLyhDm3pjverlEjjQQ5i7t/cHKjYQKz3z/z85mWBRtObHSpISrEuIP91ChIOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734726197; c=relaxed/simple;
-	bh=OiEnaYKVTru9CvGb8SDnTIaGyMxvjLzhjo7l20sAJN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dqf71OGlbeZ+NzpGNXDnVa+uIfkRwa3FM8IvuIrzWi/Uj9MyvYQrXzOoFBaQEHfOejlA/8EatmbVAEI7Yh1MCjcLdB3DSgOP0X3idr43wg6Al1qtwgFNU3HzQWnhoSoLO+ixIMnbyWdDnmd8aGpslXwfzPlVbkzSc24JNYYXhLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=atFDGkeH; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1734733225; c=relaxed/simple;
+	bh=RKJtUvqx+20g/B4pM/qb2d3twiPwIuqxNbOFvInV9oU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uP0OzwieqafzU8A2cF7rxZMLm+alWMmEMDzaU0COHEVOcWqFVea++CIQOx8bnNH61m68qGH6NPUD+T9VmvZzSaCUg6NNe+Aoyqtw2Z9zTGpPaI7u3Q8TOfIWZMhe8h13rzcLhLoFKUtmEndWfgOmzWjdm8fZb+Te1HUfmIj+hmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=maCWvAB8; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="atFDGkeH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="maCWvAB8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734726195; x=1766262195;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OiEnaYKVTru9CvGb8SDnTIaGyMxvjLzhjo7l20sAJN4=;
-  b=atFDGkeHHNnoZ2v6ABiIv6DNVqeqtj7D31VsKEexTssn8ENH09CFkUZ+
-   vprIGB6ZlhmGyP4ZWyTjaOZaDSLnbRFm1Fx9it0L2UnCihOYtopP0qcnf
-   Sb1PxkzU9T4VDUbpoLg0YyfHNtrOCWwL7fbSLpA5FTd8RnXb9B/dIp7Yz
-   yo2caTcpPf7DefcPNeP9Iw4BMZh+h55e4c0+lliDJt3muPM338NiF1tP9
-   EGg4ApIlw7v/Az+i3O1f1+QltoleCjkuGEJl2YriSEwWW9uN3jhrLmW5C
-   fLP7JHbFSJsnZFJ6ZLF5nOJjdYeiu0VBacx0YEzNTLyK9KtQBlWdEPHPO
-   g==;
-X-CSE-ConnectionGUID: u/Lxvj2LS46pJBSC5kLNtw==
-X-CSE-MsgGUID: WkY5ij0VSlakIDMksckGsA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="39220604"
+  t=1734733224; x=1766269224;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RKJtUvqx+20g/B4pM/qb2d3twiPwIuqxNbOFvInV9oU=;
+  b=maCWvAB88vynQ0mD8OiWUTS+8+r9RE+LJ1U+Sl3FuBIDbOi5np1eqAjr
+   8KIYr1s++zZDpHXxxQ42eYvaIHOT7SaTaxMCuld15qjObHThALxE2TAgR
+   hPFMgQQf4JBICmcrLc42SEv3wCDIju6MqK62yg/nzzDbC8nUvEBwR0vVN
+   pwKqCDhNXCiplkvmWvhShaFMooX11nNYYB6DGJ6Bg/YVD4K9PI345UBXm
+   4eP96ma2VF21xDXsgE1SdI+O2Ux5HH7bybFx0Rw38alUI0Kt3nLBqfCli
+   FqGv1auMD5KZuAuXG91MoKqT1KZk5tMRdYTz9OYpMnVY+yMN1W11VnaMq
+   w==;
+X-CSE-ConnectionGUID: Zbkr/Sr6SQWBj+YYWzFyvw==
+X-CSE-MsgGUID: pHIn3rKKQ1O35D8wW+d/eQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="35437741"
 X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="39220604"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 12:23:14 -0800
-X-CSE-ConnectionGUID: YCDnzWfwS9qEmJAgJimJmQ==
-X-CSE-MsgGUID: RBH11xyITEi/eokTGaxxPg==
+   d="scan'208";a="35437741"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 14:20:23 -0800
+X-CSE-ConnectionGUID: Ggo2dqd6QT6GotfRclNzFA==
+X-CSE-MsgGUID: Ug35xQvDT32RDSIF23t+Eg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="99082474"
+   d="scan'208";a="121908580"
 Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 20 Dec 2024 12:23:12 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 20 Dec 2024 14:20:23 -0800
 Received: from kbuild by a46f226878e0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tOjWf-0001eg-1g;
-	Fri, 20 Dec 2024 20:23:09 +0000
-Date: Sat, 21 Dec 2024 04:22:48 +0800
+	id 1tOlM4-0001i3-0Y;
+	Fri, 20 Dec 2024 22:20:20 +0000
+Date: Sat, 21 Dec 2024 06:20:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yunxiang Li <Yunxiang.Li@amd.com>, kvm@vger.kernel.org,
-	alex.williamson@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kevin.tian@intel.com, yishaih@nvidia.com, ankita@nvidia.com,
-	jgg@ziepe.ca, Yunxiang Li <Yunxiang.Li@amd.com>
-Subject: Re: [PATCH 2/3] vfio/pci: refactor vfio_pci_bar_rw
-Message-ID: <202412210450.yl9DrP8o-lkp@intel.com>
-References: <20241212205050.5737-2-Yunxiang.Li@amd.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:x86-efi-zboot 8/9] ld.lld: error: undefined hidden symbol:
+ kaslr_get_random_long
+Message-ID: <202412210648.1oUJrf50-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,112 +61,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241212205050.5737-2-Yunxiang.Li@amd.com>
 
-Hi Yunxiang,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on awilliam-vfio/next]
-[also build test WARNING on awilliam-vfio/for-linus linus/master v6.13-rc3 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yunxiang-Li/vfio-pci-refactor-vfio_pci_bar_rw/20241213-045257
-base:   https://github.com/awilliam/linux-vfio.git next
-patch link:    https://lore.kernel.org/r/20241212205050.5737-2-Yunxiang.Li%40amd.com
-patch subject: [PATCH 2/3] vfio/pci: refactor vfio_pci_bar_rw
-config: i386-buildonly-randconfig-004-20241220 (https://download.01.org/0day-ci/archive/20241221/202412210450.yl9DrP8o-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-efi-zboot
+head:   3b9b64db6d8de0eb1d3af75bba5d1b3c8e9f750f
+commit: 1fb505b57c8826d302ab87f25887d561891c2518 [8/9] efistub/x86: Refactor decompression flow to prepare for zboot support
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241221/202412210648.1oUJrf50-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210450.yl9DrP8o-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210648.1oUJrf50-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412210450.yl9DrP8o-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412210648.1oUJrf50-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/vfio/pci/vfio_pci_rdwr.c:14:
-   In file included from include/linux/pci.h:1650:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/vfio/pci/vfio_pci_rdwr.c:289:1: warning: unused label 'out' [-Wunused-label]
-     289 | out:
-         | ^~~~
-   2 warnings generated.
-
-
-vim +/out +289 drivers/vfio/pci/vfio_pci_rdwr.c
-
-0d77ed3589ac054 Alex Williamson 2018-03-21  232  
-536475109c82841 Max Gurtovoy    2021-08-26  233  ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char __user *buf,
-89e1f7d4c66d85f Alex Williamson 2012-07-31  234  			size_t count, loff_t *ppos, bool iswrite)
-89e1f7d4c66d85f Alex Williamson 2012-07-31  235  {
-89e1f7d4c66d85f Alex Williamson 2012-07-31  236  	struct pci_dev *pdev = vdev->pdev;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  237  	loff_t pos = *ppos & VFIO_PCI_OFFSET_MASK;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  238  	int bar = VFIO_PCI_OFFSET_TO_INDEX(*ppos);
-1378a17537c2699 Yunxiang Li     2024-12-12  239  	size_t x_start, x_end;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  240  	resource_size_t end;
-906ee99dd2a5c81 Alex Williamson 2013-02-14  241  	void __iomem *io;
-906ee99dd2a5c81 Alex Williamson 2013-02-14  242  	ssize_t done;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  243  
-a13b64591747e8a Alex Williamson 2016-02-22  244  	if (pci_resource_start(pdev, bar))
-89e1f7d4c66d85f Alex Williamson 2012-07-31  245  		end = pci_resource_len(pdev, bar);
-a13b64591747e8a Alex Williamson 2016-02-22  246  	else
-a13b64591747e8a Alex Williamson 2016-02-22  247  		return -EINVAL;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  248  
-906ee99dd2a5c81 Alex Williamson 2013-02-14  249  	if (pos >= end)
-89e1f7d4c66d85f Alex Williamson 2012-07-31  250  		return -EINVAL;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  251  
-906ee99dd2a5c81 Alex Williamson 2013-02-14  252  	count = min(count, (size_t)(end - pos));
-89e1f7d4c66d85f Alex Williamson 2012-07-31  253  
-89e1f7d4c66d85f Alex Williamson 2012-07-31  254  	if (bar == PCI_ROM_RESOURCE) {
-1378a17537c2699 Yunxiang Li     2024-12-12  255  		if (iswrite)
-1378a17537c2699 Yunxiang Li     2024-12-12  256  			return -EINVAL;
-906ee99dd2a5c81 Alex Williamson 2013-02-14  257  		/*
-906ee99dd2a5c81 Alex Williamson 2013-02-14  258  		 * The ROM can fill less space than the BAR, so we start the
-906ee99dd2a5c81 Alex Williamson 2013-02-14  259  		 * excluded range at the end of the actual ROM.  This makes
-906ee99dd2a5c81 Alex Williamson 2013-02-14  260  		 * filling large ROM BARs much faster.
-906ee99dd2a5c81 Alex Williamson 2013-02-14  261  		 */
-89e1f7d4c66d85f Alex Williamson 2012-07-31  262  		io = pci_map_rom(pdev, &x_start);
-1378a17537c2699 Yunxiang Li     2024-12-12  263  		if (!io)
-1378a17537c2699 Yunxiang Li     2024-12-12  264  			return -ENOMEM;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  265  		x_end = end;
-1378a17537c2699 Yunxiang Li     2024-12-12  266  
-1378a17537c2699 Yunxiang Li     2024-12-12  267  		done = vfio_pci_core_do_io_rw(vdev, 1, io, buf, pos,
-1378a17537c2699 Yunxiang Li     2024-12-12  268  					      count, x_start, x_end, 0);
-1378a17537c2699 Yunxiang Li     2024-12-12  269  
-1378a17537c2699 Yunxiang Li     2024-12-12  270  		pci_unmap_rom(pdev, io);
-0d77ed3589ac054 Alex Williamson 2018-03-21  271  	} else {
-1378a17537c2699 Yunxiang Li     2024-12-12  272  		done = vfio_pci_core_setup_barmap(vdev, bar);
-1378a17537c2699 Yunxiang Li     2024-12-12  273  		if (done)
-1378a17537c2699 Yunxiang Li     2024-12-12  274  			return done;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  275  
-89e1f7d4c66d85f Alex Williamson 2012-07-31  276  		io = vdev->barmap[bar];
-89e1f7d4c66d85f Alex Williamson 2012-07-31  277  
-89e1f7d4c66d85f Alex Williamson 2012-07-31  278  		if (bar == vdev->msix_bar) {
-89e1f7d4c66d85f Alex Williamson 2012-07-31  279  			x_start = vdev->msix_offset;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  280  			x_end = vdev->msix_offset + vdev->msix_size;
-1378a17537c2699 Yunxiang Li     2024-12-12  281  		} else {
-1378a17537c2699 Yunxiang Li     2024-12-12  282  			x_start = 0;
-1378a17537c2699 Yunxiang Li     2024-12-12  283  			x_end = 0;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  284  		}
-89e1f7d4c66d85f Alex Williamson 2012-07-31  285  
-1378a17537c2699 Yunxiang Li     2024-12-12  286  		done = vfio_pci_core_do_io_rw(vdev, pci_resource_flags(pdev, bar) & IORESOURCE_MEM, io, buf, pos,
-bc93b9ae0151ae5 Alex Williamson 2020-08-17  287  				      count, x_start, x_end, iswrite);
-1378a17537c2699 Yunxiang Li     2024-12-12  288  	}
-abafbc551fddede Alex Williamson 2020-04-22 @289  out:
-1378a17537c2699 Yunxiang Li     2024-12-12  290  	if (done > 0)
-1378a17537c2699 Yunxiang Li     2024-12-12  291  		*ppos += done;
-906ee99dd2a5c81 Alex Williamson 2013-02-14  292  	return done;
-89e1f7d4c66d85f Alex Williamson 2012-07-31  293  }
-84237a826b261de Alex Williamson 2013-02-18  294  
+>> ld.lld: error: undefined hidden symbol: kaslr_get_random_long
+   >>> referenced by x86-decompress.c
+   >>>               x86-decompress.stub.o:(efi_get_seed) in archive drivers/firmware/efi/libstub/lib.a
 
 -- 
 0-DAY CI Kernel Test Service
