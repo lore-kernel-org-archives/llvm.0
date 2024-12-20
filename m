@@ -1,216 +1,268 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2E121D01B;
-	Fri, 20 Dec 2024 18:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5F9199E8D;
+	Fri, 20 Dec 2024 19:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734719224; cv=none; b=Iy1YXosaY1BsyzzIvMDi7o3h/1AE+XZ6Ov9nWCoUN2BwGVrivj4upFnDrR9UuValHv3Jl/0RU4UdFZnoPHX7Gp3DSKgXsboiajYVnB8BV7LAiIRQX8aEUZgoZu29fy8EavbVJ2xVbPdbHj9+rAM6eydHD8H3XPqgfFfK7pz0Ubw=
+	t=1734721581; cv=none; b=GF7aGiUGiO1ovaGaHbr+eV9kfklQoYnpe6RCfRCYSKm4O0vGHluryt8mTfFKykWFx1MrHZEDt4PUEIKN93wc6HUV7/d3oh0uP/8bjHkoWX6+AnO3tV7YiN7bef4YmjS0YdxJiu2/hchtp9648W09v/9U7e4ReU5DN9DM4GwBB4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734719224; c=relaxed/simple;
-	bh=lVeG2+LVxzEoZ+Rnc836huFlQp02+Oj9SvSRKpveDbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rca6LB7MoN9XMmCmY7jokHjpyTvVnarlzRL6JuREC5dOqkUHrOLd4/+TLJpF+DAC89grjBI9/i+LSVZ5AZc/FegdaRtsad12j22q+1ZDBkfPqxecBrtosAJa3v96pak9JyibGLLGNACwJc9M124P26l7oSOzj0IPLdzH61n5Wyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TE2sNz4d; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734721581; c=relaxed/simple;
+	bh=BIDq7AIc2nskhJGg/Wzud7O5YDPpt+4cTKsZUZF3l38=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C2EYX/H0N2wMMA3Ls57Ej8TX6Sx9Kzt001QPbdDfVWJ7/xnsGAaaVMILZQ1Dqc06DrWhOSuQ5cJU22R2Ipzee9Nv2gHVFjB/p7QRnIGBfzqt3Sf4s/7srg/ZQHBgP/5Uuky6GctBkv3mk7p3bQU/WduYiDkm4t8OpcEtmMCUPbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QEC1bo+D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TE2sNz4d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734719222; x=1766255222;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lVeG2+LVxzEoZ+Rnc836huFlQp02+Oj9SvSRKpveDbo=;
-  b=TE2sNz4d8fsH7yf7xfr6MZ/YBbi8/DMQFbhYQx3YKhOFunLubhIYfd9q
-   jUhuzZH4VIU8ZE6aMosYRk2oqlF2aXpnWNgV5hFaZzRqG9FEZ/ajM929P
-   7OMEmI26tTwESOi17pzhYmt0wwy9hAzwNh9/M74vNGsHEhgxni4cHJzbb
-   6eY3ypHgHpObWHJZsaDgN8S45s/EAdmEzQ4h5V686YNIBQ/cO+UAlhE0f
-   /mdhzjOG4IIrboZHemXJTdOLwkTkkKxU1DaZFageLLDSBYNgiC4cuygsG
-   4EfdYhz+swT2W+0fxMP5771L0dkOrRlp6wbMwnPmc2DJwj8kFVW5+aglV
-   A==;
-X-CSE-ConnectionGUID: lbZ0T/ZASDuFdBeYrz7NQQ==
-X-CSE-MsgGUID: QJsry+LEQKqYT17P3OWsBw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="45882397"
-X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="45882397"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 10:27:02 -0800
-X-CSE-ConnectionGUID: K4pW+d6OTAmFjJn+m7+PFQ==
-X-CSE-MsgGUID: lM36vNWZR1qKyNPD2rstbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="98354381"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Dec 2024 10:26:59 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tOhiC-0001Wd-3B;
-	Fri, 20 Dec 2024 18:26:56 +0000
-Date: Sat, 21 Dec 2024 02:26:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: mtk22730 <Cloud.Zhang@mediatek.com>, Mark Brown <broonie@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Cloud Zhang <cloud.zhang@mediatek.com>
-Subject: Re: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of
- nor controller
-Message-ID: <202412210247.Brq06CHb-lkp@intel.com>
-References: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QEC1bo+D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3E2C4CECD;
+	Fri, 20 Dec 2024 19:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734721580;
+	bh=BIDq7AIc2nskhJGg/Wzud7O5YDPpt+4cTKsZUZF3l38=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=QEC1bo+DKitazcPdbQW+58zwkkrhyJ24RLtl8zuPbqZii6c/1LRm4/Cp7NfAWEHDI
+	 nwRgvNnej52kQWIoEuC/zdWS8yqfbgecVljNzkFicWpN0eAjDVrWMbsVKgAtlWsnC1
+	 KxZjaAXOhlbq6nNVQAvmy8h/uULzpOKU17MoPSsHsxlXHfhNUXakK0BzagFmqZIrUA
+	 +LdzzaOLDQ5uJ2x/SGL6i4Z/Womh2z3+TxHmAjYDkPrtHPumYVIGrjVTLwjAA5uCjN
+	 5x2GdqjuS9ubDevqX2qAmTaW0BXlbQNNonF79icffbRiBEYIBJEY9a0HX9dDFrV9Ol
+	 q9wPRoWxS02Fg==
+Date: Fri, 20 Dec 2024 19:06:08 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Cc: Mikael Gonella-Bolduc via B4 Relay
+ <devnull+mgonellabolduc.dimonoff.com@kernel.org>, Lars-Peter Clausen
+ <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Mikael
+ Gonella-Bolduc <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
+ Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
+ driver
+Message-ID: <20241220190608.713b0504@jic23-huawei>
+In-Reply-To: <Z2RydCiREUYQPLtz@uva.nl>
+References: <20241216-apds9160-driver-v3-0-c29f6c670bdb@dimonoff.com>
+	<20241216-apds9160-driver-v3-2-c29f6c670bdb@dimonoff.com>
+	<20241219163454.09daa116@jic23-huawei>
+	<Z2RydCiREUYQPLtz@uva.nl>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi mtk22730,
+On Thu, 19 Dec 2024 14:22:28 -0500
+Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> Hi Jonathan,
+> 
+> Regarding calibration attributes, while I did include them and made sure that what's exposed by the driver 
+> is actually being correctly set in the registers and that it has an impact on the input data, 
+> I do not have a real life use case for them right now and that's probably the case for almost everyone using the same chip.
+> It's there as a provision in case something comes up and I end up needing them.
+> 
+> I'm also not sure on how it should be used and in which scenario.
+> From what I understand, depending on the type of material in front of the sensor (tempered glass in my case),
+> it's there to cancel out unwanted light reflection of what you don't want to detect.
+> It does so by emitting another, very short, light pulse and takes the reflected light ADC count from that and substracts it.
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on linus/master v6.13-rc3 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I guess they apply a very short exposure time on that measurement to ensure it only picks up on light
+received very soon after the pulse and hence in theory very near to the sensor.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/mtk22730/spi-spi-mtk-nor-Modify-the-clock-architecture-of-nor-controller/20241212-172704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20241212092206.14071-1-Cloud.Zhang%40mediatek.com
-patch subject: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of nor controller
-config: um-randconfig-002-20241220 (https://download.01.org/0day-ci/archive/20241221/202412210247.Brq06CHb-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210247.Brq06CHb-lkp@intel.com/reproduce)
+> There's also another digital substraction parameter to always substract a value if you know what's the value to cancel out.
+> 
+> The 3 parameters in question in the datasheet:
+> - PS_CAN_DIG : This is just a digital substraction
+that one is fine as in_proximity_calibbias.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412210247.Brq06CHb-lkp@intel.com/
+> - PS_CAN_ANA_DURATION: The duration of the short cancellation light pulse
+> - PS_CAN_ANA_CURRENT: The light pulse current used
 
-All warnings (new ones prefixed by >>):
+These two are new concepts so I think we may need some new ABI
 
-   In file included from drivers/spi/spi-mtk-nor.c:10:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/spi/spi-mtk-nor.c:10:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/spi/spi-mtk-nor.c:10:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/spi/spi-mtk-nor.c:10:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/spi/spi-mtk-nor.c:746:19: warning: result of comparison of constant -22 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-     746 |         if (!cnt || (cnt == -EINVAL)) {
-         |                      ~~~ ^  ~~~~~~~
-   14 warnings generated.
+It is kind of like a differential channel with separate controls
+on the current and integration time (as a proxy for the pulse length).
+
+For the current I think it is cleaner to use a second
+out_currentX_* channel with labels provided to associate which current
+channel is which. Provide the read_label attribute and label all channels.
+
+Taking the duration, that's a bit of an oddity as it's really a characteristic
+of the the output current channel, not the measurement itself. So
+how about out_current1_pulse_time ?  Would need to be in seconds though
+to match with integration_time ABI.
+
+Having said all this. If there is a right setting (or a calibration procedure
+to get something that works) for a given device incorporating this sensor
+then the stuff perhaps belongs in DT.  If you go that way makes sure to cleanly
+document why these are device characteristics rather than corrections for
+calibration differences between different phones of the same model for instance.
 
 
-vim +746 drivers/spi/spi-mtk-nor.c
 
-   737	
-   738	static int mtk_nor_parse_clk(struct device *dev, struct mtk_nor *sp)
-   739	{
-   740		struct device_node *np = dev->of_node;
-   741		int ret;
-   742		const char *name;
-   743		u8 cnt, i;
-   744	
-   745		cnt = of_property_count_strings(np, "clock-names");
- > 746		if (!cnt || (cnt == -EINVAL)) {
-   747			dev_err(dev, "Unable to find clocks\n");
-   748			ret = -EINVAL;
-   749			goto out;
-   750		} else if (cnt < 0) {
-   751			dev_err(dev, "Count clock strings failed, err %d\n", cnt);
-   752			ret = cnt;
-   753			goto out;
-   754		} else if (cnt > MAX_CLOCK_CNT) {
-   755			ret = -EINVAL;
-   756			goto out;
-   757		}
-   758	
-   759		sp->clock_cnt = cnt;
-   760	
-   761		for (i = 0; i < cnt; i++) {
-   762			ret = of_property_read_string_index(np, "clock-names", i,
-   763					       &name);
-   764			if (ret) {
-   765				dev_err(dev, "failed to get clock string\n");
-   766				return ret;
-   767			}
-   768	
-   769			sp->clocks[i].name = name;
-   770			sp->clocks[i].clki = devm_clk_get(dev, sp->clocks[i].name);
-   771			if (IS_ERR(sp->clocks[i].clki)) {
-   772				dev_err(dev, "get clock %s fail\n", sp->clocks[i].name);
-   773				return PTR_ERR(sp->clocks[i].clki);
-   774			}
-   775		}
-   776	
-   777	out:
-   778		return ret;
-   779	}
-   780	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> I used a standard calibration attribute name for all of those, respectively:
+> - in_proximity_calibscale
+> - in_proxmiity_calibbias
+> - out_current_calibbias
+> 
+> I don't know if this is a correct use or not.
+
+Thanks for all the details.  That helps a lot!
+
+Gut feeling from me is that we are looking at something best defined in firmware
+/ DT given it's all about the glass in front of the sensor.
+> 
+> See my other comments inline.
+> 
+> Thank you,
+> Mikael
+> 
+> On Thu, Dec 19, 2024 at 04:34:54PM +0000, Jonathan Cameron wrote:
+> > On Mon, 16 Dec 2024 17:55:41 -0500
+> > Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org> wrote:
+> >   
+> > > From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+> > > 
+> > > APDS9160 is a combination of ALS and proximity sensors.
+> > > 
+> > > This patch add supports for:
+> > >     - Intensity clear data and illuminance data
+> > >     - Proximity data
+> > >     - Gain control, rate control
+> > >     - Event thresholds
+> > > 
+> > > Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>  
+> > 
+> > Hi Mikael,
+> > 
+> > A couple of questions on the calib* parts. I hadn't looked closely those
+> > before and the datasheet is not very helpful!
+> > 
+> > Jonathan
+> > 
+> >   
+> > > diff --git a/drivers/iio/light/apds9160.c b/drivers/iio/light/apds9160.c
+> > > new file mode 100644
+> > > index 0000000000000000000000000000000000000000..0c93ab847d9a36aac7aa6a1893bba0fe819d9e28
+> > > --- /dev/null
+> > > +++ b/drivers/iio/light/apds9160.c  
+> >   
+> > > +
+> > > +/*
+> > > + * The PS intelligent cancellation level register allows
+> > > + * for an on-chip substraction of the ADC count caused by
+> > > + * unwanted reflected light from PS ADC output.  
+> > As it's subtraction, why calibscale? Sounds more suitable to make this to calibbias.  
+> > > + */
+> > > +static int apds9160_set_ps_cancellation_level(struct apds9160_chip *data,
+> > > +					      int val)
+> > > +{
+> > > +	int ret;
+> > > +	__le16 buf;
+> > > +
+> > > +	if (val < 0 || val > 0xFFFF)
+> > > +		return -EINVAL;
+> > > +
+> > > +	buf = cpu_to_le16(val);
+> > > +	ret = regmap_bulk_write(data->regmap, APDS9160_REG_PS_CAN_LEVEL_DIG_LSB,
+> > > +				&buf, 2);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	data->ps_cancellation_level = val;
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +/*
+> > > + * This parameter determines the cancellation pulse duration
+> > > + * in each of the PWM pulse. The cancellation is applied during the
+> > > + * integration phase of the PS measurement.
+> > > + * Duration is programmed in half clock cycles
+> > > + * A duration value of 0 or 1 will not generate any cancellation pulse  
+> > 
+> > Perhaps add some details on why this is a calibbias type control?
+> > 
+> > Whilst I can sort of grasp it might have a similar affect to a conventional
+> > calibration bias by removing some offset, it's not totally obvious.
+> >   
+> 
+> After looking at all possible types for a proxmity channel this is what I though was the most sensible choice.
+> Is it possible to use a custom attribute type here if nothing fits?
+
+Yeah, it feels like too much of a stretch so new ABI needed.
+
+> Or maybe we should drop this entirely since it will probably be rarely used.
+
+See above, maybe we push this to DT and make it a firmware description problem.
+
+> 
+> > > + */
+> > > +static int apds9160_set_ps_analog_cancellation(struct apds9160_chip *data,
+> > > +					       int val)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	if (val < 0 || val > 0x7F)
+> > > +		return -EINVAL;
+> > > +
+> > > +	ret = regmap_write(data->regmap, APDS9160_REG_PS_CAN_LEVEL_ANA_DUR,
+> > > +			   val);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	data->ps_cancellation_analog = val;
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +/*
+> > > + * This parameter works in conjunction with the cancellation pulse duration
+> > > + * The value determines the current used for crosstalk cancellation
+> > > + * B4-B5: The coarse value defines cancellation current in steps of 60nA
+> > > + * B0-B3: The fine value adjusts the cancellation current in steps of 2.4nA  
+> > 
+> > Whilst I'm failing to actually understand what this is doing and maybe never will
+> > we can make the interface more intuitive by not using the encoded value.
+> > Just use a value in nA with both the val and val2 parts.
+> > 
+> > it is rather odd given 15 * 2.4 is only 36 so there are holes..  PRobably a case
+> > for getting as close as you can to the requested value.
+> > 
+> > Calibration parameters aren't guaranteed to have a simple interpretation but
+> > this current case is worse that it needs to be.
+> >  
+> 
+> Ok, noted I will make this change for v4 if it's best to keep this.
+> This works in conjunction with the cancellation duration.
+>  
+> > > +	case IIO_CHAN_INFO_CALIBSCALE:
+> > > +		if (val2 != 0)
+> > > +			return -EINVAL;
+> > > +		switch (chan->type) {
+> > > +		case IIO_PROXIMITY:
+> > > +			return apds9160_set_ps_cancellation_level(data, val);
+> > > +		case IIO_CURRENT:
+> > > +			return apds9160_set_ps_cancellation_current(data, val);  
+> > 
+> > I can't figure out what this one actually is.
+> >   
+> 
+> This is the current used by the cancellation light pulse (PS_CAN_ANA_CURRENT).
+> I might not be using the correct type name here, since it's so specific to this chip
+> I just don't know which one to use.
+
+It is a kind of cool feature, and so if it works well I expect it will become
+more common over time. So maybe this is just the first of many devices to support this.
+
+Jonathan
+
+
