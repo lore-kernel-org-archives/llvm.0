@@ -1,52 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C5218EAB;
-	Fri, 20 Dec 2024 04:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D421A7AE3;
+	Fri, 20 Dec 2024 08:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734668942; cv=none; b=GrHtWqslqGImw75AnOwUDKdSkR/Sv+dRhuYpHbx9cG598bhPz6Bqd5zQq/ticBYrl8IFjatmy30sWmsCGCULvqzObGuwkMDDdndyMbkAx3ULmsWBtXliQoYySlLGEEqch8ZIlTTW21i4VhQaKB9tk3qLC4CJ0MD8vC13whGIXSg=
+	t=1734684182; cv=none; b=aQOYaOAi1FXkVbOAp1e8W6RouUmvsfa52LNqH7Erc82xPXagvSibGchOSAgXOVcVCNbfjC6mLXVzIt7N680ZP+1bBt6VUxM3bMeZ/egfpud58okPdeYww0nynY8LQClZ2aSRbBL8BF0Gro26M5G9BGtry+n57psbNN0UpmE4l70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734668942; c=relaxed/simple;
-	bh=uPUnHYn/V1+uMo80vM/4FkDBN47Pxt/+NHL6ybpWZ7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L0fsXxS9Yh6seXLX02CVWiET/PSugrf1tyGK/CswV293Pm02OvC+V3eM7CeKkt4W3xYCOpY61zLEt+/IWIAmEYb0CxUdH4wzjm/2FqMzIQkUIMxZDpIWj5vaYMhquEl+fC1M7kcKyTCowpTMSIjLQuVJSbV+nboa743EwX9ULUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4RKSCwQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734684182; c=relaxed/simple;
+	bh=VCv78L4mZGTH84kiPzt2lwX1HtDS+Zy6CMiElRoIiDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iqDLpAwzLE5y53c/qCB1OOEYlbCuP/azgrXKPtZjTk8HTRaauRMDYyQ2aNcUbLp9GkgqXPCdM7awLWza2jAdjJxK0Gji6qQADoXOazmOQ1Qqrt71+zglJUrPaxDLEQtwuPzS9cI4k8b16JcNIYHrldsOZcei7Gnpkh1susF2UaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nAoposeR; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4RKSCwQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3CBC4CECD;
-	Fri, 20 Dec 2024 04:28:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734668942;
-	bh=uPUnHYn/V1+uMo80vM/4FkDBN47Pxt/+NHL6ybpWZ7A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H4RKSCwQ1BKLiT5ChzVtgl1UQA0rglKgLqk/JBoa7leqe/bwuAFOdaxb2V0TrXbaN
-	 pAzzH1Dj6v61fb1Z2R/liF9RTdmY1Z3fsSqcUQ88CCLj7h5l1SvmI8MCVvOoc6HsAB
-	 ZLHyRuMIXKVzAFknDOX9g3ipy+Fq5htQ5LeAqRRDuB0xFAYXMrGAsqzxW5aenThmCf
-	 U1RRpOacI16yjzkDRRGU0KGiptUSsLi2arnnvIaVq7Fj50nwv2NgO73zwzVb2IcIBO
-	 2lkQsMNJPEHp1hU8j6e0N+4i+yROMGy3dpkYwgPTpf+EQgUnGO1pAJFu7e184E/PNf
-	 0GBmrnGtS5mbg==
-Date: Fri, 20 Dec 2024 04:28:57 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev, akuchynski@google.com,
-	sboyd@kernel.org, pmalani@chromium.org, badhri@google.com,
-	rdbabiera@google.com, dmitry.baryshkov@linaro.org,
-	jthies@google.com, Benson Leung <bleung@chromium.org>,
-	Bill Wendling <morbo@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 0/8] Thunderbolt and DP altmode support for
- cros-ec-typec
-Message-ID: <Z2TyiUt1SCASbznh@google.com>
-References: <20241213233552.451927-1-abhishekpandit@chromium.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nAoposeR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734684181; x=1766220181;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VCv78L4mZGTH84kiPzt2lwX1HtDS+Zy6CMiElRoIiDM=;
+  b=nAoposeRYqFbLQh2aAUAuxFFy3VtJ9SqLkWbrRyTRz0bfmaofYe4pjC8
+   tXpViVPN11d1Zy4iwDcs2cU0WpXARGWJrOn430jSACH7dkiu+28zawl4C
+   agm2nU3SN5FD2Erm9ybV8F6ztL7NdPKfyCWIqg3L0mzWUzcIqp6ebeRJ3
+   eHszyqGZLcdzhvA/V1HxhYgKWxjovdjtzoheXc+A1xWm+dtDXdpKJUG0n
+   uL/WnzzgVMNPoLtgWAKO6UqUyaHMdfj+n9iiApQtuuwYNzXTAecxR650z
+   Q4McQphinEFXEUrutbx4yxfyhr5zj2fL2fSoOXIFjwLbEauXYLOcfTaVY
+   w==;
+X-CSE-ConnectionGUID: QebMlayWQ1+E/tvXoiC25Q==
+X-CSE-MsgGUID: Z8VB7mxPTe62aUnJv5KG4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="35375623"
+X-IronPort-AV: E=Sophos;i="6.12,250,1728975600"; 
+   d="scan'208";a="35375623"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 00:43:00 -0800
+X-CSE-ConnectionGUID: TTHtGL4xQiWUCWXCGYcK9w==
+X-CSE-MsgGUID: 0ZB+aNecRfGsK80DtUtZNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,250,1728975600"; 
+   d="scan'208";a="98282689"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 20 Dec 2024 00:42:58 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tOYb2-0000zL-1F;
+	Fri, 20 Dec 2024 08:42:56 +0000
+Date: Fri, 20 Dec 2024 16:42:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: WARNING: modpost: vmlinux: section mismatch in reference:
+ __apply_fineibt+0x849 (section: .text.__apply_fineibt) -> poison_endbr
+ (section: .init.text)
+Message-ID: <202412201614.F1kJs3gM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,21 +64,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241213233552.451927-1-abhishekpandit@chromium.org>
 
-On Fri, Dec 13, 2024 at 03:35:41PM -0800, Abhishek Pandit-Subedi wrote:
-> Abhishek Pandit-Subedi (7):
->   usb: typec: Only use SVID for matching altmodes
->   usb: typec: Make active on port altmode writable
->   usb: typec: Print err when displayport fails to enter
->   platform/chrome: cros_ec_typec: Update partner altmode active
->   platform/chrome: cros_ec_typec: Displayport support
->   platform/chrome: cros_ec_typec: Thunderbolt support
->   platform/chrome: cros_ec_typec: Disable tbt on port
-> 
-> Heikki Krogerus (1):
->   usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8faabc041a001140564f718dabe37753e88b37fa
+commit: 04505bbbbb15da950ea0239e328a76a3ad2376e0 x86/fineibt: Poison ENDBR at +0
+date:   1 year, 5 months ago
+config: x86_64-buildonly-randconfig-003-20241219 (https://download.01.org/0day-ci/archive/20241220/202412201614.F1kJs3gM-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241220/202412201614.F1kJs3gM-lkp@intel.com/reproduce)
 
-It looks no but just want to confirm: does the 4 cros_ec_typec patches
-build-time depend on the typec patches?  I.e. can they merge through
-different trees?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412201614.F1kJs3gM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x200 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x383 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x4fc (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x5d2 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x623 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x6f0 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x749 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x813 (section: .text.__apply_fineibt) -> text_poke_early (section: .init.text)
+>> WARNING: modpost: vmlinux: section mismatch in reference: __apply_fineibt+0x849 (section: .text.__apply_fineibt) -> poison_endbr (section: .init.text)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
