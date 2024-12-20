@@ -1,140 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E721EE7D3;
-	Thu, 19 Dec 2024 23:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B934C97
+	for <llvm@lists.linux.dev>; Fri, 20 Dec 2024 00:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734652009; cv=none; b=mkQEG6P0vdMSmdduW+TAeAolocKUL8VvuskcbhJfESXr7Krj/HDFasKN7g2vAz4eQOYQsHpamuC8Cz3MIu5OFnwctEXs7eX2AX3zQYVDkJdCuZJlGGzx9OVh/+8J1U9l6j3WxCUo3F9kr0Q2Nur4NsH8V9clwnUedPENdFZ/Mp0=
+	t=1734654484; cv=none; b=XAj9BhpKgA0YJvnJr2GMxzIf7YjERxH4Lv3tAVw0EVEIWbQzlYqnjua2qy/F/OW5LFEi5RWx/XG+tZ4MF/vF2FEjfCsR5EJzdKfP5Kr6l2WfiX8v6BB2xbfFiYEIvPHSpUwHEAbb9egsI07GhGzggJ7j6K3edxbtLOu2IDXOeDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734652009; c=relaxed/simple;
-	bh=VlgIxjX59zEAgQYr06DoizAEZuBLCR+PtLTOfL+NXJw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AyxCrJ7XTlTBRlrITDF4P8N31AvRKcHbaVbMxAu4nhX3OMfy1C5C7l19f8gGaYha2QhrxbAy8tl3lM79+BzPOvAwBSXz/BKA8x+b9uAzsC3qmD33e1FOFb3UQQot6dcT5FC9TzdeKrZ8bUWSz13tCW1ydiy4sQwXWtXqGRiysd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uziCFrfE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734654484; c=relaxed/simple;
+	bh=eTO4qLFVLWM7uDPgkBqgHCUS/GGGhm4RqKXT6sImQfE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MxgFg6agS6DLC1zi8wXJMJhoM13G96GmY3OoCBvfJlZLjrG3OGNPzgnIZXwdFYYYfPjORMSjDwV1+l9Ipiz/vSCPWh6SdbrCRA4uJlU/HlRVwSW1TyoVjBh/7+eF6rEzvHpjviQhtVQ2wBDiGZOQBBD7gbrw9FbWgXlWI5rkxi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IC2oey+o; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uziCFrfE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86459C4CED4;
-	Thu, 19 Dec 2024 23:46:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734652009;
-	bh=VlgIxjX59zEAgQYr06DoizAEZuBLCR+PtLTOfL+NXJw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=uziCFrfEeAh8k+2m+V9C/N36gBo4Jn29A1NYTu9fcDAa87m9o7r/n/1+Fi1NwypHy
-	 Emv/qVcNACtrMkU/P3KKu2mxfSs0pk3gF0ARII+rR0O8uIWKFNS4ot8y7lduqhRhO4
-	 msmOe95d7sTkRcgIiKyRLBDwF9etdrLDA9CS0s+gEkAAVqbFTpD4BVKcoEwPM8ke3V
-	 8AmQhxPE0BQFV4+iicZ7Ff+mfWJDEc8y2u4R/rO6t0JN2Od3PtCX7hEgr/xKZEbumC
-	 sPrgN+xqxHn76GNwsjqubiHp7lLC0/cVqVJd49viYdg1r9nKF4cN2CBWdG2QZCPTWm
-	 oUkMuhIbyKW/A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 19 Dec 2024 16:46:35 -0700
-Subject: [PATCH] drm/amd/display: Increase sanitizer frame larger than
- limit when compile testing with clang
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IC2oey+o"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54026562221so1260513e87.1
+        for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 16:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734654481; x=1735259281; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UhCGwjT4MNgsAsS3x60eka2ReGd19hVX6zntAyJ6Al4=;
+        b=IC2oey+obnksnkLGpHCS9i7EFF5/64uNhJb2+sXFuikSZd1iM+1QvQx3Pd4z5kWPGe
+         lINSAc8QC5clVN9AmqMVH2CfDJkotf4zKZ4D+JMJCHFPW71rtFo+n5Oink8jddl7AdoE
+         inLCjFrDDM6va3hanzC5qqK3jUFnFjGjxLI7Jo62jkMymh7pIv4YSsKhlpA9uF2YAFjK
+         CnB/zMi3rGyxr8e1kzgvJzeL2x+d0ZLDE82zTiPUlbwQDcK+biQiK7P5Zwb11VQrloXA
+         JrXmphlWvwLI1MmXDjAhxpijpblV1GZYzUtrzlhoBlEyxlmp3EiMwmr53Z4kFDJlCbrV
+         U2ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734654481; x=1735259281;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UhCGwjT4MNgsAsS3x60eka2ReGd19hVX6zntAyJ6Al4=;
+        b=eC4wtqxNP51dHVu7z2ow41dXJcqCmFkfW4jCFyfoYa+pNUtiMsJsLOEApjjVVgd6jj
+         E9HUCCrQ/jX/hkAVyPz0aT+8hyIMhlY/F4xIA/CK3YSbBdrts0rlkHZYZGDg+aEaCwCI
+         e7DqZOvzmGmW35DWxZpTbdfDZRMKQMJLkGMpBdYjzwB60MLXw38yRQ+kZouzL0Op5Aym
+         mICt7zImGR6VgVZfzEQa0uTiJGJqtDmqUOrqiO+A6aVFaa3NLqkMbE/F2rf4+wGlWmF2
+         mKbzRyJRBya/glrmF/eeEzBhCOHj+ihEWLOFpjDZg6H6KI2L8nrzhblK2Bo7fEIENwZ3
+         OL1A==
+X-Forwarded-Encrypted: i=1; AJvYcCXS21b58O8iwsLzfezJxhgX8BTllaTbUPv/BTgSnhsjRyCHxOhj7UNAO8uLVm87G7hPUmrr@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx6Y3VObwQMgh56uQRiXxoT/7gRE26nWJPpq7ZqpLnPMK1laJc6
+	vNOiU6qN5pvFGXvv2MDlyR9xUuJx9GTRHU3K/Q9rKP7l5thl8SzQQLG0AncMhZh1jjfk+3+Bkxw
+	rygWDXEnheDHbdLT/FEW1lxPIIIs=
+X-Gm-Gg: ASbGncuZGQmxDytdQ8HMvDFIUu0iHNHrOTHx6A2eFe29l1BedaBPMCiAZxk9fi1sQ0M
+	GK0jmP0uG1DL7gmH4e5kDk3cR2zwP1emyjlRXWCgvpL0NqmzOsv+L60PuX4QNh1fqARBA
+X-Google-Smtp-Source: AGHT+IHdMSqXFO0bUVEDAZ4SCZ2fQwBZ1kEmH9L/snNjAN+YPeQgREXfx920dn0tlJ68REUVRA6KTN5FtpWwCfHyps0=
+X-Received: by 2002:a05:6512:318d:b0:542:2192:3eb6 with SMTP id
+ 2adb3069b0e04-5422956bdb6mr135555e87.52.1734654481033; Thu, 19 Dec 2024
+ 16:28:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-v1-1-8c53a644d486@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFqwZGcC/x2N0QrCMAxFf2Xk2cBaJzh/RXwITVoD7TZSFWHs3
- w0+Hu499+7QxVQ63IYdTD7adV0cwmmA9KSlCCo7QxzjFGKYkRqX7Y3cakRiNukdU/UmZqMmWMm
- KGL5cRqo1rUtWz8bzxHO6hHAV8O3NJOv3/3t/HMcPwaEKSYcAAAA=
-X-Change-ID: 20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-f034d9c5118e
-To: Chaitanya Dhere <chaitanya.dhere@amd.com>, Jun Lei <jun.lei@amd.com>, 
- Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
- Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, 
- Alex Deucher <alexander.deucher@amd.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Xinhui Pan <Xinhui.Pan@amd.com>
-Cc: amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3854; i=nathan@kernel.org;
- h=from:subject:message-id; bh=VlgIxjX59zEAgQYr06DoizAEZuBLCR+PtLTOfL+NXJw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOkpG9KSRZ5tMNrsnDf3up++trOTeLpqh/b+034S29esU
- VWS33G4o5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExk6m9Ghlu3bC5ZOf9kclF0
- OsFnqnljfdjd+YILG/j7orwNrjw0lWX4X/45xv60ZWn0bG4dBaX5Kf/Y5d9OKLy0/832A+FnD/+
- qZgQA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
+ <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
+ <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com> <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com>
+In-Reply-To: <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Fri, 20 Dec 2024 01:27:24 +0100
+Message-ID: <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
+Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit 24909d9ec7c3 ("drm/amd/display: Overwriting dualDPP UBF values
-before usage") added a new warning in dml2/display_mode_core.c when
-building allmodconfig with clang:
+On Fri, Dec 20, 2024 at 12:26=E2=80=AFAM Andrew Cooper
+<andrew.cooper3@citrix.com> wrote:
+>
+> On 19/12/2024 11:10 pm, Sedat Dilek wrote:
+> > On Thu, Dec 19, 2024 at 6:07=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.=
+com> wrote:
+> >> On Thu, Dec 19, 2024 at 5:44=E2=80=AFPM Andrew Cooper <andrew.cooper3@=
+citrix.com> wrote:
+> >>> On 19/12/2024 4:14 pm, Sedat Dilek wrote:
+> >>>> Hi,
+> >>>>
+> >>>> Linux v6.12.6 will include XEN CVE fixes from mainline.
+> >>>>
+> >>>> Here, I use Debian/unstable AMD64 and the SLIM LLVM toolchain 19.1.x
+> >>>> from kernel.org.
+> >>>>
+> >>>> What does it mean in ISSUE DESCRIPTION...
+> >>>>
+> >>>> Furthermore, the hypercall page has no provision for Control-flow
+> >>>> Integrity schemes (e.g. kCFI/CET-IBT/FineIBT), and will simply
+> >>>> malfunction in such configurations.
+> >>>>
+> >>>> ...when someone uses Clang-kCFI?
+> >>> The hypercall page has functions of the form:
+> >>>
+> >>>     MOV $x, %eax
+> >>>     VMCALL / VMMCALL / SYSCALL
+> >>>     RET
+> >>>
+> >>> There are no ENDBR instructions, and no prologue/epilogue for hash-ba=
+sed
+> >>> CFI schemes.
+> >>>
+> >>> This is because it's code provided by Xen, not code provided by Linux=
+.
+> >>>
+> >>> The absence of ENDBR instructions will yield #CP when CET-IBT is acti=
+ve,
+> >>> and the absence of hash prologue/epilogue lets the function be used i=
+n a
+> >>> type-confused manor that CFI should have caught.
+> >>>
+> >>> ~Andrew
+> >> Thanks for the technical explanation, Andrew.
+> >>
+> >> Hope that helps the folks of "CLANG CONTROL FLOW INTEGRITY SUPPORT".
+> >>
+> >> I am not an active user of XEN in the Linux-kernel but I am willing to
+> >> test when Linux v6.12.6 is officially released and give feedback.
+> >>
+> > https://wiki.xenproject.org/wiki/Testing_Xen#Presence_test
+> > https://wiki.xenproject.org/wiki/Testing_Xen#Commands_for_presence_test=
+ing
+> >
+> > # apt install -t unstable xen-utils-4.17 -y
+> >
+> > # xl list
+> > Name                                        ID   Mem VCPUs      State  =
+ Time(s)
+> > Domain-0                                     0  7872     4     r-----  =
+   398.2
+> >
+> > Some basic tests LGTM - see also attached stuff.
+> >
+> > If you have any tests to recommend, let me know.
+>
+> That itself is good enough as a smoke test.  Thankyou for trying it out.
+>
+> If you want something a bit more thorough, try
+> https://xenbits.xen.org/docs/xtf/  (Xen's self-tests)
+>
+> Grab and build it, and `./xtf-runner -aqq --host` will run a variety of
+> extra codepaths in dom0, without the effort of making/running full guests=
+.
+>
+> ~Andrew
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6268:13: error: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
-   6268 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
-        |             ^
+Run on Debian 6.12.5 and my selfmade 6.12.5 and 6.12.6.
+All tests lead to a reboot in case of Debian or in my kernels to a shutdown=
+.
 
-Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
-Fixes") introduced one in dml2_core/dml2_core_dcn4_calcs.c with the same
-configuration:
+Can you recommend a specific test?
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7236:13: error: stack frame size (3256) exceeds limit (3072) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
-   7236 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
-        |             ^
+dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --list functional xsa | grep =
+xsa-4
+test-pv64-xsa-444
+test-hvm64-xsa-451
+test-hvm64-xsa-454
 
-In the case of the first warning, the stack usage was already at the
-limit at the parent change, so the offending change was rather
-innocuous. In the case of the second warning, there was a rather
-dramatic increase in stack usage compared to the parent:
+Is there no xsa-466 test?
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7032:13: error: stack frame size (2696) exceeds limit (2048) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
-   7032 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
-        |             ^
+Thanks.
 
-This is an unfortunate interaction between an issue with stack slot
-reuse in LLVM that gets exacerbated by sanitization (which gets enabled
-with all{mod,yes}config) and function calls using a much higher number
-of parameters than is typical in the kernel, necessitating passing most
-of these values on the stack.
-
-While it is possible that there should be source code changes to address
-these warnings, this code is difficult to modify for various reasons, as
-has been noted in other changes that have occurred for similar reasons,
-such as commit 6740ec97bcdb ("drm/amd/display: Increase frame warning
-limit with KASAN or KCSAN in dml2").
-
-Increase the frame larger than limit when compile testing with clang and
-the sanitizers enabled to avoid this breakage in all{mod,yes}config, as
-they are commonly used and valuable testing targets. While it is not the
-best to hide this issue, it is not really relevant when compile testing,
-as the sanitizers are commonly stressful on optimizations and they are
-only truly useful at runtime, which COMPILE_TEST states will not occur
-with the current build.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202412121748.chuX4sap-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/amd/display/dc/dml2/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-index d9c27ebe12ee08d6330eb199cd8ca9c8489fa5b2..91c4f3b4bd5f46ac5c1c74f665b06dbe61081917 100644
---- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-@@ -29,7 +29,11 @@ dml2_rcflags := $(CC_FLAGS_NO_FPU)
- 
- ifneq ($(CONFIG_FRAME_WARN),0)
- ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-+ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
-+frame_warn_flag := -Wframe-larger-than=4096
-+else
- frame_warn_flag := -Wframe-larger-than=3072
-+endif
- else
- frame_warn_flag := -Wframe-larger-than=2048
- endif
-
----
-base-commit: 695c2c745e5dff201b75da8a1d237ce403600d04
-change-id: 20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-f034d9c5118e
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+BR,
+-Sedat-
