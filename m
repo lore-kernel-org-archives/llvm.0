@@ -1,48 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8CB157A48;
-	Fri, 20 Dec 2024 20:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF37221451;
+	Fri, 20 Dec 2024 20:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734725431; cv=none; b=tR53bfJhV857XI57t11Dgx2tY86fH1zn+Hg+yd6zy6GU0prQB1Jd47pspdUg87s3j0mWCZLCcyifptKQC21AaaKRUtaMSxCjafCaiGrdg+dhkre2zEVic0jHgq4PWL/xnPEWcjr9HJK0J+ofXxKRLdINQWoVPJ/E1FP74zID93k=
+	t=1734726197; cv=none; b=Z0eWBfDfIXXaVtUkVOBogZJCXF1LtxnPIE8rEnLjuUF9pQUVGZHc68gwr0h+0YK/oaHWRZ1OKv20DUf8LKewgFd7EJh7iCaO7uNScxdkC6WXyLAWpm5cY0zUNrEGUzZ5KtQ7BvGz9r76Mp9I2ODNnZZNdH5kRuXE9TGBVMxwyik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734725431; c=relaxed/simple;
-	bh=Y5WkjUd7LXEn4qV2JV8JcU/BT3jEqqZU5OsCIK0j1HA=;
+	s=arc-20240116; t=1734726197; c=relaxed/simple;
+	bh=OiEnaYKVTru9CvGb8SDnTIaGyMxvjLzhjo7l20sAJN4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GM9FK0RRTfaGrITE7jH4E0qUPe/a0IiRZMTPTgeZ8cQJPVR6SROa3n0A6uJdGUdGfFRfsPcD2j9mVxqMsL6CZm9AfoRLWmv5RUDkrFjShz5jV9xw6dy4b9v41EcltxqO2ra3++1Nawb33QzgJngw42SUkqX9djLbFAYAZ8EZXJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DKM+fSgL; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=dqf71OGlbeZ+NzpGNXDnVa+uIfkRwa3FM8IvuIrzWi/Uj9MyvYQrXzOoFBaQEHfOejlA/8EatmbVAEI7Yh1MCjcLdB3DSgOP0X3idr43wg6Al1qtwgFNU3HzQWnhoSoLO+ixIMnbyWdDnmd8aGpslXwfzPlVbkzSc24JNYYXhLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=atFDGkeH; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DKM+fSgL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B405C4CECD;
-	Fri, 20 Dec 2024 20:10:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734725430;
-	bh=Y5WkjUd7LXEn4qV2JV8JcU/BT3jEqqZU5OsCIK0j1HA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DKM+fSgLUJGVn1HXFpYNBtoyOwFOUF66NNOilKp+1PTOUBMcjFg5H4qp3WxBT0Yjc
-	 C2eXYB9+UG/mw3nlzh5WQRWWzB6XaXv5mzeHDjsCY8hv0CUgYUD99N2dn0n1yhz8sa
-	 Uh6nZAGm93nNdZsrfA4sG9YZ2DkUoSHu9w8yYB5/OmqILiwnS1M524S1Rbj+iCRSE5
-	 IlGjlOAIpG1k88FuXK6B7AM6G94oRXqBNRvgjChSpVb7+Ir6J9WyJuKqWUdKEz7ioF
-	 eBGTyo6yrNzDK7GW4Ch3gFZWXmqJFLnlrTxQne12L5PloFWctxsaJ+XDV+CotNNXTX
-	 nWV/8dgBkjyiw==
-Date: Fri, 20 Dec 2024 13:10:25 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 0/2] objtool: Add option to fail build on vmlinux
- warnings
-Message-ID: <20241220201025.GB936171@ax162>
-References: <20241218-objtool-strict-v2-0-a5297c961434@google.com>
- <20241218160656.18cbdcbb93b0e0bcf28adf18@linux-foundation.org>
- <20241219010054.pxcnejgkvy3g744k@jpoimboe>
- <20241219221913.GA1259354@ax162>
- <20241219225642.ho42z3kgeuy5vq4v@jpoimboe>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="atFDGkeH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734726195; x=1766262195;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OiEnaYKVTru9CvGb8SDnTIaGyMxvjLzhjo7l20sAJN4=;
+  b=atFDGkeHHNnoZ2v6ABiIv6DNVqeqtj7D31VsKEexTssn8ENH09CFkUZ+
+   vprIGB6ZlhmGyP4ZWyTjaOZaDSLnbRFm1Fx9it0L2UnCihOYtopP0qcnf
+   Sb1PxkzU9T4VDUbpoLg0YyfHNtrOCWwL7fbSLpA5FTd8RnXb9B/dIp7Yz
+   yo2caTcpPf7DefcPNeP9Iw4BMZh+h55e4c0+lliDJt3muPM338NiF1tP9
+   EGg4ApIlw7v/Az+i3O1f1+QltoleCjkuGEJl2YriSEwWW9uN3jhrLmW5C
+   fLP7JHbFSJsnZFJ6ZLF5nOJjdYeiu0VBacx0YEzNTLyK9KtQBlWdEPHPO
+   g==;
+X-CSE-ConnectionGUID: u/Lxvj2LS46pJBSC5kLNtw==
+X-CSE-MsgGUID: WkY5ij0VSlakIDMksckGsA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="39220604"
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="39220604"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 12:23:14 -0800
+X-CSE-ConnectionGUID: YCDnzWfwS9qEmJAgJimJmQ==
+X-CSE-MsgGUID: RBH11xyITEi/eokTGaxxPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="99082474"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 20 Dec 2024 12:23:12 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tOjWf-0001eg-1g;
+	Fri, 20 Dec 2024 20:23:09 +0000
+Date: Sat, 21 Dec 2024 04:22:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yunxiang Li <Yunxiang.Li@amd.com>, kvm@vger.kernel.org,
+	alex.williamson@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kevin.tian@intel.com, yishaih@nvidia.com, ankita@nvidia.com,
+	jgg@ziepe.ca, Yunxiang Li <Yunxiang.Li@amd.com>
+Subject: Re: [PATCH 2/3] vfio/pci: refactor vfio_pci_bar_rw
+Message-ID: <202412210450.yl9DrP8o-lkp@intel.com>
+References: <20241212205050.5737-2-Yunxiang.Li@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,51 +65,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241219225642.ho42z3kgeuy5vq4v@jpoimboe>
+In-Reply-To: <20241212205050.5737-2-Yunxiang.Li@amd.com>
 
-On Thu, Dec 19, 2024 at 02:56:42PM -0800, Josh Poimboeuf wrote:
-> On Thu, Dec 19, 2024 at 03:19:13PM -0700, Nathan Chancellor wrote:
-> > I do agree with you that figuring our the root problem and resolution to
-> > some of these warnings is not always the easiest, especially when they
-> > are on the toolchain side, so I have often kicked the can down the road.
-> > I know there is some documentation in objtool.txt around various
-> > warnings, is that pretty up to date/accurate? Are there any other
-> > resources I could look at to help with this work?
-> 
-> I think the document is pretty up to date.  Some warnings are self
-> explanatory but others like "unreachable instruction" or "stack state
-> mismatch" do require digging.
-> 
-> One thing that can help is to "export OBJTOOL_VERBOSE=1", which will
-> tell objtool to disassemble any affected functions and show a backtrace
-> with all the taken branches leading up to the warning (if applicable).
-> Maybe that should be the default for --Werror.
+Hi Yunxiang,
 
-Yeah, that does not sound like a bad idea. If the build is going to
-break, it seems reasonable to give developers as much pertinent
-information as possible so they can address the problem properly and
-move on.
+kernel test robot noticed the following build warnings:
 
-> I'd definitely like more people to be able to debug objtool warnings.
-> Any ideas on making that easier or educating people or improving
-> warnings are very welcome.  I'll be keeping that in mind when looking at
-> the build errors over the holidays.
+[auto build test WARNING on awilliam-vfio/next]
+[also build test WARNING on awilliam-vfio/for-linus linus/master v6.13-rc3 next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I will definitely ponder on that as well since I should have a good
-perspective on that front.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunxiang-Li/vfio-pci-refactor-vfio_pci_bar_rw/20241213-045257
+base:   https://github.com/awilliam/linux-vfio.git next
+patch link:    https://lore.kernel.org/r/20241212205050.5737-2-Yunxiang.Li%40amd.com
+patch subject: [PATCH 2/3] vfio/pci: refactor vfio_pci_bar_rw
+config: i386-buildonly-randconfig-004-20241220 (https://download.01.org/0day-ci/archive/20241221/202412210450.yl9DrP8o-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210450.yl9DrP8o-lkp@intel.com/reproduce)
 
-> > Some objtool reports get sent to only llvm@lists.linux.dev when clang is
-> > involved (due to a historical filter IIRC, I cannot find the original
-> > request), so you may want to glance at [2] to see if anything new pops
-> > up.
-> 
-> We need to figure out how to get that fixed, the commit author really
-> needs to know if their code causes a warning/error.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412210450.yl9DrP8o-lkp@intel.com/
 
-I have started a new thread with the 0day folks to get that adjusted
-with you and Peter on CC:
+All warnings (new ones prefixed by >>):
 
-https://lore.kernel.org/20241220200617.GA936171@ax162/
+   In file included from drivers/vfio/pci/vfio_pci_rdwr.c:14:
+   In file included from include/linux/pci.h:1650:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/vfio/pci/vfio_pci_rdwr.c:289:1: warning: unused label 'out' [-Wunused-label]
+     289 | out:
+         | ^~~~
+   2 warnings generated.
 
-Cheers,
-Nathan
+
+vim +/out +289 drivers/vfio/pci/vfio_pci_rdwr.c
+
+0d77ed3589ac054 Alex Williamson 2018-03-21  232  
+536475109c82841 Max Gurtovoy    2021-08-26  233  ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char __user *buf,
+89e1f7d4c66d85f Alex Williamson 2012-07-31  234  			size_t count, loff_t *ppos, bool iswrite)
+89e1f7d4c66d85f Alex Williamson 2012-07-31  235  {
+89e1f7d4c66d85f Alex Williamson 2012-07-31  236  	struct pci_dev *pdev = vdev->pdev;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  237  	loff_t pos = *ppos & VFIO_PCI_OFFSET_MASK;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  238  	int bar = VFIO_PCI_OFFSET_TO_INDEX(*ppos);
+1378a17537c2699 Yunxiang Li     2024-12-12  239  	size_t x_start, x_end;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  240  	resource_size_t end;
+906ee99dd2a5c81 Alex Williamson 2013-02-14  241  	void __iomem *io;
+906ee99dd2a5c81 Alex Williamson 2013-02-14  242  	ssize_t done;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  243  
+a13b64591747e8a Alex Williamson 2016-02-22  244  	if (pci_resource_start(pdev, bar))
+89e1f7d4c66d85f Alex Williamson 2012-07-31  245  		end = pci_resource_len(pdev, bar);
+a13b64591747e8a Alex Williamson 2016-02-22  246  	else
+a13b64591747e8a Alex Williamson 2016-02-22  247  		return -EINVAL;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  248  
+906ee99dd2a5c81 Alex Williamson 2013-02-14  249  	if (pos >= end)
+89e1f7d4c66d85f Alex Williamson 2012-07-31  250  		return -EINVAL;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  251  
+906ee99dd2a5c81 Alex Williamson 2013-02-14  252  	count = min(count, (size_t)(end - pos));
+89e1f7d4c66d85f Alex Williamson 2012-07-31  253  
+89e1f7d4c66d85f Alex Williamson 2012-07-31  254  	if (bar == PCI_ROM_RESOURCE) {
+1378a17537c2699 Yunxiang Li     2024-12-12  255  		if (iswrite)
+1378a17537c2699 Yunxiang Li     2024-12-12  256  			return -EINVAL;
+906ee99dd2a5c81 Alex Williamson 2013-02-14  257  		/*
+906ee99dd2a5c81 Alex Williamson 2013-02-14  258  		 * The ROM can fill less space than the BAR, so we start the
+906ee99dd2a5c81 Alex Williamson 2013-02-14  259  		 * excluded range at the end of the actual ROM.  This makes
+906ee99dd2a5c81 Alex Williamson 2013-02-14  260  		 * filling large ROM BARs much faster.
+906ee99dd2a5c81 Alex Williamson 2013-02-14  261  		 */
+89e1f7d4c66d85f Alex Williamson 2012-07-31  262  		io = pci_map_rom(pdev, &x_start);
+1378a17537c2699 Yunxiang Li     2024-12-12  263  		if (!io)
+1378a17537c2699 Yunxiang Li     2024-12-12  264  			return -ENOMEM;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  265  		x_end = end;
+1378a17537c2699 Yunxiang Li     2024-12-12  266  
+1378a17537c2699 Yunxiang Li     2024-12-12  267  		done = vfio_pci_core_do_io_rw(vdev, 1, io, buf, pos,
+1378a17537c2699 Yunxiang Li     2024-12-12  268  					      count, x_start, x_end, 0);
+1378a17537c2699 Yunxiang Li     2024-12-12  269  
+1378a17537c2699 Yunxiang Li     2024-12-12  270  		pci_unmap_rom(pdev, io);
+0d77ed3589ac054 Alex Williamson 2018-03-21  271  	} else {
+1378a17537c2699 Yunxiang Li     2024-12-12  272  		done = vfio_pci_core_setup_barmap(vdev, bar);
+1378a17537c2699 Yunxiang Li     2024-12-12  273  		if (done)
+1378a17537c2699 Yunxiang Li     2024-12-12  274  			return done;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  275  
+89e1f7d4c66d85f Alex Williamson 2012-07-31  276  		io = vdev->barmap[bar];
+89e1f7d4c66d85f Alex Williamson 2012-07-31  277  
+89e1f7d4c66d85f Alex Williamson 2012-07-31  278  		if (bar == vdev->msix_bar) {
+89e1f7d4c66d85f Alex Williamson 2012-07-31  279  			x_start = vdev->msix_offset;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  280  			x_end = vdev->msix_offset + vdev->msix_size;
+1378a17537c2699 Yunxiang Li     2024-12-12  281  		} else {
+1378a17537c2699 Yunxiang Li     2024-12-12  282  			x_start = 0;
+1378a17537c2699 Yunxiang Li     2024-12-12  283  			x_end = 0;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  284  		}
+89e1f7d4c66d85f Alex Williamson 2012-07-31  285  
+1378a17537c2699 Yunxiang Li     2024-12-12  286  		done = vfio_pci_core_do_io_rw(vdev, pci_resource_flags(pdev, bar) & IORESOURCE_MEM, io, buf, pos,
+bc93b9ae0151ae5 Alex Williamson 2020-08-17  287  				      count, x_start, x_end, iswrite);
+1378a17537c2699 Yunxiang Li     2024-12-12  288  	}
+abafbc551fddede Alex Williamson 2020-04-22 @289  out:
+1378a17537c2699 Yunxiang Li     2024-12-12  290  	if (done > 0)
+1378a17537c2699 Yunxiang Li     2024-12-12  291  		*ppos += done;
+906ee99dd2a5c81 Alex Williamson 2013-02-14  292  	return done;
+89e1f7d4c66d85f Alex Williamson 2012-07-31  293  }
+84237a826b261de Alex Williamson 2013-02-18  294  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
