@@ -1,72 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ECB1BB6A0;
-	Fri, 20 Dec 2024 12:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2936215711;
+	Fri, 20 Dec 2024 13:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734698905; cv=none; b=DnOqV5IaZOnllEOeVNld/ZpQ8e2R66A8oECLKS3ptZn3E8dec9nCSGr+kMyNJiXxVrAv++I1+Rr8NL8NK7rJPskl0fcWUxmsskUvlQOU51F0X2goJhEcnBL/lBtJ20oK3vtgIb/6aKN56HxFoCgSro7aWdUfB2BIIwHXM7iS3NY=
+	t=1734700236; cv=none; b=iwA73IxkBfFPlZtIDKfMPebq3L48P9NrnwntCNc5iRPOVQi3+nbAYhPJp2uKB+fzQRkHzzoqB74OC2vnERy3uAETNOZ+EOdKsOHfI+rk8uQwIW7A5lnxSJWYAxF8qv5MbIvdmz/R9ZjML/1EOvy1slxFXsu1mvNCFQwNe3ypcTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734698905; c=relaxed/simple;
-	bh=FDdJ2lBFifNTt/lTvkM/SY/UtKg5l+gUiTFgEfwyL2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HGP5no5phq7lurD7sE1lmIRzNihmVArKg99Vx4+ExB/ZurlvVH/frvogAbS6InQPPf65HB+wr2TY7iqhDuqLiqNXUgnCqxhM646udwn7Lw5pypYUeJDG32O8R0+aU8BpU81SyXwDlS9UfbSlPfDcWg2A3z44aAFj0hkDuIb3Pxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d7c7rwfR; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1734700236; c=relaxed/simple;
+	bh=9tfqMRRr/14ylRJVnXmikiBT0Y1tNBBBRg53lA/Cil8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CuiLMOgDIV0q0dRdMdnfol5yX765H3MSdvyoRDk7UbuO//btXMKQdkxu3kbNtESD7tR/Y+55D98KSQqgaSvZBhYak4lfM0txgfrG9kqDlUXVrIqL0rLz1HpVLLUZBCVWY+/SnC5nEnPcCzovjka6wTs8kRO5HIag2wmAhNANZEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZJkR9Fff; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7c7rwfR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZJkR9Fff"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734698904; x=1766234904;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FDdJ2lBFifNTt/lTvkM/SY/UtKg5l+gUiTFgEfwyL2c=;
-  b=d7c7rwfRlY244ugosD28BiHk7Nw9W+cFfB8QgyEW4035akmmRedfIuse
-   qnAcvd/V27kyBUE6EdV+3QFmI4bJKKsab8foHZQ5G2J2kvIkqaDiSalhm
-   TFelzKKWcdHWX97M7hTfvWW6GQ7uYd8i/TRpjcGL8asfWV9PeB5vuFhyF
-   FHDUYTy4uJgbSbEp8lUiSwDLcxywGMv3/b/j378koMm8uxncVuVy4EBUd
-   uVigDo4sZdTPmOpYnA96h+a7q9IAFtWj8yETdQn7+wH1rDGzxhz1SI/yr
-   p8pEeJ0Z73QhX8d0r7S0PSy8QZl6M49cbxPS8oyOKj46YcxlH6d0fG/Wk
-   Q==;
-X-CSE-ConnectionGUID: sNjKRNp0SH2ccCsZ2c8pLw==
-X-CSE-MsgGUID: exvLjS1ERO2dDnV8kgkQuw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="35129415"
+  t=1734700235; x=1766236235;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9tfqMRRr/14ylRJVnXmikiBT0Y1tNBBBRg53lA/Cil8=;
+  b=ZJkR9FffwiBl4Brd4mthFEZpHkrhKhNNUF3yE3gXvxKe0hz8rkekdMvk
+   u6UGOiCkd/gsnQV/KDhlG7crylcfJ/6eYXeSEJz0ZAUAdlpqONwEk519u
+   xA0zTG+x8X6fYbCmHNH0AVQOyWztMrRCmA1fxAPnCLiTvjElh+Yp+tpVQ
+   4or4vpCn08vN84yjVEhLdHr1xjHUx7189TNiBa9GbDvjEZNNqKksJjgTM
+   nHiVqsPGNnsOm7uM5iDtcadczVSoCgWMBHRyzjYASAiRFEYfCnm/5hZgL
+   flftUUwPrrQUbqj8gpk8JXfs6eJqsIhc0fMlAhhmupdVfyrEUqypBlxge
+   w==;
+X-CSE-ConnectionGUID: CABysMa/Qnm8QQYx3yIjJQ==
+X-CSE-MsgGUID: xoKhLJuYQ2iK1UK9HBa0EA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="35369752"
 X-IronPort-AV: E=Sophos;i="6.12,250,1728975600"; 
-   d="scan'208";a="35129415"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 04:48:24 -0800
-X-CSE-ConnectionGUID: x+DoA/PTQHKmMiqDUDD6Zg==
-X-CSE-MsgGUID: WG3pATEDTtCBOQrj2PA1yg==
+   d="scan'208";a="35369752"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 05:10:25 -0800
+X-CSE-ConnectionGUID: y9kGpgOPQxmRNQedtW43YA==
+X-CSE-MsgGUID: FHrmnFK/QWGpPAhyOVdzTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,250,1728975600"; 
-   d="scan'208";a="98326547"
+   d="scan'208";a="98292457"
 Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 20 Dec 2024 04:48:19 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 20 Dec 2024 05:10:23 -0800
 Received: from kbuild by a46f226878e0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tOcQT-00019D-2y;
-	Fri, 20 Dec 2024 12:48:17 +0000
-Date: Fri, 20 Dec 2024 20:47:32 +0800
+	id 1tOclo-0001AJ-2o;
+	Fri, 20 Dec 2024 13:10:20 +0000
+Date: Fri, 20 Dec 2024 21:09:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>
+To: Daniel Lee <chullee@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	Simon Horman <horms@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/8] net: ethtool: plumb PHY stats to PHY
- drivers
-Message-ID: <202412202052.YznBmblv-lkp@intel.com>
-References: <20241219132534.725051-3-o.rempel@pengutronix.de>
+	linux-f2fs-devel@lists.sourceforge.net,
+	Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [jaegeuk-f2fs:dev-test 15/15] fs/f2fs/dir.c:339:1: warning: unused
+ label 'start_find_entry'
+Message-ID: <202412202144.aEypgoBo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,36 +63,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241219132534.725051-3-o.rempel@pengutronix.de>
 
-Hi Oleksij,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/ethtool-linkstate-migrate-linkstate-functions-to-support-multi-PHY-setups/20241219-213024
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241219132534.725051-3-o.rempel%40pengutronix.de
-patch subject: [PATCH net-next v2 2/8] net: ethtool: plumb PHY stats to PHY drivers
-config: arm-randconfig-004-20241220 (https://download.01.org/0day-ci/archive/20241220/202412202052.YznBmblv-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241220/202412202052.YznBmblv-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+head:   3f1a145b84bcf0fae986212590bfeeaf165d22d6
+commit: 3f1a145b84bcf0fae986212590bfeeaf165d22d6 [15/15] f2fs: Introduce linear search for dentries
+config: riscv-randconfig-002-20241220 (https://download.01.org/0day-ci/archive/20241220/202412202144.aEypgoBo-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241220/202412202144.aEypgoBo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412202052.YznBmblv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412202144.aEypgoBo-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: phy_ethtool_get_phy_stats
-   >>> referenced by stats.c
-   >>>               net/ethtool/stats.o:(stats_prepare_data) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: phy_ethtool_get_link_ext_stats
-   >>> referenced by linkstate.c
-   >>>               net/ethtool/linkstate.o:(linkstate_prepare_data) in archive vmlinux.a
+   In file included from fs/f2fs/dir.c:10:
+   In file included from include/linux/f2fs_fs.h:11:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/f2fs/dir.c:339:1: warning: unused label 'start_find_entry' [-Wunused-label]
+     339 | start_find_entry:
+         | ^~~~~~~~~~~~~~~~~
+   5 warnings generated.
+
+
+vim +/start_find_entry +339 fs/f2fs/dir.c
+
+   326	
+   327	struct f2fs_dir_entry *__f2fs_find_entry(struct inode *dir,
+   328						 const struct f2fs_filename *fname,
+   329						 struct page **res_page)
+   330	{
+   331		unsigned long npages = dir_blocks(dir);
+   332		struct f2fs_dir_entry *de = NULL;
+   333		unsigned int max_depth;
+   334		unsigned int level;
+   335		bool use_hash = true;
+   336	
+   337		*res_page = NULL;
+   338	
+ > 339	start_find_entry:
+   340		if (f2fs_has_inline_dentry(dir)) {
+   341			de = f2fs_find_in_inline_dir(dir, fname, res_page, use_hash);
+   342			goto out;
+   343		}
+   344	
+   345		if (npages == 0)
+   346			goto out;
+   347	
+   348		max_depth = F2FS_I(dir)->i_current_depth;
+   349		if (unlikely(max_depth > MAX_DIR_HASH_DEPTH)) {
+   350			f2fs_warn(F2FS_I_SB(dir), "Corrupted max_depth of %lu: %u",
+   351				  dir->i_ino, max_depth);
+   352			max_depth = MAX_DIR_HASH_DEPTH;
+   353			f2fs_i_depth_write(dir, max_depth);
+   354		}
+   355	
+   356		for (level = 0; level < max_depth; level++) {
+   357			de = find_in_level(dir, level, fname, res_page, use_hash);
+   358			if (de || IS_ERR(*res_page))
+   359				break;
+   360		}
+   361	
+   362	out:
+   363	#if IS_ENABLED(CONFIG_UNICODE)
+   364		if (IS_CASEFOLDED(dir) && !de && use_hash) {
+   365			use_hash = false;
+   366			goto start_find_entry;
+   367		}
+   368	#endif
+   369		/* This is to increase the speed of f2fs_create */
+   370		if (!de)
+   371			F2FS_I(dir)->task = current;
+   372		return de;
+   373	}
+   374	
 
 -- 
 0-DAY CI Kernel Test Service
