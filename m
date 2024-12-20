@@ -1,105 +1,216 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8C622915C
-	for <llvm@lists.linux.dev>; Fri, 20 Dec 2024 17:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2E121D01B;
+	Fri, 20 Dec 2024 18:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734716871; cv=none; b=WaOw6IiMYutrEX1BY8egUj8god1oCaZfVBiyQ/L/MAzk6QTAB316ZRMKdSd+FCjMLNs7BAS9yPs1yP7B60MdV3H4bdzuetgZOFyEfSFpCeYDVSkg4tVd0gizU06TSldijEgA+FRiqsV5vJfg8O4pdohcYTHw3pOsfzPWpvrBww8=
+	t=1734719224; cv=none; b=Iy1YXosaY1BsyzzIvMDi7o3h/1AE+XZ6Ov9nWCoUN2BwGVrivj4upFnDrR9UuValHv3Jl/0RU4UdFZnoPHX7Gp3DSKgXsboiajYVnB8BV7LAiIRQX8aEUZgoZu29fy8EavbVJ2xVbPdbHj9+rAM6eydHD8H3XPqgfFfK7pz0Ubw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734716871; c=relaxed/simple;
-	bh=qCVZ6MXEQCZKbpVFTGMRYGzHJ160bIV49ZUWguKAVVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MEQqYIBnzBNL0zqhm5UiaJ5PNNDZBJGax8SvoGQzGb66Ibj+WQ8DQ3+W107fXGwBYRAW+YJ6328qWxYTKSu00qnfyFqTPpRT3qXG6cfk5g2uF3xKGu1C/WCszB73lf/afd3pIYzmaYijyKVTSHlUIcHvF8xRHOGBWvWU40SGFv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zWIUN96C; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cgHM558s; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1734719224; c=relaxed/simple;
+	bh=lVeG2+LVxzEoZ+Rnc836huFlQp02+Oj9SvSRKpveDbo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rca6LB7MoN9XMmCmY7jokHjpyTvVnarlzRL6JuREC5dOqkUHrOLd4/+TLJpF+DAC89grjBI9/i+LSVZ5AZc/FegdaRtsad12j22q+1ZDBkfPqxecBrtosAJa3v96pak9JyibGLLGNACwJc9M124P26l7oSOzj0IPLdzH61n5Wyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TE2sNz4d; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zWIUN96C";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cgHM558s"
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1734716867;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cEtU1/INZZG1AUWOp9SKyBC5+mBME4Va/ulzQZtpooU=;
-	b=zWIUN96CcPeolG0ZYxkjsK3EL720Iqhm6WEVV1bZMz2m4KEpGzQNCtPBIctID3jC7krnh2
-	xp4eneV0EHTCOCfMrcwJJ7ttjjE3gAurfXNEdf7Bf0jz9aw0ThN5LeaipKMGir80vqDGnO
-	tAE09a7+LBcENXf4yYTxynf7DvCXawjNkJEo6WpEEH+x0jrUeHqMR97a8wj5P2dXnKhV7x
-	sFu1ebBkibO/F+qGCOdbyiYUSdsxoFUn+SSabS4clejR5Oy5oZ+yBZEM2xVvtqGD3rfNV2
-	Og6D0qp/Nu2m1bk1jg8QqRR2MWOmo3bu4ZCgk80gcdg3uff/TQyiIz2zWUzWMg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1734716867;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cEtU1/INZZG1AUWOp9SKyBC5+mBME4Va/ulzQZtpooU=;
-	b=cgHM558sw+JBKQVTWQKLskEmlEA2lnQiirxPbv5hwgQVEUyuvQ7N4KKVtC98bVutse8xND
-	h295X/l0fNAHkBBw==
-To: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Kees Cook <kees@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
-Date: Fri, 20 Dec 2024 18:41:42 +0100
-Message-ID: <20241220174731.514432-29-bigeasy@linutronix.de>
-In-Reply-To: <20241220174731.514432-1-bigeasy@linutronix.de>
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TE2sNz4d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734719222; x=1766255222;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lVeG2+LVxzEoZ+Rnc836huFlQp02+Oj9SvSRKpveDbo=;
+  b=TE2sNz4d8fsH7yf7xfr6MZ/YBbi8/DMQFbhYQx3YKhOFunLubhIYfd9q
+   jUhuzZH4VIU8ZE6aMosYRk2oqlF2aXpnWNgV5hFaZzRqG9FEZ/ajM929P
+   7OMEmI26tTwESOi17pzhYmt0wwy9hAzwNh9/M74vNGsHEhgxni4cHJzbb
+   6eY3ypHgHpObWHJZsaDgN8S45s/EAdmEzQ4h5V686YNIBQ/cO+UAlhE0f
+   /mdhzjOG4IIrboZHemXJTdOLwkTkkKxU1DaZFageLLDSBYNgiC4cuygsG
+   4EfdYhz+swT2W+0fxMP5771L0dkOrRlp6wbMwnPmc2DJwj8kFVW5+aglV
+   A==;
+X-CSE-ConnectionGUID: lbZ0T/ZASDuFdBeYrz7NQQ==
+X-CSE-MsgGUID: QJsry+LEQKqYT17P3OWsBw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="45882397"
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="45882397"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 10:27:02 -0800
+X-CSE-ConnectionGUID: K4pW+d6OTAmFjJn+m7+PFQ==
+X-CSE-MsgGUID: lM36vNWZR1qKyNPD2rstbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="98354381"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 20 Dec 2024 10:26:59 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tOhiC-0001Wd-3B;
+	Fri, 20 Dec 2024 18:26:56 +0000
+Date: Sat, 21 Dec 2024 02:26:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: mtk22730 <Cloud.Zhang@mediatek.com>, Mark Brown <broonie@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Cloud Zhang <cloud.zhang@mediatek.com>
+Subject: Re: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of
+ nor controller
+Message-ID: <202412210247.Brq06CHb-lkp@intel.com>
+References: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
 
-__module_address() can be invoked within a RCU section, there is no
-requirement to have preemption disabled.
+Hi mtk22730,
 
-I'm not sure if using rcu_read_lock() will introduce the regression that
-has been fixed in commit 14c4c8e41511a ("cfi: Use
-rcu_read_{un}lock_sched_notrace").
+kernel test robot noticed the following build warnings:
 
-Cc: Elliot Berman <quic_eberman@quicinc.com>
-Cc: Kees Cook <kees@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- kernel/cfi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.13-rc3 next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/kernel/cfi.c b/kernel/cfi.c
-index 08caad7767176..c8f2b5a51b2e6 100644
---- a/kernel/cfi.c
-+++ b/kernel/cfi.c
-@@ -71,6 +71,10 @@ static bool is_module_cfi_trap(unsigned long addr)
- 	struct module *mod;
- 	bool found =3D false;
-=20
-+	/*
-+	 * XXX this could be RCU protected but would it introcude the regression
-+	 * fixed in 14c4c8e41511a ("cfi: Use rcu_read_{un}lock_sched_notrace")
-+	 */
- 	rcu_read_lock_sched_notrace();
-=20
- 	mod =3D __module_address(addr);
---=20
-2.45.2
+url:    https://github.com/intel-lab-lkp/linux/commits/mtk22730/spi-spi-mtk-nor-Modify-the-clock-architecture-of-nor-controller/20241212-172704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20241212092206.14071-1-Cloud.Zhang%40mediatek.com
+patch subject: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of nor controller
+config: um-randconfig-002-20241220 (https://download.01.org/0day-ci/archive/20241221/202412210247.Brq06CHb-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210247.Brq06CHb-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412210247.Brq06CHb-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/spi/spi-mtk-nor.c:746:19: warning: result of comparison of constant -22 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
+     746 |         if (!cnt || (cnt == -EINVAL)) {
+         |                      ~~~ ^  ~~~~~~~
+   14 warnings generated.
+
+
+vim +746 drivers/spi/spi-mtk-nor.c
+
+   737	
+   738	static int mtk_nor_parse_clk(struct device *dev, struct mtk_nor *sp)
+   739	{
+   740		struct device_node *np = dev->of_node;
+   741		int ret;
+   742		const char *name;
+   743		u8 cnt, i;
+   744	
+   745		cnt = of_property_count_strings(np, "clock-names");
+ > 746		if (!cnt || (cnt == -EINVAL)) {
+   747			dev_err(dev, "Unable to find clocks\n");
+   748			ret = -EINVAL;
+   749			goto out;
+   750		} else if (cnt < 0) {
+   751			dev_err(dev, "Count clock strings failed, err %d\n", cnt);
+   752			ret = cnt;
+   753			goto out;
+   754		} else if (cnt > MAX_CLOCK_CNT) {
+   755			ret = -EINVAL;
+   756			goto out;
+   757		}
+   758	
+   759		sp->clock_cnt = cnt;
+   760	
+   761		for (i = 0; i < cnt; i++) {
+   762			ret = of_property_read_string_index(np, "clock-names", i,
+   763					       &name);
+   764			if (ret) {
+   765				dev_err(dev, "failed to get clock string\n");
+   766				return ret;
+   767			}
+   768	
+   769			sp->clocks[i].name = name;
+   770			sp->clocks[i].clki = devm_clk_get(dev, sp->clocks[i].name);
+   771			if (IS_ERR(sp->clocks[i].clki)) {
+   772				dev_err(dev, "get clock %s fail\n", sp->clocks[i].name);
+   773				return PTR_ERR(sp->clocks[i].clki);
+   774			}
+   775		}
+   776	
+   777	out:
+   778		return ret;
+   779	}
+   780	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
