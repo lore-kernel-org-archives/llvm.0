@@ -1,59 +1,52 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77882594B5;
-	Fri, 20 Dec 2024 04:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C5218EAB;
+	Fri, 20 Dec 2024 04:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734668795; cv=none; b=atCTl66xHzACK5ps7g7vLaY90hTloZZIfObRRoGMSwSX9saf86ZCBr4BRLXqAa9yBMLHBbhMQZJgURYBE9OxO7yYdkeeZkzHwHrL4Mr4azA80daEuH6FQX6EWydX3GErqehOAAlkkdJ0hTf7l8NZ7SE4yDsAs1wweydN2OqbFLE=
+	t=1734668942; cv=none; b=GrHtWqslqGImw75AnOwUDKdSkR/Sv+dRhuYpHbx9cG598bhPz6Bqd5zQq/ticBYrl8IFjatmy30sWmsCGCULvqzObGuwkMDDdndyMbkAx3ULmsWBtXliQoYySlLGEEqch8ZIlTTW21i4VhQaKB9tk3qLC4CJ0MD8vC13whGIXSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734668795; c=relaxed/simple;
-	bh=PhOKWy9XAAvbEpMaFISe4jUJ1PO+ykFw1VHcxWZKZvU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=I7C2q59BYjbLabMig932xC7hVdTD/2T5UrF8Zhcli9AakwtG4qM0LkeN9X52BCBngs6/yBYLPIOJSrUxIQ4kH4a+h+e6sh1wFQ3PIyFLZ8hK6kriVZ9BCwfli4k/f3PxylSz8F0Lt+vybE9vUQHUFtG9ws7UHZWqMHf2MmK7aXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AJ3OpBrv; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734668942; c=relaxed/simple;
+	bh=uPUnHYn/V1+uMo80vM/4FkDBN47Pxt/+NHL6ybpWZ7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L0fsXxS9Yh6seXLX02CVWiET/PSugrf1tyGK/CswV293Pm02OvC+V3eM7CeKkt4W3xYCOpY61zLEt+/IWIAmEYb0CxUdH4wzjm/2FqMzIQkUIMxZDpIWj5vaYMhquEl+fC1M7kcKyTCowpTMSIjLQuVJSbV+nboa743EwX9ULUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4RKSCwQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AJ3OpBrv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734668794; x=1766204794;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PhOKWy9XAAvbEpMaFISe4jUJ1PO+ykFw1VHcxWZKZvU=;
-  b=AJ3OpBrvQMBuSWaceTm0lQQNjFFisfXChnWcnibkD3XfO2IWvGR6FO5v
-   6DLOrQT+Zc9KRcOGm+Uztu9KC7qyZPfQEKuNLCrWCRsCrd6mmT6Jta6kb
-   l2WjrQ0e2cVg4WDRGBqxn2TyrS+Y3cA4R7anPK6sIAKC9a8WqdxYsS1C6
-   TrACxRR+HPNWkyAZGS/FYyZs9FmD2paMx2SZS9EpVsZ6fYK0FpjCZEbGX
-   q2qfJ2BWkw8HKxx157bmtDISawlCNpZmMtWvPpotYD78ZQ8WyQb3FhBGb
-   X3nJqKiKQPQ2d5j0+8sv7vRAYtjO7GlFwPhvv3ZdourYjyAi5jcn3Ygrq
-   Q==;
-X-CSE-ConnectionGUID: lQ/V5MGrSSm+GS58H3AhiQ==
-X-CSE-MsgGUID: J0eJNT33TDC+b9okr/xi4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="35428405"
-X-IronPort-AV: E=Sophos;i="6.12,249,1728975600"; 
-   d="scan'208";a="35428405"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 20:26:33 -0800
-X-CSE-ConnectionGUID: b7Ufziq0QSuGE6TMN2/vsA==
-X-CSE-MsgGUID: bppr7dJiSguqN5v8jZla8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,249,1728975600"; 
-   d="scan'208";a="129230199"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 19 Dec 2024 20:26:32 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tOUar-0000lj-2O;
-	Fri, 20 Dec 2024 04:26:29 +0000
-Date: Fri, 20 Dec 2024 12:25:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:buffered-uncached.10 13/18]
- fs/iomap/buffered-io.c:606:20: error: use of undeclared identifier
- 'IOMAP_DONTCACHE'
-Message-ID: <202412201218.KQsWMlvy-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4RKSCwQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3CBC4CECD;
+	Fri, 20 Dec 2024 04:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734668942;
+	bh=uPUnHYn/V1+uMo80vM/4FkDBN47Pxt/+NHL6ybpWZ7A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H4RKSCwQ1BKLiT5ChzVtgl1UQA0rglKgLqk/JBoa7leqe/bwuAFOdaxb2V0TrXbaN
+	 pAzzH1Dj6v61fb1Z2R/liF9RTdmY1Z3fsSqcUQ88CCLj7h5l1SvmI8MCVvOoc6HsAB
+	 ZLHyRuMIXKVzAFknDOX9g3ipy+Fq5htQ5LeAqRRDuB0xFAYXMrGAsqzxW5aenThmCf
+	 U1RRpOacI16yjzkDRRGU0KGiptUSsLi2arnnvIaVq7Fj50nwv2NgO73zwzVb2IcIBO
+	 2lkQsMNJPEHp1hU8j6e0N+4i+yROMGy3dpkYwgPTpf+EQgUnGO1pAJFu7e184E/PNf
+	 0GBmrnGtS5mbg==
+Date: Fri, 20 Dec 2024 04:28:57 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev, akuchynski@google.com,
+	sboyd@kernel.org, pmalani@chromium.org, badhri@google.com,
+	rdbabiera@google.com, dmitry.baryshkov@linaro.org,
+	jthies@google.com, Benson Leung <bleung@chromium.org>,
+	Bill Wendling <morbo@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 0/8] Thunderbolt and DP altmode support for
+ cros-ec-typec
+Message-ID: <Z2TyiUt1SCASbznh@google.com>
+References: <20241213233552.451927-1-abhishekpandit@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,67 +55,21 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241213233552.451927-1-abhishekpandit@chromium.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git buffered-uncached.10
-head:   10ef57808208218b909eb26c9de3f3aec7b63d05
-commit: 94425319b56d6ebc9d5d6eca449532d41275fbfb [13/18] iomap: make buffered writes work with RWF_DONTCACHE
-config: hexagon-randconfig-002-20241220 (https://download.01.org/0day-ci/archive/20241220/202412201218.KQsWMlvy-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241220/202412201218.KQsWMlvy-lkp@intel.com/reproduce)
+On Fri, Dec 13, 2024 at 03:35:41PM -0800, Abhishek Pandit-Subedi wrote:
+> Abhishek Pandit-Subedi (7):
+>   usb: typec: Only use SVID for matching altmodes
+>   usb: typec: Make active on port altmode writable
+>   usb: typec: Print err when displayport fails to enter
+>   platform/chrome: cros_ec_typec: Update partner altmode active
+>   platform/chrome: cros_ec_typec: Displayport support
+>   platform/chrome: cros_ec_typec: Thunderbolt support
+>   platform/chrome: cros_ec_typec: Disable tbt on port
+> 
+> Heikki Krogerus (1):
+>   usb: typec: Add driver for Thunderbolt 3 Alternate Mode
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412201218.KQsWMlvy-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/iomap/buffered-io.c:9:
-   In file included from include/linux/iomap.h:7:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/iomap/buffered-io.c:606:20: error: use of undeclared identifier 'IOMAP_DONTCACHE'
-     606 |         if (iter->flags & IOMAP_DONTCACHE)
-         |                           ^
-   fs/iomap/buffered-io.c:1040:17: error: use of undeclared identifier 'IOMAP_DONTCACHE'
-    1040 |                 iter.flags |= IOMAP_DONTCACHE;
-         |                               ^
-   1 warning and 2 errors generated.
-
-
-vim +/IOMAP_DONTCACHE +606 fs/iomap/buffered-io.c
-
-   590	
-   591	/**
-   592	 * iomap_get_folio - get a folio reference for writing
-   593	 * @iter: iteration structure
-   594	 * @pos: start offset of write
-   595	 * @len: Suggested size of folio to create.
-   596	 *
-   597	 * Returns a locked reference to the folio at @pos, or an error pointer if the
-   598	 * folio could not be obtained.
-   599	 */
-   600	struct folio *iomap_get_folio(struct iomap_iter *iter, loff_t pos, size_t len)
-   601	{
-   602		fgf_t fgp = FGP_WRITEBEGIN | FGP_NOFS;
-   603	
-   604		if (iter->flags & IOMAP_NOWAIT)
-   605			fgp |= FGP_NOWAIT;
- > 606		if (iter->flags & IOMAP_DONTCACHE)
-   607			fgp |= FGP_DONTCACHE;
-   608		fgp |= fgf_set_order(len);
-   609	
-   610		return __filemap_get_folio(iter->inode->i_mapping, pos >> PAGE_SHIFT,
-   611				fgp, mapping_gfp_mask(iter->inode->i_mapping));
-   612	}
-   613	EXPORT_SYMBOL_GPL(iomap_get_folio);
-   614	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+It looks no but just want to confirm: does the 4 cros_ec_typec patches
+build-time depend on the typec patches?  I.e. can they merge through
+different trees?
