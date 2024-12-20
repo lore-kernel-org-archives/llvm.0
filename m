@@ -1,174 +1,145 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B934C97
-	for <llvm@lists.linux.dev>; Fri, 20 Dec 2024 00:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3404A05;
+	Fri, 20 Dec 2024 01:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734654484; cv=none; b=XAj9BhpKgA0YJvnJr2GMxzIf7YjERxH4Lv3tAVw0EVEIWbQzlYqnjua2qy/F/OW5LFEi5RWx/XG+tZ4MF/vF2FEjfCsR5EJzdKfP5Kr6l2WfiX8v6BB2xbfFiYEIvPHSpUwHEAbb9egsI07GhGzggJ7j6K3edxbtLOu2IDXOeDg=
+	t=1734657138; cv=none; b=Uzc9JI8CijkjLSS8EBB2BTT5QNfXJnfWkqd76VtI4kzdkgsWNeOEWWow/QdLi3Td60pvm77/zPJSccbqHK18oGt3+O9Y7YuAb7ahiz4qQ4xFeC+mmhY2UAeIPRUREgAYGgEIN6qOb5azS0LISK0R9p84udbDB8nB2XntWyCMusU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734654484; c=relaxed/simple;
-	bh=eTO4qLFVLWM7uDPgkBqgHCUS/GGGhm4RqKXT6sImQfE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MxgFg6agS6DLC1zi8wXJMJhoM13G96GmY3OoCBvfJlZLjrG3OGNPzgnIZXwdFYYYfPjORMSjDwV1+l9Ipiz/vSCPWh6SdbrCRA4uJlU/HlRVwSW1TyoVjBh/7+eF6rEzvHpjviQhtVQ2wBDiGZOQBBD7gbrw9FbWgXlWI5rkxi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IC2oey+o; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734657138; c=relaxed/simple;
+	bh=T4i2es0J3OYYaLkNj8l6d4rH+5QIMEclLA8vkeOp7os=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ww+0cAm0Adqrc8pP1c+V3zjn/cRiEHbt/uAugCdZmk5S+XFg+KSZ/L7Dk74/ya7GxcyQlKGASWEtyTG3tIFVUmeMY/oPMh94yjHTK/ZoiXOpg63+f/8YYRTj0Lq2QoMEjwQcIi8bL20BwzueOScJtW50dLujrEkdtimp9WwTPJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VhbSlfU0; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IC2oey+o"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54026562221so1260513e87.1
-        for <llvm@lists.linux.dev>; Thu, 19 Dec 2024 16:28:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734654481; x=1735259281; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=UhCGwjT4MNgsAsS3x60eka2ReGd19hVX6zntAyJ6Al4=;
-        b=IC2oey+obnksnkLGpHCS9i7EFF5/64uNhJb2+sXFuikSZd1iM+1QvQx3Pd4z5kWPGe
-         lINSAc8QC5clVN9AmqMVH2CfDJkotf4zKZ4D+JMJCHFPW71rtFo+n5Oink8jddl7AdoE
-         inLCjFrDDM6va3hanzC5qqK3jUFnFjGjxLI7Jo62jkMymh7pIv4YSsKhlpA9uF2YAFjK
-         CnB/zMi3rGyxr8e1kzgvJzeL2x+d0ZLDE82zTiPUlbwQDcK+biQiK7P5Zwb11VQrloXA
-         JrXmphlWvwLI1MmXDjAhxpijpblV1GZYzUtrzlhoBlEyxlmp3EiMwmr53Z4kFDJlCbrV
-         U2ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734654481; x=1735259281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UhCGwjT4MNgsAsS3x60eka2ReGd19hVX6zntAyJ6Al4=;
-        b=eC4wtqxNP51dHVu7z2ow41dXJcqCmFkfW4jCFyfoYa+pNUtiMsJsLOEApjjVVgd6jj
-         E9HUCCrQ/jX/hkAVyPz0aT+8hyIMhlY/F4xIA/CK3YSbBdrts0rlkHZYZGDg+aEaCwCI
-         e7DqZOvzmGmW35DWxZpTbdfDZRMKQMJLkGMpBdYjzwB60MLXw38yRQ+kZouzL0Op5Aym
-         mICt7zImGR6VgVZfzEQa0uTiJGJqtDmqUOrqiO+A6aVFaa3NLqkMbE/F2rf4+wGlWmF2
-         mKbzRyJRBya/glrmF/eeEzBhCOHj+ihEWLOFpjDZg6H6KI2L8nrzhblK2Bo7fEIENwZ3
-         OL1A==
-X-Forwarded-Encrypted: i=1; AJvYcCXS21b58O8iwsLzfezJxhgX8BTllaTbUPv/BTgSnhsjRyCHxOhj7UNAO8uLVm87G7hPUmrr@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx6Y3VObwQMgh56uQRiXxoT/7gRE26nWJPpq7ZqpLnPMK1laJc6
-	vNOiU6qN5pvFGXvv2MDlyR9xUuJx9GTRHU3K/Q9rKP7l5thl8SzQQLG0AncMhZh1jjfk+3+Bkxw
-	rygWDXEnheDHbdLT/FEW1lxPIIIs=
-X-Gm-Gg: ASbGncuZGQmxDytdQ8HMvDFIUu0iHNHrOTHx6A2eFe29l1BedaBPMCiAZxk9fi1sQ0M
-	GK0jmP0uG1DL7gmH4e5kDk3cR2zwP1emyjlRXWCgvpL0NqmzOsv+L60PuX4QNh1fqARBA
-X-Google-Smtp-Source: AGHT+IHdMSqXFO0bUVEDAZ4SCZ2fQwBZ1kEmH9L/snNjAN+YPeQgREXfx920dn0tlJ68REUVRA6KTN5FtpWwCfHyps0=
-X-Received: by 2002:a05:6512:318d:b0:542:2192:3eb6 with SMTP id
- 2adb3069b0e04-5422956bdb6mr135555e87.52.1734654481033; Thu, 19 Dec 2024
- 16:28:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VhbSlfU0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734657136; x=1766193136;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=T4i2es0J3OYYaLkNj8l6d4rH+5QIMEclLA8vkeOp7os=;
+  b=VhbSlfU0OxSOPDgZ7ZrGQpQLldU7LFXFGKIZHXPfAZq1RbQIbRflIGFC
+   lRH/zIsdjZY0TT9VC266Y44pOofeG1NkYZ7ZgScwxOqpPdSmHU87OWYdp
+   sW2NratCsm6DXoY4N/1o9q5ammrz7+jXSL7ob8LAwhlK2f7w60nKhUpKE
+   QgR5IHN8hrNjmLJpelfDW+adazQJsQ1RgFUb9wvEVV4WOnnV2MIFjFWgj
+   N4zAK1YZ2jC53sahOYALp19J/+p/hDihlU3txOXkA+t3NdWc0tV7qKmbE
+   zZXWjvrONwgLu4EYFFV10awMErsUQPvvDS4j2sjcR1AKnPQII2sAIFQ2b
+   w==;
+X-CSE-ConnectionGUID: vmO10wBPRNeoZ2AjqHaAaw==
+X-CSE-MsgGUID: LIRA2vj7SY6csv80cXZjkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="34482249"
+X-IronPort-AV: E=Sophos;i="6.12,249,1728975600"; 
+   d="scan'208";a="34482249"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 17:12:15 -0800
+X-CSE-ConnectionGUID: OXWsIRzWQUmGHr4NxiH3rg==
+X-CSE-MsgGUID: pJtzlTAHTG66v02vjTdkbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="102985171"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 19 Dec 2024 17:12:14 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tORYp-0000eN-2w;
+	Fri, 20 Dec 2024 01:12:11 +0000
+Date: Fri, 20 Dec 2024 09:11:38 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: arch/x86/kernel/dumpstack_64.c:80:2: warning: arithmetic between
+ different enumeration types ('enum stack_type' and 'enum
+ exception_stack_ordering')
+Message-ID: <202412200930.m4QinYWG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
- <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
- <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com> <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com>
-In-Reply-To: <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 20 Dec 2024 01:27:24 +0100
-Message-ID: <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Dec 20, 2024 at 12:26=E2=80=AFAM Andrew Cooper
-<andrew.cooper3@citrix.com> wrote:
->
-> On 19/12/2024 11:10 pm, Sedat Dilek wrote:
-> > On Thu, Dec 19, 2024 at 6:07=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.=
-com> wrote:
-> >> On Thu, Dec 19, 2024 at 5:44=E2=80=AFPM Andrew Cooper <andrew.cooper3@=
-citrix.com> wrote:
-> >>> On 19/12/2024 4:14 pm, Sedat Dilek wrote:
-> >>>> Hi,
-> >>>>
-> >>>> Linux v6.12.6 will include XEN CVE fixes from mainline.
-> >>>>
-> >>>> Here, I use Debian/unstable AMD64 and the SLIM LLVM toolchain 19.1.x
-> >>>> from kernel.org.
-> >>>>
-> >>>> What does it mean in ISSUE DESCRIPTION...
-> >>>>
-> >>>> Furthermore, the hypercall page has no provision for Control-flow
-> >>>> Integrity schemes (e.g. kCFI/CET-IBT/FineIBT), and will simply
-> >>>> malfunction in such configurations.
-> >>>>
-> >>>> ...when someone uses Clang-kCFI?
-> >>> The hypercall page has functions of the form:
-> >>>
-> >>>     MOV $x, %eax
-> >>>     VMCALL / VMMCALL / SYSCALL
-> >>>     RET
-> >>>
-> >>> There are no ENDBR instructions, and no prologue/epilogue for hash-ba=
-sed
-> >>> CFI schemes.
-> >>>
-> >>> This is because it's code provided by Xen, not code provided by Linux=
-.
-> >>>
-> >>> The absence of ENDBR instructions will yield #CP when CET-IBT is acti=
-ve,
-> >>> and the absence of hash prologue/epilogue lets the function be used i=
-n a
-> >>> type-confused manor that CFI should have caught.
-> >>>
-> >>> ~Andrew
-> >> Thanks for the technical explanation, Andrew.
-> >>
-> >> Hope that helps the folks of "CLANG CONTROL FLOW INTEGRITY SUPPORT".
-> >>
-> >> I am not an active user of XEN in the Linux-kernel but I am willing to
-> >> test when Linux v6.12.6 is officially released and give feedback.
-> >>
-> > https://wiki.xenproject.org/wiki/Testing_Xen#Presence_test
-> > https://wiki.xenproject.org/wiki/Testing_Xen#Commands_for_presence_test=
-ing
-> >
-> > # apt install -t unstable xen-utils-4.17 -y
-> >
-> > # xl list
-> > Name                                        ID   Mem VCPUs      State  =
- Time(s)
-> > Domain-0                                     0  7872     4     r-----  =
-   398.2
-> >
-> > Some basic tests LGTM - see also attached stuff.
-> >
-> > If you have any tests to recommend, let me know.
->
-> That itself is good enough as a smoke test.  Thankyou for trying it out.
->
-> If you want something a bit more thorough, try
-> https://xenbits.xen.org/docs/xtf/  (Xen's self-tests)
->
-> Grab and build it, and `./xtf-runner -aqq --host` will run a variety of
-> extra codepaths in dom0, without the effort of making/running full guests=
-.
->
-> ~Andrew
+CC: linux-kernel@vger.kernel.org
+TO: Thomas Gleixner <tglx@linutronix.de>
+CC: Borislav Petkov <bp@suse.de>
 
-Run on Debian 6.12.5 and my selfmade 6.12.5 and 6.12.6.
-All tests lead to a reboot in case of Debian or in my kernels to a shutdown=
-.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8faabc041a001140564f718dabe37753e88b37fa
+commit: c450c8f532b63475b30e29bc600c25ab0a4ab282 x86/dumpstack/64: Speedup in_exception_stack()
+date:   6 years ago
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20241220/202412200930.m4QinYWG-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241220/202412200930.m4QinYWG-lkp@intel.com/reproduce)
 
-Can you recommend a specific test?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412200930.m4QinYWG-lkp@intel.com/
 
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --list functional xsa | grep =
-xsa-4
-test-pv64-xsa-444
-test-hvm64-xsa-451
-test-hvm64-xsa-454
+All warnings (new ones prefixed by >>):
 
-Is there no xsa-466 test?
+>> arch/x86/kernel/dumpstack_64.c:80:2: warning: arithmetic between different enumeration types ('enum stack_type' and 'enum exception_stack_ordering') [-Wenum-enum-conversion]
+      80 |         EPAGERANGE(DF),
+         |         ^~~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:70:32: note: expanded from macro 'EPAGERANGE'
+      70 |                 .type   = STACK_TYPE_EXCEPTION + ESTACK_ ##st, }
+         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:81:2: warning: arithmetic between different enumeration types ('enum stack_type' and 'enum exception_stack_ordering') [-Wenum-enum-conversion]
+      81 |         EPAGERANGE(NMI),
+         |         ^~~~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:70:32: note: expanded from macro 'EPAGERANGE'
+      70 |                 .type   = STACK_TYPE_EXCEPTION + ESTACK_ ##st, }
+         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:82:2: warning: arithmetic between different enumeration types ('enum stack_type' and 'enum exception_stack_ordering') [-Wenum-enum-conversion]
+      82 |         EPAGERANGE(DB1),
+         |         ^~~~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:70:32: note: expanded from macro 'EPAGERANGE'
+      70 |                 .type   = STACK_TYPE_EXCEPTION + ESTACK_ ##st, }
+         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:83:2: warning: arithmetic between different enumeration types ('enum stack_type' and 'enum exception_stack_ordering') [-Wenum-enum-conversion]
+      83 |         EPAGERANGE(DB),
+         |         ^~~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:70:32: note: expanded from macro 'EPAGERANGE'
+      70 |                 .type   = STACK_TYPE_EXCEPTION + ESTACK_ ##st, }
+         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:84:2: warning: arithmetic between different enumeration types ('enum stack_type' and 'enum exception_stack_ordering') [-Wenum-enum-conversion]
+      84 |         EPAGERANGE(MCE),
+         |         ^~~~~~~~~~~~~~~
+   arch/x86/kernel/dumpstack_64.c:70:32: note: expanded from macro 'EPAGERANGE'
+      70 |                 .type   = STACK_TYPE_EXCEPTION + ESTACK_ ##st, }
+         |                           ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   5 warnings generated.
 
-Thanks.
 
-BR,
--Sedat-
+vim +80 arch/x86/kernel/dumpstack_64.c
+
+    64	
+    65	#define EPAGERANGE(st)							\
+    66		[PFN_DOWN(CEA_ESTACK_OFFS(st)) ...				\
+    67		 PFN_DOWN(CEA_ESTACK_OFFS(st) + CEA_ESTACK_SIZE(st) - 1)] = {	\
+    68			.offs	= CEA_ESTACK_OFFS(st),				\
+    69			.size	= CEA_ESTACK_SIZE(st),				\
+    70			.type	= STACK_TYPE_EXCEPTION + ESTACK_ ##st, }
+    71	
+    72	/*
+    73	 * Array of exception stack page descriptors. If the stack is larger than
+    74	 * PAGE_SIZE, all pages covering a particular stack will have the same
+    75	 * info. The guard pages including the not mapped DB2 stack are zeroed
+    76	 * out.
+    77	 */
+    78	static const
+    79	struct estack_pages estack_pages[CEA_ESTACK_PAGES] ____cacheline_aligned = {
+  > 80		EPAGERANGE(DF),
+    81		EPAGERANGE(NMI),
+    82		EPAGERANGE(DB1),
+    83		EPAGERANGE(DB),
+    84		EPAGERANGE(MCE),
+    85	};
+    86	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
