@@ -1,268 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5F9199E8D;
-	Fri, 20 Dec 2024 19:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 995922210F9;
+	Fri, 20 Dec 2024 19:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734721581; cv=none; b=GF7aGiUGiO1ovaGaHbr+eV9kfklQoYnpe6RCfRCYSKm4O0vGHluryt8mTfFKykWFx1MrHZEDt4PUEIKN93wc6HUV7/d3oh0uP/8bjHkoWX6+AnO3tV7YiN7bef4YmjS0YdxJiu2/hchtp9648W09v/9U7e4ReU5DN9DM4GwBB4U=
+	t=1734723011; cv=none; b=a+RkSRDs9xpxhK3Qsh5U/9lJd84RgPNUTa47zKamr5vVP5R7UYn/O3hM0YXXbPTpmlpGyEwIPKWblHeDiT8//gUH8/RP5dDLqxaegX+2CbqTj2RHgxYQbHeypkxLSvVvNRFPDg/7kPjXsJ75LpDj4BgKP9+itwRRTFLA7DELlwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734721581; c=relaxed/simple;
-	bh=BIDq7AIc2nskhJGg/Wzud7O5YDPpt+4cTKsZUZF3l38=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C2EYX/H0N2wMMA3Ls57Ej8TX6Sx9Kzt001QPbdDfVWJ7/xnsGAaaVMILZQ1Dqc06DrWhOSuQ5cJU22R2Ipzee9Nv2gHVFjB/p7QRnIGBfzqt3Sf4s/7srg/ZQHBgP/5Uuky6GctBkv3mk7p3bQU/WduYiDkm4t8OpcEtmMCUPbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QEC1bo+D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734723011; c=relaxed/simple;
+	bh=O0Evpx+bECfAw/5AgxWoTE5sAqIrbLNiGYGk2ulkohk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YkFy6MTEf7gIBwkjXYqNswV5ZfTBKNeJgD81LcUUBRt8Bgg0uEpCIvWXT5enpNQTMaxN1HRnyXyorMcIRKBCY+HukJU2WGQIfQ3Vc0K/xfb2KRPShSkv94AsGI2A3eddmrtCmlh73T3VT+3IGgF38Jj0QER+RTV3ocR73O0OCSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+gpParF; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QEC1bo+D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3E2C4CECD;
-	Fri, 20 Dec 2024 19:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734721580;
-	bh=BIDq7AIc2nskhJGg/Wzud7O5YDPpt+4cTKsZUZF3l38=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QEC1bo+DKitazcPdbQW+58zwkkrhyJ24RLtl8zuPbqZii6c/1LRm4/Cp7NfAWEHDI
-	 nwRgvNnej52kQWIoEuC/zdWS8yqfbgecVljNzkFicWpN0eAjDVrWMbsVKgAtlWsnC1
-	 KxZjaAXOhlbq6nNVQAvmy8h/uULzpOKU17MoPSsHsxlXHfhNUXakK0BzagFmqZIrUA
-	 +LdzzaOLDQ5uJ2x/SGL6i4Z/Womh2z3+TxHmAjYDkPrtHPumYVIGrjVTLwjAA5uCjN
-	 5x2GdqjuS9ubDevqX2qAmTaW0BXlbQNNonF79icffbRiBEYIBJEY9a0HX9dDFrV9Ol
-	 q9wPRoWxS02Fg==
-Date: Fri, 20 Dec 2024 19:06:08 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-Cc: Mikael Gonella-Bolduc via B4 Relay
- <devnull+mgonellabolduc.dimonoff.com@kernel.org>, Lars-Peter Clausen
- <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Mikael
- Gonella-Bolduc <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v3 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
- driver
-Message-ID: <20241220190608.713b0504@jic23-huawei>
-In-Reply-To: <Z2RydCiREUYQPLtz@uva.nl>
-References: <20241216-apds9160-driver-v3-0-c29f6c670bdb@dimonoff.com>
-	<20241216-apds9160-driver-v3-2-c29f6c670bdb@dimonoff.com>
-	<20241219163454.09daa116@jic23-huawei>
-	<Z2RydCiREUYQPLtz@uva.nl>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+gpParF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734723010; x=1766259010;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O0Evpx+bECfAw/5AgxWoTE5sAqIrbLNiGYGk2ulkohk=;
+  b=i+gpParF5CRNDnzkM68VjoMxeejPLmw/Bg24T4SxzqKR7YOmEkxj7+Tn
+   bVDdZqxNtpovSYLng2grJ5NBEZzQM4FMJ7nNausRB4y3u6NgzWVkQYWkt
+   kcEeTScaIKqv6jqUdEClmt3xq0P5d10c2ncTi5/3BZrQn3z4pmx7WF2XI
+   wHTwIKRAeLoPjFK5puk4Ou6JMPTCxlrt1ihrbg/IF36HZ8aPoFQesDnLJ
+   QDEGtv87Jv9y9nU9/7TKrcE4l226/j8EMDW9ZrD5yWJBF7dKEgLExKT8y
+   eMw+n35dDMEwfhYsNVQwpKOo/ek6YAwD7uChnmxR+YS120YH8oFajCYxs
+   Q==;
+X-CSE-ConnectionGUID: rW1NHrK7R2Cci/ftZZV71w==
+X-CSE-MsgGUID: EfNQts8rRNekCAnzMWDssg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="34600946"
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="34600946"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 11:30:09 -0800
+X-CSE-ConnectionGUID: 2dySvJ64Q7aWNF/zFm0wyg==
+X-CSE-MsgGUID: yj1a0h+RRlqONBxiiHjNAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="99114335"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 20 Dec 2024 11:30:07 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tOihJ-0001dH-1Z;
+	Fri, 20 Dec 2024 19:30:05 +0000
+Date: Sat, 21 Dec 2024 03:30:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [paulmckrcu:dev 25/30] kernel/time/hrtimer.c:1229:28: error: use of
+ undeclared identifier 'migration_base'; did you mean 'is_migration_base'?
+Message-ID: <202412210349.2Bm3zuje-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 19 Dec 2024 14:22:28 -0500
-Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com> wrote:
+tree:   https://github.com/paulmckrcu/linux dev
+head:   54c05449fb97c1414c85c6e2e58a7d0c53827acd
+commit: fe2e53971593e84616d31630458d80398e18fbcf [25/30] EXP hrtimers: Force migrate away hrtimers queued after CPUHP_AP_HRTIMERS_DYING
+config: i386-buildonly-randconfig-004-20241220 (https://download.01.org/0day-ci/archive/20241221/202412210349.2Bm3zuje-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210349.2Bm3zuje-lkp@intel.com/reproduce)
 
-> Hi Jonathan,
-> 
-> Regarding calibration attributes, while I did include them and made sure that what's exposed by the driver 
-> is actually being correctly set in the registers and that it has an impact on the input data, 
-> I do not have a real life use case for them right now and that's probably the case for almost everyone using the same chip.
-> It's there as a provision in case something comes up and I end up needing them.
-> 
-> I'm also not sure on how it should be used and in which scenario.
-> From what I understand, depending on the type of material in front of the sensor (tempered glass in my case),
-> it's there to cancel out unwanted light reflection of what you don't want to detect.
-> It does so by emitting another, very short, light pulse and takes the reflected light ADC count from that and substracts it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412210349.2Bm3zuje-lkp@intel.com/
 
-I guess they apply a very short exposure time on that measurement to ensure it only picks up on light
-received very soon after the pulse and hence in theory very near to the sensor.
+All errors (new ones prefixed by >>):
 
-> There's also another digital substraction parameter to always substract a value if you know what's the value to cancel out.
-> 
-> The 3 parameters in question in the datasheet:
-> - PS_CAN_DIG : This is just a digital substraction
-that one is fine as in_proximity_calibbias.
-
-> - PS_CAN_ANA_DURATION: The duration of the short cancellation light pulse
-> - PS_CAN_ANA_CURRENT: The light pulse current used
-
-These two are new concepts so I think we may need some new ABI
-
-It is kind of like a differential channel with separate controls
-on the current and integration time (as a proxy for the pulse length).
-
-For the current I think it is cleaner to use a second
-out_currentX_* channel with labels provided to associate which current
-channel is which. Provide the read_label attribute and label all channels.
-
-Taking the duration, that's a bit of an oddity as it's really a characteristic
-of the the output current channel, not the measurement itself. So
-how about out_current1_pulse_time ?  Would need to be in seconds though
-to match with integration_time ABI.
-
-Having said all this. If there is a right setting (or a calibration procedure
-to get something that works) for a given device incorporating this sensor
-then the stuff perhaps belongs in DT.  If you go that way makes sure to cleanly
-document why these are device characteristics rather than corrections for
-calibration differences between different phones of the same model for instance.
-
-
-
-
-> 
-> I used a standard calibration attribute name for all of those, respectively:
-> - in_proximity_calibscale
-> - in_proxmiity_calibbias
-> - out_current_calibbias
-> 
-> I don't know if this is a correct use or not.
-
-Thanks for all the details.  That helps a lot!
-
-Gut feeling from me is that we are looking at something best defined in firmware
-/ DT given it's all about the glass in front of the sensor.
-> 
-> See my other comments inline.
-> 
-> Thank you,
-> Mikael
-> 
-> On Thu, Dec 19, 2024 at 04:34:54PM +0000, Jonathan Cameron wrote:
-> > On Mon, 16 Dec 2024 17:55:41 -0500
-> > Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org> wrote:
-> >   
-> > > From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-> > > 
-> > > APDS9160 is a combination of ALS and proximity sensors.
-> > > 
-> > > This patch add supports for:
-> > >     - Intensity clear data and illuminance data
-> > >     - Proximity data
-> > >     - Gain control, rate control
-> > >     - Event thresholds
-> > > 
-> > > Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>  
-> > 
-> > Hi Mikael,
-> > 
-> > A couple of questions on the calib* parts. I hadn't looked closely those
-> > before and the datasheet is not very helpful!
-> > 
-> > Jonathan
-> > 
-> >   
-> > > diff --git a/drivers/iio/light/apds9160.c b/drivers/iio/light/apds9160.c
-> > > new file mode 100644
-> > > index 0000000000000000000000000000000000000000..0c93ab847d9a36aac7aa6a1893bba0fe819d9e28
-> > > --- /dev/null
-> > > +++ b/drivers/iio/light/apds9160.c  
-> >   
-> > > +
-> > > +/*
-> > > + * The PS intelligent cancellation level register allows
-> > > + * for an on-chip substraction of the ADC count caused by
-> > > + * unwanted reflected light from PS ADC output.  
-> > As it's subtraction, why calibscale? Sounds more suitable to make this to calibbias.  
-> > > + */
-> > > +static int apds9160_set_ps_cancellation_level(struct apds9160_chip *data,
-> > > +					      int val)
-> > > +{
-> > > +	int ret;
-> > > +	__le16 buf;
-> > > +
-> > > +	if (val < 0 || val > 0xFFFF)
-> > > +		return -EINVAL;
-> > > +
-> > > +	buf = cpu_to_le16(val);
-> > > +	ret = regmap_bulk_write(data->regmap, APDS9160_REG_PS_CAN_LEVEL_DIG_LSB,
-> > > +				&buf, 2);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	data->ps_cancellation_level = val;
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +/*
-> > > + * This parameter determines the cancellation pulse duration
-> > > + * in each of the PWM pulse. The cancellation is applied during the
-> > > + * integration phase of the PS measurement.
-> > > + * Duration is programmed in half clock cycles
-> > > + * A duration value of 0 or 1 will not generate any cancellation pulse  
-> > 
-> > Perhaps add some details on why this is a calibbias type control?
-> > 
-> > Whilst I can sort of grasp it might have a similar affect to a conventional
-> > calibration bias by removing some offset, it's not totally obvious.
-> >   
-> 
-> After looking at all possible types for a proxmity channel this is what I though was the most sensible choice.
-> Is it possible to use a custom attribute type here if nothing fits?
-
-Yeah, it feels like too much of a stretch so new ABI needed.
-
-> Or maybe we should drop this entirely since it will probably be rarely used.
-
-See above, maybe we push this to DT and make it a firmware description problem.
-
-> 
-> > > + */
-> > > +static int apds9160_set_ps_analog_cancellation(struct apds9160_chip *data,
-> > > +					       int val)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	if (val < 0 || val > 0x7F)
-> > > +		return -EINVAL;
-> > > +
-> > > +	ret = regmap_write(data->regmap, APDS9160_REG_PS_CAN_LEVEL_ANA_DUR,
-> > > +			   val);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	data->ps_cancellation_analog = val;
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +/*
-> > > + * This parameter works in conjunction with the cancellation pulse duration
-> > > + * The value determines the current used for crosstalk cancellation
-> > > + * B4-B5: The coarse value defines cancellation current in steps of 60nA
-> > > + * B0-B3: The fine value adjusts the cancellation current in steps of 2.4nA  
-> > 
-> > Whilst I'm failing to actually understand what this is doing and maybe never will
-> > we can make the interface more intuitive by not using the encoded value.
-> > Just use a value in nA with both the val and val2 parts.
-> > 
-> > it is rather odd given 15 * 2.4 is only 36 so there are holes..  PRobably a case
-> > for getting as close as you can to the requested value.
-> > 
-> > Calibration parameters aren't guaranteed to have a simple interpretation but
-> > this current case is worse that it needs to be.
-> >  
-> 
-> Ok, noted I will make this change for v4 if it's best to keep this.
-> This works in conjunction with the cancellation duration.
->  
-> > > +	case IIO_CHAN_INFO_CALIBSCALE:
-> > > +		if (val2 != 0)
-> > > +			return -EINVAL;
-> > > +		switch (chan->type) {
-> > > +		case IIO_PROXIMITY:
-> > > +			return apds9160_set_ps_cancellation_level(data, val);
-> > > +		case IIO_CURRENT:
-> > > +			return apds9160_set_ps_cancellation_current(data, val);  
-> > 
-> > I can't figure out what this one actually is.
-> >   
-> 
-> This is the current used by the cancellation light pulse (PS_CAN_ANA_CURRENT).
-> I might not be using the correct type name here, since it's so specific to this chip
-> I just don't know which one to use.
-
-It is a kind of cool feature, and so if it works well I expect it will become
-more common over time. So maybe this is just the first of many devices to support this.
-
-Jonathan
+   In file included from kernel/time/hrtimer.c:30:
+   In file included from include/linux/syscalls.h:94:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   kernel/time/hrtimer.c:124:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     124 |         [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:27: note: previous initialization is here
+     122 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:125:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     125 |         [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:27: note: previous initialization is here
+     122 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:126:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     126 |         [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:27: note: previous initialization is here
+     122 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:127:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     127 |         [CLOCK_TAI]             = HRTIMER_BASE_TAI,
+         |                                   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:27: note: previous initialization is here
+     122 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:1229:28: error: use of undeclared identifier 'migration_base'; did you mean 'is_migration_base'?
+    1229 |                 WRITE_ONCE(timer->base, &migration_base);
+         |                                          ^~~~~~~~~~~~~~
+         |                                          is_migration_base
+   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |                         ^
+   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                        ^
+   kernel/time/hrtimer.c:281:20: note: 'is_migration_base' declared here
+     281 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
+         |                    ^
+>> kernel/time/hrtimer.c:1229:3: error: incompatible pointer types assigning to 'volatile typeof (timer->base)' (aka 'struct hrtimer_clock_base *volatile') from 'bool (*)(struct hrtimer_clock_base *)' (aka '_Bool (*)(struct hrtimer_clock_base *)') [-Werror,-Wincompatible-pointer-types]
+    1229 |                 WRITE_ONCE(timer->base, &migration_base);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:61:2: note: expanded from macro 'WRITE_ONCE'
+      61 |         __WRITE_ONCE(x, val);                                           \
+         |         ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:55:30: note: expanded from macro '__WRITE_ONCE'
+      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
+         |                                     ^ ~~~~~
+   5 warnings and 2 errors generated.
 
 
+vim +1229 kernel/time/hrtimer.c
+
+  1206	
+  1207	/*
+  1208	 * If the current CPU is offline and timers have been already
+  1209	 * migrated away, make sure not to enqueue locally and perform
+  1210	 * a remote retrigger as a last resort.
+  1211	 */
+  1212	static void enqueue_hrtimer_offline(struct hrtimer *timer,
+  1213					    struct hrtimer_clock_base *base,
+  1214					    const enum hrtimer_mode mode)
+  1215	{
+  1216		struct hrtimer_cpu_base *new_cpu_base, *old_cpu_base, *this_cpu_base;
+  1217		struct hrtimer_clock_base *new_base;
+  1218		int cpu;
+  1219	
+  1220		old_cpu_base = base->cpu_base;
+  1221		this_cpu_base = this_cpu_ptr(&hrtimer_bases);
+  1222	
+  1223		if (old_cpu_base == this_cpu_base || !old_cpu_base->online) {
+  1224			WARN_ON_ONCE(hrtimer_callback_running(timer));
+  1225			cpu = cpumask_any_and(cpu_online_mask,
+  1226					      housekeeping_cpumask(HK_TYPE_TIMER));
+  1227			new_cpu_base = &per_cpu(hrtimer_bases, cpu);
+  1228			new_base = &new_cpu_base->clock_base[base->index];
+> 1229			WRITE_ONCE(timer->base, &migration_base);
+  1230			raw_spin_unlock(&old_cpu_base->lock);
+  1231			raw_spin_lock(&new_cpu_base->lock);
+  1232			WRITE_ONCE(timer->base, new_base);
+  1233		} else {
+  1234			new_base = base;
+  1235			new_cpu_base = new_base->cpu_base;
+  1236			cpu = new_cpu_base->cpu;
+  1237		}
+  1238	
+  1239		if (enqueue_hrtimer(timer, new_base, mode))
+  1240			smp_call_function_single_async(cpu, &new_cpu_base->csd);
+  1241	}
+  1242	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
