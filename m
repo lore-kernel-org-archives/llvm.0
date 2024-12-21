@@ -1,58 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F26E4A08;
-	Sat, 21 Dec 2024 21:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DE1145B14;
+	Sat, 21 Dec 2024 22:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734816893; cv=none; b=ZZtatqX+siTRPAXeQweNhGOliZ8kMpc7sOGZtRlL1t2jolPefhu/qcR4FtnM+mo1ViyvfzWWswabEpB9Go9k0zKwxElNfZ9wvjXnCdwDlt1UzFrOtGspPMnKjbL8Yx7Q+tq9blJ+nXmFWv7OFQ+7weco7aVuChvXasjkhPTt9nA=
+	t=1734818698; cv=none; b=ccCABZ91B2LBse7IDZeeKX0p7Zjv0Ww+9DNazUdhxHacTaWGCEaoov3CstpjJqAbvSCye5CKRCeeUC8urSM3T64LBtxaZb4t9TFHxDkAw/mLwqZnCdbS/9Oz6GWulec0ik1e2t4mYnyXbCXqUUh2BENcQ/rf79FjdBlJXWevmYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734816893; c=relaxed/simple;
-	bh=YxlzdWfwmYTI3t9YBoLzFLq3mQe0fR3+KQEdm56scS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jm5l3C/woFl5EDbNKEE9oJleSYQ5mcA2xnhUR9lYOb37B+IhQ3PS/AiXcQUWA/ey579WbPEoI3dyQVeW7CHY01wzpoUTuS/NL3PBiD+jLQDaaiC27CXjcNltedKN1KeORJ+Q95civlHXARxFHolYZhr1lYXF+W/THYsA0mhoacA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aJieigve; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1734818698; c=relaxed/simple;
+	bh=CICD31YuC2DWCxXe+MIAugbnVXPhDDnOk4ss85e+Uw4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lu5Y03c6nkMFvV6LtPnBEIq9BttDhKHT+n5TPbu25WfJvxJQeWBTyQSarRL8yN3iJU2S3/oFcp6IDUGqYxGbozy7RatYX696dqU5yUcuPm/LhUC7rxaq/ZKhZKZsc3XCnIlPdexFiN3i2M+N3MZOXuQB28vIdaJWnZ4NcW60CEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K5SBW6uD; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aJieigve"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K5SBW6uD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734816892; x=1766352892;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YxlzdWfwmYTI3t9YBoLzFLq3mQe0fR3+KQEdm56scS0=;
-  b=aJieigvehPSkdObEDD0FfF2VtpfwGV0+3CVqDMzoFxtrgD66rr8iPWBZ
-   nuxSbn6p5gjGDu6FdXmBOGUB4t3az/n0dog2uIXflBxr5eErAivXBUenU
-   4UMZc2QhKR+S9pgPxgqiBRCsatBE2gn6i5FDThTaqfE3Tmku5Ais0q6D4
-   H86EMfC9bYeuY8hKRLPQkj1lMvB7qFcWNGWTQJLeE/KPmB1xA/e37IDVX
-   0IHiOvqGGFo+4qE6HfWvulGFPmnyfAeScb8RwTSHte28RmwYtgqQQV9fx
-   5/wW47APW3d72qhsRLFWVQZ5GgCUImVP52hdsuDTXXaX/yGgYCTDbRuyW
-   A==;
-X-CSE-ConnectionGUID: KFQFQrXaTOeqIMTMjZb8vA==
-X-CSE-MsgGUID: QQMirYgCSSGlC0qFcIwEpA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="52860574"
+  t=1734818697; x=1766354697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CICD31YuC2DWCxXe+MIAugbnVXPhDDnOk4ss85e+Uw4=;
+  b=K5SBW6uDmpg3DOmoFCsJ+XX/kNOm+f/nBlL9WzwuN1nr/a+wN4tpeKm3
+   GuXsuGKJYG6GsC7GIOXm2H+N0Rbw/PydZID0wmtU8awRlBUknRIvq3N5k
+   yFdlivHp/nAmW0JVWriewfcOOcapOhqgrkfxNi6hLW9AnA5ThNS24xKwD
+   3lOMp33TzuWLSEhLhhhcdStAmCIAQeEfPHUqCiqEP7/hQWDo3w+ZV2lNI
+   3S1Tj3QuwJ076fIsJIQCjn/XIUPOHJx+cgrBDQy6HzkRqiEPqDmxM5HGK
+   ve7aO6gYpCBKLMD2fd2RcY1Oykq5Ae6ONvkALElIyAb9ttS1+akBbMqKt
+   g==;
+X-CSE-ConnectionGUID: Q4v6dBaQR86S+z+d6M2nFQ==
+X-CSE-MsgGUID: ueWPDwOmQiuMOkDsWFjECw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="39273844"
 X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
-   d="scan'208";a="52860574"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 13:34:49 -0800
-X-CSE-ConnectionGUID: OndXaOARTmiurUYJjpNEkg==
-X-CSE-MsgGUID: pPyrD21lSSeNEWPkXBCT+g==
+   d="scan'208";a="39273844"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 14:04:56 -0800
+X-CSE-ConnectionGUID: ppUNR0XlQAKKVX8QBaEjjQ==
+X-CSE-MsgGUID: G5TmL7ZYQGSNcFw1Bt+xAg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="102945246"
+X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
+   d="scan'208";a="129669275"
 Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 21 Dec 2024 13:34:47 -0800
+  by orviesa002.jf.intel.com with ESMTP; 21 Dec 2024 14:04:51 -0800
 Received: from kbuild by a46f226878e0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tP77V-0002VP-0T;
-	Sat, 21 Dec 2024 21:34:45 +0000
-Date: Sun, 22 Dec 2024 05:33:46 +0800
+	id 1tP7aZ-0002X5-2N;
+	Sat, 21 Dec 2024 22:04:47 +0000
+Date: Sun, 22 Dec 2024 06:04:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
+To: Ziyue Zhang <quic_ziyuzhan@quicinc.com>, vkoul@kernel.org,
+	kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, dmitry.baryshkov@linaro.org,
+	neil.armstrong@linaro.org, abel.vesa@linaro.org,
+	manivannan.sadhasivam@linaro.org, lpieralisi@kernel.org,
+	kw@linux.com, bhelgaas@google.com, andersson@kernel.org,
+	konradybcio@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>
-Subject: [rust:staging/dev 18/23] warning: trait `Sealed` is never used
-Message-ID: <202412220513.9Lps4Oe9-lkp@intel.com>
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-pci@vger.kernel.org, quic_qianyu@quicinc.com,
+	quic_krichai@quicinc.com, quic_vbadigan@quicinc.com,
+	Ziyue Zhang <quic_ziyuzhan@quicinc.com>
+Subject: Re: [PATCH v3 2/8] phy: qcom-qmp-pcie: add dual lane PHY support for
+ QCS8300
+Message-ID: <202412220527.dEQSSoG8-lkp@intel.com>
+References: <20241220055239.2744024-3-quic_ziyuzhan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,112 +74,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241220055239.2744024-3-quic_ziyuzhan@quicinc.com>
 
-tree:   https://github.com/Rust-for-Linux/linux staging/dev
-head:   9c5819498a69da0c66d6142e486f462a1d43b3a8
-commit: 60a98cb043f1c5416825caaa19cbc5bb568773e4 [18/23] rust: Add a Sealed trait
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20241222/202412220513.9Lps4Oe9-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412220513.9Lps4Oe9-lkp@intel.com/reproduce)
+Hi Ziyue,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 4176cf5c5651c33769de83bb61b0287f4ec7719f]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ziyue-Zhang/dt-bindings-phy-qcom-sc8280xp-qmp-pcie-phy-Document-the-QCS8300-QMP-PCIe-PHY-Gen4-x2/20241220-135722
+base:   4176cf5c5651c33769de83bb61b0287f4ec7719f
+patch link:    https://lore.kernel.org/r/20241220055239.2744024-3-quic_ziyuzhan%40quicinc.com
+patch subject: [PATCH v3 2/8] phy: qcom-qmp-pcie: add dual lane PHY support for QCS8300
+config: arm64-randconfig-002-20241221 (https://download.01.org/0day-ci/archive/20241222/202412220527.dEQSSoG8-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412220527.dEQSSoG8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412220513.9Lps4Oe9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412220527.dEQSSoG8-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> warning: trait `Sealed` is never used
-   --> rust/kernel/lib.rs:98:15
-   |
-   98 |     pub trait Sealed {}
-   |               ^^^^^^
-   |
-   = note: `#[warn(dead_code)]` on by default
---
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-   505 |                            item];
-   |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-   512 |                            NR_VM_NUMA_EVENT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-   |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-   525 |                            NR_VM_NUMA_EVENT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
-   ***
-   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
-   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
-   *** unless patched (like Debian's).
-   ***   Your bindgen version:  0.65.1
-   ***   Your libclang version: 19.1.3
-   ***
-   ***
-   *** Please see Documentation/rust/quick-start.rst for details
-   *** on how to set up the Rust support.
-   ***
-   In file included from rust/helpers/helpers.c:10:
-   In file included from rust/helpers/blk.c:3:
-   In file included from include/linux/blk-mq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-   505 |                            item];
-   |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-   512 |                            NR_VM_NUMA_EVENT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-   |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-   525 |                            NR_VM_NUMA_EVENT_ITEMS +
-   |                            ~~~~~~~~~~~~~~~~~~~~~~
-   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   4 warnings generated.
-   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->> warning: trait `Sealed` is never used
-   --> rust/kernel/lib.rs:98:15
-   |
-   98 |     pub trait Sealed {}
-   |               ^^^^^^
-   |
-   = note: `#[warn(dead_code)]` on by default
+>> drivers/phy/qualcomm/phy-qcom-qmp-pcie.c:3419:12: error: use of undeclared identifier 'pciephy_v5_20_regs_layout'
+           .regs                   = pciephy_v5_20_regs_layout,
+                                     ^
+   1 error generated.
+
+
+vim +/pciephy_v5_20_regs_layout +3419 drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+
+  3390	
+  3391	static const struct qmp_phy_cfg qcs8300_qmp_gen4x2_pciephy_cfg = {
+  3392		.lanes			= 2,
+  3393		.offsets		= &qmp_pcie_offsets_v5_20,
+  3394	
+  3395		.tbls = {
+  3396			.serdes		= sa8775p_qmp_gen4x2_pcie_serdes_alt_tbl,
+  3397			.serdes_num		= ARRAY_SIZE(sa8775p_qmp_gen4x2_pcie_serdes_alt_tbl),
+  3398			.tx		= sa8775p_qmp_gen4_pcie_tx_tbl,
+  3399			.tx_num		= ARRAY_SIZE(sa8775p_qmp_gen4_pcie_tx_tbl),
+  3400			.rx		= qcs8300_qmp_gen4x2_pcie_rx_alt_tbl,
+  3401			.rx_num		= ARRAY_SIZE(qcs8300_qmp_gen4x2_pcie_rx_alt_tbl),
+  3402			.pcs		= sa8775p_qmp_gen4x2_pcie_pcs_alt_tbl,
+  3403			.pcs_num		= ARRAY_SIZE(sa8775p_qmp_gen4x2_pcie_pcs_alt_tbl),
+  3404			.pcs_misc		= sa8775p_qmp_gen4_pcie_pcs_misc_tbl,
+  3405			.pcs_misc_num	= ARRAY_SIZE(sa8775p_qmp_gen4_pcie_pcs_misc_tbl),
+  3406		},
+  3407	
+  3408		.tbls_rc = &(const struct qmp_phy_cfg_tbls) {
+  3409			.serdes		= sa8775p_qmp_gen4x2_pcie_rc_serdes_alt_tbl,
+  3410			.serdes_num	= ARRAY_SIZE(sa8775p_qmp_gen4x2_pcie_rc_serdes_alt_tbl),
+  3411			.pcs_misc	= sa8775p_qmp_gen4_pcie_rc_pcs_misc_tbl,
+  3412			.pcs_misc_num	= ARRAY_SIZE(sa8775p_qmp_gen4_pcie_rc_pcs_misc_tbl),
+  3413		},
+  3414	
+  3415		.reset_list		= sdm845_pciephy_reset_l,
+  3416		.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
+  3417		.vreg_list		= qmp_phy_vreg_l,
+  3418		.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+> 3419		.regs			= pciephy_v5_20_regs_layout,
+  3420	
+  3421		.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
+  3422		.phy_status		= PHYSTATUS_4_20,
+  3423	};
+  3424	
 
 -- 
 0-DAY CI Kernel Test Service
