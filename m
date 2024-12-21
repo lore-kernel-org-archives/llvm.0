@@ -1,164 +1,224 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEBB1D9694;
-	Sat, 21 Dec 2024 05:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB08778F45
+	for <llvm@lists.linux.dev>; Sat, 21 Dec 2024 06:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734757319; cv=none; b=cy92AH/ysK/nxrnurOGciYKuM34FEYieX7i9PC8nsCoM91la8QVQOqm6m0sOJ7f/gkIR8N06rh7i5+g1Zm6yy7UuU0Wqzbjw0pWxoB2xUV4lsBLvDxaqRMncZfc4I/01wnF7DRfI4IKhhTOkd6IsMAtXir3muFzUomTDyyBcm4c=
+	t=1734763805; cv=none; b=kYQsRhasVEoxEr21oElUB+uKVtw72NGh8m4Jiz0KRnaxyDw056j5JV6Xt1jPz9k7i2zoLDHwKCcl6ejXILyuAVgXWZTaYuaulROVBlWK/wr5Q35gxKcmMvdSJjAuslXNYjiNSrvRnZ1kntLP3EkNrboMGzU1g8s/NtC0K6o/V8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734757319; c=relaxed/simple;
-	bh=9hxFDyVIJZ9xQbiWvmBfutVhyl+tgB9qVF0L2TIP5X4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HN4COuNQJsQDU0nxcUBXzhguHvNWb8ydl5RVby4ywp/1ySAEZfniSXyo6fiH6ZYUaSDEVnv8A/5IsTE23jyUf0+pB0z++JKoii1QW24TbVKJASrCtra1CIQBj2cdaf1KBo15w1VGWfEW33Cltai+vDcRI2AQ7i+WU300ni+6hRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aPNEeYEY; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734763805; c=relaxed/simple;
+	bh=aPT/vUsqDrr6wIqMaA6El9GyLb63i2nePKY/bbBGnZI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m2DJPol+41e2wwHQorW1TPjd0+wbny4sVLqKYJngMBU/bRh9c9vKR9JCJWc1X1Mj2IfD1QORdtKijeSbSgyrcOV8QlAiWAYhYdt0SQnsk4Bw+2NpjA0xyuwBLEgl+N4mc4Ba8eu0KYKTeOMvXYajCqVeZZrVtFA5K1+P+CS3Ew0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOHUEYf3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aPNEeYEY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734757317; x=1766293317;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9hxFDyVIJZ9xQbiWvmBfutVhyl+tgB9qVF0L2TIP5X4=;
-  b=aPNEeYEY001Sh+SrNeWdollgh1o1Yf44iiHVERqiSsUmtKIUm59LC8KH
-   mVoD17LyivsgDxungZqyINJrYDgc3ga+Ljcp4SVgwJCA/S8Y/5HAdmNOH
-   ugBT94PmuZPjLgCbi12FBmmrwkZbzazswEGlxJasRqQE7AYj47EgGk9yU
-   Tfsapnh7B7bBiXLqHAVpzyH3wcXXOwPuMr78EUIoCDY+atZWW/oRkcpjN
-   Nf6aYhiN7pnKWI4vOyWtYgj7AWdEJeowwnsMEeBEjn1nRnt7BV9nbJj/e
-   GNYIOE9w5m5LBBDoU2m24o/eoD+TlW9hrKCkn8AJek2e/rWwx/N8aktsX
-   g==;
-X-CSE-ConnectionGUID: l1QFXKwRRniAmOqlt6SCEg==
-X-CSE-MsgGUID: TVbLE5/gQ+iCDiQJlzcD4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="39087361"
-X-IronPort-AV: E=Sophos;i="6.12,252,1728975600"; 
-   d="scan'208";a="39087361"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 21:01:55 -0800
-X-CSE-ConnectionGUID: /5LC0LrbT2m1WXSrYCH6ew==
-X-CSE-MsgGUID: /xvoo+kPSkKewbmkN8nCsQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,252,1728975600"; 
-   d="scan'208";a="98907633"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Dec 2024 21:01:54 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tOrce-0001w7-0V;
-	Sat, 21 Dec 2024 05:01:52 +0000
-Date: Sat, 21 Dec 2024 13:01:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:uaccess-hardening-2 6/7] net/core/scm.c:258:3: error: call
- to undeclared function 'unsafe_copy_to_user'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202412211219.1Zl2KV7q-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOHUEYf3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63781C4CEDE
+	for <llvm@lists.linux.dev>; Sat, 21 Dec 2024 06:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734763805;
+	bh=aPT/vUsqDrr6wIqMaA6El9GyLb63i2nePKY/bbBGnZI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=vOHUEYf3dUmiv8aabb+OoJ8GPvs3bM6R9YurvOddHC6HLfe1LCZ6Zy/b8eCdccSOR
+	 SiHeaILbk3z+uriQR5Q9Etf/2xvHROPG6KB4NU47UeD51GwcrAdFQOpQE22SN7zc2C
+	 j+HkIR63OpcM3yxt0zhm7QpAg2xQ2kXASg3JyT5Lp50D4EiZF+odZvERc1PUMVaI2W
+	 cf42rhdoUOGTc2ry7O0snqKPlqIsR1acD/9hqAVSXfXPiUPF+n0ta2DSVRhVmtetPr
+	 3ncEuZwQHbK5JbzZFd62LXWJxZx5P0o/Cy+G/527ZP8ir252uBl+ggjctH3IPUSf/T
+	 1FJp8fibmJGJA==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53e3a5fa6aaso3992893e87.0
+        for <llvm@lists.linux.dev>; Fri, 20 Dec 2024 22:50:05 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVU7yv/LCbbU0kCew4Bhd366CAZ5KkjCAoI/OLHocd2d0SzAJtiaYjWha+hBrhhx6cF5LOE@lists.linux.dev
+X-Gm-Message-State: AOJu0YwQDNbhm/cC/HdY8HWHuNlkKmI7nMy3Po4w+CEFD3GPr3PyE0i0
+	1PenHlJUgnPQjvjlS4/Dxf0wevXhC/cKSeQsjtknGwiKZdlV35wuEs8VTQAutGoDf8uGja/99f6
+	EVffA7pH0dBup2BgqMMHYC1/itMc=
+X-Google-Smtp-Source: AGHT+IEXQFYdtx5Oa0faHkLlK/I2FTVMe0Q27gL7GyYlEMngAiJ96rXV/jhes7CRQcuUuc1jLOX6TQVuUn3WEN3gSQw=
+X-Received: by 2002:a05:6512:159d:b0:540:2fd2:6b85 with SMTP id
+ 2adb3069b0e04-542294509efmr1870468e87.13.1734763804035; Fri, 20 Dec 2024
+ 22:50:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241216-perf_fix_riscv_obj_reading-v1-0-b75962660a9b@rivosinc.com>
+ <20241216-perf_fix_riscv_obj_reading-v1-1-b75962660a9b@rivosinc.com>
+In-Reply-To: <20241216-perf_fix_riscv_obj_reading-v1-1-b75962660a9b@rivosinc.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 21 Dec 2024 15:49:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASZLu89uSFrt9=_kEqWpZra_06VDQgOKuKKUiNqM9NJqg@mail.gmail.com>
+Message-ID: <CAK7LNASZLu89uSFrt9=_kEqWpZra_06VDQgOKuKKUiNqM9NJqg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: Check version of objdump
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Nelson Chu <nelson@rivosinc.com>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	llvm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git uaccess-hardening-2
-head:   3bdf7366340d6baa8c06d0f8f0093868c0c675d2
-commit: 43815105e17e4070555526222913036e603b7a7c [6/7] x86/uaccess: Speed up unsafe_copy_to_user()
-config: i386-buildonly-randconfig-003-20241221 (https://download.01.org/0day-ci/archive/20241221/202412211219.1Zl2KV7q-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412211219.1Zl2KV7q-lkp@intel.com/reproduce)
+On Tue, Dec 17, 2024 at 8:13=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.c=
+om> wrote:
+>
+> Similar to ld-version, add a way to check the version of objdump. This
+> should most of the time end up being the binutils version or the llvm
+> version.
+>
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412211219.1Zl2KV7q-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/core/scm.c:14:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> net/core/scm.c:258:3: error: call to undeclared function 'unsafe_copy_to_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     258 |                 unsafe_copy_to_user(CMSG_USER_DATA(cm), data,
-         |                 ^
-   net/core/scm.c:258:3: note: did you mean 'kmsan_copy_to_user'?
-   include/linux/kmsan-checks.h:87:20: note: 'kmsan_copy_to_user' declared here
-      87 | static inline void kmsan_copy_to_user(void __user *to, const void *from,
-         |                    ^
->> net/core/scm.c:259:30: error: use of undeclared identifier 'efault_end'
-     259 |                                     cmlen - sizeof(*cm), efault_end);
-         |                                                          ^
-   1 warning and 2 errors generated.
+This patch has no point because 2/2 includes CONFIG option
+from the userspace "perf".
 
 
-vim +/unsafe_copy_to_user +258 net/core/scm.c
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  230  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  231  int put_cmsg(struct msghdr * msg, int level, int type, int len, void *data)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  232  {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  233  	int cmlen = CMSG_LEN(len);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  234  
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  235  	if (msg->msg_flags & MSG_CMSG_COMPAT)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  236  		return put_cmsg_compat(msg, level, type, len, data);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  237  
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  238  	if (!msg->msg_control || msg->msg_controllen < sizeof(struct cmsghdr)) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  239  		msg->msg_flags |= MSG_CTRUNC;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  240  		return 0; /* XXX: return error? check spec. */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  241  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  242  	if (msg->msg_controllen < cmlen) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  243  		msg->msg_flags |= MSG_CTRUNC;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  244  		cmlen = msg->msg_controllen;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  245  	}
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  246  
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  247  	if (msg->msg_control_is_user) {
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  248  		struct cmsghdr __user *cm = msg->msg_control_user;
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  249  
-5f1eb1ff58ea12 Eric Dumazet      2023-02-17  250  		check_object_size(data, cmlen - sizeof(*cm), true);
-5f1eb1ff58ea12 Eric Dumazet      2023-02-17  251  
-38ebcf5096a867 Eric Dumazet      2021-04-15  252  		if (!user_write_access_begin(cm, cmlen))
-38ebcf5096a867 Eric Dumazet      2021-04-15  253  			goto efault;
-38ebcf5096a867 Eric Dumazet      2021-04-15  254  
-e7ad33fa7bc5f7 Eric Dumazet      2021-04-16  255  		unsafe_put_user(cmlen, &cm->cmsg_len, efault_end);
-38ebcf5096a867 Eric Dumazet      2021-04-15  256  		unsafe_put_user(level, &cm->cmsg_level, efault_end);
-38ebcf5096a867 Eric Dumazet      2021-04-15  257  		unsafe_put_user(type, &cm->cmsg_type, efault_end);
-38ebcf5096a867 Eric Dumazet      2021-04-15 @258  		unsafe_copy_to_user(CMSG_USER_DATA(cm), data,
-38ebcf5096a867 Eric Dumazet      2021-04-15 @259  				    cmlen - sizeof(*cm), efault_end);
-38ebcf5096a867 Eric Dumazet      2021-04-15  260  		user_write_access_end();
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  261  	} else {
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  262  		struct cmsghdr *cm = msg->msg_control;
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  263  
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  264  		cm->cmsg_level = level;
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  265  		cm->cmsg_type = type;
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  266  		cm->cmsg_len = cmlen;
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  267  		memcpy(CMSG_DATA(cm), data, cmlen - sizeof(*cm));
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  268  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  269  
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  270  	cmlen = min(CMSG_SPACE(len), msg->msg_controllen);
-c39ef2130491b2 Kevin Brodsky     2023-04-13  271  	if (msg->msg_control_is_user)
-c39ef2130491b2 Kevin Brodsky     2023-04-13  272  		msg->msg_control_user += cmlen;
-c39ef2130491b2 Kevin Brodsky     2023-04-13  273  	else
-^1da177e4c3f41 Linus Torvalds    2005-04-16  274  		msg->msg_control += cmlen;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  275  	msg->msg_controllen -= cmlen;
-1f466e1f15cf1d Christoph Hellwig 2020-05-11  276  	return 0;
-38ebcf5096a867 Eric Dumazet      2021-04-15  277  
-38ebcf5096a867 Eric Dumazet      2021-04-15  278  efault_end:
-38ebcf5096a867 Eric Dumazet      2021-04-15  279  	user_write_access_end();
-38ebcf5096a867 Eric Dumazet      2021-04-15  280  efault:
-38ebcf5096a867 Eric Dumazet      2021-04-15  281  	return -EFAULT;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  282  }
-9e34a5b51684bc Eric Dumazet      2010-07-09  283  EXPORT_SYMBOL(put_cmsg);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  284  
 
-:::::: The code at line 258 was first introduced by commit
-:::::: 38ebcf5096a86762b82262e96b2c8b170fe79040 scm: optimize put_cmsg()
+> ---
+>  init/Kconfig               | 10 +++++++
+>  scripts/Kconfig.include    |  6 ++++
+>  scripts/objdump-version.sh | 69 ++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  3 files changed, 85 insertions(+)
+>
+> diff --git a/init/Kconfig b/init/Kconfig
+> index a20e6efd3f0fbdd7f0df2448854cc30734a0ee4f..0b5d36f939e1de89c12ebdd61=
+e4815015314d4f1 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -60,6 +60,16 @@ config LLD_VERSION
+>         default $(ld-version) if LD_IS_LLD
+>         default 0
+>
+> +config OBJDUMP_IS_GNU
+> +       def_bool $(success,test "$(objdump-name)" =3D objdump)
+> +
+> +config OBJDUMP_IS_LLVM
+> +       def_bool $(success,test "$(objdump-name)" =3D llvm-objdump)
+> +
+> +config OBJDUMP_VERSION
+> +       int
+> +       default $(objdump-version)
+> +
+>  config RUSTC_VERSION
+>         int
+>         default $(rustc-version)
+> diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+> index 33193ca6e8030e659d6b321acaea1acd42c387a4..cb3e2d2564fea8cce780adb3b=
+e672c9596b7ccf2 100644
+> --- a/scripts/Kconfig.include
+> +++ b/scripts/Kconfig.include
+> @@ -58,6 +58,12 @@ $(error-if,$(success,test -z "$(ld-info)"),Sorry$(comm=
+a) this linker is not supp
+>  ld-name :=3D $(shell,set -- $(ld-info) && echo $1)
+>  ld-version :=3D $(shell,set -- $(ld-info) && echo $2)
+>
+> +# Get the objdump name, version, and error out if it is not supported.
+> +objdump-info :=3D $(shell,$(srctree)/scripts/objdump-version.sh $(OBJDUM=
+P))
+> +$(error-if,$(success,test -z "$(objdump-info)"),Sorry$(comma) this objdu=
+mp is not supported.)
+> +objdump-name :=3D $(shell,set -- $(objdump-info) && echo $1)
+> +objdump-version :=3D $(shell,set -- $(objdump-info) && echo $2)
+> +
+>  # machine bit flags
+>  #  $(m32-flag): -m32 if the compiler supports it, or an empty string oth=
+erwise.
+>  #  $(m64-flag): -m64 if the compiler supports it, or an empty string oth=
+erwise.
+> diff --git a/scripts/objdump-version.sh b/scripts/objdump-version.sh
+> new file mode 100755
+> index 0000000000000000000000000000000000000000..fa24f8dc2d3c42fd1195fceb3=
+c96b27f7127db25
+> --- /dev/null
+> +++ b/scripts/objdump-version.sh
+> @@ -0,0 +1,69 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Print the objdump name and its version in a 5 or 6-digit form.
+> +# Also, perform the minimum version check.
+> +
+> +set -e
+> +
+> +# Convert the version string x.y.z to a canonical 5 or 6-digit form.
+> +get_canonical_version()
+> +{
+> +       IFS=3D.
+> +       set -- $1
+> +
+> +       # If the 2nd or 3rd field is missing, fill it with a zero.
+> +       #
+> +       # The 4th field, if present, is ignored.
+> +       # This occurs in development snapshots as in 2.35.1.20201116
+> +       echo $((10000 * $1 + 100 * ${2:-0} + ${3:-0}))
+> +}
+> +
+> +orig_args=3D"$@"
+> +
+> +# Get the first line of the --version output.
+> +IFS=3D'
+> +'
+> +set -- $(LC_ALL=3DC "$@" --version)
+> +
+> +# Split the line on spaces.
+> +IFS=3D' '
+> +set -- $1
+> +
+> +min_tool_version=3D$(dirname $0)/min-tool-version.sh
+> +
+> +if [ "$1" =3D GNU -a "$2" =3D objdump ]; then
+> +       shift $(($# - 1))
+> +       version=3D$1
+> +       min_version=3D$($min_tool_version binutils)
+> +       disp_name=3D"GNU objdump"
+> +else
+> +       while [ $# -gt 1 -a "$1" !=3D "LLVM" ]; do
+> +               shift
+> +       done
+> +
+> +       if [ "$1" =3D LLVM ]; then
+> +               version=3D$3
+> +               min_version=3D$($min_tool_version llvm)
+> +               disp_name=3D"llvm-objdump"
+> +       else
+> +               echo "$orig_args: unknown objdump" >&2
+> +               exit 1
+> +       fi
+> +fi
+> +
+> +version=3D${version%%[!0-9.]*}
+> +
+> +cversion=3D$(get_canonical_version $version)
+> +min_cversion=3D$(get_canonical_version $min_version)
+> +
+> +if [ "$cversion" -lt "$min_cversion" ]; then
+> +       echo >&2 "***"
+> +       echo >&2 "*** objdump is too old."
+> +       echo >&2 "***   Your $disp_name version:    $version"
+> +       echo >&2 "***   Minimum $disp_name version: $min_version"
+> +       echo >&2 "***"
+> +       exit 1
+> +fi
+> +
+> +echo objdump $cversion
+>
+> --
+> 2.34.1
+>
 
-:::::: TO: Eric Dumazet <edumazet@google.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Best Regards
+
+
+Masahiro Yamada
