@@ -1,278 +1,107 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F50C13D521
-	for <llvm@lists.linux.dev>; Sat, 21 Dec 2024 17:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAB540849;
+	Sat, 21 Dec 2024 18:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734800808; cv=none; b=p6CsKVlGChhjiflj6gh1q8osBkw/cORY3XcXBDgnPvN2T/4Jo5iMYpymujUHJ5ZJQ3mMCXBGFtfQ+xJ8yW66359TTjMyJ7ul8Biz46H01iuCfNpec9/wiyJikncLvtEfW1tXoggbOr6tWYWOnG5SCxst69XMSdGat5wAuMlYNGg=
+	t=1734804214; cv=none; b=tikegZHhZ7yW6zh+9S28xhcErLRngXyCoCRBcb63Ojkc2hKSqnDtAd/BiiGwqXRSZ27kBNfBacWgmI2NqnvIzDfGA9vis7wYcQoECcCESm43PhhmdwsiqvKPiLC0vzS98gyPeG7IDYS8ilgR8n+squ7E0BIujHeHr+q0c45dUuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734800808; c=relaxed/simple;
-	bh=KQ9kRAwsMgtVXjzCbzp/JSJRsjYcY4KE8q41rvpS99g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YAbRIjpxF0ffnAa1pzFeVyPE33AOkVfaX+dxAop6uzYu0mdmeWHS4/epVYPpwweTWc3iX4pq9d3VUEIN7gqSmSJQEllxdsm17kOiPVH86aM5ruo26n7hwinjMMc+we4QYRL8sPFaHemu5QME9YB5FF+OfQmhzhwRUVtN4+Caz0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=duWwTNPt; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734804214; c=relaxed/simple;
+	bh=kkq5Us1DWbLrXaRI69S2OmXoUqK45twPixWgPS6JPeA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VDHvIKEdwiNAcWWx8UWfJLpkRCz2QcdtcupOZoJZ81Urh5ERQ2tglYlnGpyDip1UoLv75fLT9l4MJlpe5Epaqo7yh8Usnwb3CLpiRtkKomEFUfALltAS/FNodMfPpgOOI82aR22b+gLl5064idYVi6F6MdUGCNaCBoFYx3hpY4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d/mm8yu/; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="duWwTNPt"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53e3a37ae07so2980840e87.3
-        for <llvm@lists.linux.dev>; Sat, 21 Dec 2024 09:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734800804; x=1735405604; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=agKbG4Ad2aFh5DQ9Ty8+oto7J07OzvutBur24QnJNbs=;
-        b=duWwTNPtudyw6gp+2aUdF0piTzpCkq2yARyXMH06qTTWAqd0wiV+t34sj97pXKp69h
-         v4xyUqNF+tbjgGyffqnOCy+gzTFT6W3OWYlABk4v7237pUjH/W18j3IZbC+eRItHPYDp
-         p9M/gcdmZGCynQuWJh7qtnL0nsfKoJww0HbuWHDUlZchliNKn3cC4aM+B1TTQ4FSKtKq
-         x0sH6OftitbPdeKjEysyQ32Wf2t0Ux/gT+ySG9+nrR91KBFe6jlnglBsE7c5BZikbAUU
-         pUa6AjI0A7xFFaqRHjwHCwL0SYQrCu/Wg/Gg4BwJPo/S/cUXiGRKmF1ZChKemtL3+p2F
-         1ZjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734800804; x=1735405604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=agKbG4Ad2aFh5DQ9Ty8+oto7J07OzvutBur24QnJNbs=;
-        b=fSMpszRF22yaCjnJCGjEbCi5w6tzTLmBDsknuDIar80xwqfw9eBtHfliykIzGNLIS7
-         TD3UmkNEQoVAfZZDizfuZCSZq+ZPCmCLB57BAWPkmABQxS/nxFtSil0eSM6CE/8cmFG9
-         xOPXyb51f/JuyHyToo/VruD6TrRPzyNjOCiaaQFhTk68VVOHk6IF41sFcXkHic0fY6e9
-         Z2Hq/g/ytZRN/r9T62hdqGlFkH+JEnA5Ss8rBscXbfxARJlxwtfy3X4UCfWcpKKq4xqR
-         JqlUmWJRc5Dqxu4VOz97U9Yp8PN85TfM8/5iQz5lAJXL/OF47WugfpHtjt4P4vPODoNa
-         x94w==
-X-Forwarded-Encrypted: i=1; AJvYcCWZDCIwnrjIbUe1ie5L08bD75oS3OUwsxoqc7Y1MAdM+8p8bvSDCd8ahkHdr6H0Ed4nvfOY@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw8qq0pCpNuadw+mCIsMHkxkana6WqRtxsbh8TQE3ghuMywPiOy
-	q/TbOWYpd4xgUEPrMJAe4kECKbPkPs/8Jvgy6MefSk+JsC6hNupF4/Sl0F8nnHuUNSqTuc25lqX
-	SGGVuoZ/Qu7fqiuQLawmbbzrQyfk=
-X-Gm-Gg: ASbGncvgNzJwUi2NUbsDY1oaZWTQuqZjWEGBHBVBIS9Pah0C17+8TN3eZYgmjziP0vw
-	o5Eo9hZmJyhQ405wk5+krVMjAcO/YVCdUcF+FbmGmHQQnpsbDwlcVgKeeln/Ru/23Gelt
-X-Google-Smtp-Source: AGHT+IFlbPcGmfsM9lCdXkpNmrdsNPjnuj/3oeIGySw+8+ouW9qKDdkS6zFmZVV0L0qLBb8weZW1jPVbzwqmFTzG3VQ=
-X-Received: by 2002:a05:6512:2214:b0:53e:38df:672a with SMTP id
- 2adb3069b0e04-5422956289amr2032769e87.36.1734800803975; Sat, 21 Dec 2024
- 09:06:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d/mm8yu/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734804212; x=1766340212;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kkq5Us1DWbLrXaRI69S2OmXoUqK45twPixWgPS6JPeA=;
+  b=d/mm8yu/J+Ye5DesfKxzrqqWpiVKMa5yEOMCaK0Kx/oq/HcstSKfWoAv
+   FCmh+gR5AGMLeWx4s6gZeWYwtwRERP4CoE9TUnJYMT8mJr5FqgeGtXhjX
+   iLT8pKq672AfUweV0zxMg/QMbRdhABa2iWHRlJKR8yxiMEkO0vxXZf6Wj
+   HvMByzRe8yr6v3DwwJT4gPY0Dz5ABWel6746Epa6pE3yix+4HpByLrA24
+   8S72A5YU1ro9Ep6xCT4HMwh0/sNEi/Ohkm+DbAsiw/DKor4/0RnpyM8oT
+   Kp0A2lirUKeTjjp5dL48wPFDWoWivLklDm6jl3bkPwPQKy4oego/dWqyD
+   w==;
+X-CSE-ConnectionGUID: T1m4p1hLQfCyIFnNiHJgBQ==
+X-CSE-MsgGUID: vTsyPYa7T267V09S/3BodA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="35219220"
+X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
+   d="scan'208";a="35219220"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 10:03:29 -0800
+X-CSE-ConnectionGUID: B+JeVQ0DRwe+cA141uUxMw==
+X-CSE-MsgGUID: kumV4ttyT72eLaAVQQ1dAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="122097758"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 21 Dec 2024 10:03:28 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tP3oz-0002MT-1S;
+	Sat, 21 Dec 2024 18:03:25 +0000
+Date: Sun, 22 Dec 2024 02:03:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 21/239]
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c:30:18: error: unused
+ function 'hdmi_read'
+Message-ID: <202412220112.f5nh5rSz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
- <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
- <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com>
- <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com> <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
- <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com>
-In-Reply-To: <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sat, 21 Dec 2024 18:06:06 +0100
-Message-ID: <CA+icZUVhzsc+_PJr0RSwaVQTbz5TKa8wmyzgBNQEcody4YGesg@mail.gmail.com>
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	xen-devel <xen-devel@lists.xenproject.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Dec 20, 2024 at 2:39=E2=80=AFAM Andrew Cooper <andrew.cooper3@citri=
-x.com> wrote:
->
-> On 20/12/2024 12:27 am, Sedat Dilek wrote:
-> > On Fri, Dec 20, 2024 at 12:26=E2=80=AFAM Andrew Cooper
-> > <andrew.cooper3@citrix.com> wrote:
-> >> On 19/12/2024 11:10 pm, Sedat Dilek wrote:
-> >>> On Thu, Dec 19, 2024 at 6:07=E2=80=AFPM Sedat Dilek <sedat.dilek@gmai=
-l.com> wrote:
-> >>>> On Thu, Dec 19, 2024 at 5:44=E2=80=AFPM Andrew Cooper <andrew.cooper=
-3@citrix.com> wrote:
-> >>>>> On 19/12/2024 4:14 pm, Sedat Dilek wrote:
-> >>>>>> Hi,
-> >>>>>>
-> >>>>>> Linux v6.12.6 will include XEN CVE fixes from mainline.
-> >>>>>>
-> >>>>>> Here, I use Debian/unstable AMD64 and the SLIM LLVM toolchain 19.1=
-.x
-> >>>>>> from kernel.org.
-> >>>>>>
-> >>>>>> What does it mean in ISSUE DESCRIPTION...
-> >>>>>>
-> >>>>>> Furthermore, the hypercall page has no provision for Control-flow
-> >>>>>> Integrity schemes (e.g. kCFI/CET-IBT/FineIBT), and will simply
-> >>>>>> malfunction in such configurations.
-> >>>>>>
-> >>>>>> ...when someone uses Clang-kCFI?
-> >>>>> The hypercall page has functions of the form:
-> >>>>>
-> >>>>>     MOV $x, %eax
-> >>>>>     VMCALL / VMMCALL / SYSCALL
-> >>>>>     RET
-> >>>>>
-> >>>>> There are no ENDBR instructions, and no prologue/epilogue for hash-=
-based
-> >>>>> CFI schemes.
-> >>>>>
-> >>>>> This is because it's code provided by Xen, not code provided by Lin=
-ux.
-> >>>>>
-> >>>>> The absence of ENDBR instructions will yield #CP when CET-IBT is ac=
-tive,
-> >>>>> and the absence of hash prologue/epilogue lets the function be used=
- in a
-> >>>>> type-confused manor that CFI should have caught.
-> >>>>>
-> >>>>> ~Andrew
-> >>>> Thanks for the technical explanation, Andrew.
-> >>>>
-> >>>> Hope that helps the folks of "CLANG CONTROL FLOW INTEGRITY SUPPORT".
-> >>>>
-> >>>> I am not an active user of XEN in the Linux-kernel but I am willing =
-to
-> >>>> test when Linux v6.12.6 is officially released and give feedback.
-> >>>>
-> >>> https://wiki.xenproject.org/wiki/Testing_Xen#Presence_test
-> >>> https://wiki.xenproject.org/wiki/Testing_Xen#Commands_for_presence_te=
-sting
-> >>>
-> >>> # apt install -t unstable xen-utils-4.17 -y
-> >>>
-> >>> # xl list
-> >>> Name                                        ID   Mem VCPUs      State=
-   Time(s)
-> >>> Domain-0                                     0  7872     4     r-----=
-     398.2
-> >>>
-> >>> Some basic tests LGTM - see also attached stuff.
-> >>>
-> >>> If you have any tests to recommend, let me know.
-> >> That itself is good enough as a smoke test.  Thankyou for trying it ou=
-t.
-> >>
-> >> If you want something a bit more thorough, try
-> >> https://xenbits.xen.org/docs/xtf/  (Xen's self-tests)
-> >>
-> >> Grab and build it, and `./xtf-runner -aqq --host` will run a variety o=
-f
-> >> extra codepaths in dom0, without the effort of making/running full gue=
-sts.
-> >>
-> >> ~Andrew
-> > Run on Debian 6.12.5 and my selfmade 6.12.5 and 6.12.6.
-> > All tests lead to a reboot in case of Debian or in my kernels to a shut=
-down.
-> >
-> > Can you recommend a specific test?
->
-> Oh, that's distinctly less good.
->
-> Start with just "example".  It's literally a hello world microkernel,
-> but the symptoms you're seeing is a dom0 crash, so it will likely
-> provoke it.
->
-> Do you have serial to the machine?  If so, boot Xen with `console=3Dcom1
-> com1=3D115200,8n1` (or com2, as appropriate).
->
-> If not and you've only got a regular screen, boot Xen with `vga=3D,keep
-> noreboot` (comma is important) which might leave enough information on
-> screen to get an idea of what's going on.
->
-> Full command line docs at
-> https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html
->
-> > dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --list functional xsa | g=
-rep xsa-4
-> > test-pv64-xsa-444
-> > test-hvm64-xsa-451
-> > test-hvm64-xsa-454
-> >
-> > Is there no xsa-466 test?
->
-> No.  XSA-466 is really "well don't do that then if it matters".
->
-> More generally, not all XSAs are amenable to testing in this way.
->
-> ~Andrew
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   13d127a82b5c70061560c65fb083e30e79363874
+commit: 30c2de0a267c04046d89e678cc0067a9cfb455df [21/239] mm/vmstat: fix a W=1 clang compiler warning
+config: arm-randconfig-003-20241222 (https://download.01.org/0day-ci/archive/20241222/202412220112.f5nh5rSz-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412220112.f5nh5rSz-lkp@intel.com/reproduce)
 
-RUN example tests on Debian's 6.12.6 kernel.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412220112.f5nh5rSz-lkp@intel.com/
 
-$ cat /proc/version
-Linux version 6.12.6-amd64 (debian-kernel@lists.debian.org)
-(x86_64-linux-gnu-gcc-14 (Debian 14.2.0-11) 14.2.0, GNU ld (GNU
-Binutils for Debian) 2.43.50.20241215) #1 SMP PREEMPT_DYNAMIC Debian
-6.12.6-1 (2024-12-21)
+All errors (new ones prefixed by >>):
 
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --list example
-test-hvm32-example
-test-hvm32pae-example
-test-hvm32pse-example
-test-hvm64-example
-test-pv32pae-example
-test-pv64-example
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner test-hvm32-example
-Executing 'xl create -p tests/example/test-hvm32-example.cfg'
-Executing 'xl console test-hvm32-example'
-Executing 'xl unpause test-hvm32-example'
---- Xen Test Framework ---
-Environment: HVM 32bit (No paging)
-Hello World
-Test result: SUCCESS
+>> drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c:30:18: error: unused function 'hdmi_read' [-Werror,-Wunused-function]
+      30 | static inline u8 hdmi_read(struct dw_hdmi_i2s_audio_data *audio, int offset)
+         |                  ^~~~~~~~~
+   1 error generated.
 
-Combined test results:
-test-hvm32-example                       SUCCESS
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner test-hvm32pae-example
-Executing 'xl create -p tests/example/test-hvm32pae-example.cfg'
-Executing 'xl console test-hvm32pae-example'
-Executing 'xl unpause test-hvm32pae-example'
---- Xen Test Framework ---
-Environment: HVM 32bit (PAE 3 levels)
-Hello World
-Test result: SUCCESS
 
-Combined test results:
-test-hvm32pae-example                    SUCCESS
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner test-hvm32pse-example
-Executing 'xl create -p tests/example/test-hvm32pse-example.cfg'
-Executing 'xl console test-hvm32pse-example'
-Executing 'xl unpause test-hvm32pse-example'
---- Xen Test Framework ---
-Environment: HVM 32bit (PSE 2 levels)
-Hello World
-Test result: SUCCESS
+vim +/hdmi_read +30 drivers/gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c
 
-Combined test results:
-test-hvm32pse-example                    SUCCESS
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner test-hvm64-example
-Executing 'xl create -p tests/example/test-hvm64-example.cfg'
-Executing 'xl console test-hvm64-example'
-Executing 'xl unpause test-hvm64-example'
---- Xen Test Framework ---
-Environment: HVM 64bit (Long mode 4 levels)
-Hello World
-Test result: SUCCESS
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  29  
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08 @30  static inline u8 hdmi_read(struct dw_hdmi_i2s_audio_data *audio, int offset)
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  31  {
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  32  	struct dw_hdmi *hdmi = audio->hdmi;
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  33  
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  34  	return audio->read(hdmi, offset);
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  35  }
+2761ba6c0925ca9 drivers/gpu/drm/bridge/dw-hdmi-i2s-audio.c Kuninori Morimoto 2016-11-08  36  
 
-Combined test results:
-test-hvm64-example                       SUCCESS
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner test-pv32pae-example
-Combined test results:
-test-pv32pae-example                     SKIP
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner test-pv64-example
-Executing 'xl create -p tests/example/test-pv64-example.cfg'
-Executing 'xl console test-pv64-example'
-Executing 'xl unpause test-pv64-example'
---- Xen Test Framework ---
-Environment: PV 64bit (Long mode 4 levels)
-Hello World
-Test result: SUCCESS
+:::::: The code at line 30 was first introduced by commit
+:::::: 2761ba6c0925ca9c5b917a95f68135d9dce443fb drm: bridge: add DesignWare HDMI I2S audio support
 
-Combined test results:
-test-pv64-example                        SUCCESS
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Archit Taneja <architt@codeaurora.org>
 
-Thanks.
-
-Best regards,
--Sedat-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
