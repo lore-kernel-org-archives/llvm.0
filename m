@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1793C18732E;
-	Sun, 22 Dec 2024 11:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AF82A1AA;
+	Sun, 22 Dec 2024 17:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734867057; cv=none; b=fftLdARLXE8dbEOhSf+Nf1zGliH25fiBiXQ+1u2O/x/yASWxHzd4hlmF9Ddc2pFH/a5L8mdkC+3g4alAjmub4hZ8tDGqjqBzdAMUS1PGDmQIE04lH6bPhAByQvG2U1XrmIpY5ASZNtMsoXwknc2sTnISQltnsQ3VGrLtPf/poM4=
+	t=1734886828; cv=none; b=u1frDZTXqrFR89fEzv5zFL9xwoIW92OWhlsfLlCts/xYZnz/eKFCVJ60ZPPov3wE86Mt7Jv9T2GnCo0SpPZ5QeajVOa6vSd4AbdCFZr0rvqyydZnA3EHxVVhApnyMmUxxwdT+ZN8vnLMiLR0WJLveRUS4WGUeCcsWA7QQB1U7S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734867057; c=relaxed/simple;
-	bh=YnvPVm1s+4W45VlHuSRO4GkuEbWIUgE3/3+zMdnz7aQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sNyQdJIUq8I1cBJfJtgbzSVwJqW44H+TM3r0du1N/oPyTsMGunBLiJI9w86nBdDF99qcgoAYZKfygV3/lRfYac/OfFEff/Rb7F12+wz3g//1MZ5uuz5S7oJLekTeO+lATMdMzjpo5nR35AHSPoW2GRxiRrUojZMyUgYlU4n8cOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PmZxAUdD; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1734886828; c=relaxed/simple;
+	bh=WG0YhvbH4drLyIkvqgWPZERq/LhDTLtZrZZr0vpjzHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l3+AAXZnd6eoqOjn3kTwTKhCQGd/o7xocEj+XSmuvUVbqCOLFH5zlu/YTtDBzFTgqBd8vk1y+egRRTNQJmj4Re96T1iEKlHsY6B9HwJU4pUPNYVcl9KOdXV/R/Nf4PU8/L5qfoapUlGel9Ea3WksktnIGkKjbsPd9P7N+0fzRbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WvCPCtCy; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PmZxAUdD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WvCPCtCy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734867055; x=1766403055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YnvPVm1s+4W45VlHuSRO4GkuEbWIUgE3/3+zMdnz7aQ=;
-  b=PmZxAUdDYu5Q8YWv5BgNG9elqSO5Z33eKKMAntVpWdcGNi35TI0X3HC2
-   QSifgccqSpdoD9kQlltVNnAi4nBNuydYFuKOC9ykQVXMRQo12+lJwvi+2
-   D0j3rDEsAe7cHxcQiYsyr+Knh1uNFh2G5G0Ykk3DBf0R4yTMqzx/It5P+
-   8Een8xOoEvBozfGn85qVqHb0Q57jCMsReYgwf98gilGVZ/SRPvHM5ZDmg
-   sSfVMQHyZ2LaodkyfDOBkpO+eET9+u7GnvZMD0TY3MGi1k9Kq3TbLTQxa
-   y4Ltt1lGQPACfPBq/Ox+wdTniyEcR0C/Yu88DMTKlFowO9Ge8zAOpYNwM
-   Q==;
-X-CSE-ConnectionGUID: F0t9OeXzRLmJFw9XnrX4Og==
-X-CSE-MsgGUID: O9rbmGF0Qpe7vHEYRqEwiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="35498769"
+  t=1734886826; x=1766422826;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WG0YhvbH4drLyIkvqgWPZERq/LhDTLtZrZZr0vpjzHg=;
+  b=WvCPCtCyllJxbihzt4PaSiVzHwJgQfinjnTm/HfGnoshg3msHvV4IIMn
+   Qh9tTgENbTJFOixAIMldpRPQvtDJFZquAhjv89mmkFvsqDaD1qZdeoHYI
+   nn6B4Y4qHgm8dTdA+pLXM61VoifbNTcTyRkoh4EA8OKBKMFwag82lv0A5
+   iDVFQPwVHhn6wDE3rFoNiU8JDM2p7RtjSdx0sUUm6BXjwW2oUAWrZWIrJ
+   3Oxgg0MQmnl9klEwQvw33RbweupYTOme6jJAaigtaQQwIdqBXTCiPckgW
+   /RdK44vdPA6aJQefPM0uHK8pHsq9yVDVjrivCgOcAC1XkKZV6Zx2t5BBc
+   w==;
+X-CSE-ConnectionGUID: 2OMhgsrMQxmZkLNy+Q/OXQ==
+X-CSE-MsgGUID: hXKSq/MPRI2VOpikSdC/fA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="39302530"
 X-IronPort-AV: E=Sophos;i="6.12,255,1728975600"; 
-   d="scan'208";a="35498769"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2024 03:30:54 -0800
-X-CSE-ConnectionGUID: U0X4XKUURkygL2Z5EhOp0w==
-X-CSE-MsgGUID: ekmDfC9rQUGIeqhQmNHC+A==
+   d="scan'208";a="39302530"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2024 09:00:25 -0800
+X-CSE-ConnectionGUID: zREmB0vMTY24u1Ec1qua/Q==
+X-CSE-MsgGUID: Zy6xTekyRNmCclgij8hZrg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="103933925"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="104057533"
 Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 22 Dec 2024 03:30:53 -0800
+  by orviesa003.jf.intel.com with ESMTP; 22 Dec 2024 09:00:24 -0800
 Received: from kbuild by a46f226878e0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tPKAd-0002tP-0o;
-	Sun, 22 Dec 2024 11:30:51 +0000
-Date: Sun, 22 Dec 2024 19:30:13 +0800
+	id 1tPPJW-00034F-01;
+	Sun, 22 Dec 2024 17:00:22 +0000
+Date: Mon, 23 Dec 2024 01:00:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lee Jones <lee@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v6 2/5] samples: rust: Provide example using the new Rust
- MiscDevice abstraction
-Message-ID: <202412221934.QGXsH2pw-lkp@intel.com>
-References: <20241213134715.601415-3-lee@kernel.org>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:execmem/x86-rox/v8 3/6] arch/x86/mm/pat/set_memory.c:1314:3:
+ error: call to undeclared function 'collapse_page_count'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202412230033.RG988JjP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,73 +63,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241213134715.601415-3-lee@kernel.org>
 
-Hi Lee,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rust/rust-next]
-[also build test ERROR on lee-leds/for-leds-next soc/for-next linus/master v6.13-rc3]
-[cannot apply to next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lee-Jones/Documentation-ioctl-number-Carve-out-some-identifiers-for-use-by-sample-drivers/20241213-215003
-base:   https://github.com/Rust-for-Linux/linux rust-next
-patch link:    https://lore.kernel.org/r/20241213134715.601415-3-lee%40kernel.org
-patch subject: [PATCH v6 2/5] samples: rust: Provide example using the new Rust MiscDevice abstraction
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20241222/202412221934.QGXsH2pw-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git execmem/x86-rox/v8
+head:   6c4eb6e17cdd71fe4df151523bb69db507c52b8c
+commit: 84b77b5e5004c02f0f731ca69c66a8d8f4bcbc6c [3/6] x86/mm/pat: Restore large pages after fragmentation
+config: i386-buildonly-randconfig-005-20241222 (https://download.01.org/0day-ci/archive/20241223/202412230033.RG988JjP-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412221934.QGXsH2pw-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412230033.RG988JjP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412221934.QGXsH2pw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412230033.RG988JjP-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   error[E0050]: method `open` has 2 parameters but the declaration in trait `open` has 0
-   --> samples/rust/rust_misc_device.rs:55:20
-   |
-   55 |     fn open(_file: &File, misc: &MiscDeviceRegistration<Self>) -> Result<KBox<Self>> {
-   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected 0 parameters, found 2
-   |
->> = note: `open` from trait: `fn() -> core::result::Result<<Self as MiscDevice>::Ptr, kernel::error::Error>`
---
-   error[E0050]: method `ioctl` has 4 parameters but the declaration in trait `ioctl` has 3
-   --> samples/rust/rust_misc_device.rs:64:13
-   |
-   64 |           me: <Self::Ptr as kernel::types::ForeignOwnable>::Borrowed<'_>,
-   |  _____________^
-   65 | |         _file: &File,
-   66 | |         cmd: u32,
-   67 | |         _arg: usize,
-   | |___________________^ expected 3 parameters, found 4
-   |
->> = note: `ioctl` from trait: `fn(<<Self as MiscDevice>::Ptr as ForeignOwnable>::Borrowed<'_>, u32, usize) -> core::result::Result<isize, kernel::error::Error>`
---
->> error[E0599]: no method named `device` found for reference `&MiscDeviceRegistration<RustMiscDevice>` in the current scope
-   --> samples/rust/rust_misc_device.rs:56:35
-   |
-   56 |         let dev = ARef::from(misc.device());
-   |                                   ^^^^^^ method not found in `&MiscDeviceRegistration<RustMiscDevice>`
---
->> error[E0282]: type annotations needed for `ARef<T>`
-   --> samples/rust/rust_misc_device.rs:56:13
-   |
-   56 |         let dev = ARef::from(misc.device());
-   |             ^^^
-   57 |
-   58 |         dev_info!(dev, "Opening Rust Misc Device Samplen");
-   |         --------------------------------------------------- type must be known at this point
-   |
-   help: consider giving `dev` an explicit type, where the type for type parameter `T` is specified
-   |
-   56 |         let dev: ARef<T> = ARef::from(misc.device());
-   |                +++++++++
+   In file included from arch/x86/mm/pat/set_memory.c:6:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/x86/mm/pat/set_memory.c:1314:3: error: call to undeclared function 'collapse_page_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1314 |                 collapse_page_count(PG_LEVEL_2M);
+         |                 ^
+   arch/x86/mm/pat/set_memory.c:1314:3: note: did you mean 'update_page_count'?
+   arch/x86/include/asm/pgtable_types.h:563:20: note: 'update_page_count' declared here
+     563 | static inline void update_page_count(int level, unsigned long pages) { }
+         |                    ^
+   arch/x86/mm/pat/set_memory.c:1361:3: error: call to undeclared function 'collapse_page_count'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1361 |                 collapse_page_count(PG_LEVEL_1G);
+         |                 ^
+   1 warning and 2 errors generated.
+
+
+vim +/collapse_page_count +1314 arch/x86/mm/pat/set_memory.c
+
+  1251	
+  1252	static int collapse_pmd_page(pmd_t *pmd, unsigned long addr,
+  1253				     struct list_head *pgtables)
+  1254	{
+  1255		pmd_t _pmd, old_pmd;
+  1256		pte_t *pte, first;
+  1257		unsigned long pfn;
+  1258		pgprot_t pgprot;
+  1259		int i = 0;
+  1260	
+  1261		addr &= PMD_MASK;
+  1262		pte = pte_offset_kernel(pmd, addr);
+  1263		first = *pte;
+  1264		pfn = pte_pfn(first);
+  1265	
+  1266		/* Make sure alignment is suitable */
+  1267		if (PFN_PHYS(pfn) & ~PMD_MASK)
+  1268			return 0;
+  1269	
+  1270		/* The page is 4k intentionally */
+  1271		if (pte_flags(first) & _PAGE_KERNEL_4K)
+  1272			return 0;
+  1273	
+  1274		/* Check that the rest of PTEs are compatible with the first one */
+  1275		for (i = 1, pte++; i < PTRS_PER_PTE; i++, pte++) {
+  1276			pte_t entry = *pte;
+  1277	
+  1278			if (!pte_present(entry))
+  1279				return 0;
+  1280			if (pte_flags(entry) != pte_flags(first))
+  1281				return 0;
+  1282			if (pte_pfn(entry) != pte_pfn(first) + i)
+  1283				return 0;
+  1284		}
+  1285	
+  1286		old_pmd = *pmd;
+  1287	
+  1288		/* Success: set up a large page */
+  1289		pgprot = pgprot_4k_2_large(pte_pgprot(first));
+  1290		pgprot_val(pgprot) |= _PAGE_PSE;
+  1291		_pmd = pfn_pmd(pfn, pgprot);
+  1292		set_pmd(pmd, _pmd);
+  1293	
+  1294		/* Queue the page table to be freed after TLB flush */
+  1295		list_add(&page_ptdesc(pmd_page(old_pmd))->pt_list, pgtables);
+  1296	
+  1297		if (IS_ENABLED(CONFIG_X86_32) && !SHARED_KERNEL_PMD) {
+  1298			struct page *page;
+  1299	
+  1300			/* Update all PGD tables to use the same large page */
+  1301			list_for_each_entry(page, &pgd_list, lru) {
+  1302				pgd_t *pgd = (pgd_t *)page_address(page) + pgd_index(addr);
+  1303				p4d_t *p4d = p4d_offset(pgd, addr);
+  1304				pud_t *pud = pud_offset(p4d, addr);
+  1305				pmd_t *pmd = pmd_offset(pud, addr);
+  1306				/* Something is wrong if entries doesn't match */
+  1307				if (WARN_ON(pmd_val(old_pmd) != pmd_val(*pmd)))
+  1308					continue;
+  1309				set_pmd(pmd, _pmd);
+  1310			}
+  1311		}
+  1312	
+  1313		if (pfn_range_is_mapped(pfn, pfn + 1))
+> 1314			collapse_page_count(PG_LEVEL_2M);
+  1315	
+  1316		return 1;
+  1317	}
+  1318	
 
 -- 
 0-DAY CI Kernel Test Service
