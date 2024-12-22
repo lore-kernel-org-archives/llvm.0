@@ -1,97 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E1D1547F5;
-	Sun, 22 Dec 2024 07:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84EE188736
+	for <llvm@lists.linux.dev>; Sun, 22 Dec 2024 10:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734853781; cv=none; b=DE1XOP7hLOUeLGE7hgOJgJu8Fnd6K8pcCwjx7siy85WK4AU7LufmQE2PoiM3QfUOhh4TiLIm2UglUGy4WjhRjo2QKIeckuUzS0i+u3dYFQfdBUqpvT1/NdemtEmGornRDfSnNIzxemZN08cNcSEBA23TQbvJU+git/SqSOQKsrw=
+	t=1734863868; cv=none; b=Zy4Uq/CnsoKUWCKEh8VieW8+WvLDr6QnhEMi+ggfKNT2Ok5bozlfKqKu7Hf20dEPbt92jEZE64m3eSAsVrJhIT3oP6Ia/44s5TZfOkbctcdBeHrfrY/iwfJk4pI8cw0Rsb83Gmnk8bnLGFlexxM7oKNSfgasvk7fbd+a2nVtotY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734853781; c=relaxed/simple;
-	bh=fvpYtmNlP6JX1JM+3BYcUNs6sGhTnAociXKnGB8aW0g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n85l/Y5wk14b4Dvw+RBtFRtlsPnN10vu6jCBRkH0rzm3cOc9CRtbIQiEvJ17Fib3+b8ZpcPGlIagheLw2kCPYK0ReU3unsiJCJI1FM66lZvz5cSuFngM4A+8KkA3sqRM0KOnPuB8kMb+nqpE9K8bjTIZTX4IviU29w8LveX400w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SU7ARzz4; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1734863868; c=relaxed/simple;
+	bh=Dih0UevojjK6aYi/hraFiM0YbAA8nuuUB3ySstbKIVc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d5vEWinr0jaQHeWJUEkLwBaaVO56rNR+yFqnnDfYnQq06vALdGicbLwtymr7/e7shq0XKidGJgRQdAZrCUob7q6C6GtEsE6zuLZpeXw/4YWhcItbQOCiXtslWYdTo8hNsxrkRf1UeYKf892BAHTbi5LH+QCZ4cIeesJHdEnTbp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xhu+I8tk; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SU7ARzz4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734853779; x=1766389779;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fvpYtmNlP6JX1JM+3BYcUNs6sGhTnAociXKnGB8aW0g=;
-  b=SU7ARzz4bdPYcBG3c+x+JwVhZuihDo+Cxus1DbUb/SrgpL74kOLsf78z
-   q5jjF1q9S/bc0LbImEraBp7Ifk7CWTsjFuaiEu6Dj/wq8YMZjeTRarE5e
-   8IHROaAjR0qcluiNbO+SIWKI2cvPekuDIvpnQAuTCHXSg47kKe5lknoEb
-   MGAF+/0zZctrjTvy8EhbRdJojDpdexS3kEtNlOy+dTVxYphd9s+7DoBLG
-   /vsbhUIfBL+Re3vw0z0+DAYcYXu7MAyFfJuW8YQaz/9hA4BYYmIzz8q5c
-   hu0j3CzbEhgAgAKFSckPE6+gCPmLELvpWpDGOC7oNx197gkaEuJp4N9Ia
-   w==;
-X-CSE-ConnectionGUID: fABDwsToQ+6WjUjNqpDykw==
-X-CSE-MsgGUID: E5X5INsRT02DV4Q4+NzV3w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="46767028"
-X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
-   d="scan'208";a="46767028"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 23:49:38 -0800
-X-CSE-ConnectionGUID: xcyh8rfgS8m4Z6TopsQnbQ==
-X-CSE-MsgGUID: Mnejlkh4SYyH9KF0YElFJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
-   d="scan'208";a="98686992"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 21 Dec 2024 23:49:37 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tPGiV-0002nO-1c;
-	Sun, 22 Dec 2024 07:49:35 +0000
-Date: Sun, 22 Dec 2024 15:49:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:sframe 12/26] include/linux/sframe.h:31:92: error: unknown
- type name 'unsinged'; did you mean 'unsigned'?
-Message-ID: <202412221520.YWmqMjHq-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xhu+I8tk"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5401fb9fa03so3277029e87.1
+        for <llvm@lists.linux.dev>; Sun, 22 Dec 2024 02:37:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734863865; x=1735468665; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uAf4XYF+BN/cynPMUouPVnj1TJkDYFatX5sPirx1ssQ=;
+        b=Xhu+I8tkVHEULKKgG7QcdHtelKZ3OIFtDakAI6jvIOHhoMKQ58He7EHKG1KYhUonwK
+         S1SQvMOiVicqXQeu/YksZqKVAGGryHYeEsyRKvNp3Qg1Al5UEFfFKnoaAKHotcrvNYDM
+         aB0YKDzBVQiPYYlc6aVwRgihIDhmePpDyW8WW2UqmjMv5nIEoWqs+ERf6iw+8rzWYBvX
+         ohqKygJkPlXEGuQLapM0CKd3kViwo7UJW0Yshze02qp8ZaF+f5pqJ7gf0Om72tOXo/W6
+         3W6KrLY8y4bEwa6RwSGA2DR7NXN2tkuPFiYcyWpRbgADQQQxq9m7YMazn3xL1ehHY2og
+         aDfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734863865; x=1735468665;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uAf4XYF+BN/cynPMUouPVnj1TJkDYFatX5sPirx1ssQ=;
+        b=LHpSeKKHvrHpapUQoZ3qDlbtNZivmDqRGwLsdH9uL+/2ML/l5yZ1HqJ6vV0lmEznNt
+         UpK78alGmt7EASFZppwz8XuBTdAMO6FRWIjeMB6HSGHWXZF8s0SV85Hv8tMhuyVyJDj3
+         cPEXFV2dMlrsgGQyEZEIcj3Al2JAXZtyvqRtHsUh0pEpEXO5uNrv97EMONkMlVBHkcWr
+         XTTg2Sq4zCgWh0F2WjqhUHhDgW38SwG2lrC4G8nZzZu3li0hIEf7BYqi3h4RrOuSwhlN
+         lTA1+DEzZVWNudEl1lKZpkGdrCY135h9OAc0DZgJIFF3scMaqRl1g3UMFMpmfaBA5vna
+         +mkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMxFCyLNOQ4MG1cmtPxaQxYcKILFRGTai6Nmqp1wS9d25vUi1NPEZq68R7KTHcfwoceMZS@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy8Ac6gtwPsyHVDPDR16PXHpUA4LdWFczQ0vhc2LczLrSmp4H2l
+	3bC2BgAzxG5ptBUVdPsXbgMPLychonQ+IJb5p7xwhwW1JMPC7v5kCCCbtfG1RCYUYJyDKHkwL09
+	Ak4xLhFma8UnkAXS+hQeyMOROFbA=
+X-Gm-Gg: ASbGncu1IflFoUedyQowDsmJ1Wb0L0XMMwQXlwUlm3N1xldkiB47Dg4KLN3URmv3tyT
+	GGT+0UMPUgaIkxqg2/w4qJNK5onJ+rG6Jpdoj5F5HT5/QiGKWiq75xXJ8DiP6LiwvhR+J
+X-Google-Smtp-Source: AGHT+IGJ4XnG6hPJJ83WUCPU4UF5z2bmt9KoMQ+xXAQfdQtvpcUiv3Qt3tZqeiwj1hLIlyJ3fx6mjYGevzp0orcU4bE=
+X-Received: by 2002:a05:6512:3510:b0:542:2952:8848 with SMTP id
+ 2adb3069b0e04-54229529bb5mr1819462e87.3.1734863864768; Sun, 22 Dec 2024
+ 02:37:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
+ <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
+ <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com>
+ <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com> <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
+ <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com> <CA+icZUUp9rgx2Dvsww6QbTGRZz5=mf75D0_KncwdgCEZe01-EA@mail.gmail.com>
+ <CA+icZUV0HEF_hwr-eSovntfcT0++FBrQN-HbFL+oZtnKjJzLtA@mail.gmail.com> <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com>
+In-Reply-To: <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Sun, 22 Dec 2024 11:37:08 +0100
+Message-ID: <CA+icZUW454ND85nbjqAoMg42=i+aGht8Z=iG2wKj=Un7Ot0y6Q@mail.gmail.com>
+Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	xen-devel <xen-devel@lists.xenproject.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git sframe
-head:   3c5688da4922c1ff09b4973c69e7324950c7ef60
-commit: e660bb57e4f94f01da72031da438d20fa25ee32c [12/26] sframe
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20241222/202412221520.YWmqMjHq-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412221520.YWmqMjHq-lkp@intel.com/reproduce)
+On Sat, Dec 21, 2024 at 10:31=E2=80=AFPM Andrew Cooper
+<andrew.cooper3@citrix.com> wrote:
+>
+> On 21/12/2024 6:25 pm, Sedat Dilek wrote:
+> > With...
+> >
+> > dileks@iniza:~/src/xtf/git$ mv tests/xsa-454 ../
+> > dileks@iniza:~/src/xtf/git$ mv tests/xsa-consoleio-write ../
+>
+> That's completely bizzare.   There's nothing interestingly different
+> with those two tests vs the others.
+>
+> I take it the crash is repeatable when using either of these?
+>
+> ~Andrew
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412221520.YWmqMjHq-lkp@intel.com/
+This time I stopped SDDM and thus KDE-6/Wayland session.
 
-All errors (new ones prefixed by >>):
+Tested with Debian's officially 6.12.6-amd64 kernel in VT-3.
 
-   In file included from kernel/fork.c:108:
->> include/linux/sframe.h:31:92: error: unknown type name 'unsinged'; did you mean 'unsigned'?
-      31 | static inline int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end, unsinged long text_start, unsigned long text_end) { return -EINVAL; }
-         |                                                                                            ^~~~~~~~
-         |                                                                                            unsigned
-   1 error generated.
+test-hvm32pae-xsa-consoleio-write SUCCESS <--- 1st time I tried, never
+said this is not OK
 
+test-hvm64-xsa-454 leads to FROZEN system and DATA LOSS (here: ext4).
+Reproducibly as told many times.- in Debian and selfmade kernels version 6.=
+12.6.
 
-vim +31 include/linux/sframe.h
+Stolen from the picture I took with my smartphone:
 
-    30	
-  > 31	static inline int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end, unsinged long text_start, unsigned long text_end) { return -EINVAL; }
-    32	static inline int sframe_remove_section(unsigned long sframe_addr) { return -EINVAL; }
-    33	static inline int sframe_find(unsigned long ip, struct unwind_user_frame *frame) { return -EINVAL; }
-    34	
+sudo ./xft-runner test-hvm64-xsa-454
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
+Executing 'xl console test-hvm64-xsa-454'
+Executing 'xl unpause test-hvm64-xsa-454'
+
+^^ System does NOT react!
+
+I can send you the picture on request.
+
+-Sedat-
