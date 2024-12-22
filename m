@@ -1,145 +1,182 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB467DA8C;
-	Sun, 22 Dec 2024 04:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC9C29A9;
+	Sun, 22 Dec 2024 06:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734841771; cv=none; b=Go2MXCCupKr7LBFeJysG4nxWkCcaNcpR77zVQTKmB+lzC0RJM5dAOPs33pVlazmmXh/WJlJc2JsytWJW+lEseyjWmy2za5Jg1F/wRJtoRRwMWvuRPfiAHFbCZjbmY3fIb4xoIiKxGvh/bxZqfzQw5b4rpYnwT5AnQcG4f6FgPvs=
+	t=1734848737; cv=none; b=TNd6fXyBQ9ZhmteLFbzH8eaXTE1D7HGdjxEQO6/i0qXvJa+2nwtdXyXv8sxLYkPYGssk4osH3biB17kMmOlCPZxj8FD0ndz4NzHoI8keoe8iD6Q6d8VjI9vvu0GaQHd0A+AMKVPmnugx+aVyQewGC7kswriB8N1PC7lLGnHKuqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734841771; c=relaxed/simple;
-	bh=ofCf1akM1Rj4Et01SCsrVmJ0xx3ask4YGXdXZdKtMI8=;
-	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=EPu/qnW4W1SPL9S+/89HfO3Cz5ij9BM8PS+/zVaCWh45xE9YHPhH5payhbObNg2fGtcgAKUwTA0ZuaKshalmRV+E6ja4lp9C5m3FTa3wp3ixmLhrQl/9/3UBxj3Ijt0ibk6HB0NFULk7AoAiJwQrd6E31ADYKPr+eah3s0qW5Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8CxyuBGlWdnlF5ZAA--.43504S3;
-	Sun, 22 Dec 2024 12:27:50 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMBxReRDlWdnEC0FAA--.29113S3;
-	Sun, 22 Dec 2024 12:27:47 +0800 (CST)
-Subject: Re: [PATCH v6 9/9] drm/amd/display: Mark dc_fixpt_from_fraction()
- noinline
-To: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>
-References: <20241217010905.13054-1-yangtiezhu@loongson.cn>
- <20241217015006.30305-1-yangtiezhu@loongson.cn>
- <CAAhV-H4WpcWjrQdkm3Sx4DVbp=2oW9nNGAbNqR4BEmiryrptNQ@mail.gmail.com>
- <20241218190558.g2hykmjgbny4n5i3@jpoimboe>
- <CADnq5_PFcHzob4poLa86_K4yP5gUT7Ei4Rz5vSUofvZTmB48-g@mail.gmail.com>
- <4bace457-cc26-13a3-bc90-ad6ad12bc2ed@loongson.cn>
- <20241220103100.GB17537@noisy.programming.kicks-ass.net>
- <20241220223403.GA2605890@ax162>
- <05cdb3b4c9bddf25f7b839229b635d2dec5140a4.camel@xry111.site>
-Cc: Alex Deucher <alexdeucher@gmail.com>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- loongarch@lists.linux.dev, amd-gfx@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
- llvm@lists.linux.dev
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <bc35fddc-498a-cc58-b6a1-f5234a4f6d0d@loongson.cn>
-Date: Sun, 22 Dec 2024 12:27:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+	s=arc-20240116; t=1734848737; c=relaxed/simple;
+	bh=W5kzsXoNfwgHyHOmU1UFjyJ7eAhIUDQJ3UH+jovAbZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J0zISi9KwIq0HwW1A1i85VmyIH1trSeeQxdJappKF1JsVClvWU0CXl+JcT5lVrBAnDR6rgp8/HSKWCuLh4omvLstecLhp5xnNOPfjKB0NwqFQcvHXA4Dxyh8dqVLJqznomkYIB5Ot+LiLtPVBnEVjbnZcPFlxu51ihmlUukC6/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gYh59wft; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gYh59wft"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734848735; x=1766384735;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W5kzsXoNfwgHyHOmU1UFjyJ7eAhIUDQJ3UH+jovAbZE=;
+  b=gYh59wftC6VzGuGql6cT8NxPrkqIlRRz/8v39ZoiM/0RDf98CAop37JW
+   qCP8QAh6K0fibv2tdKXM4NmYjK4Rcn02p+ySLobXeYPRg/EqVVUm5RK5t
+   pkcdkbPTGD6okJDViy8NGoB4Rb/Qo0e0LjZ+apLssG4rtlcv97sxlymqr
+   1PlQD5E9gP+t5muLKaj6+BBKV93YjNkZj3WQwu5e5EH+TDipFd3Ox0xls
+   FZ4nwo4gpH1k8J3WLaQi+mL1MlhYJSyIlVT9ygj9nUuIVzlAQZpk7mSpA
+   xSbxQhS42cjhR/Jqo1nRgNiM9Ia3Z/pO3aupJ3udtwfP+UpNiq8GYypB5
+   Q==;
+X-CSE-ConnectionGUID: xK4yT7aIT/yZIIorjKCp9A==
+X-CSE-MsgGUID: rcz4WV9AS8OJaJenatsuIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="39127470"
+X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
+   d="scan'208";a="39127470"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 22:25:35 -0800
+X-CSE-ConnectionGUID: Kkk8hTKWQD2fAF+Cg4FMTw==
+X-CSE-MsgGUID: mzzYk/u9RcS2yr4G0Xc+rQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
+   d="scan'208";a="103763766"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 21 Dec 2024 22:25:31 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tPFP7-0002lT-00;
+	Sun, 22 Dec 2024 06:25:29 +0000
+Date: Sun, 22 Dec 2024 14:24:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nihar Chaithanya <niharchaithanya@gmail.com>, dpenkler@gmail.com,
+	gregkh@linuxfoundation.org, roheetchavan@gmail.com, arnd@arndb.de,
+	dan.carpenter@linaro.org, kees@ijzerbout.nl,
+	m.omerfarukbulut@gmail.com, skhan@linuxfoundation.org,
+	everestkc@everestkc.com.np, dominik.karol.piatkowski@protonmail.com,
+	nathan@kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3] staging: gpib: Add error handling
+Message-ID: <202412221339.S4dQNJOs-lkp@intel.com>
+References: <20241221214822.163667-1-niharchaithanya@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <05cdb3b4c9bddf25f7b839229b635d2dec5140a4.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowMBxReRDlWdnEC0FAA--.29113S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFWfJryDGr13JF18Wr1kXrc_yoW5Jr1kpF
-	4rJFyUGrWDXFySvFZFkw15Xa93A3yfJr4kGFyrur1rAa47AanY9rs3t3WkJayakr42yr40
-	va98KFyqyF4qyFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241221214822.163667-1-niharchaithanya@gmail.com>
 
-On 12/21/2024 03:40 PM, Xi Ruoyao wrote:
-> On Fri, 2024-12-20 at 15:34 -0700, Nathan Chancellor wrote:
->>> Now, the thing is, these ASSERT()s are checking for divide-by-zero, I
->>> suspect clang figured that out and invokes UB on us and just stops
->>> code-gen.
->>
->> Yeah, I think your analysis is spot on, as this was introduced by a
->> change in clang from a few months ago according to my bisect:
->>
->> https://github.com/llvm/llvm-project/commit/37932643abab699e8bb1def08b7eb4eae7ff1448
->>
->> Since the ASSERT does not do anything to prevent the divide by zero (it
->> just flags it with WARN_ON) and the rest of the code doesn't either, I
->> assume that the codegen stops as soon as it encounters the unreachable
->> that change created from the path where divide by zero would occur via
->>
->>   dc_fixpt_recip() ->
->>     dc_fixpt_from_fraction() ->
->>       complete_integer_division_u64() ->
->>         div64_u64_rem()
->>
->> Shouldn't callers of division functions harden them against dividing by
->> zero?
->
-> Yes I think it'd be the correct solution.
+Hi Nihar,
 
-Thank you all. Do you mean like this?
+kernel test robot noticed the following build errors:
 
---- >8 ---
+[auto build test ERROR on staging/staging-testing]
 
-diff --git a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c 
-b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-index 88d3f9d7dd55..848d8e67304a 100644
---- a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-@@ -79,11 +79,13 @@ struct fixed31_32 dc_fixpt_from_fraction(long long 
-numerator, long long denomina
-         unsigned long long arg2_value = arg2_negative ? -denominator : 
-denominator;
+url:    https://github.com/intel-lab-lkp/linux/commits/Nihar-Chaithanya/staging-gpib-Add-error-handling/20241222-060646
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20241221214822.163667-1-niharchaithanya%40gmail.com
+patch subject: [PATCH v3] staging: gpib: Add error handling
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20241222/202412221339.S4dQNJOs-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412221339.S4dQNJOs-lkp@intel.com/reproduce)
 
-         unsigned long long remainder;
-+       unsigned long long res_value;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412221339.S4dQNJOs-lkp@intel.com/
 
-         /* determine integer part */
+All errors (new ones prefixed by >>):
 
--       unsigned long long res_value = complete_integer_division_u64(
--               arg1_value, arg2_value, &remainder);
-+       ASSERT(arg2_value);
-+
-+       res_value = complete_integer_division_u64(arg1_value, 
-arg2_value, &remainder);
+   In file included from drivers/staging/gpib/fmh_gpib/fmh_gpib.c:15:
+   In file included from drivers/staging/gpib/fmh_gpib/fmh_gpib.h:9:
+   In file included from include/linux/dmaengine.h:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/gpib/fmh_gpib/fmh_gpib.c:162:45: warning: bitwise operation between different enumeration types ('enum fmh_gpib_auxmr_bits' and 'enum aux_reg_i_bits') [-Wenum-enum-conversion]
+     162 |                 write_byte(&priv->nec7210_priv, AUX_I_REG | LOCAL_PPOLL_MODE_BIT, AUXMR);
+         |                                                 ~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~
+>> drivers/staging/gpib/fmh_gpib/fmh_gpib.c:1694:8: error: use of undeclared label 'err_platform_driver'
+    1694 |                 goto err_platform_driver;
+         |                      ^
+   5 warnings and 1 error generated.
 
-         ASSERT(res_value <= LONG_MAX);
 
-@@ -214,8 +216,6 @@ struct fixed31_32 dc_fixpt_recip(struct fixed31_32 arg)
-          * Good idea to use Newton's method
-          */
+vim +/err_platform_driver +1694 drivers/staging/gpib/fmh_gpib/fmh_gpib.c
 
--       ASSERT(arg.value);
--
-         return dc_fixpt_from_fraction(
-                 dc_fixpt_one.value,
-                 arg.value);
+  1687	
+  1688	static int __init fmh_gpib_init_module(void)
+  1689	{
+  1690		int result;
+  1691	
+  1692		result = platform_driver_register(&fmh_gpib_platform_driver);
+  1693		if (result)
+> 1694			goto err_platform_driver;
+  1695	
+  1696		result = pci_register_driver(&fmh_gpib_pci_driver);
+  1697		if (result)
+  1698			goto err_pci_driver;
+  1699	
+  1700		result = gpib_register_driver(&fmh_gpib_unaccel_interface, THIS_MODULE);
+  1701		if (result)
+  1702			goto err_unaccel;
+  1703	
+  1704		result = gpib_register_driver(&fmh_gpib_interface, THIS_MODULE);
+  1705		if (result)
+  1706			goto err_interface;
+  1707	
+  1708		result = gpib_register_driver(&fmh_gpib_pci_unaccel_interface, THIS_MODULE);
+  1709		if (result)
+  1710			goto err_pci_unaccel;
+  1711	
+  1712		result = gpib_register_driver(&fmh_gpib_pci_interface, THIS_MODULE);
+  1713		if (result)
+  1714			goto err_pci;
+  1715	
+  1716		return 0;
+  1717	
+  1718	err_pci:
+  1719		gpib_unregister_driver(&fmh_gpib_pci_unaccel_interface);
+  1720	err_pci_unaccel:
+  1721		gpib_unregister_driver(&fmh_gpib_interface);
+  1722	err_interface:
+  1723		gpib_unregister_driver(&fmh_gpib_unaccel_interface);
+  1724	err_unaccel:
+  1725		pci_unregister_driver(&fmh_gpib_pci_driver);
+  1726	err_pci_driver:
+  1727		platform_driver_unregister(&fmh_gpib_platform_driver);
+  1728	
+  1729		return result;
+  1730	}
+  1731	
 
-With the above changes, there is no "falls through" objtool warning
-compiled with both clang 19 and the latest mainline clang 20.
-
-If you are OK with it, I will send a separate formal patch to handle
-this issue after doing some more testing.
-
-Thanks,
-Tiezhu
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
