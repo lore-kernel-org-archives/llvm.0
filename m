@@ -1,123 +1,136 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84EE188736
-	for <llvm@lists.linux.dev>; Sun, 22 Dec 2024 10:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1793C18732E;
+	Sun, 22 Dec 2024 11:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734863868; cv=none; b=Zy4Uq/CnsoKUWCKEh8VieW8+WvLDr6QnhEMi+ggfKNT2Ok5bozlfKqKu7Hf20dEPbt92jEZE64m3eSAsVrJhIT3oP6Ia/44s5TZfOkbctcdBeHrfrY/iwfJk4pI8cw0Rsb83Gmnk8bnLGFlexxM7oKNSfgasvk7fbd+a2nVtotY=
+	t=1734867057; cv=none; b=fftLdARLXE8dbEOhSf+Nf1zGliH25fiBiXQ+1u2O/x/yASWxHzd4hlmF9Ddc2pFH/a5L8mdkC+3g4alAjmub4hZ8tDGqjqBzdAMUS1PGDmQIE04lH6bPhAByQvG2U1XrmIpY5ASZNtMsoXwknc2sTnISQltnsQ3VGrLtPf/poM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734863868; c=relaxed/simple;
-	bh=Dih0UevojjK6aYi/hraFiM0YbAA8nuuUB3ySstbKIVc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d5vEWinr0jaQHeWJUEkLwBaaVO56rNR+yFqnnDfYnQq06vALdGicbLwtymr7/e7shq0XKidGJgRQdAZrCUob7q6C6GtEsE6zuLZpeXw/4YWhcItbQOCiXtslWYdTo8hNsxrkRf1UeYKf892BAHTbi5LH+QCZ4cIeesJHdEnTbp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xhu+I8tk; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734867057; c=relaxed/simple;
+	bh=YnvPVm1s+4W45VlHuSRO4GkuEbWIUgE3/3+zMdnz7aQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sNyQdJIUq8I1cBJfJtgbzSVwJqW44H+TM3r0du1N/oPyTsMGunBLiJI9w86nBdDF99qcgoAYZKfygV3/lRfYac/OfFEff/Rb7F12+wz3g//1MZ5uuz5S7oJLekTeO+lATMdMzjpo5nR35AHSPoW2GRxiRrUojZMyUgYlU4n8cOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PmZxAUdD; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xhu+I8tk"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5401fb9fa03so3277029e87.1
-        for <llvm@lists.linux.dev>; Sun, 22 Dec 2024 02:37:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734863865; x=1735468665; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uAf4XYF+BN/cynPMUouPVnj1TJkDYFatX5sPirx1ssQ=;
-        b=Xhu+I8tkVHEULKKgG7QcdHtelKZ3OIFtDakAI6jvIOHhoMKQ58He7EHKG1KYhUonwK
-         S1SQvMOiVicqXQeu/YksZqKVAGGryHYeEsyRKvNp3Qg1Al5UEFfFKnoaAKHotcrvNYDM
-         aB0YKDzBVQiPYYlc6aVwRgihIDhmePpDyW8WW2UqmjMv5nIEoWqs+ERf6iw+8rzWYBvX
-         ohqKygJkPlXEGuQLapM0CKd3kViwo7UJW0Yshze02qp8ZaF+f5pqJ7gf0Om72tOXo/W6
-         3W6KrLY8y4bEwa6RwSGA2DR7NXN2tkuPFiYcyWpRbgADQQQxq9m7YMazn3xL1ehHY2og
-         aDfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734863865; x=1735468665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uAf4XYF+BN/cynPMUouPVnj1TJkDYFatX5sPirx1ssQ=;
-        b=LHpSeKKHvrHpapUQoZ3qDlbtNZivmDqRGwLsdH9uL+/2ML/l5yZ1HqJ6vV0lmEznNt
-         UpK78alGmt7EASFZppwz8XuBTdAMO6FRWIjeMB6HSGHWXZF8s0SV85Hv8tMhuyVyJDj3
-         cPEXFV2dMlrsgGQyEZEIcj3Al2JAXZtyvqRtHsUh0pEpEXO5uNrv97EMONkMlVBHkcWr
-         XTTg2Sq4zCgWh0F2WjqhUHhDgW38SwG2lrC4G8nZzZu3li0hIEf7BYqi3h4RrOuSwhlN
-         lTA1+DEzZVWNudEl1lKZpkGdrCY135h9OAc0DZgJIFF3scMaqRl1g3UMFMpmfaBA5vna
-         +mkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMxFCyLNOQ4MG1cmtPxaQxYcKILFRGTai6Nmqp1wS9d25vUi1NPEZq68R7KTHcfwoceMZS@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy8Ac6gtwPsyHVDPDR16PXHpUA4LdWFczQ0vhc2LczLrSmp4H2l
-	3bC2BgAzxG5ptBUVdPsXbgMPLychonQ+IJb5p7xwhwW1JMPC7v5kCCCbtfG1RCYUYJyDKHkwL09
-	Ak4xLhFma8UnkAXS+hQeyMOROFbA=
-X-Gm-Gg: ASbGncu1IflFoUedyQowDsmJ1Wb0L0XMMwQXlwUlm3N1xldkiB47Dg4KLN3URmv3tyT
-	GGT+0UMPUgaIkxqg2/w4qJNK5onJ+rG6Jpdoj5F5HT5/QiGKWiq75xXJ8DiP6LiwvhR+J
-X-Google-Smtp-Source: AGHT+IGJ4XnG6hPJJ83WUCPU4UF5z2bmt9KoMQ+xXAQfdQtvpcUiv3Qt3tZqeiwj1hLIlyJ3fx6mjYGevzp0orcU4bE=
-X-Received: by 2002:a05:6512:3510:b0:542:2952:8848 with SMTP id
- 2adb3069b0e04-54229529bb5mr1819462e87.3.1734863864768; Sun, 22 Dec 2024
- 02:37:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PmZxAUdD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734867055; x=1766403055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YnvPVm1s+4W45VlHuSRO4GkuEbWIUgE3/3+zMdnz7aQ=;
+  b=PmZxAUdDYu5Q8YWv5BgNG9elqSO5Z33eKKMAntVpWdcGNi35TI0X3HC2
+   QSifgccqSpdoD9kQlltVNnAi4nBNuydYFuKOC9ykQVXMRQo12+lJwvi+2
+   D0j3rDEsAe7cHxcQiYsyr+Knh1uNFh2G5G0Ykk3DBf0R4yTMqzx/It5P+
+   8Een8xOoEvBozfGn85qVqHb0Q57jCMsReYgwf98gilGVZ/SRPvHM5ZDmg
+   sSfVMQHyZ2LaodkyfDOBkpO+eET9+u7GnvZMD0TY3MGi1k9Kq3TbLTQxa
+   y4Ltt1lGQPACfPBq/Ox+wdTniyEcR0C/Yu88DMTKlFowO9Ge8zAOpYNwM
+   Q==;
+X-CSE-ConnectionGUID: F0t9OeXzRLmJFw9XnrX4Og==
+X-CSE-MsgGUID: O9rbmGF0Qpe7vHEYRqEwiQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="35498769"
+X-IronPort-AV: E=Sophos;i="6.12,255,1728975600"; 
+   d="scan'208";a="35498769"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2024 03:30:54 -0800
+X-CSE-ConnectionGUID: U0X4XKUURkygL2Z5EhOp0w==
+X-CSE-MsgGUID: ekmDfC9rQUGIeqhQmNHC+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="103933925"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 22 Dec 2024 03:30:53 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tPKAd-0002tP-0o;
+	Sun, 22 Dec 2024 11:30:51 +0000
+Date: Sun, 22 Dec 2024 19:30:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lee Jones <lee@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v6 2/5] samples: rust: Provide example using the new Rust
+ MiscDevice abstraction
+Message-ID: <202412221934.QGXsH2pw-lkp@intel.com>
+References: <20241213134715.601415-3-lee@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
- <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
- <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com>
- <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com> <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
- <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com> <CA+icZUUp9rgx2Dvsww6QbTGRZz5=mf75D0_KncwdgCEZe01-EA@mail.gmail.com>
- <CA+icZUV0HEF_hwr-eSovntfcT0++FBrQN-HbFL+oZtnKjJzLtA@mail.gmail.com> <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com>
-In-Reply-To: <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 22 Dec 2024 11:37:08 +0100
-Message-ID: <CA+icZUW454ND85nbjqAoMg42=i+aGht8Z=iG2wKj=Un7Ot0y6Q@mail.gmail.com>
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	xen-devel <xen-devel@lists.xenproject.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241213134715.601415-3-lee@kernel.org>
 
-On Sat, Dec 21, 2024 at 10:31=E2=80=AFPM Andrew Cooper
-<andrew.cooper3@citrix.com> wrote:
->
-> On 21/12/2024 6:25 pm, Sedat Dilek wrote:
-> > With...
-> >
-> > dileks@iniza:~/src/xtf/git$ mv tests/xsa-454 ../
-> > dileks@iniza:~/src/xtf/git$ mv tests/xsa-consoleio-write ../
->
-> That's completely bizzare.   There's nothing interestingly different
-> with those two tests vs the others.
->
-> I take it the crash is repeatable when using either of these?
->
-> ~Andrew
+Hi Lee,
 
-This time I stopped SDDM and thus KDE-6/Wayland session.
+kernel test robot noticed the following build errors:
 
-Tested with Debian's officially 6.12.6-amd64 kernel in VT-3.
+[auto build test ERROR on rust/rust-next]
+[also build test ERROR on lee-leds/for-leds-next soc/for-next linus/master v6.13-rc3]
+[cannot apply to next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-test-hvm32pae-xsa-consoleio-write SUCCESS <--- 1st time I tried, never
-said this is not OK
+url:    https://github.com/intel-lab-lkp/linux/commits/Lee-Jones/Documentation-ioctl-number-Carve-out-some-identifiers-for-use-by-sample-drivers/20241213-215003
+base:   https://github.com/Rust-for-Linux/linux rust-next
+patch link:    https://lore.kernel.org/r/20241213134715.601415-3-lee%40kernel.org
+patch subject: [PATCH v6 2/5] samples: rust: Provide example using the new Rust MiscDevice abstraction
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20241222/202412221934.QGXsH2pw-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412221934.QGXsH2pw-lkp@intel.com/reproduce)
 
-test-hvm64-xsa-454 leads to FROZEN system and DATA LOSS (here: ext4).
-Reproducibly as told many times.- in Debian and selfmade kernels version 6.=
-12.6.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412221934.QGXsH2pw-lkp@intel.com/
 
-Stolen from the picture I took with my smartphone:
+All errors (new ones prefixed by >>):
 
-sudo ./xft-runner test-hvm64-xsa-454
+   error[E0050]: method `open` has 2 parameters but the declaration in trait `open` has 0
+   --> samples/rust/rust_misc_device.rs:55:20
+   |
+   55 |     fn open(_file: &File, misc: &MiscDeviceRegistration<Self>) -> Result<KBox<Self>> {
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected 0 parameters, found 2
+   |
+>> = note: `open` from trait: `fn() -> core::result::Result<<Self as MiscDevice>::Ptr, kernel::error::Error>`
+--
+   error[E0050]: method `ioctl` has 4 parameters but the declaration in trait `ioctl` has 3
+   --> samples/rust/rust_misc_device.rs:64:13
+   |
+   64 |           me: <Self::Ptr as kernel::types::ForeignOwnable>::Borrowed<'_>,
+   |  _____________^
+   65 | |         _file: &File,
+   66 | |         cmd: u32,
+   67 | |         _arg: usize,
+   | |___________________^ expected 3 parameters, found 4
+   |
+>> = note: `ioctl` from trait: `fn(<<Self as MiscDevice>::Ptr as ForeignOwnable>::Borrowed<'_>, u32, usize) -> core::result::Result<isize, kernel::error::Error>`
+--
+>> error[E0599]: no method named `device` found for reference `&MiscDeviceRegistration<RustMiscDevice>` in the current scope
+   --> samples/rust/rust_misc_device.rs:56:35
+   |
+   56 |         let dev = ARef::from(misc.device());
+   |                                   ^^^^^^ method not found in `&MiscDeviceRegistration<RustMiscDevice>`
+--
+>> error[E0282]: type annotations needed for `ARef<T>`
+   --> samples/rust/rust_misc_device.rs:56:13
+   |
+   56 |         let dev = ARef::from(misc.device());
+   |             ^^^
+   57 |
+   58 |         dev_info!(dev, "Opening Rust Misc Device Samplen");
+   |         --------------------------------------------------- type must be known at this point
+   |
+   help: consider giving `dev` an explicit type, where the type for type parameter `T` is specified
+   |
+   56 |         let dev: ARef<T> = ARef::from(misc.device());
+   |                +++++++++
 
-Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
-Executing 'xl console test-hvm64-xsa-454'
-Executing 'xl unpause test-hvm64-xsa-454'
-
-^^ System does NOT react!
-
-I can send you the picture on request.
-
--Sedat-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
