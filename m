@@ -1,109 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F8E18FDDF
-	for <llvm@lists.linux.dev>; Sun, 22 Dec 2024 22:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB027DA8C;
+	Sun, 22 Dec 2024 23:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734906788; cv=none; b=DaxSUBuPAVt6D1btIMnaZAUxmNNESIqu9bbtSQIsU3Bfx8TbdK8TXicBPReRx/g8MjY81FPKWkrICDzWHjO6YFFjhU80N+4rlZpKXoIHavpNo4zcDIYXRruJyomTi2q5Z8khI/25YakjlE9W6nbki9le39Ak/Vc62Zcu5Z+3n1Q=
+	t=1734909369; cv=none; b=rpdMHSvHUUVHxkVMrhcJmpyCYGL2V2ChegU+kqR2mwvHv3k8Mrd7wokMpapA42ea+gwqYHgjsrRaGwHqfLbnj9GGOhdKLSHseVgp4QJdW7hKDN+SEpY8BpQML7hCivA54Mo08ejSRXCQFBwya/qRhF3PRWtctTobrFF6TTePA4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734906788; c=relaxed/simple;
-	bh=fALH8zrraHzrbZa2ltYhqiW2P6SCZ0BC5ccffpoN2wk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=M7u8LdACgjVqTAyNJAwnMV2GZTgAgrWqcrnICOaqqqIMvyT8JWHK1J0Jj1aeoNR8nLK3JDNx/d/E0apwyYU9va05DbUuAZkAWQz0xHERpomLWOqT4j4tN9yCd1puu+jQCWdLdkMCIKFbZnQJM3rS7TLzu/p0lYS2IzoDgaO9DR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aumj02De; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1734909369; c=relaxed/simple;
+	bh=r6HKnJOGOj/50r48P+z/0C7cAdafkLowwBy5C9itAyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qv01VFvwkX+MXnu734KKp0ScMaUvg1ut2fdhKjRQ6adHRa9bqN6g+StV80sp1+kbV9Qsi0QCfTal+amKeYwMriutJgtir3lCVh03ZJWFb7DClbTju24QgB5HpfQwi4j6Q62Qtv18tC44O7wZRRODSHdSaJB4OaJW6AO/IwwgEIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ESnFkb3N; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aumj02De"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734906784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=S6xY6Eq/hM8nyEp/6vaUSrP9aCj99DaH5mSAkKEeJYo=;
-	b=aumj02De305FR+okSWmyb0GbclsDvy69Ei40x1yu37HjhAPSqRkO8MvRmDhmUU3mi9Lpbt
-	4Lo1Y9fGF5qAtz2XrLY6KePWimwNqhoCVvxWDLSnMZ9tm7wGnMla/LFp31Qc368lk+2goP
-	bDsYyVK7kKyUP/av3qvZHqfm5GMYe3A=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-501-ZQDz-01vNSWaqrc3TFm_kA-1; Sun,
- 22 Dec 2024 17:33:02 -0500
-X-MC-Unique: ZQDz-01vNSWaqrc3TFm_kA-1
-X-Mimecast-MFC-AGG-ID: ZQDz-01vNSWaqrc3TFm_kA
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EBCD21956088
-	for <llvm@lists.linux.dev>; Sun, 22 Dec 2024 22:33:01 +0000 (UTC)
-Received: from [172.64.13.20] (unknown [10.30.32.164])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 36D591956052;
-	Sun, 22 Dec 2024 22:33:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc3,
- upstream-mainline, b1fdbe77)
-Date: Sun, 22 Dec 2024 22:33:00 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ESnFkb3N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734909365; x=1766445365;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=r6HKnJOGOj/50r48P+z/0C7cAdafkLowwBy5C9itAyU=;
+  b=ESnFkb3NzJJuhb83VEzyTA0ATUIt+RJ017LPScx4qaFVdxPq2bunmQg1
+   g6HWcFA8tJkMhaAbvCwacQ818g87F3eEzC2NuM1/kFmmEvlJYywk06jM+
+   xpjCX+dLr6M6t+blSdqp21M+0+PLe/2UbeORPHBBVfDToXBVoWKdqmkoy
+   At1BzAJuDFmUqaEI3GRtUpj0bqADuRchHUER64hceoiBD+S9auzMYItPG
+   9NjH9gGi3ycjLk43b08EHBoJtcIVuUVS/9Y/XddgY4yqm7S+R+hcG1Uvt
+   PdCrOdqtQluXeArOQdIpHwZDaf7hxnIN3OUxl7spKupQnLDBRc/9oj1Ew
+   A==;
+X-CSE-ConnectionGUID: YtFDRKEpR1+XIQq7jkm6lg==
+X-CSE-MsgGUID: +8EQdZKYQjmxImoIom4GIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="46384381"
+X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
+   d="scan'208";a="46384381"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2024 15:16:05 -0800
+X-CSE-ConnectionGUID: awnVERWzRYaB5hR0e+AAIA==
+X-CSE-MsgGUID: Sr/Mn9qpSiG+/gFXpCKmCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
+   d="scan'208";a="129889341"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 22 Dec 2024 15:16:03 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tPVB3-0003GD-1F;
+	Sun, 22 Dec 2024 23:16:01 +0000
+Date: Mon, 23 Dec 2024 07:15:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/b4-sysfs-const-bin_attr-cb 106/107]
+ drivers/s390/cio/chp.c:157:8: error: incompatible function pointer types
+ initializing 'ssize_t (*)(struct file *, struct kobject *, const struct
+ bin_attribute *, char *, loff_t, size_t)' (aka 'long (*)(struct file *,
+ struct kobject *, const struct bin_att...
+Message-ID: <202412230729.lM9ZqE9U-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <99048.124122217330201835@us-mta-501.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: mJUEh7jl9iO2dEDMGPabD7GrQMPWzlTY03qrBnBjeec_1734906782
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/b4-sysfs-const-bin_attr-cb
+head:   8db3706541f19807373f27aa92d17a30c7092993
+commit: dd1c32ee4842fb19b7fc433388b5e6071e135440 [106/107] read/write
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20241223/202412230729.lM9ZqE9U-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412230729.lM9ZqE9U-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412230729.lM9ZqE9U-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/s390/cio/chp.c:157:8: error: incompatible function pointer types initializing 'ssize_t (*)(struct file *, struct kobject *, const struct bin_attribute *, char *, loff_t, size_t)' (aka 'long (*)(struct file *, struct kobject *, const struct bin_attribute *, char *, long long, unsigned long)') with an expression of type 'ssize_t (struct file *, struct kobject *, struct bin_attribute *, char *, loff_t, size_t)' (aka 'long (struct file *, struct kobject *, struct bin_attribute *, char *, long long, unsigned long)') [-Wincompatible-function-pointer-types]
+     157 | static BIN_ATTR_ADMIN_RO(measurement_chars_full, sizeof(struct cmg_cmcb));
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sysfs.h:378:41: note: expanded from macro 'BIN_ATTR_ADMIN_RO'
+     378 | struct bin_attribute bin_attr_##_name = __BIN_ATTR_ADMIN_RO(_name, _size)
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sysfs.h:369:26: note: expanded from macro '__BIN_ATTR_ADMIN_RO'
+     369 |         __BIN_ATTR(_name, 0400, _name##_read, NULL, _size)
+         |                                 ^~~~~~~~~~~~
+   <scratch space>:62:1: note: expanded from here
+      62 | measurement_chars_full_read
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sysfs.h:338:10: note: expanded from macro '__BIN_ATTR'
+     338 |         .read = _read,                                                  \
+         |                 ^~~~~
+   drivers/s390/cio/chp.c:221:1: error: initializing 'struct bin_attribute **' with an expression of type 'const struct bin_attribute *const[5]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     221 | BIN_ATTRIBUTE_GROUPS(measurement);
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sysfs.h:296:15: note: expanded from macro 'BIN_ATTRIBUTE_GROUPS'
+     296 |         .bin_attrs = _name##_attrs,                             \
+         |                      ^~~~~~~~~~~~~
+   <scratch space>:10:1: note: expanded from here
+      10 | measurement_attrs
+         | ^~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
-irt/kvm/kvm
+vim +157 drivers/s390/cio/chp.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1599700797
+e6b6e10ac1de116 Peter Oberparleiter 2007-04-27  146  
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  147  static ssize_t measurement_chars_full_read(struct file *filp,
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  148  					   struct kobject *kobj,
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  149  					   struct bin_attribute *bin_attr,
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  150  					   char *buf, loff_t off, size_t count)
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  151  {
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  152  	struct channel_path *chp = to_channelpath(kobj_to_dev(kobj));
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  153  
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  154  	return memory_read_from_buffer(buf, count, &off, &chp->cmcb,
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  155  				       sizeof(chp->cmcb));
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  156  }
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07 @157  static BIN_ATTR_ADMIN_RO(measurement_chars_full, sizeof(struct cmg_cmcb));
+2f4b3b83b8c6e79 Peter Oberparleiter 2024-11-07  158  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1599700797-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1599700797-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1599700797-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+:::::: The code at line 157 was first introduced by commit
+:::::: 2f4b3b83b8c6e798a2e581521f00933d0f9ec777 s390/cio: Externalize full CMG characteristics
 
+:::::: TO: Peter Oberparleiter <oberpar@linux.ibm.com>
+:::::: CC: Heiko Carstens <hca@linux.ibm.com>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
