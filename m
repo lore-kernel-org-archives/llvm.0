@@ -1,52 +1,84 @@
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733813D0D5;
-	Sun, 22 Dec 2024 04:20:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F11BE40;
+	Sun, 22 Dec 2024 04:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734841224; cv=none; b=l25MMCDO3FT+QekUfmNolaRD1mKD6UEPAM84NzjKdw+O9hxgeJKvOOveosjRvlywjitcsGDIrn320UovZL3RPhzScgcZ5ZIUdkcj4GzkZkORplDfzRo4aCU8p2qQqk8fMy7fz/pexoTMG1Us9KiPFgkU595NKuA1R73MhbfLpQg=
+	t=1734841771; cv=none; b=oBdnjJ22iq1y1VQn1jmHwXoFTPLGL2mshu8+xS0V7Q1TRAxTxp6NXhp83HMPXrwF+Zs6ADUGm8fUG4TN1Q/Oq6z1zHIrrUUm/xrDNXfbxV1PV+vk+Wv3QFden76prjrUS9uYWAhJUnJLAYL3EfvTbNw25pWkjT3l5ljtuNS9oi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734841224; c=relaxed/simple;
-	bh=SBC2ST+0oancyUzYEiO7UG8jJgvoTf7tnOHYco9n8zQ=;
+	s=arc-20240116; t=1734841771; c=relaxed/simple;
+	bh=wxJZB31tzXEYe/W+Za1/hmN5Vyqc9LpWaG6482m3CC8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DvNXqFFa4xRKnTl6AqiAKe30USyRB4/uongg9ZfjHvoaEXJVPb2wnMwhsXZ5uw0sLfjsKmV33OZvbfNJqAwZ1eWkWJ5THcBRbxxP7dMzx4FVMm4YcMqDP/6HYZCW7gcL6Cs9O99SBXXy6IXaoEuo6M60vV18YF5urFdZVH1/UTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=BlEgm4jl; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+	 Content-Type:Content-Disposition:In-Reply-To; b=nBvr7Qqs5p75S5hnIY3+Lt54U7OTAsTaxpF+cEGMaQ1scMntabGw/iBArsK89H3mLOH8IfS1VzL+iF8xu44hRvypgwapqmfq4K8R2VNQ9oA5y3j1BnRsWSSWmH0VoVun9I905AQbB13JYOcu8N2o0MhAEA3om/PwatFDUKvD+yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gtPGZe2h; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="BlEgm4jl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=PAAd2U1Mp2pW+AoJOC/H/IFSldcHWpdu/VmyCU+eH3w=; b=BlEgm4jle0e9B/s4fVnh1aja63
-	dkjJ6cIZsgYOJoLGpzYbMvLucRCumWe5WKT86eTIynhYM2cehE+E6KzMxxgTZwoWK6rKvzTjQ850m
-	ocftoGJvIWtabc1KFxDKMyfgYCiREgP08y9OlIDsRhoeC6zJxFp2K4CQ8iIQjIt9c3QyxS2TqzCx0
-	SDue+VWhAdRxfPaFgBTyqe+wnS9GoeQfnkEGx2jVCo9u4X6dgeNp/2WNXn7hKfIvVzqHhZP+hvz1O
-	AJ23Qah8K+6MMXr1k6YA0+8Xo6WSXE8RRNnzrZaeuhEwLbaW60zRUezYMvinmqq1hT6tVkhedLuq3
-	2nnvKUmw==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1tPDF4-002Uev-0y;
-	Sun, 22 Dec 2024 12:20:20 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 22 Dec 2024 12:20:19 +0800
-Date: Sun, 22 Dec 2024 12:20:19 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thara Gopinath <thara.gopinath@gmail.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-crypto@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH] crypto: qce - revert "use __free() for a buffer that's
- always freed"
-Message-ID: <Z2eTg29H703vaiNc@gondor.apana.org.au>
-References: <20241218-crypto-qce-sha-fix-clang-cleanup-error-v1-1-7e6c6dcca345@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gtPGZe2h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734841769; x=1766377769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wxJZB31tzXEYe/W+Za1/hmN5Vyqc9LpWaG6482m3CC8=;
+  b=gtPGZe2hKS/IZ3L/CNuXSfALo1wj3s3DR7vfaCi9w0GWMFdsIDMTVr7S
+   Mtjbayy3ZCOhbxzYg1eDhhzx6Ou8Q7cXVQygSZ0T0gkqKOiz4SNfDqxlQ
+   CdtF5/x0OwoFZqXbbFMmd7xHnmhxh9jVLMQOFtX7ip/UM4Vf4Irp0PMtC
+   HnhAc5e0QIukkXvKkV9kvWE+a75HcGDxWJnbbu/E5Se2adYAqtBJJoLzV
+   Q6vHpt0s7WHPxtQeigIGOQa8kHj7DrVxsls+io7sYMnV9i+ZZc49ZUm2X
+   DbsqLA0qjev7/569ZsZsXtORcWYBZXPeO/XPKDWhqwrI4HWlfA9HeTnDg
+   g==;
+X-CSE-ConnectionGUID: g7Y6KPdcQYmvFkn0ReHUpA==
+X-CSE-MsgGUID: SF+YLXKNQNmjXEM2RdIimw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="35559933"
+X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
+   d="scan'208";a="35559933"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 20:29:28 -0800
+X-CSE-ConnectionGUID: QPDYs2+6RxC2QpPP3V9zNw==
+X-CSE-MsgGUID: ToqDiGWeTWq5ruff7ypNNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
+   d="scan'208";a="99285725"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 21 Dec 2024 20:29:22 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tPDai-0002jD-0x;
+	Sun, 22 Dec 2024 04:29:20 +0000
+Date: Sun, 22 Dec 2024 12:28:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Weikang <guoweikang.kernel@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Sam Creasey <sammy@sammy.net>, Huacai Chen <chenhuacai@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Oreoluwa Babatunde <quic_obabatun@quicinc.com>,
+	rafael.j.wysocki@intel.com, Palmer Dabbelt <palmer@rivosinc.com>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Easwar Hariharan <eahariha@linux.microsoft.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Ingo Molnar <mingo@kernel.org>, Dave Hansen <dave.hansen@intel.com>,
+	Christian Brauner <brauner@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>
+Subject: Re: [PATCH v5] mm/memblock: Add memblock_alloc_or_panic interface
+Message-ID: <202412221259.JuGNAUCq-lkp@intel.com>
+References: <20241222030331.2704579-1-guoweikang.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,40 +87,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241218-crypto-qce-sha-fix-clang-cleanup-error-v1-1-7e6c6dcca345@kernel.org>
+In-Reply-To: <20241222030331.2704579-1-guoweikang.kernel@gmail.com>
 
-On Wed, Dec 18, 2024 at 01:11:17PM -0700, Nathan Chancellor wrote:
-> Commit ce8fd0500b74 ("crypto: qce - use __free() for a buffer that's
-> always freed") introduced a buggy use of __free(), which clang
-> rightfully points out:
-> 
->   drivers/crypto/qce/sha.c:365:3: error: cannot jump from this goto statement to its label
->     365 |                 goto err_free_ahash;
->         |                 ^
->   drivers/crypto/qce/sha.c:373:6: note: jump bypasses initialization of variable with __attribute__((cleanup))
->     373 |         u8 *buf __free(kfree) = kzalloc(keylen + QCE_MAX_ALIGN_SIZE,
->         |             ^
-> 
-> Jumping over a variable declared with the cleanup attribute does not
-> prevent the cleanup function from running; instead, the cleanup function
-> is called with an uninitialized value.
-> 
-> Moving the declaration back to the top function with __free() and a NULL
-> initialization would resolve the bug but that is really not much
-> different from the original code. Since the function is so simple and
-> there is no functional reason to use __free() here, just revert the
-> original change to resolve the issue.
-> 
-> Fixes: ce8fd0500b74 ("crypto: qce - use __free() for a buffer that's always freed")
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Closes: https://lore.kernel.org/CA+G9fYtpAwXa5mUQ5O7vDLK2xN4t-kJoxgUe1ZFRT=AGqmLSRA@mail.gmail.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/crypto/qce/sha.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Hi Guo,
 
-Patch applied.  Thanks.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guo-Weikang/mm-memblock-Add-memblock_alloc_or_panic-interface/20241222-110513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20241222030331.2704579-1-guoweikang.kernel%40gmail.com
+patch subject: [PATCH v5] mm/memblock: Add memblock_alloc_or_panic interface
+config: arm-randconfig-002-20241222 (https://download.01.org/0day-ci/archive/20241222/202412221259.JuGNAUCq-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412221259.JuGNAUCq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412221259.JuGNAUCq-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/memblock.c:1706: warning: Function parameter or struct member 'func' not described in '__memblock_alloc_or_panic'
+>> mm/memblock.c:1706: warning: Excess function parameter 'fuc' description in '__memblock_alloc_or_panic'
+
+
+vim +1706 mm/memblock.c
+
+  1693	
+  1694	/**
+  1695	 * __memblock_alloc_or_panic - Try to allocate memory and panic on failure
+  1696	 * @size: size of memory block to be allocated in bytes
+  1697	 * @align: alignment of the region and block's size
+  1698	 * @fuc: caller func name
+  1699	 *
+  1700	 * This function attempts to allocate memory using memblock_alloc,
+  1701	 * and in case of failure, it calls panic with the formatted message.
+  1702	 * This function should not be used directly, please use the macro memblock_alloc_or_panic.
+  1703	 */
+  1704	void *__init __memblock_alloc_or_panic(phys_addr_t size, phys_addr_t align,
+  1705					       const char *func)
+> 1706	{
+  1707		void *addr = memblock_alloc(size, align);
+  1708	
+  1709		if (unlikely(!addr))
+  1710			panic("%s: Failed to allocate %pap bytes\n", func, &size);
+  1711		return addr;
+  1712	}
+  1713	
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
