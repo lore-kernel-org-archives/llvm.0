@@ -1,143 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F11BE40;
-	Sun, 22 Dec 2024 04:29:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB467DA8C;
+	Sun, 22 Dec 2024 04:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734841771; cv=none; b=oBdnjJ22iq1y1VQn1jmHwXoFTPLGL2mshu8+xS0V7Q1TRAxTxp6NXhp83HMPXrwF+Zs6ADUGm8fUG4TN1Q/Oq6z1zHIrrUUm/xrDNXfbxV1PV+vk+Wv3QFden76prjrUS9uYWAhJUnJLAYL3EfvTbNw25pWkjT3l5ljtuNS9oi0=
+	t=1734841771; cv=none; b=Go2MXCCupKr7LBFeJysG4nxWkCcaNcpR77zVQTKmB+lzC0RJM5dAOPs33pVlazmmXh/WJlJc2JsytWJW+lEseyjWmy2za5Jg1F/wRJtoRRwMWvuRPfiAHFbCZjbmY3fIb4xoIiKxGvh/bxZqfzQw5b4rpYnwT5AnQcG4f6FgPvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734841771; c=relaxed/simple;
-	bh=wxJZB31tzXEYe/W+Za1/hmN5Vyqc9LpWaG6482m3CC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nBvr7Qqs5p75S5hnIY3+Lt54U7OTAsTaxpF+cEGMaQ1scMntabGw/iBArsK89H3mLOH8IfS1VzL+iF8xu44hRvypgwapqmfq4K8R2VNQ9oA5y3j1BnRsWSSWmH0VoVun9I905AQbB13JYOcu8N2o0MhAEA3om/PwatFDUKvD+yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gtPGZe2h; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gtPGZe2h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734841769; x=1766377769;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wxJZB31tzXEYe/W+Za1/hmN5Vyqc9LpWaG6482m3CC8=;
-  b=gtPGZe2hKS/IZ3L/CNuXSfALo1wj3s3DR7vfaCi9w0GWMFdsIDMTVr7S
-   Mtjbayy3ZCOhbxzYg1eDhhzx6Ou8Q7cXVQygSZ0T0gkqKOiz4SNfDqxlQ
-   CdtF5/x0OwoFZqXbbFMmd7xHnmhxh9jVLMQOFtX7ip/UM4Vf4Irp0PMtC
-   HnhAc5e0QIukkXvKkV9kvWE+a75HcGDxWJnbbu/E5Se2adYAqtBJJoLzV
-   Q6vHpt0s7WHPxtQeigIGOQa8kHj7DrVxsls+io7sYMnV9i+ZZc49ZUm2X
-   DbsqLA0qjev7/569ZsZsXtORcWYBZXPeO/XPKDWhqwrI4HWlfA9HeTnDg
-   g==;
-X-CSE-ConnectionGUID: g7Y6KPdcQYmvFkn0ReHUpA==
-X-CSE-MsgGUID: SF+YLXKNQNmjXEM2RdIimw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11293"; a="35559933"
-X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
-   d="scan'208";a="35559933"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2024 20:29:28 -0800
-X-CSE-ConnectionGUID: QPDYs2+6RxC2QpPP3V9zNw==
-X-CSE-MsgGUID: ToqDiGWeTWq5ruff7ypNNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,254,1728975600"; 
-   d="scan'208";a="99285725"
-Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 21 Dec 2024 20:29:22 -0800
-Received: from kbuild by a46f226878e0 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tPDai-0002jD-0x;
-	Sun, 22 Dec 2024 04:29:20 +0000
-Date: Sun, 22 Dec 2024 12:28:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guo Weikang <guoweikang.kernel@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sam Creasey <sammy@sammy.net>, Huacai Chen <chenhuacai@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Oreoluwa Babatunde <quic_obabatun@quicinc.com>,
-	rafael.j.wysocki@intel.com, Palmer Dabbelt <palmer@rivosinc.com>,
-	Hanjun Guo <guohanjun@huawei.com>,
-	Easwar Hariharan <eahariha@linux.microsoft.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Ingo Molnar <mingo@kernel.org>, Dave Hansen <dave.hansen@intel.com>,
-	Christian Brauner <brauner@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>
-Subject: Re: [PATCH v5] mm/memblock: Add memblock_alloc_or_panic interface
-Message-ID: <202412221259.JuGNAUCq-lkp@intel.com>
-References: <20241222030331.2704579-1-guoweikang.kernel@gmail.com>
+	bh=ofCf1akM1Rj4Et01SCsrVmJ0xx3ask4YGXdXZdKtMI8=;
+	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=EPu/qnW4W1SPL9S+/89HfO3Cz5ij9BM8PS+/zVaCWh45xE9YHPhH5payhbObNg2fGtcgAKUwTA0ZuaKshalmRV+E6ja4lp9C5m3FTa3wp3ixmLhrQl/9/3UBxj3Ijt0ibk6HB0NFULk7AoAiJwQrd6E31ADYKPr+eah3s0qW5Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8CxyuBGlWdnlF5ZAA--.43504S3;
+	Sun, 22 Dec 2024 12:27:50 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowMBxReRDlWdnEC0FAA--.29113S3;
+	Sun, 22 Dec 2024 12:27:47 +0800 (CST)
+Subject: Re: [PATCH v6 9/9] drm/amd/display: Mark dc_fixpt_from_fraction()
+ noinline
+To: Xi Ruoyao <xry111@xry111.site>, Nathan Chancellor <nathan@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>
+References: <20241217010905.13054-1-yangtiezhu@loongson.cn>
+ <20241217015006.30305-1-yangtiezhu@loongson.cn>
+ <CAAhV-H4WpcWjrQdkm3Sx4DVbp=2oW9nNGAbNqR4BEmiryrptNQ@mail.gmail.com>
+ <20241218190558.g2hykmjgbny4n5i3@jpoimboe>
+ <CADnq5_PFcHzob4poLa86_K4yP5gUT7Ei4Rz5vSUofvZTmB48-g@mail.gmail.com>
+ <4bace457-cc26-13a3-bc90-ad6ad12bc2ed@loongson.cn>
+ <20241220103100.GB17537@noisy.programming.kicks-ass.net>
+ <20241220223403.GA2605890@ax162>
+ <05cdb3b4c9bddf25f7b839229b635d2dec5140a4.camel@xry111.site>
+Cc: Alex Deucher <alexdeucher@gmail.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+ loongarch@lists.linux.dev, amd-gfx@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+ llvm@lists.linux.dev
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <bc35fddc-498a-cc58-b6a1-f5234a4f6d0d@loongson.cn>
+Date: Sun, 22 Dec 2024 12:27:47 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241222030331.2704579-1-guoweikang.kernel@gmail.com>
+In-Reply-To: <05cdb3b4c9bddf25f7b839229b635d2dec5140a4.camel@xry111.site>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowMBxReRDlWdnEC0FAA--.29113S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFWfJryDGr13JF18Wr1kXrc_yoW5Jr1kpF
+	4rJFyUGrWDXFySvFZFkw15Xa93A3yfJr4kGFyrur1rAa47AanY9rs3t3WkJayakr42yr40
+	va98KFyqyF4qyFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUUUU=
 
-Hi Guo,
+On 12/21/2024 03:40 PM, Xi Ruoyao wrote:
+> On Fri, 2024-12-20 at 15:34 -0700, Nathan Chancellor wrote:
+>>> Now, the thing is, these ASSERT()s are checking for divide-by-zero, I
+>>> suspect clang figured that out and invokes UB on us and just stops
+>>> code-gen.
+>>
+>> Yeah, I think your analysis is spot on, as this was introduced by a
+>> change in clang from a few months ago according to my bisect:
+>>
+>> https://github.com/llvm/llvm-project/commit/37932643abab699e8bb1def08b7eb4eae7ff1448
+>>
+>> Since the ASSERT does not do anything to prevent the divide by zero (it
+>> just flags it with WARN_ON) and the rest of the code doesn't either, I
+>> assume that the codegen stops as soon as it encounters the unreachable
+>> that change created from the path where divide by zero would occur via
+>>
+>>   dc_fixpt_recip() ->
+>>     dc_fixpt_from_fraction() ->
+>>       complete_integer_division_u64() ->
+>>         div64_u64_rem()
+>>
+>> Shouldn't callers of division functions harden them against dividing by
+>> zero?
+>
+> Yes I think it'd be the correct solution.
 
-kernel test robot noticed the following build warnings:
+Thank you all. Do you mean like this?
 
-[auto build test WARNING on akpm-mm/mm-everything]
+--- >8 ---
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guo-Weikang/mm-memblock-Add-memblock_alloc_or_panic-interface/20241222-110513
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241222030331.2704579-1-guoweikang.kernel%40gmail.com
-patch subject: [PATCH v5] mm/memblock: Add memblock_alloc_or_panic interface
-config: arm-randconfig-002-20241222 (https://download.01.org/0day-ci/archive/20241222/202412221259.JuGNAUCq-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241222/202412221259.JuGNAUCq-lkp@intel.com/reproduce)
+diff --git a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c 
+b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
+index 88d3f9d7dd55..848d8e67304a 100644
+--- a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
++++ b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
+@@ -79,11 +79,13 @@ struct fixed31_32 dc_fixpt_from_fraction(long long 
+numerator, long long denomina
+         unsigned long long arg2_value = arg2_negative ? -denominator : 
+denominator;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412221259.JuGNAUCq-lkp@intel.com/
+         unsigned long long remainder;
++       unsigned long long res_value;
 
-All warnings (new ones prefixed by >>):
+         /* determine integer part */
 
->> mm/memblock.c:1706: warning: Function parameter or struct member 'func' not described in '__memblock_alloc_or_panic'
->> mm/memblock.c:1706: warning: Excess function parameter 'fuc' description in '__memblock_alloc_or_panic'
+-       unsigned long long res_value = complete_integer_division_u64(
+-               arg1_value, arg2_value, &remainder);
++       ASSERT(arg2_value);
++
++       res_value = complete_integer_division_u64(arg1_value, 
+arg2_value, &remainder);
 
+         ASSERT(res_value <= LONG_MAX);
 
-vim +1706 mm/memblock.c
+@@ -214,8 +216,6 @@ struct fixed31_32 dc_fixpt_recip(struct fixed31_32 arg)
+          * Good idea to use Newton's method
+          */
 
-  1693	
-  1694	/**
-  1695	 * __memblock_alloc_or_panic - Try to allocate memory and panic on failure
-  1696	 * @size: size of memory block to be allocated in bytes
-  1697	 * @align: alignment of the region and block's size
-  1698	 * @fuc: caller func name
-  1699	 *
-  1700	 * This function attempts to allocate memory using memblock_alloc,
-  1701	 * and in case of failure, it calls panic with the formatted message.
-  1702	 * This function should not be used directly, please use the macro memblock_alloc_or_panic.
-  1703	 */
-  1704	void *__init __memblock_alloc_or_panic(phys_addr_t size, phys_addr_t align,
-  1705					       const char *func)
-> 1706	{
-  1707		void *addr = memblock_alloc(size, align);
-  1708	
-  1709		if (unlikely(!addr))
-  1710			panic("%s: Failed to allocate %pap bytes\n", func, &size);
-  1711		return addr;
-  1712	}
-  1713	
+-       ASSERT(arg.value);
+-
+         return dc_fixpt_from_fraction(
+                 dc_fixpt_one.value,
+                 arg.value);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With the above changes, there is no "falls through" objtool warning
+compiled with both clang 19 and the latest mainline clang 20.
+
+If you are OK with it, I will send a separate formal patch to handle
+this issue after doing some more testing.
+
+Thanks,
+Tiezhu
+
