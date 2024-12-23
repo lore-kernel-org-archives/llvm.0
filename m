@@ -1,59 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A13919006B;
-	Mon, 23 Dec 2024 10:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C6F19DFB4;
+	Mon, 23 Dec 2024 12:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734951406; cv=none; b=BH2W02OW32Osbm7iNwzUk634BuECRm1dxLMSO8h3CshQH2Wy0ya4fY4BkkQJw59kfU2cvwECYWUsE+AouPtTfVDcs3XNM+g6TrWJCnAsPTtQdWnXkboX30F9qCdG7Xhcu7MmjeIRfObF42ap3GiLdAsV19VgaSbdXbdDzSGY+ig=
+	t=1734957698; cv=none; b=ZEbAcvMzW1AFD3qs33CaRsHe05hRtazTk7jxZBO9oC20ovN22X4whPTE23qs0I3rQ2xETjRYQGQBieDV50gztl2iUZ0cslzgXrLSruLrUuEdFwh6rnwIu5T0jHm3EUwSwT1L91kuEvH4Q8kp/MHd+3hEwcSSIkzCt0huKkggiAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734951406; c=relaxed/simple;
-	bh=uW8AHJTpl6aGBYegqIfRSUEnuQceTykaxN21iG+GZec=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pUk1Ye4l5IrOakOV84lapiPfWmG3Jh9RRhlcJ7hIehJv4h7LWyPEVxhwddV7CuSKYqQ04PZXAyiz51pCVU+oWrfDvssUvk9uDvOP7ftqupgSK/zzVh3NuWb1Nynps/OcEwvh+rCW/+Eqjt3I4muRdT0whMPT58tJZgrnjnkggCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+jl4FPj; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1734957698; c=relaxed/simple;
+	bh=L+YxQcEOgXNHxMddVjNfSi3hx+4G5NNjAUaqSfVyCpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hEP0wdNYh5CJS1cyR068AriB7GUUBbG22wuNF8kvoa6rLxVr3RBPVCotsT6LySoQwPmcebBPb0nVlb25M3qzXPsgze7zYPJQ+VGHViIJjs1izrK1lUuJaOWjEL77WABXXd7KAfzX7+A+uh6IaP/iikOMuOieaOASIWZDylsDqlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ASmir0OI; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+jl4FPj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ASmir0OI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734951403; x=1766487403;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uW8AHJTpl6aGBYegqIfRSUEnuQceTykaxN21iG+GZec=;
-  b=Y+jl4FPjIForW/Ms0pM/G5uaR2Ei8Yi/YczWCG+8xL9n7Fc8zyH9lh+v
-   sHcwnKNMofMWBu8QSgwsrW1d0NDDcaltJvhxEpsV3S0UtwAkwS9P26XfR
-   xKlmHlnxzBBf4YEkpR4BgXtLTNMWCsVcr/Yi8lARfCXn50NIHvg/EuAzI
-   rCZBOHh3yFw22fGeYZpnFg10C/1pJS9JNsgZuHSzmRDfpOh0FDNejj5S1
-   6ttr4kmXZrb5CV2TN3GYdNFieXfVPN3tMzcmHhnGrl2v78gpcFTXa4CnR
-   XIsiLFN+vUdPHC2P/aet6VicWQ+r3ruKHxN911rw2m1ZyCZpGOXHouyAK
-   A==;
-X-CSE-ConnectionGUID: 6WLFvibLRnuQtm00+nPQ8g==
-X-CSE-MsgGUID: nog93HGVSxShBl6sLoxd0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="46419662"
-X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
-   d="scan'208";a="46419662"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 02:56:43 -0800
-X-CSE-ConnectionGUID: bEBRLp16T8SbnLloiaiTmQ==
-X-CSE-MsgGUID: wGA3wLi7T6qYc3BSOuRjEA==
+  t=1734957696; x=1766493696;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L+YxQcEOgXNHxMddVjNfSi3hx+4G5NNjAUaqSfVyCpQ=;
+  b=ASmir0OIvHBpAZfNCjLNCs0T8XCb4fAgkx06JX97th+KwSBD6JKvEqSH
+   0Zq3j2SEZNpBBVRNxl9IcnsQpQpb7Pg0xW7cYUvFrHNi67psEGj+Yi7Kb
+   N9NJGEI3+Xrsbr/hOmVS+zcz00qOd3R2c6vJVa9w4paz2jUTcDAvG/teG
+   8GcI7URJv9+yz0VVJa67Y1QYW70dLNFwtimKhqQsmswWhwk8zwTUFG89j
+   HN/WoqId0tvRR90BgD5HzPlEiO2aVER+KOvXtG3ygDwNnVAv+TLyNXZA0
+   iojsvrF0wUv4n/9ecf5c7Lb51V1aQNlYJurhHhS1BtYMnbfCw9s2mj+b+
+   g==;
+X-CSE-ConnectionGUID: 4uSKpBSNQFKxUwTjNTD+DQ==
+X-CSE-MsgGUID: jq12t1sNQTSltgaM7zqJ9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="23008526"
+X-IronPort-AV: E=Sophos;i="6.12,257,1728975600"; 
+   d="scan'208";a="23008526"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 04:41:35 -0800
+X-CSE-ConnectionGUID: 7uffrvwjQtefBERyCCjFhg==
+X-CSE-MsgGUID: 02RzGsxqQJi2m11SdTmWlw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="99641594"
+X-IronPort-AV: E=Sophos;i="6.12,257,1728975600"; 
+   d="scan'208";a="99716687"
 Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 23 Dec 2024 02:56:42 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 23 Dec 2024 04:41:32 -0800
 Received: from kbuild by a46f226878e0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tPg75-0003YJ-24;
-	Mon, 23 Dec 2024 10:56:39 +0000
-Date: Mon, 23 Dec 2024 18:55:39 +0800
+	id 1tPhkY-0003ad-0K;
+	Mon, 23 Dec 2024 12:41:30 +0000
+Date: Mon, 23 Dec 2024 20:41:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
+To: Jammy Huang <jammy_huang@aspeedtech.com>, tzimmermann@suse.de,
+	jfalempe@redhat.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, airlied@redhat.com, airlied@gmail.com,
+	daniel@ffwll.ch
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org
-Subject: [viro-vfs:work.dcache 6/6] fs/libfs.c:1819:10: warning: comparison
- of distinct pointer types ('const char *' and 'const unsigned char *')
-Message-ID: <202412231828.bq5nr63U-lkp@intel.com>
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/ast: Support timings, 1280x720/1280x960/1600x900
+Message-ID: <202412232014.2tGzY28v-lkp@intel.com>
+References: <20241223081044.4139167-1-jammy_huang@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,86 +66,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241223081044.4139167-1-jammy_huang@aspeedtech.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.dcache
-head:   08141fdc186755910b5bffc21a4325e2b673629f
-commit: 7cd7d43774879a6d7fc35662fb788ed8210dd09a [6/6] generic_ci_d_compare(): use shortname_storage
-config: arm-randconfig-002-20241223 (https://download.01.org/0day-ci/archive/20241223/202412231828.bq5nr63U-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412231828.bq5nr63U-lkp@intel.com/reproduce)
+Hi Jammy,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 4bbf9020becbfd8fc2c3da790855b7042fad455b]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jammy-Huang/drm-ast-Support-timings-1280x720-1280x960-1600x900/20241223-161735
+base:   4bbf9020becbfd8fc2c3da790855b7042fad455b
+patch link:    https://lore.kernel.org/r/20241223081044.4139167-1-jammy_huang%40aspeedtech.com
+patch subject: [PATCH] drm/ast: Support timings, 1280x720/1280x960/1600x900
+config: i386-buildonly-randconfig-002-20241223 (https://download.01.org/0day-ci/archive/20241223/202412232014.2tGzY28v-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412232014.2tGzY28v-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412231828.bq5nr63U-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412232014.2tGzY28v-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/libfs.c:1819:10: warning: comparison of distinct pointer types ('const char *' and 'const unsigned char *') [-Wcompare-distinct-pointer-types]
-           if (str == dentry->d_shortname.string) {
-               ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/gpu/drm/ast/ast_mode.c:481:31: error: use of undeclared identifier 'AST_IO_SEQ_PORT'
+     481 |                 ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT, 0x01, 0xff, 0x08);
+         |                                             ^
+   drivers/gpu/drm/ast/ast_mode.c:483:31: error: use of undeclared identifier 'AST_IO_SEQ_PORT'
+     483 |                 ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT, 0x01, 0xf7, 0x00);
+         |                                             ^
+   2 errors generated.
 
 
-vim +1819 fs/libfs.c
+vim +/AST_IO_SEQ_PORT +481 drivers/gpu/drm/ast/ast_mode.c
 
-  1776	
-  1777	#if IS_ENABLED(CONFIG_UNICODE)
-  1778	/**
-  1779	 * generic_ci_d_compare - generic d_compare implementation for casefolding filesystems
-  1780	 * @dentry:	dentry whose name we are checking against
-  1781	 * @len:	len of name of dentry
-  1782	 * @str:	str pointer to name of dentry
-  1783	 * @name:	Name to compare against
-  1784	 *
-  1785	 * Return: 0 if names match, 1 if mismatch, or -ERRNO
-  1786	 */
-  1787	int generic_ci_d_compare(const struct dentry *dentry, unsigned int len,
-  1788				 const char *str, const struct qstr *name)
-  1789	{
-  1790		const struct dentry *parent;
-  1791		const struct inode *dir;
-  1792		union shortname_store strbuf;
-  1793		struct qstr qstr;
-  1794	
-  1795		/*
-  1796		 * Attempt a case-sensitive match first. It is cheaper and
-  1797		 * should cover most lookups, including all the sane
-  1798		 * applications that expect a case-sensitive filesystem.
-  1799		 *
-  1800		 * This comparison is safe under RCU because the caller
-  1801		 * guarantees the consistency between str and len. See
-  1802		 * __d_lookup_rcu_op_compare() for details.
-  1803		 */
-  1804		if (len == name->len && !memcmp(str, name->name, len))
-  1805			return 0;
-  1806	
-  1807		parent = READ_ONCE(dentry->d_parent);
-  1808		dir = READ_ONCE(parent->d_inode);
-  1809		if (!dir || !IS_CASEFOLDED(dir))
-  1810			return 1;
-  1811	
-  1812		/*
-  1813		 * If the dentry name is stored in-line, then it may be concurrently
-  1814		 * modified by a rename.  If this happens, the VFS will eventually retry
-  1815		 * the lookup, so it doesn't matter what ->d_compare() returns.
-  1816		 * However, it's unsafe to call utf8_strncasecmp() with an unstable
-  1817		 * string.  Therefore, we have to copy the name into a temporary buffer.
-  1818		 */
-> 1819		if (str == dentry->d_shortname.string) {
-  1820			strbuf = dentry->d_shortname;
-  1821			strbuf.string[len] = 0;
-  1822			str = strbuf.string;
-  1823			/* prevent compiler from optimizing out the temporary buffer */
-  1824			barrier();
-  1825		}
-  1826		qstr.len = len;
-  1827		qstr.name = str;
-  1828	
-  1829		return utf8_strncasecmp(dentry->d_sb->s_encoding, name, &qstr);
-  1830	}
-  1831	EXPORT_SYMBOL(generic_ci_d_compare);
-  1832	
+   461	
+   462	static void ast_set_dclk_reg(struct ast_device *ast,
+   463				     struct drm_display_mode *mode,
+   464				     struct ast_vbios_mode_info *vbios_mode)
+   465	{
+   466		const struct ast_vbios_dclk_info *clk_info;
+   467	
+   468		if (IS_AST_GEN6(ast) || IS_AST_GEN7(ast))
+   469			clk_info = &dclk_table_ast2500[vbios_mode->enh_table->dclk_index];
+   470		else
+   471			clk_info = &dclk_table[vbios_mode->enh_table->dclk_index];
+   472	
+   473		ast_set_index_reg_mask(ast, AST_IO_VGACRI, 0xc0, 0x00, clk_info->param1);
+   474		ast_set_index_reg_mask(ast, AST_IO_VGACRI, 0xc1, 0x00, clk_info->param2);
+   475		ast_set_index_reg_mask(ast, AST_IO_VGACRI, 0xbb, 0x0f,
+   476				       (clk_info->param3 & 0xc0) |
+   477				       ((clk_info->param3 & 0x3) << 4));
+   478	
+   479		/* Set SEQ; Half dclk for this timing */
+   480		if (vbios_mode->enh_table->flags & HalfDCLK)
+ > 481			ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT, 0x01, 0xff, 0x08);
+   482		else
+   483			ast_set_index_reg_mask(ast, AST_IO_SEQ_PORT, 0x01, 0xf7, 0x00);
+   484	}
+   485	
 
 -- 
 0-DAY CI Kernel Test Service
