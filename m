@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117D4EEB5;
-	Mon, 23 Dec 2024 08:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2D6DF60;
+	Mon, 23 Dec 2024 08:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734941416; cv=none; b=ih579CQC46am1nFAd79PBIs93EO1j+V7hqBlBllDtJfjIwELTW5MEasksUJk0SqFrtRFrXMhgk14k7zxEUtK68JUjTDEQrF7QKaRnzefUV39CSW2rPDhMia6EmEvBDShvJgK0Hw2n5krblBgIvgPHRNqNQy5NVjqrcSGuk/9TD4=
+	t=1734942018; cv=none; b=SnU2CihILm2Ocn2vtlg7xGvvlu2e5mXfmj7Bnh933fcmYc5TL2VTsuYFcqB0XnXOmee77MA7fvY5pp6PIb/X2ssIZRNowlPaIGuhz1wyOaHTo7sED2TNwYSmyVY40MOVl1m7kssZexIXHxzT1/kPRhUn81Xv39k3X2soi0ZDXvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734941416; c=relaxed/simple;
-	bh=HD2G2UNRJBsalTqHqAztT7pnUSwz6t4dZqbr7RGqVkg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Pd5fwYc5O5BsLU+grLOu5Wd/vi9pROZAaJtxo4WFGdBViLsuv75Bz3LNVjEvc80oBEarYr4HmNtEfA2lkpC35KLmsUHjwC1RsydOvBS/o0J+iHS1gfHInAeGojtN4miZppJ49I9BRmJffiQ1yrXYMig3wyYzqJID2Wa1LySSKlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Of/yQyZN; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1734942018; c=relaxed/simple;
+	bh=axaF9dpKY8yR2fWQuuIExIfJe66HYYhMN9St+/v+8r0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mnFx+9KL2sxXOZqSFpRku5AtmsOwC3auGcZDK1bBwMqr1MjjjIur+Auch87uxi9tVP2BqUuxwlmnVxEDNSB6idfvPvPTwszyC7hICIhefniruxMW6yKNks9qIdfWRYgU8rI/HLyHUxRw//0jjFF1JXo7lP6wKYAVK31LzoIYWWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bVbQ7XWQ; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Of/yQyZN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bVbQ7XWQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734941413; x=1766477413;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HD2G2UNRJBsalTqHqAztT7pnUSwz6t4dZqbr7RGqVkg=;
-  b=Of/yQyZNLLj0gNOtmwqSJNsC3ilDHGm64YlxuDne/GFjdMnlqArdu9n0
-   C32FwogdvGijp2yh4x7eXS4Z3O9YJT1KicKk5WQ44JpDtXjoJjZ6RUM+k
-   bJqRYpw9s6yjss8v7GPowgHcX5pkuaUexCcTXbzn4m5IfqOQJJshS/AjG
-   toIucB1uuliM+FQARTrZeaFYeHQqt6IxNbO4qhLhr/DgM0OeQsWGTdeHc
-   WB9pfzjow8pY0R5qdeszQYQ2YmT0VzRlwdzEaSyXaijnb2af+Jagsl+eN
-   pp92u6PV7pPMWDskUonFhXMkFVHx3jLslX47dEmSa2MSLGA7uGNY50Tr8
+  t=1734942016; x=1766478016;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=axaF9dpKY8yR2fWQuuIExIfJe66HYYhMN9St+/v+8r0=;
+  b=bVbQ7XWQSgXDf8syLp4jYjCy8kuFKU/cTVmVlJjNe8k+FmhyvvsVS/3b
+   mVZM9oiaXIuH4/jtOJT2oOcxjMdewr2jvDTr+5Zn8GkhUxYdxB3zQvzTO
+   GR1Fxs/pElCkQNQWghpOGJS+Tt6PQEDkkLlcFRGCeAtbIuK1eJhrj2rZ+
+   02LwNBFv/kyAtQbFkNnNL5v6ciTm/zMMpU7yIVODnBGcwZqr9WykFpYVY
+   PYzZ0FgnWhUOfKjjFZEKW9x0S07pZ4rc0X8+OeQXnovYakLF4g/yQZOMX
+   kUcne6zwMObFZIuzjg4YFiaprINKKWqPPXB70Bpgw0sALrel7qlQpCpk4
    A==;
-X-CSE-ConnectionGUID: oTkyCYpcSv629AWMfpcldA==
-X-CSE-MsgGUID: HRR7qfbnTdm3jJcRYITdIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="45893779"
+X-CSE-ConnectionGUID: bKsY1nsvS66dJNbSwxnyzA==
+X-CSE-MsgGUID: U0mzIMnBQ2qdQMBASgjYiA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="39180692"
 X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
-   d="scan'208";a="45893779"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 00:10:12 -0800
-X-CSE-ConnectionGUID: QHqE4StoRvm0vVlHe5StWQ==
-X-CSE-MsgGUID: FZlKYtADQMyVsAVia8uZ7Q==
+   d="scan'208";a="39180692"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 00:20:15 -0800
+X-CSE-ConnectionGUID: huNc4HPiTEiiIUBmHe9ruQ==
+X-CSE-MsgGUID: q47s8Ob+QISfK8d59ETGhw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
-   d="scan'208";a="99005132"
+   d="scan'208";a="98915654"
 Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 23 Dec 2024 00:10:11 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 23 Dec 2024 00:20:12 -0800
 Received: from kbuild by a46f226878e0 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tPdVw-0003U3-20;
-	Mon, 23 Dec 2024 08:10:08 +0000
-Date: Mon, 23 Dec 2024 16:09:16 +0800
+	id 1tPdfe-0003UJ-1D;
+	Mon, 23 Dec 2024 08:20:10 +0000
+Date: Mon, 23 Dec 2024 16:19:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Himanshu Chauhan <hchauhan@ventanamicro.com>
+To: John Daley <johndale@cisco.com>, benve@cisco.com, satishkh@cisco.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_sbi_sse_v3 42/46]
- arch/riscv/kernel/hw_breakpoint.c:58:6: warning: variable 'rc' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202412231642.st92KQwr-lkp@intel.com>
+	John Daley <johndale@cisco.com>,
+	Nelson Escobar <neescoba@cisco.com>
+Subject: Re: [PATCH net-next 4/5] enic: Use the Page Pool API for RX when MTU
+ is less than page size
+Message-ID: <202412231605.tOclyr7m-lkp@intel.com>
+References: <20241220215058.11118-5-johndale@cisco.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,26 +67,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20241220215058.11118-5-johndale@cisco.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_sse_v3
-head:   36a4c153b9a152c3eb136e4aced7c9ccbaae922d
-commit: d869f0c459d0d190cabdccf1bf1de39332935dfb [42/46] riscv: Introduce support for hardware break/watchpoints
-config: riscv-randconfig-001-20241223 (https://download.01.org/0day-ci/archive/20241223/202412231642.st92KQwr-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412231642.st92KQwr-lkp@intel.com/reproduce)
+Hi John,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Daley/enic-Refactor-RX-path-common-code-into-helper-functions/20241221-055423
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20241220215058.11118-5-johndale%40cisco.com
+patch subject: [PATCH net-next 4/5] enic: Use the Page Pool API for RX when MTU is less than page size
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241223/202412231605.tOclyr7m-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241223/202412231605.tOclyr7m-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412231642.st92KQwr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412231605.tOclyr7m-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/riscv/kernel/hw_breakpoint.c:6:
-   In file included from include/linux/hw_breakpoint.h:5:
-   In file included from include/linux/perf_event.h:50:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2224:
+   In file included from drivers/net/ethernet/cisco/enic/enic_rq.c:4:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
@@ -93,82 +107,67 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      512 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/kernel/hw_breakpoint.c:58:6: warning: variable 'rc' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-      58 |         if (ret.error) {
-         |             ^~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:94:9: note: uninitialized use occurs here
-      94 |         return rc;
-         |                ^~
-   arch/riscv/kernel/hw_breakpoint.c:58:2: note: remove the 'if' if its condition is always true
-      58 |         if (ret.error) {
-         |         ^~~~~~~~~~~~~~
-   arch/riscv/kernel/hw_breakpoint.c:45:8: note: initialize the variable 'rc' to silence this warning
-      45 |         int rc;
-         |               ^
-         |                = 0
-   3 warnings generated.
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/cisco/enic/enic_rq.c:214:30: warning: variable 'q_number' is uninitialized when used here [-Wuninitialized]
+     214 |                                      enic->netdev->name, q_number);
+         |                                                          ^~~~~~~~
+   include/linux/net.h:286:43: note: expanded from macro 'net_warn_ratelimited'
+     286 |         net_ratelimited_function(pr_warn, fmt, ##__VA_ARGS__)
+         |                                                  ^~~~~~~~~~~
+   include/linux/net.h:272:12: note: expanded from macro 'net_ratelimited_function'
+     272 |                 function(__VA_ARGS__);                          \
+         |                          ^~~~~~~~~~~
+   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
+     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |                                            ^~~~~~~~~~~
+   include/linux/printk.h:501:60: note: expanded from macro 'printk'
+     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
+     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   drivers/net/ethernet/cisco/enic/enic_rq.c:204:14: note: initialize the variable 'q_number' to silence this warning
+     204 |         u16 q_number, completed_index, bytes_written, vlan_tci, checksum;
+         |                     ^
+         |                      = 0
+   5 warnings generated.
 
 
-vim +58 arch/riscv/kernel/hw_breakpoint.c
+vim +/q_number +214 drivers/net/ethernet/cisco/enic/enic_rq.c
 
-    39	
-    40	static int arch_smp_setup_sbi_shmem(unsigned int cpu)
-    41	{
-    42		struct sbi_dbtr_shmem_entry *dbtr_shmem;
-    43		unsigned long shmem_pa;
-    44		struct sbiret ret;
-    45		int rc;
-    46	
-    47		dbtr_shmem = per_cpu_ptr(sbi_dbtr_shmem, cpu);
-    48		if (!dbtr_shmem) {
-    49			pr_err("Invalid per-cpu shared memory for debug triggers\n");
-    50			return -ENODEV;
-    51		}
-    52	
-    53		shmem_pa = __pa(dbtr_shmem);
-    54	
-    55		ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_SETUP_SHMEM,
-    56				MEM_LO(shmem_pa), MEM_HI(shmem_pa), 0, 0, 0, 0);
-    57	
-  > 58		if (ret.error) {
-    59			switch(ret.error) {
-    60			case SBI_ERR_DENIED:
-    61				pr_warn("%s: Access denied for shared memory at %lx\n",
-    62					__func__, shmem_pa);
-    63				rc = -EPERM;
-    64				break;
-    65	
-    66			case SBI_ERR_INVALID_PARAM:
-    67			case SBI_ERR_INVALID_ADDRESS:
-    68				pr_warn("%s: Invalid address parameter (%lu)\n",
-    69					__func__, ret.error);
-    70				rc = -EINVAL;
-    71				break;
-    72	
-    73			case SBI_ERR_ALREADY_AVAILABLE:
-    74				pr_warn("%s: Shared memory is already set\n",
-    75					__func__);
-    76				rc = -EADDRINUSE;
-    77				break;
-    78	
-    79			case SBI_ERR_FAILURE:
-    80				pr_err("%s: Internal sdtrig state error\n",
-    81				       __func__);
-    82				rc = -ENXIO;
-    83				break;
-    84	
-    85			default:
-    86				pr_warn("%s: Unknown error %lu\n", __func__, ret.error);
-    87				rc = -ENXIO;
-    88				break;
-    89			}
-    90		}
-    91	
-    92		pr_warn("CPU %d: HW Breakpoint shared memory registered.\n", cpu);
-    93	
-    94		return rc;
-    95	}
-    96	
+   189	
+   190	void enic_rq_indicate_page(struct vnic_rq *vrq, struct cq_desc *cq_desc,
+   191				   struct vnic_rq_buf *buf, int skipped, void *opaque)
+   192	{
+   193		struct enic *enic = vnic_dev_priv(vrq->vdev);
+   194		struct sk_buff *skb;
+   195		struct enic_rq *rq = &enic->rq[vrq->index];
+   196		struct enic_rq_stats *rqstats = &rq->stats;
+   197		struct vnic_cq *cq = &enic->cq[enic_cq_rq(enic, vrq->index)];
+   198		struct napi_struct *napi;
+   199		u8 type, color, eop, sop, ingress_port, vlan_stripped;
+   200		u8 fcoe, fcoe_sof, fcoe_fc_crc_ok, fcoe_enc_error, fcoe_eof;
+   201		u8 tcp_udp_csum_ok, udp, tcp, ipv4_csum_ok;
+   202		u8 ipv6, ipv4, ipv4_fragment, fcs_ok, rss_type, csum_not_calc;
+   203		u8 packet_error;
+   204		u16 q_number, completed_index, bytes_written, vlan_tci, checksum;
+   205		u32 rss_hash;
+   206	
+   207		if (skipped) {
+   208			rqstats->desc_skip++;
+   209			return;
+   210		}
+   211	
+   212		if (!buf || !buf->dma_addr) {
+   213			net_warn_ratelimited("%s[%u]: !buf || !buf->dma_addr!!\n",
+ > 214					     enic->netdev->name, q_number);
 
 -- 
 0-DAY CI Kernel Test Service
