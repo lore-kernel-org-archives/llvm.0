@@ -1,110 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474F9EC2;
-	Tue, 24 Dec 2024 02:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4889A13C9A6;
+	Tue, 24 Dec 2024 03:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735005701; cv=none; b=Q36WNLXIz18Y1DNxPMEuoc8tEer/PfT3YuNJiVWQgFMqCS0fFZXmRK5BqxMp5zyC25bRDTM1fDYYgelKjJ56G6JoxmjGhgeNra9Qqv8DVGTiAk2jel+AUd3XHlGQx16+HjD/j9s771IQWTOqFl+x+1BG/mYDkm52GRYv4EoWiAo=
+	t=1735010108; cv=none; b=fjyM0z1i3pAG7Ccwyd3F4xt7Q+HzrNog7xkBHCzZSnZZvNXK2tmeD0wsWa8E6i84ChLJhVYG/rCu4tMiaY4xrsycUgshFtOSniRJ9RAjT7s9xvjW+RI+ryBzMkimGHY389RIU2fPBDA2ty+ERF9S63LMP7kppqpi8acywjx+P/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735005701; c=relaxed/simple;
-	bh=bppVJI1S5FCdgUGe/0cv3T2Tpfj+ZuH9gWt2elHkJFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lhNs14B0N7w/MQm6+jD/8ugYGTkvKMLPHUZxfe/00+S/haJvFlI/rcS1DdTDFMcpoj6kkKn7lFRjmx1y8RThqj95Xf6la3kbG3s3zZ/kIRd8gssw/pnnGhQr8WwvrQzHamt+6i8yoZAEkGCc95/c3LmrHV8Vuvd43rIlMd6Z01E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DC/tkZTf; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DC/tkZTf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735005699; x=1766541699;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bppVJI1S5FCdgUGe/0cv3T2Tpfj+ZuH9gWt2elHkJFM=;
-  b=DC/tkZTfs1qWKOyu9SgQL6N4ru8tRexlsUyPVmYVBMwISQE6l27YqYxY
-   yHvHqZ77kgI8rUAfHsv+M1ycYemy5b1AqVIKOcANE/4DYUMh9nWs/7Ts/
-   MLLKLN3GUqqI8YQHicJJOGCQhwNvAalghbNnYiqhSLa9shVtNFGZovIHt
-   Q0Jicn6quJyCQWQx/T2b+pnoqR8BVb4nqOvXP4e5yS7MPNo+2KmkDOCBE
-   SuKIgmwjWke3SaTOrnW5YgMF2yyfHDZD9K6SRLU61yUVvExNHvkezCFNC
-   OHaVqvelrLauoRXUTd6xXpU2PCpWa6qKHK904WW8rBJbXCdOEwiUYvcdR
-   g==;
-X-CSE-ConnectionGUID: M7zGBh6wREK/i1qX8DM59w==
-X-CSE-MsgGUID: LMN4hc3vT7mUf7m5bVy2TQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="38318056"
-X-IronPort-AV: E=Sophos;i="6.12,258,1728975600"; 
-   d="scan'208";a="38318056"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 18:01:39 -0800
-X-CSE-ConnectionGUID: YAD/n3aFSkW+vDmdYDUGww==
-X-CSE-MsgGUID: 7rAHWUtFSyyU6UiNCrAGPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104353174"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 23 Dec 2024 18:01:37 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tPuEp-0000kp-0u;
-	Tue, 24 Dec 2024 02:01:35 +0000
-Date: Tue, 24 Dec 2024 10:00:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:sframe 28/32] kernel/events/core.c:6944:3: error: call to
- undeclared function 'unwind_user_deferred'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202412240919.szVHGt00-lkp@intel.com>
+	s=arc-20240116; t=1735010108; c=relaxed/simple;
+	bh=/OerEw+Wkp9Uh+oLYdywt5w/jPmZo0ox7xR+A/sD3hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lbX6S8P2Yy+8Nh68H5u6jjTAvfh4TplM+8bt68W4nNXEfmaLqcgHeevhZbEGnPLqf93mzoYHnNX1fbAHPTp3DAc6I6sb5zfwqI+tp1dwvAC9KHS/lVEcnbqlWHqh5bvh4K1zidxUseSOvld5vyCB2NvnHEXWfDruXE3dd6CAsV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D5FEC4CED3;
+	Tue, 24 Dec 2024 03:15:04 +0000 (UTC)
+Date: Mon, 23 Dec 2024 22:15:56 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Andy Chiu <andybnac@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev, bjorn@rivosinc.com,
+ puranjay12@gmail.com, alexghiti@rivosinc.com, yongxuan.wang@sifive.com,
+ greentime.hu@sifive.com, nick.hu@sifive.com, nylon.chen@sifive.com,
+ tommy.wu@sifive.com, eric.lin@sifive.com, viccent.chen@sifive.com,
+ zong.li@sifive.com, samuel.holland@sifive.com
+Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
+ improvements
+Message-ID: <20241223221556.1f5e598f@gandalf.local.home>
+In-Reply-To: <87frncmkre.fsf@all.your.base.are.belong.to.us>
+References: <20241127172908.17149-1-andybnac@gmail.com>
+ <87frncmkre.fsf@all.your.base.are.belong.to.us>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git sframe
-head:   b610703fefd5a3a992e07a383e2e6f6cbf9a41c8
-commit: ea5b03d9c57dc5e8656b844f96a4ca3b4ab73317 [28/32] perf: Add deferred user callchains
-config: x86_64-buildonly-randconfig-001-20241224 (https://download.01.org/0day-ci/archive/20241224/202412240919.szVHGt00-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241224/202412240919.szVHGt00-lkp@intel.com/reproduce)
+On Wed, 27 Nov 2024 22:25:57 +0100
+Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412240919.szVHGt00-lkp@intel.com/
+> Adding Steven.
 
-All errors (new ones prefixed by >>):
+And this has been in my draft folder for almost a month :-p
 
-   In file included from kernel/events/core.c:12:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> kernel/events/core.c:6944:3: error: call to undeclared function 'unwind_user_deferred'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    6944 |                 unwind_user_deferred(&perf_unwind_callback_cb, NULL, event);
-         |                 ^
->> kernel/events/core.c:14218:2: error: call to undeclared function 'unwind_user_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    14218 |         unwind_user_register(&perf_unwind_callback_cb, perf_event_callchain_deferred);
-          |         ^
-   1 warning and 2 errors generated.
+I kept coming to this email, but then got distracted by something else.
 
+>=20
+> Andy Chiu <andybnac@gmail.com> writes:
+>=20
+> > This series makes atmoic code patching possible in riscv ftrace. A
+> > direct benefit of this is that we can get rid of stop_machine() when
+> > patching function entries. This also makes it possible to run ftrace
+> > with full kernel preemption. Before this series, the kernel initializes
+> > patchable function entries to NOP4 + NOP4. To start tracing, it updates
+> > entries to AUIPC + JALR while holding other cores in stop_machine.
+> > stop_machine() is required because it is impossible to update 2
+> > instructions, and be seen atomically. And preemption must have to be
+> > prevented, as kernel preemption allows process to be scheduled out while
+> > executing on one of these instruction pairs.
+> >
+> > This series addresses the problem by initializing the first NOP4 to
+> > AUIPC. So, atmoic patching is possible because the kernel only has to
+> > update one instruction. As long as the instruction is naturally aligned,
+> > then it is expected to be updated atomically.
+> >
+> > However, the address range of the ftrace trampoline is limited to +-2K
+> > from ftrace_caller after appplying this series. This issue is expected
+> > to be solved by Puranjay's CALL_OPS, where it adds 8B naturally align
+> > data in front of pacthable functions and can  use it to direct execution
+> > out to any custom trampolines.
+> >
+> > The series is composed by three parts. The first part cleans up the
+> > existing issues when the kernel is compiled with clang.The second part
+> > modifies the ftrace code patching mechanism (2-4) as mentioned above.
+> > Then prepare ftrace to be able to run with kernel preemption (5,6)
+> >
+> > An ongoing fix:
+> >
+> > Since there is no room for marking *kernel_text_address as notrace[1] at
+> > source code level, there is a significant performance regression when
+> > using function_graph with TRACE_IRQFLAGS enabled. There can be as much =
+as
+> > 8 graph handler being called in each function-entry. The current
+> > workaround requires us echo "*kernel_text_address" into
+> > set_ftrace_notrace before starting the trace. However, we observed that
+> > the kernel still enables the patch site in some cases even with
+> > *kernel_text_address properly added in the file While the root cause is
+> > still under investagtion, we consider that it should not be the reason
+> > for holding back the code patching, in order to unblock the call_ops
+> > part. =20
+>=20
+> Maybe Steven knows this from the top of his head!
+>=20
+> As Andy points out, "*kernel_text_address" is used in the stack
+> unwinding on RISC-V. So, if you do a tracing without filtering *and*
+> TRACE_IRQFLAGS, one will drown in traces.
 
-vim +/unwind_user_deferred +6944 kernel/events/core.c
+I tested set_ftrace_notrace on x86 and the function graph tracer does honor
+it. I wonder if there's a kernel
+	=09
+>=20
+> E.g. the ftrace selftest:
+>   | $ ./ftracetest -vvv test.d/ftrace/fgraph-multi.tc
+>=20
+> will generate a lot of traces.
+>=20
+> Now, if we add:
+> --8<--
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc=
+ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> index ff88f97e41fb..4f30a4d81d99 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> @@ -84,6 +84,7 @@ cd $INSTANCE2
+>  do_test '*rcu*' 'rcu'
+>  cd $WD
+>  cd $INSTANCE3
+> +echo '*kernel_text_address' > set_ftrace_notrace
+>  echo function_graph > current_tracer
+> =20
+>  sleep 1
+> -->8-- =20
+>=20
+> The graph tracer will not honor the "set_ftrace_notrace" in $INSTANCE3,
+> but still enable the *kernel_text_address traces. (Note that there are
+> no filters in the test, so *all* ftrace recs will be enabled.)
+>=20
+> Are we holding the graph tracer wrong?
 
-  6938	
-  6939	static void perf_pending_unwind_irq(struct irq_work *entry)
-  6940	{
-  6941		struct perf_event *event = container_of(entry, struct perf_event, pending_unwind_irq);
-  6942	
-  6943		if (event->pending_unwind) {
-> 6944			unwind_user_deferred(&perf_unwind_callback_cb, NULL, event);
-  6945			event->pending_unwind = 0;
-  6946		}
-  6947	}
-  6948	
+What do you get when you do:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  # grep kernel_text_address available_filter_functions
+
+?
+
+>=20
+>=20
+> Happy thanksgiving!
+> Bj=C3=B6rn
+
+And Merry Christmas!
+
+-- Steve
+
