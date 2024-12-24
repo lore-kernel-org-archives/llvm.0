@@ -1,147 +1,346 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D05F442C;
-	Tue, 24 Dec 2024 19:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF8114901B
+	for <llvm@lists.linux.dev>; Tue, 24 Dec 2024 21:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735069869; cv=none; b=fVExGGTjgS4fQguhEK9aqyF/iff07qF4XuAoLL20tokCeBYnj816pZZVZt6FlcKokBXLbfdRVucZN7wIJAbMZRWTN9mMfMICaSgCPWnBijFNe4VIdRo8jLvy5M4GDyKvH0HD5PtBhAdojBLr0IWh/csUW8WdCaM/Oov1GStFEu0=
+	t=1735077461; cv=none; b=keLX4ZT9kRmBCIQLATvEDQmLLcuAy1FxSuVWMBM1z98E8d6/w+jEU4Rn7K0ERXDUKFtTCE/cCw3Tb5Y2UCQBK7ZYNp7oZxUVjGGZJfq2qwRzmAw+llUpUMVrYlSlQn+SVRQb/uI+hYf5YcyLa5RMRcM0u7lWaTQ7MNXBmH2WpV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735069869; c=relaxed/simple;
-	bh=mrgS68bZ6DseRndN40d7oDtMIPRQRFLhnxyzZ+33blI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Vc6LMWNeVR9cVkoBxRpJ9mwUNxOXx7TGE3B+S43d3PJ5Y2klvQJA1Ks1TiYv2LW8ARkqXhmxZY+GYTGYkzUfftJDKAMFaXA4htwIG1P4rcbHnH+Sb9lf8uisceXdqEOMfJ0enazrUVMjfD/NazALaHb/jptqGl2wFDWW/6X0blk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PanSxcSn; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1735077461; c=relaxed/simple;
+	bh=dsJxWoBCTUptl3K4/St8dF62g0fT8fu+JzX9XGCw5js=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YFFjuZYQKM8LibGLx3QDDUXkPHmHBT+Zz1YO0Pm4jkuHXL1Ag948Ocu2VIOUDW0V08/48Bj1IGhj+xdradlXNVW+u921Wtb76GPuG+jpQqHhJr6yrji9T8HsRywdTpWwaUdkSHofVe7pxGbD6T0jQGsWadwdeZQIEX0bCLRmXRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WvtR/yED; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PanSxcSn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735069867; x=1766605867;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mrgS68bZ6DseRndN40d7oDtMIPRQRFLhnxyzZ+33blI=;
-  b=PanSxcSnWzaZtQv10WtogUVNLiSAS1d4accqHsOFNotuqFfqOIcz2F6Q
-   jYKjdIA4y6uKdzRA4eU6V/J8WJdHk0lh7BKdhxaKAcWpzG6tOfsCm2hbV
-   wE2A+KwkoiM2/z5kwxL4cMe0VgNc9JGuZQ25mTOsvZpdJK1UZwUgBon0l
-   bE/EoNdaiJSaf+zgNYX4TMhdSdZLvRmNnvXLIDCQui1lrMayawvslQ7X4
-   I0NDqQcdfcciV/WzUkgyQILujpenZlNwvjy4W/mfXEV2u8/8gC1ZvK1zx
-   nFmqUVZZMRB7XhDqs7vkkoexlw0ABlrB2CwbvEM7453tn928wjg4LaYMX
-   g==;
-X-CSE-ConnectionGUID: mUtZYCNdQNm8DVNfigPlfA==
-X-CSE-MsgGUID: 0uYtHv3zQzieEYPKWRJXcA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="60922671"
-X-IronPort-AV: E=Sophos;i="6.12,261,1728975600"; 
-   d="scan'208";a="60922671"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2024 11:51:06 -0800
-X-CSE-ConnectionGUID: Cap4vluNSdehk3lfyXfOHA==
-X-CSE-MsgGUID: wpUigovaTr+Jz4LZQIQw2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,261,1728975600"; 
-   d="scan'208";a="130406591"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 24 Dec 2024 11:51:05 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tQAvm-0001PP-2Z;
-	Tue, 24 Dec 2024 19:51:02 +0000
-Date: Wed, 25 Dec 2024 03:50:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yuyu Li <liyuyu6@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>,
-	Junxian Huang <huangjunxian6@hisilicon.com>
-Subject: [rdma-rdma:wip/leon-for-next 25/34]
- drivers/infiniband/hw/bnxt_re/main.c:2172:1: warning: unused label
- 're_dev_unreg'
-Message-ID: <202412250356.e2dZ2kjW-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvtR/yED"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53f22fd6887so5180560e87.2
+        for <llvm@lists.linux.dev>; Tue, 24 Dec 2024 13:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735077457; x=1735682257; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZbPCqk/DVvB78zsAYK9srunz1WN+hN0RoJRdIyLYCY4=;
+        b=WvtR/yED3I7gnd2ZQoV3XD+rzbZThHamtrHHX4OdqCoqiLfAkRhDfcDm0UO4VZPLx5
+         Nl+dj/Amg9wk6HTGdiEwPoq/C1WDKKmbaqWkXOpW1ZZw4HXR19+TYHPMth91YoyWGwFm
+         na/yTGoJ81F1PW2hx3RHjBmPGVW/a7a6KpnrHdWZHMnf6r9N7HxAqcR+MHuFOYNTCqEy
+         45j3ELYHdBGK6f2TXIVozlITPpxTYxpdqP+uV0R2fZLUWi8sks6BDlfKWtaIOad26ybA
+         Jp3snPAc37+Oj1jtlHvOJJbNHPg3NZhCGayD1XtCp4eabUGC7hQBPcd3gFKjUBAw0CC/
+         F5KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735077457; x=1735682257;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZbPCqk/DVvB78zsAYK9srunz1WN+hN0RoJRdIyLYCY4=;
+        b=cLSZUCIYz7qeebBeqmoGpAU+aqbNk2QKP4LwG1wvdbi4APVm7O9YZqpBTgNByvQywp
+         UBoBx2h2WDwttq+h/Zy8K7jgI6heHv1/918doz2CcSO2dzOIgkhiF7r2E5oADechLl6r
+         ivCjeKBBAGpUz7Ejxxus1iklBYuYgv9xB158KPHZQZYdspkX++QfkmHFVIRY+xG8T+Fi
+         KH3qlhgK3nqx4ogB+IVUVQkExNID2qBxq4p94+OIiCwj+B9a69fGvn2UCxObWpenoIJo
+         1vQDFZdlHN4VK90949JUjxAkx0/QFGdRGu9Vre2euOpEj+A0MbBxtBSw1K5wKhR9sHZV
+         tvyg==
+X-Forwarded-Encrypted: i=1; AJvYcCWbiIQpZIoPjNlV2jDfB8yJQFy2NstOjQ9Eg8NCiuVU9jqDneaTYjupVupxsPUvoB3GG3ng@lists.linux.dev
+X-Gm-Message-State: AOJu0YzoUJ3jNMvLH6hU3iaUV9Z1Soqt8ucGE5Cs7ubEs/g9DBYjtXc7
+	2Udeze7CVK/kn/avngXX8E115XdQXdsG2Qg/PEqPYvN6JpQlSBPtSDVUjLbp3CKPDxi4nElKRVg
+	H6Cb+vl23U2dx5SWFA7BeGMEwwJE=
+X-Gm-Gg: ASbGncs0iX9NJLI3Nb37Xoi2aGJ/L7iDZi+zNj4KHcJS3xNQg/JbmRMys35o4nvvnzK
+	/Hdm/Pcdz8Y7KkTm0Z8t4Z1jii3r2VtXn7ELkXsA+rAGODm0e5EBN3qYm+pArBYv+aWRw
+X-Google-Smtp-Source: AGHT+IFT13jLt/GfmU5pUvX0TVKGlwS3vaT5BtXg5VR9Mbaj2a1D6QRod7r0jNvqujpQ46FL6AiFIkdpu/wczpbqkIg=
+X-Received: by 2002:a05:6512:b19:b0:542:2e09:639a with SMTP id
+ 2adb3069b0e04-5422e0963efmr4469706e87.10.1735077456979; Tue, 24 Dec 2024
+ 13:57:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
+ <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
+ <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com>
+ <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com> <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
+ <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com> <CA+icZUUp9rgx2Dvsww6QbTGRZz5=mf75D0_KncwdgCEZe01-EA@mail.gmail.com>
+ <CA+icZUV0HEF_hwr-eSovntfcT0++FBrQN-HbFL+oZtnKjJzLtA@mail.gmail.com>
+ <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com> <CA+icZUW454ND85nbjqAoMg42=i+aGht8Z=iG2wKj=Un7Ot0y6Q@mail.gmail.com>
+ <CA+icZUUnbY7eRZtN-pMNn0jhYKLLEWEDNmJjhGQ3auPuS9_+MQ@mail.gmail.com>
+In-Reply-To: <CA+icZUUnbY7eRZtN-pMNn0jhYKLLEWEDNmJjhGQ3auPuS9_+MQ@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Tue, 24 Dec 2024 22:56:59 +0100
+Message-ID: <CA+icZUXVxE+tXvHk25iiMSY1K27JGhds_j+sp0Lr+_Zs6x1Utw@mail.gmail.com>
+Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
+	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
+	xen-devel <xen-devel@lists.xenproject.org>, 1091360@bugs.debian.org
+Content-Type: multipart/mixed; boundary="0000000000007b4e3e062a0b33ad"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git wip/leon-for-next
-head:   1a4f56e8c029d463e9b8461ea3256ae16c88ddf6
-commit: 6c409d08650c2a6dc6776d8b78a706996dcf4a78 [25/34] RDMA/bnxt_re: Remove deliver net device event
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241225/202412250356.e2dZ2kjW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241225/202412250356.e2dZ2kjW-lkp@intel.com/reproduce)
+--0000000000007b4e3e062a0b33ad
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412250356.e2dZ2kjW-lkp@intel.com/
+On Tue, Dec 24, 2024 at 5:23=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.com>=
+ wrote:
+>
+> On Sun, Dec 22, 2024 at 11:37=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.c=
+om> wrote:
+> >
+> > On Sat, Dec 21, 2024 at 10:31=E2=80=AFPM Andrew Cooper
+> > <andrew.cooper3@citrix.com> wrote:
+> > >
+> > > On 21/12/2024 6:25 pm, Sedat Dilek wrote:
+> > > > With...
+> > > >
+> > > > dileks@iniza:~/src/xtf/git$ mv tests/xsa-454 ../
+> > > > dileks@iniza:~/src/xtf/git$ mv tests/xsa-consoleio-write ../
+> > >
+> > > That's completely bizzare.   There's nothing interestingly different
+> > > with those two tests vs the others.
+> > >
+> > > I take it the crash is repeatable when using either of these?
+> > >
+> > > ~Andrew
+> >
+> > This time I stopped SDDM and thus KDE-6/Wayland session.
+> >
+> > Tested with Debian's officially 6.12.6-amd64 kernel in VT-3.
+> >
+> > test-hvm32pae-xsa-consoleio-write SUCCESS <--- 1st time I tried, never
+> > said this is not OK
+> >
+> > test-hvm64-xsa-454 leads to FROZEN system and DATA LOSS (here: ext4).
+> > Reproducibly as told many times.- in Debian and selfmade kernels versio=
+n 6.12.6.
+> >
+> > Stolen from the picture I took with my smartphone:
+> >
+> > sudo ./xft-runner test-hvm64-xsa-454
+> >
+> > Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
+> > Executing 'xl console test-hvm64-xsa-454'
+> > Executing 'xl unpause test-hvm64-xsa-454'
+> >
+> > ^^ System does NOT react!
+> >
+> > I can send you the picture on request.
+> >
+> > -Sedat-
+>
+> [ CC 1091360@bugs.debian.org ]
+>
+> I upgraded to Xen version 4.19.1 in Debian/unstable AMD64.
+>
+> # xl info | egrep 'release|version|commandline|caps'
+> release                : 6.12.6-amd64
+> version                : #1 SMP PREEMPT_DYNAMIC Debian 6.12.6-1 (2024-12-=
+21)
+> hw_caps                :
+> bfebfbff:17bae3bf:28100800:00000001:00000001:00000000:00000000:00000100
+> virt_caps              : pv hvm hap shadow gnttab-v1 gnttab-v2
+> xen_version            : 4.19.1
+> xen_caps               : xen-3.0-x86_64 hvm-3.0-x86_32 hvm-3.0-x86_32p
+> hvm-3.0-x86_64
+> xen_commandline        : placeholder
+>
+> dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --host test-hvm64-xsa-454
+> Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
+> Executing 'xl console test-hvm64-xsa-454'
+> Executing 'xl unpause test-hvm64-xsa-454'
+> --- Xen Test Framework ---
+> Environment: HVM 64bit (Long mode 4 levels)
+> XSA-454 PoC
+> Success: Not vulnerable to XSA-454
+> Test result: SUCCESS
+>
+> Combined test results:
+> test-hvm64-xsa-454                       SUCCESS
+>
+> root@iniza:~# LC_ALL=3DC ll /var/log/xen/*xsa-454*.log
+> -rw-r--r-- 1 root adm 232 Dec 24 17:11
+> /var/log/xen/qemu-dm-test-hvm64-xsa-454.log
+> -rw-r--r-- 1 root adm 232 Dec 24 17:11 /var/log/xen/xl-test-hvm64-xsa-454=
+.log
+>
+> root@iniza:~# cat /var/log/xen/qemu-dm-test-hvm64-xsa-454.log
+> VNC server running on 127.0.0.1:5900
+> xen-qemu-system-i386: failed to create 'console' device '0': declining
+> to handle console type 'xenconsoled'
+> xen-qemu-system-i386: terminating on signal 1 from pid 6302
+> (/usr/lib/xen-4.19/bin/xl)
+>
+> root@iniza:~# cat /var/log/xen/xl-test-hvm64-xsa-454.log
+> Waiting for domain test-hvm64-xsa-454 (domid 144) to die [pid 6302]
+> Domain 144 has shut down, reason code 0 0x0
+> Action for shutdown reason code 0 is destroy
+> Domain 144 needs to be cleaned up: destroying the domain
+> Done. Exiting now
+>
+> Due to Debian-Bug #1091360 ("qemu-system-xen: Build against libxen-dev
+> version 4.19.1-1") I am not able to do the full XFT tests.
+>
+> -Sedat-
+>
+> Link: https://bugs.debian.org/1091360
 
-All warnings (new ones prefixed by >>):
+With NEW qemu-system-xen/unstable (1:9.2.0+ds-3) both 6.12.6 kernel -
+Debian and selfmade run with SUCCESS.
 
->> drivers/infiniband/hw/bnxt_re/main.c:2172:1: warning: unused label 're_dev_unreg' [-Wunused-label]
-    2172 | re_dev_unreg:
-         | ^~~~~~~~~~~~~
-   1 warning generated.
+Nothing scary in dmesg-log.
 
+Happy XMAS,
+-Sedat-
 
-vim +/re_dev_unreg +2172 drivers/infiniband/hw/bnxt_re/main.c
+--0000000000007b4e3e062a0b33ad
+Content-Type: text/plain; charset="US-ASCII"; name="results_xen-4-19-1_dileks-6-12-6.txt"
+Content-Disposition: attachment; 
+	filename="results_xen-4-19-1_dileks-6-12-6.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m5309lk00>
+X-Attachment-Id: f_m5309lk00
 
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2135  
-cc5b9b48d44756 Selvin Xavier      2024-09-10  2136  static int bnxt_re_add_device(struct auxiliary_device *adev, u8 op_type)
-1ac5a404797523 Selvin Xavier      2017-02-10  2137  {
-6d758147c7b80a Ajit Khaparde      2022-10-14  2138  	struct bnxt_aux_priv *aux_priv =
-6d758147c7b80a Ajit Khaparde      2022-10-14  2139  		container_of(adev, struct bnxt_aux_priv, aux_dev);
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2140  	struct bnxt_re_en_dev_info *en_info;
-1ac5a404797523 Selvin Xavier      2017-02-10  2141  	struct bnxt_en_dev *en_dev;
-6d758147c7b80a Ajit Khaparde      2022-10-14  2142  	struct bnxt_re_dev *rdev;
-14611b9b984125 Kalesh AP          2023-08-03  2143  	int rc;
-1ac5a404797523 Selvin Xavier      2017-02-10  2144  
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2145  	en_info = auxiliary_get_drvdata(adev);
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2146  	en_dev = en_info->en_dev;
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2147  
-1ac5a404797523 Selvin Xavier      2017-02-10  2148  
-0ba9294da081ba Kalesh AP          2024-10-08  2149  	rdev = bnxt_re_dev_add(adev, en_dev);
-6d758147c7b80a Ajit Khaparde      2022-10-14  2150  	if (!rdev || !rdev_to_dev(rdev)) {
-1ac5a404797523 Selvin Xavier      2017-02-10  2151  		rc = -ENOMEM;
-1ac5a404797523 Selvin Xavier      2017-02-10  2152  		goto exit;
-1ac5a404797523 Selvin Xavier      2017-02-10  2153  	}
-66832705c4d01e Selvin Xavier      2020-02-26  2154  
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2155  	bnxt_re_update_en_info_rdev(rdev, en_info, adev);
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2156  
-cc5b9b48d44756 Selvin Xavier      2024-09-10  2157  	rc = bnxt_re_dev_init(rdev, op_type);
-6d758147c7b80a Ajit Khaparde      2022-10-14  2158  	if (rc)
-6d758147c7b80a Ajit Khaparde      2022-10-14  2159  		goto re_dev_dealloc;
-1ac5a404797523 Selvin Xavier      2017-02-10  2160  
-c2b777a9592395 Selvin Xavier      2020-02-26  2161  	rc = bnxt_re_ib_init(rdev);
-497158aa5f520d Selvin Xavier      2018-02-26  2162  	if (rc) {
-6d758147c7b80a Ajit Khaparde      2022-10-14  2163  		pr_err("Failed to register with IB: %s",
-6d758147c7b80a Ajit Khaparde      2022-10-14  2164  			aux_priv->aux_dev.name);
-6d758147c7b80a Ajit Khaparde      2022-10-14  2165  		goto re_dev_uninit;
-3cae58047c1343 Jason Gunthorpe    2020-03-13  2166  	}
-3cae58047c1343 Jason Gunthorpe    2020-03-13  2167  
-94a9dc6ac8f7e6 Selvin Xavier      2024-09-10  2168  	bnxt_re_setup_cc(rdev, true);
-94a9dc6ac8f7e6 Selvin Xavier      2024-09-10  2169  
-6d758147c7b80a Ajit Khaparde      2022-10-14  2170  	return 0;
-3cae58047c1343 Jason Gunthorpe    2020-03-13  2171  
-a5e099e0c464ac Kalesh AP          2024-10-08 @2172  re_dev_unreg:
-a5e099e0c464ac Kalesh AP          2024-10-08  2173  	ib_unregister_device(&rdev->ibdev);
-6d758147c7b80a Ajit Khaparde      2022-10-14  2174  re_dev_uninit:
-dee3da3422d5e8 Chandramohan Akula 2024-09-10  2175  	bnxt_re_update_en_info_rdev(NULL, en_info, adev);
-cc5b9b48d44756 Selvin Xavier      2024-09-10  2176  	bnxt_re_dev_uninit(rdev, BNXT_RE_COMPLETE_REMOVE);
-6d758147c7b80a Ajit Khaparde      2022-10-14  2177  re_dev_dealloc:
-6d758147c7b80a Ajit Khaparde      2022-10-14  2178  	ib_dealloc_device(&rdev->ibdev);
-a6c66d6a08b88c Selvin Xavier      2018-11-21  2179  exit:
-6d758147c7b80a Ajit Khaparde      2022-10-14  2180  	return rc;
-1ac5a404797523 Selvin Xavier      2017-02-10  2181  }
-1ac5a404797523 Selvin Xavier      2017-02-10  2182  
+IyBjYXQgL3Byb2MvdmVyc2lvbiAKTGludXggdmVyc2lvbiA2LjEyLjYtMS1hbWQ2NC1jbGFuZzE5
+LWtjZmkgKHNlZGF0LmRpbGVrQGdtYWlsLmNvbUBpbml6YSkgKENsYW5nQnVpbHRMaW51eCBjbGFu
+ZyB2ZXJzaW9uIDE5LjEuNiAoaHR0cHM6Ly9naXRodWIuY29tL2xsdm0vbGx2bS1wcm9qZWN0Lmdp
+dCBlMjFkYzRiZDU0NzRkMDRiOGU2MmQ3MzMxMzYyZWRjYzU2NDhkN2U1KSwgQ2xhbmdCdWlsdExp
+bnV4IExMRCAxOS4xLjYgKGh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdC5naXQg
+ZTIxZGM0YmQ1NDc0ZDA0YjhlNjJkNzMzMTM2MmVkY2M1NjQ4ZDdlNSkpICMxfnRyaXhpZStkaWxl
+a3MgU01QIFBSRUVNUFRfRFlOQU1JQyAyMDI0LTEyLTE5CgojIExDX0FMTD1DIGRtZXNnIC1UIHwg
+Z3JlcCBrQ0ZJCltUdWUgRGVjIDI0IDIyOjM0OjUxIDIwMjRdIFNNUCBhbHRlcm5hdGl2ZXM6IFVz
+aW5nIGtDRkkKCiMgeGwgaW5mbyB8IGVncmVwICdyZWxlYXNlfHZlcnNpb258Y29tbWFuZGxpbmV8
+Y2FwcycKcmVsZWFzZSAgICAgICAgICAgICAgICA6IDYuMTIuNi0xLWFtZDY0LWNsYW5nMTkta2Nm
+aQp2ZXJzaW9uICAgICAgICAgICAgICAgIDogIzF+dHJpeGllK2RpbGVrcyBTTVAgUFJFRU1QVF9E
+WU5BTUlDIDIwMjQtMTItMTkKaHdfY2FwcyAgICAgICAgICAgICAgICA6IGJmZWJmYmZmOjE3YmFl
+M2JmOjI4MTAwODAwOjAwMDAwMDAxOjAwMDAwMDAxOjAwMDAwMDAwOjAwMDAwMDAwOjAwMDAwMTAw
+CnZpcnRfY2FwcyAgICAgICAgICAgICAgOiBwdiBodm0gaGFwIHNoYWRvdyBnbnR0YWItdjEgZ250
+dGFiLXYyCnhlbl92ZXJzaW9uICAgICAgICAgICAgOiA0LjE5LjEKeGVuX2NhcHMgICAgICAgICAg
+ICAgICA6IHhlbi0zLjAteDg2XzY0IGh2bS0zLjAteDg2XzMyIGh2bS0zLjAteDg2XzMycCBodm0t
+My4wLXg4Nl82NCAKeGVuX2NvbW1hbmRsaW5lICAgICAgICA6IHBsYWNlaG9sZGVyCgojIGRwa2cg
+LWwgfCBlZ3JlcCAncWVtdS1zeXN0ZW0teGVufGxpYnhlbm1pc2MnIHwgYXdrICcvXihpaXxoaXxy
+Y3xwaSkvIHtwcmludCAkMSAiICIgJDIgIiAiICQzfScgfCBjb2x1bW4gLXQKaWkgIGxpYnhlbm1p
+c2M0LjE5OmFtZDY0ICA0LjE5LjEtMQppaSAgcWVtdS1zeXN0ZW0teGVuICAgICAgIDE6OS4yLjAr
+ZHMtMwoKZGlsZWtzQGluaXphOn4vc3JjL3h0Zi9naXQkIHN1ZG8gLi94dGYtcnVubmVyIC1hIC0t
+aG9zdAoKLi4uCkV4ZWN1dGluZyAneGwgY3JlYXRlIC1wIHRlc3RzL3hzYS00NTQvdGVzdC1odm02
+NC14c2EtNDU0LmNmZycKRXhlY3V0aW5nICd4bCBjb25zb2xlIHRlc3QtaHZtNjQteHNhLTQ1NCcK
+RXhlY3V0aW5nICd4bCB1bnBhdXNlIHRlc3QtaHZtNjQteHNhLTQ1NCcKLS0tIFhlbiBUZXN0IEZy
+YW1ld29yayAtLS0KRW52aXJvbm1lbnQ6IEhWTSA2NGJpdCAoTG9uZyBtb2RlIDQgbGV2ZWxzKQpY
+U0EtNDU0IFBvQwpTdWNjZXNzOiBOb3QgdnVsbmVyYWJsZSB0byBYU0EtNDU0ClRlc3QgcmVzdWx0
+OiBTVUNDRVNTCgpFeGVjdXRpbmcgJ3hsIGNyZWF0ZSAtcCB0ZXN0cy94c2EtY29uc29sZWlvLXdy
+aXRlL3Rlc3QtaHZtMzJwYWUteHNhLWNvbnNvbGVpby13cml0ZS5jZmcnCkV4ZWN1dGluZyAneGwg
+Y29uc29sZSB0ZXN0LWh2bTMycGFlLXhzYS1jb25zb2xlaW8td3JpdGUnCkV4ZWN1dGluZyAneGwg
+dW5wYXVzZSB0ZXN0LWh2bTMycGFlLXhzYS1jb25zb2xlaW8td3JpdGUnCi0tLSBYZW4gVGVzdCBG
+cmFtZXdvcmsgLS0tCkVudmlyb25tZW50OiBIVk0gMzJiaXQgKFBBRSAzIGxldmVscykKQ09OU09M
+RUlPX3dyaXRlIHN0YWNrIG92ZXJmbG93IFBvQwpTdWNjZXNzOiBOb3QgdnVsbmVyYWJsZSB0byBD
+T05TT0xFSU9fd3JpdGUgc3RhY2sgb3ZlcmZsb3cKVGVzdCByZXN1bHQ6IFNVQ0NFU1MKCkNvbWJp
+bmVkIHRlc3QgcmVzdWx0czoKdGVzdC1odm0zMi1jcHVpZC1mYXVsdGluZyAgICAgICAgICAgICAg
+ICBTS0lQCnRlc3QtaHZtMzJwYWUtY3B1aWQtZmF1bHRpbmcgICAgICAgICAgICAgU0tJUAp0ZXN0
+LWh2bTMycHNlLWNwdWlkLWZhdWx0aW5nICAgICAgICAgICAgIFNLSVAKdGVzdC1odm02NC1jcHVp
+ZC1mYXVsdGluZyAgICAgICAgICAgICAgICBTS0lQCnRlc3QtcHY2NC1jcHVpZC1mYXVsdGluZyAg
+ICAgICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTY0LWZwdS1leGNlcHRpb24tZW11bGF0aW9uICAg
+ICAgIFNLSVAKdGVzdC1odm0zMi1pbnZscGd+aGFwICAgICAgICAgICAgICAgICAgICBTVUNDRVNT
+CnRlc3QtaHZtMzItaW52bHBnfnNoYWRvdyAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2
+bTMycGFlLWludmxwZ35oYXAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMnBhZS1p
+bnZscGd+c2hhZG93ICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQtaW52bHBnfmhhcCAg
+ICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LWludmxwZ35zaGFkb3cgICAgICAg
+ICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC1sYnItdHN4LXZtZW50cnkgICAgICAgICAgICAg
+ICBTVUNDRVNTCnRlc3QtaHZtMzItbGl2ZXBhdGNoLXByaXYtY2hlY2sgICAgICAgICAgU1VDQ0VT
+Uwp0ZXN0LWh2bTY0LWxpdmVwYXRjaC1wcml2LWNoZWNrICAgICAgICAgIFNVQ0NFU1MKdGVzdC1w
+djY0LWxpdmVwYXRjaC1wcml2LWNoZWNrICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzItbG0t
+dHMgICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LWxtLXRzICAgICAg
+ICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMnBhZS1tZW1vcC1zZWcgICAgICAg
+ICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQtbWVtb3Atc2VnICAgICAgICAgICAgICAgICAg
+ICAgU1VDQ0VTUwp0ZXN0LXB2NjQtbWVtb3Atc2VnICAgICAgICAgICAgICAgICAgICAgIFNVQ0NF
+U1MKdGVzdC1odm0zMnBhZS1ubWktdGFza3N3aXRjaC1wcml2ICAgICAgICBTVUNDRVNTCnRlc3Qt
+cHY2NC1wdi1mc2dzYmFzZSAgICAgICAgICAgICAgICAgICAgU0tJUAp0ZXN0LXB2NjQtcHYtaW9w
+bH5oeXBlcmNhbGwgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXB2LWlvcGx+dm1hc3Np
+c3QgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzItc3dpbnQtZW11bGF0aW9uICAgICAg
+ICAgICAgICAgU0tJUAp0ZXN0LWh2bTMycGFlLXN3aW50LWVtdWxhdGlvbiAgICAgICAgICAgIFNL
+SVAKdGVzdC1odm0zMnBzZS1zd2ludC1lbXVsYXRpb24gICAgICAgICAgICBTS0lQCnRlc3QtaHZt
+NjQtc3dpbnQtZW11bGF0aW9uICAgICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTMyLXVtaXAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIFNLSVAKdGVzdC1odm02NC11bWlwICAgICAgICAgICAgICAg
+ICAgICAgICAgICBTS0lQCnRlc3QtaHZtMzIteHNhLTEyMiAgICAgICAgICAgICAgICAgICAgICAg
+U1VDQ0VTUwp0ZXN0LWh2bTMycGFlLXhzYS0xMjIgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MK
+dGVzdC1odm0zMnBzZS14c2EtMTIyICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZt
+NjQteHNhLTEyMiAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTEy
+MiAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMi14c2EtMTIzICAgICAg
+ICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtcHY2NC14c2EtMTY3ICAgICAgICAgICAgICAgICAg
+ICAgICAgU0tJUAp0ZXN0LWh2bTY0LXhzYS0xNjh+c2hhZG93ICAgICAgICAgICAgICAgIFNVQ0NF
+U1MKdGVzdC1odm02NC14c2EtMTcwICAgICAgICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtaHZt
+NjQteHNhLTE3M35zaGFkb3cgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTE4
+MiAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMi14c2EtMTg2ICAgICAg
+ICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtaHZtNjQteHNhLTE4NiAgICAgICAgICAgICAgICAg
+ICAgICAgU0tJUAp0ZXN0LWh2bTMyLXhzYS0xODggICAgICAgICAgICAgICAgICAgICAgIFNVQ0NF
+U1MKdGVzdC1odm0zMnBhZS14c2EtMTg4ICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3Qt
+aHZtMzJwc2UteHNhLTE4OCAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LXhz
+YS0xODggICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0xODggICAg
+ICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzIteHNhLTE5MSAgICAgICAgICAg
+ICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTMyLXhzYS0xOTIgICAgICAgICAgICAgICAgICAgICAg
+IFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0xOTMgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNT
+CnRlc3QtaHZtNjQteHNhLTE5NSAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2
+bTY0LXhzYS0xOTYgICAgICAgICAgICAgICAgICAgICAgIFNLSVAKdGVzdC1odm0zMi14c2EtMjAw
+ICAgICAgICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtaHZtMzIteHNhLTIwMyAgICAgICAgICAg
+ICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTY0LXhzYS0yMDQgICAgICAgICAgICAgICAgICAgICAg
+IFNLSVAKdGVzdC1wdjY0LXhzYS0yMTIgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRl
+c3QtcHY2NC14c2EtMjEzICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0
+LXhzYS0yMjEgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0yMjEg
+ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtMjI0ICAgICAgICAg
+ICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTIyNyAgICAgICAgICAgICAgICAg
+ICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC14c2EtMjMxICAgICAgICAgICAgICAgICAgICAgICBT
+VUNDRVNTCnRlc3QtcHY2NC14c2EtMjMxICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0
+ZXN0LWh2bTY0LXhzYS0yMzIgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0
+LXhzYS0yMzIgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtMjM0
+ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTMyLXhzYS0yMzkgICAgICAg
+ICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0yNTUgICAgICAgICAgICAgICAg
+ICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtMjU5ICAgICAgICAgICAgICAgICAgICAgICAg
+U1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTI2MCAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MK
+dGVzdC1odm02NC14c2EtMjYxICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2
+NC14c2EtMjY1ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LXhzYS0y
+NjkgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC14c2EtMjc3ICAgICAg
+ICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQteHNhLTI3OCAgICAgICAgICAgICAg
+ICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTI3OSAgICAgICAgICAgICAgICAgICAgICAg
+IFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0yODYgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNT
+CnRlc3QtcHY2NC14c2EtMjk2ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2
+NjQteHNhLTI5OCAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC14c2Et
+MzA0ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQteHNhLTMwOCAgICAg
+ICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTMxNiAgICAgICAgICAgICAg
+ICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMi14c2EtMzE3ICAgICAgICAgICAgICAgICAgICAg
+ICBTVUNDRVNTCnRlc3QtaHZtMzJwYWUteHNhLTMxNyAgICAgICAgICAgICAgICAgICAgU1VDQ0VT
+Uwp0ZXN0LWh2bTMycHNlLXhzYS0zMTcgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1o
+dm02NC14c2EtMzE3ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2Et
+MzE3ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTMzMyAgICAg
+ICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0zMzkgICAgICAgICAgICAg
+ICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtNDQ0ICAgICAgICAgICAgICAgICAgICAg
+ICAgU0tJUAp0ZXN0LWh2bTY0LXhzYS00NTEgICAgICAgICAgICAgICAgICAgICAgIFNLSVAKdGVz
+dC1odm02NC14c2EtNDU0ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzJw
+YWUteHNhLWNvbnNvbGVpby13cml0ZSAgICAgICAgU1VDQ0VTUwoKCi1kaWxla3MgLy8gMjQtRGVj
+LTIwMjQK
+--0000000000007b4e3e062a0b33ad
+Content-Type: text/x-log; charset="US-ASCII"; name="qemu-dm-test-hvm64-xsa-454.log"
+Content-Disposition: attachment; filename="qemu-dm-test-hvm64-xsa-454.log"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m5309ptw1>
+X-Attachment-Id: f_m5309ptw1
 
-:::::: The code at line 2172 was first introduced by commit
-:::::: a5e099e0c464ac3d077339f481981e0d859b8545 RDMA/bnxt_re: Fix an error path in bnxt_re_add_device
+Vk5DIHNlcnZlciBydW5uaW5nIG9uIDEyNy4wLjAuMTo1OTAwCnhlbi1xZW11LXN5c3RlbS1pMzg2
+OiBmYWlsZWQgdG8gY3JlYXRlICdjb25zb2xlJyBkZXZpY2UgJzAnOiBkZWNsaW5pbmcgdG8gaGFu
+ZGxlIGNvbnNvbGUgdHlwZSAneGVuY29uc29sZWQnCnhlbi1xZW11LXN5c3RlbS1pMzg2OiB0ZXJt
+aW5hdGluZyBvbiBzaWduYWwgMSBmcm9tIHBpZCA0ODQ1ICgvdXNyL2xpYi94ZW4tNC4xOS9iaW4v
+eGwpCg==
+--0000000000007b4e3e062a0b33ad
+Content-Type: text/x-log; charset="US-ASCII"; name="xl-test-hvm64-xsa-454.log"
+Content-Disposition: attachment; filename="xl-test-hvm64-xsa-454.log"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m5309ss22>
+X-Attachment-Id: f_m5309ss22
 
-:::::: TO: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+V2FpdGluZyBmb3IgZG9tYWluIHRlc3QtaHZtNjQteHNhLTQ1NCAoZG9taWQgOTQpIHRvIGRpZSBb
+cGlkIDQ4NDVdCkRvbWFpbiA5NCBoYXMgc2h1dCBkb3duLCByZWFzb24gY29kZSAwIDB4MApBY3Rp
+b24gZm9yIHNodXRkb3duIHJlYXNvbiBjb2RlIDAgaXMgZGVzdHJveQpEb21haW4gOTQgbmVlZHMg
+dG8gYmUgY2xlYW5lZCB1cDogZGVzdHJveWluZyB0aGUgZG9tYWluCkRvbmUuIEV4aXRpbmcgbm93
+Cg==
+--0000000000007b4e3e062a0b33ad--
