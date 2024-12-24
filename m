@@ -1,346 +1,322 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF8114901B
-	for <llvm@lists.linux.dev>; Tue, 24 Dec 2024 21:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58058212D60;
+	Tue, 24 Dec 2024 23:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735077461; cv=none; b=keLX4ZT9kRmBCIQLATvEDQmLLcuAy1FxSuVWMBM1z98E8d6/w+jEU4Rn7K0ERXDUKFtTCE/cCw3Tb5Y2UCQBK7ZYNp7oZxUVjGGZJfq2qwRzmAw+llUpUMVrYlSlQn+SVRQb/uI+hYf5YcyLa5RMRcM0u7lWaTQ7MNXBmH2WpV8=
+	t=1735083271; cv=none; b=cBFqIlOk8k9nCbew+NWNRKqOhJhS0+r709mZpT3owGona/kCpfwCRTE/qXJvbVBH4xYRx70vCwzuEIrYMjtDLykS/LvEYF4uMq8JE/MmuHGrumeJ/Sk3ThfZS/tk4eP5FbKNNwNnsZQAIk8KJotanKmiJJowm8Ma3HD/vzJC5x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735077461; c=relaxed/simple;
-	bh=dsJxWoBCTUptl3K4/St8dF62g0fT8fu+JzX9XGCw5js=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YFFjuZYQKM8LibGLx3QDDUXkPHmHBT+Zz1YO0Pm4jkuHXL1Ag948Ocu2VIOUDW0V08/48Bj1IGhj+xdradlXNVW+u921Wtb76GPuG+jpQqHhJr6yrji9T8HsRywdTpWwaUdkSHofVe7pxGbD6T0jQGsWadwdeZQIEX0bCLRmXRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WvtR/yED; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1735083271; c=relaxed/simple;
+	bh=YcX2ncLPxYqtSquQR7sTFscPhSUP9EFkasX0QohzZyw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q3WN2hXrtv5HP1/1oOT4V/Bgx52O2ay+kXpV/AeF5YSaPxxt/vP1NkY9Cb4Pzb3HE1XcTB3bsqzM0jJxfQKtkCSs6UiLHaAu8WeKNTmQsRABTRk6ST0pstBCZiZevGrdI3bhGDdLgyocIuttbO90MHjqERobNEiStXvgwa+h4XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z+uhUv8W; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvtR/yED"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53f22fd6887so5180560e87.2
-        for <llvm@lists.linux.dev>; Tue, 24 Dec 2024 13:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735077457; x=1735682257; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZbPCqk/DVvB78zsAYK9srunz1WN+hN0RoJRdIyLYCY4=;
-        b=WvtR/yED3I7gnd2ZQoV3XD+rzbZThHamtrHHX4OdqCoqiLfAkRhDfcDm0UO4VZPLx5
-         Nl+dj/Amg9wk6HTGdiEwPoq/C1WDKKmbaqWkXOpW1ZZw4HXR19+TYHPMth91YoyWGwFm
-         na/yTGoJ81F1PW2hx3RHjBmPGVW/a7a6KpnrHdWZHMnf6r9N7HxAqcR+MHuFOYNTCqEy
-         45j3ELYHdBGK6f2TXIVozlITPpxTYxpdqP+uV0R2fZLUWi8sks6BDlfKWtaIOad26ybA
-         Jp3snPAc37+Oj1jtlHvOJJbNHPg3NZhCGayD1XtCp4eabUGC7hQBPcd3gFKjUBAw0CC/
-         F5KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735077457; x=1735682257;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZbPCqk/DVvB78zsAYK9srunz1WN+hN0RoJRdIyLYCY4=;
-        b=cLSZUCIYz7qeebBeqmoGpAU+aqbNk2QKP4LwG1wvdbi4APVm7O9YZqpBTgNByvQywp
-         UBoBx2h2WDwttq+h/Zy8K7jgI6heHv1/918doz2CcSO2dzOIgkhiF7r2E5oADechLl6r
-         ivCjeKBBAGpUz7Ejxxus1iklBYuYgv9xB158KPHZQZYdspkX++QfkmHFVIRY+xG8T+Fi
-         KH3qlhgK3nqx4ogB+IVUVQkExNID2qBxq4p94+OIiCwj+B9a69fGvn2UCxObWpenoIJo
-         1vQDFZdlHN4VK90949JUjxAkx0/QFGdRGu9Vre2euOpEj+A0MbBxtBSw1K5wKhR9sHZV
-         tvyg==
-X-Forwarded-Encrypted: i=1; AJvYcCWbiIQpZIoPjNlV2jDfB8yJQFy2NstOjQ9Eg8NCiuVU9jqDneaTYjupVupxsPUvoB3GG3ng@lists.linux.dev
-X-Gm-Message-State: AOJu0YzoUJ3jNMvLH6hU3iaUV9Z1Soqt8ucGE5Cs7ubEs/g9DBYjtXc7
-	2Udeze7CVK/kn/avngXX8E115XdQXdsG2Qg/PEqPYvN6JpQlSBPtSDVUjLbp3CKPDxi4nElKRVg
-	H6Cb+vl23U2dx5SWFA7BeGMEwwJE=
-X-Gm-Gg: ASbGncs0iX9NJLI3Nb37Xoi2aGJ/L7iDZi+zNj4KHcJS3xNQg/JbmRMys35o4nvvnzK
-	/Hdm/Pcdz8Y7KkTm0Z8t4Z1jii3r2VtXn7ELkXsA+rAGODm0e5EBN3qYm+pArBYv+aWRw
-X-Google-Smtp-Source: AGHT+IFT13jLt/GfmU5pUvX0TVKGlwS3vaT5BtXg5VR9Mbaj2a1D6QRod7r0jNvqujpQ46FL6AiFIkdpu/wczpbqkIg=
-X-Received: by 2002:a05:6512:b19:b0:542:2e09:639a with SMTP id
- 2adb3069b0e04-5422e0963efmr4469706e87.10.1735077456979; Tue, 24 Dec 2024
- 13:57:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z+uhUv8W"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735083269; x=1766619269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YcX2ncLPxYqtSquQR7sTFscPhSUP9EFkasX0QohzZyw=;
+  b=Z+uhUv8WfdBFd6gBlV3Azd1vEuV1AZ5FuM0GOaFWMXRIF5c7QWIdefYw
+   y+LGf5wMjkHwLeW8ylMhJHdHgk1PSV2+DDT7HxD4f+60S+xCkaqMR7R26
+   QBSIgwMAXF2MAZZPHt60DM/DXbbBlOpnVxScyqYfpEgBCZCcgTds1n8Ok
+   OGIAmmj+DRhuWErTYMj5EVQ9m/KVGAexkXFZ5gUGH3okk4ftQSXBy9o26
+   s9WcLjTucVxeSuAwfRGGPYYNlksn7ZKlsvO96UTpOxn+jyK1E3UBjrz83
+   EZOyTTCd1O9Lp81LqEDe72NfanPJbuG/i7TVfD5Mqpl8aUgyepnz6U/nI
+   w==;
+X-CSE-ConnectionGUID: zV9BWHSgQ3awpWqPFaXDyA==
+X-CSE-MsgGUID: IRH6NMPvR4KhVfGirSphxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="35666609"
+X-IronPort-AV: E=Sophos;i="6.12,261,1728975600"; 
+   d="scan'208";a="35666609"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2024 15:34:29 -0800
+X-CSE-ConnectionGUID: qGB9eT7LRHaBVTor91LYvQ==
+X-CSE-MsgGUID: 7+Y8jl4KTa+zdQR9fHs2tg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="100057210"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 24 Dec 2024 15:34:26 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tQEPu-0001X1-2j;
+	Tue, 24 Dec 2024 23:34:22 +0000
+Date: Wed, 25 Dec 2024 07:34:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Damien Le Moal <dlemoal@kernel.org>, linux-nvme@lists.infradead.org,
+	Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>, linux-pci@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+	Niklas Cassel <cassel@kernel.org>
+Subject: Re: [PATCH v7 17/18] nvmet: New NVMe PCI endpoint function target
+ driver
+Message-ID: <202412250700.WqUH4KaL-lkp@intel.com>
+References: <20241220095108.601914-18-dlemoal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
- <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
- <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com>
- <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com> <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
- <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com> <CA+icZUUp9rgx2Dvsww6QbTGRZz5=mf75D0_KncwdgCEZe01-EA@mail.gmail.com>
- <CA+icZUV0HEF_hwr-eSovntfcT0++FBrQN-HbFL+oZtnKjJzLtA@mail.gmail.com>
- <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com> <CA+icZUW454ND85nbjqAoMg42=i+aGht8Z=iG2wKj=Un7Ot0y6Q@mail.gmail.com>
- <CA+icZUUnbY7eRZtN-pMNn0jhYKLLEWEDNmJjhGQ3auPuS9_+MQ@mail.gmail.com>
-In-Reply-To: <CA+icZUUnbY7eRZtN-pMNn0jhYKLLEWEDNmJjhGQ3auPuS9_+MQ@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Tue, 24 Dec 2024 22:56:59 +0100
-Message-ID: <CA+icZUXVxE+tXvHk25iiMSY1K27JGhds_j+sp0Lr+_Zs6x1Utw@mail.gmail.com>
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	xen-devel <xen-devel@lists.xenproject.org>, 1091360@bugs.debian.org
-Content-Type: multipart/mixed; boundary="0000000000007b4e3e062a0b33ad"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241220095108.601914-18-dlemoal@kernel.org>
 
---0000000000007b4e3e062a0b33ad
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Damien,
 
-On Tue, Dec 24, 2024 at 5:23=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.com>=
- wrote:
->
-> On Sun, Dec 22, 2024 at 11:37=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.c=
-om> wrote:
-> >
-> > On Sat, Dec 21, 2024 at 10:31=E2=80=AFPM Andrew Cooper
-> > <andrew.cooper3@citrix.com> wrote:
-> > >
-> > > On 21/12/2024 6:25 pm, Sedat Dilek wrote:
-> > > > With...
-> > > >
-> > > > dileks@iniza:~/src/xtf/git$ mv tests/xsa-454 ../
-> > > > dileks@iniza:~/src/xtf/git$ mv tests/xsa-consoleio-write ../
-> > >
-> > > That's completely bizzare.   There's nothing interestingly different
-> > > with those two tests vs the others.
-> > >
-> > > I take it the crash is repeatable when using either of these?
-> > >
-> > > ~Andrew
-> >
-> > This time I stopped SDDM and thus KDE-6/Wayland session.
-> >
-> > Tested with Debian's officially 6.12.6-amd64 kernel in VT-3.
-> >
-> > test-hvm32pae-xsa-consoleio-write SUCCESS <--- 1st time I tried, never
-> > said this is not OK
-> >
-> > test-hvm64-xsa-454 leads to FROZEN system and DATA LOSS (here: ext4).
-> > Reproducibly as told many times.- in Debian and selfmade kernels versio=
-n 6.12.6.
-> >
-> > Stolen from the picture I took with my smartphone:
-> >
-> > sudo ./xft-runner test-hvm64-xsa-454
-> >
-> > Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
-> > Executing 'xl console test-hvm64-xsa-454'
-> > Executing 'xl unpause test-hvm64-xsa-454'
-> >
-> > ^^ System does NOT react!
-> >
-> > I can send you the picture on request.
-> >
-> > -Sedat-
->
-> [ CC 1091360@bugs.debian.org ]
->
-> I upgraded to Xen version 4.19.1 in Debian/unstable AMD64.
->
-> # xl info | egrep 'release|version|commandline|caps'
-> release                : 6.12.6-amd64
-> version                : #1 SMP PREEMPT_DYNAMIC Debian 6.12.6-1 (2024-12-=
-21)
-> hw_caps                :
-> bfebfbff:17bae3bf:28100800:00000001:00000001:00000000:00000000:00000100
-> virt_caps              : pv hvm hap shadow gnttab-v1 gnttab-v2
-> xen_version            : 4.19.1
-> xen_caps               : xen-3.0-x86_64 hvm-3.0-x86_32 hvm-3.0-x86_32p
-> hvm-3.0-x86_64
-> xen_commandline        : placeholder
->
-> dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --host test-hvm64-xsa-454
-> Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
-> Executing 'xl console test-hvm64-xsa-454'
-> Executing 'xl unpause test-hvm64-xsa-454'
-> --- Xen Test Framework ---
-> Environment: HVM 64bit (Long mode 4 levels)
-> XSA-454 PoC
-> Success: Not vulnerable to XSA-454
-> Test result: SUCCESS
->
-> Combined test results:
-> test-hvm64-xsa-454                       SUCCESS
->
-> root@iniza:~# LC_ALL=3DC ll /var/log/xen/*xsa-454*.log
-> -rw-r--r-- 1 root adm 232 Dec 24 17:11
-> /var/log/xen/qemu-dm-test-hvm64-xsa-454.log
-> -rw-r--r-- 1 root adm 232 Dec 24 17:11 /var/log/xen/xl-test-hvm64-xsa-454=
-.log
->
-> root@iniza:~# cat /var/log/xen/qemu-dm-test-hvm64-xsa-454.log
-> VNC server running on 127.0.0.1:5900
-> xen-qemu-system-i386: failed to create 'console' device '0': declining
-> to handle console type 'xenconsoled'
-> xen-qemu-system-i386: terminating on signal 1 from pid 6302
-> (/usr/lib/xen-4.19/bin/xl)
->
-> root@iniza:~# cat /var/log/xen/xl-test-hvm64-xsa-454.log
-> Waiting for domain test-hvm64-xsa-454 (domid 144) to die [pid 6302]
-> Domain 144 has shut down, reason code 0 0x0
-> Action for shutdown reason code 0 is destroy
-> Domain 144 needs to be cleaned up: destroying the domain
-> Done. Exiting now
->
-> Due to Debian-Bug #1091360 ("qemu-system-xen: Build against libxen-dev
-> version 4.19.1-1") I am not able to do the full XFT tests.
->
-> -Sedat-
->
-> Link: https://bugs.debian.org/1091360
+kernel test robot noticed the following build warnings:
 
-With NEW qemu-system-xen/unstable (1:9.2.0+ds-3) both 6.12.6 kernel -
-Debian and selfmade run with SUCCESS.
+[auto build test WARNING on 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8]
 
-Nothing scary in dmesg-log.
+url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Le-Moal/nvme-Move-opcode-string-helper-functions-declarations/20241220-175304
+base:   78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+patch link:    https://lore.kernel.org/r/20241220095108.601914-18-dlemoal%40kernel.org
+patch subject: [PATCH v7 17/18] nvmet: New NVMe PCI endpoint function target driver
+config: i386-randconfig-011-20241225 (https://download.01.org/0day-ci/archive/20241225/202412250700.WqUH4KaL-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241225/202412250700.WqUH4KaL-lkp@intel.com/reproduce)
 
-Happy XMAS,
--Sedat-
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412250700.WqUH4KaL-lkp@intel.com/
 
---0000000000007b4e3e062a0b33ad
-Content-Type: text/plain; charset="US-ASCII"; name="results_xen-4-19-1_dileks-6-12-6.txt"
-Content-Disposition: attachment; 
-	filename="results_xen-4-19-1_dileks-6-12-6.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m5309lk00>
-X-Attachment-Id: f_m5309lk00
+All warnings (new ones prefixed by >>):
 
-IyBjYXQgL3Byb2MvdmVyc2lvbiAKTGludXggdmVyc2lvbiA2LjEyLjYtMS1hbWQ2NC1jbGFuZzE5
-LWtjZmkgKHNlZGF0LmRpbGVrQGdtYWlsLmNvbUBpbml6YSkgKENsYW5nQnVpbHRMaW51eCBjbGFu
-ZyB2ZXJzaW9uIDE5LjEuNiAoaHR0cHM6Ly9naXRodWIuY29tL2xsdm0vbGx2bS1wcm9qZWN0Lmdp
-dCBlMjFkYzRiZDU0NzRkMDRiOGU2MmQ3MzMxMzYyZWRjYzU2NDhkN2U1KSwgQ2xhbmdCdWlsdExp
-bnV4IExMRCAxOS4xLjYgKGh0dHBzOi8vZ2l0aHViLmNvbS9sbHZtL2xsdm0tcHJvamVjdC5naXQg
-ZTIxZGM0YmQ1NDc0ZDA0YjhlNjJkNzMzMTM2MmVkY2M1NjQ4ZDdlNSkpICMxfnRyaXhpZStkaWxl
-a3MgU01QIFBSRUVNUFRfRFlOQU1JQyAyMDI0LTEyLTE5CgojIExDX0FMTD1DIGRtZXNnIC1UIHwg
-Z3JlcCBrQ0ZJCltUdWUgRGVjIDI0IDIyOjM0OjUxIDIwMjRdIFNNUCBhbHRlcm5hdGl2ZXM6IFVz
-aW5nIGtDRkkKCiMgeGwgaW5mbyB8IGVncmVwICdyZWxlYXNlfHZlcnNpb258Y29tbWFuZGxpbmV8
-Y2FwcycKcmVsZWFzZSAgICAgICAgICAgICAgICA6IDYuMTIuNi0xLWFtZDY0LWNsYW5nMTkta2Nm
-aQp2ZXJzaW9uICAgICAgICAgICAgICAgIDogIzF+dHJpeGllK2RpbGVrcyBTTVAgUFJFRU1QVF9E
-WU5BTUlDIDIwMjQtMTItMTkKaHdfY2FwcyAgICAgICAgICAgICAgICA6IGJmZWJmYmZmOjE3YmFl
-M2JmOjI4MTAwODAwOjAwMDAwMDAxOjAwMDAwMDAxOjAwMDAwMDAwOjAwMDAwMDAwOjAwMDAwMTAw
-CnZpcnRfY2FwcyAgICAgICAgICAgICAgOiBwdiBodm0gaGFwIHNoYWRvdyBnbnR0YWItdjEgZ250
-dGFiLXYyCnhlbl92ZXJzaW9uICAgICAgICAgICAgOiA0LjE5LjEKeGVuX2NhcHMgICAgICAgICAg
-ICAgICA6IHhlbi0zLjAteDg2XzY0IGh2bS0zLjAteDg2XzMyIGh2bS0zLjAteDg2XzMycCBodm0t
-My4wLXg4Nl82NCAKeGVuX2NvbW1hbmRsaW5lICAgICAgICA6IHBsYWNlaG9sZGVyCgojIGRwa2cg
-LWwgfCBlZ3JlcCAncWVtdS1zeXN0ZW0teGVufGxpYnhlbm1pc2MnIHwgYXdrICcvXihpaXxoaXxy
-Y3xwaSkvIHtwcmludCAkMSAiICIgJDIgIiAiICQzfScgfCBjb2x1bW4gLXQKaWkgIGxpYnhlbm1p
-c2M0LjE5OmFtZDY0ICA0LjE5LjEtMQppaSAgcWVtdS1zeXN0ZW0teGVuICAgICAgIDE6OS4yLjAr
-ZHMtMwoKZGlsZWtzQGluaXphOn4vc3JjL3h0Zi9naXQkIHN1ZG8gLi94dGYtcnVubmVyIC1hIC0t
-aG9zdAoKLi4uCkV4ZWN1dGluZyAneGwgY3JlYXRlIC1wIHRlc3RzL3hzYS00NTQvdGVzdC1odm02
-NC14c2EtNDU0LmNmZycKRXhlY3V0aW5nICd4bCBjb25zb2xlIHRlc3QtaHZtNjQteHNhLTQ1NCcK
-RXhlY3V0aW5nICd4bCB1bnBhdXNlIHRlc3QtaHZtNjQteHNhLTQ1NCcKLS0tIFhlbiBUZXN0IEZy
-YW1ld29yayAtLS0KRW52aXJvbm1lbnQ6IEhWTSA2NGJpdCAoTG9uZyBtb2RlIDQgbGV2ZWxzKQpY
-U0EtNDU0IFBvQwpTdWNjZXNzOiBOb3QgdnVsbmVyYWJsZSB0byBYU0EtNDU0ClRlc3QgcmVzdWx0
-OiBTVUNDRVNTCgpFeGVjdXRpbmcgJ3hsIGNyZWF0ZSAtcCB0ZXN0cy94c2EtY29uc29sZWlvLXdy
-aXRlL3Rlc3QtaHZtMzJwYWUteHNhLWNvbnNvbGVpby13cml0ZS5jZmcnCkV4ZWN1dGluZyAneGwg
-Y29uc29sZSB0ZXN0LWh2bTMycGFlLXhzYS1jb25zb2xlaW8td3JpdGUnCkV4ZWN1dGluZyAneGwg
-dW5wYXVzZSB0ZXN0LWh2bTMycGFlLXhzYS1jb25zb2xlaW8td3JpdGUnCi0tLSBYZW4gVGVzdCBG
-cmFtZXdvcmsgLS0tCkVudmlyb25tZW50OiBIVk0gMzJiaXQgKFBBRSAzIGxldmVscykKQ09OU09M
-RUlPX3dyaXRlIHN0YWNrIG92ZXJmbG93IFBvQwpTdWNjZXNzOiBOb3QgdnVsbmVyYWJsZSB0byBD
-T05TT0xFSU9fd3JpdGUgc3RhY2sgb3ZlcmZsb3cKVGVzdCByZXN1bHQ6IFNVQ0NFU1MKCkNvbWJp
-bmVkIHRlc3QgcmVzdWx0czoKdGVzdC1odm0zMi1jcHVpZC1mYXVsdGluZyAgICAgICAgICAgICAg
-ICBTS0lQCnRlc3QtaHZtMzJwYWUtY3B1aWQtZmF1bHRpbmcgICAgICAgICAgICAgU0tJUAp0ZXN0
-LWh2bTMycHNlLWNwdWlkLWZhdWx0aW5nICAgICAgICAgICAgIFNLSVAKdGVzdC1odm02NC1jcHVp
-ZC1mYXVsdGluZyAgICAgICAgICAgICAgICBTS0lQCnRlc3QtcHY2NC1jcHVpZC1mYXVsdGluZyAg
-ICAgICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTY0LWZwdS1leGNlcHRpb24tZW11bGF0aW9uICAg
-ICAgIFNLSVAKdGVzdC1odm0zMi1pbnZscGd+aGFwICAgICAgICAgICAgICAgICAgICBTVUNDRVNT
-CnRlc3QtaHZtMzItaW52bHBnfnNoYWRvdyAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2
-bTMycGFlLWludmxwZ35oYXAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMnBhZS1p
-bnZscGd+c2hhZG93ICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQtaW52bHBnfmhhcCAg
-ICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LWludmxwZ35zaGFkb3cgICAgICAg
-ICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC1sYnItdHN4LXZtZW50cnkgICAgICAgICAgICAg
-ICBTVUNDRVNTCnRlc3QtaHZtMzItbGl2ZXBhdGNoLXByaXYtY2hlY2sgICAgICAgICAgU1VDQ0VT
-Uwp0ZXN0LWh2bTY0LWxpdmVwYXRjaC1wcml2LWNoZWNrICAgICAgICAgIFNVQ0NFU1MKdGVzdC1w
-djY0LWxpdmVwYXRjaC1wcml2LWNoZWNrICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzItbG0t
-dHMgICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LWxtLXRzICAgICAg
-ICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMnBhZS1tZW1vcC1zZWcgICAgICAg
-ICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQtbWVtb3Atc2VnICAgICAgICAgICAgICAgICAg
-ICAgU1VDQ0VTUwp0ZXN0LXB2NjQtbWVtb3Atc2VnICAgICAgICAgICAgICAgICAgICAgIFNVQ0NF
-U1MKdGVzdC1odm0zMnBhZS1ubWktdGFza3N3aXRjaC1wcml2ICAgICAgICBTVUNDRVNTCnRlc3Qt
-cHY2NC1wdi1mc2dzYmFzZSAgICAgICAgICAgICAgICAgICAgU0tJUAp0ZXN0LXB2NjQtcHYtaW9w
-bH5oeXBlcmNhbGwgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXB2LWlvcGx+dm1hc3Np
-c3QgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzItc3dpbnQtZW11bGF0aW9uICAgICAg
-ICAgICAgICAgU0tJUAp0ZXN0LWh2bTMycGFlLXN3aW50LWVtdWxhdGlvbiAgICAgICAgICAgIFNL
-SVAKdGVzdC1odm0zMnBzZS1zd2ludC1lbXVsYXRpb24gICAgICAgICAgICBTS0lQCnRlc3QtaHZt
-NjQtc3dpbnQtZW11bGF0aW9uICAgICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTMyLXVtaXAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIFNLSVAKdGVzdC1odm02NC11bWlwICAgICAgICAgICAgICAg
-ICAgICAgICAgICBTS0lQCnRlc3QtaHZtMzIteHNhLTEyMiAgICAgICAgICAgICAgICAgICAgICAg
-U1VDQ0VTUwp0ZXN0LWh2bTMycGFlLXhzYS0xMjIgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MK
-dGVzdC1odm0zMnBzZS14c2EtMTIyICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZt
-NjQteHNhLTEyMiAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTEy
-MiAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMi14c2EtMTIzICAgICAg
-ICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtcHY2NC14c2EtMTY3ICAgICAgICAgICAgICAgICAg
-ICAgICAgU0tJUAp0ZXN0LWh2bTY0LXhzYS0xNjh+c2hhZG93ICAgICAgICAgICAgICAgIFNVQ0NF
-U1MKdGVzdC1odm02NC14c2EtMTcwICAgICAgICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtaHZt
-NjQteHNhLTE3M35zaGFkb3cgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTE4
-MiAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMi14c2EtMTg2ICAgICAg
-ICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtaHZtNjQteHNhLTE4NiAgICAgICAgICAgICAgICAg
-ICAgICAgU0tJUAp0ZXN0LWh2bTMyLXhzYS0xODggICAgICAgICAgICAgICAgICAgICAgIFNVQ0NF
-U1MKdGVzdC1odm0zMnBhZS14c2EtMTg4ICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3Qt
-aHZtMzJwc2UteHNhLTE4OCAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LXhz
-YS0xODggICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0xODggICAg
-ICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzIteHNhLTE5MSAgICAgICAgICAg
-ICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTMyLXhzYS0xOTIgICAgICAgICAgICAgICAgICAgICAg
-IFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0xOTMgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNT
-CnRlc3QtaHZtNjQteHNhLTE5NSAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2
-bTY0LXhzYS0xOTYgICAgICAgICAgICAgICAgICAgICAgIFNLSVAKdGVzdC1odm0zMi14c2EtMjAw
-ICAgICAgICAgICAgICAgICAgICAgICBTS0lQCnRlc3QtaHZtMzIteHNhLTIwMyAgICAgICAgICAg
-ICAgICAgICAgICAgU0tJUAp0ZXN0LWh2bTY0LXhzYS0yMDQgICAgICAgICAgICAgICAgICAgICAg
-IFNLSVAKdGVzdC1wdjY0LXhzYS0yMTIgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRl
-c3QtcHY2NC14c2EtMjEzICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0
-LXhzYS0yMjEgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0yMjEg
-ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtMjI0ICAgICAgICAg
-ICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTIyNyAgICAgICAgICAgICAgICAg
-ICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC14c2EtMjMxICAgICAgICAgICAgICAgICAgICAgICBT
-VUNDRVNTCnRlc3QtcHY2NC14c2EtMjMxICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0
-ZXN0LWh2bTY0LXhzYS0yMzIgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0
-LXhzYS0yMzIgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtMjM0
-ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTMyLXhzYS0yMzkgICAgICAg
-ICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0yNTUgICAgICAgICAgICAgICAg
-ICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtMjU5ICAgICAgICAgICAgICAgICAgICAgICAg
-U1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTI2MCAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MK
-dGVzdC1odm02NC14c2EtMjYxICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2
-NC14c2EtMjY1ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LWh2bTY0LXhzYS0y
-NjkgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC14c2EtMjc3ICAgICAg
-ICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQteHNhLTI3OCAgICAgICAgICAgICAg
-ICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTI3OSAgICAgICAgICAgICAgICAgICAgICAg
-IFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0yODYgICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNT
-CnRlc3QtcHY2NC14c2EtMjk2ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2
-NjQteHNhLTI5OCAgICAgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm02NC14c2Et
-MzA0ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtNjQteHNhLTMwOCAgICAg
-ICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTMxNiAgICAgICAgICAgICAg
-ICAgICAgICAgIFNVQ0NFU1MKdGVzdC1odm0zMi14c2EtMzE3ICAgICAgICAgICAgICAgICAgICAg
-ICBTVUNDRVNTCnRlc3QtaHZtMzJwYWUteHNhLTMxNyAgICAgICAgICAgICAgICAgICAgU1VDQ0VT
-Uwp0ZXN0LWh2bTMycHNlLXhzYS0zMTcgICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1o
-dm02NC14c2EtMzE3ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2Et
-MzE3ICAgICAgICAgICAgICAgICAgICAgICAgU1VDQ0VTUwp0ZXN0LXB2NjQteHNhLTMzMyAgICAg
-ICAgICAgICAgICAgICAgICAgIFNVQ0NFU1MKdGVzdC1wdjY0LXhzYS0zMzkgICAgICAgICAgICAg
-ICAgICAgICAgICBTVUNDRVNTCnRlc3QtcHY2NC14c2EtNDQ0ICAgICAgICAgICAgICAgICAgICAg
-ICAgU0tJUAp0ZXN0LWh2bTY0LXhzYS00NTEgICAgICAgICAgICAgICAgICAgICAgIFNLSVAKdGVz
-dC1odm02NC14c2EtNDU0ICAgICAgICAgICAgICAgICAgICAgICBTVUNDRVNTCnRlc3QtaHZtMzJw
-YWUteHNhLWNvbnNvbGVpby13cml0ZSAgICAgICAgU1VDQ0VTUwoKCi1kaWxla3MgLy8gMjQtRGVj
-LTIwMjQK
---0000000000007b4e3e062a0b33ad
-Content-Type: text/x-log; charset="US-ASCII"; name="qemu-dm-test-hvm64-xsa-454.log"
-Content-Disposition: attachment; filename="qemu-dm-test-hvm64-xsa-454.log"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m5309ptw1>
-X-Attachment-Id: f_m5309ptw1
+   In file included from drivers/nvme/target/pci-epf.c:12:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/nvme/target/pci-epf.c:1854:19: warning: shift count is negative [-Wshift-count-negative]
+    1854 |         pci_addr = acq & GENMASK(63, 12);
+         |                          ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/nvme/target/pci-epf.c:1864:19: warning: shift count is negative [-Wshift-count-negative]
+    1864 |         pci_addr = asq & GENMASK(63, 12);
+         |                          ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/nvme/target/pci-epf.c:1961:16: warning: shift count >= width of type [-Wshift-count-overflow]
+    1961 |         ctrl->cap &= ~GENMASK(35, 32);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^  ~~~
+   drivers/nvme/target/pci-epf.c:1961:16: warning: shift count is negative [-Wshift-count-negative]
+    1961 |         ctrl->cap &= ~GENMASK(35, 32);
+         |                       ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^~~~~~~~~~~~~~~
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/nvme/target/pci-epf.c:753:19: warning: unused function 'nvmet_pci_epf_prp_addr' [-Wunused-function]
+     753 | static inline u64 nvmet_pci_epf_prp_addr(struct nvmet_pci_epf_ctrl *ctrl,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~
+   6 warnings generated.
 
-Vk5DIHNlcnZlciBydW5uaW5nIG9uIDEyNy4wLjAuMTo1OTAwCnhlbi1xZW11LXN5c3RlbS1pMzg2
-OiBmYWlsZWQgdG8gY3JlYXRlICdjb25zb2xlJyBkZXZpY2UgJzAnOiBkZWNsaW5pbmcgdG8gaGFu
-ZGxlIGNvbnNvbGUgdHlwZSAneGVuY29uc29sZWQnCnhlbi1xZW11LXN5c3RlbS1pMzg2OiB0ZXJt
-aW5hdGluZyBvbiBzaWduYWwgMSBmcm9tIHBpZCA0ODQ1ICgvdXNyL2xpYi94ZW4tNC4xOS9iaW4v
-eGwpCg==
---0000000000007b4e3e062a0b33ad
-Content-Type: text/x-log; charset="US-ASCII"; name="xl-test-hvm64-xsa-454.log"
-Content-Disposition: attachment; filename="xl-test-hvm64-xsa-454.log"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m5309ss22>
-X-Attachment-Id: f_m5309ss22
 
-V2FpdGluZyBmb3IgZG9tYWluIHRlc3QtaHZtNjQteHNhLTQ1NCAoZG9taWQgOTQpIHRvIGRpZSBb
-cGlkIDQ4NDVdCkRvbWFpbiA5NCBoYXMgc2h1dCBkb3duLCByZWFzb24gY29kZSAwIDB4MApBY3Rp
-b24gZm9yIHNodXRkb3duIHJlYXNvbiBjb2RlIDAgaXMgZGVzdHJveQpEb21haW4gOTQgbmVlZHMg
-dG8gYmUgY2xlYW5lZCB1cDogZGVzdHJveWluZyB0aGUgZG9tYWluCkRvbmUuIEV4aXRpbmcgbm93
-Cg==
---0000000000007b4e3e062a0b33ad--
+vim +1854 drivers/nvme/target/pci-epf.c
+
+  1817	
+  1818	static int nvmet_pci_epf_enable_ctrl(struct nvmet_pci_epf_ctrl *ctrl)
+  1819	{
+  1820		u64 pci_addr, asq, acq;
+  1821		u32 aqa;
+  1822		u16 status, qsize;
+  1823	
+  1824		if (ctrl->enabled)
+  1825			return 0;
+  1826	
+  1827		dev_info(ctrl->dev, "Enabling controller\n");
+  1828	
+  1829		ctrl->mps_shift = nvmet_cc_mps(ctrl->cc) + 12;
+  1830		ctrl->mps = 1UL << ctrl->mps_shift;
+  1831		ctrl->mps_mask = ctrl->mps - 1;
+  1832	
+  1833		ctrl->io_sqes = 1UL << nvmet_cc_iosqes(ctrl->cc);
+  1834		ctrl->io_cqes = 1UL << nvmet_cc_iocqes(ctrl->cc);
+  1835	
+  1836		if (ctrl->io_sqes < sizeof(struct nvme_command)) {
+  1837			dev_err(ctrl->dev, "Unsupported IO SQES %zu (need %zu)\n",
+  1838				ctrl->io_sqes, sizeof(struct nvme_command));
+  1839			return -EINVAL;
+  1840		}
+  1841	
+  1842		if (ctrl->io_cqes < sizeof(struct nvme_completion)) {
+  1843			dev_err(ctrl->dev, "Unsupported IO CQES %zu (need %zu)\n",
+  1844				ctrl->io_sqes, sizeof(struct nvme_completion));
+  1845			return -EINVAL;
+  1846		}
+  1847	
+  1848		/* Create the admin queue. */
+  1849		aqa = nvmet_pci_epf_bar_read32(ctrl, NVME_REG_AQA);
+  1850		asq = nvmet_pci_epf_bar_read64(ctrl, NVME_REG_ASQ);
+  1851		acq = nvmet_pci_epf_bar_read64(ctrl, NVME_REG_ACQ);
+  1852	
+  1853		qsize = (aqa & 0x0fff0000) >> 16;
+> 1854		pci_addr = acq & GENMASK(63, 12);
+  1855		status = nvmet_pci_epf_create_cq(ctrl->tctrl, 0,
+  1856					NVME_CQ_IRQ_ENABLED | NVME_QUEUE_PHYS_CONTIG,
+  1857					qsize, pci_addr, 0);
+  1858		if (status != NVME_SC_SUCCESS) {
+  1859			dev_err(ctrl->dev, "Failed to create admin completion queue\n");
+  1860			return -EINVAL;
+  1861		}
+  1862	
+  1863		qsize = aqa & 0x00000fff;
+  1864		pci_addr = asq & GENMASK(63, 12);
+  1865		status = nvmet_pci_epf_create_sq(ctrl->tctrl, 0, NVME_QUEUE_PHYS_CONTIG,
+  1866						 qsize, pci_addr);
+  1867		if (status != NVME_SC_SUCCESS) {
+  1868			dev_err(ctrl->dev, "Failed to create admin submission queue\n");
+  1869			nvmet_pci_epf_delete_cq(ctrl->tctrl, 0);
+  1870			return -EINVAL;
+  1871		}
+  1872	
+  1873		ctrl->sq_ab = NVMET_PCI_EPF_SQ_AB;
+  1874		ctrl->irq_vector_threshold = NVMET_PCI_EPF_IV_THRESHOLD;
+  1875		ctrl->enabled = true;
+  1876	
+  1877		/* Start polling the controller SQs */
+  1878		schedule_delayed_work(&ctrl->poll_sqs, 0);
+  1879	
+  1880		return 0;
+  1881	}
+  1882	
+  1883	static void nvmet_pci_epf_disable_ctrl(struct nvmet_pci_epf_ctrl *ctrl)
+  1884	{
+  1885		int qid;
+  1886	
+  1887		if (!ctrl->enabled)
+  1888			return;
+  1889	
+  1890		dev_info(ctrl->dev, "Disabling controller\n");
+  1891	
+  1892		ctrl->enabled = false;
+  1893		cancel_delayed_work_sync(&ctrl->poll_sqs);
+  1894	
+  1895		/* Delete all IO queues */
+  1896		for (qid = 1; qid < ctrl->nr_queues; qid++)
+  1897			nvmet_pci_epf_delete_sq(ctrl->tctrl, qid);
+  1898	
+  1899		for (qid = 1; qid < ctrl->nr_queues; qid++)
+  1900			nvmet_pci_epf_delete_cq(ctrl->tctrl, qid);
+  1901	
+  1902		/* Delete the admin queue last */
+  1903		nvmet_pci_epf_delete_sq(ctrl->tctrl, 0);
+  1904		nvmet_pci_epf_delete_cq(ctrl->tctrl, 0);
+  1905	}
+  1906	
+  1907	static void nvmet_pci_epf_poll_cc_work(struct work_struct *work)
+  1908	{
+  1909		struct nvmet_pci_epf_ctrl *ctrl =
+  1910			container_of(work, struct nvmet_pci_epf_ctrl, poll_cc.work);
+  1911		u32 old_cc, new_cc;
+  1912		int ret;
+  1913	
+  1914		if (!ctrl->tctrl)
+  1915			return;
+  1916	
+  1917		old_cc = ctrl->cc;
+  1918		new_cc = nvmet_pci_epf_bar_read32(ctrl, NVME_REG_CC);
+  1919		ctrl->cc = new_cc;
+  1920	
+  1921		if (nvmet_cc_en(new_cc) && !nvmet_cc_en(old_cc)) {
+  1922			/* Enable the controller */
+  1923			ret = nvmet_pci_epf_enable_ctrl(ctrl);
+  1924			if (ret)
+  1925				return;
+  1926			ctrl->csts |= NVME_CSTS_RDY;
+  1927		}
+  1928	
+  1929		if (!nvmet_cc_en(new_cc) && nvmet_cc_en(old_cc)) {
+  1930			nvmet_pci_epf_disable_ctrl(ctrl);
+  1931			ctrl->csts &= ~NVME_CSTS_RDY;
+  1932		}
+  1933	
+  1934		if (nvmet_cc_shn(new_cc) && !nvmet_cc_shn(old_cc)) {
+  1935			nvmet_pci_epf_disable_ctrl(ctrl);
+  1936			ctrl->csts |= NVME_CSTS_SHST_CMPLT;
+  1937		}
+  1938	
+  1939		if (!nvmet_cc_shn(new_cc) && nvmet_cc_shn(old_cc))
+  1940			ctrl->csts &= ~NVME_CSTS_SHST_CMPLT;
+  1941	
+  1942		nvmet_update_cc(ctrl->tctrl, ctrl->cc);
+  1943		nvmet_pci_epf_bar_write32(ctrl, NVME_REG_CSTS, ctrl->csts);
+  1944	
+  1945		schedule_delayed_work(&ctrl->poll_cc, NVMET_PCI_EPF_CC_POLL_INTERVAL);
+  1946	}
+  1947	
+  1948	static void nvmet_pci_epf_init_bar(struct nvmet_pci_epf_ctrl *ctrl)
+  1949	{
+  1950		struct nvmet_ctrl *tctrl = ctrl->tctrl;
+  1951	
+  1952		ctrl->bar = ctrl->nvme_epf->reg_bar;
+  1953	
+  1954		/* Copy the target controller capabilities as a base */
+  1955		ctrl->cap = tctrl->cap;
+  1956	
+  1957		/* Contiguous Queues Required (CQR) */
+  1958		ctrl->cap |= 0x1ULL << 16;
+  1959	
+  1960		/* Set Doorbell stride to 4B (DSTRB) */
+> 1961		ctrl->cap &= ~GENMASK(35, 32);
+  1962	
+  1963		/* Clear NVM Subsystem Reset Supported (NSSRS) */
+  1964		ctrl->cap &= ~(0x1ULL << 36);
+  1965	
+  1966		/* Clear Boot Partition Support (BPS) */
+  1967		ctrl->cap &= ~(0x1ULL << 45);
+  1968	
+  1969		/* Clear Persistent Memory Region Supported (PMRS) */
+  1970		ctrl->cap &= ~(0x1ULL << 56);
+  1971	
+  1972		/* Clear Controller Memory Buffer Supported (CMBS) */
+  1973		ctrl->cap &= ~(0x1ULL << 57);
+  1974	
+  1975		/* Controller configuration */
+  1976		ctrl->cc = tctrl->cc & (~NVME_CC_ENABLE);
+  1977	
+  1978		/* Controller status */
+  1979		ctrl->csts = ctrl->tctrl->csts;
+  1980	
+  1981		nvmet_pci_epf_bar_write64(ctrl, NVME_REG_CAP, ctrl->cap);
+  1982		nvmet_pci_epf_bar_write32(ctrl, NVME_REG_VS, tctrl->subsys->ver);
+  1983		nvmet_pci_epf_bar_write32(ctrl, NVME_REG_CSTS, ctrl->csts);
+  1984		nvmet_pci_epf_bar_write32(ctrl, NVME_REG_CC, ctrl->cc);
+  1985	}
+  1986	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
