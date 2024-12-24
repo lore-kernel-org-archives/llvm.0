@@ -1,152 +1,236 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4889A13C9A6;
-	Tue, 24 Dec 2024 03:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1629186E2E;
+	Tue, 24 Dec 2024 11:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735010108; cv=none; b=fjyM0z1i3pAG7Ccwyd3F4xt7Q+HzrNog7xkBHCzZSnZZvNXK2tmeD0wsWa8E6i84ChLJhVYG/rCu4tMiaY4xrsycUgshFtOSniRJ9RAjT7s9xvjW+RI+ryBzMkimGHY389RIU2fPBDA2ty+ERF9S63LMP7kppqpi8acywjx+P/Y=
+	t=1735039012; cv=none; b=kxj/kLBYXwlPomKpPQkATW+Fj9OPyRpzVhceplBtpA0cDqM0i42HQrg5mcu0VGQ+u3xdri5+FFQhGPc9sjVHebbhjphp9R35ynZpYDCgvHoAQHKHje+IqsmMIjBgswZtMs5z2JxbO4jP+8fnqKo12eTZXlaizzHjrcc+EwGhLOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735010108; c=relaxed/simple;
-	bh=/OerEw+Wkp9Uh+oLYdywt5w/jPmZo0ox7xR+A/sD3hw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lbX6S8P2Yy+8Nh68H5u6jjTAvfh4TplM+8bt68W4nNXEfmaLqcgHeevhZbEGnPLqf93mzoYHnNX1fbAHPTp3DAc6I6sb5zfwqI+tp1dwvAC9KHS/lVEcnbqlWHqh5bvh4K1zidxUseSOvld5vyCB2NvnHEXWfDruXE3dd6CAsV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D5FEC4CED3;
-	Tue, 24 Dec 2024 03:15:04 +0000 (UTC)
-Date: Mon, 23 Dec 2024 22:15:56 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Andy Chiu <andybnac@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, bjorn@rivosinc.com,
- puranjay12@gmail.com, alexghiti@rivosinc.com, yongxuan.wang@sifive.com,
- greentime.hu@sifive.com, nick.hu@sifive.com, nylon.chen@sifive.com,
- tommy.wu@sifive.com, eric.lin@sifive.com, viccent.chen@sifive.com,
- zong.li@sifive.com, samuel.holland@sifive.com
-Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt
- improvements
-Message-ID: <20241223221556.1f5e598f@gandalf.local.home>
-In-Reply-To: <87frncmkre.fsf@all.your.base.are.belong.to.us>
-References: <20241127172908.17149-1-andybnac@gmail.com>
- <87frncmkre.fsf@all.your.base.are.belong.to.us>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1735039012; c=relaxed/simple;
+	bh=2HOtRseGtjMgLatc222DdK/RSeKWMNOgUbwMHw26haI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jDM7DwCJIqJTuJGJWZfCgpCAXR5HfVYOFVmM/KEjP+Z6bEG9J+Im7kcFTun4JAoUvsLgEfdBHbMaeOLoXPAExwuwyJ5l0ETrH3kgj/qi6xNx6DRTceb5/9zaud+CA+YOFhCYQJcubXpcadyuPiZDt69LeRKEsx45wu1oCkCl6no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ykbq/HtH; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ykbq/HtH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735039010; x=1766575010;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2HOtRseGtjMgLatc222DdK/RSeKWMNOgUbwMHw26haI=;
+  b=Ykbq/HtH49qieSOvGaDNEwumUOtfmBAbGAnWir/gsFPI5H+r9XsQKEe7
+   69O5KDCpC1th/W65ApTnupxKuDUz9mXlnpb8ycbowgL7CUtEEgbTrr6J7
+   cvEssXTTjQe6f5R30TTKxpOXjc3LBu84ejMmEX9v4x1ogzrwoutCHKqAe
+   R2ErZEogrPEGD5FNfD5RDa+gGPXkL7JpsY3HCKg1wejUtNPUqfxLisKpS
+   oChKIP9G+s0UPaH1vU7QEDDHNWxVz4prCA9xRbMBd0329aYw+1/HdCjtt
+   7AzzyDxCslCBEr5QD7ZLk84K4zOByB9kBQhhsn9+7KGLEFaBAqtH1Rq/4
+   w==;
+X-CSE-ConnectionGUID: Q7JUyWzrQbirzu0ueg2LXA==
+X-CSE-MsgGUID: de9N0Y7FTwqOBWf7dgGbSg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="46884790"
+X-IronPort-AV: E=Sophos;i="6.12,260,1728975600"; 
+   d="scan'208";a="46884790"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2024 03:16:50 -0800
+X-CSE-ConnectionGUID: xKlOAgGST+GcPYTapvhgSw==
+X-CSE-MsgGUID: XtiGmS6TTqm0rSpiKdWyIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="100292714"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 24 Dec 2024 03:16:47 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tQ2u3-000131-2j;
+	Tue, 24 Dec 2024 11:16:43 +0000
+Date: Tue, 24 Dec 2024 19:16:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jammy Huang <jammy_huang@aspeedtech.com>, tzimmermann@suse.de,
+	jfalempe@redhat.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, airlied@redhat.com, airlied@gmail.com,
+	daniel@ffwll.ch
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drm/ast: Support timings, 1280x720/1280x960/1600x900
+Message-ID: <202412241827.pakDEV5a-lkp@intel.com>
+References: <20241224025430.3773224-1-jammy_huang@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241224025430.3773224-1-jammy_huang@aspeedtech.com>
 
-On Wed, 27 Nov 2024 22:25:57 +0100
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrote:
+Hi Jammy,
 
-> Adding Steven.
+kernel test robot noticed the following build errors:
 
-And this has been in my draft folder for almost a month :-p
+[auto build test ERROR on 4bbf9020becbfd8fc2c3da790855b7042fad455b]
 
-I kept coming to this email, but then got distracted by something else.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jammy-Huang/drm-ast-Support-timings-1280x720-1280x960-1600x900/20241224-105552
+base:   4bbf9020becbfd8fc2c3da790855b7042fad455b
+patch link:    https://lore.kernel.org/r/20241224025430.3773224-1-jammy_huang%40aspeedtech.com
+patch subject: [PATCH v2] drm/ast: Support timings, 1280x720/1280x960/1600x900
+config: powerpc-randconfig-001-20241224 (https://download.01.org/0day-ci/archive/20241224/202412241827.pakDEV5a-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241224/202412241827.pakDEV5a-lkp@intel.com/reproduce)
 
->=20
-> Andy Chiu <andybnac@gmail.com> writes:
->=20
-> > This series makes atmoic code patching possible in riscv ftrace. A
-> > direct benefit of this is that we can get rid of stop_machine() when
-> > patching function entries. This also makes it possible to run ftrace
-> > with full kernel preemption. Before this series, the kernel initializes
-> > patchable function entries to NOP4 + NOP4. To start tracing, it updates
-> > entries to AUIPC + JALR while holding other cores in stop_machine.
-> > stop_machine() is required because it is impossible to update 2
-> > instructions, and be seen atomically. And preemption must have to be
-> > prevented, as kernel preemption allows process to be scheduled out while
-> > executing on one of these instruction pairs.
-> >
-> > This series addresses the problem by initializing the first NOP4 to
-> > AUIPC. So, atmoic patching is possible because the kernel only has to
-> > update one instruction. As long as the instruction is naturally aligned,
-> > then it is expected to be updated atomically.
-> >
-> > However, the address range of the ftrace trampoline is limited to +-2K
-> > from ftrace_caller after appplying this series. This issue is expected
-> > to be solved by Puranjay's CALL_OPS, where it adds 8B naturally align
-> > data in front of pacthable functions and can  use it to direct execution
-> > out to any custom trampolines.
-> >
-> > The series is composed by three parts. The first part cleans up the
-> > existing issues when the kernel is compiled with clang.The second part
-> > modifies the ftrace code patching mechanism (2-4) as mentioned above.
-> > Then prepare ftrace to be able to run with kernel preemption (5,6)
-> >
-> > An ongoing fix:
-> >
-> > Since there is no room for marking *kernel_text_address as notrace[1] at
-> > source code level, there is a significant performance regression when
-> > using function_graph with TRACE_IRQFLAGS enabled. There can be as much =
-as
-> > 8 graph handler being called in each function-entry. The current
-> > workaround requires us echo "*kernel_text_address" into
-> > set_ftrace_notrace before starting the trace. However, we observed that
-> > the kernel still enables the patch site in some cases even with
-> > *kernel_text_address properly added in the file While the root cause is
-> > still under investagtion, we consider that it should not be the reason
-> > for holding back the code patching, in order to unblock the call_ops
-> > part. =20
->=20
-> Maybe Steven knows this from the top of his head!
->=20
-> As Andy points out, "*kernel_text_address" is used in the stack
-> unwinding on RISC-V. So, if you do a tracing without filtering *and*
-> TRACE_IRQFLAGS, one will drown in traces.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412241827.pakDEV5a-lkp@intel.com/
 
-I tested set_ftrace_notrace on x86 and the function graph tracer does honor
-it. I wonder if there's a kernel
-	=09
->=20
-> E.g. the ftrace selftest:
->   | $ ./ftracetest -vvv test.d/ftrace/fgraph-multi.tc
->=20
-> will generate a lot of traces.
->=20
-> Now, if we add:
-> --8<--
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc=
- b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
-> index ff88f97e41fb..4f30a4d81d99 100644
-> --- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
-> @@ -84,6 +84,7 @@ cd $INSTANCE2
->  do_test '*rcu*' 'rcu'
->  cd $WD
->  cd $INSTANCE3
-> +echo '*kernel_text_address' > set_ftrace_notrace
->  echo function_graph > current_tracer
-> =20
->  sleep 1
-> -->8-- =20
->=20
-> The graph tracer will not honor the "set_ftrace_notrace" in $INSTANCE3,
-> but still enable the *kernel_text_address traces. (Note that there are
-> no filters in the test, so *all* ftrace recs will be enabled.)
->=20
-> Are we holding the graph tracer wrong?
+All errors (new ones prefixed by >>):
 
-What do you get when you do:
+>> drivers/gpu/drm/ast/ast_mode.c:150:12: error: use of undeclared identifier 'crtc'
+                   else if (crtc->mode.crtc_vdisplay == 720)
+                            ^
+   drivers/gpu/drm/ast/ast_mode.c:152:12: error: use of undeclared identifier 'crtc'
+                   else if (crtc->mode.crtc_vdisplay == 960)
+                            ^
+   2 errors generated.
 
-  # grep kernel_text_address available_filter_functions
 
-?
+vim +/crtc +150 drivers/gpu/drm/ast/ast_mode.c
 
->=20
->=20
-> Happy thanksgiving!
-> Bj=C3=B6rn
+   108	
+   109	static bool ast_get_vbios_mode_info(const struct drm_format_info *format,
+   110					    const struct drm_display_mode *mode,
+   111					    struct drm_display_mode *adjusted_mode,
+   112					    struct ast_vbios_mode_info *vbios_mode)
+   113	{
+   114		u32 refresh_rate_index = 0, refresh_rate;
+   115		const struct ast_vbios_enhtable *best = NULL;
+   116		u32 hborder, vborder;
+   117		bool check_sync;
+   118	
+   119		switch (format->cpp[0] * 8) {
+   120		case 8:
+   121			vbios_mode->std_table = &vbios_stdtable[VGAModeIndex];
+   122			break;
+   123		case 16:
+   124			vbios_mode->std_table = &vbios_stdtable[HiCModeIndex];
+   125			break;
+   126		case 24:
+   127		case 32:
+   128			vbios_mode->std_table = &vbios_stdtable[TrueCModeIndex];
+   129			break;
+   130		default:
+   131			return false;
+   132		}
+   133	
+   134		switch (mode->crtc_hdisplay) {
+   135		case 640:
+   136			vbios_mode->enh_table = &res_640x480[refresh_rate_index];
+   137			break;
+   138		case 800:
+   139			vbios_mode->enh_table = &res_800x600[refresh_rate_index];
+   140			break;
+   141		case 1024:
+   142			vbios_mode->enh_table = &res_1024x768[refresh_rate_index];
+   143			break;
+   144		case 1152:
+   145			vbios_mode->enh_table = &res_1152x864[refresh_rate_index];
+   146			break;
+   147		case 1280:
+   148			if (mode->crtc_vdisplay == 800)
+   149				vbios_mode->enh_table = &res_1280x800[refresh_rate_index];
+ > 150			else if (crtc->mode.crtc_vdisplay == 720)
+   151				vbios_mode->enh_table = &res_1280x720[refresh_rate_index];
+   152			else if (crtc->mode.crtc_vdisplay == 960)
+   153				vbios_mode->enh_table = &res_1280x960[refresh_rate_index];
+   154			else
+   155				vbios_mode->enh_table = &res_1280x1024[refresh_rate_index];
+   156			break;
+   157		case 1360:
+   158			vbios_mode->enh_table = &res_1360x768[refresh_rate_index];
+   159			break;
+   160		case 1440:
+   161			vbios_mode->enh_table = &res_1440x900[refresh_rate_index];
+   162			break;
+   163		case 1600:
+   164			if (mode->crtc_vdisplay == 900)
+   165				vbios_mode->enh_table = &res_1600x900[refresh_rate_index];
+   166			else
+   167				vbios_mode->enh_table = &res_1600x1200[refresh_rate_index];
+   168			break;
+   169		case 1680:
+   170			vbios_mode->enh_table = &res_1680x1050[refresh_rate_index];
+   171			break;
+   172		case 1920:
+   173			if (mode->crtc_vdisplay == 1080)
+   174				vbios_mode->enh_table = &res_1920x1080[refresh_rate_index];
+   175			else
+   176				vbios_mode->enh_table = &res_1920x1200[refresh_rate_index];
+   177			break;
+   178		default:
+   179			return false;
+   180		}
+   181	
+   182		refresh_rate = drm_mode_vrefresh(mode);
+   183		check_sync = vbios_mode->enh_table->flags & WideScreenMode;
+   184	
+   185		while (1) {
+   186			const struct ast_vbios_enhtable *loop = vbios_mode->enh_table;
+   187	
+   188			while (loop->refresh_rate != 0xff) {
+   189				if ((check_sync) &&
+   190				    (((mode->flags & DRM_MODE_FLAG_NVSYNC)  &&
+   191				      (loop->flags & PVSync))  ||
+   192				     ((mode->flags & DRM_MODE_FLAG_PVSYNC)  &&
+   193				      (loop->flags & NVSync))  ||
+   194				     ((mode->flags & DRM_MODE_FLAG_NHSYNC)  &&
+   195				      (loop->flags & PHSync))  ||
+   196				     ((mode->flags & DRM_MODE_FLAG_PHSYNC)  &&
+   197				      (loop->flags & NHSync)))) {
+   198					loop++;
+   199					continue;
+   200				}
+   201				if (loop->refresh_rate <= refresh_rate
+   202				    && (!best || loop->refresh_rate > best->refresh_rate))
+   203					best = loop;
+   204				loop++;
+   205			}
+   206			if (best || !check_sync)
+   207				break;
+   208			check_sync = 0;
+   209		}
+   210	
+   211		if (best)
+   212			vbios_mode->enh_table = best;
+   213	
+   214		hborder = (vbios_mode->enh_table->flags & HBorder) ? 8 : 0;
+   215		vborder = (vbios_mode->enh_table->flags & VBorder) ? 8 : 0;
+   216	
+   217		adjusted_mode->crtc_htotal = vbios_mode->enh_table->ht;
+   218		adjusted_mode->crtc_hblank_start = vbios_mode->enh_table->hde + hborder;
+   219		adjusted_mode->crtc_hblank_end = vbios_mode->enh_table->ht - hborder;
+   220		adjusted_mode->crtc_hsync_start = vbios_mode->enh_table->hde + hborder +
+   221			vbios_mode->enh_table->hfp;
+   222		adjusted_mode->crtc_hsync_end = (vbios_mode->enh_table->hde + hborder +
+   223						 vbios_mode->enh_table->hfp +
+   224						 vbios_mode->enh_table->hsync);
+   225	
+   226		adjusted_mode->crtc_vtotal = vbios_mode->enh_table->vt;
+   227		adjusted_mode->crtc_vblank_start = vbios_mode->enh_table->vde + vborder;
+   228		adjusted_mode->crtc_vblank_end = vbios_mode->enh_table->vt - vborder;
+   229		adjusted_mode->crtc_vsync_start = vbios_mode->enh_table->vde + vborder +
+   230			vbios_mode->enh_table->vfp;
+   231		adjusted_mode->crtc_vsync_end = (vbios_mode->enh_table->vde + vborder +
+   232						 vbios_mode->enh_table->vfp +
+   233						 vbios_mode->enh_table->vsync);
+   234	
+   235		return true;
+   236	}
+   237	
 
-And Merry Christmas!
-
--- Steve
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
