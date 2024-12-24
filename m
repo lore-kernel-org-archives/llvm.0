@@ -1,183 +1,169 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5831FF1CF
-	for <llvm@lists.linux.dev>; Tue, 24 Dec 2024 16:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376841C4A24;
+	Tue, 24 Dec 2024 17:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735057465; cv=none; b=R19I+FaoHBREl4SJWjzafOzKYEgC43QLAjgopiBpUsmEGV//k/xt2ypH7ig0gWhTUjdUylFtBF9IzHI4TU8lRXy1ElqyZThXwlkYEDC/Oq+D0aQYy75rs0B6xr3S/ZTraXskJ68dA9uRuyJUqA+5uJycmmRSof04LiqtbOB6NbA=
+	t=1735060464; cv=none; b=MemEFgqoAs/j3mNiqTqOyub8oYNTiuaW2mRR0N3eYFZMUL70dqNfs6aXXBtPTj96v9ZGdPa6jeVqRCgu/OwC/hVjnSrZxTYfZoOacjpN1/FQr0zKHXM6hsf5e1dwY/6mLZhPen21pBwpfVsC/vNGraVCiOVlCfq2FjDgfahl41w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735057465; c=relaxed/simple;
-	bh=p7KqVG8jZUozSrF3yUtKGwmf8J8zBpBVmYtQMvxyH9U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cJs6jaJSSB6skSbWG9YW17rSOn/PjpIrst8142GlV8hjpxQR+0vmjv9dTVRr4ImNMaWU1IOpACzoUZWgRfc89YeZkVOw2pAP6+A16YofH6BLyoQuEyAuTXBk2mkUlvFKOlliaopt0Eyoedv7pqbuUqD6PToDRBClO6gnwVlIS/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ou5kG+cE; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1735060464; c=relaxed/simple;
+	bh=Yojp5uCv90zfCQ+TejW3fszYK5JErgu4yHk4Qa8r89A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=h2XDeuYIxIFGAJrKRpumhDBdLMQNB4NcDPZpBCAoPPKs1sDXsYpZ6TyatxDctp+ljaMFf/XEHQSOi8phF6wfgr9A+G73FHL9S9VBTzpzt6XLp73HGWQOgd71PMoU7lVaeRg1VsLDm/4rA0tOuehHKilTgRjRcFZycPEzzt507XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pp5YKvxN; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ou5kG+cE"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53f757134cdso5764537e87.2
-        for <llvm@lists.linux.dev>; Tue, 24 Dec 2024 08:24:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735057462; x=1735662262; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4mkXKWmGiV5XXckoZsuAcHVdzO+pEYcGppRBWUinzmo=;
-        b=Ou5kG+cEasslmYjnEeMDSZJJfAYVPpOb7UWyND0NCZ7VulwS+TVcf9MJF7syxdkKj4
-         SnZ0GJIISXcnmN/ziVqeCHfUIdZijC/EkGiZJmHT7sz9OuxT2gt4/EJ0ysj2F1ujm3AW
-         AdYL8rkDMkXwMKWzfptyRIeX/tDiwL0hRsmqoySBfWt+b7iDo3JIDJG7qt94CJlD3PtU
-         8cQLYvvdnwwtg8RNZBjaeRhgKNcPO0VJMyVSHtLOELU3e85nojuO35+/P8tBxXdn9LAA
-         1F0GIMf8fpTgU5pQn4Sn9zoLMRFSXjVNpHxwlbopxm2ZN6sp7rCGlArFXrHTDMCRYj4g
-         B1NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735057462; x=1735662262;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4mkXKWmGiV5XXckoZsuAcHVdzO+pEYcGppRBWUinzmo=;
-        b=H5NU0W4cEYWwCAmp6FrEdXAsUYJjNEO0mqzH6aXOVPXqYwvGQzW3HxW9WJ5okqlXz5
-         6QXZtY+TXhSNWq1W21J4zz0yqT1vEXovLShkmVgr0lVu8L0PT48groZ3XFzevNA30D4T
-         29jvG+uMC554SyQn29b8+9zNAcMt3oZCGQ+WUlv6v7+GVQs3KF8A6GhzLihUYo+c251G
-         74yrAH/dCn4tb3yfrlz67uU9Ds2MJ9D0+A8d2gMbpUyw1WdWfIDuSKvPJbsNujTh7rk/
-         pdJ9ruBOkqPks2UZSTWhWt3JXPHDLxhhN9yGPH3xmxnL9IqotxYCIJbgrUtBeHeDwwfK
-         Eh9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVfd/K+xq95/Z3C/zl3enqy71z5Kl6vAa9mf4Qx4ROh+1PGzwzftWYzdyxJICadmZnApF1a@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz7rxWUKee2ntxrXkqGYYTlIU0O60NZAXN6niZEjpMW5Hp4xQlf
-	59bQND1JdZx3fYkVG7ih58XhpQsaW+dUCMA5fi848EkowW6Lp5ReXTThNB8VQZga74J3GG/aqiW
-	kXGTU6qAB4NjzRsa740MKrtPQm8M=
-X-Gm-Gg: ASbGncuFfwzpMLds0XTkZxLscwUlWBO4XSYrKPTDnrtAqxI/Bjsmq1JluzNjd3RCCNW
-	QxOOH+cYSsdrIUa7PX7HabMKMk4yeWkLapfUD0UzJjVFdr7Fwzle5R5vUFR6cZBqHsmK3
-X-Google-Smtp-Source: AGHT+IFeDcoH6FqGav3dMmPGh5sT6bY3h7jtuxBtb3J/jlYw3D77GN96q3f6d8YvDmECDxLlD6KL4j+bq6oD5HrXqmc=
-X-Received: by 2002:a05:6512:1114:b0:53e:335e:774d with SMTP id
- 2adb3069b0e04-5422957afc9mr4939338e87.56.1735057462100; Tue, 24 Dec 2024
- 08:24:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pp5YKvxN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735060462; x=1766596462;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yojp5uCv90zfCQ+TejW3fszYK5JErgu4yHk4Qa8r89A=;
+  b=Pp5YKvxNukoTsADo7vVWlpj7pvxXJzO55t+31NrB+ho89JEnPJ/aVKqc
+   6AyeKimZYMfEeYKICfChaifZhWxDtuYXriPvObFBqNe3Eo88rbcl/807C
+   uaHFM0baTFRgbLphh69/jcFz/bvBNgRtXt7YGSUijZ2XMpoPyRJ2QZtpC
+   PuxKbfEt2wV51AthV7tfQOlTV7ssBlk9z10vKrDaBEEiJtOChpy7ifpy+
+   2dMiRorYhOyGveqSyPLZo7OXoSAWtClffEzPLFcBEEsj+IHWM/FnSHDur
+   Sur09DhfTJWSZrmyXvmjUAHcZTDM6jnJ1ljaSvpkFl1xd3U6SLib8uxGU
+   g==;
+X-CSE-ConnectionGUID: 9sN6Sjo/QqSlgx5kh8ZH4Q==
+X-CSE-MsgGUID: aftdx3rrR3K5D02kufa1Wg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="46129471"
+X-IronPort-AV: E=Sophos;i="6.12,260,1728975600"; 
+   d="scan'208";a="46129471"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2024 09:14:21 -0800
+X-CSE-ConnectionGUID: jp1t1Lz5T6qECyWl29k2Gg==
+X-CSE-MsgGUID: 7R5F6c0FTgie59P7wS/0Hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,260,1728975600"; 
+   d="scan'208";a="100038843"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 24 Dec 2024 09:14:20 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tQ8U6-0001Jp-0k;
+	Tue, 24 Dec 2024 17:14:18 +0000
+Date: Wed, 25 Dec 2024 01:13:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yuyu Li <liyuyu6@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leon Romanovsky <leon@kernel.org>,
+	Junxian Huang <huangjunxian6@hisilicon.com>
+Subject: [leon-rdma:rdma-next 32/1045]
+ drivers/infiniband/hw/vmw_pvrdma/pvrdma_main.c:184:23: error: use of
+ undeclared identifier 'pvrdma_report_event_handle'
+Message-ID: <202412250108.bZPX0cVX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+icZUWHU=oXOEj5wHTzxrw_wj1w5hTvqq8Ry400s0ZCJjTEZw@mail.gmail.com>
- <099d3a80-4fdb-49a7-9fd0-207d7386551f@citrix.com> <CA+icZUX98gQ54hePEWNauiU41XQV7qdKJx5PiiXzxy+6yW7hTw@mail.gmail.com>
- <CA+icZUW-i53boHBPt+8zh-D921XFbPb_Kc=dzdgCK1QvkOgCsw@mail.gmail.com>
- <90640a5d-ff17-4555-adc6-ae9e21e24ebd@citrix.com> <CA+icZUVo69swc9QfwJr+mDuHqJKcFUexc08voP2O41g31HGx5w@mail.gmail.com>
- <43166e29-ff2d-4a9d-8c1b-41b5e247974b@citrix.com> <CA+icZUUp9rgx2Dvsww6QbTGRZz5=mf75D0_KncwdgCEZe01-EA@mail.gmail.com>
- <CA+icZUV0HEF_hwr-eSovntfcT0++FBrQN-HbFL+oZtnKjJzLtA@mail.gmail.com>
- <698f48a0-b674-4d7f-9c47-f1f8bf86379e@citrix.com> <CA+icZUW454ND85nbjqAoMg42=i+aGht8Z=iG2wKj=Un7Ot0y6Q@mail.gmail.com>
-In-Reply-To: <CA+icZUW454ND85nbjqAoMg42=i+aGht8Z=iG2wKj=Un7Ot0y6Q@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Tue, 24 Dec 2024 17:23:45 +0100
-Message-ID: <CA+icZUUnbY7eRZtN-pMNn0jhYKLLEWEDNmJjhGQ3auPuS9_+MQ@mail.gmail.com>
-Subject: Re: [Linux-6.12.y] XEN: CVE-2024-53241 / XSA-466 and Clang-kCFI
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Juergen Gross <jgross@suse.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Jan Beulich <jbeulich@suse.com>, 
-	Josh Poimboeuf <jpoimboe@redhat.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sasha Levin <sashal@kernel.org>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	xen-devel <xen-devel@lists.xenproject.org>, 1091360@bugs.debian.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Dec 22, 2024 at 11:37=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.com=
-> wrote:
->
-> On Sat, Dec 21, 2024 at 10:31=E2=80=AFPM Andrew Cooper
-> <andrew.cooper3@citrix.com> wrote:
-> >
-> > On 21/12/2024 6:25 pm, Sedat Dilek wrote:
-> > > With...
-> > >
-> > > dileks@iniza:~/src/xtf/git$ mv tests/xsa-454 ../
-> > > dileks@iniza:~/src/xtf/git$ mv tests/xsa-consoleio-write ../
-> >
-> > That's completely bizzare.   There's nothing interestingly different
-> > with those two tests vs the others.
-> >
-> > I take it the crash is repeatable when using either of these?
-> >
-> > ~Andrew
->
-> This time I stopped SDDM and thus KDE-6/Wayland session.
->
-> Tested with Debian's officially 6.12.6-amd64 kernel in VT-3.
->
-> test-hvm32pae-xsa-consoleio-write SUCCESS <--- 1st time I tried, never
-> said this is not OK
->
-> test-hvm64-xsa-454 leads to FROZEN system and DATA LOSS (here: ext4).
-> Reproducibly as told many times.- in Debian and selfmade kernels version =
-6.12.6.
->
-> Stolen from the picture I took with my smartphone:
->
-> sudo ./xft-runner test-hvm64-xsa-454
->
-> Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
-> Executing 'xl console test-hvm64-xsa-454'
-> Executing 'xl unpause test-hvm64-xsa-454'
->
-> ^^ System does NOT react!
->
-> I can send you the picture on request.
->
-> -Sedat-
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
+head:   afe2e50bf66e078829b0b15249542da262a945ed
+commit: 6577fade345296c6ed8aa054181c67a05cb135f2 [32/1045] RDMA/pvrdma: Support report_port_event() ops
+config: x86_64-buildonly-randconfig-004-20241224 (https://download.01.org/0day-ci/archive/20241225/202412250108.bZPX0cVX-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241225/202412250108.bZPX0cVX-lkp@intel.com/reproduce)
 
-[ CC 1091360@bugs.debian.org ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412250108.bZPX0cVX-lkp@intel.com/
 
-I upgraded to Xen version 4.19.1 in Debian/unstable AMD64.
+All errors (new ones prefixed by >>):
 
-# xl info | egrep 'release|version|commandline|caps'
-release                : 6.12.6-amd64
-version                : #1 SMP PREEMPT_DYNAMIC Debian 6.12.6-1 (2024-12-21=
-)
-hw_caps                :
-bfebfbff:17bae3bf:28100800:00000001:00000001:00000000:00000000:00000100
-virt_caps              : pv hvm hap shadow gnttab-v1 gnttab-v2
-xen_version            : 4.19.1
-xen_caps               : xen-3.0-x86_64 hvm-3.0-x86_32 hvm-3.0-x86_32p
-hvm-3.0-x86_64
-xen_commandline        : placeholder
+   In file included from drivers/infiniband/hw/vmw_pvrdma/pvrdma_main.c:47:
+   In file included from include/linux/inetdevice.h:9:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/infiniband/hw/vmw_pvrdma/pvrdma_main.c:184:23: error: use of undeclared identifier 'pvrdma_report_event_handle'
+     184 |         .report_port_event = pvrdma_report_event_handle,
+         |                              ^
+   drivers/infiniband/hw/vmw_pvrdma/pvrdma_main.c:830:46: warning: shift count >= width of type [-Wshift-count-overflow]
+     830 |         ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   4 warnings and 1 error generated.
 
-dileks@iniza:~/src/xtf/git$ sudo ./xtf-runner --host test-hvm64-xsa-454
-Executing 'xl create -p tests/xsa-454/test-hvm64-xsa-454.cfg'
-Executing 'xl console test-hvm64-xsa-454'
-Executing 'xl unpause test-hvm64-xsa-454'
---- Xen Test Framework ---
-Environment: HVM 64bit (Long mode 4 levels)
-XSA-454 PoC
-Success: Not vulnerable to XSA-454
-Test result: SUCCESS
 
-Combined test results:
-test-hvm64-xsa-454                       SUCCESS
+vim +/pvrdma_report_event_handle +184 drivers/infiniband/hw/vmw_pvrdma/pvrdma_main.c
 
-root@iniza:~# LC_ALL=3DC ll /var/log/xen/*xsa-454*.log
--rw-r--r-- 1 root adm 232 Dec 24 17:11
-/var/log/xen/qemu-dm-test-hvm64-xsa-454.log
--rw-r--r-- 1 root adm 232 Dec 24 17:11 /var/log/xen/xl-test-hvm64-xsa-454.l=
-og
+   145	
+   146	static const struct ib_device_ops pvrdma_dev_ops = {
+   147		.owner = THIS_MODULE,
+   148		.driver_id = RDMA_DRIVER_VMW_PVRDMA,
+   149		.uverbs_abi_ver = PVRDMA_UVERBS_ABI_VERSION,
+   150	
+   151		.add_gid = pvrdma_add_gid,
+   152		.alloc_mr = pvrdma_alloc_mr,
+   153		.alloc_pd = pvrdma_alloc_pd,
+   154		.alloc_ucontext = pvrdma_alloc_ucontext,
+   155		.create_ah = pvrdma_create_ah,
+   156		.create_cq = pvrdma_create_cq,
+   157		.create_qp = pvrdma_create_qp,
+   158		.dealloc_pd = pvrdma_dealloc_pd,
+   159		.dealloc_ucontext = pvrdma_dealloc_ucontext,
+   160		.del_gid = pvrdma_del_gid,
+   161		.dereg_mr = pvrdma_dereg_mr,
+   162		.destroy_ah = pvrdma_destroy_ah,
+   163		.destroy_cq = pvrdma_destroy_cq,
+   164		.destroy_qp = pvrdma_destroy_qp,
+   165		.device_group = &pvrdma_attr_group,
+   166		.get_dev_fw_str = pvrdma_get_fw_ver_str,
+   167		.get_dma_mr = pvrdma_get_dma_mr,
+   168		.get_link_layer = pvrdma_port_link_layer,
+   169		.get_port_immutable = pvrdma_port_immutable,
+   170		.map_mr_sg = pvrdma_map_mr_sg,
+   171		.mmap = pvrdma_mmap,
+   172		.modify_port = pvrdma_modify_port,
+   173		.modify_qp = pvrdma_modify_qp,
+   174		.poll_cq = pvrdma_poll_cq,
+   175		.post_recv = pvrdma_post_recv,
+   176		.post_send = pvrdma_post_send,
+   177		.query_device = pvrdma_query_device,
+   178		.query_gid = pvrdma_query_gid,
+   179		.query_pkey = pvrdma_query_pkey,
+   180		.query_port = pvrdma_query_port,
+   181		.query_qp = pvrdma_query_qp,
+   182		.reg_user_mr = pvrdma_reg_user_mr,
+   183		.req_notify_cq = pvrdma_req_notify_cq,
+ > 184		.report_port_event = pvrdma_report_event_handle,
+   185	
+   186		INIT_RDMA_OBJ_SIZE(ib_ah, pvrdma_ah, ibah),
+   187		INIT_RDMA_OBJ_SIZE(ib_cq, pvrdma_cq, ibcq),
+   188		INIT_RDMA_OBJ_SIZE(ib_pd, pvrdma_pd, ibpd),
+   189		INIT_RDMA_OBJ_SIZE(ib_qp, pvrdma_qp, ibqp),
+   190		INIT_RDMA_OBJ_SIZE(ib_ucontext, pvrdma_ucontext, ibucontext),
+   191	};
+   192	
 
-root@iniza:~# cat /var/log/xen/qemu-dm-test-hvm64-xsa-454.log
-VNC server running on 127.0.0.1:5900
-xen-qemu-system-i386: failed to create 'console' device '0': declining
-to handle console type 'xenconsoled'
-xen-qemu-system-i386: terminating on signal 1 from pid 6302
-(/usr/lib/xen-4.19/bin/xl)
-
-root@iniza:~# cat /var/log/xen/xl-test-hvm64-xsa-454.log
-Waiting for domain test-hvm64-xsa-454 (domid 144) to die [pid 6302]
-Domain 144 has shut down, reason code 0 0x0
-Action for shutdown reason code 0 is destroy
-Domain 144 needs to be cleaned up: destroying the domain
-Done. Exiting now
-
-Due to Debian-Bug #1091360 ("qemu-system-xen: Build against libxen-dev
-version 4.19.1-1") I am not able to do the full XFT tests.
-
--Sedat-
-
-Link: https://bugs.debian.org/1091360
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
