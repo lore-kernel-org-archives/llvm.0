@@ -1,145 +1,154 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BC61E535;
-	Wed, 25 Dec 2024 09:44:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A6A14E2E2;
+	Wed, 25 Dec 2024 13:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735119845; cv=none; b=hgzIfBh2b9zBqTC7xxy5yfrAlF48Wx5cXc/emwNLeG4bIBMNOnQX91dIlC+vypwWbPUdavhlOA9VRj5Q0rx6k4YsRreFs5n2xy/muSG2cmh4HmsBd+wBcWqshLkae2FJTZvGJ59AxsiBGLTlVjWojslb4BfmgMUomw/0dEYVa4U=
+	t=1735131744; cv=none; b=ft2MksMfPGLZ0/ewz5ZMGG7B+IMY1c+hi9vgOvYF/DKVzec9TqN0T7V1Az3vmNudOrxg01nDKEQxH7V+ZQ9absnNf4iIosMa5az/mDyjZXgALOzCGpsnWyxiqda7gUArKhiMpSqGfdcETgNJ/EDgpWrJsXXwM2cpme/DDC6UAeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735119845; c=relaxed/simple;
-	bh=qG+sEKhe/dJMugL0RB6ZF8lRnVvXLNlIDxlhmr/VPMg=;
-	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=mpyrSySs6LB6+Fr8i5z9OuwPlSv12ohxB6+WK1I+BxH5DM5S2xMaVZBf5pY+yHVoE1lefPF/qgOMyHnweHOc/gPz3nVR21XbwIFJ3is/8QxOL2kF9gds3AoGyfUeolZ44Ew12tkL+KZE7/DNT7ufVLoL/BE/1QldEz4D73f48Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Dx_67c02tnTVFaAA--.7776S3;
-	Wed, 25 Dec 2024 17:43:56 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMBxzsXa02tn5bcIAA--.37718S3;
-	Wed, 25 Dec 2024 17:43:54 +0800 (CST)
-Subject: Re: [PATCH v6 9/9] drm/amd/display: Mark dc_fixpt_from_fraction()
- noinline
-To: Nathan Chancellor <nathan@kernel.org>
-References: <20241217010905.13054-1-yangtiezhu@loongson.cn>
- <20241217015006.30305-1-yangtiezhu@loongson.cn>
- <CAAhV-H4WpcWjrQdkm3Sx4DVbp=2oW9nNGAbNqR4BEmiryrptNQ@mail.gmail.com>
- <20241218190558.g2hykmjgbny4n5i3@jpoimboe>
- <CADnq5_PFcHzob4poLa86_K4yP5gUT7Ei4Rz5vSUofvZTmB48-g@mail.gmail.com>
- <4bace457-cc26-13a3-bc90-ad6ad12bc2ed@loongson.cn>
- <20241220103100.GB17537@noisy.programming.kicks-ass.net>
- <20241220223403.GA2605890@ax162>
- <05cdb3b4c9bddf25f7b839229b635d2dec5140a4.camel@xry111.site>
- <bc35fddc-498a-cc58-b6a1-f5234a4f6d0d@loongson.cn>
- <20241223214645.GB1188382@ax162>
-Cc: Xi Ruoyao <xry111@xry111.site>, Peter Zijlstra <peterz@infradead.org>,
- Alex Deucher <alexdeucher@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
- amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <73c297f1-05a7-e786-557c-b267b125b6d5@loongson.cn>
-Date: Wed, 25 Dec 2024 17:43:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+	s=arc-20240116; t=1735131744; c=relaxed/simple;
+	bh=EVo1/chTj+XW7R2AlgQpXBNFX2ODe38tSPHJirwHYq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSdExTn8vEa+ljxWicDC4odTZfcu4nNbI36o3sr5thhZ7CsdiQc9UlpEKSvEOHLkM1SurbQmv+DcZIu5nc2MK3xZkhU54eeR6XRIk4Qegy9bOt5YdtKxU83o9esJLNRC4+JBPXkis+kMZyG0Xsw3OZ+8K1FVtwXIvHPLYnjNWg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mtoU01Yw; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mtoU01Yw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735131741; x=1766667741;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EVo1/chTj+XW7R2AlgQpXBNFX2ODe38tSPHJirwHYq0=;
+  b=mtoU01Ywjg9iKBI004jqGqdfFqg17oIu6l8x51sW21B3qG6B/yVIy/5H
+   QHrzUii0ZyFSm5mi1rjW5Q3+CcpgVvRo+DxLP5ttApzjk1gWhwSbKNYIT
+   yHDLRskMTkkKrL1mBQQ3jXq0V2z2jsv7Bl+lY9HTUlhaL1miO+agBRqvz
+   nYboyoGCkkimIwJvgqBFZFYGGUOIkg2weClBEwf7RBWzNwqZ0dHDD7KG4
+   eGWxyYHYEoYFG+pDXBiXTNlnMIAGfIzM6JPo0Qho423883BDzEzBLtXRY
+   tyLH1kGOSB34FpeXk3TTU5zSWkQaVXZm8oqe1GpQTILBDk8TJMwnDeCfZ
+   g==;
+X-CSE-ConnectionGUID: QOPV+c95RqGDzZvW1w3u7A==
+X-CSE-MsgGUID: eUJLivJqRFSzfJQGx0uScQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="35289394"
+X-IronPort-AV: E=Sophos;i="6.12,263,1728975600"; 
+   d="scan'208";a="35289394"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2024 05:02:20 -0800
+X-CSE-ConnectionGUID: GCQ7BFBTRcOSbGDJLVY0sw==
+X-CSE-MsgGUID: EQJ0TTcORoiG/DVZsYSyYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,263,1728975600"; 
+   d="scan'208";a="99564861"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 25 Dec 2024 05:02:14 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tQR1g-0001q3-03;
+	Wed, 25 Dec 2024 13:02:12 +0000
+Date: Wed, 25 Dec 2024 21:02:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yong Wang <yongwang@nvidia.com>, razor@blackwall.org, roopa@nvidia.com,
+	davem@davemloft.net, edumazet@google.com, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, aroulin@nvidia.com,
+	idosch@nvidia.com, nmiyar@nvidia.com
+Subject: Re: [PATCH net-next 1/2] net: bridge: multicast: re-implement port
+ multicast enable/disable functions
+Message-ID: <202412251623.8huquaZx-lkp@intel.com>
+References: <20241220220604.1430728-2-yongwang@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20241223214645.GB1188382@ax162>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowMBxzsXa02tn5bcIAA--.37718S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Ww4UJF4DZw1fZFy5ZF47Awc_yoW5JF45pa
-	yfKF98Zr1DAF4xtasrGw18WFW3Aa4fGF40gF15C395u347AFn8urWfJF1kGrW3Gry7AF4a
-	qF4DKrWUJF1qyFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUU
-	UU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241220220604.1430728-2-yongwang@nvidia.com>
 
-On 12/24/2024 05:46 AM, Nathan Chancellor wrote:
-> On Sun, Dec 22, 2024 at 12:27:47PM +0800, Tiezhu Yang wrote:
+Hi Yong,
 
-...
+kernel test robot noticed the following build errors:
 
->> With the above changes, there is no "falls through" objtool warning
->> compiled with both clang 19 and the latest mainline clang 20.
->
-> I am somewhat surprised that changes anything because the ASSERT is not
-> stopping control flow so I would expect the same problem as before. I
-> guess it does not happen perhaps due to inlining differences? I looked
+[auto build test ERROR on 3272040790eb4b6cafe6c30ec05049e9599ec456]
 
-It is weird and I think it is not the correct way.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yong-Wang/net-bridge-multicast-re-implement-port-multicast-enable-disable-functions/20241221-060848
+base:   3272040790eb4b6cafe6c30ec05049e9599ec456
+patch link:    https://lore.kernel.org/r/20241220220604.1430728-2-yongwang%40nvidia.com
+patch subject: [PATCH net-next 1/2] net: bridge: multicast: re-implement port multicast enable/disable functions
+config: i386-randconfig-011-20241225 (https://download.01.org/0day-ci/archive/20241225/202412251623.8huquaZx-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241225/202412251623.8huquaZx-lkp@intel.com/reproduce)
 
-> at this code briefly when I sent my initial message and I was not sure
-> where such a check should exist. It does not look like these functions
-> really do any sort of error handling.
->
->> If you are OK with it, I will send a separate formal patch to handle
->> this issue after doing some more testing.
->
-> It may still be worth doing this to get some initial thoughts from the
-> AMD DRM folks.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412251623.8huquaZx-lkp@intel.com/
 
-I think the correct way is:
+All errors (new ones prefixed by >>):
 
-Keep the current ASSERT for the aim of debugging, just add BUG() to
-stop control flow if the divisor is zero.
+   In file included from net/bridge/br_multicast.c:10:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> net/bridge/br_multicast.c:2178:14: error: call to undeclared function 'br_vlan_state_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2178 |                         if (on && br_vlan_state_allowed(br_vlan_get_state(vlan), true))
+         |                                   ^
+>> net/bridge/br_multicast.c:2178:36: error: call to undeclared function 'br_vlan_get_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2178 |                         if (on && br_vlan_state_allowed(br_vlan_get_state(vlan), true))
+         |                                                         ^
+   net/bridge/br_multicast.c:2178:36: note: did you mean 'br_vlan_get_stats'?
+   include/trace/events/../../../net/bridge/br_private.h:1792:20: note: 'br_vlan_get_stats' declared here
+    1792 | static inline void br_vlan_get_stats(const struct net_bridge_vlan *v,
+         |                    ^
+   1 warning and 2 errors generated.
 
---- >8 ---
 
-diff --git a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c 
-b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-index 88d3f9d7dd55..e15391e36b40 100644
---- a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-@@ -52,6 +52,7 @@ static inline unsigned long long 
-complete_integer_division_u64(
-         unsigned long long result;
+vim +/br_vlan_state_allowed +2178 net/bridge/br_multicast.c
 
-         ASSERT(divisor);
-+       BUG_ON(!divisor);
+  2159	
+  2160	static void br_multicast_toggle_port(struct net_bridge_port *port, bool on)
+  2161	{
+  2162		struct net_bridge *br = port->br;
+  2163	
+  2164		if (br_opt_get(br, BROPT_MCAST_VLAN_SNOOPING_ENABLED)) {
+  2165			struct net_bridge_vlan_group *vg;
+  2166			struct net_bridge_vlan *vlan;
+  2167	
+  2168			rcu_read_lock();
+  2169			vg = nbp_vlan_group_rcu(port);
+  2170			if (!vg) {
+  2171				rcu_read_unlock();
+  2172				return;
+  2173			}
+  2174	
+  2175			/* iterate each vlan of the port, toggle port_mcast_ctx per vlan */
+  2176			list_for_each_entry_rcu(vlan, &vg->vlan_list, vlist) {
+  2177				/* enable port_mcast_ctx when vlan is LEARNING or FORWARDING */
+> 2178				if (on && br_vlan_state_allowed(br_vlan_get_state(vlan), true))
+  2179					br_multicast_enable_port_ctx(&vlan->port_mcast_ctx);
+  2180				else
+  2181					br_multicast_disable_port_ctx(&vlan->port_mcast_ctx);
+  2182			}
+  2183			rcu_read_unlock();
+  2184		} else {
+  2185			/* use the port's multicast context when vlan snooping is disabled */
+  2186			if (on)
+  2187				br_multicast_enable_port_ctx(&port->multicast_ctx);
+  2188			else
+  2189				br_multicast_disable_port_ctx(&port->multicast_ctx);
+  2190		}
+  2191	}
+  2192	
 
-         result = div64_u64_rem(dividend, divisor, remainder);
-
-diff --git a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c 
-b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-index 131f1e3949d3..ce2036950808 100644
---- a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-@@ -30,6 +30,7 @@ static inline unsigned long long 
-spl_complete_integer_division_u64(
-         unsigned long long result;
-
-         SPL_ASSERT(divisor);
-+       BUG_ON(!divisor);
-
-         result = spl_div64_u64_rem(dividend, divisor, remainder);
-
-It looks reasonable and works well both on x86 and LoongArch, there are
-no the following objtool warnings:
-
-   dc_fixpt_recip() falls through to next function dc_fixpt_sinc()
-   spl_fixpt_recip() falls through to next function spl_fixpt_sinc()
-
-If no more comments, I will send a separate formal patch for your
-review in the next week.
-
-Thanks,
-Tiezhu
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
