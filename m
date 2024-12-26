@@ -1,59 +1,72 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D0212C80C;
-	Thu, 26 Dec 2024 02:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1432F4F20C;
+	Thu, 26 Dec 2024 16:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735179298; cv=none; b=dFJlA3lSI6nxlzf3iQzRm/2jPRw4Mx1F0ykj2M6J9Sjl7QctHiZKYUahtCOAdUI4crJNnniyMEWgXy+jSfx+2Rh6j2t59nmkiE8bx96AEUkx8uH7rc7tdksA1cPNsWTUKNy5YNalSEdH5O42GOz2UytGMlMd/wOD06c7v9EAAzw=
+	t=1735229572; cv=none; b=Fi4CobKa6fICoJ5tMsVOHWL6xpIGjVvhy+B+yAT64mHrd/wpaBB9QUrDAxfyrfL2f3gK1Zd3kitUTse75nUBGe0Wk3D+MpbHpR9YNnxepeAsXkL4L8PTzhT9DtRM3X6wYerkXWgxIB+nwTJFXBOZfXDT3FU9t6OnQiR+epuLWxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735179298; c=relaxed/simple;
-	bh=bfY/PNKBLy1svnPyhlJzJ1u/d8+E6R8CVJTVi1IGL3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YkejFt2KEadLmJzxiEATSXzx7s0ietlRi4k0Gnm4ja4Y03p/8pmfHOJhLlYkK51+L5C7tXZl1TQGabuHmIYQ1QOoz3C3IiQtOrIp2VTZRBWHp3Zn8bdTFxXMizT25WFpD3slFjsDQu9cx2OXLp5dSvRg4ILu/U6pPxI0nxAM3ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eac9famI; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1735229572; c=relaxed/simple;
+	bh=VTlaFfUyGxXavHeYnrdDn3aVaMe/WmZQsQaO+nlu2y0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jC7/AiHYgSKTjHMgdf8U/VCD5kIqlUCUptorQd0QzbyoEhWI5WfQaE2k75XVp5+Z4S+7UyKVNMSZ3Xmph7BfZd8rz/OXO+sLAkUnUw3tP/Vb0NaDJK6wSjpBUxImEtKckgo8DvrUhmr4U9tJPZUcTU0J0rD87PRBD3cZzQXHrLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lj+2m7z7; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eac9famI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lj+2m7z7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735179297; x=1766715297;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bfY/PNKBLy1svnPyhlJzJ1u/d8+E6R8CVJTVi1IGL3M=;
-  b=Eac9famIlKPorxNWsoFeS7cXxK0FNqULs2woSneSpWrfPOP878CC5LOO
-   UqHspGXynG4fomo/fTV2OzaG29f+GOH6dtwnT4xm+7lmETBb+/m7KURD8
-   sm4IcGjPDQW3qGVI+7ZaYDQn7sQHqBdjkMdz/AR7QFE18P1YIWXfIqk7f
-   5sFs+xBm6aIK27rIPvgHSQJc/FUGJSY/9mXbmyXQnWQmE6x8fG6Tk5qKm
-   kKNVCwtjdhbJjei2hB9rE2k1wpI7/EaflzfEX4gtwO2enQrfpenk65Sno
-   A/86HzhYZY0/o7lkmHzxzhf7TI4zIs1Aw6nmdCYgHAH10BTWOYj9JkKL1
-   w==;
-X-CSE-ConnectionGUID: XyYqPYwKQiOcf2M10lrHwQ==
-X-CSE-MsgGUID: fINyBsnoQ82SyYrHhmDTzQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="35312528"
-X-IronPort-AV: E=Sophos;i="6.12,264,1728975600"; 
-   d="scan'208";a="35312528"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2024 18:14:56 -0800
-X-CSE-ConnectionGUID: ZJJJHE7JQRSvpm4DwArQXg==
-X-CSE-MsgGUID: 1Nw2So0LRaKYFH1N6qpqYQ==
+  t=1735229570; x=1766765570;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VTlaFfUyGxXavHeYnrdDn3aVaMe/WmZQsQaO+nlu2y0=;
+  b=lj+2m7z7yFZV8GhptY5zEHZGZ9ljSLxSRmBMGxkbgZSCJ0GZneuWBxOH
+   Osvy3hWToMEL2j+ciI0/Bgaesr3bEHKOh3KSCcH4xdxfskUAmLfatmrEG
+   mwbFtZrBGMEn1Y5ujKhOAnMS3leldNz346sg+tK2fCrZQpaOlGJeF5zic
+   D174OgmZZZRKEV/wdtYkXE1oBWQMw8kfD5QDJL2IFQtCYfiqRnQs5ykWL
+   oRO14wte49Nb42ppWbvRoEvz7rb96iiCkn/CwUmN8I4fMMEuOqaLDNm95
+   tkGmwJVASoeAqHy/xmX8GGw4FTjvrbQ6bSRQpOlv4KNkIQbrEN36ByO1/
+   A==;
+X-CSE-ConnectionGUID: nVDDmzjjT2aO625NpKr2ZQ==
+X-CSE-MsgGUID: /ppgEfIORxWWWWbreJ4w7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="35358540"
+X-IronPort-AV: E=Sophos;i="6.12,266,1728975600"; 
+   d="scan'208";a="35358540"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2024 08:12:49 -0800
+X-CSE-ConnectionGUID: CllPXsfwR1CBqfRCEfds9g==
+X-CSE-MsgGUID: Lq2Ho4+KTYu+BnCu6FgcZQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,264,1728975600"; 
-   d="scan'208";a="100176920"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="137295161"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 25 Dec 2024 18:14:54 -0800
+  by orviesa001.jf.intel.com with ESMTP; 26 Dec 2024 08:12:43 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tQdOm-0002IA-0M;
-	Thu, 26 Dec 2024 02:14:52 +0000
-Date: Thu, 26 Dec 2024 10:14:26 +0800
+	id 1tQqTZ-0002gT-0S;
+	Thu, 26 Dec 2024 16:12:41 +0000
+Date: Fri, 27 Dec 2024 00:12:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Al Viro <viro@zeniv.linux.org.uk>
+To: Gur Stavi <gur.stavi@huawei.com>, gongfan <gongfan1@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org
-Subject: [viro-vfs:work.debugfs 17/18] mm/slub.c:7576:38: error: too many
- arguments provided to function-like macro invocation
-Message-ID: <202412261018.IBubSniL-lkp@intel.com>
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, linux-doc@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Cai Huoqing <cai.huoqing@linux.dev>, Xin Guo <guoxin09@huawei.com>,
+	Shen Chenyang <shenchenyang1@hisilicon.com>,
+	Zhou Shuai <zhoushuai28@huawei.com>, Wu Like <wulike1@huawei.com>,
+	Shi Jing <shijing34@huawei.com>,
+	Meny Yossefi <meny.yossefi@huawei.com>
+Subject: Re: [PATCH net-next v02 1/1] hinic3: module initialization and tx/rx
+ logic
+Message-ID: <202412262331.IwY6o4xF-lkp@intel.com>
+References: <bbf2442dc9feca8bfa13ccfa2497a0e857eb5809.1735206602.git.gur.stavi@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,60 +75,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <bbf2442dc9feca8bfa13ccfa2497a0e857eb5809.1735206602.git.gur.stavi@huawei.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.debugfs
-head:   e98a67d7c1e4a22fa9b851507e25ecdc5b8cea6d
-commit: 3c2d1b64cb4320860923a2097f5891efa2d7060e [17/18] slub: don't mess with ->d_name
-config: x86_64-buildonly-randconfig-002-20241226 (https://download.01.org/0day-ci/archive/20241226/202412261018.IBubSniL-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241226/202412261018.IBubSniL-lkp@intel.com/reproduce)
+Hi Gur,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 9268abe611b09edc975aa27e6ce829f629352ff4]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gur-Stavi/hinic3-module-initialization-and-tx-rx-logic/20241226-192558
+base:   9268abe611b09edc975aa27e6ce829f629352ff4
+patch link:    https://lore.kernel.org/r/bbf2442dc9feca8bfa13ccfa2497a0e857eb5809.1735206602.git.gur.stavi%40huawei.com
+patch subject: [PATCH net-next v02 1/1] hinic3: module initialization and tx/rx logic
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20241226/202412262331.IwY6o4xF-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 319b89197348b7cad1215e235bdc7b5ec8f9b72c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241226/202412262331.IwY6o4xF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412261018.IBubSniL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412262331.IwY6o4xF-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/slub.c:49:
-   In file included from mm/internal.h:13:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/slub.c:7576:38: error: too many arguments provided to function-like macro invocation
-    7576 |                 (void *)(unsigned long)TRACK_FREE, &slab_debugfs_fops);
-         |                                                    ^
-   include/linux/debugfs.h:125:9: note: macro 'debugfs_create_file' defined here
-     125 | #define debugfs_create_file(name, mode, parent, data, fops)                     \
-         |         ^
->> mm/slub.c:7575:2: error: use of undeclared identifier 'debugfs_create_file'
-    7575 |         debugfs_create_file("free_traces", 0400, slab_cache_dir, s,
-         |         ^
-   2 warnings and 2 errors generated.
+   In file included from drivers/net/ethernet/huawei/hinic3/hinic3_tx.c:4:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/um/include/asm/cacheflush.h:4:
+   In file included from arch/um/include/asm/tlbflush.h:9:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/net/ethernet/huawei/hinic3/hinic3_tx.c:4:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/ethernet/huawei/hinic3/hinic3_tx.c:4:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/ethernet/huawei/hinic3/hinic3_tx.c:4:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/ethernet/huawei/hinic3/hinic3_tx.c:292:3: error: call to undeclared function 'csum_ipv6_magic'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     292 |                 csum_ipv6_magic(&ip->v6->saddr, &ip->v6->daddr, 0, proto, 0);
+         |                 ^
+   13 warnings and 1 error generated.
 
 
-vim +7576 mm/slub.c
+vim +/csum_ipv6_magic +292 drivers/net/ethernet/huawei/hinic3/hinic3_tx.c
 
-  7562	
-  7563	static void debugfs_slab_add(struct kmem_cache *s)
-  7564	{
-  7565		struct dentry *slab_cache_dir;
-  7566	
-  7567		if (unlikely(!slab_debugfs_root))
-  7568			return;
-  7569	
-  7570		slab_cache_dir = debugfs_create_dir(s->name, slab_debugfs_root);
-  7571	
-  7572		debugfs_create_file_aux("alloc_traces", 0400, slab_cache_dir, s,
-  7573			(void *)(unsigned long)TRACK_ALLOC, &slab_debugfs_fops);
-  7574	
-> 7575		debugfs_create_file("free_traces", 0400, slab_cache_dir, s,
-> 7576			(void *)(unsigned long)TRACK_FREE, &slab_debugfs_fops);
-  7577	}
-  7578	
+   287	
+   288	static __sum16 csum_magic(union hinic3_ip *ip, unsigned short proto)
+   289	{
+   290		return (ip->v4->version == 4) ?
+   291			csum_tcpudp_magic(ip->v4->saddr, ip->v4->daddr, 0, proto, 0) :
+ > 292			csum_ipv6_magic(&ip->v6->saddr, &ip->v6->daddr, 0, proto, 0);
+   293	}
+   294	
 
 -- 
 0-DAY CI Kernel Test Service
