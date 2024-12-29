@@ -1,109 +1,178 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8471B38DC8
-	for <llvm@lists.linux.dev>; Sat, 28 Dec 2024 20:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED11800;
+	Sun, 29 Dec 2024 01:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735417930; cv=none; b=sDX3L2s2n5YPmygf6llncswp2suC71mqk7JTuA02CiGzY6HKReP8Z5j4suJO75XDpSqv6gRBqNSjr+qXOOn0G+iMrYSwYXbzqyzs89KRY6qKdrC4lYxvccUiJ+4LFGVSlp7e6cF5gBi1N1L21iGQcwS+kZ1KccLAh/PwSYfagEg=
+	t=1735436378; cv=none; b=XSgpIWI82fRZsVGv98TC6KunSV/vjI2L8BPf3TnZHCvhPpbPEyCa43sIjnnhB06h1fcinrrpPQpNbcu1uC/stnKQ1GItJFYtvNGeFfmTN2o549AWXvMNjh5mK7RN177A0KH3DblrTK4dPdWXbne3PbivH+T62eG4FSYb6bnae8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735417930; c=relaxed/simple;
-	bh=Cj6wMRAGzFPtL25o6CTJo2TVbIRwlOSzrj0Cq6CpG6g=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HjwzHRomR3QHpCXytd3Gs50frZ2RwQSLxX1Uq0P29qxurwdvl3bGPRgOMlFhFvxH0A5sB5N259Bd6HD5herkCM9boeEvhjlVgMcptug+N2RwFi5e7Oy9psQ46tNjnCzN2KT/75eO+pK1/EHjgeRefSp/WCylDmq926acj6Qt/RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z0xX1WLy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1735436378; c=relaxed/simple;
+	bh=rFQfnH8g9qnvAm/orX7H7+JRj5OpvCxqGxR6Qhq2ETY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hgjQSGYuF7GQCCCt1F1scHh23Wo05V2ureryuxYdJ9Yrhipl3jfeGbh8O2JoPxOtPHyy+qbcwJWPpq8QNiKEbUBOYE2Mm4xKtorn/UUUI86BPnWNnkplA2wM/GNs6yGT5kX1QGWzjoBRk7ysfM77Yw2sjobiPCohXN7eAv8IZOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KAA5cOb+; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z0xX1WLy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1735417927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pEZMESImKhHMK5qr8hXRmm41Y09FA7oXPJ5xlGvcPl8=;
-	b=Z0xX1WLyhF96ZNvXS4WN40Fu+af8DhurEnfdjS7uIywUXOZKxQ/fXIBmmEkbFKr8hol8Nf
-	QgovsIEHjc9OB/0Lc+jCazqk5OLtKt3MQ4yZugx7znNVdoYC8bGRCuBRkBMlNE1Jfaz3l9
-	EM3LDMwLPuwSaVgs3b3wSryXelaQBuA=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-112-XpJqdqlbOQ6Y69hCSC6Vjg-1; Sat,
- 28 Dec 2024 15:32:05 -0500
-X-MC-Unique: XpJqdqlbOQ6Y69hCSC6Vjg-1
-X-Mimecast-MFC-AGG-ID: XpJqdqlbOQ6Y69hCSC6Vjg
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C8F5E19560A5
-	for <llvm@lists.linux.dev>; Sat, 28 Dec 2024 20:32:04 +0000 (UTC)
-Received: from [172.64.3.33] (unknown [10.30.32.189])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 68E5119560AA;
-	Sat, 28 Dec 2024 20:32:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc4,
- upstream-mainline, 059dd502)
-Date: Sat, 28 Dec 2024 20:32:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KAA5cOb+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735436377; x=1766972377;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rFQfnH8g9qnvAm/orX7H7+JRj5OpvCxqGxR6Qhq2ETY=;
+  b=KAA5cOb+HHhu9i8VTwHL7lZbeLSQGkEB/pPYAXQPs9pV4oJoDSYERwwR
+   j4Z2wErfE/i704yxY9jzV7U0wrnvsZH5afvDDRm1yCKzzZNUIOujZUWOl
+   OUuwyiJ01M3fm2IDn8+Hxl0WNm+UjT+nAoSSsO0iIsr/1yLcughG3herM
+   2YSN9c8VQAFvm2TL74dGIEG1VGiYc6i2FVbIO8rcLP+VJ/IdQnCKrEZPC
+   0os94WBAoFriIEafQwlesrC9IoV9/kq9/wLYMER8KzFwOjl+XLV39hXUu
+   +eaomhe7mds+XPTyXwoUj7mP8ukLBfSQt9jUJ++rDzN7mfmkEuz+Eid1w
+   Q==;
+X-CSE-ConnectionGUID: Lv97bzJ5Rz6qJIjXlU0G6A==
+X-CSE-MsgGUID: tUjow86QQFun5DVDsFgfgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="35802055"
+X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
+   d="scan'208";a="35802055"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 17:39:37 -0800
+X-CSE-ConnectionGUID: Oy4svG45T4qIdA2Vlwx06g==
+X-CSE-MsgGUID: xNOqO8z6T+WhcD2uqXjGIg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="100302592"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 28 Dec 2024 17:39:31 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tRiHA-0004QO-0J;
+	Sun, 29 Dec 2024 01:39:28 +0000
+Date: Sun, 29 Dec 2024 09:39:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-ide@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to
+ pm_sleep_ptr()
+Message-ID: <202412290939.43oNt9t6-lkp@intel.com>
+References: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <44195.124122815320500207@us-mta-112.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: tVakpEF4BUUscXseWGiy79qMFyxk9z3J0IHtMBdY6B8_1735417925
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Raphael,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/usb-dwc3-st-Switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20241229-073700
+base:   8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
+patch link:    https://lore.kernel.org/r/20241229-update_pm_macro-v1-2-c7d4c4856336%40gmail.com
+patch subject: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+config: hexagon-randconfig-001-20241229 (https://download.01.org/0day-ci/archive/20241229/202412290939.43oNt9t6-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 319b89197348b7cad1215e235bdc7b5ec8f9b72c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412290939.43oNt9t6-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412290939.43oNt9t6-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mmc/host/sdhci-st.c:460:8: error: call to undeclared function 'sdhci_suspend_host'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     460 |         ret = sdhci_suspend_host(host);
+         |               ^
+>> drivers/mmc/host/sdhci-st.c:494:9: error: call to undeclared function 'sdhci_resume_host'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     494 |         return sdhci_resume_host(host);
+         |                ^
+   drivers/mmc/host/sdhci-st.c:494:9: note: did you mean 'sdhci_remove_host'?
+   drivers/mmc/host/sdhci.h:827:6: note: 'sdhci_remove_host' declared here
+     827 | void sdhci_remove_host(struct sdhci_host *host, int dead);
+         |      ^
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'block-6.13-20241228' of git://git.kernel.dk/=
-linux
+vim +/sdhci_suspend_host +460 drivers/mmc/host/sdhci-st.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1605173737
+f52d9c4f459bda Peter Griffin 2014-07-09  449  
+f52d9c4f459bda Peter Griffin 2014-07-09  450  static int sdhci_st_suspend(struct device *dev)
+f52d9c4f459bda Peter Griffin 2014-07-09  451  {
+f52d9c4f459bda Peter Griffin 2014-07-09  452  	struct sdhci_host *host = dev_get_drvdata(dev);
+f52d9c4f459bda Peter Griffin 2014-07-09  453  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+1531675269c833 Jisheng Zhang 2016-02-16  454  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
+d38dcad4e7b48f Adrian Hunter 2017-03-20  455  	int ret;
+d38dcad4e7b48f Adrian Hunter 2017-03-20  456  
+d38dcad4e7b48f Adrian Hunter 2017-03-20  457  	if (host->tuning_mode != SDHCI_TUNING_MODE_3)
+d38dcad4e7b48f Adrian Hunter 2017-03-20  458  		mmc_retune_needed(host->mmc);
+f52d9c4f459bda Peter Griffin 2014-07-09  459  
+d38dcad4e7b48f Adrian Hunter 2017-03-20 @460  	ret = sdhci_suspend_host(host);
+f52d9c4f459bda Peter Griffin 2014-07-09  461  	if (ret)
+f52d9c4f459bda Peter Griffin 2014-07-09  462  		goto out;
+f52d9c4f459bda Peter Griffin 2014-07-09  463  
+406c24310a7bd7 Peter Griffin 2015-04-10  464  	reset_control_assert(pdata->rstc);
+406c24310a7bd7 Peter Griffin 2015-04-10  465  
+3ae50f4512ce83 Lee Jones     2016-09-08  466  	clk_disable_unprepare(pdata->icnclk);
+f52d9c4f459bda Peter Griffin 2014-07-09  467  	clk_disable_unprepare(pltfm_host->clk);
+f52d9c4f459bda Peter Griffin 2014-07-09  468  out:
+f52d9c4f459bda Peter Griffin 2014-07-09  469  	return ret;
+f52d9c4f459bda Peter Griffin 2014-07-09  470  }
+f52d9c4f459bda Peter Griffin 2014-07-09  471  
+f52d9c4f459bda Peter Griffin 2014-07-09  472  static int sdhci_st_resume(struct device *dev)
+f52d9c4f459bda Peter Griffin 2014-07-09  473  {
+f52d9c4f459bda Peter Griffin 2014-07-09  474  	struct sdhci_host *host = dev_get_drvdata(dev);
+f52d9c4f459bda Peter Griffin 2014-07-09  475  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+1531675269c833 Jisheng Zhang 2016-02-16  476  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
+2053812f6e1af0 Peter Griffin 2015-04-10  477  	struct device_node *np = dev->of_node;
+7f55eb101d4a75 Arvind Yadav  2017-06-20  478  	int ret;
+f52d9c4f459bda Peter Griffin 2014-07-09  479  
+7f55eb101d4a75 Arvind Yadav  2017-06-20  480  	ret = clk_prepare_enable(pltfm_host->clk);
+7f55eb101d4a75 Arvind Yadav  2017-06-20  481  	if (ret)
+7f55eb101d4a75 Arvind Yadav  2017-06-20  482  		return ret;
+7f55eb101d4a75 Arvind Yadav  2017-06-20  483  
+7f55eb101d4a75 Arvind Yadav  2017-06-20  484  	ret = clk_prepare_enable(pdata->icnclk);
+7f55eb101d4a75 Arvind Yadav  2017-06-20  485  	if (ret) {
+7f55eb101d4a75 Arvind Yadav  2017-06-20  486  		clk_disable_unprepare(pltfm_host->clk);
+7f55eb101d4a75 Arvind Yadav  2017-06-20  487  		return ret;
+7f55eb101d4a75 Arvind Yadav  2017-06-20  488  	}
+f52d9c4f459bda Peter Griffin 2014-07-09  489  
+406c24310a7bd7 Peter Griffin 2015-04-10  490  	reset_control_deassert(pdata->rstc);
+406c24310a7bd7 Peter Griffin 2015-04-10  491  
+2053812f6e1af0 Peter Griffin 2015-04-10  492  	st_mmcss_cconfig(np, host);
+2053812f6e1af0 Peter Griffin 2015-04-10  493  
+f52d9c4f459bda Peter Griffin 2014-07-09 @494  	return sdhci_resume_host(host);
+f52d9c4f459bda Peter Griffin 2014-07-09  495  }
+f52d9c4f459bda Peter Griffin 2014-07-09  496  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1605173737-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1605173737-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1605173737-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
