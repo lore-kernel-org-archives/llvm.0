@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84C42594BC;
-	Sun, 29 Dec 2024 03:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBE023774;
+	Sun, 29 Dec 2024 06:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735443226; cv=none; b=hx054jRYBmX30AdJP/FBG4ytAQMK1YSbNCnTeciqagSnnZlwk3TeYpIMVb7UZCk/Bno2XSimMDs9hHJmOzUGLjuLsPzph3Sx3CLqv/m8IYEpYfWgswwWDa8XQ+SOhiOo+mY4/+Dc3mlHlRIFpPy+PgzBkLfSPMuVgrC/OEoLP/A=
+	t=1735453865; cv=none; b=vFEFKJDNh4bYkZ5ICZd/2CKQC46kYZqxxKMRxg38fX1GJFXr+oGYgEWOXLrXu36Zg0qGJk8jyN46x9QCH6w5nWYDDn6QnGBFKK8Vr0qTpshSQf6N89GDUXNSCL/28S1mWiXrzQtrDymZILn8EBurJqjL2E89ibujYS58eNcHWrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735443226; c=relaxed/simple;
-	bh=XwoovLm8yoaFjgI4B0ibds4k+XbUr6BG+p7sFBLZz2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XuOHBAsM2HkoszcYByARuNCLP9aHFJRiejM0V+SNbT6Jh/jYy9CF3uYKIMCO7uOV5wPsV81quiPnc9WWWqFENYJuoytoxnua+JzQJEFkX15rKguAfwHYXwpQ8yIStAkMaH+Fze/D4M7ctIhMnKR0H7AIlDSffCU7/VQYuE6/JZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IfvQzkjl; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1735453865; c=relaxed/simple;
+	bh=LMSj/cD2Xl6GDpxsZazwBcFTO8kMvDOOZNB4zpDIjSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=B2PjomFuBSOdu3Vt3zKk/D/xTqrfpq7ThHYcBh8vd05j21hhVRBCKMVRh2McI3TtkZHvu8LfzkGlBtUWrfSXK95mYJ8JkuQYb6tnV+c0D9L4McbuwwhHExwzp+XonmQGL6TaeMMdbdbx40Bs91WJEELOtStzp5eqEZQP1aCAifk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vu+32jn/; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IfvQzkjl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vu+32jn/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735443223; x=1766979223;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XwoovLm8yoaFjgI4B0ibds4k+XbUr6BG+p7sFBLZz2s=;
-  b=IfvQzkjlzmTou4aAkQ9yqYottTbeo64zqs3b3zoW7YthGF4+0v3SslNQ
-   SwRRNC2hhZCW6yq87Ep7aUhDoX+uf6m/jpFsSkGpI3y/Xtu7us6Rykqx2
-   vnXe6EqyUJYFWOstwWvGIzYCUWMisE7NQE+C1n60uddqnRxA+sE7o4Oot
-   80ndjz+3FMJf5r7wyiUkOjvcvtnzhrTPmceiUGbmLVMhIv43RICnnnE6o
-   PRE9NvjmIMaYyT7fwmxNC9pYWwR6LdVcxFNk5CceuFRiYU15ZtIoGEdpV
-   i7vT9XutbdcquAgzWIizAww75zC8DplQDTZ1G22uxYe/q72iQkRusOkaH
+  t=1735453860; x=1766989860;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LMSj/cD2Xl6GDpxsZazwBcFTO8kMvDOOZNB4zpDIjSc=;
+  b=Vu+32jn/Z0MYAZRBjDYXO/KGZsEHkOjAcENvC1Q25DGmL76MKePVuopq
+   wbpgvbxFCCfYrHD/1yumGo+hIafevhqYVy0V1ic3cHy+0xc73diNqE4ja
+   QiAqu9xfEUmQ5QdBucYoo6oJ9EptwqscxH54ZNA/uKApRyr+K89a4rSh4
+   joBW+iGj82NmYWfiZwor2Okne6vJ90/RlISvPcKzUuNwtuDXi3TgvIRii
+   j10U8T3HPEytJKTcUAlUYPAYpLC/ecb6jTd3xD54U5s2TywP7aCMKisE4
+   D8bFPI+TZFESJcj4zd2eZWMTP/mT3jX0YW2rGouj7g+TrTHQDqW7jVJUz
    g==;
-X-CSE-ConnectionGUID: EIzS/IsAS1+gJChJ7wv7JQ==
-X-CSE-MsgGUID: RZxNdM1VT2WQw1ZkEktfzA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="53312113"
+X-CSE-ConnectionGUID: Yb3BV6NuTluU9RxZ6MSXKQ==
+X-CSE-MsgGUID: kfRzGI8LRVejVf3N6GUHEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="35923753"
 X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="53312113"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 19:33:42 -0800
-X-CSE-ConnectionGUID: t7dwh/+4SVGFum/pILbHuA==
-X-CSE-MsgGUID: tUqVM2o1TVCoYeN4iwYFQA==
+   d="scan'208";a="35923753"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 22:30:59 -0800
+X-CSE-ConnectionGUID: nyFoTYfhSPe1DZByzW8EjA==
+X-CSE-MsgGUID: i03hrQL0SX+vfqK6bz0rmg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="100230565"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="101346047"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 28 Dec 2024 19:33:40 -0800
+  by orviesa008.jf.intel.com with ESMTP; 28 Dec 2024 22:30:57 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tRk3e-0004SC-0U;
-	Sun, 29 Dec 2024 03:33:38 +0000
-Date: Sun, 29 Dec 2024 11:32:58 +0800
+	id 1tRmpB-0004We-32;
+	Sun, 29 Dec 2024 06:30:53 +0000
+Date: Sun, 29 Dec 2024 14:30:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Laight <david.laight.linux@gmail.com>, andi.shyti@kernel.org,
-	andriy.shevchenko@linux.intel.com, masahiroy@kernel.org,
-	u.kleine-koenig@baylibre.com, torvalds@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] module: Allow DEFAULT_SYMBOL_NAMESPACE be set after
- export.h included
-Message-ID: <202412291114.MzNzqKpo-lkp@intel.com>
-References: <20241228184328.5ced280b@dsl-u17-10>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org
+Subject: [viro-vfs:work.debugfs 20/20]
+ drivers/net/bonding/bond_debugfs.c:66:2: error: use of undeclared identifier
+ 'err'
+Message-ID: <202412291628.UQQUijmc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,47 +63,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241228184328.5ced280b@dsl-u17-10>
 
-Hi David,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.13-rc4 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/module-Allow-DEFAULT_SYMBOL_NAMESPACE-be-set-after-export-h-included/20241229-024441
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241228184328.5ced280b%40dsl-u17-10
-patch subject: [PATCH] module: Allow DEFAULT_SYMBOL_NAMESPACE be set after export.h included
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20241229/202412291114.MzNzqKpo-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412291114.MzNzqKpo-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.debugfs
+head:   b41a25033d7a1783290826fb565d082a0c7a55c4
+commit: b41a25033d7a1783290826fb565d082a0c7a55c4 [20/20] saner replacement for debugfs_rename()
+config: s390-randconfig-001-20241229 (https://download.01.org/0day-ci/archive/20241229/202412291628.UQQUijmc-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412291628.UQQUijmc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412291114.MzNzqKpo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412291628.UQQUijmc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pwm/pwm-lpss.c:22:9: warning: 'DEFAULT_SYMBOL_NAMESPACE' macro redefined [-Wmacro-redefined]
-      22 | #define DEFAULT_SYMBOL_NAMESPACE "PWM_LPSS"
+>> drivers/net/bonding/bond_debugfs.c:66:2: error: use of undeclared identifier 'err'
+      66 |         err = debugfs_change_name(bond->debug_dir, "%s", bond->dev->name);
          |         ^
-   include/linux/export.h:63:9: note: previous definition is here
-      63 | #define DEFAULT_SYMBOL_NAMESPACE ""
-         |         ^
-   1 warning generated.
+   drivers/net/bonding/bond_debugfs.c:67:6: error: use of undeclared identifier 'err'
+      67 |         if (err) {
+         |             ^
+   2 errors generated.
 
 
-vim +/DEFAULT_SYMBOL_NAMESPACE +22 drivers/pwm/pwm-lpss.c
+vim +/err +66 drivers/net/bonding/bond_debugfs.c
 
-093e00bb3f82f3 Alan Cox        2014-04-18  21  
-ceb8bf2ceaa77f Masahiro Yamada 2024-12-03 @22  #define DEFAULT_SYMBOL_NAMESPACE "PWM_LPSS"
-a3682d2fe3c36c Andy Shevchenko 2022-09-27  23  
+    63	
+    64	void bond_debug_reregister(struct bonding *bond)
+    65	{
+  > 66		err = debugfs_change_name(bond->debug_dir, "%s", bond->dev->name);
+    67		if (err) {
+    68			netdev_warn(bond->dev, "failed to reregister, so just unregister old one\n");
+    69			bond_debug_unregister(bond);
+    70		}
+    71	}
+    72	
 
 -- 
 0-DAY CI Kernel Test Service
