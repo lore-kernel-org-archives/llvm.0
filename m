@@ -1,222 +1,258 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FD21E52D;
-	Sun, 29 Dec 2024 17:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6731C6BE
+	for <llvm@lists.linux.dev>; Sun, 29 Dec 2024 19:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735494938; cv=none; b=WQiSvrqExHWYA4SbKXbVUQnfJWhLT1PNna8RX01UdMzAaOZsRpv6GlT97txA52Ng0UGy0kr0tmvDjSgVNnulCHcKHDg3wpUK++ozz15TExJnHs/FvWpFLM2NmCgRPmjFWRzZgW/b7RAMJeET02tmOqOQY8cQhNa4+pAaGR/Fb5g=
+	t=1735499391; cv=none; b=Z+XXsVjyyKs/9MlSlrm+UvxJOrthp+omeLQ+QudqQlmc6g6uwo04B3QcTlBuAox+e/2hAyqj6xLjWE+sJYylhxOPUgZfTLIGGDqrChLR1e/V9uXwFyNqlvjX9VCrjsqAQMdZ3W/pISapMhEhQEiOQ9lPPLQh/KuIIBPgX3fH25Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735494938; c=relaxed/simple;
-	bh=68EfKJS4tDBUgfuIRkH7FwfLZsp1BWHarTWhcDMOd4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TG+lSCTRV70VafBGLsxGWIQDrhoVeAIkz/MrJ/nmDX3qZ4PGQXKpyabexjkzmlzotoATupufADQn1xEFMtzTcCgOzQ9Hs3ldN7KI7BMAzH5abDZjEYC+8E10HkMBrP6i5hbGbZaIOXWDHWZpUn2YhRz3ZSGPi6hE51pWEDj2aQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AWYXOzDO; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1735499391; c=relaxed/simple;
+	bh=NCrrgqVAdcYcVpkHo2xkAAJ9iDqQ1idGb/S2gtyxU2Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CGeSDSRMlXjmo/9i3E9enyLihv0n2ybNzOY1YQrNYZmMxV6Ax8k9Es6VJjGFOZydlMjNHRYlh957VipT2hXchSGH7R+h/W2OtsQ0e3tW9aEAbD/jIX95B3zCFeZ/LYKGsbVtCwx9GnfsOkBi1nzPP2xmK0i6kYElDbJ7cSbLEoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PcRyWrM4; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AWYXOzDO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735494937; x=1767030937;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=68EfKJS4tDBUgfuIRkH7FwfLZsp1BWHarTWhcDMOd4U=;
-  b=AWYXOzDOetNXld5p62w7V4eooZy0yyo4s/ELSZg6VEeAWLS+QKlg9Dc3
-   LPgttf/qMLV/CXGvVx1myxV8Oc5NEXBGHEf/irSrWa12Xb6QF16BOkEf9
-   jX2Xx3jfzKLl7fVJSkgN2f1j69+6hk9CKl7wBw3sezh3ONHGcPLx9FTlA
-   l0RBPiS2kh9rKjvoLvGEawHOO2MIYVSvtos7wLDFh3WT5ogsSkSFOLm+p
-   iQc0WxpNzYAa5VU5yrasb6SbavuxIMHYSGN6QR9RIuxa5eSYQA/isI4ob
-   NmcilDsZRpdSMzg4a6LRw9IecT1anxspp5+Pu8YkB1spXx1lfoTnLOtcE
-   A==;
-X-CSE-ConnectionGUID: 6z5eBHCrQ76wb43dCG3O7A==
-X-CSE-MsgGUID: YOoRbbkdTdWuUh1UybGIQw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="39734346"
-X-IronPort-AV: E=Sophos;i="6.12,274,1728975600"; 
-   d="scan'208";a="39734346"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2024 09:55:36 -0800
-X-CSE-ConnectionGUID: Ufv39eOWSwW2s1o4viu9mw==
-X-CSE-MsgGUID: EAgsQH1sTp6iqMShiXGb9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="105683657"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 29 Dec 2024 09:55:34 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tRxVi-0004rg-1m;
-	Sun, 29 Dec 2024 17:55:30 +0000
-Date: Mon, 30 Dec 2024 01:54:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrey Albershteyn <aalbersh@redhat.com>, linux-xfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, djwong@kernel.org,
-	david@fromorbit.com, hch@lst.de,
-	Andrey Albershteyn <aalbersh@redhat.com>
-Subject: Re: [PATCH 1/2] iomap: add iomap_writepages_unbound() to write
- beyond EOF
-Message-ID: <202412300135.cvWMPZGf-lkp@intel.com>
-References: <20241229133640.1193578-2-aalbersh@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PcRyWrM4"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ee46851b5eso8966547a91.1
+        for <llvm@lists.linux.dev>; Sun, 29 Dec 2024 11:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735499389; x=1736104189; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aLV20bromzR57IY1Unak28q6U4TXsFtoJ6LiojUAkQY=;
+        b=PcRyWrM48v4hfEj5jEUb9zjuzHV3WMWOHjKhlOZC60h2qJJys2MwaBhm/rGjpIJFgI
+         sz6ROJV5zHqBt6V3t1PczvS+Top4kWIrXatN51H8Y4zywd/M8htlQY6M+Wd5avQsxVgD
+         Dg162EynrXXi2rDAlCYYSsEp8X2KHyQFpOc7YdAFXQMJ+tJlekTU7rQzEbiTSfe/RrpI
+         0NMddzTcAzSiq+d1plh+Hq4Lvq6/mfnt5KjvpLhNf4aV0FzwlLCcZMft/mA36ipVUlOo
+         wwi3VVwqeJbm43BjFP1TpzkEcsYfXRmmsBW6m1vwPM9TR9zZq2El85pUfnQSRhwEFYUC
+         OWIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735499389; x=1736104189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aLV20bromzR57IY1Unak28q6U4TXsFtoJ6LiojUAkQY=;
+        b=PRrg2Ea6OwXT1ErJiJAdxZeA8NaDPObqvVTthCXocG4OGw9cPkzLHG7UEisx06V2+p
+         Ui6AWHEq+ttALKz60QjuIpdjcuO0ty0uPGdrU8HCHaGlC7YBFc+wn2xbcQ24Gl1rgOuh
+         g4Gt/+YywVYo/I07Fyulq/lssZ3oOGU5oN8WqDDfuEXFCgsnvRJQF3SP0isJvya4Jugk
+         4QbiHfLXrNJUG1jvmJBEcRCYPQ0cQF8NAGGWRIloQ7qNBxiXuNlgUCUqR25SCU/ChdjM
+         BBUfGnJWiiWVi6pDY+S7I9SJ9IVQA6gL0GY9gJx9YxGF2403L6NFs6llHTjff40rzqxp
+         QbsA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2qZyRoHN6qe/1cADHv8HsdTupIBs2l/qFSpJWt59C/ZkAU0shzpUQdP7GTrGv0zjpOLIQ@lists.linux.dev
+X-Gm-Message-State: AOJu0YwolGuBvUDnm9DzB/AocpCxEZXG/ZlKmmeWMgSL6AlJ1gUm6n3d
+	3xctmCDaz9HeqYi99g039I7DRa7m61Uema3XUbe9p3N4WQiwzAPd88Y91fh1vVGZmkTaIKIkB7+
+	GgAgFNfNXybIzNOU8nwe3sl6B+5Q=
+X-Gm-Gg: ASbGncsm9JUbfG07kC+jIiykvQo6mEjWJ4H2CXAO86cv457OxplJHY3D58UpymcupX+
+	PUO73Cn04p0X0mp4SVbTlWw2fr7tRN+vaVrA=
+X-Google-Smtp-Source: AGHT+IE7Tm8Mby3gPyNsg+/b10UHatLbPwY4DMX0HrwWi6WxBOR1WIfuspFPxlHAL3JLR9SzCcUearx0rAjJKnBNpWA=
+X-Received: by 2002:a17:90b:2d43:b0:2ee:c797:e27f with SMTP id
+ 98e67ed59e1d1-2f452eed977mr42563935a91.36.1735499388635; Sun, 29 Dec 2024
+ 11:09:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241229133640.1193578-2-aalbersh@kernel.org>
+References: <20241127172908.17149-1-andybnac@gmail.com> <87frncmkre.fsf@all.your.base.are.belong.to.us>
+ <20241223221556.1f5e598f@gandalf.local.home>
+In-Reply-To: <20241223221556.1f5e598f@gandalf.local.home>
+From: Andy Chiu <andybnac@gmail.com>
+Date: Mon, 30 Dec 2024 03:08:00 +0800
+Message-ID: <CAFTtA3Nb66VZGoMVfrVs6cYLorjbSX8GmThyKB1FFvfg2HknpA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt improvements
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, bjorn@rivosinc.com, 
+	puranjay12@gmail.com, alexghiti@rivosinc.com, yongxuan.wang@sifive.com, 
+	greentime.hu@sifive.com, nick.hu@sifive.com, nylon.chen@sifive.com, 
+	tommy.wu@sifive.com, eric.lin@sifive.com, viccent.chen@sifive.com, 
+	zong.li@sifive.com, samuel.holland@sifive.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrey,
+Steven Rostedt <rostedt@goodmis.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8824=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8811:15=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> On Wed, 27 Nov 2024 22:25:57 +0100
+> Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrote:
+>
+> > Adding Steven.
+>
+> And this has been in my draft folder for almost a month :-p
+>
+> I kept coming to this email, but then got distracted by something else.
+>
+> >
+> > Andy Chiu <andybnac@gmail.com> writes:
+> >
+> > > This series makes atmoic code patching possible in riscv ftrace. A
+> > > direct benefit of this is that we can get rid of stop_machine() when
+> > > patching function entries. This also makes it possible to run ftrace
+> > > with full kernel preemption. Before this series, the kernel initializ=
+es
+> > > patchable function entries to NOP4 + NOP4. To start tracing, it updat=
+es
+> > > entries to AUIPC + JALR while holding other cores in stop_machine.
+> > > stop_machine() is required because it is impossible to update 2
+> > > instructions, and be seen atomically. And preemption must have to be
+> > > prevented, as kernel preemption allows process to be scheduled out wh=
+ile
+> > > executing on one of these instruction pairs.
+> > >
+> > > This series addresses the problem by initializing the first NOP4 to
+> > > AUIPC. So, atmoic patching is possible because the kernel only has to
+> > > update one instruction. As long as the instruction is naturally align=
+ed,
+> > > then it is expected to be updated atomically.
+> > >
+> > > However, the address range of the ftrace trampoline is limited to +-2=
+K
+> > > from ftrace_caller after appplying this series. This issue is expecte=
+d
+> > > to be solved by Puranjay's CALL_OPS, where it adds 8B naturally align
+> > > data in front of pacthable functions and can  use it to direct execut=
+ion
+> > > out to any custom trampolines.
+> > >
+> > > The series is composed by three parts. The first part cleans up the
+> > > existing issues when the kernel is compiled with clang.The second par=
+t
+> > > modifies the ftrace code patching mechanism (2-4) as mentioned above.
+> > > Then prepare ftrace to be able to run with kernel preemption (5,6)
+> > >
+> > > An ongoing fix:
+> > >
+> > > Since there is no room for marking *kernel_text_address as notrace[1]=
+ at
+> > > source code level, there is a significant performance regression when
+> > > using function_graph with TRACE_IRQFLAGS enabled. There can be as muc=
+h as
+> > > 8 graph handler being called in each function-entry. The current
+> > > workaround requires us echo "*kernel_text_address" into
+> > > set_ftrace_notrace before starting the trace. However, we observed th=
+at
+> > > the kernel still enables the patch site in some cases even with
+> > > *kernel_text_address properly added in the file While the root cause =
+is
+> > > still under investagtion, we consider that it should not be the reaso=
+n
+> > > for holding back the code patching, in order to unblock the call_ops
+> > > part.
+> >
+> > Maybe Steven knows this from the top of his head!
+> >
+> > As Andy points out, "*kernel_text_address" is used in the stack
+> > unwinding on RISC-V. So, if you do a tracing without filtering *and*
+> > TRACE_IRQFLAGS, one will drown in traces.
+>
+> I tested set_ftrace_notrace on x86 and the function graph tracer does hon=
+or
+> it. I wonder if there's a kernel
 
-kernel test robot noticed the following build errors:
+After checking the log buffer, I can confirm that riscv does also
+honor set_ftrace_notrace. It does not print out "*kernel_text_address"
+in the trace buffer. Sorry for not making this clear.
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v6.13-rc4 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, the problem is that the patch sites "*kernel_text_address"
+were enabled, allowing the code flow into ftrace and parts of fgraph.
+In particular, with TRACE_IRQFLAGS enabled, the functions are called
+extensively, causing the significant slow down.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrey-Albershteyn/iomap-add-iomap_writepages_unbound-to-write-beyond-EOF/20241229-213942
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20241229133640.1193578-2-aalbersh%40kernel.org
-patch subject: [PATCH 1/2] iomap: add iomap_writepages_unbound() to write beyond EOF
-config: s390-randconfig-002-20241229 (https://download.01.org/0day-ci/archive/20241230/202412300135.cvWMPZGf-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241230/202412300135.cvWMPZGf-lkp@intel.com/reproduce)
+IIUC, it is reasonable to enable a patch site if there is at least one
+tracing instance that request the function. However, in another
+experiment, the patch sites of "*kernel_text_address"  are enabled
+even when all instances have them disabled. Here is a way to reproduce
+it:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412300135.cvWMPZGf-lkp@intel.com/
+cd /sys/kernel/
+mount -t tracefs t tracing/
+cd tracing/
+mkdir instances/1
+mkdir instances/2
+cd instances/1/
+echo *kernel_text_address > set_ftrace_notrace
+echo *sched* > set_ftrace_filter # this is just to make the kernel
+more responsive
+cat set_ftrace_notrace
+echo function_graph > current_tracer
+cd ../2/
+echo *kernel_text_address > set_ftrace_notrace
+cat set_ftrace_notrace
+echo function_graph > current_tracer
 
-All errors (new ones prefixed by >>):
+To figure out this problem, it is probably worth trying to understand
+why the patch site is enabled after the above sequence:
 
->> fs/iomap/buffered-io.c:982:23: error: use of undeclared identifier 'IOMAP_NOSIZE'
-                   if (!(iter->flags & IOMAP_NOSIZE) && (pos + written > old_size)) {
-                                       ^
-   fs/iomap/buffered-io.c:988:23: error: use of undeclared identifier 'IOMAP_NOSIZE'
-                   if (!(iter->flags & IOMAP_NOSIZE) && (old_size < pos))
-                                       ^
-   2 errors generated.
+It seems like the ftrace_ops being passed into
+__ftrace_hash_rec_update() at the start of the second tracer has an
+empty notrace hash. This leads to the eventual activation of the patch
+sites. However, graph_ops does not have the empty notrace hash when
+the user starts the first graph tracer. I am trying to understand this
+part of the code, and the relationship between graph_ops and ops in
+the fgraph_array.
+
+>
+> >
+> > E.g. the ftrace selftest:
+> >   | $ ./ftracetest -vvv test.d/ftrace/fgraph-multi.tc
+> >
+> > will generate a lot of traces.
+> >
+> > Now, if we add:
+> > --8<--
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.=
+tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> > index ff88f97e41fb..4f30a4d81d99 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> > @@ -84,6 +84,7 @@ cd $INSTANCE2
+> >  do_test '*rcu*' 'rcu'
+> >  cd $WD
+> >  cd $INSTANCE3
+> > +echo '*kernel_text_address' > set_ftrace_notrace
+> >  echo function_graph > current_tracer
+> >
+> >  sleep 1
+> > -->8--
+> >
+> > The graph tracer will not honor the "set_ftrace_notrace" in $INSTANCE3,
+> > but still enable the *kernel_text_address traces. (Note that there are
+> > no filters in the test, so *all* ftrace recs will be enabled.)
+> >
+> > Are we holding the graph tracer wrong?
+>
+> What do you get when you do:
+>
+>   # grep kernel_text_address available_filter_functions
+>
+> ?
+
+We get:
+kernel_text_address
+__kernel_text_address
+
+>
+> >
+> >
+> > Happy thanksgiving!
+> > Bj=C3=B6rn
+>
+> And Merry Christmas!
+>
+> -- Steve
+>
+
+And Happy New Year!
 
 
-vim +/IOMAP_NOSIZE +982 fs/iomap/buffered-io.c
-
-   909	
-   910	static loff_t iomap_write_iter(struct iomap_iter *iter, struct iov_iter *i)
-   911	{
-   912		loff_t length = iomap_length(iter);
-   913		loff_t pos = iter->pos;
-   914		ssize_t total_written = 0;
-   915		long status = 0;
-   916		struct address_space *mapping = iter->inode->i_mapping;
-   917		size_t chunk = mapping_max_folio_size(mapping);
-   918		unsigned int bdp_flags = (iter->flags & IOMAP_NOWAIT) ? BDP_ASYNC : 0;
-   919	
-   920		do {
-   921			struct folio *folio;
-   922			loff_t old_size;
-   923			size_t offset;		/* Offset into folio */
-   924			size_t bytes;		/* Bytes to write to folio */
-   925			size_t copied;		/* Bytes copied from user */
-   926			size_t written;		/* Bytes have been written */
-   927	
-   928			bytes = iov_iter_count(i);
-   929	retry:
-   930			offset = pos & (chunk - 1);
-   931			bytes = min(chunk - offset, bytes);
-   932			status = balance_dirty_pages_ratelimited_flags(mapping,
-   933								       bdp_flags);
-   934			if (unlikely(status))
-   935				break;
-   936	
-   937			if (bytes > length)
-   938				bytes = length;
-   939	
-   940			/*
-   941			 * Bring in the user page that we'll copy from _first_.
-   942			 * Otherwise there's a nasty deadlock on copying from the
-   943			 * same page as we're writing to, without it being marked
-   944			 * up-to-date.
-   945			 *
-   946			 * For async buffered writes the assumption is that the user
-   947			 * page has already been faulted in. This can be optimized by
-   948			 * faulting the user page.
-   949			 */
-   950			if (unlikely(fault_in_iov_iter_readable(i, bytes) == bytes)) {
-   951				status = -EFAULT;
-   952				break;
-   953			}
-   954	
-   955			status = iomap_write_begin(iter, pos, bytes, &folio);
-   956			if (unlikely(status)) {
-   957				iomap_write_failed(iter->inode, pos, bytes);
-   958				break;
-   959			}
-   960			if (iter->iomap.flags & IOMAP_F_STALE)
-   961				break;
-   962	
-   963			offset = offset_in_folio(folio, pos);
-   964			if (bytes > folio_size(folio) - offset)
-   965				bytes = folio_size(folio) - offset;
-   966	
-   967			if (mapping_writably_mapped(mapping))
-   968				flush_dcache_folio(folio);
-   969	
-   970			copied = copy_folio_from_iter_atomic(folio, offset, bytes, i);
-   971			written = iomap_write_end(iter, pos, bytes, copied, folio) ?
-   972				  copied : 0;
-   973	
-   974			/*
-   975			 * Update the in-memory inode size after copying the data into
-   976			 * the page cache.  It's up to the file system to write the
-   977			 * updated size to disk, preferably after I/O completion so that
-   978			 * no stale data is exposed.  Only once that's done can we
-   979			 * unlock and release the folio.
-   980			 */
-   981			old_size = iter->inode->i_size;
- > 982			if (!(iter->flags & IOMAP_NOSIZE) && (pos + written > old_size)) {
-   983				i_size_write(iter->inode, pos + written);
-   984				iter->iomap.flags |= IOMAP_F_SIZE_CHANGED;
-   985			}
-   986			__iomap_put_folio(iter, pos, written, folio);
-   987	
-   988			if (!(iter->flags & IOMAP_NOSIZE) && (old_size < pos))
-   989				pagecache_isize_extended(iter->inode, old_size, pos);
-   990	
-   991			cond_resched();
-   992			if (unlikely(written == 0)) {
-   993				/*
-   994				 * A short copy made iomap_write_end() reject the
-   995				 * thing entirely.  Might be memory poisoning
-   996				 * halfway through, might be a race with munmap,
-   997				 * might be severe memory pressure.
-   998				 */
-   999				iomap_write_failed(iter->inode, pos, bytes);
-  1000				iov_iter_revert(i, copied);
-  1001	
-  1002				if (chunk > PAGE_SIZE)
-  1003					chunk /= 2;
-  1004				if (copied) {
-  1005					bytes = copied;
-  1006					goto retry;
-  1007				}
-  1008			} else {
-  1009				pos += written;
-  1010				total_written += written;
-  1011				length -= written;
-  1012			}
-  1013		} while (iov_iter_count(i) && length);
-  1014	
-  1015		if (status == -EAGAIN) {
-  1016			iov_iter_revert(i, total_written);
-  1017			return -EAGAIN;
-  1018		}
-  1019		return total_written ? total_written : status;
-  1020	}
-  1021	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Andy
