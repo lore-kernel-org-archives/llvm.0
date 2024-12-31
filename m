@@ -1,87 +1,59 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A5C2114
-	for <llvm@lists.linux.dev>; Tue, 31 Dec 2024 03:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B11E136E;
+	Tue, 31 Dec 2024 04:13:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735616037; cv=none; b=AmdiIv98Fg0Y362aePnnQz/DYjVOhfBEXPTQJNcU7jjQbe65pQSTIS+Bg4FIF/uZslEfQ7J9SfrI276FQIMZBtEUlJjaGiBpGT2TNQU7oM38LwpBpfCgOMy+Im2kNd+oq5Vt106mKuZ+3MtdGZOPUnkMY+KualwKu1IqiM5k9H0=
+	t=1735618425; cv=none; b=kzJmDnwekWujTJioAQpohEGoInKrtipJ+jKsQ50YiZN/HWLOzEkbkDf1eH/rvjo2+koiGq5qBTHVOQ9fYNmYOI7pC6+bhkOpvTl7Pjo2+uZ7eGRoGWUJBdLShtz0guwA+YxhirRxqLJc1kB1i3tEw8MG/qkmwjQEoinTd2W66/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735616037; c=relaxed/simple;
-	bh=acGKTC8N7xBcBPH29clLa/qcfRodutSkMabhv4kx+rQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NBJyY7Yl0EdiZDPKl+Gv6V9eDedFwBw4ld9WLpXNUvulNnASbtx4rXmjP8QCoNJ5i1Wpe0X1kpF/SEULLFglDMYqO/OHBX0Ff7gcBnstyr2GiJglD0zv489mAi24aULdhqHpcNG5a3ePU4zoRsaco4mwEBEdsti/67LNaK0+elA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=M2XhLxZg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1735618425; c=relaxed/simple;
+	bh=DH1WiwE4kZAlkM1BR1tG9JqHjbRShP1PSmelBnR8kFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HnOtQyyKv3nGTyVxj+159ggVpG+tH9a/EKoK1eE3mzH0ABAJz4ltOcKjWeXBRIHpofsnHSoLLQUuHEfe2/+SnQDrtouvvfPvY0LRFijoprV8/jvAAMnh7vVrqOQJeLUJ3SUy9RHB19Mc75iDh1+rGcu03B2d7tcufkpKI2uINY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OrVhhjIv; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="M2XhLxZg"
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BUMViCG024008
-	for <llvm@lists.linux.dev>; Tue, 31 Dec 2024 03:33:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=LZ7v8jm16Hil/pksNnzk5waj
-	wFJzjpwjwT7s4mkt0jA=; b=M2XhLxZgJiVT9geHm2eAh5+BfDReBJOM47YYnDxI
-	txpLy29JDMpN5Ncai/kR624hmxCGO7bOq7buNN6KQycnd4qBAbMPfJakDq47A/La
-	y7Aw9jY+5OYkZaZCx5hGGwFd0XW/GizBxzaIKxHfsJ7pJ2du+V9PjnJKO9ZDc9fj
-	+1i4yR5qKOHGOHG/NlAAe8oncryZl0f2wrooMBnX0KBY7xfKr7nXmJ1EpDno3FUH
-	DoR5b6E6ZX+5Wef4hV5k9XNzELGNQlF6A33JP1YLTquccCRh9awjUz7Y44gRwdBE
-	18uHlKr9uGKoPv481uy+FQwwD/6ldmVgYetR0tZdQzNFdw==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43v35mrh1e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 31 Dec 2024 03:33:49 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2ef80d30df1so12744889a91.1
-        for <llvm@lists.linux.dev>; Mon, 30 Dec 2024 19:33:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735616028; x=1736220828;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LZ7v8jm16Hil/pksNnzk5wajwFJzjpwjwT7s4mkt0jA=;
-        b=cDddHDJhSnGyNX91nqOwDmiRp5OKxaxPF98/f+R5CDBAnMn9ipUsBUmGzwGLgf/DhW
-         acuAQ2IM35blF7z4zYP4zWo6n9cRfxLvhYpafGHFdC7rNGrkJ5gp5uaZ2gUHqpXkHOw3
-         pPnQk/FyuUvR/Q8+oOtAqybeVyAMerMpAwuLZmCl9z35XVcf9iPygfxBYGrLhZljW/wd
-         QGovuMmVjOAk+m6v4MPiTnX1FzTdoP8qasC9oonJEVrjlwjP6HSDtuE0Ky66Nr0PPZjM
-         x9ArCEwPLNPt0UkQvpNxbKEeJP5m5TUeFzJwyoCeRC9kGW3zzEgBle5+fd9CFSagNn4S
-         n96Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXXv0x1KL2Mt9e3ao8ftvIiS+bqlSV+4rv6XsGMm8MTgjhoMHgwn9W3NY1cXTJfIwKvtfsQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzXolCnxaatPVy79MPRVrvNBXcJ9qvZjSAwRY3By0+XP8U51pNd
-	1nb4ypCsR2lKAd0WuZ8CMc/Z3cNVDrpMTYXZT1eBOs1hhQXvsrhaqeUF43MlU3VfwgZNpy4HnWK
-	bSlWs4VXsjDgIsuodtxz8Vx4L+0838eGz+qZOsijrkyb80oSv+ik+
-X-Gm-Gg: ASbGncta8Ae588du4ibmroDr/phVrrxe4wGTuV2k4e8MzTPETqYx7jxjHn3gfum53AH
-	/xdl8EpbStXO19Knxajn5R277alca9PrmTfhDyk9h57q/ng2oqtJ1di+0a2feOrnQG584hcoBq6
-	hi7aR8EGYfw9Wl67hg5m6wM9ABCA/qUmisEhcRLQx1ppkaxvYApBOHeLvUZNpFMKojyu2zRC2Ys
-	u1adzcxigYSmc5EF/aX+iEI5HbpXw+gDWock0yoA7I8lanPC33obOMjLKEOjDLGuJ6r2ojowi7I
-	Zpq31vn+SVHL5krNI7A0wERv3VlWblTSQiXO
-X-Received: by 2002:a05:6a00:1411:b0:725:f376:f4f4 with SMTP id d2e1a72fcca58-72abde01aa8mr55840936b3a.13.1735616028026;
-        Mon, 30 Dec 2024 19:33:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHZwi81tswp0lqrn1YgXNMxMkrFIdc4Z48lc1H1/ClA4kxkVwHUin8C6iGgtHNm6Juv6r87vw==
-X-Received: by 2002:a05:6a00:1411:b0:725:f376:f4f4 with SMTP id d2e1a72fcca58-72abde01aa8mr55840899b3a.13.1735616027505;
-        Mon, 30 Dec 2024 19:33:47 -0800 (PST)
-Received: from hu-eberman-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad816187sm19902800b3a.16.2024.12.30.19.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2024 19:33:47 -0800 (PST)
-Date: Mon, 30 Dec 2024 19:33:45 -0800
-From: Elliot Berman <elliot.berman@oss.qualcomm.com>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Gomez <da.gomez@samsung.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elliot Berman <quic_eberman@quicinc.com>, Kees Cook <kees@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
-Message-ID: <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
- <20241220174731.514432-29-bigeasy@linutronix.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OrVhhjIv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735618423; x=1767154423;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DH1WiwE4kZAlkM1BR1tG9JqHjbRShP1PSmelBnR8kFc=;
+  b=OrVhhjIv89QmyI+tPp/xbM2MCruY4QtCdrsr56JuZSLO9h86MIy9LNTR
+   kmdDgnZnUcS7KahXaZX+WTOFgPaHmpmpxB3PoVFuc2AtoipUFHF91VPXB
+   TVxMTpadsh5GzVBo8NbP10GoqJHN/4nhBznDBwmNFLKQ/ARf5Iu+88rja
+   +P1FYrskIYIAuj/npgvve9u25fvcy7gccTM8996wRl68B9bcFoB4iIz+x
+   7X/R1TQNjE3e4SLu9Ugv5tSNZ8bwGb0IUzdZnI7mV6h/EiaHJ/C2lSKYW
+   Kf45+FCL4J5Phz7yZa4nfu6pWT2/a/0l75eq6e0tl1K0Nd4IZqdYI+UG2
+   g==;
+X-CSE-ConnectionGUID: Ia58ZWIJTSC+ZF5BfR+fjw==
+X-CSE-MsgGUID: Ozg2I5/lSPmiLlgq7RjXaw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11301"; a="36059781"
+X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
+   d="scan'208";a="36059781"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2024 20:13:43 -0800
+X-CSE-ConnectionGUID: DYpOiWp4RNCIy5242NWLSA==
+X-CSE-MsgGUID: a5+Fg2zNSUe2Pm8mxLCbbg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
+   d="scan'208";a="100814442"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 30 Dec 2024 20:13:41 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tSTdT-0006hd-0t;
+	Tue, 31 Dec 2024 04:13:39 +0000
+Date: Tue, 31 Dec 2024 12:13:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/thermal/max77620_thermal.c:48: warning: Function parameter
+ or struct member 'tz' not described in 'max77620_thermal_read_temp'
+Message-ID: <202412311216.RBUETxdV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -90,93 +62,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241220174731.514432-29-bigeasy@linutronix.de>
-X-Proofpoint-ORIG-GUID: rINX8QPnPaxVCLHNmKx9_MgSYtDLOtoJ
-X-Proofpoint-GUID: rINX8QPnPaxVCLHNmKx9_MgSYtDLOtoJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0
- malwarescore=0 phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412310027
 
-On Fri, Dec 20, 2024 at 06:41:42PM +0100, Sebastian Andrzej Siewior wrote:
-> __module_address() can be invoked within a RCU section, there is no
-> requirement to have preemption disabled.
-> 
-> I'm not sure if using rcu_read_lock() will introduce the regression that
-> has been fixed in commit 14c4c8e41511a ("cfi: Use
-> rcu_read_{un}lock_sched_notrace").
-> 
+Hi Daniel,
 
-You can replace the rcu_read_lock_sched_notrace() with guard(rcu)().
-Regular rcu lock doesn't generate function traces, so the recursive loop
-isn't possible.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-I've tested:
- - the current kernel (no recursive loop)
- - Revert back to rcu_read_lock_sched() (fails)
- - Your series as-is (no recurisve loop)
- - Replace with guard(rcu)() (no recursive loop)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ccb98ccef0e543c2bd4ef1a72270461957f3d8d0
+commit: ae11d6a87c3e742418baa591be1e719a95788059 thermal/drivers/maxim: Switch to new of API
+date:   2 years, 5 months ago
+config: arm64-randconfig-003-20241220 (https://download.01.org/0day-ci/archive/20241231/202412311216.RBUETxdV-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241231/202412311216.RBUETxdV-lkp@intel.com/reproduce)
 
-Whether you'd like to stick with the current patch or replace with
-guard(rcu)():
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412311216.RBUETxdV-lkp@intel.com/
 
-Tested-by: Elliot Berman <elliot.berman@oss.qualcomm.com>  # sm8650-qrd
+All warnings (new ones prefixed by >>):
 
--
-
-I don't know why I didn't mention steps to reproduce, even for my own
-benefit. Lesson learned :)
-
-Here are the steps to reproduce; you'll need a system with support for
-CFI: qemu arm64 probably does the trick and you'll need clang>=16. I'm
-happy to help test future revisions of this series since I have the
-setup all done.
-
-```
-modprobe -a dummy_stm stm_ftrace stm_p_basic
-mkdir -p /sys/kernel/config/stp-policy/dummy_stm.0.my-policy/default
-echo function > /sys/kernel/tracing/current_tracer
-echo 1 > /sys/kernel/tracing/tracing_on
-echo dummy_stm.0 > /sys/class/stm_source/ftrace/stm_source_link
-```
-
-The trace buffer should not be full of stm calls due to the recursive
-loop as mentioned in my original commit.
+>> drivers/thermal/max77620_thermal.c:48: warning: Function parameter or struct member 'tz' not described in 'max77620_thermal_read_temp'
+>> drivers/thermal/max77620_thermal.c:48: warning: Excess function parameter 'data' description in 'max77620_thermal_read_temp'
 
 
-Regards,
-Elliot Berman
+vim +48 drivers/thermal/max77620_thermal.c
 
-> Cc: Elliot Berman <quic_eberman@quicinc.com>
-> Cc: Kees Cook <kees@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->  kernel/cfi.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/kernel/cfi.c b/kernel/cfi.c
-> index 08caad7767176..c8f2b5a51b2e6 100644
-> --- a/kernel/cfi.c
-> +++ b/kernel/cfi.c
-> @@ -71,6 +71,10 @@ static bool is_module_cfi_trap(unsigned long addr)
->  	struct module *mod;
->  	bool found = false;
->  
-> +	/*
-> +	 * XXX this could be RCU protected but would it introcude the regression
-> +	 * fixed in 14c4c8e41511a ("cfi: Use rcu_read_{un}lock_sched_notrace")
-> +	 */
->  	rcu_read_lock_sched_notrace();
->  
->  	mod = __module_address(addr);
-> -- 
-> 2.45.2
-> 
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  32  
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  33  /**
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  34   * max77620_thermal_read_temp: Read PMIC die temperatue.
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  35   * @data:	Device specific data.
+0f43e646dddd60 Amit Kucheria   2019-11-20  36   * @temp:	Temperature in millidegrees Celsius
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  37   *
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  38   * The actual temperature of PMIC die is not available from PMIC.
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  39   * PMIC only tells the status if it has crossed or not the threshold level
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  40   * of 120degC or 140degC.
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  41   * If threshold has not been crossed then assume die temperature as 100degC
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  42   * else 120degC or 140deG based on the PMIC die temp threshold status.
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  43   *
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  44   * Return 0 on success otherwise error number to show reason of failure.
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  45   */
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  46  
+ae11d6a87c3e74 Daniel Lezcano  2022-08-05  47  static int max77620_thermal_read_temp(struct thermal_zone_device *tz, int *temp)
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23 @48  {
+ae11d6a87c3e74 Daniel Lezcano  2022-08-05  49  	struct max77620_therm_info *mtherm = tz->devdata;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  50  	unsigned int val;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  51  	int ret;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  52  
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  53  	ret = regmap_read(mtherm->rmap, MAX77620_REG_STATLBT, &val);
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  54  	if (ret < 0) {
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  55  		dev_err(mtherm->dev, "Failed to read STATLBT: %d\n", ret);
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  56  		return ret;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  57  	}
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  58  
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  59  	if (val & MAX77620_IRQ_TJALRM2_MASK)
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  60  		*temp = MAX77620_TJALARM2_TEMP;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  61  	else if (val & MAX77620_IRQ_TJALRM1_MASK)
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  62  		*temp = MAX77620_TJALARM1_TEMP;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  63  	else
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  64  		*temp = MAX77620_NORMAL_OPERATING_TEMP;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  65  
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  66  	return 0;
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  67  }
+ec4664b3fd6d56 Laxman Dewangan 2016-08-23  68  
+
+:::::: The code at line 48 was first introduced by commit
+:::::: ec4664b3fd6d565a79eb562e4339528f74eb1cca thermal: max77620: Add thermal driver for reporting junction temp
+
+:::::: TO: Laxman Dewangan <ldewangan@nvidia.com>
+:::::: CC: Zhang Rui <rui.zhang@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
