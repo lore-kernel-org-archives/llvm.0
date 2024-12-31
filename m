@@ -1,115 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6477156220;
-	Tue, 31 Dec 2024 07:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F403A17C7CA;
+	Tue, 31 Dec 2024 07:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735629371; cv=none; b=oweznaEnVg9Ec9xx7t7B7GIR6lr751XOT+PWfkK2cJl/23iOJmSfxvot38PnaYlBlC6M81I0WTaIqn/XgLeVEQyo03RgPFWPQxGMnvtJm2sX15ON1ln6LujNpcb6jrKsjJ13SOPIubPb8VADloTgjJ+Jg7xa2JfSFrzzyLX1kvI=
+	t=1735630105; cv=none; b=N3MeIL7lWSrpxnnTiG2VhNUG65mQSFN2cxJqqrTtVYRuqBM/oxwLzrt3pM9SnngQF190Uc4G81fdNp0WR+/+EAA/qIgVcl4p+vHVth6ksQdnwPuoj5XZCMNvoGLTOk4bppCna3h6fMTsduM6zjdvyOaChh/+hIF9B28g+Ruhqsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735629371; c=relaxed/simple;
-	bh=fApJCHrn31Vh6fErbfPcRBxFjy0hahLbp7eKl4doSPM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QWohowtDsFNcuMVTGxU21ie3gu1fESlOGbB4ILNJD6ECAyWc2n89GwRJN+VTmGdIynZDjoL1ETIm4PtZsAEmRtNVoZZlZUqnqltbjBVqZI6hPQIn3JuzR3Q5XuSX2qDQNtuyPxETNMxGKav/QROPG08fNLoA+v88o80qBuhHghY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fUtHPsng; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fUtHPsng"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735629368; x=1767165368;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fApJCHrn31Vh6fErbfPcRBxFjy0hahLbp7eKl4doSPM=;
-  b=fUtHPsngR6nDuKekgcJX2ZihVOd+fxUD5NDGV1BR4cNccZfbFfEb1ob2
-   1xBYYtM8spy+r+cqQ/9zF4OhFMnbc72EQS+WirVx7YKVFnQlFS0mvBnt+
-   3FVPD+HV88lkgQ4EwySYGOIpMVp7CrlFD1ITTPdlI7ZdkCNmphDpI0Ee8
-   pNsaJ0e63elX50I8o3AwT607Hbw1+6lZF5jH/VBZxtWgohIeW9lHbbTMY
-   3xl/Z5vq16f8oirnoKuk6sfnpMykxLxf+LqW/qYc832W/NX+ZEaOiDrtr
-   P0nW4wi4TogkMEMUoHFZ4AFNs0QLP/vFHd63p8UJ6ObTbZJTQDYMxtIxQ
-   g==;
-X-CSE-ConnectionGUID: L/o5X+GcRS+7C936LJ1sAQ==
-X-CSE-MsgGUID: 0bPVI+lATLqLWRTdHfiycg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11301"; a="38742412"
-X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
-   d="scan'208";a="38742412"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2024 23:16:08 -0800
-X-CSE-ConnectionGUID: q2b2GBZfQ7uzWqvf0LmYoA==
-X-CSE-MsgGUID: NpPDoN6DSsmsTm8kKDNs+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="124274047"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 30 Dec 2024 23:16:06 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tSWU0-0006u6-2H;
-	Tue, 31 Dec 2024 07:16:04 +0000
-Date: Tue, 31 Dec 2024 15:15:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
-	Boqun Feng <boqun.feng@gmail.com>
-Subject: error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in
- crate `$crate::bindings`
-Message-ID: <202412311507.14xdiaIX-lkp@intel.com>
+	s=arc-20240116; t=1735630105; c=relaxed/simple;
+	bh=tjKmDjYuugvkR57s3EQZ8Pj6Woao6xb8cvGVYcaC18c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dt41y0GWruGrbeqZLe0VUMsDUIEAp9IphxZz4t5Gm6HM2VhHo0yFi1+V6wkOaAM8vbMH5I9C9kXsqlctjLkNnjAL80TkKpbkuTiVvDKH6vpM8ZdfLqLBrDY5eBb412p8E5rUsFg4Tc8dDri98DER4Il0nddegViZhah3O3/y3a4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8CxPuMLnXNnpE5cAA--.49287S3;
+	Tue, 31 Dec 2024 15:28:11 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowMBxTMUHnXNnqxoPAA--.8697S2;
+	Tue, 31 Dec 2024 15:28:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Xinhui Pan <Xinhui.Pan@amd.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	loongarch@lists.linux.dev,
+	amd-gfx@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: Harden callers of division functions
+Date: Tue, 31 Dec 2024 15:28:06 +0800
+Message-ID: <20241231072806.4936-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMBxTMUHnXNnqxoPAA--.8697S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxWry8uF1ktw1UJFWUCFWUJrc_yoW5Gr4Dpa
+	13GFyUZryDZFZ7tFZ7CF17WFW3Aa93GF4v9a15Cws5u347Zan8ur43J3Z5Gr429ryIyF4a
+	vF4DKrWjqF1vyrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU866wJUUUUU==
 
-Hi Alice,
+There are objtool warnings compiled with the latest mainline LLVM:
 
-FYI, the error/warning still remains.
+  dc_fixpt_recip() falls through to next function dc_fixpt_sinc()
+  spl_fixpt_recip() falls through to next function spl_fixpt_sinc()
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ccb98ccef0e543c2bd4ef1a72270461957f3d8d0
-commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 rust: samples: add tracepoint to Rust sample
-date:   8 weeks ago
-config: x86_64-buildonly-randconfig-001-20241230 (https://download.01.org/0day-ci/archive/20241231/202412311507.14xdiaIX-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241231/202412311507.14xdiaIX-lkp@intel.com/reproduce)
+Here are the call paths:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412311507.14xdiaIX-lkp@intel.com/
+  dc_fixpt_recip()
+    dc_fixpt_from_fraction()
+      complete_integer_division_u64()
+        div64_u64_rem()
 
-All errors (new ones prefixed by >>):
+  spl_fixpt_recip()
+    spl_fixpt_from_fraction()
+      spl_complete_integer_division_u64()
+        spl_div64_u64_rem()
 
->> error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in crate `$crate::bindings`
-   --> samples/rust/rust_print.rs:87:5
-   |
-   87 | /     kernel::declare_trace! {
-   88 | |         /// # Safety
-   89 | |         ///
-   90 | |         /// Always safe to call.
-   91 | |         unsafe fn rust_sample_loaded(magic: c_int);
-   92 | |     }
-   | |_____^ not found in `$crate::bindings`
-   |
-   = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` in crate `$crate::bindings`
-   --> samples/rust/rust_print.rs:87:5
-   |
-   87 | /     kernel::declare_trace! {
-   88 | |         /// # Safety
-   89 | |         ///
-   90 | |         /// Always safe to call.
-   91 | |         unsafe fn rust_sample_loaded(magic: c_int);
-   92 | |     }
-   | |_____^ not found in `$crate::bindings`
-   |
-   = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
+This was introduced by a change in Clang from a few months:
 
+  [SimplifyCFG] Deduce paths unreachable if they cause div/rem UB)
+  https://github.com/llvm/llvm-project/commit/37932643abab
+
+Since the ASSERT does not do anything to prevent the divide by zero
+(just flags it with WARN_ON) and the rest of the code doesn't either,
+the callers of division functions should harden them against dividing
+by zero to avoid undefined behavior.
+
+Keep the current ASSERT for the aim of debugging, just add BUG() to
+stop control flow if the divisior is zero.
+
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Xi Ruoyao <xry111@xry111.site>
+Suggested-by: Rui Wang <wangrui@loongson.cn>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Link: https://lore.kernel.org/lkml/20241220223403.GA2605890@ax162/
+---
+ drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c  | 1 +
+ drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
+index 88d3f9d7dd55..e15391e36b40 100644
+--- a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
++++ b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
+@@ -52,6 +52,7 @@ static inline unsigned long long complete_integer_division_u64(
+ 	unsigned long long result;
+ 
+ 	ASSERT(divisor);
++	BUG_ON(!divisor);
+ 
+ 	result = div64_u64_rem(dividend, divisor, remainder);
+ 
+diff --git a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
+index 131f1e3949d3..ce2036950808 100644
+--- a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
++++ b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
+@@ -30,6 +30,7 @@ static inline unsigned long long spl_complete_integer_division_u64(
+ 	unsigned long long result;
+ 
+ 	SPL_ASSERT(divisor);
++	BUG_ON(!divisor);
+ 
+ 	result = spl_div64_u64_rem(dividend, divisor, remainder);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.42.0
+
